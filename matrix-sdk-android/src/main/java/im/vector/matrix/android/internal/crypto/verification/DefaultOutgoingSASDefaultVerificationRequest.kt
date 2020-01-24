@@ -20,10 +20,8 @@ import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningServ
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.OutgoingSasVerificationRequest
 import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
-import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
-import im.vector.matrix.android.internal.crypto.model.rest.toValue
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
 
@@ -75,16 +73,15 @@ internal class DefaultOutgoingSASDefaultVerificationRequest(
         cancel(CancelCode.UnexpectedMessage)
     }
 
-    fun start(method: VerificationMethod) {
+    fun start() {
         if (state != VerificationTxState.None) {
             Timber.e("## SAS O: start verification from invalid state")
             // should I cancel??
             throw IllegalStateException("Interactive Key verification already started")
         }
 
-        val startMessage = transport.createStart(
+        val startMessage = transport.createStartForSas(
                 credentials.deviceId ?: "",
-                method.toValue(),
                 transactionId,
                 KNOWN_AGREEMENT_PROTOCOLS,
                 KNOWN_HASHES,

@@ -20,7 +20,8 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.crypto.sas.SasMode
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
-import im.vector.matrix.android.internal.crypto.model.rest.supportedVerificationMethods
+import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
+import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
 import im.vector.matrix.android.internal.crypto.verification.SASDefaultVerificationTransaction
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfoStart
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
@@ -34,7 +35,8 @@ internal data class MessageVerificationStartContent(
         @Json(name = "message_authentication_codes") override val messageAuthenticationCodes: List<String>?,
         @Json(name = "short_authentication_string") override val shortAuthenticationStrings: List<String>?,
         @Json(name = "method") override val method: String?,
-        @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
+        @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?,
+        @Json(name = "secret") override val sharedSecret: String?
 ) : VerificationInfoStart {
 
     override fun toCanonicalJson(): String? {
@@ -44,20 +46,37 @@ internal data class MessageVerificationStartContent(
     override val transactionID: String?
         get() = relatesTo?.eventId
 
+    // TODO Move those method to the interface?
     override fun isValid(): Boolean {
         if (transactionID.isNullOrBlank()
                 || fromDevice.isNullOrBlank()
-                || method !in supportedVerificationMethods
-                || keyAgreementProtocols.isNullOrEmpty()
+                || (method == VERIFICATION_METHOD_SAS && !isValidSas())
+                || (method == VERIFICATION_METHOD_RECIPROCATE && !isValidReciprocate())) {
+            Timber.e("## received invalid verification request")
+            return false
+        }
+        return true
+    }
+
+    private fun isValidSas(): Boolean {
+        if (keyAgreementProtocols.isNullOrEmpty()
                 || hashes.isNullOrEmpty()
                 || !hashes.contains("sha256") || messageAuthenticationCodes.isNullOrEmpty()
                 || (!messageAuthenticationCodes.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256)
                         && !messageAuthenticationCodes.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256_LONGKDF))
                 || shortAuthenticationStrings.isNullOrEmpty()
                 || !shortAuthenticationStrings.contains(SasMode.DECIMAL)) {
-            Timber.e("## received invalid verification request")
             return false
         }
+
+        return true
+    }
+
+    private fun isValidReciprocate(): Boolean {
+        if (sharedSecret.isNullOrBlank()) {
+            return false
+        }
+
         return true
     }
 

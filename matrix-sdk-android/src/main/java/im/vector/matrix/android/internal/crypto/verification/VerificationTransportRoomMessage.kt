@@ -16,14 +16,33 @@
 package im.vector.matrix.android.internal.crypto.verification
 
 import androidx.lifecycle.Observer
-import androidx.work.*
+import androidx.work.BackoffPolicy
+import androidx.work.Data
+import androidx.work.ExistingWorkPolicy
+import androidx.work.Operation
+import androidx.work.WorkInfo
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
-import im.vector.matrix.android.api.session.events.model.*
-import im.vector.matrix.android.api.session.room.model.message.*
+import im.vector.matrix.android.api.session.events.model.Content
+import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.LocalEcho
+import im.vector.matrix.android.api.session.events.model.RelationType
+import im.vector.matrix.android.api.session.events.model.UnsignedData
+import im.vector.matrix.android.api.session.events.model.toContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationAcceptContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationCancelContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationDoneContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationKeyContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationMacContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationReadyContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationStartContent
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
+import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
+import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
 import im.vector.matrix.android.internal.di.DeviceId
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.UserId
@@ -35,7 +54,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -245,24 +264,42 @@ internal class VerificationTransportRoomMessage(
 
     override fun createMac(tid: String, mac: Map<String, String>, keys: String) = MessageVerificationMacContent.create(tid, mac, keys)
 
-    override fun createStart(fromDevice: String,
-                             method: String,
-                             transactionID: String,
-                             keyAgreementProtocols: List<String>,
-                             hashes: List<String>,
-                             messageAuthenticationCodes: List<String>,
-                             shortAuthenticationStrings: List<String>): VerificationInfoStart {
+    override fun createStartForSas(fromDevice: String,
+                                   transactionID: String,
+                                   keyAgreementProtocols: List<String>,
+                                   hashes: List<String>,
+                                   messageAuthenticationCodes: List<String>,
+                                   shortAuthenticationStrings: List<String>): VerificationInfoStart {
         return MessageVerificationStartContent(
                 fromDevice,
                 hashes,
                 keyAgreementProtocols,
                 messageAuthenticationCodes,
                 shortAuthenticationStrings,
-                method,
+                VERIFICATION_METHOD_SAS,
                 RelationDefaultContent(
                         type = RelationType.REFERENCE,
                         eventId = transactionID
-                )
+                ),
+                null
+        )
+    }
+
+    override fun createStartForQrCode(fromDevice: String,
+                                      transactionID: String,
+                                      sharedSecret: String): VerificationInfoStart {
+        return MessageVerificationStartContent(
+                fromDevice,
+                null,
+                null,
+                null,
+                null,
+                VERIFICATION_METHOD_RECIPROCATE,
+                RelationDefaultContent(
+                        type = RelationType.REFERENCE,
+                        eventId = transactionID
+                ),
+                sharedSecret
         )
     }
 

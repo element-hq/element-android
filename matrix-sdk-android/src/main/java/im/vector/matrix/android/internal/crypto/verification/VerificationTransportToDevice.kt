@@ -21,7 +21,14 @@ import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
-import im.vector.matrix.android.internal.crypto.model.rest.*
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationCancel
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationKey
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationMac
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationReady
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
+import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
+import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -119,21 +126,35 @@ internal class VerificationTransportToDevice(
 
     override fun createMac(tid: String, mac: Map<String, String>, keys: String) = KeyVerificationMac.create(tid, mac, keys)
 
-    override fun createStart(fromDevice: String,
-                             method: String,
-                             transactionID: String,
-                             keyAgreementProtocols: List<String>,
-                             hashes: List<String>,
-                             messageAuthenticationCodes: List<String>,
-                             shortAuthenticationStrings: List<String>): VerificationInfoStart {
+    override fun createStartForSas(fromDevice: String,
+                                   transactionID: String,
+                                   keyAgreementProtocols: List<String>,
+                                   hashes: List<String>,
+                                   messageAuthenticationCodes: List<String>,
+                                   shortAuthenticationStrings: List<String>): VerificationInfoStart {
         return KeyVerificationStart(
                 fromDevice,
-                method,
+                VERIFICATION_METHOD_SAS,
                 transactionID,
                 keyAgreementProtocols,
                 hashes,
                 messageAuthenticationCodes,
-                shortAuthenticationStrings)
+                shortAuthenticationStrings,
+                null)
+    }
+
+    override fun createStartForQrCode(fromDevice: String,
+                                      transactionID: String,
+                                      sharedSecret: String): VerificationInfoStart {
+        return KeyVerificationStart(
+                fromDevice,
+                VERIFICATION_METHOD_RECIPROCATE,
+                transactionID,
+                null,
+                null,
+                null,
+                null,
+                sharedSecret)
     }
 
     override fun createReady(tid: String, fromDevice: String, methods: List<String>): VerificationInfoReady {

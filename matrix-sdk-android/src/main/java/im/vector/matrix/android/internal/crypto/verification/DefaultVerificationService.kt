@@ -23,19 +23,42 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
-import im.vector.matrix.android.api.session.crypto.sas.*
+import im.vector.matrix.android.api.session.crypto.sas.CancelCode
+import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
+import im.vector.matrix.android.api.session.crypto.sas.VerificationService
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.safeValueOf
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.*
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageRelationContent
+import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationAcceptContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationCancelContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationDoneContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationKeyContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationMacContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationReadyContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationStartContent
 import im.vector.matrix.android.internal.crypto.DeviceListManager
 import im.vector.matrix.android.internal.crypto.MyDeviceInfoHolder
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
-import im.vector.matrix.android.internal.crypto.model.rest.*
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationCancel
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationKey
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationMac
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
+import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
+import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
+import im.vector.matrix.android.internal.crypto.model.rest.supportedVerificationMethods
+import im.vector.matrix.android.internal.crypto.model.rest.toValue
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
@@ -43,10 +66,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.internal.toImmutableList
 import timber.log.Timber
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 import kotlin.collections.set
 
 @SessionScope
@@ -708,7 +729,7 @@ internal class DefaultVerificationService @Inject constructor(
             tx.transport = verificationTransportToDeviceFactory.createTransport(tx)
             addTransaction(tx)
 
-            tx.start(method)
+            tx.start()
             return txID
         } else {
             throw IllegalArgumentException("Unknown verification method")
@@ -747,7 +768,12 @@ internal class DefaultVerificationService @Inject constructor(
                 otherUserId = userId
         )
 
-        transport.sendVerificationRequest(methods.map { it.toValue() }, localID, userId, roomId) { syncedId, info ->
+        // Add reciprocate method if application declares it can scan or show QR codes
+        // Not sure if it ok to do that (?)
+        val reciprocateMethod = methods.firstOrNull { it == VerificationMethod.QR_CODE_SCAN || it == VerificationMethod.QR_CODE_SHOW }?.let { listOf(VERIFICATION_METHOD_RECIPROCATE) }.orEmpty()
+        val methodValues = (methods.map { it.toValue() } + reciprocateMethod).distinct()
+
+        transport.sendVerificationRequest(methodValues, localID, userId, roomId) { syncedId, info ->
             // We need to update with the syncedID
             updatePendingRequest(verificationRequest.copy(
                     transactionId = syncedId,
@@ -807,7 +833,7 @@ internal class DefaultVerificationService @Inject constructor(
             tx.transport = verificationTransportRoomMessageFactory.createTransport(roomId, tx)
             addTransaction(tx)
 
-            tx.start(method)
+            tx.start()
             return transactionId
         } else {
             throw IllegalArgumentException("Unknown verification method")

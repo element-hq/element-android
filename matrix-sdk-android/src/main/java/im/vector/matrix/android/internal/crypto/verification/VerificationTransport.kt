@@ -60,13 +60,22 @@ internal interface VerificationTransport {
     fun createKey(tid: String,
                   pubKey: String): VerificationInfoKey
 
-    fun createStart(fromDevice: String,
-                    method: String,
-                    transactionID: String,
-                    keyAgreementProtocols: List<String>,
-                    hashes: List<String>,
-                    messageAuthenticationCodes: List<String>,
-                    shortAuthenticationStrings: List<String>): VerificationInfoStart
+    /**
+     * Create start for SAS verification
+     */
+    fun createStartForSas(fromDevice: String,
+                          transactionID: String,
+                          keyAgreementProtocols: List<String>,
+                          hashes: List<String>,
+                          messageAuthenticationCodes: List<String>,
+                          shortAuthenticationStrings: List<String>): VerificationInfoStart
+
+    /**
+     * Create start for QR code verification
+     */
+    fun createStartForQrCode(fromDevice: String,
+                             transactionID: String,
+                             sharedSecret: String): VerificationInfoStart
 
     fun createMac(tid: String, mac: Map<String, String>, keys: String): VerificationInfoMac
 

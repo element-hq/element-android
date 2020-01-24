@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.crypto.verification
 internal interface VerificationInfoStart : VerificationInfo {
 
     val method: String?
+
     /**
      * Alice’s device ID
      */
@@ -57,6 +58,11 @@ internal interface VerificationInfoStart : VerificationInfo {
      * Other methods may be defined in the future
      */
     val shortAuthenticationStrings: List<String>?
+
+    /**
+     * Shared secret, when starting verification with QR code
+     */
+    val sharedSecret: String?
 
     fun toCanonicalJson(): String?
 }

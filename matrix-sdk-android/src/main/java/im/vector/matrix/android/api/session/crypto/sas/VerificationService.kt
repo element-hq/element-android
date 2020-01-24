@@ -56,6 +56,7 @@ interface VerificationService {
 
     fun declineVerificationRequestInDMs(otherUserId: String, otherDeviceId: String, transactionId: String, roomId: String)
 
+    // Only SAS method is supported for the moment
     fun beginKeyVerificationInDMs(method: VerificationMethod,
                                   transactionId: String,
                                   roomId: String,

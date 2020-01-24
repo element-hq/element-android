@@ -34,28 +34,46 @@ internal data class KeyVerificationStart(
         @Json(name = "key_agreement_protocols") override val keyAgreementProtocols: List<String>? = null,
         @Json(name = "hashes") override val hashes: List<String>? = null,
         @Json(name = "message_authentication_codes") override val messageAuthenticationCodes: List<String>? = null,
-        @Json(name = "short_authentication_string") override val shortAuthenticationStrings: List<String>? = null
+        @Json(name = "short_authentication_string") override val shortAuthenticationStrings: List<String>? = null,
+        // For QR code verification
+        @Json(name = "secret") override val sharedSecret: String? = null
 ) : SendToDeviceObject, VerificationInfoStart {
 
     override fun toCanonicalJson(): String? {
         return JsonCanonicalizer.getCanonicalJson(KeyVerificationStart::class.java, this)
     }
 
+    // TODO Move those method to the interface?
     override fun isValid(): Boolean {
         if (transactionID.isNullOrBlank()
                 || fromDevice.isNullOrBlank()
-                || method !in supportedVerificationMethods
-                || keyAgreementProtocols.isNullOrEmpty()
+                || (method == VERIFICATION_METHOD_SAS && !isValidSas())
+                || (method == VERIFICATION_METHOD_RECIPROCATE && !isValidReciprocate())) {
+            Timber.e("## received invalid verification request")
+            return false
+        }
+        return true
+    }
+
+    private fun isValidSas(): Boolean {
+        if (keyAgreementProtocols.isNullOrEmpty()
                 || hashes.isNullOrEmpty()
-                || !hashes.contains("sha256")
-                || messageAuthenticationCodes.isNullOrEmpty()
+                || !hashes.contains("sha256") || messageAuthenticationCodes.isNullOrEmpty()
                 || (!messageAuthenticationCodes.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256)
                         && !messageAuthenticationCodes.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256_LONGKDF))
                 || shortAuthenticationStrings.isNullOrEmpty()
                 || !shortAuthenticationStrings.contains(SasMode.DECIMAL)) {
-            Timber.e("## received invalid verification request")
             return false
         }
+
+        return true
+    }
+
+    private fun isValidReciprocate(): Boolean {
+        if (sharedSecret.isNullOrBlank()) {
+            return false
+        }
+
         return true
     }
 
