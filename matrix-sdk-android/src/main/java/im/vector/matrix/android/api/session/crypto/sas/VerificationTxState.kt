@@ -16,7 +16,7 @@
 
 package im.vector.matrix.android.api.session.crypto.sas
 
-enum class SasVerificationTxState {
+enum class VerificationTxState {
     None,
     // I have started a verification request
     SendingStart,

@@ -22,7 +22,8 @@ import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningServ
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.EmojiRepresentation
 import im.vector.matrix.android.api.session.crypto.sas.SasMode
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
@@ -38,7 +39,7 @@ import kotlin.properties.Delegates
 /**
  * Represents an ongoing short code interactive key verification between two devices.
  */
-internal abstract class SASVerificationTransaction(
+internal abstract class SASDefaultVerificationTransaction(
         private val setDeviceVerificationAction: SetDeviceVerificationAction,
         open val credentials: Credentials,
         private val cryptoStore: IMXCryptoStore,
@@ -48,9 +49,7 @@ internal abstract class SASVerificationTransaction(
         otherUserId: String,
         otherDevice: String?,
         isIncoming: Boolean) :
-        VerificationTransaction(transactionId, otherUserId, otherDevice, isIncoming) {
-
-    lateinit var transport: SasTransport
+        DefaultVerificationTransaction(transactionId, otherUserId, otherDevice, isIncoming), SasVerificationTransaction {
 
     companion object {
         const val SAS_MAC_SHA256_LONGKDF = "hmac-sha256"
@@ -72,7 +71,7 @@ internal abstract class SASVerificationTransaction(
                 }
     }
 
-    override var state by Delegates.observable(SasVerificationTxState.None) { _, _, new ->
+    override var state by Delegates.observable(VerificationTxState.None) { _, _, new ->
         //        println("$property has changed from $old to $new")
         listeners.forEach {
             try {
@@ -81,9 +80,9 @@ internal abstract class SASVerificationTransaction(
                 Timber.e(e, "## Error while notifying listeners")
             }
         }
-        if (new == SasVerificationTxState.Cancelled
-                || new == SasVerificationTxState.OnCancelled
-                || new == SasVerificationTxState.Verified) {
+        if (new == VerificationTxState.Cancelled
+                || new == VerificationTxState.OnCancelled
+                || new == VerificationTxState.Verified) {
             releaseSAS()
         }
     }
@@ -122,14 +121,14 @@ internal abstract class SASVerificationTransaction(
      */
     override fun userHasVerifiedShortCode() {
         Timber.v("## SAS short code verified by user for id:$transactionId")
-        if (state != SasVerificationTxState.ShortCodeReady) {
+        if (state != VerificationTxState.ShortCodeReady) {
             // ignore and cancel?
             Timber.e("## Accepted short code from invalid state $state")
             cancel(CancelCode.UnexpectedMessage)
             return
         }
 
-        state = SasVerificationTxState.ShortCodeAccepted
+        state = VerificationTxState.ShortCodeAccepted
         // Alice and Bob’ devices calculate the HMAC of their own device keys and a comma-separated,
         // sorted list of the key IDs that they wish the other user to verify,
         // the shared secret as the input keying material, no salt, and with the input parameter set to the concatenation of:
@@ -185,11 +184,11 @@ internal abstract class SASVerificationTransaction(
 
         val macMsg = transport.createMac(transactionId, keyMap, keyStrings)
         myMac = macMsg
-        state = SasVerificationTxState.SendingMac
-        sendToOther(EventType.KEY_VERIFICATION_MAC, macMsg, SasVerificationTxState.MacSent, CancelCode.User) {
-            if (state == SasVerificationTxState.SendingMac) {
+        state = VerificationTxState.SendingMac
+        sendToOther(EventType.KEY_VERIFICATION_MAC, macMsg, VerificationTxState.MacSent, CancelCode.User) {
+            if (state == VerificationTxState.SendingMac) {
                 // It is possible that we receive the next event before this one :/, in this case we should keep state
-                state = SasVerificationTxState.MacSent
+                state = VerificationTxState.MacSent
             }
         }
 
@@ -228,13 +227,9 @@ internal abstract class SASVerificationTransaction(
 
     abstract fun onKeyVerificationMac(vKey: VerificationInfoMac)
 
-    override fun userHasScannedRemoteQrCode(scannedData: String) {
-        // TODO
-    }
-
     protected fun verifyMacs() {
         Timber.v("## SAS verifying macs for id:$transactionId")
-        state = SasVerificationTxState.Verifying
+        state = VerificationTxState.Verifying
 
         // Keys have been downloaded earlier in process
         val otherUserKnownDevices = cryptoStore.getUserDevices(otherUserId)
@@ -335,7 +330,7 @@ internal abstract class SASVerificationTransaction(
             setDeviceVerified(otherUserId, it)
         }
         transport.done(transactionId)
-        state = SasVerificationTxState.Verified
+        state = VerificationTxState.Verified
     }
 
     private fun setDeviceVerified(userId: String, deviceId: String) {
@@ -351,13 +346,13 @@ internal abstract class SASVerificationTransaction(
 
     override fun cancel(code: CancelCode) {
         cancelledReason = code
-        state = SasVerificationTxState.Cancelled
+        state = VerificationTxState.Cancelled
         transport.cancelTransaction(transactionId, otherUserId, otherDeviceId ?: "", code)
     }
 
     protected fun sendToOther(type: String,
                               keyToDevice: VerificationInfo,
-                              nextState: SasVerificationTxState,
+                              nextState: VerificationTxState,
                               onErrorReason: CancelCode,
                               onDone: (() -> Unit)?) {
         transport.sendToOther(type, keyToDevice, nextState, onErrorReason, onDone)

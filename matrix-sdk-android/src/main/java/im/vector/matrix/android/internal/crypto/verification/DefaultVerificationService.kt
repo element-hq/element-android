@@ -50,7 +50,7 @@ import kotlin.collections.HashMap
 import kotlin.collections.set
 
 @SessionScope
-internal class DefaultSasVerificationService @Inject constructor(
+internal class DefaultVerificationService @Inject constructor(
         private val credentials: Credentials,
         private val cryptoStore: IMXCryptoStore,
         private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
@@ -60,7 +60,7 @@ internal class DefaultSasVerificationService @Inject constructor(
         private val sasTransportRoomMessageFactory: SasTransportRoomMessageFactory,
         private val sasTransportToDeviceFactory: SasTransportToDeviceFactory,
         private val crossSigningService: CrossSigningService
-) : VerificationTransaction.Listener, SasVerificationService {
+) : DefaultVerificationTransaction.Listener, VerificationService {
 
     private val uiHandler = Handler(Looper.getMainLooper())
 
@@ -68,7 +68,7 @@ internal class DefaultSasVerificationService @Inject constructor(
     lateinit var cryptoService: CryptoService
 
     // map [sender : [transaction]]
-    private val txMap = HashMap<String, HashMap<String, VerificationTransaction>>()
+    private val txMap = HashMap<String, HashMap<String, DefaultVerificationTransaction>>()
 
     /**
      * Map [sender: [PendingVerificationRequest]]
@@ -139,9 +139,9 @@ internal class DefaultSasVerificationService @Inject constructor(
         }
     }
 
-    private var listeners = ArrayList<SasVerificationService.SasVerificationListener>()
+    private var listeners = ArrayList<VerificationService.VerificationListener>()
 
-    override fun addListener(listener: SasVerificationService.SasVerificationListener) {
+    override fun addListener(listener: VerificationService.VerificationListener) {
         uiHandler.post {
             if (!listeners.contains(listener)) {
                 listeners.add(listener)
@@ -149,7 +149,7 @@ internal class DefaultSasVerificationService @Inject constructor(
         }
     }
 
-    override fun removeListener(listener: SasVerificationService.SasVerificationListener) {
+    override fun removeListener(listener: VerificationService.VerificationListener) {
         uiHandler.post {
             listeners.remove(listener)
         }
@@ -344,7 +344,7 @@ internal class DefaultSasVerificationService @Inject constructor(
         }
     }
 
-    private suspend fun handleStart(otherUserId: String?, startReq: VerificationInfoStart, txConfigure: (SASVerificationTransaction) -> Unit): CancelCode? {
+    private suspend fun handleStart(otherUserId: String?, startReq: VerificationInfoStart, txConfigure: (DefaultVerificationTransaction) -> Unit): CancelCode? {
         Timber.d("## SAS onStartRequestReceived ${startReq.transactionID!!}")
         if (checkKeysAreDownloaded(otherUserId!!, startReq.fromDevice ?: "") != null) {
             Timber.v("## SAS onStartRequestReceived $startReq")
@@ -373,7 +373,7 @@ internal class DefaultSasVerificationService @Inject constructor(
                     // as we are the one requesting in first place (or we accepted the request)
                     val autoAccept = getExistingVerificationRequest(otherUserId)?.any { it.transactionId == startReq.transactionID }
                             ?: false
-                    val tx = DefaultIncomingSASVerificationTransaction(
+                    val tx = DefaultIncomingSASDefaultVerificationTransaction(
 //                            this,
                             setDeviceVerificationAction,
                             credentials,
@@ -461,9 +461,9 @@ internal class DefaultSasVerificationService @Inject constructor(
             ))
         }
 
-        if (existingTransaction is SASVerificationTransaction) {
+        if (existingTransaction is SASDefaultVerificationTransaction) {
             existingTransaction.cancelledReason = safeValueOf(cancelReq.code)
-            existingTransaction.state = SasVerificationTxState.OnCancelled
+            existingTransaction.state = VerificationTxState.OnCancelled
         }
     }
 
@@ -497,7 +497,7 @@ internal class DefaultSasVerificationService @Inject constructor(
             return
         }
 
-        if (existing is SASVerificationTransaction) {
+        if (existing is SASDefaultVerificationTransaction) {
             existing.acceptVerificationEvent(otherUserId, acceptReq)
         } else {
             // not other types now
@@ -538,7 +538,7 @@ internal class DefaultSasVerificationService @Inject constructor(
             Timber.e("##  SAS Received invalid key request")
             return
         }
-        if (existing is SASVerificationTransaction) {
+        if (existing is SASDefaultVerificationTransaction) {
             existing.acceptVerificationEvent(otherUserId, keyReq)
         } else {
             // not other types now
@@ -616,7 +616,7 @@ internal class DefaultSasVerificationService @Inject constructor(
             Timber.e("## SAS Received invalid Mac request")
             return
         }
-        if (existing is SASVerificationTransaction) {
+        if (existing is SASDefaultVerificationTransaction) {
             existing.acceptVerificationEvent(senderId, macReq)
         } else {
             // not other types known for now
@@ -681,7 +681,7 @@ internal class DefaultSasVerificationService @Inject constructor(
         }
     }
 
-    private fun addTransaction(tx: VerificationTransaction) {
+    private fun addTransaction(tx: DefaultVerificationTransaction) {
         tx.otherUserId.let { otherUserId ->
             synchronized(txMap) {
                 val txInnerMap = txMap.getOrPut(otherUserId) { HashMap() }
@@ -696,7 +696,7 @@ internal class DefaultSasVerificationService @Inject constructor(
         val txID = createUniqueIDForTransaction(userId, deviceID)
         // should check if already one (and cancel it)
         if (method == VerificationMethod.SAS) {
-            val tx = DefaultOutgoingSASVerificationRequest(
+            val tx = DefaultOutgoingSASDefaultVerificationRequest(
                     setDeviceVerificationAction,
                     credentials,
                     cryptoStore,
@@ -795,7 +795,7 @@ internal class DefaultSasVerificationService @Inject constructor(
                                            otherDeviceId: String,
                                            callback: MatrixCallback<String>?): String? {
         if (method == VerificationMethod.SAS) {
-            val tx = DefaultOutgoingSASVerificationRequest(
+            val tx = DefaultOutgoingSASDefaultVerificationRequest(
                     setDeviceVerificationAction,
                     credentials,
                     cryptoStore,
@@ -831,7 +831,7 @@ internal class DefaultSasVerificationService @Inject constructor(
             // TODO this is not yet related to a transaction, maybe we should use another method like for cancel?
             val readyMsg = transport.createReady(transactionId, credentials.deviceId ?: "", methods)
             transport.sendToOther(EventType.KEY_VERIFICATION_READY, readyMsg,
-                    SasVerificationTxState.None,
+                    VerificationTxState.None,
                     CancelCode.User,
                     null // TODO handle error?
             )
@@ -859,10 +859,10 @@ internal class DefaultSasVerificationService @Inject constructor(
 
     override fun transactionUpdated(tx: VerificationTransaction) {
         dispatchTxUpdated(tx)
-        if (tx is SASVerificationTransaction
-                && (tx.state == SasVerificationTxState.Cancelled
-                        || tx.state == SasVerificationTxState.OnCancelled
-                        || tx.state == SasVerificationTxState.Verified)
+        if (tx is SASDefaultVerificationTransaction
+                && (tx.state == VerificationTxState.Cancelled
+                        || tx.state == VerificationTxState.OnCancelled
+                        || tx.state == VerificationTxState.Verified)
         ) {
             // remove
             this.removeTransaction(tx.otherUserId, tx.transactionId)

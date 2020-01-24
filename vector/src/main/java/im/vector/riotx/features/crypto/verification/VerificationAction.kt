@@ -21,7 +21,7 @@ import im.vector.riotx.core.platform.VectorViewModelAction
 sealed class VerificationAction : VectorViewModelAction {
     data class RequestVerificationByDM(val userID: String, val roomId: String?) : VerificationAction()
     data class StartSASVerification(val userID: String, val pendingRequestTransactionId: String) : VerificationAction()
-    data class RemoteQrCodeScanned(val userID: String, val sasTransactionId: String, val scannedData: String) : VerificationAction()
+    data class RemoteQrCodeScanned(val userID: String, val transactionId: String, val scannedData: String) : VerificationAction()
     data class SASMatchAction(val userID: String, val sasTransactionId: String) : VerificationAction()
     data class SASDoNotMatchAction(val userID: String, val sasTransactionId: String) : VerificationAction()
     object GotItConclusion : VerificationAction()

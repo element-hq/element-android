@@ -20,7 +20,7 @@ import androidx.work.*
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.*
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
@@ -48,12 +48,12 @@ internal class SasTransportRoomMessage(
         private val roomId: String,
         private val monarchy: Monarchy,
         private val localEchoEventFactory: LocalEchoEventFactory,
-        private val tx: SASVerificationTransaction?
+        private val tx: DefaultVerificationTransaction?
 ) : SasTransport {
 
     override fun sendToOther(type: String,
                              verificationInfo: VerificationInfo,
-                             nextState: SasVerificationTxState,
+                             nextState: VerificationTxState,
                              onErrorReason: CancelCode,
                              onDone: (() -> Unit)?) {
         Timber.d("## SAS sending msg type $type")
@@ -304,7 +304,7 @@ internal class SasTransportRoomMessageFactory @Inject constructor(
         private val deviceId: String?,
         private val localEchoEventFactory: LocalEchoEventFactory) {
 
-    fun createTransport(roomId: String, tx: SASVerificationTransaction?): SasTransportRoomMessage {
+    fun createTransport(roomId: String, tx: DefaultVerificationTransaction?): SasTransportRoomMessage {
         return SasTransportRoomMessage(workManagerProvider, stringProvider, sessionId, userId, deviceId, roomId, monarchy, localEchoEventFactory, tx)
     }
 }

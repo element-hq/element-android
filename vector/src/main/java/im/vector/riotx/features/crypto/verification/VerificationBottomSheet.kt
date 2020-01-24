@@ -31,7 +31,7 @@ import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.commitTransactionNow
@@ -101,7 +101,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         it.otherUserMxItem?.let { matrixItem ->
             avatarRenderer.render(matrixItem, otherUserAvatarImageView)
 
-            if (it.sasTransactionState == SasVerificationTxState.Verified) {
+            if (it.transactionState == VerificationTxState.Verified) {
                 otherUserNameText.text = getString(R.string.verification_verified_user, matrixItem.getBestName())
                 otherUserShield.isVisible = true
             } else {
@@ -111,23 +111,23 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
 
         // Did the request result in a SAS transaction?
-        if (it.sasTransactionState != null) {
-            when (it.sasTransactionState) {
-                SasVerificationTxState.None,
-                SasVerificationTxState.SendingStart,
-                SasVerificationTxState.Started,
-                SasVerificationTxState.OnStarted,
-                SasVerificationTxState.SendingAccept,
-                SasVerificationTxState.Accepted,
-                SasVerificationTxState.OnAccepted,
-                SasVerificationTxState.SendingKey,
-                SasVerificationTxState.KeySent,
-                SasVerificationTxState.OnKeyReceived,
-                SasVerificationTxState.ShortCodeReady,
-                SasVerificationTxState.ShortCodeAccepted,
-                SasVerificationTxState.SendingMac,
-                SasVerificationTxState.MacSent,
-                SasVerificationTxState.Verifying   -> {
+        if (it.transactionState != null) {
+            when (it.transactionState) {
+                VerificationTxState.None,
+                VerificationTxState.SendingStart,
+                VerificationTxState.Started,
+                VerificationTxState.OnStarted,
+                VerificationTxState.SendingAccept,
+                VerificationTxState.Accepted,
+                VerificationTxState.OnAccepted,
+                VerificationTxState.SendingKey,
+                VerificationTxState.KeySent,
+                VerificationTxState.OnKeyReceived,
+                VerificationTxState.ShortCodeReady,
+                VerificationTxState.ShortCodeAccepted,
+                VerificationTxState.SendingMac,
+                VerificationTxState.MacSent,
+                VerificationTxState.Verifying   -> {
                     showFragment(VerificationEmojiCodeFragment::class, Bundle().apply {
                         putParcelable(MvRx.KEY_ARG, VerificationArgs(
                                 it.otherUserMxItem?.id ?: "",
@@ -136,12 +136,12 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                                 it.pendingRequest?.transactionId ?: it.transactionId))
                     })
                 }
-                SasVerificationTxState.Verified,
-                SasVerificationTxState.Cancelled,
-                SasVerificationTxState.OnCancelled -> {
+                VerificationTxState.Verified,
+                VerificationTxState.Cancelled,
+                VerificationTxState.OnCancelled -> {
                     showFragment(VerificationConclusionFragment::class, Bundle().apply {
                         putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(
-                                it.sasTransactionState == SasVerificationTxState.Verified,
+                                it.transactionState == VerificationTxState.Verified,
                                 it.cancelCode?.value))
                     })
                 }

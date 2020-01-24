@@ -17,7 +17,7 @@ package im.vector.matrix.android.internal.crypto.verification
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
@@ -29,7 +29,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class SasTransportToDevice(
-        private var tx: SASVerificationTransaction?,
+        private var tx: DefaultVerificationTransaction?,
         private var sendToDeviceTask: SendToDeviceTask,
         private var taskExecutor: TaskExecutor
 ) : SasTransport {
@@ -44,7 +44,7 @@ internal class SasTransportToDevice(
 
     override fun sendToOther(type: String,
                              verificationInfo: VerificationInfo,
-                             nextState: SasVerificationTxState,
+                             nextState: VerificationTxState,
                              onErrorReason: CancelCode,
                              onDone: (() -> Unit)?) {
         Timber.d("## SAS sending msg type $type")
@@ -149,7 +149,7 @@ internal class SasTransportToDeviceFactory @Inject constructor(
         private val sendToDeviceTask: SendToDeviceTask,
         private val taskExecutor: TaskExecutor) {
 
-    fun createTransport(tx: SASVerificationTransaction?): SasTransportToDevice {
+    fun createTransport(tx: DefaultVerificationTransaction?): SasTransportToDevice {
         return SasTransportToDevice(tx, sendToDeviceTask, taskExecutor)
     }
 }

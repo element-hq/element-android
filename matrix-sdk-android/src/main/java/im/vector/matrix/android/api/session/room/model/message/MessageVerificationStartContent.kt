@@ -21,7 +21,7 @@ import im.vector.matrix.android.api.session.crypto.sas.SasMode
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 import im.vector.matrix.android.internal.crypto.model.rest.supportedVerificationMethods
-import im.vector.matrix.android.internal.crypto.verification.SASVerificationTransaction
+import im.vector.matrix.android.internal.crypto.verification.SASDefaultVerificationTransaction
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfoStart
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import timber.log.Timber
@@ -51,8 +51,8 @@ internal data class MessageVerificationStartContent(
                 || keyAgreementProtocols.isNullOrEmpty()
                 || hashes.isNullOrEmpty()
                 || !hashes.contains("sha256") || messageAuthenticationCodes.isNullOrEmpty()
-                || (!messageAuthenticationCodes.contains(SASVerificationTransaction.SAS_MAC_SHA256)
-                        && !messageAuthenticationCodes.contains(SASVerificationTransaction.SAS_MAC_SHA256_LONGKDF))
+                || (!messageAuthenticationCodes.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256)
+                        && !messageAuthenticationCodes.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256_LONGKDF))
                 || shortAuthenticationStrings.isNullOrEmpty()
                 || !shortAuthenticationStrings.contains(SasMode.DECIMAL)) {
             Timber.e("## received invalid verification request")

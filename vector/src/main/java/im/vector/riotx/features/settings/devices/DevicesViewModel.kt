@@ -32,10 +32,10 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.VerificationService
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
@@ -64,7 +64,7 @@ sealed class DevicesAction : VectorViewModelAction {
 
 class DevicesViewModel @AssistedInject constructor(@Assisted initialState: DevicesViewState,
                                                    private val session: Session)
-    : VectorViewModel<DevicesViewState, DevicesAction>(initialState), SasVerificationService.SasVerificationListener {
+    : VectorViewModel<DevicesViewState, DevicesAction>(initialState), VerificationService.VerificationListener {
 
     @AssistedInject.Factory
     interface Factory {
@@ -103,9 +103,9 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
         super.onCleared()
     }
 
-    override fun transactionCreated(tx: SasVerificationTransaction) {}
-    override fun transactionUpdated(tx: SasVerificationTransaction) {
-      if(tx.state == SasVerificationTxState.Verified) {
+    override fun transactionCreated(tx: VerificationTransaction) {}
+    override fun transactionUpdated(tx: VerificationTransaction) {
+      if(tx.state == VerificationTxState.Verified) {
           refreshDevicesList()
       }
     }

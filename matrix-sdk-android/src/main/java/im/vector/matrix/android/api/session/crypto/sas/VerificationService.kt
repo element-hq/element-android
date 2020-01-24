@@ -27,19 +27,18 @@ import im.vector.matrix.android.internal.crypto.verification.PendingVerification
  * SAS verification is intended to be a highly interactive process for users,
  * and as such exposes verification methods which are easier for users to use.
  */
-// TODO Rename to VerificationService and reorganize packages?
-interface SasVerificationService {
+interface VerificationService {
 
-    fun addListener(listener: SasVerificationListener)
+    fun addListener(listener: VerificationListener)
 
-    fun removeListener(listener: SasVerificationListener)
+    fun removeListener(listener: VerificationListener)
 
     /**
      * Mark this device as verified manually
      */
     fun markedLocallyAsManuallyVerified(userId: String, deviceID: String)
 
-    fun getExistingTransaction(otherUser: String, tid: String): SasVerificationTransaction?
+    fun getExistingTransaction(otherUser: String, tid: String): VerificationTransaction?
 
     fun getExistingVerificationRequest(otherUser: String): List<PendingVerificationRequest>?
 
@@ -70,10 +69,9 @@ interface SasVerificationService {
 
     // fun transactionUpdated(tx: SasVerificationTransaction)
 
-    // TODO Rename to VerificationListener
-    interface SasVerificationListener {
-        fun transactionCreated(tx: SasVerificationTransaction)
-        fun transactionUpdated(tx: SasVerificationTransaction)
+    interface VerificationListener {
+        fun transactionCreated(tx: VerificationTransaction)
+        fun transactionUpdated(tx: VerificationTransaction)
         fun markedAsManuallyVerified(userId: String, deviceId: String) {}
 
         fun verificationRequestCreated(pr: PendingVerificationRequest) {}

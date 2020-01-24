@@ -16,7 +16,7 @@
 
 package im.vector.matrix.android.api.session.crypto.sas
 
-interface OutgoingSasVerificationRequest {
+interface OutgoingSasVerificationRequest : SasVerificationTransaction {
     val uxState: UxState
 
     enum class UxState {

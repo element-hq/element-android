@@ -67,7 +67,7 @@ import im.vector.matrix.android.internal.crypto.tasks.GetDeviceInfoTask
 import im.vector.matrix.android.internal.crypto.tasks.GetDevicesTask
 import im.vector.matrix.android.internal.crypto.tasks.SetDeviceNameTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
-import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
+import im.vector.matrix.android.internal.crypto.verification.DefaultVerificationService
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.MoshiProvider
@@ -127,7 +127,7 @@ internal class DefaultCryptoService @Inject constructor(
         //
         private val roomDecryptorProvider: RoomDecryptorProvider,
         // The SAS verification service.
-        private val sasVerificationService: DefaultSasVerificationService,
+        private val sasVerificationService: DefaultVerificationService,
 
         private val crossSigningService: DefaultCrossSigningService,
         //
@@ -341,7 +341,7 @@ internal class DefaultCryptoService @Inject constructor(
     override fun getKeysBackupService() = keysBackup
 
     /**
-     * @return the SasVerificationService
+     * @return the VerificationService
      */
     override fun getSasVerificationService() = sasVerificationService
 

@@ -55,10 +55,10 @@ class SASTest : InstrumentedTest {
         val bobSasMgr = bobSession!!.getSasVerificationService()
 
         val bobTxCreatedLatch = CountDownLatch(1)
-        val bobListener = object : SasVerificationService.SasVerificationListener {
-            override fun transactionCreated(tx: SasVerificationTransaction) {}
+        val bobListener = object : VerificationService.VerificationListener {
+            override fun transactionCreated(tx: VerificationTransaction) {}
 
-            override fun transactionUpdated(tx: SasVerificationTransaction) {
+            override fun transactionUpdated(tx: VerificationTransaction) {
                 bobTxCreatedLatch.countDown()
             }
 
@@ -78,26 +78,26 @@ class SASTest : InstrumentedTest {
         val bobKeyTx = bobSasMgr.getExistingTransaction(aliceSession.myUserId, txID)
 
         assertNotNull("Bob should have started verif transaction", bobKeyTx)
-        assertTrue(bobKeyTx is SASVerificationTransaction)
+        assertTrue(bobKeyTx is SASDefaultVerificationTransaction)
         assertNotNull("Bob should have starting a SAS transaction", bobKeyTx)
-        assertTrue(aliceKeyTx is SASVerificationTransaction)
+        assertTrue(aliceKeyTx is SASDefaultVerificationTransaction)
         assertEquals("Alice and Bob have same transaction id", aliceKeyTx!!.transactionId, bobKeyTx!!.transactionId)
 
-        val aliceSasTx = aliceKeyTx as SASVerificationTransaction?
-        val bobSasTx = bobKeyTx as SASVerificationTransaction?
+        val aliceSasTx = aliceKeyTx as SASDefaultVerificationTransaction?
+        val bobSasTx = bobKeyTx as SASDefaultVerificationTransaction?
 
-        assertEquals("Alice state should be started", SasVerificationTxState.Started, aliceSasTx!!.state)
-        assertEquals("Bob state should be started by alice", SasVerificationTxState.OnStarted, bobSasTx!!.state)
+        assertEquals("Alice state should be started", VerificationTxState.Started, aliceSasTx!!.state)
+        assertEquals("Bob state should be started by alice", VerificationTxState.OnStarted, bobSasTx!!.state)
 
         // Let's cancel from alice side
         val cancelLatch = CountDownLatch(1)
 
-        val bobListener2 = object : SasVerificationService.SasVerificationListener {
-            override fun transactionCreated(tx: SasVerificationTransaction) {}
+        val bobListener2 = object : VerificationService.VerificationListener {
+            override fun transactionCreated(tx: VerificationTransaction) {}
 
-            override fun transactionUpdated(tx: SasVerificationTransaction) {
+            override fun transactionUpdated(tx: VerificationTransaction) {
                 if (tx.transactionId == txID) {
-                    if ((tx as SASVerificationTransaction).state === SasVerificationTxState.OnCancelled) {
+                    if ((tx as SASDefaultVerificationTransaction).state === VerificationTxState.OnCancelled) {
                         cancelLatch.countDown()
                     }
                 }
@@ -111,9 +111,9 @@ class SASTest : InstrumentedTest {
         mTestHelper.await(cancelLatch)
 
         assertEquals("Should be cancelled on alice side",
-                SasVerificationTxState.Cancelled, aliceSasTx.state)
+                VerificationTxState.Cancelled, aliceSasTx.state)
         assertEquals("Should be cancelled on bob side",
-                SasVerificationTxState.OnCancelled, bobSasTx.state)
+                VerificationTxState.OnCancelled, bobSasTx.state)
 
         assertEquals("Should be User cancelled on alice side",
                 CancelCode.User, aliceSasTx.cancelledReason)
@@ -139,10 +139,10 @@ class SASTest : InstrumentedTest {
         var cancelReason: String? = null
         val cancelLatch = CountDownLatch(1)
 
-        val bobListener = object : SasVerificationService.SasVerificationListener {
-            override fun transactionCreated(tx: SasVerificationTransaction) {}
+        val bobListener = object : VerificationService.VerificationListener {
+            override fun transactionCreated(tx: VerificationTransaction) {}
 
-            override fun transactionUpdated(tx: SasVerificationTransaction) {
+            override fun transactionUpdated(tx: VerificationTransaction) {
                 if (tx.transactionId == tid && tx.cancelledReason != null) {
                     cancelReason = tx.cancelledReason?.humanReadable
                     cancelLatch.countDown()
@@ -168,10 +168,10 @@ class SASTest : InstrumentedTest {
         val aliceUserID = aliceSession.myUserId
         val aliceDevice = aliceSession.getMyDevice().deviceId
 
-        val aliceListener = object : SasVerificationService.SasVerificationListener {
-            override fun transactionCreated(tx: SasVerificationTransaction) {}
+        val aliceListener = object : VerificationService.VerificationListener {
+            override fun transactionCreated(tx: VerificationTransaction) {}
 
-            override fun transactionUpdated(tx: SasVerificationTransaction) {
+            override fun transactionUpdated(tx: VerificationTransaction) {
                 if ((tx as IncomingSasVerificationTransaction).uxState === IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT) {
                     (tx as IncomingSasVerificationTransaction).performAccept()
                 }
@@ -268,10 +268,10 @@ class SASTest : InstrumentedTest {
                              aliceUserID: String?,
                              aliceDevice: String?,
                              tid: String,
-                             protocols: List<String> = SASVerificationTransaction.KNOWN_AGREEMENT_PROTOCOLS,
-                             hashes: List<String> = SASVerificationTransaction.KNOWN_HASHES,
-                             mac: List<String> = SASVerificationTransaction.KNOWN_MACS,
-                             codes: List<String> = SASVerificationTransaction.KNOWN_SHORT_CODES) {
+                             protocols: List<String> = SASDefaultVerificationTransaction.KNOWN_AGREEMENT_PROTOCOLS,
+                             hashes: List<String> = SASDefaultVerificationTransaction.KNOWN_HASHES,
+                             mac: List<String> = SASDefaultVerificationTransaction.KNOWN_MACS,
+                             codes: List<String> = SASDefaultVerificationTransaction.KNOWN_SHORT_CODES) {
         val startMessage = KeyVerificationStart(
                 fromDevice = bobSession.getMyDevice().deviceId,
                 method = VerificationMethod.SAS.toValue(),
@@ -307,15 +307,15 @@ class SASTest : InstrumentedTest {
 
         val aliceCreatedLatch = CountDownLatch(2)
         val aliceCancelledLatch = CountDownLatch(2)
-        val createdTx = ArrayList<SASVerificationTransaction>()
-        val aliceListener = object : SasVerificationService.SasVerificationListener {
-            override fun transactionCreated(tx: SasVerificationTransaction) {
-                createdTx.add(tx as SASVerificationTransaction)
+        val createdTx = ArrayList<SASDefaultVerificationTransaction>()
+        val aliceListener = object : VerificationService.VerificationListener {
+            override fun transactionCreated(tx: VerificationTransaction) {
+                createdTx.add(tx as SASDefaultVerificationTransaction)
                 aliceCreatedLatch.countDown()
             }
 
-            override fun transactionUpdated(tx: SasVerificationTransaction) {
-                if ((tx as SASVerificationTransaction).state === SasVerificationTxState.OnCancelled) {
+            override fun transactionUpdated(tx: VerificationTransaction) {
+                if ((tx as SASDefaultVerificationTransaction).state === VerificationTxState.OnCancelled) {
                     aliceCancelledLatch.countDown()
                 }
             }
@@ -352,14 +352,14 @@ class SASTest : InstrumentedTest {
         var startReq: KeyVerificationStart? = null
 
         val aliceAcceptedLatch = CountDownLatch(1)
-        val aliceListener = object : SasVerificationService.SasVerificationListener {
+        val aliceListener = object : VerificationService.VerificationListener {
             override fun markedAsManuallyVerified(userId: String, deviceId: String) {}
 
-            override fun transactionCreated(tx: SasVerificationTransaction) {}
+            override fun transactionCreated(tx: VerificationTransaction) {}
 
-            override fun transactionUpdated(tx: SasVerificationTransaction) {
-                if ((tx as SASVerificationTransaction).state === SasVerificationTxState.OnAccepted) {
-                    val at = tx as SASVerificationTransaction
+            override fun transactionUpdated(tx: VerificationTransaction) {
+                if ((tx as SASDefaultVerificationTransaction).state === VerificationTxState.OnAccepted) {
+                    val at = tx as SASDefaultVerificationTransaction
                     accepted = at.accepted as? KeyVerificationAccept
                     startReq = at.startReq as? KeyVerificationStart
                     aliceAcceptedLatch.countDown()
@@ -368,10 +368,10 @@ class SASTest : InstrumentedTest {
         }
         aliceSasMgr.addListener(aliceListener)
 
-        val bobListener = object : SasVerificationService.SasVerificationListener {
-            override fun transactionCreated(tx: SasVerificationTransaction) {}
+        val bobListener = object : VerificationService.VerificationListener {
+            override fun transactionCreated(tx: VerificationTransaction) {}
 
-            override fun transactionUpdated(tx: SasVerificationTransaction) {
+            override fun transactionUpdated(tx: VerificationTransaction) {
                 if ((tx as IncomingSasVerificationTransaction).uxState === IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT) {
                     val at = tx as IncomingSasVerificationTransaction
                     at.performAccept()
@@ -413,10 +413,10 @@ class SASTest : InstrumentedTest {
         val bobSasMgr = bobSession!!.getSasVerificationService()
 
         val aliceSASLatch = CountDownLatch(1)
-        val aliceListener = object : SasVerificationService.SasVerificationListener {
-            override fun transactionCreated(tx: SasVerificationTransaction) {}
+        val aliceListener = object : VerificationService.VerificationListener {
+            override fun transactionCreated(tx: VerificationTransaction) {}
 
-            override fun transactionUpdated(tx: SasVerificationTransaction) {
+            override fun transactionUpdated(tx: VerificationTransaction) {
                 val uxState = (tx as OutgoingSasVerificationRequest).uxState
                 when (uxState) {
                     OutgoingSasVerificationRequest.UxState.SHOW_SAS -> {
@@ -431,10 +431,10 @@ class SASTest : InstrumentedTest {
         aliceSasMgr.addListener(aliceListener)
 
         val bobSASLatch = CountDownLatch(1)
-        val bobListener = object : SasVerificationService.SasVerificationListener {
-            override fun transactionCreated(tx: SasVerificationTransaction) {}
+        val bobListener = object : VerificationService.VerificationListener {
+            override fun transactionCreated(tx: VerificationTransaction) {}
 
-            override fun transactionUpdated(tx: SasVerificationTransaction) {
+            override fun transactionUpdated(tx: VerificationTransaction) {
                 val uxState = (tx as IncomingSasVerificationTransaction).uxState
                 when (uxState) {
                     IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT -> {
@@ -457,8 +457,8 @@ class SASTest : InstrumentedTest {
         mTestHelper.await(aliceSASLatch)
         mTestHelper.await(bobSASLatch)
 
-        val aliceTx = aliceSasMgr.getExistingTransaction(bobUserId, verificationSAS!!) as SASVerificationTransaction
-        val bobTx = bobSasMgr.getExistingTransaction(aliceSession.myUserId, verificationSAS) as SASVerificationTransaction
+        val aliceTx = aliceSasMgr.getExistingTransaction(bobUserId, verificationSAS!!) as SASDefaultVerificationTransaction
+        val bobTx = bobSasMgr.getExistingTransaction(aliceSession.myUserId, verificationSAS) as SASDefaultVerificationTransaction
 
         assertEquals("Should have same SAS", aliceTx.getShortCodeRepresentation(SasMode.DECIMAL),
                 bobTx.getShortCodeRepresentation(SasMode.DECIMAL))
@@ -477,10 +477,10 @@ class SASTest : InstrumentedTest {
         val bobSasMgr = bobSession!!.getSasVerificationService()
 
         val aliceSASLatch = CountDownLatch(1)
-        val aliceListener = object : SasVerificationService.SasVerificationListener {
-            override fun transactionCreated(tx: SasVerificationTransaction) {}
+        val aliceListener = object : VerificationService.VerificationListener {
+            override fun transactionCreated(tx: VerificationTransaction) {}
 
-            override fun transactionUpdated(tx: SasVerificationTransaction) {
+            override fun transactionUpdated(tx: VerificationTransaction) {
                 val uxState = (tx as OutgoingSasVerificationRequest).uxState
                 when (uxState) {
                     OutgoingSasVerificationRequest.UxState.SHOW_SAS -> {
@@ -498,10 +498,10 @@ class SASTest : InstrumentedTest {
         aliceSasMgr.addListener(aliceListener)
 
         val bobSASLatch = CountDownLatch(1)
-        val bobListener = object : SasVerificationService.SasVerificationListener {
-            override fun transactionCreated(tx: SasVerificationTransaction) {}
+        val bobListener = object : VerificationService.VerificationListener {
+            override fun transactionCreated(tx: VerificationTransaction) {}
 
-            override fun transactionUpdated(tx: SasVerificationTransaction) {
+            override fun transactionUpdated(tx: VerificationTransaction) {
                 val uxState = (tx as IncomingSasVerificationTransaction).uxState
                 when (uxState) {
                     IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT -> {

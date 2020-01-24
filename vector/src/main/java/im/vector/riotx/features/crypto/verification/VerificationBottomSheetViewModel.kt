@@ -27,10 +27,12 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
+import im.vector.matrix.android.api.session.crypto.sas.QRVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.sas.VerificationService
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
 import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
@@ -42,7 +44,7 @@ data class VerificationBottomSheetViewState(
         val otherUserMxItem: MatrixItem? = null,
         val roomId: String? = null,
         val pendingRequest: PendingVerificationRequest? = null,
-        val sasTransactionState: SasVerificationTxState? = null,
+        val transactionState: VerificationTxState? = null,
         val transactionId: String? = null,
         val cancelCode: CancelCode? = null
 ) : MvRxState
@@ -50,7 +52,7 @@ data class VerificationBottomSheetViewState(
 class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted initialState: VerificationBottomSheetViewState,
                                                                    private val session: Session)
     : VectorViewModel<VerificationBottomSheetViewState, VerificationAction>(initialState),
-        SasVerificationService.SasVerificationListener {
+        VerificationService.VerificationListener {
 
     // Can be used for several actions, for a one shot result
     private val _requestLiveData = MutableLiveData<LiveEvent<Async<VerificationAction>>>()
@@ -89,7 +91,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
 
             return fragment.verificationViewModelFactory.create(VerificationBottomSheetViewState(
                     otherUserMxItem = userItem?.toMatrixItem(),
-                    sasTransactionState = sasTx?.state,
+                    transactionState = sasTx?.state,
                     transactionId = args.verificationId,
                     pendingRequest = pr,
                     roomId = args.roomId)
@@ -101,6 +103,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
         val otherUserId = state.otherUserMxItem?.id ?: return@withState
         val roomId = state.roomId
                 ?: session.getExistingDirectRoomWithUser(otherUserId)?.roomId
+
         when (action) {
             is VerificationAction.RequestVerificationByDM -> {
                 if (roomId == null) return@withState
@@ -124,18 +127,20 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
             }
             is VerificationAction.RemoteQrCodeScanned     -> {
                 // TODO Use session.getCrossSigningService()?
-                session.getSasVerificationService()
-                        .getExistingTransaction(action.userID, action.sasTransactionId)
+                val existingTransaction = session.getSasVerificationService()
+                        .getExistingTransaction(action.userID, action.transactionId) as? QRVerificationTransaction
+                existingTransaction
                         ?.userHasScannedRemoteQrCode(action.scannedData)
             }
             is VerificationAction.SASMatchAction          -> {
-                session.getSasVerificationService()
+                (session.getSasVerificationService()
                         .getExistingTransaction(action.userID, action.sasTransactionId)
-                        ?.userHasVerifiedShortCode()
+                        as? SasVerificationTransaction)?.userHasVerifiedShortCode()
             }
             is VerificationAction.SASDoNotMatchAction     -> {
-                session.getSasVerificationService()
+                (session.getSasVerificationService()
                         .getExistingTransaction(action.userID, action.sasTransactionId)
+                        as? SasVerificationTransaction)
                         ?.shortCodeDoesNotMatch()
             }
             is VerificationAction.GotItConclusion         -> {
@@ -144,16 +149,16 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
         }
     }
 
-    override fun transactionCreated(tx: SasVerificationTransaction) {
+    override fun transactionCreated(tx: VerificationTransaction) {
         transactionUpdated(tx)
     }
 
-    override fun transactionUpdated(tx: SasVerificationTransaction) = withState { state ->
+    override fun transactionUpdated(tx: VerificationTransaction) = withState { state ->
         if (tx.transactionId == (state.pendingRequest?.transactionId ?: state.transactionId)) {
             // A SAS tx has been started following this request
             setState {
                 copy(
-                        sasTransactionState = tx.state,
+                        transactionState = tx.state,
                         cancelCode = tx.cancelledReason
                 )
             }

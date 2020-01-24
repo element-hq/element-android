@@ -23,9 +23,10 @@ import android.content.Context
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListener
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
+import im.vector.matrix.android.api.session.crypto.sas.VerificationService
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequestCancellation
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
@@ -55,7 +56,7 @@ import kotlin.collections.HashMap
 @Singleton
 class KeyRequestHandler @Inject constructor(private val context: Context)
     : RoomKeysRequestListener,
-        SasVerificationService.SasVerificationListener {
+        VerificationService.VerificationListener {
 
     private val alertsToRequests = HashMap<String, ArrayList<IncomingRoomKeyRequest>>()
 
@@ -261,16 +262,20 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
         }
     }
 
-    override fun transactionCreated(tx: SasVerificationTransaction) {
+    override fun transactionCreated(tx: VerificationTransaction) {
     }
 
-    override fun transactionUpdated(tx: SasVerificationTransaction) {
-        val state = tx.state
-        if (state == SasVerificationTxState.Verified) {
-            // ok it's verified, see if we have key request for that
-            shareAllSessions("${tx.otherDeviceId}${tx.otherUserId}")
-            PopupAlertManager.cancelAlert("ikr_${tx.otherDeviceId}${tx.otherUserId}")
+    override fun transactionUpdated(tx: VerificationTransaction) {
+        if (tx is SasVerificationTransaction) {
+            val state = tx.state
+            if (state == VerificationTxState.Verified) {
+                // ok it's verified, see if we have key request for that
+                shareAllSessions("${tx.otherDeviceId}${tx.otherUserId}")
+                PopupAlertManager.cancelAlert("ikr_${tx.otherDeviceId}${tx.otherUserId}")
+            }
         }
+        // should do it with QR tx also
+        // TODO -> Probably better to listen to device trust changes?
     }
 
     override fun markedAsManuallyVerified(userId: String, deviceId: String) {

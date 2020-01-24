@@ -17,9 +17,9 @@ package im.vector.riotx.features.crypto.verification
 
 import android.content.Context
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.VerificationService
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseActivity
@@ -34,7 +34,7 @@ import javax.inject.Singleton
  * Listens to the VerificationManager and add a new notification when an incoming request is detected.
  */
 @Singleton
-class IncomingVerificationRequestHandler @Inject constructor(private val context: Context) : SasVerificationService.SasVerificationListener {
+class IncomingVerificationRequestHandler @Inject constructor(private val context: Context) : VerificationService.VerificationListener {
 
     private var session: Session? = null
 
@@ -48,13 +48,13 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
         this.session = null
     }
 
-    override fun transactionCreated(tx: SasVerificationTransaction) {}
+    override fun transactionCreated(tx: VerificationTransaction) {}
 
-    override fun transactionUpdated(tx: SasVerificationTransaction) {
+    override fun transactionUpdated(tx: VerificationTransaction) {
         if (!tx.isToDeviceTransport()) return
         // TODO maybe check also if
         when (tx.state) {
-            SasVerificationTxState.OnStarted -> {
+            VerificationTxState.OnStarted -> {
                 // Add a notification for every incoming request
                 val name = session?.getUser(tx.otherUserId)?.displayName
                         ?: tx.otherUserId
@@ -92,13 +92,13 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
                         }
                 PopupAlertManager.postVectorAlert(alert)
             }
-            SasVerificationTxState.Cancelled,
-            SasVerificationTxState.OnCancelled,
-            SasVerificationTxState.Verified  -> {
+            VerificationTxState.Cancelled,
+            VerificationTxState.OnCancelled,
+            VerificationTxState.Verified  -> {
                 // cancel related notification
                 PopupAlertManager.cancelAlert("kvr_${tx.transactionId}")
             }
-            else                             -> Unit
+            else                          -> Unit
         }
     }
 

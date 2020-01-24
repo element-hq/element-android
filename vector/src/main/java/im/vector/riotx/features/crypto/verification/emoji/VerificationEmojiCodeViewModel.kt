@@ -20,9 +20,10 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.sas.EmojiRepresentation
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
+import im.vector.matrix.android.api.session.crypto.sas.VerificationService
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.core.di.HasScreenInjector
@@ -42,13 +43,13 @@ data class VerificationEmojiCodeViewState(
 class VerificationEmojiCodeViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationEmojiCodeViewState,
         private val session: Session
-) : VectorViewModel<VerificationEmojiCodeViewState, EmptyAction>(initialState), SasVerificationService.SasVerificationListener {
+) : VectorViewModel<VerificationEmojiCodeViewState, EmptyAction>(initialState), VerificationService.VerificationListener {
 
     init {
         withState { state ->
             refreshStateFromTx(session.getSasVerificationService()
                     .getExistingTransaction(state.otherUser?.id ?: "", state.transactionId
-                            ?: ""))
+                            ?: "") as? SasVerificationTransaction)
         }
 
         session.getSasVerificationService().addListener(this)
@@ -61,16 +62,16 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
 
     private fun refreshStateFromTx(sasTx: SasVerificationTransaction?) {
         when (sasTx?.state) {
-            SasVerificationTxState.None,
-            SasVerificationTxState.SendingStart,
-            SasVerificationTxState.Started,
-            SasVerificationTxState.OnStarted,
-            SasVerificationTxState.SendingAccept,
-            SasVerificationTxState.Accepted,
-            SasVerificationTxState.OnAccepted,
-            SasVerificationTxState.SendingKey,
-            SasVerificationTxState.KeySent,
-            SasVerificationTxState.OnKeyReceived  -> {
+            VerificationTxState.None,
+            VerificationTxState.SendingStart,
+            VerificationTxState.Started,
+            VerificationTxState.OnStarted,
+            VerificationTxState.SendingAccept,
+            VerificationTxState.Accepted,
+            VerificationTxState.OnAccepted,
+            VerificationTxState.SendingKey,
+            VerificationTxState.KeySent,
+            VerificationTxState.OnKeyReceived  -> {
                 setState {
                     copy(
                             isWaitingFromOther = false,
@@ -84,7 +85,7 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
                     )
                 }
             }
-            SasVerificationTxState.ShortCodeReady -> {
+            VerificationTxState.ShortCodeReady -> {
                 setState {
                     copy(
                             isWaitingFromOther = false,
@@ -96,17 +97,17 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
                     )
                 }
             }
-            SasVerificationTxState.ShortCodeAccepted,
-            SasVerificationTxState.SendingMac,
-            SasVerificationTxState.MacSent,
-            SasVerificationTxState.Verifying,
-            SasVerificationTxState.Verified       -> {
+            VerificationTxState.ShortCodeAccepted,
+            VerificationTxState.SendingMac,
+            VerificationTxState.MacSent,
+            VerificationTxState.Verifying,
+            VerificationTxState.Verified       -> {
                 setState {
                     copy(isWaitingFromOther = true)
                 }
             }
-            SasVerificationTxState.Cancelled,
-            SasVerificationTxState.OnCancelled    -> {
+            VerificationTxState.Cancelled,
+            VerificationTxState.OnCancelled    -> {
                 // The fragment should not be rendered in this state,
                 // it should have been replaced by a conclusion fragment
                 setState {
@@ -130,12 +131,12 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
         }
     }
 
-    override fun transactionCreated(tx: SasVerificationTransaction) {
+    override fun transactionCreated(tx: VerificationTransaction) {
         transactionUpdated(tx)
     }
 
-    override fun transactionUpdated(tx: SasVerificationTransaction) = withState { state ->
-        if (tx.transactionId == state.transactionId) {
+    override fun transactionUpdated(tx: VerificationTransaction) = withState { state ->
+        if (tx.transactionId == state.transactionId && tx is SasVerificationTransaction) {
             refreshStateFromTx(tx)
         }
     }

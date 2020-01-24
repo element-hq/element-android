@@ -18,13 +18,13 @@ package im.vector.matrix.android.internal.crypto.tasks
 
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
+import im.vector.matrix.android.api.session.crypto.sas.VerificationService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
-import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
+import im.vector.matrix.android.internal.crypto.verification.DefaultVerificationService
 import im.vector.matrix.android.internal.di.DeviceId
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.task.Task
@@ -35,7 +35,7 @@ import javax.inject.Inject
 internal interface RoomVerificationUpdateTask : Task<RoomVerificationUpdateTask.Params, Unit> {
     data class Params(
             val events: List<Event>,
-            val sasVerificationService: DefaultSasVerificationService,
+            val sasVerificationService: DefaultVerificationService,
             val cryptoService: CryptoService
     )
 }
@@ -60,7 +60,7 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
             // If the request is in the future by more than 5 minutes or more than 10 minutes in the past,
             // the message should be ignored by the receiver.
 
-            if (!SasVerificationService.isValidRequest(event.ageLocalTs
+            if (!VerificationService.isValidRequest(event.ageLocalTs
                             ?: event.originServerTs)) return@forEach Unit.also {
                 Timber.d("## SAS Verification live observer: msgId: ${event.eventId} is outdated")
             }

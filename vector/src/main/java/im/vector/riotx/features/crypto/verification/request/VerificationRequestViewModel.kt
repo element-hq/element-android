@@ -19,8 +19,8 @@ import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.sas.VerificationService
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
@@ -38,7 +38,7 @@ data class VerificationRequestViewState(
 class VerificationRequestViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationRequestViewState,
         private val session: Session
-) : VectorViewModel<VerificationRequestViewState, EmptyAction>(initialState), SasVerificationService.SasVerificationListener {
+) : VectorViewModel<VerificationRequestViewState, EmptyAction>(initialState), VerificationService.VerificationListener {
 
     @AssistedInject.Factory
     interface Factory {
@@ -79,9 +79,9 @@ class VerificationRequestViewModel @AssistedInject constructor(
 
     override fun handle(action: EmptyAction) {}
 
-    override fun transactionCreated(tx: SasVerificationTransaction) {}
+    override fun transactionCreated(tx: VerificationTransaction) {}
 
-    override fun transactionUpdated(tx: SasVerificationTransaction) {}
+    override fun transactionUpdated(tx: VerificationTransaction) {}
 
     override fun verificationRequestCreated(pr: PendingVerificationRequest) {
         verificationRequestUpdated(pr)

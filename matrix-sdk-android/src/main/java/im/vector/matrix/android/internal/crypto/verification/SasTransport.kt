@@ -16,7 +16,7 @@
 package im.vector.matrix.android.internal.crypto.verification
 
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 
 /**
@@ -30,7 +30,7 @@ internal interface SasTransport {
      */
     fun sendToOther(type: String,
                     verificationInfo: VerificationInfo,
-                    nextState: SasVerificationTxState,
+                    nextState: VerificationTxState,
                     onErrorReason: CancelCode,
                     onDone: (() -> Unit)?)
 
