@@ -40,11 +40,11 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
 
     fun start(session: Session) {
         this.session = session
-        session.getSasVerificationService().addListener(this)
+        session.getVerificationService().addListener(this)
     }
 
     fun stop() {
-        session?.getSasVerificationService()?.removeListener(this)
+        session?.getVerificationService()?.removeListener(this)
         this.session = null
     }
 
@@ -130,7 +130,7 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
                             }
                         }
                         dismissedAction = Runnable {
-                            session?.getSasVerificationService()?.declineVerificationRequestInDMs(pr.otherUserId,
+                            session?.getVerificationService()?.declineVerificationRequestInDMs(pr.otherUserId,
                                     pr.requestInfo?.fromDevice ?: "",
                                     pr.transactionId ?: "",
                                     pr.roomId ?: ""

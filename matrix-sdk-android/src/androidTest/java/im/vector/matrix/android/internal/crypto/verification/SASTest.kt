@@ -51,8 +51,8 @@ class SASTest : InstrumentedTest {
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
 
-        val aliceSasMgr = aliceSession.getSasVerificationService()
-        val bobSasMgr = bobSession!!.getSasVerificationService()
+        val aliceVerificationService = aliceSession.getVerificationService()
+        val bobVerificationService = bobSession!!.getVerificationService()
 
         val bobTxCreatedLatch = CountDownLatch(1)
         val bobListener = object : VerificationService.VerificationListener {
@@ -64,18 +64,18 @@ class SASTest : InstrumentedTest {
 
             override fun markedAsManuallyVerified(userId: String, deviceId: String) {}
         }
-        bobSasMgr.addListener(bobListener)
+        bobVerificationService.addListener(bobListener)
 
-        val txID = aliceSasMgr.beginKeyVerification(VerificationMethod.SAS, bobSession.myUserId, bobSession.getMyDevice().deviceId)
+        val txID = aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobSession.myUserId, bobSession.getMyDevice().deviceId)
         assertNotNull("Alice should have a started transaction", txID)
 
-        val aliceKeyTx = aliceSasMgr.getExistingTransaction(bobSession.myUserId, txID!!)
+        val aliceKeyTx = aliceVerificationService.getExistingTransaction(bobSession.myUserId, txID!!)
         assertNotNull("Alice should have a started transaction", aliceKeyTx)
 
         mTestHelper.await(bobTxCreatedLatch)
-        bobSasMgr.removeListener(bobListener)
+        bobVerificationService.removeListener(bobListener)
 
-        val bobKeyTx = bobSasMgr.getExistingTransaction(aliceSession.myUserId, txID)
+        val bobKeyTx = bobVerificationService.getExistingTransaction(aliceSession.myUserId, txID)
 
         assertNotNull("Bob should have started verif transaction", bobKeyTx)
         assertTrue(bobKeyTx is SASDefaultVerificationTransaction)
@@ -105,7 +105,7 @@ class SASTest : InstrumentedTest {
 
             override fun markedAsManuallyVerified(userId: String, deviceId: String) {}
         }
-        bobSasMgr.addListener(bobListener2)
+        bobVerificationService.addListener(bobListener2)
 
         aliceSasTx.cancel(CancelCode.User)
         mTestHelper.await(cancelLatch)
@@ -120,8 +120,8 @@ class SASTest : InstrumentedTest {
         assertEquals("Should be User cancelled on bob side",
                 CancelCode.User, aliceSasTx.cancelledReason)
 
-        assertNull(bobSasMgr.getExistingTransaction(aliceSession.myUserId, txID))
-        assertNull(aliceSasMgr.getExistingTransaction(bobSession.myUserId, txID))
+        assertNull(bobVerificationService.getExistingTransaction(aliceSession.myUserId, txID))
+        assertNull(aliceVerificationService.getExistingTransaction(bobSession.myUserId, txID))
 
         cryptoTestData.close()
     }
@@ -151,7 +151,7 @@ class SASTest : InstrumentedTest {
 
             override fun markedAsManuallyVerified(userId: String, deviceId: String) {}
         }
-        bobSession.getSasVerificationService().addListener(bobListener)
+        bobSession.getVerificationService().addListener(bobListener)
 
         // TODO bobSession!!.dataHandler.addListener(object : MXEventListener() {
         // TODO     override fun onToDeviceEvent(event: Event?) {
@@ -179,7 +179,7 @@ class SASTest : InstrumentedTest {
 
             override fun markedAsManuallyVerified(userId: String, deviceId: String) {}
         }
-        aliceSession.getSasVerificationService().addListener(aliceListener)
+        aliceSession.getVerificationService().addListener(aliceListener)
 
         fakeBobStart(bobSession, aliceUserID, aliceDevice, tid, protocols = protocols)
 
@@ -303,7 +303,7 @@ class SASTest : InstrumentedTest {
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
 
-        val aliceSasMgr = aliceSession.getSasVerificationService()
+        val aliceVerificationService = aliceSession.getVerificationService()
 
         val aliceCreatedLatch = CountDownLatch(2)
         val aliceCancelledLatch = CountDownLatch(2)
@@ -322,12 +322,12 @@ class SASTest : InstrumentedTest {
 
             override fun markedAsManuallyVerified(userId: String, deviceId: String) {}
         }
-        aliceSasMgr.addListener(aliceListener)
+        aliceVerificationService.addListener(aliceListener)
 
         val bobUserId = bobSession!!.myUserId
         val bobDeviceId = bobSession.getMyDevice().deviceId
-        aliceSasMgr.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId)
-        aliceSasMgr.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId)
+        aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId)
+        aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId)
 
         mTestHelper.await(aliceCreatedLatch)
         mTestHelper.await(aliceCancelledLatch)
@@ -345,8 +345,8 @@ class SASTest : InstrumentedTest {
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
 
-        val aliceSasMgr = aliceSession.getSasVerificationService()
-        val bobSasMgr = bobSession!!.getSasVerificationService()
+        val aliceVerificationService = aliceSession.getVerificationService()
+        val bobVerificationService = bobSession!!.getVerificationService()
 
         var accepted: KeyVerificationAccept? = null
         var startReq: KeyVerificationStart? = null
@@ -366,7 +366,7 @@ class SASTest : InstrumentedTest {
                 }
             }
         }
-        aliceSasMgr.addListener(aliceListener)
+        aliceVerificationService.addListener(aliceListener)
 
         val bobListener = object : VerificationService.VerificationListener {
             override fun transactionCreated(tx: VerificationTransaction) {}
@@ -380,11 +380,11 @@ class SASTest : InstrumentedTest {
 
             override fun markedAsManuallyVerified(userId: String, deviceId: String) {}
         }
-        bobSasMgr.addListener(bobListener)
+        bobVerificationService.addListener(bobListener)
 
         val bobUserId = bobSession.myUserId
         val bobDeviceId = bobSession.getMyDevice().deviceId
-        aliceSasMgr.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId)
+        aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId)
         mTestHelper.await(aliceAcceptedLatch)
 
         assertTrue("Should have receive a commitment", accepted!!.commitment?.trim()?.isEmpty() == false)
@@ -409,8 +409,8 @@ class SASTest : InstrumentedTest {
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
 
-        val aliceSasMgr = aliceSession.getSasVerificationService()
-        val bobSasMgr = bobSession!!.getSasVerificationService()
+        val aliceVerificationService = aliceSession.getVerificationService()
+        val bobVerificationService = bobSession!!.getVerificationService()
 
         val aliceSASLatch = CountDownLatch(1)
         val aliceListener = object : VerificationService.VerificationListener {
@@ -428,7 +428,7 @@ class SASTest : InstrumentedTest {
 
             override fun markedAsManuallyVerified(userId: String, deviceId: String) {}
         }
-        aliceSasMgr.addListener(aliceListener)
+        aliceVerificationService.addListener(aliceListener)
 
         val bobSASLatch = CountDownLatch(1)
         val bobListener = object : VerificationService.VerificationListener {
@@ -449,16 +449,16 @@ class SASTest : InstrumentedTest {
 
             override fun markedAsManuallyVerified(userId: String, deviceId: String) {}
         }
-        bobSasMgr.addListener(bobListener)
+        bobVerificationService.addListener(bobListener)
 
         val bobUserId = bobSession.myUserId
         val bobDeviceId = bobSession.getMyDevice().deviceId
-        val verificationSAS = aliceSasMgr.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId)
+        val verificationSAS = aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId)
         mTestHelper.await(aliceSASLatch)
         mTestHelper.await(bobSASLatch)
 
-        val aliceTx = aliceSasMgr.getExistingTransaction(bobUserId, verificationSAS!!) as SASDefaultVerificationTransaction
-        val bobTx = bobSasMgr.getExistingTransaction(aliceSession.myUserId, verificationSAS) as SASDefaultVerificationTransaction
+        val aliceTx = aliceVerificationService.getExistingTransaction(bobUserId, verificationSAS!!) as SASDefaultVerificationTransaction
+        val bobTx = bobVerificationService.getExistingTransaction(aliceSession.myUserId, verificationSAS) as SASDefaultVerificationTransaction
 
         assertEquals("Should have same SAS", aliceTx.getShortCodeRepresentation(SasMode.DECIMAL),
                 bobTx.getShortCodeRepresentation(SasMode.DECIMAL))
@@ -473,8 +473,8 @@ class SASTest : InstrumentedTest {
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
 
-        val aliceSasMgr = aliceSession.getSasVerificationService()
-        val bobSasMgr = bobSession!!.getSasVerificationService()
+        val aliceVerificationService = aliceSession.getVerificationService()
+        val bobVerificationService = bobSession!!.getVerificationService()
 
         val aliceSASLatch = CountDownLatch(1)
         val aliceListener = object : VerificationService.VerificationListener {
@@ -495,7 +495,7 @@ class SASTest : InstrumentedTest {
 
             override fun markedAsManuallyVerified(userId: String, deviceId: String) {}
         }
-        aliceSasMgr.addListener(aliceListener)
+        aliceVerificationService.addListener(aliceListener)
 
         val bobSASLatch = CountDownLatch(1)
         val bobListener = object : VerificationService.VerificationListener {
@@ -519,11 +519,11 @@ class SASTest : InstrumentedTest {
 
             override fun markedAsManuallyVerified(userId: String, deviceId: String) {}
         }
-        bobSasMgr.addListener(bobListener)
+        bobVerificationService.addListener(bobListener)
 
         val bobUserId = bobSession.myUserId
         val bobDeviceId = bobSession.getMyDevice().deviceId
-        aliceSasMgr.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId)
+        aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId)
         mTestHelper.await(aliceSASLatch)
         mTestHelper.await(bobSASLatch)
 

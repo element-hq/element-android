@@ -20,8 +20,8 @@ import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 
 /**
- * SAS verification can be performed using toDevice events or via DM.
- * This class abstracts the concept of transport for SAS
+ * Verification can be performed using toDevice events or via DM.
+ * This class abstracts the concept of transport for verification
  */
 internal interface VerificationTransport {
 
@@ -46,6 +46,7 @@ internal interface VerificationTransport {
                           code: CancelCode)
 
     fun done(transactionId: String)
+
     /**
      * Creates an accept message suitable for this transport
      */

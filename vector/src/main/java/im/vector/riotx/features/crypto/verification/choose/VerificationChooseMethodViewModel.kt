@@ -51,7 +51,7 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
     override fun transactionUpdated(tx: VerificationTransaction) {}
 
     override fun verificationRequestUpdated(pr: PendingVerificationRequest) = withState { state ->
-        val pvr = session.getSasVerificationService().getExistingVerificationRequest(state.otherUserId, state.transactionId)
+        val pvr = session.getVerificationService().getExistingVerificationRequest(state.otherUserId, state.transactionId)
 
         setState {
             copy(
@@ -70,12 +70,12 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
     }
 
     init {
-        session.getSasVerificationService().addListener(this)
+        session.getVerificationService().addListener(this)
     }
 
     override fun onCleared() {
         super.onCleared()
-        session.getSasVerificationService().removeListener(this)
+        session.getVerificationService().removeListener(this)
     }
 
     companion object : MvRxViewModelFactory<VerificationChooseMethodViewModel, VerificationChooseMethodViewState> {
@@ -87,7 +87,7 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
         override fun initialState(viewModelContext: ViewModelContext): VerificationChooseMethodViewState? {
             val args: VerificationBottomSheet.VerificationArgs = viewModelContext.args()
             val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
-            val pvr = session.getSasVerificationService().getExistingVerificationRequest(args.otherUserId, args.verificationId)
+            val pvr = session.getVerificationService().getExistingVerificationRequest(args.otherUserId, args.verificationId)
 
             return VerificationChooseMethodViewState(otherUserId = args.otherUserId,
                     transactionId = args.verificationId ?: "",

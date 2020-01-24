@@ -24,8 +24,8 @@ import im.vector.matrix.android.internal.crypto.verification.PendingVerification
  * https://matrix.org/docs/spec/client_server/r0.5.0#key-verification-framework
  *
  * Verifying keys manually by reading out the Ed25519 key is not very user friendly, and can lead to errors.
- * SAS verification is a user-friendly key verification process.
- * SAS verification is intended to be a highly interactive process for users,
+ * Verification is a user-friendly key verification process.
+ * Verification is intended to be a highly interactive process for users,
  * and as such exposes verification methods which are easier for users to use.
  */
 interface VerificationService {

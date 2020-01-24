@@ -145,7 +145,7 @@ internal class VerificationTransportToDevice(
     }
 }
 
-internal class SasTransportToDeviceFactory @Inject constructor(
+internal class VerificationTransportToDeviceFactory @Inject constructor(
         private val sendToDeviceTask: SendToDeviceTask,
         private val taskExecutor: TaskExecutor) {
 

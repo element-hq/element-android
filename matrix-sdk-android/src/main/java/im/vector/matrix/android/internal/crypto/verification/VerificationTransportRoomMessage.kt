@@ -292,7 +292,7 @@ internal class VerificationTransportRoomMessage(
     }
 }
 
-internal class SasTransportRoomMessageFactory @Inject constructor(
+internal class VerificationTransportRoomMessageFactory @Inject constructor(
         private val workManagerProvider: WorkManagerProvider,
         private val stringProvider: StringProvider,
         private val monarchy: Monarchy,

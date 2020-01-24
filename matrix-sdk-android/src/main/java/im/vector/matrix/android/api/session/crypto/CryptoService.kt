@@ -50,7 +50,7 @@ interface CryptoService {
 
     fun isCryptoEnabled(): Boolean
 
-    fun getSasVerificationService(): VerificationService
+    fun getVerificationService(): VerificationService
 
     fun getCrossSigningService(): CrossSigningService
 
@@ -118,8 +118,9 @@ interface CryptoService {
 
     fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>>)
 
-    fun getCryptoDeviceInfo(userId: String) : List<CryptoDeviceInfo>
-    fun getLiveCryptoDeviceInfo(userId: String) : LiveData<List<CryptoDeviceInfo>>
+    fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo>
+
+    fun getLiveCryptoDeviceInfo(userId: String): LiveData<List<CryptoDeviceInfo>>
 
     fun addNewSessionListener(newSessionListener: NewSessionListener)
 

@@ -64,12 +64,12 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
 
     fun start(session: Session) {
         this.session = session
-        session.getSasVerificationService().addListener(this)
+        session.getVerificationService().addListener(this)
         session.addRoomKeysRequestListener(this)
     }
 
     fun stop() {
-        session?.getSasVerificationService()?.removeListener(this)
+        session?.getVerificationService()?.removeListener(this)
         session?.removeRoomKeysRequestListener(this)
         session = null
     }

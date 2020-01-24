@@ -48,8 +48,8 @@ internal abstract class SASDefaultVerificationTransaction(
         transactionId: String,
         otherUserId: String,
         otherDevice: String?,
-        isIncoming: Boolean) :
-        DefaultVerificationTransaction(transactionId, otherUserId, otherDevice, isIncoming), SasVerificationTransaction {
+        isIncoming: Boolean
+) : DefaultVerificationTransaction(transactionId, otherUserId, otherDevice, isIncoming), SasVerificationTransaction {
 
     companion object {
         const val SAS_MAC_SHA256_LONGKDF = "hmac-sha256"

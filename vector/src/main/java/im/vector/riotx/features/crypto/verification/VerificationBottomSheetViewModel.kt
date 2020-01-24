@@ -68,11 +68,11 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
         get() = _requestLiveData
 
     init {
-        session.getSasVerificationService().addListener(this)
+        session.getVerificationService().addListener(this)
     }
 
     override fun onCleared() {
-        session.getSasVerificationService().removeListener(this)
+        session.getVerificationService().removeListener(this)
         super.onCleared()
     }
 
@@ -91,10 +91,10 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
 
             val userItem = session.getUser(args.otherUserId)
 
-            val pr = session.getSasVerificationService().getExistingVerificationRequest(args.otherUserId, args.verificationId)
+            val pr = session.getVerificationService().getExistingVerificationRequest(args.otherUserId, args.verificationId)
 
             val sasTx = (pr?.transactionId ?: args.verificationId)?.let {
-                session.getSasVerificationService().getExistingTransaction(args.otherUserId, it)
+                session.getVerificationService().getExistingTransaction(args.otherUserId, it)
             }
 
             return fragment.verificationViewModelFactory.create(VerificationBottomSheetViewState(
@@ -132,7 +132,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                                 copy(
                                         roomId = data,
                                         pendingRequest = Success(
-                                                session.getSasVerificationService().requestKeyVerificationInDMs(supportedVerificationMethods, otherUserId, data, pendingLocalId)
+                                                session.getVerificationService().requestKeyVerificationInDMs(supportedVerificationMethods, otherUserId, data, pendingLocalId)
                                         )
                                 )
                             }
@@ -146,16 +146,16 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                     })
                 } else {
                     setState {
-                        copy(pendingRequest = Success(session.getSasVerificationService().requestKeyVerificationInDMs(supportedVerificationMethods, otherUserId, roomId)))
+                        copy(pendingRequest = Success(session.getVerificationService().requestKeyVerificationInDMs(supportedVerificationMethods, otherUserId, roomId)))
                     }
                 }
             }
             is VerificationAction.StartSASVerification    -> {
-                val request = session.getSasVerificationService().getExistingVerificationRequest(otherUserId, action.pendingRequestTransactionId)
+                val request = session.getVerificationService().getExistingVerificationRequest(otherUserId, action.pendingRequestTransactionId)
                         ?: return@withState
                 if (roomId == null) return@withState
                 val otherDevice = if (request.isIncoming) request.requestInfo?.fromDevice else request.readyInfo?.fromDevice
-                session.getSasVerificationService().beginKeyVerificationInDMs(
+                session.getVerificationService().beginKeyVerificationInDMs(
                         VerificationMethod.SAS,
                         transactionId = action.pendingRequestTransactionId,
                         roomId = roomId,
@@ -165,19 +165,18 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                 )
             }
             is VerificationAction.RemoteQrCodeScanned     -> {
-                // TODO Use session.getCrossSigningService()?
-                val existingTransaction = session.getSasVerificationService()
+                val existingTransaction = session.getVerificationService()
                         .getExistingTransaction(action.userID, action.transactionId) as? QRVerificationTransaction
                 existingTransaction
                         ?.userHasScannedRemoteQrCode(action.scannedData)
             }
             is VerificationAction.SASMatchAction          -> {
-                (session.getSasVerificationService()
+                (session.getVerificationService()
                         .getExistingTransaction(action.userID, action.sasTransactionId)
                         as? SasVerificationTransaction)?.userHasVerifiedShortCode()
             }
             is VerificationAction.SASDoNotMatchAction     -> {
-                (session.getSasVerificationService()
+                (session.getVerificationService()
                         .getExistingTransaction(action.userID, action.sasTransactionId)
                         as? SasVerificationTransaction)
                         ?.shortCodeDoesNotMatch()
