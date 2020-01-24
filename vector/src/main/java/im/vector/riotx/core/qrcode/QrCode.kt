@@ -23,16 +23,13 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
 
-fun String.toQrCode(width: Int,
-                    height: Int,
-                    @ColorInt backgroundColor: Int = Color.WHITE,
-                    @ColorInt foregroundColor: Int = Color.BLACK): Bitmap {
+fun String.toBitMatrix(size: Int): BitMatrix {
     return QRCodeWriter().encode(
             this,
             BarcodeFormat.QR_CODE,
-            width,
-            height
-    ).toBitmap(backgroundColor, foregroundColor)
+            size,
+            size
+    )
 }
 
 fun BitMatrix.toBitmap(@ColorInt backgroundColor: Int = Color.WHITE,

@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:text="Scan QR-code" />
 
-            <ImageView
+            <im.vector.riotx.core.ui.views.QrCodeImageView
                 android:id="@+id/debug_qr_code"
                 android:layout_width="200dp"
                 android:layout_height="200dp"

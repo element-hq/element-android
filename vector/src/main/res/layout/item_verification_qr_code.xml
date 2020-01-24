@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<im.vector.riotx.core.ui.views.QrCodeImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemVerificationBigImage"
+    android:layout_width="match_parent"
+    android:layout_height="240dp"
+    android:layout_margin="8dp"
+    tools:src="@drawable/ic_shield_trusted" />

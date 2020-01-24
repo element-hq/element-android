@@ -16,38 +16,41 @@
  */
 package im.vector.riotx.features.crypto.verification.epoxy
 
-import android.widget.ImageView
 import androidx.core.view.ViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import im.vector.riotx.core.ui.views.QrCodeImageView
 
 /**
  * A action for bottom sheet.
  */
-@EpoxyModelClass(layout = R.layout.item_verification_big_image)
-abstract class BottomSheetVerificationBigImageItem : VectorEpoxyModel<BottomSheetVerificationBigImageItem.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_verification_qr_code)
+abstract class BottomSheetVerificationQrCodeItem : VectorEpoxyModel<BottomSheetVerificationQrCodeItem.Holder>() {
 
     @EpoxyAttribute
-    var imageRes: Int = 0
+    lateinit var data: String
+
+    @EpoxyAttribute
+    var animate = false
 
     @EpoxyAttribute
     var contentDescription: String? = null
 
     override fun bind(holder: Holder) {
-        holder.image.setImageResource(imageRes)
+        holder.qsrCodeImage.setData(data, animate)
 
         if (contentDescription == null) {
-            ViewCompat.setImportantForAccessibility(holder.image, ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_NO)
+            ViewCompat.setImportantForAccessibility(holder.qsrCodeImage, ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_NO)
         } else {
-            ViewCompat.setImportantForAccessibility(holder.image, ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_YES)
-            holder.image.contentDescription = contentDescription
+            ViewCompat.setImportantForAccessibility(holder.qsrCodeImage, ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_YES)
+            holder.qsrCodeImage.contentDescription = contentDescription
         }
     }
 
     class Holder : VectorEpoxyHolder() {
-        val image by bind<ImageView>(R.id.itemVerificationBigImage)
+        val qsrCodeImage by bind<QrCodeImageView>(R.id.itemVerificationBigImage)
     }
 }
