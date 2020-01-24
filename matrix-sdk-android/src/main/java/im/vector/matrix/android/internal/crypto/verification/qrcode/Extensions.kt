@@ -18,6 +18,10 @@ package im.vector.matrix.android.internal.crypto.verification.qrcode
 
 import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
+import java.net.URLDecoder
+import java.net.URLEncoder
+
+private const val ENCODING = "utf-8"
 
 /**
  * Generate an URL to generate a QR code of the form:
@@ -34,21 +38,19 @@ fun QrCodeData.toUrl(): String {
     return buildString {
         append(PermalinkFactory.createPermalink(userId))
         append("?request=")
-        append(PermalinkFactory.escape(requestEventId))
+        append(URLEncoder.encode(requestEventId, ENCODING))
         append("&action=")
-        append(PermalinkFactory.escape(action))
+        append(URLEncoder.encode(action, ENCODING))
 
         for ((keyId, key) in keys) {
-            append("&key_")
-            append(PermalinkFactory.escape(keyId))
-            append("=")
-            append(PermalinkFactory.escape(key))
+            append("&key_$keyId=")
+            append(URLEncoder.encode(key, ENCODING))
         }
 
         append("&secret=")
-        append(PermalinkFactory.escape(sharedSecret))
+        append(URLEncoder.encode(sharedSecret, ENCODING))
         append("&other_user_key=")
-        append(PermalinkFactory.escape(otherUserKey))
+        append(URLEncoder.encode(otherUserKey, ENCODING))
     }
 }
 
@@ -82,7 +84,7 @@ fun String.toQrCodeData(): QrCodeData? {
             .filter { it.isNotEmpty() }
 
     val keyValues = urlParams.map {
-        (it.substringBefore("=") to it.substringAfter("=").let { value -> PermalinkFactory.unescape(value) })
+        (it.substringBefore("=") to it.substringAfter("=").let { value -> URLDecoder.decode(value, ENCODING) })
     }.toMap()
 
     val action = keyValues["action"] ?: return null

@@ -39,7 +39,7 @@ class QrCodeTest {
             otherUserKey = "otherUserKey"
     )
 
-    private val basicUrl = "https://matrix.to/#/@benoit:matrix.org?request=\$azertyazerty&action=verify&key_1=abcdef&key_2=ghijql&secret=sharedSecret&other_user_key=otherUserKey"
+    private val basicUrl = "https://matrix.to/#/@benoit:matrix.org?request=%24azertyazerty&action=verify&key_1=abcdef&key_2=ghijql&secret=sharedSecret&other_user_key=otherUserKey"
 
     @Test
     fun testNominalCase() {
@@ -101,7 +101,7 @@ class QrCodeTest {
 
     @Test
     fun testBadRequestEventId() {
-        basicUrl.replace("\$azertyazerty", "@azertyazerty")
+        basicUrl.replace("%24azertyazerty", "%32azertyazerty")
                 .toQrCodeData()
                 .shouldBeNull()
     }
