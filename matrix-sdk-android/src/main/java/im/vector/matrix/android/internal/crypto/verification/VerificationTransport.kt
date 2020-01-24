@@ -23,7 +23,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageVerificati
  * SAS verification can be performed using toDevice events or via DM.
  * This class abstracts the concept of transport for SAS
  */
-internal interface SasTransport {
+internal interface VerificationTransport {
 
     /**
      * Sends a message

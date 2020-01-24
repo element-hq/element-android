@@ -204,7 +204,7 @@ internal abstract class SASDefaultVerificationTransaction(
     }
 
     override fun isToDeviceTransport(): Boolean {
-        return transport is SasTransportToDevice
+        return transport is VerificationTransportToDevice
     }
 
     override fun acceptVerificationEvent(senderId: String, info: VerificationInfo) {

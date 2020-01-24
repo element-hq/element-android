@@ -39,7 +39,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-internal class SasTransportRoomMessage(
+internal class VerificationTransportRoomMessage(
         private val workManagerProvider: WorkManagerProvider,
         private val stringProvider: StringProvider,
         private val sessionId: String,
@@ -49,7 +49,7 @@ internal class SasTransportRoomMessage(
         private val monarchy: Monarchy,
         private val localEchoEventFactory: LocalEchoEventFactory,
         private val tx: DefaultVerificationTransaction?
-) : SasTransport {
+) : VerificationTransport {
 
     override fun sendToOther(type: String,
                              verificationInfo: VerificationInfo,
@@ -304,7 +304,7 @@ internal class SasTransportRoomMessageFactory @Inject constructor(
         private val deviceId: String?,
         private val localEchoEventFactory: LocalEchoEventFactory) {
 
-    fun createTransport(roomId: String, tx: DefaultVerificationTransaction?): SasTransportRoomMessage {
-        return SasTransportRoomMessage(workManagerProvider, stringProvider, sessionId, userId, deviceId, roomId, monarchy, localEchoEventFactory, tx)
+    fun createTransport(roomId: String, tx: DefaultVerificationTransaction?): VerificationTransportRoomMessage {
+        return VerificationTransportRoomMessage(workManagerProvider, stringProvider, sessionId, userId, deviceId, roomId, monarchy, localEchoEventFactory, tx)
     }
 }

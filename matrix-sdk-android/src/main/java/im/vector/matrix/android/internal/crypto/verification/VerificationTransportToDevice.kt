@@ -28,11 +28,11 @@ import im.vector.matrix.android.internal.task.configureWith
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class SasTransportToDevice(
+internal class VerificationTransportToDevice(
         private var tx: DefaultVerificationTransaction?,
         private var sendToDeviceTask: SendToDeviceTask,
         private var taskExecutor: TaskExecutor
-) : SasTransport {
+) : VerificationTransport {
 
     override fun sendVerificationRequest(supportedMethods: List<String>,
                                          localID: String,
@@ -149,7 +149,7 @@ internal class SasTransportToDeviceFactory @Inject constructor(
         private val sendToDeviceTask: SendToDeviceTask,
         private val taskExecutor: TaskExecutor) {
 
-    fun createTransport(tx: DefaultVerificationTransaction?): SasTransportToDevice {
-        return SasTransportToDevice(tx, sendToDeviceTask, taskExecutor)
+    fun createTransport(tx: DefaultVerificationTransaction?): VerificationTransportToDevice {
+        return VerificationTransportToDevice(tx, sendToDeviceTask, taskExecutor)
     }
 }
