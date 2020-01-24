@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.RoomSummaryQueryParams
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.VersioningState
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
@@ -36,6 +37,7 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.query.process
 import im.vector.matrix.android.internal.session.room.alias.GetRoomIdByAliasTask
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
+import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.session.room.read.MarkAllRoomsReadTask
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateBreadcrumbsTask
@@ -76,15 +78,21 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
 
     override fun getExistingDirectRoomWithUser(otherUserId: String): Room? {
         Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            val roomId = RoomSummaryEntity.where(realm)
+            val candidates = RoomSummaryEntity.where(realm)
                     .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-                    .findAll()?.let { dms ->
-                        dms.firstOrNull {
-                            it.otherMemberIds.contains(otherUserId)
-                        }
+                    .findAll()?.filter { dm ->
+                        dm.otherMemberIds.contains(otherUserId)
+                                    && dm.membership == Membership.JOIN
+                    }?.map {
+                        it.roomId
                     }
-                    ?.roomId ?: return null
-            return RoomEntity.where(realm, roomId).findFirst()?.let { roomFactory.create(roomId) }
+                    ?: return null
+            candidates.forEach { roomId ->
+                if (RoomMemberHelper(realm, roomId).getActiveRoomMemberIds().any { it == otherUserId }) {
+                    return RoomEntity.where(realm, roomId).findFirst()?.let { roomFactory.create(roomId) }
+                }
+            }
+            return null
         }
     }
 

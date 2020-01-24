@@ -20,16 +20,23 @@ package im.vector.riotx.features.roommemberprofile
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Incomplete
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.args
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.animations.AppBarStateChangeListener
 import im.vector.riotx.core.animations.MatrixItemAppBarStateChangeListener
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
+import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.home.AvatarRenderer
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_matrix_profile.*
@@ -83,6 +90,21 @@ class RoomMemberProfileFragment @Inject constructor(
                     }
                 }
                 .disposeOnDestroyView()
+
+        viewModel.actionResultLiveData.observeEvent(this) { async ->
+            when (async) {
+                is Success -> {
+                    when (val action = async.invoke()) {
+                        is RoomMemberProfileAction.VerifyUser -> {
+                            VerificationBottomSheet
+                                    .withArgs(roomId = null, otherUserId = action.userId!!)
+                                    .show(parentFragmentManager, "VERIF")
+                        }
+                    }
+                }
+            }
+
+        }
     }
 
     override fun onDestroyView() {
@@ -126,8 +148,39 @@ class RoomMemberProfileFragment @Inject constructor(
         viewModel.handle(RoomMemberProfileAction.IgnoreUser)
     }
 
-    override fun onLearnMoreClicked() {
-        vectorBaseActivity.notImplemented("Learn more")
+    override fun onTapVerify() {
+        viewModel.handle(RoomMemberProfileAction.VerifyUser())
+//        if (state.isRoomEncrypted) {
+//            if( !state.isMine && state.userMXCrossSigningInfo?.isTrusted == false) {
+//                // we want to verify
+//                // TODO do not use current room, find or create DM
+//                VerificationBottomSheet.withArgs(
+//                        state.roomId,
+//                        state.userId
+//                ).show(parentFragmentManager, "REQ")
+//            }
+//        }
+    }
+
+//    override fun onTapVerify() = withState(viewModel) { state ->
+//        if (state.isRoomEncrypted) {
+//            if( !state.isMine && state.userMXCrossSigningInfo?.isTrusted == false) {
+//                // we want to verify
+//                // TODO do not use current room, find or create DM
+//                VerificationBottomSheet.withArgs(
+//                        state.roomId,
+//                        state.userId
+//                ).show(parentFragmentManager, "REQ")
+//            }
+//        }
+//    }
+
+    override fun onShowDeviceList() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onShowDeviceListNoCrossSigning() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onJumpToReadReceiptClicked() {

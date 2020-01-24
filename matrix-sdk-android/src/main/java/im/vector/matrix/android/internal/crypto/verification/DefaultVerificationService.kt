@@ -715,7 +715,7 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-    override fun requestKeyVerificationInDMs(methods: List<VerificationMethod>, userId: String, roomId: String)
+    override fun requestKeyVerificationInDMs(methods: List<VerificationMethod>, userId: String, roomId: String, localId: String?)
             : PendingVerificationRequest {
         Timber.i("## SAS Requesting verification to user: $userId in room $roomId")
 
@@ -737,7 +737,7 @@ internal class DefaultVerificationService @Inject constructor(
             }
         }
 
-        val localID = LocalEcho.createLocalEchoId()
+        val localID = localId ?: LocalEcho.createLocalEchoId()
 
         val verificationRequest = PendingVerificationRequest(
                 ageLocalTs = System.currentTimeMillis(),

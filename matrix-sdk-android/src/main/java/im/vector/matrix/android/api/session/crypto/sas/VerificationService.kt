@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session.crypto.sas
 
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 
 /**
@@ -51,7 +52,7 @@ interface VerificationService {
     /**
      * Request a key verification from another user using toDevice events.
      */
-    fun requestKeyVerificationInDMs(methods: List<VerificationMethod>, userId: String, roomId: String): PendingVerificationRequest
+    fun requestKeyVerificationInDMs(methods: List<VerificationMethod>, userId: String, roomId: String, localId: String? = LocalEcho.createLocalEchoId()): PendingVerificationRequest
 
     fun declineVerificationRequestInDMs(otherUserId: String, otherDeviceId: String, transactionId: String, roomId: String)
 

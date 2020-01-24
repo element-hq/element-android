@@ -72,7 +72,7 @@ class VerificationChooseMethodFragment @Inject constructor(
     override fun doVerifyBySas() = withState(sharedViewModel) {
         sharedViewModel.handle(VerificationAction.StartSASVerification(
                 it.otherUserMxItem?.id ?: "",
-                it.pendingRequest?.transactionId ?: ""))
+                it.pendingRequest.invoke()?.transactionId ?: ""))
     }
 
     override fun openCamera() {
@@ -115,7 +115,7 @@ class VerificationChooseMethodFragment @Inject constructor(
     private fun onRemoteQrCodeScanned(remoteQrCode: String) = withState(sharedViewModel) {
         sharedViewModel.handle(VerificationAction.RemoteQrCodeScanned(
                 it.otherUserMxItem?.id ?: "",
-                it.pendingRequest?.transactionId ?: "",
+                it.pendingRequest.invoke()?.transactionId ?: "",
                 remoteQrCode
         ))
     }

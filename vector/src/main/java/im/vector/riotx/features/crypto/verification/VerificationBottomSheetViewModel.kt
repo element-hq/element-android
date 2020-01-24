@@ -18,21 +18,27 @@ package im.vector.riotx.features.crypto.verification
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.QRVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.VerificationService
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
+import im.vector.matrix.android.api.session.crypto.sas.VerificationService
 import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
+import im.vector.matrix.android.api.session.events.model.LocalEcho
+import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
@@ -43,7 +49,8 @@ import im.vector.riotx.core.utils.LiveEvent
 data class VerificationBottomSheetViewState(
         val otherUserMxItem: MatrixItem? = null,
         val roomId: String? = null,
-        val pendingRequest: PendingVerificationRequest? = null,
+        val pendingRequest: Async<PendingVerificationRequest> = Uninitialized,
+        val pendingLocalId: String? = null,
         val transactionState: VerificationTxState? = null,
         val transactionId: String? = null,
         val cancelCode: CancelCode? = null
@@ -93,7 +100,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                     otherUserMxItem = userItem?.toMatrixItem(),
                     transactionState = sasTx?.state,
                     transactionId = args.verificationId,
-                    pendingRequest = pr,
+                    pendingRequest = if (pr != null) Success(pr) else Uninitialized,
                     roomId = args.roomId)
             )
         }
@@ -106,9 +113,40 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
 
         when (action) {
             is VerificationAction.RequestVerificationByDM -> {
-                if (roomId == null) return@withState
-                setState {
-                    copy(pendingRequest = session.getSasVerificationService().requestKeyVerificationInDMs(supportedVerificationMethods, otherUserId, roomId))
+                if (roomId == null) {
+                    val localID = LocalEcho.createLocalEchoId()
+                    setState {
+                        copy(
+                                pendingLocalId = localID,
+                                pendingRequest = Loading()
+                        )
+                    }
+                    val roomParams = CreateRoomParams().apply {
+                        invitedUserIds = listOf(otherUserId).toMutableList()
+                        setDirectMessage()
+                    }
+                    session.createRoom(roomParams, object : MatrixCallback<String> {
+                        override fun onSuccess(data: String) {
+                            setState {
+                                copy(
+                                        roomId = data,
+                                        pendingRequest = Success(
+                                                session.getSasVerificationService().requestKeyVerificationInDMs(supportedVerificationMethods, otherUserId, data, pendingLocalId)
+                                        )
+                                )
+                            }
+                        }
+
+                        override fun onFailure(failure: Throwable) {
+                            setState {
+                                copy(pendingRequest = Fail(failure))
+                            }
+                        }
+                    })
+                } else {
+                    setState {
+                        copy(pendingRequest = Success(session.getSasVerificationService().requestKeyVerificationInDMs(supportedVerificationMethods, otherUserId, roomId)))
+                    }
                 }
             }
             is VerificationAction.StartSASVerification    -> {
@@ -154,7 +192,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
     }
 
     override fun transactionUpdated(tx: VerificationTransaction) = withState { state ->
-        if (tx.transactionId == (state.pendingRequest?.transactionId ?: state.transactionId)) {
+        if (tx.transactionId == (state.pendingRequest.invoke()?.transactionId ?: state.transactionId)) {
             // A SAS tx has been started following this request
             setState {
                 copy(
@@ -171,9 +209,11 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
 
     override fun verificationRequestUpdated(pr: PendingVerificationRequest) = withState { state ->
 
-        if (pr.localID == state.pendingRequest?.localID || state.pendingRequest?.transactionId == pr.transactionId) {
+        if (pr.localID == state.pendingLocalId
+                || pr.localID == state.pendingRequest.invoke()?.localID
+                || state.pendingRequest.invoke()?.transactionId == pr.transactionId) {
             setState {
-                copy(pendingRequest = pr)
+                copy(pendingRequest = Success(pr))
             }
         }
     }

@@ -30,21 +30,18 @@ import kotlinx.android.synthetic.main.bottom_sheet_verification_child_fragment.*
 import javax.inject.Inject
 
 class VerificationRequestFragment @Inject constructor(
-        val verificationRequestViewModelFactory: VerificationRequestViewModel.Factory,
         val controller: VerificationRequestController
 ) : VectorBaseFragment(), VerificationRequestController.Listener {
 
-    private val viewModel by fragmentViewModel(VerificationRequestViewModel::class)
-
-    private val sharedViewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)
+    private val viewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)
 
     override fun getLayoutResId() = R.layout.bottom_sheet_verification_child_fragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupRecyclerView()
     }
+
 
     override fun onDestroyView() {
         bottomSheetVerificationRecyclerView.cleanup()
@@ -61,7 +58,9 @@ class VerificationRequestFragment @Inject constructor(
         controller.update(state)
     }
 
-    override fun onClickOnVerificationStart() = withState(viewModel) { state ->
-        sharedViewModel.handle(VerificationAction.RequestVerificationByDM(state.matrixItem.id, state.roomId))
+    override fun onClickOnVerificationStart(): Unit = withState(viewModel) { state ->
+        state.otherUserMxItem?.id?.let { otherUserId ->
+            viewModel.handle(VerificationAction.RequestVerificationByDM(otherUserId, state.roomId))
+        }
     }
 }

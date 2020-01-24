@@ -37,7 +37,9 @@ class RoomMemberProfileController @Inject constructor(
 
     interface Callback {
         fun onIgnoreClicked()
-        fun onLearnMoreClicked()
+        fun onTapVerify()
+        fun onShowDeviceList()
+        fun onShowDeviceListNoCrossSigning()
         fun onJumpToReadReceiptClicked()
         fun onMentionClicked()
     }
@@ -90,7 +92,7 @@ class RoomMemberProfileController @Inject constructor(
                             editable = true,
                             icon = icon,
                             divider = false,
-                            action = { callback?.onLearnMoreClicked() }
+                            action = { callback?.onShowDeviceList() }
                     )
                 } else {
                     //Not trusted, propose to verify
@@ -102,7 +104,7 @@ class RoomMemberProfileController @Inject constructor(
                                 editable = true,
                                 icon = R.drawable.ic_shield_black,
                                 divider = false,
-                                action = { callback?.onLearnMoreClicked() }
+                                action = { callback?.onTapVerify() }
                         )
                     }
 
@@ -120,7 +122,7 @@ class RoomMemberProfileController @Inject constructor(
                         editable = false,
                         divider = false,
                         subtitle = stringProvider.getString(R.string.room_profile_encrypted_subtitle),
-                        action = { callback?.onLearnMoreClicked() }
+                        action = { callback?.onShowDeviceListNoCrossSigning() }
                 )
             }
         } else {

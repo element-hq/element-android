@@ -17,9 +17,13 @@
 
 package im.vector.riotx.features.roommemberprofile
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -46,6 +50,7 @@ import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DataSource
+import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.core.utils.PublishDataSource
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -86,6 +91,10 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
     private val _viewEvents = PublishDataSource<RoomMemberProfileViewEvents>()
     val viewEvents: DataSource<RoomMemberProfileViewEvents> = _viewEvents
 
+    private val _actionResultLiveData = MutableLiveData<LiveEvent<Async<RoomMemberProfileAction>>>()
+    val actionResultLiveData: LiveData<LiveEvent<Async<RoomMemberProfileAction>>>
+        get() = _actionResultLiveData
+
     private val room = if (initialState.roomId != null) {
         session.getRoom(initialState.roomId)
     } else {
@@ -112,7 +121,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
 
             session.rx().liveUserCryptoDevices(initialState.userId)
                     .map {
-                        it.fold(true, { prev, dev -> prev && dev.isVerified})
+                        it.fold(true, { prev, dev -> prev && dev.isVerified })
                     }
                     .execute {
                         copy(allDevicesAreTrusted = it)
@@ -134,9 +143,23 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
 
     override fun handle(action: RoomMemberProfileAction) {
         when (action) {
-            RoomMemberProfileAction.RetryFetchingInfo -> fetchProfileInfo()
-            is RoomMemberProfileAction.IgnoreUser     -> handleIgnoreAction()
+            is RoomMemberProfileAction.RetryFetchingInfo -> fetchProfileInfo()
+            is RoomMemberProfileAction.IgnoreUser        -> handleIgnoreAction()
+            is RoomMemberProfileAction.VerifyUser        -> prepareVerification(action)
         }
+    }
+
+    private fun prepareVerification(action: RoomMemberProfileAction.VerifyUser) = withState { state ->
+        // Sanity
+        if (state.isRoomEncrypted) {
+            if (!state.isMine && state.userMXCrossSigningInfo?.isTrusted == false) {
+                // ok, let's find or create the DM room
+                _actionResultLiveData.postValue(
+                        LiveEvent(Success(action.copy(userId = state.userId)))
+                )
+            }
+        }
+
     }
 
     private fun observeRoomMemberSummary(room: Room) {
@@ -163,7 +186,6 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                 .execute {
                     copy(userMatrixItem = it)
                 }
-
     }
 
     private fun observeRoomSummaryAndPowerLevels(room: Room) {
