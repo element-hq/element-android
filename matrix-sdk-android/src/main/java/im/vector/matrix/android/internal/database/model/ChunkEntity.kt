@@ -28,10 +28,7 @@ internal open class ChunkEntity(@Index var prevToken: String? = null,
                                 @Index var isLastForward: Boolean = false,
                                 @Index var isLastBackward: Boolean = false,
                                 var backwardsDisplayIndex: Int? = null,
-                                var forwardsDisplayIndex: Int? = null,
-                                var backwardsStateIndex: Int? = null,
-                                var forwardsStateIndex: Int? = null,
-                                var isUnlinked: Boolean = false
+                                var forwardsDisplayIndex: Int? = null
 ) : RealmObject() {
 
     fun identifier() = "${prevToken}_$nextToken"

@@ -31,17 +31,18 @@ internal interface ClearUnlinkedEventsTask : Task<ClearUnlinkedEventsTask.Params
     data class Params(val roomId: String)
 }
 
-internal class DefaultClearUnlinkedEventsTask @Inject constructor(private val monarchy: Monarchy) : ClearUnlinkedEventsTask {
+internal class DefaultClearUnlinkedEventsTask @Inject constructor() : ClearUnlinkedEventsTask {
 
     override suspend fun execute(params: ClearUnlinkedEventsTask.Params) {
-        monarchy.awaitTransaction { localRealm ->
+        return
+        /*monarchy.awaitTransaction { localRealm ->
             val unlinkedChunks = ChunkEntity
                     .where(localRealm, roomId = params.roomId)
-                    .equalTo(ChunkEntityFields.IS_UNLINKED, true)
                     .findAll()
             unlinkedChunks.forEach {
                 it.deleteOnCascade()
             }
         }
+        */
     }
 }

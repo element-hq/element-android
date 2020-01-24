@@ -29,9 +29,8 @@ import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.query.descending
-import im.vector.matrix.android.internal.database.query.prev
+import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
+import im.vector.matrix.android.internal.database.query.getOrNull
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -51,14 +50,14 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
 
     override fun getStateEvent(eventType: String): Event? {
         return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            EventEntity.where(realm, roomId, eventType).prev()?.asDomain()
+            CurrentStateEventEntity.getOrNull(realm, roomId, type = eventType, stateKey = "")?.root?.asDomain()
         }
     }
 
     override fun getStateEventLive(eventType: String): LiveData<Optional<Event>> {
         val liveData = monarchy.findAllMappedWithChanges(
-                { realm ->  EventEntity.where(realm, roomId, eventType).descending() },
-                { it.asDomain() }
+                { realm -> CurrentStateEventEntity.where(realm, roomId, type = eventType, stateKey = "") },
+                { it.root?.asDomain() }
         )
         return Transformations.map(liveData) { results ->
             results.firstOrNull().toOptional()

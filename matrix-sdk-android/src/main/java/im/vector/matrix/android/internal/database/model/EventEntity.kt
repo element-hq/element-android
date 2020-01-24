@@ -24,8 +24,9 @@ import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.annotations.Index
 import io.realm.annotations.LinkingObjects
+import io.realm.annotations.PrimaryKey
 
-internal open class EventEntity(@Index var eventId: String = "",
+internal open class EventEntity(@PrimaryKey var eventId: String = "",
                                 @Index var roomId: String = "",
                                 @Index var type: String = "",
                                 var content: String? = null,
@@ -36,9 +37,6 @@ internal open class EventEntity(@Index var eventId: String = "",
                                 var age: Long? = 0,
                                 var unsignedData: String? = null,
                                 var redacts: String? = null,
-                                @Index var stateIndex: Int = 0,
-                                @Index var displayIndex: Int = 0,
-                                @Index var isUnlinked: Boolean = false,
                                 var decryptionResultJson: String? = null,
                                 var decryptionErrorCode: String? = null
 ) : RealmObject() {
@@ -60,9 +58,6 @@ internal open class EventEntity(@Index var eventId: String = "",
         }
 
     companion object
-
-    @LinkingObjects("untimelinedStateEvents")
-    val room: RealmResults<RoomEntity>? = null
 
     @LinkingObjects("root")
     val timelineEventEntity: RealmResults<TimelineEventEntity>? = null

@@ -22,14 +22,18 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.tag.RoomTagContent
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.database.helper.*
+import im.vector.matrix.android.internal.database.mapper.asDomain
+import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.model.EventEntityFields
+import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
+import im.vector.matrix.android.internal.database.query.getOrCreate
+import im.vector.matrix.android.internal.database.query.getOrNull
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.mapWithProgress
@@ -52,7 +56,6 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                                    private val roomFullyReadHandler: RoomFullyReadHandler,
                                                    private val cryptoService: DefaultCryptoService,
                                                    private val roomMemberEventHandler: RoomMemberEventHandler,
-                                                   private val timelineEventSenderVisitor: TimelineEventSenderVisitor,
                                                    private val eventBus: EventBus) {
 
     sealed class HandlingStrategy {
@@ -118,13 +121,16 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         roomEntity.membership = Membership.JOIN
 
         // State event
-
         if (roomSync.state?.events?.isNotEmpty() == true) {
-            val minStateIndex = roomEntity.untimelinedStateEvents.where().min(EventEntityFields.STATE_INDEX)?.toInt()
-                    ?: Int.MIN_VALUE
-            val untimelinedStateIndex = minStateIndex + 1
-            roomSync.state.events.forEach { event ->
-                roomEntity.addStateEvent(event, filterDuplicates = true, stateIndex = untimelinedStateIndex)
+            for (event in roomSync.state.events) {
+                if (event.eventId == null || event.stateKey == null) {
+                    continue
+                }
+                val eventEntity = event.toEntity(roomId, SendState.SYNCED)
+                CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
+                    eventId = event.eventId
+                    root = eventEntity
+                }
                 // Give info to crypto module
                 cryptoService.onStateEvent(roomId, event)
                 roomMemberEventHandler.handle(realm, roomId, event)
@@ -193,28 +199,37 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                      prevToken: String? = null,
                                      isLimited: Boolean = true): ChunkEntity {
         val lastChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomEntity.roomId)
-        var stateIndexOffset = 0
         val chunkEntity = if (!isLimited && lastChunk != null) {
             lastChunk
         } else {
             realm.createObject<ChunkEntity>().apply { this.prevToken = prevToken }
         }
-        if (isLimited && lastChunk != null) {
-            stateIndexOffset = lastChunk.lastStateIndex(PaginationDirection.FORWARDS)
-        }
         lastChunk?.isLastForward = false
         chunkEntity.isLastForward = true
-        chunkEntity.isUnlinked = false
 
-        val timelineEvents = ArrayList<TimelineEventEntity>(eventList.size)
         val eventIds = ArrayList<String>(eventList.size)
+        val roomMemberEventsByUser = HashMap<String, Event?>()
+
         for (event in eventList) {
-            if(event.eventId != null) {
-                eventIds.add(event.eventId)
+            if (event.eventId == null || event.senderId == null) {
+                continue
             }
-            chunkEntity.add(roomEntity.roomId, event, PaginationDirection.FORWARDS, stateIndexOffset)?.also {
-                timelineEvents.add(it)
+            eventIds.add(event.eventId)
+            val eventEntity = event.toEntity(roomId, SendState.SYNCED)
+            if (event.isStateEvent() && event.stateKey != null) {
+                CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
+                    eventId = event.eventId
+                    root = eventEntity
+                }
+                if (event.type == EventType.STATE_ROOM_MEMBER) {
+                    roomMemberEventsByUser[event.stateKey] = event
+                    roomMemberEventHandler.handle(realm, roomEntity.roomId, event)
+                }
             }
+            val roomMemberEvent = roomMemberEventsByUser.getOrPut(event.senderId) {
+                CurrentStateEventEntity.getOrNull(realm, roomId, event.senderId, EventType.STATE_ROOM_MEMBER)?.root?.asDomain()
+            }
+            chunkEntity.addTimelineEvent(roomId, eventEntity, PaginationDirection.FORWARDS, roomMemberEvent)
             // Give info to crypto module
             cryptoService.onLiveEvent(roomEntity.roomId, event)
             // Try to remove local echo
@@ -227,9 +242,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     Timber.v("Can't find corresponding local echo for tx:$it")
                 }
             }
-            roomMemberEventHandler.handle(realm, roomEntity.roomId, event)
         }
-        timelineEventSenderVisitor.visit(timelineEvents)
         // posting new events to timeline if any is registered
         eventBus.post(DefaultTimeline.OnNewTimelineEvents(roomId = roomId, eventIds = eventIds))
         return chunkEntity

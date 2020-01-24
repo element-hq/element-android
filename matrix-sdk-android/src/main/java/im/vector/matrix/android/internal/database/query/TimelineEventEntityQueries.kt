@@ -34,22 +34,20 @@ internal fun TimelineEventEntity.Companion.where(realm: Realm, roomId: String, e
             .`in`(TimelineEventEntityFields.EVENT_ID, eventIds.toTypedArray())
 }
 
-internal fun TimelineEventEntity.Companion.where(realm: Realm,
-                                                 roomId: String? = null,
-                                                 type: String? = null,
-                                                 linkFilterMode: EventEntity.LinkFilterMode = LINKED_ONLY): RealmQuery<TimelineEventEntity> {
+internal fun TimelineEventEntity.Companion.whereRoomId(realm: Realm,
+                                                       roomId: String): RealmQuery<TimelineEventEntity> {
+    return realm.where<TimelineEventEntity>().equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
+}
+
+internal fun TimelineEventEntity.Companion.whereType(realm: Realm,
+                                                     type: String,
+                                                     roomId: String? = null): RealmQuery<TimelineEventEntity> {
     val query = realm.where<TimelineEventEntity>()
+    query.equalTo(TimelineEventEntityFields.ROOT.TYPE, type)
     if (roomId != null) {
         query.equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
     }
-    if (type != null) {
-        query.equalTo(TimelineEventEntityFields.ROOT.TYPE, type)
-    }
-    return when (linkFilterMode) {
-        LINKED_ONLY   -> query.equalTo(TimelineEventEntityFields.ROOT.IS_UNLINKED, false)
-        UNLINKED_ONLY -> query.equalTo(TimelineEventEntityFields.ROOT.IS_UNLINKED, true)
-        BOTH          -> query
-    }
+    return query
 }
 
 internal fun TimelineEventEntity.Companion.findWithSenderMembershipEvent(realm: Realm, senderMembershipEventId: String): List<TimelineEventEntity> {
@@ -71,7 +69,7 @@ internal fun TimelineEventEntity.Companion.latestEvent(realm: Realm,
         liveEvents
     }
     return query
-            ?.sort(TimelineEventEntityFields.ROOT.DISPLAY_INDEX, Sort.DESCENDING)
+            ?.sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
             ?.findFirst()
 }
 
@@ -81,32 +79,6 @@ internal fun RealmQuery<TimelineEventEntity>.filterTypes(filterTypes: List<Strin
     } else {
         this.`in`(TimelineEventEntityFields.ROOT.TYPE, filterTypes.toTypedArray())
     }
-}
-
-internal fun RealmQuery<TimelineEventEntity>.next(from: Int? = null, strict: Boolean = true): TimelineEventEntity? {
-    if (from != null) {
-        if (strict) {
-            this.greaterThan(TimelineEventEntityFields.ROOT.STATE_INDEX, from)
-        } else {
-            this.greaterThanOrEqualTo(TimelineEventEntityFields.ROOT.STATE_INDEX, from)
-        }
-    }
-    return this
-            .sort(TimelineEventEntityFields.ROOT.STATE_INDEX, Sort.ASCENDING)
-            .findFirst()
-}
-
-internal fun RealmQuery<TimelineEventEntity>.prev(since: Int? = null, strict: Boolean = false): TimelineEventEntity? {
-    if (since != null) {
-        if (strict) {
-            this.lessThan(TimelineEventEntityFields.ROOT.STATE_INDEX, since)
-        } else {
-            this.lessThanOrEqualTo(TimelineEventEntityFields.ROOT.STATE_INDEX, since)
-        }
-    }
-    return this
-            .sort(TimelineEventEntityFields.ROOT.STATE_INDEX, Sort.DESCENDING)
-            .findFirst()
 }
 
 internal fun RealmList<TimelineEventEntity>.find(eventId: String): TimelineEventEntity? {

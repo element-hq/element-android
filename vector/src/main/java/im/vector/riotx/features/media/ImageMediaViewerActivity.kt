@@ -61,7 +61,7 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
             ViewCompat.setTransitionName(imageTransitionView, it)
         }
         if (mediaData.url.isNullOrEmpty()) {
-            finish()
+            supportFinishAfterTransition()
             return
         }
 

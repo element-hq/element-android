@@ -18,9 +18,11 @@ package im.vector.matrix.android.internal.session.room.membership
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.internal.database.helper.TimelineEventSenderVisitor
-import im.vector.matrix.android.internal.database.helper.addStateEvent
+import im.vector.matrix.android.api.session.room.send.SendState
+import im.vector.matrix.android.internal.database.mapper.toEntity
+import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
@@ -47,7 +49,6 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
         private val syncTokenStore: SyncTokenStore,
         private val roomSummaryUpdater: RoomSummaryUpdater,
         private val roomMemberEventHandler: RoomMemberEventHandler,
-        private val timelineEventSenderVisitor: TimelineEventSenderVisitor,
         private val eventBus: EventBus
 ) : LoadRoomMembersTask {
 
@@ -69,12 +70,15 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
                     ?: realm.createObject(roomId)
 
             for (roomMemberEvent in response.roomMemberEvents) {
-                roomEntity.addStateEvent(roomMemberEvent)
+                if (roomMemberEvent.eventId == null || roomMemberEvent.stateKey == null) {
+                    continue
+                }
+                val eventEntity = roomMemberEvent.toEntity(roomId, SendState.SYNCED)
+                CurrentStateEventEntity.getOrCreate(realm, roomId, roomMemberEvent.stateKey, roomMemberEvent.type).apply {
+                    eventId = roomMemberEvent.eventId
+                    root = eventEntity
+                }
                 roomMemberEventHandler.handle(realm, roomId, roomMemberEvent)
-            }
-            timelineEventSenderVisitor.clear()
-            roomEntity.chunks.flatMap { it.timelineEvents }.forEach {
-                timelineEventSenderVisitor.visit(it)
             }
             roomEntity.areAllMembersLoaded = true
             roomSummaryUpdater.update(realm, roomId, updateMembers = true)

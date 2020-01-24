@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,29 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
 package im.vector.matrix.android.internal.database.model
 
-import im.vector.matrix.android.api.session.room.model.Membership
-import io.realm.RealmList
 import io.realm.RealmObject
+import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
 
-internal open class RoomEntity(@PrimaryKey var roomId: String = "",
-                               var chunks: RealmList<ChunkEntity> = RealmList(),
-                               var sendingTimelineEvents: RealmList<TimelineEventEntity> = RealmList(),
-                               var areAllMembersLoaded: Boolean = false
+internal open class CurrentStateEventEntity(var eventId: String = "",
+                                            var root: EventEntity? = null,
+                                            @Index var roomId: String = "",
+                                            @Index var type: String = "",
+                                            @Index var stateKey: String = ""
 ) : RealmObject() {
-
-    private var membershipStr: String = Membership.NONE.name
-    var membership: Membership
-        get() {
-            return Membership.valueOf(membershipStr)
-        }
-        set(value) {
-            membershipStr = value.name
-        }
-
     companion object
 }

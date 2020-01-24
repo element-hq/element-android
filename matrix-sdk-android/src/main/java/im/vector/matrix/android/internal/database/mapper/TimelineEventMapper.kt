@@ -39,7 +39,7 @@ internal class TimelineEventMapper @Inject constructor(private val readReceiptsS
                         ?: Event("", timelineEventEntity.eventId),
                 annotations = timelineEventEntity.annotations?.asDomain(),
                 localId = timelineEventEntity.localId,
-                displayIndex = timelineEventEntity.root?.displayIndex ?: 0,
+                displayIndex = timelineEventEntity.displayIndex,
                 senderName = timelineEventEntity.senderName,
                 isUniqueDisplayName = timelineEventEntity.isUniqueDisplayName,
                 senderAvatar = timelineEventEntity.senderAvatar,

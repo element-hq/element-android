@@ -20,10 +20,12 @@ import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.annotations.Index
 import io.realm.annotations.LinkingObjects
+import io.realm.annotations.PrimaryKey
 
 internal open class TimelineEventEntity(var localId: Long = 0,
-                                        @Index var eventId: String = "",
+                                        @PrimaryKey var eventId: String = "",
                                         @Index var roomId: String = "",
+                                        @Index var displayIndex: Int = 0,
                                         var root: EventEntity? = null,
                                         var annotations: EventAnnotationsSummaryEntity? = null,
                                         var senderName: String? = null,

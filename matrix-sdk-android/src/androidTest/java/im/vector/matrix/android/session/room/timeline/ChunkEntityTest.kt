@@ -181,7 +181,7 @@ internal class ChunkEntityTest : InstrumentedTest {
                                    direction: PaginationDirection,
                                    stateIndexOffset: Int = 0) {
         events.forEach { event ->
-            add(roomId, event, direction, stateIndexOffset)
+            add(roomId, event, direction)
         }
     }
 }

@@ -17,12 +17,18 @@
 package im.vector.matrix.android.internal.session.room.timeline
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.database.helper.*
+import im.vector.matrix.android.internal.database.mapper.asDomain
+import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.find
-import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
+import im.vector.matrix.android.internal.database.query.getOrNull
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.kotlin.createObject
@@ -32,8 +38,7 @@ import javax.inject.Inject
 /**
  * Insert Chunk in DB, and eventually merge with existing chunk event
  */
-internal class TokenChunkEventPersistor @Inject constructor(private val monarchy: Monarchy,
-                                                            private val timelineEventSenderVisitor: TimelineEventSenderVisitor) {
+internal class TokenChunkEventPersistor @Inject constructor(private val monarchy: Monarchy) {
 
     /**
      * <pre>
@@ -110,7 +115,6 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
         monarchy
                 .awaitTransaction { realm ->
                     Timber.v("Start persisting ${receivedChunk.events.size} events in $roomId towards $direction")
-
                     val roomEntity = RoomEntity.where(realm, roomId).findFirst()
                             ?: realm.createObject(roomId)
 
@@ -124,50 +128,44 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                         prevToken = receivedChunk.end
                     }
 
-                    val shouldSkip = ChunkEntity.find(realm, roomId, nextToken = nextToken) != null
-                            || ChunkEntity.find(realm, roomId, prevToken = prevToken) != null
-
                     val prevChunk = ChunkEntity.find(realm, roomId, nextToken = prevToken)
                     val nextChunk = ChunkEntity.find(realm, roomId, prevToken = nextToken)
 
                     // The current chunk is the one we will keep all along the merge processChanges.
                     // We try to look for a chunk next to the token,
                     // otherwise we create a whole new one which is unlinked (not live)
-
-                    var currentChunk = if (direction == PaginationDirection.FORWARDS) {
+                    val currentChunk = if (direction == PaginationDirection.FORWARDS) {
                         prevChunk?.apply { this.nextToken = nextToken }
                     } else {
                         nextChunk?.apply { this.prevToken = prevToken }
                     }
-                            ?: ChunkEntity.create(realm, prevToken, nextToken, isUnlinked = true)
+                            ?: ChunkEntity.create(realm, prevToken, nextToken)
 
                     if (receivedChunk.events.isEmpty() && receivedChunk.end == receivedChunk.start) {
                         Timber.v("Reach end of $roomId")
                         currentChunk.isLastBackward = true
-                    } else if (!shouldSkip) {
+                    } else {
                         Timber.v("Add ${receivedChunk.events.size} events in chunk(${currentChunk.nextToken} | ${currentChunk.prevToken}")
-                        val timelineEvents = receivedChunk.events.mapNotNull {
-                            currentChunk.add(roomId, it, direction)
-                        }
-                        // Then we merge chunks if needed
-                        if (currentChunk != prevChunk && prevChunk != null) {
-                            currentChunk = handleMerge(roomEntity, direction, currentChunk, prevChunk)
-                        } else if (currentChunk != nextChunk && nextChunk != null) {
-                            currentChunk = handleMerge(roomEntity, direction, currentChunk, nextChunk)
+                        val roomMemberEventsByUser = HashMap<String, Event?>()
+                        val eventList = if (direction == PaginationDirection.FORWARDS) {
+                            receivedChunk.events
                         } else {
-                            val newEventIds = receivedChunk.events.mapNotNull { it.eventId }
-                            val overlappedChunks = ChunkEntity.findAllIncludingEvents(realm, newEventIds)
-                            overlappedChunks
-                                    .filter { it != currentChunk }
-                                    .forEach { overlapped ->
-                                        currentChunk = handleMerge(roomEntity, direction, currentChunk, overlapped)
-                                    }
+                            receivedChunk.events.asReversed()
+                        }
+                        for (event in eventList) {
+                            if (event.eventId == null || event.senderId == null) {
+                                continue
+                            }
+                            val eventEntity = event.toEntity(roomId, SendState.SYNCED)
+                            if (event.type == EventType.STATE_ROOM_MEMBER && event.stateKey != null) {
+                                roomMemberEventsByUser[event.stateKey] = event
+                            }
+                            val roomMemberEvent = roomMemberEventsByUser.getOrPut(event.senderId) {
+                                CurrentStateEventEntity.getOrNull(realm, roomId, event.senderId, EventType.STATE_ROOM_MEMBER)?.root?.asDomain()
+                            }
+                            currentChunk.addTimelineEvent(roomId, eventEntity, PaginationDirection.FORWARDS, roomMemberEvent)
                         }
                         roomEntity.addOrUpdate(currentChunk)
-                        for (stateEvent in receivedChunk.stateEvents) {
-                            roomEntity.addStateEvent(stateEvent, isUnlinked = currentChunk.isUnlinked)
-                        }
-                        timelineEventSenderVisitor.visit(timelineEvents)
                     }
                 }
         return if (receivedChunk.events.isEmpty()) {
@@ -178,25 +176,6 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
             }
         } else {
             Result.SUCCESS
-        }
-    }
-
-    private fun handleMerge(roomEntity: RoomEntity,
-                            direction: PaginationDirection,
-                            currentChunk: ChunkEntity,
-                            otherChunk: ChunkEntity): ChunkEntity {
-        // We always merge the bottom chunk into top chunk, so we are always merging backwards
-        Timber.v("Merge ${currentChunk.prevToken} | ${currentChunk.nextToken} with ${otherChunk.prevToken} | ${otherChunk.nextToken}")
-        return if (direction == PaginationDirection.BACKWARDS && !otherChunk.isLastForward) {
-            val events = currentChunk.merge(roomEntity.roomId, otherChunk, PaginationDirection.BACKWARDS)
-            timelineEventSenderVisitor.visit(events)
-            roomEntity.deleteOnCascade(otherChunk)
-            currentChunk
-        } else {
-            val events = otherChunk.merge(roomEntity.roomId, currentChunk, PaginationDirection.BACKWARDS)
-            timelineEventSenderVisitor.visit(events)
-            roomEntity.deleteOnCascade(currentChunk)
-            otherChunk
         }
     }
 }

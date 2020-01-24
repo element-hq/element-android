@@ -36,15 +36,15 @@ internal fun isEventRead(monarchy: Monarchy,
 
     monarchy.doWithRealm { realm ->
         val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId) ?: return@doWithRealm
-        val eventToCheck = liveChunk.timelineEvents.find(eventId)?.root
+        val eventToCheck = liveChunk.timelineEvents.find(eventId)
 
-        isEventRead = if (eventToCheck?.sender == userId) {
+        isEventRead = if (eventToCheck?.root?.sender == userId) {
             true
         } else {
             val readReceipt = ReadReceiptEntity.where(realm, roomId, userId).findFirst()
-                              ?: return@doWithRealm
-            val readReceiptIndex = liveChunk.timelineEvents.find(readReceipt.eventId)?.root?.displayIndex
-                                   ?: Int.MIN_VALUE
+                    ?: return@doWithRealm
+            val readReceiptIndex = liveChunk.timelineEvents.find(readReceipt.eventId)?.displayIndex
+                    ?: Int.MIN_VALUE
             val eventToCheckIndex = eventToCheck?.displayIndex ?: Int.MAX_VALUE
 
             eventToCheckIndex <= readReceiptIndex
@@ -62,11 +62,11 @@ internal fun isReadMarkerMoreRecent(monarchy: Monarchy,
     }
     return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
         val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId) ?: return false
-        val eventToCheck = liveChunk.timelineEvents.find(eventId)?.root
+        val eventToCheck = liveChunk.timelineEvents.find(eventId)
 
         val readMarker = ReadMarkerEntity.where(realm, roomId).findFirst() ?: return false
-        val readMarkerIndex = liveChunk.timelineEvents.find(readMarker.eventId)?.root?.displayIndex
-                              ?: Int.MIN_VALUE
+        val readMarkerIndex = liveChunk.timelineEvents.find(readMarker.eventId)?.displayIndex
+                ?: Int.MIN_VALUE
         val eventToCheckIndex = eventToCheck?.displayIndex ?: Int.MAX_VALUE
         eventToCheckIndex <= readMarkerIndex
     }

@@ -20,7 +20,6 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.events.model.UnsignedData
-import im.vector.matrix.android.internal.database.helper.TimelineEventSenderVisitor
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.EventMapper
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -41,8 +40,7 @@ internal interface PruneEventTask : Task<PruneEventTask.Params, Unit> {
     )
 }
 
-internal class DefaultPruneEventTask @Inject constructor(private val monarchy: Monarchy,
-                                                         private val timelineEventSenderVisitor: TimelineEventSenderVisitor) : PruneEventTask {
+internal class DefaultPruneEventTask @Inject constructor(private val monarchy: Monarchy) : PruneEventTask {
 
     override suspend fun execute(params: PruneEventTask.Params) {
         monarchy.awaitTransaction { realm ->
@@ -97,10 +95,10 @@ internal class DefaultPruneEventTask @Inject constructor(private val monarchy: M
 //                }
             }
         }
+        // TODO : make it work again. Maybe waits for SQL rework...
         if (typeToPrune == EventType.STATE_ROOM_MEMBER && stateKey != null) {
-            timelineEventSenderVisitor.clear(roomId = eventToPrune.roomId, senderId = stateKey)
-            val timelineEventsToUpdate = TimelineEventEntity.findWithSenderMembershipEvent(realm, eventToPrune.eventId)
-            timelineEventSenderVisitor.visit(timelineEventsToUpdate)
+            TimelineEventEntity.findWithSenderMembershipEvent(realm, eventToPrune.eventId)
+
         }
     }
 

@@ -52,9 +52,7 @@ internal class LocalEchoRepository @Inject constructor(private val monarchy: Mon
         eventBus.post(DefaultTimeline.OnNewTimelineEvents(roomId = roomId, eventIds = listOf(eventId)))
         monarchy.awaitTransaction { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return@awaitTransaction
-            val eventEntity = event.toEntity(roomId).apply {
-                this.sendState = SendState.UNSENT
-            }
+            val eventEntity = event.toEntity(roomId, SendState.UNSENT)
             val roomMemberHelper = RoomMemberHelper(realm, roomId)
             val myUser = roomMemberHelper.getLastRoomMember(senderId)
             val localId = TimelineEventEntity.nextId(realm)
@@ -64,7 +62,7 @@ internal class LocalEchoRepository @Inject constructor(private val monarchy: Mon
                 it.roomId = roomId
                 it.senderName = myUser?.displayName
                 it.senderAvatar = myUser?.avatarUrl
-                it.isUniqueDisplayName = roomMemberHelper.isUniqueDisplayName(myUser?.displayName)
+                it.isUniqueDisplayName = roomMemberHelper.isUniqueDisplayName()
             }
             roomEntity.sendingTimelineEvents.add(0, timelineEventEntity)
             roomSummaryUpdater.update(realm, roomId)
@@ -103,7 +101,7 @@ internal class LocalEchoRepository @Inject constructor(private val monarchy: Mon
         return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
             TimelineEventEntity
                     .findAllInRoomWithSendStates(realm, roomId, SendState.HAS_FAILED_STATES)
-                    .sortedByDescending { it.root?.displayIndex ?: 0 }
+                    .sortedByDescending { it.displayIndex }
                     .mapNotNull { it.root?.asDomain() }
                     .filter { event ->
                         when (event.getClearType()) {

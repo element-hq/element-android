@@ -22,10 +22,10 @@ import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
+import im.vector.matrix.android.internal.database.query.getOrNull
 import im.vector.matrix.android.internal.database.query.where
 import io.realm.Realm
 import io.realm.RealmQuery
-import io.realm.Sort
 
 /**
  * This class is an helper around STATE_ROOM_MEMBER events.
@@ -41,11 +41,7 @@ internal class RoomMemberHelper(private val realm: Realm,
     }
 
     fun getLastStateEvent(userId: String): EventEntity? {
-        return EventEntity
-                .where(realm, roomId, EventType.STATE_ROOM_MEMBER)
-                .equalTo(EventEntityFields.STATE_KEY, userId)
-                .sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING)
-                .findFirst()
+        return CurrentStateEventEntity.getOrNull(realm, roomId, userId, EventType.STATE_ROOM_MEMBER)?.root
     }
 
     fun getLastRoomMember(userId: String): RoomMemberSummaryEntity? {
@@ -54,16 +50,8 @@ internal class RoomMemberHelper(private val realm: Realm,
                 .findFirst()
     }
 
-    fun isUniqueDisplayName(displayName: String?): Boolean {
-        if (displayName.isNullOrEmpty()) {
-            return true
-        }
-        return EventEntity
-                .where(realm, roomId, EventType.STATE_ROOM_MEMBER)
-                .contains(EventEntityFields.CONTENT, "\"displayname\":\"$displayName\"")
-                .distinct(EventEntityFields.STATE_KEY)
-                .findAll()
-                .size == 1
+    fun isUniqueDisplayName(): Boolean {
+        return false
     }
 
     fun queryRoomMembersEvent(): RealmQuery<RoomMemberSummaryEntity> {

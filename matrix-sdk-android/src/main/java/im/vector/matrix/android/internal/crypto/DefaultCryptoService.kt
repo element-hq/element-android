@@ -60,6 +60,7 @@ import im.vector.matrix.android.internal.crypto.tasks.*
 import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.database.query.whereType
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.session.SessionScope
@@ -482,7 +483,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     override fun isRoomEncrypted(roomId: String): Boolean {
         val encryptionEvent = monarchy.fetchCopied {
-            EventEntity.where(it, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION).findFirst()
+            EventEntity.whereType(it, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION).findFirst()
         }
         return encryptionEvent != null
     }

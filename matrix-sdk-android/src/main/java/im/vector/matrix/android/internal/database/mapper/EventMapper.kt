@@ -20,6 +20,7 @@ import com.squareup.moshi.JsonDataException
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.UnsignedData
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.di.MoshiProvider
@@ -90,6 +91,8 @@ internal fun EventEntity.asDomain(): Event {
     return EventMapper.map(this)
 }
 
-internal fun Event.toEntity(roomId: String): EventEntity {
-    return EventMapper.map(this, roomId)
+internal fun Event.toEntity(roomId: String, sendState: SendState): EventEntity {
+    return EventMapper.map(this, roomId).apply {
+        this.sendState = sendState
+    }
 }

@@ -21,14 +21,17 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.*
+import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.RoomAliasesContent
+import im.vector.matrix.android.api.session.room.model.RoomCanonicalAliasContent
+import im.vector.matrix.android.api.session.room.model.RoomNameContent
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
-import im.vector.matrix.android.internal.database.model.*
-import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntity
+import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntityFields
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.query.prev
+import im.vector.matrix.android.internal.database.query.getOrNull
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.UserId
 import javax.inject.Inject
@@ -57,19 +60,19 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
         var name: CharSequence? = null
         monarchy.doWithRealm { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
-            val roomName = EventEntity.where(realm, roomId, EventType.STATE_ROOM_NAME).prev()
+            val roomName = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_NAME, stateKey = "")?.root
             name = ContentMapper.map(roomName?.content).toModel<RoomNameContent>()?.name
             if (!name.isNullOrEmpty()) {
                 return@doWithRealm
             }
 
-            val canonicalAlias = EventEntity.where(realm, roomId, EventType.STATE_ROOM_CANONICAL_ALIAS).prev()
+            val canonicalAlias = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_CANONICAL_ALIAS, stateKey = "")?.root
             name = ContentMapper.map(canonicalAlias?.content).toModel<RoomCanonicalAliasContent>()?.canonicalAlias
             if (!name.isNullOrEmpty()) {
                 return@doWithRealm
             }
 
-            val aliases = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ALIASES).prev()
+            val aliases = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_ALIASES, stateKey = "")?.root
             name = ContentMapper.map(aliases?.content).toModel<RoomAliasesContent>()?.aliases?.firstOrNull()
             if (!name.isNullOrEmpty()) {
                 return@doWithRealm
@@ -126,7 +129,7 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
     private fun resolveRoomMemberName(roomMemberSummary: RoomMemberSummaryEntity?,
                                       roomMemberHelper: RoomMemberHelper): String? {
         if (roomMemberSummary == null) return null
-        val isUnique = roomMemberHelper.isUniqueDisplayName(roomMemberSummary.displayName)
+        val isUnique = roomMemberHelper.isUniqueDisplayName()
         return if (isUnique) {
             roomMemberSummary.displayName
         } else {
