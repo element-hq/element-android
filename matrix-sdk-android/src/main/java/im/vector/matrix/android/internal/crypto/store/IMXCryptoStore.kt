@@ -17,6 +17,7 @@
 
 package im.vector.matrix.android.internal.crypto.store
 
+import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.NewSessionListener
@@ -195,6 +196,9 @@ internal interface IMXCryptoStore {
      */
     fun getUserDevices(userId: String): Map<String, CryptoDeviceInfo>?
 
+    fun getUserDeviceList(userId: String): List<CryptoDeviceInfo>?
+
+    fun getLiveDeviceList(userId: String): LiveData<List<CryptoDeviceInfo>>
     /**
      * Store the crypto algorithm for a room.
      *

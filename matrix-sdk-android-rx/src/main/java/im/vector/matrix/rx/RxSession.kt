@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -97,6 +98,10 @@ class RxSession(private val session: Session) {
 
     fun getProfileInfo(userId: String): Single<JsonDict> = singleBuilder {
         session.getProfile(userId, it)
+    }
+
+    fun liveUserCryptoDevices(userId: String) : Observable<List<CryptoDeviceInfo>> {
+        return session.getLiveCryptoDeviceInfo(userId).asObservable()
     }
 }
 

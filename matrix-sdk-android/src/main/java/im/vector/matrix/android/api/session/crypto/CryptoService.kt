@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session.crypto
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
@@ -116,6 +117,9 @@ interface CryptoService {
     fun shouldEncryptForInvitedMembers(roomId: String): Boolean
 
     fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>>)
+
+    fun getCryptoDeviceInfo(userId: String) : List<CryptoDeviceInfo>
+    fun getLiveCryptoDeviceInfo(userId: String) : LiveData<List<CryptoDeviceInfo>>
 
     fun addNewSessionListener(newSessionListener: NewSessionListener)
 

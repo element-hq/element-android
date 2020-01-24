@@ -15,6 +15,7 @@
  */
 package im.vector.riotx.core.ui.list
 
+import android.view.Gravity
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -41,12 +42,16 @@ abstract class GenericFooterItem : VectorEpoxyModel<GenericFooterItem.Holder>() 
     @EpoxyAttribute
     var itemClickAction: GenericItem.Action? = null
 
+    @EpoxyAttribute
+    var centered: Boolean = true
+
     override fun bind(holder: Holder) {
         holder.text.setTextOrHide(text)
         when (style) {
             GenericItem.STYLE.BIG_TEXT    -> holder.text.textSize = 18f
             GenericItem.STYLE.NORMAL_TEXT -> holder.text.textSize = 14f
         }
+        holder.text.gravity = if(centered) Gravity.CENTER_HORIZONTAL else Gravity.START
 
         holder.view.setOnClickListener {
             itemClickAction?.perform?.run()

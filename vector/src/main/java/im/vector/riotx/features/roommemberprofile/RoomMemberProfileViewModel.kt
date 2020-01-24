@@ -42,6 +42,7 @@ import im.vector.matrix.rx.mapOptional
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
+import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DataSource
@@ -68,6 +69,17 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         override fun create(viewModelContext: ViewModelContext, state: RoomMemberProfileViewState): RoomMemberProfileViewModel? {
             val fragment: RoomMemberProfileFragment = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.viewModelFactory.create(state)
+        }
+
+        override fun initialState(viewModelContext: ViewModelContext): RoomMemberProfileViewState? {
+            val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
+            val args = viewModelContext.args<RoomMemberProfileArgs>()
+
+            return RoomMemberProfileViewState(
+                    userId = args.userId,
+                    roomId = args.roomId,
+                    userMXCrossSigningInfo = session.getCrossSigningService().getUserCrossSigningKeys(args.userId)
+            )
         }
     }
 
@@ -97,6 +109,14 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                 observeRoomMemberSummary(room)
                 observeRoomSummaryAndPowerLevels(room)
             }
+
+            session.rx().liveUserCryptoDevices(initialState.userId)
+                    .map {
+                        it.fold(true, { prev, dev -> prev && dev.isVerified})
+                    }
+                    .execute {
+                        copy(allDevicesAreTrusted = it)
+                    }
         }
     }
 
@@ -143,6 +163,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                 .execute {
                     copy(userMatrixItem = it)
                 }
+
     }
 
     private fun observeRoomSummaryAndPowerLevels(room: Room) {

@@ -21,6 +21,7 @@ package im.vector.matrix.android.internal.crypto
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import androidx.lifecycle.LiveData
 import com.squareup.moshi.Types
 import com.zhuinden.monarchy.Monarchy
 import dagger.Lazy
@@ -153,6 +154,7 @@ internal class DefaultCryptoService @Inject constructor(
         private val taskExecutor: TaskExecutor,
         private val cryptoCoroutineScope: CoroutineScope
 ) : CryptoService {
+
 
     init {
         sasVerificationService.cryptoService = this
@@ -396,6 +398,13 @@ internal class DefaultCryptoService @Inject constructor(
         } else {
             null
         }
+    }
+    override fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
+        return cryptoStore.getUserDevices(userId)?.map { it.value } ?: emptyList()
+    }
+
+    override fun getLiveCryptoDeviceInfo(userId: String): LiveData<List<CryptoDeviceInfo>> {
+        return cryptoStore.getLiveDeviceList(userId)
     }
 
     /**

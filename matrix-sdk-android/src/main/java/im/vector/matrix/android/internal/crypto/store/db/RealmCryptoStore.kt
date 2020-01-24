@@ -16,6 +16,9 @@
 
 package im.vector.matrix.android.internal.crypto.store.db
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
+import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
@@ -95,6 +98,10 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
     override fun removeSessionListener(listener: NewSessionListener) {
         newSessionListeners.remove(listener)
     }
+
+    private val monarchy = Monarchy.Builder()
+            .setRealmConfiguration(realmConfiguration)
+            .build()
 
     /* ==========================================================================================
      * Other data
@@ -341,6 +348,28 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
                 ?.devices
                 ?.map { CryptoMapper.mapToModel(it) }
                 ?.associateBy { it.deviceId }
+    }
+
+    override fun getUserDeviceList(userId: String): List<CryptoDeviceInfo>? {
+        return doRealmQueryAndCopy(realmConfiguration) {
+            it.where<UserEntity>()
+                    .equalTo(UserEntityFields.USER_ID, userId)
+                    .findFirst()
+        }
+                ?.devices
+                ?.map { CryptoMapper.mapToModel(it) }
+    }
+
+    override fun getLiveDeviceList(userId: String): LiveData<List<CryptoDeviceInfo>> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { realm: Realm -> realm.where<UserEntity>().equalTo(UserEntityFields.USER_ID, userId) },
+                { entity ->
+                    entity.devices.map { CryptoMapper.mapToModel(it) }
+                }
+        )
+        return Transformations.map(liveData) {
+            it.firstOrNull() ?: emptyList()
+        }
     }
 
     override fun storeRoomAlgorithm(roomId: String, algorithm: String) {
