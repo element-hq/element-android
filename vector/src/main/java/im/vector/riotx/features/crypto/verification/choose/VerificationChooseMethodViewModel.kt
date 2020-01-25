@@ -37,7 +37,7 @@ data class VerificationChooseMethodViewState(
         val transactionId: String = "",
         val otherCanShowQrCode: Boolean = false,
         val otherCanScanQrCode: Boolean = false,
-        val QRtext: String? = null,
+        val qrCodeText: String? = null,
         val SASModeAvailable: Boolean = false
 ) : MvRxState
 
@@ -57,8 +57,7 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
             copy(
                     otherCanShowQrCode = pvr?.hasMethod(VerificationMethod.QR_CODE_SHOW) ?: false,
                     otherCanScanQrCode = pvr?.hasMethod(VerificationMethod.QR_CODE_SCAN) ?: false,
-                    // TODO
-                    QRtext = "https://www.example.org",
+                    qrCodeText = pvr?.qrCodeText,
                     SASModeAvailable = pvr?.hasMethod(VerificationMethod.SAS) ?: false
             )
         }
@@ -93,8 +92,7 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
                     transactionId = args.verificationId ?: "",
                     otherCanShowQrCode = pvr?.hasMethod(VerificationMethod.QR_CODE_SHOW) ?: false,
                     otherCanScanQrCode = pvr?.hasMethod(VerificationMethod.QR_CODE_SCAN) ?: false,
-                    // TODO
-                    QRtext = "https://www.example.org",
+                    qrCodeText = pvr?.qrCodeText,
                     SASModeAvailable = pvr?.hasMethod(VerificationMethod.SAS) ?: false
             )
         }

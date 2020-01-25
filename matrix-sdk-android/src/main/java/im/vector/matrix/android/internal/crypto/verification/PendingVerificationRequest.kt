@@ -37,7 +37,9 @@ data class PendingVerificationRequest(
         val readyInfo: VerificationInfoReady? = null,
         val cancelConclusion: CancelCode? = null,
         val isSuccessful: Boolean = false,
-        val handledByOtherSession: Boolean = false
+        val handledByOtherSession: Boolean = false,
+        val myGeneratedSecret: String? = null,
+        val qrCodeText: String? = null
 
 ) {
     val isReady: Boolean = readyInfo != null

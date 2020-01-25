@@ -55,11 +55,15 @@ import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationCancel
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationKey
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationMac
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
+import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SCAN
 import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
 import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
 import im.vector.matrix.android.internal.crypto.model.rest.supportedVerificationMethods
 import im.vector.matrix.android.internal.crypto.model.rest.toValue
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
+import im.vector.matrix.android.internal.crypto.verification.qrcode.QrCodeData
+import im.vector.matrix.android.internal.crypto.verification.qrcode.generateSharedSecret
+import im.vector.matrix.android.internal.crypto.verification.qrcode.toUrl
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
@@ -72,6 +76,9 @@ import kotlin.collections.set
 
 @SessionScope
 internal class DefaultVerificationService @Inject constructor(
+        // TODO @UserId private val userId: String,
+        // TODO @DeviceId private val deviceId: String,
+        // TODO Do not use credential (do it in a dedicated commit)
         private val credentials: Credentials,
         private val cryptoStore: IMXCryptoStore,
         private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
@@ -650,7 +657,63 @@ internal class DefaultVerificationService @Inject constructor(
             Timber.e("## SAS Received Ready for unknown request txId:${readyReq.transactionID} fromDevice ${readyReq.fromDevice}")
             return
         }
-        updatePendingRequest(existingRequest.copy(readyInfo = readyReq))
+
+        var myGeneratedSharedSecret: String? = null
+        val qrCodeText = readyReq.methods
+                // Check if other user is able to scan QR code
+                ?.takeIf { it.contains(VERIFICATION_METHOD_QR_CODE_SCAN) }
+                ?.let {
+                    // Build the QR code URL
+                    val requestEventId = existingRequest.transactionId ?: run {
+                        Timber.w("Unknown requestEventId")
+                        return@let null
+                    }
+
+                    val myMasterKey = crossSigningService.getMyCrossSigningKeys()
+                            ?.masterKey()
+                            ?.unpaddedBase64PublicKey
+                            ?: run {
+                                Timber.w("Unable to get my master key")
+                                return@let null
+                            }
+
+                    val otherUserMasterKey = crossSigningService.getUserCrossSigningKeys(existingRequest.otherUserId)
+                            ?.masterKey()
+                            ?.unpaddedBase64PublicKey
+                            ?: run {
+                                Timber.w("Unable to get other user master key")
+                                return@let null
+                            }
+
+                    val myDeviceId = credentials.deviceId
+                            ?: run {
+                                Timber.w("Unable to get my deviceId")
+                                return@let null
+                            }
+
+                    // TODO I'm pretty sure it's the correct key to put here
+                    val myDeviceKey = myDeviceInfoHolder.get().myDevice.fingerprint()!!
+
+                    val generatedSharedSecret = generateSharedSecret()
+                            .also { myGeneratedSharedSecret = it }
+                    QrCodeData(
+                            userId = credentials.userId,
+                            requestEventId = requestEventId,
+                            action = QrCodeData.ACTION_VERIFY,
+                            keys = hashMapOf(
+                                    myMasterKey to myMasterKey,
+                                    myDeviceId to myDeviceKey
+                            ),
+                            sharedSecret = generatedSharedSecret,
+                            otherUserKey = otherUserMasterKey
+                    ).toUrl()
+                }
+
+        updatePendingRequest(existingRequest.copy(
+                readyInfo = readyReq,
+                myGeneratedSecret = myGeneratedSharedSecret,
+                qrCodeText = qrCodeText
+        ))
     }
 
     private fun handleDoneReceived(senderId: String, doneInfo: VerificationInfo) {

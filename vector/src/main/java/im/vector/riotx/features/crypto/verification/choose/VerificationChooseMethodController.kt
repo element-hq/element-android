@@ -49,10 +49,10 @@ class VerificationChooseMethodController @Inject constructor(
                 notice(stringProvider.getString(R.string.verification_scan_notice))
             }
 
-            if (state.otherCanScanQrCode && !state.QRtext.isNullOrBlank()) {
+            if (state.otherCanScanQrCode && !state.qrCodeText.isNullOrBlank()) {
                 bottomSheetVerificationQrCodeItem {
                     id("qr")
-                    data(state.QRtext)
+                    data(state.qrCodeText)
                     animate(false)
                 }
 
