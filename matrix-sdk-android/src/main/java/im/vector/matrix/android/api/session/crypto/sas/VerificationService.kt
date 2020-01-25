@@ -39,20 +39,20 @@ interface VerificationService {
      */
     fun markedLocallyAsManuallyVerified(userId: String, deviceID: String)
 
-    fun getExistingTransaction(otherUser: String, tid: String): VerificationTransaction?
+    fun getExistingTransaction(otherUserId: String, tid: String): VerificationTransaction?
 
-    fun getExistingVerificationRequest(otherUser: String): List<PendingVerificationRequest>?
+    fun getExistingVerificationRequest(otherUserId: String): List<PendingVerificationRequest>?
 
-    fun getExistingVerificationRequest(otherUser: String, tid: String?): PendingVerificationRequest?
+    fun getExistingVerificationRequest(otherUserId: String, tid: String?): PendingVerificationRequest?
 
     fun getExistingVerificationRequestInRoom(roomId: String, tid: String?): PendingVerificationRequest?
 
-    fun beginKeyVerification(method: VerificationMethod, userId: String, deviceID: String): String?
+    fun beginKeyVerification(method: VerificationMethod, otherUserId: String, otherDeviceID: String): String?
 
     /**
      * Request a key verification from another user using toDevice events.
      */
-    fun requestKeyVerificationInDMs(methods: List<VerificationMethod>, userId: String, roomId: String, localId: String? = LocalEcho.createLocalEchoId()): PendingVerificationRequest
+    fun requestKeyVerificationInDMs(methods: List<VerificationMethod>, otherUserId: String, roomId: String, localId: String? = LocalEcho.createLocalEchoId()): PendingVerificationRequest
 
     fun declineVerificationRequestInDMs(otherUserId: String, otherDeviceId: String, transactionId: String, roomId: String)
 

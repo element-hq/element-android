@@ -17,7 +17,6 @@ package im.vector.matrix.android.internal.crypto.verification
 
 import android.util.Base64
 import im.vector.matrix.android.BuildConfig
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTransaction
@@ -30,16 +29,18 @@ import timber.log.Timber
 
 internal class DefaultIncomingSASDefaultVerificationTransaction(
         setDeviceVerificationAction: SetDeviceVerificationAction,
-        override val credentials: Credentials,
+        override val userId: String,
+        override val deviceId: String?,
         private val cryptoStore: IMXCryptoStore,
         crossSigningService: CrossSigningService,
         deviceFingerprint: String,
         transactionId: String,
         otherUserID: String,
-        val autoAccept: Boolean = false
+        private val autoAccept: Boolean = false
 ) : SASDefaultVerificationTransaction(
         setDeviceVerificationAction,
-        credentials,
+        userId,
+        deviceId,
         cryptoStore,
         crossSigningService,
         deviceFingerprint,
@@ -157,7 +158,7 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
         cancel(CancelCode.UnexpectedMessage)
     }
 
-    override fun onKeyVerificationKey(userId: String, vKey: VerificationInfoKey) {
+    override fun onKeyVerificationKey(vKey: VerificationInfoKey) {
         Timber.v("## SAS received key for request id:$transactionId")
         if (state != VerificationTxState.SendingAccept && state != VerificationTxState.Accepted) {
             Timber.e("## SAS received key from invalid state $state")
@@ -194,10 +195,7 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
         // - the Matrix ID of the user who sent the m.key.verification.accept message,
         // - he device ID of the device that sent the m.key.verification.accept message
         // - the transaction ID.
-        val sasInfo = "MATRIX_KEY_VERIFICATION_SAS" +
-                "$otherUserId$otherDeviceId" +
-                "${credentials.userId}${credentials.deviceId}" +
-                transactionId
+        val sasInfo = "MATRIX_KEY_VERIFICATION_SAS$otherUserId$otherDeviceId$userId$deviceId$transactionId"
         // decimal: generate five bytes by using HKDF.
         // emoji: generate six bytes by using HKDF.
         shortCodeBytes = getSAS().generateShortCode(sasInfo, 6)

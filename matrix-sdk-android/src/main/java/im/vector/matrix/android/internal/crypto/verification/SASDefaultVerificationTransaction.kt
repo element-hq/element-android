@@ -17,7 +17,6 @@ package im.vector.matrix.android.internal.crypto.verification
 
 import android.os.Build
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.EmojiRepresentation
@@ -41,7 +40,8 @@ import kotlin.properties.Delegates
  */
 internal abstract class SASDefaultVerificationTransaction(
         private val setDeviceVerificationAction: SetDeviceVerificationAction,
-        open val credentials: Credentials,
+        open val userId: String,
+        open val deviceId: String?,
         private val cryptoStore: IMXCryptoStore,
         private val crossSigningService: CrossSigningService,
         private val deviceFingerprint: String,
@@ -139,11 +139,7 @@ internal abstract class SASDefaultVerificationTransaction(
         // - the device ID of the device receiving the MAC,
         // - the transaction ID, and
         // - the key ID of the key being MAC-ed, or the string “KEY_IDS” if the item being MAC-ed is the list of key IDs.
-
-        val baseInfo = "MATRIX_KEY_VERIFICATION_MAC" +
-                credentials.userId + credentials.deviceId +
-                otherUserId + otherDeviceId +
-                transactionId
+        val baseInfo = "MATRIX_KEY_VERIFICATION_MAC$userId$deviceId$otherUserId$otherDeviceId$transactionId"
 
         //  Previously, with SAS verification, the m.key.verification.mac message only contained the user's device key.
         //  It should now contain both the device key and the MSK.
@@ -151,7 +147,7 @@ internal abstract class SASDefaultVerificationTransaction(
 
         val keyMap = HashMap<String, String>()
 
-        val keyId = "ed25519:${credentials.deviceId}"
+        val keyId = "ed25519:$deviceId"
         val macString = macUsingAgreedMethod(deviceFingerprint, baseInfo + keyId)
 
         if (macString.isNullOrBlank()) {
@@ -211,7 +207,7 @@ internal abstract class SASDefaultVerificationTransaction(
         when (info) {
             is VerificationInfoStart  -> onVerificationStart(info)
             is VerificationInfoAccept -> onVerificationAccept(info)
-            is VerificationInfoKey    -> onKeyVerificationKey(senderId, info)
+            is VerificationInfoKey    -> onKeyVerificationKey(info)
             is VerificationInfoMac    -> onKeyVerificationMac(info)
             else                      -> {
                 // nop
@@ -223,7 +219,7 @@ internal abstract class SASDefaultVerificationTransaction(
 
     abstract fun onVerificationAccept(accept: VerificationInfoAccept)
 
-    abstract fun onKeyVerificationKey(userId: String, vKey: VerificationInfoKey)
+    abstract fun onKeyVerificationKey(vKey: VerificationInfoKey)
 
     abstract fun onKeyVerificationMac(vKey: VerificationInfoMac)
 
@@ -241,7 +237,7 @@ internal abstract class SASDefaultVerificationTransaction(
 
         val baseInfo = "MATRIX_KEY_VERIFICATION_MAC" +
                 otherUserId + otherDeviceId +
-                credentials.userId + credentials.deviceId +
+                userId + deviceId +
                 transactionId
 
         val commaSeparatedListOfKeyIds = theirMac!!.mac!!.keys.sorted().joinToString(",")
@@ -305,7 +301,7 @@ internal abstract class SASDefaultVerificationTransaction(
         }
 
         // If not me sign his MSK and upload the signature
-        if (otherMasterKeyIsVerified && otherUserId != credentials.userId) {
+        if (otherMasterKeyIsVerified && otherUserId != userId) {
             // we should trust this master key
             // And check verification MSK -> SSK?
             crossSigningService.trustUser(otherUserId, object : MatrixCallback<Unit> {
@@ -315,7 +311,7 @@ internal abstract class SASDefaultVerificationTransaction(
             })
         }
 
-        if (otherUserId == credentials.userId) {
+        if (otherUserId == userId) {
             // If me it's reasonable to sign and upload the device signature
             // Notice that i might not have the private keys, so may ot be able to do it
             crossSigningService.signDevice(otherDeviceId!!, object : MatrixCallback<Unit> {
