@@ -19,7 +19,13 @@ package im.vector.matrix.android.internal.database.helper
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomMemberContent
-import im.vector.matrix.android.internal.database.model.*
+import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
+import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
+import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntity
+import im.vector.matrix.android.internal.database.model.TimelineEventEntity
+import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.extensions.assertIsManaged
@@ -37,15 +43,7 @@ internal fun ChunkEntity.addTimelineEvent(roomId: String,
                                           direction: PaginationDirection,
                                           roomMemberEvent: Event?): TimelineEventEntity {
 
-    var currentDisplayIndex = lastDisplayIndex(direction, 0)
-    if (direction == PaginationDirection.FORWARDS) {
-        currentDisplayIndex += 1
-        forwardsDisplayIndex = currentDisplayIndex
-    } else {
-        currentDisplayIndex -= 1
-        backwardsDisplayIndex = currentDisplayIndex
-    }
-
+    val displayIndex = nextDisplayIndex(direction)
     val localId = TimelineEventEntity.nextId(realm)
     val eventId = eventEntity.eventId
     val senderId = eventEntity.sender ?: ""
@@ -73,12 +71,12 @@ internal fun ChunkEntity.addTimelineEvent(roomId: String,
 
     val timelineEventEntity = TimelineEventEntity().also {
         it.localId = localId
-        it.root = realm.copyToRealm(eventEntity)
+        it.root = eventEntity
         it.eventId = eventId
         it.roomId = roomId
         it.annotations = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
         it.readReceipts = readReceiptsSummaryEntity
-        it.displayIndex = currentDisplayIndex
+        it.displayIndex = displayIndex
     }
     if (roomMemberEvent != null) {
         val roomMemberContent = roomMemberEvent.content.toModel<RoomMemberContent>()
@@ -91,9 +89,13 @@ internal fun ChunkEntity.addTimelineEvent(roomId: String,
     return timelineEventEntity
 }
 
-internal fun ChunkEntity.lastDisplayIndex(direction: PaginationDirection, defaultValue: Int = 0): Int {
+internal fun ChunkEntity.nextDisplayIndex(direction: PaginationDirection): Int {
     return when (direction) {
-        PaginationDirection.FORWARDS  -> forwardsDisplayIndex
-        PaginationDirection.BACKWARDS -> backwardsDisplayIndex
-    } ?: defaultValue
+        PaginationDirection.FORWARDS  -> {
+            (timelineEvents.where().max(TimelineEventEntityFields.DISPLAY_INDEX)?.toInt() ?: 0) + 1
+        }
+        PaginationDirection.BACKWARDS -> {
+            (timelineEvents.where().min(TimelineEventEntityFields.DISPLAY_INDEX)?.toInt() ?: 0) - 1
+        }
+    }
 }

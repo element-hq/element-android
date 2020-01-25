@@ -126,7 +126,9 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 if (event.eventId == null || event.stateKey == null) {
                     continue
                 }
-                val eventEntity = event.toEntity(roomId, SendState.SYNCED)
+                val eventEntity = event.toEntity(roomId, SendState.SYNCED).let {
+                    realm.copyToRealmOrUpdate(it)
+                }
                 CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
                     eventId = event.eventId
                     root = eventEntity
@@ -215,8 +217,10 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 continue
             }
             eventIds.add(event.eventId)
-            val eventEntity = event.toEntity(roomId, SendState.SYNCED)
-            if (event.isStateEvent() && event.stateKey != null) {
+            val eventEntity = event.toEntity(roomId, SendState.SYNCED).let {
+                realm.copyToRealmOrUpdate(it)
+            }
+            if (event.isStateEvent() && event.stateKey != null && !event.isRedacted()) {
                 CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
                     eventId = event.eventId
                     root = eventEntity

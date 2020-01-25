@@ -73,7 +73,9 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
                 if (roomMemberEvent.eventId == null || roomMemberEvent.stateKey == null) {
                     continue
                 }
-                val eventEntity = roomMemberEvent.toEntity(roomId, SendState.SYNCED)
+                val eventEntity = roomMemberEvent.toEntity(roomId, SendState.SYNCED).let {
+                    realm.copyToRealmOrUpdate(it)
+                }
                 CurrentStateEventEntity.getOrCreate(realm, roomId, roomMemberEvent.stateKey, roomMemberEvent.type).apply {
                     eventId = roomMemberEvent.eventId
                     root = eventEntity

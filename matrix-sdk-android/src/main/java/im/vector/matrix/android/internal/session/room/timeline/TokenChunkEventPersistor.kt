@@ -20,11 +20,13 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.send.SendState
-import im.vector.matrix.android.internal.database.helper.*
+import im.vector.matrix.android.internal.database.helper.addOrUpdate
+import im.vector.matrix.android.internal.database.helper.addTimelineEvent
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
+import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.find
@@ -152,18 +154,35 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                         } else {
                             receivedChunk.events.asReversed()
                         }
+                        val stateEvents = receivedChunk.stateEvents
+                        for (stateEvent in stateEvents) {
+                            if (stateEvent.type == EventType.STATE_ROOM_MEMBER && stateEvent.stateKey != null && !stateEvent.isRedacted()) {
+                                roomMemberEventsByUser[stateEvent.stateKey] = stateEvent
+                            }
+                        }
+                        val eventEntities = ArrayList<EventEntity>(eventList.size)
                         for (event in eventList) {
                             if (event.eventId == null || event.senderId == null) {
                                 continue
                             }
-                            val eventEntity = event.toEntity(roomId, SendState.SYNCED)
-                            if (event.type == EventType.STATE_ROOM_MEMBER && event.stateKey != null) {
+                            val eventEntity = event.toEntity(roomId, SendState.SYNCED).also {
+                                realm.copyToRealmOrUpdate(it)
+                            }
+                            if(direction == PaginationDirection.FORWARDS){
+                                eventEntities.add(eventEntity)
+                            }else {
+                                eventEntities.add(0, eventEntity)
+                            }
+                            if (event.type == EventType.STATE_ROOM_MEMBER && event.stateKey != null && !event.isRedacted()) {
                                 roomMemberEventsByUser[event.stateKey] = event
                             }
-                            val roomMemberEvent = roomMemberEventsByUser.getOrPut(event.senderId) {
-                                CurrentStateEventEntity.getOrNull(realm, roomId, event.senderId, EventType.STATE_ROOM_MEMBER)?.root?.asDomain()
+                        }
+                        for (eventEntity in eventEntities) {
+                            val senderId = eventEntity.sender ?: continue
+                            val roomMemberEvent = roomMemberEventsByUser.getOrPut(senderId) {
+                                CurrentStateEventEntity.getOrNull(realm, roomId, senderId, EventType.STATE_ROOM_MEMBER)?.root?.asDomain()
                             }
-                            currentChunk.addTimelineEvent(roomId, eventEntity, PaginationDirection.FORWARDS, roomMemberEvent)
+                            currentChunk.addTimelineEvent(roomId, eventEntity, direction, roomMemberEvent)
                         }
                         roomEntity.addOrUpdate(currentChunk)
                     }
