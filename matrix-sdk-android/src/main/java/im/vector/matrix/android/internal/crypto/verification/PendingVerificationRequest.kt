@@ -25,6 +25,7 @@ import java.util.UUID
 
 /**
  * Stores current pending verification requests
+ * TODO We should not expose this whole object to the app. Create an interface
  */
 data class PendingVerificationRequest(
         val ageLocalTs: Long,
