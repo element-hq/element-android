@@ -26,33 +26,39 @@ import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 
 interface CrossSigningService {
 
-    fun isUserTrusted(userId: String) : Boolean
+    fun isUserTrusted(otherUserId: String): Boolean
 
     /**
      * Will not force a download of the key, but will verify signatures trust chain.
      * Checks that my trusted user key has signed the other user UserKey
      */
-    fun checkUserTrust(userId: String) : UserTrustResult
+    fun checkUserTrust(otherUserId: String): UserTrustResult
 
     /**
      * Initialize cross signing for this user.
      * Users needs to enter credentials
      */
-    fun initializeCrossSigning(authParams: UserPasswordAuth?, callback: MatrixCallback<Unit>? = null)
+    fun initializeCrossSigning(authParams: UserPasswordAuth?,
+                               callback: MatrixCallback<Unit>? = null)
 
-    fun getUserCrossSigningKeys(userId: String): MXCrossSigningInfo?
+    fun getUserCrossSigningKeys(otherUserId: String): MXCrossSigningInfo?
 
     fun getLiveCrossSigningKeys(userId: String): LiveData<Optional<MXCrossSigningInfo>>
 
     fun getMyCrossSigningKeys(): MXCrossSigningInfo?
+
     fun canCrossSign(): Boolean
 
-    fun trustUser(userId: String, callback: MatrixCallback<Unit>)
+    fun trustUser(otherUserId: String,
+                  callback: MatrixCallback<Unit>)
 
     /**
      * Sign one of your devices and upload the signature
      */
-    fun signDevice(deviceId: String, callback: MatrixCallback<Unit>)
+    fun signDevice(deviceId: String,
+                   callback: MatrixCallback<Unit>)
 
-    fun checkDeviceTrust(userId: String, deviceId: String, locallyTrusted: Boolean?) : DeviceTrustResult
+    fun checkDeviceTrust(otherUserId: String,
+                         otherDeviceId: String,
+                         locallyTrusted: Boolean?): DeviceTrustResult
 }
