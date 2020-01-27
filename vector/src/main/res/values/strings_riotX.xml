@@ -34,6 +34,7 @@
 
 
     <string name="verification_verify_device">Verify this device</string>
+    <string name="verification_verify_device_manually">Manually verify</string>
 
     <!-- Sender name of a message when it is send by you, e.g. You: Hello!-->
     <string name="you">You</string>
@@ -128,5 +129,9 @@
     <string name="room_member_profile_sessions_section_title">Sessions</string>
     <string name="trusted">Trusted</string>
     <string name="not_trusted">Not Trusted</string>
+
+    <string name="verification_profile_device_verified_because">This device is trusted for secure messaging because %1$s (%2$s) verified it:</string>
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) signed in using a new device:</string>
+    <string name="verification_profile_device_untrust_info">Until this user trusts this device, messages sent to and from it are labelled with warnings. Alternatively, you can manually verify it.</string>
 
 </resources>

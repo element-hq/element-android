@@ -180,8 +180,8 @@ class RoomMemberProfileFragment @Inject constructor(
         DeviceListBottomSheet.newInstance(it.userId).show(parentFragmentManager, "DEV_LIST")
     }
 
-    override fun onShowDeviceListNoCrossSigning() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun onShowDeviceListNoCrossSigning() = withState(viewModel) {
+        DeviceListBottomSheet.newInstance(it.userId).show(parentFragmentManager, "DEV_LIST")
     }
 
     override fun onJumpToReadReceiptClicked() {

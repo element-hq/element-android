@@ -40,7 +40,7 @@ import im.vector.riotx.features.themes.ThemeUtils
 abstract class GenericItemWithValue : VectorEpoxyModel<GenericItemWithValue.Holder>() {
 
     @EpoxyAttribute
-    var title: String? = null
+    var title: CharSequence? = null
 
     @EpoxyAttribute
     var value: CharSequence? = null

@@ -1,5 +1,22 @@
+/*
+ * Copyright 2020 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 package im.vector.riotx.features.roommemberprofile.devices
 
+import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -11,16 +28,18 @@ import im.vector.riotx.core.epoxy.errorWithRetryItem
 import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.core.ui.list.GenericItem
 import im.vector.riotx.core.ui.list.genericFooterItem
 import im.vector.riotx.core.ui.list.genericItem
 import im.vector.riotx.core.ui.list.genericItemWithValue
+import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.settings.VectorPreferences
+import me.gujun.android.span.span
 import javax.inject.Inject
 
 class DeviceListEpoxyController @Inject constructor(private val stringProvider: StringProvider,
                                                     private val colorProvider: ColorProvider,
+                                                    private val dimensionConverter: DimensionConverter,
                                                     private val vectorPreferences: VectorPreferences)
     : TypedEpoxyController<DeviceListViewState>() {
 
@@ -46,7 +65,10 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
             }
             is Success    -> {
 
-                val deviceList = data.cryptoDevices.invoke()
+                val deviceList = data.cryptoDevices.invoke().sortedByDescending {
+                    it.isVerified
+                }
+
 
                 // Build top header
                 val allGreen = deviceList.fold(true, { prev, device ->
@@ -57,8 +79,17 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                     id("title")
                     style(GenericItem.STYLE.BIG_TEXT)
                     titleIconResourceId(if (allGreen) R.drawable.ic_shield_trusted else R.drawable.ic_shield_warning)
-                    title(stringProvider.getString(R.string.verification_profile_verified))
+                    title(
+                            stringProvider.getString(
+                                    if (allGreen) R.string.verification_profile_verified else R.string.verification_profile_warning
+                            )
+                    )
                     description(stringProvider.getString(R.string.verification_conclusion_ok_notice))
+                }
+
+                if (vectorPreferences.developerMode()) {
+                    // Display the cross signing keys
+                    addDebugInfo(data)
                 }
 
                 genericItem {
@@ -79,18 +110,22 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                         genericItemWithValue {
                             id(device.deviceId)
                             titleIconResourceId(if (device.isVerified) R.drawable.ic_shield_trusted else R.drawable.ic_shield_warning)
-                            title(
-                                    buildString {
-                                        append(device.displayName() ?: device.deviceId)
-                                        apply {
-                                            if (vectorPreferences.developerMode()) {
-                                                append("\n")
-                                                append(device.deviceId)
-                                            }
+                            apply {
+                                if (vectorPreferences.developerMode()) {
+                                    val seq = span {
+                                        +(device.displayName() ?: device.deviceId)
+                                        +"\n"
+                                        span {
+                                            text = "(${device.deviceId})"
+                                            textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                            textSize = dimensionConverter.spToPx(14)
                                         }
                                     }
-
-                            )
+                                    title(seq)
+                                } else {
+                                    title(device.displayName() ?: device.deviceId)
+                                }
+                            }
                             value(
                                     stringProvider.getString(
                                             if (device.isVerified) R.string.trusted else R.string.not_trusted
@@ -101,6 +136,9 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                                             if (device.isVerified) R.color.riotx_positive_accent else R.color.riotx_destructive_accent
                                     )
                             )
+                            itemClickAction(View.OnClickListener {
+                                interactionListener?.onDeviceSelected(device)
+                            })
                         }
                     }
                 }
@@ -113,6 +151,57 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                         // TODO
                     }
                 }
+            }
+        }
+    }
+
+    private fun addDebugInfo(data: DeviceListViewState) {
+        data.memberCrossSigningKey?.masterKey()?.let {
+            genericItemWithValue {
+                id("msk")
+                titleIconResourceId(R.drawable.key_small)
+                title(
+                        span {
+                            +"Master Key:\n"
+                            span {
+                                text = it.unpaddedBase64PublicKey ?: ""
+                                textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                textSize = dimensionConverter.spToPx(12)
+                            }
+                        }
+                )
+            }
+        }
+        data.memberCrossSigningKey?.userKey()?.let {
+            genericItemWithValue {
+                id("usk")
+                titleIconResourceId(R.drawable.key_small)
+                title(
+                        span {
+                            +"User Key:\n"
+                            span {
+                                text = it.unpaddedBase64PublicKey ?: ""
+                                textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                textSize = dimensionConverter.spToPx(12)
+                            }
+                        }
+                )
+            }
+        }
+        data.memberCrossSigningKey?.selfSigningKey()?.let {
+            genericItemWithValue {
+                id("ssk")
+                titleIconResourceId(R.drawable.key_small)
+                title(
+                        span {
+                            +"Self Signed Key:\n"
+                            span {
+                                text = it.unpaddedBase64PublicKey ?: ""
+                                textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                textSize = dimensionConverter.spToPx(12)
+                            }
+                        }
+                )
             }
         }
     }

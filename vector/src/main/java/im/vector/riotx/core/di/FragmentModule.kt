@@ -57,6 +57,8 @@ import im.vector.riotx.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.riotx.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewNoPreviewFragment
 import im.vector.riotx.features.roommemberprofile.RoomMemberProfileFragment
+import im.vector.riotx.features.roommemberprofile.devices.DeviceListFragment
+import im.vector.riotx.features.roommemberprofile.devices.DeviceTrustInfoActionFragment
 import im.vector.riotx.features.roomprofile.RoomProfileFragment
 import im.vector.riotx.features.roomprofile.members.RoomMemberListFragment
 import im.vector.riotx.features.settings.VectorSettingsAdvancedNotificationPreferenceFragment
@@ -319,4 +321,14 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(QrCodeScannerFragment::class)
     fun bindQrCodeScannerFragment(fragment: QrCodeScannerFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(DeviceListFragment::class)
+    fun bindDeviceListFragment(fragment: DeviceListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(DeviceTrustInfoActionFragment::class)
+    fun bindDeviceTrustInfoActionFragment(fragment: DeviceTrustInfoActionFragment): Fragment
 }

@@ -16,65 +16,98 @@
  */
 package im.vector.riotx.features.roommemberprofile.devices
 
+import android.content.DialogInterface
 import android.os.Bundle
-import androidx.core.view.isVisible
-import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
+import android.view.KeyEvent
+import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
-import im.vector.riotx.core.extensions.cleanup
-import im.vector.riotx.core.extensions.configureWith
+import im.vector.riotx.core.extensions.commitTransaction
+import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
-import im.vector.riotx.core.utils.DimensionConverter
-import kotlinx.android.synthetic.main.bottom_sheet_generic_list_with_title.*
+import im.vector.riotx.features.crypto.verification.VerificationAction
+import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import javax.inject.Inject
+import kotlin.reflect.KClass
 
-class DeviceListBottomSheet : VectorBaseBottomSheetDialogFragment(), DeviceListEpoxyController.InteractionListener {
+class DeviceListBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
-    override fun getLayoutResId() = R.layout.bottom_sheet_generic_list_with_title
+    override fun getLayoutResId() = R.layout.bottom_sheet_with_fragments
 
     private val viewModel: DeviceListBottomSheetViewModel by fragmentViewModel(DeviceListBottomSheetViewModel::class)
 
     @Inject lateinit var viewModelFactory: DeviceListBottomSheetViewModel.Factory
 
-    @Inject lateinit var dimensionConverter: DimensionConverter
-
-    @BindView(R.id.bottomSheetRecyclerView)
-    lateinit var recyclerView: RecyclerView
-
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
     }
 
-    @Inject lateinit var epoxyController: DeviceListEpoxyController
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        recyclerView.setPadding(0, dimensionConverter.dpToPx(16 ),0,  dimensionConverter.dpToPx(16 ))
-        recyclerView.configureWith(
-                epoxyController,
-                showDivider = false,
-                hasFixedSize = false)
-        epoxyController.interactionListener = this
-        bottomSheetTitle.isVisible = false
+        viewModel.requestLiveData.observeEvent(this) { async ->
+            when (async) {
+                is Success -> {
+                    when (val action = async.invoke()) {
+                        is VerificationAction.StartSASVerification -> {
+                            VerificationBottomSheet.withArgs(
+                                    roomId = null,
+                                    otherUserId = action.userID,
+                                    transactionId = action.pendingRequestTransactionId
+                            ).show(requireActivity().supportFragmentManager, "REQPOP")
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    override fun onDestroyView() {
-        recyclerView.cleanup()
-        super.onDestroyView()
+    private val onKeyListener = DialogInterface.OnKeyListener { _, keyCode, _ ->
+        withState(viewModel) {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                if (it.selectedDevice != null) {
+                    viewModel.selectDevice(null)
+                    return@withState true
+                } else {
+                    return@withState false
+                }
+            }
+            return@withState false
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        dialog?.setOnKeyListener(onKeyListener)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        dialog?.setOnKeyListener(null)
     }
 
     override fun invalidate() = withState(viewModel) {
-        epoxyController.setData(it)
         super.invalidate()
+        if (it.selectedDevice == null) {
+            showFragment(DeviceListFragment::class, arguments ?: Bundle())
+        } else {
+            showFragment(DeviceTrustInfoActionFragment::class, arguments ?: Bundle())
+        }
     }
 
-    override fun onDeviceSelected(device: CryptoDeviceInfo) {
-        // TODO
+    private fun showFragment(fragmentClass: KClass<out Fragment>, bundle: Bundle) {
+        if (childFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
+            childFragmentManager.commitTransaction {
+                replace(R.id.bottomSheetFragmentContainer,
+                        fragmentClass.java,
+                        bundle,
+                        fragmentClass.simpleName
+                )
+            }
+        }
     }
 
     companion object {

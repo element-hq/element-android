@@ -226,11 +226,11 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         mainActivityStarted = true
 
         MainActivity.restartApp(this,
-                                MainActivityArgs(
-                                        clearCredentials = !globalError.softLogout,
-                                        isUserLoggedOut = true,
-                                        isSoftLogout = globalError.softLogout
-                                )
+                MainActivityArgs(
+                        clearCredentials = !globalError.softLogout,
+                        isUserLoggedOut = true,
+                        isSoftLogout = globalError.softLogout
+                )
         )
     }
 
