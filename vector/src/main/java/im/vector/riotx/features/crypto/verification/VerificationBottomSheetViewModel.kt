@@ -166,18 +166,18 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
             }
             is VerificationAction.RemoteQrCodeScanned     -> {
                 val existingTransaction = session.getVerificationService()
-                        .getExistingTransaction(action.userID, action.transactionId) as? QRVerificationTransaction
+                        .getExistingTransaction(action.otherUserId, action.transactionId) as? QRVerificationTransaction
                 existingTransaction
                         ?.userHasScannedRemoteQrCode(action.scannedData)
             }
             is VerificationAction.SASMatchAction          -> {
                 (session.getVerificationService()
-                        .getExistingTransaction(action.userID, action.sasTransactionId)
+                        .getExistingTransaction(action.otherUserId, action.sasTransactionId)
                         as? SasVerificationTransaction)?.userHasVerifiedShortCode()
             }
             is VerificationAction.SASDoNotMatchAction     -> {
                 (session.getVerificationService()
-                        .getExistingTransaction(action.userID, action.sasTransactionId)
+                        .getExistingTransaction(action.otherUserId, action.sasTransactionId)
                         as? SasVerificationTransaction)
                         ?.shortCodeDoesNotMatch()
             }
