@@ -26,6 +26,8 @@ import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 
 interface CrossSigningService {
 
+    fun isCrossSigningEnabled(): Boolean
+
     fun isUserTrusted(otherUserId: String): Boolean
 
     /**

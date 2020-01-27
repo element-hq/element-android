@@ -601,7 +601,7 @@ internal class DefaultVerificationService @Inject constructor(
             return
         }
         if (checkKeysAreDownloaded(event.senderId, readyReq.fromDevice ?: "") == null) {
-            Timber.e("## SAS Verification device ${readyReq.fromDevice} is not knwown")
+            Timber.e("## SAS Verification device ${readyReq.fromDevice} is not known")
             // TODO cancel?
             return
         }
@@ -833,10 +833,19 @@ internal class DefaultVerificationService @Inject constructor(
                 otherUserId = otherUserId
         )
 
-        // Add reciprocate method if application declares it can scan or show QR codes
-        // Not sure if it ok to do that (?)
-        val reciprocateMethod = methods.firstOrNull { it == VerificationMethod.QR_CODE_SCAN || it == VerificationMethod.QR_CODE_SHOW }?.let { listOf(VERIFICATION_METHOD_RECIPROCATE) }.orEmpty()
-        val methodValues = (methods.map { it.toValue() } + reciprocateMethod).distinct()
+        // We can SCAN or SHOW QR codes only if cross-signing is enabled
+        val methodValues = if (crossSigningService.isCrossSigningEnabled()) {
+            // Add reciprocate method if application declares it can scan or show QR codes
+            // Not sure if it ok to do that (?)
+            val reciprocateMethod = methods.firstOrNull { it == VerificationMethod.QR_CODE_SCAN || it == VerificationMethod.QR_CODE_SHOW }?.let { listOf(VERIFICATION_METHOD_RECIPROCATE) }.orEmpty()
+            methods.map { it.toValue() } + reciprocateMethod
+        } else {
+            // Filter out SCAN and SHOW qr code method
+            methods
+                    .filter { it != VerificationMethod.QR_CODE_SHOW && it != VerificationMethod.QR_CODE_SCAN }
+                    .map { it.toValue() }
+        }
+                .distinct()
 
         transport.sendVerificationRequest(methodValues, localID, otherUserId, roomId) { syncedId, info ->
             // We need to update with the syncedID

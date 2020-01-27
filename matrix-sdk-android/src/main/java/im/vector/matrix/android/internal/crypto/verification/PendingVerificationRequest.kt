@@ -39,7 +39,9 @@ data class PendingVerificationRequest(
         val cancelConclusion: CancelCode? = null,
         val isSuccessful: Boolean = false,
         val handledByOtherSession: Boolean = false,
+        // TODO Move to OutgoingQrCodeTransaction
         val myGeneratedSecret: String? = null,
+        // TODO Move to OutgoingQrCodeTransaction
         val qrCodeText: String? = null
 
 ) {

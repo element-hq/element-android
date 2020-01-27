@@ -212,7 +212,7 @@ internal class DefaultCrossSigningService @Inject constructor(
             this.constraints = TaskConstraints(true)
             this.callback = object : MatrixCallback<Unit> {
                 override fun onSuccess(data: Unit) {
-                    Timber.i("## CrossSigning - Keys succesfully uploaded")
+                    Timber.i("## CrossSigning - Keys successfully uploaded")
 
                     //  Sign the current device with SSK
                     val uploadSignatureQueryBuilder = UploadSignatureQueryBuilder()
@@ -248,7 +248,7 @@ internal class DefaultCrossSigningService @Inject constructor(
                         this.constraints = TaskConstraints(true)
                         this.callback = object : MatrixCallback<Unit> {
                             override fun onSuccess(data: Unit) {
-                                Timber.i("## CrossSigning - signatures succesfuly uploaded")
+                                Timber.i("## CrossSigning - signatures successfully uploaded")
                                 callback?.onSuccess(Unit)
                             }
 
@@ -293,21 +293,20 @@ internal class DefaultCrossSigningService @Inject constructor(
      *  ┏━━━━━━━━┓                             ┏━━━━━━━━┓
      *  ┃ ALICE  ┃                             ┃  BOB   ┃
      *  ┗━━━━━━━━┛                             ┗━━━━━━━━┛
-     *   MSK                      ┌────────────▶MSK
+     *   MSK                      ┌────────────▶  MSK
      *                            │
-     *     │                      │               │
-     *     │    SSK               │               └──▶ SSK  ──────────────────┐
-     *     │                      │                                           │
-     *     │                      │                    USK                    │
-     *     └──▶ USK   ────────────┘              (not visible by              │
-     *                                                Alice)                  │
-     *                                                                        ▼
-     *                                                                ┌──────────────┐
-     *                                                                │ BOB's Device │
-     *                                                                └──────────────┘
+     *     │                      │
+     *     │    SSK               │
+     *     │                      │
+     *     │                      │
+     *     └──▶ USK   ────────────┘
      */
     override fun isUserTrusted(otherUserId: String): Boolean {
         return cryptoStore.getCrossSigningInfo(userId)?.isTrusted() == true
+    }
+
+    override fun isCrossSigningEnabled(): Boolean {
+        return checkSelfTrust().isVerified()
     }
 
     /**
