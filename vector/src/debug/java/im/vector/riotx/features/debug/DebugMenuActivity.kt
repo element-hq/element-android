@@ -22,18 +22,9 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.text.InputType
-import android.widget.EditText
-import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import butterknife.OnClick
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
-import im.vector.matrix.android.internal.auth.registration.RegistrationFlowResponse
-import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
-import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
@@ -176,61 +167,6 @@ class DebugMenuActivity : VectorBaseActivity() {
     @OnClick(R.id.debug_test_crash)
     fun testCrash() {
         throw RuntimeException("Application crashed from user demand")
-    }
-
-    @OnClick(R.id.debug_initialise_xsigning)
-    fun testXSigning() {
-        activeSessionHolder.getActiveSession().getCrossSigningService().initializeCrossSigning(null, object : MatrixCallback<Unit> {
-            override fun onFailure(failure: Throwable) {
-                if (failure is Failure.OtherServerError
-                        && failure.httpCode == 401
-                ) {
-                    try {
-                        MoshiProvider.providesMoshi()
-                                .adapter(RegistrationFlowResponse::class.java)
-                                .fromJson(failure.errorBody)
-                    } catch (e: Exception) {
-                        null
-                    }?.let {
-                        // Retry with authentication
-                        if (it.flows?.any { it.stages?.contains(LoginFlowTypes.PASSWORD) == true } == true) {
-                            // Ask for password
-                            val inflater = this@DebugMenuActivity.layoutInflater
-                            val layout = inflater.inflate(R.layout.dialog_base_edit_text, null)
-
-                            val input = layout.findViewById<EditText>(R.id.edit_text).also {
-                                it.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
-                            }
-
-                            val activeSession = activeSessionHolder.getActiveSession()
-                            AlertDialog.Builder(this@DebugMenuActivity)
-                                    .setTitle("Confirm password")
-                                    .setView(layout)
-                                    .setPositiveButton(R.string.ok) { _, _ ->
-                                        val pass = input.text.toString()
-
-                                        activeSession.getCrossSigningService().initializeCrossSigning(
-                                                UserPasswordAuth(
-                                                        session = it.session,
-                                                        user = activeSession.myUserId,
-                                                        password = pass
-                                                )
-                                        )
-                                    }
-                                    .setNegativeButton(R.string.cancel, null)
-                                    .show()
-                        } else {
-                            // can't do this from here
-                            AlertDialog.Builder(this@DebugMenuActivity)
-                                    .setTitle(R.string.dialog_title_error)
-                                    .setMessage("You cannot do that from mobile")
-                                    .setPositiveButton(R.string.ok, null)
-                                    .show()
-                        }
-                    }
-                }
-            }
-        })
     }
 
     @OnClick(R.id.debug_scan_qr_code)

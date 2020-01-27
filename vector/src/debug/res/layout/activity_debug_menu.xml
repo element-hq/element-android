@@ -62,13 +62,6 @@
                 android:text="Crash the app" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/debug_initialise_xsigning"
-                style="@style/VectorButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Initialize XSigning" />
-
-            <com.google.android.material.button.MaterialButton
                 android:id="@+id/debug_scan_qr_code"
                 style="@style/VectorButtonStyle"
                 android:layout_width="wrap_content"

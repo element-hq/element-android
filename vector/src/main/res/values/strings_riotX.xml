@@ -134,4 +134,7 @@
     <string name="verification_profile_device_new_signing">%1$s (%2$s) signed in using a new device:</string>
     <string name="verification_profile_device_untrust_info">Until this user trusts this device, messages sent to and from it are labelled with warnings. Alternatively, you can manually verify it.</string>
 
+
+    <string name="initialize_cross_signing">Initialize CrossSigning</string>
+    <string name="reset_cross_signing">Reset Keys</string>
 </resources>

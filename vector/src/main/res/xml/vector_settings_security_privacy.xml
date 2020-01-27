@@ -15,6 +15,7 @@
             android:persistent="false"
             android:title="@string/encryption_information_cross_signing_state"
             tools:summary="@string/encryption_information_dg_xsigning_complete"
+            app:fragment="im.vector.riotx.features.settings.crosssigning.CrossSigningSettingsFragment"
             />
 
 

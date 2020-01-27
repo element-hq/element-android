@@ -68,6 +68,7 @@ import im.vector.riotx.features.settings.VectorSettingsNotificationPreferenceFra
 import im.vector.riotx.features.settings.VectorSettingsNotificationsTroubleshootFragment
 import im.vector.riotx.features.settings.VectorSettingsPreferencesFragment
 import im.vector.riotx.features.settings.VectorSettingsSecurityPrivacyFragment
+import im.vector.riotx.features.settings.crosssigning.CrossSigningSettingsFragment
 import im.vector.riotx.features.settings.devices.VectorSettingsDevicesFragment
 import im.vector.riotx.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
@@ -331,4 +332,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(DeviceTrustInfoActionFragment::class)
     fun bindDeviceTrustInfoActionFragment(fragment: DeviceTrustInfoActionFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(CrossSigningSettingsFragment::class)
+    fun bindCrossSigningSettingsFragment(fragment: CrossSigningSettingsFragment): Fragment
 }
