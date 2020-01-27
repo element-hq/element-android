@@ -31,7 +31,7 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
-import im.vector.matrix.android.api.session.crypto.sas.QRVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.sas.QrCodeVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
 import im.vector.matrix.android.api.session.crypto.sas.VerificationService
@@ -166,7 +166,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
             }
             is VerificationAction.RemoteQrCodeScanned     -> {
                 val existingTransaction = session.getVerificationService()
-                        .getExistingTransaction(action.otherUserId, action.transactionId) as? QRVerificationTransaction
+                        .getExistingTransaction(action.otherUserId, action.transactionId) as? QrCodeVerificationTransaction
                 existingTransaction
                         ?.userHasScannedRemoteQrCode(action.scannedData)
             }

@@ -16,23 +16,15 @@
 
 package im.vector.matrix.android.api.session.crypto.sas
 
-interface VerificationTransaction {
+interface QrCodeVerificationTransaction : VerificationTransaction {
 
-    var state: VerificationTxState
-
-    val cancelledReason: CancelCode?
-    val transactionId: String
-    val otherUserId: String
-    var otherDeviceId: String?
-
-    // TODO Not used. Remove?
-    val isIncoming: Boolean
     /**
-     * User wants to cancel the transaction
+     * To use to display a qr code, for the other user to scan it
      */
-    fun cancel()
+    val qrCodeText: String?
 
-    fun cancel(code: CancelCode)
-
-    fun isToDeviceTransport(): Boolean
+    /**
+     * Call when you have scan the other user QR code
+     */
+    fun userHasScannedRemoteQrCode(otherQrCodeText: String): CancelCode?
 }

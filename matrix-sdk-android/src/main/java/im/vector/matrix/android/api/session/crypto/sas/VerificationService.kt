@@ -67,7 +67,10 @@ interface VerificationService {
     /**
      * Returns false if the request is unknown
      */
-    fun readyPendingVerificationInDMs(otherUserId: String, roomId: String, transactionId: String): Boolean
+    fun readyPendingVerificationInDMs(methods: List<VerificationMethod>,
+                                      otherUserId: String,
+                                      roomId: String,
+                                      transactionId: String): Boolean
 
     // fun transactionUpdated(tx: SasVerificationTransaction)
 
