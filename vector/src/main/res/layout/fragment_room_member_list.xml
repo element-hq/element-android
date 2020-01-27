@@ -32,7 +32,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@tools:sample/avatars" />
 
-            <TextView
+            <im.vector.riotx.core.platform.EllipsizingTextView
                 android:id="@+id/roomMemberListToolbarTitleView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

@@ -25,7 +25,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
 
-    <TextView
+    <im.vector.riotx.core.platform.EllipsizingTextView
         android:id="@+id/matrixItemTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
         app:layout_goneMarginStart="0dp"
         tools:text="@sample/matrix.json/data/displayName" />
 
-    <TextView
+    <im.vector.riotx.core.platform.EllipsizingTextView
         android:id="@+id/matrixItemSubtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

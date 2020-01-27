@@ -28,7 +28,7 @@
         tools:src="@drawable/ic_room_profile_notification"
         tools:visibility="visible" />
 
-    <TextView
+    <im.vector.riotx.core.platform.EllipsizingTextView
         android:id="@+id/actionTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
         app:layout_goneMarginStart="0dp"
         tools:text="@string/room_profile_section_security_learn_more" />
 
-    <TextView
+    <im.vector.riotx.core.platform.EllipsizingTextView
         android:id="@+id/actionSubtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

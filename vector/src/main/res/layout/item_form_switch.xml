@@ -7,7 +7,7 @@
     android:background="?riotx_background"
     android:minHeight="@dimen/item_form_min_height">
 
-    <TextView
+    <im.vector.riotx.core.platform.EllipsizingTextView
         android:id="@+id/formSwitchTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
