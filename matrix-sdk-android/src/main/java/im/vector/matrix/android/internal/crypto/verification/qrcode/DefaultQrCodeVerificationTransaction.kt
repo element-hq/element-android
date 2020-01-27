@@ -38,6 +38,7 @@ internal class DefaultQrCodeVerificationTransaction(
         private val cryptoStore: IMXCryptoStore,
         private val myGeneratedSecret: String,
         override val qrCodeText: String,
+        val userId: String,
         val deviceId: String,
         override val isIncoming: Boolean
 ) : DefaultVerificationTransaction(transactionId, otherUserId, otherDeviceId, isIncoming), QrCodeVerificationTransaction {
@@ -71,7 +72,7 @@ internal class DefaultQrCodeVerificationTransaction(
         }
 
         // check master key
-        if (qrCodeData.otherUserKey != crossSigningService.getUserCrossSigningKeys(otherUserId)?.masterKey()?.unpaddedBase64PublicKey) {
+        if (qrCodeData.otherUserKey != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
             return CancelCode.MismatchedKeys
         }
 

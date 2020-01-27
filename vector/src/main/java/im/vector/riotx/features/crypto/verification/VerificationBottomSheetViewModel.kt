@@ -46,6 +46,7 @@ import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
+import timber.log.Timber
 
 data class VerificationBottomSheetViewState(
         val otherUserMxItem: MatrixItem? = null,
@@ -175,6 +176,11 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                         .getExistingTransaction(action.otherUserId, action.transactionId) as? QrCodeVerificationTransaction
                 existingTransaction
                         ?.userHasScannedRemoteQrCode(action.scannedData)
+                        ?.let { cancelCode ->
+                            // Something went wrong
+                            Timber.w("## Something is not right: $cancelCode")
+                            // TODO
+                        }
             }
             is VerificationAction.SASMatchAction          -> {
                 (session.getVerificationService()

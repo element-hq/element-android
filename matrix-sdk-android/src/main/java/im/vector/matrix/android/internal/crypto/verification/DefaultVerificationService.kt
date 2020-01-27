@@ -687,6 +687,7 @@ internal class DefaultVerificationService @Inject constructor(
                     cryptoStore,
                     qrCodeData.sharedSecret,
                     qrCodeData.toUrl(),
+                    userId,
                     deviceId ?: "",
                     false)
 
@@ -1011,7 +1012,6 @@ internal class DefaultVerificationService @Inject constructor(
                     result.add(VERIFICATION_METHOD_QR_CODE_SHOW)
                     result.add(VERIFICATION_METHOD_RECIPROCATE)
 
-                    // Create the pending request, to display the QR code
                     // Create the pending transaction
                     val tx = DefaultQrCodeVerificationTransaction(
                             transactionId,
@@ -1021,6 +1021,7 @@ internal class DefaultVerificationService @Inject constructor(
                             cryptoStore,
                             qrCodeData.sharedSecret,
                             qrCodeData.toUrl(),
+                            userId,
                             deviceId ?: "",
                             false)
 
