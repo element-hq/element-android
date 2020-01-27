@@ -98,7 +98,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         it.otherUserMxItem?.let { matrixItem ->
             avatarRenderer.render(matrixItem, otherUserAvatarImageView)
 
-            if (it.transactionState == VerificationTxState.Verified) {
+            if (it.sasTransactionState == VerificationTxState.Verified || it.qrTransactionState == VerificationTxState.Verified) {
                 otherUserNameText.text = getString(R.string.verification_verified_user, matrixItem.getBestName())
                 otherUserShield.isVisible = true
             } else {
@@ -108,8 +108,8 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
 
         // Did the request result in a SAS transaction?
-        if (it.transactionState != null) {
-            when (it.transactionState) {
+        if (it.sasTransactionState != null) {
+            when (it.sasTransactionState) {
                 VerificationTxState.None,
                 VerificationTxState.SendingStart,
                 VerificationTxState.Started,
@@ -138,13 +138,26 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 VerificationTxState.OnCancelled -> {
                     showFragment(VerificationConclusionFragment::class, Bundle().apply {
                         putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(
-                                it.transactionState == VerificationTxState.Verified,
+                                it.sasTransactionState == VerificationTxState.Verified,
                                 it.cancelCode?.value))
                     })
                 }
             }
 
             return@withState
+        }
+
+        when (it.qrTransactionState) {
+            VerificationTxState.Verified,
+            VerificationTxState.Cancelled,
+            VerificationTxState.OnCancelled -> {
+                showFragment(VerificationConclusionFragment::class, Bundle().apply {
+                    putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(
+                            it.qrTransactionState == VerificationTxState.Verified,
+                            it.cancelCode?.value))
+                })
+            }
+            else                            -> Unit
         }
 
         // At this point there is no transaction for this request

@@ -815,6 +815,8 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         room.roomId,
                         action.transactionId)) {
             _requestLiveData.postValue(LiveEvent(Success(action)))
+        } else {
+            // TODO
         }
     }
 

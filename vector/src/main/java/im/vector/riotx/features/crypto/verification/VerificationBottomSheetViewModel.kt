@@ -52,7 +52,8 @@ data class VerificationBottomSheetViewState(
         val roomId: String? = null,
         val pendingRequest: Async<PendingVerificationRequest> = Uninitialized,
         val pendingLocalId: String? = null,
-        val transactionState: VerificationTxState? = null,
+        val sasTransactionState: VerificationTxState? = null,
+        val qrTransactionState: VerificationTxState? = null,
         val transactionId: String? = null,
         val cancelCode: CancelCode? = null
 ) : MvRxState
@@ -94,12 +95,17 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
             val pr = session.getVerificationService().getExistingVerificationRequest(args.otherUserId, args.verificationId)
 
             val sasTx = (pr?.transactionId ?: args.verificationId)?.let {
-                session.getVerificationService().getExistingTransaction(args.otherUserId, it)
+                session.getVerificationService().getExistingTransaction(args.otherUserId, it) as? SasVerificationTransaction
+            }
+
+            val qrTx = (pr?.transactionId ?: args.verificationId)?.let {
+                session.getVerificationService().getExistingTransaction(args.otherUserId, it) as? QrCodeVerificationTransaction
             }
 
             return fragment.verificationViewModelFactory.create(VerificationBottomSheetViewState(
                     otherUserMxItem = userItem?.toMatrixItem(),
-                    transactionState = sasTx?.state,
+                    sasTransactionState = sasTx?.state,
+                    qrTransactionState = qrTx?.state,
                     transactionId = args.verificationId,
                     pendingRequest = if (pr != null) Success(pr) else Uninitialized,
                     roomId = args.roomId)
@@ -192,13 +198,28 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
     }
 
     override fun transactionUpdated(tx: VerificationTransaction) = withState { state ->
-        if (tx.transactionId == (state.pendingRequest.invoke()?.transactionId ?: state.transactionId)) {
-            // A SAS tx has been started following this request
-            setState {
-                copy(
-                        transactionState = tx.state,
-                        cancelCode = tx.cancelledReason
-                )
+        when (tx) {
+            is SasVerificationTransaction    -> {
+                if (tx.transactionId == (state.pendingRequest.invoke()?.transactionId ?: state.transactionId)) {
+                    // A SAS tx has been started following this request
+                    setState {
+                        copy(
+                                sasTransactionState = tx.state,
+                                cancelCode = tx.cancelledReason
+                        )
+                    }
+                }
+            }
+            is QrCodeVerificationTransaction -> {
+                if (tx.transactionId == (state.pendingRequest.invoke()?.transactionId ?: state.transactionId)) {
+                    // A SAS tx has been started following this request
+                    setState {
+                        copy(
+                                qrTransactionState = tx.state,
+                                cancelCode = tx.cancelledReason
+                        )
+                    }
+                }
             }
         }
     }

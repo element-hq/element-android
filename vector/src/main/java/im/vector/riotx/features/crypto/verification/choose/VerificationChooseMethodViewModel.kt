@@ -98,10 +98,14 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
             val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
             val pvr = session.getVerificationService().getExistingVerificationRequest(args.otherUserId, args.verificationId)
 
+            // Get the QR code now, because transaction is already created, so transactionCreated() will not be called
+            val qrCodeVerificationTransaction = session.getVerificationService().getExistingTransaction(args.otherUserId, args.verificationId ?: "")
+
             return VerificationChooseMethodViewState(otherUserId = args.otherUserId,
                     transactionId = args.verificationId ?: "",
                     otherCanShowQrCode = pvr?.hasMethod(VerificationMethod.QR_CODE_SHOW) ?: false,
                     otherCanScanQrCode = pvr?.hasMethod(VerificationMethod.QR_CODE_SCAN) ?: false,
+                    qrCodeText = (qrCodeVerificationTransaction as? QrCodeVerificationTransaction)?.qrCodeText,
                     SASModeAvailable = pvr?.hasMethod(VerificationMethod.SAS) ?: false
             )
         }

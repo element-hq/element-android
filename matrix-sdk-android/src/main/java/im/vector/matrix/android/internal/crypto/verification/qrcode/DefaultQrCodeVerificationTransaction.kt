@@ -152,5 +152,10 @@ internal class DefaultQrCodeVerificationTransaction(
                 Timber.e(failure, "## QR Verification: Failed to trust User $otherUserId")
             }
         })
+
+        // TODO Sign devices
+
     }
+
+    // TODO Send the done event
 }
