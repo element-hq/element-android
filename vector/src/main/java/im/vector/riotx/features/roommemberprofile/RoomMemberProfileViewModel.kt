@@ -76,16 +76,6 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
             return fragment.viewModelFactory.create(state)
         }
 
-        override fun initialState(viewModelContext: ViewModelContext): RoomMemberProfileViewState? {
-            val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
-            val args = viewModelContext.args<RoomMemberProfileArgs>()
-
-            return RoomMemberProfileViewState(
-                    userId = args.userId,
-                    roomId = args.roomId,
-                    userMXCrossSigningInfo = session.getCrossSigningService().getUserCrossSigningKeys(args.userId)
-            )
-        }
     }
 
     private val _viewEvents = PublishDataSource<RoomMemberProfileViewEvents>()
@@ -126,6 +116,14 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                     .execute {
                         copy(allDevicesAreTrusted = it)
                     }
+
+            session.rx().liveCrossSigningInfo(initialState.userId)
+                    .map {
+                        it.getOrNull()
+                    }
+                    .execute {
+                        copy(userMXCrossSigningInfo = it)
+                    }
         }
     }
 
@@ -152,7 +150,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
     private fun prepareVerification(action: RoomMemberProfileAction.VerifyUser) = withState { state ->
         // Sanity
         if (state.isRoomEncrypted) {
-            if (!state.isMine && state.userMXCrossSigningInfo?.isTrusted == false) {
+            if (!state.isMine && state.userMXCrossSigningInfo.invoke()?.isTrusted() == false) {
                 // ok, let's find or create the DM room
                 _actionResultLiveData.postValue(
                         LiveEvent(Success(action.copy(userId = state.userId)))

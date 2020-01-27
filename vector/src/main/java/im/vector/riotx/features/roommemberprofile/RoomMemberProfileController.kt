@@ -75,9 +75,9 @@ class RoomMemberProfileController @Inject constructor(
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
 
         if (state.isRoomEncrypted) {
-            if (state.userMXCrossSigningInfo != null) {
+            if (state.userMXCrossSigningInfo.invoke() != null) {
                 // Cross signing is enabled for this user
-                if (state.userMXCrossSigningInfo.isTrusted) {
+                if (state.userMXCrossSigningInfo.invoke()?.isTrusted() == true) {
                     //User is trusted
                     val icon = if (state.allDevicesAreTrusted.invoke() == true) R.drawable.ic_shield_trusted
                     else R.drawable.ic_shield_warning
@@ -126,14 +126,6 @@ class RoomMemberProfileController @Inject constructor(
                 )
             }
         } else {
-//            buildProfileAction(
-//                    id = "learn_more",
-//                    title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
-//                    dividerColor = dividerColor,
-//                    editable = false,
-//                    divider = false,
-//                    subtitle = stringProvider.getString(R.string.room_profile_not_encrypted_subtitle)
-//            )
             genericFooterItem {
                 id("verify_footer_not_encrypted")
                 text(stringProvider.getString(R.string.room_profile_not_encrypted_subtitle))

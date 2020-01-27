@@ -124,4 +124,9 @@
     <string name="verification_profile_verified">Verified</string>
     <string name="verification_profile_warning">Warning</string>
 
+    <string name="room_member_profile_failed_to_get_devices">Failed to get devices</string>
+    <string name="room_member_profile_sessions_section_title">Sessions</string>
+    <string name="trusted">Trusted</string>
+    <string name="not_trusted">Not Trusted</string>
+
 </resources>

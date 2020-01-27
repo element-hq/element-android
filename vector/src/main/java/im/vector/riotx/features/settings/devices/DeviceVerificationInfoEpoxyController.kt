@@ -22,6 +22,7 @@ import im.vector.riotx.core.epoxy.dividerItem
 import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.core.ui.list.GenericItem
 import im.vector.riotx.core.ui.list.genericItem
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
@@ -30,8 +31,7 @@ import javax.inject.Inject
 
 class DeviceVerificationInfoEpoxyController @Inject constructor(private val stringProvider: StringProvider,
                                                                 private val colorProvider: ColorProvider,
-                                                                private val session: Session,
-                                                                private val avatarRender: AvatarRenderer)
+                                                                private val session: Session)
     : TypedEpoxyController<DeviceVerificationInfoBottomSheetViewState>() {
 
     var callback: Callback? = null

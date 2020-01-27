@@ -18,6 +18,7 @@ package im.vector.matrix.rx
 
 import androidx.paging.PagedList
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.api.session.group.GroupSummaryQueryParams
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.pushers.Pusher
@@ -100,8 +101,13 @@ class RxSession(private val session: Session) {
         session.getProfile(userId, it)
     }
 
-    fun liveUserCryptoDevices(userId: String) : Observable<List<CryptoDeviceInfo>> {
+    fun liveUserCryptoDevices(userId: String): Observable<List<CryptoDeviceInfo>> {
         return session.getLiveCryptoDeviceInfo(userId).asObservable()
+    }
+
+    fun liveCrossSigningInfo(userId: String): Observable<Optional<MXCrossSigningInfo>> {
+        return session.getCrossSigningService().getLiveCrossSigningKeys(userId).asObservable()
+                .startWith(session.getCrossSigningService().getUserCrossSigningKeys(userId).toOptional())
     }
 }
 
