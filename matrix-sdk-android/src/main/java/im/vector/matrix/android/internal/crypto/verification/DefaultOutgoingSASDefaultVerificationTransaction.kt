@@ -17,14 +17,14 @@ package im.vector.matrix.android.internal.crypto.verification
 
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
-import im.vector.matrix.android.api.session.crypto.sas.OutgoingSasVerificationRequest
+import im.vector.matrix.android.api.session.crypto.sas.OutgoingSasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
 
-internal class DefaultOutgoingSASDefaultVerificationRequest(
+internal class DefaultOutgoingSASDefaultVerificationTransaction(
         setDeviceVerificationAction: SetDeviceVerificationAction,
         userId: String,
         deviceId: String?,
@@ -45,27 +45,27 @@ internal class DefaultOutgoingSASDefaultVerificationRequest(
         otherUserId,
         otherDeviceId,
         isIncoming = false),
-        OutgoingSasVerificationRequest {
+        OutgoingSasVerificationTransaction {
 
-    override val uxState: OutgoingSasVerificationRequest.UxState
+    override val uxState: OutgoingSasVerificationTransaction.UxState
         get() {
             return when (state) {
-                VerificationTxState.None           -> OutgoingSasVerificationRequest.UxState.WAIT_FOR_START
+                VerificationTxState.None           -> OutgoingSasVerificationTransaction.UxState.WAIT_FOR_START
                 VerificationTxState.SendingStart,
                 VerificationTxState.Started,
                 VerificationTxState.OnAccepted,
                 VerificationTxState.SendingKey,
                 VerificationTxState.KeySent,
-                VerificationTxState.OnKeyReceived  -> OutgoingSasVerificationRequest.UxState.WAIT_FOR_KEY_AGREEMENT
-                VerificationTxState.ShortCodeReady -> OutgoingSasVerificationRequest.UxState.SHOW_SAS
+                VerificationTxState.OnKeyReceived  -> OutgoingSasVerificationTransaction.UxState.WAIT_FOR_KEY_AGREEMENT
+                VerificationTxState.ShortCodeReady -> OutgoingSasVerificationTransaction.UxState.SHOW_SAS
                 VerificationTxState.ShortCodeAccepted,
                 VerificationTxState.SendingMac,
                 VerificationTxState.MacSent,
-                VerificationTxState.Verifying      -> OutgoingSasVerificationRequest.UxState.WAIT_FOR_VERIFICATION
-                VerificationTxState.Verified       -> OutgoingSasVerificationRequest.UxState.VERIFIED
-                VerificationTxState.OnCancelled    -> OutgoingSasVerificationRequest.UxState.CANCELLED_BY_ME
-                VerificationTxState.Cancelled      -> OutgoingSasVerificationRequest.UxState.CANCELLED_BY_OTHER
-                else                               -> OutgoingSasVerificationRequest.UxState.UNKNOWN
+                VerificationTxState.Verifying      -> OutgoingSasVerificationTransaction.UxState.WAIT_FOR_VERIFICATION
+                VerificationTxState.Verified       -> OutgoingSasVerificationTransaction.UxState.VERIFIED
+                VerificationTxState.OnCancelled    -> OutgoingSasVerificationTransaction.UxState.CANCELLED_BY_ME
+                VerificationTxState.Cancelled      -> OutgoingSasVerificationTransaction.UxState.CANCELLED_BY_OTHER
+                else                               -> OutgoingSasVerificationTransaction.UxState.UNKNOWN
             }
         }
 

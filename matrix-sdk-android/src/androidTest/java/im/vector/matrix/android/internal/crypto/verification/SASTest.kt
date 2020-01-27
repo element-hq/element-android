@@ -417,12 +417,12 @@ class SASTest : InstrumentedTest {
             override fun transactionCreated(tx: VerificationTransaction) {}
 
             override fun transactionUpdated(tx: VerificationTransaction) {
-                val uxState = (tx as OutgoingSasVerificationRequest).uxState
+                val uxState = (tx as OutgoingSasVerificationTransaction).uxState
                 when (uxState) {
-                    OutgoingSasVerificationRequest.UxState.SHOW_SAS -> {
+                    OutgoingSasVerificationTransaction.UxState.SHOW_SAS -> {
                         aliceSASLatch.countDown()
                     }
-                    else                                            -> Unit
+                    else                                                -> Unit
                 }
             }
 
@@ -481,15 +481,15 @@ class SASTest : InstrumentedTest {
             override fun transactionCreated(tx: VerificationTransaction) {}
 
             override fun transactionUpdated(tx: VerificationTransaction) {
-                val uxState = (tx as OutgoingSasVerificationRequest).uxState
+                val uxState = (tx as OutgoingSasVerificationTransaction).uxState
                 when (uxState) {
-                    OutgoingSasVerificationRequest.UxState.SHOW_SAS -> {
+                    OutgoingSasVerificationTransaction.UxState.SHOW_SAS -> {
                         tx.userHasVerifiedShortCode()
                     }
-                    OutgoingSasVerificationRequest.UxState.VERIFIED -> {
+                    OutgoingSasVerificationTransaction.UxState.VERIFIED -> {
                         aliceSASLatch.countDown()
                     }
-                    else                                            -> Unit
+                    else                                                -> Unit
                 }
             }
 

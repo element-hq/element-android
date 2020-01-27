@@ -47,9 +47,9 @@ internal abstract class SASDefaultVerificationTransaction(
         private val deviceFingerprint: String,
         transactionId: String,
         otherUserId: String,
-        otherDevice: String?,
+        otherDeviceId: String?,
         isIncoming: Boolean
-) : DefaultVerificationTransaction(transactionId, otherUserId, otherDevice, isIncoming), SasVerificationTransaction {
+) : DefaultVerificationTransaction(transactionId, otherUserId, otherDeviceId, isIncoming), SasVerificationTransaction {
 
     companion object {
         const val SAS_MAC_SHA256_LONGKDF = "hmac-sha256"

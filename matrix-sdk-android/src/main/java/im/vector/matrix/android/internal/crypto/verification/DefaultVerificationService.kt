@@ -782,7 +782,7 @@ internal class DefaultVerificationService @Inject constructor(
         val txID = createUniqueIDForTransaction(otherUserId, otherDeviceID)
         // should check if already one (and cancel it)
         if (method == VerificationMethod.SAS) {
-            val tx = DefaultOutgoingSASDefaultVerificationRequest(
+            val tx = DefaultOutgoingSASDefaultVerificationTransaction(
                     setDeviceVerificationAction,
                     userId,
                     deviceId,
@@ -896,7 +896,7 @@ internal class DefaultVerificationService @Inject constructor(
                                            otherDeviceId: String,
                                            callback: MatrixCallback<String>?): String? {
         if (method == VerificationMethod.SAS) {
-            val tx = DefaultOutgoingSASDefaultVerificationRequest(
+            val tx = DefaultOutgoingSASDefaultVerificationTransaction(
                     setDeviceVerificationAction,
                     userId,
                     deviceId,
