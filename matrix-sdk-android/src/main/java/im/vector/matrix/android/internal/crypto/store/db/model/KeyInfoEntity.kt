@@ -29,7 +29,8 @@ internal open class KeyInfoEntity(
          * The signature of this MXDeviceInfo.
          * A map from "<userId>" to a map from "<key type>:<Publickey>" to "<signature>"
          */
-        var signatures: String? = null
+        var signatures: String? = null,
+        var trustLevelEntity: TrustLevelEntity? = null
 ) : RealmObject() {
 
     // Deserialize data

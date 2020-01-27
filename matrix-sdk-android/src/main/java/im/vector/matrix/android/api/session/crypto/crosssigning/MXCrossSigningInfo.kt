@@ -23,12 +23,12 @@ data class MXCrossSigningInfo(
 
         var userId: String,
 
-        var crossSigningKeys: List<CryptoCrossSigningKey> = ArrayList(),
-
-        // TODO this should at the key level no?
-        val isTrusted: Boolean = false
+        var crossSigningKeys: List<CryptoCrossSigningKey> = ArrayList()
 
 ) {
+
+    fun isTrusted() : Boolean = masterKey()?.trustLevel?.isVerified() == true
+            && selfSigningKey()?.trustLevel?.isVerified() == true
 
     fun masterKey(): CryptoCrossSigningKey? = crossSigningKeys
             .firstOrNull { it.usages?.contains(KeyUsage.MASTER.value) == true }

@@ -24,8 +24,7 @@ import io.realm.annotations.PrimaryKey
 internal open class CrossSigningInfoEntity(
         @PrimaryKey
         var userId: String? = null,
-        var crossSigningKeys: RealmList<KeyInfoEntity> = RealmList(),
-        var trustLevelEntity: TrustLevelEntity? = null
+        var crossSigningKeys: RealmList<KeyInfoEntity> = RealmList()
 ) : RealmObject() {
 
     companion object

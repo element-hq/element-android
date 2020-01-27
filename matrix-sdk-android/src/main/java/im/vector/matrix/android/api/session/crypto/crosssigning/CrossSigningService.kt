@@ -16,7 +16,9 @@
 
 package im.vector.matrix.android.api.session.crypto.crosssigning
 
+import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustResult
 import im.vector.matrix.android.internal.crypto.crosssigning.UserTrustResult
 import im.vector.matrix.android.internal.crypto.model.rest.SignatureUploadResponse
@@ -39,6 +41,8 @@ interface CrossSigningService {
     fun initializeCrossSigning(authParams: UserPasswordAuth?, callback: MatrixCallback<Unit>? = null)
 
     fun getUserCrossSigningKeys(userId: String): MXCrossSigningInfo?
+
+    fun getLiveCrossSigningKeys(userId: String): LiveData<Optional<MXCrossSigningInfo>>
 
     fun getMyCrossSigningKeys(): MXCrossSigningInfo?
     fun canCrossSign(): Boolean

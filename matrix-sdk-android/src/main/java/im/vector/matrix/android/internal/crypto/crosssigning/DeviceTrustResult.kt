@@ -29,3 +29,4 @@ sealed class DeviceTrustResult {
 
 fun DeviceTrustResult.isSuccess(): Boolean = this is DeviceTrustResult.Success
 fun DeviceTrustResult.isCrossSignedVerified(): Boolean = (this as? DeviceTrustResult.Success)?.level?.isCrossSigningVerified() == true
+fun DeviceTrustResult.isLocallyVerified(): Boolean = (this as? DeviceTrustResult.Success)?.level?.isLocallyVerified() == true

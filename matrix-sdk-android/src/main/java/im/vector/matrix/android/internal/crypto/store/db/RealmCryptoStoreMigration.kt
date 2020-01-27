@@ -43,22 +43,23 @@ internal object RealmCryptoStoreMigration : RealmMigration {
             Timber.d("Step 0 -> 1")
             Timber.d("Create KeyInfoEntity")
 
-            val keyInfoEntitySchema = realm.schema.create("KeyInfoEntity")
-                    .addField(KeyInfoEntityFields.PUBLIC_KEY_BASE64, String::class.java)
-                    .addField(KeyInfoEntityFields.SIGNATURES, String::class.java)
-                    .addRealmListField(KeyInfoEntityFields.USAGES.`$`, String::class.java)
-
             val trustLevelentityEntitySchema = realm.schema.create("TrustLevelEntity")
                     .addField(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED, Boolean::class.java)
                     .setNullable(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED, true)
                     .addField(TrustLevelEntityFields.LOCALLY_VERIFIED, Boolean::class.java)
                     .setNullable(TrustLevelEntityFields.LOCALLY_VERIFIED, true)
 
+
+            val keyInfoEntitySchema = realm.schema.create("KeyInfoEntity")
+                    .addField(KeyInfoEntityFields.PUBLIC_KEY_BASE64, String::class.java)
+                    .addField(KeyInfoEntityFields.SIGNATURES, String::class.java)
+                    .addRealmListField(KeyInfoEntityFields.USAGES.`$`, String::class.java)
+                    .addRealmObjectField(KeyInfoEntityFields.TRUST_LEVEL_ENTITY.`$`, trustLevelentityEntitySchema)
+
             Timber.d("Create CrossSigningInfoEntity")
 
             val crossSigningInfoSchema = realm.schema.create("CrossSigningInfoEntity")
                     .addField(CrossSigningInfoEntityFields.USER_ID, String::class.java)
-                    .addRealmObjectField(CrossSigningInfoEntityFields.TRUST_LEVEL_ENTITY.`$`, trustLevelentityEntitySchema)
                     .addPrimaryKey(CrossSigningInfoEntityFields.USER_ID)
                     .addRealmListField(CrossSigningInfoEntityFields.CROSS_SIGNING_KEYS.`$`, keyInfoEntitySchema)
 

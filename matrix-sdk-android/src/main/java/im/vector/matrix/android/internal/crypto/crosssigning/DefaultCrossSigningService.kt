@@ -16,12 +16,14 @@
 
 package im.vector.matrix.android.internal.crypto.crosssigning
 
+import androidx.lifecycle.LiveData
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningState
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
+import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.crypto.DeviceListManager
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.MyDeviceInfoHolder
@@ -63,7 +65,7 @@ internal class DefaultCrossSigningService @Inject constructor(
         private val uploadSignaturesTask: UploadSignaturesTask,
         private val cryptoCoroutineScope: CoroutineScope,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val taskExecutor: TaskExecutor) : CrossSigningService {
+        private val taskExecutor: TaskExecutor) : CrossSigningService, DeviceListManager.UserDevicesUpdateListener {
 
     private var olmUtility: OlmUtility? = null
 
@@ -120,16 +122,22 @@ internal class DefaultCrossSigningService @Inject constructor(
                                 }
                             }
                 }
+
+                // Recover local trust in case private key are there?
+                cryptoStore.setUserKeysAsTrusted(userId, checkUserTrust(userId).isVerified())
             }
         } catch (e: Throwable) {
             // Mmm this kind of a big issue
             Timber.e(e, "Failed to initialize Cross Signing")
         }
+
+        deviceListManager.addListener(this)
     }
 
     fun release() {
         olmUtility?.releaseUtility()
         listOf(masterPkSigning, userPkSigning, selfSigningPkSigning).forEach { it?.releaseSigning() }
+        deviceListManager.removeListener(this)
     }
 
     protected fun finalize() {
@@ -251,13 +259,13 @@ internal class DefaultCrossSigningService @Inject constructor(
                         }
                     }
 
+                    resetTrustOnKeyChange()
                     uploadSignaturesTask.configureWith(UploadSignaturesTask.Params(uploadSignatureQueryBuilder.build())) {
                         this.retryCount = 3
                         this.constraints = TaskConstraints(true)
                         this.callback = object : MatrixCallback<SignatureUploadResponse> {
                             override fun onSuccess(data: SignatureUploadResponse) {
                                 Timber.i("## CrossSigning - signatures succesfuly uploaded")
-
                                 // Force download of my keys now
                                 kotlin.runCatching {
                                     cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
@@ -291,6 +299,12 @@ internal class DefaultCrossSigningService @Inject constructor(
         }.executeBy(taskExecutor)
     }
 
+
+    private fun resetTrustOnKeyChange() {
+        Timber.i("## CrossSigning - Clear all other user trust")
+        cryptoStore.clearOtherUserTrust()
+    }
+
     /**
      *
      *  ┏━━━━━━━━┓                             ┏━━━━━━━━┓
@@ -310,7 +324,7 @@ internal class DefaultCrossSigningService @Inject constructor(
      *                                                                └──────────────┘
      */
     override fun isUserTrusted(userId: String): Boolean {
-        return cryptoStore.getCrossSigningInfo(userId)?.isTrusted == true
+        return cryptoStore.getCrossSigningInfo(userId)?.isTrusted() == true
     }
 
     /**
@@ -331,7 +345,7 @@ internal class DefaultCrossSigningService @Inject constructor(
         val myUserKey = myCrossSigningInfo?.userKey()
                 ?: return UserTrustResult.CrossSigningNotConfigured(credentials.userId)
 
-        if (!myCrossSigningInfo.isTrusted) {
+        if (!myCrossSigningInfo.isTrusted()) {
             return UserTrustResult.KeysNotTrusted(myCrossSigningInfo)
         }
 
@@ -455,6 +469,10 @@ internal class DefaultCrossSigningService @Inject constructor(
         return cryptoStore.getCrossSigningInfo(userId)
     }
 
+    override fun getLiveCrossSigningKeys(userId: String): LiveData<Optional<MXCrossSigningInfo>> {
+        return cryptoStore.getLiveCrossSigningInfo(userId)
+    }
+
     override fun getMyCrossSigningKeys(): MXCrossSigningInfo? {
         return cryptoStore.getMyCrossSigningInfo()
     }
@@ -464,20 +482,21 @@ internal class DefaultCrossSigningService @Inject constructor(
     }
 
     override fun trustUser(userId: String, callback: MatrixCallback<SignatureUploadResponse>) {
+        Timber.d("## CrossSigning - Mark user $userId as trusted ")
         // We should have this user keys
         val otherMasterKeys = getUserCrossSigningKeys(userId)?.masterKey()
         if (otherMasterKeys == null) {
-            callback.onFailure(Throwable("Other master signing key is not known"))
+            callback.onFailure(Throwable("## CrossSigning - Other master signing key is not known"))
             return
         }
         val myKeys = getUserCrossSigningKeys(credentials.userId)
         if (myKeys == null) {
-            callback.onFailure(Throwable("CrossSigning is not setup for this account"))
+            callback.onFailure(Throwable("## CrossSigning - CrossSigning is not setup for this account"))
             return
         }
         val userPubKey = myKeys.userKey()?.unpaddedBase64PublicKey
         if (userPubKey == null || userPkSigning == null) {
-            callback.onFailure(Throwable("Cannot sign from this account, privateKeyUnknown $userPubKey"))
+            callback.onFailure(Throwable("## CrossSigning - Cannot sign from this account, privateKeyUnknown $userPubKey"))
             return
         }
 
@@ -487,18 +506,45 @@ internal class DefaultCrossSigningService @Inject constructor(
 
         if (newSignature == null) {
             // race??
-            callback.onFailure(Throwable("Failed to sign"))
+            callback.onFailure(Throwable("## CrossSigning - Failed to sign"))
             return
         }
 
         cryptoStore.setUserKeysAsTrusted(userId, true)
         // TODO update local copy with new signature directly here? kind of local echo of trust?
 
+
+        Timber.d("## CrossSigning - Upload signature of $userId MSK signed by USK")
         val uploadQuery = UploadSignatureQueryBuilder()
-                .withSigningKeyInfo(otherMasterKeys.addSignatureAndCopy(credentials.userId, userPubKey, newSignature))
+                .withSigningKeyInfo(otherMasterKeys.copyForSignature(credentials.userId, userPubKey, newSignature))
                 .build()
         uploadSignaturesTask.configureWith(UploadSignaturesTask.Params(uploadQuery)) {
-            this.callback = callback
+            this.callback = object: MatrixCallback<SignatureUploadResponse> {
+                override fun onSuccess(data: SignatureUploadResponse) {
+                    //force a key download to refresh trust?
+                    val uldata = data
+                    kotlin.runCatching {
+                        Timber.d("## CrossSigning - Force download of user keys")
+                        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+                            deviceListManager.downloadKeys(listOf(userId), true)
+                        }
+                    }.foldToCallback(object : MatrixCallback<Any> {
+                        override fun onSuccess(data: Any) {
+                            callback.onSuccess(uldata)
+                        }
+
+                        override fun onFailure(failure: Throwable) {
+                            Timber.e("## CrossSigning - fail to download keys", failure)
+                            callback.onFailure(failure)
+                        }
+                    })
+                }
+
+                override fun onFailure(failure: Throwable) {
+                    Timber.e("## CrossSigning - fail to upload signature", failure)
+                    callback.onFailure(failure)
+                }
+            }
         }.executeBy(taskExecutor)
     }
 
@@ -570,13 +616,13 @@ internal class DefaultCrossSigningService @Inject constructor(
         val myKeys = getUserCrossSigningKeys(credentials.userId)
                 ?: return legacyFallbackTrust(locallyTrusted, DeviceTrustResult.CrossSigningNotConfigured(credentials.userId))
 
-        if (!myKeys.isTrusted) return legacyFallbackTrust(locallyTrusted, DeviceTrustResult.KeysNotTrusted(myKeys))
+        if (!myKeys.isTrusted()) return legacyFallbackTrust(locallyTrusted, DeviceTrustResult.KeysNotTrusted(myKeys))
 
         val otherKeys = getUserCrossSigningKeys(userId)
                 ?: return legacyFallbackTrust(locallyTrusted, DeviceTrustResult.CrossSigningNotConfigured(userId))
 
         // TODO should we force verification ?
-        if (!otherKeys.isTrusted) return legacyFallbackTrust(locallyTrusted, DeviceTrustResult.KeysNotTrusted(otherKeys))
+        if (!otherKeys.isTrusted()) return legacyFallbackTrust(locallyTrusted, DeviceTrustResult.KeysNotTrusted(otherKeys))
 
         // Check if the trust chain is valid
         /*
@@ -616,6 +662,26 @@ internal class DefaultCrossSigningService @Inject constructor(
             DeviceTrustResult.Success(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true))
         } else {
             crossSignTrustFail
+        }
+    }
+
+    override fun onUsersDeviceUpdate(users: List<String>) {
+
+        Timber.d("## CrossSigning - onUsersDeviceUpdate for ${users.size} users")
+        users.forEach { userId ->
+
+            checkUserTrust(userId).let {
+                Timber.d("## CrossSigning - update trust for ${userId} , verified=${it.isVerified()}")
+                cryptoStore.setUserKeysAsTrusted(userId, it.isVerified())
+            }
+
+            // TODO if my keys have changes, i should recheck all devices of all users?
+            val devices = cryptoStore.getUserDeviceList(userId)
+            devices?.forEach { device ->
+                val updatedTrust = checkDeviceTrust(userId, device.deviceId, device.trustLevel?.isLocallyVerified() ?: false)
+                Timber.d("## CrossSigning - update trust for device ${device.deviceId} of user ${userId} , verified=$updatedTrust")
+                cryptoStore.setDeviceTrust(userId, device.deviceId, updatedTrust.isCrossSignedVerified(), updatedTrust.isLocallyVerified())
+            }
         }
     }
 }

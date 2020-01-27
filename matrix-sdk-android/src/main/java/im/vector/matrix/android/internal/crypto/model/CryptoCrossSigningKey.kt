@@ -41,6 +41,12 @@ data class CryptoCrossSigningKey(
         )
     }
 
+    fun copyForSignature(userId: String, signedWithNoPrefix: String, signature: String): CryptoCrossSigningKey {
+        return this.copy(
+                signatures = mapOf(userId to mapOf("ed25519:$signedWithNoPrefix" to signature))
+        )
+    }
+
     data class Builder(
             val userId: String,
             val usage: KeyUsage,

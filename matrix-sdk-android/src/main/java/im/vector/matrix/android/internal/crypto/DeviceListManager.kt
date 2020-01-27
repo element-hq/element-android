@@ -27,6 +27,7 @@ import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.DownloadKeysForUsersTask
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
+import okhttp3.internal.toImmutableList
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -37,6 +38,30 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
                                                      private val syncTokenStore: SyncTokenStore,
                                                      private val credentials: Credentials,
                                                      private val downloadKeysForUsersTask: DownloadKeysForUsersTask) {
+
+    interface UserDevicesUpdateListener {
+        fun onUsersDeviceUpdate(users: List<String>)
+    }
+
+    private val deviceChangeListeners = ArrayList<UserDevicesUpdateListener>()
+
+    fun addListener(listener: UserDevicesUpdateListener) {
+        deviceChangeListeners.add(listener)
+    }
+
+    fun removeListener(listener: UserDevicesUpdateListener) {
+        deviceChangeListeners.remove(listener)
+    }
+
+    fun dispatchDeviceChange(users: List<String>) {
+        deviceChangeListeners.forEach {
+            try {
+                it.onUsersDeviceUpdate(users)
+            } catch (failure: Throwable) {
+                Timber.e(failure, "Failed to dispatch device chande")
+            }
+        }
+    }
 
     // HS not ready for retry
     private val notReadyToRetryHS = mutableSetOf<String>()
@@ -210,6 +235,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         }
         cryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
 
+        dispatchDeviceChange(userIds.toImmutableList())
         return usersDevicesInfoMap
     }
 
@@ -338,6 +364,10 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
                     userSigningKey
             )
         }
+
+        // Update devices trust for these users
+        dispatchDeviceChange(downloadUsers)
+
         return onKeysDownloadSucceed(filteredUsers, response.failures)
     }
 

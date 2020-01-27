@@ -163,7 +163,7 @@ internal abstract class SASDefaultVerificationTransaction(
 
         keyMap[keyId] = macString
 
-        cryptoStore.getMyCrossSigningInfo()?.takeIf { it.isTrusted }
+        cryptoStore.getMyCrossSigningInfo()?.takeIf { it.isTrusted() }
                 ?.masterKey()
                 ?.unpaddedBase64PublicKey
                 ?.let { masterPublicKey ->

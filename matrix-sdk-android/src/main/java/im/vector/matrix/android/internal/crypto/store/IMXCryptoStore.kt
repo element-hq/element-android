@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.crypto.store
 
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
+import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.NewSessionListener
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
@@ -403,10 +404,14 @@ internal interface IMXCryptoStore {
     fun setMyCrossSigningInfo(info: MXCrossSigningInfo?)
 
     fun getCrossSigningInfo(userId: String) : MXCrossSigningInfo?
+    fun getLiveCrossSigningInfo(userId: String) : LiveData<Optional<MXCrossSigningInfo>>
     fun setCrossSigningInfo(userId: String, info: MXCrossSigningInfo?)
 
     fun storePrivateKeysInfo(msk: String?, usk: String?, ssk: String?)
     fun getCrossSigningPrivateKeys() : PrivateKeysInfo?
 
     fun setUserKeysAsTrusted(userId: String, trusted: Boolean = true)
+    fun setDeviceTrust(userId: String, deviceId: String, crossSignedVerified: Boolean, locallyVerified : Boolean)
+
+    fun clearOtherUserTrust()
 }

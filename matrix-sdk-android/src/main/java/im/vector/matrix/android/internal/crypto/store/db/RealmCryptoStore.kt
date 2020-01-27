@@ -21,9 +21,12 @@ import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
+import im.vector.matrix.android.api.util.Optional
+import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.NewSessionListener
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
+import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
@@ -883,17 +886,54 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
 
     override fun setUserKeysAsTrusted(userId: String, trusted: Boolean) {
         doRealmTransaction(realmConfiguration) { realm ->
-            val info = realm.where(CrossSigningInfoEntity::class.java)
+            val xInfoEntity = realm.where(CrossSigningInfoEntity::class.java)
                     .equalTo(CrossSigningInfoEntityFields.USER_ID, userId)
                     .findFirst()
-            if (info != null) {
+            xInfoEntity?.crossSigningKeys?.forEach { info ->
                 val level = info.trustLevelEntity
                 if (level == null) {
                     val newLevel = realm.createObject(TrustLevelEntity::class.java)
-                    newLevel.locallyVerified = true
+                    newLevel.locallyVerified = trusted
+                    newLevel.crossSignedVerified = trusted
                     info.trustLevelEntity = newLevel
                 } else {
-                    level.locallyVerified = true
+                    level.locallyVerified = trusted
+                    level.crossSignedVerified = trusted
+                }
+            }
+        }
+    }
+
+    override fun setDeviceTrust(userId: String, deviceId: String, crossSignedVerified: Boolean, locallyVerified: Boolean) {
+        doRealmTransaction(realmConfiguration) { realm ->
+            realm.where(DeviceInfoEntity::class.java)
+                    .equalTo(DeviceInfoEntityFields.PRIMARY_KEY, DeviceInfoEntity.createPrimaryKey(userId, deviceId))
+                    .findFirst()?.let { deviceInfoEntity ->
+                        val trustEntity = deviceInfoEntity.trustLevelEntity
+                        if (trustEntity == null) {
+                            realm.createObject(TrustLevelEntity::class.java).let {
+                                it.locallyVerified = locallyVerified
+                                it.crossSignedVerified = crossSignedVerified
+                                deviceInfoEntity.trustLevelEntity = it
+                            }
+                        } else {
+                            trustEntity.locallyVerified = locallyVerified
+                            trustEntity.crossSignedVerified = crossSignedVerified
+                        }
+                    }
+        }
+    }
+
+    override fun clearOtherUserTrust() {
+        doRealmTransaction(realmConfiguration) { realm ->
+            val xInfoEntities = realm.where(CrossSigningInfoEntity::class.java)
+                    .findAll()
+            xInfoEntities?.forEach { info ->
+                //Need to ignore mine
+                if (info.userId != credentials.userId) {
+                    info.crossSigningKeys.forEach {
+                        it.trustLevelEntity = null
+                    }
                 }
             }
         }
@@ -913,12 +953,46 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
                                 userId = userId,
                                 keys = mapOf("ed25519:$pubKey" to pubKey),
                                 usages = it.usages.map { it },
-                                signatures = it.getSignatures()
+                                signatures = it.getSignatures(),
+                                trustLevel = it.trustLevelEntity?.let {
+                                    DeviceTrustLevel(
+                                            crossSigningVerified = it.crossSignedVerified ?: false,
+                                            locallyVerified = it.locallyVerified ?: false
+                                    )
+                                }
 
                         )
-                    },
-                    isTrusted = xsignInfo.trustLevelEntity?.isVerified() ?: false // TODO
+                    }
             )
+        }
+    }
+
+    override fun getLiveCrossSigningInfo(userId: String): LiveData<Optional<MXCrossSigningInfo>> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { realm: Realm -> realm.where<CrossSigningInfoEntity>().equalTo(UserEntityFields.USER_ID, userId) },
+                { entity ->
+                    MXCrossSigningInfo(
+                            userId = userId,
+                            crossSigningKeys = entity.crossSigningKeys.mapNotNull {
+                                val pubKey = it.publicKeyBase64 ?: return@mapNotNull null
+                                CryptoCrossSigningKey(
+                                        userId = userId,
+                                        keys = mapOf("ed25519:$pubKey" to pubKey),
+                                        usages = it.usages.map { it },
+                                        signatures = it.getSignatures(),
+                                        trustLevel = it.trustLevelEntity?.let {
+                                            DeviceTrustLevel(
+                                                    crossSigningVerified = it.crossSignedVerified ?: false,
+                                                    locallyVerified = it.locallyVerified ?: false
+                                            )
+                                        }
+                                )
+                            }
+                    )
+                }
+        )
+        return Transformations.map(liveData) {
+            it.firstOrNull().toOptional()
         }
     }
 
@@ -941,19 +1015,13 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
                                 keyInfoEntity.usages = info.usages?.let { RealmList(*it.toTypedArray()) }
                                         ?: RealmList()
                                 keyInfoEntity.putSignatures(info.signatures)
+                                // TODO how to handle better, check if same keys?
+                                // reset trust
+                                keyInfoEntity.trustLevelEntity = null
                             }
                     )
                 }
                 existing.crossSigningKeys = xkeys
-                val existingTrust = existing.trustLevelEntity
-                if (existingTrust != null) {
-                    existingTrust.locallyVerified = true
-                } else {
-                    realm.createObject(TrustLevelEntity::class.java).let {
-                        it.locallyVerified = info.isTrusted
-                        existing.trustLevelEntity = it
-                    }
-                }
             }
         }
     }
