@@ -677,6 +677,7 @@ internal class DefaultVerificationService @Inject constructor(
                                 return@let null
                             }
 
+                    // TODO Force download?
                     val otherUserMasterKey = crossSigningService.getUserCrossSigningKeys(existingRequest.otherUserId)
                             ?.masterKey()
                             ?.unpaddedBase64PublicKey
