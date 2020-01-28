@@ -143,9 +143,6 @@ abstract class SyncService : Service() {
             backgroundDetectionObserver = matrix.backgroundDetectionObserver
             return true
         } catch (exception: Exception) {
-            if (BuildConfig.DEBUG) {
-                throw exception
-            }
             Timber.e(exception, "An exception occurred during initialisation")
             return false
         }
