@@ -20,7 +20,6 @@ import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
@@ -44,10 +43,11 @@ import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.LiveEvent
 
 data class CrossSigningSettingsViewState(
-        val crossSigningInfo: Async<MXCrossSigningInfo?> = Uninitialized,
+        val crossSigningInfo: MXCrossSigningInfo? = null,
         val xSigningIsEnableInAccount: Boolean = false,
         val xSigningKeysAreTrusted: Boolean = false,
-        val xSigningKeyCanSign: Boolean = true
+        val xSigningKeyCanSign: Boolean = true,
+        val isUploadingKeys: Boolean = false
 ) : MvRxState
 
 sealed class CrossSigningAction : VectorViewModelAction {
@@ -67,16 +67,13 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted privat
 
     init {
         session.rx().liveCrossSigningInfo(session.myUserId)
-                .map {
-                    it.getOrNull()
-                }
                 .execute {
-                    val crossSigningKeys = it.invoke()
+                    val crossSigningKeys = it.invoke()?.getOrNull()
                     val xSigningIsEnableInAccount = crossSigningKeys != null
                     val xSigningKeysAreTrusted = session.getCrossSigningService().checkUserTrust(session.myUserId).isVerified()
                     val xSigningKeyCanSign = session.getCrossSigningService().canCrossSign()
                     copy(
-                            crossSigningInfo = it,
+                            crossSigningInfo = crossSigningKeys,
                             xSigningIsEnableInAccount = xSigningIsEnableInAccount,
                             xSigningKeysAreTrusted = xSigningKeysAreTrusted,
                             xSigningKeyCanSign = xSigningKeyCanSign
@@ -99,9 +96,16 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted privat
 
     private fun initializeCrossSigning(auth: UserPasswordAuth?) {
         setState {
-            copy(crossSigningInfo = Loading())
+            copy(isUploadingKeys = true)
         }
         session.getCrossSigningService().initializeCrossSigning(auth, object : MatrixCallback<Unit> {
+
+            override fun onSuccess(data: Unit) {
+                setState {
+                    copy(isUploadingKeys = false)
+                }
+            }
+
             override fun onFailure(failure: Throwable) {
                 if (failure is Failure.OtherServerError
                         && failure.httpCode == 401
@@ -125,6 +129,9 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted privat
                     }
                 }
                 _requestLiveData.postValue(LiveEvent(Fail(Throwable("You cannot do that from mobile"))))
+                setState {
+                    copy(isUploadingKeys = false)
+                }
             }
         })
     }

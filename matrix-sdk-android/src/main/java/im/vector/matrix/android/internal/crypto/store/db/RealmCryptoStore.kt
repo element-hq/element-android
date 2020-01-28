@@ -877,10 +877,10 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
     }
 
     override fun setMyCrossSigningInfo(info: MXCrossSigningInfo?) {
-        doRealmQueryAndCopy(realmConfiguration) {
-            it.where<CryptoMetadataEntity>().findFirst()
-        }?.userId?.let {
-            setCrossSigningInfo(it, info)
+        doRealmTransaction(realmConfiguration) { realm ->
+            realm.where<CryptoMetadataEntity>().findFirst()?.userId?.let { userId ->
+                addOrUpdateCrossSigningInfo(realm, userId, info)
+            }
         }
     }
 
@@ -998,31 +998,36 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
 
     override fun setCrossSigningInfo(userId: String, info: MXCrossSigningInfo?) {
         doRealmTransaction(realmConfiguration) { realm ->
-
-            var existing = CrossSigningInfoEntity.get(realm, userId)
-            if (info == null) {
-                // Delete known if needed
-                existing?.deleteFromRealm()
-                // TODO notify, we might need to untrust things?
-            } else {
-                // Just override existing, caller should check and untrust id needed
-                existing = CrossSigningInfoEntity.getOrCreate(realm, userId)
-                val xkeys = RealmList<KeyInfoEntity>()
-                info.crossSigningKeys.forEach { info ->
-                    xkeys.add(
-                            realm.createObject(KeyInfoEntity::class.java).also { keyInfoEntity ->
-                                keyInfoEntity.publicKeyBase64 = info.unpaddedBase64PublicKey
-                                keyInfoEntity.usages = info.usages?.let { RealmList(*it.toTypedArray()) }
-                                        ?: RealmList()
-                                keyInfoEntity.putSignatures(info.signatures)
-                                // TODO how to handle better, check if same keys?
-                                // reset trust
-                                keyInfoEntity.trustLevelEntity = null
-                            }
-                    )
-                }
-                existing.crossSigningKeys = xkeys
-            }
+            addOrUpdateCrossSigningInfo(realm, userId, info)
         }
+    }
+
+    private fun addOrUpdateCrossSigningInfo(realm: Realm, userId: String, info: MXCrossSigningInfo?): CrossSigningInfoEntity? {
+        var existing = CrossSigningInfoEntity.get(realm, userId)
+        if (info == null) {
+            // Delete known if needed
+            existing?.deleteFromRealm()
+            // TODO notify, we might need to untrust things?
+        } else {
+            // Just override existing, caller should check and untrust id needed
+            existing = CrossSigningInfoEntity.getOrCreate(realm, userId)
+           // existing.crossSigningKeys.forEach { it.deleteFromRealm() }
+            val xkeys = RealmList<KeyInfoEntity>()
+            info.crossSigningKeys.forEach { cryptoCrossSigningKey ->
+                xkeys.add(
+                        realm.createObject(KeyInfoEntity::class.java).also { keyInfoEntity ->
+                            keyInfoEntity.publicKeyBase64 = cryptoCrossSigningKey.unpaddedBase64PublicKey
+                            keyInfoEntity.usages = cryptoCrossSigningKey.usages?.let { RealmList(*it.toTypedArray()) }
+                                    ?: RealmList()
+                            keyInfoEntity.putSignatures(cryptoCrossSigningKey.signatures)
+                            // TODO how to handle better, check if same keys?
+                            // reset trust
+                            keyInfoEntity.trustLevelEntity = null
+                        }
+                )
+            }
+            existing.crossSigningKeys = xkeys
+        }
+        return existing
     }
 }

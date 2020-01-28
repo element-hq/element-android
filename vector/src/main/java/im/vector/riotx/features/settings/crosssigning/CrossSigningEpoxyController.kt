@@ -16,8 +16,6 @@
 package im.vector.riotx.features.settings.crosssigning
 
 import com.airbnb.epoxy.TypedEpoxyController
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.resources.ColorProvider
@@ -50,14 +48,16 @@ class CrossSigningEpoxyController @Inject constructor(
                 titleIconResourceId(R.drawable.ic_shield_trusted)
                 title(stringProvider.getString(R.string.encryption_information_dg_xsigning_complete))
             }
-            bottomSheetVerificationActionItem {
-                id("resetkeys")
-                title("Reset keys")
-                titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                iconRes(R.drawable.ic_arrow_right)
-                iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                listener {
-                    interactionListener?.onResetCrossSigningKeys()
+            if (!data.isUploadingKeys) {
+                bottomSheetVerificationActionItem {
+                    id("resetkeys")
+                    title("Reset keys")
+                    titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
+                    iconRes(R.drawable.ic_arrow_right)
+                    iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
+                    listener {
+                        interactionListener?.onResetCrossSigningKeys()
+                    }
                 }
             }
         } else if (data.xSigningKeysAreTrusted) {
@@ -66,30 +66,32 @@ class CrossSigningEpoxyController @Inject constructor(
                 titleIconResourceId(R.drawable.ic_shield_warning)
                 title(stringProvider.getString(R.string.encryption_information_dg_xsigning_trusted))
             }
-            bottomSheetVerificationActionItem {
-                id("resetkeys")
-                title("Reset keys")
-                titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                iconRes(R.drawable.ic_arrow_right)
-                iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                listener {
-                    interactionListener?.onResetCrossSigningKeys()
+            if (!data.isUploadingKeys) {
+                bottomSheetVerificationActionItem {
+                    id("resetkeys")
+                    title("Reset keys")
+                    titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
+                    iconRes(R.drawable.ic_arrow_right)
+                    iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
+                    listener {
+                        interactionListener?.onResetCrossSigningKeys()
+                    }
                 }
-            }
-        } else if (data.xSigningIsEnableInAccount) {
-            genericItem {
-                id("enable")
-                titleIconResourceId(R.drawable.ic_shield_black)
-                title(stringProvider.getString(R.string.encryption_information_dg_xsigning_not_trusted))
-            }
-            bottomSheetVerificationActionItem {
-                id("resetkeys")
-                title("Reset keys")
-                titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                iconRes(R.drawable.ic_arrow_right)
-                iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                listener {
-                    interactionListener?.onResetCrossSigningKeys()
+            } else if (data.xSigningIsEnableInAccount) {
+                genericItem {
+                    id("enable")
+                    titleIconResourceId(R.drawable.ic_shield_black)
+                    title(stringProvider.getString(R.string.encryption_information_dg_xsigning_not_trusted))
+                }
+                bottomSheetVerificationActionItem {
+                    id("resetkeys")
+                    title("Reset keys")
+                    titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
+                    iconRes(R.drawable.ic_arrow_right)
+                    iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
+                    listener {
+                        interactionListener?.onResetCrossSigningKeys()
+                    }
                 }
             }
         } else {
@@ -97,75 +99,74 @@ class CrossSigningEpoxyController @Inject constructor(
                 id("not")
                 title(stringProvider.getString(R.string.encryption_information_dg_xsigning_disabled))
             }
-
-            bottomSheetVerificationActionItem {
-                id("initKeys")
-                title("Initialize keys")
-                titleColor(colorProvider.getColor(R.color.riotx_positive_accent))
-                iconRes(R.drawable.ic_arrow_right)
-                iconColor(colorProvider.getColor(R.color.riotx_positive_accent))
-                listener {
-                    interactionListener?.onInitializeCrossSigningKeys()
+            if (!data.isUploadingKeys) {
+                bottomSheetVerificationActionItem {
+                    id("initKeys")
+                    title("Initialize keys")
+                    titleColor(colorProvider.getColor(R.color.riotx_positive_accent))
+                    iconRes(R.drawable.ic_arrow_right)
+                    iconColor(colorProvider.getColor(R.color.riotx_positive_accent))
+                    listener {
+                        interactionListener?.onInitializeCrossSigningKeys()
+                    }
                 }
             }
         }
 
-        when (data.crossSigningInfo) {
-            is Loading -> {
-                loadingItem {
-                    id("loading")
+        if (data.isUploadingKeys) {
+            loadingItem {
+                id("loading")
+            }
+        } else {
+
+            val crossSigningKeys = data.crossSigningInfo
+
+            crossSigningKeys?.masterKey()?.let {
+                genericItemWithValue {
+                    id("msk")
+                    titleIconResourceId(R.drawable.key_small)
+                    title(
+                            span {
+                                +"Master Key:\n"
+                                span {
+                                    text = it.unpaddedBase64PublicKey ?: ""
+                                    textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                    textSize = dimensionConverter.spToPx(12)
+                                }
+                            }
+                    )
                 }
             }
-            is Success -> {
-                val crossSigningKeys = data.crossSigningInfo.invoke()
-
-                crossSigningKeys?.masterKey()?.let {
-                    genericItemWithValue {
-                        id("msk")
-                        titleIconResourceId(R.drawable.key_small)
-                        title(
+            crossSigningKeys?.userKey()?.let {
+                genericItemWithValue {
+                    id("usk")
+                    titleIconResourceId(R.drawable.key_small)
+                    title(
+                            span {
+                                +"User Key:\n"
                                 span {
-                                    +"Master Key:\n"
-                                    span {
-                                        text = it.unpaddedBase64PublicKey ?: ""
-                                        textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
-                                        textSize = dimensionConverter.spToPx(12)
-                                    }
+                                    text = it.unpaddedBase64PublicKey ?: ""
+                                    textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                    textSize = dimensionConverter.spToPx(12)
                                 }
-                        )
-                    }
+                            }
+                    )
                 }
-                crossSigningKeys?.userKey()?.let {
-                    genericItemWithValue {
-                        id("usk")
-                        titleIconResourceId(R.drawable.key_small)
-                        title(
+            }
+            crossSigningKeys?.selfSigningKey()?.let {
+                genericItemWithValue {
+                    id("ssk")
+                    titleIconResourceId(R.drawable.key_small)
+                    title(
+                            span {
+                                +"Self Signed Key:\n"
                                 span {
-                                    +"User Key:\n"
-                                    span {
-                                        text = it.unpaddedBase64PublicKey ?: ""
-                                        textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
-                                        textSize = dimensionConverter.spToPx(12)
-                                    }
+                                    text = it.unpaddedBase64PublicKey ?: ""
+                                    textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+                                    textSize = dimensionConverter.spToPx(12)
                                 }
-                        )
-                    }
-                }
-                crossSigningKeys?.selfSigningKey()?.let {
-                    genericItemWithValue {
-                        id("ssk")
-                        titleIconResourceId(R.drawable.key_small)
-                        title(
-                                span {
-                                    +"Self Signed Key:\n"
-                                    span {
-                                        text = it.unpaddedBase64PublicKey ?: ""
-                                        textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
-                                        textSize = dimensionConverter.spToPx(12)
-                                    }
-                                }
-                        )
-                    }
+                            }
+                    )
                 }
             }
         }

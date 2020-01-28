@@ -46,7 +46,6 @@ import im.vector.matrix.rx.mapOptional
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
-import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DataSource
@@ -75,7 +74,6 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
             val fragment: RoomMemberProfileFragment = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.viewModelFactory.create(state)
         }
-
     }
 
     private val _viewEvents = PublishDataSource<RoomMemberProfileViewEvents>()
@@ -118,11 +116,8 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                     }
 
             session.rx().liveCrossSigningInfo(initialState.userId)
-                    .map {
-                        it.getOrNull()
-                    }
                     .execute {
-                        copy(userMXCrossSigningInfo = it)
+                        copy(userMXCrossSigningInfo = it.invoke()?.getOrNull())
                     }
         }
     }
@@ -150,7 +145,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
     private fun prepareVerification(action: RoomMemberProfileAction.VerifyUser) = withState { state ->
         // Sanity
         if (state.isRoomEncrypted) {
-            if (!state.isMine && state.userMXCrossSigningInfo.invoke()?.isTrusted() == false) {
+            if (!state.isMine && state.userMXCrossSigningInfo?.isTrusted() == false) {
                 // ok, let's find or create the DM room
                 _actionResultLiveData.postValue(
                         LiveEvent(Success(action.copy(userId = state.userId)))

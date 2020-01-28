@@ -74,11 +74,8 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
                 }
 
         session.rx().liveCrossSigningInfo(userId)
-                .map {
-                    it.getOrNull()
-                }
                 .execute {
-                    copy(memberCrossSigningKey = it.invoke())
+                    copy(memberCrossSigningKey = it.invoke()?.getOrNull())
                 }
     }
 

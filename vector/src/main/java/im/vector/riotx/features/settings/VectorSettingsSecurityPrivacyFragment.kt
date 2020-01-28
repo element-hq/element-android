@@ -105,6 +105,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         super.onResume()
         // My device name may have been updated
         refreshMyDevice()
+        refreshXSigningStatus()
         mCryptographyCategory.isVisible = vectorPreferences.developerMode()
     }
 
@@ -128,6 +129,10 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             }
         }
 
+        refreshXSigningStatus()
+    }
+
+    private fun refreshXSigningStatus() {
         if (vectorPreferences.developerMode()) {
             val crossSigningKeys = session.getCrossSigningService().getMyCrossSigningKeys()
             val xSigningIsEnableInAccount = crossSigningKeys != null
