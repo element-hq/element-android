@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.EmptyAction
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 
@@ -41,7 +42,7 @@ data class VerificationChooseMethodViewState(
 class VerificationChooseMethodViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationChooseMethodViewState,
         private val session: Session
-) : VectorViewModel<VerificationChooseMethodViewState, EmptyAction>(initialState), SasVerificationService.SasVerificationListener {
+) : VectorViewModel<VerificationChooseMethodViewState, EmptyAction, EmptyViewEvents>(initialState), SasVerificationService.SasVerificationListener {
 
     override fun transactionCreated(tx: SasVerificationTransaction) {}
 

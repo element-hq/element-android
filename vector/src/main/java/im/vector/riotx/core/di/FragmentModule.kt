@@ -29,6 +29,7 @@ import im.vector.riotx.features.crypto.verification.choose.VerificationChooseMet
 import im.vector.riotx.features.crypto.verification.conclusion.VerificationConclusionFragment
 import im.vector.riotx.features.crypto.verification.emoji.VerificationEmojiCodeFragment
 import im.vector.riotx.features.crypto.verification.request.VerificationRequestFragment
+import im.vector.riotx.features.grouplist.GroupListFragment
 import im.vector.riotx.features.home.HomeDetailFragment
 import im.vector.riotx.features.home.HomeDrawerFragment
 import im.vector.riotx.features.home.LoadingFragment
@@ -60,6 +61,7 @@ import im.vector.riotx.features.roomprofile.members.RoomMemberListFragment
 import im.vector.riotx.features.roomprofile.settings.RoomSettingsFragment
 import im.vector.riotx.features.settings.VectorSettingsAdvancedNotificationPreferenceFragment
 import im.vector.riotx.features.settings.VectorSettingsHelpAboutFragment
+import im.vector.riotx.features.settings.VectorSettingsLabsFragment
 import im.vector.riotx.features.settings.VectorSettingsNotificationPreferenceFragment
 import im.vector.riotx.features.settings.VectorSettingsNotificationsTroubleshootFragment
 import im.vector.riotx.features.settings.VectorSettingsPreferencesFragment

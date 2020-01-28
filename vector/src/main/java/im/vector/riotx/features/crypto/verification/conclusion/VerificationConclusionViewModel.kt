@@ -21,6 +21,7 @@ import com.airbnb.mvrx.ViewModelContext
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.safeValueOf
 import im.vector.riotx.core.platform.EmptyAction
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 
 data class VerificationConclusionViewState(
@@ -34,7 +35,7 @@ enum class ConclusionState {
 }
 
 class VerificationConclusionViewModel(initialState: VerificationConclusionViewState)
-    : VectorViewModel<VerificationConclusionViewState, EmptyAction>(initialState) {
+    : VectorViewModel<VerificationConclusionViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     companion object : MvRxViewModelFactory<VerificationConclusionViewModel, VerificationConclusionViewState> {
 

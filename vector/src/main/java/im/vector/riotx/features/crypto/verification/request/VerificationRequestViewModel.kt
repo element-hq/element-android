@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.EmptyAction
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 
@@ -38,7 +39,7 @@ data class VerificationRequestViewState(
 class VerificationRequestViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationRequestViewState,
         private val session: Session
-) : VectorViewModel<VerificationRequestViewState, EmptyAction>(initialState), SasVerificationService.SasVerificationListener {
+) : VectorViewModel<VerificationRequestViewState, EmptyAction, EmptyViewEvents>(initialState), SasVerificationService.SasVerificationListener {
 
     @AssistedInject.Factory
     interface Factory {
