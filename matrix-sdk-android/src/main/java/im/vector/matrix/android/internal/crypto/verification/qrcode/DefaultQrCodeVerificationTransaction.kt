@@ -64,28 +64,33 @@ internal class DefaultQrCodeVerificationTransaction(
 
     override fun userHasScannedOtherQrCode(otherQrCodeText: String) {
         val otherQrCodeData = otherQrCodeText.toQrCodeData() ?: run {
+            Timber.d("## Verification QR: Invalid QR Code Data")
             cancel(CancelCode.QrCodeInvalid)
             return
         }
 
         // Perform some checks
         if (otherQrCodeData.action != QrCodeData.ACTION_VERIFY) {
+            Timber.d("## Verification QR: Invalid action ${otherQrCodeData.action}")
             cancel(CancelCode.QrCodeInvalid)
             return
         }
 
         if (otherQrCodeData.userId != otherUserId) {
+            Timber.d("## Verification QR: Mismatched user ${otherQrCodeData.userId}")
             cancel(CancelCode.MismatchedUser)
             return
         }
 
         if (otherQrCodeData.requestEventId != transactionId) {
+            Timber.d("## Verification QR: Invalid transaction actual ${otherQrCodeData.requestEventId} expected:$transactionId")
             cancel(CancelCode.QrCodeInvalid)
             return
         }
 
         // check master key
         if (otherQrCodeData.otherUserKey != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
+            Timber.d("## Verification QR: Invalid other master key ${otherQrCodeData.otherUserKey}")
             cancel(CancelCode.MismatchedKeys)
             return
         }
@@ -95,7 +100,7 @@ internal class DefaultQrCodeVerificationTransaction(
 
         val otherDevices = cryptoStore.getUserDevices(otherUserId)
         otherQrCodeData.keys.keys.forEach { key ->
-            Timber.w("Checking key $key")
+            Timber.w("## Verification QR: Checking key $key")
 
             when (val keyNoPrefix = key.withoutPrefix("ed25519:")) {
                 otherQrCodeData.keys[key] -> {
@@ -150,7 +155,7 @@ internal class DefaultQrCodeVerificationTransaction(
 
     fun start(remoteSecret: String) {
         if (state != VerificationTxState.None) {
-            Timber.e("## SAS O: start verification from invalid state")
+            Timber.e("## Verification QR: start verification from invalid state")
             // should I cancel??
             throw IllegalStateException("Interactive Key verification already started")
         }

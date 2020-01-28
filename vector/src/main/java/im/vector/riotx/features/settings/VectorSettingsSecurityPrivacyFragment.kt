@@ -429,11 +429,15 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         // TODO Move to a ViewModel...
         session.getDevicesList(object : MatrixCallback<DevicesListResponse> {
             override fun onSuccess(data: DevicesListResponse) {
-                refreshCryptographyPreference(data.devices ?: emptyList())
+                if (isAdded) {
+                    refreshCryptographyPreference(data.devices ?: emptyList())
+                }
             }
 
             override fun onFailure(failure: Throwable) {
-                refreshCryptographyPreference(emptyList())
+                if (isAdded) {
+                    refreshCryptographyPreference(emptyList())
+                }
             }
         })
     }
