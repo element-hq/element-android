@@ -17,7 +17,7 @@ Nightly build: [![Buildkite](https://badge.buildkite.com/657d3db27364448d69d54f6
 
 # New Android SDK
 
-RiotX is based on a new Android SDK fully written in Kotlin (like RiotX). In order to make the early development as fast as possible, RiotX and the new SDK currently share the same git repository. We will make separate repos once the API is stable enough.
+RiotX is based on a new Android SDK fully written in Kotlin (like RiotX). In order to make the early development as fast as possible, RiotX and the new SDK currently share the same git repository. We will make separate repos once the SDK is stable enough.
 
 
 # Roadmap
