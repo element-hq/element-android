@@ -30,6 +30,7 @@ import im.vector.matrix.android.internal.crypto.model.MXKey
 import im.vector.matrix.android.internal.crypto.model.rest.SignatureUploadResponse
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.extensions.toUnsignedInt
+import im.vector.matrix.android.internal.util.withoutPrefix
 import org.matrix.olm.OlmSAS
 import org.matrix.olm.OlmUtility
 import timber.log.Timber
@@ -253,7 +254,7 @@ internal abstract class SASDefaultVerificationTransaction(
 
         // cannot be empty because it has been validated
         theirMac!!.mac!!.keys.forEach {
-            val keyIDNoPrefix = if (it.startsWith("ed25519:")) it.substring("ed25519:".length) else it
+            val keyIDNoPrefix = it.withoutPrefix("ed25519:")
             val otherDeviceKey = otherUserKnownDevices?.get(keyIDNoPrefix)?.fingerprint()
             if (otherDeviceKey == null) {
                 Timber.w("## SAS Verification: Could not find device $keyIDNoPrefix to verify")
@@ -276,7 +277,7 @@ internal abstract class SASDefaultVerificationTransaction(
         if (otherCrossSigningMasterKeyPublic != null) {
             // Did the user signed his master key
             theirMac!!.mac!!.keys.forEach {
-                val keyIDNoPrefix = if (it.startsWith("ed25519:")) it.substring("ed25519:".length) else it
+                val keyIDNoPrefix = it.withoutPrefix("ed25519:")
                 if (keyIDNoPrefix == otherCrossSigningMasterKeyPublic) {
                     // Check the signature
                     val mac = macUsingAgreedMethod(otherCrossSigningMasterKeyPublic, baseInfo + it)

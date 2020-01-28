@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.QrCodeVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
 import im.vector.matrix.android.api.session.crypto.sas.VerificationService
 import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
@@ -372,30 +373,46 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
+    /**
+     * Return a CancelCode to make the caller cancel the verification. Else return null
+     */
     private suspend fun handleStart(otherUserId: String?, startReq: VerificationInfoStart, txConfigure: (DefaultVerificationTransaction) -> Unit): CancelCode? {
-        Timber.d("## SAS onStartRequestReceived ${startReq.transactionID!!}")
+        Timber.d("## SAS onStartRequestReceived ${startReq.transactionID}")
         if (checkKeysAreDownloaded(otherUserId!!, startReq.fromDevice ?: "") != null) {
-            Timber.v("## SAS onStartRequestReceived $startReq")
             val tid = startReq.transactionID!!
             val existing = getExistingTransaction(otherUserId, tid)
-            val existingTxs = getExistingTransactionsForUser(otherUserId)
-            if (existing != null) {
-                // should cancel both!
-                Timber.v("## SAS onStartRequestReceived - Request exist with same if ${startReq.transactionID!!}")
-                existing.cancel(CancelCode.UnexpectedMessage)
-                return CancelCode.UnexpectedMessage
-                // cancelTransaction(tid, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
-            } else if (existingTxs?.isEmpty() == false) {
-                Timber.v("## SAS onStartRequestReceived - There is already a transaction with this user ${startReq.transactionID!!}")
-                // Multiple keyshares between two devices: any two devices may only have at most one key verification in flight at a time.
-                existingTxs.forEach {
-                    it.cancel(CancelCode.UnexpectedMessage)
-                }
-                return CancelCode.UnexpectedMessage
-                // cancelTransaction(tid, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
-            } else {
-                // Ok we can create
-                if (startReq.method == VERIFICATION_METHOD_SAS) {
+
+            when (startReq.method) {
+                VERIFICATION_METHOD_SAS -> {
+                    when (existing) {
+                        is SasVerificationTransaction    -> {
+                            // should cancel both!
+                            Timber.v("## SAS onStartRequestReceived - Request exist with same id ${startReq.transactionID}")
+                            existing.cancel(CancelCode.UnexpectedMessage)
+                            // Already cancelled, so return null
+                            return null
+                        }
+                        is QrCodeVerificationTransaction -> {
+                            // Nothing to do?
+                        }
+                        null                             -> {
+                            getExistingTransactionsForUser(otherUserId)
+                                    ?.filterIsInstance(SasVerificationTransaction::class.java)
+                                    ?.takeIf { it.isNotEmpty() }
+                                    ?.also {
+                                        // Multiple keyshares between two devices: any two devices may only have at most one key verification in flight at a time.
+                                        Timber.v("## SAS onStartRequestReceived - There is already a transaction with this user ${startReq.transactionID}")
+                                    }
+                                    ?.forEach {
+                                        it.cancel(CancelCode.UnexpectedMessage)
+                                    }
+                                    ?.also {
+                                        return CancelCode.UnexpectedMessage
+                                    }
+                        }
+                    }
+
+                    // Ok we can create a SAS transaction
                     Timber.v("## SAS onStartRequestReceived - request accepted ${startReq.transactionID!!}")
                     // If there is a corresponding request, we can auto accept
                     // as we are the one requesting in first place (or we accepted the request)
@@ -414,40 +431,39 @@ internal class DefaultVerificationService @Inject constructor(
                             autoAccept).also { txConfigure(it) }
                     addTransaction(tx)
                     tx.acceptVerificationEvent(otherUserId, startReq)
-                } else if (startReq.method == VERIFICATION_METHOD_RECIPROCATE) {
+                    return null
+                }
+                VERIFICATION_METHOD_RECIPROCATE -> {
                     // Other user has scanned my QR code
-                    val pendingTransaction = getExistingTransaction(otherUserId, startReq.transactionID!!)
-
-                    if (pendingTransaction != null && pendingTransaction is DefaultQrCodeVerificationTransaction) {
-                        pendingTransaction.onStartReceived(startReq)
+                    if (existing is DefaultQrCodeVerificationTransaction) {
+                        existing.onStartReceived(startReq)
+                        return null
                     } else {
-                        Timber.w("## SAS onStartRequestReceived - unknown transaction ${startReq.transactionID}")
-                        return CancelCode.UnknownTransaction
+                        Timber.w("## SAS onStartRequestReceived - unexpected message ${startReq.transactionID}")
+                        return CancelCode.UnexpectedMessage
                     }
-                } else {
+                }
+                else ->{
                     Timber.e("## SAS onStartRequestReceived - unknown method ${startReq.method}")
                     return CancelCode.UnknownMethod
-                    // cancelTransaction(tid, otherUserId, startReq.fromDevice
-//                            ?: event.getSenderKey()!!, CancelCode.UnknownMethod)
                 }
             }
         } else {
             return CancelCode.UnexpectedMessage
-//            cancelTransaction(startReq.transactionID!!, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
         }
-        return null
     }
 
+    // TODO Refacto: It could just return a boolean
     private suspend fun checkKeysAreDownloaded(otherUserId: String,
-                                               fromDevice: String): MXUsersDevicesMap<CryptoDeviceInfo>? {
+                                               otherDeviceId: String): MXUsersDevicesMap<CryptoDeviceInfo>? {
         return try {
             var keys = deviceListManager.downloadKeys(listOf(otherUserId), false)
-            if (keys.getUserDeviceIds(otherUserId)?.contains(fromDevice) == true) {
+            if (keys.getUserDeviceIds(otherUserId)?.contains(otherDeviceId) == true) {
                 return keys
             } else {
                 // force download
                 keys = deviceListManager.downloadKeys(listOf(otherUserId), true)
-                return keys.takeIf { keys.getUserDeviceIds(otherUserId)?.contains(fromDevice) == true }
+                return keys.takeIf { keys.getUserDeviceIds(otherUserId)?.contains(otherDeviceId) == true }
             }
         } catch (e: Exception) {
             null

@@ -29,6 +29,7 @@ import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.verification.DefaultVerificationTransaction
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfo
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfoStart
+import im.vector.matrix.android.internal.util.withoutPrefix
 import timber.log.Timber
 import kotlin.properties.Delegates
 
@@ -89,19 +90,53 @@ internal class DefaultQrCodeVerificationTransaction(
             return
         }
 
-        val verifiedDeviceIds = mutableListOf<String>()
+        val toVerifyDeviceIds = mutableListOf<String>()
+        var canTrustOtherUserMasterKey = false
 
         val otherDevices = cryptoStore.getUserDevices(otherUserId)
         otherQrCodeData.keys.keys.forEach { key ->
             Timber.w("Checking key $key")
-            val fingerprint = otherDevices?.get(key)?.fingerprint()
-            if (fingerprint != null && fingerprint != otherQrCodeData.keys[key]) {
-                cancel(CancelCode.MismatchedKeys)
-                return
-            } else {
-                // Store the deviceId to verify after
-                verifiedDeviceIds.add(key)
+
+            when (val keyNoPrefix = key.withoutPrefix("ed25519:")) {
+                otherQrCodeData.keys[key] -> {
+                    // Maybe master key?
+                    if (otherQrCodeData.keys[key] == crossSigningService.getUserCrossSigningKeys(otherUserId)?.masterKey()?.unpaddedBase64PublicKey) {
+                        canTrustOtherUserMasterKey = true
+                    } else {
+                        cancel(CancelCode.MismatchedKeys)
+                        return
+                    }
+                }
+                else                      -> {
+                    when (val otherDevice = otherDevices?.get(keyNoPrefix)) {
+                        null -> {
+                            // Unknown device, ignore
+                        }
+                        else -> {
+                            when (otherDevice.fingerprint()) {
+                                null                      -> {
+                                    // Ignore
+                                }
+                                otherQrCodeData.keys[key] -> {
+                                    // Store the deviceId to verify after
+                                    toVerifyDeviceIds.add(key)
+                                }
+                                else                      -> {
+                                    cancel(CancelCode.MismatchedKeys)
+                                    return
+                                }
+                            }
+                        }
+                    }
+                }
             }
+
+        }
+
+        if (!canTrustOtherUserMasterKey && toVerifyDeviceIds.isEmpty()) {
+            // Nothing to verify
+            cancel(CancelCode.MismatchedKeys)
+            return
         }
 
         // All checks are correct
@@ -110,7 +145,7 @@ internal class DefaultQrCodeVerificationTransaction(
         start(otherQrCodeData.sharedSecret)
 
         // Trust the other user
-        trust(verifiedDeviceIds)
+        trust(canTrustOtherUserMasterKey, toVerifyDeviceIds)
     }
 
     fun start(remoteSecret: String) {
@@ -161,16 +196,16 @@ internal class DefaultQrCodeVerificationTransaction(
         if (startReq.sharedSecret == qrCodeData.sharedSecret) {
             // Ok, we can trust the other user
             // We can only trust the master key in this case
-            trust(listOf(qrCodeData.otherUserKey))
+            trust(true, emptyList())
         } else {
             // Display a warning
-            cancel(CancelCode.QrCodeInvalid)
+            cancel(CancelCode.MismatchedKeys)
         }
     }
 
-    private fun trust(verifiedDeviceIds: List<String>) {
+    private fun trust(canTrustOtherUserMasterKey: Boolean, toVerifyDeviceIds: List<String>) {
         // If not me sign his MSK and upload the signature
-        if (otherUserId != userId) {
+        if (otherUserId != userId && canTrustOtherUserMasterKey) {
             // we should trust this master key
             // And check verification MSK -> SSK?
             crossSigningService.trustUser(otherUserId, object : MatrixCallback<SignatureUploadResponse> {
@@ -191,7 +226,7 @@ internal class DefaultQrCodeVerificationTransaction(
         }
 
         // TODO what if the otherDevice is not in this list? and should we
-        verifiedDeviceIds.forEach {
+        toVerifyDeviceIds.forEach {
             setDeviceVerified(otherUserId, it)
         }
         transport.done(transactionId)
@@ -200,7 +235,7 @@ internal class DefaultQrCodeVerificationTransaction(
 
     private fun setDeviceVerified(userId: String, deviceId: String) {
         // TODO should not override cross sign status
-        setDeviceVerificationAction.handle(DeviceTrustLevel(false, true),
+        setDeviceVerificationAction.handle(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
                 userId,
                 deviceId)
     }

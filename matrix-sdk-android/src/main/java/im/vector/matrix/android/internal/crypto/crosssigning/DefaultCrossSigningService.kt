@@ -40,6 +40,7 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.android.internal.util.withoutPrefix
 import kotlinx.coroutines.CoroutineScope
 import org.matrix.olm.OlmPkSigning
 import org.matrix.olm.OlmUtility
@@ -384,7 +385,7 @@ internal class DefaultCrossSigningService @Inject constructor(
         } else {
             // Maybe it's signed by a locally trusted device?
             myMasterKey.signatures?.get(userId)?.forEach { (key, value) ->
-                val potentialDeviceId = if (key.startsWith("ed25519:")) key.substring("ed25519:".length) else key
+                val potentialDeviceId = key.withoutPrefix("ed25519:")
                 val potentialDevice = cryptoStore.getUserDevice(userId, potentialDeviceId)
                 if (potentialDevice != null && potentialDevice.isVerified) {
                     // Check signature validity?
