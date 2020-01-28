@@ -56,8 +56,7 @@ class RainbowGeneratorTest {
             <font color="#ff00aa">w</font>
             <font color="#ff0055">!</font>
         """
-                        .trimIndent()
-                        .replace("\n", "")
+                        .trimIndentOnLine()
 
         assertEquals(expected, rainbowGenerator.generate("This is a rainbow!"))
     }
@@ -73,7 +72,18 @@ class RainbowGeneratorTest {
     }
 
     @Test
-    fun testEmojiMix() {
+    fun testEmoji3() {
+        val expected = """
+            <font color="#ff0000">🤞</font>
+            <font color="#80ff00">🙂</font>
+        """
+                .trimIndentOnLine()
+
+        assertEquals(expected, rainbowGenerator.generate("🤞🙂"))
+    }
+
+    @Test
+    fun testEmojiMix1() {
         val expected = """
             <font color="#ff0000">H</font>
             <font color="#ff6600">e</font>
@@ -90,9 +100,37 @@ class RainbowGeneratorTest {
             <font color="#cc00ff">d</font>
             <font color="#ff00cc">!</font>
         """
-                .trimIndent()
-                .replace("\n", "")
+                .trimIndentOnLine()
 
         assertEquals(expected, rainbowGenerator.generate("Hello 🤞 world!"))
     }
+
+    @Test
+    fun testEmojiMix2() {
+        val expected = """
+            <font color="#ff0000">a</font>
+            <font color="#00ff00">🤞</font>
+        """
+                .trimIndentOnLine()
+
+        assertEquals(expected, rainbowGenerator.generate("a🤞"))
+    }
+
+    @Test
+    fun testEmojiMix3() {
+        val expected = """
+            <font color="#ff0000">🤞</font>
+            <font color="#00ff00">a</font>
+        """
+                .trimIndentOnLine()
+
+        assertEquals(expected, rainbowGenerator.generate("🤞a"))
+    }
+
+    @Test
+    fun testError1() {
+        assertEquals("<font color=\"#ff0000\">\uD83E</font>", rainbowGenerator.generate("\uD83E"))
+    }
 }
+
+fun String.trimIndentOnLine() = trimIndent().replace("\n", "")
