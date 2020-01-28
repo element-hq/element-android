@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home.room.detail.composer.rainbow
 
+import im.vector.riotx.core.utils.splitEmoji
 import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -30,9 +31,10 @@ class RainbowGenerator @Inject constructor() {
         val frequency = 360f / text.length
 
         return text
+                .splitEmoji()
                 .mapIndexed { idx, letter ->
                     // Do better than React-Sdk: Avoid adding font color for spaces
-                    if (letter == ' ') {
+                    if (letter == " ") {
                         "$letter"
                     } else {
                         val dashColor = hueToRGB(idx * frequency, 1.0f, 0.5f).toDashColor()
