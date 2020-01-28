@@ -43,6 +43,8 @@ class VerificationConclusionViewModel(initialState: VerificationConclusionViewSt
             val args = viewModelContext.args<VerificationConclusionFragment.Args>()
 
             return when (safeValueOf(args.cancelReason)) {
+                CancelCode.QrCodeInvalid,
+                CancelCode.MismatchedUser,
                 CancelCode.MismatchedSas,
                 CancelCode.MismatchedCommitment,
                 CancelCode.MismatchedKeys -> {

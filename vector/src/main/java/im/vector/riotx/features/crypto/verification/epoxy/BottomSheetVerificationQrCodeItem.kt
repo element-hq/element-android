@@ -16,38 +16,30 @@
  */
 package im.vector.riotx.features.crypto.verification.epoxy
 
-import android.widget.ImageView
-import androidx.core.view.ViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import im.vector.riotx.core.ui.views.QrCodeImageView
 
 /**
- * A action for bottom sheet.
+ * An Epoxy item displaying a QR code
  */
-@EpoxyModelClass(layout = R.layout.item_verification_big_image)
-abstract class BottomSheetVerificationBigImageItem : VectorEpoxyModel<BottomSheetVerificationBigImageItem.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_verification_qr_code)
+abstract class BottomSheetVerificationQrCodeItem : VectorEpoxyModel<BottomSheetVerificationQrCodeItem.Holder>() {
 
     @EpoxyAttribute
-    var imageRes: Int = 0
+    lateinit var data: String
 
     @EpoxyAttribute
-    var contentDescription: String? = null
+    var animate = false
 
     override fun bind(holder: Holder) {
-        holder.image.setImageResource(imageRes)
-
-        if (contentDescription == null) {
-            ViewCompat.setImportantForAccessibility(holder.image, ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_NO)
-        } else {
-            ViewCompat.setImportantForAccessibility(holder.image, ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_YES)
-            holder.image.contentDescription = contentDescription
-        }
+        holder.qsrCodeImage.setData(data, animate)
     }
 
     class Holder : VectorEpoxyHolder() {
-        val image by bind<ImageView>(R.id.itemVerificationBigImage)
+        val qsrCodeImage by bind<QrCodeImageView>(R.id.itemVerificationQrCodeImage)
     }
 }

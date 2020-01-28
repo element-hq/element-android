@@ -20,45 +20,74 @@ import android.os.Handler
 import android.os.Looper
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
-import im.vector.matrix.android.api.session.crypto.sas.*
+import im.vector.matrix.android.api.session.crypto.sas.CancelCode
+import im.vector.matrix.android.api.session.crypto.sas.QrCodeVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
+import im.vector.matrix.android.api.session.crypto.sas.VerificationService
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.safeValueOf
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.*
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageRelationContent
+import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationAcceptContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationCancelContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationDoneContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationKeyContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationMacContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationReadyContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationStartContent
 import im.vector.matrix.android.internal.crypto.DeviceListManager
 import im.vector.matrix.android.internal.crypto.MyDeviceInfoHolder
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
-import im.vector.matrix.android.internal.crypto.model.rest.*
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationCancel
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationKey
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationMac
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
+import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SCAN
+import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SHOW
+import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
+import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
+import im.vector.matrix.android.internal.crypto.model.rest.toValue
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
+import im.vector.matrix.android.internal.crypto.verification.qrcode.DefaultQrCodeVerificationTransaction
+import im.vector.matrix.android.internal.crypto.verification.qrcode.QrCodeData
+import im.vector.matrix.android.internal.crypto.verification.qrcode.generateSharedSecret
+import im.vector.matrix.android.internal.di.DeviceId
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.internal.toImmutableList
 import timber.log.Timber
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 import kotlin.collections.set
 
 @SessionScope
 internal class DefaultVerificationService @Inject constructor(
-        private val credentials: Credentials,
+        @UserId private val userId: String,
+        @DeviceId private val deviceId: String?,
         private val cryptoStore: IMXCryptoStore,
         private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
         private val deviceListManager: DeviceListManager,
         private val setDeviceVerificationAction: SetDeviceVerificationAction,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val sasTransportRoomMessageFactory: SasTransportRoomMessageFactory,
-        private val sasTransportToDeviceFactory: SasTransportToDeviceFactory,
+        private val verificationTransportRoomMessageFactory: VerificationTransportRoomMessageFactory,
+        private val verificationTransportToDeviceFactory: VerificationTransportToDeviceFactory,
         private val crossSigningService: CrossSigningService
 ) : DefaultVerificationTransaction.Listener, VerificationService {
 
@@ -236,7 +265,7 @@ internal class DefaultVerificationService @Inject constructor(
                 ?: return
         val senderId = event.senderId ?: return
 
-        if (requestInfo.toUserId != credentials.userId) {
+        if (requestInfo.toUserId != userId) {
             // I should ignore this, it's not for me
             Timber.w("## SAS Verification ignoring request from ${event.senderId}, not sent to me")
             return
@@ -289,7 +318,7 @@ internal class DefaultVerificationService @Inject constructor(
         if (startReq?.isValid()?.not() == true) {
             Timber.e("## received invalid verification request")
             if (startReq.transactionID != null) {
-                sasTransportRoomMessageFactory.createTransport(event.roomId ?: "", null)
+                verificationTransportRoomMessageFactory.createTransport(event.roomId ?: "", null)
                         .cancelTransaction(
                                 startReq.transactionID ?: "",
                                 otherUserId!!,
@@ -301,9 +330,9 @@ internal class DefaultVerificationService @Inject constructor(
         }
 
         handleStart(otherUserId, startReq as VerificationInfoStart) {
-            it.transport = sasTransportRoomMessageFactory.createTransport(event.roomId ?: "", it)
+            it.transport = verificationTransportRoomMessageFactory.createTransport(event.roomId ?: "", it)
         }?.let {
-            sasTransportRoomMessageFactory.createTransport(event.roomId ?: "", null)
+            verificationTransportRoomMessageFactory.createTransport(event.roomId ?: "", null)
                     .cancelTransaction(
                             startReq.transactionID ?: "",
                             otherUserId!!,
@@ -322,7 +351,7 @@ internal class DefaultVerificationService @Inject constructor(
         if (!startReq.isValid()) {
             Timber.e("## SAS received invalid verification request")
             if (startReq.transactionID != null) {
-                sasTransportToDeviceFactory.createTransport(null).cancelTransaction(
+                verificationTransportToDeviceFactory.createTransport(null).cancelTransaction(
                         startReq.transactionID,
                         otherUserId!!,
                         startReq.fromDevice ?: event.getSenderKey()!!,
@@ -333,9 +362,9 @@ internal class DefaultVerificationService @Inject constructor(
         }
         // Download device keys prior to everything
         handleStart(otherUserId, startReq) {
-            it.transport = sasTransportToDeviceFactory.createTransport(it)
+            it.transport = verificationTransportToDeviceFactory.createTransport(it)
         }?.let {
-            sasTransportToDeviceFactory.createTransport(null).cancelTransaction(
+            verificationTransportToDeviceFactory.createTransport(null).cancelTransaction(
                     startReq.transactionID ?: "",
                     otherUserId!!,
                     startReq.fromDevice ?: event.getSenderKey()!!,
@@ -344,30 +373,46 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
+    /**
+     * Return a CancelCode to make the caller cancel the verification. Else return null
+     */
     private suspend fun handleStart(otherUserId: String?, startReq: VerificationInfoStart, txConfigure: (DefaultVerificationTransaction) -> Unit): CancelCode? {
-        Timber.d("## SAS onStartRequestReceived ${startReq.transactionID!!}")
+        Timber.d("## SAS onStartRequestReceived ${startReq.transactionID}")
         if (checkKeysAreDownloaded(otherUserId!!, startReq.fromDevice ?: "") != null) {
-            Timber.v("## SAS onStartRequestReceived $startReq")
             val tid = startReq.transactionID!!
             val existing = getExistingTransaction(otherUserId, tid)
-            val existingTxs = getExistingTransactionsForUser(otherUserId)
-            if (existing != null) {
-                // should cancel both!
-                Timber.v("## SAS onStartRequestReceived - Request exist with same if ${startReq.transactionID!!}")
-                existing.cancel(CancelCode.UnexpectedMessage)
-                return CancelCode.UnexpectedMessage
-                // cancelTransaction(tid, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
-            } else if (existingTxs?.isEmpty() == false) {
-                Timber.v("## SAS onStartRequestReceived - There is already a transaction with this user ${startReq.transactionID!!}")
-                // Multiple keyshares between two devices: any two devices may only have at most one key verification in flight at a time.
-                existingTxs.forEach {
-                    it.cancel(CancelCode.UnexpectedMessage)
-                }
-                return CancelCode.UnexpectedMessage
-                // cancelTransaction(tid, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
-            } else {
-                // Ok we can create
-                if (startReq.method == VERIFICATION_METHOD_SAS) {
+
+            when (startReq.method) {
+                VERIFICATION_METHOD_SAS -> {
+                    when (existing) {
+                        is SasVerificationTransaction    -> {
+                            // should cancel both!
+                            Timber.v("## SAS onStartRequestReceived - Request exist with same id ${startReq.transactionID}")
+                            existing.cancel(CancelCode.UnexpectedMessage)
+                            // Already cancelled, so return null
+                            return null
+                        }
+                        is QrCodeVerificationTransaction -> {
+                            // Nothing to do?
+                        }
+                        null                             -> {
+                            getExistingTransactionsForUser(otherUserId)
+                                    ?.filterIsInstance(SasVerificationTransaction::class.java)
+                                    ?.takeIf { it.isNotEmpty() }
+                                    ?.also {
+                                        // Multiple keyshares between two devices: any two devices may only have at most one key verification in flight at a time.
+                                        Timber.v("## SAS onStartRequestReceived - There is already a transaction with this user ${startReq.transactionID}")
+                                    }
+                                    ?.forEach {
+                                        it.cancel(CancelCode.UnexpectedMessage)
+                                    }
+                                    ?.also {
+                                        return CancelCode.UnexpectedMessage
+                                    }
+                        }
+                    }
+
+                    // Ok we can create a SAS transaction
                     Timber.v("## SAS onStartRequestReceived - request accepted ${startReq.transactionID!!}")
                     // If there is a corresponding request, we can auto accept
                     // as we are the one requesting in first place (or we accepted the request)
@@ -376,7 +421,8 @@ internal class DefaultVerificationService @Inject constructor(
                     val tx = DefaultIncomingSASDefaultVerificationTransaction(
 //                            this,
                             setDeviceVerificationAction,
-                            credentials,
+                            userId,
+                            deviceId,
                             cryptoStore,
                             crossSigningService,
                             myDeviceInfoHolder.get().myDevice.fingerprint()!!,
@@ -385,30 +431,39 @@ internal class DefaultVerificationService @Inject constructor(
                             autoAccept).also { txConfigure(it) }
                     addTransaction(tx)
                     tx.acceptVerificationEvent(otherUserId, startReq)
-                } else {
+                    return null
+                }
+                VERIFICATION_METHOD_RECIPROCATE -> {
+                    // Other user has scanned my QR code
+                    if (existing is DefaultQrCodeVerificationTransaction) {
+                        existing.onStartReceived(startReq)
+                        return null
+                    } else {
+                        Timber.w("## SAS onStartRequestReceived - unexpected message ${startReq.transactionID}")
+                        return CancelCode.UnexpectedMessage
+                    }
+                }
+                else ->{
                     Timber.e("## SAS onStartRequestReceived - unknown method ${startReq.method}")
                     return CancelCode.UnknownMethod
-                    // cancelTransaction(tid, otherUserId, startReq.fromDevice
-//                            ?: event.getSenderKey()!!, CancelCode.UnknownMethod)
                 }
             }
         } else {
             return CancelCode.UnexpectedMessage
-//            cancelTransaction(startReq.transactionID!!, otherUserId, startReq.fromDevice!!, CancelCode.UnexpectedMessage)
         }
-        return null
     }
 
+    // TODO Refacto: It could just return a boolean
     private suspend fun checkKeysAreDownloaded(otherUserId: String,
-                                               fromDevice: String): MXUsersDevicesMap<CryptoDeviceInfo>? {
+                                               otherDeviceId: String): MXUsersDevicesMap<CryptoDeviceInfo>? {
         return try {
             var keys = deviceListManager.downloadKeys(listOf(otherUserId), false)
-            if (keys.getUserDeviceIds(otherUserId)?.contains(fromDevice) == true) {
+            if (keys.getUserDeviceIds(otherUserId)?.contains(otherDeviceId) == true) {
                 return keys
             } else {
                 // force download
                 keys = deviceListManager.downloadKeys(listOf(otherUserId), true)
-                return keys.takeIf { keys.getUserDeviceIds(otherUserId)?.contains(fromDevice) == true }
+                return keys.takeIf { keys.getUserDeviceIds(otherUserId)?.contains(otherDeviceId) == true }
             }
         } catch (e: Exception) {
             null
@@ -573,12 +628,12 @@ internal class DefaultVerificationService @Inject constructor(
             return
         }
         if (checkKeysAreDownloaded(event.senderId, readyReq.fromDevice ?: "") == null) {
-            Timber.e("## SAS Verification device ${readyReq.fromDevice} is not knwown")
+            Timber.e("## SAS Verification device ${readyReq.fromDevice} is not known")
             // TODO cancel?
             return
         }
 
-        handleReadyReceived(event.senderId, readyReq)
+        handleReadyReceived(event.senderId, event.roomId!!, readyReq)
     }
 
     private fun onRoomDoneReceived(event: Event) {
@@ -623,13 +678,87 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-    private fun handleReadyReceived(senderId: String, readyReq: VerificationInfoReady) {
+    private fun handleReadyReceived(senderId: String, roomId: String, readyReq: VerificationInfoReady) {
         val existingRequest = getExistingVerificationRequest(senderId)?.find { it.transactionId == readyReq.transactionID }
         if (existingRequest == null) {
             Timber.e("## SAS Received Ready for unknown request txId:${readyReq.transactionID} fromDevice ${readyReq.fromDevice}")
             return
         }
-        updatePendingRequest(existingRequest.copy(readyInfo = readyReq))
+
+        val qrCodeData = readyReq.methods
+                // Check if other user is able to scan QR code
+                ?.takeIf { it.contains(VERIFICATION_METHOD_QR_CODE_SCAN) }
+                ?.let {
+                    createQrCodeData(existingRequest.transactionId, existingRequest.otherUserId)
+                }
+
+        if (readyReq.methods?.orEmpty().orEmpty().contains(VERIFICATION_METHOD_RECIPROCATE)) {
+            // Create the pending transaction
+            val tx = DefaultQrCodeVerificationTransaction(
+                    setDeviceVerificationAction,
+                    readyReq.transactionID!!,
+                    senderId,
+                    readyReq.fromDevice,
+                    crossSigningService,
+                    cryptoStore,
+                    qrCodeData,
+                    userId,
+                    deviceId ?: "",
+                    false)
+
+            tx.transport = verificationTransportRoomMessageFactory.createTransport(roomId, tx)
+
+            addTransaction(tx)
+        }
+
+        updatePendingRequest(existingRequest.copy(
+                readyInfo = readyReq
+        ))
+    }
+
+    private fun createQrCodeData(transactionId: String?, otherUserId: String): QrCodeData? {
+        // Build the QR code URL
+        val requestEventId = transactionId ?: run {
+            Timber.w("## Unknown requestEventId")
+            return null
+        }
+
+        val myMasterKey = crossSigningService.getMyCrossSigningKeys()
+                ?.masterKey()
+                ?.unpaddedBase64PublicKey
+                ?: run {
+                    Timber.w("## Unable to get my master key")
+                    return null
+                }
+
+        val otherUserMasterKey = crossSigningService.getUserCrossSigningKeys(otherUserId)
+                ?.masterKey()
+                ?.unpaddedBase64PublicKey
+                ?: run {
+                    Timber.w("## Unable to get other user master key")
+                    return null
+                }
+
+        val myDeviceId = deviceId
+                ?: run {
+                    Timber.w("## Unable to get my deviceId")
+                    return null
+                }
+
+        val myDeviceKey = myDeviceInfoHolder.get().myDevice.fingerprint()!!
+
+        val generatedSharedSecret = generateSharedSecret()
+        return QrCodeData(
+                userId = userId,
+                requestEventId = requestEventId,
+                action = QrCodeData.ACTION_VERIFY,
+                keys = hashMapOf(
+                        myMasterKey to myMasterKey,
+                        myDeviceId to myDeviceKey
+                ),
+                sharedSecret = generatedSharedSecret,
+                otherUserKey = otherUserMasterKey
+        )
     }
 
     private fun handleDoneReceived(senderId: String, doneInfo: VerificationInfo) {
@@ -641,21 +770,22 @@ internal class DefaultVerificationService @Inject constructor(
         updatePendingRequest(existingRequest.copy(isSuccessful = true))
     }
 
-    override fun getExistingTransaction(otherUser: String, tid: String): VerificationTransaction? {
+    // TODO All this methods should be delegated to a TransactionStore
+    override fun getExistingTransaction(otherUserId: String, tid: String): VerificationTransaction? {
         synchronized(lock = txMap) {
-            return txMap[otherUser]?.get(tid)
+            return txMap[otherUserId]?.get(tid)
         }
     }
 
-    override fun getExistingVerificationRequest(otherUser: String): List<PendingVerificationRequest>? {
+    override fun getExistingVerificationRequest(otherUserId: String): List<PendingVerificationRequest>? {
         synchronized(lock = pendingRequests) {
-            return pendingRequests[otherUser]
+            return pendingRequests[otherUserId]
         }
     }
 
-    override fun getExistingVerificationRequest(otherUser: String, tid: String?): PendingVerificationRequest? {
+    override fun getExistingVerificationRequest(otherUserId: String, tid: String?): PendingVerificationRequest? {
         synchronized(lock = pendingRequests) {
-            return tid?.let { tid -> pendingRequests[otherUser]?.firstOrNull { it.transactionId == tid } }
+            return tid?.let { tid -> pendingRequests[otherUserId]?.firstOrNull { it.transactionId == tid } }
         }
     }
 
@@ -692,39 +822,40 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-    override fun beginKeyVerification(method: VerificationMethod, userId: String, deviceID: String): String? {
-        val txID = createUniqueIDForTransaction(userId, deviceID)
+    override fun beginKeyVerification(method: VerificationMethod, otherUserId: String, otherDeviceID: String): String? {
+        val txID = createUniqueIDForTransaction(otherUserId, otherDeviceID)
         // should check if already one (and cancel it)
         if (method == VerificationMethod.SAS) {
-            val tx = DefaultOutgoingSASDefaultVerificationRequest(
+            val tx = DefaultOutgoingSASDefaultVerificationTransaction(
                     setDeviceVerificationAction,
-                    credentials,
+                    userId,
+                    deviceId,
                     cryptoStore,
                     crossSigningService,
                     myDeviceInfoHolder.get().myDevice.fingerprint()!!,
                     txID,
-                    userId,
-                    deviceID)
-            tx.transport = sasTransportToDeviceFactory.createTransport(tx)
+                    otherUserId,
+                    otherDeviceID)
+            tx.transport = verificationTransportToDeviceFactory.createTransport(tx)
             addTransaction(tx)
 
-            tx.start(method)
+            tx.start()
             return txID
         } else {
             throw IllegalArgumentException("Unknown verification method")
         }
     }
 
-    override fun requestKeyVerificationInDMs(methods: List<VerificationMethod>, userId: String, roomId: String, localId: String?)
+    override fun requestKeyVerificationInDMs(methods: List<VerificationMethod>, otherUserId: String, roomId: String, localId: String?)
             : PendingVerificationRequest {
-        Timber.i("## SAS Requesting verification to user: $userId in room $roomId")
+        Timber.i("## SAS Requesting verification to user: $otherUserId in room $roomId")
 
-        val requestsForUser = pendingRequests[userId]
+        val requestsForUser = pendingRequests[otherUserId]
                 ?: ArrayList<PendingVerificationRequest>().also {
-                    pendingRequests[userId] = it
+                    pendingRequests[otherUserId] = it
                 }
 
-        val transport = sasTransportRoomMessageFactory.createTransport(roomId, null)
+        val transport = verificationTransportRoomMessageFactory.createTransport(roomId, null)
 
         // Cancel existing pending requests?
         requestsForUser.toImmutableList().forEach { existingRequest ->
@@ -744,10 +875,24 @@ internal class DefaultVerificationService @Inject constructor(
                 isIncoming = false,
                 roomId = roomId,
                 localID = localID,
-                otherUserId = userId
+                otherUserId = otherUserId
         )
 
-        transport.sendVerificationRequest(methods.map { it.toValue() }, localID, userId, roomId) { syncedId, info ->
+        // We can SCAN or SHOW QR codes only if cross-signing is enabled
+        val methodValues = if (crossSigningService.isCrossSigningEnabled()) {
+            // Add reciprocate method if application declares it can scan or show QR codes
+            // Not sure if it ok to do that (?)
+            val reciprocateMethod = methods.firstOrNull { it == VerificationMethod.QR_CODE_SCAN || it == VerificationMethod.QR_CODE_SHOW }?.let { listOf(VERIFICATION_METHOD_RECIPROCATE) }.orEmpty()
+            methods.map { it.toValue() } + reciprocateMethod
+        } else {
+            // Filter out SCAN and SHOW qr code method
+            methods
+                    .filter { it != VerificationMethod.QR_CODE_SHOW && it != VerificationMethod.QR_CODE_SCAN }
+                    .map { it.toValue() }
+        }
+                .distinct()
+
+        transport.sendVerificationRequest(methodValues, localID, otherUserId, roomId) { syncedId, info ->
             // We need to update with the syncedID
             updatePendingRequest(verificationRequest.copy(
                     transactionId = syncedId,
@@ -762,7 +907,7 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     override fun declineVerificationRequestInDMs(otherUserId: String, otherDeviceId: String, transactionId: String, roomId: String) {
-        sasTransportRoomMessageFactory.createTransport(roomId, null)
+        verificationTransportRoomMessageFactory.createTransport(roomId, null)
                 .cancelTransaction(transactionId, otherUserId, otherDeviceId, CancelCode.User)
 
         getExistingVerificationRequest(otherUserId, transactionId)?.let {
@@ -795,42 +940,52 @@ internal class DefaultVerificationService @Inject constructor(
                                            otherDeviceId: String,
                                            callback: MatrixCallback<String>?): String? {
         if (method == VerificationMethod.SAS) {
-            val tx = DefaultOutgoingSASDefaultVerificationRequest(
+            val tx = DefaultOutgoingSASDefaultVerificationTransaction(
                     setDeviceVerificationAction,
-                    credentials,
+                    userId,
+                    deviceId,
                     cryptoStore,
                     crossSigningService,
                     myDeviceInfoHolder.get().myDevice.fingerprint()!!,
                     transactionId,
                     otherUserId,
                     otherDeviceId)
-            tx.transport = sasTransportRoomMessageFactory.createTransport(roomId, tx)
+            tx.transport = verificationTransportRoomMessageFactory.createTransport(roomId, tx)
             addTransaction(tx)
 
-            tx.start(method)
+            tx.start()
             return transactionId
         } else {
             throw IllegalArgumentException("Unknown verification method")
         }
     }
 
-    override fun readyPendingVerificationInDMs(otherUserId: String, roomId: String, transactionId: String): Boolean {
+    override fun readyPendingVerificationInDMs(methods: List<VerificationMethod>,
+                                               otherUserId: String,
+                                               roomId: String,
+                                               transactionId: String): Boolean {
         Timber.v("## SAS readyPendingVerificationInDMs $otherUserId room:$roomId tx:$transactionId")
         // Let's find the related request
         val existingRequest = getExistingVerificationRequest(otherUserId, transactionId)
         if (existingRequest != null) {
             // we need to send a ready event, with matching methods
-            val transport = sasTransportRoomMessageFactory.createTransport(roomId, null)
-            // TODO We should not use supportedVerificationMethods here, because it depends on the client implementation
-            val methods = existingRequest.requestInfo?.methods?.intersect(supportedVerificationMethods)?.toList()
+            val transport = verificationTransportRoomMessageFactory.createTransport(roomId, null)
+            val computedMethods = computeReadyMethods(
+                    transactionId,
+                    otherUserId,
+                    existingRequest.requestInfo?.fromDevice ?: "",
+                    roomId,
+                    existingRequest.requestInfo?.methods,
+                    methods)
             if (methods.isNullOrEmpty()) {
                 Timber.i("Cannot ready this request, no common methods found txId:$transactionId")
                 // TODO buttons should not be shown in  this case?
                 return false
             }
             // TODO this is not yet related to a transaction, maybe we should use another method like for cancel?
-            val readyMsg = transport.createReady(transactionId, credentials.deviceId ?: "", methods)
-            transport.sendToOther(EventType.KEY_VERIFICATION_READY, readyMsg,
+            val readyMsg = transport.createReady(transactionId, deviceId ?: "", computedMethods)
+            transport.sendToOther(EventType.KEY_VERIFICATION_READY,
+                    readyMsg,
                     VerificationTxState.None,
                     CancelCode.User,
                     null // TODO handle error?
@@ -844,15 +999,73 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
+    private fun computeReadyMethods(
+            transactionId: String,
+            otherUserId: String,
+            otherDeviceId: String,
+            roomId: String,
+            otherUserMethods: List<String>?,
+            methods: List<VerificationMethod>): List<String> {
+        if (otherUserMethods.isNullOrEmpty()) {
+            return emptyList()
+        }
+
+        val result = mutableSetOf<String>()
+
+        if (VERIFICATION_METHOD_SAS in otherUserMethods && VerificationMethod.SAS in methods) {
+            // Other can do SAS and so do I
+            result.add(VERIFICATION_METHOD_SAS)
+        }
+
+        if (VERIFICATION_METHOD_QR_CODE_SCAN in otherUserMethods || VERIFICATION_METHOD_QR_CODE_SHOW in otherUserMethods) {
+            // Other user wants to verify using QR code. Cross-signing has to be setup
+            val qrCodeData = createQrCodeData(transactionId, otherUserId)
+
+            if (qrCodeData != null) {
+                if (VERIFICATION_METHOD_QR_CODE_SCAN in otherUserMethods && VerificationMethod.QR_CODE_SHOW in methods) {
+                    // Other can Scan and I can show QR code
+                    result.add(VERIFICATION_METHOD_QR_CODE_SHOW)
+                    result.add(VERIFICATION_METHOD_RECIPROCATE)
+                }
+                if (VERIFICATION_METHOD_QR_CODE_SHOW in otherUserMethods && VerificationMethod.QR_CODE_SCAN in methods) {
+                    // Other can show and I can scan QR code
+                    result.add(VERIFICATION_METHOD_QR_CODE_SCAN)
+                    result.add(VERIFICATION_METHOD_RECIPROCATE)
+                }
+            }
+
+            if (VERIFICATION_METHOD_RECIPROCATE in result) {
+                // Create the pending transaction
+                val tx = DefaultQrCodeVerificationTransaction(
+                        setDeviceVerificationAction,
+                        transactionId,
+                        otherUserId,
+                        otherDeviceId,
+                        crossSigningService,
+                        cryptoStore,
+                        qrCodeData,
+                        userId,
+                        deviceId ?: "",
+                        false)
+
+                tx.transport = verificationTransportRoomMessageFactory.createTransport(roomId, tx)
+
+                addTransaction(tx)
+            }
+        }
+
+        return result.toList()
+    }
+
     /**
      * This string must be unique for the pair of users performing verification for the duration that the transaction is valid
      */
-    private fun createUniqueIDForTransaction(userId: String, deviceID: String): String {
+    private fun createUniqueIDForTransaction(otherUserId: String, otherDeviceID: String): String {
         return buildString {
-            append(credentials.userId).append("|")
-            append(credentials.deviceId).append("|")
             append(userId).append("|")
-            append(deviceID).append("|")
+            append(deviceId).append("|")
+            append(otherUserId).append("|")
+            append(otherDeviceID).append("|")
             append(UUID.randomUUID().toString())
         }
     }
@@ -860,6 +1073,14 @@ internal class DefaultVerificationService @Inject constructor(
     override fun transactionUpdated(tx: VerificationTransaction) {
         dispatchTxUpdated(tx)
         if (tx is SASDefaultVerificationTransaction
+                && (tx.state == VerificationTxState.Cancelled
+                        || tx.state == VerificationTxState.OnCancelled
+                        || tx.state == VerificationTxState.Verified)
+        ) {
+            // remove
+            this.removeTransaction(tx.otherUserId, tx.transactionId)
+        }
+        if (tx is QrCodeVerificationTransaction
                 && (tx.state == VerificationTxState.Cancelled
                         || tx.state == VerificationTxState.OnCancelled
                         || tx.state == VerificationTxState.Verified)

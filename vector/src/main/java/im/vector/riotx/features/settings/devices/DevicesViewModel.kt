@@ -86,11 +86,11 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
 
     init {
         refreshDevicesList()
-        session.getSasVerificationService().addListener(this)
+        session.getVerificationService().addListener(this)
     }
 
     override fun onCleared() {
-        session.getSasVerificationService().removeListener(this)
+        session.getVerificationService().removeListener(this)
         super.onCleared()
     }
 
@@ -169,7 +169,7 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
 
     private fun handleVerify(action: DevicesAction.VerifyMyDevice) {
         // TODO Implement request in to DEVICE!!!
-        val txID = session.getSasVerificationService().beginKeyVerification(VerificationMethod.SAS, session.myUserId, action.deviceId)
+        val txID = session.getVerificationService().beginKeyVerification(VerificationMethod.SAS, session.myUserId, action.deviceId)
         if (txID != null) {
             _requestLiveData.postValue(LiveEvent(Success(
                     action.copy(

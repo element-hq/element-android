@@ -55,7 +55,7 @@ class DeviceListBottomSheet : VectorBaseBottomSheetDialogFragment() {
                         is VerificationAction.StartSASVerification -> {
                             VerificationBottomSheet.withArgs(
                                     roomId = null,
-                                    otherUserId = action.userID,
+                                    otherUserId = action.otherUserId,
                                     transactionId = action.pendingRequestTransactionId
                             ).show(requireActivity().supportFragmentManager, "REQPOP")
                         }

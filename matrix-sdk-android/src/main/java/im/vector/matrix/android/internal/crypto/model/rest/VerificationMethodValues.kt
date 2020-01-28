@@ -33,11 +33,3 @@ internal fun VerificationMethod.toValue(): String {
         VerificationMethod.QR_CODE_SHOW -> VERIFICATION_METHOD_QR_CODE_SHOW
     }
 }
-
-internal val supportedVerificationMethods =
-        listOf(
-                VERIFICATION_METHOD_SAS,
-                VERIFICATION_METHOD_QR_CODE_SHOW,
-                VERIFICATION_METHOD_QR_CODE_SCAN,
-                VERIFICATION_METHOD_RECIPROCATE
-        )

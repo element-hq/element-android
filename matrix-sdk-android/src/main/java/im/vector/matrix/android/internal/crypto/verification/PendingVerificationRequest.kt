@@ -25,6 +25,7 @@ import java.util.UUID
 
 /**
  * Stores current pending verification requests
+ * TODO We should not expose this whole object to the app. Create an interface
  */
 data class PendingVerificationRequest(
         val ageLocalTs: Long,
@@ -38,7 +39,6 @@ data class PendingVerificationRequest(
         val cancelConclusion: CancelCode? = null,
         val isSuccessful: Boolean = false,
         val handledByOtherSession: Boolean = false
-
 ) {
     val isReady: Boolean = readyInfo != null
     val isSent: Boolean = transactionId != null

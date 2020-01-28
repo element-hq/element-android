@@ -15,21 +15,19 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
-import im.vector.matrix.android.api.session.crypto.sas.OutgoingSasVerificationRequest
+import im.vector.matrix.android.api.session.crypto.sas.OutgoingSasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
-import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
-import im.vector.matrix.android.internal.crypto.model.rest.toValue
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
 
-internal class DefaultOutgoingSASDefaultVerificationRequest(
+internal class DefaultOutgoingSASDefaultVerificationTransaction(
         setDeviceVerificationAction: SetDeviceVerificationAction,
-        credentials: Credentials,
+        userId: String,
+        deviceId: String?,
         cryptoStore: IMXCryptoStore,
         crossSigningService: CrossSigningService,
         deviceFingerprint: String,
@@ -38,7 +36,8 @@ internal class DefaultOutgoingSASDefaultVerificationRequest(
         otherDeviceId: String
 ) : SASDefaultVerificationTransaction(
         setDeviceVerificationAction,
-        credentials,
+        userId,
+        deviceId,
         cryptoStore,
         crossSigningService,
         deviceFingerprint,
@@ -46,27 +45,27 @@ internal class DefaultOutgoingSASDefaultVerificationRequest(
         otherUserId,
         otherDeviceId,
         isIncoming = false),
-        OutgoingSasVerificationRequest {
+        OutgoingSasVerificationTransaction {
 
-    override val uxState: OutgoingSasVerificationRequest.UxState
+    override val uxState: OutgoingSasVerificationTransaction.UxState
         get() {
             return when (state) {
-                VerificationTxState.None           -> OutgoingSasVerificationRequest.UxState.WAIT_FOR_START
+                VerificationTxState.None           -> OutgoingSasVerificationTransaction.UxState.WAIT_FOR_START
                 VerificationTxState.SendingStart,
                 VerificationTxState.Started,
                 VerificationTxState.OnAccepted,
                 VerificationTxState.SendingKey,
                 VerificationTxState.KeySent,
-                VerificationTxState.OnKeyReceived  -> OutgoingSasVerificationRequest.UxState.WAIT_FOR_KEY_AGREEMENT
-                VerificationTxState.ShortCodeReady -> OutgoingSasVerificationRequest.UxState.SHOW_SAS
+                VerificationTxState.OnKeyReceived  -> OutgoingSasVerificationTransaction.UxState.WAIT_FOR_KEY_AGREEMENT
+                VerificationTxState.ShortCodeReady -> OutgoingSasVerificationTransaction.UxState.SHOW_SAS
                 VerificationTxState.ShortCodeAccepted,
                 VerificationTxState.SendingMac,
                 VerificationTxState.MacSent,
-                VerificationTxState.Verifying      -> OutgoingSasVerificationRequest.UxState.WAIT_FOR_VERIFICATION
-                VerificationTxState.Verified       -> OutgoingSasVerificationRequest.UxState.VERIFIED
-                VerificationTxState.OnCancelled    -> OutgoingSasVerificationRequest.UxState.CANCELLED_BY_ME
-                VerificationTxState.Cancelled      -> OutgoingSasVerificationRequest.UxState.CANCELLED_BY_OTHER
-                else                               -> OutgoingSasVerificationRequest.UxState.UNKNOWN
+                VerificationTxState.Verifying      -> OutgoingSasVerificationTransaction.UxState.WAIT_FOR_VERIFICATION
+                VerificationTxState.Verified       -> OutgoingSasVerificationTransaction.UxState.VERIFIED
+                VerificationTxState.OnCancelled    -> OutgoingSasVerificationTransaction.UxState.CANCELLED_BY_ME
+                VerificationTxState.Cancelled      -> OutgoingSasVerificationTransaction.UxState.CANCELLED_BY_OTHER
+                else                               -> OutgoingSasVerificationTransaction.UxState.UNKNOWN
             }
         }
 
@@ -75,16 +74,15 @@ internal class DefaultOutgoingSASDefaultVerificationRequest(
         cancel(CancelCode.UnexpectedMessage)
     }
 
-    fun start(method: VerificationMethod) {
+    fun start() {
         if (state != VerificationTxState.None) {
             Timber.e("## SAS O: start verification from invalid state")
             // should I cancel??
             throw IllegalStateException("Interactive Key verification already started")
         }
 
-        val startMessage = transport.createStart(
-                credentials.deviceId ?: "",
-                method.toValue(),
+        val startMessage = transport.createStartForSas(
+                deviceId ?: "",
                 transactionId,
                 KNOWN_AGREEMENT_PROTOCOLS,
                 KNOWN_HASHES,
@@ -164,7 +162,7 @@ internal class DefaultOutgoingSASDefaultVerificationRequest(
         }
     }
 
-    override fun onKeyVerificationKey(userId: String, vKey: VerificationInfoKey) {
+    override fun onKeyVerificationKey(vKey: VerificationInfoKey) {
         Timber.v("## SAS O: onKeyVerificationKey id:$transactionId")
         if (state != VerificationTxState.SendingKey && state != VerificationTxState.KeySent) {
             Timber.e("## received key from invalid state $state")
@@ -192,16 +190,13 @@ internal class DefaultOutgoingSASDefaultVerificationRequest(
             // - the Matrix ID of the user who sent the m.key.verification.accept message,
             // - he device ID of the device that sent the m.key.verification.accept message
             // - the transaction ID.
-            val sasInfo = "MATRIX_KEY_VERIFICATION_SAS" +
-                    "${credentials.userId}${credentials.deviceId}" +
-                    "$otherUserId$otherDeviceId" +
-                    transactionId
+            val sasInfo = "MATRIX_KEY_VERIFICATION_SAS$userId$deviceId$otherUserId$otherDeviceId$transactionId"
             // decimal: generate five bytes by using HKDF.
             // emoji: generate six bytes by using HKDF.
             shortCodeBytes = getSAS().generateShortCode(sasInfo, 6)
             state = VerificationTxState.ShortCodeReady
         } else {
-            // bad commitement
+            // bad commitment
             cancel(CancelCode.MismatchedCommitment)
         }
     }

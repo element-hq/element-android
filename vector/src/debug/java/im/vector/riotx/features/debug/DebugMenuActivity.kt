@@ -29,7 +29,6 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseActivity
-import im.vector.riotx.core.qrcode.toQrCode
 import im.vector.riotx.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
 import im.vector.riotx.core.utils.allGranted
@@ -56,8 +55,7 @@ class DebugMenuActivity : VectorBaseActivity() {
     }
 
     private fun renderQrCode(text: String) {
-        val qrBitmap = text.toQrCode(200, 200)
-        debug_qr_code.setImageBitmap(qrBitmap)
+        debug_qr_code.setData(text, true)
     }
 
     @OnClick(R.id.debug_test_text_view_link)

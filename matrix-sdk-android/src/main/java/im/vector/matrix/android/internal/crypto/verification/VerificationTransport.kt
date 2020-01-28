@@ -20,8 +20,8 @@ import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 
 /**
- * SAS verification can be performed using toDevice events or via DM.
- * This class abstracts the concept of transport for SAS
+ * Verification can be performed using toDevice events or via DM.
+ * This class abstracts the concept of transport for verification
  */
 internal interface VerificationTransport {
 
@@ -46,6 +46,7 @@ internal interface VerificationTransport {
                           code: CancelCode)
 
     fun done(transactionId: String)
+
     /**
      * Creates an accept message suitable for this transport
      */
@@ -59,13 +60,22 @@ internal interface VerificationTransport {
     fun createKey(tid: String,
                   pubKey: String): VerificationInfoKey
 
-    fun createStart(fromDevice: String,
-                    method: String,
-                    transactionID: String,
-                    keyAgreementProtocols: List<String>,
-                    hashes: List<String>,
-                    messageAuthenticationCodes: List<String>,
-                    shortAuthenticationStrings: List<String>): VerificationInfoStart
+    /**
+     * Create start for SAS verification
+     */
+    fun createStartForSas(fromDevice: String,
+                          transactionID: String,
+                          keyAgreementProtocols: List<String>,
+                          hashes: List<String>,
+                          messageAuthenticationCodes: List<String>,
+                          shortAuthenticationStrings: List<String>): VerificationInfoStart
+
+    /**
+     * Create start for QR code verification
+     */
+    fun createStartForQrCode(fromDevice: String,
+                             transactionID: String,
+                             sharedSecret: String): VerificationInfoStart
 
     fun createMac(tid: String, mac: Map<String, String>, keys: String): VerificationInfoMac
 

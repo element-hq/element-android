@@ -19,19 +19,16 @@ package im.vector.riotx.features.crypto.verification.choose
 import com.airbnb.epoxy.EpoxyController
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.dividerItem
-import im.vector.riotx.core.qrcode.toQrCode
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
-import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationBigImageItem
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
+import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationQrCodeItem
 import javax.inject.Inject
 
 class VerificationChooseMethodController @Inject constructor(
         private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider,
-        private val dimensionConverter: DimensionConverter
+        private val colorProvider: ColorProvider
 ) : EpoxyController() {
 
     var listener: Listener? = null
@@ -52,14 +49,11 @@ class VerificationChooseMethodController @Inject constructor(
                 notice(stringProvider.getString(R.string.verification_scan_notice))
             }
 
-            if (state.otherCanScanQrCode && !state.QRtext.isNullOrBlank()) {
-                // Generate the QR code
-                val size = dimensionConverter.dpToPx(180)
-                val qrCodeBitmap = state.QRtext.toQrCode(size, size)
-
-                bottomSheetVerificationBigImageItem {
+            if (state.otherCanScanQrCode && !state.qrCodeText.isNullOrBlank()) {
+                bottomSheetVerificationQrCodeItem {
                     id("qr")
-                    imageBitmap(qrCodeBitmap)
+                    data(state.qrCodeText)
+                    animate(false)
                 }
 
                 dividerItem {

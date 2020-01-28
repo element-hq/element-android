@@ -126,8 +126,8 @@ internal class DefaultCryptoService @Inject constructor(
         private val oneTimeKeysUploader: OneTimeKeysUploader,
         //
         private val roomDecryptorProvider: RoomDecryptorProvider,
-        // The SAS verification service.
-        private val sasVerificationService: DefaultVerificationService,
+        // The verification service.
+        private val verificationService: DefaultVerificationService,
 
         private val crossSigningService: DefaultCrossSigningService,
         //
@@ -157,7 +157,7 @@ internal class DefaultCryptoService @Inject constructor(
 
 
     init {
-        sasVerificationService.cryptoService = this
+        verificationService.cryptoService = this
     }
 
     private val uiHandler = Handler(Looper.getMainLooper())
@@ -343,7 +343,7 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * @return the VerificationService
      */
-    override fun getSasVerificationService() = sasVerificationService
+    override fun getVerificationService() = verificationService
 
     override fun getCrossSigningService() = crossSigningService
 

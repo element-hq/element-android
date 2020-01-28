@@ -24,8 +24,8 @@ import im.vector.matrix.android.internal.crypto.verification.PendingVerification
  * https://matrix.org/docs/spec/client_server/r0.5.0#key-verification-framework
  *
  * Verifying keys manually by reading out the Ed25519 key is not very user friendly, and can lead to errors.
- * SAS verification is a user-friendly key verification process.
- * SAS verification is intended to be a highly interactive process for users,
+ * Verification is a user-friendly key verification process.
+ * Verification is intended to be a highly interactive process for users,
  * and as such exposes verification methods which are easier for users to use.
  */
 interface VerificationService {
@@ -39,23 +39,24 @@ interface VerificationService {
      */
     fun markedLocallyAsManuallyVerified(userId: String, deviceID: String)
 
-    fun getExistingTransaction(otherUser: String, tid: String): VerificationTransaction?
+    fun getExistingTransaction(otherUserId: String, tid: String): VerificationTransaction?
 
-    fun getExistingVerificationRequest(otherUser: String): List<PendingVerificationRequest>?
+    fun getExistingVerificationRequest(otherUserId: String): List<PendingVerificationRequest>?
 
-    fun getExistingVerificationRequest(otherUser: String, tid: String?): PendingVerificationRequest?
+    fun getExistingVerificationRequest(otherUserId: String, tid: String?): PendingVerificationRequest?
 
     fun getExistingVerificationRequestInRoom(roomId: String, tid: String?): PendingVerificationRequest?
 
-    fun beginKeyVerification(method: VerificationMethod, userId: String, deviceID: String): String?
+    fun beginKeyVerification(method: VerificationMethod, otherUserId: String, otherDeviceID: String): String?
 
     /**
      * Request a key verification from another user using toDevice events.
      */
-    fun requestKeyVerificationInDMs(methods: List<VerificationMethod>, userId: String, roomId: String, localId: String? = LocalEcho.createLocalEchoId()): PendingVerificationRequest
+    fun requestKeyVerificationInDMs(methods: List<VerificationMethod>, otherUserId: String, roomId: String, localId: String? = LocalEcho.createLocalEchoId()): PendingVerificationRequest
 
     fun declineVerificationRequestInDMs(otherUserId: String, otherDeviceId: String, transactionId: String, roomId: String)
 
+    // Only SAS method is supported for the moment
     fun beginKeyVerificationInDMs(method: VerificationMethod,
                                   transactionId: String,
                                   roomId: String,
@@ -66,7 +67,10 @@ interface VerificationService {
     /**
      * Returns false if the request is unknown
      */
-    fun readyPendingVerificationInDMs(otherUserId: String, roomId: String, transactionId: String): Boolean
+    fun readyPendingVerificationInDMs(methods: List<VerificationMethod>,
+                                      otherUserId: String,
+                                      roomId: String,
+                                      transactionId: String): Boolean
 
     // fun transactionUpdated(tx: SasVerificationTransaction)
 

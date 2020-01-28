@@ -65,7 +65,7 @@ class DefaultNavigator @Inject constructor(
 
     override fun performDeviceVerification(context: Context, otherUserId: String, sasTransationId: String) {
         val session = sessionHolder.getSafeActiveSession() ?: return
-        val tx = session.getSasVerificationService().getExistingTransaction(otherUserId, sasTransationId) ?: return
+        val tx = session.getVerificationService().getExistingTransaction(otherUserId, sasTransationId) ?: return
         (tx as? IncomingSasVerificationTransaction)?.performAccept()
         if (context is VectorBaseActivity) {
             VerificationBottomSheet.withArgs(
