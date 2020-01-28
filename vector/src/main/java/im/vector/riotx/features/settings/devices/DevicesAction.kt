@@ -21,7 +21,7 @@ import im.vector.riotx.core.platform.VectorViewModelAction
 
 sealed class DevicesAction : VectorViewModelAction {
     object Retry : DevicesAction()
-    data class Delete(val deviceInfo: DeviceInfo) : DevicesAction()
+    data class Delete(val deviceId: String) : DevicesAction()
     data class Password(val password: String) : DevicesAction()
     data class Rename(val deviceInfo: DeviceInfo, val newName: String) : DevicesAction()
     data class PromptRename(val deviceId: String, val deviceInfo: DeviceInfo? = null) : DevicesAction()

@@ -44,7 +44,7 @@ data class VerificationChooseMethodViewState(
 class VerificationChooseMethodViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationChooseMethodViewState,
         private val session: Session
-) : VectorViewModel<VerificationChooseMethodViewState, EmptyAction, EmptyViewEvents>(initialState), SasVerificationService.SasVerificationListener {
+) : VectorViewModel<VerificationChooseMethodViewState, EmptyAction, EmptyViewEvents>(initialState), VerificationService.VerificationListener {
 
     override fun transactionCreated(tx: VerificationTransaction) {}
 

@@ -75,9 +75,9 @@ class RoomMemberProfileController @Inject constructor(
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
 
         if (state.isRoomEncrypted) {
-            if (state.userMXCrossSigningInfo.invoke() != null) {
+            if (state.userMXCrossSigningInfo != null) {
                 // Cross signing is enabled for this user
-                if (state.userMXCrossSigningInfo.invoke()?.isTrusted() == true) {
+                if (state.userMXCrossSigningInfo.isTrusted()) {
                     //User is trusted
                     val icon = if (state.allDevicesAreTrusted.invoke() == true) R.drawable.ic_shield_trusted
                     else R.drawable.ic_shield_warning

@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.EmptyAction
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 
 data class DeviceVerificationInfoBottomSheetViewState(
@@ -36,7 +37,7 @@ data class DeviceVerificationInfoBottomSheetViewState(
 
 class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@Assisted initialState: DeviceVerificationInfoBottomSheetViewState,
                                                                              val session: Session
-) : VectorViewModel<DeviceVerificationInfoBottomSheetViewState, EmptyAction>(initialState) {
+) : VectorViewModel<DeviceVerificationInfoBottomSheetViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {

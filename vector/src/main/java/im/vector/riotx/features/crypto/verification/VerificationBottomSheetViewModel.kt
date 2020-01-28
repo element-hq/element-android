@@ -60,7 +60,7 @@ data class VerificationBottomSheetViewState(
 class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted initialState: VerificationBottomSheetViewState,
                                                                    private val session: Session)
     : VectorViewModel<VerificationBottomSheetViewState, VerificationAction, EmptyViewEvents>(initialState),
-        SasVerificationService.SasVerificationListener {
+        VerificationService.VerificationListener {
 
     // Can be used for several actions, for a one shot result
     private val _requestLiveData = MutableLiveData<LiveEvent<Async<VerificationAction>>>()

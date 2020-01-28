@@ -44,7 +44,7 @@ data class VerificationEmojiCodeViewState(
 class VerificationEmojiCodeViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationEmojiCodeViewState,
         private val session: Session
-) : VectorViewModel<VerificationEmojiCodeViewState, EmptyAction, EmptyViewEvents>(initialState), SasVerificationService.SasVerificationListener {
+) : VectorViewModel<VerificationEmojiCodeViewState, EmptyAction, EmptyViewEvents>(initialState), VerificationService.VerificationListener {
 
     init {
         withState { state ->

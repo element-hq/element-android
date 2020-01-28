@@ -37,6 +37,7 @@ import im.vector.matrix.android.internal.crypto.crosssigning.isVerified
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.rx.rx
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.platform.VectorViewModelAction
 import im.vector.riotx.core.resources.StringProvider
@@ -58,7 +59,7 @@ sealed class CrossSigningAction : VectorViewModelAction {
 class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted private val initialState: CrossSigningSettingsViewState,
                                                                 private val stringProvider: StringProvider,
                                                                 private val session: Session)
-    : VectorViewModel<CrossSigningSettingsViewState, CrossSigningAction>(initialState) {
+    : VectorViewModel<CrossSigningSettingsViewState, CrossSigningAction, EmptyViewEvents>(initialState) {
 
     // Can be used for several actions, for a one shot result
     private val _requestLiveData = MutableLiveData<LiveEvent<Async<CrossSigningAction>>>()

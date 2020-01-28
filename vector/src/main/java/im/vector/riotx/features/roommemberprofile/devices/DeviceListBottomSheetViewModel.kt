@@ -36,6 +36,7 @@ import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.EmptyAction
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.LiveEvent
@@ -52,7 +53,8 @@ data class DeviceListViewState(
 class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted private val initialState: DeviceListViewState,
                                                                  @Assisted private val userId: String,
                                                                  private val stringProvider: StringProvider,
-                                                                 private val session: Session) : VectorViewModel<DeviceListViewState, EmptyAction>(initialState) {
+                                                                 private val session: Session)
+    : VectorViewModel<DeviceListViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     // Can be used for several actions, for a one shot result
     private val _requestLiveData = MutableLiveData<LiveEvent<Async<VerificationAction>>>()
