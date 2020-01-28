@@ -30,3 +30,7 @@ const val MXCRYPTO_ALGORITHM_MEGOLM = "m.megolm.v1.aes-sha2"
  * Matrix algorithm value for megolm keys backup.
  */
 const val MXCRYPTO_ALGORITHM_MEGOLM_BACKUP = "m.megolm_backup.v1.curve25519-aes-sha2"
+
+// TODO Refacto: use this constants everywhere
+const val ed25519 = "ed25519"
+const val curve25519 = "curve25519"

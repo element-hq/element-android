@@ -32,6 +32,15 @@ private const val ENCODING = "utf-8"
  *     &key_<keyid>=<key-in-base64>...
  *     &secret=<shared_secret>
  *     &other_user_key=<master-key-in-base64>
+ *
+ * Example:
+ * https://matrix.to/#/@user:matrix.org?
+ *     request=%24pBeIfm7REDACTEDSQJbgqvi-yYiwmPB8_H_W_O974
+ *     &action=verify
+ *     &key_VJEDVKUYTQ=DL7LWIw7Qp%2B4AREDACTEDOwy2BjygumSWAGfzaWY
+ *     &key_fsh%2FfQ08N3xvh4ySXsINB%2BJ2hREDACTEDVcVOG4qqo=fsh%2FfQ08N3xvh4ySXsINB%2BJ2hREDACTEDVcVOG4qqo
+ *     &secret=AjQqw51Fp6UBuPolZ2FAD5WnXc22ZhJG6iGslrVvIdw%3D
+ *     &other_user_key=WqSVLkBCS%2Fi5NqR%2F%2FymC8T7K9RPxBIuqK8Usl6Y3big
  * </pre>
  */
 fun QrCodeData.toUrl(): String {
