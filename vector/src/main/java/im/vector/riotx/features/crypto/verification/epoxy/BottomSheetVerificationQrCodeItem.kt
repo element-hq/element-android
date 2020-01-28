@@ -16,7 +16,6 @@
  */
 package im.vector.riotx.features.crypto.verification.epoxy
 
-import androidx.core.view.ViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
@@ -25,7 +24,7 @@ import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.ui.views.QrCodeImageView
 
 /**
- * A action for bottom sheet.
+ * An Epoxy item displaying a QR code
  */
 @EpoxyModelClass(layout = R.layout.item_verification_qr_code)
 abstract class BottomSheetVerificationQrCodeItem : VectorEpoxyModel<BottomSheetVerificationQrCodeItem.Holder>() {
@@ -36,21 +35,11 @@ abstract class BottomSheetVerificationQrCodeItem : VectorEpoxyModel<BottomSheetV
     @EpoxyAttribute
     var animate = false
 
-    @EpoxyAttribute
-    var contentDescription: String? = null
-
     override fun bind(holder: Holder) {
         holder.qsrCodeImage.setData(data, animate)
-
-        if (contentDescription == null) {
-            ViewCompat.setImportantForAccessibility(holder.qsrCodeImage, ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_NO)
-        } else {
-            ViewCompat.setImportantForAccessibility(holder.qsrCodeImage, ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_YES)
-            holder.qsrCodeImage.contentDescription = contentDescription
-        }
     }
 
     class Holder : VectorEpoxyHolder() {
-        val qsrCodeImage by bind<QrCodeImageView>(R.id.itemVerificationBigImage)
+        val qsrCodeImage by bind<QrCodeImageView>(R.id.itemVerificationQrCodeImage)
     }
 }

@@ -34,8 +34,6 @@ fun String.toBitMatrix(size: Int): BitMatrix {
 
 fun BitMatrix.toBitmap(@ColorInt backgroundColor: Int = Color.WHITE,
                        @ColorInt foregroundColor: Int = Color.BLACK): Bitmap {
-    val height: Int = height
-    val width: Int = width
     val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
     for (x in 0 until width) {
         for (y in 0 until height) {

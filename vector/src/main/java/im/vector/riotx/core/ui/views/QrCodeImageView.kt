@@ -17,6 +17,7 @@
 package im.vector.riotx.core.ui.views
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.util.AttributeSet
@@ -32,6 +33,10 @@ class QrCodeImageView @JvmOverloads constructor(
     private var data: String? = null
     private var animate = false
 
+    init {
+        setBackgroundColor(Color.WHITE)
+    }
+
     fun setData(data: String, animate: Boolean) {
         this.data = data
         this.animate = animate
@@ -46,24 +51,24 @@ class QrCodeImageView @JvmOverloads constructor(
 
     private fun render() {
         data
-                ?.takeIf { width > 0 }
+                ?.takeIf { height > 0 }
                 ?.let {
                     if (animate) {
                         // NOT SUPPORTED YET val anim = createAnimation(it)
                         // NOT SUPPORTED YET setImageDrawable(anim)
                         // NOT SUPPORTED YET anim.start()
-                        // NOT SUPPORTED YET setImageDrawable(BitmapDrawable(resources, it.toBitMatrix(width).toBitmap()))
-                        val bitmap = it.toBitMatrix(width).toBitmap()
+                        // NOT SUPPORTED YET setImageDrawable(BitmapDrawable(resources, it.toBitMatrix(height).toBitmap()))
+                        val bitmap = it.toBitMatrix(height).toBitmap()
                         post { setImageBitmap(bitmap) }
                     } else {
-                        val bitmap = it.toBitMatrix(width).toBitmap()
+                        val bitmap = it.toBitMatrix(height).toBitmap()
                         post { setImageBitmap(bitmap) }
                     }
                 }
     }
 
     private fun createAnimation(data: String): AnimationDrawable {
-        val finalQr = data.toBitMatrix(width)
+        val finalQr = data.toBitMatrix(height)
 
         val list = mutableListOf(finalQr)
 

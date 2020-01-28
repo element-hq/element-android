@@ -100,7 +100,6 @@
     <string name="room_settings_enable_encryption_dialog_content">Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly.</string>
     <string name="room_settings_enable_encryption_dialog_submit">Enable encryption</string>
 
-
     <string name="verification_request_notice">For extra security, verify %s by checking a one-time code.</string>
     <string name="verification_request_start_notice">For maximum security, do this in person.</string>
 
@@ -146,4 +145,6 @@
 
     <string name="initialize_cross_signing">Initialize CrossSigning</string>
     <string name="reset_cross_signing">Reset Keys</string>
+
+    <string name="a11y_qr_code_for_verification">QR code</string>
 </resources>
