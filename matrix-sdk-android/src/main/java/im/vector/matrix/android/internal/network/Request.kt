@@ -38,7 +38,7 @@ internal class Request<DATA>(private val eventBus: EventBus?) {
 
     suspend fun execute(): DATA {
         return try {
-            val response = apiCall.awaitResponse()
+            val response = apiCall.clone().awaitResponse()
             if (response.isSuccessful) {
                 response.body()
                         ?: throw IllegalStateException("The request returned a null body")
