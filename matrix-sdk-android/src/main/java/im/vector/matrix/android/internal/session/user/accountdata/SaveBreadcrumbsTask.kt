@@ -16,6 +16,7 @@
 package im.vector.matrix.android.internal.session.user.accountdata
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.internal.database.model.BreadcrumbsEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
@@ -50,10 +51,10 @@ internal class DefaultSaveBreadcrumbsTask @Inject constructor(
             // Update the room summaries
             // Reset all the indexes...
             RoomSummaryEntity.where(realm)
-                    .greaterThan(RoomSummaryEntityFields.BREADCRUMBS_INDEX, RoomSummaryEntity.NOT_IN_BREADCRUMBS)
+                    .greaterThan(RoomSummaryEntityFields.BREADCRUMBS_INDEX, RoomSummary.NOT_IN_BREADCRUMBS)
                     .findAll()
                     .forEach {
-                        it.breadcrumbsIndex = RoomSummaryEntity.NOT_IN_BREADCRUMBS
+                        it.breadcrumbsIndex = RoomSummary.NOT_IN_BREADCRUMBS
                     }
 
             // ...and apply new indexes

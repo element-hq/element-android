@@ -60,7 +60,7 @@ import kotlinx.coroutines.withContext
 class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private val initialState: RoomMemberProfileViewState,
                                                              private val stringProvider: StringProvider,
                                                              private val session: Session)
-    : VectorViewModel<RoomMemberProfileViewState, RoomMemberProfileAction>(initialState) {
+    : VectorViewModel<RoomMemberProfileViewState, RoomMemberProfileAction, RoomMemberProfileViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -75,9 +75,6 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
             return fragment.viewModelFactory.create(state)
         }
     }
-
-    private val _viewEvents = PublishDataSource<RoomMemberProfileViewEvents>()
-    val viewEvents: DataSource<RoomMemberProfileViewEvents> = _viewEvents
 
     private val _actionResultLiveData = MutableLiveData<LiveEvent<Async<RoomMemberProfileAction>>>()
     val actionResultLiveData: LiveData<LiveEvent<Async<RoomMemberProfileAction>>>
@@ -219,7 +216,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
 
     private fun handleIgnoreAction() = withState { state ->
         val isIgnored = state.isIgnored() ?: return@withState
-        _viewEvents.post(RoomMemberProfileViewEvents.Loading(stringProvider.getString(R.string.please_wait)))
+        _viewEvents.post(RoomMemberProfileViewEvents.Loading())
         val ignoreActionCallback = object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 _viewEvents.post(RoomMemberProfileViewEvents.OnIgnoreActionSuccess)

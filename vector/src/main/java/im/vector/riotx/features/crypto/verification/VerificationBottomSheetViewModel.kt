@@ -43,6 +43,7 @@ import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.core.di.HasScreenInjector
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
 
@@ -58,8 +59,8 @@ data class VerificationBottomSheetViewState(
 
 class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted initialState: VerificationBottomSheetViewState,
                                                                    private val session: Session)
-    : VectorViewModel<VerificationBottomSheetViewState, VerificationAction>(initialState),
-        VerificationService.VerificationListener {
+    : VectorViewModel<VerificationBottomSheetViewState, VerificationAction, EmptyViewEvents>(initialState),
+        SasVerificationService.SasVerificationListener {
 
     // Can be used for several actions, for a one shot result
     private val _requestLiveData = MutableLiveData<LiveEvent<Async<VerificationAction>>>()

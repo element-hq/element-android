@@ -22,10 +22,15 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -35,11 +40,13 @@ import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util.assertMainThread
 import com.google.android.material.snackbar.Snackbar
+import im.vector.riotx.R
 import im.vector.riotx.core.di.DaggerScreenComponent
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.features.navigation.Navigator
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
@@ -120,6 +127,14 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
         mUnBinder = ButterKnife.bind(this, view)
     }
 
+    open fun showLoading(message: CharSequence?) {
+        showLoadingDialog(message)
+    }
+
+    open fun showFailure(throwable: Throwable) {
+        displayErrorDialog(throwable)
+    }
+
     @CallSuper
     override fun onDestroyView() {
         super.onDestroyView()
@@ -182,10 +197,10 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
         }
     }
 
-    protected fun showLoadingDialog(message: CharSequence, cancelable: Boolean = false) {
+    protected fun showLoadingDialog(message: CharSequence? = null, cancelable: Boolean = false) {
         progress = ProgressDialog(requireContext()).apply {
             setCancelable(cancelable)
-            setMessage(message)
+            setMessage(message ?: getString(R.string.please_wait))
             setProgressStyle(ProgressDialog.STYLE_SPINNER)
             show()
         }
@@ -221,6 +236,21 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     }
 
     /* ==========================================================================================
+     * ViewEvents
+     * ========================================================================================== */
+
+    protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(observer: (T) -> Unit) {
+        viewEvents
+                .observe()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    dismissLoadingDialog()
+                    observer(it)
+                }
+                .disposeOnDestroyView()
+    }
+
+    /* ==========================================================================================
      * MENU MANAGEMENT
      * ========================================================================================== */
 
@@ -232,5 +262,17 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
         if (menuRes != -1) {
             inflater.inflate(menuRes, menu)
         }
+    }
+
+    /* ==========================================================================================
+     * Common Dialogs
+     * ========================================================================================== */
+
+    protected fun displayErrorDialog(throwable: Throwable) {
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(errorFormatter.toHumanReadable(throwable))
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 }

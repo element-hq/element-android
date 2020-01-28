@@ -21,16 +21,26 @@ import im.vector.matrix.android.api.pushrules.RuleScope
 import im.vector.matrix.android.api.pushrules.RuleSetKey
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomMemberContent
+import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.internal.database.mapper.PushRulesMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.*
+import im.vector.matrix.android.internal.database.model.BreadcrumbsEntity
+import im.vector.matrix.android.internal.database.model.IgnoredUserEntity
+import im.vector.matrix.android.internal.database.model.PushRulesEntity
+import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
+import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.getDirectRooms
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
-import im.vector.matrix.android.internal.session.sync.model.accountdata.*
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataBreadcrumbs
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataDirectMessages
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataFallback
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataIgnoredUsers
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataPushRules
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataSync
 import im.vector.matrix.android.internal.session.user.accountdata.DirectChatsHelper
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
 import io.realm.Realm
@@ -177,10 +187,10 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         // Update the room summaries
         // Reset all the indexes...
         RoomSummaryEntity.where(realm)
-                .greaterThan(RoomSummaryEntityFields.BREADCRUMBS_INDEX, RoomSummaryEntity.NOT_IN_BREADCRUMBS)
+                .greaterThan(RoomSummaryEntityFields.BREADCRUMBS_INDEX, RoomSummary.NOT_IN_BREADCRUMBS)
                 .findAll()
                 .forEach {
-                    it.breadcrumbsIndex = RoomSummaryEntity.NOT_IN_BREADCRUMBS
+                    it.breadcrumbsIndex = RoomSummary.NOT_IN_BREADCRUMBS
                 }
 
         // ...and apply new indexes

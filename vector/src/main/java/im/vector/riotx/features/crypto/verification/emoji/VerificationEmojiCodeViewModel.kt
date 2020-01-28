@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.EmptyAction
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 
@@ -43,7 +44,7 @@ data class VerificationEmojiCodeViewState(
 class VerificationEmojiCodeViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationEmojiCodeViewState,
         private val session: Session
-) : VectorViewModel<VerificationEmojiCodeViewState, EmptyAction>(initialState), VerificationService.VerificationListener {
+) : VectorViewModel<VerificationEmojiCodeViewState, EmptyAction, EmptyViewEvents>(initialState), SasVerificationService.SasVerificationListener {
 
     init {
         withState { state ->

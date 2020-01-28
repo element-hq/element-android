@@ -20,7 +20,12 @@ import android.net.Uri
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.jakewharton.rxrelay2.PublishRelay
 import com.squareup.inject.assisted.Assisted
@@ -55,9 +60,7 @@ import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.resources.UserPreferencesProvider
-import im.vector.riotx.core.utils.DataSource
 import im.vector.riotx.core.utils.LiveEvent
-import im.vector.riotx.core.utils.PublishDataSource
 import im.vector.riotx.core.utils.subscribeLogError
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
@@ -82,7 +85,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                                                       private val stringProvider: StringProvider,
                                                       private val typingHelper: TypingHelper,
                                                       private val session: Session
-) : VectorViewModel<RoomDetailViewState, RoomDetailAction>(initialState), Timeline.Listener {
+) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState), Timeline.Listener {
 
     private val room = session.getRoom(initialState.roomId)!!
     private val eventId = initialState.eventId
@@ -104,9 +107,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private var timelineEvents = PublishRelay.create<List<TimelineEvent>>()
     var timeline = room.createTimeline(eventId, timelineSettings)
         private set
-
-    private val _viewEvents = PublishDataSource<RoomDetailViewEvents>()
-    val viewEvents: DataSource<RoomDetailViewEvents> = _viewEvents
 
     // Can be used for several actions, for a one shot result
     private val _requestLiveData = MutableLiveData<LiveEvent<Async<RoomDetailAction>>>()
@@ -295,6 +295,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         }
     }
 
+    // TODO Cleanup this and use ViewEvents
     private val _nonBlockingPopAlert = MutableLiveData<LiveEvent<Pair<Int, List<Any>>>>()
     val nonBlockingPopAlert: LiveData<LiveEvent<Pair<Int, List<Any>>>>
         get() = _nonBlockingPopAlert

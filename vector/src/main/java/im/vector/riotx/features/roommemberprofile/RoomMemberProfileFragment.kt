@@ -32,6 +32,7 @@ import im.vector.riotx.core.animations.AppBarStateChangeListener
 import im.vector.riotx.core.animations.MatrixItemAppBarStateChangeListener
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.StateView
@@ -81,17 +82,13 @@ class RoomMemberProfileFragment @Inject constructor(
         appBarStateChangeListener = MatrixItemAppBarStateChangeListener(headerView, listOf(matrixProfileToolbarAvatarImageView,
                 matrixProfileToolbarTitleView))
         matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
-        viewModel.viewEvents
-                .observe()
-                .subscribe {
-                    dismissLoadingDialog()
-                    when (it) {
-                        is RoomMemberProfileViewEvents.Loading -> showLoadingDialog(it.message)
-                        is RoomMemberProfileViewEvents.Failure -> showErrorInSnackbar(it.throwable)
-                    }
-                }
-                .disposeOnDestroyView()
-
+        viewModel.observeViewEvents {
+            when (it) {
+                is RoomMemberProfileViewEvents.Loading               -> showLoading(it.message)
+                is RoomMemberProfileViewEvents.Failure               -> showFailure(it.throwable)
+                is RoomMemberProfileViewEvents.OnIgnoreActionSuccess -> Unit
+            }.exhaustive
+        }
         viewModel.actionResultLiveData.observeEvent(this) { async ->
             when (async) {
                 is Success -> {

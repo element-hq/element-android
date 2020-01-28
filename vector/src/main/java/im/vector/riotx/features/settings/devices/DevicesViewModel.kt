@@ -43,28 +43,19 @@ import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.core.platform.VectorViewModelAction
 import im.vector.riotx.core.utils.LiveEvent
 
 data class DevicesViewState(
         val myDeviceId: String = "",
         val devices: Async<List<DeviceInfo>> = Uninitialized,
         val cryptoDevices: Async<List<CryptoDeviceInfo>> = Uninitialized,
+        // TODO Replace by isLoading boolean
         val request: Async<Unit> = Uninitialized
 ) : MvRxState
 
-sealed class DevicesAction : VectorViewModelAction {
-    object Retry : DevicesAction()
-    data class Delete(val deviceId: String) : DevicesAction()
-    data class Password(val password: String) : DevicesAction()
-    data class Rename(val deviceInfo: DeviceInfo, val newName: String) : DevicesAction()
-    data class PromptRename(val deviceId: String, val deviceInfo: DeviceInfo? = null) : DevicesAction()
-    data class VerifyMyDevice(val deviceId: String, val userId: String? = null, val transactionId: String? = null) : DevicesAction()
-}
-
 class DevicesViewModel @AssistedInject constructor(@Assisted initialState: DevicesViewState,
                                                    private val session: Session)
-    : VectorViewModel<DevicesViewState, DevicesAction>(initialState), VerificationService.VerificationListener {
+    : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -217,7 +208,7 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
                     )
                 }
 
-                _requestErrorLiveData.postLiveEvent(failure)
+                _viewEvents.post(DevicesViewEvents.Failure(failure))
             }
         })
     }
@@ -267,7 +258,7 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
                         )
                     }
 
-                    _requestErrorLiveData.postLiveEvent(failure)
+                    _viewEvents.post(DevicesViewEvents.Failure(failure))
                 }
             }
 
@@ -321,7 +312,7 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
                     )
                 }
 
-                _requestErrorLiveData.postLiveEvent(failure)
+                _viewEvents.post(DevicesViewEvents.Failure(failure))
             }
         })
     }

@@ -15,18 +15,14 @@
  *
  */
 
-package im.vector.riotx.features.login
+package im.vector.riotx.features.settings.ignored
 
-import im.vector.matrix.android.api.auth.registration.FlowResult
 import im.vector.riotx.core.platform.VectorViewEvents
 
 /**
- * Transient events for Login
+ * Transient events for Ignored users screen
  */
-sealed class LoginViewEvents: VectorViewEvents {
-    data class Loading(val message: CharSequence? = null) : LoginViewEvents()
-    data class Failure(val throwable: Throwable) : LoginViewEvents()
-
-    data class RegistrationFlowResult(val flowResult: FlowResult, val isRegistrationStarted: Boolean) : LoginViewEvents()
-    object OutdatedHomeserver : LoginViewEvents()
+sealed class IgnoredUsersViewEvents : VectorViewEvents {
+    data class Loading(val message: CharSequence? = null) : IgnoredUsersViewEvents()
+    data class Failure(val throwable: Throwable) : IgnoredUsersViewEvents()
 }

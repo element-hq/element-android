@@ -61,6 +61,7 @@ import im.vector.riotx.features.roommemberprofile.devices.DeviceListFragment
 import im.vector.riotx.features.roommemberprofile.devices.DeviceTrustInfoActionFragment
 import im.vector.riotx.features.roomprofile.RoomProfileFragment
 import im.vector.riotx.features.roomprofile.members.RoomMemberListFragment
+import im.vector.riotx.features.roomprofile.settings.RoomSettingsFragment
 import im.vector.riotx.features.settings.VectorSettingsAdvancedNotificationPreferenceFragment
 import im.vector.riotx.features.settings.VectorSettingsHelpAboutFragment
 import im.vector.riotx.features.settings.VectorSettingsLabsFragment
@@ -277,6 +278,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(RoomMemberListFragment::class)
     fun bindRoomMemberListFragment(fragment: RoomMemberListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomSettingsFragment::class)
+    fun bindRoomSettingsFragment(fragment: RoomSettingsFragment): Fragment
 
     @Binds
     @IntoMap
