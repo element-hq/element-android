@@ -156,11 +156,12 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                             it.qrTransactionState == VerificationTxState.Verified,
                             it.cancelCode?.value))
                 })
+                return@withState
             }
             else                            -> Unit
         }
 
-        // At this point there is no transaction for this request
+        // At this point there is no SAS transaction for this request
 
         // Transaction has not yet started
         if (it.pendingRequest.invoke()?.cancelConclusion != null) {

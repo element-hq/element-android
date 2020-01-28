@@ -74,7 +74,7 @@ internal class DefaultQrCodeVerificationTransaction(
         }
 
         if (otherQrCodeData.userId != otherUserId) {
-            cancel(CancelCode.UserMismatchError)
+            cancel(CancelCode.MismatchedUser)
             return
         }
 
