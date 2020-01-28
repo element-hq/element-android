@@ -23,12 +23,18 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomAliasesContent
 import im.vector.matrix.android.api.session.room.model.RoomCanonicalAliasContent
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
+import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
-import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.EventEntityFields
+import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntityFields
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
-import im.vector.matrix.android.internal.database.query.*
+import im.vector.matrix.android.internal.database.query.getOrCreate
+import im.vector.matrix.android.internal.database.query.isEventRead
+import im.vector.matrix.android.internal.database.query.latestEvent
+import im.vector.matrix.android.internal.database.query.prev
+import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.membership.RoomDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
@@ -92,7 +98,9 @@ internal class RoomSummaryUpdater @Inject constructor(
         val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).prev()
         val lastCanonicalAliasEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_CANONICAL_ALIAS).prev()
         val lastAliasesEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ALIASES).prev()
-        val encryptionEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ENCRYPTION).prev()
+        val encryptionEvent = EventEntity.where(realm, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION)
+                .contains(EventEntityFields.CONTENT, "\"algorithm\":\"$MXCRYPTO_ALGORITHM_MEGOLM\"")
+                .prev()
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
                 // avoid this call if we are sure there are unread events

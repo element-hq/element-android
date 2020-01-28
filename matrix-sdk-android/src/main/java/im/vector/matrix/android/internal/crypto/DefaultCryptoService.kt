@@ -56,9 +56,15 @@ import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
-import im.vector.matrix.android.internal.crypto.tasks.*
+import im.vector.matrix.android.internal.crypto.tasks.DeleteDeviceTask
+import im.vector.matrix.android.internal.crypto.tasks.DeleteDeviceWithUserPasswordTask
+import im.vector.matrix.android.internal.crypto.tasks.GetDeviceInfoTask
+import im.vector.matrix.android.internal.crypto.tasks.GetDevicesTask
+import im.vector.matrix.android.internal.crypto.tasks.SetDeviceNameTask
+import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
 import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.extensions.foldToCallback
@@ -71,7 +77,12 @@ import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.fetchCopied
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.matrix.olm.OlmManager
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
@@ -475,14 +486,16 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Tells if a room is encrypted
+     * Tells if a room is encrypted with MXCRYPTO_ALGORITHM_MEGOLM
      *
      * @param roomId the room id
-     * @return true if the room is encrypted
+     * @return true if the room is encrypted with algorithm MXCRYPTO_ALGORITHM_MEGOLM
      */
     override fun isRoomEncrypted(roomId: String): Boolean {
-        val encryptionEvent = monarchy.fetchCopied {
-            EventEntity.where(it, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION).findFirst()
+        val encryptionEvent = monarchy.fetchCopied { realm ->
+            EventEntity.where(realm, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION)
+                    .contains(EventEntityFields.CONTENT, "\"algorithm\":\"$MXCRYPTO_ALGORITHM_MEGOLM\"")
+                    .findFirst()
         }
         return encryptionEvent != null
     }
