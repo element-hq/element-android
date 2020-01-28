@@ -23,7 +23,7 @@ import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
-internal interface UploadSignaturesTask : Task<UploadSignaturesTask.Params, SignatureUploadResponse> {
+internal interface UploadSignaturesTask : Task<UploadSignaturesTask.Params, Unit> {
     data class Params(
             val signatures: Map<String, Map<String, Any>>
     )
@@ -34,14 +34,18 @@ internal class DefaultUploadSignaturesTask @Inject constructor(
         private val eventBus: EventBus
 ) : UploadSignaturesTask {
 
-    override suspend fun execute(params: UploadSignaturesTask.Params): SignatureUploadResponse {
-        val executeRequest = executeRequest<SignatureUploadResponse>(eventBus) {
-            apiCall = cryptoApi.uploadSignatures(params.signatures)
+    override suspend fun execute(params: UploadSignaturesTask.Params): Unit {
+
+        try {
+            val response = executeRequest<SignatureUploadResponse>(eventBus) {
+                apiCall = cryptoApi.uploadSignatures(params.signatures)
+            }
+            if (response.failures?.isNotEmpty() == true) {
+                throw Throwable(response.failures.toString())
+            }
+            return
+        } catch (f: Failure) {
+            throw f
         }
-        if (executeRequest.failures?.isNotEmpty() == true) {
-            // TODO better
-            throw Failure.OtherServerError(executeRequest.toString(), 400)
-        }
-        return executeRequest
     }
 }

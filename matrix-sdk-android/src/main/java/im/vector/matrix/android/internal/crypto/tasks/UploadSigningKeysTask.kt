@@ -30,7 +30,7 @@ import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
-internal interface UploadSigningKeysTask : Task<UploadSigningKeysTask.Params, KeysQueryResponse> {
+internal interface UploadSigningKeysTask : Task<UploadSigningKeysTask.Params, Unit> {
     data class Params(
             // the device keys to send.
             val masterKey: CryptoCrossSigningKey,
@@ -42,11 +42,13 @@ internal interface UploadSigningKeysTask : Task<UploadSigningKeysTask.Params, Ke
     )
 }
 
+data class UploadSigningKeys(val failures: Map<String, Any>?) : Failure.FeatureFailure()
+
 internal class DefaultUploadSigningKeysTask @Inject constructor(
         private val cryptoApi: CryptoApi,
         private val eventBus: EventBus
 ) : UploadSigningKeysTask {
-    override suspend fun execute(params: UploadSigningKeysTask.Params): KeysQueryResponse {
+    override suspend fun execute(params: UploadSigningKeysTask.Params) {
         val uploadQuery = UploadSigningKeysBody(
                 masterKey = params.masterKey.toRest(),
                 userSigningKey = params.userKey.toRest(),
@@ -55,9 +57,13 @@ internal class DefaultUploadSigningKeysTask @Inject constructor(
         )
         try {
             // Make a first request to start user-interactive authentication
-            return executeRequest(eventBus) {
+            val request = executeRequest<KeysQueryResponse>(eventBus) {
                 apiCall = cryptoApi.uploadSigningKeys(uploadQuery)
             }
+            if (request.failures?.isNotEmpty() == true) {
+                throw UploadSigningKeys(request.failures)
+            }
+            return
         } catch (throwable: Throwable) {
             if (throwable is Failure.OtherServerError
                     && throwable.httpCode == 401
@@ -73,10 +79,18 @@ internal class DefaultUploadSigningKeysTask @Inject constructor(
                     null
                 }?.let {
                     // Retry with authentication
-                    return executeRequest(eventBus) {
-                        apiCall = cryptoApi.uploadSigningKeys(
-                                uploadQuery.copy(auth =  params.userPasswordAuth.copy(session = it.session))
-                        )
+                    try {
+                        val req = executeRequest<KeysQueryResponse>(eventBus) {
+                            apiCall = cryptoApi.uploadSigningKeys(
+                                    uploadQuery.copy(auth = params.userPasswordAuth.copy(session = it.session))
+                            )
+                        }
+                        if (req.failures?.isNotEmpty() == true) {
+                            throw UploadSigningKeys(req.failures)
+                        }
+                        return
+                    } catch (failure: Throwable) {
+                        throw failure
                     }
                 }
             }

@@ -47,12 +47,12 @@ interface CrossSigningService {
     fun getMyCrossSigningKeys(): MXCrossSigningInfo?
     fun canCrossSign(): Boolean
 
-    fun trustUser(userId: String, callback: MatrixCallback<SignatureUploadResponse>)
+    fun trustUser(userId: String, callback: MatrixCallback<Unit>)
 
     /**
      * Sign one of your devices and upload the signature
      */
-    fun signDevice(deviceId: String, callback: MatrixCallback<SignatureUploadResponse>)
+    fun signDevice(deviceId: String, callback: MatrixCallback<Unit>)
 
     fun checkDeviceTrust(userId: String, deviceId: String, locallyTrusted: Boolean?) : DeviceTrustResult
 }

@@ -23,7 +23,6 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -129,7 +128,14 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted privat
                         }
                     }
                 }
-                _requestLiveData.postValue(LiveEvent(Fail(Throwable("You cannot do that from mobile"))))
+                when (failure) {
+                    is Failure.ServerError -> {
+                        _requestLiveData.postValue(LiveEvent(Fail(Throwable(failure.error.message))))
+                    }
+                    else                   -> {
+                        _requestLiveData.postValue(LiveEvent(Fail(failure)))
+                    }
+                }
                 setState {
                     copy(isUploadingKeys = false)
                 }

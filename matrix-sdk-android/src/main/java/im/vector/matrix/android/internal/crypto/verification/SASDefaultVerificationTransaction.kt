@@ -308,7 +308,7 @@ internal abstract class SASDefaultVerificationTransaction(
         if (otherMasterKeyIsVerified && otherUserId != credentials.userId) {
             // we should trust this master key
             // And check verification MSK -> SSK?
-            crossSigningService.trustUser(otherUserId, object : MatrixCallback<SignatureUploadResponse> {
+            crossSigningService.trustUser(otherUserId, object : MatrixCallback<Unit> {
                 override fun onFailure(failure: Throwable) {
                     Timber.e(failure, "## SAS Verification: Failed to trust User $otherUserId")
                 }
@@ -318,7 +318,7 @@ internal abstract class SASDefaultVerificationTransaction(
         if (otherUserId == credentials.userId) {
             // If me it's reasonable to sign and upload the device signature
             // Notice that i might not have the private keys, so may ot be able to do it
-            crossSigningService.signDevice(otherDeviceId!!, object : MatrixCallback<SignatureUploadResponse> {
+            crossSigningService.signDevice(otherDeviceId!!, object : MatrixCallback<Unit> {
                 override fun onFailure(failure: Throwable) {
                     Timber.w(failure, "## SAS Verification: Failed to sign new device $otherDeviceId")
                 }

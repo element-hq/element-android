@@ -21,7 +21,6 @@ import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
-import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningState
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.crypto.DeviceListManager
@@ -30,16 +29,12 @@ import im.vector.matrix.android.internal.crypto.MyDeviceInfoHolder
 import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.KeyUsage
 import im.vector.matrix.android.internal.crypto.model.rest.KeysQueryResponse
-import im.vector.matrix.android.internal.crypto.model.rest.SignatureUploadResponse
-import im.vector.matrix.android.internal.crypto.model.rest.UploadResponseFailure
 import im.vector.matrix.android.internal.crypto.model.rest.UploadSignatureQueryBuilder
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.UploadSignaturesTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadSigningKeysTask
-import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.di.UserId
-import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskConstraints
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -47,7 +42,6 @@ import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import org.matrix.olm.OlmPkSigning
 import org.matrix.olm.OlmUtility
 import timber.log.Timber
@@ -68,8 +62,6 @@ internal class DefaultCrossSigningService @Inject constructor(
         private val taskExecutor: TaskExecutor) : CrossSigningService, DeviceListManager.UserDevicesUpdateListener {
 
     private var olmUtility: OlmUtility? = null
-
-    private var crossSigningState: CrossSigningState = CrossSigningState.Unknown
 
     private var masterPkSigning: OlmPkSigning? = null
     private var userPkSigning: OlmPkSigning? = null
@@ -152,8 +144,6 @@ internal class DefaultCrossSigningService @Inject constructor(
      */
     override fun initializeCrossSigning(authParams: UserPasswordAuth?, callback: MatrixCallback<Unit>?) {
         Timber.d("## CrossSigning  initializeCrossSigning")
-        // TODO sync that
-        crossSigningState = CrossSigningState.Enabling
 
         val myUserID = credentials.userId
 
@@ -222,13 +212,10 @@ internal class DefaultCrossSigningService @Inject constructor(
         cryptoStore.setUserKeysAsTrusted(myUserID)
         cryptoStore.storePrivateKeysInfo(masterKeyPrivateKey?.toBase64NoPadding(), uskPrivateKey?.toBase64NoPadding(), sskPrivateKey?.toBase64NoPadding())
 
-        // TODO we should ensure that they are sent
-        // TODO error handling?
         uploadSigningKeysTask.configureWith(params) {
-            this.retryCount = 3
             this.constraints = TaskConstraints(true)
-            this.callback = object : MatrixCallback<KeysQueryResponse> {
-                override fun onSuccess(data: KeysQueryResponse) {
+            this.callback = object : MatrixCallback<Unit> {
+                override fun onSuccess(data: Unit) {
                     Timber.i("## CrossSigning - Keys succesfully uploaded")
 
                     //  Sign the current device with SSK
@@ -261,44 +248,44 @@ internal class DefaultCrossSigningService @Inject constructor(
 
                     resetTrustOnKeyChange()
                     uploadSignaturesTask.configureWith(UploadSignaturesTask.Params(uploadSignatureQueryBuilder.build())) {
-                        this.retryCount = 3
+                        //this.retryCount = 3
                         this.constraints = TaskConstraints(true)
-                        this.callback = object : MatrixCallback<SignatureUploadResponse> {
-                            override fun onSuccess(data: SignatureUploadResponse) {
+                        this.callback = object : MatrixCallback<Unit> {
+                            override fun onSuccess(data: Unit) {
                                 Timber.i("## CrossSigning - signatures succesfuly uploaded")
-                                // Force download of my keys now
-                                kotlin.runCatching {
-                                    cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-                                        deviceListManager.downloadKeys(listOf(myUserID), true)
-                                    }
-                                }.foldToCallback(object : MatrixCallback<Any> {
-                                    override fun onSuccess(data: Any) {
-                                        callback?.onSuccess(Unit)
-                                    }
-
-                                    override fun onFailure(failure: Throwable) {
-                                        callback?.onFailure(failure)
-                                    }
-                                })
+                                callback?.onSuccess(Unit)
                             }
 
                             override fun onFailure(failure: Throwable) {
+                                //Clear
                                 Timber.e(failure, "## CrossSigning - Failed to upload signatures")
+                                clearSigningKeys()
                             }
                         }
                     }.executeBy(taskExecutor)
-
-                    crossSigningState = CrossSigningState.Trusted
                 }
 
                 override fun onFailure(failure: Throwable) {
                     Timber.e(failure, "## CrossSigning - Failed to upload signing keys")
+                    clearSigningKeys()
                     callback?.onFailure(failure)
                 }
             }
         }.executeBy(taskExecutor)
     }
 
+    private fun clearSigningKeys() {
+        this@DefaultCrossSigningService.masterPkSigning?.releaseSigning()
+        this@DefaultCrossSigningService.userPkSigning?.releaseSigning()
+        this@DefaultCrossSigningService.selfSigningPkSigning?.releaseSigning()
+
+        this@DefaultCrossSigningService.masterPkSigning = null
+        this@DefaultCrossSigningService.userPkSigning = null
+        this@DefaultCrossSigningService.selfSigningPkSigning = null
+
+        cryptoStore.setMyCrossSigningInfo(null)
+        cryptoStore.storePrivateKeysInfo(null, null, null)
+    }
 
     private fun resetTrustOnKeyChange() {
         Timber.i("## CrossSigning - Clear all other user trust")
@@ -481,7 +468,7 @@ internal class DefaultCrossSigningService @Inject constructor(
         return checkSelfTrust().isVerified() && cryptoStore.getCrossSigningPrivateKeys()?.selfSigned != null
     }
 
-    override fun trustUser(userId: String, callback: MatrixCallback<SignatureUploadResponse>) {
+    override fun trustUser(userId: String, callback: MatrixCallback<Unit>) {
         Timber.d("## CrossSigning - Mark user $userId as trusted ")
         // We should have this user keys
         val otherMasterKeys = getUserCrossSigningKeys(userId)?.masterKey()
@@ -513,42 +500,16 @@ internal class DefaultCrossSigningService @Inject constructor(
         cryptoStore.setUserKeysAsTrusted(userId, true)
         // TODO update local copy with new signature directly here? kind of local echo of trust?
 
-
         Timber.d("## CrossSigning - Upload signature of $userId MSK signed by USK")
         val uploadQuery = UploadSignatureQueryBuilder()
                 .withSigningKeyInfo(otherMasterKeys.copyForSignature(credentials.userId, userPubKey, newSignature))
                 .build()
         uploadSignaturesTask.configureWith(UploadSignaturesTask.Params(uploadQuery)) {
-            this.callback = object: MatrixCallback<SignatureUploadResponse> {
-                override fun onSuccess(data: SignatureUploadResponse) {
-                    //force a key download to refresh trust?
-                    val uldata = data
-                    kotlin.runCatching {
-                        Timber.d("## CrossSigning - Force download of user keys")
-                        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-                            deviceListManager.downloadKeys(listOf(userId), true)
-                        }
-                    }.foldToCallback(object : MatrixCallback<Any> {
-                        override fun onSuccess(data: Any) {
-                            callback.onSuccess(uldata)
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            Timber.e("## CrossSigning - fail to download keys", failure)
-                            callback.onFailure(failure)
-                        }
-                    })
-                }
-
-                override fun onFailure(failure: Throwable) {
-                    Timber.e("## CrossSigning - fail to upload signature", failure)
-                    callback.onFailure(failure)
-                }
-            }
+            this.callback = callback
         }.executeBy(taskExecutor)
     }
 
-    override fun signDevice(deviceId: String, callback: MatrixCallback<SignatureUploadResponse>) {
+    override fun signDevice(deviceId: String, callback: MatrixCallback<Unit>) {
         // This device should be yours
         val device = cryptoStore.getUserDevice(credentials.userId, deviceId)
         if (device == null) {
@@ -590,22 +551,7 @@ internal class DefaultCrossSigningService @Inject constructor(
                 .withDeviceInfo(toUpload)
                 .build()
         uploadSignaturesTask.configureWith(UploadSignaturesTask.Params(uploadQuery)) {
-            this.callback = object : MatrixCallback<SignatureUploadResponse> {
-                override fun onFailure(failure: Throwable) {
-                    callback.onFailure(failure)
-                }
-
-                override fun onSuccess(data: SignatureUploadResponse) {
-                    val watchedFailure = data.failures?.get(userId)?.get(deviceId)
-                    if (watchedFailure == null) {
-                        callback.onSuccess(data)
-                    } else {
-                        val failure = MoshiProvider.providesMoshi().adapter(UploadResponseFailure::class.java).fromJson(watchedFailure.toString())?.message
-                                ?: watchedFailure.toString()
-                        callback.onFailure(Throwable(failure))
-                    }
-                }
-            }
+            this.callback = callback
         }.executeBy(taskExecutor)
     }
 

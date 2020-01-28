@@ -3,12 +3,19 @@ package im.vector.matrix.android.internal.crypto.crosssigning
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import im.vector.matrix.android.InstrumentedTest
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.common.*
+import im.vector.matrix.android.common.CommonTestHelper
+import im.vector.matrix.android.common.CryptoTestHelper
+import im.vector.matrix.android.common.SessionTestParams
+import im.vector.matrix.android.common.TestConstants
+import im.vector.matrix.android.common.TestMatrixCallback
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
-import im.vector.matrix.android.internal.crypto.model.rest.SignatureUploadResponse
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -43,7 +50,7 @@ class XSigningTest : InstrumentedTest {
         val userKey = myCrossSigningKeys?.userKey()
         assertNotNull("User key should be stored", userKey?.unpaddedBase64PublicKey)
 
-        assertTrue("Signing Keys should be trusted", myCrossSigningKeys?.isTrusted == true)
+        assertTrue("Signing Keys should be trusted", myCrossSigningKeys?.isTrusted() == true)
 
         assertTrue("Signing Keys should be trusted", aliceSession.getCrossSigningService().checkUserTrust(aliceSession.myUserId).isVerified())
 
@@ -88,7 +95,7 @@ class XSigningTest : InstrumentedTest {
         assertEquals("Bob keys from alice pov should match", bobKeysFromAlicePOV?.masterKey()?.unpaddedBase64PublicKey, bobSession.getCrossSigningService().getMyCrossSigningKeys()?.masterKey()?.unpaddedBase64PublicKey)
         assertEquals("Bob keys from alice pov should match", bobKeysFromAlicePOV?.selfSigningKey()?.unpaddedBase64PublicKey, bobSession.getCrossSigningService().getMyCrossSigningKeys()?.selfSigningKey()?.unpaddedBase64PublicKey)
 
-        assertTrue("Bob keys from alice pov should not be trusted", bobKeysFromAlicePOV?.isTrusted == false)
+        assertTrue("Bob keys from alice pov should not be trusted", bobKeysFromAlicePOV?.isTrusted() == false)
 
         mTestHelper.signout(aliceSession)
         mTestHelper.signout(bobSession)
@@ -126,11 +133,11 @@ class XSigningTest : InstrumentedTest {
         mTestHelper.await(downloadLatch)
 
         val bobKeysFromAlicePOV = aliceSession.getCrossSigningService().getUserCrossSigningKeys(bobUserId)
-        assertTrue("Bob keys from alice pov should not be trusted", bobKeysFromAlicePOV?.isTrusted == false)
+        assertTrue("Bob keys from alice pov should not be trusted", bobKeysFromAlicePOV?.isTrusted() == false)
 
         val trustLatch = CountDownLatch(1)
-        aliceSession.getCrossSigningService().trustUser(bobUserId, object : MatrixCallback<SignatureUploadResponse> {
-            override fun onSuccess(data: SignatureUploadResponse) {
+        aliceSession.getCrossSigningService().trustUser(bobUserId, object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
                 trustLatch.countDown()
             }
 
@@ -167,8 +174,8 @@ class XSigningTest : InstrumentedTest {
 
         // Manually mark it as trusted from first session
         val bobSignLatch = CountDownLatch(1)
-        bobSession.getCrossSigningService().signDevice(bobSecondDeviceId!!, object : MatrixCallback<SignatureUploadResponse> {
-            override fun onSuccess(data: SignatureUploadResponse) {
+        bobSession.getCrossSigningService().signDevice(bobSecondDeviceId!!, object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
                 bobSignLatch.countDown()
             }
 
