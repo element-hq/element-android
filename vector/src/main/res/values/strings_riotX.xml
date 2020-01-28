@@ -80,12 +80,21 @@
 
     <string name="unignore">Unignore</string>
 
+    <string name="room_list_sharing_header_recent_rooms">Recent rooms</string>
+    <string name="room_list_sharing_header_other_rooms">Other rooms</string>
+
     <!-- Title for category in the settings which affect what is displayed in the timeline (ex: show read receipts, etc.) -->
     <string name="settings_category_timeline">Timeline</string>
 
     <!-- Title for category in the settings which affect the behavior of the message editor (ex: enable Markdown, send typing notification, etc.) -->
     <string name="settings_category_composer">Message editor</string>
 
+    <string name="room_settings_enable_encryption">Enable end-to-end encryption</string>
+    <string name="room_settings_enable_encryption_warning">Once enabled, encryption cannot be disabled.</string>
+
+    <string name="room_settings_enable_encryption_dialog_title">Enable encryption?</string>
+    <string name="room_settings_enable_encryption_dialog_content">Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly.</string>
+    <string name="room_settings_enable_encryption_dialog_submit">Enable encryption</string>
 
 
     <string name="verification_request_notice">For extra security, verify %s by checking a one-time code.</string>

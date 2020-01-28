@@ -32,6 +32,7 @@ import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.canReact
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
@@ -86,7 +87,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                                                           private val noticeEventFormatter: NoticeEventFormatter,
                                                           private val stringProvider: StringProvider,
                                                           private val vectorPreferences: VectorPreferences
-) : VectorViewModel<MessageActionState, MessageActionsAction>(initialState) {
+) : VectorViewModel<MessageActionState, MessageActionsAction, EmptyViewEvents>(initialState) {
 
     private val eventId = initialState.eventId
     private val informationData = initialState.informationData

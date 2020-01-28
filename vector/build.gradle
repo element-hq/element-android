@@ -27,7 +27,7 @@ static def generateVersionCodeFromTimestamp() {
     // It's unix timestamp, minus timestamp of October 3rd 2018 (first commit date) divided by 100: It's incremented by one every 100 seconds.
     // plus 20_000_000 for compatibility reason with the previous way the Version Code was computed
     // Note that the result will be multiplied by 10 when adding the digit for the arch
-    return ((getGitTimestamp() - 1_538_524_800 ) / 100).toInteger() + 20_000_000
+    return ((getGitTimestamp() - 1_538_524_800) / 100).toInteger() + 20_000_000
 }
 
 def generateVersionCodeFromVersionName() {
@@ -45,7 +45,7 @@ def getVersionCode() {
 }
 
 static def gitRevision() {
-    def cmd = "git rev-parse --short HEAD"
+    def cmd = "git rev-parse --short=8 HEAD"
     return cmd.execute().text.trim()
 }
 
@@ -66,11 +66,26 @@ static def gitBranchName() {
     }
 }
 
-static def getVersionSuffix() {
+// For Google Play build, build on any other branch than master will have a "-dev" suffix
+static def getGplayVersionSuffix() {
     if (gitBranchName() == "master") {
         return ""
     } else {
         return "-dev"
+    }
+}
+
+static def gitTag() {
+    def cmd = "git describe --exact-match --tags"
+    return cmd.execute().text.trim()
+}
+
+// For F-Droid build, build on a not tagged commit will have a "-dev" suffix
+static def getFdroidVersionSuffix() {
+    if (gitTag() == "") {
+        return "-dev"
+    } else {
+        return ""
     }
 }
 
@@ -101,8 +116,6 @@ android {
         // `develop` branch will have version code from timestamp, to ensure each build from CI has a incremented versionCode.
         // Other branches (master, features, etc.) will have version code based on application version.
         versionCode project.getVersionCode()
-
-        versionName "${versionMajor}.${versionMinor}.${versionPatch}${getVersionSuffix()}"
 
         buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
         resValue "string", "git_revision", "\"${gitRevision()}\""
@@ -190,6 +203,8 @@ android {
         gplay {
             dimension "store"
 
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}"
+
             resValue "bool", "isGplay", "true"
             buildConfigField "boolean", "ALLOW_FCM_USE", "true"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
@@ -198,6 +213,8 @@ android {
 
         fdroid {
             dimension "store"
+
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getFdroidVersionSuffix()}"
 
             resValue "bool", "isGplay", "false"
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"

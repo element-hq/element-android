@@ -144,7 +144,7 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
         return RoomSummaryEntity.where(realm)
                 .isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME)
                 .notEqualTo(RoomSummaryEntityFields.VERSIONING_STATE_STR, VersioningState.UPGRADED_ROOM_JOINED.name)
-                .greaterThan(RoomSummaryEntityFields.BREADCRUMBS_INDEX, RoomSummaryEntity.NOT_IN_BREADCRUMBS)
+                .greaterThan(RoomSummaryEntityFields.BREADCRUMBS_INDEX, RoomSummary.NOT_IN_BREADCRUMBS)
                 .sort(RoomSummaryEntityFields.BREADCRUMBS_INDEX)
     }
 

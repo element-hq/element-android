@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,19 +12,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
-package im.vector.riotx.features.home.room.list
+package im.vector.riotx.features.roomprofile.settings
 
-import im.vector.riotx.core.platform.VectorViewEvents
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.Uninitialized
+import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.riotx.features.roomprofile.RoomProfileArgs
 
-/**
- * Transient events for RoomList
- */
-sealed class RoomListViewEvents : VectorViewEvents {
-    data class Loading(val message: CharSequence? = null) : RoomListViewEvents()
-    data class Failure(val throwable: Throwable) : RoomListViewEvents()
+data class RoomSettingsViewState(
+        val roomId: String,
+        val roomSummary: Async<RoomSummary> = Uninitialized,
+        val isLoading: Boolean = false
+) : MvRxState {
 
-    data class SelectRoom(val roomId: String) : RoomListViewEvents()
+    constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 }

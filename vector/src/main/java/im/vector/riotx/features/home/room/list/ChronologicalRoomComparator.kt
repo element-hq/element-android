@@ -22,26 +22,20 @@ import javax.inject.Inject
 class ChronologicalRoomComparator @Inject constructor() : Comparator<RoomSummary> {
 
     override fun compare(leftRoomSummary: RoomSummary?, rightRoomSummary: RoomSummary?): Int {
-        var rightTimestamp = 0L
-        var leftTimestamp = 0L
-        if (null != leftRoomSummary) {
-            leftTimestamp = leftRoomSummary.latestPreviewableEvent?.root?.originServerTs ?: 0
-        }
-        if (null != rightRoomSummary) {
-            rightTimestamp = rightRoomSummary.latestPreviewableEvent?.root?.originServerTs ?: 0
-        }
-        return if (rightRoomSummary?.latestPreviewableEvent?.root == null) {
-            -1
-        } else if (leftRoomSummary?.latestPreviewableEvent?.root == null) {
-            1
-        } else {
-            val deltaTimestamp = rightTimestamp - leftTimestamp
-            if (deltaTimestamp > 0) {
-                1
-            } else if (deltaTimestamp < 0) {
-                -1
-            } else {
-                0
+        return when {
+            rightRoomSummary?.latestPreviewableEvent?.root == null -> -1
+            leftRoomSummary?.latestPreviewableEvent?.root == null  -> 1
+            else                                                   -> {
+                val rightTimestamp = rightRoomSummary.latestPreviewableEvent?.root?.originServerTs ?: 0
+                val leftTimestamp = leftRoomSummary.latestPreviewableEvent?.root?.originServerTs ?: 0
+
+                val deltaTimestamp = rightTimestamp - leftTimestamp
+
+                when {
+                    deltaTimestamp > 0 -> 1
+                    deltaTimestamp < 0 -> -1
+                    else               -> 0
+                }
             }
         }
     }
