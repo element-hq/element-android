@@ -26,10 +26,12 @@ import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
+import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.extensions.assertIsManaged
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
+import io.realm.Sort
 import io.realm.kotlin.createObject
 
 internal fun ChunkEntity.deleteOnCascade() {
@@ -38,14 +40,38 @@ internal fun ChunkEntity.deleteOnCascade() {
     this.deleteFromRealm()
 }
 
+internal fun ChunkEntity.merge(chunkToMerge: ChunkEntity, direction: PaginationDirection) {
+    assertIsManaged()
+    val eventsToMerge: List<TimelineEventEntity>
+    if (direction == PaginationDirection.FORWARDS) {
+        this.nextToken = chunkToMerge.nextToken
+        this.isLastForward = chunkToMerge.isLastForward
+        eventsToMerge = chunkToMerge.timelineEvents.sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
+    } else {
+        this.prevToken = chunkToMerge.prevToken
+        this.isLastBackward = chunkToMerge.isLastBackward
+        eventsToMerge = chunkToMerge.timelineEvents.sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
+    }
+    return eventsToMerge
+            .forEach {
+                if (timelineEvents.find(it.eventId) == null) {
+                    it.displayIndex = nextDisplayIndex(direction)
+                    this.timelineEvents.add(it)
+                }
+            }
+}
+
 internal fun ChunkEntity.addTimelineEvent(roomId: String,
                                           eventEntity: EventEntity,
                                           direction: PaginationDirection,
-                                          roomMemberEvent: Event?): TimelineEventEntity {
+                                          roomMemberEvent: Event?) {
 
+    val eventId = eventEntity.eventId
+    if (timelineEvents.find(eventId) != null) {
+        return
+    }
     val displayIndex = nextDisplayIndex(direction)
     val localId = TimelineEventEntity.nextId(realm)
-    val eventId = eventEntity.eventId
     val senderId = eventEntity.sender ?: ""
 
     val readReceiptsSummaryEntity = ReadReceiptsSummaryEntity.where(realm, eventId).findFirst()
@@ -69,24 +95,23 @@ internal fun ChunkEntity.addTimelineEvent(roomId: String,
         }
     }
 
-    val timelineEventEntity = TimelineEventEntity().also {
-        it.localId = localId
-        it.root = eventEntity
-        it.eventId = eventId
-        it.roomId = roomId
-        it.annotations = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
-        it.readReceipts = readReceiptsSummaryEntity
-        it.displayIndex = displayIndex
-    }
-    if (roomMemberEvent != null) {
-        val roomMemberContent = roomMemberEvent.content.toModel<RoomMemberContent>()
-        timelineEventEntity.senderAvatar = roomMemberContent?.avatarUrl
-        timelineEventEntity.senderName = roomMemberContent?.displayName
-        timelineEventEntity.isUniqueDisplayName = false
-        timelineEventEntity.senderMembershipEventId = roomMemberEvent.eventId
+    val timelineEventEntity = realm.createObject<TimelineEventEntity>().apply {
+        this.localId = localId
+        this.root = eventEntity
+        this.eventId = eventId
+        this.roomId = roomId
+        this.annotations = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
+        this.readReceipts = readReceiptsSummaryEntity
+        this.displayIndex = displayIndex
+        if (roomMemberEvent != null) {
+            val roomMemberContent = roomMemberEvent.content.toModel<RoomMemberContent>()
+            this.senderAvatar = roomMemberContent?.avatarUrl
+            this.senderName = roomMemberContent?.displayName
+            this.isUniqueDisplayName = false
+            this.senderMembershipEventId = roomMemberEvent.eventId
+        }
     }
     timelineEvents.add(timelineEventEntity)
-    return timelineEventEntity
 }
 
 internal fun ChunkEntity.nextDisplayIndex(direction: PaginationDirection): Int {

@@ -27,8 +27,7 @@ internal interface GetContextOfEventTask : Task<GetContextOfEventTask.Params, To
 
     data class Params(
             val roomId: String,
-            val eventId: String,
-            val limit: Int
+            val eventId: String
     )
 }
 
@@ -39,10 +38,12 @@ internal class DefaultGetContextOfEventTask @Inject constructor(
         private val eventBus: EventBus
 ) : GetContextOfEventTask {
 
+
     override suspend fun execute(params: GetContextOfEventTask.Params): TokenChunkEventPersistor.Result {
         val filter = filterRepository.getRoomFilter()
         val response = executeRequest<EventContextResponse>(eventBus) {
-            apiCall = roomAPI.getContextOfEvent(params.roomId, params.eventId, params.limit, filter)
+            // We are limiting the response to the event with eventId to be sure we don't have any issue with potential merging process.
+            apiCall = roomAPI.getContextOfEvent(params.roomId, params.eventId, 1, filter)
         }
         return tokenChunkEventPersistor.insertInDb(response, params.roomId, PaginationDirection.BACKWARDS)
     }

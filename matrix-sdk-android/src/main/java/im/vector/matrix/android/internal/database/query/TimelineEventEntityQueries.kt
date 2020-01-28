@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.database.query
 
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.database.model.*
-import im.vector.matrix.android.internal.database.model.EventEntity.LinkFilterMode.*
 import io.realm.*
 import io.realm.kotlin.where
 

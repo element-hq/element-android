@@ -26,9 +26,7 @@ internal open class ChunkEntity(@Index var prevToken: String? = null,
                                 @Index var nextToken: String? = null,
                                 var timelineEvents: RealmList<TimelineEventEntity> = RealmList(),
                                 @Index var isLastForward: Boolean = false,
-                                @Index var isLastBackward: Boolean = false,
-                                var backwardsDisplayIndex: Int? = null,
-                                var forwardsDisplayIndex: Int? = null
+                                @Index var isLastBackward: Boolean = false
 ) : RealmObject() {
 
     fun identifier() = "${prevToken}_$nextToken"

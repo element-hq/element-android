@@ -48,21 +48,23 @@ internal class RoomSummaryUpdater @Inject constructor(
         private val monarchy: Monarchy) {
 
     // TODO: maybe allow user of SDK to give that list
-    private val PREVIEWABLE_TYPES = listOf(
-            EventType.MESSAGE,
-            EventType.STATE_ROOM_NAME,
-            EventType.STATE_ROOM_TOPIC,
-            EventType.STATE_ROOM_MEMBER,
-            EventType.STATE_ROOM_HISTORY_VISIBILITY,
-            EventType.CALL_INVITE,
-            EventType.CALL_HANGUP,
-            EventType.CALL_ANSWER,
-            EventType.ENCRYPTED,
-            EventType.STATE_ROOM_ENCRYPTION,
-            EventType.STATE_ROOM_THIRD_PARTY_INVITE,
-            EventType.STICKER,
-            EventType.STATE_ROOM_CREATE
-    )
+    companion object {
+        val PREVIEWABLE_TYPES = listOf(
+                EventType.MESSAGE,
+                EventType.STATE_ROOM_NAME,
+                EventType.STATE_ROOM_TOPIC,
+                EventType.STATE_ROOM_MEMBER,
+                EventType.STATE_ROOM_HISTORY_VISIBILITY,
+                EventType.CALL_INVITE,
+                EventType.CALL_HANGUP,
+                EventType.CALL_ANSWER,
+                EventType.ENCRYPTED,
+                EventType.STATE_ROOM_ENCRYPTION,
+                EventType.STATE_ROOM_THIRD_PARTY_INVITE,
+                EventType.STICKER,
+                EventType.STATE_ROOM_CREATE
+        )
+    }
 
     fun update(realm: Realm,
                roomId: String,

@@ -17,12 +17,10 @@
 package im.vector.matrix.android.internal.database.query
 
 import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.EventEntity.LinkFilterMode.*
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmQuery
-import io.realm.Sort
 import io.realm.kotlin.where
 
 internal fun EventEntity.Companion.where(realm: Realm, eventId: String): RealmQuery<EventEntity> {

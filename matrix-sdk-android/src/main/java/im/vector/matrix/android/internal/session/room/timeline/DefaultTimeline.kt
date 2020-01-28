@@ -71,7 +71,6 @@ internal class DefaultTimeline(
         private val realmConfiguration: RealmConfiguration,
         private val taskExecutor: TaskExecutor,
         private val contextOfEventTask: GetContextOfEventTask,
-        private val clearUnlinkedEventsTask: ClearUnlinkedEventsTask,
         private val paginationTask: PaginationTask,
         private val cryptoService: CryptoService,
         private val timelineEventMapper: TimelineEventMapper,
@@ -225,9 +224,6 @@ internal class DefaultTimeline(
                 }
                 eventDecryptor.destroy()
             }
-            clearUnlinkedEventsTask
-                    .configureWith(ClearUnlinkedEventsTask.Params(roomId))
-                    .executeBy(taskExecutor)
         }
     }
 
@@ -653,7 +649,7 @@ internal class DefaultTimeline(
     }
 
     private fun fetchEvent(eventId: String) {
-        val params = GetContextOfEventTask.Params(roomId, eventId, settings.initialSize)
+        val params = GetContextOfEventTask.Params(roomId, eventId)
         cancelableBag += contextOfEventTask.configureWith(params) {
             callback = object : MatrixCallback<TokenChunkEventPersistor.Result> {
                 override fun onFailure(failure: Throwable) {

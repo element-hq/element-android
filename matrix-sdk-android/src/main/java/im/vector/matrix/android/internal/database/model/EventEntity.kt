@@ -41,12 +41,6 @@ internal open class EventEntity(@PrimaryKey var eventId: String = "",
                                 var decryptionErrorCode: String? = null
 ) : RealmObject() {
 
-    enum class LinkFilterMode {
-        LINKED_ONLY,
-        UNLINKED_ONLY,
-        BOTH
-    }
-
     private var sendStateStr: String = SendState.UNKNOWN.name
 
     var sendState: SendState
@@ -59,9 +53,6 @@ internal open class EventEntity(@PrimaryKey var eventId: String = "",
 
     companion object
 
-    @LinkingObjects("root")
-    val timelineEventEntity: RealmResults<TimelineEventEntity>? = null
-
     fun setDecryptionResult(result: MXEventDecryptionResult) {
         val decryptionResult = OlmDecryptionResult(
                 payload = result.clearEvent,
@@ -72,6 +63,5 @@ internal open class EventEntity(@PrimaryKey var eventId: String = "",
         val adapter = MoshiProvider.providesMoshi().adapter<OlmDecryptionResult>(OlmDecryptionResult::class.java)
         decryptionResultJson = adapter.toJson(decryptionResult)
         decryptionErrorCode = null
-        timelineEventEntity?.firstOrNull()?.root = this
     }
 }
