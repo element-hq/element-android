@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="notice_end_to_end_ok">%1$s turned on end-to-end encryption.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s turned on end-to-end encryption (unrecognised algorithm %2$s).</string>
+
 </resources>
