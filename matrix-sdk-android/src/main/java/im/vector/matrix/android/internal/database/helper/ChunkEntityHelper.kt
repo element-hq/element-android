@@ -16,12 +16,14 @@
 
 package im.vector.matrix.android.internal.database.helper
 
-import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomMemberContent
+import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.CurrentStateEventEntityFields
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
@@ -33,6 +35,7 @@ import im.vector.matrix.android.internal.extensions.assertIsManaged
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import io.realm.Sort
 import io.realm.kotlin.createObject
+import timber.log.Timber
 
 internal fun ChunkEntity.deleteOnCascade() {
     assertIsManaged()
@@ -40,7 +43,7 @@ internal fun ChunkEntity.deleteOnCascade() {
     this.deleteFromRealm()
 }
 
-internal fun ChunkEntity.merge(chunkToMerge: ChunkEntity, direction: PaginationDirection) {
+internal fun ChunkEntity.merge(roomId: String, chunkToMerge: ChunkEntity, direction: PaginationDirection) {
     assertIsManaged()
     val eventsToMerge: List<TimelineEventEntity>
     if (direction == PaginationDirection.FORWARDS) {
@@ -52,6 +55,9 @@ internal fun ChunkEntity.merge(chunkToMerge: ChunkEntity, direction: PaginationD
         this.isLastBackward = chunkToMerge.isLastBackward
         eventsToMerge = chunkToMerge.timelineEvents.sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
     }
+    chunkToMerge.stateEvents.forEach { stateEvent ->
+        addStateEvent(roomId, stateEvent, direction)
+    }
     return eventsToMerge
             .forEach {
                 if (timelineEvents.find(it.eventId) == null) {
@@ -61,10 +67,29 @@ internal fun ChunkEntity.merge(chunkToMerge: ChunkEntity, direction: PaginationD
             }
 }
 
+internal fun ChunkEntity.addStateEvent(roomId: String, stateEvent: EventEntity, direction: PaginationDirection) {
+    if (direction == PaginationDirection.FORWARDS) {
+        Timber.v("We don't keep chunk state events when paginating forward")
+    } else {
+        val stateKey = stateEvent.stateKey ?: return
+        val type = stateEvent.type
+        val pastStateEvent = stateEvents.where()
+                .equalTo(EventEntityFields.ROOM_ID, roomId)
+                .equalTo(EventEntityFields.STATE_KEY, stateKey)
+                .equalTo(CurrentStateEventEntityFields.TYPE, type)
+                .findFirst()
+
+        if (pastStateEvent != null) {
+            stateEvents.remove(pastStateEvent)
+        }
+        stateEvents.add(stateEvent)
+    }
+}
+
 internal fun ChunkEntity.addTimelineEvent(roomId: String,
                                           eventEntity: EventEntity,
                                           direction: PaginationDirection,
-                                          roomMemberEvent: Event?) {
+                                          roomMemberEvent: EventEntity?) {
 
     val eventId = eventEntity.eventId
     if (timelineEvents.find(eventId) != null) {
@@ -104,10 +129,9 @@ internal fun ChunkEntity.addTimelineEvent(roomId: String,
         this.readReceipts = readReceiptsSummaryEntity
         this.displayIndex = displayIndex
         if (roomMemberEvent != null) {
-            val roomMemberContent = roomMemberEvent.content.toModel<RoomMemberContent>()
+            val roomMemberContent = ContentMapper.map(roomMemberEvent.content).toModel<RoomMemberContent>()
             this.senderAvatar = roomMemberContent?.avatarUrl
             this.senderName = roomMemberContent?.displayName
-            this.isUniqueDisplayName = false
             this.senderMembershipEventId = roomMemberEvent.eventId
         }
     }

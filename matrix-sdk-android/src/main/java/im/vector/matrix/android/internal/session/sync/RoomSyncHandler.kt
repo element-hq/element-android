@@ -29,6 +29,7 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
+import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
@@ -210,7 +211,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         chunkEntity.isLastForward = true
 
         val eventIds = ArrayList<String>(eventList.size)
-        val roomMemberEventsByUser = HashMap<String, Event?>()
+        val roomMemberEventsByUser = HashMap<String, EventEntity?>()
 
         for (event in eventList) {
             if (event.eventId == null || event.senderId == null) {
@@ -226,12 +227,12 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     root = eventEntity
                 }
                 if (event.type == EventType.STATE_ROOM_MEMBER) {
-                    roomMemberEventsByUser[event.stateKey] = event
+                    roomMemberEventsByUser[event.stateKey] = eventEntity
                     roomMemberEventHandler.handle(realm, roomEntity.roomId, event)
                 }
             }
             val roomMemberEvent = roomMemberEventsByUser.getOrPut(event.senderId) {
-                CurrentStateEventEntity.getOrNull(realm, roomId, event.senderId, EventType.STATE_ROOM_MEMBER)?.root?.asDomain()
+                CurrentStateEventEntity.getOrNull(realm, roomId, event.senderId, EventType.STATE_ROOM_MEMBER)?.root
             }
             chunkEntity.addTimelineEvent(roomId, eventEntity, PaginationDirection.FORWARDS, roomMemberEvent)
             // Give info to crypto module
