@@ -100,7 +100,7 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
     }
 
     fun manuallyVerify(device: CryptoDeviceInfo) {
-        session.getSasVerificationService().beginKeyVerification(VerificationMethod.SAS, deviceID = device.deviceId, userId = userId)?.let { txID ->
+        session.getVerificationService().beginKeyVerification(VerificationMethod.SAS, userId, device.deviceId)?.let { txID ->
             _requestLiveData.postValue(LiveEvent(Success(VerificationAction.StartSASVerification(userId, txID))))
         }
     }

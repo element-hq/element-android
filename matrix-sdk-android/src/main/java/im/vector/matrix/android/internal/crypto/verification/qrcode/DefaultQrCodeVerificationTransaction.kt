@@ -208,7 +208,7 @@ internal class DefaultQrCodeVerificationTransaction(
         if (otherUserId != userId && canTrustOtherUserMasterKey) {
             // we should trust this master key
             // And check verification MSK -> SSK?
-            crossSigningService.trustUser(otherUserId, object : MatrixCallback<SignatureUploadResponse> {
+            crossSigningService.trustUser(otherUserId, object : MatrixCallback<Unit> {
                 override fun onFailure(failure: Throwable) {
                     Timber.e(failure, "## QR Verification: Failed to trust User $otherUserId")
                 }
@@ -218,7 +218,7 @@ internal class DefaultQrCodeVerificationTransaction(
         if (otherUserId == userId) {
             // If me it's reasonable to sign and upload the device signature
             // Notice that i might not have the private keys, so may not be able to do it
-            crossSigningService.signDevice(otherDeviceId!!, object : MatrixCallback<SignatureUploadResponse> {
+            crossSigningService.signDevice(otherDeviceId!!, object : MatrixCallback<Unit> {
                 override fun onFailure(failure: Throwable) {
                     Timber.w(failure, "## QR Verification: Failed to sign new device $otherDeviceId")
                 }
