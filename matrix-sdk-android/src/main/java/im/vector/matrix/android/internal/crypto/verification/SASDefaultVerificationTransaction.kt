@@ -313,7 +313,7 @@ internal abstract class SASDefaultVerificationTransaction(
 
         if (otherUserId == userId) {
             // If me it's reasonable to sign and upload the device signature
-            // Notice that i might not have the private keys, so may ot be able to do it
+            // Notice that i might not have the private keys, so may not be able to do it
             crossSigningService.signDevice(otherDeviceId!!, object : MatrixCallback<Unit> {
                 override fun onFailure(failure: Throwable) {
                     Timber.w(failure, "## SAS Verification: Failed to sign new device $otherDeviceId")

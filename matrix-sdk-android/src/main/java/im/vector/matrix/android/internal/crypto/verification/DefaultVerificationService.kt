@@ -64,7 +64,6 @@ import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.verification.qrcode.DefaultQrCodeVerificationTransaction
 import im.vector.matrix.android.internal.crypto.verification.qrcode.QrCodeData
 import im.vector.matrix.android.internal.crypto.verification.qrcode.generateSharedSecret
-import im.vector.matrix.android.internal.crypto.verification.qrcode.toUrl
 import im.vector.matrix.android.internal.di.DeviceId
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.SessionScope
@@ -677,16 +676,16 @@ internal class DefaultVerificationService @Inject constructor(
                     createQrCodeData(existingRequest.transactionId, existingRequest.otherUserId)
                 }
 
-        if (qrCodeData != null) {
+        if (readyReq.methods?.orEmpty().orEmpty().contains(VERIFICATION_METHOD_RECIPROCATE)) {
             // Create the pending transaction
             val tx = DefaultQrCodeVerificationTransaction(
+                    setDeviceVerificationAction,
                     readyReq.transactionID!!,
                     senderId,
                     readyReq.fromDevice,
                     crossSigningService,
                     cryptoStore,
-                    qrCodeData.sharedSecret,
-                    qrCodeData.toUrl(),
+                    qrCodeData,
                     userId,
                     deviceId ?: "",
                     false)
@@ -1003,7 +1002,7 @@ internal class DefaultVerificationService @Inject constructor(
         }
 
         if (VERIFICATION_METHOD_QR_CODE_SCAN in otherUserMethods || VERIFICATION_METHOD_QR_CODE_SHOW in otherUserMethods) {
-            // Other user want to verify using QR code. Cross-signing has to be setup
+            // Other user wants to verify using QR code. Cross-signing has to be setup
             val qrCodeData = createQrCodeData(transactionId, otherUserId)
 
             if (qrCodeData != null) {
@@ -1011,29 +1010,31 @@ internal class DefaultVerificationService @Inject constructor(
                     // Other can Scan and I can show QR code
                     result.add(VERIFICATION_METHOD_QR_CODE_SHOW)
                     result.add(VERIFICATION_METHOD_RECIPROCATE)
-
-                    // Create the pending transaction
-                    val tx = DefaultQrCodeVerificationTransaction(
-                            transactionId,
-                            otherUserId,
-                            otherDeviceId,
-                            crossSigningService,
-                            cryptoStore,
-                            qrCodeData.sharedSecret,
-                            qrCodeData.toUrl(),
-                            userId,
-                            deviceId ?: "",
-                            false)
-
-                    tx.transport = verificationTransportRoomMessageFactory.createTransport(roomId, tx)
-
-                    addTransaction(tx)
                 }
                 if (VERIFICATION_METHOD_QR_CODE_SHOW in otherUserMethods && VerificationMethod.QR_CODE_SCAN in methods) {
                     // Other can show and I can scan QR code
                     result.add(VERIFICATION_METHOD_QR_CODE_SCAN)
                     result.add(VERIFICATION_METHOD_RECIPROCATE)
                 }
+            }
+
+            if (VERIFICATION_METHOD_RECIPROCATE in result) {
+                // Create the pending transaction
+                val tx = DefaultQrCodeVerificationTransaction(
+                        setDeviceVerificationAction,
+                        transactionId,
+                        otherUserId,
+                        otherDeviceId,
+                        crossSigningService,
+                        cryptoStore,
+                        qrCodeData,
+                        userId,
+                        deviceId ?: "",
+                        false)
+
+                tx.transport = verificationTransportRoomMessageFactory.createTransport(roomId, tx)
+
+                addTransaction(tx)
             }
         }
 

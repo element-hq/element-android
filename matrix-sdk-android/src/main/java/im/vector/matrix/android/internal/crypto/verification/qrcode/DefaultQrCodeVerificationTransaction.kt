@@ -22,6 +22,8 @@ import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.QrCodeVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
+import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.rest.SignatureUploadResponse
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.verification.DefaultVerificationTransaction
@@ -31,19 +33,23 @@ import timber.log.Timber
 import kotlin.properties.Delegates
 
 internal class DefaultQrCodeVerificationTransaction(
+        private val setDeviceVerificationAction: SetDeviceVerificationAction,
         override val transactionId: String,
         override val otherUserId: String,
         override var otherDeviceId: String?,
         private val crossSigningService: CrossSigningService,
         private val cryptoStore: IMXCryptoStore,
-        private val myGeneratedSecret: String,
-        override val qrCodeText: String,
+        // Not null only if other user is able to scan QR code
+        private val qrCodeData: QrCodeData?,
         val userId: String,
         val deviceId: String,
         override val isIncoming: Boolean
 ) : DefaultVerificationTransaction(transactionId, otherUserId, otherDeviceId, isIncoming), QrCodeVerificationTransaction {
 
     override var cancelledReason: CancelCode? = null
+
+    override val qrCodeText: String?
+        get() = qrCodeData?.toUrl()
 
     override var state by Delegates.observable(VerificationTxState.None) { _, _, _ ->
         listeners.forEach {
@@ -55,47 +61,56 @@ internal class DefaultQrCodeVerificationTransaction(
         }
     }
 
-    override fun userHasScannedRemoteQrCode(otherQrCodeText: String): CancelCode? {
-        val qrCodeData = otherQrCodeText.toQrCodeData() ?: return CancelCode.QrCodeInvalid
+    override fun userHasScannedOtherQrCode(otherQrCodeText: String) {
+        val otherQrCodeData = otherQrCodeText.toQrCodeData() ?: run {
+            cancel(CancelCode.QrCodeInvalid)
+            return
+        }
 
         // Perform some checks
-        if (qrCodeData.action != QrCodeData.ACTION_VERIFY) {
-            return CancelCode.QrCodeInvalid
+        if (otherQrCodeData.action != QrCodeData.ACTION_VERIFY) {
+            cancel(CancelCode.QrCodeInvalid)
+            return
         }
 
-        if (qrCodeData.userId != otherUserId) {
-            return CancelCode.UserMismatchError
+        if (otherQrCodeData.userId != otherUserId) {
+            cancel(CancelCode.UserMismatchError)
+            return
         }
 
-        if (qrCodeData.requestEventId != transactionId) {
-            return CancelCode.QrCodeInvalid
+        if (otherQrCodeData.requestEventId != transactionId) {
+            cancel(CancelCode.QrCodeInvalid)
+            return
         }
 
         // check master key
-        if (qrCodeData.otherUserKey != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
-            return CancelCode.MismatchedKeys
+        if (otherQrCodeData.otherUserKey != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
+            cancel(CancelCode.MismatchedKeys)
+            return
         }
 
+        val verifiedDeviceIds = mutableListOf<String>()
+
         val otherDevices = cryptoStore.getUserDevices(otherUserId)
-        qrCodeData.keys.keys.forEach { key ->
+        otherQrCodeData.keys.keys.forEach { key ->
             Timber.w("Checking key $key")
             val fingerprint = otherDevices?.get(key)?.fingerprint()
-            if (fingerprint != null && fingerprint != qrCodeData.keys[key]) {
-                return CancelCode.MismatchedKeys
+            if (fingerprint != null && fingerprint != otherQrCodeData.keys[key]) {
+                cancel(CancelCode.MismatchedKeys)
+                return
+            } else {
+                // Store the deviceId to verify after
+                verifiedDeviceIds.add(key)
             }
         }
 
         // All checks are correct
-
-        // Trust the other user
-        trust()
-        state = VerificationTxState.Verified
-
         // Send the shared secret so that sender can trust me
         // qrCodeData.sharedSecret will be used to send the start request
-        start(qrCodeData.sharedSecret)
+        start(otherQrCodeData.sharedSecret)
 
-        return null
+        // Trust the other user
+        trust(verifiedDeviceIds)
     }
 
     fun start(remoteSecret: String) {
@@ -135,28 +150,58 @@ internal class DefaultQrCodeVerificationTransaction(
 
     override fun isToDeviceTransport() = false
 
-    // Remote user has scanned our QR code. check that the secret matched, so we can trust him
+    // Other user has scanned our QR code. check that the secret matched, so we can trust him
     fun onStartReceived(startReq: VerificationInfoStart) {
-        if (startReq.sharedSecret == myGeneratedSecret) {
+        if (qrCodeData == null) {
+            // Should not happen
+            cancel(CancelCode.UnexpectedMessage)
+            return
+        }
+
+        if (startReq.sharedSecret == qrCodeData.sharedSecret) {
             // Ok, we can trust the other user
-            trust()
+            // We can only trust the master key in this case
+            trust(listOf(qrCodeData.otherUserKey))
         } else {
             // Display a warning
-            cancelledReason = CancelCode.QrCodeInvalid
-            state = VerificationTxState.OnCancelled
+            cancel(CancelCode.QrCodeInvalid)
         }
     }
 
-    private fun trust() {
-        crossSigningService.trustUser(otherUserId, object : MatrixCallback<SignatureUploadResponse> {
-            override fun onFailure(failure: Throwable) {
-                Timber.e(failure, "## QR Verification: Failed to trust User $otherUserId")
-            }
-        })
+    private fun trust(verifiedDeviceIds: List<String>) {
+        // If not me sign his MSK and upload the signature
+        if (otherUserId != userId) {
+            // we should trust this master key
+            // And check verification MSK -> SSK?
+            crossSigningService.trustUser(otherUserId, object : MatrixCallback<SignatureUploadResponse> {
+                override fun onFailure(failure: Throwable) {
+                    Timber.e(failure, "## QR Verification: Failed to trust User $otherUserId")
+                }
+            })
+        }
 
-        // TODO Sign devices
+        if (otherUserId == userId) {
+            // If me it's reasonable to sign and upload the device signature
+            // Notice that i might not have the private keys, so may not be able to do it
+            crossSigningService.signDevice(otherDeviceId!!, object : MatrixCallback<SignatureUploadResponse> {
+                override fun onFailure(failure: Throwable) {
+                    Timber.w(failure, "## QR Verification: Failed to sign new device $otherDeviceId")
+                }
+            })
+        }
 
+        // TODO what if the otherDevice is not in this list? and should we
+        verifiedDeviceIds.forEach {
+            setDeviceVerified(otherUserId, it)
+        }
+        transport.done(transactionId)
+        state = VerificationTxState.Verified
     }
 
-    // TODO Send the done event
+    private fun setDeviceVerified(userId: String, deviceId: String) {
+        // TODO should not override cross sign status
+        setDeviceVerificationAction.handle(DeviceTrustLevel(false, true),
+                userId,
+                deviceId)
+    }
 }

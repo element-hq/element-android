@@ -175,7 +175,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                 val existingTransaction = session.getVerificationService()
                         .getExistingTransaction(action.otherUserId, action.transactionId) as? QrCodeVerificationTransaction
                 existingTransaction
-                        ?.userHasScannedRemoteQrCode(action.scannedData)
+                        ?.userHasScannedOtherQrCode(action.scannedData)
                         ?.let { cancelCode ->
                             // Something went wrong
                             Timber.w("## Something is not right: $cancelCode")

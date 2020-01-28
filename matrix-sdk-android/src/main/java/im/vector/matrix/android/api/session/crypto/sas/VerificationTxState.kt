@@ -44,6 +44,8 @@ enum class VerificationTxState {
     Verified,
 
     // Global: The verification has been cancelled (by me or other), see cancelReason for details
+    // When I do the cancel
     Cancelled,
+    // When the other user do a cancel
     OnCancelled
 }

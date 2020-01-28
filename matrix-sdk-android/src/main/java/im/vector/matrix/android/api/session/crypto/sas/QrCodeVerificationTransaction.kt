@@ -26,5 +26,5 @@ interface QrCodeVerificationTransaction : VerificationTransaction {
     /**
      * Call when you have scan the other user QR code
      */
-    fun userHasScannedRemoteQrCode(otherQrCodeText: String): CancelCode?
+    fun userHasScannedOtherQrCode(otherQrCodeText: String)
 }
