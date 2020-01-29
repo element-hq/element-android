@@ -131,7 +131,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                             invitedUserIds = listOf(otherUserId)
                     )
                             .setDirectMessage()
-                            .also { it.enableEncryptionIfInvitedUsersSupportIt = true }
+                            .enableEncryptionIfInvitedUsersSupportIt()
 
                     session.createRoom(roomParams, object : MatrixCallback<String> {
                         override fun onSuccess(data: String) {

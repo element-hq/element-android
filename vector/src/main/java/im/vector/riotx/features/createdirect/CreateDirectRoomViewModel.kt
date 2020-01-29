@@ -96,7 +96,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                 invitedUserIds = currentState.selectedUsers.map { it.userId }
         )
                 .setDirectMessage()
-                .also { it.enableEncryptionIfInvitedUsersSupportIt = true }
+                .enableEncryptionIfInvitedUsersSupportIt()
 
         session.rx()
                 .createRoom(roomParams)

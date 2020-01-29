@@ -125,7 +125,13 @@ data class CreateRoomParams(
      * the encryption will be enabled on the created room
      */
     @Transient
-    var enableEncryptionIfInvitedUsersSupportIt: Boolean = false
+    internal var enableEncryptionIfInvitedUsersSupportIt: Boolean = false
+        private set
+
+    fun enableEncryptionIfInvitedUsersSupportIt(): CreateRoomParams {
+        enableEncryptionIfInvitedUsersSupportIt = true
+        return this
+    }
 
     /**
      * Add the crypto algorithm to the room creation parameters.
