@@ -42,6 +42,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -142,6 +143,7 @@ class SASTest : InstrumentedTest {
 
     @Test
     fun test_key_agreement_protocols_must_include_curve25519() {
+        fail("Not passing for the moment")
         val cryptoTestData = mCryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val bobSession = cryptoTestData.secondSession!!
@@ -206,6 +208,7 @@ class SASTest : InstrumentedTest {
 
     @Test
     fun test_key_agreement_macs_Must_include_hmac_sha256() {
+        fail("Not passing for the moment")
         val cryptoTestData = mCryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val bobSession = cryptoTestData.secondSession!!
@@ -243,6 +246,7 @@ class SASTest : InstrumentedTest {
 
     @Test
     fun test_key_agreement_short_code_include_decimal() {
+        fail("Not passing for the moment")
         val cryptoTestData = mCryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val bobSession = cryptoTestData.secondSession!!
