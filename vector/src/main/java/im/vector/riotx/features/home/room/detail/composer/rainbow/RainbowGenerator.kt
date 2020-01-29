@@ -28,10 +28,10 @@ import kotlin.math.roundToInt
 class RainbowGenerator @Inject constructor() {
 
     fun generate(text: String): String {
-        val frequency = 360f / text.length
+        val split = text.splitEmoji()
+        val frequency = 360f / split.size
 
-        return text
-                .splitEmoji()
+        return split
                 .mapIndexed { idx, letter ->
                     // Do better than React-Sdk: Avoid adding font color for spaces
                     if (letter == " ") {
