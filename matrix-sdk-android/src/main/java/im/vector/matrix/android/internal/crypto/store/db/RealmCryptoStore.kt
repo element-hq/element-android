@@ -313,6 +313,25 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
                                     signingInfo.setSelfSignedKey(keyEntity)
                                 }
 
+                                // Only for me
+                                if (userSigningKey != null) {
+                                    val existingUSK = signingInfo.getUserSigningKey()
+                                    if (existingUSK != null && existingUSK.publicKeyBase64 == userSigningKey.unpaddedBase64PublicKey) {
+                                        // update signatures?
+                                        existingUSK.putSignatures(userSigningKey.signatures)
+                                        existingUSK.usages = userSigningKey.usages?.toTypedArray()?.let { RealmList(*it) }
+                                                ?: RealmList()
+                                    } else {
+                                        val keyEntity = realm.createObject(KeyInfoEntity::class.java).apply {
+                                            this.publicKeyBase64 = userSigningKey.unpaddedBase64PublicKey
+                                            this.usages = userSigningKey.usages?.toTypedArray()?.let { RealmList(*it) }
+                                                    ?: RealmList()
+                                            this.putSignatures(userSigningKey.signatures)
+                                        }
+                                        signingInfo.setUserSignedKey(keyEntity)
+                                    }
+                                }
+
                                 userEntity.crossSigningInfoEntity = signingInfo
                             }
                         }

@@ -46,4 +46,14 @@ internal open class CrossSigningInfoEntity(
                 .forEach { crossSigningKeys.remove(it) }
         info?.let { crossSigningKeys.add(it) }
     }
+
+    fun getUserSigningKey() = crossSigningKeys.firstOrNull { it.usages.contains(KeyUsage.USER_SIGNING.value) }
+
+    fun setUserSignedKey(info: KeyInfoEntity?) {
+        crossSigningKeys
+                .filter { it.usages.contains(KeyUsage.USER_SIGNING.value) }
+                .forEach { crossSigningKeys.remove(it) }
+        info?.let { crossSigningKeys.add(it) }
+    }
+
 }
