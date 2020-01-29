@@ -19,4 +19,3 @@ package im.vector.matrix.android.api.extensions
 fun Boolean?.orTrue() = this ?: true
 
 fun Boolean?.orFalse() = this ?: false
-

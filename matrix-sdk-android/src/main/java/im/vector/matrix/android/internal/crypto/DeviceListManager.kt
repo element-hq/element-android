@@ -27,7 +27,6 @@ import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.DownloadKeysForUsersTask
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
-import okhttp3.internal.toImmutableList
 import timber.log.Timber
 import javax.inject.Inject
 
