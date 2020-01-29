@@ -235,7 +235,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         }
         cryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
 
-        dispatchDeviceChange(userIds.toImmutableList())
+        dispatchDeviceChange(userIds)
         return usersDevicesInfoMap
     }
 
@@ -294,7 +294,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
      *
      * @param downloadUsers the user ids list
      */
-    private suspend fun doKeyDownloadForUsers(downloadUsers: MutableList<String>): MXUsersDevicesMap<CryptoDeviceInfo> {
+    private suspend fun doKeyDownloadForUsers(downloadUsers: List<String>): MXUsersDevicesMap<CryptoDeviceInfo> {
         Timber.v("## doKeyDownloadForUsers() : doKeyDownloadForUsers $downloadUsers")
         // get the user ids which did not already trigger a keys download
         val filteredUsers = downloadUsers.filter { MatrixPatterns.isUserId(it) }
