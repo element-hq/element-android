@@ -7,6 +7,7 @@ Features ✨:
 
 Improvements 🙌:
  - Sharing things to RiotX: sort list by recent room first (#771)
+ - Hide the algorithm when turning on e2e (#897)
 
 Other changes:
  -
