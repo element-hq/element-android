@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Ref: https://developer.android.com/training/articles/security-config.html -->
+    <!-- By default, do not allow clearText traffic -->
+    <base-config cleartextTrafficPermitted="false" />
+
+    <!-- Allow clearText traffic on some specified host -->
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- Localhost -->
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
+        <!-- Localhost for Android emulator -->
+        <domain includeSubdomains="true">10.0.2.2</domain>
+    </domain-config>
+
+</network-security-config>

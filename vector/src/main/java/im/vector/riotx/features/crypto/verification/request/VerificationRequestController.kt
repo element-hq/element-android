@@ -19,11 +19,14 @@ package im.vector.riotx.features.crypto.verification.request
 import androidx.core.text.toSpannable
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.dividerItem
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.colorizeMatchingText
+import im.vector.riotx.features.crypto.verification.VerificationBottomSheetViewState
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationWaitingItem
@@ -36,17 +39,18 @@ class VerificationRequestController @Inject constructor(
 
     var listener: Listener? = null
 
-    private var viewState: VerificationRequestViewState? = null
+    private var viewState: VerificationBottomSheetViewState? = null
 
-    fun update(viewState: VerificationRequestViewState) {
+    fun update(viewState: VerificationBottomSheetViewState) {
         this.viewState = viewState
         requestModelBuild()
     }
 
     override fun buildModels() {
         val state = viewState ?: return
+        val matrixItem = viewState?.otherUserMxItem ?: return
 
-        val styledText = state.matrixItem.let {
+        val styledText = matrixItem.let {
             stringProvider.getString(R.string.verification_request_notice, it.id)
                     .toSpannable()
                     .colorizeMatchingText(it.id, colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color))
@@ -61,14 +65,8 @@ class VerificationRequestController @Inject constructor(
             id("sep")
         }
 
-        when (state.started) {
-            is Loading -> {
-                bottomSheetVerificationWaitingItem {
-                    id("waiting")
-                    title(stringProvider.getString(R.string.verification_request_waiting_for, state.matrixItem.getBestName()))
-                }
-            }
-            else       -> {
+        when (val pr = state.pendingRequest) {
+            is Uninitialized -> {
                 bottomSheetVerificationActionItem {
                     id("start")
                     title(stringProvider.getString(R.string.start_verification))
@@ -77,6 +75,20 @@ class VerificationRequestController @Inject constructor(
                     iconRes(R.drawable.ic_arrow_right)
                     iconColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
                     listener { listener?.onClickOnVerificationStart() }
+                }
+            }
+            is Loading -> {
+                bottomSheetVerificationWaitingItem {
+                    id("waiting")
+                    title(stringProvider.getString(R.string.verification_request_waiting_for, matrixItem.getBestName()))
+                }
+            }
+            is Success -> {
+                if (!pr.invoke().isReady) {
+                    bottomSheetVerificationWaitingItem {
+                        id("waiting")
+                        title(stringProvider.getString(R.string.verification_request_waiting_for, matrixItem.getBestName()))
+                    }
                 }
             }
         }

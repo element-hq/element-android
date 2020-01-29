@@ -23,7 +23,7 @@ import im.vector.matrix.android.api.util.JsonDict
 @JsonClass(generateAdapter = true)
 data class KeysUploadBody(
         @Json(name = "device_keys")
-        var deviceKeys: DeviceKeys? = null,
+        var deviceKeys: RestDeviceInfo? = null,
 
         @Json(name = "one_time_keys")
         var oneTimeKeys: JsonDict? = null

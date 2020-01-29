@@ -15,6 +15,8 @@
  */
 package im.vector.riotx.features.crypto.verification.choose
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.airbnb.mvrx.fragmentViewModel
@@ -24,9 +26,15 @@ import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
+import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
+import im.vector.riotx.core.utils.allGranted
+import im.vector.riotx.core.utils.checkPermissions
 import im.vector.riotx.features.crypto.verification.VerificationAction
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheetViewModel
+import im.vector.riotx.features.qrcode.QrCodeScannerActivity
 import kotlinx.android.synthetic.main.bottom_sheet_verification_child_fragment.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class VerificationChooseMethodFragment @Inject constructor(
@@ -61,13 +69,54 @@ class VerificationChooseMethodFragment @Inject constructor(
         controller.update(state)
     }
 
-    override fun doVerifyBySas() = withState(sharedViewModel) {
+    override fun doVerifyBySas() = withState(sharedViewModel) { state ->
         sharedViewModel.handle(VerificationAction.StartSASVerification(
-                it.otherUserMxItem?.id ?: "",
-                it.pendingRequest?.transactionId ?: ""))
+                state.otherUserMxItem?.id ?: "",
+                state.pendingRequest.invoke()?.transactionId ?: ""))
     }
 
     override fun openCamera() {
-        // TODO
+        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
+            doOpenQRCodeScanner()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA && allGranted(grantResults)) {
+            doOpenQRCodeScanner()
+        }
+    }
+
+    private fun doOpenQRCodeScanner() {
+        QrCodeScannerActivity.startForResult(this)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                QrCodeScannerActivity.QR_CODE_SCANNER_REQUEST_CODE -> {
+                    val scannedQrCode = QrCodeScannerActivity.getResultText(data)
+                    val wasQrCode = QrCodeScannerActivity.getResultIsQrCode(data)
+
+                    if (wasQrCode && !scannedQrCode.isNullOrBlank()) {
+                        onRemoteQrCodeScanned(scannedQrCode)
+                    } else {
+                        Timber.w("It was not a QR code, or empty result")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun onRemoteQrCodeScanned(remoteQrCode: String) = withState(sharedViewModel) { state ->
+        sharedViewModel.handle(VerificationAction.RemoteQrCodeScanned(
+                state.otherUserMxItem?.id ?: "",
+                state.pendingRequest.invoke()?.transactionId ?: "",
+                remoteQrCode
+        ))
     }
 }

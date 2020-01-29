@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.crypto.actions
 
+import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.di.UserId
@@ -27,8 +28,8 @@ internal class SetDeviceVerificationAction @Inject constructor(
         @UserId private val userId: String,
         private val keysBackup: KeysBackup) {
 
-    fun handle(verificationStatus: Int, deviceId: String, userId: String) {
-        val device = cryptoStore.getUserDevice(deviceId, userId)
+    fun handle(trustLevel: DeviceTrustLevel, userId: String, deviceId: String) {
+        val device = cryptoStore.getUserDevice(userId, deviceId)
 
         // Sanity check
         if (null == device) {
@@ -36,16 +37,18 @@ internal class SetDeviceVerificationAction @Inject constructor(
             return
         }
 
-        if (device.verified != verificationStatus) {
-            device.verified = verificationStatus
-            cryptoStore.storeUserDevice(userId, device)
-
+        if (device.isVerified != trustLevel.isVerified()) {
             if (userId == this.userId) {
                 // If one of the user's own devices is being marked as verified / unverified,
                 // check the key backup status, since whether or not we use this depends on
                 // whether it has a signature from a verified device
                 keysBackup.checkAndStartKeysBackup()
             }
+        }
+
+        if (device.trustLevel != trustLevel) {
+            device.trustLevel = trustLevel
+            cryptoStore.storeUserDevice(userId, device)
         }
     }
 }

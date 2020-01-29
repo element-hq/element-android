@@ -107,7 +107,7 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
                 cryptoStore.deleteIncomingRoomKeyRequest(request)
             }
             // if the device is verified already, share the keys
-            val device = cryptoStore.getUserDevice(deviceId!!, userId)
+            val device = cryptoStore.getUserDevice(userId, deviceId!!)
             if (device != null) {
                 if (device.isVerified) {
                     Timber.v("## processReceivedRoomKeyRequests() : device is already verified: sharing keys")

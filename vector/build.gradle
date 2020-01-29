@@ -368,6 +368,10 @@ dependencies {
 
     implementation "androidx.emoji:emoji-appcompat:1.0.0"
 
+    // QR-code
+    implementation 'com.google.zxing:core:3.4.0'
+    implementation 'me.dm7.barcodescanner:zxing:1.9.13'
+
     // TESTS
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'

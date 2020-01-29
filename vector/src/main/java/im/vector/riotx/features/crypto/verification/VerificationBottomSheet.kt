@@ -31,7 +31,7 @@ import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.commitTransactionNow
@@ -40,7 +40,6 @@ import im.vector.riotx.features.crypto.verification.choose.VerificationChooseMet
 import im.vector.riotx.features.crypto.verification.conclusion.VerificationConclusionFragment
 import im.vector.riotx.features.crypto.verification.emoji.VerificationEmojiCodeFragment
 import im.vector.riotx.features.crypto.verification.request.VerificationRequestFragment
-import im.vector.riotx.features.crypto.verification.request.VerificationRequestViewModel
 import im.vector.riotx.features.home.AvatarRenderer
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.bottom_sheet_verification.*
@@ -57,8 +56,6 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
             val roomId: String? = null
     ) : Parcelable
 
-    @Inject
-    lateinit var verificationRequestViewModelFactory: VerificationRequestViewModel.Factory
     @Inject
     lateinit var verificationViewModelFactory: VerificationBottomSheetViewModel.Factory
     @Inject
@@ -101,7 +98,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         it.otherUserMxItem?.let { matrixItem ->
             avatarRenderer.render(matrixItem, otherUserAvatarImageView)
 
-            if(it.sasTransactionState == SasVerificationTxState.Verified) {
+            if (it.sasTransactionState == VerificationTxState.Verified || it.qrTransactionState == VerificationTxState.Verified) {
                 otherUserNameText.text = getString(R.string.verification_verified_user, matrixItem.getBestName())
                 otherUserShield.isVisible = true
             } else {
@@ -113,33 +110,35 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         // Did the request result in a SAS transaction?
         if (it.sasTransactionState != null) {
             when (it.sasTransactionState) {
-                SasVerificationTxState.None,
-                SasVerificationTxState.SendingStart,
-                SasVerificationTxState.Started,
-                SasVerificationTxState.OnStarted,
-                SasVerificationTxState.SendingAccept,
-                SasVerificationTxState.Accepted,
-                SasVerificationTxState.OnAccepted,
-                SasVerificationTxState.SendingKey,
-                SasVerificationTxState.KeySent,
-                SasVerificationTxState.OnKeyReceived,
-                SasVerificationTxState.ShortCodeReady,
-                SasVerificationTxState.ShortCodeAccepted,
-                SasVerificationTxState.SendingMac,
-                SasVerificationTxState.MacSent,
-                SasVerificationTxState.Verifying   -> {
+                VerificationTxState.None,
+                VerificationTxState.SendingStart,
+                VerificationTxState.Started,
+                VerificationTxState.OnStarted,
+                VerificationTxState.SendingAccept,
+                VerificationTxState.Accepted,
+                VerificationTxState.OnAccepted,
+                VerificationTxState.SendingKey,
+                VerificationTxState.KeySent,
+                VerificationTxState.OnKeyReceived,
+                VerificationTxState.ShortCodeReady,
+                VerificationTxState.ShortCodeAccepted,
+                VerificationTxState.SendingMac,
+                VerificationTxState.MacSent,
+                VerificationTxState.Verifying   -> {
                     showFragment(VerificationEmojiCodeFragment::class, Bundle().apply {
                         putParcelable(MvRx.KEY_ARG, VerificationArgs(
                                 it.otherUserMxItem?.id ?: "",
-                                it.pendingRequest?.transactionId))
+                                // If it was outgoing it.transaction id would be null, but the pending request
+                                // would be updated (from localID to txId)
+                                it.pendingRequest.invoke()?.transactionId ?: it.transactionId))
                     })
                 }
-                SasVerificationTxState.Verified,
-                SasVerificationTxState.Cancelled,
-                SasVerificationTxState.OnCancelled -> {
+                VerificationTxState.Verified,
+                VerificationTxState.Cancelled,
+                VerificationTxState.OnCancelled -> {
                     showFragment(VerificationConclusionFragment::class, Bundle().apply {
                         putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(
-                                it.sasTransactionState == SasVerificationTxState.Verified,
+                                it.sasTransactionState == VerificationTxState.Verified,
                                 it.cancelCode?.value))
                     })
                 }
@@ -148,39 +147,53 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
             return@withState
         }
 
-        // At this point there is no transaction for this request
+        when (it.qrTransactionState) {
+            VerificationTxState.Verified,
+            VerificationTxState.Cancelled,
+            VerificationTxState.OnCancelled -> {
+                showFragment(VerificationConclusionFragment::class, Bundle().apply {
+                    putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(
+                            it.qrTransactionState == VerificationTxState.Verified,
+                            it.cancelCode?.value))
+                })
+                return@withState
+            }
+            else                            -> Unit
+        }
+
+        // At this point there is no SAS transaction for this request
 
         // Transaction has not yet started
-        if (it.pendingRequest?.cancelConclusion != null) {
+        if (it.pendingRequest.invoke()?.cancelConclusion != null) {
             // The request has been declined, we should dismiss
             dismiss()
         }
 
         // If it's an outgoing
-        if (it.pendingRequest == null || !it.pendingRequest.isIncoming) {
+        if (it.pendingRequest.invoke() == null || it.pendingRequest.invoke()?.isIncoming == false) {
             Timber.v("## SAS show bottom sheet for outgoing request")
-            if (it.pendingRequest?.isReady == true) {
+            if (it.pendingRequest.invoke()?.isReady == true) {
                 Timber.v("## SAS show bottom sheet for outgoing and ready request")
                 // Show choose method fragment with waiting
                 showFragment(VerificationChooseMethodFragment::class, Bundle().apply {
                     putParcelable(MvRx.KEY_ARG, VerificationArgs(it.otherUserMxItem?.id
-                            ?: "", it.pendingRequest.transactionId))
+                            ?: "", it.pendingRequest.invoke()?.transactionId))
                 })
             } else {
                 // Stay on the start fragment
                 showFragment(VerificationRequestFragment::class, Bundle().apply {
                     putParcelable(MvRx.KEY_ARG, VerificationArgs(
                             it.otherUserMxItem?.id ?: "",
-                            it.pendingRequest?.transactionId,
+                            it.pendingRequest.invoke()?.transactionId,
                             it.roomId))
                 })
             }
-        } else if (it.pendingRequest.isIncoming) {
+        } else if (it.pendingRequest.invoke()?.isIncoming == true) {
             Timber.v("## SAS show bottom sheet for Incoming request")
             // For incoming we can switch to choose method because ready is being sent or already sent
             showFragment(VerificationChooseMethodFragment::class, Bundle().apply {
                 putParcelable(MvRx.KEY_ARG, VerificationArgs(it.otherUserMxItem?.id
-                        ?: "", it.pendingRequest.transactionId))
+                        ?: "", it.pendingRequest.invoke()?.transactionId))
             })
         }
         super.invalidate()
@@ -204,10 +217,10 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     }
 
     companion object {
-        fun withArgs(roomId: String, otherUserId: String, transactionId: String? = null): VerificationBottomSheet {
+        fun withArgs(roomId: String?, otherUserId: String, transactionId: String? = null): VerificationBottomSheet {
             return VerificationBottomSheet().apply {
                 arguments = Bundle().apply {
-                    putParcelable(MvRx.KEY_ARG, VerificationBottomSheet.VerificationArgs(
+                    putParcelable(MvRx.KEY_ARG, VerificationArgs(
                             otherUserId = otherUserId,
                             roomId = roomId,
                             verificationId = transactionId

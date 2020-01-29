@@ -24,11 +24,12 @@ import dagger.Component
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.preference.UserAvatarPreference
 import im.vector.riotx.features.MainActivity
+import im.vector.riotx.features.createdirect.CreateDirectRoomActivity
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
+import im.vector.riotx.features.debug.DebugMenuActivity
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.home.HomeModule
-import im.vector.riotx.features.createdirect.CreateDirectRoomActivity
 import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
@@ -43,6 +44,7 @@ import im.vector.riotx.features.media.ImageMediaViewerActivity
 import im.vector.riotx.features.media.VideoMediaViewerActivity
 import im.vector.riotx.features.navigation.Navigator
 import im.vector.riotx.features.permalink.PermalinkHandlerActivity
+import im.vector.riotx.features.qrcode.QrCodeScannerActivity
 import im.vector.riotx.features.rageshake.BugReportActivity
 import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.RageShake
@@ -50,7 +52,9 @@ import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.reactions.widget.ReactionButton
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
+import im.vector.riotx.features.roommemberprofile.devices.DeviceListBottomSheet
 import im.vector.riotx.features.settings.VectorSettingsActivity
+import im.vector.riotx.features.settings.devices.DeviceVerificationInfoBottomSheet
 import im.vector.riotx.features.share.IncomingShareActivity
 import im.vector.riotx.features.signout.soft.SoftLogoutActivity
 import im.vector.riotx.features.ui.UiStateRepository
@@ -138,6 +142,14 @@ interface ScreenComponent {
     fun inject(verificationBottomSheet: VerificationBottomSheet)
 
     fun inject(permalinkHandlerActivity: PermalinkHandlerActivity)
+
+    fun inject(activity: QrCodeScannerActivity)
+
+    fun inject(activity: DebugMenuActivity)
+
+    fun inject(deviceVerificationInfoBottomSheet: DeviceVerificationInfoBottomSheet)
+
+    fun inject(deviceListBottomSheet: DeviceListBottomSheet)
 
     @Component.Factory
     interface Factory {

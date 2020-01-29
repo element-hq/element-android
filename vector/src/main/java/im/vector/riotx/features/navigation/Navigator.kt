@@ -26,6 +26,8 @@ interface Navigator {
 
     fun openRoom(context: Context, roomId: String, eventId: String? = null, buildTask: Boolean = false)
 
+    fun performDeviceVerification(context: Context, otherUserId: String, sasTransationId: String)
+
     fun openRoomForSharing(activity: Activity, roomId: String, sharedData: SharedData)
 
     fun openNotJoinedRoom(context: Context, roomIdOrAlias: String?, eventId: String? = null, buildTask: Boolean = false)

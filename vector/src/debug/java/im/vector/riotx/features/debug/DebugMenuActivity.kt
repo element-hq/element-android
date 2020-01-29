@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.debug
 
+import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -25,12 +26,37 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import butterknife.OnClick
 import im.vector.riotx.R
+import im.vector.riotx.core.di.ActiveSessionHolder
+import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
+import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
+import im.vector.riotx.core.utils.allGranted
+import im.vector.riotx.core.utils.checkPermissions
+import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.debug.sas.DebugSasEmojiActivity
+import im.vector.riotx.features.qrcode.QrCodeScannerActivity
+import kotlinx.android.synthetic.debug.activity_debug_menu.*
+import javax.inject.Inject
 
 class DebugMenuActivity : VectorBaseActivity() {
 
     override fun getLayoutRes() = R.layout.activity_debug_menu
+
+    @Inject
+    lateinit var activeSessionHolder: ActiveSessionHolder
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
+
+    override fun initUiAndData() {
+        renderQrCode("https://www.example.org")
+    }
+
+    private fun renderQrCode(text: String) {
+        debug_qr_code.setData(text, true)
+    }
 
     @OnClick(R.id.debug_test_text_view_link)
     fun testTextViewLink() {
@@ -139,5 +165,38 @@ class DebugMenuActivity : VectorBaseActivity() {
     @OnClick(R.id.debug_test_crash)
     fun testCrash() {
         throw RuntimeException("Application crashed from user demand")
+    }
+
+    @OnClick(R.id.debug_scan_qr_code)
+    fun scanQRCode() {
+        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
+            doScanQRCode()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA && allGranted(grantResults)) {
+            doScanQRCode()
+        }
+    }
+
+    private fun doScanQRCode() {
+        QrCodeScannerActivity.startForResult(this)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                QrCodeScannerActivity.QR_CODE_SCANNER_REQUEST_CODE -> {
+                    toast("QrCode: " + QrCodeScannerActivity.getResultText(data) + " is QRCode: " + QrCodeScannerActivity.getResultIsQrCode(data))
+
+                    // Also update the current QR Code (reverse operation)
+                    renderQrCode(QrCodeScannerActivity.getResultText(data) ?: "")
+                }
+            }
+        }
     }
 }

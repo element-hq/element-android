@@ -17,7 +17,7 @@
 package im.vector.matrix.android.internal.crypto.actions
 
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXKey
 import im.vector.matrix.android.internal.crypto.model.MXOlmSessionResult
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
@@ -28,8 +28,8 @@ import javax.inject.Inject
 internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val olmDevice: MXOlmDevice,
                                                                      private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask) {
 
-    suspend fun handle(devicesByUser: Map<String, List<MXDeviceInfo>>): MXUsersDevicesMap<MXOlmSessionResult> {
-        val devicesWithoutSession = ArrayList<MXDeviceInfo>()
+    suspend fun handle(devicesByUser: Map<String, List<CryptoDeviceInfo>>): MXUsersDevicesMap<MXOlmSessionResult> {
+        val devicesWithoutSession = ArrayList<CryptoDeviceInfo>()
 
         val results = MXUsersDevicesMap<MXOlmSessionResult>()
 
@@ -102,7 +102,7 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val
         return results
     }
 
-    private fun verifyKeyAndStartSession(oneTimeKey: MXKey, userId: String, deviceInfo: MXDeviceInfo): String? {
+    private fun verifyKeyAndStartSession(oneTimeKey: MXKey, userId: String, deviceInfo: CryptoDeviceInfo): String? {
         var sessionId: String? = null
 
         val deviceId = deviceInfo.deviceId

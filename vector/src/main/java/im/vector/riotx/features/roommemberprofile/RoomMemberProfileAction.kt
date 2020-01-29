@@ -23,4 +23,5 @@ sealed class RoomMemberProfileAction : VectorViewModelAction {
 
     object RetryFetchingInfo: RoomMemberProfileAction()
     object IgnoreUser: RoomMemberProfileAction()
+    data class VerifyUser(val userId: String? = null, val roomId: String? = null): RoomMemberProfileAction()
 }

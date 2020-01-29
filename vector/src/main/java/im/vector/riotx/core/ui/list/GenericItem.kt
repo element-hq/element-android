@@ -61,6 +61,10 @@ abstract class GenericItem : VectorEpoxyModel<GenericItem.Holder>() {
     var endIconResourceId: Int = -1
 
     @EpoxyAttribute
+    @DrawableRes
+    var titleIconResourceId: Int = -1
+
+    @EpoxyAttribute
     var hasIndeterminateProcess = false
 
     @EpoxyAttribute
@@ -71,6 +75,13 @@ abstract class GenericItem : VectorEpoxyModel<GenericItem.Holder>() {
 
     override fun bind(holder: Holder) {
         holder.titleText.setTextOrHide(title)
+
+        if (titleIconResourceId != -1) {
+            holder.titleIcon.setImageResource(titleIconResourceId)
+            holder.titleIcon.isVisible = true
+        } else {
+            holder.titleIcon.isVisible = false
+        }
 
         when (style) {
             STYLE.BIG_TEXT    -> holder.titleText.textSize = 18f
@@ -104,7 +115,7 @@ abstract class GenericItem : VectorEpoxyModel<GenericItem.Holder>() {
 
     class Holder : VectorEpoxyHolder() {
         val root by bind<View>(R.id.item_generic_root)
-
+        val titleIcon by bind<ImageView>(R.id.item_generic_title_image)
         val titleText by bind<TextView>(R.id.item_generic_title_text)
         val descriptionText by bind<TextView>(R.id.item_generic_description_text)
         val accessoryImage by bind<ImageView>(R.id.item_generic_accessory_image)

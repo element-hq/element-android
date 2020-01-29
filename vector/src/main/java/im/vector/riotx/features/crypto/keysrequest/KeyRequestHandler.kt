@@ -23,12 +23,14 @@ import android.content.Context
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListener
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationService
+import im.vector.matrix.android.api.session.crypto.sas.VerificationService
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequestCancellation
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
@@ -54,7 +56,7 @@ import kotlin.collections.HashMap
 @Singleton
 class KeyRequestHandler @Inject constructor(private val context: Context)
     : RoomKeysRequestListener,
-        SasVerificationService.SasVerificationListener {
+        VerificationService.VerificationListener {
 
     private val alertsToRequests = HashMap<String, ArrayList<IncomingRoomKeyRequest>>()
 
@@ -62,12 +64,12 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
 
     fun start(session: Session) {
         this.session = session
-        session.getSasVerificationService().addListener(this)
+        session.getVerificationService().addListener(this)
         session.addRoomKeysRequestListener(this)
     }
 
     fun stop() {
-        session?.getSasVerificationService()?.removeListener(this)
+        session?.getVerificationService()?.removeListener(this)
         session?.removeRoomKeysRequestListener(this)
         session = null
     }
@@ -88,7 +90,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
         }
 
         // Do we already have alerts for this user/device
-        val mappingKey = keyForMap(deviceId, userId)
+        val mappingKey = keyForMap(userId, deviceId)
         if (alertsToRequests.containsKey(mappingKey)) {
             // just add the request, there is already an alert for this
             alertsToRequests[mappingKey]?.add(request)
@@ -98,8 +100,8 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
         alertsToRequests[mappingKey] = ArrayList<IncomingRoomKeyRequest>().apply { this.add(request) }
 
         // Add a notification for every incoming request
-        session?.downloadKeys(listOf(userId), false, object : MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>> {
-            override fun onSuccess(data: MXUsersDevicesMap<MXDeviceInfo>) {
+        session?.downloadKeys(listOf(userId), false, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
+            override fun onSuccess(data: MXUsersDevicesMap<CryptoDeviceInfo>) {
                 val deviceInfo = data.getObject(userId, deviceId)
 
                 if (null == deviceInfo) {
@@ -109,9 +111,9 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
                 }
 
                 if (deviceInfo.isUnknown) {
-                    session?.setDeviceVerification(MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED, deviceId, userId)
+                    session?.setDeviceVerification(DeviceTrustLevel(false, false), userId, deviceId)
 
-                    deviceInfo.verified = MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED
+                    deviceInfo.trustLevel = DeviceTrustLevel(false, false)
 
                     // can we get more info on this device?
                     session?.getDevicesList(object : MatrixCallback<DevicesListResponse> {
@@ -143,7 +145,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
                           userId: String,
                           deviceId: String,
                           wasNewDevice: Boolean,
-                          deviceInfo: MXDeviceInfo?,
+                          deviceInfo: CryptoDeviceInfo?,
                           moreInfo: DeviceInfo? = null) {
         val deviceName = if (deviceInfo!!.displayName().isNullOrEmpty()) deviceInfo.deviceId else deviceInfo.displayName()
         val dialogText: String?
@@ -180,7 +182,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
         }
 
         val alert = PopupAlertManager.VectorAlert(
-                alertManagerId(deviceId, userId),
+                alertManagerId(userId, deviceId),
                 context.getString(R.string.key_share_request),
                 dialogText,
                 R.drawable.key_small
@@ -188,7 +190,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
 
         alert.colorRes = R.color.key_share_req_accent_color
 
-        val mappingKey = keyForMap(deviceId, userId)
+        val mappingKey = keyForMap(userId, deviceId)
         alert.dismissedAction = Runnable {
             denyAllRequests(mappingKey)
         }
@@ -248,7 +250,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
             return
         }
 
-        val alertMgrUniqueKey = alertManagerId(deviceId, userId)
+        val alertMgrUniqueKey = alertManagerId(userId, deviceId)
         alertsToRequests[alertMgrUniqueKey]?.removeAll {
             it.deviceId == request.deviceId
                     && it.userId == request.userId
@@ -256,29 +258,33 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
         }
         if (alertsToRequests[alertMgrUniqueKey]?.isEmpty() == true) {
             PopupAlertManager.cancelAlert(alertMgrUniqueKey)
-            alertsToRequests.remove(keyForMap(deviceId, userId))
+            alertsToRequests.remove(keyForMap(userId, deviceId))
         }
     }
 
-    override fun transactionCreated(tx: SasVerificationTransaction) {
+    override fun transactionCreated(tx: VerificationTransaction) {
     }
 
-    override fun transactionUpdated(tx: SasVerificationTransaction) {
-        val state = tx.state
-        if (state == SasVerificationTxState.Verified) {
-            // ok it's verified, see if we have key request for that
-            shareAllSessions("${tx.otherDeviceId}${tx.otherUserId}")
-            PopupAlertManager.cancelAlert("ikr_${tx.otherDeviceId}${tx.otherUserId}")
+    override fun transactionUpdated(tx: VerificationTransaction) {
+        if (tx is SasVerificationTransaction) {
+            val state = tx.state
+            if (state == VerificationTxState.Verified) {
+                // ok it's verified, see if we have key request for that
+                shareAllSessions("${tx.otherDeviceId}${tx.otherUserId}")
+                PopupAlertManager.cancelAlert("ikr_${tx.otherDeviceId}${tx.otherUserId}")
+            }
         }
+        // should do it with QR tx also
+        // TODO -> Probably better to listen to device trust changes?
     }
 
     override fun markedAsManuallyVerified(userId: String, deviceId: String) {
         // accept related requests
-        shareAllSessions(keyForMap(deviceId, userId))
-        PopupAlertManager.cancelAlert(alertManagerId(deviceId, userId))
+        shareAllSessions(keyForMap(userId, deviceId))
+        PopupAlertManager.cancelAlert(alertManagerId(userId, deviceId))
     }
 
-    private fun keyForMap(deviceId: String, userId: String) = "$deviceId$userId"
+    private fun keyForMap(userId: String, deviceId: String) = "$deviceId$userId"
 
-    private fun alertManagerId(deviceId: String, userId: String) = "ikr_$deviceId$userId"
+    private fun alertManagerId(userId: String, deviceId: String) = "ikr_$deviceId$userId"
 }

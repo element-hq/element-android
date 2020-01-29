@@ -22,8 +22,8 @@ import im.vector.riotx.core.epoxy.dividerItem
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
-import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationBigImageItem
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
+import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationQrCodeItem
 import javax.inject.Inject
 
 class VerificationChooseMethodController @Inject constructor(
@@ -43,33 +43,37 @@ class VerificationChooseMethodController @Inject constructor(
     override fun buildModels() {
         val state = viewState ?: return
 
-        if (state.QRModeAvailable) {
+        if (state.otherCanScanQrCode || state.otherCanShowQrCode) {
             bottomSheetVerificationNoticeItem {
                 id("notice")
                 notice(stringProvider.getString(R.string.verification_scan_notice))
             }
 
-            // TODO Generate the QR code
-            bottomSheetVerificationBigImageItem {
-                id("qr")
-                imageRes(R.drawable.riotx_logo)
+            if (state.otherCanScanQrCode && !state.qrCodeText.isNullOrBlank()) {
+                bottomSheetVerificationQrCodeItem {
+                    id("qr")
+                    data(state.qrCodeText)
+                    animate(false)
+                }
+
+                dividerItem {
+                    id("sep0")
+                }
             }
 
-            dividerItem {
-                id("sep0")
-            }
+            if (state.otherCanShowQrCode) {
+                bottomSheetVerificationActionItem {
+                    id("openCamera")
+                    title(stringProvider.getString(R.string.verification_scan_their_code))
+                    titleColor(colorProvider.getColor(R.color.riotx_accent))
+                    iconRes(R.drawable.ic_camera)
+                    iconColor(colorProvider.getColor(R.color.riotx_accent))
+                    listener { listener?.openCamera() }
+                }
 
-            bottomSheetVerificationActionItem {
-                id("openCamera")
-                title(stringProvider.getString(R.string.verification_scan_their_code))
-                titleColor(colorProvider.getColor(R.color.riotx_accent))
-                iconRes(R.drawable.ic_camera)
-                iconColor(colorProvider.getColor(R.color.riotx_accent))
-                listener { listener?.openCamera() }
-            }
-
-            dividerItem {
-                id("sep1")
+                dividerItem {
+                    id("sep1")
+                }
             }
 
             bottomSheetVerificationActionItem {

@@ -20,6 +20,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.TaskStackBuilder
+import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTransaction
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
@@ -29,6 +30,7 @@ import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.createdirect.CreateDirectRoomActivity
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupActivity
+import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.debug.DebugMenuActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailArgs
@@ -61,6 +63,18 @@ class DefaultNavigator @Inject constructor(
         startActivity(context, intent, buildTask)
     }
 
+    override fun performDeviceVerification(context: Context, otherUserId: String, sasTransationId: String) {
+        val session = sessionHolder.getSafeActiveSession() ?: return
+        val tx = session.getVerificationService().getExistingTransaction(otherUserId, sasTransationId) ?: return
+        (tx as? IncomingSasVerificationTransaction)?.performAccept()
+        if (context is VectorBaseActivity) {
+            VerificationBottomSheet.withArgs(
+                    roomId = null,
+                    otherUserId = otherUserId,
+                    transactionId = sasTransationId
+            ).show(context.supportFragmentManager, "REQPOP")
+        }
+    }
     override fun openNotJoinedRoom(context: Context, roomIdOrAlias: String?, eventId: String?, buildTask: Boolean) {
         if (context is VectorBaseActivity) {
             context.notImplemented("Open not joined room")

@@ -37,7 +37,7 @@ internal class VerificationMessageLiveObserver @Inject constructor(
         @SessionDatabase realmConfiguration: RealmConfiguration,
         private val roomVerificationUpdateTask: DefaultRoomVerificationUpdateTask,
         private val cryptoService: CryptoService,
-        private val sasVerificationService: DefaultSasVerificationService,
+        private val sasVerificationService: DefaultVerificationService,
         private val taskExecutor: TaskExecutor
 ) : RealmLiveEntityObserver<EventEntity>(realmConfiguration) {
 

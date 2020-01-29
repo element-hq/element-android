@@ -17,10 +17,13 @@
 package im.vector.matrix.android.api.session.crypto.sas
 
 /**
- * Verification methods supported (or to be supported) by the matrix SDK
+ * Verification methods
  */
 enum class VerificationMethod {
+    // Use it when your application supports the SAS verification method
     SAS,
-    // Not supported yet
-    SCAN
+    // Use it if your application is able to display QR codes
+    QR_CODE_SHOW,
+    // Use it if your application is able to scan QR codes
+    QR_CODE_SCAN
 }

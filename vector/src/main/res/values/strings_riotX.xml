@@ -32,6 +32,10 @@
     <string name="verification_sent">Verification Sent</string>
     <string name="verification_request">Verification Request</string>
 
+
+    <string name="verification_verify_device">Verify this device</string>
+    <string name="verification_verify_device_manually">Manually verify</string>
+
     <!-- Sender name of a message when it is send by you, e.g. You: Hello!-->
     <string name="you">You</string>
 
@@ -40,7 +44,7 @@
     <string name="verification_scan_emoji_title">Can\'t scan</string>
     <string name="verification_scan_emoji_subtitle">If you\'re not in person, compare emoji instead</string>
 
-    <string name="verification_no_scan_emoji_title">Continue</string>
+    <string name="verification_no_scan_emoji_title">Verify by comparing emojis</string>
 
     <string name="verify_by_emoji_title">Verify by Emoji</string>
     <string name="verify_by_emoji_description">If you can’t scan the code above, verify by comparing a short, unique selection of emoji.</string>
@@ -52,7 +56,7 @@
     <string name="verification_request_waiting_for">Waiting for %s…</string>
     <string name="verification_request_alert_description">For extra security, verify %s by checking a one-time code on both your devices.\n\nFor maximum security, do this in person.</string>
     <string name="room_profile_not_encrypted_subtitle">Messages in this room are not end-to-end encrypted.</string>
-    <string name="room_profile_encrypted_subtitle">Messages in this room are end-to-end encrypted.</string>
+    <string name="room_profile_encrypted_subtitle">Messages in this room are end-to-end encrypted.\n\nYour messages are secured with locks and only you and the recipient have the unique keys to unlock them.</string>
     <string name="room_profile_section_security">Security</string>
     <string name="room_profile_section_security_learn_more">Learn more</string>
     <string name="room_profile_section_more">More</string>
@@ -96,7 +100,6 @@
     <string name="room_settings_enable_encryption_dialog_content">Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly.</string>
     <string name="room_settings_enable_encryption_dialog_submit">Enable encryption</string>
 
-
     <string name="verification_request_notice">For extra security, verify %s by checking a one-time code.</string>
     <string name="verification_request_start_notice">For maximum security, do this in person.</string>
 
@@ -104,4 +107,44 @@
     <string name="verification_code_notice">Compare the code with the one displayed on the other user\'s screen.</string>
     <string name="verification_conclusion_ok_notice">Messages with this user are end-to-end encrypted and can\'t be read by third parties.</string>
 
+
+    <string name="encryption_information_cross_signing_state">Cross-Signing</string>
+    <string name="encryption_information_dg_xsigning_complete">Cross-Signing is enabled\nPrivate Keys on device.</string>
+    <string name="encryption_information_dg_xsigning_trusted">Cross-Signing is enabled\nKeys are trusted\n.Private keys are not known</string>
+    <string name="encryption_information_dg_xsigning_not_trusted">Cross-Signing is enabled\nKeys are not trusted</string>
+    <string name="encryption_information_dg_xsigning_disabled">Cross-Signing is not enabled</string>
+
+
+    <string name="settings_active_sessions_list">Active Sessions</string>
+    <string name="settings_active_sessions_show_all">Show All Sessions</string>
+    <string name="settings_active_sessions_manage">Manage Sessions</string>
+    <string name="settings_active_sessions_signout_device">Sign out this device</string>
+
+    <string name="settings_active_sessions_verified_device_desc">This session is trusted for secure messaging because you verified it:</string>
+    <string name="settings_active_sessions_unverified_device_desc">Verify this session to mark it as trusted &amp; grant it access to encrypted messages. If you didn’t sign in to this device your account may be compromised:</string>
+
+    <plurals name="settings_active_sessions_count">
+        <item quantity="one">%d active session</item>
+        <item quantity="other">%d active sessions</item>
+    </plurals>
+
+
+    <string name="verification_profile_verify">Verify</string>
+    <string name="verification_profile_verified">Verified</string>
+    <string name="verification_profile_warning">Warning</string>
+
+    <string name="room_member_profile_failed_to_get_devices">Failed to get devices</string>
+    <string name="room_member_profile_sessions_section_title">Sessions</string>
+    <string name="trusted">Trusted</string>
+    <string name="not_trusted">Not Trusted</string>
+
+    <string name="verification_profile_device_verified_because">This device is trusted for secure messaging because %1$s (%2$s) verified it:</string>
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) signed in using a new device:</string>
+    <string name="verification_profile_device_untrust_info">Until this user trusts this device, messages sent to and from it are labelled with warnings. Alternatively, you can manually verify it.</string>
+
+
+    <string name="initialize_cross_signing">Initialize CrossSigning</string>
+    <string name="reset_cross_signing">Reset Keys</string>
+
+    <string name="a11y_qr_code_for_verification">QR code</string>
 </resources>

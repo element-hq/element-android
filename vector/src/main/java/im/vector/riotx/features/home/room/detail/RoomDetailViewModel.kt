@@ -188,7 +188,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailAction.AcceptVerificationRequest        -> handleAcceptVerification(action)
             is RoomDetailAction.DeclineVerificationRequest       -> handleDeclineVerification(action)
             is RoomDetailAction.RequestVerification              -> handleRequestVerification(action)
-            is RoomDetailAction.ResumeVerification              -> handleResumeRequestVerification(action)
+            is RoomDetailAction.ResumeVerification               -> handleResumeRequestVerification(action)
         }
     }
 
@@ -411,7 +411,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                             popDraft()
                         }
                         is ParsedCommand.VerifyUser               -> {
-                            session.getSasVerificationService().requestKeyVerificationInDMs(supportedVerificationMethods, slashCommandResult.userId, room.roomId)
+                            session.getVerificationService().requestKeyVerificationInDMs(supportedVerificationMethods, slashCommandResult.userId, room.roomId)
                             _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
                             popDraft()
                         }
@@ -809,14 +809,19 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private fun handleAcceptVerification(action: RoomDetailAction.AcceptVerificationRequest) {
         Timber.v("## SAS handleAcceptVerification ${action.otherUserId},  roomId:${room.roomId}, txId:${action.transactionId}")
-        if (session.getSasVerificationService().readyPendingVerificationInDMs(action.otherUserId, room.roomId,
-                action.transactionId)) {
+        if (session.getVerificationService().readyPendingVerificationInDMs(
+                        supportedVerificationMethods,
+                        action.otherUserId,
+                        room.roomId,
+                        action.transactionId)) {
             _requestLiveData.postValue(LiveEvent(Success(action)))
+        } else {
+            // TODO
         }
     }
 
     private fun handleDeclineVerification(action: RoomDetailAction.DeclineVerificationRequest) {
-        session.getSasVerificationService().declineVerificationRequestInDMs(
+        session.getVerificationService().declineVerificationRequestInDMs(
                 action.otherUserId,
                 action.otherdDeviceId,
                 action.transactionId,
@@ -824,12 +829,13 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleRequestVerification(action: RoomDetailAction.RequestVerification) {
+        if (action.userId == session.myUserId) return
         _requestLiveData.postValue(LiveEvent(Success(action)))
     }
 
     private fun handleResumeRequestVerification(action: RoomDetailAction.ResumeVerification) {
         // Check if this request is still active and handled by me
-        session.getSasVerificationService().getExistingVerificationRequestInRoom(room.roomId, action.transactionId)?.let {
+        session.getVerificationService().getExistingVerificationRequestInRoom(room.roomId, action.transactionId)?.let {
             if (it.handledByOtherSession) return
             if (!it.isFinished) {
                 _requestLiveData.postValue(LiveEvent(Success(action.copy(

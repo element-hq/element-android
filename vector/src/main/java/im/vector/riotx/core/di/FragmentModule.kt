@@ -49,6 +49,7 @@ import im.vector.riotx.features.login.LoginSplashFragment
 import im.vector.riotx.features.login.LoginWaitForEmailFragment
 import im.vector.riotx.features.login.LoginWebFragment
 import im.vector.riotx.features.login.terms.LoginTermsFragment
+import im.vector.riotx.features.qrcode.QrCodeScannerFragment
 import im.vector.riotx.features.reactions.EmojiChooserFragment
 import im.vector.riotx.features.reactions.EmojiSearchResultFragment
 import im.vector.riotx.features.roomdirectory.PublicRoomsFragment
@@ -56,6 +57,8 @@ import im.vector.riotx.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.riotx.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewNoPreviewFragment
 import im.vector.riotx.features.roommemberprofile.RoomMemberProfileFragment
+import im.vector.riotx.features.roommemberprofile.devices.DeviceListFragment
+import im.vector.riotx.features.roommemberprofile.devices.DeviceTrustInfoActionFragment
 import im.vector.riotx.features.roomprofile.RoomProfileFragment
 import im.vector.riotx.features.roomprofile.members.RoomMemberListFragment
 import im.vector.riotx.features.roomprofile.settings.RoomSettingsFragment
@@ -66,6 +69,7 @@ import im.vector.riotx.features.settings.VectorSettingsNotificationPreferenceFra
 import im.vector.riotx.features.settings.VectorSettingsNotificationsTroubleshootFragment
 import im.vector.riotx.features.settings.VectorSettingsPreferencesFragment
 import im.vector.riotx.features.settings.VectorSettingsSecurityPrivacyFragment
+import im.vector.riotx.features.settings.crosssigning.CrossSigningSettingsFragment
 import im.vector.riotx.features.settings.devices.VectorSettingsDevicesFragment
 import im.vector.riotx.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
@@ -319,4 +323,24 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(VerificationConclusionFragment::class)
     fun bindVerificationConclusionFragment(fragment: VerificationConclusionFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(QrCodeScannerFragment::class)
+    fun bindQrCodeScannerFragment(fragment: QrCodeScannerFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(DeviceListFragment::class)
+    fun bindDeviceListFragment(fragment: DeviceListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(DeviceTrustInfoActionFragment::class)
+    fun bindDeviceTrustInfoActionFragment(fragment: DeviceTrustInfoActionFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(CrossSigningSettingsFragment::class)
+    fun bindCrossSigningSettingsFragment(fragment: CrossSigningSettingsFragment): Fragment
 }
