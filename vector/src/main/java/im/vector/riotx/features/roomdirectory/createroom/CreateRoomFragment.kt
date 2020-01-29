@@ -85,6 +85,10 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
         viewModel.handle(CreateRoomAction.SetIsInRoomDirectory(isInRoomDirectory))
     }
 
+    override fun setIsEncrypted(isEncrypted: Boolean) {
+        viewModel.handle(CreateRoomAction.SetIsEncrypted(isEncrypted))
+    }
+
     override fun retry() {
         Timber.v("Retry")
         viewModel.handle(CreateRoomAction.Create)
