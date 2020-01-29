@@ -19,7 +19,14 @@ package im.vector.matrix.android.internal.crypto.verification
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import im.vector.matrix.android.InstrumentedTest
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.sas.*
+import im.vector.matrix.android.api.session.crypto.sas.CancelCode
+import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.sas.OutgoingSasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.sas.SasMode
+import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
+import im.vector.matrix.android.api.session.crypto.sas.VerificationService
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.common.CommonTestHelper
@@ -30,12 +37,16 @@ import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationCancel
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
 import im.vector.matrix.android.internal.crypto.model.rest.toValue
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
-import java.util.*
+import java.util.ArrayList
 import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
@@ -97,7 +108,8 @@ class SASTest : InstrumentedTest {
 
             override fun transactionUpdated(tx: VerificationTransaction) {
                 if (tx.transactionId == txID) {
-                    if ((tx as SASDefaultVerificationTransaction).state === VerificationTxState.OnCancelled) {
+                    val immutableState = (tx as SASDefaultVerificationTransaction).state
+                    if (immutableState is VerificationTxState.Cancelled && !immutableState.byMe) {
                         cancelLatch.countDown()
                     }
                 }
@@ -110,15 +122,17 @@ class SASTest : InstrumentedTest {
         aliceSasTx.cancel(CancelCode.User)
         mTestHelper.await(cancelLatch)
 
-        assertEquals("Should be cancelled on alice side",
-                VerificationTxState.Cancelled, aliceSasTx.state)
-        assertEquals("Should be cancelled on bob side",
-                VerificationTxState.OnCancelled, bobSasTx.state)
+        assertTrue("Should be cancelled on alice side", aliceSasTx.state is VerificationTxState.Cancelled)
+        assertTrue("Should be cancelled on bob side", bobSasTx.state is VerificationTxState.Cancelled)
 
-        assertEquals("Should be User cancelled on alice side",
-                CancelCode.User, aliceSasTx.cancelledReason)
-        assertEquals("Should be User cancelled on bob side",
-                CancelCode.User, aliceSasTx.cancelledReason)
+        val aliceCancelState = aliceSasTx.state as VerificationTxState.Cancelled
+        val bobCancelState = bobSasTx.state as VerificationTxState.Cancelled
+
+        assertTrue("Should be cancelled by me on alice side", aliceCancelState.byMe)
+        assertFalse("Should be cancelled by other on bob side", bobCancelState.byMe)
+
+        assertEquals("Should be User cancelled on alice side", CancelCode.User, aliceCancelState.cancelCode)
+        assertEquals("Should be User cancelled on bob side", CancelCode.User, bobCancelState.cancelCode)
 
         assertNull(bobVerificationService.getExistingTransaction(aliceSession.myUserId, txID))
         assertNull(aliceVerificationService.getExistingTransaction(bobSession.myUserId, txID))
@@ -136,15 +150,15 @@ class SASTest : InstrumentedTest {
         val tid = "00000000"
 
         // Bob should receive a cancel
-        var cancelReason: String? = null
+        var cancelReason: CancelCode? = null
         val cancelLatch = CountDownLatch(1)
 
         val bobListener = object : VerificationService.VerificationListener {
             override fun transactionCreated(tx: VerificationTransaction) {}
 
             override fun transactionUpdated(tx: VerificationTransaction) {
-                if (tx.transactionId == tid && tx.cancelledReason != null) {
-                    cancelReason = tx.cancelledReason?.humanReadable
+                if (tx.transactionId == tid && tx.state is VerificationTxState.Cancelled) {
+                    cancelReason = (tx.state as VerificationTxState.Cancelled).cancelCode
                     cancelLatch.countDown()
                 }
             }
@@ -185,7 +199,7 @@ class SASTest : InstrumentedTest {
 
         mTestHelper.await(cancelLatch)
 
-        assertEquals("Request should be cancelled with m.unknown_method", CancelCode.UnknownMethod.value, cancelReason)
+        assertEquals("Request should be cancelled with m.unknown_method", CancelCode.UnknownMethod, cancelReason)
 
         cryptoTestData.close()
     }
@@ -315,7 +329,7 @@ class SASTest : InstrumentedTest {
             }
 
             override fun transactionUpdated(tx: VerificationTransaction) {
-                if ((tx as SASDefaultVerificationTransaction).state === VerificationTxState.OnCancelled) {
+                if ((tx as SASDefaultVerificationTransaction).state is VerificationTxState.Cancelled && !(tx.state as VerificationTxState.Cancelled).byMe) {
                     aliceCancelledLatch.countDown()
                 }
             }
