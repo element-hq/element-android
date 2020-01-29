@@ -71,10 +71,10 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     private lateinit var viewModelFactory: ViewModelProvider.Factory
 
     protected val activityViewModelProvider
-        get() = ViewModelProviders.of(requireActivity(), viewModelFactory)
+        get() = ViewModelProvider(requireActivity(), viewModelFactory)
 
     protected val fragmentViewModelProvider
-        get() = ViewModelProviders.of(this, viewModelFactory)
+        get() = ViewModelProvider(this, viewModelFactory)
 
     /* ==========================================================================================
      * Life cycle

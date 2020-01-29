@@ -22,7 +22,6 @@ import android.os.Parcelable
 import android.widget.FrameLayout
 import androidx.annotation.CallSuper
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.MvRxView
 import com.airbnb.mvrx.MvRxViewId
@@ -50,10 +49,10 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
     private lateinit var viewModelFactory: ViewModelProvider.Factory
 
     protected val activityViewModelProvider
-        get() = ViewModelProviders.of(requireActivity(), viewModelFactory)
+        get() = ViewModelProvider(requireActivity(), viewModelFactory)
 
     protected val fragmentViewModelProvider
-        get() = ViewModelProviders.of(this, viewModelFactory)
+        get() = ViewModelProvider(this, viewModelFactory)
 
     /* ==========================================================================================
      * BottomSheetBehavior

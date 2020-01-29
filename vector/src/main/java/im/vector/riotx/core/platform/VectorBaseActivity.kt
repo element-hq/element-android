@@ -38,7 +38,6 @@ import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
@@ -92,7 +91,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     private lateinit var viewModelFactory: ViewModelProvider.Factory
 
     protected val viewModelProvider
-        get() = ViewModelProviders.of(this, viewModelFactory)
+        get() = ViewModelProvider(this, viewModelFactory)
 
     /* ==========================================================================================
      * DATA
