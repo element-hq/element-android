@@ -128,48 +128,4 @@ class CoroutineSequencersTest {
         println("BLOCKING METHOD $name ENDS on ${Thread.currentThread().name}")
         return name
     }
-
-    @Test
-    fun test_MoshiMap() {
-        val moshi = Moshi.Builder().build()
-        val sample = """
-             {
-               "master_key": {
-                "user_id": "@alice:example.com",
-                "usage": ["master"],
-                "keys": {
-                  "ed25519:base64+master+public+key": "base64+self+master+key",
-                }
-               },
-               "self_signing_key": {
-                "user_id": "@alice:example.com",
-                "usage": ["self_signing"],
-                "keys": {
-                  "ed25519:base64+self+signing+public+key": "base64+self+signing+public+key",
-                },
-                "signatures": {
-                  "@alice:example.com": {
-                    "ed25519:base64+master+public+key": "base64+signature"
-                  }
-                }
-               },
-               "user_signing_key": {
-                "user_id": "@alice:example.com",
-                "keys": {
-                  "ed25519:base64+device+signing+public+key": "base64+device+signing+public+key",
-                },
-                "usage": ["user_signing"],
-                "signatures": {
-                  "@alice:example.com": {
-                    "ed25519:base64+master+public+key": "base64+signature"
-                  }
-                }
-               }
-        """.trimIndent()
-
-        val adapter = moshi.adapter<Map<String, Any>>(Types.newParameterizedType(Map::class.java, List::class.java, String::class.java))
-
-        val map = adapter.fromJson(sample)
-        print(map)
-    }
 }
