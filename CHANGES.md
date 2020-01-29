@@ -10,7 +10,7 @@ Improvements 🙌:
  - Hide the algorithm when turning on e2e (#897)
 
 Other changes:
- -
+ - Add support for /rainbow and /rainbowme commands (#879)
 
 Bugfix 🐛:
  -
