@@ -34,7 +34,6 @@ class DeviceTrustInfoActionFragment @Inject constructor(
         val epoxyController: DeviceTrustInfoEpoxyController
 ) : VectorBaseFragment(), DeviceTrustInfoEpoxyController.InteractionListener {
 
-
     override fun getLayoutResId() = R.layout.bottom_sheet_generic_list
 
     private val viewModel: DeviceListBottomSheetViewModel by parentFragmentViewModel(DeviceListBottomSheetViewModel::class)
@@ -66,5 +65,3 @@ class DeviceTrustInfoActionFragment @Inject constructor(
         viewModel.manuallyVerify(device)
     }
 }
-
-

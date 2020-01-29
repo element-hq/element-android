@@ -43,7 +43,7 @@ class DeviceVerificationInfoBottomSheet : VectorBaseBottomSheetDialogFragment(),
 
     private val viewModel: DeviceVerificationInfoBottomSheetViewModel by fragmentViewModel(DeviceVerificationInfoBottomSheetViewModel::class)
 
-    private val sharedViewModel: DevicesViewModel by parentFragmentViewModel (DevicesViewModel::class)
+    private val sharedViewModel: DevicesViewModel by parentFragmentViewModel(DevicesViewModel::class)
 
     @Inject lateinit var deviceVerificationInfoViewModelFactory: DeviceVerificationInfoBottomSheetViewModel.Factory
 
@@ -91,5 +91,4 @@ class DeviceVerificationInfoBottomSheet : VectorBaseBottomSheetDialogFragment(),
         dismiss()
         sharedViewModel.handle(action)
     }
-
 }

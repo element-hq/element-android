@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto
 
-import com.zhuinden.monarchy.Monarchy
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

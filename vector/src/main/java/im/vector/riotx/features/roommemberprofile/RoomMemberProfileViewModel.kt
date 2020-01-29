@@ -48,9 +48,7 @@ import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.core.utils.DataSource
 import im.vector.riotx.core.utils.LiveEvent
-import im.vector.riotx.core.utils.PublishDataSource
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import kotlinx.coroutines.Dispatchers
@@ -149,7 +147,6 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                 )
             }
         }
-
     }
 
     private fun observeRoomMemberSummary(room: Room) {

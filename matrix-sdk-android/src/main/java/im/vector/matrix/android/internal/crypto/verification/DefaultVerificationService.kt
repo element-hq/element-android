@@ -383,7 +383,7 @@ internal class DefaultVerificationService @Inject constructor(
             val existing = getExistingTransaction(otherUserId, tid)
 
             when (startReq.method) {
-                VERIFICATION_METHOD_SAS -> {
+                VERIFICATION_METHOD_SAS         -> {
                     when (existing) {
                         is SasVerificationTransaction    -> {
                             // should cancel both!
@@ -400,8 +400,9 @@ internal class DefaultVerificationService @Inject constructor(
                                     ?.filterIsInstance(SasVerificationTransaction::class.java)
                                     ?.takeIf { it.isNotEmpty() }
                                     ?.also {
-                                        // Multiple keyshares between two devices: any two devices may only have at most one key verification in flight at a time.
-                                        Timber.v("## SAS onStartRequestReceived - There is already a transaction with this user ${startReq.transactionID}")
+                                        // Multiple keyshares between two devices:
+                                        // any two devices may only have at most one key verification in flight at a time.
+                                        Timber.v("## SAS onStartRequestReceived - Already a transaction with this user ${startReq.transactionID}")
                                     }
                                     ?.forEach {
                                         it.cancel(CancelCode.UnexpectedMessage)
@@ -443,7 +444,7 @@ internal class DefaultVerificationService @Inject constructor(
                         return CancelCode.UnexpectedMessage
                     }
                 }
-                else ->{
+                else                            -> {
                     Timber.e("## SAS onStartRequestReceived - unknown method ${startReq.method}")
                     return CancelCode.UnknownMethod
                 }
@@ -882,7 +883,9 @@ internal class DefaultVerificationService @Inject constructor(
         val methodValues = if (crossSigningService.isCrossSigningEnabled()) {
             // Add reciprocate method if application declares it can scan or show QR codes
             // Not sure if it ok to do that (?)
-            val reciprocateMethod = methods.firstOrNull { it == VerificationMethod.QR_CODE_SCAN || it == VerificationMethod.QR_CODE_SHOW }?.let { listOf(VERIFICATION_METHOD_RECIPROCATE) }.orEmpty()
+            val reciprocateMethod = methods
+                    .firstOrNull { it == VerificationMethod.QR_CODE_SCAN || it == VerificationMethod.QR_CODE_SHOW }
+                    ?.let { listOf(VERIFICATION_METHOD_RECIPROCATE) }.orEmpty()
             methods.map { it.toValue() } + reciprocateMethod
         } else {
             // Filter out SCAN and SHOW qr code method

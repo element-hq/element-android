@@ -101,7 +101,6 @@ class RoomMemberProfileFragment @Inject constructor(
                     }
                 }
             }
-
         }
     }
 
@@ -148,30 +147,7 @@ class RoomMemberProfileFragment @Inject constructor(
 
     override fun onTapVerify() {
         viewModel.handle(RoomMemberProfileAction.VerifyUser())
-//        if (state.isRoomEncrypted) {
-//            if( !state.isMine && state.userMXCrossSigningInfo?.isTrusted == false) {
-//                // we want to verify
-//                // TODO do not use current room, find or create DM
-//                VerificationBottomSheet.withArgs(
-//                        state.roomId,
-//                        state.userId
-//                ).show(parentFragmentManager, "REQ")
-//            }
-//        }
     }
-
-//    override fun onTapVerify() = withState(viewModel) { state ->
-//        if (state.isRoomEncrypted) {
-//            if( !state.isMine && state.userMXCrossSigningInfo?.isTrusted == false) {
-//                // we want to verify
-//                // TODO do not use current room, find or create DM
-//                VerificationBottomSheet.withArgs(
-//                        state.roomId,
-//                        state.userId
-//                ).show(parentFragmentManager, "REQ")
-//            }
-//        }
-//    }
 
     override fun onShowDeviceList() = withState(viewModel) {
         DeviceListBottomSheet.newInstance(it.userId).show(parentFragmentManager, "DEV_LIST")

@@ -365,7 +365,11 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
 
     override fun getLiveDeviceList(userId: String): LiveData<List<CryptoDeviceInfo>> {
         val liveData = monarchy.findAllMappedWithChanges(
-                { realm: Realm -> realm.where<UserEntity>().equalTo(UserEntityFields.USER_ID, userId) },
+                { realm: Realm ->
+                    realm
+                            .where<UserEntity>()
+                            .equalTo(UserEntityFields.USER_ID, userId)
+                },
                 { entity ->
                     entity.devices.map { CryptoMapper.mapToModel(it) }
                 }
@@ -929,7 +933,7 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
             val xInfoEntities = realm.where(CrossSigningInfoEntity::class.java)
                     .findAll()
             xInfoEntities?.forEach { info ->
-                //Need to ignore mine
+                // Need to ignore mine
                 if (info.userId != credentials.userId) {
                     info.crossSigningKeys.forEach {
                         it.trustLevelEntity = null
@@ -969,7 +973,10 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
 
     override fun getLiveCrossSigningInfo(userId: String): LiveData<Optional<MXCrossSigningInfo>> {
         val liveData = monarchy.findAllMappedWithChanges(
-                { realm: Realm -> realm.where<CrossSigningInfoEntity>().equalTo(UserEntityFields.USER_ID, userId) },
+                { realm: Realm ->
+                    realm.where<CrossSigningInfoEntity>()
+                            .equalTo(UserEntityFields.USER_ID, userId)
+                },
                 { entity ->
                     MXCrossSigningInfo(
                             userId = userId,
@@ -1011,7 +1018,7 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
         } else {
             // Just override existing, caller should check and untrust id needed
             existing = CrossSigningInfoEntity.getOrCreate(realm, userId)
-           // existing.crossSigningKeys.forEach { it.deleteFromRealm() }
+            // existing.crossSigningKeys.forEach { it.deleteFromRealm() }
             val xkeys = RealmList<KeyInfoEntity>()
             info.crossSigningKeys.forEach { cryptoCrossSigningKey ->
                 xkeys.add(

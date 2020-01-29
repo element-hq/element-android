@@ -23,7 +23,6 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.util.MatrixItem
-import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 
 data class RoomMemberProfileViewState(
         val userId: String,

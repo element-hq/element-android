@@ -120,7 +120,6 @@ object PopupAlertManager {
         }
         currentAlerter = next
         next?.let {
-
             if (next.shouldBeDisplayedIn?.invoke(currentActivity) == false) return
             val currentTime = System.currentTimeMillis()
             if (next.expirationTimestamp != null && currentTime > next.expirationTimestamp!!) {

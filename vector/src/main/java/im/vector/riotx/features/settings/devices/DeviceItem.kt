@@ -17,7 +17,6 @@
 package im.vector.riotx.features.settings.devices
 
 import android.graphics.Typeface
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -110,7 +109,6 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
                 it.isVisible = false
             }
         }
-
     }
 
     class Holder : VectorEpoxyHolder() {

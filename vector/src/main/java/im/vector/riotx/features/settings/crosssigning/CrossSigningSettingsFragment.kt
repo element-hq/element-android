@@ -122,4 +122,3 @@ class CrossSigningSettingsFragment @Inject constructor(
         viewModel.handle(CrossSigningAction.InitializeCrossSigning())
     }
 }
-

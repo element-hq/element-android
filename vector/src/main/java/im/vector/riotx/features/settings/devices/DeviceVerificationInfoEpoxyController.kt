@@ -22,11 +22,9 @@ import im.vector.riotx.core.epoxy.dividerItem
 import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.core.ui.list.GenericItem
 import im.vector.riotx.core.ui.list.genericItem
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
-import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
 class DeviceVerificationInfoEpoxyController @Inject constructor(private val stringProvider: StringProvider,
@@ -43,7 +41,6 @@ class DeviceVerificationInfoEpoxyController @Inject constructor(private val stri
                 id("loading")
             }
         } else {
-
             if (device.isVerified) {
                 genericItem {
                     id("trust${device.deviceId}")
@@ -85,7 +82,7 @@ class DeviceVerificationInfoEpoxyController @Inject constructor(private val stri
             }
 
             if (device.deviceId != session.sessionParams.credentials.deviceId) {
-                //Add the delete option
+                // Add the delete option
                 dividerItem {
                     id("d2")
                 }

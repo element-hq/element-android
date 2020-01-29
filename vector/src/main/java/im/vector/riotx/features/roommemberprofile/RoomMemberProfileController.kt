@@ -78,7 +78,7 @@ class RoomMemberProfileController @Inject constructor(
             if (state.userMXCrossSigningInfo != null) {
                 // Cross signing is enabled for this user
                 if (state.userMXCrossSigningInfo.isTrusted()) {
-                    //User is trusted
+                    // User is trusted
                     val icon = if (state.allDevicesAreTrusted.invoke() == true) R.drawable.ic_shield_trusted
                     else R.drawable.ic_shield_warning
 
@@ -95,7 +95,7 @@ class RoomMemberProfileController @Inject constructor(
                             action = { callback?.onShowDeviceList() }
                     )
                 } else {
-                    //Not trusted, propose to verify
+                    // Not trusted, propose to verify
                     if (!state.isMine) {
                         buildProfileAction(
                                 id = "learn_more",

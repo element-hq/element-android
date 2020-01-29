@@ -99,7 +99,6 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted privat
             copy(isUploadingKeys = true)
         }
         session.getCrossSigningService().initializeCrossSigning(auth, object : MatrixCallback<Unit> {
-
             override fun onSuccess(data: Unit) {
                 setState {
                     copy(isUploadingKeys = false)

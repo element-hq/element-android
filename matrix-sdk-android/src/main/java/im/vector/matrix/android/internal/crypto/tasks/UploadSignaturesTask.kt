@@ -34,8 +34,7 @@ internal class DefaultUploadSignaturesTask @Inject constructor(
         private val eventBus: EventBus
 ) : UploadSignaturesTask {
 
-    override suspend fun execute(params: UploadSignaturesTask.Params): Unit {
-
+    override suspend fun execute(params: UploadSignaturesTask.Params) {
         try {
             val response = executeRequest<SignatureUploadResponse>(eventBus) {
                 apiCall = cryptoApi.uploadSignatures(params.signatures)

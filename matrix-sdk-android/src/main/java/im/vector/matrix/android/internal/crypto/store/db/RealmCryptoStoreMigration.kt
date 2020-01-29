@@ -49,7 +49,6 @@ internal object RealmCryptoStoreMigration : RealmMigration {
                     .addField(TrustLevelEntityFields.LOCALLY_VERIFIED, Boolean::class.java)
                     .setNullable(TrustLevelEntityFields.LOCALLY_VERIFIED, true)
 
-
             val keyInfoEntitySchema = realm.schema.create("KeyInfoEntity")
                     .addField(KeyInfoEntityFields.PUBLIC_KEY_BASE64, String::class.java)
                     .addField(KeyInfoEntityFields.SIGNATURES, String::class.java)

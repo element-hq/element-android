@@ -66,7 +66,6 @@ abstract class GenericItemWithValue : VectorEpoxyModel<GenericItemWithValue.Hold
             holder.titleIcon.isVisible = false
         }
 
-
         holder.valueText.setTextOrHide(value)
 
         if (valueColorInt != null) {

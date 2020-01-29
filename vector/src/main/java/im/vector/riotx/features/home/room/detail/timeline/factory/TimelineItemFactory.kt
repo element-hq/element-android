@@ -31,7 +31,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val defaultItemFactory: DefaultItemFactory,
                                               private val roomCreateItemFactory: RoomCreateItemFactory,
                                               private val verificationConclusionItemFactory: VerificationItemFactory,
-                                              private val userPreferencesProvider: UserPreferencesProvider ) {
+                                              private val userPreferencesProvider: UserPreferencesProvider) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,

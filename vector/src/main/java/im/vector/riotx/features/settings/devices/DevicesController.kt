@@ -29,7 +29,6 @@ import im.vector.riotx.core.epoxy.errorWithRetryItem
 import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.core.ui.list.genericFooterItem
 import im.vector.riotx.core.ui.list.genericItemHeader
 import im.vector.riotx.features.settings.VectorPreferences
 import javax.inject.Inject
@@ -97,7 +96,6 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
 
         // Other devices
         if (devices.size > 1) {
-
             genericItemHeader {
                 id("others")
                 text(stringProvider.getString(R.string.devices_other_devices))

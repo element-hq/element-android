@@ -155,7 +155,6 @@ internal class DefaultCryptoService @Inject constructor(
         private val cryptoCoroutineScope: CoroutineScope
 ) : CryptoService {
 
-
     init {
         verificationService.cryptoService = this
     }
@@ -188,7 +187,7 @@ internal class DefaultCryptoService @Inject constructor(
                 .configureWith(SetDeviceNameTask.Params(deviceId, deviceName)) {
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
-                            //bg refresh of crypto device
+                            // bg refresh of crypto device
                             downloadKeys(listOf(credentials.userId), true, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {})
                             callback.onSuccess(data)
                         }

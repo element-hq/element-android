@@ -55,7 +55,6 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
         }
         when (data.cryptoDevices) {
             Uninitialized -> {
-
             }
             is Loading    -> {
                 loadingItem {
@@ -64,11 +63,9 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                 }
             }
             is Success    -> {
-
                 val deviceList = data.cryptoDevices.invoke().sortedByDescending {
                     it.isVerified
                 }
-
 
                 // Build top header
                 val allGreen = deviceList.fold(true, { prev, device ->
@@ -96,7 +93,6 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                     id("sessions")
                     style(GenericItem.STYLE.BIG_TEXT)
                     title(stringProvider.getString(R.string.room_member_profile_sessions_section_title))
-
                 }
                 if (deviceList.isEmpty()) {
                     // Can this really happen?

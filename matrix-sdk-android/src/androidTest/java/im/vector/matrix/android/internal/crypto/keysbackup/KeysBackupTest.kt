@@ -25,7 +25,14 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupStateListener
-import im.vector.matrix.android.common.*
+import im.vector.matrix.android.common.CommonTestHelper
+import im.vector.matrix.android.common.CryptoTestData
+import im.vector.matrix.android.common.CryptoTestHelper
+import im.vector.matrix.android.common.SessionTestParams
+import im.vector.matrix.android.common.TestConstants
+import im.vector.matrix.android.common.TestMatrixCallback
+import im.vector.matrix.android.common.assertDictEquals
+import im.vector.matrix.android.common.assertListEquals
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import im.vector.matrix.android.internal.crypto.MegolmSessionData
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
@@ -36,12 +43,18 @@ import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersio
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
-import java.util.*
+import java.util.ArrayList
+import java.util.Collections
 import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
@@ -298,7 +311,10 @@ class KeysBackupTest : InstrumentedTest {
         val decryption = keysBackup.pkDecryptionFromRecoveryKey(keyBackupCreationInfo.recoveryKey)
         assertNotNull(decryption)
         // - Check decryptKeyBackupData() returns stg
-        val sessionData = keysBackup.decryptKeyBackupData(keyBackupData, session.olmInboundGroupSession!!.sessionIdentifier(), cryptoTestData.roomId, decryption!!)
+        val sessionData = keysBackup
+                .decryptKeyBackupData(keyBackupData,
+                        session.olmInboundGroupSession!!.sessionIdentifier(),
+                        cryptoTestData.roomId, decryption!!)
         assertNotNull(sessionData)
         // - Compare the decrypted megolm key with the original one
         assertKeysEquals(session.exportKeys(), sessionData)

@@ -139,7 +139,9 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                                 copy(
                                         roomId = data,
                                         pendingRequest = Success(
-                                                session.getVerificationService().requestKeyVerificationInDMs(supportedVerificationMethods, otherUserId, data, pendingLocalId)
+                                                session
+                                                        .getVerificationService()
+                                                        .requestKeyVerificationInDMs(supportedVerificationMethods, otherUserId, data, pendingLocalId)
                                         )
                                 )
                             }
@@ -153,7 +155,12 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                     })
                 } else {
                     setState {
-                        copy(pendingRequest = Success(session.getVerificationService().requestKeyVerificationInDMs(supportedVerificationMethods, otherUserId, roomId)))
+                        copy(
+                                pendingRequest = Success(session
+                                        .getVerificationService()
+                                        .requestKeyVerificationInDMs(supportedVerificationMethods, otherUserId, roomId)
+                                )
+                        )
                     }
                 }
             }

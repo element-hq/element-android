@@ -24,7 +24,6 @@ import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
-import im.vector.matrix.android.internal.crypto.model.rest.SignatureUploadResponse
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.verification.DefaultVerificationTransaction
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfo
@@ -135,7 +134,6 @@ internal class DefaultQrCodeVerificationTransaction(
                     }
                 }
             }
-
         }
 
         if (!canTrustOtherUserMasterKey && toVerifyDeviceIds.isEmpty()) {

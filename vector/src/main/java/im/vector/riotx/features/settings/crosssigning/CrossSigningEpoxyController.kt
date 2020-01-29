@@ -118,7 +118,6 @@ class CrossSigningEpoxyController @Inject constructor(
                 id("loading")
             }
         } else {
-
             val crossSigningKeys = data.crossSigningInfo
 
             crossSigningKeys?.masterKey()?.let {

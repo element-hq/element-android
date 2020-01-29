@@ -17,7 +17,6 @@ package im.vector.riotx.features.crypto.verification.request
 
 import android.os.Bundle
 import android.view.View
-import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
@@ -41,7 +40,6 @@ class VerificationRequestFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
     }
-
 
     override fun onDestroyView() {
         bottomSheetVerificationRecyclerView.cleanup()

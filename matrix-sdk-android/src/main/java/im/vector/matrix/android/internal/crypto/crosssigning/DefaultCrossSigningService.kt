@@ -27,7 +27,6 @@ import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.MyDeviceInfoHolder
 import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.KeyUsage
-import im.vector.matrix.android.internal.crypto.model.rest.KeysQueryResponse
 import im.vector.matrix.android.internal.crypto.model.rest.UploadSignatureQueryBuilder
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
@@ -245,7 +244,7 @@ internal class DefaultCrossSigningService @Inject constructor(
 
                     resetTrustOnKeyChange()
                     uploadSignaturesTask.configureWith(UploadSignaturesTask.Params(uploadSignatureQueryBuilder.build())) {
-                        //this.retryCount = 3
+                        // this.retryCount = 3
                         this.constraints = TaskConstraints(true)
                         this.callback = object : MatrixCallback<Unit> {
                             override fun onSuccess(data: Unit) {
@@ -254,7 +253,7 @@ internal class DefaultCrossSigningService @Inject constructor(
                             }
 
                             override fun onFailure(failure: Throwable) {
-                                //Clear
+                                // Clear
                                 Timber.e(failure, "## CrossSigning - Failed to upload signatures")
                                 clearSigningKeys()
                             }
@@ -584,8 +583,13 @@ internal class DefaultCrossSigningService @Inject constructor(
          */
 
         val otherSSKSignature = otherDevice.signatures?.get(otherUserId)?.get("ed25519:${otherKeys.selfSigningKey()?.unpaddedBase64PublicKey}")
-                ?: return legacyFallbackTrust(locallyTrusted, DeviceTrustResult.MissingDeviceSignature(otherDeviceId, otherKeys.selfSigningKey()?.unpaddedBase64PublicKey
-                        ?: ""))
+                ?: return legacyFallbackTrust(
+                        locallyTrusted,
+                        DeviceTrustResult.MissingDeviceSignature(otherDeviceId, otherKeys.selfSigningKey()
+                                ?.unpaddedBase64PublicKey
+                                ?: ""
+                        )
+                )
 
         // Check  bob's device is signed by bob's SSK
         try {
@@ -606,7 +610,6 @@ internal class DefaultCrossSigningService @Inject constructor(
     }
 
     override fun onUsersDeviceUpdate(users: List<String>) {
-
         Timber.d("## CrossSigning - onUsersDeviceUpdate for ${users.size} users")
         users.forEach { otherUserId ->
 

@@ -52,7 +52,11 @@ interface VerificationService {
     /**
      * Request a key verification from another user using toDevice events.
      */
-    fun requestKeyVerificationInDMs(methods: List<VerificationMethod>, otherUserId: String, roomId: String, localId: String? = LocalEcho.createLocalEchoId()): PendingVerificationRequest
+    fun requestKeyVerificationInDMs(methods: List<VerificationMethod>,
+                                    otherUserId: String,
+                                    roomId: String,
+                                    localId: String? = LocalEcho.createLocalEchoId()
+    ): PendingVerificationRequest
 
     fun declineVerificationRequestInDMs(otherUserId: String, otherDeviceId: String, transactionId: String, roomId: String)
 
