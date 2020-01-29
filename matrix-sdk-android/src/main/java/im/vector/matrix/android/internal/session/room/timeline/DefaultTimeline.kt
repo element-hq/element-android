@@ -30,7 +30,6 @@ import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntityFields
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
-import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
@@ -61,7 +60,6 @@ import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.math.max
-import kotlin.math.min
 
 private const val MIN_FETCHING_COUNT = 30
 
@@ -374,10 +372,9 @@ internal class DefaultTimeline(
      */
     private fun paginateInternal(startDisplayIndex: Int?,
                                  direction: Timeline.Direction,
-                                 count: Int,
-                                 strict: Boolean = false): Boolean {
+                                 count: Int): Boolean {
         updateState(direction) { it.copy(requestedPaginationCount = count, isPaginating = true) }
-        val builtCount = buildTimelineEvents(startDisplayIndex, direction, count.toLong(), strict)
+        val builtCount = buildTimelineEvents(startDisplayIndex, direction, count.toLong())
         val shouldFetchMore = builtCount < count && !hasReachedEnd(direction)
         if (shouldFetchMore) {
             val newRequestedCount = count - builtCount
@@ -387,7 +384,6 @@ internal class DefaultTimeline(
         } else {
             updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
         }
-
         return !shouldFetchMore
     }
 
@@ -451,12 +447,12 @@ internal class DefaultTimeline(
         if (currentInitialEventId != null && shouldFetchInitialEvent) {
             fetchEvent(currentInitialEventId)
         } else {
-            val count = min(settings.initialSize, filteredEvents.size)
+            val count = filteredEvents.size.coerceAtMost(settings.initialSize)
             if (initialEventId == null) {
-                paginateInternal(initialDisplayIndex, Timeline.Direction.BACKWARDS, count, strict = false)
+                paginateInternal(initialDisplayIndex, Timeline.Direction.BACKWARDS, count)
             } else {
-                paginateInternal(initialDisplayIndex, Timeline.Direction.FORWARDS, count / 2, strict = false)
-                paginateInternal(initialDisplayIndex, Timeline.Direction.BACKWARDS, count / 2, strict = true)
+                paginateInternal(initialDisplayIndex, Timeline.Direction.FORWARDS, (count / 2).coerceAtLeast(1))
+                paginateInternal(initialDisplayIndex?.minus(1), Timeline.Direction.BACKWARDS, (count / 2).coerceAtLeast(1))
             }
         }
         postSnapshot()
@@ -557,7 +553,7 @@ internal class DefaultTimeline(
      * This has to be called on TimelineThread as it access realm live results
      */
     private fun getLiveChunk(): ChunkEntity? {
-        return filteredEvents.firstOrNull()?.chunk?.firstOrNull()
+        return nonFilteredEvents.firstOrNull()?.chunk?.firstOrNull()
     }
 
     /**
@@ -566,13 +562,12 @@ internal class DefaultTimeline(
      */
     private fun buildTimelineEvents(startDisplayIndex: Int?,
                                     direction: Timeline.Direction,
-                                    count: Long,
-                                    strict: Boolean = false): Int {
+                                    count: Long): Int {
         if (count < 1 || startDisplayIndex == null) {
             return 0
         }
         val start = System.currentTimeMillis()
-        val offsetResults = getOffsetResults(startDisplayIndex, direction, count, strict)
+        val offsetResults = getOffsetResults(startDisplayIndex, direction, count)
         if (offsetResults.isEmpty()) {
             return 0
         }
@@ -613,23 +608,16 @@ internal class DefaultTimeline(
      */
     private fun getOffsetResults(startDisplayIndex: Int,
                                  direction: Timeline.Direction,
-                                 count: Long,
-                                 strict: Boolean): RealmResults<TimelineEventEntity> {
+                                 count: Long): RealmResults<TimelineEventEntity> {
         val offsetQuery = filteredEvents.where()
         if (direction == Timeline.Direction.BACKWARDS) {
-            offsetQuery.sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
-            if (strict) {
-                offsetQuery.lessThan(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
-            } else {
-                offsetQuery.lessThanOrEqualTo(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
-            }
+            offsetQuery
+                    .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
+                    .lessThanOrEqualTo(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
         } else {
-            offsetQuery.sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
-            if (strict) {
-                offsetQuery.greaterThan(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
-            } else {
-                offsetQuery.greaterThanOrEqualTo(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
-            }
+            offsetQuery
+                    .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
+                    .greaterThanOrEqualTo(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
         }
         return offsetQuery
                 .limit(count)
@@ -652,6 +640,11 @@ internal class DefaultTimeline(
         val params = GetContextOfEventTask.Params(roomId, eventId)
         cancelableBag += contextOfEventTask.configureWith(params) {
             callback = object : MatrixCallback<TokenChunkEventPersistor.Result> {
+
+                override fun onSuccess(data: TokenChunkEventPersistor.Result) {
+                    postSnapshot()
+                }
+
                 override fun onFailure(failure: Throwable) {
                     postFailure(failure)
                 }
@@ -697,7 +690,7 @@ internal class DefaultTimeline(
         forwardsState.set(State())
     }
 
-    // Extension methods ***************************************************************************
+// Extension methods ***************************************************************************
 
     private fun Timeline.Direction.toPaginationDirection(): PaginationDirection {
         return if (this == Timeline.Direction.BACKWARDS) PaginationDirection.BACKWARDS else PaginationDirection.FORWARDS
