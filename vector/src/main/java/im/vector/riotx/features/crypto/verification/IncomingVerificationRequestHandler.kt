@@ -18,8 +18,8 @@ package im.vector.riotx.features.crypto.verification
 import android.content.Context
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.sas.VerificationService
-import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseActivity
@@ -54,7 +54,7 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
         if (!tx.isToDeviceTransport()) return
         // TODO maybe check also if
         when (tx.state) {
-            VerificationTxState.OnStarted -> {
+            is VerificationTxState.OnStarted       -> {
                 // Add a notification for every incoming request
                 val name = session?.getUser(tx.otherUserId)?.displayName
                         ?: tx.otherUserId
@@ -92,13 +92,11 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
                         }
                 PopupAlertManager.postVectorAlert(alert)
             }
-            VerificationTxState.Cancelled,
-            VerificationTxState.OnCancelled,
-            VerificationTxState.Verified  -> {
+            is VerificationTxState.TerminalTxState -> {
                 // cancel related notification
                 PopupAlertManager.cancelAlert("kvr_${tx.transactionId}")
             }
-            else                          -> Unit
+            else                                   -> Unit
         }
     }
 
@@ -134,7 +132,7 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
                                     pr.requestInfo?.fromDevice ?: "",
                                     pr.transactionId ?: "",
                                     pr.roomId ?: ""
-                                    )
+                            )
                         }
                         colorInt = ThemeUtils.getColor(context, R.attr.vctr_notice_secondary)
                         // 5mn expiration

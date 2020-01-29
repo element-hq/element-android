@@ -20,13 +20,13 @@ interface VerificationTransaction {
 
     var state: VerificationTxState
 
-    val cancelledReason: CancelCode?
     val transactionId: String
     val otherUserId: String
     var otherDeviceId: String?
 
     // TODO Not used. Remove?
     val isIncoming: Boolean
+
     /**
      * User wants to cancel the transaction
      */

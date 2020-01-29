@@ -518,8 +518,7 @@ internal class DefaultVerificationService @Inject constructor(
         }
 
         if (existingTransaction is SASDefaultVerificationTransaction) {
-            existingTransaction.cancelledReason = safeValueOf(cancelReq.code)
-            existingTransaction.state = VerificationTxState.OnCancelled
+            existingTransaction.state = VerificationTxState.Cancelled(safeValueOf(cancelReq.code), false)
         }
     }
 
@@ -1075,19 +1074,7 @@ internal class DefaultVerificationService @Inject constructor(
 
     override fun transactionUpdated(tx: VerificationTransaction) {
         dispatchTxUpdated(tx)
-        if (tx is SASDefaultVerificationTransaction
-                && (tx.state == VerificationTxState.Cancelled
-                        || tx.state == VerificationTxState.OnCancelled
-                        || tx.state == VerificationTxState.Verified)
-        ) {
-            // remove
-            this.removeTransaction(tx.otherUserId, tx.transactionId)
-        }
-        if (tx is QrCodeVerificationTransaction
-                && (tx.state == VerificationTxState.Cancelled
-                        || tx.state == VerificationTxState.OnCancelled
-                        || tx.state == VerificationTxState.Verified)
-        ) {
+        if (tx.state is VerificationTxState.TerminalTxState) {
             // remove
             this.removeTransaction(tx.otherUserId, tx.transactionId)
         }

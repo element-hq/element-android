@@ -49,23 +49,28 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
 
     override val uxState: OutgoingSasVerificationTransaction.UxState
         get() {
-            return when (state) {
-                VerificationTxState.None           -> OutgoingSasVerificationTransaction.UxState.WAIT_FOR_START
-                VerificationTxState.SendingStart,
-                VerificationTxState.Started,
-                VerificationTxState.OnAccepted,
-                VerificationTxState.SendingKey,
-                VerificationTxState.KeySent,
-                VerificationTxState.OnKeyReceived  -> OutgoingSasVerificationTransaction.UxState.WAIT_FOR_KEY_AGREEMENT
-                VerificationTxState.ShortCodeReady -> OutgoingSasVerificationTransaction.UxState.SHOW_SAS
-                VerificationTxState.ShortCodeAccepted,
-                VerificationTxState.SendingMac,
-                VerificationTxState.MacSent,
-                VerificationTxState.Verifying      -> OutgoingSasVerificationTransaction.UxState.WAIT_FOR_VERIFICATION
-                VerificationTxState.Verified       -> OutgoingSasVerificationTransaction.UxState.VERIFIED
-                VerificationTxState.OnCancelled    -> OutgoingSasVerificationTransaction.UxState.CANCELLED_BY_ME
-                VerificationTxState.Cancelled      -> OutgoingSasVerificationTransaction.UxState.CANCELLED_BY_OTHER
-                else                               -> OutgoingSasVerificationTransaction.UxState.UNKNOWN
+            return when (val immutableState = state) {
+                is VerificationTxState.None           -> OutgoingSasVerificationTransaction.UxState.WAIT_FOR_START
+                is VerificationTxState.SendingStart,
+                is VerificationTxState.Started,
+                is VerificationTxState.OnAccepted,
+                is VerificationTxState.SendingKey,
+                is VerificationTxState.KeySent,
+                is VerificationTxState.OnKeyReceived  -> OutgoingSasVerificationTransaction.UxState.WAIT_FOR_KEY_AGREEMENT
+                is VerificationTxState.ShortCodeReady -> OutgoingSasVerificationTransaction.UxState.SHOW_SAS
+                is VerificationTxState.ShortCodeAccepted,
+                is VerificationTxState.SendingMac,
+                is VerificationTxState.MacSent,
+                is VerificationTxState.Verifying      -> OutgoingSasVerificationTransaction.UxState.WAIT_FOR_VERIFICATION
+                is VerificationTxState.Verified       -> OutgoingSasVerificationTransaction.UxState.VERIFIED
+                is VerificationTxState.Cancelled      -> {
+                    if (immutableState.byMe) {
+                        OutgoingSasVerificationTransaction.UxState.CANCELLED_BY_OTHER
+                    } else {
+                        OutgoingSasVerificationTransaction.UxState.CANCELLED_BY_ME
+                    }
+                }
+                else                                  -> OutgoingSasVerificationTransaction.UxState.UNKNOWN
             }
         }
 

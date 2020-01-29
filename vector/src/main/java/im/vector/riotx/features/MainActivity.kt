@@ -189,7 +189,7 @@ class MainActivity : VectorBaseActivity() {
                 // The homeserver has invalidated the token, with a soft logout
                 SoftLogoutActivity.newIntent(this)
             args.isUserLoggedOut             ->
-                // the homeserver has invalidated the token (password changed, device deleted, other security reason
+                // the homeserver has invalidated the token (password changed, device deleted, other security reasons)
                 SignedOutActivity.newIntent(this)
             sessionHolder.hasActiveSession() ->
                 // We have a session.
