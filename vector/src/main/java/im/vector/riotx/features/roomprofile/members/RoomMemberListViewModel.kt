@@ -40,6 +40,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 
 class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomMemberListViewState,
+                                                          private val roomMemberSummaryComparator: RoomMemberSummaryComparator,
                                                           private val session: Session)
     : VectorViewModel<RoomMemberListViewState, RoomMemberListAction, EmptyViewEvents>(initialState) {
 
@@ -113,11 +114,11 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                 }
 
         return listOf(
-                PowerLevelCategory.ADMIN to admins,
-                PowerLevelCategory.MODERATOR to moderators,
-                PowerLevelCategory.CUSTOM to customs,
-                PowerLevelCategory.INVITE to invites,
-                PowerLevelCategory.USER to users
+                PowerLevelCategory.ADMIN to admins.sortedWith(roomMemberSummaryComparator),
+                PowerLevelCategory.MODERATOR to moderators.sortedWith(roomMemberSummaryComparator),
+                PowerLevelCategory.CUSTOM to customs.sortedWith(roomMemberSummaryComparator),
+                PowerLevelCategory.INVITE to invites.sortedWith(roomMemberSummaryComparator),
+                PowerLevelCategory.USER to users.sortedWith(roomMemberSummaryComparator)
         )
     }
 

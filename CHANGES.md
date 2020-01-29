@@ -8,6 +8,7 @@ Features ✨:
 Improvements 🙌:
  - Sharing things to RiotX: sort list by recent room first (#771)
  - Hide the algorithm when turning on e2e (#897)
+ - Sort room members by display names
 
 Other changes:
  - Add support for /rainbow and /rainbowme commands (#879)
