@@ -30,7 +30,6 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.QrCodeVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
@@ -55,8 +54,7 @@ data class VerificationBottomSheetViewState(
         val pendingLocalId: String? = null,
         val sasTransactionState: VerificationTxState? = null,
         val qrTransactionState: VerificationTxState? = null,
-        val transactionId: String? = null,
-        val cancelCode: CancelCode? = null
+        val transactionId: String? = null
 ) : MvRxState
 
 class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted initialState: VerificationBottomSheetViewState,
@@ -129,10 +127,12 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                                 pendingRequest = Loading()
                         )
                     }
-                    val roomParams = CreateRoomParams().apply {
-                        invitedUserIds = listOf(otherUserId).toMutableList()
-                        setDirectMessage()
-                    }
+                    val roomParams = CreateRoomParams(
+                            invitedUserIds = listOf(otherUserId)
+                    )
+                            .setDirectMessage()
+                            .enableEncryptionIfInvitedUsersSupportIt()
+
                     session.createRoom(roomParams, object : MatrixCallback<String> {
                         override fun onSuccess(data: String) {
                             setState {
@@ -217,19 +217,17 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                     // A SAS tx has been started following this request
                     setState {
                         copy(
-                                sasTransactionState = tx.state,
-                                cancelCode = tx.cancelledReason
+                                sasTransactionState = tx.state
                         )
                     }
                 }
             }
             is QrCodeVerificationTransaction -> {
                 if (tx.transactionId == (state.pendingRequest.invoke()?.transactionId ?: state.transactionId)) {
-                    // A SAS tx has been started following this request
+                    // A QR tx has been started following this request
                     setState {
                         copy(
-                                qrTransactionState = tx.state,
-                                cancelCode = tx.cancelledReason
+                                qrTransactionState = tx.state
                         )
                     }
                 }

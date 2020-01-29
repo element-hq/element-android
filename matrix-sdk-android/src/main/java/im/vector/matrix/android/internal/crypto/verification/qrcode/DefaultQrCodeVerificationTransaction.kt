@@ -30,7 +30,6 @@ import im.vector.matrix.android.internal.crypto.verification.VerificationInfo
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfoStart
 import im.vector.matrix.android.internal.util.withoutPrefix
 import timber.log.Timber
-import kotlin.properties.Delegates
 
 internal class DefaultQrCodeVerificationTransaction(
         private val setDeviceVerificationAction: SetDeviceVerificationAction,
@@ -46,20 +45,21 @@ internal class DefaultQrCodeVerificationTransaction(
         override val isIncoming: Boolean
 ) : DefaultVerificationTransaction(transactionId, otherUserId, otherDeviceId, isIncoming), QrCodeVerificationTransaction {
 
-    override var cancelledReason: CancelCode? = null
-
     override val qrCodeText: String?
         get() = qrCodeData?.toUrl()
 
-    override var state by Delegates.observable(VerificationTxState.None) { _, _, _ ->
-        listeners.forEach {
-            try {
-                it.transactionUpdated(this)
-            } catch (e: Throwable) {
-                Timber.e(e, "## Error while notifying listeners")
+    override var state: VerificationTxState = VerificationTxState.None
+        set(newState) {
+            field = newState
+
+            listeners.forEach {
+                try {
+                    it.transactionUpdated(this)
+                } catch (e: Throwable) {
+                    Timber.e(e, "## Error while notifying listeners")
+                }
             }
         }
-    }
 
     override fun userHasScannedOtherQrCode(otherQrCodeText: String) {
         val otherQrCodeData = otherQrCodeText.toQrCodeData() ?: run {
@@ -181,8 +181,7 @@ internal class DefaultQrCodeVerificationTransaction(
     }
 
     override fun cancel(code: CancelCode) {
-        cancelledReason = code
-        state = VerificationTxState.Cancelled
+        state = VerificationTxState.Cancelled(code, true)
         transport.cancelTransaction(transactionId, otherUserId, otherDeviceId ?: "", code)
     }
 

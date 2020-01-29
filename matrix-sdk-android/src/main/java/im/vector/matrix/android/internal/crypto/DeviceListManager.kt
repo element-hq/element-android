@@ -27,7 +27,6 @@ import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.DownloadKeysForUsersTask
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
-import okhttp3.internal.toImmutableList
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -235,7 +234,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         }
         cryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
 
-        dispatchDeviceChange(userIds.toImmutableList())
+        dispatchDeviceChange(userIds)
         return usersDevicesInfoMap
     }
 
@@ -294,7 +293,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
      *
      * @param downloadUsers the user ids list
      */
-    private suspend fun doKeyDownloadForUsers(downloadUsers: MutableList<String>): MXUsersDevicesMap<CryptoDeviceInfo> {
+    private suspend fun doKeyDownloadForUsers(downloadUsers: List<String>): MXUsersDevicesMap<CryptoDeviceInfo> {
         Timber.v("## doKeyDownloadForUsers() : doKeyDownloadForUsers $downloadUsers")
         // get the user ids which did not already trigger a keys download
         val filteredUsers = downloadUsers.filter { MatrixPatterns.isUserId(it) }

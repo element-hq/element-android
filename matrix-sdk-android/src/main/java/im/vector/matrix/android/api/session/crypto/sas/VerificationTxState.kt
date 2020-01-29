@@ -16,36 +16,36 @@
 
 package im.vector.matrix.android.api.session.crypto.sas
 
-enum class VerificationTxState {
-    None,
-    // I have started a verification request
-    SendingStart,
-    Started,
-    // Other user/device sent me a request
-    OnStarted,
-    // I have accepted a request started by the other user/device
-    SendingAccept,
-    Accepted,
-    // My request has been accepted by the other user/device
-    OnAccepted,
-    // I have sent my public key
-    SendingKey,
-    KeySent,
-    // The other user/device has sent me his public key
-    OnKeyReceived,
-    // Short code is ready to be displayed
-    ShortCodeReady,
-    // I have compared the code and manually said that they match
-    ShortCodeAccepted,
+sealed class VerificationTxState {
+    // Uninitialized state
+    object None : VerificationTxState()
 
-    SendingMac,
-    MacSent,
-    Verifying,
-    Verified,
+    // Specific for SAS
+    abstract class VerificationSasTxState : VerificationTxState()
 
-    // Global: The verification has been cancelled (by me or other), see cancelReason for details
-    // When I do the cancel
-    Cancelled,
-    // When the other user do a cancel
-    OnCancelled
+    object SendingStart : VerificationSasTxState()
+    object Started : VerificationSasTxState()
+    object OnStarted : VerificationSasTxState()
+    object SendingAccept : VerificationSasTxState()
+    object Accepted : VerificationSasTxState()
+    object OnAccepted : VerificationSasTxState()
+    object SendingKey : VerificationSasTxState()
+    object KeySent : VerificationSasTxState()
+    object OnKeyReceived : VerificationSasTxState()
+    object ShortCodeReady : VerificationSasTxState()
+    object ShortCodeAccepted : VerificationSasTxState()
+    object SendingMac : VerificationSasTxState()
+    object MacSent : VerificationSasTxState()
+    object Verifying : VerificationSasTxState()
+
+    // Specific for QR code
+    // TODO Add code for the confirmation step for the user who has been scanned
+
+    // Terminal states
+    abstract class TerminalTxState : VerificationTxState()
+
+    object Verified : TerminalTxState()
+
+    // Cancelled by me or by other
+    data class Cancelled(val cancelCode: CancelCode, val byMe: Boolean) : TerminalTxState()
 }

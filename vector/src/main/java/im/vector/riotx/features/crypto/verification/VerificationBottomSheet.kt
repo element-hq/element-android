@@ -110,21 +110,21 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         // Did the request result in a SAS transaction?
         if (it.sasTransactionState != null) {
             when (it.sasTransactionState) {
-                VerificationTxState.None,
-                VerificationTxState.SendingStart,
-                VerificationTxState.Started,
-                VerificationTxState.OnStarted,
-                VerificationTxState.SendingAccept,
-                VerificationTxState.Accepted,
-                VerificationTxState.OnAccepted,
-                VerificationTxState.SendingKey,
-                VerificationTxState.KeySent,
-                VerificationTxState.OnKeyReceived,
-                VerificationTxState.ShortCodeReady,
-                VerificationTxState.ShortCodeAccepted,
-                VerificationTxState.SendingMac,
-                VerificationTxState.MacSent,
-                VerificationTxState.Verifying   -> {
+                is VerificationTxState.None,
+                is VerificationTxState.SendingStart,
+                is VerificationTxState.Started,
+                is VerificationTxState.OnStarted,
+                is VerificationTxState.SendingAccept,
+                is VerificationTxState.Accepted,
+                is VerificationTxState.OnAccepted,
+                is VerificationTxState.SendingKey,
+                is VerificationTxState.KeySent,
+                is VerificationTxState.OnKeyReceived,
+                is VerificationTxState.ShortCodeReady,
+                is VerificationTxState.ShortCodeAccepted,
+                is VerificationTxState.SendingMac,
+                is VerificationTxState.MacSent,
+                is VerificationTxState.Verifying -> {
                     showFragment(VerificationEmojiCodeFragment::class, Bundle().apply {
                         putParcelable(MvRx.KEY_ARG, VerificationArgs(
                                 it.otherUserMxItem?.id ?: "",
@@ -133,13 +133,14 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                                 it.pendingRequest.invoke()?.transactionId ?: it.transactionId))
                     })
                 }
-                VerificationTxState.Verified,
-                VerificationTxState.Cancelled,
-                VerificationTxState.OnCancelled -> {
+                is VerificationTxState.Verified  -> {
                     showFragment(VerificationConclusionFragment::class, Bundle().apply {
-                        putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(
-                                it.sasTransactionState == VerificationTxState.Verified,
-                                it.cancelCode?.value))
+                        putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null))
+                    })
+                }
+                is VerificationTxState.Cancelled -> {
+                    showFragment(VerificationConclusionFragment::class, Bundle().apply {
+                        putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(false, it.sasTransactionState.cancelCode.value))
                     })
                 }
             }
@@ -148,17 +149,19 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
 
         when (it.qrTransactionState) {
-            VerificationTxState.Verified,
-            VerificationTxState.Cancelled,
-            VerificationTxState.OnCancelled -> {
+            is VerificationTxState.Verified  -> {
                 showFragment(VerificationConclusionFragment::class, Bundle().apply {
-                    putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(
-                            it.qrTransactionState == VerificationTxState.Verified,
-                            it.cancelCode?.value))
+                    putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null))
                 })
                 return@withState
             }
-            else                            -> Unit
+            is VerificationTxState.Cancelled -> {
+                showFragment(VerificationConclusionFragment::class, Bundle().apply {
+                    putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(false, it.qrTransactionState.cancelCode.value))
+                })
+                return@withState
+            }
+            else                             -> Unit
         }
 
         // At this point there is no SAS transaction for this request

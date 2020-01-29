@@ -14,25 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.crypto.sas
+package im.vector.matrix.android.api.extensions
 
-interface VerificationTransaction {
+fun Boolean?.orTrue() = this ?: true
 
-    var state: VerificationTxState
-
-    val transactionId: String
-    val otherUserId: String
-    var otherDeviceId: String?
-
-    // TODO Not used. Remove?
-    val isIncoming: Boolean
-
-    /**
-     * User wants to cancel the transaction
-     */
-    fun cancel()
-
-    fun cancel(code: CancelCode)
-
-    fun isToDeviceTransport(): Boolean
-}
+fun Boolean?.orFalse() = this ?: false

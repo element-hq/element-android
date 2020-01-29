@@ -15,15 +15,23 @@
  */
 package im.vector.riotx.features.crypto.verification.emoji
 
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.sas.EmojiRepresentation
-import im.vector.matrix.android.api.session.crypto.sas.VerificationService
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
+import im.vector.matrix.android.api.session.crypto.sas.VerificationService
 import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.core.di.HasScreenInjector
@@ -63,16 +71,16 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
 
     private fun refreshStateFromTx(sasTx: SasVerificationTransaction?) {
         when (sasTx?.state) {
-            VerificationTxState.None,
-            VerificationTxState.SendingStart,
-            VerificationTxState.Started,
-            VerificationTxState.OnStarted,
-            VerificationTxState.SendingAccept,
-            VerificationTxState.Accepted,
-            VerificationTxState.OnAccepted,
-            VerificationTxState.SendingKey,
-            VerificationTxState.KeySent,
-            VerificationTxState.OnKeyReceived  -> {
+            is VerificationTxState.None,
+            is VerificationTxState.SendingStart,
+            is VerificationTxState.Started,
+            is VerificationTxState.OnStarted,
+            is VerificationTxState.SendingAccept,
+            is VerificationTxState.Accepted,
+            is VerificationTxState.OnAccepted,
+            is VerificationTxState.SendingKey,
+            is VerificationTxState.KeySent,
+            is VerificationTxState.OnKeyReceived  -> {
                 setState {
                     copy(
                             isWaitingFromOther = false,
@@ -86,7 +94,7 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
                     )
                 }
             }
-            VerificationTxState.ShortCodeReady -> {
+            is VerificationTxState.ShortCodeReady -> {
                 setState {
                     copy(
                             isWaitingFromOther = false,
@@ -98,17 +106,16 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
                     )
                 }
             }
-            VerificationTxState.ShortCodeAccepted,
-            VerificationTxState.SendingMac,
-            VerificationTxState.MacSent,
-            VerificationTxState.Verifying,
-            VerificationTxState.Verified       -> {
+            is VerificationTxState.ShortCodeAccepted,
+            is VerificationTxState.SendingMac,
+            is VerificationTxState.MacSent,
+            is VerificationTxState.Verifying,
+            is VerificationTxState.Verified       -> {
                 setState {
                     copy(isWaitingFromOther = true)
                 }
             }
-            VerificationTxState.Cancelled,
-            VerificationTxState.OnCancelled    -> {
+            is VerificationTxState.Cancelled      -> {
                 // The fragment should not be rendered in this state,
                 // it should have been replaced by a conclusion fragment
                 setState {

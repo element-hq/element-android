@@ -33,7 +33,6 @@ import im.vector.matrix.android.internal.util.withoutPrefix
 import org.matrix.olm.OlmSAS
 import org.matrix.olm.OlmUtility
 import timber.log.Timber
-import kotlin.properties.Delegates
 
 /**
  * Represents an ongoing short code interactive key verification between two devices.
@@ -71,23 +70,22 @@ internal abstract class SASDefaultVerificationTransaction(
                 }
     }
 
-    override var state by Delegates.observable(VerificationTxState.None) { _, _, new ->
-        //        println("$property has changed from $old to $new")
-        listeners.forEach {
-            try {
-                it.transactionUpdated(this)
-            } catch (e: Throwable) {
-                Timber.e(e, "## Error while notifying listeners")
+    override var state: VerificationTxState = VerificationTxState.None
+        set(newState) {
+            field = newState
+
+            listeners.forEach {
+                try {
+                    it.transactionUpdated(this)
+                } catch (e: Throwable) {
+                    Timber.e(e, "## Error while notifying listeners")
+                }
+            }
+
+            if (newState is VerificationTxState.TerminalTxState) {
+                releaseSAS()
             }
         }
-        if (new == VerificationTxState.Cancelled
-                || new == VerificationTxState.OnCancelled
-                || new == VerificationTxState.Verified) {
-            releaseSAS()
-        }
-    }
-
-    override var cancelledReason: CancelCode? = null
 
     private var olmSas: OlmSAS? = null
 
@@ -341,8 +339,7 @@ internal abstract class SASDefaultVerificationTransaction(
     }
 
     override fun cancel(code: CancelCode) {
-        cancelledReason = code
-        state = VerificationTxState.Cancelled
+        state = VerificationTxState.Cancelled(code, true)
         transport.cancelTransaction(transactionId, otherUserId, otherDeviceId ?: "", code)
     }
 
