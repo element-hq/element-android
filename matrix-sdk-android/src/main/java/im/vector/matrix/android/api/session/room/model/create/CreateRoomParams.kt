@@ -121,11 +121,18 @@ data class CreateRoomParams(
         val powerLevelContentOverride: PowerLevelsContent? = null
 ) {
     /**
+     * Set to true means that if cross-signing is enabled and we can get keys for every invited users,
+     * the encryption will be enabled on the created room
+     */
+    @Transient
+    var enableEncryptionIfInvitedUsersSupportIt: Boolean = false
+
+    /**
      * Add the crypto algorithm to the room creation parameters.
      *
      * @param algorithm the algorithm
      */
-    fun enableEncryptionWithAlgorithm(algorithm: String): CreateRoomParams {
+    fun enableEncryptionWithAlgorithm(algorithm: String = MXCRYPTO_ALGORITHM_MEGOLM): CreateRoomParams {
         return if (algorithm == MXCRYPTO_ALGORITHM_MEGOLM) {
             val contentMap = mapOf("algorithm" to algorithm)
 

@@ -3,6 +3,7 @@ Changes in RiotX 0.14.0 (2020-XX-XX)
 
 Features ✨:
  - Enable encryption in unencrypted rooms, from the room settings (#212)
+ - Negotiate E2E by default for DMs (#907)
 
 Improvements 🙌:
  - Sharing things to RiotX: sort list by recent room first (#771)

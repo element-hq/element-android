@@ -92,14 +92,12 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun createRoomAndInviteSelectedUsers() = withState { currentState ->
-        val isDirect = currentState.selectedUsers.size == 1
         val roomParams = CreateRoomParams(
-                invitedUserIds = ArrayList(currentState.selectedUsers.map { it.userId })
-        ).apply {
-            if (isDirect) {
-                setDirectMessage()
-            }
-        }
+                invitedUserIds = currentState.selectedUsers.map { it.userId }
+        )
+                .setDirectMessage()
+                .also { it.enableEncryptionIfInvitedUsersSupportIt = true }
+
         session.rx()
                 .createRoom(roomParams)
                 .execute {

@@ -17,9 +17,12 @@
 package im.vector.matrix.android.internal.session.room.create
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.extensions.orTrue
+import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.room.failure.CreateRoomFailure
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
+import im.vector.matrix.android.internal.crypto.DeviceListManager
 import im.vector.matrix.android.internal.database.awaitNotEmptyResult
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomEntityFields
@@ -49,12 +52,41 @@ internal class DefaultCreateRoomTask @Inject constructor(
         private val readMarkersTask: SetReadMarkersTask,
         @SessionDatabase
         private val realmConfiguration: RealmConfiguration,
+        private val crossSigningService: CrossSigningService,
+        private val deviceListManager: DeviceListManager,
         private val eventBus: EventBus
 ) : CreateRoomTask {
 
     override suspend fun execute(params: CreateRoomParams): String {
+        val createRoomParams = params
+                .takeIf { it.enableEncryptionIfInvitedUsersSupportIt }
+                .takeIf { crossSigningService.isCrossSigningEnabled() }
+                ?.takeIf { it.invite3pids.isNullOrEmpty() }
+                ?.invitedUserIds
+                ?.let { userIds ->
+                    val keys = deviceListManager.downloadKeys(userIds, forceDownload = false)
+
+                    userIds.any { userId ->
+                        if (keys.map[userId].isNullOrEmpty()) {
+                            // A user has no device, so do not enable encryption
+                            true
+                        } else {
+                            // Check that every user's device have at least one key
+                            keys.map[userId]?.values?.any { it.keys.isNullOrEmpty() } ?: true
+                        }
+                    }
+                }
+                .orTrue()
+                .let { cannotEnableEncryption ->
+                    if (!cannotEnableEncryption) {
+                        params.enableEncryptionWithAlgorithm()
+                    } else {
+                        params
+                    }
+                }
+
         val createRoomResponse = executeRequest<CreateRoomResponse>(eventBus) {
-            apiCall = roomAPI.createRoom(params)
+            apiCall = roomAPI.createRoom(createRoomParams)
         }
         val roomId = createRoomResponse.roomId!!
         // Wait for room to come back from the sync (but it can maybe be in the DB if the sync response is received before)
@@ -66,8 +98,8 @@ internal class DefaultCreateRoomTask @Inject constructor(
         } catch (exception: TimeoutCancellationException) {
             throw CreateRoomFailure.CreatedWithTimeout
         }
-        if (params.isDirect()) {
-            handleDirectChatCreation(params, roomId)
+        if (createRoomParams.isDirect()) {
+            handleDirectChatCreation(createRoomParams, roomId)
         }
         setReadMarkers(roomId)
         return roomId
