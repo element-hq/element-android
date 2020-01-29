@@ -37,8 +37,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
-import java.util.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import java.util.Arrays
+import java.util.HashMap
 import java.util.concurrent.CountDownLatch
 
 class CryptoTestHelper(val mTestHelper: CommonTestHelper) {
@@ -57,7 +61,7 @@ class CryptoTestHelper(val mTestHelper: CommonTestHelper) {
         var roomId: String? = null
         val lock1 = CountDownLatch(1)
 
-        aliceSession.createRoom(CreateRoomParams().apply { name = "MyRoom" }, object : TestMatrixCallback<String>(lock1) {
+        aliceSession.createRoom(CreateRoomParams(name = "MyRoom"), object : TestMatrixCallback<String>(lock1) {
             override fun onSuccess(data: String) {
                 roomId = data
                 super.onSuccess(data)

@@ -127,10 +127,10 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                                 pendingRequest = Loading()
                         )
                     }
-                    val roomParams = CreateRoomParams().apply {
-                        invitedUserIds = listOf(otherUserId).toMutableList()
-                        setDirectMessage()
-                    }
+                    val roomParams = CreateRoomParams(
+                            invitedUserIds = listOf(otherUserId).toMutableList()
+                    )
+                            .setDirectMessage()
                     session.createRoom(roomParams, object : MatrixCallback<String> {
                         override fun onSuccess(data: String) {
                             setState {
