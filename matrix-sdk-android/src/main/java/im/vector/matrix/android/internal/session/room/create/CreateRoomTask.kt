@@ -60,7 +60,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
     override suspend fun execute(params: CreateRoomParams): String {
         val createRoomParams = params
                 .takeIf { it.enableEncryptionIfInvitedUsersSupportIt }
-                .takeIf { crossSigningService.isCrossSigningEnabled() }
+                ?.takeIf { crossSigningService.isCrossSigningEnabled() }
                 ?.takeIf { it.invite3pids.isNullOrEmpty() }
                 ?.invitedUserIds
                 ?.let { userIds ->
