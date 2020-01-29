@@ -33,7 +33,7 @@ interface StateService {
      */
     fun enableEncryption(algorithm: String, callback: MatrixCallback<Unit>)
 
-    fun getStateEvent(eventType: String): Event?
+    fun getStateEvent(eventType: String, stateKey: String): Event?
 
-    fun getStateEventLive(eventType: String): LiveData<Optional<Event>>
+    fun getStateEventLive(eventType: String, stateKey: String): LiveData<Optional<Event>>
 }

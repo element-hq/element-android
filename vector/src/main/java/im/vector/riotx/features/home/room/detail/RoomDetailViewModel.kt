@@ -901,7 +901,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     setState { copy(asyncInviter = Success(it)) }
                 }
             }
-            room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE)?.also {
+            room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE, "")?.also {
                 setState { copy(tombstoneEvent = it) }
             }
         }

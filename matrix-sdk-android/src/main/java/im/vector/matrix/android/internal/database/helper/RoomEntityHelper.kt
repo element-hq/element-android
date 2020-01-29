@@ -16,14 +16,8 @@
 
 package im.vector.matrix.android.internal.database.helper
 
-import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.send.SendState
-import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntity
-import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
-import io.realm.Realm
 
 internal fun RoomEntity.deleteOnCascade(chunkEntity: ChunkEntity) {
     chunks.remove(chunkEntity)
@@ -35,21 +29,3 @@ internal fun RoomEntity.addOrUpdate(chunkEntity: ChunkEntity) {
         chunks.add(chunkEntity)
     }
 }
-
-internal fun RoomEntity.addSendingEvent(realm: Realm, event: Event) {
-    val senderId = event.senderId ?: return
-    val eventEntity = event.toEntity(roomId, SendState.UNSENT)
-    val roomMembers = RoomMemberHelper(realm, roomId)
-    val myUser = roomMembers.getLastRoomMember(senderId)
-    val localId = TimelineEventEntity.nextId(realm)
-    val timelineEventEntity = TimelineEventEntity(localId).also {
-        it.root = eventEntity
-        it.eventId = event.eventId ?: ""
-        it.roomId = roomId
-        it.senderName = myUser?.displayName
-        it.senderAvatar = myUser?.avatarUrl
-        it.isUniqueDisplayName = roomMembers.isUniqueDisplayName()
-    }
-    sendingTimelineEvents.add(0, timelineEventEntity)
-}
-

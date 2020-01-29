@@ -129,7 +129,7 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
     private fun resolveRoomMemberName(roomMemberSummary: RoomMemberSummaryEntity?,
                                       roomMemberHelper: RoomMemberHelper): String? {
         if (roomMemberSummary == null) return null
-        val isUnique = roomMemberHelper.isUniqueDisplayName()
+        val isUnique = roomMemberHelper.isUniqueDisplayName(roomMemberSummary.displayName)
         return if (isUnique) {
             roomMemberSummary.displayName
         } else {

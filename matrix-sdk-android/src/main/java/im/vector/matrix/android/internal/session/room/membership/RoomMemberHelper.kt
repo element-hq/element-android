@@ -18,9 +18,10 @@ package im.vector.matrix.android.internal.session.room.membership
 
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.internal.database.model.*
+import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntity
+import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntityFields
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.getOrNull
 import im.vector.matrix.android.internal.database.query.where
@@ -50,8 +51,14 @@ internal class RoomMemberHelper(private val realm: Realm,
                 .findFirst()
     }
 
-    fun isUniqueDisplayName(): Boolean {
-        return false
+    fun isUniqueDisplayName(displayName: String?): Boolean {
+        if (displayName.isNullOrEmpty()) {
+            return true
+        }
+        return RoomMemberSummaryEntity.where(realm, roomId)
+                .equalTo(RoomMemberSummaryEntityFields.DISPLAY_NAME, displayName)
+                .findAll()
+                .size == 1
     }
 
     fun queryRoomMembersEvent(): RealmQuery<RoomMemberSummaryEntity> {

@@ -17,19 +17,20 @@
 package im.vector.matrix.android.internal.session.room.timeline
 
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.RoomMemberContent
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.database.helper.addOrUpdate
 import im.vector.matrix.android.internal.database.helper.addStateEvent
 import im.vector.matrix.android.internal.database.helper.addTimelineEvent
 import im.vector.matrix.android.internal.database.helper.deleteOnCascade
 import im.vector.matrix.android.internal.database.helper.merge
-import im.vector.matrix.android.internal.database.mapper.asDomain
+import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
-import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.CurrentStateEventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
@@ -37,14 +38,11 @@ import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
-import im.vector.matrix.android.internal.database.query.getOrNull
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
-import io.realm.RealmList
-import io.realm.kotlin.createObject
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -193,24 +191,29 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
             currentChunk: ChunkEntity
     ) {
         Timber.v("Add ${receivedChunk.events.size} events in chunk(${currentChunk.nextToken} | ${currentChunk.prevToken}")
-        val roomMemberEventsByUser = HashMap<String, EventEntity?>()
-        val eventList = if (direction == PaginationDirection.FORWARDS) {
-            receivedChunk.events
-        } else {
-            receivedChunk.events.asReversed()
-        }
+        val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
+        val eventList = receivedChunk.events
         val stateEvents = receivedChunk.stateEvents
+
+        realm.where(CurrentStateEventEntity::class.java)
+                .equalTo(CurrentStateEventEntityFields.ROOM_ID, roomId)
+                .equalTo(CurrentStateEventEntityFields.TYPE, EventType.STATE_ROOM_MEMBER)
+                .findAll()
+                .forEach {
+                    val roomMember = ContentMapper.map(it.root?.content).toModel<RoomMemberContent>()
+                    roomMemberContentsByUser[it.stateKey] = roomMember
+                }
+
         for (stateEvent in stateEvents) {
             val stateEventEntity = stateEvent.toEntity(roomId, SendState.SYNCED).let {
                 realm.copyToRealmOrUpdate(it)
             }
             currentChunk.addStateEvent(roomId, stateEventEntity, direction)
             if (stateEvent.type == EventType.STATE_ROOM_MEMBER && stateEvent.stateKey != null && !stateEvent.isRedacted()) {
-                roomMemberEventsByUser[stateEvent.stateKey] = stateEventEntity
+                roomMemberContentsByUser[stateEvent.stateKey] = stateEvent.content.toModel<RoomMemberContent>()
             }
         }
         val eventIds = ArrayList<String>(eventList.size)
-        val eventEntities = ArrayList<EventEntity>(eventList.size)
         for (event in eventList) {
             if (event.eventId == null || event.senderId == null) {
                 continue
@@ -219,23 +222,16 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
             val eventEntity = event.toEntity(roomId, SendState.SYNCED).let {
                 realm.copyToRealmOrUpdate(it)
             }
-            if (direction == PaginationDirection.FORWARDS) {
-                eventEntities.add(eventEntity)
-            } else {
-                eventEntities.add(0, eventEntity)
-            }
             if (event.type == EventType.STATE_ROOM_MEMBER && event.stateKey != null && !event.isRedacted()) {
-                roomMemberEventsByUser[event.stateKey] = eventEntity
+                val contentToUse = if (direction == PaginationDirection.FORWARDS) {
+                    event.content
+                } else {
+                    event.prevContent
+                }
+                roomMemberContentsByUser[event.stateKey] = contentToUse.toModel<RoomMemberContent>()
             }
+            currentChunk.addTimelineEvent(roomId, eventEntity, direction, roomMemberContentsByUser)
         }
-        for (eventEntity in eventEntities) {
-            val senderId = eventEntity.sender ?: continue
-            val roomMemberEvent = roomMemberEventsByUser.getOrPut(senderId) {
-                CurrentStateEventEntity.getOrNull(realm, roomId, senderId, EventType.STATE_ROOM_MEMBER)?.root
-            }
-            currentChunk.addTimelineEvent(roomId, eventEntity, direction, roomMemberEvent)
-        }
-
         val chunks = ChunkEntity.findAllIncludingEvents(realm, eventIds)
         val chunksToDelete = ArrayList<ChunkEntity>()
         chunks.forEach {

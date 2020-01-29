@@ -21,20 +21,21 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.RoomMemberContent
 import im.vector.matrix.android.api.session.room.model.tag.RoomTagContent
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
-import im.vector.matrix.android.internal.database.helper.*
-import im.vector.matrix.android.internal.database.mapper.asDomain
+import im.vector.matrix.android.internal.database.helper.addOrUpdate
+import im.vector.matrix.android.internal.database.helper.addTimelineEvent
+import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
-import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.CurrentStateEventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.getOrCreate
-import im.vector.matrix.android.internal.database.query.getOrNull
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.mapWithProgress
@@ -44,7 +45,11 @@ import im.vector.matrix.android.internal.session.room.read.FullyReadContent
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimeline
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import im.vector.matrix.android.internal.session.room.typing.TypingEventContent
-import im.vector.matrix.android.internal.session.sync.model.*
+import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
+import im.vector.matrix.android.internal.session.sync.model.RoomSync
+import im.vector.matrix.android.internal.session.sync.model.RoomSyncAccountData
+import im.vector.matrix.android.internal.session.sync.model.RoomSyncEphemeral
+import im.vector.matrix.android.internal.session.sync.model.RoomsSyncResponse
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import org.greenrobot.eventbus.EventBus
@@ -211,7 +216,16 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         chunkEntity.isLastForward = true
 
         val eventIds = ArrayList<String>(eventList.size)
-        val roomMemberEventsByUser = HashMap<String, EventEntity?>()
+        val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
+
+        realm.where(CurrentStateEventEntity::class.java)
+                .equalTo(CurrentStateEventEntityFields.ROOM_ID, roomId)
+                .equalTo(CurrentStateEventEntityFields.TYPE, EventType.STATE_ROOM_MEMBER)
+                .findAll()
+                .forEach {
+                    val roomMember = ContentMapper.map(it.root?.content).toModel<RoomMemberContent>()
+                    roomMemberContentsByUser[it.stateKey] = roomMember
+                }
 
         for (event in eventList) {
             if (event.eventId == null || event.senderId == null) {
@@ -227,14 +241,11 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     root = eventEntity
                 }
                 if (event.type == EventType.STATE_ROOM_MEMBER) {
-                    roomMemberEventsByUser[event.stateKey] = eventEntity
+                    roomMemberContentsByUser[event.stateKey] = event.content.toModel()
                     roomMemberEventHandler.handle(realm, roomEntity.roomId, event)
                 }
             }
-            val roomMemberEvent = roomMemberEventsByUser.getOrPut(event.senderId) {
-                CurrentStateEventEntity.getOrNull(realm, roomId, event.senderId, EventType.STATE_ROOM_MEMBER)?.root
-            }
-            chunkEntity.addTimelineEvent(roomId, eventEntity, PaginationDirection.FORWARDS, roomMemberEvent)
+            chunkEntity.addTimelineEvent(roomId, eventEntity, PaginationDirection.FORWARDS, roomMemberContentsByUser)
             // Give info to crypto module
             cryptoService.onLiveEvent(roomEntity.roomId, event)
             // Try to remove local echo

@@ -62,7 +62,7 @@ internal class LocalEchoRepository @Inject constructor(private val monarchy: Mon
                 it.roomId = roomId
                 it.senderName = myUser?.displayName
                 it.senderAvatar = myUser?.avatarUrl
-                it.isUniqueDisplayName = roomMemberHelper.isUniqueDisplayName()
+                it.isUniqueDisplayName = roomMemberHelper.isUniqueDisplayName(myUser?.displayName)
             }
             roomEntity.sendingTimelineEvents.add(0, timelineEventEntity)
             roomSummaryUpdater.update(realm, roomId)

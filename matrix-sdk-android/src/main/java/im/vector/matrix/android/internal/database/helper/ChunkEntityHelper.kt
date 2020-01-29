@@ -16,9 +16,7 @@
 
 package im.vector.matrix.android.internal.database.helper
 
-import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomMemberContent
-import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.CurrentStateEventEntityFields
 import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
@@ -89,7 +87,7 @@ internal fun ChunkEntity.addStateEvent(roomId: String, stateEvent: EventEntity, 
 internal fun ChunkEntity.addTimelineEvent(roomId: String,
                                           eventEntity: EventEntity,
                                           direction: PaginationDirection,
-                                          roomMemberEvent: EventEntity?) {
+                                          roomMemberContentsByUser: HashMap<String, RoomMemberContent?>) {
 
     val eventId = eventEntity.eventId
     if (timelineEvents.find(eventId) != null) {
@@ -128,12 +126,15 @@ internal fun ChunkEntity.addTimelineEvent(roomId: String,
         this.annotations = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
         this.readReceipts = readReceiptsSummaryEntity
         this.displayIndex = displayIndex
-        if (roomMemberEvent != null) {
-            val roomMemberContent = ContentMapper.map(roomMemberEvent.content).toModel<RoomMemberContent>()
-            this.senderAvatar = roomMemberContent?.avatarUrl
-            this.senderName = roomMemberContent?.displayName
-            this.senderMembershipEventId = roomMemberEvent.eventId
-        }
+
+        val roomMemberContent = roomMemberContentsByUser[senderId]
+        val isUnique = roomMemberContentsByUser.values.find {
+            roomMemberContent != it &&
+                    it?.displayName == roomMemberContent?.displayName
+        } == null
+        this.senderAvatar = roomMemberContent?.avatarUrl
+        this.senderName = roomMemberContent?.displayName
+        this.isUniqueDisplayName = isUnique
     }
     timelineEvents.add(timelineEventEntity)
 }

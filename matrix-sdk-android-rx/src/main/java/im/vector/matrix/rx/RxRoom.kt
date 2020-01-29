@@ -61,10 +61,10 @@ class RxRoom(private val room: Room) {
                 }
     }
 
-    fun liveStateEvent(eventType: String): Observable<Optional<Event>> {
-        return room.getStateEventLive(eventType).asObservable()
+    fun liveStateEvent(eventType: String, stateKey: String): Observable<Optional<Event>> {
+        return room.getStateEventLive(eventType, stateKey).asObservable()
                 .startWithCallable {
-                    room.getStateEvent(eventType).toOptional()
+                    room.getStateEvent(eventType, stateKey).toOptional()
                 }
     }
 
