@@ -95,10 +95,12 @@ internal class DefaultPruneEventTask @Inject constructor(private val monarchy: M
 //                }
             }
         }
-        // TODO : make it work again. Maybe waits for SQL rework...
         if (typeToPrune == EventType.STATE_ROOM_MEMBER && stateKey != null) {
-            TimelineEventEntity.findWithSenderMembershipEvent(realm, eventToPrune.eventId)
-
+            TimelineEventEntity.findWithSenderMembershipEvent(realm, eventToPrune.eventId).forEach {
+                it.senderName = null
+                it.isUniqueDisplayName = false
+                it.senderAvatar = null
+            }
         }
     }
 

@@ -20,7 +20,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.query.types
+import im.vector.matrix.android.internal.database.query.whereTypes
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.UserId
 import io.realm.OrderedCollectionChangeSet
@@ -43,7 +43,7 @@ internal class EventRelationsAggregationUpdater @Inject constructor(
         RealmLiveEntityObserver<EventEntity>(realmConfiguration) {
 
     override val query = Monarchy.Query<EventEntity> {
-        EventEntity.types(it, listOf(
+        EventEntity.whereTypes(it, listOf(
                 EventType.MESSAGE,
                 EventType.REDACTION,
                 EventType.REACTION,

@@ -31,11 +31,11 @@ import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
-import im.vector.matrix.android.internal.database.model.CurrentStateEventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.getOrCreate
+import im.vector.matrix.android.internal.database.query.getOrNull
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.mapWithProgress
@@ -218,15 +218,6 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         val eventIds = ArrayList<String>(eventList.size)
         val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
 
-        realm.where(CurrentStateEventEntity::class.java)
-                .equalTo(CurrentStateEventEntityFields.ROOM_ID, roomId)
-                .equalTo(CurrentStateEventEntityFields.TYPE, EventType.STATE_ROOM_MEMBER)
-                .findAll()
-                .forEach {
-                    val roomMember = ContentMapper.map(it.root?.content).toModel<RoomMemberContent>()
-                    roomMemberContentsByUser[it.stateKey] = roomMember
-                }
-
         for (event in eventList) {
             if (event.eventId == null || event.senderId == null) {
                 continue
@@ -235,7 +226,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             val eventEntity = event.toEntity(roomId, SendState.SYNCED).let {
                 realm.copyToRealmOrUpdate(it)
             }
-            if (event.isStateEvent() && event.stateKey != null && !event.isRedacted()) {
+            if (event.isStateEvent() && event.stateKey != null) {
                 CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
                     eventId = event.eventId
                     root = eventEntity
@@ -244,6 +235,11 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     roomMemberContentsByUser[event.stateKey] = event.content.toModel()
                     roomMemberEventHandler.handle(realm, roomEntity.roomId, event)
                 }
+            }
+            roomMemberContentsByUser.getOrPut(event.senderId) {
+                // If we don't have any new state on this user, get it from db
+                val rootStateEvent = CurrentStateEventEntity.getOrNull(realm, roomId, event.senderId, EventType.STATE_ROOM_MEMBER)?.root
+                ContentMapper.map(rootStateEvent?.content).toModel()
             }
             chunkEntity.addTimelineEvent(roomId, eventEntity, PaginationDirection.FORWARDS, roomMemberContentsByUser)
             // Give info to crypto module

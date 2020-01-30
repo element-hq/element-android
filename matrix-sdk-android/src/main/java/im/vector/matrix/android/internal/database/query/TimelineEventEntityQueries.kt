@@ -38,17 +38,6 @@ internal fun TimelineEventEntity.Companion.whereRoomId(realm: Realm,
     return realm.where<TimelineEventEntity>().equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
 }
 
-internal fun TimelineEventEntity.Companion.whereType(realm: Realm,
-                                                     type: String,
-                                                     roomId: String? = null): RealmQuery<TimelineEventEntity> {
-    val query = realm.where<TimelineEventEntity>()
-    query.equalTo(TimelineEventEntityFields.ROOT.TYPE, type)
-    if (roomId != null) {
-        query.equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
-    }
-    return query
-}
-
 internal fun TimelineEventEntity.Companion.findWithSenderMembershipEvent(realm: Realm, senderMembershipEventId: String): List<TimelineEventEntity> {
     return realm.where<TimelineEventEntity>()
             .equalTo(TimelineEventEntityFields.SENDER_MEMBERSHIP_EVENT_ID, senderMembershipEventId)
