@@ -39,6 +39,7 @@ import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.features.crypto.verification.choose.VerificationChooseMethodFragment
 import im.vector.riotx.features.crypto.verification.conclusion.VerificationConclusionFragment
 import im.vector.riotx.features.crypto.verification.emoji.VerificationEmojiCodeFragment
+import im.vector.riotx.features.crypto.verification.qrconfirmation.VerificationQrScannedByOtherFragment
 import im.vector.riotx.features.crypto.verification.request.VerificationRequestFragment
 import im.vector.riotx.features.home.AvatarRenderer
 import kotlinx.android.parcel.Parcelize
@@ -149,19 +150,23 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
 
         when (it.qrTransactionState) {
-            is VerificationTxState.Verified  -> {
+            is VerificationTxState.QrScannedByOther -> {
+                showFragment(VerificationQrScannedByOtherFragment::class, Bundle())
+                return@withState
+            }
+            is VerificationTxState.Verified         -> {
                 showFragment(VerificationConclusionFragment::class, Bundle().apply {
                     putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null))
                 })
                 return@withState
             }
-            is VerificationTxState.Cancelled -> {
+            is VerificationTxState.Cancelled        -> {
                 showFragment(VerificationConclusionFragment::class, Bundle().apply {
                     putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(false, it.qrTransactionState.cancelCode.value))
                 })
                 return@withState
             }
-            else                             -> Unit
+            else                                    -> Unit
         }
 
         // At this point there is no SAS transaction for this request

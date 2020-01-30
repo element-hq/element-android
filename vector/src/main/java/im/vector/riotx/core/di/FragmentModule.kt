@@ -28,6 +28,7 @@ import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsFra
 import im.vector.riotx.features.crypto.verification.choose.VerificationChooseMethodFragment
 import im.vector.riotx.features.crypto.verification.conclusion.VerificationConclusionFragment
 import im.vector.riotx.features.crypto.verification.emoji.VerificationEmojiCodeFragment
+import im.vector.riotx.features.crypto.verification.qrconfirmation.VerificationQrScannedByOtherFragment
 import im.vector.riotx.features.crypto.verification.request.VerificationRequestFragment
 import im.vector.riotx.features.grouplist.GroupListFragment
 import im.vector.riotx.features.home.HomeDetailFragment
@@ -77,7 +78,6 @@ import im.vector.riotx.features.signout.soft.SoftLogoutFragment
 
 @Module
 interface FragmentModule {
-
     /**
      * Fragments with @IntoMap will be injected by this factory
      */
@@ -318,6 +318,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(VerificationEmojiCodeFragment::class)
     fun bindVerificationEmojiCodeFragment(fragment: VerificationEmojiCodeFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(VerificationQrScannedByOtherFragment::class)
+    fun bindVerificationQrScannedByOtherFragment(fragment: VerificationQrScannedByOtherFragment): Fragment
 
     @Binds
     @IntoMap

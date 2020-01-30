@@ -52,7 +52,7 @@ fun QrCodeData.toUrl(): String {
         append(URLEncoder.encode(action, ENCODING))
 
         for ((keyId, key) in keys) {
-            append("&key_$keyId=")
+            append("&key_${URLEncoder.encode(keyId, ENCODING)}=")
             append(URLEncoder.encode(key, ENCODING))
         }
 
@@ -105,7 +105,7 @@ fun String.toQrCodeData(): QrCodeData? {
     val keys = keyValues.keys
             .filter { it.startsWith("key_") }
             .map {
-                it.substringAfter("key_") to (keyValues[it] ?: return null)
+                URLDecoder.decode(it.substringAfter("key_"), ENCODING) to (keyValues[it] ?: return null)
             }
             .toMap()
 

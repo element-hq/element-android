@@ -198,11 +198,22 @@ internal class DefaultQrCodeVerificationTransaction(
         if (startReq.sharedSecret == qrCodeData.sharedSecret) {
             // Ok, we can trust the other user
             // We can only trust the master key in this case
-            trust(true, emptyList())
+            // But first, ask the user for a confirmation
+            state = VerificationTxState.QrScannedByOther
         } else {
             // Display a warning
             cancel(CancelCode.MismatchedKeys)
         }
+    }
+
+    override fun otherUserScannedMyQrCode() {
+        trust(true, emptyList())
+    }
+
+    override fun otherUserDidNotScannedMyQrCode() {
+        // What can I do then?
+        // At least remove the transaction...
+        state = VerificationTxState.Cancelled(CancelCode.MismatchedKeys, true)
     }
 
     private fun trust(canTrustOtherUserMasterKey: Boolean, toVerifyDeviceIds: List<String>) {

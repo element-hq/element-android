@@ -55,5 +55,4 @@ internal open class CrossSigningInfoEntity(
                 .forEach { crossSigningKeys.remove(it) }
         info?.let { crossSigningKeys.add(it) }
     }
-
 }

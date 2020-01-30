@@ -27,4 +27,14 @@ interface QrCodeVerificationTransaction : VerificationTransaction {
      * Call when you have scan the other user QR code
      */
     fun userHasScannedOtherQrCode(otherQrCodeText: String)
+
+    /**
+     * Call when you confirm that other user has scanned your QR code
+     */
+    fun otherUserScannedMyQrCode()
+
+    /**
+     * Call when you do not confirm that other user has scanned your QR code
+     */
+    fun otherUserDidNotScannedMyQrCode()
 }
