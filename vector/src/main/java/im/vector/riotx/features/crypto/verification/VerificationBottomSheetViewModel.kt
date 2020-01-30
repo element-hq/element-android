@@ -30,6 +30,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.QrCodeVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
@@ -55,7 +56,9 @@ data class VerificationBottomSheetViewState(
         val pendingLocalId: String? = null,
         val sasTransactionState: VerificationTxState? = null,
         val qrTransactionState: VerificationTxState? = null,
-        val transactionId: String? = null
+        val transactionId: String? = null,
+        val waitForOtherUserMode: Boolean = false,
+        val isMe: Boolean = false
 ) : MvRxState
 
 class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted initialState: VerificationBottomSheetViewState,
@@ -102,13 +105,18 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                 session.getVerificationService().getExistingTransaction(args.otherUserId, it) as? QrCodeVerificationTransaction
             }
 
+            val isWaitingForOtherMode = args.waitForIncomingRequest
+            // TODO see if active tx for this user and take it
+
             return fragment.verificationViewModelFactory.create(VerificationBottomSheetViewState(
                     otherUserMxItem = userItem?.toMatrixItem(),
                     sasTransactionState = sasTx?.state,
                     qrTransactionState = qrTx?.state,
                     transactionId = args.verificationId,
                     pendingRequest = if (pr != null) Success(pr) else Uninitialized,
-                    roomId = args.roomId)
+                    waitForOtherUserMode = isWaitingForOtherMode,
+                    roomId = args.roomId,
+                    isMe = args.otherUserId == session.myUserId)
             )
         }
     }
@@ -230,6 +238,27 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
     }
 
     override fun transactionUpdated(tx: VerificationTransaction) = withState { state ->
+        if (state.waitForOtherUserMode && state.transactionId == null) {
+            // is this an incoming with that user
+            if (tx.isIncoming && tx.otherUserId == state.otherUserMxItem?.id) {
+
+                // Also auto accept incoming if needed!
+                if (tx is IncomingSasVerificationTransaction) {
+                    if (tx.uxState == IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT) {
+                        tx.performAccept()
+                    }
+                }
+                // Use this one!
+                setState {
+                    copy(
+                            transactionId = tx.transactionId,
+                            sasTransactionState = tx.state.takeIf { tx is SasVerificationTransaction },
+                            qrTransactionState = tx.state.takeIf { tx is QrCodeVerificationTransaction }
+                    )
+                }
+            }
+        }
+
         when (tx) {
             is SasVerificationTransaction    -> {
                 if (tx.transactionId == (state.pendingRequest.invoke()?.transactionId ?: state.transactionId)) {
@@ -259,6 +288,20 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
     }
 
     override fun verificationRequestUpdated(pr: PendingVerificationRequest) = withState { state ->
+
+        if (state.waitForOtherUserMode && state.pendingRequest.invoke() == null && state.transactionId == null) {
+            // is this an incoming with that user
+            if (pr.isIncoming && pr.otherUserId == state.otherUserMxItem?.id) {
+                // Use this one!
+                setState {
+                    copy(
+                            transactionId = pr.transactionId,
+                            pendingRequest = Success(pr)
+                    )
+                }
+                return@withState
+            }
+        }
 
         if (pr.localID == state.pendingLocalId
                 || pr.localID == state.pendingRequest.invoke()?.localID

@@ -25,7 +25,8 @@ import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 
 data class VerificationConclusionViewState(
-        val conclusionState: ConclusionState = ConclusionState.CANCELLED
+        val conclusionState: ConclusionState = ConclusionState.CANCELLED,
+        val isSelfVerification: Boolean = false
 ) : MvRxState
 
 enum class ConclusionState {
@@ -48,13 +49,13 @@ class VerificationConclusionViewModel(initialState: VerificationConclusionViewSt
                 CancelCode.MismatchedSas,
                 CancelCode.MismatchedCommitment,
                 CancelCode.MismatchedKeys -> {
-                    VerificationConclusionViewState(ConclusionState.WARNING)
+                    VerificationConclusionViewState(ConclusionState.WARNING, args.isMe)
                 }
                 else                      -> {
                     VerificationConclusionViewState(
                             if (args.isSuccessFull) ConclusionState.SUCCESS
                             else ConclusionState.CANCELLED
-                    )
+                    , args.isMe)
                 }
             }
         }

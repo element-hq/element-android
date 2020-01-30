@@ -38,7 +38,8 @@ class VerificationConclusionFragment @Inject constructor(
     @Parcelize
     data class Args(
             val isSuccessFull: Boolean,
-            val cancelReason: String?
+            val cancelReason: String?,
+            val isMe: Boolean
     ) : Parcelable
 
     private val sharedViewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)

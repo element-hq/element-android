@@ -54,7 +54,9 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     data class VerificationArgs(
             val otherUserId: String,
             val verificationId: String? = null,
-            val roomId: String? = null
+            val roomId: String? = null,
+            // Special mode where UX should show loading wheel until other user sends a request/tx
+            val waitForIncomingRequest : Boolean = false
     ) : Parcelable
 
     @Inject
@@ -97,14 +99,25 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     override fun invalidate() = withState(viewModel) {
         it.otherUserMxItem?.let { matrixItem ->
-            avatarRenderer.render(matrixItem, otherUserAvatarImageView)
 
-            if (it.sasTransactionState == VerificationTxState.Verified || it.qrTransactionState == VerificationTxState.Verified) {
-                otherUserNameText.text = getString(R.string.verification_verified_user, matrixItem.getBestName())
-                otherUserShield.isVisible = true
-            } else {
-                otherUserNameText.text = getString(R.string.verification_verify_user, matrixItem.getBestName())
+            if (it.waitForOtherUserMode) {
+                if (it.sasTransactionState == VerificationTxState.Verified || it.qrTransactionState == VerificationTxState.Verified) {
+                    otherUserAvatarImageView.setImageResource(R.drawable.ic_shield_trusted)
+                } else {
+                    otherUserAvatarImageView.setImageResource(R.drawable.ic_shield_warning)
+                }
+                otherUserNameText.text = getString(R.string.complete_security)
                 otherUserShield.isVisible = false
+            } else {
+                avatarRenderer.render(matrixItem, otherUserAvatarImageView)
+
+                if (it.sasTransactionState == VerificationTxState.Verified || it.qrTransactionState == VerificationTxState.Verified) {
+                    otherUserNameText.text = getString(R.string.verification_verified_user, matrixItem.getBestName())
+                    otherUserShield.isVisible = true
+                } else {
+                    otherUserNameText.text = getString(R.string.verification_verify_user, matrixItem.getBestName())
+                    otherUserShield.isVisible = false
+                }
             }
         }
 
@@ -136,12 +149,12 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 }
                 is VerificationTxState.Verified  -> {
                     showFragment(VerificationConclusionFragment::class, Bundle().apply {
-                        putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null))
+                        putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null, it.isMe))
                     })
                 }
                 is VerificationTxState.Cancelled -> {
                     showFragment(VerificationConclusionFragment::class, Bundle().apply {
-                        putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(false, it.sasTransactionState.cancelCode.value))
+                        putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(false, it.sasTransactionState.cancelCode.value, it.isMe))
                     })
                 }
             }
@@ -156,13 +169,13 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
             }
             is VerificationTxState.Verified         -> {
                 showFragment(VerificationConclusionFragment::class, Bundle().apply {
-                    putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null))
+                    putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null, it.isMe))
                 })
                 return@withState
             }
             is VerificationTxState.Cancelled        -> {
                 showFragment(VerificationConclusionFragment::class, Bundle().apply {
-                    putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(false, it.qrTransactionState.cancelCode.value))
+                    putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(false, it.qrTransactionState.cancelCode.value, it.isMe))
                 })
                 return@withState
             }
@@ -178,7 +191,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
 
         // If it's an outgoing
-        if (it.pendingRequest.invoke() == null || it.pendingRequest.invoke()?.isIncoming == false) {
+        if (it.pendingRequest.invoke() == null || it.pendingRequest.invoke()?.isIncoming == false || it.waitForOtherUserMode) {
             Timber.v("## SAS show bottom sheet for outgoing request")
             if (it.pendingRequest.invoke()?.isReady == true) {
                 Timber.v("## SAS show bottom sheet for outgoing and ready request")
@@ -225,17 +238,20 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     }
 
     companion object {
-        fun withArgs(roomId: String?, otherUserId: String, transactionId: String? = null): VerificationBottomSheet {
+        fun withArgs(roomId: String?, otherUserId: String, transactionId: String? = null, waitForIncomingRequest: Boolean = false): VerificationBottomSheet {
             return VerificationBottomSheet().apply {
                 arguments = Bundle().apply {
                     putParcelable(MvRx.KEY_ARG, VerificationArgs(
                             otherUserId = otherUserId,
                             roomId = roomId,
-                            verificationId = transactionId
+                            verificationId = transactionId,
+                            waitForIncomingRequest = waitForIncomingRequest
                     ))
                 }
             }
         }
+
+        val WAITING_SELF_VERIF_TAG : String = "WAITING_SELF_VERIF_TAG"
     }
 }
 

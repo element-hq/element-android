@@ -50,44 +50,64 @@ class VerificationRequestController @Inject constructor(
         val state = viewState ?: return
         val matrixItem = viewState?.otherUserMxItem ?: return
 
-        val styledText = matrixItem.let {
-            stringProvider.getString(R.string.verification_request_notice, it.id)
-                    .toSpannable()
-                    .colorizeMatchingText(it.id, colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color))
-        }
 
-        bottomSheetVerificationNoticeItem {
-            id("notice")
-            notice(styledText)
-        }
 
-        dividerItem {
-            id("sep")
-        }
-
-        when (val pr = state.pendingRequest) {
-            is Uninitialized -> {
-                bottomSheetVerificationActionItem {
-                    id("start")
-                    title(stringProvider.getString(R.string.start_verification))
-                    titleColor(colorProvider.getColor(R.color.riotx_accent))
-                    subTitle(stringProvider.getString(R.string.verification_request_start_notice))
-                    iconRes(R.drawable.ic_arrow_right)
-                    iconColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
-                    listener { listener?.onClickOnVerificationStart() }
-                }
+        if (state.waitForOtherUserMode) {
+            bottomSheetVerificationNoticeItem {
+                id("notice")
+                notice(stringProvider.getString(R.string.verification_open_other_to_verify))
             }
-            is Loading -> {
-                bottomSheetVerificationWaitingItem {
-                    id("waiting")
-                    title(stringProvider.getString(R.string.verification_request_waiting_for, matrixItem.getBestName()))
-                }
+
+            dividerItem {
+                id("sep")
             }
-            is Success -> {
-                if (!pr.invoke().isReady) {
+
+
+            bottomSheetVerificationWaitingItem {
+                id("waiting")
+                title(stringProvider.getString(R.string.verification_request_waiting_for, matrixItem.getBestName()))
+            }
+        } else {
+
+            val styledText = matrixItem.let {
+                stringProvider.getString(R.string.verification_request_notice, it.id)
+                        .toSpannable()
+                        .colorizeMatchingText(it.id, colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color))
+            }
+
+            bottomSheetVerificationNoticeItem {
+                id("notice")
+                notice(styledText)
+            }
+
+            dividerItem {
+                id("sep")
+            }
+
+            when (val pr = state.pendingRequest) {
+                is Uninitialized -> {
+                    bottomSheetVerificationActionItem {
+                        id("start")
+                        title(stringProvider.getString(R.string.start_verification))
+                        titleColor(colorProvider.getColor(R.color.riotx_accent))
+                        subTitle(stringProvider.getString(R.string.verification_request_start_notice))
+                        iconRes(R.drawable.ic_arrow_right)
+                        iconColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                        listener { listener?.onClickOnVerificationStart() }
+                    }
+                }
+                is Loading       -> {
                     bottomSheetVerificationWaitingItem {
                         id("waiting")
                         title(stringProvider.getString(R.string.verification_request_waiting_for, matrixItem.getBestName()))
+                    }
+                }
+                is Success       -> {
+                    if (!pr.invoke().isReady) {
+                        bottomSheetVerificationWaitingItem {
+                            id("waiting")
+                            title(stringProvider.getString(R.string.verification_request_waiting_for, matrixItem.getBestName()))
+                        }
                     }
                 }
             }

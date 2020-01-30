@@ -100,18 +100,19 @@
     <string name="room_settings_enable_encryption_dialog_content">Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly.</string>
     <string name="room_settings_enable_encryption_dialog_submit">Enable encryption</string>
 
-    <string name="verification_request_notice">For extra security, verify %s by checking a one-time code.</string>
-    <string name="verification_request_start_notice">For maximum security, do this in person.</string>
+    <string name="verification_request_notice">To be secure, verify %s by checking a one-time code.</string>
+    <string name="verification_request_start_notice">To be secure, do this in person or use another way to communicate.</string>
 
     <string name="verification_emoji_notice">Compare the unique emoji, ensuring they appear in the same order.</string>
     <string name="verification_code_notice">Compare the code with the one displayed on the other user\'s screen.</string>
     <string name="verification_conclusion_ok_notice">Messages with this user are end-to-end encrypted and can\'t be read by third parties.</string>
+    <string name="verification_conclusion_ok_self_notice">Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.</string>
 
 
     <string name="encryption_information_cross_signing_state">Cross-Signing</string>
     <string name="encryption_information_dg_xsigning_complete">Cross-Signing is enabled\nPrivate Keys on device.</string>
-    <string name="encryption_information_dg_xsigning_trusted">Cross-Signing is enabled\nKeys are trusted\n.Private keys are not known</string>
-    <string name="encryption_information_dg_xsigning_not_trusted">Cross-Signing is enabled\nKeys are not trusted</string>
+        <string name="encryption_information_dg_xsigning_trusted">Cross-Signing is enabled\nKeys are trusted.\nPrivate keys are not known</string>
+    <string name="encryption_information_dg_xsigning_not_trusted">Cross-Signing is enabled.\nKeys are not trusted</string>
     <string name="encryption_information_dg_xsigning_disabled">Cross-Signing is not enabled</string>
 
 
@@ -127,6 +128,12 @@
         <item quantity="one">%d active session</item>
         <item quantity="other">%d active sessions</item>
     </plurals>
+
+    <string name="crosssigning_verify_this_session">Verify this session</string>
+    <string name="crosssigning_other_user_not_trust">Other users may not trust it</string>
+    <string name="complete_security">Complete Security</string>
+
+    <string name="verification_open_other_to_verify">Open an existing session &amp; use it to verify this one, granting it access to encrypted messages. If you can’t access one, use your recovery key or passphrase.</string>
 
 
     <string name="verification_profile_verify">Verify</string>
