@@ -135,7 +135,16 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
                     .apply {
                         contentAction = Runnable {
                             (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
-                                it.navigator.openRoom(it, pr.roomId ?: "", pr.transactionId)
+                                val roomId = pr.roomId
+                                if (roomId.isNullOrBlank()) {
+                                    session?.getVerificationService()
+                                            ?.readyPendingVerification(supportedVerificationMethods,
+                                                    pr.otherUserId,
+                                                    pr.transactionId ?: "")
+                                    it.navigator.waitSessionVerification(it)
+                                } else {
+                                    it.navigator.openRoom(it, roomId, pr.transactionId)
+                                }
                             }
                         }
                         dismissedAction = Runnable {

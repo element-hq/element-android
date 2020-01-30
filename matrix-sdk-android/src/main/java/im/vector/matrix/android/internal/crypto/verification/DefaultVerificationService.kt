@@ -55,6 +55,7 @@ import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationCancel
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationKey
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationMac
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationReady
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationRequest
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
 import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SCAN
@@ -110,25 +111,28 @@ internal class DefaultVerificationService @Inject constructor(
     fun onToDeviceEvent(event: Event) {
         GlobalScope.launch(coroutineDispatchers.crypto) {
             when (event.getClearType()) {
-                EventType.KEY_VERIFICATION_START  -> {
+                EventType.KEY_VERIFICATION_START         -> {
                     onStartRequestReceived(event)
                 }
-                EventType.KEY_VERIFICATION_CANCEL -> {
+                EventType.KEY_VERIFICATION_CANCEL        -> {
                     onCancelReceived(event)
                 }
-                EventType.KEY_VERIFICATION_ACCEPT -> {
+                EventType.KEY_VERIFICATION_ACCEPT        -> {
                     onAcceptReceived(event)
                 }
-                EventType.KEY_VERIFICATION_KEY    -> {
+                EventType.KEY_VERIFICATION_KEY           -> {
                     onKeyReceived(event)
                 }
-                EventType.KEY_VERIFICATION_MAC    -> {
+                EventType.KEY_VERIFICATION_MAC           -> {
                     onMacReceived(event)
                 }
-                MessageType.MSGTYPE_VERIFICATION_REQUEST    -> {
+                EventType.KEY_VERIFICATION_READY         -> {
+                    onReadyReceived(event)
+                }
+                MessageType.MSGTYPE_VERIFICATION_REQUEST -> {
                     onRequestReceived(event)
                 }
-                else                              -> {
+                else                                     -> {
                     // ignore
                 }
             }
@@ -263,7 +267,6 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-
     private fun onRequestReceived(event: Event) {
         val requestInfo = event.getClearContent().toModel<KeyVerificationRequest>()!!
 
@@ -279,7 +282,7 @@ internal class DefaultVerificationService @Inject constructor(
 
         GlobalScope.launch {
             if (checkKeysAreDownloaded(senderId, otherDeviceId) == null) {
-                Timber.e("## Verification device $otherDeviceId is not knwon")
+                Timber.e("## Verification device $otherDeviceId is not known")
             }
         }
 
@@ -294,13 +297,12 @@ internal class DefaultVerificationService @Inject constructor(
                 isIncoming = true,
                 otherUserId = senderId, // requestInfo.toUserId,
                 roomId = null,
-                transactionId = event.eventId,
+                transactionId = requestInfo.transactionID,
                 requestInfo = requestInfo
         )
         requestsForUser.add(pendingVerificationRequest)
         dispatchRequestAdded(pendingVerificationRequest)
     }
-
 
     suspend fun onRoomRequestReceived(event: Event) {
         Timber.v("## SAS Verification request from ${event.senderId} in room ${event.roomId}")
@@ -318,7 +320,7 @@ internal class DefaultVerificationService @Inject constructor(
         // We don't want to block here
         GlobalScope.launch {
             if (checkKeysAreDownloaded(senderId, fromDevice) == null) {
-                Timber.e("## SAS Verification device $fromDevice is not knwon")
+                Timber.e("## SAS Verification device $fromDevice is not known")
             }
         }
 
@@ -677,7 +679,29 @@ internal class DefaultVerificationService @Inject constructor(
             return
         }
 
-        handleReadyReceived(event.senderId, event.roomId!!, readyReq)
+        handleReadyReceived(event.senderId, readyReq) {
+            verificationTransportRoomMessageFactory.createTransport(event.roomId!!, it)
+        }
+    }
+
+    private suspend fun onReadyReceived(event: Event) {
+        val readyReq = event.getClearContent().toModel<KeyVerificationReady>()
+
+        if (readyReq == null || readyReq.isValid().not() || event.senderId == null) {
+            // ignore
+            Timber.e("## SAS Received invalid ready request")
+            // TODO should we cancel?
+            return
+        }
+        if (checkKeysAreDownloaded(event.senderId, readyReq.fromDevice ?: "") == null) {
+            Timber.e("## SAS Verification device ${readyReq.fromDevice} is not known")
+            // TODO cancel?
+            return
+        }
+
+        handleReadyReceived(event.senderId, readyReq) {
+            verificationTransportToDeviceFactory.createTransport(it)
+        }
     }
 
     private fun onRoomDoneReceived(event: Event) {
@@ -722,7 +746,9 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-    private fun handleReadyReceived(senderId: String, roomId: String, readyReq: VerificationInfoReady) {
+    private fun handleReadyReceived(senderId: String,
+                                    readyReq: VerificationInfoReady,
+                                    transportCreator: (DefaultVerificationTransaction) -> VerificationTransport) {
         val existingRequest = getExistingVerificationRequest(senderId)?.find { it.transactionId == readyReq.transactionID }
         if (existingRequest == null) {
             Timber.e("## SAS Received Ready for unknown request txId:${readyReq.transactionID} fromDevice ${readyReq.fromDevice}")
@@ -750,7 +776,7 @@ internal class DefaultVerificationService @Inject constructor(
                     deviceId ?: "",
                     false)
 
-            tx.transport = verificationTransportRoomMessageFactory.createTransport(roomId, tx)
+            tx.transport = transportCreator.invoke(tx)
 
             addTransaction(tx)
         }
@@ -973,8 +999,8 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-    override fun beginKeyVerification(method: VerificationMethod, otherUserId: String, otherDeviceID: String): String? {
-        val txID = createUniqueIDForTransaction(otherUserId, otherDeviceID)
+    override fun beginKeyVerification(method: VerificationMethod, otherUserId: String, otherDeviceId: String, transactionId: String?): String? {
+        val txID = transactionId?.takeIf { it.isNotEmpty() } ?: createUniqueIDForTransaction(otherUserId, otherDeviceId)
         // should check if already one (and cancel it)
         if (method == VerificationMethod.SAS) {
             val tx = DefaultOutgoingSASDefaultVerificationTransaction(
@@ -986,7 +1012,7 @@ internal class DefaultVerificationService @Inject constructor(
                     myDeviceInfoHolder.get().myDevice.fingerprint()!!,
                     txID,
                     otherUserId,
-                    otherDeviceID)
+                    otherDeviceId)
             tx.transport = verificationTransportToDeviceFactory.createTransport(tx)
             addTransaction(tx)
 
@@ -1190,9 +1216,10 @@ internal class DefaultVerificationService @Inject constructor(
                     transactionId,
                     otherUserId,
                     existingRequest.requestInfo?.fromDevice ?: "",
-                    roomId,
                     existingRequest.requestInfo?.methods,
-                    methods)
+                    methods) {
+                verificationTransportRoomMessageFactory.createTransport(roomId, it)
+            }
             if (methods.isNullOrEmpty()) {
                 Timber.i("Cannot ready this request, no common methods found txId:$transactionId")
                 // TODO buttons should not be shown in  this case?
@@ -1215,13 +1242,52 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
+    override fun readyPendingVerification(methods: List<VerificationMethod>,
+                                          otherUserId: String,
+                                          transactionId: String): Boolean {
+        Timber.v("## SAS readyPendingVerification $otherUserId tx:$transactionId")
+        // Let's find the related request
+        val existingRequest = getExistingVerificationRequest(otherUserId, transactionId)
+        if (existingRequest != null) {
+            // we need to send a ready event, with matching methods
+            val transport = verificationTransportToDeviceFactory.createTransport(null)
+            val computedMethods = computeReadyMethods(
+                    transactionId,
+                    otherUserId,
+                    existingRequest.requestInfo?.fromDevice ?: "",
+                    existingRequest.requestInfo?.methods,
+                    methods) {
+                verificationTransportToDeviceFactory.createTransport(it)
+            }
+            if (methods.isNullOrEmpty()) {
+                Timber.i("Cannot ready this request, no common methods found txId:$transactionId")
+                // TODO buttons should not be shown in  this case?
+                return false
+            }
+            // TODO this is not yet related to a transaction, maybe we should use another method like for cancel?
+            val readyMsg = transport.createReady(transactionId, deviceId ?: "", computedMethods)
+            transport.sendVerificationReady(
+                    readyMsg,
+                    otherUserId,
+                    existingRequest.requestInfo?.fromDevice ?: "",
+                    null // TODO handle error?
+            )
+            updatePendingRequest(existingRequest.copy(readyInfo = readyMsg))
+            return true
+        } else {
+            Timber.e("## SAS readyPendingVerification Verification not found")
+            // :/ should not be possible... unless live observer very slow
+            return false
+        }
+    }
+
     private fun computeReadyMethods(
             transactionId: String,
             otherUserId: String,
             otherDeviceId: String,
-            roomId: String,
             otherUserMethods: List<String>?,
-            methods: List<VerificationMethod>): List<String> {
+            methods: List<VerificationMethod>,
+            transportCreator: (DefaultVerificationTransaction) -> VerificationTransport): List<String> {
         if (otherUserMethods.isNullOrEmpty()) {
             return emptyList()
         }
@@ -1264,7 +1330,7 @@ internal class DefaultVerificationService @Inject constructor(
                         deviceId ?: "",
                         false)
 
-                tx.transport = verificationTransportRoomMessageFactory.createTransport(roomId, tx)
+                tx.transport = transportCreator.invoke(tx)
 
                 addTransaction(tx)
             }

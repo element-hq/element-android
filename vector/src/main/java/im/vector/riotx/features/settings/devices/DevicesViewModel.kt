@@ -33,9 +33,8 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.sas.VerificationService
-import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
-import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
 import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
+import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
@@ -44,6 +43,7 @@ import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
+import im.vector.riotx.features.crypto.verification.supportedVerificationMethods
 
 data class DevicesViewState(
         val myDeviceId: String = "",
@@ -96,9 +96,9 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
 
     override fun transactionCreated(tx: VerificationTransaction) {}
     override fun transactionUpdated(tx: VerificationTransaction) {
-      if (tx.state == VerificationTxState.Verified) {
-          refreshDevicesList()
-      }
+        if (tx.state == VerificationTxState.Verified) {
+            refreshDevicesList()
+        }
     }
 
     /**
@@ -168,16 +168,13 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
     }
 
     private fun handleVerify(action: DevicesAction.VerifyMyDevice) {
-        // TODO Implement request in to DEVICE!!!
-        val txID = session.getVerificationService().beginKeyVerification(VerificationMethod.SAS, session.myUserId, action.deviceId)
-        if (txID != null) {
-            _requestLiveData.postValue(LiveEvent(Success(
-                    action.copy(
-                            userId = session.myUserId,
-                            transactionId = txID
-                    )
-            )))
-        }
+        val txID = session.getVerificationService().requestKeyVerification(supportedVerificationMethods, session.myUserId, listOf(action.deviceId))
+        _requestLiveData.postValue(LiveEvent(Success(
+                action.copy(
+                        userId = session.myUserId,
+                        transactionId = txID.transactionId
+                )
+        )))
     }
 
     private fun handlePromptRename(action: DevicesAction.PromptRename) = withState { state ->

@@ -77,6 +77,30 @@ internal class VerificationTransportToDevice(
                 .executeBy(taskExecutor)
     }
 
+    override fun sendVerificationReady(keyReq: VerificationInfoReady,
+                                       otherUserId: String,
+                                       otherDeviceId: String,
+                                       callback: (() -> Unit)?) {
+        val contentMap = MXUsersDevicesMap<Any>()
+
+        contentMap.setObject(otherUserId, otherDeviceId, keyReq)
+
+        sendToDeviceTask
+                .configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_READY, contentMap)) {
+                    this.callback = object : MatrixCallback<Unit> {
+                        override fun onSuccess(data: Unit) {
+                            Timber.v("## verification [$tx.transactionId] send toDevice request success")
+                            callback?.invoke()
+                        }
+
+                        override fun onFailure(failure: Throwable) {
+                            Timber.e("## verification [$tx.transactionId] failed to send toDevice request")
+                        }
+                    }
+                }
+                .executeBy(taskExecutor)
+    }
+
     override fun sendToOther(type: String,
                              verificationInfo: VerificationInfo,
                              nextState: VerificationTxState,
