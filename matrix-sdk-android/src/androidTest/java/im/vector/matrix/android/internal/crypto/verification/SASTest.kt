@@ -47,7 +47,6 @@ import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
-import java.util.ArrayList
 import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
@@ -78,7 +77,10 @@ class SASTest : InstrumentedTest {
         }
         bobVerificationService.addListener(bobListener)
 
-        val txID = aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobSession.myUserId, bobSession.getMyDevice().deviceId)
+        val txID = aliceVerificationService.beginKeyVerification(VerificationMethod.SAS,
+                bobSession.myUserId,
+                bobSession.getMyDevice().deviceId,
+                null)
         assertNotNull("Alice should have a started transaction", txID)
 
         val aliceKeyTx = aliceVerificationService.getExistingTransaction(bobSession.myUserId, txID!!)
@@ -325,7 +327,7 @@ class SASTest : InstrumentedTest {
 
         val aliceCreatedLatch = CountDownLatch(2)
         val aliceCancelledLatch = CountDownLatch(2)
-        val createdTx = ArrayList<SASDefaultVerificationTransaction>()
+        val createdTx = mutableListOf<SASDefaultVerificationTransaction>()
         val aliceListener = object : VerificationService.VerificationListener {
             override fun transactionCreated(tx: VerificationTransaction) {
                 createdTx.add(tx as SASDefaultVerificationTransaction)
@@ -344,8 +346,8 @@ class SASTest : InstrumentedTest {
 
         val bobUserId = bobSession!!.myUserId
         val bobDeviceId = bobSession.getMyDevice().deviceId
-        aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId)
-        aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId)
+        aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId, null)
+        aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId, null)
 
         mTestHelper.await(aliceCreatedLatch)
         mTestHelper.await(aliceCancelledLatch)
@@ -402,7 +404,7 @@ class SASTest : InstrumentedTest {
 
         val bobUserId = bobSession.myUserId
         val bobDeviceId = bobSession.getMyDevice().deviceId
-        aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId)
+        aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId, null)
         mTestHelper.await(aliceAcceptedLatch)
 
         assertTrue("Should have receive a commitment", accepted!!.commitment?.trim()?.isEmpty() == false)
@@ -471,7 +473,7 @@ class SASTest : InstrumentedTest {
 
         val bobUserId = bobSession.myUserId
         val bobDeviceId = bobSession.getMyDevice().deviceId
-        val verificationSAS = aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId)
+        val verificationSAS = aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId, null)
         mTestHelper.await(aliceSASLatch)
         mTestHelper.await(bobSASLatch)
 
@@ -541,7 +543,7 @@ class SASTest : InstrumentedTest {
 
         val bobUserId = bobSession.myUserId
         val bobDeviceId = bobSession.getMyDevice().deviceId
-        aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId)
+        aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId, null)
         mTestHelper.await(aliceSASLatch)
         mTestHelper.await(bobSASLatch)
 

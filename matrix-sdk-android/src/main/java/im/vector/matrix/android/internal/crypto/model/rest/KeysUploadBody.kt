@@ -21,10 +21,10 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.util.JsonDict
 
 @JsonClass(generateAdapter = true)
-data class KeysUploadBody(
+internal data class KeysUploadBody(
         @Json(name = "device_keys")
-        var deviceKeys: RestDeviceInfo? = null,
+        val deviceKeys: RestDeviceInfo? = null,
 
         @Json(name = "one_time_keys")
-        var oneTimeKeys: JsonDict? = null
+        val oneTimeKeys: JsonDict? = null
 )

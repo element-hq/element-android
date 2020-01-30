@@ -12,6 +12,7 @@ import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -73,14 +74,12 @@ class XSigningTest : InstrumentedTest {
                 password = TestConstants.PASSWORD
         )
 
-        val aliceLatch = CountDownLatch(1)
-        val bobLatch = CountDownLatch(1)
+        val latch = CountDownLatch(2)
 
-        aliceSession.getCrossSigningService().initializeCrossSigning(aliceAuthParams, TestMatrixCallback(aliceLatch))
-        bobSession.getCrossSigningService().initializeCrossSigning(bobAuthParams, TestMatrixCallback(bobLatch))
+        aliceSession.getCrossSigningService().initializeCrossSigning(aliceAuthParams, TestMatrixCallback(latch))
+        bobSession.getCrossSigningService().initializeCrossSigning(bobAuthParams, TestMatrixCallback(latch))
 
-        mTestHelper.await(aliceLatch)
-        mTestHelper.await(bobLatch)
+        mTestHelper.await(latch)
 
         // Check that alice can see bob keys
         val downloadLatch = CountDownLatch(1)
@@ -88,14 +87,14 @@ class XSigningTest : InstrumentedTest {
         mTestHelper.await(downloadLatch)
 
         val bobKeysFromAlicePOV = aliceSession.getCrossSigningService().getUserCrossSigningKeys(bobSession.myUserId)
-        assertNotNull("Alice can see bob Master key", bobKeysFromAlicePOV?.masterKey())
-        assertNull("Alice should not see bob User key", bobKeysFromAlicePOV?.userKey())
-        assertNotNull("Alice can see bob SelfSigned key", bobKeysFromAlicePOV?.selfSigningKey())
+        assertNotNull("Alice can see bob Master key", bobKeysFromAlicePOV!!.masterKey())
+        assertNull("Alice should not see bob User key", bobKeysFromAlicePOV.userKey())
+        assertNotNull("Alice can see bob SelfSigned key", bobKeysFromAlicePOV.selfSigningKey())
 
-        assertEquals("Bob keys from alice pov should match", bobKeysFromAlicePOV?.masterKey()?.unpaddedBase64PublicKey, bobSession.getCrossSigningService().getMyCrossSigningKeys()?.masterKey()?.unpaddedBase64PublicKey)
-        assertEquals("Bob keys from alice pov should match", bobKeysFromAlicePOV?.selfSigningKey()?.unpaddedBase64PublicKey, bobSession.getCrossSigningService().getMyCrossSigningKeys()?.selfSigningKey()?.unpaddedBase64PublicKey)
+        assertEquals("Bob keys from alice pov should match", bobKeysFromAlicePOV.masterKey()?.unpaddedBase64PublicKey, bobSession.getCrossSigningService().getMyCrossSigningKeys()?.masterKey()?.unpaddedBase64PublicKey)
+        assertEquals("Bob keys from alice pov should match", bobKeysFromAlicePOV.selfSigningKey()?.unpaddedBase64PublicKey, bobSession.getCrossSigningService().getMyCrossSigningKeys()?.selfSigningKey()?.unpaddedBase64PublicKey)
 
-        assertTrue("Bob keys from alice pov should not be trusted", bobKeysFromAlicePOV?.isTrusted() == false)
+        assertFalse("Bob keys from alice pov should not be trusted", bobKeysFromAlicePOV.isTrusted())
 
         mTestHelper.signout(aliceSession)
         mTestHelper.signout(bobSession)
@@ -117,14 +116,12 @@ class XSigningTest : InstrumentedTest {
                 password = TestConstants.PASSWORD
         )
 
-        val aliceLatch = CountDownLatch(1)
-        val bobLatch = CountDownLatch(1)
+        val latch = CountDownLatch(2)
 
-        aliceSession.getCrossSigningService().initializeCrossSigning(aliceAuthParams, TestMatrixCallback(aliceLatch))
-        bobSession.getCrossSigningService().initializeCrossSigning(bobAuthParams, TestMatrixCallback(bobLatch))
+        aliceSession.getCrossSigningService().initializeCrossSigning(aliceAuthParams, TestMatrixCallback(latch))
+        bobSession.getCrossSigningService().initializeCrossSigning(bobAuthParams, TestMatrixCallback(latch))
 
-        mTestHelper.await(aliceLatch)
-        mTestHelper.await(bobLatch)
+        mTestHelper.await(latch)
 
         // Check that alice can see bob keys
         val downloadLatch = CountDownLatch(1)

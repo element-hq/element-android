@@ -271,13 +271,13 @@ internal class DefaultCrossSigningService @Inject constructor(
     }
 
     private fun clearSigningKeys() {
-        this@DefaultCrossSigningService.masterPkSigning?.releaseSigning()
-        this@DefaultCrossSigningService.userPkSigning?.releaseSigning()
-        this@DefaultCrossSigningService.selfSigningPkSigning?.releaseSigning()
+        masterPkSigning?.releaseSigning()
+        userPkSigning?.releaseSigning()
+        selfSigningPkSigning?.releaseSigning()
 
-        this@DefaultCrossSigningService.masterPkSigning = null
-        this@DefaultCrossSigningService.userPkSigning = null
-        this@DefaultCrossSigningService.selfSigningPkSigning = null
+        masterPkSigning = null
+        userPkSigning = null
+        selfSigningPkSigning = null
 
         cryptoStore.setMyCrossSigningInfo(null)
         cryptoStore.storePrivateKeysInfo(null, null, null)

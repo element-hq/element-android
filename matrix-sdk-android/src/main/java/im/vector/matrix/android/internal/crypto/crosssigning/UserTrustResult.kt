@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package im.vector.matrix.android.internal.crypto.crosssigning
 
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 
 sealed class UserTrustResult {
-
     object Success : UserTrustResult()
 
-//    data class Success(val deviceID: String, val crossSigned: Boolean) : UserTrustResult()
-//
-//    data class UnknownDevice(val deviceID: String) : UserTrustResult()
+    // data class Success(val deviceID: String, val crossSigned: Boolean) : UserTrustResult()
+    // data class UnknownDevice(val deviceID: String) : UserTrustResult()
     data class CrossSigningNotConfigured(val userID: String) : UserTrustResult()
+
     data class UnknownCrossSignatureInfo(val userID: String) : UserTrustResult()
     data class KeysNotTrusted(val key: MXCrossSigningInfo) : UserTrustResult()
     data class KeyNotSigned(val key: CryptoCrossSigningKey) : UserTrustResult()

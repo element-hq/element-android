@@ -28,7 +28,7 @@ internal data class KeyVerificationKey(
         /**
          * the ID of the transaction that the message is part of
          */
-        @Json(name = "transaction_id") override var transactionID: String? = null,
+        @Json(name = "transaction_id") override val transactionID: String? = null,
 
         /**
          * The device’s ephemeral public key, as an unpadded base64 string

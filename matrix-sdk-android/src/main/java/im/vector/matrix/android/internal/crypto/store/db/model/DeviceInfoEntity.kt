@@ -35,8 +35,7 @@ internal open class DeviceInfoEntity(@PrimaryKey var primaryKey: String = "",
                                      var signatureMapJson: String? = null,
                                      var unsignedMapJson: String? = null,
                                      var trustLevelEntity: TrustLevelEntity? = null
-                                     )
-    : RealmObject() {
+) : RealmObject() {
 
 //    // Deserialize data
 //    fun getDeviceInfo(): MXDeviceInfo? {

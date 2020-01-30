@@ -20,12 +20,10 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class UpdateDeviceInfoBody(
-
+internal data class UpdateDeviceInfoBody(
         /**
          * The new display name for this device. If not given, the display name is unchanged.
          */
         @Json(name = "display_name")
         var displayName: String? = null
-
 )

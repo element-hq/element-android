@@ -33,31 +33,31 @@ internal data class KeyVerificationAccept(
          * Alice’s device should record this ID and use it in future messages in this transaction.
          */
         @Json(name = "transaction_id")
-        override var transactionID: String? = null,
+        override val transactionID: String? = null,
 
         /**
          * The key agreement protocol that Bob’s device has selected to use, out of the list proposed by Alice’s device
          */
         @Json(name = "key_agreement_protocol")
-        override var keyAgreementProtocol: String? = null,
+        override val keyAgreementProtocol: String? = null,
 
         /**
          * The hash algorithm that Bob’s device has selected to use, out of the list proposed by Alice’s device
          */
         @Json(name = "hash")
-        override var hash: String? = null,
+        override val hash: String? = null,
 
         /**
          * The message authentication code that Bob’s device has selected to use, out of the list proposed by Alice’s device
          */
         @Json(name = "message_authentication_code")
-        override var messageAuthenticationCode: String? = null,
+        override val messageAuthenticationCode: String? = null,
 
         /**
          * An array of short authentication string methods that Bob’s client (and Bob) understands.  Must be a subset of the list proposed by Alice’s device
          */
         @Json(name = "short_authentication_string")
-        override var shortAuthenticationStrings: List<String>? = null,
+        override val shortAuthenticationStrings: List<String>? = null,
 
         /**
          * The hash (encoded as unpadded base64) of the concatenation of the device’s ephemeral public key (QB, encoded as unpadded base64)
@@ -89,14 +89,14 @@ internal data class KeyVerificationAccept(
                             commitment: String,
                             messageAuthenticationCode: String,
                             shortAuthenticationStrings: List<String>): VerificationInfoAccept {
-            return KeyVerificationAccept().apply {
-                this.transactionID = tid
-                this.keyAgreementProtocol = keyAgreementProtocol
-                this.hash = hash
-                this.commitment = commitment
-                this.messageAuthenticationCode = messageAuthenticationCode
-                this.shortAuthenticationStrings = shortAuthenticationStrings
-            }
+            return KeyVerificationAccept(
+                    transactionID = tid,
+                    keyAgreementProtocol = keyAgreementProtocol,
+                    hash = hash,
+                    commitment = commitment,
+                    messageAuthenticationCode = messageAuthenticationCode,
+                    shortAuthenticationStrings = shortAuthenticationStrings
+            )
         }
     }
 }

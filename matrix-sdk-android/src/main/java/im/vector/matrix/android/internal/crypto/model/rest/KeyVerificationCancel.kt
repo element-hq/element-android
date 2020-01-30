@@ -34,12 +34,12 @@ internal data class KeyVerificationCancel(
         /**
          * machine-readable reason for cancelling, see #CancelCode
          */
-        override var code: String? = null,
+        override val code: String? = null,
 
         /**
          * human-readable reason for cancelling.  This should only be used if the receiving client does not understand the code given.
          */
-        override var reason: String? = null
+        override val reason: String? = null
 ) : SendToDeviceObject, VerificationInfoCancel {
 
     companion object {

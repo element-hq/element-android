@@ -1500,7 +1500,7 @@ Why choose Riot.im?
 
     <string name="sas_verified">Verified!</string>
     <string name="sas_verified_successful">You\'ve successfully verified this device.</string>
-    <string name="sas_verified_successful_description">Messages with this user in this room are end-to-end encrypted and can‘t be read by third parties.</string>
+    <string name="sas_verified_successful_description">Messages with this user in this room are end-to-end encrypted and can\'t be read by third parties.</string>
     <string name="sas_got_it">Got it</string>
 
     <string name="sas_verifying_keys">Nothing appearing? Not all clients supports interactive verification yet. Use legacy verification.</string>
@@ -1694,7 +1694,6 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="room_directory_search_hint">Name or ID (#example:matrix.org)</string>
 
     <string name="labs_swipe_to_reply_in_timeline">Enable swipe to reply in timeline</string>
-    <string name="labs_enable_verification_other_dm">Enable verification other DM</string>
 
     <string name="link_copied_to_clipboard">Link copied to clipboard</string>
 

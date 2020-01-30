@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.crypto.crosssigning
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 
 sealed class DeviceTrustResult {
-
     data class Success(val level: DeviceTrustLevel) : DeviceTrustResult()
     data class UnknownDevice(val deviceID: String) : DeviceTrustResult()
     data class CrossSigningNotConfigured(val userID: String) : DeviceTrustResult()
@@ -27,6 +26,6 @@ sealed class DeviceTrustResult {
     data class InvalidDeviceSignature(val deviceId: String, val signingKey: String, val throwable: Throwable?) : DeviceTrustResult()
 }
 
-fun DeviceTrustResult.isSuccess(): Boolean = this is DeviceTrustResult.Success
-fun DeviceTrustResult.isCrossSignedVerified(): Boolean = (this as? DeviceTrustResult.Success)?.level?.isCrossSigningVerified() == true
-fun DeviceTrustResult.isLocallyVerified(): Boolean = (this as? DeviceTrustResult.Success)?.level?.isLocallyVerified() == true
+fun DeviceTrustResult.isSuccess() = this is DeviceTrustResult.Success
+fun DeviceTrustResult.isCrossSignedVerified() = this is DeviceTrustResult.Success && level.isCrossSigningVerified()
+fun DeviceTrustResult.isLocallyVerified() = this is DeviceTrustResult.Success && level.isLocallyVerified() == true

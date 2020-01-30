@@ -45,15 +45,10 @@ internal class DefaultUploadKeysTask @Inject constructor(
     override suspend fun execute(params: UploadKeysTask.Params): KeysUploadResponse {
         val encodedDeviceId = convertToUTF8(params.deviceId)
 
-        val body = KeysUploadBody()
-
-        if (null != params.deviceKeys) {
-            body.deviceKeys = params.deviceKeys
-        }
-
-        if (null != params.oneTimeKeys) {
-            body.oneTimeKeys = params.oneTimeKeys
-        }
+        val body = KeysUploadBody(
+                deviceKeys = params.deviceKeys,
+                oneTimeKeys = params.oneTimeKeys
+        )
 
         return executeRequest(eventBus) {
             apiCall = if (encodedDeviceId.isBlank()) {

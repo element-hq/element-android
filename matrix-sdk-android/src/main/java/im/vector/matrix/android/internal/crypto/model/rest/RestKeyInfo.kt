@@ -21,7 +21,7 @@ import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.CryptoInfoMapper
 
 @JsonClass(generateAdapter = true)
-data class RestKeyInfo(
+internal data class RestKeyInfo(
         /**
          * The user who owns the key
          */

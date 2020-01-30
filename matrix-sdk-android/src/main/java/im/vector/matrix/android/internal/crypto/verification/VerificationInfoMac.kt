@@ -16,9 +16,6 @@
 package im.vector.matrix.android.internal.crypto.verification
 
 internal interface VerificationInfoMac : VerificationInfo {
-
-    override val transactionID: String?
-
     /**
      * A map of key ID to the MAC of the key, as an unpadded base64 string, calculated using the MAC key
      */

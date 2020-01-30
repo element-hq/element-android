@@ -28,15 +28,15 @@ data class UserPasswordAuth(
 
         // device device session id
         @Json(name = "session")
-        var session: String? = null,
+        val session: String? = null,
 
         // registration information
         @Json(name = "type")
-        var type: String? = LoginFlowTypes.PASSWORD,
+        val type: String? = LoginFlowTypes.PASSWORD,
 
         @Json(name = "user")
-        var user: String? = null,
+        val user: String? = null,
 
         @Json(name = "password")
-        var password: String? = null
+        val password: String? = null
 )

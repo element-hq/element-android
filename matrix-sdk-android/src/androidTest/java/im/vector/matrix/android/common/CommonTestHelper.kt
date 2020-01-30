@@ -37,8 +37,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
-import java.util.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
+import java.util.ArrayList
+import java.util.UUID
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -280,7 +283,7 @@ class CommonTestHelper(context: Context) {
 
     fun signout(session: Session) {
         val lock = CountDownLatch(1)
-        session.signOut(true, object : TestMatrixCallback<Unit>(lock) {})
+        session.signOut(true, TestMatrixCallback(lock))
         await(lock)
     }
 }

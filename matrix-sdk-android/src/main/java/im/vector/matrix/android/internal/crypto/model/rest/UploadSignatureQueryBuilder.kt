@@ -22,9 +22,9 @@ import im.vector.matrix.android.internal.crypto.model.toRest
 /**
  * Helper class to build CryptoApi#uploadSignatures params
  */
-data class UploadSignatureQueryBuilder(
-        private val deviceInfoList: ArrayList<CryptoDeviceInfo> = ArrayList(),
-        private val signingKeyInfoList: ArrayList<CryptoCrossSigningKey> = ArrayList()
+internal data class UploadSignatureQueryBuilder(
+        private val deviceInfoList: MutableList<CryptoDeviceInfo> = mutableListOf(),
+        private val signingKeyInfoList: MutableList<CryptoCrossSigningKey> = mutableListOf()
 ) {
 
     fun withDeviceInfo(deviceInfo: CryptoDeviceInfo) = apply {

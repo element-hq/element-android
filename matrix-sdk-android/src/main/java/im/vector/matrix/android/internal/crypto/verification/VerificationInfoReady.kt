@@ -22,10 +22,8 @@ package im.vector.matrix.android.internal.crypto.verification
  * The m.key.verification.ready event is optional; the recipient of the m.key.verification.request event may respond directly
  * with a m.key.verification.start event instead.
  */
+
 interface VerificationInfoReady : VerificationInfo {
-
-    override val transactionID: String?
-
     /**
      * The ID of the device that sent the m.key.verification.ready message
      */

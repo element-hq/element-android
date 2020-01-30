@@ -28,28 +28,27 @@ import com.squareup.moshi.JsonClass
  * The user_signing_keys property will only be included when a user requests their own keys.
  */
 @JsonClass(generateAdapter = true)
-data class KeysQueryResponse(
+internal data class KeysQueryResponse(
         /**
          * The device keys per devices per users.
          * Map from userId to map from deviceId to MXDeviceInfo
          * TODO Use MXUsersDevicesMap?
          */
         @Json(name = "device_keys")
-        var deviceKeys: Map<String, Map<String, RestDeviceInfo>>? = null,
+        val deviceKeys: Map<String, Map<String, RestDeviceInfo>>? = null,
 
         /**
          * The failures sorted by homeservers. TODO Bad comment ?
          * TODO Use MXUsersDevicesMap?
          */
-        var failures: Map<String, Map<String, Any>>? = null,
+        val failures: Map<String, Map<String, Any>>? = null,
 
         @Json(name = "master_keys")
-        var masterKeys: Map<String, RestKeyInfo?>? = null,
+        val masterKeys: Map<String, RestKeyInfo?>? = null,
 
         @Json(name = "self_signing_keys")
-        var selfSigningKeys: Map<String, RestKeyInfo?>? = null,
+        val selfSigningKeys: Map<String, RestKeyInfo?>? = null,
 
         @Json(name = "user_signing_keys")
-        var userSigningKeys: Map<String, RestKeyInfo?>? = null
-
+        val userSigningKeys: Map<String, RestKeyInfo?>? = null
 )

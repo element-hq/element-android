@@ -90,7 +90,7 @@ class CrossSigningSettingsFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    fun requestPassword(sessionId: String) {
+    private fun requestPassword(sessionId: String) {
         // Ask for password
         val inflater = this.layoutInflater
         val layout = inflater.inflate(R.layout.dialog_base_edit_text, null)
@@ -105,6 +105,7 @@ class CrossSigningSettingsFragment @Inject constructor(
                 .setPositiveButton(R.string.ok) { _, _ ->
                     val pass = input.text.toString()
 
+                    // TODO sessionId should never get out the ViewModel
                     viewModel.handle(CrossSigningAction.InitializeCrossSigning(UserPasswordAuth(
                             session = sessionId,
                             password = pass

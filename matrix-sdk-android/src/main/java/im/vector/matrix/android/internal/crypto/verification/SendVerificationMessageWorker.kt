@@ -30,7 +30,8 @@ import im.vector.matrix.android.internal.worker.getSessionComponent
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class SendVerificationMessageWorker constructor(context: Context, params: WorkerParameters)
+internal class SendVerificationMessageWorker(context: Context,
+                                             params: WorkerParameters)
     : CoroutineWorker(context, params) {
 
     @JsonClass(generateAdapter = true)

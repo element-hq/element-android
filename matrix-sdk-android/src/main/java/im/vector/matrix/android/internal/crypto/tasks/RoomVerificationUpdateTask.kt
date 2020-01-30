@@ -35,7 +35,7 @@ import javax.inject.Inject
 internal interface RoomVerificationUpdateTask : Task<RoomVerificationUpdateTask.Params, Unit> {
     data class Params(
             val events: List<Event>,
-            val sasVerificationService: DefaultVerificationService,
+            val verificationService: DefaultVerificationService,
             val cryptoService: CryptoService
     )
 }
@@ -104,7 +104,7 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
                             // The verification is started from another device
                             Timber.v("## SAS Verification live observer: Transaction started by other device  tid:${it.transactionID} ")
                             it.transactionID?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
-                            params.sasVerificationService.onRoomRequestHandledByOtherDevice(event)
+                            params.verificationService.onRoomRequestHandledByOtherDevice(event)
                         }
                     }
                 } else if (EventType.KEY_VERIFICATION_READY == event.type) {
@@ -113,13 +113,13 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
                             // The verification is started from another device
                             Timber.v("## SAS Verification live observer: Transaction started by other device  tid:${it.transactionID} ")
                             it.transactionID?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
-                            params.sasVerificationService.onRoomRequestHandledByOtherDevice(event)
+                            params.verificationService.onRoomRequestHandledByOtherDevice(event)
                         }
                     }
                 } else if (EventType.KEY_VERIFICATION_CANCEL == event.type || EventType.KEY_VERIFICATION_DONE == event.type) {
                     event.getClearContent().toModel<MessageRelationContent>()?.relatesTo?.eventId?.let {
                         transactionsHandledByOtherDevice.remove(it)
-                        params.sasVerificationService.onRoomRequestHandledByOtherDevice(event)
+                        params.verificationService.onRoomRequestHandledByOtherDevice(event)
                     }
                 }
 
@@ -141,11 +141,11 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
                 EventType.KEY_VERIFICATION_CANCEL,
                 EventType.KEY_VERIFICATION_READY,
                 EventType.KEY_VERIFICATION_DONE -> {
-                    params.sasVerificationService.onRoomEvent(event)
+                    params.verificationService.onRoomEvent(event)
                 }
                 EventType.MESSAGE -> {
                     if (MessageType.MSGTYPE_VERIFICATION_REQUEST == event.getClearContent().toModel<MessageContent>()?.type) {
-                        params.sasVerificationService.onRoomRequestReceived(event)
+                        params.verificationService.onRoomRequestReceived(event)
                     }
                 }
             }

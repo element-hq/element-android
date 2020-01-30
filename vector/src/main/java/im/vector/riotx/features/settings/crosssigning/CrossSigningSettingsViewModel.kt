@@ -89,7 +89,7 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted privat
     override fun handle(action: CrossSigningAction) {
         when (action) {
             is CrossSigningAction.InitializeCrossSigning -> {
-                initializeCrossSigning(action.auth?.also { it.user = session.myUserId })
+                initializeCrossSigning(action.auth?.copy(user = session.myUserId))
             }
         }
     }

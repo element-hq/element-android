@@ -42,8 +42,9 @@ internal class DefaultSendToDeviceTask @Inject constructor(
 ) : SendToDeviceTask {
 
     override suspend fun execute(params: SendToDeviceTask.Params) {
-        val sendToDeviceBody = SendToDeviceBody()
-        sendToDeviceBody.messages = params.contentMap.map
+        val sendToDeviceBody = SendToDeviceBody(
+                messages = params.contentMap.map
+        )
 
         return executeRequest(eventBus) {
             apiCall = cryptoApi.sendToDevice(

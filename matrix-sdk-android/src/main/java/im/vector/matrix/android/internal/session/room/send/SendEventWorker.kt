@@ -32,7 +32,8 @@ import im.vector.matrix.android.internal.worker.getSessionComponent
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
-internal class SendEventWorker constructor(context: Context, params: WorkerParameters)
+internal class SendEventWorker(context: Context,
+                               params: WorkerParameters)
     : CoroutineWorker(context, params) {
 
     @JsonClass(generateAdapter = true)

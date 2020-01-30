@@ -15,14 +15,10 @@
  */
 package im.vector.matrix.android.internal.crypto.model
 
-import com.squareup.moshi.Moshi
 import im.vector.matrix.android.internal.crypto.model.rest.RestDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.RestKeyInfo
-import im.vector.matrix.android.internal.di.SerializeNulls
 
-object CryptoInfoMapper {
-
-    private val moshi = Moshi.Builder().add(SerializeNulls.JSON_ADAPTER_FACTORY).build()
+internal object CryptoInfoMapper {
 
     fun map(restDeviceInfo: RestDeviceInfo): CryptoDeviceInfo {
         return CryptoDeviceInfo(

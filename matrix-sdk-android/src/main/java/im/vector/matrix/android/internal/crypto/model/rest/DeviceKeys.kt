@@ -38,5 +38,4 @@ data class DeviceKeys(
 
         @Json(name = "usage")
         val usage: List<String>? = null
-
 )

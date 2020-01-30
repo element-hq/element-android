@@ -19,8 +19,6 @@ package im.vector.matrix.android.internal.crypto.verification
  * Sent by both devices to send their ephemeral Curve25519 public key to the other device.
  */
 internal interface VerificationInfoKey : VerificationInfo {
-
-    override val transactionID: String?
     /**
      * The device’s ephemeral public key, as an unpadded base64 string
      */

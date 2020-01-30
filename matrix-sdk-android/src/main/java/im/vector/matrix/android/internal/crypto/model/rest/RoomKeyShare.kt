@@ -21,7 +21,7 @@ import com.squareup.moshi.Json
  * Parent class representing an room key action request
  * Note: this class cannot be abstract because of [org.matrix.androidsdk.core.JsonUtils.toRoomKeyShare]
  */
-open class RoomKeyShare : SendToDeviceObject {
+internal open class RoomKeyShare : SendToDeviceObject {
 
     var action: String? = null
 

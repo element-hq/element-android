@@ -22,8 +22,7 @@ import com.squareup.moshi.JsonClass
  * Class representing an room key request content
  */
 @JsonClass(generateAdapter = true)
-class RoomKeyShareRequest : RoomKeyShare() {
-
+internal class RoomKeyShareRequest : RoomKeyShare() {
     var body: RoomKeyRequestBody? = null
 
     init {

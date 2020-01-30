@@ -20,40 +20,41 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.util.JsonDict
 
 @JsonClass(generateAdapter = true)
-data class RestDeviceInfo(
+internal data class RestDeviceInfo(
         /**
          * The id of this device.
          */
         @Json(name = "device_id")
-        var deviceId: String,
+        val deviceId: String,
 
         /**
          * the user id
          */
         @Json(name = "user_id")
-        var userId: String,
+        val userId: String,
 
         /**
          * The list of algorithms supported by this device.
          */
         @Json(name = "algorithms")
-        var algorithms: List<String>? = null,
+        val algorithms: List<String>? = null,
 
         /**
          * A map from "<key type>:<deviceId>" to "<base64-encoded key>".
          */
         @Json(name = "keys")
-        var keys: Map<String, String>? = null,
+        val keys: Map<String, String>? = null,
 
         /**
          * The signature of this MXDeviceInfo.
          * A map from "<userId>" to a map from "<key type>:<deviceId>" to "<signature>"
          */
         @Json(name = "signatures")
-        var signatures: Map<String, Map<String, String>>? = null,
+        val signatures: Map<String, Map<String, String>>? = null,
 
         /*
          * Additional data from the home server.
          */
         @Json(name = "unsigned")
-        var unsigned: JsonDict? = null)
+        val unsigned: JsonDict? = null
+)

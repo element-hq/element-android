@@ -32,7 +32,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class CryptoSyncHandler @Inject constructor(private val cryptoService: DefaultCryptoService,
-                                                     private val sasVerificationService: DefaultVerificationService) {
+                                                     private val verificationService: DefaultVerificationService) {
 
     fun handleToDevice(toDevice: ToDeviceSyncResponse, initialSyncProgressService: DefaultInitialSyncProgressService? = null) {
         val total = toDevice.events?.size ?: 0
@@ -44,7 +44,7 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
                     && event.getClearContent()?.toModel<MessageContent>()?.type == "m.bad.encrypted") {
                 Timber.e("## handleToDeviceEvent() : Warning: Unable to decrypt to-device event : ${event.content}")
             } else {
-                sasVerificationService.onToDeviceEvent(event)
+                verificationService.onToDeviceEvent(event)
                 cryptoService.onToDeviceEvent(event)
             }
         }

@@ -20,14 +20,11 @@ import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.KeyUsage
 
 data class MXCrossSigningInfo(
-
-        var userId: String,
-
-        var crossSigningKeys: List<CryptoCrossSigningKey> = ArrayList()
-
+        val userId: String,
+        val crossSigningKeys: List<CryptoCrossSigningKey>
 ) {
 
-    fun isTrusted() : Boolean = masterKey()?.trustLevel?.isVerified() == true
+    fun isTrusted(): Boolean = masterKey()?.trustLevel?.isVerified() == true
             && selfSigningKey()?.trustLevel?.isVerified() == true
 
     fun masterKey(): CryptoCrossSigningKey? = crossSigningKeys

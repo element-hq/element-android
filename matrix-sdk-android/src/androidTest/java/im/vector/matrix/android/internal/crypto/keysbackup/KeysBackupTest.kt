@@ -314,7 +314,8 @@ class KeysBackupTest : InstrumentedTest {
         val sessionData = keysBackup
                 .decryptKeyBackupData(keyBackupData,
                         session.olmInboundGroupSession!!.sessionIdentifier(),
-                        cryptoTestData.roomId, decryption!!)
+                        cryptoTestData.roomId,
+                        decryption!!)
         assertNotNull(sessionData)
         // - Compare the decrypted megolm key with the original one
         assertKeysEquals(session.exportKeys(), sessionData)

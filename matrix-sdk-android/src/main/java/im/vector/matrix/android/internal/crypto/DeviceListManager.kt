@@ -42,22 +42,28 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         fun onUsersDeviceUpdate(users: List<String>)
     }
 
-    private val deviceChangeListeners = ArrayList<UserDevicesUpdateListener>()
+    private val deviceChangeListeners = mutableListOf<UserDevicesUpdateListener>()
 
     fun addListener(listener: UserDevicesUpdateListener) {
-        deviceChangeListeners.add(listener)
+        synchronized(deviceChangeListeners) {
+            deviceChangeListeners.add(listener)
+        }
     }
 
     fun removeListener(listener: UserDevicesUpdateListener) {
-        deviceChangeListeners.remove(listener)
+        synchronized(deviceChangeListeners) {
+            deviceChangeListeners.remove(listener)
+        }
     }
 
-    fun dispatchDeviceChange(users: List<String>) {
-        deviceChangeListeners.forEach {
-            try {
-                it.onUsersDeviceUpdate(users)
-            } catch (failure: Throwable) {
-                Timber.e(failure, "Failed to dispatch device chande")
+    private fun dispatchDeviceChange(users: List<String>) {
+        synchronized(deviceChangeListeners) {
+            deviceChangeListeners.forEach {
+                try {
+                    it.onUsersDeviceUpdate(users)
+                } catch (failure: Throwable) {
+                    Timber.e(failure, "Failed to dispatch device change")
+                }
             }
         }
     }
