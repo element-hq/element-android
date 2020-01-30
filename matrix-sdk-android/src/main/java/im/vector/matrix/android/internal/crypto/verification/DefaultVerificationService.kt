@@ -990,7 +990,7 @@ internal class DefaultVerificationService @Inject constructor(
         )
 
         // We can SCAN or SHOW QR codes only if cross-signing is enabled
-        val methodValues = if (crossSigningService.isCrossSigningEnabled()) {
+        val methodValues = if (crossSigningService.isCrossSigningVerified()) {
             // Add reciprocate method if application declares it can scan or show QR codes
             // Not sure if it ok to do that (?)
             val reciprocateMethod = methods
