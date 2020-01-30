@@ -114,7 +114,7 @@ internal class DefaultCrossSigningService @Inject constructor(
                 }
 
                 // Recover local trust in case private key are there?
-                cryptoStore.setUserKeysAsTrusted(userId, checkUserTrust(userId).isVerified())
+                setUserKeysAsTrusted(userId, checkUserTrust(userId).isVerified())
             }
         } catch (e: Throwable) {
             // Mmm this kind of a big issue
@@ -205,7 +205,7 @@ internal class DefaultCrossSigningService @Inject constructor(
 
         val crossSigningInfo = MXCrossSigningInfo(userId, listOf(params.masterKey, params.userKey, params.selfSignedKey))
         cryptoStore.setMyCrossSigningInfo(crossSigningInfo)
-        cryptoStore.setUserKeysAsTrusted(userId)
+        setUserKeysAsTrusted(userId, true)
         cryptoStore.storePrivateKeysInfo(masterKeyPrivateKey?.toBase64NoPadding(), uskPrivateKey?.toBase64NoPadding(), sskPrivateKey?.toBase64NoPadding())
 
         uploadSigningKeysTask.configureWith(params) {
@@ -615,7 +615,7 @@ internal class DefaultCrossSigningService @Inject constructor(
 
             checkUserTrust(otherUserId).let {
                 Timber.d("## CrossSigning - update trust for $otherUserId , verified=${it.isVerified()}")
-                cryptoStore.setUserKeysAsTrusted(otherUserId, it.isVerified())
+                setUserKeysAsTrusted(otherUserId, it.isVerified())
             }
 
             // TODO if my keys have changes, i should recheck all devices of all users?
@@ -624,6 +624,34 @@ internal class DefaultCrossSigningService @Inject constructor(
                 val updatedTrust = checkDeviceTrust(otherUserId, device.deviceId, device.trustLevel?.isLocallyVerified() ?: false)
                 Timber.d("## CrossSigning - update trust for device ${device.deviceId} of user $otherUserId , verified=$updatedTrust")
                 cryptoStore.setDeviceTrust(otherUserId, device.deviceId, updatedTrust.isCrossSignedVerified(), updatedTrust.isLocallyVerified())
+            }
+
+            if (otherUserId == userId) {
+                // It's me, i should check if a newly trusted device is signing my master key
+                // In this case it will change my MSK trust, and should then re-trigger a check of all other user trust
+                setUserKeysAsTrusted(otherUserId, checkSelfTrust().isVerified())
+            }
+        }
+    }
+
+    private fun setUserKeysAsTrusted(otherUserId: String, trusted: Boolean) {
+        val currentTrust = cryptoStore.getCrossSigningInfo(otherUserId)?.isTrusted()
+        cryptoStore.setUserKeysAsTrusted(otherUserId, trusted)
+
+        // If it's me, recheck trust of all users and devices?
+        val users = ArrayList<String>()
+        if (otherUserId == userId && currentTrust != trusted) {
+            cryptoStore.updateUsersTrust {
+                users.add(it)
+                checkUserTrust(it).isVerified()
+            }
+
+            users.forEach {
+                cryptoStore.getUserDeviceList(it)?.forEach { device ->
+                    val updatedTrust = checkDeviceTrust(it, device.deviceId, device.trustLevel?.isLocallyVerified() ?: false)
+                    Timber.d("## CrossSigning - update trust for device ${device.deviceId} of user $otherUserId , verified=$updatedTrust")
+                    cryptoStore.setDeviceTrust(it, device.deviceId, updatedTrust.isCrossSignedVerified(), updatedTrust.isLocallyVerified())
+                }
             }
         }
     }

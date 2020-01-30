@@ -414,4 +414,6 @@ internal interface IMXCryptoStore {
     fun setDeviceTrust(userId: String, deviceId: String, crossSignedVerified: Boolean, locallyVerified : Boolean)
 
     fun clearOtherUserTrust()
+
+    fun updateUsersTrust(check: (String) -> Boolean)
 }

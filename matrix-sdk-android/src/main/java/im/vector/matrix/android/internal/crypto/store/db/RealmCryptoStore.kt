@@ -962,32 +962,64 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
         }
     }
 
+    override fun updateUsersTrust(check: (String) -> Boolean) {
+        doRealmTransaction(realmConfiguration) { realm ->
+            val xInfoEntities = realm.where(CrossSigningInfoEntity::class.java)
+                    .findAll()
+            xInfoEntities?.forEach { xInfoEntity ->
+                // Need to ignore mine
+                if (xInfoEntity.userId == credentials.userId) return@forEach
+                val mapped = mapCrossSigningInfoEntity(xInfoEntity)
+                val currentTrust = mapped.isTrusted()
+                val newTrust = check(mapped.userId)
+                if (currentTrust != newTrust) {
+                    xInfoEntity.crossSigningKeys.forEach { info ->
+                        val level = info.trustLevelEntity
+                        if (level == null) {
+                            val newLevel = realm.createObject(TrustLevelEntity::class.java)
+                            newLevel.locallyVerified = newTrust
+                            newLevel.crossSignedVerified = newTrust
+                            info.trustLevelEntity = newLevel
+                        } else {
+                            level.locallyVerified = newTrust
+                            level.crossSignedVerified = newTrust
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     override fun getCrossSigningInfo(userId: String): MXCrossSigningInfo? {
         return doRealmQueryAndCopy(realmConfiguration) { realm ->
             realm.where(CrossSigningInfoEntity::class.java)
                     .equalTo(CrossSigningInfoEntityFields.USER_ID, userId)
                     .findFirst()
         }?.let { xsignInfo ->
-            MXCrossSigningInfo(
-                    userId = userId,
-                    crossSigningKeys = xsignInfo.crossSigningKeys.mapNotNull {
-                        val pubKey = it.publicKeyBase64 ?: return@mapNotNull null
-                        CryptoCrossSigningKey(
-                                userId = userId,
-                                keys = mapOf("ed25519:$pubKey" to pubKey),
-                                usages = it.usages.map { it },
-                                signatures = it.getSignatures(),
-                                trustLevel = it.trustLevelEntity?.let {
-                                    DeviceTrustLevel(
-                                            crossSigningVerified = it.crossSignedVerified ?: false,
-                                            locallyVerified = it.locallyVerified ?: false
-                                    )
-                                }
-
-                        )
-                    }
-            )
+            mapCrossSigningInfoEntity(xsignInfo)
         }
+    }
+
+    private fun mapCrossSigningInfoEntity(xsignInfo: CrossSigningInfoEntity): MXCrossSigningInfo {
+        return MXCrossSigningInfo(
+                userId = xsignInfo.userId ?: "",
+                crossSigningKeys = xsignInfo.crossSigningKeys.mapNotNull {
+                    val pubKey = it.publicKeyBase64 ?: return@mapNotNull null
+                    CryptoCrossSigningKey(
+                            userId = xsignInfo.userId ?: "",
+                            keys = mapOf("ed25519:$pubKey" to pubKey),
+                            usages = it.usages.map { it },
+                            signatures = it.getSignatures(),
+                            trustLevel = it.trustLevelEntity?.let {
+                                DeviceTrustLevel(
+                                        crossSigningVerified = it.crossSignedVerified ?: false,
+                                        locallyVerified = it.locallyVerified ?: false
+                                )
+                            }
+
+                    )
+                }
+        )
     }
 
     override fun getLiveCrossSigningInfo(userId: String): LiveData<Optional<MXCrossSigningInfo>> {
