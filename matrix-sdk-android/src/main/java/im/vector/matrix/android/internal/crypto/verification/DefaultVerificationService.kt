@@ -736,7 +736,7 @@ internal class DefaultVerificationService @Inject constructor(
                     createQrCodeData(existingRequest.transactionId, existingRequest.otherUserId)
                 }
 
-        if (readyReq.methods?.orEmpty().orEmpty().contains(VERIFICATION_METHOD_RECIPROCATE)) {
+        if (readyReq.methods.orEmpty().contains(VERIFICATION_METHOD_RECIPROCATE)) {
             // Create the pending transaction
             val tx = DefaultQrCodeVerificationTransaction(
                     setDeviceVerificationAction,
