@@ -17,7 +17,6 @@ package im.vector.matrix.android.internal.crypto.verification
 
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
-import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 
 /**
  * Verification can be performed using toDevice events or via DM.
@@ -37,8 +36,9 @@ internal interface VerificationTransport {
     fun sendVerificationRequest(supportedMethods: List<String>,
                                 localID: String,
                                 otherUserId: String,
-                                roomId: String,
-                                callback: (String?, MessageVerificationRequestContent?) -> Unit)
+                                roomId: String?,
+                                toDevices: List<String>?,
+                                callback: (String?, VerificationInfoRequest?) -> Unit)
 
     fun cancelTransaction(transactionId: String,
                           otherUserId: String,

@@ -17,32 +17,26 @@ package im.vector.matrix.android.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.internal.crypto.verification.VerificationInfo
+import im.vector.matrix.android.internal.crypto.verification.VerificationInfoRequest
 
 /**
  * Requests a key verification with another user's devices.
  */
 @JsonClass(generateAdapter = true)
 internal data class KeyVerificationRequest(
+        @Json(name = "from_device") override val fromDevice: String?,
+        @Json(name = "methods") override val methods: List<String>,
+        @Json(name = "methods") override val timestamp: Long?,
+        @Json(name = "transaction_id") override var transactionID: String? = null
 
-        @Json(name = "from_device")
-        val fromDevice: String,
-        /** The verification methods supported by the sender. */
-        val methods: List<String>,
-        /**
-         *  The POSIX timestamp in milliseconds for when the request was made.
-         *  If the request is in the future by more than 5 minutes or more than 10 minutes in the past,
-         *  the message should be ignored by the receiver.
-         */
-        val timestamp: Int,
+) : SendToDeviceObject, VerificationInfoRequest {
 
-        @Json(name = "transaction_id")
-        override var transactionID: String? = null
-
-) : SendToDeviceObject, VerificationInfo {
+    override fun toSendToDeviceObject() = this
 
     override fun isValid(): Boolean {
-        // TODO
+        if (transactionID.isNullOrBlank() || methods.isNullOrEmpty() || fromDevice.isNullOrEmpty()) {
+            return false
+        }
         return true
     }
 }

@@ -140,12 +140,17 @@ internal class VerificationTransportRoomMessage(
     override fun sendVerificationRequest(supportedMethods: List<String>,
                                          localID: String,
                                          otherUserId: String,
-                                         roomId: String,
-                                         callback: (String?, MessageVerificationRequestContent?) -> Unit) {
+                                         roomId: String?,
+                                         toDevices: List<String>?,
+                                         callback: (String?, VerificationInfoRequest?) -> Unit) {
+        // This transport requires a room
+        requireNotNull(roomId)
+
         val info = MessageVerificationRequestContent(
                 body = stringProvider.getString(R.string.key_verification_request_fallback_message, userId),
                 fromDevice = userDeviceId ?: "",
                 toUserId = otherUserId,
+                timestamp = System.currentTimeMillis(),
                 methods = supportedMethods
         )
         val content = info.toContent()

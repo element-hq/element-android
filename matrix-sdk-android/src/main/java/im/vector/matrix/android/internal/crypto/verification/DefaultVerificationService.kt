@@ -55,6 +55,7 @@ import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationCancel
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationKey
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationMac
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationRequest
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
 import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SCAN
 import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SHOW
@@ -123,6 +124,9 @@ internal class DefaultVerificationService @Inject constructor(
                 }
                 EventType.KEY_VERIFICATION_MAC    -> {
                     onMacReceived(event)
+                }
+                MessageType.MSGTYPE_VERIFICATION_REQUEST    -> {
+                    onRequestReceived(event)
                 }
                 else                              -> {
                     // ignore
@@ -259,11 +263,51 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
+
+    private fun onRequestReceived(event: Event) {
+        val requestInfo = event.getClearContent().toModel<KeyVerificationRequest>()!!
+
+        if (!requestInfo.isValid()) {
+            // ignore
+            Timber.e("## SAS Received invalid key request")
+            return
+        }
+        val senderId = event.senderId ?: return
+
+        // We don't want to block here
+        val otherDeviceId = requestInfo.fromDevice ?: return
+
+        GlobalScope.launch {
+            if (checkKeysAreDownloaded(senderId, otherDeviceId) == null) {
+                Timber.e("## Verification device $otherDeviceId is not knwon")
+            }
+        }
+
+        // Remember this request
+        val requestsForUser = pendingRequests[senderId]
+                ?: ArrayList<PendingVerificationRequest>().also {
+                    pendingRequests[event.senderId] = it
+                }
+
+        val pendingVerificationRequest = PendingVerificationRequest(
+                ageLocalTs = event.ageLocalTs ?: System.currentTimeMillis(),
+                isIncoming = true,
+                otherUserId = senderId, // requestInfo.toUserId,
+                roomId = null,
+                transactionId = event.eventId,
+                requestInfo = requestInfo
+        )
+        requestsForUser.add(pendingVerificationRequest)
+        dispatchRequestAdded(pendingVerificationRequest)
+    }
+
+
     suspend fun onRoomRequestReceived(event: Event) {
         Timber.v("## SAS Verification request from ${event.senderId} in room ${event.roomId}")
         val requestInfo = event.getClearContent().toModel<MessageVerificationRequestContent>()
                 ?: return
         val senderId = event.senderId ?: return
+        val fromDevice = requestInfo.fromDevice ?: return
 
         if (requestInfo.toUserId != userId) {
             // I should ignore this, it's not for me
@@ -273,8 +317,8 @@ internal class DefaultVerificationService @Inject constructor(
 
         // We don't want to block here
         GlobalScope.launch {
-            if (checkKeysAreDownloaded(senderId, requestInfo.fromDevice) == null) {
-                Timber.e("## SAS Verification device ${requestInfo.fromDevice} is not knwon")
+            if (checkKeysAreDownloaded(senderId, fromDevice) == null) {
+                Timber.e("## SAS Verification device $fromDevice is not knwon")
             }
         }
 
@@ -894,12 +938,75 @@ internal class DefaultVerificationService @Inject constructor(
         }
                 .distinct()
 
-        transport.sendVerificationRequest(methodValues, localID, otherUserId, roomId) { syncedId, info ->
+        transport.sendVerificationRequest(methodValues, localID, otherUserId, roomId, null) { syncedId, info ->
             // We need to update with the syncedID
             updatePendingRequest(verificationRequest.copy(
                     transactionId = syncedId,
                     requestInfo = info
             ))
+        }
+
+        requestsForUser.add(verificationRequest)
+        dispatchRequestAdded(verificationRequest)
+
+        return verificationRequest
+    }
+
+    override fun requestKeyVerification(methods: List<VerificationMethod>, otherUserId: String, otherDevices: List<String>?): PendingVerificationRequest {
+        // TODO refactor this with the DM one
+        Timber.i("## Requesting verification to user: $otherUserId with device list $otherDevices")
+
+        val targetDevices = otherDevices ?: cryptoService.getUserDevices(otherUserId).map { it.deviceId }
+        val requestsForUser = pendingRequests[otherUserId]
+                ?: ArrayList<PendingVerificationRequest>().also {
+                    pendingRequests[otherUserId] = it
+                }
+
+        val transport = verificationTransportToDeviceFactory.createTransport(null)
+
+        // Cancel existing pending requests?
+        requestsForUser.toImmutableList().forEach { existingRequest ->
+            existingRequest.transactionId?.let { tid ->
+                if (!existingRequest.isFinished) {
+                    Timber.d("## SAS, cancelling pending requests to start a new one")
+                    updatePendingRequest(existingRequest.copy(cancelConclusion = CancelCode.User))
+                    existingRequest.targetDevices?.forEach {
+                        transport.cancelTransaction(tid, existingRequest.otherUserId, it, CancelCode.User)
+                    }
+                }
+            }
+        }
+
+        val localID = LocalEcho.createLocalEchoId()
+
+        val verificationRequest = PendingVerificationRequest(
+                transactionId = localID,
+                ageLocalTs = System.currentTimeMillis(),
+                isIncoming = false,
+                roomId = null,
+                localID = localID,
+                otherUserId = otherUserId,
+                targetDevices = targetDevices
+        )
+
+        // We can SCAN or SHOW QR codes only if cross-signing is enabled
+        val methodValues = if (crossSigningService.isCrossSigningEnabled()) {
+            // Add reciprocate method if application declares it can scan or show QR codes
+            // Not sure if it ok to do that (?)
+            val reciprocateMethod = methods
+                    .firstOrNull { it == VerificationMethod.QR_CODE_SCAN || it == VerificationMethod.QR_CODE_SHOW }
+                    ?.let { listOf(VERIFICATION_METHOD_RECIPROCATE) }.orEmpty()
+            methods.map { it.toValue() } + reciprocateMethod
+        } else {
+            // Filter out SCAN and SHOW qr code method
+            methods
+                    .filter { it != VerificationMethod.QR_CODE_SHOW && it != VerificationMethod.QR_CODE_SCAN }
+                    .map { it.toValue() }
+        }
+                .distinct()
+
+        transport.sendVerificationRequest(methodValues, localID, otherUserId, null, targetDevices) { _, _ ->
+            // Nothing special to do in to device mode
         }
 
         requestsForUser.add(verificationRequest)

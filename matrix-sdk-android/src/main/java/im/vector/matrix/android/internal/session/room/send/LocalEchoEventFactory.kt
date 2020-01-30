@@ -298,6 +298,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         body = stringProvider.getString(R.string.key_verification_request_fallback_message, userId),
                         fromDevice = fromDevice,
                         toUserId = toUserId,
+                        timestamp = System.currentTimeMillis(),
                         methods = methods
                 ).toContent(),
                 unsignedData = UnsignedData(age = null, transactionId = localID)

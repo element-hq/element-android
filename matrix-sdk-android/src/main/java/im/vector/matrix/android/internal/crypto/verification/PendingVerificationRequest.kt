@@ -34,11 +34,13 @@ data class PendingVerificationRequest(
         val otherUserId: String,
         val roomId: String?,
         val transactionId: String? = null,
-        val requestInfo: MessageVerificationRequestContent? = null,
+        val requestInfo: VerificationInfoRequest? = null,
         val readyInfo: VerificationInfoReady? = null,
         val cancelConclusion: CancelCode? = null,
         val isSuccessful: Boolean = false,
-        val handledByOtherSession: Boolean = false
+        val handledByOtherSession: Boolean = false,
+        // In case of to device it is sent to a list of devices
+        val targetDevices: List<String> ? = null
 ) {
     val isReady: Boolean = readyInfo != null
     val isSent: Boolean = transactionId != null

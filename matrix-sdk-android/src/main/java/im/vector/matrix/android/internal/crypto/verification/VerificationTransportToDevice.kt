@@ -19,17 +19,19 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
+import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationCancel
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationKey
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationMac
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationReady
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationRequest
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
 import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
 import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
+import im.vector.matrix.android.internal.di.DeviceId
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import timber.log.Timber
@@ -38,15 +40,41 @@ import javax.inject.Inject
 internal class VerificationTransportToDevice(
         private var tx: DefaultVerificationTransaction?,
         private var sendToDeviceTask: SendToDeviceTask,
+        private val myDeviceId: String?,
         private var taskExecutor: TaskExecutor
 ) : VerificationTransport {
 
     override fun sendVerificationRequest(supportedMethods: List<String>,
                                          localID: String,
                                          otherUserId: String,
-                                         roomId: String,
-                                         callback: (String?, MessageVerificationRequestContent?) -> Unit) {
-        // TODO "not implemented"
+                                         roomId: String?,
+                                         toDevices: List<String>?,
+                                         callback: (String?, VerificationInfoRequest?) -> Unit) {
+
+        val contentMap = MXUsersDevicesMap<Any>()
+        val keyReq = KeyVerificationRequest(
+                fromDevice = myDeviceId,
+                methods = supportedMethods,
+                timestamp = System.currentTimeMillis(),
+                transactionID = localID
+        )
+        toDevices?.forEach {
+            contentMap.setObject(otherUserId, it, keyReq)
+        }
+        sendToDeviceTask
+                .configureWith(SendToDeviceTask.Params(MessageType.MSGTYPE_VERIFICATION_REQUEST, contentMap, localID)) {
+                    this.callback = object : MatrixCallback<Unit> {
+                        override fun onSuccess(data: Unit) {
+                            Timber.v("## verification [$tx.transactionId] send toDevice request success")
+                            callback.invoke(localID, keyReq)
+                        }
+
+                        override fun onFailure(failure: Throwable) {
+                            Timber.e("## verification [$tx.transactionId] failed to send toDevice request")
+                        }
+                    }
+                }
+                .executeBy(taskExecutor)
     }
 
     override fun sendToOther(type: String,
@@ -168,9 +196,10 @@ internal class VerificationTransportToDevice(
 
 internal class VerificationTransportToDeviceFactory @Inject constructor(
         private val sendToDeviceTask: SendToDeviceTask,
+        @DeviceId val myDeviceId: String?,
         private val taskExecutor: TaskExecutor) {
 
     fun createTransport(tx: DefaultVerificationTransaction?): VerificationTransportToDevice {
-        return VerificationTransportToDevice(tx, sendToDeviceTask, taskExecutor)
+        return VerificationTransportToDevice(tx, sendToDeviceTask, myDeviceId, taskExecutor)
     }
 }

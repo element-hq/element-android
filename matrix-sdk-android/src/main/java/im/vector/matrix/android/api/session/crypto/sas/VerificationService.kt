@@ -58,6 +58,14 @@ interface VerificationService {
                                     localId: String? = LocalEcho.createLocalEchoId()
     ): PendingVerificationRequest
 
+    /**
+     * Request a key verification from another user using toDevice events.
+     */
+    fun requestKeyVerification(methods: List<VerificationMethod>,
+                                    otherUserId: String,
+                                    otherDevices: List<String>?
+    ): PendingVerificationRequest
+
     fun declineVerificationRequestInDMs(otherUserId: String, otherDeviceId: String, transactionId: String, roomId: String)
 
     // Only SAS method is supported for the moment
