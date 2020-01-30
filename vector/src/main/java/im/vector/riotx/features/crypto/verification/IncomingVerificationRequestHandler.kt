@@ -53,6 +53,7 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
     override fun transactionUpdated(tx: VerificationTransaction) {
         if (!tx.isToDeviceTransport()) return
         // TODO maybe check also if
+        val uid = "kvr_${tx.transactionId}"
         when (tx.state) {
             is VerificationTxState.OnStarted       -> {
                 // Add a notification for every incoming request
@@ -60,10 +61,20 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
                         ?: tx.otherUserId
 
                 val alert = PopupAlertManager.VectorAlert(
-                        "kvr_${tx.transactionId}",
+                        uid,
                         context.getString(R.string.sas_incoming_request_notif_title),
                         context.getString(R.string.sas_incoming_request_notif_content, name),
-                        R.drawable.shield)
+                        R.drawable.shield,
+                        shouldBeDisplayedIn = { activity ->
+                            if (activity is VectorBaseActivity) {
+                                // TODO a bit too hugly :/
+                                activity.supportFragmentManager.findFragmentByTag(VerificationBottomSheet.WAITING_SELF_VERIF_TAG)?.let {
+                                    false.also {
+                                        PopupAlertManager.cancelAlert(uid)
+                                    }
+                                } ?: true
+                            } else true
+                        })
                         .apply {
                             contentAction = Runnable {
                                 (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
@@ -94,7 +105,7 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
             }
             is VerificationTxState.TerminalTxState -> {
                 // cancel related notification
-                PopupAlertManager.cancelAlert("kvr_${tx.transactionId}")
+                PopupAlertManager.cancelAlert(uid)
             }
             else                                   -> Unit
         }
