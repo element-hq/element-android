@@ -97,11 +97,10 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         })
     }
 
-    override fun invalidate() = withState(viewModel) {
-        it.otherUserMxItem?.let { matrixItem ->
-
-            if (it.waitForOtherUserMode) {
-                if (it.sasTransactionState == VerificationTxState.Verified || it.qrTransactionState == VerificationTxState.Verified) {
+    override fun invalidate() = withState(viewModel) { state ->
+        state.otherUserMxItem?.let { matrixItem ->
+            if (state.isMe) {
+                if (state.sasTransactionState == VerificationTxState.Verified || state.qrTransactionState == VerificationTxState.Verified) {
                     otherUserAvatarImageView.setImageResource(R.drawable.ic_shield_trusted)
                 } else {
                     otherUserAvatarImageView.setImageResource(R.drawable.ic_shield_warning)
@@ -111,7 +110,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
             } else {
                 avatarRenderer.render(matrixItem, otherUserAvatarImageView)
 
-                if (it.sasTransactionState == VerificationTxState.Verified || it.qrTransactionState == VerificationTxState.Verified) {
+                if (state.sasTransactionState == VerificationTxState.Verified || state.qrTransactionState == VerificationTxState.Verified) {
                     otherUserNameText.text = getString(R.string.verification_verified_user, matrixItem.getBestName())
                     otherUserShield.isVisible = true
                 } else {
@@ -122,8 +121,8 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
 
         // Did the request result in a SAS transaction?
-        if (it.sasTransactionState != null) {
-            when (it.sasTransactionState) {
+        if (state.sasTransactionState != null) {
+            when (state.sasTransactionState) {
                 is VerificationTxState.None,
                 is VerificationTxState.SendingStart,
                 is VerificationTxState.Started,
@@ -141,20 +140,20 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 is VerificationTxState.Verifying -> {
                     showFragment(VerificationEmojiCodeFragment::class, Bundle().apply {
                         putParcelable(MvRx.KEY_ARG, VerificationArgs(
-                                it.otherUserMxItem?.id ?: "",
+                                state.otherUserMxItem?.id ?: "",
                                 // If it was outgoing it.transaction id would be null, but the pending request
                                 // would be updated (from localID to txId)
-                                it.pendingRequest.invoke()?.transactionId ?: it.transactionId))
+                                state.pendingRequest.invoke()?.transactionId ?: state.transactionId))
                     })
                 }
                 is VerificationTxState.Verified  -> {
                     showFragment(VerificationConclusionFragment::class, Bundle().apply {
-                        putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null, it.isMe))
+                        putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null, state.isMe))
                     })
                 }
                 is VerificationTxState.Cancelled -> {
                     showFragment(VerificationConclusionFragment::class, Bundle().apply {
-                        putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(false, it.sasTransactionState.cancelCode.value, it.isMe))
+                        putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(false, state.sasTransactionState.cancelCode.value, state.isMe))
                     })
                 }
             }
@@ -162,20 +161,20 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
             return@withState
         }
 
-        when (it.qrTransactionState) {
+        when (state.qrTransactionState) {
             is VerificationTxState.QrScannedByOther -> {
                 showFragment(VerificationQrScannedByOtherFragment::class, Bundle())
                 return@withState
             }
             is VerificationTxState.Verified         -> {
                 showFragment(VerificationConclusionFragment::class, Bundle().apply {
-                    putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null, it.isMe))
+                    putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null, state.isMe))
                 })
                 return@withState
             }
             is VerificationTxState.Cancelled        -> {
                 showFragment(VerificationConclusionFragment::class, Bundle().apply {
-                    putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(false, it.qrTransactionState.cancelCode.value, it.isMe))
+                    putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(false, state.qrTransactionState.cancelCode.value, state.isMe))
                 })
                 return@withState
             }
@@ -185,36 +184,36 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         // At this point there is no SAS transaction for this request
 
         // Transaction has not yet started
-        if (it.pendingRequest.invoke()?.cancelConclusion != null) {
+        if (state.pendingRequest.invoke()?.cancelConclusion != null) {
             // The request has been declined, we should dismiss
             dismiss()
         }
 
         // If it's an outgoing
-        if (it.pendingRequest.invoke() == null || it.pendingRequest.invoke()?.isIncoming == false || it.waitForOtherUserMode) {
+        if (state.pendingRequest.invoke() == null || state.pendingRequest.invoke()?.isIncoming == false || state.waitForOtherUserMode) {
             Timber.v("## SAS show bottom sheet for outgoing request")
-            if (it.pendingRequest.invoke()?.isReady == true) {
+            if (state.pendingRequest.invoke()?.isReady == true) {
                 Timber.v("## SAS show bottom sheet for outgoing and ready request")
                 // Show choose method fragment with waiting
                 showFragment(VerificationChooseMethodFragment::class, Bundle().apply {
-                    putParcelable(MvRx.KEY_ARG, VerificationArgs(it.otherUserMxItem?.id
-                            ?: "", it.pendingRequest.invoke()?.transactionId))
+                    putParcelable(MvRx.KEY_ARG, VerificationArgs(state.otherUserMxItem?.id
+                            ?: "", state.pendingRequest.invoke()?.transactionId))
                 })
             } else {
                 // Stay on the start fragment
                 showFragment(VerificationRequestFragment::class, Bundle().apply {
                     putParcelable(MvRx.KEY_ARG, VerificationArgs(
-                            it.otherUserMxItem?.id ?: "",
-                            it.pendingRequest.invoke()?.transactionId,
-                            it.roomId))
+                            state.otherUserMxItem?.id ?: "",
+                            state.pendingRequest.invoke()?.transactionId,
+                            state.roomId))
                 })
             }
-        } else if (it.pendingRequest.invoke()?.isIncoming == true) {
+        } else if (state.pendingRequest.invoke()?.isIncoming == true) {
             Timber.v("## SAS show bottom sheet for Incoming request")
             // For incoming we can switch to choose method because ready is being sent or already sent
             showFragment(VerificationChooseMethodFragment::class, Bundle().apply {
-                putParcelable(MvRx.KEY_ARG, VerificationArgs(it.otherUserMxItem?.id
-                        ?: "", it.pendingRequest.invoke()?.transactionId))
+                putParcelable(MvRx.KEY_ARG, VerificationArgs(state.otherUserMxItem?.id
+                        ?: "", state.pendingRequest.invoke()?.transactionId))
             })
         }
         super.invalidate()

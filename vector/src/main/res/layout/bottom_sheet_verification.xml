@@ -21,7 +21,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:adjustViewBounds="true"
-            android:background="@drawable/circle"
             android:contentDescription="@string/avatar"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
