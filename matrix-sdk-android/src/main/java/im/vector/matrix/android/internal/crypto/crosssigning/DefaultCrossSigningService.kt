@@ -305,7 +305,7 @@ internal class DefaultCrossSigningService @Inject constructor(
         return cryptoStore.getCrossSigningInfo(userId)?.isTrusted() == true
     }
 
-    override fun isCrossSigningEnabled(): Boolean {
+    override fun isCrossSigningVerified(): Boolean {
         return checkSelfTrust().isVerified()
     }
 

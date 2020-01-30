@@ -35,7 +35,6 @@ import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.commitTransactionNow
-import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.features.crypto.verification.choose.VerificationChooseMethodFragment
 import im.vector.riotx.features.crypto.verification.conclusion.VerificationConclusionFragment
