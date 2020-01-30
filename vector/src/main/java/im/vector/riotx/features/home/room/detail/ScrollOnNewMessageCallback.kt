@@ -21,26 +21,30 @@ import im.vector.riotx.core.platform.DefaultListUpdateCallback
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.item.BaseEventItem
 import timber.log.Timber
+import java.util.concurrent.CopyOnWriteArrayList
 
 class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
                                  private val timelineEventController: TimelineEventController) : DefaultListUpdateCallback {
 
-    private val newTimelineEventIds = HashSet<String>()
+    private val newTimelineEventIds = CopyOnWriteArrayList<String>()
 
-    fun addNewTimelineEventIds(eventIds: List<String>){
-        newTimelineEventIds.addAll(eventIds)
+    fun addNewTimelineEventIds(eventIds: List<String>) {
+        newTimelineEventIds.addAll(0, eventIds)
     }
 
     override fun onInserted(position: Int, count: Int) {
         Timber.v("On inserted $count count at position: $position")
-        if(layoutManager.findFirstVisibleItemPosition() != position ){
+        if (layoutManager.findFirstVisibleItemPosition() != position) {
             return
         }
         val firstNewItem = timelineEventController.adapter.getModelAtPosition(position) as? BaseEventItem ?: return
-        val firstNewItemIds = firstNewItem.getEventIds()
-        if(newTimelineEventIds.intersect(firstNewItemIds).isNotEmpty()){
+        val firstNewItemIds = firstNewItem.getEventIds().firstOrNull()
+        val indexOfFirstNewItem = newTimelineEventIds.indexOf(firstNewItemIds)
+        if (indexOfFirstNewItem != -1) {
             Timber.v("Should scroll to position: $position")
-            newTimelineEventIds.clear()
+            repeat(newTimelineEventIds.size - indexOfFirstNewItem) {
+                newTimelineEventIds.removeAt(indexOfFirstNewItem)
+            }
             layoutManager.scrollToPosition(position)
         }
     }

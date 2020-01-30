@@ -78,6 +78,7 @@ internal class DefaultTimeline(
 ) : Timeline, TimelineHiddenReadReceipts.Delegate {
 
     data class OnNewTimelineEvents(val roomId: String, val eventIds: List<String>)
+    data class OnLocalEchoCreated(val roomId: String, val timelineEvent: TimelineEvent)
 
     companion object {
         val BACKGROUND_HANDLER = createBackgroundHandler("TIMELINE_DB_THREAD")
@@ -99,6 +100,7 @@ internal class DefaultTimeline(
 
     private var prevDisplayIndex: Int? = null
     private var nextDisplayIndex: Int? = null
+    private val inMemorySendingEvents = Collections.synchronizedList<TimelineEvent>(ArrayList())
     private val builtEvents = Collections.synchronizedList<TimelineEvent>(ArrayList())
     private val builtEventsIdMap = Collections.synchronizedMap(HashMap<String, Int>())
     private val backwardsState = AtomicReference(State())
@@ -321,10 +323,21 @@ internal class DefaultTimeline(
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onNewTimelineEvents(onNewTimelineEvents: OnNewTimelineEvents) {
-        if (onNewTimelineEvents.roomId == roomId) {
+        if (isLive && onNewTimelineEvents.roomId == roomId) {
             listeners.forEach {
                 it.onNewTimelineEvents(onNewTimelineEvents.eventIds)
             }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onLocalEchoCreated(onLocalEchoCreated: OnLocalEchoCreated) {
+        if (isLive && onLocalEchoCreated.roomId == roomId) {
+            listeners.forEach {
+                it.onNewTimelineEvents(listOf(onLocalEchoCreated.timelineEvent.eventId))
+            }
+            inMemorySendingEvents.add(0, onLocalEchoCreated.timelineEvent)
+            postSnapshot()
         }
     }
 
@@ -394,12 +407,15 @@ internal class DefaultTimeline(
     private fun buildSendingEvents(): List<TimelineEvent> {
         val sendingEvents = ArrayList<TimelineEvent>()
         if (hasReachedEnd(Timeline.Direction.FORWARDS) && !hasMoreInCache(Timeline.Direction.FORWARDS)) {
+            sendingEvents.addAll(inMemorySendingEvents)
             roomEntity?.sendingTimelineEvents
                     ?.where()
                     ?.filterEventsWithSettings()
                     ?.findAll()
-                    ?.forEach {
-                        sendingEvents.add(timelineEventMapper.map(it))
+                    ?.forEach { timelineEventEntity ->
+                        if (sendingEvents.find { it.eventId == timelineEventEntity.eventId } == null) {
+                            sendingEvents.add(timelineEventMapper.map(timelineEventEntity))
+                        }
                     }
         }
         return sendingEvents
@@ -580,6 +596,11 @@ internal class DefaultTimeline(
         offsetResults.forEach { eventEntity ->
 
             val timelineEvent = buildTimelineEvent(eventEntity)
+            val transactionId = timelineEvent.root.unsignedData?.transactionId
+            val sendingEvent = inMemorySendingEvents.find {
+                it.eventId == transactionId
+            }
+            inMemorySendingEvents.remove(sendingEvent)
 
             if (timelineEvent.isEncrypted()
                     && timelineEvent.root.mxDecryptionResult == null) {
@@ -665,7 +686,7 @@ internal class DefaultTimeline(
                     it.onTimelineUpdated(snapshot)
                 }
             }
-            debouncer.debounce("post_snapshot", runnable, 50)
+            debouncer.debounce("post_snapshot", runnable, 1)
         }
     }
 

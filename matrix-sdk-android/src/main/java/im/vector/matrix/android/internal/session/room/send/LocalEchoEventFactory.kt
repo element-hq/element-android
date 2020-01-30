@@ -56,6 +56,7 @@ import im.vector.matrix.android.internal.util.StringProvider
 import kotlinx.coroutines.launch
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -419,7 +420,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         )
     }
 
-    fun createLocalEcho(event: Event){
+    fun createLocalEcho(event: Event) {
         checkNotNull(event.roomId) { "Your event should have a roomId" }
         taskExecutor.executorScope.launch {
             localEchoRepository.createLocalEcho(event)

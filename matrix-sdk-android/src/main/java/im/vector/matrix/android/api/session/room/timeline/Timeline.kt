@@ -114,7 +114,7 @@ interface Timeline {
         fun onTimelineFailure(throwable: Throwable)
 
         /**
-         * Call when new events come through the sync
+         * Called when new events come through the sync
          */
         fun onNewTimelineEvents(eventIds: List<String>)
     }

@@ -30,7 +30,6 @@ import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.epoxy.LoadingItem_
-import im.vector.riotx.core.epoxy.emptyItem
 import im.vector.riotx.core.extensions.localDateTime
 import im.vector.riotx.features.home.room.detail.RoomDetailViewState
 import im.vector.riotx.features.home.room.detail.UnreadState
@@ -253,7 +252,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             currentSnapshot = newSnapshot
             val diffResult = DiffUtil.calculateDiff(diffCallback)
             diffResult.dispatchUpdatesTo(listUpdateCallback)
-            requestDelayedModelBuild(100)
+            requestModelBuild()
             inSubmitList = false
         }
     }

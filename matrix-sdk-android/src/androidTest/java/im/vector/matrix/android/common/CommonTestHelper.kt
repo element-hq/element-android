@@ -106,6 +106,10 @@ class CommonTestHelper(context: Context) {
             override fun onTimelineFailure(throwable: Throwable) {
             }
 
+            override fun onNewTimelineEvents(eventIds: List<String>) {
+                //noop
+            }
+
             override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
                 // TODO Count only new messages?
                 if (snapshot.count { it.root.type == EventType.MESSAGE } == nbOfMessages) {

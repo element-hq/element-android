@@ -24,13 +24,17 @@ import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.internal.database.helper.addTimelineEvent
 import im.vector.matrix.android.internal.database.helper.nextId
+import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.mapper.toEntity
+import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.findAllInRoomWithSendStates
+import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
@@ -39,24 +43,27 @@ import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
+import java.lang.IllegalStateException
 import javax.inject.Inject
+import kotlin.random.Random
 
 internal class LocalEchoRepository @Inject constructor(private val monarchy: Monarchy,
                                                        private val roomSummaryUpdater: RoomSummaryUpdater,
-                                                       private val eventBus: EventBus) {
+                                                       private val eventBus: EventBus,
+                                                       private val timelineEventMapper: TimelineEventMapper) {
 
     suspend fun createLocalEcho(event: Event) {
-        val roomId = event.roomId ?: return
-        val senderId = event.senderId ?: return
-        val eventId = event.eventId ?: return
-        eventBus.post(DefaultTimeline.OnNewTimelineEvents(roomId = roomId, eventIds = listOf(eventId)))
-        monarchy.awaitTransaction { realm ->
-            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return@awaitTransaction
+        val roomId = event.roomId ?: throw IllegalStateException("You should have set a roomId for your event")
+        val senderId = event.senderId ?: throw IllegalStateException("You should have set a senderIf for your event")
+        if (event.eventId == null) {
+            throw IllegalStateException("You should have set an eventId for your event")
+        }
+        val timelineEventEntity = Realm.getInstance(monarchy.realmConfiguration).use { realm ->
             val eventEntity = event.toEntity(roomId, SendState.UNSENT)
             val roomMemberHelper = RoomMemberHelper(realm, roomId)
             val myUser = roomMemberHelper.getLastRoomMember(senderId)
             val localId = TimelineEventEntity.nextId(realm)
-            val timelineEventEntity = TimelineEventEntity(localId).also {
+            TimelineEventEntity(localId).also {
                 it.root = eventEntity
                 it.eventId = event.eventId
                 it.roomId = roomId
@@ -64,6 +71,11 @@ internal class LocalEchoRepository @Inject constructor(private val monarchy: Mon
                 it.senderAvatar = myUser?.avatarUrl
                 it.isUniqueDisplayName = roomMemberHelper.isUniqueDisplayName(myUser?.displayName)
             }
+        }
+        val timelineEvent = timelineEventMapper.map(timelineEventEntity)
+        eventBus.post(DefaultTimeline.OnLocalEchoCreated(roomId = roomId, timelineEvent = timelineEvent))
+        monarchy.awaitTransaction { realm ->
+            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return@awaitTransaction
             roomEntity.sendingTimelineEvents.add(0, timelineEventEntity)
             roomSummaryUpdater.update(realm, roomId)
         }
