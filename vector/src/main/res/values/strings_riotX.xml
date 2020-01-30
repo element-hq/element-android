@@ -147,4 +147,8 @@
     <string name="reset_cross_signing">Reset Keys</string>
 
     <string name="a11y_qr_code_for_verification">QR code</string>
+
+    <string name="qr_code_scanned_by_other_notice">Did the other user successfully scan the QR code?</string>
+    <string name="qr_code_scanned_by_other_yes">Yes</string>
+    <string name="qr_code_scanned_by_other_no">No</string>
 </resources>

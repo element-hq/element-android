@@ -42,6 +42,7 @@ import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.core.di.HasScreenInjector
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
@@ -118,7 +119,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                 ?: session.getExistingDirectRoomWithUser(otherUserId)?.roomId
 
         when (action) {
-            is VerificationAction.RequestVerificationByDM -> {
+            is VerificationAction.RequestVerificationByDM      -> {
                 if (roomId == null) {
                     val localID = LocalEcho.createLocalEchoId()
                     setState {
@@ -163,8 +164,9 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                         )
                     }
                 }
+                Unit
             }
-            is VerificationAction.StartSASVerification    -> {
+            is VerificationAction.StartSASVerification         -> {
                 val request = session.getVerificationService().getExistingVerificationRequest(otherUserId, action.pendingRequestTransactionId)
                         ?: return@withState
                 if (roomId == null) return@withState
@@ -177,8 +179,9 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                         otherDeviceId = otherDevice ?: "",
                         callback = null
                 )
+                Unit
             }
-            is VerificationAction.RemoteQrCodeScanned     -> {
+            is VerificationAction.RemoteQrCodeScanned          -> {
                 val existingTransaction = session.getVerificationService()
                         .getExistingTransaction(action.otherUserId, action.transactionId) as? QrCodeVerificationTransaction
                 existingTransaction
@@ -189,21 +192,37 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                             // TODO
                         }
             }
-            is VerificationAction.SASMatchAction          -> {
+            is VerificationAction.OtherUserScannedSuccessfully -> {
+                val transactionId = state.transactionId ?: return@withState
+
+                val existingTransaction = session.getVerificationService()
+                        .getExistingTransaction(otherUserId, transactionId) as? QrCodeVerificationTransaction
+                existingTransaction
+                        ?.otherUserScannedMyQrCode()
+            }
+            is VerificationAction.OtherUserDidNotScanned       -> {
+                val transactionId = state.transactionId ?: return@withState
+
+                val existingTransaction = session.getVerificationService()
+                        .getExistingTransaction(otherUserId, transactionId) as? QrCodeVerificationTransaction
+                existingTransaction
+                        ?.otherUserDidNotScannedMyQrCode()
+            }
+            is VerificationAction.SASMatchAction               -> {
                 (session.getVerificationService()
                         .getExistingTransaction(action.otherUserId, action.sasTransactionId)
                         as? SasVerificationTransaction)?.userHasVerifiedShortCode()
             }
-            is VerificationAction.SASDoNotMatchAction     -> {
+            is VerificationAction.SASDoNotMatchAction          -> {
                 (session.getVerificationService()
                         .getExistingTransaction(action.otherUserId, action.sasTransactionId)
                         as? SasVerificationTransaction)
                         ?.shortCodeDoesNotMatch()
             }
-            is VerificationAction.GotItConclusion         -> {
+            is VerificationAction.GotItConclusion              -> {
                 _requestLiveData.postValue(LiveEvent(Success(action)))
             }
-        }
+        }.exhaustive
     }
 
     override fun transactionCreated(tx: VerificationTransaction) {

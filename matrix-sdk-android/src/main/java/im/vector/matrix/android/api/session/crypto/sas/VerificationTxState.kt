@@ -39,7 +39,10 @@ sealed class VerificationTxState {
     object Verifying : VerificationSasTxState()
 
     // Specific for QR code
-    // TODO Add code for the confirmation step for the user who has been scanned
+    abstract class VerificationQrTxState : VerificationTxState()
+
+    // Will be used to ask the user if the other user has correctly scanned
+    object QrScannedByOther : VerificationQrTxState()
 
     // Terminal states
     abstract class TerminalTxState : VerificationTxState()
