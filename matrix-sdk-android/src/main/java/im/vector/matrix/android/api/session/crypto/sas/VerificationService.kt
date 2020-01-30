@@ -47,7 +47,10 @@ interface VerificationService {
 
     fun getExistingVerificationRequestInRoom(roomId: String, tid: String?): PendingVerificationRequest?
 
-    fun beginKeyVerification(method: VerificationMethod, otherUserId: String, otherDeviceID: String): String?
+    fun beginKeyVerification(method: VerificationMethod,
+                             otherUserId: String,
+                             otherDeviceId: String,
+                             transactionId: String?): String?
 
     /**
      * Request a key verification from another user using toDevice events.
@@ -62,11 +65,14 @@ interface VerificationService {
      * Request a key verification from another user using toDevice events.
      */
     fun requestKeyVerification(methods: List<VerificationMethod>,
-                                    otherUserId: String,
-                                    otherDevices: List<String>?
+                               otherUserId: String,
+                               otherDevices: List<String>?
     ): PendingVerificationRequest
 
-    fun declineVerificationRequestInDMs(otherUserId: String, otherDeviceId: String, transactionId: String, roomId: String)
+    fun declineVerificationRequestInDMs(otherUserId: String,
+                                        otherDeviceId: String,
+                                        transactionId: String,
+                                        roomId: String)
 
     // Only SAS method is supported for the moment
     fun beginKeyVerificationInDMs(method: VerificationMethod,
@@ -83,6 +89,13 @@ interface VerificationService {
                                       otherUserId: String,
                                       roomId: String,
                                       transactionId: String): Boolean
+
+    /**
+     * Returns false if the request is unknown
+     */
+    fun readyPendingVerification(methods: List<VerificationMethod>,
+                                 otherUserId: String,
+                                 transactionId: String): Boolean
 
     // fun transactionUpdated(tx: SasVerificationTransaction)
 

@@ -52,7 +52,6 @@ class VerificationConclusionController @Inject constructor(
                     notice(stringProvider.getString(
                             if (state.isSelfVerification) R.string.verification_conclusion_ok_self_notice
                             else R.string.verification_conclusion_ok_notice))
-
                 }
 
                 bottomSheetVerificationBigImageItem {

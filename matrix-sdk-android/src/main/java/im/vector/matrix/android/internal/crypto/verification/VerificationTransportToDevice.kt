@@ -50,7 +50,6 @@ internal class VerificationTransportToDevice(
                                          roomId: String?,
                                          toDevices: List<String>?,
                                          callback: (String?, VerificationInfoRequest?) -> Unit) {
-
         val contentMap = MXUsersDevicesMap<Any>()
         val keyReq = KeyVerificationRequest(
                 fromDevice = myDeviceId,
@@ -67,6 +66,30 @@ internal class VerificationTransportToDevice(
                         override fun onSuccess(data: Unit) {
                             Timber.v("## verification [$tx.transactionId] send toDevice request success")
                             callback.invoke(localID, keyReq)
+                        }
+
+                        override fun onFailure(failure: Throwable) {
+                            Timber.e("## verification [$tx.transactionId] failed to send toDevice request")
+                        }
+                    }
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun sendVerificationReady(keyReq: VerificationInfoReady,
+                                       otherUserId: String,
+                                       otherDeviceId: String,
+                                       callback: (() -> Unit)?) {
+        val contentMap = MXUsersDevicesMap<Any>()
+
+        contentMap.setObject(otherUserId, otherDeviceId, keyReq)
+
+        sendToDeviceTask
+                .configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_READY, contentMap)) {
+                    this.callback = object : MatrixCallback<Unit> {
+                        override fun onSuccess(data: Unit) {
+                            Timber.v("## verification [$tx.transactionId] send toDevice request success")
+                            callback?.invoke()
                         }
 
                         override fun onFailure(failure: Throwable) {

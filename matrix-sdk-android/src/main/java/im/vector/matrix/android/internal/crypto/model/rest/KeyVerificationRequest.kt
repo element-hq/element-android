@@ -26,7 +26,7 @@ import im.vector.matrix.android.internal.crypto.verification.VerificationInfoReq
 internal data class KeyVerificationRequest(
         @Json(name = "from_device") override val fromDevice: String?,
         @Json(name = "methods") override val methods: List<String>,
-        @Json(name = "methods") override val timestamp: Long?,
+        @Json(name = "timestamp") override val timestamp: Long?,
         @Json(name = "transaction_id") override var transactionID: String? = null
 
 ) : SendToDeviceObject, VerificationInfoRequest {

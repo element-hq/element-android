@@ -168,7 +168,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                         addButton(
                                 getString(R.string.later),
                                 Runnable {
-
                                 }
                         )
                         addButton(

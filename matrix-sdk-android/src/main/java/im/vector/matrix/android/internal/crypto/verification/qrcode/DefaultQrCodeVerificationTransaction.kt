@@ -88,8 +88,25 @@ internal class DefaultQrCodeVerificationTransaction(
         }
 
         // check master key
-        if (otherQrCodeData.otherUserKey != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
+        if (otherQrCodeData.userId != userId
+                && otherQrCodeData.otherUserKey == null) {
+            // Verification with other user, other_user_key is mandatory in this case
+            Timber.d("## Verification QR: Invalid, missing other_user_key")
+            cancel(CancelCode.QrCodeInvalid)
+            return
+        }
+
+        if (otherQrCodeData.otherUserKey != null
+                && otherQrCodeData.otherUserKey != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
             Timber.d("## Verification QR: Invalid other master key ${otherQrCodeData.otherUserKey}")
+            cancel(CancelCode.MismatchedKeys)
+            return
+        }
+
+        // Check device key if available
+        if (otherQrCodeData.otherDeviceKey != null
+                && otherQrCodeData.otherDeviceKey != cryptoStore.getUserDevice(otherQrCodeData.userId, otherDeviceId ?: "")?.fingerprint()) {
+            Timber.d("## Verification QR: Invalid other device key")
             cancel(CancelCode.MismatchedKeys)
             return
         }
@@ -147,8 +164,15 @@ internal class DefaultQrCodeVerificationTransaction(
         // qrCodeData.sharedSecret will be used to send the start request
         start(otherQrCodeData.sharedSecret)
 
+        val safeOtherDeviceId = otherDeviceId
+        if (!otherQrCodeData.otherDeviceKey.isNullOrBlank()
+                && safeOtherDeviceId != null) {
+            // Locally verify the device
+            toVerifyDeviceIds.add(safeOtherDeviceId)
+        }
+
         // Trust the other user
-        trust(canTrustOtherUserMasterKey, toVerifyDeviceIds)
+        trust(canTrustOtherUserMasterKey, toVerifyDeviceIds.distinct())
     }
 
     fun start(remoteSecret: String) {
@@ -240,8 +264,8 @@ internal class DefaultQrCodeVerificationTransaction(
 
         // TODO what if the otherDevice is not in this list? and should we
         toVerifyDeviceIds.forEach {
-            setDeviceVerified(otherUserId, it)
-        }
+                    setDeviceVerified(otherUserId, it)
+                }
         transport.done(transactionId)
         state = VerificationTxState.Verified
     }

@@ -17,7 +17,6 @@ package im.vector.matrix.android.internal.crypto.verification
 
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
 import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
-import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SCAN
 import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SHOW
 import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
@@ -40,7 +39,7 @@ data class PendingVerificationRequest(
         val isSuccessful: Boolean = false,
         val handledByOtherSession: Boolean = false,
         // In case of to device it is sent to a list of devices
-        val targetDevices: List<String> ? = null
+        val targetDevices: List<String>? = null
 ) {
     val isReady: Boolean = readyInfo != null
     val isSent: Boolean = transactionId != null

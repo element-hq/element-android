@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.crypto.verification.qrcode
 
+import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldNotBeNull
@@ -36,10 +37,18 @@ class QrCodeTest {
                     "2" to "ghijql"
             ),
             sharedSecret = "sharedSecret",
-            otherUserKey = "otherUserKey"
+            otherUserKey = "otherUserKey",
+            otherDeviceKey = "otherDeviceKey"
     )
 
-    private val basicUrl = "https://matrix.to/#/@benoit:matrix.org?request=%24azertyazerty&action=verify&key_1=abcdef&key_2=ghijql&secret=sharedSecret&other_user_key=otherUserKey"
+    private val basicUrl = "https://matrix.to/#/@benoit:matrix.org" +
+            "?request=%24azertyazerty" +
+            "&action=verify" +
+            "&key_1=abcdef" +
+            "&key_2=ghijql" +
+            "&secret=sharedSecret" +
+            "&other_user_key=otherUserKey" +
+            "&other_device_key=otherDeviceKey"
 
     @Test
     fun testNominalCase() {
@@ -56,7 +65,8 @@ class QrCodeTest {
         decodedData.keys["1"]?.shouldBeEqualTo("abcdef")
         decodedData.keys["2"]?.shouldBeEqualTo("ghijql")
         decodedData.sharedSecret shouldBeEqualTo "sharedSecret"
-        decodedData.otherUserKey shouldBeEqualTo "otherUserKey"
+        decodedData.otherUserKey?.shouldBeEqualTo("otherUserKey")
+        decodedData.otherDeviceKey?.shouldBeEqualTo("otherDeviceKey")
     }
 
     @Test
@@ -81,7 +91,56 @@ class QrCodeTest {
         decodedData.keys["1"]?.shouldBeEqualTo("abcdef")
         decodedData.keys["2"]?.shouldBeEqualTo("ghijql")
         decodedData.sharedSecret shouldBeEqualTo "sharedSecret"
-        decodedData.otherUserKey shouldBeEqualTo "otherUserKey"
+        decodedData.otherUserKey!! shouldBeEqualTo "otherUserKey"
+        decodedData.otherDeviceKey!! shouldBeEqualTo "otherDeviceKey"
+    }
+
+    @Test
+    fun testNoOtherUserKey() {
+        val url = basicQrCodeData
+                .copy(
+                        otherUserKey = null
+                )
+                .toUrl()
+
+        url shouldBeEqualTo basicUrl
+                .replace("&other_user_key=otherUserKey", "")
+
+        val decodedData = url.toQrCodeData()
+
+        decodedData.shouldNotBeNull()
+
+        decodedData.userId shouldBeEqualTo "@benoit:matrix.org"
+        decodedData.requestEventId shouldBeEqualTo "\$azertyazerty"
+        decodedData.keys["1"]?.shouldBeEqualTo("abcdef")
+        decodedData.keys["2"]?.shouldBeEqualTo("ghijql")
+        decodedData.sharedSecret shouldBeEqualTo "sharedSecret"
+        decodedData.otherUserKey shouldBe null
+        decodedData.otherDeviceKey?.shouldBeEqualTo("otherDeviceKey")
+    }
+
+    @Test
+    fun testNoOtherDeviceKey() {
+        val url = basicQrCodeData
+                .copy(
+                        otherDeviceKey = null
+                )
+                .toUrl()
+
+        url shouldBeEqualTo basicUrl
+                .replace("&other_device_key=otherDeviceKey", "")
+
+        val decodedData = url.toQrCodeData()
+
+        decodedData.shouldNotBeNull()
+
+        decodedData.userId shouldBeEqualTo "@benoit:matrix.org"
+        decodedData.requestEventId shouldBeEqualTo "\$azertyazerty"
+        decodedData.keys["1"]?.shouldBeEqualTo("abcdef")
+        decodedData.keys["2"]?.shouldBeEqualTo("ghijql")
+        decodedData.sharedSecret shouldBeEqualTo "sharedSecret"
+        decodedData.otherUserKey?.shouldBeEqualTo("otherUserKey")
+        decodedData.otherDeviceKey shouldBe null
     }
 
     @Test
@@ -146,13 +205,6 @@ class QrCodeTest {
     @Test
     fun testMissingSecret() {
         basicUrl.replace("&secret=sharedSecret", "")
-                .toQrCodeData()
-                .shouldBeNull()
-    }
-
-    @Test
-    fun testMissingOtherUserKey() {
-        basicUrl.replace("&other_user_key=otherUserKey", "")
                 .toQrCodeData()
                 .shouldBeNull()
     }

@@ -332,6 +332,13 @@ internal class VerificationTransportRoomMessage(
             localEchoEventFactory.saveLocalEcho(monarchy, it)
         }
     }
+
+    override fun sendVerificationReady(keyReq: VerificationInfoReady,
+                                       otherUserId: String,
+                                       otherDeviceId: String,
+                                       callback: (() -> Unit)?) {
+        // Not applicable
+    }
 }
 
 internal class VerificationTransportRoomMessageFactory @Inject constructor(

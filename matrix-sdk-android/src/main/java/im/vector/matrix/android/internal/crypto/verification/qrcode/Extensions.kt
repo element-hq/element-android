@@ -32,6 +32,7 @@ private const val ENCODING = "utf-8"
  *     &key_<keyid>=<key-in-base64>...
  *     &secret=<shared_secret>
  *     &other_user_key=<master-key-in-base64>
+ *     &other_device_key=<device-key-in-base64>
  *
  * Example:
  * https://matrix.to/#/@user:matrix.org?
@@ -40,7 +41,8 @@ private const val ENCODING = "utf-8"
  *     &key_VJEDVKUYTQ=DL7LWIw7Qp%2B4AREDACTEDOwy2BjygumSWAGfzaWY
  *     &key_fsh%2FfQ08N3xvh4ySXsINB%2BJ2hREDACTEDVcVOG4qqo=fsh%2FfQ08N3xvh4ySXsINB%2BJ2hREDACTEDVcVOG4qqo
  *     &secret=AjQqw51Fp6UBuPolZ2FAD5WnXc22ZhJG6iGslrVvIdw%3D
- *     &other_user_key=WqSVLkBCS%2Fi5NqR%2F%2FymC8T7K9RPxBIuqK8Usl6Y3big
+ *     &other_user_key=WqSVLkBCS%2Fi5NqRREDACTEDRPxBIuqK8Usl6Y3big
+ *     &other_device_key=WqSVLkBREDACTEDBsfszdvsdBEvefqsdcsfBvsfcsFb
  * </pre>
  */
 fun QrCodeData.toUrl(): String {
@@ -58,8 +60,15 @@ fun QrCodeData.toUrl(): String {
 
         append("&secret=")
         append(URLEncoder.encode(sharedSecret, ENCODING))
-        append("&other_user_key=")
-        append(URLEncoder.encode(otherUserKey, ENCODING))
+
+        if (!otherUserKey.isNullOrBlank()) {
+            append("&other_user_key=")
+            append(URLEncoder.encode(otherUserKey, ENCODING))
+        }
+        if (!otherDeviceKey.isNullOrBlank()) {
+            append("&other_device_key=")
+            append(URLEncoder.encode(otherDeviceKey, ENCODING))
+        }
     }
 }
 
@@ -100,7 +109,8 @@ fun String.toQrCodeData(): QrCodeData? {
 
     val requestEventId = keyValues["request"]?.takeIf { MatrixPatterns.isEventId(it) } ?: return null
     val sharedSecret = keyValues["secret"] ?: return null
-    val otherUserKey = keyValues["other_user_key"] ?: return null
+    val otherUserKey = keyValues["other_user_key"]
+    val otherDeviceKey = keyValues["other_device_key"]
 
     val keys = keyValues.keys
             .filter { it.startsWith("key_") }
@@ -115,6 +125,7 @@ fun String.toQrCodeData(): QrCodeData? {
             action,
             keys,
             sharedSecret,
-            otherUserKey
+            otherUserKey,
+            otherDeviceKey
     )
 }

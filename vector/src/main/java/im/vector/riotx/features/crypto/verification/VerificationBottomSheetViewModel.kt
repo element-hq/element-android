@@ -47,7 +47,6 @@ import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
-import timber.log.Timber
 
 data class VerificationBottomSheetViewState(
         val otherUserMxItem: MatrixItem? = null,
@@ -95,7 +94,15 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
 
             val userItem = session.getUser(args.otherUserId)
 
-            val pr = session.getVerificationService().getExistingVerificationRequest(args.otherUserId, args.verificationId)
+            val isWaitingForOtherMode = args.waitForIncomingRequest
+
+            val pr = if (isWaitingForOtherMode) {
+                // See if active tx for this user and take it
+                session.getVerificationService().getExistingVerificationRequest(args.otherUserId)
+                        ?.firstOrNull { !it.isFinished }
+            } else {
+                session.getVerificationService().getExistingVerificationRequest(args.otherUserId, args.verificationId)
+            }
 
             val sasTx = (pr?.transactionId ?: args.verificationId)?.let {
                 session.getVerificationService().getExistingTransaction(args.otherUserId, it) as? SasVerificationTransaction
@@ -104,9 +111,6 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
             val qrTx = (pr?.transactionId ?: args.verificationId)?.let {
                 session.getVerificationService().getExistingTransaction(args.otherUserId, it) as? QrCodeVerificationTransaction
             }
-
-            val isWaitingForOtherMode = args.waitForIncomingRequest
-            // TODO see if active tx for this user and take it
 
             return fragment.verificationViewModelFactory.create(VerificationBottomSheetViewState(
                     otherUserMxItem = userItem?.toMatrixItem(),
@@ -177,16 +181,24 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
             is VerificationAction.StartSASVerification         -> {
                 val request = session.getVerificationService().getExistingVerificationRequest(otherUserId, action.pendingRequestTransactionId)
                         ?: return@withState
-                if (roomId == null) return@withState
                 val otherDevice = if (request.isIncoming) request.requestInfo?.fromDevice else request.readyInfo?.fromDevice
-                session.getVerificationService().beginKeyVerificationInDMs(
-                        VerificationMethod.SAS,
-                        transactionId = action.pendingRequestTransactionId,
-                        roomId = roomId,
-                        otherUserId = request.otherUserId,
-                        otherDeviceId = otherDevice ?: "",
-                        callback = null
-                )
+                if (roomId == null) {
+                    session.getVerificationService().beginKeyVerification(
+                            VerificationMethod.SAS,
+                            otherUserId = request.otherUserId,
+                            otherDeviceId = otherDevice ?: "",
+                            transactionId = action.pendingRequestTransactionId
+                    )
+                } else {
+                    session.getVerificationService().beginKeyVerificationInDMs(
+                            VerificationMethod.SAS,
+                            transactionId = action.pendingRequestTransactionId,
+                            roomId = roomId,
+                            otherUserId = request.otherUserId,
+                            otherDeviceId = otherDevice ?: "",
+                            callback = null
+                    )
+                }
                 Unit
             }
             is VerificationAction.RemoteQrCodeScanned          -> {
@@ -194,11 +206,6 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                         .getExistingTransaction(action.otherUserId, action.transactionId) as? QrCodeVerificationTransaction
                 existingTransaction
                         ?.userHasScannedOtherQrCode(action.scannedData)
-                        ?.let { cancelCode ->
-                            // Something went wrong
-                            Timber.w("## Something is not right: $cancelCode")
-                            // TODO
-                        }
             }
             is VerificationAction.OtherUserScannedSuccessfully -> {
                 val transactionId = state.transactionId ?: return@withState
@@ -241,7 +248,6 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
         if (state.waitForOtherUserMode && state.transactionId == null) {
             // is this an incoming with that user
             if (tx.isIncoming && tx.otherUserId == state.otherUserMxItem?.id) {
-
                 // Also auto accept incoming if needed!
                 if (tx is IncomingSasVerificationTransaction) {
                     if (tx.uxState == IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT) {
