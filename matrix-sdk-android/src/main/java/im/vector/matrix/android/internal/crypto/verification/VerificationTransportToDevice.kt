@@ -50,7 +50,6 @@ internal class VerificationTransportToDevice(
                                          roomId: String?,
                                          toDevices: List<String>?,
                                          callback: (String?, VerificationInfoRequest?) -> Unit) {
-
         val contentMap = MXUsersDevicesMap<Any>()
         val keyReq = KeyVerificationRequest(
                 fromDevice = myDeviceId,

@@ -53,9 +53,9 @@ class VerificationConclusionViewModel(initialState: VerificationConclusionViewSt
                 }
                 else                      -> {
                     VerificationConclusionViewState(
-                            if (args.isSuccessFull) ConclusionState.SUCCESS
-                            else ConclusionState.CANCELLED
-                    , args.isMe)
+                            if (args.isSuccessFull) ConclusionState.SUCCESS else ConclusionState.CANCELLED,
+                            args.isMe
+                    )
                 }
             }
         }

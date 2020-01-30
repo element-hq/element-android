@@ -248,7 +248,6 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
         if (state.waitForOtherUserMode && state.transactionId == null) {
             // is this an incoming with that user
             if (tx.isIncoming && tx.otherUserId == state.otherUserMxItem?.id) {
-
                 // Also auto accept incoming if needed!
                 if (tx is IncomingSasVerificationTransaction) {
                     if (tx.uxState == IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT) {

@@ -50,8 +50,6 @@ class VerificationRequestController @Inject constructor(
         val state = viewState ?: return
         val matrixItem = viewState?.otherUserMxItem ?: return
 
-
-
         if (state.waitForOtherUserMode) {
             bottomSheetVerificationNoticeItem {
                 id("notice")
@@ -62,13 +60,11 @@ class VerificationRequestController @Inject constructor(
                 id("sep")
             }
 
-
             bottomSheetVerificationWaitingItem {
                 id("waiting")
                 title(stringProvider.getString(R.string.verification_request_waiting_for, matrixItem.getBestName()))
             }
         } else {
-
             val styledText = matrixItem.let {
                 stringProvider.getString(R.string.verification_request_notice, it.id)
                         .toSpannable()
