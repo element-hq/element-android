@@ -85,6 +85,29 @@ class QrCodeTest {
     }
 
     @Test
+    fun testUrlCharInKeys() {
+        val url = basicQrCodeData
+                .copy(
+                        keys = mapOf(
+                                "/=" to "abcdef",
+                                "&?" to "ghijql"
+                        )
+                )
+                .toUrl()
+
+        url shouldBeEqualTo basicUrl
+                .replace("key_1=abcdef", "key_%2F%3D=abcdef")
+                .replace("key_2=ghijql", "key_%26%3F=ghijql")
+
+        val decodedData = url.toQrCodeData()
+
+        decodedData.shouldNotBeNull()
+
+        decodedData.keys["/="]?.shouldBeEqualTo("abcdef")
+        decodedData.keys["&&"]?.shouldBeEqualTo("ghijql")
+    }
+
+    @Test
     fun testMissingActionCase() {
         basicUrl.replace("&action=verify", "")
                 .toQrCodeData()
