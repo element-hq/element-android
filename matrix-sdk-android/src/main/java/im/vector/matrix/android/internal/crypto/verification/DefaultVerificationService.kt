@@ -733,7 +733,7 @@ internal class DefaultVerificationService @Inject constructor(
                 // Check if other user is able to scan QR code
                 ?.takeIf { it.contains(VERIFICATION_METHOD_QR_CODE_SCAN) }
                 ?.let {
-                    createQrCodeData(existingRequest.transactionId, existingRequest.otherUserId)
+                    createQrCodeData(existingRequest.transactionId, existingRequest.otherUserId, readyReq.fromDevice)
                 }
 
         if (readyReq.methods.orEmpty().contains(VERIFICATION_METHOD_RECIPROCATE)) {
@@ -760,13 +760,25 @@ internal class DefaultVerificationService @Inject constructor(
         ))
     }
 
-    private fun createQrCodeData(transactionId: String?, otherUserId: String): QrCodeData? {
-        // Build the QR code URL
-        val requestEventId = transactionId ?: run {
+    private fun createQrCodeData(requestEventId: String?, otherUserId: String, otherDeviceId: String?): QrCodeData? {
+        requestEventId ?: run {
             Timber.w("## Unknown requestEventId")
             return null
         }
 
+        return when {
+            userId != otherUserId                        ->
+                createQrCodeDataForDistinctUser(requestEventId, otherUserId, otherDeviceId)
+            crossSigningService.isCrossSigningVerified() ->
+                // This is a self verification and I am the old device (Osborne2)
+                createQrCodeDataForVerifiedDevice(requestEventId, otherDeviceId)
+            else                                         ->
+                // This is a self verification and I am the new device (Dynabook)
+                createQrCodeDataForUnVerifiedDevice(requestEventId, otherDeviceId)
+        }
+    }
+
+    private fun createQrCodeDataForDistinctUser(requestEventId: String, otherUserId: String, otherDeviceId: String?): QrCodeData? {
         val myMasterKey = crossSigningService.getMyCrossSigningKeys()
                 ?.masterKey()
                 ?.unpaddedBase64PublicKey
@@ -789,9 +801,17 @@ internal class DefaultVerificationService @Inject constructor(
                     return null
                 }
 
-        val myDeviceKey = myDeviceInfoHolder.get().myDevice.fingerprint()!!
+        val myDeviceKey = myDeviceInfoHolder.get().myDevice.fingerprint()
+                ?: run {
+                    Timber.w("## Unable to get my fingerprint")
+                    return null
+                }
 
-        val generatedSharedSecret = generateSharedSecret()
+        val otherDeviceKey = otherDeviceId
+                ?.let {
+                    cryptoStore.getUserDevice(userId, otherDeviceId)?.fingerprint()
+                }
+
         return QrCodeData(
                 userId = userId,
                 requestEventId = requestEventId,
@@ -800,8 +820,95 @@ internal class DefaultVerificationService @Inject constructor(
                         myMasterKey to myMasterKey,
                         myDeviceId to myDeviceKey
                 ),
-                sharedSecret = generatedSharedSecret,
-                otherUserKey = otherUserMasterKey
+                sharedSecret = generateSharedSecret(),
+                otherUserKey = otherUserMasterKey,
+                otherDeviceKey = otherDeviceKey
+        )
+    }
+
+    // Create a QR code to display on the old device (Osborne2)
+    private fun createQrCodeDataForVerifiedDevice(requestEventId: String, otherDeviceId: String?): QrCodeData? {
+        val myMasterKey = crossSigningService.getMyCrossSigningKeys()
+                ?.masterKey()
+                ?.unpaddedBase64PublicKey
+                ?: run {
+                    Timber.w("## Unable to get my master key")
+                    return null
+                }
+
+        val otherDeviceKey = otherDeviceId
+                ?.let {
+                    cryptoStore.getUserDevice(userId, otherDeviceId)?.fingerprint()
+                }
+                ?: run {
+                    Timber.w("## Unable to get other device data")
+                    return null
+                }
+
+        val myDeviceId = deviceId
+                ?: run {
+                    Timber.w("## Unable to get my deviceId")
+                    return null
+                }
+
+        val myDeviceKey = myDeviceInfoHolder.get().myDevice.fingerprint()
+                ?: run {
+                    Timber.w("## Unable to get my fingerprint")
+                    return null
+                }
+
+        return QrCodeData(
+                userId = userId,
+                requestEventId = requestEventId,
+                action = QrCodeData.ACTION_VERIFY,
+                keys = hashMapOf(
+                        myMasterKey to myMasterKey,
+                        myDeviceId to myDeviceKey
+                ),
+                sharedSecret = generateSharedSecret(),
+                otherUserKey = null,
+                otherDeviceKey = otherDeviceKey
+        )
+    }
+
+    // Create a QR code to display on the new device (Dynabook)
+    private fun createQrCodeDataForUnVerifiedDevice(requestEventId: String, otherDeviceId: String?): QrCodeData? {
+        val myMasterKey = crossSigningService.getMyCrossSigningKeys()
+                ?.masterKey()
+                ?.unpaddedBase64PublicKey
+                ?: run {
+                    Timber.w("## Unable to get my master key")
+                    return null
+                }
+
+        val myDeviceId = deviceId
+                ?: run {
+                    Timber.w("## Unable to get my deviceId")
+                    return null
+                }
+
+        val myDeviceKey = myDeviceInfoHolder.get().myDevice.fingerprint()
+                ?: run {
+                    Timber.w("## Unable to get my fingerprint")
+                    return null
+                }
+
+        val otherDeviceKey = otherDeviceId
+                ?.let {
+                    cryptoStore.getUserDevice(userId, otherDeviceId)?.fingerprint()
+                }
+
+        return QrCodeData(
+                userId = userId,
+                requestEventId = requestEventId,
+                action = QrCodeData.ACTION_VERIFY,
+                keys = hashMapOf(
+                        // Note: no master key here
+                        myDeviceId to myDeviceKey
+                ),
+                sharedSecret = generateSharedSecret(),
+                otherUserKey = myMasterKey,
+                otherDeviceKey = otherDeviceKey
         )
     }
 
@@ -1128,7 +1235,7 @@ internal class DefaultVerificationService @Inject constructor(
 
         if (VERIFICATION_METHOD_QR_CODE_SCAN in otherUserMethods || VERIFICATION_METHOD_QR_CODE_SHOW in otherUserMethods) {
             // Other user wants to verify using QR code. Cross-signing has to be setup
-            val qrCodeData = createQrCodeData(transactionId, otherUserId)
+            val qrCodeData = createQrCodeData(transactionId, otherUserId, otherDeviceId)
 
             if (qrCodeData != null) {
                 if (VERIFICATION_METHOD_QR_CODE_SCAN in otherUserMethods && VerificationMethod.QR_CODE_SHOW in methods) {

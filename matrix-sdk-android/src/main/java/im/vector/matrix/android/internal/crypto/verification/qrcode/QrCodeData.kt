@@ -26,13 +26,18 @@ data class QrCodeData(
         // The action
         val action: String,
         // key_<key_id>: each key that the user wants verified will have an entry of this form, where the value is the key in unpadded base64.
-        // The QR code should contain at least the user's master cross-signing key.
+        // The QR code should contain at least the user's master cross-signing key. In the case where a device does not have a cross-signing key
+        // (as in the case where a user logs in to a new device, and is verifying against another device), thin the QR code should contain at
+        // least the device's key.
         val keys: Map<String, String>,
         // random single-use shared secret in unpadded base64. It must be at least 256-bits long (43 characters when base64-encoded).
         val sharedSecret: String,
         // the other user's master cross-signing key, in unpadded base64. In other words, if Alice is displaying the QR code,
         // this would be the copy of Bob's master cross-signing key that Alice has.
-        val otherUserKey: String
+        val otherUserKey: String?,
+        // The other device's key, in unpadded base64
+        // This is only needed when a user is verifying their own devices, where the other device has not yet been signed with the cross-signing key.
+        val otherDeviceKey: String?
 ) {
     companion object {
         const val ACTION_VERIFY = "verify"
