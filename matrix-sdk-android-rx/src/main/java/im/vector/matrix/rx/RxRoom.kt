@@ -17,7 +17,6 @@
 package im.vector.matrix.rx
 
 import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
-import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.Room
@@ -31,7 +30,6 @@ import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
-import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
@@ -39,32 +37,50 @@ import io.reactivex.functions.BiFunction
 class RxRoom(private val room: Room, private val session: Session) {
 
     fun liveRoomSummary(): Observable<Optional<RoomSummary>> {
-        val summaryObservable = room.getRoomSummaryLive().asObservable()
+        val summaryObservable = room.getRoomSummaryLive()
+                .asObservable()
                 .startWith(room.roomSummary().toOptional())
 
-        val memberChangeObserver = summaryObservable.map {
-            it.getOrNull()?.otherMemberIds ?: emptyList()
-        }.distinctUntilChanged()
-
-        val keyObservable = session.getLiveCryptoDeviceInfo().asObservable()
-
-        val subObserver = Observable
-                .combineLatest<List<String>, List<CryptoDeviceInfo>, RoomEncryptionTrustLevel>(
-                        memberChangeObserver,
-                        keyObservable,
-                        BiFunction { userList, _ ->
-                            session.getCrossSigningService().getTrustLevelForUsers(userList)
+        val memberIdsChangeObservable = summaryObservable
+                .map {
+                    it.getOrNull()?.let { roomSummary ->
+                        if (roomSummary.isEncrypted) {
+                            // Return the list of other users
+                            roomSummary.otherMemberIds
+                        } else {
+                            // Return an empty list, the room is not encrypted
+                            emptyList()
                         }
-                )
+                    }.orEmpty()
+                }.distinctUntilChanged()
 
+        // Observe the device info of the users in the room
+        val cryptoDeviceInfoObservable = memberIdsChangeObservable
+                .switchMap { otherUserIds ->
+                    session.getLiveCryptoDeviceInfo(otherUserIds)
+                            .asObservable()
+                            .map {
+                                // If any key change, emit the userIds list
+                                otherUserIds
+                            }
+                }
+
+        val roomEncryptionTrustLevelObservable = cryptoDeviceInfoObservable
+                .map { otherUserIds ->
+                    if (otherUserIds.isEmpty()) {
+                        Optional<RoomEncryptionTrustLevel>(null)
+                    } else {
+                        session.getCrossSigningService().getTrustLevelForUsers(otherUserIds).toOptional()
+                    }
+                }
 
         return Observable
-                .combineLatest<Optional<RoomSummary>, RoomEncryptionTrustLevel, Optional<RoomSummary>>(
+                .combineLatest<Optional<RoomSummary>, Optional<RoomEncryptionTrustLevel>, Optional<RoomSummary>>(
                         summaryObservable,
-                        subObserver,
+                        roomEncryptionTrustLevelObservable,
                         BiFunction { summary, level ->
                             summary.getOrNull()?.copy(
-                                    roomEncryptionTrustLevel = if (summary.getOrNull()?.isEncrypted.orFalse()) level else null
+                                    roomEncryptionTrustLevel = level.getOrNull()
                             ).toOptional()
                         }
                 )

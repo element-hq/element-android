@@ -38,22 +38,24 @@ import io.reactivex.functions.BiFunction
 class RxSession(private val session: Session) {
 
     fun liveRoomSummaries(queryParams: RoomSummaryQueryParams): Observable<List<RoomSummary>> {
-        val summaryObservable = session.getRoomSummariesLive(queryParams).asObservable()
+        val summariesObservable = session.getRoomSummariesLive(queryParams).asObservable()
                 .startWith(session.getRoomSummaries(queryParams))
 
-        val keyObservable = session.getLiveCryptoDeviceInfo().asObservable()
+        val cryptoDeviceInfoObservable = session.getLiveCryptoDeviceInfo().asObservable()
 
         return Observable
                 .combineLatest<List<RoomSummary>, List<CryptoDeviceInfo>, List<RoomSummary>>(
-                        summaryObservable,
-                        keyObservable,
+                        summariesObservable,
+                        cryptoDeviceInfoObservable,
                         BiFunction { summaries, _ ->
                             summaries.map {
-                                if (it.isEncrypted) it.copy(
-                                        roomEncryptionTrustLevel = session.getCrossSigningService().getTrustLevelForUsers(
-                                                it.otherMemberIds
-                                        )
-                                ) else it
+                                if (it.isEncrypted) {
+                                    it.copy(
+                                            roomEncryptionTrustLevel = session.getCrossSigningService().getTrustLevelForUsers(it.otherMemberIds)
+                                    )
+                                } else {
+                                    it
+                                }
                             }
                         }
                 )

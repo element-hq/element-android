@@ -658,25 +658,33 @@ internal class DefaultCrossSigningService @Inject constructor(
         }
     }
 
-    override fun getTrustLevelForUsers(userList: List<String>): RoomEncryptionTrustLevel {
-        val atLeastOneTrusted = userList
+    override fun getTrustLevelForUsers(userIds: List<String>): RoomEncryptionTrustLevel {
+        val atLeastOneTrusted = userIds
                 .filter { it != userId }
                 .map { getUserCrossSigningKeys(it) }
                 .any { it?.isTrusted() == true }
 
-        if (!atLeastOneTrusted) {
-            return RoomEncryptionTrustLevel.Default
+        return if (!atLeastOneTrusted) {
+            RoomEncryptionTrustLevel.Default
         } else {
             // I have verified at least one other user
-            val allDevices = userList.mapNotNull {
+            val allDevices = userIds.mapNotNull {
                 cryptoStore.getUserDeviceList(it)
             }.flatten()
             if (getMyCrossSigningKeys() != null) {
                 val hasWarning = allDevices.any { !it.trustLevel?.crossSigningVerified.orFalse() }
-                return if (hasWarning) RoomEncryptionTrustLevel.Warning else RoomEncryptionTrustLevel.Trusted
+                if (hasWarning) {
+                    RoomEncryptionTrustLevel.Warning
+                } else {
+                    RoomEncryptionTrustLevel.Trusted
+                }
             } else {
-                val hasWarningLegacy = allDevices.any { !it.trustLevel?.crossSigningVerified.orFalse() }
-                return if (hasWarningLegacy) RoomEncryptionTrustLevel.Warning else RoomEncryptionTrustLevel.Trusted
+                val hasWarningLegacy = allDevices.any { !it.isVerified }
+                if (hasWarningLegacy) {
+                    RoomEncryptionTrustLevel.Warning
+                } else {
+                    RoomEncryptionTrustLevel.Trusted
+                }
             }
         }
     }

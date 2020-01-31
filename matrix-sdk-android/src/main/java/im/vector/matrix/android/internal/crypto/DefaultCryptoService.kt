@@ -403,11 +403,16 @@ internal class DefaultCryptoService @Inject constructor(
         return cryptoStore.getUserDevices(userId)?.map { it.value } ?: emptyList()
     }
 
+    override fun getLiveCryptoDeviceInfo(): LiveData<List<CryptoDeviceInfo>> {
+        return cryptoStore.getLiveDeviceList()
+    }
+
     override fun getLiveCryptoDeviceInfo(userId: String): LiveData<List<CryptoDeviceInfo>> {
         return cryptoStore.getLiveDeviceList(userId)
     }
-    override fun getLiveCryptoDeviceInfo(): LiveData<List<CryptoDeviceInfo>> {
-        return cryptoStore.getLiveDeviceList()
+
+    override fun getLiveCryptoDeviceInfo(userIds: List<String>): LiveData<List<CryptoDeviceInfo>> {
+        return cryptoStore.getLiveDeviceList(userIds)
     }
 
     /**

@@ -200,6 +200,9 @@ internal interface IMXCryptoStore {
     fun getUserDeviceList(userId: String): List<CryptoDeviceInfo>?
 
     fun getLiveDeviceList(userId: String): LiveData<List<CryptoDeviceInfo>>
+
+    fun getLiveDeviceList(userIds: List<String>): LiveData<List<CryptoDeviceInfo>>
+
     //TODO temp
     fun getLiveDeviceList(): LiveData<List<CryptoDeviceInfo>>
     /**
