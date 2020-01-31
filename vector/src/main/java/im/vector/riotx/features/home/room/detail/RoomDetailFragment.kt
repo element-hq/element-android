@@ -309,11 +309,10 @@ class RoomDetailFragment @Inject constructor(
 
         roomDetailViewModel.observeViewEvents {
             when (it) {
-                is RoomDetailViewEvents.Failure -> showErrorInSnackbar(it.throwable)
+                is RoomDetailViewEvents.Failure             -> showErrorInSnackbar(it.throwable)
                 is RoomDetailViewEvents.OnNewTimelineEvents -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
             }.exhaustive
         }
-
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -348,9 +347,8 @@ class RoomDetailFragment @Inject constructor(
             jumpToBottomView.visibility = View.INVISIBLE
             if (!roomDetailViewModel.timeline.isLive) {
                 roomDetailViewModel.timeline.restartWithEventId(null)
-            } else {
-                layoutManager.scrollToPosition(0)
             }
+            layoutManager.scrollToPosition(0)
         }
 
         jumpToBottomViewVisibilityManager = JumpToBottomViewVisibilityManager(

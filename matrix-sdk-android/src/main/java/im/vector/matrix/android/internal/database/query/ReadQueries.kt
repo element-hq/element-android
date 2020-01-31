@@ -20,6 +20,7 @@ import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
 import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
+import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import io.realm.Realm
 
 internal fun isEventRead(monarchy: Monarchy,
@@ -37,15 +38,14 @@ internal fun isEventRead(monarchy: Monarchy,
     monarchy.doWithRealm { realm ->
         val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId) ?: return@doWithRealm
         val eventToCheck = liveChunk.timelineEvents.find(eventId)
-
-        isEventRead = if (eventToCheck?.root?.sender == userId) {
+        isEventRead = if (eventToCheck == null || eventToCheck.root?.sender == userId) {
             true
         } else {
             val readReceipt = ReadReceiptEntity.where(realm, roomId, userId).findFirst()
                     ?: return@doWithRealm
             val readReceiptIndex = liveChunk.timelineEvents.find(readReceipt.eventId)?.displayIndex
                     ?: Int.MIN_VALUE
-            val eventToCheckIndex = eventToCheck?.displayIndex ?: Int.MAX_VALUE
+            val eventToCheckIndex = eventToCheck.displayIndex
 
             eventToCheckIndex <= readReceiptIndex
         }
@@ -61,13 +61,17 @@ internal fun isReadMarkerMoreRecent(monarchy: Monarchy,
         return false
     }
     return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-        val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId) ?: return false
-        val eventToCheck = liveChunk.timelineEvents.find(eventId)
-
+        val eventToCheck = TimelineEventEntity.where(realm, roomId = roomId, eventId = eventId).findFirst()
+        val eventToCheckChunk = eventToCheck?.chunk?.firstOrNull()
         val readMarker = ReadMarkerEntity.where(realm, roomId).findFirst() ?: return false
-        val readMarkerIndex = liveChunk.timelineEvents.find(readMarker.eventId)?.displayIndex
-                ?: Int.MIN_VALUE
-        val eventToCheckIndex = eventToCheck?.displayIndex ?: Int.MAX_VALUE
-        eventToCheckIndex <= readMarkerIndex
+        val readMarkerEvent = TimelineEventEntity.where(realm, roomId = roomId, eventId = readMarker.eventId).findFirst()
+        val readMarkerChunk = readMarkerEvent?.chunk?.firstOrNull()
+        if (eventToCheckChunk == readMarkerChunk) {
+            val readMarkerIndex = readMarkerEvent?.displayIndex ?: Int.MIN_VALUE
+            val eventToCheckIndex = eventToCheck?.displayIndex ?: Int.MAX_VALUE
+            eventToCheckIndex <= readMarkerIndex
+        } else {
+            eventToCheckChunk?.isLastForward == false
+        }
     }
 }

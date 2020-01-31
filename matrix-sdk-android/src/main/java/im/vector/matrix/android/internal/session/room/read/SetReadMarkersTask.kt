@@ -58,8 +58,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
         private val roomFullyReadHandler: RoomFullyReadHandler,
         private val readReceiptHandler: ReadReceiptHandler,
         @UserId private val userId: String,
-        private val eventBus: EventBus,
-        private val networkConnectivityChecker: NetworkConnectivityChecker
+        private val eventBus: EventBus
 ) : SetReadMarkersTask {
 
     override suspend fun execute(params: SetReadMarkersTask.Params) {
@@ -93,13 +92,14 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
         }
 
         val shouldUpdateRoomSummary = readReceiptEventId != null && readReceiptEventId == latestSyncedEventId
-        updateDatabase(params.roomId, markers, shouldUpdateRoomSummary)
-        if (markers.isEmpty()) {
-            return
+        if (markers.isNotEmpty() || shouldUpdateRoomSummary) {
+            updateDatabase(params.roomId, markers, shouldUpdateRoomSummary)
         }
-        executeRequest<Unit>(eventBus) {
-            isRetryable = true
-            apiCall = roomAPI.sendReadMarker(params.roomId, markers)
+        if (markers.isNotEmpty()) {
+            executeRequest<Unit>(eventBus) {
+                isRetryable = true
+                apiCall = roomAPI.sendReadMarker(params.roomId, markers)
+            }
         }
     }
 
