@@ -143,6 +143,7 @@ internal class VerificationTransportRoomMessage(
                                          roomId: String?,
                                          toDevices: List<String>?,
                                          callback: (String?, VerificationInfoRequest?) -> Unit) {
+        Timber.d("## SAS sending verification request with supported methods: $supportedMethods")
         // This transport requires a room
         requireNotNull(roomId)
 
@@ -222,6 +223,7 @@ internal class VerificationTransportRoomMessage(
     }
 
     override fun done(transactionId: String) {
+        Timber.d("## SAS sending done for $transactionId")
         val event = createEventAndLocalEcho(
                 type = EventType.KEY_VERIFICATION_DONE,
                 roomId = roomId,
@@ -337,7 +339,8 @@ internal class VerificationTransportRoomMessage(
                                        otherUserId: String,
                                        otherDeviceId: String,
                                        callback: (() -> Unit)?) {
-        // Not applicable
+        // Not applicable (send event is called directly)
+        Timber.w("## SAS ignored verification ready with methods: ${keyReq.methods}")
     }
 }
 

@@ -105,7 +105,7 @@ internal class DefaultQrCodeVerificationTransaction(
 
         // Check device key if available
         if (otherQrCodeData.otherDeviceKey != null
-                && otherQrCodeData.otherDeviceKey != cryptoStore.getUserDevice(otherQrCodeData.userId, otherDeviceId ?: "")?.fingerprint()) {
+                && otherQrCodeData.otherDeviceKey != cryptoStore.getUserDevice(userId, deviceId)?.fingerprint()) {
             Timber.d("## Verification QR: Invalid other device key")
             cancel(CancelCode.MismatchedKeys)
             return

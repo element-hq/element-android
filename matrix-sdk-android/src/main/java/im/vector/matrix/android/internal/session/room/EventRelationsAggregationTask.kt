@@ -18,7 +18,13 @@ package im.vector.matrix.android.internal.session.room
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
-import im.vector.matrix.android.api.session.events.model.*
+import im.vector.matrix.android.api.session.events.model.AggregatedAnnotation
+import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.LocalEcho
+import im.vector.matrix.android.api.session.events.model.RelationType
+import im.vector.matrix.android.api.session.events.model.toContent
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.ReferencesAggregatedContent
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageRelationContent
@@ -27,7 +33,13 @@ import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResu
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.EventMapper
-import im.vector.matrix.android.internal.database.model.*
+import im.vector.matrix.android.internal.database.model.EditAggregatedSummaryEntity
+import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
+import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntity
+import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntityFields
+import im.vector.matrix.android.internal.database.model.ReferencesAggregatedSummaryEntity
+import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
@@ -53,9 +65,10 @@ enum class VerificationState {
     DONE
 }
 
-fun VerificationState.isCanceled() : Boolean {
+fun VerificationState.isCanceled(): Boolean {
     return this == VerificationState.CANCELED_BY_ME || this == VerificationState.CANCELED_BY_OTHER
 }
+
 /**
  * Called by EventRelationAggregationUpdater, when new events that can affect relations are inserted in base.
  */
@@ -118,6 +131,8 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                     EventType.KEY_VERIFICATION_ACCEPT,
                     EventType.KEY_VERIFICATION_START,
                     EventType.KEY_VERIFICATION_MAC,
+                        // TODO Add ?
+                        //  EventType.KEY_VERIFICATION_READY,
                     EventType.KEY_VERIFICATION_KEY -> {
                         Timber.v("## SAS REF in room $roomId for event ${event.eventId}")
                         event.content.toModel<MessageRelationContent>()?.relatesTo?.let {
@@ -146,6 +161,8 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                                 EventType.KEY_VERIFICATION_ACCEPT,
                                 EventType.KEY_VERIFICATION_START,
                                 EventType.KEY_VERIFICATION_MAC,
+                                    // TODO Add ?
+                                    // EventType.KEY_VERIFICATION_READY,
                                 EventType.KEY_VERIFICATION_KEY -> {
                                     Timber.v("## SAS REF in room $roomId for event ${event.eventId}")
                                     encryptedEventContent.relatesTo.eventId?.let {
@@ -473,7 +490,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
         }
     }
 
-    private fun updateVerificationState(oldState: VerificationState?, newState: VerificationState) : VerificationState {
+    private fun updateVerificationState(oldState: VerificationState?, newState: VerificationState): VerificationState {
         // Cancel is always prioritary ?
         // Eg id i found that mac or keys mismatch and send a cancel and the other send a done, i have to
         // consider as canceled

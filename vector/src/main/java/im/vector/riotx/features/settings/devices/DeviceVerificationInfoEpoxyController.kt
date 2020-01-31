@@ -16,7 +16,6 @@
 package im.vector.riotx.features.settings.devices
 
 import com.airbnb.epoxy.TypedEpoxyController
-import com.airbnb.mvrx.Fail
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.dividerItem

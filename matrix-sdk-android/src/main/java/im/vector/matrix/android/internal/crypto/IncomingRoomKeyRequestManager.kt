@@ -129,7 +129,7 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
                 cryptoStore.deleteIncomingRoomKeyRequest(request)
                 continue
             }
-            
+
             cryptoStore.storeIncomingRoomKeyRequest(request)
             onRoomKeyRequest(request)
         }

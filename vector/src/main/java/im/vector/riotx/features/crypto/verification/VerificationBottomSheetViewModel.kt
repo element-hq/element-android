@@ -42,7 +42,6 @@ import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
-import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
@@ -56,11 +55,13 @@ data class VerificationBottomSheetViewState(
         val sasTransactionState: VerificationTxState? = null,
         val qrTransactionState: VerificationTxState? = null,
         val transactionId: String? = null,
+        // true when we display the loading and we wait for the other (incoming request)
         val waitForOtherUserMode: Boolean = false,
         val isMe: Boolean = false
 ) : MvRxState
 
 class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted initialState: VerificationBottomSheetViewState,
+                                                                   @Assisted args: VerificationBottomSheet.VerificationArgs,
                                                                    private val session: Session)
     : VectorViewModel<VerificationBottomSheetViewState, VerificationAction, EmptyViewEvents>(initialState),
         VerificationService.VerificationListener {
@@ -72,6 +73,55 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
 
     init {
         session.getVerificationService().addListener(this)
+
+        val userItem = session.getUser(args.otherUserId)
+
+        val isWaitingForOtherMode = args.waitForIncomingRequest
+
+        var autoReady = false
+        val pr = if (isWaitingForOtherMode) {
+            // See if active tx for this user and take it
+
+            session.getVerificationService().getExistingVerificationRequest(args.otherUserId)
+                    ?.lastOrNull { !it.isFinished }
+                    ?.also { verificationRequest ->
+                        if (verificationRequest.isIncoming && !verificationRequest.isReady) {
+                            // auto ready in this case, as we are waiting
+                            autoReady = true
+                        }
+                    }
+        } else {
+            session.getVerificationService().getExistingVerificationRequest(args.otherUserId, args.verificationId)
+        }
+
+        val sasTx = (pr?.transactionId ?: args.verificationId)?.let {
+            session.getVerificationService().getExistingTransaction(args.otherUserId, it) as? SasVerificationTransaction
+        }
+
+        val qrTx = (pr?.transactionId ?: args.verificationId)?.let {
+            session.getVerificationService().getExistingTransaction(args.otherUserId, it) as? QrCodeVerificationTransaction
+        }
+
+        setState {
+            copy(
+                    otherUserMxItem = userItem?.toMatrixItem(),
+                    sasTransactionState = sasTx?.state,
+                    qrTransactionState = qrTx?.state,
+                    transactionId = pr?.transactionId ?: args.verificationId,
+                    pendingRequest = if (pr != null) Success(pr) else Uninitialized,
+                    waitForOtherUserMode = isWaitingForOtherMode,
+                    roomId = args.roomId,
+                    isMe = args.otherUserId == session.myUserId
+            )
+        }
+
+        if (autoReady) {
+            // TODO, can I be here in DM mode? in this case should test if roomID is null?
+            session.getVerificationService()
+                    .readyPendingVerification(supportedVerificationMethods,
+                            pr!!.otherUserId,
+                            pr.transactionId ?: "")
+        }
     }
 
     override fun onCleared() {
@@ -81,7 +131,8 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
 
     @AssistedInject.Factory
     interface Factory {
-        fun create(initialState: VerificationBottomSheetViewState): VerificationBottomSheetViewModel
+        fun create(initialState: VerificationBottomSheetViewState,
+                   args: VerificationBottomSheet.VerificationArgs): VerificationBottomSheetViewModel
     }
 
     companion object : MvRxViewModelFactory<VerificationBottomSheetViewModel, VerificationBottomSheetViewState> {
@@ -90,48 +141,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
             val fragment: VerificationBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
             val args: VerificationBottomSheet.VerificationArgs = viewModelContext.args()
 
-            val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
-
-            val userItem = session.getUser(args.otherUserId)
-
-            val isWaitingForOtherMode = args.waitForIncomingRequest
-
-            val pr = if (isWaitingForOtherMode) {
-                // See if active tx for this user and take it
-                session.getVerificationService().getExistingVerificationRequest(args.otherUserId)
-                        ?.firstOrNull { !it.isFinished }
-                        ?.also { verificationRequest ->
-                            if (verificationRequest.isIncoming && !verificationRequest.isReady) {
-                                //auto ready in this case, as we are waiting
-                                // TODO, can I be here in DM mode? in this case should test if roomID is null?
-                                session.getVerificationService()
-                                        .readyPendingVerification(supportedVerificationMethods,
-                                                verificationRequest.otherUserId,
-                                                verificationRequest.transactionId ?: "")
-                            }
-                        }
-            } else {
-                session.getVerificationService().getExistingVerificationRequest(args.otherUserId, args.verificationId)
-            }
-
-            val sasTx = (pr?.transactionId ?: args.verificationId)?.let {
-                session.getVerificationService().getExistingTransaction(args.otherUserId, it) as? SasVerificationTransaction
-            }
-
-            val qrTx = (pr?.transactionId ?: args.verificationId)?.let {
-                session.getVerificationService().getExistingTransaction(args.otherUserId, it) as? QrCodeVerificationTransaction
-            }
-
-            return fragment.verificationViewModelFactory.create(VerificationBottomSheetViewState(
-                    otherUserMxItem = userItem?.toMatrixItem(),
-                    sasTransactionState = sasTx?.state,
-                    qrTransactionState = qrTx?.state,
-                    transactionId = args.verificationId,
-                    pendingRequest = if (pr != null) Success(pr) else Uninitialized,
-                    waitForOtherUserMode = isWaitingForOtherMode,
-                    roomId = args.roomId,
-                    isMe = args.otherUserId == session.myUserId)
-            )
+            return fragment.verificationViewModelFactory.create(state, args)
         }
     }
 
@@ -309,7 +319,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
             // is this an incoming with that user
             if (pr.isIncoming && pr.otherUserId == state.otherUserMxItem?.id) {
                 if (!pr.isReady) {
-                    //auto ready in this case, as we are waiting
+                    // auto ready in this case, as we are waiting
                     // TODO, can I be here in DM mode? in this case should test if roomID is null?
                     session.getVerificationService()
                             .readyPendingVerification(supportedVerificationMethods,

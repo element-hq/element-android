@@ -35,7 +35,6 @@ import javax.inject.Inject
  * For reactions will build a EventAnnotationsSummaryEntity, ans for edits a EditAggregatedSummaryEntity.
  * The summaries can then be extracted and added (as a decoration) to a TimelineEvent for final display.
  */
-
 internal class EventRelationsAggregationUpdater @Inject constructor(
         @SessionDatabase realmConfiguration: RealmConfiguration,
         @UserId private val userId: String,
@@ -52,6 +51,8 @@ internal class EventRelationsAggregationUpdater @Inject constructor(
                 EventType.KEY_VERIFICATION_ACCEPT,
                 EventType.KEY_VERIFICATION_START,
                 EventType.KEY_VERIFICATION_MAC,
+                // TODO Add ?
+                // EventType.KEY_VERIFICATION_READY,
                 EventType.KEY_VERIFICATION_KEY,
                 EventType.ENCRYPTED)
         )

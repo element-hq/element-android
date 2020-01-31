@@ -50,6 +50,7 @@ internal class VerificationTransportToDevice(
                                          roomId: String?,
                                          toDevices: List<String>?,
                                          callback: (String?, VerificationInfoRequest?) -> Unit) {
+        Timber.d("## SAS sending verification request with supported methods: $supportedMethods")
         val contentMap = MXUsersDevicesMap<Any>()
         val keyReq = KeyVerificationRequest(
                 fromDevice = myDeviceId,
@@ -80,6 +81,7 @@ internal class VerificationTransportToDevice(
                                        otherUserId: String,
                                        otherDeviceId: String,
                                        callback: (() -> Unit)?) {
+        Timber.d("## SAS sending verification ready with methods: ${keyReq.methods}")
         val contentMap = MXUsersDevicesMap<Any>()
 
         contentMap.setObject(otherUserId, otherDeviceId, keyReq)
@@ -137,6 +139,7 @@ internal class VerificationTransportToDevice(
 
     override fun done(transactionId: String) {
         // To device do not do anything here
+        Timber.d("## SAS done (nothing send in to device transport)")
     }
 
     override fun cancelTransaction(transactionId: String, otherUserId: String, otherUserDeviceId: String, code: CancelCode) {
@@ -164,8 +167,7 @@ internal class VerificationTransportToDevice(
                               hash: String,
                               commitment: String,
                               messageAuthenticationCode: String,
-                              shortAuthenticationStrings: List<String>)
-            : VerificationInfoAccept = KeyVerificationAccept.create(
+                              shortAuthenticationStrings: List<String>): VerificationInfoAccept = KeyVerificationAccept.create(
             tid,
             keyAgreementProtocol,
             hash,

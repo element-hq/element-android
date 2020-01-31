@@ -298,6 +298,7 @@ internal class DefaultVerificationService @Inject constructor(
                 otherUserId = senderId, // requestInfo.toUserId,
                 roomId = null,
                 transactionId = requestInfo.transactionID,
+                localID = requestInfo.transactionID!!,
                 requestInfo = requestInfo
         )
         requestsForUser.add(pendingVerificationRequest)
@@ -336,6 +337,7 @@ internal class DefaultVerificationService @Inject constructor(
                 otherUserId = senderId, // requestInfo.toUserId,
                 roomId = event.roomId,
                 transactionId = event.eventId,
+                localID = event.eventId!!,
                 requestInfo = requestInfo
         )
         requestsForUser.add(pendingVerificationRequest)
@@ -1075,6 +1077,7 @@ internal class DefaultVerificationService @Inject constructor(
             // We need to update with the syncedID
             updatePendingRequest(verificationRequest.copy(
                     transactionId = syncedId,
+                    // localId stays different
                     requestInfo = info
             ))
         }
