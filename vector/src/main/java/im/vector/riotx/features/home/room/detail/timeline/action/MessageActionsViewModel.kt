@@ -15,7 +15,12 @@
  */
 package im.vector.riotx.features.home.room.detail.timeline.action
 
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import dagger.Lazy
@@ -42,7 +47,8 @@ import im.vector.riotx.features.html.VectorHtmlCompressor
 import im.vector.riotx.features.reactions.data.EmojiDataSource
 import im.vector.riotx.features.settings.VectorPreferences
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 /**
  * Quick reactions state
@@ -57,7 +63,7 @@ data class MessageActionState(
         val eventId: String,
         val informationData: MessageInformationData,
         val timelineEvent: Async<TimelineEvent> = Uninitialized,
-        val messageBody: CharSequence? = null,
+        val messageBody: CharSequence = "",
         // For quick reactions
         val quickStates: Async<List<ToggleState>> = Uninitialized,
         // For actions
@@ -152,13 +158,16 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun observeTimelineEventState() {
         asyncSubscribe(MessageActionState::timelineEvent) { timelineEvent ->
-            val computedMessage = computeMessageBody(timelineEvent)
-            val actions = actionsForEvent(timelineEvent)
-            setState { copy(messageBody = computedMessage, actions = actions) }
+            setState {
+                copy(
+                        messageBody = computeMessageBody(timelineEvent),
+                        actions = actionsForEvent(timelineEvent)
+                )
+            }
         }
     }
 
-    private fun computeMessageBody(timelineEvent: TimelineEvent): CharSequence? {
+    private fun computeMessageBody(timelineEvent: TimelineEvent): CharSequence {
         return when (timelineEvent.root.getClearType()) {
             EventType.MESSAGE,
             EventType.STICKER     -> {
@@ -188,7 +197,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 noticeEventFormatter.format(timelineEvent)
             }
             else                  -> null
-        }
+        } ?: ""
     }
 
     private fun actionsForEvent(timelineEvent: TimelineEvent): List<EventSharedAction> {

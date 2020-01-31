@@ -44,6 +44,12 @@ abstract class FormSwitchItem : VectorEpoxyModel<FormSwitchItem.Holder>() {
     var summary: String? = null
 
     override fun bind(holder: Holder) {
+        holder.view.setOnClickListener {
+            if (enabled) {
+                holder.switchView.toggle()
+            }
+        }
+
         holder.titleView.text = title
         holder.summaryView.setTextOrHide(summary)
 

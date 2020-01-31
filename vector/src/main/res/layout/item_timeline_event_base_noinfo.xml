@@ -36,8 +36,9 @@
         <ViewStub
             android:id="@+id/messageContentDefaultStub"
             style="@style/TimelineContentStubBaseParams"
-            android:inflatedId="@+id/stateMessageView"
-            android:layout="@layout/item_timeline_event_default_stub" />
+            android:layout="@layout/item_timeline_event_default_stub"
+            tools:layout_marginTop="80dp"
+            tools:visibility="visible" />
 
         <ViewStub
             android:id="@+id/messageContentBlankStub"
@@ -49,7 +50,9 @@
         <ViewStub
             android:id="@+id/messageContentMergedHeaderStub"
             style="@style/TimelineContentStubBaseParams"
-            android:layout="@layout/item_timeline_event_merged_header_stub" />
+            android:layout="@layout/item_timeline_event_merged_header_stub"
+            tools:layout_marginTop="160dp"
+            tools:visibility="visible" />
 
     </FrameLayout>
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.roomdirectory.createroom
+package im.vector.riotx.features.home.room.detail.composer.rainbow
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.Uninitialized
+data class RgbColor(
+        val r: Int,
+        val g: Int,
+        val b: Int
+)
 
-data class CreateRoomViewState(
-        val roomName: String = "",
-        val isPublic: Boolean = false,
-        val isInRoomDirectory: Boolean = false,
-        val isEncrypted: Boolean = false,
-        val asyncCreateRoomRequest: Async<String> = Uninitialized
-) : MvRxState
+fun RgbColor.toDashColor(): String {
+    return listOf(r, g, b)
+            .joinToString(separator = "", prefix = "#") {
+                it.toString(16).padStart(2, '0')
+            }
+}

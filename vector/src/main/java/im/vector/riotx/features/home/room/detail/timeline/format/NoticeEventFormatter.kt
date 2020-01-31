@@ -33,6 +33,7 @@ import im.vector.matrix.android.api.session.room.model.RoomNameContent
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.crypto.model.event.EncryptionEventContent
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
@@ -198,7 +199,11 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
 
     private fun formatRoomEncryptionEvent(event: Event, senderName: String?): CharSequence? {
         val content = event.content.toModel<EncryptionEventContent>() ?: return null
-        return sp.getString(R.string.notice_end_to_end, senderName, content.algorithm)
+        return if (content.algorithm == MXCRYPTO_ALGORITHM_MEGOLM) {
+            sp.getString(R.string.notice_end_to_end_ok, senderName)
+        } else {
+            sp.getString(R.string.notice_end_to_end_unknown_algorithm, senderName, content.algorithm)
+        }
     }
 
     private fun buildProfileNotice(event: Event, senderName: String?, eventContent: RoomMemberContent?, prevEventContent: RoomMemberContent?): String {

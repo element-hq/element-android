@@ -46,17 +46,14 @@ class MessageActionsEpoxyController @Inject constructor(
 
     override fun buildModels(state: MessageActionState) {
         // Message preview
-        val body = state.messageBody
-        if (body != null) {
-            bottomSheetMessagePreviewItem {
-                id("preview")
-                avatarRenderer(avatarRenderer)
-                matrixItem(state.informationData.matrixItem)
-                movementMethod(createLinkMovementMethod(listener))
-                userClicked { listener?.didSelectMenuAction(EventSharedAction.OpenUserProfile(state.informationData.senderId)) }
-                body(body.linkify(listener))
-                time(state.time())
-            }
+        bottomSheetMessagePreviewItem {
+            id("preview")
+            avatarRenderer(avatarRenderer)
+            matrixItem(state.informationData.matrixItem)
+            movementMethod(createLinkMovementMethod(listener))
+            userClicked { listener?.didSelectMenuAction(EventSharedAction.OpenUserProfile(state.informationData.senderId)) }
+            body(state.messageBody.linkify(listener))
+            time(state.time())
         }
 
         // Send state

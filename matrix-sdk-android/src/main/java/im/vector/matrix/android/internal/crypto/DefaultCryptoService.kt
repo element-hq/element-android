@@ -69,6 +69,7 @@ import im.vector.matrix.android.internal.crypto.tasks.SetDeviceNameTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
 import im.vector.matrix.android.internal.crypto.verification.DefaultVerificationService
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.extensions.foldToCallback
@@ -515,14 +516,16 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Tells if a room is encrypted
+     * Tells if a room is encrypted with MXCRYPTO_ALGORITHM_MEGOLM
      *
      * @param roomId the room id
-     * @return true if the room is encrypted
+     * @return true if the room is encrypted with algorithm MXCRYPTO_ALGORITHM_MEGOLM
      */
     override fun isRoomEncrypted(roomId: String): Boolean {
-        val encryptionEvent = monarchy.fetchCopied {
-            EventEntity.where(it, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION).findFirst()
+        val encryptionEvent = monarchy.fetchCopied { realm ->
+            EventEntity.where(realm, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION)
+                    .contains(EventEntityFields.CONTENT, "\"algorithm\":\"$MXCRYPTO_ALGORITHM_MEGOLM\"")
+                    .findFirst()
         }
         return encryptionEvent != null
     }

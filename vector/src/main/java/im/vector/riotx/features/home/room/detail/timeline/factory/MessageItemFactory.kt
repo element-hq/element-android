@@ -27,7 +27,17 @@ import dagger.Lazy
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.*
+import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageEmoteContent
+import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
+import im.vector.matrix.android.api.session.room.model.message.MessageImageInfoContent
+import im.vector.matrix.android.api.session.room.model.message.MessageNoticeContent
+import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
+import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
+import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
@@ -41,8 +51,26 @@ import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.core.utils.containsOnlyEmojis
 import im.vector.riotx.core.utils.isLocalFile
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotx.features.home.room.detail.timeline.helper.*
-import im.vector.riotx.features.home.room.detail.timeline.item.*
+import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
+import im.vector.riotx.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
+import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformationDataFactory
+import im.vector.riotx.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
+import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
+import im.vector.riotx.features.home.room.detail.timeline.item.AbsMessageItem
+import im.vector.riotx.features.home.room.detail.timeline.item.DefaultItem
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageBlockCodeItem
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageBlockCodeItem_
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageFileItem
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageFileItem_
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageImageVideoItem
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageImageVideoItem_
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem_
+import im.vector.riotx.features.home.room.detail.timeline.item.RedactedMessageItem
+import im.vector.riotx.features.home.room.detail.timeline.item.RedactedMessageItem_
+import im.vector.riotx.features.home.room.detail.timeline.item.VerificationRequestItem
+import im.vector.riotx.features.home.room.detail.timeline.item.VerificationRequestItem_
 import im.vector.riotx.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.riotx.features.home.room.detail.timeline.tools.linkify
 import im.vector.riotx.features.html.CodeVisitor
@@ -201,7 +229,7 @@ class MessageItemFactory @Inject constructor(
                                            informationData: MessageInformationData,
                                            highlight: Boolean,
                                            callback: TimelineEventController.Callback?): DefaultItem? {
-        val text = "${messageContent.type} message events are not yet handled"
+        val text = stringProvider.getString(R.string.rendering_event_error_type_of_message_not_handled, messageContent.type)
         return defaultItemFactory.create(text, informationData, highlight, callback)
     }
 

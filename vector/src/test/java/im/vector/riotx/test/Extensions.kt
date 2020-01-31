@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,6 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.roomdirectory.createroom
+package im.vector.riotx.test
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.Uninitialized
-
-data class CreateRoomViewState(
-        val roomName: String = "",
-        val isPublic: Boolean = false,
-        val isInRoomDirectory: Boolean = false,
-        val isEncrypted: Boolean = false,
-        val asyncCreateRoomRequest: Async<String> = Uninitialized
-) : MvRxState
+fun String.trimIndentOneLine() = trimIndent().replace("\n", "")
