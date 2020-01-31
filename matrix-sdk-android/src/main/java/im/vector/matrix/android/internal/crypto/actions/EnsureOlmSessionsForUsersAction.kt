@@ -40,7 +40,7 @@ internal class EnsureOlmSessionsForUsersAction @Inject constructor(private val o
                 // Don't bother setting up session to ourself
                 it.identityKey() != olmDevice.deviceCurve25519Key
                         // Don't bother setting up sessions with blocked users
-                        && !it.isVerified
+                        && !(it.trustLevel?.isVerified() ?: false)
             }
         }
         return ensureOlmSessionsForDevicesAction.handle(devicesByUser)

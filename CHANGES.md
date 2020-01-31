@@ -3,7 +3,7 @@ Changes in RiotX 0.14.0 (2020-XX-XX)
 
 Features ✨:
  - Enable encryption in unencrypted rooms, from the room settings (#212)
- - Enable e2e by default when creating DM, and give the possibility to enable encryption when creating room (#837)
+ - Negotiate E2E by default for DMs (#907)
 
 Improvements 🙌:
  - Sharing things to RiotX: sort list by recent room first (#771)
@@ -120,6 +120,7 @@ Changes in RiotX 0.9.0 (2019-12-05)
 Features ✨:
  - Account creation. It's now possible to create account on any homeserver with RiotX (#34)
  - Iteration of the login flow (#613)
+ - [SDK] MSC2241 / verification in DMs (#707)
 
 Improvements 🙌:
  - Send mention Pills from composer

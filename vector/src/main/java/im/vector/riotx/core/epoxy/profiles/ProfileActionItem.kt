@@ -38,10 +38,16 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() 
     var subtitle: String? = null
     @EpoxyAttribute
     var iconRes: Int = 0
+
+    @EpoxyAttribute
+    var editableRes: Int = R.drawable.ic_arrow_right
+
     @EpoxyAttribute
     var editable: Boolean = true
+
     @EpoxyAttribute
     var destructive: Boolean = false
+
     @EpoxyAttribute
     var listener: View.OnClickListener? = null
 
@@ -65,6 +71,13 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() 
             holder.icon.isVisible = true
         } else {
             holder.icon.isVisible = false
+        }
+
+        if (editableRes != 0) {
+            holder.editable.setImageResource(editableRes)
+            holder.editable.isVisible = true
+        } else {
+            holder.editable.isVisible = false
         }
     }
 

@@ -18,40 +18,43 @@ package im.vector.matrix.android.internal.crypto.model.rest
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
+import im.vector.matrix.android.internal.crypto.verification.VerificationInfoCancel
 
 /**
  * To device event sent by either party to cancel a key verification.
  */
 @JsonClass(generateAdapter = true)
-data class KeyVerificationCancel(
+internal data class KeyVerificationCancel(
         /**
          * the transaction ID of the verification to cancel
          */
         @Json(name = "transaction_id")
-        var transactionID: String? = null,
+        override val transactionID: String? = null,
 
         /**
          * machine-readable reason for cancelling, see #CancelCode
          */
-        var code: String? = null,
+        override val code: String? = null,
 
         /**
          * human-readable reason for cancelling.  This should only be used if the receiving client does not understand the code given.
          */
-        var reason: String? = null
-) : SendToDeviceObject {
+        override val reason: String? = null
+) : SendToDeviceObject, VerificationInfoCancel {
 
     companion object {
         fun create(tid: String, cancelCode: CancelCode): KeyVerificationCancel {
-            return KeyVerificationCancel().apply {
-                this.transactionID = tid
-                this.code = cancelCode.value
-                this.reason = cancelCode.humanReadable
-            }
+            return KeyVerificationCancel(
+                    tid,
+                    cancelCode.value,
+                    cancelCode.humanReadable
+            )
         }
     }
 
-    fun isValid(): Boolean {
+    override fun toSendToDeviceObject() = this
+
+    override fun isValid(): Boolean {
         if (transactionID.isNullOrBlank() || code.isNullOrBlank()) {
             return false
         }

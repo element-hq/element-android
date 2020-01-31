@@ -17,9 +17,11 @@
 package im.vector.matrix.android.internal.session.room.create
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.room.failure.CreateRoomFailure
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
+import im.vector.matrix.android.internal.crypto.DeviceListManager
 import im.vector.matrix.android.internal.database.awaitNotEmptyResult
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomEntityFields
@@ -49,12 +51,20 @@ internal class DefaultCreateRoomTask @Inject constructor(
         private val readMarkersTask: SetReadMarkersTask,
         @SessionDatabase
         private val realmConfiguration: RealmConfiguration,
+        private val crossSigningService: CrossSigningService,
+        private val deviceListManager: DeviceListManager,
         private val eventBus: EventBus
 ) : CreateRoomTask {
 
     override suspend fun execute(params: CreateRoomParams): String {
+        val createRoomParams = if (canEnableEncryption(params)) {
+            params.enableEncryptionWithAlgorithm()
+        } else {
+            params
+        }
+
         val createRoomResponse = executeRequest<CreateRoomResponse>(eventBus) {
-            apiCall = roomAPI.createRoom(params)
+            apiCall = roomAPI.createRoom(createRoomParams)
         }
         val roomId = createRoomResponse.roomId!!
         // Wait for room to come back from the sync (but it can maybe be in the DB if the sync response is received before)
@@ -66,11 +76,33 @@ internal class DefaultCreateRoomTask @Inject constructor(
         } catch (exception: TimeoutCancellationException) {
             throw CreateRoomFailure.CreatedWithTimeout
         }
-        if (params.isDirect()) {
-            handleDirectChatCreation(params, roomId)
+        if (createRoomParams.isDirect()) {
+            handleDirectChatCreation(createRoomParams, roomId)
         }
         setReadMarkers(roomId)
         return roomId
+    }
+
+    private suspend fun canEnableEncryption(params: CreateRoomParams): Boolean {
+        return params.enableEncryptionIfInvitedUsersSupportIt
+                && crossSigningService.isCrossSigningVerified()
+                && params.invite3pids.isNullOrEmpty()
+                && params.invitedUserIds?.isNotEmpty() == true
+                && params.invitedUserIds.let { userIds ->
+            val keys = deviceListManager.downloadKeys(userIds, forceDownload = false)
+
+            userIds.all { userId ->
+                keys.map[userId].let { deviceMap ->
+                    if (deviceMap.isNullOrEmpty()) {
+                        // A user has no device, so do not enable encryption
+                        false
+                    } else {
+                        // Check that every user's device have at least one key
+                        deviceMap.values.all { !it.keys.isNullOrEmpty() }
+                    }
+                }
+            }
+        }
     }
 
     private suspend fun handleDirectChatCreation(params: CreateRoomParams, roomId: String) {

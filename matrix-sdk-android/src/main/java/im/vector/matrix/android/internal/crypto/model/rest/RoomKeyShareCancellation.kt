@@ -21,7 +21,7 @@ import com.squareup.moshi.JsonClass
  * Class representing an room key request cancellation content
  */
 @JsonClass(generateAdapter = true)
-class RoomKeyShareCancellation : RoomKeyShare() {
+internal class RoomKeyShareCancellation : RoomKeyShare() {
     init {
         action = ACTION_SHARE_CANCELLATION
     }

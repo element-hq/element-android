@@ -18,7 +18,7 @@
 
 package im.vector.matrix.android.api.session.crypto
 
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.olm.OlmException
 
@@ -36,7 +36,7 @@ sealed class MXCryptoError : Throwable() {
 
     data class OlmError(val olmException: OlmException) : MXCryptoError()
 
-    data class UnknownDevice(val deviceList: MXUsersDevicesMap<MXDeviceInfo>) : MXCryptoError()
+    data class UnknownDevice(val deviceList: MXUsersDevicesMap<CryptoDeviceInfo>) : MXCryptoError()
 
     enum class ErrorType {
         ENCRYPTING_NOT_ENABLED,

@@ -107,7 +107,7 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
                 cryptoStore.deleteIncomingRoomKeyRequest(request)
             }
             // if the device is verified already, share the keys
-            val device = cryptoStore.getUserDevice(deviceId!!, userId)
+            val device = cryptoStore.getUserDevice(userId, deviceId!!)
             if (device != null) {
                 if (device.isVerified) {
                     Timber.v("## processReceivedRoomKeyRequests() : device is already verified: sharing keys")
@@ -122,6 +122,14 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
                     continue
                 }
             }
+
+            // If cross signing is available on account we automatically discard untrust devices request
+            if (cryptoStore.getMyCrossSigningInfo() != null) {
+                // At this point the device is unknown, we don't want to bother user with that
+                cryptoStore.deleteIncomingRoomKeyRequest(request)
+                continue
+            }
+
             cryptoStore.storeIncomingRoomKeyRequest(request)
             onRoomKeyRequest(request)
         }

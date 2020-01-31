@@ -16,15 +16,14 @@
 
 package im.vector.matrix.android.internal.util
 
-import android.content.Context
 import androidx.work.WorkManager
 import im.vector.matrix.android.api.util.Cancelable
-import java.util.UUID
+import java.util.*
 
-internal class CancelableWork(private val context: Context,
+internal class CancelableWork(private val workManager: WorkManager,
                               private val workId: UUID) : Cancelable {
 
     override fun cancel() {
-        WorkManager.getInstance(context).cancelWorkById(workId)
+        workManager.cancelWorkById(workId)
     }
 }

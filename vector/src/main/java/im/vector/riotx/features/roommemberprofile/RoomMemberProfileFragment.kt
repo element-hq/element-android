@@ -33,10 +33,13 @@ import im.vector.riotx.core.animations.MatrixItemAppBarStateChangeListener
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
+import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.roommemberprofile.devices.DeviceListBottomSheet
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_matrix_profile.*
 import kotlinx.android.synthetic.main.view_stub_room_member_profile_header.*
@@ -86,6 +89,19 @@ class RoomMemberProfileFragment @Inject constructor(
                 is RoomMemberProfileViewEvents.OnIgnoreActionSuccess -> Unit
             }.exhaustive
         }
+        viewModel.actionResultLiveData.observeEvent(this) { async ->
+            when (async) {
+                is Success -> {
+                    when (val action = async.invoke()) {
+                        is RoomMemberProfileAction.VerifyUser -> {
+                            VerificationBottomSheet
+                                    .withArgs(roomId = null, otherUserId = action.userId!!)
+                                    .show(parentFragmentManager, "VERIF")
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -129,8 +145,16 @@ class RoomMemberProfileFragment @Inject constructor(
         viewModel.handle(RoomMemberProfileAction.IgnoreUser)
     }
 
-    override fun onLearnMoreClicked() {
-        vectorBaseActivity.notImplemented("Learn more")
+    override fun onTapVerify() {
+        viewModel.handle(RoomMemberProfileAction.VerifyUser())
+    }
+
+    override fun onShowDeviceList() = withState(viewModel) {
+        DeviceListBottomSheet.newInstance(it.userId).show(parentFragmentManager, "DEV_LIST")
+    }
+
+    override fun onShowDeviceListNoCrossSigning() = withState(viewModel) {
+        DeviceListBottomSheet.newInstance(it.userId).show(parentFragmentManager, "DEV_LIST")
     }
 
     override fun onJumpToReadReceiptClicked() {

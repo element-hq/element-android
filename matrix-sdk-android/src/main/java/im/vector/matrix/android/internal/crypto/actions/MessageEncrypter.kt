@@ -19,7 +19,7 @@ package im.vector.matrix.android.internal.crypto.actions
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_OLM
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.EncryptedMessage
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.convertToUTF8
@@ -37,7 +37,7 @@ internal class MessageEncrypter @Inject constructor(private val credentials: Cre
      * @param deviceInfos   list of device infos to encrypt for.
      * @return the content for an m.room.encrypted event.
      */
-    fun encryptMessage(payloadFields: Map<String, Any>, deviceInfos: List<MXDeviceInfo>): EncryptedMessage {
+    fun encryptMessage(payloadFields: Map<String, Any>, deviceInfos: List<CryptoDeviceInfo>): EncryptedMessage {
         val deviceInfoParticipantKey = deviceInfos.associateBy { it.identityKey()!! }
 
         val payloadJson = payloadFields.toMutableMap()

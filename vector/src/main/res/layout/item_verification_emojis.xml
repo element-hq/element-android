@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/layout_vertical_margin">
+
+    <include
+        android:id="@+id/emoji0"
+        layout="@layout/item_emoji_verif" />
+
+    <include
+        android:id="@+id/emoji1"
+        layout="@layout/item_emoji_verif" />
+
+    <include
+        android:id="@+id/emoji2"
+        layout="@layout/item_emoji_verif" />
+
+    <include
+        android:id="@+id/emoji3"
+        layout="@layout/item_emoji_verif" />
+
+    <include
+        android:id="@+id/emoji4"
+        layout="@layout/item_emoji_verif" />
+
+    <include
+        android:id="@+id/emoji5"
+        layout="@layout/item_emoji_verif" />
+
+    <include
+        android:id="@+id/emoji6"
+        layout="@layout/item_emoji_verif" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/sas_emoji_grid_flow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="emoji0,emoji1,emoji2,emoji3,emoji4,emoji5,emoji6"
+        app:flow_horizontalBias="0.5"
+        app:flow_horizontalGap="16dp"
+        app:flow_horizontalStyle="packed"
+        app:flow_verticalBias="0"
+        app:flow_verticalGap="8dp"
+        app:flow_wrapMode="chain"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

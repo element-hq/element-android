@@ -16,9 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.store.db.model
 
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
-import im.vector.matrix.android.internal.crypto.store.db.deserializeFromRealm
-import im.vector.matrix.android.internal.crypto.store.db.serializeForRealm
 import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.annotations.LinkingObjects
@@ -30,18 +27,25 @@ internal fun DeviceInfoEntity.Companion.createPrimaryKey(userId: String, deviceI
 internal open class DeviceInfoEntity(@PrimaryKey var primaryKey: String = "",
                                      var deviceId: String? = null,
                                      var identityKey: String? = null,
-                                     var deviceInfoData: String? = null)
-    : RealmObject() {
+                                     // var deviceInfoData: String? = null,
+                                     var userId: String? = null,
+                                     var isBlocked: Boolean? = null,
+                                     var algorithmListJson: String? = null,
+                                     var keysMapJson: String? = null,
+                                     var signatureMapJson: String? = null,
+                                     var unsignedMapJson: String? = null,
+                                     var trustLevelEntity: TrustLevelEntity? = null
+) : RealmObject() {
 
-    // Deserialize data
-    fun getDeviceInfo(): MXDeviceInfo? {
-        return deserializeFromRealm(deviceInfoData)
-    }
-
-    // Serialize data
-    fun putDeviceInfo(deviceInfo: MXDeviceInfo?) {
-        deviceInfoData = serializeForRealm(deviceInfo)
-    }
+//    // Deserialize data
+//    fun getDeviceInfo(): MXDeviceInfo? {
+//        return deserializeFromRealm(deviceInfoData)
+//    }
+//
+//    // Serialize data
+//    fun putDeviceInfo(deviceInfo: MXDeviceInfo?) {
+//        deviceInfoData = serializeForRealm(deviceInfo)
+//    }
 
     @LinkingObjects("devices")
     val users: RealmResults<UserEntity>? = null

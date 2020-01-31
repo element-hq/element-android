@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session
 
-import android.content.Context
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import dagger.Lazy
@@ -46,6 +45,7 @@ import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.di.SessionId
+import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.session.sync.SyncTaskSequencer
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
@@ -63,7 +63,7 @@ import javax.inject.Provider
 @SessionScope
 internal class DefaultSession @Inject constructor(
         override val sessionParams: SessionParams,
-        private val context: Context,
+        private val workManagerProvider: WorkManagerProvider,
         private val eventBus: EventBus,
         @SessionId
         override val sessionId: String,
@@ -122,15 +122,15 @@ internal class DefaultSession @Inject constructor(
     }
 
     override fun requireBackgroundSync() {
-        SyncWorker.requireBackgroundSync(context, sessionId)
+        SyncWorker.requireBackgroundSync(workManagerProvider, sessionId)
     }
 
     override fun startAutomaticBackgroundSync(repeatDelay: Long) {
-        SyncWorker.automaticallyBackgroundSync(context, sessionId, 0, repeatDelay)
+        SyncWorker.automaticallyBackgroundSync(workManagerProvider, sessionId, 0, repeatDelay)
     }
 
     override fun stopAnyBackgroundSync() {
-        SyncWorker.stopAnyBackgroundSync(context)
+        SyncWorker.stopAnyBackgroundSync(workManagerProvider)
     }
 
     override fun startSync(fromForeground: Boolean) {

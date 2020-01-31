@@ -101,4 +101,6 @@ interface RoomService {
     fun getRoomIdByAlias(roomAlias: String,
                          searchOnServer: Boolean,
                          callback: MatrixCallback<Optional<String>>): Cancelable
+
+    fun getExistingDirectRoomWithUser(otherUserId: String) : Room?
 }

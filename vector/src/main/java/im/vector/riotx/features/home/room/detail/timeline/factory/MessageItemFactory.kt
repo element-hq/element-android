@@ -24,6 +24,7 @@ import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import dagger.Lazy
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
@@ -34,6 +35,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageImageInfoC
 import im.vector.matrix.android.api.session.room.model.message.MessageNoticeContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -67,6 +69,8 @@ import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem_
 import im.vector.riotx.features.home.room.detail.timeline.item.RedactedMessageItem
 import im.vector.riotx.features.home.room.detail.timeline.item.RedactedMessageItem_
+import im.vector.riotx.features.home.room.detail.timeline.item.VerificationRequestItem
+import im.vector.riotx.features.home.room.detail.timeline.item.VerificationRequestItem_
 import im.vector.riotx.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.riotx.features.home.room.detail.timeline.tools.linkify
 import im.vector.riotx.features.html.CodeVisitor
@@ -91,7 +95,8 @@ class MessageItemFactory @Inject constructor(
         private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
         private val defaultItemFactory: DefaultItemFactory,
         private val noticeItemFactory: NoticeItemFactory,
-        private val avatarSizeProvider: AvatarSizeProvider) {
+        private val avatarSizeProvider: AvatarSizeProvider,
+        private val session: Session) {
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
@@ -124,14 +129,15 @@ class MessageItemFactory @Inject constructor(
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
         return when (messageContent) {
-            is MessageEmoteContent     -> buildEmoteMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageTextContent      -> buildItemForTextContent(messageContent, informationData, highlight, callback, attributes)
-            is MessageImageInfoContent -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageNoticeContent    -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageVideoContent     -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageFileContent      -> buildFileMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageAudioContent     -> buildAudioMessageItem(messageContent, informationData, highlight, callback, attributes)
-            else                       -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback)
+            is MessageEmoteContent               -> buildEmoteMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageTextContent                -> buildItemForTextContent(messageContent, informationData, highlight, callback, attributes)
+            is MessageImageInfoContent           -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageNoticeContent              -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageVideoContent               -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageFileContent                -> buildFileMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageAudioContent               -> buildAudioMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
+            else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback)
         }
     }
 
@@ -153,6 +159,51 @@ class MessageItemFactory @Inject constructor(
                         DebouncedClickListener(View.OnClickListener {
                             callback?.onAudioMessageClicked(messageContent)
                         }))
+    }
+
+    private fun buildVerificationRequestMessageItem(messageContent: MessageVerificationRequestContent,
+                                                    @Suppress("UNUSED_PARAMETER")
+                                                    informationData: MessageInformationData,
+                                                    highlight: Boolean,
+                                                    callback: TimelineEventController.Callback?,
+                                                    attributes: AbsMessageItem.Attributes): VerificationRequestItem? {
+        // If this request is not sent by me or sent to me, we should ignore it in timeline
+        val myUserId = session.myUserId
+        if (informationData.senderId != myUserId && messageContent.toUserId != myUserId) {
+            return null
+        }
+
+        val otherUserId = if (informationData.sentByMe) messageContent.toUserId else informationData.senderId
+        val otherUserName = if (informationData.sentByMe) session.getUser(messageContent.toUserId)?.displayName
+        else informationData.memberName
+        return VerificationRequestItem_()
+                .attributes(
+                        VerificationRequestItem.Attributes(
+                                otherUserId = otherUserId,
+                                otherUserName = otherUserName.toString(),
+                                fromDevide = messageContent.fromDevice ?: "",
+                                referenceId = informationData.eventId,
+                                informationData = informationData,
+                                avatarRenderer = attributes.avatarRenderer,
+                                colorProvider = attributes.colorProvider,
+                                itemLongClickListener = attributes.itemLongClickListener,
+                                itemClickListener = attributes.itemClickListener,
+                                reactionPillCallback = attributes.reactionPillCallback,
+                                readReceiptsCallback = attributes.readReceiptsCallback,
+                                emojiTypeFace = attributes.emojiTypeFace
+                        )
+                )
+                .callback(callback)
+//                .izLocalFile(messageContent.getFileUrl().isLocalFile())
+//                .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
+                .highlighted(highlight)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
+//                .filename(messageContent.body)
+//                .iconRes(R.drawable.filetype_audio)
+//                .clickListener(
+//                        DebouncedClickListener(View.OnClickListener {
+//                            callback?.onAudioMessageClicked(messageContent)
+//                        }))
     }
 
     private fun buildFileMessageItem(messageContent: MessageFileContent,
@@ -226,7 +277,8 @@ class MessageItemFactory @Inject constructor(
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
         val thumbnailData = ImageContentRenderer.Data(
                 filename = messageContent.body,
-                url = messageContent.videoInfo?.thumbnailFile?.url ?: messageContent.videoInfo?.thumbnailUrl,
+                url = messageContent.videoInfo?.thumbnailFile?.url
+                        ?: messageContent.videoInfo?.thumbnailUrl,
                 elementToDecrypt = messageContent.videoInfo?.thumbnailFile?.toElementToDecrypt(),
                 height = messageContent.videoInfo?.height,
                 maxHeight = maxHeight,

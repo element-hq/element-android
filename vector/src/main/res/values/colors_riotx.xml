@@ -7,6 +7,17 @@
     <color name="riotx_accent">#FF03B381</color>
     <color name="riotx_accent_alpha25">#3F03B381</color>
 
+
+    <color name="riotx_destructive_accent">#FFFF4B55</color>
+    <color name="riotx_destructive_accent_alpha12">#1EFF4B55</color>
+
+
+    <color name="riotx_positive_accent">#03B381</color>
+    <color name="riotx_disabled_accent">#61708B</color>
+    <color name="riotx_positive_accent_alpha12">#1E03B381</color>
+    <color name="riotx_button_disabled_alpha12">#1E61708B</color>
+
+
     <color name="riotx_notice">#FFFF4B55</color>
     <color name="riotx_notice_secondary">#FF61708B</color>
     <color name="riotx_links">#FF368BD6</color>

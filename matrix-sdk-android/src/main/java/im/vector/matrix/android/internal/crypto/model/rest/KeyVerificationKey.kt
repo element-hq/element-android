@@ -17,37 +17,35 @@ package im.vector.matrix.android.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.internal.crypto.verification.VerificationInfoKeyFactory
+import im.vector.matrix.android.internal.crypto.verification.VerificationInfoKey
 
 /**
  * Sent by both devices to send their ephemeral Curve25519 public key to the other device.
  */
 @JsonClass(generateAdapter = true)
-data class KeyVerificationKey(
+internal data class KeyVerificationKey(
         /**
          * the ID of the transaction that the message is part of
          */
-        @Json(name = "transaction_id")
-        @JvmField
-        var transactionID: String? = null,
+        @Json(name = "transaction_id") override val transactionID: String? = null,
 
         /**
          * The device’s ephemeral public key, as an unpadded base64 string
          */
-        @JvmField
-        var key: String? = null
+        @Json(name = "key") override val key: String? = null
 
-) : SendToDeviceObject {
+) : SendToDeviceObject, VerificationInfoKey {
 
-    companion object {
-        fun create(tid: String, key: String): KeyVerificationKey {
-            return KeyVerificationKey().apply {
-                this.transactionID = tid
-                this.key = key
-            }
+    companion object : VerificationInfoKeyFactory {
+        override fun create(tid: String, pubKey: String): KeyVerificationKey {
+            return KeyVerificationKey(tid, pubKey)
         }
     }
 
-    fun isValid(): Boolean {
+    override fun toSendToDeviceObject() = this
+
+    override fun isValid(): Boolean {
         if (transactionID.isNullOrBlank() || key.isNullOrBlank()) {
             return false
         }

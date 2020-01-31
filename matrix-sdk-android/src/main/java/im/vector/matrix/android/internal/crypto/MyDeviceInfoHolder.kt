@@ -17,7 +17,8 @@
 package im.vector.matrix.android.internal.crypto
 
 import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.session.SessionScope
 import javax.inject.Inject
@@ -35,11 +36,13 @@ internal class MyDeviceInfoHolder @Inject constructor(
     /**
      * my device info
      */
-    val myDevice: MXDeviceInfo = MXDeviceInfo(credentials.deviceId!!, credentials.userId)
+    val myDevice: CryptoDeviceInfo
 
     init {
+
         val keys = HashMap<String, String>()
 
+// TODO it's a bit strange, why not load from DB?
         if (!olmDevice.deviceEd25519Key.isNullOrEmpty()) {
             keys["ed25519:" + credentials.deviceId] = olmDevice.deviceEd25519Key!!
         }
@@ -48,10 +51,22 @@ internal class MyDeviceInfoHolder @Inject constructor(
             keys["curve25519:" + credentials.deviceId] = olmDevice.deviceCurve25519Key!!
         }
 
-        myDevice.keys = keys
+//        myDevice.keys = keys
+//
+//        myDevice.algorithms = MXCryptoAlgorithms.supportedAlgorithms()
 
-        myDevice.algorithms = MXCryptoAlgorithms.supportedAlgorithms()
-        myDevice.verified = MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED
+        // TODO hwo to really check cross signed status?
+        //
+        val crossSigned = cryptoStore.getMyCrossSigningInfo()?.masterKey()?.trustLevel?.locallyVerified ?: false
+//        myDevice.trustLevel = DeviceTrustLevel(crossSigned, true)
+
+        myDevice = CryptoDeviceInfo(
+                credentials.deviceId!!,
+                credentials.userId,
+                keys = keys,
+                algorithms = MXCryptoAlgorithms.supportedAlgorithms(),
+                trustLevel = DeviceTrustLevel(crossSigned, true)
+        )
 
         // Add our own deviceinfo to the store
         val endToEndDevicesForUser = cryptoStore.getUserDevices(credentials.userId)

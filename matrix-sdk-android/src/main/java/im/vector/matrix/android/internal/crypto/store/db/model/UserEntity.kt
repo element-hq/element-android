@@ -20,9 +20,11 @@ import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
-internal open class UserEntity(@PrimaryKey var userId: String? = null,
-                      var devices: RealmList<DeviceInfoEntity> = RealmList(),
-                      var deviceTrackingStatus: Int = 0)
+internal open class UserEntity(
+        @PrimaryKey var userId: String? = null,
+        var devices: RealmList<DeviceInfoEntity> = RealmList(),
+        var crossSigningInfoEntity: CrossSigningInfoEntity? = null,
+        var deviceTrackingStatus: Int = 0)
     : RealmObject() {
 
     companion object

@@ -29,7 +29,7 @@ import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForDevi
 import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
 import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
@@ -95,7 +95,7 @@ internal class MXMegolmEncryption(
      *
      * @param devicesInRoom the devices list
      */
-    private suspend fun ensureOutboundSession(devicesInRoom: MXUsersDevicesMap<MXDeviceInfo>): MXOutboundSessionInfo {
+    private suspend fun ensureOutboundSession(devicesInRoom: MXUsersDevicesMap<CryptoDeviceInfo>): MXOutboundSessionInfo {
         var session = outboundSession
         if (session == null
                 // Need to make a brand new session?
@@ -106,7 +106,7 @@ internal class MXMegolmEncryption(
             outboundSession = session
         }
         val safeSession = session
-        val shareMap = HashMap<String, MutableList<MXDeviceInfo>>()/* userId */
+        val shareMap = HashMap<String, MutableList<CryptoDeviceInfo>>()/* userId */
         val userIds = devicesInRoom.userIds
         for (userId in userIds) {
             val deviceIds = devicesInRoom.getUserDeviceIds(userId)
@@ -129,14 +129,14 @@ internal class MXMegolmEncryption(
      * @param devicesByUsers the devices map
      */
     private suspend fun shareKey(session: MXOutboundSessionInfo,
-                                 devicesByUsers: Map<String, List<MXDeviceInfo>>) {
+                                 devicesByUsers: Map<String, List<CryptoDeviceInfo>>) {
         // nothing to send, the task is done
         if (devicesByUsers.isEmpty()) {
             Timber.v("## shareKey() : nothing more to do")
             return
         }
         // reduce the map size to avoid request timeout when there are too many devices (Users size  * devices per user)
-        val subMap = HashMap<String, List<MXDeviceInfo>>()
+        val subMap = HashMap<String, List<CryptoDeviceInfo>>()
         var devicesCount = 0
         for ((userId, devices) in devicesByUsers) {
             subMap[userId] = devices
@@ -158,7 +158,7 @@ internal class MXMegolmEncryption(
      * @param devicesByUser the devices map
      */
     private suspend fun shareUserDevicesKey(session: MXOutboundSessionInfo,
-                                            devicesByUser: Map<String, List<MXDeviceInfo>>) {
+                                            devicesByUser: Map<String, List<CryptoDeviceInfo>>) {
         val sessionKey = olmDevice.getSessionKey(session.sessionId)
         val chainIndex = olmDevice.getMessageIndex(session.sessionId)
 
@@ -262,7 +262,7 @@ internal class MXMegolmEncryption(
      *
      * @param userIds  the user ids whose devices must be checked.
      */
-    private suspend fun getDevicesInRoom(userIds: List<String>): MXUsersDevicesMap<MXDeviceInfo> {
+    private suspend fun getDevicesInRoom(userIds: List<String>): MXUsersDevicesMap<CryptoDeviceInfo> {
         // We are happy to use a cached version here: we assume that if we already
         // have a list of the user's devices, then we already share an e2e room
         // with them, which means that they will have announced any new devices via
@@ -271,8 +271,8 @@ internal class MXMegolmEncryption(
         val encryptToVerifiedDevicesOnly = cryptoStore.getGlobalBlacklistUnverifiedDevices()
                 || cryptoStore.getRoomsListBlacklistUnverifiedDevices().contains(roomId)
 
-        val devicesInRoom = MXUsersDevicesMap<MXDeviceInfo>()
-        val unknownDevices = MXUsersDevicesMap<MXDeviceInfo>()
+        val devicesInRoom = MXUsersDevicesMap<CryptoDeviceInfo>()
+        val unknownDevices = MXUsersDevicesMap<CryptoDeviceInfo>()
 
         for (userId in keys.userIds) {
             val deviceIds = keys.getUserDeviceIds(userId) ?: continue

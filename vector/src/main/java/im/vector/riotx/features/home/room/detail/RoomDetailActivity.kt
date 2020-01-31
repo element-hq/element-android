@@ -109,7 +109,7 @@ class RoomDetailActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     companion object {
 
-        private const val EXTRA_ROOM_DETAIL_ARGS = "EXTRA_ROOM_DETAIL_ARGS"
+        const val EXTRA_ROOM_DETAIL_ARGS = "EXTRA_ROOM_DETAIL_ARGS"
 
         fun newIntent(context: Context, roomDetailArgs: RoomDetailArgs): Intent {
             return Intent(context, RoomDetailActivity::class.java).apply {
