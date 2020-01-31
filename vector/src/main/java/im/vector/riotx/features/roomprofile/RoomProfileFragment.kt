@@ -147,7 +147,6 @@ class RoomProfileFragment @Inject constructor(
                 avatarRenderer.render(matrixItem, matrixProfileToolbarAvatarImageView)
                 roomProfileDecorationImageView.isVisible = it.roomEncryptionTrustLevel != null
                 roomProfileDecorationImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
-                matrixProfileDecorationToolbarAvatarImageView.isVisible = it.roomEncryptionTrustLevel != null
                 matrixProfileDecorationToolbarAvatarImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
             }
         }
