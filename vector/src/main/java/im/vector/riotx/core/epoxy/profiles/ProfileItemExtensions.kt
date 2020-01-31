@@ -19,6 +19,7 @@ package im.vector.riotx.core.epoxy.profiles
 
 import androidx.annotation.DrawableRes
 import com.airbnb.epoxy.EpoxyController
+import im.vector.riotx.core.epoxy.ClickListener
 import im.vector.riotx.core.epoxy.dividerItem
 
 fun EpoxyController.buildProfileSection(title: String) {
@@ -37,7 +38,7 @@ fun EpoxyController.buildProfileAction(
         @DrawableRes icon: Int = 0,
         destructive: Boolean = false,
         divider: Boolean = true,
-        action: () -> Unit
+        action: ClickListener? = null
 ) {
     profileActionItem {
         iconRes(icon)
@@ -47,7 +48,7 @@ fun EpoxyController.buildProfileAction(
         destructive(destructive)
         title(title)
         listener { _ ->
-            action()
+            action?.invoke()
         }
     }
 

@@ -3,6 +3,9 @@
 
     <!-- Strings not defined in Riot -->
 
+    <string name="create_room_encryption_title">"Enable encryption"</string>
+    <string name="create_room_encryption_description">"Once enabled, encryption cannot be disabled."</string>
+
     <string name="login_error_threepid_denied">Your email domain is not authorized to register on this server</string>
 
     <string name="room_profile_not_encrypted_subtitle">Messages in this room are not end-to-end encrypted.</string>
@@ -32,7 +35,17 @@
 
     <string name="room_member_jump_to_read_receipt">Jump to read receipt</string>
 
+    <string name="rendering_event_error_type_of_event_not_handled">"RiotX does not handle events of type '%1$s' (yet)"</string>
+    <string name="rendering_event_error_type_of_message_not_handled">"RiotX does not handle message of type '%1$s' (yet)"</string>
+    <string name="rendering_event_error_exception">"RiotX encountered an issue when rendering content of event with id '%1$s'"</string>
+
     <string name="unignore">Unignore</string>
+
+    <string name="room_list_sharing_header_recent_rooms">Recent rooms</string>
+    <string name="room_list_sharing_header_other_rooms">Other rooms</string>
+
+    <string name="command_description_rainbow">Sends the given message colored as a rainbow</string>
+    <string name="command_description_rainbow_emote">Sends the given emote colored as a rainbow</string>
 
     <!-- Title for category in the settings which affect what is displayed in the timeline (ex: show read receipts, etc.) -->
     <string name="settings_category_timeline">Timeline</string>
@@ -40,5 +53,11 @@
     <!-- Title for category in the settings which affect the behavior of the message editor (ex: enable Markdown, send typing notification, etc.) -->
     <string name="settings_category_composer">Message editor</string>
 
+    <string name="room_settings_enable_encryption">Enable end-to-end encryption</string>
+    <string name="room_settings_enable_encryption_warning">Once enabled, encryption cannot be disabled.</string>
+
+    <string name="room_settings_enable_encryption_dialog_title">Enable encryption?</string>
+    <string name="room_settings_enable_encryption_dialog_content">Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly.</string>
+    <string name="room_settings_enable_encryption_dialog_submit">Enable encryption</string>
 
 </resources>

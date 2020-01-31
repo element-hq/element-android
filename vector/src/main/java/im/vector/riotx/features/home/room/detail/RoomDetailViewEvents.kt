@@ -16,10 +16,12 @@
 
 package im.vector.riotx.features.home.room.detail
 
+import im.vector.riotx.core.platform.VectorViewEvents
+
 /**
  * Transient events for RoomDetail
  */
-sealed class RoomDetailViewEvents {
+sealed class RoomDetailViewEvents : VectorViewEvents {
     data class Failure(val throwable: Throwable) : RoomDetailViewEvents()
     data class OnNewTimelineEvents(val eventIds: List<String>) : RoomDetailViewEvents()
 }

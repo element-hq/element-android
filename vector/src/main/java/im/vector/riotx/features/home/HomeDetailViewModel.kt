@@ -24,6 +24,7 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.di.HasScreenInjector
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.grouplist.SelectedGroupDataSource
@@ -40,7 +41,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                                                       private val selectedGroupStore: SelectedGroupDataSource,
                                                       private val homeRoomListStore: HomeRoomListDataSource,
                                                       private val stringProvider: StringProvider)
-    : VectorViewModel<HomeDetailViewState, HomeDetailAction>(initialState) {
+    : VectorViewModel<HomeDetailViewState, HomeDetailAction, EmptyViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {

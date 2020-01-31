@@ -15,11 +15,15 @@
  */
 
 package im.vector.riotx.features.roomprofile
+
+import im.vector.riotx.core.platform.VectorViewEvents
+
 /**
  * Transient events for RoomProfile
  */
-sealed class RoomProfileViewEvents {
-    data class Loading(val message: CharSequence): RoomProfileViewEvents()
-    object OnLeaveRoomSuccess: RoomProfileViewEvents()
+sealed class RoomProfileViewEvents : VectorViewEvents {
+    data class Loading(val message: CharSequence? = null) : RoomProfileViewEvents()
     data class Failure(val throwable: Throwable) : RoomProfileViewEvents()
+
+    object OnLeaveRoomSuccess : RoomProfileViewEvents()
 }

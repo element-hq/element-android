@@ -2,13 +2,16 @@ Changes in RiotX 0.14.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Enable encryption in unencrypted rooms, from the room settings (#212)
+ - Enable e2e by default when creating DM, and give the possibility to enable encryption when creating room (#837)
 
 Improvements 🙌:
- -
+ - Sharing things to RiotX: sort list by recent room first (#771)
+ - Hide the algorithm when turning on e2e (#897)
+ - Sort room members by display names
 
 Other changes:
- -
+ - Add support for /rainbow and /rainbowme commands (#879)
 
 Bugfix 🐛:
  -
@@ -17,7 +20,8 @@ Translations 🗣:
  -
 
 Build 🧱:
- -
+ - Ensure builds are reproducible (#842)
+ - F-Droid: fix the "-dev" issue in version name (#815)
 
 Changes in RiotX 0.13.0 (2020-01-17)
 ===================================================
