@@ -19,7 +19,18 @@ package im.vector.riotx.features.home.room.detail.timeline.format
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.*
+import im.vector.matrix.android.api.session.room.model.GuestAccess
+import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.RoomAliasesContent
+import im.vector.matrix.android.api.session.room.model.RoomCanonicalAliasContent
+import im.vector.matrix.android.api.session.room.model.RoomGuestAccessContent
+import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
+import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibilityContent
+import im.vector.matrix.android.api.session.room.model.RoomJoinRules
+import im.vector.matrix.android.api.session.room.model.RoomJoinRulesContent
+import im.vector.matrix.android.api.session.room.model.RoomMemberContent
+import im.vector.matrix.android.api.session.room.model.RoomNameContent
+import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.model.event.EncryptionEventContent
@@ -56,8 +67,8 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             EventType.KEY_VERIFICATION_DONE,
             EventType.KEY_VERIFICATION_KEY,
             EventType.KEY_VERIFICATION_READY,
-            EventType.REDACTION                -> formatDebug(timelineEvent.root)
-            else                               -> {
+            EventType.REDACTION                     -> formatDebug(timelineEvent.root)
+            else                                    -> {
                 Timber.v("Type $type not handled by this formatter")
                 null
             }
