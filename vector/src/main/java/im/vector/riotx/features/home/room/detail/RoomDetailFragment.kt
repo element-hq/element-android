@@ -116,6 +116,7 @@ import im.vector.riotx.features.attachments.AttachmentTypeSelectorView
 import im.vector.riotx.features.attachments.AttachmentsHelper
 import im.vector.riotx.features.attachments.ContactAttachment
 import im.vector.riotx.features.command.Command
+import im.vector.riotx.features.crypto.util.toImageRes
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.composer.TextComposerView
@@ -682,18 +683,23 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun renderRoomSummary(state: RoomDetailViewState) {
-        state.asyncRoomSummary()?.let {
-            if (it.membership.isLeft()) {
+        state.asyncRoomSummary()?.let { roomSummary ->
+            if (roomSummary.membership.isLeft()) {
                 Timber.w("The room has been left")
                 activity?.finish()
             } else {
-                roomToolbarTitleView.text = it.displayName
-                avatarRenderer.render(it.toMatrixItem(), roomToolbarAvatarImageView)
+                roomToolbarTitleView.text = roomSummary.displayName
+                avatarRenderer.render(roomSummary.toMatrixItem(), roomToolbarAvatarImageView)
 
-                renderSubTitle(state.typingMessage, it.topic)
+                renderSubTitle(state.typingMessage, roomSummary.topic)
             }
-            jumpToBottomView.count = it.notificationCount
-            jumpToBottomView.drawBadge = it.hasUnreadMessages
+            jumpToBottomView.count = roomSummary.notificationCount
+            jumpToBottomView.drawBadge = roomSummary.hasUnreadMessages
+
+            roomToolbarDecorationImageView.let {
+                it.setImageResource(roomSummary.roomEncryptionTrustLevel.toImageRes())
+                it.isVisible = roomSummary.roomEncryptionTrustLevel != null
+            }
         }
     }
 

@@ -33,6 +33,16 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@tools:sample/avatars" />
 
+            <ImageView
+                android:id="@+id/roomToolbarDecorationImageView"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:layout_constraintCircle="@+id/roomToolbarAvatarImageView"
+                app:layout_constraintCircleAngle="135"
+                app:layout_constraintCircleRadius="20dp"
+                tools:ignore="MissingConstraints"
+                tools:src="@drawable/ic_shield_trusted" />
+
             <TextView
                 android:id="@+id/roomToolbarTitleView"
                 android:layout_width="0dp"
