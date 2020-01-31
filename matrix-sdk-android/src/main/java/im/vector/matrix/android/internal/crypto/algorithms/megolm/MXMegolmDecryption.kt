@@ -66,9 +66,12 @@ internal class MXMegolmDecryption(private val userId: String,
     override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         // If cross signing is enabled, we don't send request until the keys are trusted
         val requestOnFail =
-                if (cryptoStore.getMyCrossSigningInfo() != null)
+                if (cryptoStore.getMyCrossSigningInfo() != null) {
                     cryptoStore.getMyCrossSigningInfo()?.isTrusted() == true
-                else true // Legacy
+                } else {
+                    // Legacy
+                    true
+                }
         return decryptEvent(event, timeline, requestOnFail)
     }
 
