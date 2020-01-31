@@ -53,7 +53,7 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
     var detailedMode = false
 
     @EpoxyAttribute
-    var trusted : Boolean? = false
+    var trusted : Boolean? = null
 
     override fun bind(holder: Holder) {
         holder.root.setOnClickListener { itemClickAction?.invoke() }

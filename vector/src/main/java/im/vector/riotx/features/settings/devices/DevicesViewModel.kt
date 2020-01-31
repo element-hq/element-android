@@ -110,7 +110,8 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
         if (session.isCryptoEnabled() && !session.sessionParams.credentials.deviceId.isNullOrEmpty()) {
             setState {
                 copy(
-                        devices = Loading()
+                        // Keep known list if we have it, and let refresh go in backgroung
+                        devices = this.devices.takeIf { it is Success } ?: Loading()
                 )
             }
 

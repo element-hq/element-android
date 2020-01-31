@@ -115,7 +115,7 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
                             deviceInfo(deviceInfo)
                             currentDevice(isCurrentDevice)
                             itemClickAction { callback?.onDeviceClicked(deviceInfo) }
-                            trusted(cryptoDevices?.firstOrNull { it.deviceId == deviceInfo.deviceId }?.isVerified ?: false)
+                            trusted(cryptoDevices?.firstOrNull { it.deviceId == deviceInfo.deviceId }?.isVerified)
                         }
                     }
         }
