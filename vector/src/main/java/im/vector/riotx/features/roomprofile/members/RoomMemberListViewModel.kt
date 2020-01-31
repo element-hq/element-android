@@ -72,8 +72,8 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
         }
         Observable
                 .combineLatest<List<RoomMemberSummary>, PowerLevelsContent, RoomMemberSummaries>(
-                        room.rx().liveRoomMembers(roomMemberQueryParams),
-                        room.rx()
+                        room.rx(session).liveRoomMembers(roomMemberQueryParams),
+                        room.rx(session)
                                 .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
                                 .mapOptional { it.content.toModel<PowerLevelsContent>() }
                                 .unwrap(),
@@ -87,7 +87,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
     }
 
     private fun observeRoomSummary() {
-        room.rx().liveRoomSummary()
+        room.rx(session).liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     copy(roomSummary = async)

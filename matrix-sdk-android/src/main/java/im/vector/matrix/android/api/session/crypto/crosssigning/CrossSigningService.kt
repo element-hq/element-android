@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.session.crypto.crosssigning
 
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustResult
 import im.vector.matrix.android.internal.crypto.crosssigning.UserTrustResult
@@ -62,4 +63,6 @@ interface CrossSigningService {
     fun checkDeviceTrust(otherUserId: String,
                          otherDeviceId: String,
                          locallyTrusted: Boolean?): DeviceTrustResult
+
+    fun getTrustLevelForUsers(userIds: List<String>): RoomEncryptionTrustLevel
 }

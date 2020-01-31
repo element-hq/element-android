@@ -33,12 +33,32 @@ import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.functions.BiFunction
 
 class RxSession(private val session: Session) {
 
     fun liveRoomSummaries(queryParams: RoomSummaryQueryParams): Observable<List<RoomSummary>> {
-        return session.getRoomSummariesLive(queryParams).asObservable()
+        val summariesObservable = session.getRoomSummariesLive(queryParams).asObservable()
                 .startWith(session.getRoomSummaries(queryParams))
+
+        val cryptoDeviceInfoObservable = session.getLiveCryptoDeviceInfo().asObservable()
+
+        return Observable
+                .combineLatest<List<RoomSummary>, List<CryptoDeviceInfo>, List<RoomSummary>>(
+                        summariesObservable,
+                        cryptoDeviceInfoObservable,
+                        BiFunction { summaries, _ ->
+                            summaries.map {
+                                if (it.isEncrypted) {
+                                    it.copy(
+                                            roomEncryptionTrustLevel = session.getCrossSigningService().getTrustLevelForUsers(it.otherMemberIds)
+                                    )
+                                } else {
+                                    it
+                                }
+                            }
+                        }
+                )
     }
 
     fun liveGroupSummaries(queryParams: GroupSummaryQueryParams): Observable<List<GroupSummary>> {

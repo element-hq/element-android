@@ -16,6 +16,8 @@
 
 package im.vector.matrix.rx
 
+import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.members.RoomMemberQueryParams
@@ -30,12 +32,58 @@ import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.functions.BiFunction
 
-class RxRoom(private val room: Room) {
+class RxRoom(private val room: Room, private val session: Session) {
 
     fun liveRoomSummary(): Observable<Optional<RoomSummary>> {
-        return room.getRoomSummaryLive().asObservable()
+        val summaryObservable = room.getRoomSummaryLive()
+                .asObservable()
                 .startWith(room.roomSummary().toOptional())
+
+        val memberIdsChangeObservable = summaryObservable
+                .map {
+                    it.getOrNull()?.let { roomSummary ->
+                        if (roomSummary.isEncrypted) {
+                            // Return the list of other users
+                            roomSummary.otherMemberIds
+                        } else {
+                            // Return an empty list, the room is not encrypted
+                            emptyList()
+                        }
+                    }.orEmpty()
+                }.distinctUntilChanged()
+
+        // Observe the device info of the users in the room
+        val cryptoDeviceInfoObservable = memberIdsChangeObservable
+                .switchMap { otherUserIds ->
+                    session.getLiveCryptoDeviceInfo(otherUserIds)
+                            .asObservable()
+                            .map {
+                                // If any key change, emit the userIds list
+                                otherUserIds
+                            }
+                }
+
+        val roomEncryptionTrustLevelObservable = cryptoDeviceInfoObservable
+                .map { otherUserIds ->
+                    if (otherUserIds.isEmpty()) {
+                        Optional<RoomEncryptionTrustLevel>(null)
+                    } else {
+                        session.getCrossSigningService().getTrustLevelForUsers(otherUserIds).toOptional()
+                    }
+                }
+
+        return Observable
+                .combineLatest<Optional<RoomSummary>, Optional<RoomEncryptionTrustLevel>, Optional<RoomSummary>>(
+                        summaryObservable,
+                        roomEncryptionTrustLevelObservable,
+                        BiFunction { summary, level ->
+                            summary.getOrNull()?.copy(
+                                    roomEncryptionTrustLevel = level.getOrNull()
+                            ).toOptional()
+                        }
+                )
     }
 
     fun liveRoomMembers(queryParams: RoomMemberQueryParams): Observable<List<RoomMemberSummary>> {
@@ -88,6 +136,6 @@ class RxRoom(private val room: Room) {
     }
 }
 
-fun Room.rx(): RxRoom {
-    return RxRoom(this)
+fun Room.rx(session: Session): RxRoom {
+    return RxRoom(this, session)
 }

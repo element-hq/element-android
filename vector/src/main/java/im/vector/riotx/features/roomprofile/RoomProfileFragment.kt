@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -34,6 +35,7 @@ import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.features.crypto.util.toImageRes
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
@@ -75,8 +77,12 @@ class RoomProfileFragment @Inject constructor(
         }
         setupToolbar(matrixProfileToolbar)
         setupRecyclerView()
-        appBarStateChangeListener = MatrixItemAppBarStateChangeListener(headerView, listOf(matrixProfileToolbarAvatarImageView,
-                matrixProfileToolbarTitleView))
+        appBarStateChangeListener = MatrixItemAppBarStateChangeListener(
+                headerView,
+                listOf(matrixProfileToolbarAvatarImageView,
+                        matrixProfileToolbarTitleView,
+                        matrixProfileDecorationToolbarAvatarImageView)
+        )
         matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         roomProfileViewModel.observeViewEvents {
             when (it) {
@@ -139,6 +145,9 @@ class RoomProfileFragment @Inject constructor(
                 val matrixItem = it.toMatrixItem()
                 avatarRenderer.render(matrixItem, roomProfileAvatarView)
                 avatarRenderer.render(matrixItem, matrixProfileToolbarAvatarImageView)
+                roomProfileDecorationImageView.isVisible = it.roomEncryptionTrustLevel != null
+                roomProfileDecorationImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
+                matrixProfileDecorationToolbarAvatarImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
             }
         }
         roomProfileController.setData(state)
