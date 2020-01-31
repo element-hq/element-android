@@ -100,6 +100,16 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                 // See if active tx for this user and take it
                 session.getVerificationService().getExistingVerificationRequest(args.otherUserId)
                         ?.firstOrNull { !it.isFinished }
+                        ?.also { verificationRequest ->
+                            if (verificationRequest.isIncoming && !verificationRequest.isReady) {
+                                //auto ready in this case, as we are waiting
+                                // TODO, can I be here in DM mode? in this case should test if roomID is null?
+                                session.getVerificationService()
+                                        .readyPendingVerification(supportedVerificationMethods,
+                                                verificationRequest.otherUserId,
+                                                verificationRequest.transactionId ?: "")
+                            }
+                        }
             } else {
                 session.getVerificationService().getExistingVerificationRequest(args.otherUserId, args.verificationId)
             }
@@ -298,6 +308,15 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
         if (state.waitForOtherUserMode && state.pendingRequest.invoke() == null && state.transactionId == null) {
             // is this an incoming with that user
             if (pr.isIncoming && pr.otherUserId == state.otherUserMxItem?.id) {
+                if (!pr.isReady) {
+                    //auto ready in this case, as we are waiting
+                    // TODO, can I be here in DM mode? in this case should test if roomID is null?
+                    session.getVerificationService()
+                            .readyPendingVerification(supportedVerificationMethods,
+                                    pr.otherUserId,
+                                    pr.transactionId ?: "")
+                }
+
                 // Use this one!
                 setState {
                     copy(

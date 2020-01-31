@@ -137,10 +137,6 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
                             (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
                                 val roomId = pr.roomId
                                 if (roomId.isNullOrBlank()) {
-                                    session?.getVerificationService()
-                                            ?.readyPendingVerification(supportedVerificationMethods,
-                                                    pr.otherUserId,
-                                                    pr.transactionId ?: "")
                                     it.navigator.waitSessionVerification(it)
                                 } else {
                                     it.navigator.openRoom(it, roomId, pr.transactionId)
