@@ -33,7 +33,7 @@
     <string name="verification_request">Verification Request</string>
 
 
-    <string name="verification_verify_device">Verify this device</string>
+    <string name="verification_verify_device">Verify this session</string>
     <string name="verification_verify_device_manually">Manually verify</string>
 
     <!-- Sender name of a message when it is send by you, e.g. You: Hello!-->
@@ -119,10 +119,12 @@
     <string name="settings_active_sessions_list">Active Sessions</string>
     <string name="settings_active_sessions_show_all">Show All Sessions</string>
     <string name="settings_active_sessions_manage">Manage Sessions</string>
-    <string name="settings_active_sessions_signout_device">Sign out this device</string>
+    <string name="settings_active_sessions_signout_device">Sign out this session</string>
+
+    <string name="settings_failed_to_get_crypto_device_info">No cryptographic information available</string>
 
     <string name="settings_active_sessions_verified_device_desc">This session is trusted for secure messaging because you verified it:</string>
-    <string name="settings_active_sessions_unverified_device_desc">Verify this session to mark it as trusted &amp; grant it access to encrypted messages. If you didn’t sign in to this device your account may be compromised:</string>
+    <string name="settings_active_sessions_unverified_device_desc">Verify this session to mark it as trusted &amp; grant it access to encrypted messages. If you didn’t sign in to this session your account may be compromised:</string>
 
     <plurals name="settings_active_sessions_count">
         <item quantity="one">%d active session</item>
@@ -146,8 +148,8 @@
     <string name="not_trusted">Not Trusted</string>
 
     <string name="verification_profile_device_verified_because">This device is trusted for secure messaging because %1$s (%2$s) verified it:</string>
-    <string name="verification_profile_device_new_signing">%1$s (%2$s) signed in using a new device:</string>
-    <string name="verification_profile_device_untrust_info">Until this user trusts this device, messages sent to and from it are labelled with warnings. Alternatively, you can manually verify it.</string>
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) signed in using a new session:</string>
+    <string name="verification_profile_device_untrust_info">Until this user trusts this session, messages sent to and from it are labelled with warnings. Alternatively, you can manually verify it.</string>
 
 
     <string name="initialize_cross_signing">Initialize CrossSigning</string>
