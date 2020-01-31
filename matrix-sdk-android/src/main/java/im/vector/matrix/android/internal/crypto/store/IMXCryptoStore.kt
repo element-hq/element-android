@@ -203,7 +203,7 @@ internal interface IMXCryptoStore {
 
     fun getLiveDeviceList(userIds: List<String>): LiveData<List<CryptoDeviceInfo>>
 
-    //TODO temp
+    // TODO temp
     fun getLiveDeviceList(): LiveData<List<CryptoDeviceInfo>>
     /**
      * Store the crypto algorithm for a room.
