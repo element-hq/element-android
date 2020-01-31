@@ -24,11 +24,13 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.extensions.setTextOrHide
+import im.vector.riotx.features.crypto.util.toImageRes
 import im.vector.riotx.features.home.AvatarRenderer
 
 @EpoxyModelClass(layout = R.layout.item_room)
@@ -39,6 +41,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
     @EpoxyAttribute lateinit var lastFormattedEvent: CharSequence
     @EpoxyAttribute lateinit var lastEventTime: CharSequence
     @EpoxyAttribute var typingString: CharSequence? = null
+    @EpoxyAttribute var encryptionTrustLevel: RoomEncryptionTrustLevel? = null
     @EpoxyAttribute var unreadNotificationCount: Int = 0
     @EpoxyAttribute var hasUnreadMessage: Boolean = false
     @EpoxyAttribute var hasDraft: Boolean = false
@@ -59,6 +62,8 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         holder.draftView.isVisible = hasDraft
         avatarRenderer.render(matrixItem, holder.avatarImageView)
+        holder.roomAvatarDecorationImageView.isVisible = encryptionTrustLevel != null
+        holder.roomAvatarDecorationImageView.setImageResource(encryptionTrustLevel.toImageRes())
     }
 
     class Holder : VectorEpoxyHolder() {
@@ -70,6 +75,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         val draftView by bind<ImageView>(R.id.roomDraftBadge)
         val lastEventTimeView by bind<TextView>(R.id.roomLastEventTimeView)
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
+        val roomAvatarDecorationImageView by bind<ImageView>(R.id.roomAvatarDecorationImageView)
         val rootView by bind<ViewGroup>(R.id.itemRoomLayout)
     }
 }

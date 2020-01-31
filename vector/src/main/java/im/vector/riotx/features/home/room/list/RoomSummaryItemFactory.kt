@@ -113,6 +113,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
         return RoomSummaryItem_()
                 .id(roomSummary.roomId)
                 .avatarRenderer(avatarRenderer)
+                .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
                 .matrixItem(roomSummary.toMatrixItem())
                 .lastEventTime(latestEventTime)
                 .typingString(typingString)
