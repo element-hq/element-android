@@ -152,7 +152,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         observeDrafts()
         observeUnreadState()
         room.getRoomSummaryLive()
-        room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
+        room.rx(session).loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         // Inform the SDK that the room is displayed
         session.onRoomDisplayed(initialState.roomId)
     }
@@ -233,7 +233,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun observeDrafts() {
-        room.rx().liveDrafts()
+        room.rx(session).liveDrafts()
                 .subscribe {
                     Timber.d("Draft update --> SetState")
                     setState {
@@ -874,7 +874,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun observeRoomSummary() {
-        room.rx().liveRoomSummary()
+        room.rx(session).liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     val typingRoomMembers =
@@ -892,7 +892,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         Observable
                 .combineLatest<List<TimelineEvent>, RoomSummary, UnreadState>(
                         timelineEvents.observeOn(Schedulers.computation()),
-                        room.rx().liveRoomSummary().unwrap(),
+                        room.rx(session).liveRoomSummary().unwrap(),
                         BiFunction { timelineEvents, roomSummary ->
                             computeUnreadState(timelineEvents, roomSummary)
                         }

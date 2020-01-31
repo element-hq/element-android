@@ -19,6 +19,8 @@ package im.vector.matrix.android.internal.crypto.crosssigning
 import androidx.lifecycle.LiveData
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.api.util.Optional
@@ -652,6 +654,29 @@ internal class DefaultCrossSigningService @Inject constructor(
                     Timber.d("## CrossSigning - update trust for device ${device.deviceId} of user $otherUserId , verified=$updatedTrust")
                     cryptoStore.setDeviceTrust(it, device.deviceId, updatedTrust.isCrossSignedVerified(), updatedTrust.isLocallyVerified())
                 }
+            }
+        }
+    }
+
+    override fun getTrustLevelForUsers(userList: List<String>): RoomEncryptionTrustLevel {
+        val atLeastOneTrusted = userList
+                .filter { it != userId }
+                .map { getUserCrossSigningKeys(it) }
+                .any { it?.isTrusted() == true }
+
+        if (!atLeastOneTrusted) {
+            return RoomEncryptionTrustLevel.Default
+        } else {
+            // I have verified at least one other user
+            val allDevices = userList.mapNotNull {
+                cryptoStore.getUserDeviceList(it)
+            }.flatten()
+            if (getMyCrossSigningKeys() != null) {
+                val hasWarning = allDevices.any { !it.trustLevel?.crossSigningVerified.orFalse() }
+                return if (hasWarning) RoomEncryptionTrustLevel.Warning else RoomEncryptionTrustLevel.Trusted
+            } else {
+                val hasWarningLegacy = allDevices.any { !it.trustLevel?.crossSigningVerified.orFalse() }
+                return if (hasWarningLegacy) RoomEncryptionTrustLevel.Warning else RoomEncryptionTrustLevel.Trusted
             }
         }
     }

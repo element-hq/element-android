@@ -121,6 +121,7 @@ interface CryptoService {
     fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo>
 
     fun getLiveCryptoDeviceInfo(userId: String): LiveData<List<CryptoDeviceInfo>>
+    fun getLiveCryptoDeviceInfo(): LiveData<List<CryptoDeviceInfo>>
 
     fun addNewSessionListener(newSessionListener: NewSessionListener)
 

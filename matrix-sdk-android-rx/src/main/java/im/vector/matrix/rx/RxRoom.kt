@@ -16,6 +16,9 @@
 
 package im.vector.matrix.rx
 
+import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
+import im.vector.matrix.android.api.extensions.orFalse
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.members.RoomMemberQueryParams
@@ -28,14 +31,43 @@ import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.functions.BiFunction
 
-class RxRoom(private val room: Room) {
+class RxRoom(private val room: Room, private val session: Session) {
 
     fun liveRoomSummary(): Observable<Optional<RoomSummary>> {
-        return room.getRoomSummaryLive().asObservable()
+        val summaryObservable = room.getRoomSummaryLive().asObservable()
                 .startWith(room.roomSummary().toOptional())
+
+        val memberChangeObserver = summaryObservable.map {
+            it.getOrNull()?.otherMemberIds ?: emptyList()
+        }.distinctUntilChanged()
+
+        val keyObservable = session.getLiveCryptoDeviceInfo().asObservable()
+
+        val subObserver = Observable
+                .combineLatest<List<String>, List<CryptoDeviceInfo>, RoomEncryptionTrustLevel>(
+                        memberChangeObserver,
+                        keyObservable,
+                        BiFunction { userList, _ ->
+                            session.getCrossSigningService().getTrustLevelForUsers(userList)
+                        }
+                )
+
+
+        return Observable
+                .combineLatest<Optional<RoomSummary>, RoomEncryptionTrustLevel, Optional<RoomSummary>>(
+                        summaryObservable,
+                        subObserver,
+                        BiFunction { summary, level ->
+                            summary.getOrNull()?.copy(
+                                    roomEncryptionTrustLevel = if (summary.getOrNull()?.isEncrypted.orFalse()) level else null
+                            ).toOptional()
+                        }
+                )
     }
 
     fun liveRoomMembers(queryParams: RoomMemberQueryParams): Observable<List<RoomMemberSummary>> {
@@ -88,6 +120,6 @@ class RxRoom(private val room: Room) {
     }
 }
 
-fun Room.rx(): RxRoom {
-    return RxRoom(this)
+fun Room.rx(session: Session): RxRoom {
+    return RxRoom(this, session)
 }

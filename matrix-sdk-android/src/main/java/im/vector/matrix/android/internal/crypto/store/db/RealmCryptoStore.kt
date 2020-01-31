@@ -398,6 +398,20 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
         }
     }
 
+    override fun getLiveDeviceList(): LiveData<List<CryptoDeviceInfo>> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { realm: Realm ->
+                    realm.where<UserEntity>()
+                },
+                { entity ->
+                    entity.devices.map { CryptoMapper.mapToModel(it) }
+                }
+        )
+        return Transformations.map(liveData) {
+            it.firstOrNull() ?: emptyList()
+        }
+    }
+
     override fun storeRoomAlgorithm(roomId: String, algorithm: String) {
         doRealmTransaction(realmConfiguration) {
             CryptoRoomEntity.getOrCreate(it, roomId).algorithm = algorithm

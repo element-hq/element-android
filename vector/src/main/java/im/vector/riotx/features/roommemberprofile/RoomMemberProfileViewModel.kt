@@ -153,7 +153,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         val queryParams = roomMemberQueryParams {
             this.userId = QueryStringValue.Equals(initialState.userId, QueryStringValue.Case.SENSITIVE)
         }
-        room.rx().liveRoomMembers(queryParams)
+        room.rx(session).liveRoomMembers(queryParams)
                 .map { it.firstOrNull()?.toMatrixItem().toOptional() }
                 .unwrap()
                 .execute {
@@ -176,8 +176,8 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
     }
 
     private fun observeRoomSummaryAndPowerLevels(room: Room) {
-        val roomSummaryLive = room.rx().liveRoomSummary().unwrap()
-        val powerLevelsContentLive = room.rx().liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
+        val roomSummaryLive = room.rx(session).liveRoomSummary().unwrap()
+        val powerLevelsContentLive = room.rx(session).liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
                 .mapOptional { it.content.toModel<PowerLevelsContent>() }
                 .unwrap()
 
