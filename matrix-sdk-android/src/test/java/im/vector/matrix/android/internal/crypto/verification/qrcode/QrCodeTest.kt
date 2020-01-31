@@ -30,7 +30,7 @@ class QrCodeTest {
 
     private val basicQrCodeData = QrCodeData(
             userId = "@benoit:matrix.org",
-            requestEventId = "\$azertyazerty",
+            requestId = "\$azertyazerty",
             action = QrCodeData.ACTION_VERIFY,
             keys = mapOf(
                     "1" to "abcdef",
@@ -61,7 +61,7 @@ class QrCodeTest {
         decodedData.shouldNotBeNull()
 
         decodedData.userId shouldBeEqualTo "@benoit:matrix.org"
-        decodedData.requestEventId shouldBeEqualTo "\$azertyazerty"
+        decodedData.requestId shouldBeEqualTo "\$azertyazerty"
         decodedData.keys["1"]?.shouldBeEqualTo("abcdef")
         decodedData.keys["2"]?.shouldBeEqualTo("ghijql")
         decodedData.sharedSecret shouldBeEqualTo "sharedSecret"
@@ -74,7 +74,7 @@ class QrCodeTest {
         val url = basicQrCodeData
                 .copy(
                         userId = "@benoit/foo:matrix.org",
-                        requestEventId = "\$azertyazerty/bar"
+                        requestId = "\$azertyazerty/bar"
                 )
                 .toUrl()
 
@@ -87,7 +87,7 @@ class QrCodeTest {
         decodedData.shouldNotBeNull()
 
         decodedData.userId shouldBeEqualTo "@benoit/foo:matrix.org"
-        decodedData.requestEventId shouldBeEqualTo "\$azertyazerty/bar"
+        decodedData.requestId shouldBeEqualTo "\$azertyazerty/bar"
         decodedData.keys["1"]?.shouldBeEqualTo("abcdef")
         decodedData.keys["2"]?.shouldBeEqualTo("ghijql")
         decodedData.sharedSecret shouldBeEqualTo "sharedSecret"
@@ -111,7 +111,7 @@ class QrCodeTest {
         decodedData.shouldNotBeNull()
 
         decodedData.userId shouldBeEqualTo "@benoit:matrix.org"
-        decodedData.requestEventId shouldBeEqualTo "\$azertyazerty"
+        decodedData.requestId shouldBeEqualTo "\$azertyazerty"
         decodedData.keys["1"]?.shouldBeEqualTo("abcdef")
         decodedData.keys["2"]?.shouldBeEqualTo("ghijql")
         decodedData.sharedSecret shouldBeEqualTo "sharedSecret"
@@ -135,7 +135,7 @@ class QrCodeTest {
         decodedData.shouldNotBeNull()
 
         decodedData.userId shouldBeEqualTo "@benoit:matrix.org"
-        decodedData.requestEventId shouldBeEqualTo "\$azertyazerty"
+        decodedData.requestId shouldBeEqualTo "\$azertyazerty"
         decodedData.keys["1"]?.shouldBeEqualTo("abcdef")
         decodedData.keys["2"]?.shouldBeEqualTo("ghijql")
         decodedData.sharedSecret shouldBeEqualTo "sharedSecret"
@@ -174,6 +174,13 @@ class QrCodeTest {
     }
 
     @Test
+    fun testEmptyActionCase() {
+        basicUrl.replace("&action=verify", "&action=")
+                .toQrCodeData()
+                .shouldBeNull()
+    }
+
+    @Test
     fun testOtherActionCase() {
         basicUrl.replace("&action=verify", "&action=confirm")
                 .toQrCodeData()
@@ -182,8 +189,15 @@ class QrCodeTest {
     }
 
     @Test
-    fun testBadRequestEventId() {
-        basicUrl.replace("%24azertyazerty", "%32azertyazerty")
+    fun testMissingRequestId() {
+        basicUrl.replace("request=%24azertyazerty", "")
+                .toQrCodeData()
+                .shouldBeNull()
+    }
+
+    @Test
+    fun testEmptyRequestId() {
+        basicUrl.replace("request=%24azertyazerty", "request=")
                 .toQrCodeData()
                 .shouldBeNull()
     }
@@ -207,5 +221,26 @@ class QrCodeTest {
         basicUrl.replace("&secret=sharedSecret", "")
                 .toQrCodeData()
                 .shouldBeNull()
+    }
+
+    @Test
+    fun testEmptySecret() {
+        basicUrl.replace("&secret=sharedSecret", "&secret=")
+                .toQrCodeData()
+                .shouldBeNull()
+    }
+
+    @Test
+    fun testSelfSigning() {
+        // request is not an eventId in this case
+        val url = "https://matrix.to/#/@benoit0815:matrix.org" +
+                "?request=local.4dff40e1-7bf1-4e80-81ed-c6090d43bf20" +
+                "&action=verify" +
+                "&key_utbSRFcFjFDYf0KcNv3FoBHFSbvUPXtCYutuOg6WQ%2Bs=utbSRFcFjFDYf0KcNv3FoBHFSbvUPXtCYutuOg6WQ%2Bs" +
+                "&key_YSOXZVBXIZ=F0XWqgUePgwm5HMYG3yhBNneHmscrAxxlooLHjy8YQc" +
+                "&secret=LYVcEQmfdorbJ3vbQnq7nbNZc%2BGmDxUen1rByV9hRM4" +
+                "&other_device_key=eGoUqZqAroCYpjp7FLGIkTEzYHBFED4uUAfJ267gqQQ"
+
+        url.toQrCodeData()!!.requestId shouldBeEqualTo "local.4dff40e1-7bf1-4e80-81ed-c6090d43bf20"
     }
 }

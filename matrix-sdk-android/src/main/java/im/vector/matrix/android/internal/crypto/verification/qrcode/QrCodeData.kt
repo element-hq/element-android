@@ -21,8 +21,8 @@ package im.vector.matrix.android.internal.crypto.verification.qrcode
  */
 data class QrCodeData(
         val userId: String,
-        // the event ID of the associated verification request event.
-        val requestEventId: String,
+        // Request Id. Can be an arbitrary value. In DM, it will be the event ID of the associated verification request event.
+        val requestId: String,
         // The action
         val action: String,
         // key_<key_id>: each key that the user wants verified will have an entry of this form, where the value is the key in unpadded base64.

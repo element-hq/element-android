@@ -786,25 +786,25 @@ internal class DefaultVerificationService @Inject constructor(
         ))
     }
 
-    private fun createQrCodeData(requestEventId: String?, otherUserId: String, otherDeviceId: String?): QrCodeData? {
-        requestEventId ?: run {
-            Timber.w("## Unknown requestEventId")
+    private fun createQrCodeData(requestId: String?, otherUserId: String, otherDeviceId: String?): QrCodeData? {
+        requestId ?: run {
+            Timber.w("## Unknown requestId")
             return null
         }
 
         return when {
             userId != otherUserId                        ->
-                createQrCodeDataForDistinctUser(requestEventId, otherUserId, otherDeviceId)
+                createQrCodeDataForDistinctUser(requestId, otherUserId, otherDeviceId)
             crossSigningService.isCrossSigningVerified() ->
                 // This is a self verification and I am the old device (Osborne2)
-                createQrCodeDataForVerifiedDevice(requestEventId, otherDeviceId)
+                createQrCodeDataForVerifiedDevice(requestId, otherDeviceId)
             else                                         ->
                 // This is a self verification and I am the new device (Dynabook)
-                createQrCodeDataForUnVerifiedDevice(requestEventId, otherDeviceId)
+                createQrCodeDataForUnVerifiedDevice(requestId, otherDeviceId)
         }
     }
 
-    private fun createQrCodeDataForDistinctUser(requestEventId: String, otherUserId: String, otherDeviceId: String?): QrCodeData? {
+    private fun createQrCodeDataForDistinctUser(requestId: String, otherUserId: String, otherDeviceId: String?): QrCodeData? {
         val myMasterKey = crossSigningService.getMyCrossSigningKeys()
                 ?.masterKey()
                 ?.unpaddedBase64PublicKey
@@ -840,7 +840,7 @@ internal class DefaultVerificationService @Inject constructor(
 
         return QrCodeData(
                 userId = userId,
-                requestEventId = requestEventId,
+                requestId = requestId,
                 action = QrCodeData.ACTION_VERIFY,
                 keys = hashMapOf(
                         myMasterKey to myMasterKey,
@@ -853,7 +853,7 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     // Create a QR code to display on the old device (Osborne2)
-    private fun createQrCodeDataForVerifiedDevice(requestEventId: String, otherDeviceId: String?): QrCodeData? {
+    private fun createQrCodeDataForVerifiedDevice(requestId: String, otherDeviceId: String?): QrCodeData? {
         val myMasterKey = crossSigningService.getMyCrossSigningKeys()
                 ?.masterKey()
                 ?.unpaddedBase64PublicKey
@@ -885,7 +885,7 @@ internal class DefaultVerificationService @Inject constructor(
 
         return QrCodeData(
                 userId = userId,
-                requestEventId = requestEventId,
+                requestId = requestId,
                 action = QrCodeData.ACTION_VERIFY,
                 keys = hashMapOf(
                         myMasterKey to myMasterKey,
@@ -898,7 +898,7 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     // Create a QR code to display on the new device (Dynabook)
-    private fun createQrCodeDataForUnVerifiedDevice(requestEventId: String, otherDeviceId: String?): QrCodeData? {
+    private fun createQrCodeDataForUnVerifiedDevice(requestId: String, otherDeviceId: String?): QrCodeData? {
         val myMasterKey = crossSigningService.getMyCrossSigningKeys()
                 ?.masterKey()
                 ?.unpaddedBase64PublicKey
@@ -926,7 +926,7 @@ internal class DefaultVerificationService @Inject constructor(
 
         return QrCodeData(
                 userId = userId,
-                requestEventId = requestEventId,
+                requestId = requestId,
                 action = QrCodeData.ACTION_VERIFY,
                 keys = hashMapOf(
                         // Note: no master key here

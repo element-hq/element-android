@@ -49,7 +49,7 @@ fun QrCodeData.toUrl(): String {
     return buildString {
         append(PermalinkFactory.createPermalink(userId))
         append("?request=")
-        append(URLEncoder.encode(requestEventId, ENCODING))
+        append(URLEncoder.encode(requestId, ENCODING))
         append("&action=")
         append(URLEncoder.encode(action, ENCODING))
 
@@ -105,10 +105,10 @@ fun String.toQrCodeData(): QrCodeData? {
         (it.substringBefore("=") to it.substringAfter("=").let { value -> URLDecoder.decode(value, ENCODING) })
     }.toMap()
 
-    val action = keyValues["action"] ?: return null
+    val action = keyValues["action"]?.takeIf { it.isNotBlank() } ?: return null
 
-    val requestEventId = keyValues["request"]?.takeIf { MatrixPatterns.isEventId(it) } ?: return null
-    val sharedSecret = keyValues["secret"] ?: return null
+    val requestEventId = keyValues["request"]?.takeIf { it.isNotBlank() } ?: return null
+    val sharedSecret = keyValues["secret"]?.takeIf { it.isNotBlank() } ?: return null
     val otherUserKey = keyValues["other_user_key"]
     val otherDeviceKey = keyValues["other_device_key"]
 
