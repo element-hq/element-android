@@ -40,6 +40,7 @@ import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
+import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
@@ -87,6 +88,13 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
     init {
         refreshDevicesList()
         session.getVerificationService().addListener(this)
+
+        session.rx().liveUserCryptoDevices(session.myUserId)
+                .execute {
+                    copy(
+                            cryptoDevices = it
+                    )
+                }
     }
 
     override fun onCleared() {
