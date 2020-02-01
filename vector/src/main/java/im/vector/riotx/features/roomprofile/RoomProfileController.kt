@@ -23,6 +23,7 @@ import im.vector.riotx.core.epoxy.profiles.buildProfileAction
 import im.vector.riotx.core.epoxy.profiles.buildProfileSection
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.core.ui.list.genericFooterItem
 import javax.inject.Inject
 
 class RoomProfileController @Inject constructor(
@@ -55,14 +56,12 @@ class RoomProfileController @Inject constructor(
         } else {
             R.string.room_profile_not_encrypted_subtitle
         }
-        buildProfileAction(
-                id = "learn_more",
-                title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
-                dividerColor = dividerColor,
-                subtitle = stringProvider.getString(learnMoreSubtitle),
-                action = { callback?.onLearnMoreClicked() }
-        )
-
+        genericFooterItem {
+            id("e2e info")
+            centered(false)
+            text(stringProvider.getString(learnMoreSubtitle))
+        }
+        
         // More
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
         buildProfileAction(
