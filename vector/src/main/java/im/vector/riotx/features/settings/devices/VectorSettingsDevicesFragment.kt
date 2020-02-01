@@ -168,8 +168,8 @@ class VectorSettingsDevicesFragment @Inject constructor(
             viewModel.handle(DevicesAction.Password(mAccountPassword))
         } else {
             val inflater = requireActivity().layoutInflater
-            val layout = inflater.inflate(R.layout.dialog_device_delete, null)
-            val passwordEditText = layout.findViewById<EditText>(R.id.delete_password)
+            val layout = inflater.inflate(R.layout.dialog_prompt_password, null)
+            val passwordEditText = layout.findViewById<EditText>(R.id.prompt_password)
 
             AlertDialog.Builder(requireActivity())
                     .setIcon(android.R.drawable.ic_dialog_alert)
