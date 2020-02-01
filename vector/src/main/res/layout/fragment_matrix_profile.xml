@@ -63,9 +63,11 @@
                         android:id="@+id/matrixProfileDecorationToolbarAvatarImageView"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
+                        android:alpha="0"
                         app:layout_constraintCircle="@+id/matrixProfileToolbarAvatarImageView"
                         app:layout_constraintCircleAngle="135"
                         app:layout_constraintCircleRadius="20dp"
+                        tools:alpha="1"
                         tools:ignore="MissingConstraints"
                         tools:src="@drawable/ic_shield_trusted" />
 
