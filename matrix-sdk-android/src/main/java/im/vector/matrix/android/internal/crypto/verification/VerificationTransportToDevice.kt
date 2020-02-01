@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationCancel
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationDone
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationKey
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationMac
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationReady
@@ -138,8 +139,24 @@ internal class VerificationTransportToDevice(
     }
 
     override fun done(transactionId: String) {
-        // To device do not do anything here
-        Timber.d("## SAS done (nothing send in to device transport)")
+        val otherUserId = tx?.otherUserId ?: return
+        val otherUserDeviceId = tx?.otherDeviceId ?: return
+        val cancelMessage = KeyVerificationDone(transactionId)
+        val contentMap = MXUsersDevicesMap<Any>()
+        contentMap.setObject(otherUserId, otherUserDeviceId, cancelMessage)
+        sendToDeviceTask
+                .configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_DONE, contentMap, transactionId)) {
+                    this.callback = object : MatrixCallback<Unit> {
+                        override fun onSuccess(data: Unit) {
+                            Timber.v("## SAS verification [$transactionId] done")
+                        }
+
+                        override fun onFailure(failure: Throwable) {
+                            Timber.e(failure, "## SAS verification [$transactionId] failed to done.")
+                        }
+                    }
+                }
+                .executeBy(taskExecutor)
     }
 
     override fun cancelTransaction(transactionId: String, otherUserId: String, otherUserDeviceId: String, code: CancelCode) {
