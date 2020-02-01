@@ -104,10 +104,16 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
 
             session.rx().liveUserCryptoDevices(initialState.userId)
                     .map {
-                        it.fold(true, { prev, dev -> prev && dev.isVerified })
+                        Pair(
+                                it.fold(true, { prev, dev -> prev && dev.isVerified }),
+                                it.fold(true, { prev, dev -> prev && (dev.trustLevel?.crossSigningVerified == true) })
+                        )
                     }
-                    .execute {
-                        copy(allDevicesAreTrusted = it)
+                    .execute { it ->
+                        copy(
+                                allDevicesAreTrusted = it()?.first == true,
+                                allDevicesAreCrossSignedTrusted = it()?.second == true
+                        )
                     }
 
             session.rx().liveCrossSigningInfo(initialState.userId)

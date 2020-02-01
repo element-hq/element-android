@@ -667,7 +667,6 @@ internal class DefaultCrossSigningService @Inject constructor(
         return if (allTrusted.isEmpty()) {
             RoomEncryptionTrustLevel.Default
         } else {
-
             // If one of the verified user as an untrusted device -> warning
             // Green if all devices of all verified users are trusted -> green
             // else black

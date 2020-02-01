@@ -16,12 +16,16 @@
 
 package im.vector.matrix.android.api.session.room.model
 
+import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
+
 /**
  * Class representing a simplified version of EventType.STATE_ROOM_MEMBER state event content
  */
-data class RoomMemberSummary(
+data class RoomMemberSummary constructor(
         val membership: Membership,
         val userId: String,
         val displayName: String? = null,
-        val avatarUrl: String? = null
+        val avatarUrl: String? = null,
+        // TODO Warning: Will not be populated if not using RxRoom
+        val userEncryptionTrustLevel: RoomEncryptionTrustLevel? = null
 )

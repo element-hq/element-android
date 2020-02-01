@@ -30,6 +30,7 @@ import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
@@ -87,8 +88,29 @@ class RxRoom(private val room: Room, private val session: Session) {
     }
 
     fun liveRoomMembers(queryParams: RoomMemberQueryParams): Observable<List<RoomMemberSummary>> {
-        return room.getRoomMembersLive(queryParams).asObservable()
+        val roomMembersObservable = room.getRoomMembersLive(queryParams).asObservable()
                 .startWith(room.getRoomMembers(queryParams))
+
+        // TODO Do it only for room members of the room (switchMap)
+        val cryptoDeviceInfoObservable = session.getLiveCryptoDeviceInfo().asObservable()
+
+        return Observable
+                .combineLatest<List<RoomMemberSummary>, List<CryptoDeviceInfo>, List<RoomMemberSummary>>(
+                        roomMembersObservable,
+                        cryptoDeviceInfoObservable,
+                        BiFunction { summaries, _ ->
+                            summaries.map {
+                                if (room.isEncrypted()) {
+                                    it.copy(
+                                            // Get the trust level of a virtual room with only this user
+                                            userEncryptionTrustLevel = session.getCrossSigningService().getTrustLevelForUsers(listOf(it.userId))
+                                    )
+                                } else {
+                                    it
+                                }
+                            }
+                        }
+                )
     }
 
     fun liveAnnotationSummary(eventId: String): Observable<Optional<EventAnnotationsSummary>> {

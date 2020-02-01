@@ -20,6 +20,7 @@ package im.vector.riotx.features.roommemberprofile
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
@@ -79,8 +80,13 @@ class RoomMemberProfileFragment @Inject constructor(
         memberProfileStateView.contentView = memberProfileInfoContainer
         matrixProfileRecyclerView.configureWith(roomMemberProfileController, hasFixedSize = true)
         roomMemberProfileController.callback = this
-        appBarStateChangeListener = MatrixItemAppBarStateChangeListener(headerView, listOf(matrixProfileToolbarAvatarImageView,
-                matrixProfileToolbarTitleView))
+        appBarStateChangeListener = MatrixItemAppBarStateChangeListener(headerView,
+                listOf(
+                        matrixProfileToolbarAvatarImageView,
+                        matrixProfileToolbarTitleView,
+                        matrixProfileDecorationToolbarAvatarImageView
+                )
+        )
         matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         viewModel.observeViewEvents {
             when (it) {
@@ -133,6 +139,37 @@ class RoomMemberProfileFragment @Inject constructor(
                 matrixProfileToolbarTitleView.text = bestName
                 avatarRenderer.render(userMatrixItem, memberProfileAvatarView)
                 avatarRenderer.render(userMatrixItem, matrixProfileToolbarAvatarImageView)
+
+                if (state.isRoomEncrypted) {
+                    memberProfileDecorationImageView.isVisible = true
+                    if (state.userMXCrossSigningInfo != null) {
+                        // Cross signing is enabled for this user
+                        val icon = if (state.userMXCrossSigningInfo.isTrusted()) {
+                            // User is trusted
+                            if (state.allDevicesAreCrossSignedTrusted) {
+                                R.drawable.ic_shield_trusted
+                            } else {
+                                R.drawable.ic_shield_warning
+                            }
+                        } else {
+                            R.drawable.ic_shield_black
+                        }
+
+                        memberProfileDecorationImageView.setImageResource(icon)
+                        matrixProfileDecorationToolbarAvatarImageView.setImageResource(icon)
+                    } else {
+                        // Legacy
+                        if (state.allDevicesAreTrusted) {
+                            memberProfileDecorationImageView.setImageResource(R.drawable.ic_shield_trusted)
+                            matrixProfileDecorationToolbarAvatarImageView.setImageResource(R.drawable.ic_shield_trusted)
+                        } else {
+                            memberProfileDecorationImageView.setImageResource(R.drawable.ic_shield_warning)
+                            matrixProfileDecorationToolbarAvatarImageView.setImageResource(R.drawable.ic_shield_warning)
+                        }
+                    }
+                } else {
+                    memberProfileDecorationImageView.isVisible = false
+                }
             }
         }
         memberProfilePowerLevelView.setTextOrHide(state.userPowerLevelString())
