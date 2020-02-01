@@ -141,6 +141,7 @@ internal class MXOlmDevice @Inject constructor(
      */
     fun release() {
         olmAccount?.releaseAccount()
+        olmUtility?.releaseUtility()
     }
 
     /**

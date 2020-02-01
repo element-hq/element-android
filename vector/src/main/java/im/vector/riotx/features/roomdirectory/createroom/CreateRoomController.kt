@@ -39,9 +39,7 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
     var index = 0
 
     override fun buildModels(viewState: CreateRoomViewState) {
-        val asyncCreateRoom = viewState.asyncCreateRoomRequest
-
-        when (asyncCreateRoom) {
+        when (val asyncCreateRoom = viewState.asyncCreateRoomRequest) {
             is Success       -> {
                 // Nothing to display, the screen will be closed
             }
@@ -101,12 +99,24 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
                 listener?.setIsInRoomDirectory(value)
             }
         }
+        formSwitchItem {
+            id("encryption")
+            enabled(enableFormElement)
+            title(stringProvider.getString(R.string.create_room_encryption_title))
+            summary(stringProvider.getString(R.string.create_room_encryption_description))
+            switchChecked(viewState.isEncrypted)
+
+            listener { value ->
+                listener?.setIsEncrypted(value)
+            }
+        }
     }
 
     interface Listener {
         fun onNameChange(newName: String)
         fun setIsPublic(isPublic: Boolean)
         fun setIsInRoomDirectory(isInRoomDirectory: Boolean)
+        fun setIsEncrypted(isEncrypted: Boolean)
         fun retry()
     }
 }

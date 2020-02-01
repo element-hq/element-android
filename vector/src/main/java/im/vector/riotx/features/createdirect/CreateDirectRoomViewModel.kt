@@ -33,6 +33,7 @@ import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.postLiveEvent
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
 import io.reactivex.Single
@@ -51,7 +52,7 @@ data class SelectUserAction(
 class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                                                             initialState: CreateDirectRoomViewState,
                                                             private val session: Session)
-    : VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction>(initialState) {
+    : VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, EmptyViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -91,13 +92,12 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun createRoomAndInviteSelectedUsers() = withState { currentState ->
-        val isDirect = currentState.selectedUsers.size == 1
-        val roomParams = CreateRoomParams().apply {
-            invitedUserIds = ArrayList(currentState.selectedUsers.map { it.userId })
-            if (isDirect) {
-                setDirectMessage()
-            }
-        }
+        val roomParams = CreateRoomParams(
+                invitedUserIds = currentState.selectedUsers.map { it.userId }
+        )
+                .setDirectMessage()
+                .enableEncryptionIfInvitedUsersSupportIt()
+
         session.rx()
                 .createRoom(roomParams)
                 .execute {

@@ -22,10 +22,15 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
+import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
@@ -36,6 +41,7 @@ import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.pushers.PushersManager
 import im.vector.riotx.features.disclaimer.showDisclaimerDialog
 import im.vector.riotx.features.notifications.NotificationDrawerManager
+import im.vector.riotx.features.popup.PopupAlertManager
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.workers.signout.SignOutViewModel
 import im.vector.riotx.push.fcm.FcmHelper
@@ -96,7 +102,9 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         activeSessionHolder.getSafeActiveSession()?.getInitialSyncProgressStatus()?.observe(this, Observer { status ->
             if (status == null) {
                 waiting_view.isVisible = false
+                promptCompleteSecurityIfNeeded()
             } else {
+                sharedActionViewModel.hasDisplayedCompleteSecurityPrompt = false
                 Timber.v("${getString(status.statusText)} ${status.percentProgress}")
                 waiting_view.setOnClickListener {
                     // block interactions
@@ -114,6 +122,65 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                 waiting_view.isVisible = true
             }
         })
+    }
+
+    private fun promptCompleteSecurityIfNeeded() {
+        val session = activeSessionHolder.getSafeActiveSession() ?: return
+        if (!session.hasAlreadySynced()) return
+        if (sharedActionViewModel.hasDisplayedCompleteSecurityPrompt) return
+
+        // ensure keys are downloaded
+        session.downloadKeys(listOf(session.myUserId), true, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
+            override fun onSuccess(data: MXUsersDevicesMap<CryptoDeviceInfo>) {
+                runOnUiThread {
+                    alertCompleteSecurity(session)
+                }
+            }
+        })
+    }
+
+    private fun alertCompleteSecurity(session: Session) {
+        val myCrossSigningKeys = session.getCrossSigningService()
+                .getMyCrossSigningKeys()
+        val crossSigningEnabledOnAccount = myCrossSigningKeys != null
+
+        if (crossSigningEnabledOnAccount && myCrossSigningKeys?.isTrusted() == false) {
+            // We need to ask
+            sharedActionViewModel.hasDisplayedCompleteSecurityPrompt = true
+            PopupAlertManager.postVectorAlert(
+                    PopupAlertManager.VectorAlert(
+                            uid = "completeSecurity",
+                            title = getString(R.string.crosssigning_verify_this_session),
+                            description = getString(R.string.crosssigning_other_user_not_trust),
+                            iconId = R.drawable.ic_shield_warning
+                    ).apply {
+                        colorInt = ContextCompat.getColor(this@HomeActivity, R.color.riotx_positive_accent)
+                        contentAction = Runnable {
+                            Runnable {
+                                (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
+                                    it.navigator.waitSessionVerification(it)
+                                }
+                            }
+                        }
+                        dismissedAction = Runnable {
+                            //                            tx.cancel()
+                        }
+                        addButton(
+                                getString(R.string.later),
+                                Runnable {
+                                }
+                        )
+                        addButton(
+                                getString(R.string.verification_profile_verify),
+                                Runnable {
+                                    (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
+                                        it.navigator.waitSessionVerification(it)
+                                    }
+                                }
+                        )
+                    }
+            )
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {

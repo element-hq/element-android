@@ -16,7 +16,12 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.reactions
 
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
@@ -25,6 +30,7 @@ import im.vector.matrix.rx.RxRoom
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.platform.EmptyAction
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
 import io.reactivex.Observable
@@ -54,7 +60,7 @@ class ViewReactionsViewModel @AssistedInject constructor(@Assisted
                                                          initialState: DisplayReactionsViewState,
                                                          private val session: Session,
                                                          private val dateFormatter: VectorDateFormatter
-) : VectorViewModel<DisplayReactionsViewState, EmptyAction>(initialState) {
+) : VectorViewModel<DisplayReactionsViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     private val roomId = initialState.roomId
     private val eventId = initialState.eventId
@@ -80,7 +86,7 @@ class ViewReactionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun observeEventAnnotationSummaries() {
-        RxRoom(room)
+        RxRoom(room, session)
                 .liveAnnotationSummary(eventId)
                 .unwrap()
                 .flatMapSingle { summaries ->

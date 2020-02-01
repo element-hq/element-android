@@ -27,7 +27,6 @@ import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreFromK
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreFromPassphraseViewModel
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreSharedViewModel
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupSharedViewModel
-import im.vector.riotx.features.crypto.verification.SasVerificationViewModel
 import im.vector.riotx.features.home.HomeSharedActionViewModel
 import im.vector.riotx.features.home.room.detail.RoomDetailSharedActionViewModel
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageSharedActionViewModel
@@ -60,11 +59,6 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(EmojiChooserViewModel::class)
     fun bindEmojiChooserViewModel(viewModel: EmojiChooserViewModel): ViewModel
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(SasVerificationViewModel::class)
-    fun bindSasVerificationViewModel(viewModel: SasVerificationViewModel): ViewModel
 
     @Binds
     @IntoMap

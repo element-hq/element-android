@@ -29,7 +29,7 @@ import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
-import kotlinx.android.synthetic.main.fragment_room_member_list.*
+import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
 import javax.inject.Inject
 
 class RoomMemberListFragment @Inject constructor(
@@ -41,12 +41,12 @@ class RoomMemberListFragment @Inject constructor(
     private val viewModel: RoomMemberListViewModel by fragmentViewModel()
     private val roomProfileArgs: RoomProfileArgs by args()
 
-    override fun getLayoutResId() = R.layout.fragment_room_member_list
+    override fun getLayoutResId() = R.layout.fragment_room_setting_generic
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         roomMemberListController.callback = this
-        setupToolbar(roomMemberListToolbar)
+        setupToolbar(roomSettingsToolbar)
         recyclerView.configureWith(roomMemberListController, hasFixedSize = true)
     }
 
@@ -66,8 +66,8 @@ class RoomMemberListFragment @Inject constructor(
 
     private fun renderRoomSummary(state: RoomMemberListViewState) {
         state.roomSummary()?.let {
-            roomMemberListToolbarTitleView.text = it.displayName
-            avatarRenderer.render(it.toMatrixItem(), roomMemberListToolbarAvatarImageView)
+            roomSettingsToolbarTitleView.text = it.displayName
+            avatarRenderer.render(it.toMatrixItem(), roomSettingsToolbarAvatarImageView)
         }
     }
 }

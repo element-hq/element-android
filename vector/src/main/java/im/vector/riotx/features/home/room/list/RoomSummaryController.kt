@@ -59,39 +59,9 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
     override fun buildModels() {
         val nonNullViewState = viewState ?: return
         when (nonNullViewState.displayMode) {
-            RoomListDisplayMode.FILTERED,
-            RoomListDisplayMode.SHARE -> {
-                buildFilteredRooms(nonNullViewState)
-            }
-            else                      -> {
-                var showHelp = false
-                val roomSummaries = nonNullViewState.asyncFilteredRooms()
-                roomSummaries?.forEach { (category, summaries) ->
-                    if (summaries.isEmpty()) {
-                        return@forEach
-                    } else {
-                        val isExpanded = nonNullViewState.isCategoryExpanded(category)
-                        buildRoomCategory(nonNullViewState, summaries, category.titleRes, nonNullViewState.isCategoryExpanded(category)) {
-                            listener?.onToggleRoomCategory(category)
-                        }
-                        if (isExpanded) {
-                            buildRoomModels(summaries,
-                                    nonNullViewState.joiningRoomsIds,
-                                    nonNullViewState.joiningErrorRoomsIds,
-                                    nonNullViewState.rejectingRoomsIds,
-                                    nonNullViewState.rejectingErrorRoomsIds)
-                            // Never set showHelp to true for invitation
-                            if (category != RoomCategory.INVITE) {
-                                showHelp = userPreferencesProvider.shouldShowLongClickOnRoomHelp()
-                            }
-                        }
-                    }
-                }
-
-                if (showHelp) {
-                    buildLongClickHelp()
-                }
-            }
+            RoomListDisplayMode.FILTERED -> buildFilteredRooms(nonNullViewState)
+            RoomListDisplayMode.SHARE    -> buildShareRooms(nonNullViewState)
+            else                         -> buildRooms(nonNullViewState)
         }
     }
 
@@ -109,9 +79,69 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                 viewState.rejectingRoomsIds,
                 viewState.rejectingErrorRoomsIds)
 
-        when {
-            viewState.displayMode == RoomListDisplayMode.FILTERED -> addFilterFooter(viewState)
-            filteredSummaries.isEmpty()                           -> addEmptyFooter()
+        addFilterFooter(viewState)
+    }
+
+    private fun buildShareRooms(viewState: RoomListViewState) {
+        var hasResult = false
+        val roomSummaries = viewState.asyncFilteredRooms()
+
+        roomListNameFilter.filter = viewState.roomFilter
+
+        roomSummaries?.forEach { (category, summaries) ->
+            val filteredSummaries = summaries
+                    .filter { it.membership == Membership.JOIN && roomListNameFilter.test(it) }
+
+            if (filteredSummaries.isEmpty()) {
+                return@forEach
+            } else {
+                hasResult = true
+                val isExpanded = viewState.isCategoryExpanded(category)
+                buildRoomCategory(viewState, emptyList(), category.titleRes, viewState.isCategoryExpanded(category)) {
+                    listener?.onToggleRoomCategory(category)
+                }
+                if (isExpanded) {
+                    buildRoomModels(filteredSummaries,
+                            emptySet(),
+                            emptySet(),
+                            emptySet(),
+                            emptySet()
+                    )
+                }
+            }
+        }
+        if (!hasResult) {
+            addNoResultItem()
+        }
+    }
+
+    private fun buildRooms(viewState: RoomListViewState) {
+        var showHelp = false
+        val roomSummaries = viewState.asyncFilteredRooms()
+        roomSummaries?.forEach { (category, summaries) ->
+            if (summaries.isEmpty()) {
+                return@forEach
+            } else {
+                val isExpanded = viewState.isCategoryExpanded(category)
+                buildRoomCategory(viewState, summaries, category.titleRes, viewState.isCategoryExpanded(category)) {
+                    listener?.onToggleRoomCategory(category)
+                }
+                if (isExpanded) {
+                    buildRoomModels(summaries,
+                            viewState.joiningRoomsIds,
+                            viewState.joiningErrorRoomsIds,
+                            viewState.rejectingRoomsIds,
+                            viewState.rejectingErrorRoomsIds)
+                    // Never set showHelp to true for invitation
+                    if (category != RoomCategory.INVITE) {
+                        showHelp = userPreferencesProvider.shouldShowLongClickOnRoomHelp()
+                    }
+                }
+            }
+        }
+
+        if (showHelp) {
+            buildLongClickHelp()
         }
     }
 
@@ -130,7 +160,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
         }
     }
 
-    private fun addEmptyFooter() {
+    private fun addNoResultItem() {
         noResultItem {
             id("no_result")
             text(stringProvider.getString(R.string.no_result_placeholder))
@@ -142,9 +172,6 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                                   @StringRes titleRes: Int,
                                   isExpanded: Boolean,
                                   mutateExpandedState: () -> Unit) {
-        if (summaries.isEmpty()) {
-            return
-        }
         // TODO should add some business logic later
         val unreadCount = if (summaries.isEmpty()) {
             0

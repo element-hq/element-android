@@ -37,8 +37,13 @@ enum class Command(val command: String, val parameters: String, @StringRes val d
     KICK_USER("/kick", "<user-id> [reason]", R.string.command_description_kick_user),
     CHANGE_DISPLAY_NAME("/nick", "<display-name>", R.string.command_description_nick),
     MARKDOWN("/markdown", "<on|off>", R.string.command_description_markdown),
+    RAINBOW("/rainbow", "<message>", R.string.command_description_rainbow),
+    RAINBOW_EMOTE("/rainbowme", "<message>", R.string.command_description_rainbow_emote),
     CLEAR_SCALAR_TOKEN("/clear_scalar_token", "", R.string.command_description_clear_scalar_token),
-    SPOILER("/spoiler", "<message>", R.string.command_description_spoiler);
+    SPOILER("/spoiler", "<message>", R.string.command_description_spoiler),
+    SHRUG("/shrug", "<message>", R.string.command_description_shrug),
+    // TODO temporary command
+    VERIFY_USER("/verify", "<user-id>", R.string.command_description_verify);
 
     val length
         get() = command.length + 1

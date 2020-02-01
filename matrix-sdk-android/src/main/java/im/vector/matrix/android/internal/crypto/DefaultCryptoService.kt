@@ -21,6 +21,7 @@ package im.vector.matrix.android.internal.crypto
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import androidx.lifecycle.LiveData
 import com.squareup.moshi.Types
 import com.zhuinden.monarchy.Monarchy
 import dagger.Lazy
@@ -44,7 +45,10 @@ import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAct
 import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
 import im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmEncryptionFactory
 import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmEncryptionFactory
+import im.vector.matrix.android.internal.crypto.crosssigning.DefaultCrossSigningService
+import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
@@ -54,11 +58,18 @@ import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
+import im.vector.matrix.android.internal.crypto.model.toRest
 import im.vector.matrix.android.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
-import im.vector.matrix.android.internal.crypto.tasks.*
-import im.vector.matrix.android.internal.crypto.verification.DefaultSasVerificationService
+import im.vector.matrix.android.internal.crypto.tasks.DeleteDeviceTask
+import im.vector.matrix.android.internal.crypto.tasks.DeleteDeviceWithUserPasswordTask
+import im.vector.matrix.android.internal.crypto.tasks.GetDeviceInfoTask
+import im.vector.matrix.android.internal.crypto.tasks.GetDevicesTask
+import im.vector.matrix.android.internal.crypto.tasks.SetDeviceNameTask
+import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
+import im.vector.matrix.android.internal.crypto.verification.DefaultVerificationService
 import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.extensions.foldToCallback
@@ -71,7 +82,12 @@ import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.fetchCopied
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.matrix.olm.OlmManager
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
@@ -111,8 +127,10 @@ internal class DefaultCryptoService @Inject constructor(
         private val oneTimeKeysUploader: OneTimeKeysUploader,
         //
         private val roomDecryptorProvider: RoomDecryptorProvider,
-        // The SAS verification service.
-        private val sasVerificationService: DefaultSasVerificationService,
+        // The verification service.
+        private val verificationService: DefaultVerificationService,
+
+        private val crossSigningService: DefaultCrossSigningService,
         //
         private val incomingRoomKeyRequestManager: IncomingRoomKeyRequestManager,
         //
@@ -137,6 +155,10 @@ internal class DefaultCryptoService @Inject constructor(
         private val taskExecutor: TaskExecutor,
         private val cryptoCoroutineScope: CoroutineScope
 ) : CryptoService {
+
+    init {
+        verificationService.cryptoService = this
+    }
 
     private val uiHandler = Handler(Looper.getMainLooper())
 
@@ -164,7 +186,17 @@ internal class DefaultCryptoService @Inject constructor(
     override fun setDeviceName(deviceId: String, deviceName: String, callback: MatrixCallback<Unit>) {
         setDeviceNameTask
                 .configureWith(SetDeviceNameTask.Params(deviceId, deviceName)) {
-                    this.callback = callback
+                    this.callback = object : MatrixCallback<Unit> {
+                        override fun onSuccess(data: Unit) {
+                            // bg refresh of crypto device
+                            downloadKeys(listOf(credentials.userId), true, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {})
+                            callback.onSuccess(data)
+                        }
+
+                        override fun onFailure(failure: Throwable) {
+                            callback.onFailure(failure)
+                        }
+                    }
                 }
                 .executeBy(taskExecutor)
     }
@@ -189,7 +221,7 @@ internal class DefaultCryptoService @Inject constructor(
         return if (longFormat) olmManager.getDetailedVersion(context) else olmManager.version
     }
 
-    override fun getMyDevice(): MXDeviceInfo {
+    override fun getMyDevice(): CryptoDeviceInfo {
         return myDeviceInfoHolder.get().myDevice
     }
 
@@ -309,9 +341,11 @@ internal class DefaultCryptoService @Inject constructor(
     override fun getKeysBackupService() = keysBackup
 
     /**
-     * @return the SasVerificationService
+     * @return the VerificationService
      */
-    override fun getSasVerificationService() = sasVerificationService
+    override fun getVerificationService() = verificationService
+
+    override fun getCrossSigningService() = crossSigningService
 
     /**
      * A sync response has been received
@@ -345,7 +379,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @param algorithm the encryption algorithm.
      * @return the device info, or null if not found / unsupported algorithm / crypto released
      */
-    override fun deviceWithIdentityKey(senderKey: String, algorithm: String): MXDeviceInfo? {
+    override fun deviceWithIdentityKey(senderKey: String, algorithm: String): CryptoDeviceInfo? {
         return if (algorithm != MXCRYPTO_ALGORITHM_MEGOLM && algorithm != MXCRYPTO_ALGORITHM_OLM) {
             // We only deal in olm keys
             null
@@ -358,12 +392,27 @@ internal class DefaultCryptoService @Inject constructor(
      * @param userId   the user id
      * @param deviceId the device id
      */
-    override fun getDeviceInfo(userId: String, deviceId: String?): MXDeviceInfo? {
+    override fun getDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo? {
         return if (userId.isNotEmpty() && !deviceId.isNullOrEmpty()) {
-            cryptoStore.getUserDevice(deviceId, userId)
+            cryptoStore.getUserDevice(userId, deviceId)
         } else {
             null
         }
+    }
+    override fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
+        return cryptoStore.getUserDevices(userId)?.map { it.value } ?: emptyList()
+    }
+
+    override fun getLiveCryptoDeviceInfo(): LiveData<List<CryptoDeviceInfo>> {
+        return cryptoStore.getLiveDeviceList()
+    }
+
+    override fun getLiveCryptoDeviceInfo(userId: String): LiveData<List<CryptoDeviceInfo>> {
+        return cryptoStore.getLiveDeviceList(userId)
+    }
+
+    override fun getLiveCryptoDeviceInfo(userIds: List<String>): LiveData<List<CryptoDeviceInfo>> {
+        return cryptoStore.getLiveDeviceList(userIds)
     }
 
     /**
@@ -389,7 +438,7 @@ internal class DefaultCryptoService @Inject constructor(
                     // assume if the device is either verified or blocked
                     // it means that the device is known
                     if (device?.isUnknown == true) {
-                        device.verified = MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED
+                        device.trustLevel = DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false)
                         isUpdated = true
                     }
                 }
@@ -406,12 +455,12 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Update the blocked/verified state of the given device.
      *
-     * @param verificationStatus the new verification status
-     * @param deviceId           the unique identifier for the device.
-     * @param userId             the owner of the device
+     * @param trustLevel the new trust level
+     * @param userId     the owner of the device
+     * @param deviceId   the unique identifier for the device.
      */
-    override fun setDeviceVerification(verificationStatus: Int, deviceId: String, userId: String) {
-        setDeviceVerificationAction.handle(verificationStatus, deviceId, userId)
+    override fun setDeviceVerification(trustLevel: DeviceTrustLevel, userId: String, deviceId: String) {
+        setDeviceVerificationAction.handle(trustLevel, userId, deviceId)
     }
 
     /**
@@ -475,14 +524,16 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Tells if a room is encrypted
+     * Tells if a room is encrypted with MXCRYPTO_ALGORITHM_MEGOLM
      *
      * @param roomId the room id
-     * @return true if the room is encrypted
+     * @return true if the room is encrypted with algorithm MXCRYPTO_ALGORITHM_MEGOLM
      */
     override fun isRoomEncrypted(roomId: String): Boolean {
-        val encryptionEvent = monarchy.fetchCopied {
-            EventEntity.where(it, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION).findFirst()
+        val encryptionEvent = monarchy.fetchCopied { realm ->
+            EventEntity.where(realm, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION)
+                    .contains(EventEntityFields.CONTENT, "\"algorithm\":\"$MXCRYPTO_ALGORITHM_MEGOLM\"")
+                    .findFirst()
         }
         return encryptionEvent != null
     }
@@ -490,9 +541,8 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * @return the stored device keys for a user.
      */
-    override fun getUserDevices(userId: String): MutableList<MXDeviceInfo> {
-        val map = cryptoStore.getUserDevices(userId)
-        return if (null != map) ArrayList(map.values) else ArrayList()
+    override fun getUserDevices(userId: String): MutableList<CryptoDeviceInfo> {
+        return cryptoStore.getUserDevices(userId)?.values?.toMutableList() ?: ArrayList()
     }
 
     fun isEncryptionEnabledForInvitedUser(): Boolean {
@@ -754,11 +804,15 @@ internal class DefaultCryptoService @Inject constructor(
         // Prepare the device keys data to send
         // Sign it
         val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, getMyDevice().signalableJSONDictionary())
-        getMyDevice().signatures = objectSigner.signObject(canonicalJson)
+        var rest = getMyDevice().toRest()
+
+        rest = rest.copy(
+                signatures = objectSigner.signObject(canonicalJson)
+        )
 
         // For now, we set the device id explicitly, as we may not be using the
         // same one as used in login.
-        val uploadDeviceKeysParams = UploadKeysTask.Params(getMyDevice().toDeviceKeys(), null, getMyDevice().deviceId)
+        val uploadDeviceKeysParams = UploadKeysTask.Params(rest, null, getMyDevice().deviceId)
         return uploadKeysTask.execute(uploadDeviceKeysParams)
     }
 
@@ -998,8 +1052,8 @@ internal class DefaultCryptoService @Inject constructor(
      * @param devicesInRoom the devices map
      * @return the unknown devices map
      */
-    private fun getUnknownDevices(devicesInRoom: MXUsersDevicesMap<MXDeviceInfo>): MXUsersDevicesMap<MXDeviceInfo> {
-        val unknownDevices = MXUsersDevicesMap<MXDeviceInfo>()
+    private fun getUnknownDevices(devicesInRoom: MXUsersDevicesMap<CryptoDeviceInfo>): MXUsersDevicesMap<CryptoDeviceInfo> {
+        val unknownDevices = MXUsersDevicesMap<CryptoDeviceInfo>()
         val userIds = devicesInRoom.userIds
         for (userId in userIds) {
             devicesInRoom.getUserDeviceIds(userId)?.forEach { deviceId ->
@@ -1014,7 +1068,7 @@ internal class DefaultCryptoService @Inject constructor(
         return unknownDevices
     }
 
-    override fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<MXDeviceInfo>>) {
+    override fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             runCatching {
                 deviceListManager.downloadKeys(userIds, forceDownload)

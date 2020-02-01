@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.api.session.room.model
 
+import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -24,7 +25,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
  * This class holds some data of a room.
  * It can be retrieved by [im.vector.matrix.android.api.session.room.Room] and [im.vector.matrix.android.api.session.room.RoomService]
  */
-data class RoomSummary(
+data class RoomSummary constructor(
         val roomId: String,
         val displayName: String = "",
         val topic: String = "",
@@ -45,7 +46,10 @@ data class RoomSummary(
         val readMarkerId: String? = null,
         val userDrafts: List<UserDraft> = emptyList(),
         var isEncrypted: Boolean,
-        val typingRoomMemberIds: List<String> = emptyList()
+        val typingRoomMemberIds: List<String> = emptyList(),
+        val breadcrumbsIndex: Int = NOT_IN_BREADCRUMBS,
+        // TODO Plug it
+        val roomEncryptionTrustLevel: RoomEncryptionTrustLevel? = null
 ) {
 
     val isVersioned: Boolean
@@ -53,4 +57,8 @@ data class RoomSummary(
 
     val hasNewMessages: Boolean
         get() = notificationCount != 0
+
+    companion object {
+        const val NOT_IN_BREADCRUMBS = -1
+    }
 }

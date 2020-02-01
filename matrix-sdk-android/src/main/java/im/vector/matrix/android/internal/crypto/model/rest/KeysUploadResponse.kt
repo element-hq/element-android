@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
  * This class represents the response to /keys/upload request made by uploadKeys.
  */
 @JsonClass(generateAdapter = true)
-data class KeysUploadResponse(
+internal data class KeysUploadResponse(
 
         /**
          * The count per algorithm as returned by the home server: a map (algorithm to count).

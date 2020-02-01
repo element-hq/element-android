@@ -26,7 +26,9 @@ import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
 import im.vector.matrix.rx.rx
 import im.vector.riotx.ActiveSessionDataSource
 import im.vector.riotx.core.platform.EmptyAction
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.features.home.room.list.BreadcrumbsRoomComparator
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
@@ -38,8 +40,9 @@ data class IncomingShareState(private val dummy: Boolean = false) : MvRxState
  */
 class IncomingShareViewModel @AssistedInject constructor(@Assisted initialState: IncomingShareState,
                                                          private val sessionObservableStore: ActiveSessionDataSource,
-                                                         private val shareRoomListObservableStore: ShareRoomListDataSource)
-    : VectorViewModel<IncomingShareState, EmptyAction>(initialState) {
+                                                         private val shareRoomListObservableStore: ShareRoomListDataSource,
+                                                         private val breadcrumbsRoomComparator: BreadcrumbsRoomComparator)
+    : VectorViewModel<IncomingShareState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -68,6 +71,9 @@ class IncomingShareViewModel @AssistedInject constructor(@Assisted initialState:
                             ?: Observable.just(emptyList())
                 }
                 .throttleLast(300, TimeUnit.MILLISECONDS)
+                .map {
+                    it.sortedWith(breadcrumbsRoomComparator)
+                }
                 .subscribe {
                     shareRoomListObservableStore.post(it)
                 }

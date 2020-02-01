@@ -18,12 +18,15 @@
 package im.vector.riotx.features.login
 
 import im.vector.matrix.android.api.auth.registration.FlowResult
+import im.vector.riotx.core.platform.VectorViewEvents
 
 /**
  * Transient events for Login
  */
-sealed class LoginViewEvents {
+sealed class LoginViewEvents: VectorViewEvents {
+    data class Loading(val message: CharSequence? = null) : LoginViewEvents()
+    data class Failure(val throwable: Throwable) : LoginViewEvents()
+
     data class RegistrationFlowResult(val flowResult: FlowResult, val isRegistrationStarted: Boolean) : LoginViewEvents()
-    data class Error(val throwable: Throwable) : LoginViewEvents()
     object OutdatedHomeserver : LoginViewEvents()
 }

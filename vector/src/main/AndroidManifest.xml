@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".VectorApplication"
@@ -47,9 +48,6 @@
             android:label="@string/title_activity_settings"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".features.media.VideoMediaViewerActivity" />
-        <activity
-            android:name=".features.crypto.verification.SASVerificationActivity"
-            android:label="@string/title_activity_verify_device" />
         <activity
             android:name=".features.crypto.keysbackup.restore.KeysBackupRestoreActivity"
             android:label="@string/title_activity_keys_backup_setup" />
@@ -126,12 +124,15 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".features.roommemberprofile.RoomMemberProfileActivity"
+        <activity
+            android:name=".features.roommemberprofile.RoomMemberProfileActivity"
             android:parentActivityName=".features.home.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".features.home.HomeActivity" />
         </activity>
+
+        <activity android:name=".features.qrcode.QrCodeScannerActivity" />
 
         <!-- Services -->
 

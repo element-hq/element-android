@@ -17,13 +17,15 @@ package im.vector.matrix.android.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.internal.crypto.verification.VerificationInfoAccept
+import im.vector.matrix.android.internal.crypto.verification.VerificationInfoAcceptFactory
 import timber.log.Timber
 
 /**
  * Sent by Bob to accept a verification from a previously sent m.key.verification.start message.
  */
 @JsonClass(generateAdapter = true)
-data class KeyVerificationAccept(
+internal data class KeyVerificationAccept(
 
         /**
          * string to identify the transaction.
@@ -31,39 +33,41 @@ data class KeyVerificationAccept(
          * Alice’s device should record this ID and use it in future messages in this transaction.
          */
         @Json(name = "transaction_id")
-        var transactionID: String? = null,
+        override val transactionID: String? = null,
 
         /**
          * The key agreement protocol that Bob’s device has selected to use, out of the list proposed by Alice’s device
          */
         @Json(name = "key_agreement_protocol")
-        var keyAgreementProtocol: String? = null,
+        override val keyAgreementProtocol: String? = null,
 
         /**
          * The hash algorithm that Bob’s device has selected to use, out of the list proposed by Alice’s device
          */
-        var hash: String? = null,
+        @Json(name = "hash")
+        override val hash: String? = null,
 
         /**
          * The message authentication code that Bob’s device has selected to use, out of the list proposed by Alice’s device
          */
         @Json(name = "message_authentication_code")
-        var messageAuthenticationCode: String? = null,
+        override val messageAuthenticationCode: String? = null,
 
         /**
          * An array of short authentication string methods that Bob’s client (and Bob) understands.  Must be a subset of the list proposed by Alice’s device
          */
         @Json(name = "short_authentication_string")
-        var shortAuthenticationStrings: List<String>? = null,
+        override val shortAuthenticationStrings: List<String>? = null,
 
         /**
          * The hash (encoded as unpadded base64) of the concatenation of the device’s ephemeral public key (QB, encoded as unpadded base64)
          *  and the canonical JSON representation of the m.key.verification.start message.
          */
-        var commitment: String? = null
-) : SendToDeviceObject {
+        @Json(name = "commitment")
+        override var commitment: String? = null
+) : SendToDeviceObject, VerificationInfoAccept {
 
-    fun isValid(): Boolean {
+    override fun isValid(): Boolean {
         if (transactionID.isNullOrBlank()
                 || keyAgreementProtocol.isNullOrBlank()
                 || hash.isNullOrBlank()
@@ -76,21 +80,23 @@ data class KeyVerificationAccept(
         return true
     }
 
-    companion object {
-        fun create(tid: String,
-                   keyAgreementProtocol: String,
-                   hash: String,
-                   commitment: String,
-                   messageAuthenticationCode: String,
-                   shortAuthenticationStrings: List<String>): KeyVerificationAccept {
-            return KeyVerificationAccept().apply {
-                this.transactionID = tid
-                this.keyAgreementProtocol = keyAgreementProtocol
-                this.hash = hash
-                this.commitment = commitment
-                this.messageAuthenticationCode = messageAuthenticationCode
-                this.shortAuthenticationStrings = shortAuthenticationStrings
-            }
+    override fun toSendToDeviceObject() = this
+
+    companion object : VerificationInfoAcceptFactory {
+        override fun create(tid: String,
+                            keyAgreementProtocol: String,
+                            hash: String,
+                            commitment: String,
+                            messageAuthenticationCode: String,
+                            shortAuthenticationStrings: List<String>): VerificationInfoAccept {
+            return KeyVerificationAccept(
+                    transactionID = tid,
+                    keyAgreementProtocol = keyAgreementProtocol,
+                    hash = hash,
+                    commitment = commitment,
+                    messageAuthenticationCode = messageAuthenticationCode,
+                    shortAuthenticationStrings = shortAuthenticationStrings
+            )
         }
     }
 }

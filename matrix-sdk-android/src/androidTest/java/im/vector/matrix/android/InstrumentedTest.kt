@@ -21,6 +21,7 @@ import androidx.test.core.app.ApplicationProvider
 import java.io.File
 
 interface InstrumentedTest {
+
     fun context(): Context {
         return ApplicationProvider.getApplicationContext()
     }

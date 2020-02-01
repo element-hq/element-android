@@ -17,14 +17,14 @@
 package im.vector.matrix.android.api.extensions
 
 import im.vector.matrix.android.api.comparators.DatedObjectComparators
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 
 /* ==========================================================================================
  * MXDeviceInfo
  * ========================================================================================== */
 
-fun MXDeviceInfo.getFingerprintHumanReadable() = fingerprint()
+fun CryptoDeviceInfo.getFingerprintHumanReadable() = fingerprint()
         ?.chunked(4)
         ?.joinToString(separator = " ")
 

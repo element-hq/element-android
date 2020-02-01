@@ -1,3 +1,23 @@
+Changes in RiotX 0.14.0 (2020-02-01)
+===================================================
+
+Features ✨:
+ - First implementation of Cross-signing
+ - Enable encryption in unencrypted rooms, from the room settings (#212)
+ - Negotiate E2E by default for DMs (#907)
+
+Improvements 🙌:
+ - Sharing things to RiotX: sort list by recent room first (#771)
+ - Hide the algorithm when turning on e2e (#897)
+ - Sort room members by display names
+
+Other changes:
+ - Add support for /rainbow and /rainbowme commands (#879)
+
+Build 🧱:
+ - Ensure builds are reproducible (#842)
+ - F-Droid: fix the "-dev" issue in version name (#815)
+
 Changes in RiotX 0.13.0 (2020-01-17)
 ===================================================
 
@@ -95,6 +115,7 @@ Changes in RiotX 0.9.0 (2019-12-05)
 Features ✨:
  - Account creation. It's now possible to create account on any homeserver with RiotX (#34)
  - Iteration of the login flow (#613)
+ - [SDK] MSC2241 / verification in DMs (#707)
 
 Improvements 🙌:
  - Send mention Pills from composer

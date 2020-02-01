@@ -15,7 +15,12 @@
  */
 package im.vector.riotx.features.home.room.detail.timeline.action
 
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import dagger.Lazy
@@ -23,10 +28,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.isTextMessage
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
-import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
@@ -35,6 +37,7 @@ import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.canReact
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
@@ -44,7 +47,8 @@ import im.vector.riotx.features.html.VectorHtmlCompressor
 import im.vector.riotx.features.reactions.data.EmojiDataSource
 import im.vector.riotx.features.settings.VectorPreferences
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 /**
  * Quick reactions state
@@ -59,7 +63,7 @@ data class MessageActionState(
         val eventId: String,
         val informationData: MessageInformationData,
         val timelineEvent: Async<TimelineEvent> = Uninitialized,
-        val messageBody: CharSequence? = null,
+        val messageBody: CharSequence = "",
         // For quick reactions
         val quickStates: Async<List<ToggleState>> = Uninitialized,
         // For actions
@@ -89,7 +93,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                                                           private val noticeEventFormatter: NoticeEventFormatter,
                                                           private val stringProvider: StringProvider,
                                                           private val vectorPreferences: VectorPreferences
-) : VectorViewModel<MessageActionState, MessageActionsAction>(initialState) {
+) : VectorViewModel<MessageActionState, MessageActionsAction, EmptyViewEvents>(initialState) {
 
     private val eventId = initialState.eventId
     private val informationData = initialState.informationData
@@ -130,7 +134,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun observeEvent() {
         if (room == null) return
-        room.rx()
+        room.rx(session)
                 .liveTimelineEvent(eventId)
                 .unwrap()
                 .execute {
@@ -140,7 +144,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun observeReactions() {
         if (room == null) return
-        room.rx()
+        room.rx(session)
                 .liveAnnotationSummary(eventId)
                 .map { annotations ->
                     EmojiDataSource.quickEmojis.map { emoji ->
@@ -154,13 +158,16 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun observeTimelineEventState() {
         asyncSubscribe(MessageActionState::timelineEvent) { timelineEvent ->
-            val computedMessage = computeMessageBody(timelineEvent)
-            val actions = actionsForEvent(timelineEvent)
-            setState { copy(messageBody = computedMessage, actions = actions) }
+            setState {
+                copy(
+                        messageBody = computeMessageBody(timelineEvent),
+                        actions = actionsForEvent(timelineEvent)
+                )
+            }
         }
     }
 
-    private fun computeMessageBody(timelineEvent: TimelineEvent): CharSequence? {
+    private fun computeMessageBody(timelineEvent: TimelineEvent): CharSequence {
         return when (timelineEvent.root.getClearType()) {
             EventType.MESSAGE,
             EventType.STICKER     -> {
@@ -172,6 +179,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                             ?: messageContent.body
 
                     eventHtmlRenderer.get().render(html)
+                } else if (messageContent is MessageVerificationRequestContent) {
+                    stringProvider.getString(R.string.verification_request)
                 } else {
                     messageContent?.body
                 }
@@ -188,7 +197,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 noticeEventFormatter.format(timelineEvent)
             }
             else                  -> null
-        }
+        } ?: ""
     }
 
     private fun actionsForEvent(timelineEvent: TimelineEvent): List<EventSharedAction> {

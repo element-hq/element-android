@@ -20,15 +20,19 @@ package im.vector.riotx.features.home.room.detail.timeline.helper
 
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.ReferencesAggregatedContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.hasBeenEdited
+import im.vector.matrix.android.internal.session.room.VerificationState
+import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.extensions.localDateTime
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.getColorFromUserId
-import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotx.features.home.room.detail.timeline.item.ReactionInfoData
 import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
+import im.vector.riotx.features.home.room.detail.timeline.item.ReferencesInfoData
 import me.gujun.android.span.span
 import javax.inject.Inject
 
@@ -69,6 +73,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 senderId = event.root.senderId ?: "",
                 sendState = event.root.sendState,
                 time = time,
+                ageLocalTS = event.root.ageLocalTs,
                 avatarUrl = avatarUrl,
                 memberName = formattedMemberName,
                 showInformation = showInformation,
@@ -87,7 +92,15 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                         .map {
                             ReadReceiptData(it.user.userId, it.user.avatarUrl, it.user.displayName, it.originServerTs)
                         }
-                        .toList()
+                        .toList(),
+                referencesInfoData = event.annotations?.referencesAggregatedSummary?.let { referencesAggregatedSummary ->
+                    val stateStr = referencesAggregatedSummary.content.toModel<ReferencesAggregatedContent>()?.verificationSummary
+                    ReferencesInfoData(
+                            VerificationState.values().firstOrNull { stateStr == it.name }
+                                    ?: VerificationState.REQUEST
+                    )
+                },
+                sentByMe = event.root.senderId == session.myUserId
         )
     }
 }

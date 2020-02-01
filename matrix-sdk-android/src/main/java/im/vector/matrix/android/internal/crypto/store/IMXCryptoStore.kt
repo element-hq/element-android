@@ -17,10 +17,14 @@
 
 package im.vector.matrix.android.internal.crypto.store
 
+import androidx.lifecycle.LiveData
+import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
+import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.NewSessionListener
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
 import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
@@ -154,7 +158,7 @@ internal interface IMXCryptoStore {
      * @param userId the user's id.
      * @param device the device to store.
      */
-    fun storeUserDevice(userId: String?, deviceInfo: MXDeviceInfo?)
+    fun storeUserDevice(userId: String?, deviceInfo: CryptoDeviceInfo?)
 
     /**
      * Retrieve a device for a user.
@@ -163,7 +167,7 @@ internal interface IMXCryptoStore {
      * @param userId   the user's id.
      * @return the device
      */
-    fun getUserDevice(deviceId: String, userId: String): MXDeviceInfo?
+    fun getUserDevice(userId: String, deviceId: String): CryptoDeviceInfo?
 
     /**
      * Retrieve a device by its identity key.
@@ -171,7 +175,7 @@ internal interface IMXCryptoStore {
      * @param identityKey the device identity key (`MXDeviceInfo.identityKey`)
      * @return the device or null if not found
      */
-    fun deviceWithIdentityKey(identityKey: String): MXDeviceInfo?
+    fun deviceWithIdentityKey(identityKey: String): CryptoDeviceInfo?
 
     /**
      * Store the known devices for a user.
@@ -179,7 +183,11 @@ internal interface IMXCryptoStore {
      * @param userId  The user's id.
      * @param devices A map from device id to 'MXDevice' object for the device.
      */
-    fun storeUserDevices(userId: String, devices: Map<String, MXDeviceInfo>?)
+    fun storeUserDevices(userId: String, devices: Map<String, CryptoDeviceInfo>?)
+
+    fun storeUserCrossSigningKeys(userId: String, masterKey: CryptoCrossSigningKey?,
+                                 selfSigningKey: CryptoCrossSigningKey?,
+                                 userSigningKey: CryptoCrossSigningKey?)
 
     /**
      * Retrieve the known devices for a user.
@@ -187,8 +195,16 @@ internal interface IMXCryptoStore {
      * @param userId The user's id.
      * @return The devices map if some devices are known, else null
      */
-    fun getUserDevices(userId: String): Map<String, MXDeviceInfo>?
+    fun getUserDevices(userId: String): Map<String, CryptoDeviceInfo>?
 
+    fun getUserDeviceList(userId: String): List<CryptoDeviceInfo>?
+
+    fun getLiveDeviceList(userId: String): LiveData<List<CryptoDeviceInfo>>
+
+    fun getLiveDeviceList(userIds: List<String>): LiveData<List<CryptoDeviceInfo>>
+
+    // TODO temp
+    fun getLiveDeviceList(): LiveData<List<CryptoDeviceInfo>>
     /**
      * Store the crypto algorithm for a room.
      *
@@ -381,4 +397,28 @@ internal interface IMXCryptoStore {
     fun addNewSessionListener(listener: NewSessionListener)
 
     fun removeSessionListener(listener: NewSessionListener)
+
+    // =============================================
+    // CROSS SIGNING
+    // =============================================
+
+    /**
+     * Gets the current crosssigning info
+     */
+    fun getMyCrossSigningInfo() : MXCrossSigningInfo?
+    fun setMyCrossSigningInfo(info: MXCrossSigningInfo?)
+
+    fun getCrossSigningInfo(userId: String) : MXCrossSigningInfo?
+    fun getLiveCrossSigningInfo(userId: String) : LiveData<Optional<MXCrossSigningInfo>>
+    fun setCrossSigningInfo(userId: String, info: MXCrossSigningInfo?)
+
+    fun storePrivateKeysInfo(msk: String?, usk: String?, ssk: String?)
+    fun getCrossSigningPrivateKeys() : PrivateKeysInfo?
+
+    fun setUserKeysAsTrusted(userId: String, trusted: Boolean = true)
+    fun setDeviceTrust(userId: String, deviceId: String, crossSignedVerified: Boolean, locallyVerified : Boolean)
+
+    fun clearOtherUserTrust()
+
+    fun updateUsersTrust(check: (String) -> Boolean)
 }

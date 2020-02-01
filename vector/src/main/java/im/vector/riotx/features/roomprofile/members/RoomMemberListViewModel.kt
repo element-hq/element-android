@@ -34,13 +34,15 @@ import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.rx.mapOptional
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 
 class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomMemberListViewState,
+                                                          private val roomMemberSummaryComparator: RoomMemberSummaryComparator,
                                                           private val session: Session)
-    : VectorViewModel<RoomMemberListViewState, RoomMemberListAction>(initialState) {
+    : VectorViewModel<RoomMemberListViewState, RoomMemberListAction, EmptyViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -70,8 +72,8 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
         }
         Observable
                 .combineLatest<List<RoomMemberSummary>, PowerLevelsContent, RoomMemberSummaries>(
-                        room.rx().liveRoomMembers(roomMemberQueryParams),
-                        room.rx()
+                        room.rx(session).liveRoomMembers(roomMemberQueryParams),
+                        room.rx(session)
                                 .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
                                 .mapOptional { it.content.toModel<PowerLevelsContent>() }
                                 .unwrap(),
@@ -85,7 +87,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
     }
 
     private fun observeRoomSummary() {
-        room.rx().liveRoomSummary()
+        room.rx(session).liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     copy(roomSummary = async)
@@ -112,11 +114,11 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                 }
 
         return listOf(
-                PowerLevelCategory.ADMIN to admins,
-                PowerLevelCategory.MODERATOR to moderators,
-                PowerLevelCategory.CUSTOM to customs,
-                PowerLevelCategory.INVITE to invites,
-                PowerLevelCategory.USER to users
+                PowerLevelCategory.ADMIN to admins.sortedWith(roomMemberSummaryComparator),
+                PowerLevelCategory.MODERATOR to moderators.sortedWith(roomMemberSummaryComparator),
+                PowerLevelCategory.CUSTOM to customs.sortedWith(roomMemberSummaryComparator),
+                PowerLevelCategory.INVITE to invites.sortedWith(roomMemberSummaryComparator),
+                PowerLevelCategory.USER to users.sortedWith(roomMemberSummaryComparator)
         )
     }
 

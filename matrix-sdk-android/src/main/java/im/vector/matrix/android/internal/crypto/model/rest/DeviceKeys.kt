@@ -18,22 +18,24 @@ package im.vector.matrix.android.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.util.JsonDict
 
 @JsonClass(generateAdapter = true)
 data class DeviceKeys(
         @Json(name = "user_id")
-        val userId: String,
+        val userId: String?,
 
         @Json(name = "device_id")
-        val deviceId: String,
+        val deviceId: String?,
 
         @Json(name = "algorithms")
-        val algorithms: List<String>,
+        val algorithms: List<String>?,
 
         @Json(name = "keys")
-        val keys: Map<String, String>,
+        val keys: Map<String, String>?,
 
         @Json(name = "signatures")
-        val signatures: JsonDict
+        val signatures: Map<String, Map<String, String>>?,
+
+        @Json(name = "usage")
+        val usage: List<String>? = null
 )

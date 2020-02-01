@@ -26,6 +26,13 @@ import javax.inject.Qualifier
 internal annotation class UserId
 
 /**
+ * Used to inject the deviceId
+ */
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+internal annotation class DeviceId
+
+/**
  * Used to inject the md5 of the userId
  */
 @Qualifier

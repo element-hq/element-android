@@ -20,12 +20,12 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import com.tapadoo.alerter.Alerter
 import com.tapadoo.alerter.OnHideAlertListener
 import im.vector.riotx.R
-import im.vector.riotx.features.crypto.verification.SASVerificationActivity
 import timber.log.Timber
 import java.lang.ref.WeakReference
 
@@ -78,8 +78,7 @@ object PopupAlertManager {
                 setLightStatusBar()
             }
         }
-
-        if (shouldIgnoreActivity(activity)) {
+        if (currentAlerter?.shouldBeDisplayedIn?.invoke(activity) == false) {
             return
         }
 
@@ -108,8 +107,6 @@ object PopupAlertManager {
         }
     }
 
-    private fun shouldIgnoreActivity(activity: Activity) = activity is SASVerificationActivity
-
     private fun displayNextIfPossible() {
         val currentActivity = weakCurrentActivity?.get()
         if (Alerter.isShowing || currentActivity == null) {
@@ -123,6 +120,7 @@ object PopupAlertManager {
         }
         currentAlerter = next
         next?.let {
+            if (next.shouldBeDisplayedIn?.invoke(currentActivity) == false) return
             val currentTime = System.currentTimeMillis()
             if (next.expirationTimestamp != null && currentTime > next.expirationTimestamp!!) {
                 // skip
@@ -209,7 +207,13 @@ object PopupAlertManager {
                 })
                 .enableSwipeToDismiss()
                 .enableInfiniteDuration(true)
-                .setBackgroundColorRes(alert.colorRes ?: R.color.notification_accent_color)
+                .apply {
+                    if (alert.colorInt != null) {
+                        setBackgroundColorInt(alert.colorInt!!)
+                    } else {
+                        setBackgroundColorRes(alert.colorRes ?: R.color.notification_accent_color)
+                    }
+                }
                 .show()
     }
 
@@ -229,7 +233,8 @@ object PopupAlertManager {
     data class VectorAlert(val uid: String,
                            val title: String,
                            val description: String,
-                           @DrawableRes val iconId: Int?) {
+                           @DrawableRes val iconId: Int?,
+                           val shouldBeDisplayedIn: ((Activity) -> Boolean)? = null) {
 
         data class Button(val title: String, val action: Runnable, val autoClose: Boolean)
 
@@ -250,5 +255,8 @@ object PopupAlertManager {
 
         @ColorRes
         var colorRes: Int? = null
+
+        @ColorInt
+        var colorInt: Int? = null
     }
 }

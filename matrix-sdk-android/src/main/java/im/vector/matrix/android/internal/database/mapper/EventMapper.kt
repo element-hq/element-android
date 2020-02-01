@@ -43,6 +43,7 @@ internal object EventMapper {
         eventEntity.redacts = event.redacts
         eventEntity.age = event.unsignedData?.age ?: event.originServerTs
         eventEntity.unsignedData = uds
+        eventEntity.ageLocalTs = event.ageLocalTs
         return eventEntity
     }
 
@@ -70,6 +71,7 @@ internal object EventMapper {
                 unsignedData = ud,
                 redacts = eventEntity.redacts
         ).also {
+            it.ageLocalTs = eventEntity.ageLocalTs
             it.sendState = eventEntity.sendState
             eventEntity.decryptionResultJson?.let { json ->
                 try {

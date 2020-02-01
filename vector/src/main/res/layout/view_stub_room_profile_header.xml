@@ -1,49 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?riotx_background"
-    android:orientation="vertical"
     android:padding="16dp">
 
     <ImageView
         android:id="@+id/roomProfileAvatarView"
         android:layout_width="128dp"
         android:layout_height="128dp"
-        android:layout_gravity="center_horizontal"
         android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/roomProfileNameView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/roomProfileDecorationImageView"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintCircle="@+id/roomProfileAvatarView"
+        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleRadius="64dp"
+        tools:ignore="MissingConstraints"
+        tools:src="@drawable/ic_shield_trusted" />
 
     <TextView
         android:id="@+id/roomProfileNameView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:textAppearance="@style/Vector.Toolbar.Title"
         android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/roomProfileAliasView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roomProfileAvatarView"
         tools:text="@sample/matrix.json/data/roomName" />
 
     <TextView
         android:id="@+id/roomProfileAliasView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
+        android:gravity="center"
         android:singleLine="true"
         android:textAppearance="@style/Vector.Toolbar.Title"
         android:textSize="14sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/roomProfileTopicView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roomProfileNameView"
         tools:text="@sample/matrix.json/data/roomAlias" />
 
     <TextView
         android:id="@+id/roomProfileTopicView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
         android:autoLink="web"
@@ -51,6 +70,10 @@
         android:gravity="center"
         android:textSize="14sp"
         android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roomProfileAliasView"
         tools:text="@sample/matrix.json/data/roomTopic" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

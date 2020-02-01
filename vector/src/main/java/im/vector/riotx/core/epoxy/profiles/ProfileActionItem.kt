@@ -38,16 +38,25 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() 
     var subtitle: String? = null
     @EpoxyAttribute
     var iconRes: Int = 0
+
+    @EpoxyAttribute
+    var editableRes: Int = R.drawable.ic_arrow_right
+
     @EpoxyAttribute
     var editable: Boolean = true
+
     @EpoxyAttribute
     var destructive: Boolean = false
+
     @EpoxyAttribute
-    lateinit var listener: View.OnClickListener
+    var listener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.view.setOnClickListener(listener)
+        if (listener == null) {
+            holder.view.isClickable = false
+        }
         holder.editable.isVisible = editable
         holder.title.text = title
         val tintColor = if (destructive) {
@@ -62,6 +71,13 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() 
             holder.icon.isVisible = true
         } else {
             holder.icon.isVisible = false
+        }
+
+        if (editableRes != 0) {
+            holder.editable.setImageResource(editableRes)
+            holder.editable.isVisible = true
+        } else {
+            holder.editable.isVisible = false
         }
     }
 

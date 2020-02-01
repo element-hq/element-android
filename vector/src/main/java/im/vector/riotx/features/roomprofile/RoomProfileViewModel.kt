@@ -29,13 +29,11 @@ import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.core.utils.DataSource
-import im.vector.riotx.core.utils.PublishDataSource
 
 class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: RoomProfileViewState,
                                                        private val stringProvider: StringProvider,
                                                        private val session: Session)
-    : VectorViewModel<RoomProfileViewState, RoomProfileAction>(initialState) {
+    : VectorViewModel<RoomProfileViewState, RoomProfileAction, RoomProfileViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -51,9 +49,6 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: R
         }
     }
 
-    private val _viewEvents = PublishDataSource<RoomProfileViewEvents>()
-    val viewEvents: DataSource<RoomProfileViewEvents> = _viewEvents
-
     private val room = session.getRoom(initialState.roomId)!!
 
     init {
@@ -61,7 +56,7 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: R
     }
 
     private fun observeRoomSummary() {
-        room.rx().liveRoomSummary()
+        room.rx(session).liveRoomSummary()
                 .unwrap()
                 .execute {
                     copy(roomSummary = it)

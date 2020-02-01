@@ -15,7 +15,15 @@
  */
 package im.vector.riotx.features.home.room.detail.timeline.edithistory
 
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
@@ -28,10 +36,11 @@ import im.vector.matrix.android.api.session.room.model.message.isReply
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.platform.EmptyAction
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
 import timber.log.Timber
-import java.util.*
+import java.util.UUID
 
 data class ViewEditHistoryViewState(
         val eventId: String,
@@ -47,7 +56,7 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
                                                            initialState: ViewEditHistoryViewState,
                                                            val session: Session,
                                                            val dateFormatter: VectorDateFormatter
-) : VectorViewModel<ViewEditHistoryViewState, EmptyAction>(initialState) {
+) : VectorViewModel<ViewEditHistoryViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     private val roomId = initialState.roomId
     private val eventId = initialState.eventId

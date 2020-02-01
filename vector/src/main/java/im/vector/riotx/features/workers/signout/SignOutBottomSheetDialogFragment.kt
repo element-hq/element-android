@@ -20,7 +20,6 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -32,7 +31,6 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.transition.TransitionManager
 import butterknife.BindView
-import butterknife.ButterKnife
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
@@ -210,11 +208,7 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment() {
         })
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.bottom_sheet_logout_and_backup, container, false)
-        ButterKnife.bind(this, view)
-        return view
-    }
+    override fun getLayoutResId() = R.layout.bottom_sheet_logout_and_backup
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)

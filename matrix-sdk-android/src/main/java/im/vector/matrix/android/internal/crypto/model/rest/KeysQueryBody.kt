@@ -24,7 +24,7 @@ import com.squareup.moshi.JsonClass
  * This class represents the body to /keys/query
  */
 @JsonClass(generateAdapter = true)
-data class KeysQueryBody(
+internal data class KeysQueryBody(
 
         /**
          * The time (in milliseconds) to wait when downloading keys from remote servers. 10 seconds is the recommended default.

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?riotx_background"
+    android:foreground="?attr/selectableItemBackground"
     android:minHeight="@dimen/item_form_min_height">
 
     <TextView

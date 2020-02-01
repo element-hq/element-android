@@ -17,7 +17,12 @@
 package im.vector.riotx.features.roomdirectory.createroom
 
 import androidx.fragment.app.FragmentActivity
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.ActivityViewModelContext
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
@@ -25,12 +30,14 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.RoomDirectoryVisibility
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomPreset
+import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 
 class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: CreateRoomViewState,
                                                       private val session: Session
-) : VectorViewModel<CreateRoomViewState, CreateRoomAction>(initialState) {
+) : VectorViewModel<CreateRoomViewState, CreateRoomAction, EmptyViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -56,6 +63,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
             is CreateRoomAction.SetName              -> setName(action)
             is CreateRoomAction.SetIsPublic          -> setIsPublic(action)
             is CreateRoomAction.SetIsInRoomDirectory -> setIsInRoomDirectory(action)
+            is CreateRoomAction.SetIsEncrypted       -> setIsEncrypted(action)
             is CreateRoomAction.Create               -> doCreateRoom()
         }
     }
@@ -66,6 +74,8 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
 
     private fun setIsInRoomDirectory(action: CreateRoomAction.SetIsInRoomDirectory) = setState { copy(isInRoomDirectory = action.isInRoomDirectory) }
 
+    private fun setIsEncrypted(action: CreateRoomAction.SetIsEncrypted) = setState { copy(isEncrypted = action.isEncrypted) }
+
     private fun doCreateRoom() = withState { state ->
         if (state.asyncCreateRoomRequest is Loading || state.asyncCreateRoomRequest is Success) {
             return@withState
@@ -75,14 +85,15 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
             copy(asyncCreateRoomRequest = Loading())
         }
 
-        val createRoomParams = CreateRoomParams().apply {
-            name = state.roomName.takeIf { it.isNotBlank() }
-
-            // Directory visibility
-            visibility = if (state.isInRoomDirectory) RoomDirectoryVisibility.PUBLIC else RoomDirectoryVisibility.PRIVATE
-
-            // Public room
-            preset = if (state.isPublic) CreateRoomPreset.PRESET_PUBLIC_CHAT else CreateRoomPreset.PRESET_PRIVATE_CHAT
+        val createRoomParams = CreateRoomParams(
+                name = state.roomName.takeIf { it.isNotBlank() },
+                // Directory visibility
+                visibility = if (state.isInRoomDirectory) RoomDirectoryVisibility.PUBLIC else RoomDirectoryVisibility.PRIVATE,
+                // Public room
+                preset = if (state.isPublic) CreateRoomPreset.PRESET_PUBLIC_CHAT else CreateRoomPreset.PRESET_PRIVATE_CHAT
+        ).let {
+            // Encryption
+            if (state.isEncrypted) it.enableEncryptionWithAlgorithm(MXCRYPTO_ALGORITHM_MEGOLM) else it
         }
 
         session.createRoom(createRoomParams, object : MatrixCallback<String> {

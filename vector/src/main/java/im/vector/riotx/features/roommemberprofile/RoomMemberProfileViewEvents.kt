@@ -16,11 +16,14 @@
 
 package im.vector.riotx.features.roommemberprofile
 
+import im.vector.riotx.core.platform.VectorViewEvents
+
 /**
  * Transient events for RoomMemberProfile
  */
-sealed class RoomMemberProfileViewEvents {
-    data class Loading(val message: CharSequence) : RoomMemberProfileViewEvents()
-    object OnIgnoreActionSuccess : RoomMemberProfileViewEvents()
+sealed class RoomMemberProfileViewEvents : VectorViewEvents {
+    data class Loading(val message: CharSequence? = null) : RoomMemberProfileViewEvents()
     data class Failure(val throwable: Throwable) : RoomMemberProfileViewEvents()
+
+    object OnIgnoreActionSuccess : RoomMemberProfileViewEvents()
 }

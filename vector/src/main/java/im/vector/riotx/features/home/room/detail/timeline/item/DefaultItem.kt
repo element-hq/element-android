@@ -17,6 +17,7 @@
 package im.vector.riotx.features.home.room.detail.timeline.item
 
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -29,41 +30,38 @@ import im.vector.riotx.features.home.room.detail.timeline.TimelineEventControlle
 abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
 
     @EpoxyAttribute
-    lateinit var informationData: MessageInformationData
-    @EpoxyAttribute
-    lateinit var avatarRenderer: AvatarRenderer
-    @EpoxyAttribute
-    var baseCallback: TimelineEventController.BaseCallback? = null
-
-    private var longClickListener = View.OnLongClickListener {
-        return@OnLongClickListener baseCallback?.onEventLongClicked(informationData, null, it) == true
-    }
-
-    @EpoxyAttribute
-    var readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
+    lateinit var attributes: Attributes
 
     private val _readReceiptsClickListener = DebouncedClickListener(View.OnClickListener {
-        readReceiptsCallback?.onReadReceiptsClicked(informationData.readReceipts)
+        attributes.readReceiptsCallback?.onReadReceiptsClicked(attributes.informationData.readReceipts)
     })
 
-    @EpoxyAttribute
-    var text: CharSequence? = null
-
     override fun bind(holder: Holder) {
-        holder.messageView.text = text
-        holder.view.setOnLongClickListener(longClickListener)
-        holder.readReceiptsView.render(informationData.readReceipts, avatarRenderer, _readReceiptsClickListener)
+        super.bind(holder)
+        holder.messageTextView.text = attributes.text
+        attributes.avatarRenderer.render(attributes.informationData.matrixItem, holder.avatarImageView)
+        holder.view.setOnLongClickListener(attributes.itemLongClickListener)
+        holder.readReceiptsView.render(attributes.informationData.readReceipts, attributes.avatarRenderer, _readReceiptsClickListener)
     }
 
     override fun getEventIds(): List<String> {
-        return listOf(informationData.eventId)
+        return listOf(attributes.informationData.eventId)
     }
 
     override fun getViewType() = STUB_ID
 
     class Holder : BaseHolder(STUB_ID) {
-        val messageView by bind<TextView>(R.id.stateMessageView)
+        val avatarImageView by bind<ImageView>(R.id.itemDefaultAvatarView)
+        val messageTextView by bind<TextView>(R.id.itemDefaultTextView)
     }
+
+    data class Attributes(
+            val avatarRenderer: AvatarRenderer,
+            val informationData: MessageInformationData,
+            val text: CharSequence,
+            val itemLongClickListener: View.OnLongClickListener? = null,
+            val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
+    )
 
     companion object {
         private const val STUB_ID = R.id.messageContentDefaultStub

@@ -21,6 +21,7 @@ import dagger.Component
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.crypto.CryptoModule
+import im.vector.matrix.android.internal.crypto.verification.SendVerificationMessageWorker
 import im.vector.matrix.android.internal.di.MatrixComponent
 import im.vector.matrix.android.internal.di.SessionAssistedInjectModule
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
@@ -99,6 +100,8 @@ internal interface SessionComponent {
     fun inject(syncWorker: SyncWorker)
 
     fun inject(addHttpPusherWorker: AddHttpPusherWorker)
+
+    fun inject(sendVerificationMessageWorker: SendVerificationMessageWorker)
 
     @Component.Factory
     interface Factory {

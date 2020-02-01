@@ -16,7 +16,7 @@
 
 package im.vector.matrix.android.api.session.crypto.sas
 
-interface IncomingSasVerificationTransaction {
+interface IncomingSasVerificationTransaction : SasVerificationTransaction {
     val uxState: UxState
 
     fun performAccept()

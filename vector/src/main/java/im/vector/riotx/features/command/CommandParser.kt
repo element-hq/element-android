@@ -80,6 +80,16 @@ object CommandParser {
 
                     ParsedCommand.SendEmote(message)
                 }
+                Command.RAINBOW.command                  -> {
+                    val message = textMessage.subSequence(Command.RAINBOW.command.length, textMessage.length).trim()
+
+                    ParsedCommand.SendRainbow(message)
+                }
+                Command.RAINBOW_EMOTE.command                  -> {
+                    val message = textMessage.subSequence(Command.RAINBOW_EMOTE.command.length, textMessage.length).trim()
+
+                    ParsedCommand.SendRainbowEmote(message)
+                }
                 Command.JOIN_ROOM.command              -> {
                     if (messageParts.size >= 2) {
                         val roomAlias = messageParts[1]
@@ -243,6 +253,17 @@ object CommandParser {
                     val message = textMessage.substring(Command.SPOILER.command.length).trim()
 
                     ParsedCommand.SendSpoiler(message)
+                }
+                Command.SHRUG.command                  -> {
+                    val message = textMessage.substring(Command.SHRUG.command.length).trim()
+
+                    ParsedCommand.SendShrug(message)
+                }
+
+                Command.VERIFY_USER.command            -> {
+                    val message = textMessage.substring(Command.VERIFY_USER.command.length).trim()
+
+                    ParsedCommand.VerifyUser(message)
                 }
                 else                                   -> {
                     // Unknown command

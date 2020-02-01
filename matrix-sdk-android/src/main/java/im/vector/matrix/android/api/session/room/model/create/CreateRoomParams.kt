@@ -35,95 +35,111 @@ import timber.log.Timber
  * Parameter to create a room, with facilities functions to configure it
  */
 @JsonClass(generateAdapter = true)
-class CreateRoomParams {
+data class CreateRoomParams(
+        /**
+         * A public visibility indicates that the room will be shown in the published room list.
+         * A private visibility will hide the room from the published room list.
+         * Rooms default to private visibility if this key is not included.
+         * NB: This should not be confused with join_rules which also uses the word public. One of: ["public", "private"]
+         */
+        @Json(name = "visibility")
+        val visibility: RoomDirectoryVisibility? = null,
 
-    /**
-     * A public visibility indicates that the room will be shown in the published room list.
-     * A private visibility will hide the room from the published room list.
-     * Rooms default to private visibility if this key is not included.
-     * NB: This should not be confused with join_rules which also uses the word public. One of: ["public", "private"]
-     */
-    var visibility: RoomDirectoryVisibility? = null
+        /**
+         * The desired room alias local part. If this is included, a room alias will be created and mapped to the newly created room.
+         * The alias will belong on the same homeserver which created the room.
+         * For example, if this was set to "foo" and sent to the homeserver "example.com" the complete room alias would be #foo:example.com.
+         */
+        @Json(name = "room_alias_name")
+        val roomAliasName: String? = null,
 
-    /**
-     * The desired room alias local part. If this is included, a room alias will be created and mapped to the newly created room.
-     * The alias will belong on the same homeserver which created the room.
-     * For example, if this was set to "foo" and sent to the homeserver "example.com" the complete room alias would be #foo:example.com.
-     */
-    @Json(name = "room_alias_name")
-    var roomAliasName: String? = null
+        /**
+         * If this is included, an m.room.name event will be sent into the room to indicate the name of the room.
+         * See Room Events for more information on m.room.name.
+         */
+        @Json(name = "name")
+        val name: String? = null,
 
-    /**
-     * If this is included, an m.room.name event will be sent into the room to indicate the name of the room.
-     * See Room Events for more information on m.room.name.
-     */
-    var name: String? = null
+        /**
+         * If this is included, an m.room.topic event will be sent into the room to indicate the topic for the room.
+         * See Room Events for more information on m.room.topic.
+         */
+        @Json(name = "topic")
+        val topic: String? = null,
 
-    /**
-     * If this is included, an m.room.topic event will be sent into the room to indicate the topic for the room.
-     * See Room Events for more information on m.room.topic.
-     */
-    var topic: String? = null
+        /**
+         * A list of user IDs to invite to the room.
+         * This will tell the server to invite everyone in the list to the newly created room.
+         */
+        @Json(name = "invite")
+        val invitedUserIds: List<String>? = null,
 
-    /**
-     * A list of user IDs to invite to the room.
-     * This will tell the server to invite everyone in the list to the newly created room.
-     */
-    @Json(name = "invite")
-    var invitedUserIds: MutableList<String>? = null
+        /**
+         * A list of objects representing third party IDs to invite into the room.
+         */
+        @Json(name = "invite_3pid")
+        val invite3pids: List<Invite3Pid>? = null,
 
-    /**
-     * A list of objects representing third party IDs to invite into the room.
-     */
-    @Json(name = "invite_3pid")
-    var invite3pids: MutableList<Invite3Pid>? = null
+        /**
+         * Extra keys to be added to the content of the m.room.create.
+         * The server will clobber the following keys: creator.
+         * Future versions of the specification may allow the server to clobber other keys.
+         */
+        @Json(name = "creation_content")
+        val creationContent: Any? = null,
 
-    /**
-     * Extra keys to be added to the content of the m.room.create.
-     * The server will clobber the following keys: creator.
-     * Future versions of the specification may allow the server to clobber other keys.
-     */
-    @Json(name = "creation_content")
-    var creationContent: Any? = null
+        /**
+         * A list of state events to set in the new room.
+         * This allows the user to override the default state events set in the new room.
+         * The expected format of the state events are an object with type, state_key and content keys set.
+         * Takes precedence over events set by presets, but gets overridden by name and topic keys.
+         */
+        @Json(name = "initial_state")
+        val initialStates: List<Event>? = null,
 
-    /**
-     * A list of state events to set in the new room.
-     * This allows the user to override the default state events set in the new room.
-     * The expected format of the state events are an object with type, state_key and content keys set.
-     * Takes precedence over events set by presets, but gets overridden by name and topic keys.
-     */
-    @Json(name = "initial_state")
-    var initialStates: MutableList<Event>? = null
+        /**
+         * Convenience parameter for setting various default state events based on a preset. Must be either:
+         * private_chat => join_rules is set to invite. history_visibility is set to shared.
+         * trusted_private_chat => join_rules is set to invite. history_visibility is set to shared. All invitees are given the same power level as the
+         * room creator.
+         * public_chat: => join_rules is set to public. history_visibility is set to shared.
+         */
+        @Json(name = "preset")
+        val preset: CreateRoomPreset? = null,
 
-    /**
-     * Convenience parameter for setting various default state events based on a preset. Must be either:
-     * private_chat => join_rules is set to invite. history_visibility is set to shared.
-     * trusted_private_chat => join_rules is set to invite. history_visibility is set to shared. All invitees are given the same power level as the
-     * room creator.
-     * public_chat: => join_rules is set to public. history_visibility is set to shared.
-     */
-    var preset: CreateRoomPreset? = null
+        /**
+         * This flag makes the server set the is_direct flag on the m.room.member events sent to the users in invite and invite_3pid.
+         * See Direct Messaging for more information.
+         */
+        @Json(name = "is_direct")
+        val isDirect: Boolean? = null,
 
+        /**
+         * The power level content to override in the default power level event
+         */
+        @Json(name = "power_level_content_override")
+        val powerLevelContentOverride: PowerLevelsContent? = null
+) {
     /**
-     * This flag makes the server set the is_direct flag on the m.room.member events sent to the users in invite and invite_3pid.
-     * See Direct Messaging for more information.
+     * Set to true means that if cross-signing is enabled and we can get keys for every invited users,
+     * the encryption will be enabled on the created room
      */
-    @Json(name = "is_direct")
-    var isDirect: Boolean? = null
+    @Transient
+    internal var enableEncryptionIfInvitedUsersSupportIt: Boolean = false
+        private set
 
-    /**
-     * The power level content to override in the default power level event
-     */
-    @Json(name = "power_level_content_override")
-    var powerLevelContentOverride: PowerLevelsContent? = null
+    fun enableEncryptionIfInvitedUsersSupportIt(): CreateRoomParams {
+        enableEncryptionIfInvitedUsersSupportIt = true
+        return this
+    }
 
     /**
      * Add the crypto algorithm to the room creation parameters.
      *
      * @param algorithm the algorithm
      */
-    fun enableEncryptionWithAlgorithm(algorithm: String) {
-        if (algorithm == MXCRYPTO_ALGORITHM_MEGOLM) {
+    fun enableEncryptionWithAlgorithm(algorithm: String = MXCRYPTO_ALGORITHM_MEGOLM): CreateRoomParams {
+        return if (algorithm == MXCRYPTO_ALGORITHM_MEGOLM) {
             val contentMap = mapOf("algorithm" to algorithm)
 
             val algoEvent = Event(
@@ -132,13 +148,12 @@ class CreateRoomParams {
                     content = contentMap.toContent()
             )
 
-            if (null == initialStates) {
-                initialStates = mutableListOf(algoEvent)
-            } else {
-                initialStates!!.add(algoEvent)
-            }
+            copy(
+                    initialStates = initialStates.orEmpty().filter { it.type != EventType.STATE_ROOM_ENCRYPTION } + algoEvent
+            )
         } else {
             Timber.e("Unsupported algorithm: $algorithm")
+            this
         }
     }
 
@@ -147,9 +162,10 @@ class CreateRoomParams {
      *
      * @param historyVisibility the expected history visibility, set null to remove any existing value.
      */
-    fun setHistoryVisibility(historyVisibility: RoomHistoryVisibility?) {
+    fun setHistoryVisibility(historyVisibility: RoomHistoryVisibility?): CreateRoomParams {
         // Remove the existing value if any.
-        initialStates?.removeAll { it.type == EventType.STATE_ROOM_HISTORY_VISIBILITY }
+        val newInitialStates = initialStates
+                ?.filter { it.type != EventType.STATE_ROOM_HISTORY_VISIBILITY }
 
         if (historyVisibility != null) {
             val contentMap = mapOf("history_visibility" to historyVisibility)
@@ -159,20 +175,24 @@ class CreateRoomParams {
                     stateKey = "",
                     content = contentMap.toContent())
 
-            if (null == initialStates) {
-                initialStates = mutableListOf(historyVisibilityEvent)
-            } else {
-                initialStates!!.add(historyVisibilityEvent)
-            }
+            return copy(
+                    initialStates = newInitialStates.orEmpty() + historyVisibilityEvent
+            )
+        } else {
+            return copy(
+                    initialStates = newInitialStates
+            )
         }
     }
 
     /**
      * Mark as a direct message room.
      */
-    fun setDirectMessage() {
-        preset = CreateRoomPreset.PRESET_TRUSTED_PRIVATE_CHAT
-        isDirect = true
+    fun setDirectMessage(): CreateRoomParams {
+        return copy(
+                preset = CreateRoomPreset.PRESET_TRUSTED_PRIVATE_CHAT,
+                isDirect = true
+        )
     }
 
     /**
@@ -215,28 +235,26 @@ class CreateRoomParams {
      */
     fun addParticipantIds(hsConfig: HomeServerConnectionConfig,
                           userId: String,
-                          ids: List<String>) {
-        for (id in ids) {
-            if (Patterns.EMAIL_ADDRESS.matcher(id).matches() && hsConfig.identityServerUri != null) {
-                if (null == invite3pids) {
-                    invite3pids = ArrayList()
-                }
-                val pid = Invite3Pid(idServer = hsConfig.identityServerUri.host!!,
-                        medium = ThreePidMedium.EMAIL,
-                        address = id)
-
-                invite3pids!!.add(pid)
-            } else if (isUserId(id)) {
-                // do not invite oneself
-                if (userId != id) {
-                    if (null == invitedUserIds) {
-                        invitedUserIds = ArrayList()
-                    }
-
-                    invitedUserIds!!.add(id)
-                }
-            }
-            // TODO add phonenumbers when it will be available
-        }
+                          ids: List<String>): CreateRoomParams {
+        return copy(
+                invite3pids = (invite3pids.orEmpty() + ids
+                        .takeIf { hsConfig.identityServerUri != null }
+                        ?.filter { id -> Patterns.EMAIL_ADDRESS.matcher(id).matches() }
+                        ?.map { id ->
+                            Invite3Pid(
+                                    idServer = hsConfig.identityServerUri!!.host!!,
+                                    medium = ThreePidMedium.EMAIL,
+                                    address = id
+                            )
+                        }
+                        .orEmpty())
+                        .distinct(),
+                invitedUserIds = (invitedUserIds.orEmpty() + ids
+                        .filter { id -> isUserId(id) }
+                        // do not invite oneself
+                        .filter { id -> id != userId })
+                        .distinct()
+        )
+        // TODO add phonenumbers when it will be available
     }
 }

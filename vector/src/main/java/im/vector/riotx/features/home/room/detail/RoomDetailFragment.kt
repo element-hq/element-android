@@ -54,6 +54,7 @@ import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
@@ -74,6 +75,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageFileConten
 import im.vector.matrix.android.api.session.room.model.message.MessageImageInfoContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.Timeline
@@ -85,6 +87,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.withColoredButton
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.extensions.setTextOrHide
@@ -113,6 +116,8 @@ import im.vector.riotx.features.attachments.AttachmentTypeSelectorView
 import im.vector.riotx.features.attachments.AttachmentsHelper
 import im.vector.riotx.features.attachments.ContactAttachment
 import im.vector.riotx.features.command.Command
+import im.vector.riotx.features.crypto.util.toImageRes
+import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.composer.TextComposerView
 import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
@@ -306,15 +311,11 @@ class RoomDetailFragment @Inject constructor(
             displayRoomDetailActionResult(it)
         }
 
-        roomDetailViewModel.viewEvents
-                .observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    when (it) {
-                        is RoomDetailViewEvents.Failure -> showErrorInSnackbar(it.throwable)
-                    }
-                }
-                .disposeOnDestroyView()
+        roomDetailViewModel.observeViewEvents {
+            when (it) {
+                is RoomDetailViewEvents.Failure -> showErrorInSnackbar(it.throwable)
+            }.exhaustive
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -682,18 +683,23 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun renderRoomSummary(state: RoomDetailViewState) {
-        state.asyncRoomSummary()?.let {
-            if (it.membership.isLeft()) {
+        state.asyncRoomSummary()?.let { roomSummary ->
+            if (roomSummary.membership.isLeft()) {
                 Timber.w("The room has been left")
                 activity?.finish()
             } else {
-                roomToolbarTitleView.text = it.displayName
-                avatarRenderer.render(it.toMatrixItem(), roomToolbarAvatarImageView)
+                roomToolbarTitleView.text = roomSummary.displayName
+                avatarRenderer.render(roomSummary.toMatrixItem(), roomToolbarAvatarImageView)
 
-                renderSubTitle(state.typingMessage, it.topic)
+                renderSubTitle(state.typingMessage, roomSummary.topic)
             }
-            jumpToBottomView.count = it.notificationCount
-            jumpToBottomView.drawBadge = it.hasUnreadMessages
+            jumpToBottomView.count = roomSummary.notificationCount
+            jumpToBottomView.drawBadge = roomSummary.hasUnreadMessages
+
+            roomToolbarDecorationImageView.let {
+                it.setImageResource(roomSummary.roomEncryptionTrustLevel.toImageRes())
+                it.isVisible = roomSummary.roomEncryptionTrustLevel != null
+            }
         }
     }
 
@@ -796,7 +802,7 @@ class RoomDetailFragment @Inject constructor(
             }
             is Success -> {
                 when (val data = result.invoke()) {
-                    is RoomDetailAction.ReportContent -> {
+                    is RoomDetailAction.ReportContent             -> {
                         when {
                             data.spam          -> {
                                 AlertDialog.Builder(requireActivity())
@@ -832,6 +838,30 @@ class RoomDetailFragment @Inject constructor(
                                         .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                             }
                         }
+                    }
+                    is RoomDetailAction.RequestVerification       -> {
+                        Timber.v("## SAS RequestVerification action")
+                        VerificationBottomSheet.withArgs(
+                                roomDetailArgs.roomId,
+                                data.userId
+                        ).show(parentFragmentManager, "REQ")
+                    }
+                    is RoomDetailAction.AcceptVerificationRequest -> {
+                        Timber.v("## SAS AcceptVerificationRequest action")
+                        VerificationBottomSheet.withArgs(
+                                roomDetailArgs.roomId,
+                                data.otherUserId,
+                                data.transactionId
+                        ).show(parentFragmentManager, "REQ")
+                    }
+                    is RoomDetailAction.ResumeVerification        -> {
+                        val otherUserId = data.otherUserId ?: return
+                        VerificationBottomSheet().apply {
+                            arguments = Bundle().apply {
+                                putParcelable(MvRx.KEY_ARG, VerificationBottomSheet.VerificationArgs(
+                                        otherUserId, data.transactionId, roomId = roomDetailArgs.roomId))
+                            }
+                        }.show(parentFragmentManager, "REQ")
                     }
                 }
             }
@@ -982,6 +1012,9 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View) {
+        if (messageContent is MessageVerificationRequestContent) {
+            roomDetailViewModel.handle(RoomDetailAction.ResumeVerification(informationData.eventId))
+        }
     }
 
     override fun onEventLongClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View): Boolean {
@@ -997,6 +1030,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onAvatarClicked(informationData: MessageInformationData) {
+        // roomDetailViewModel.handle(RoomDetailAction.RequestVerification(informationData.senderId))
         openRoomMemberProfile(informationData.senderId)
     }
 
@@ -1026,6 +1060,10 @@ class RoomDetailFragment @Inject constructor(
     override fun onEditedDecorationClicked(informationData: MessageInformationData) {
         ViewEditHistoryBottomSheet.newInstance(roomDetailArgs.roomId, informationData)
                 .show(requireActivity().supportFragmentManager, "DISPLAY_EDITS")
+    }
+
+    override fun onTimelineItemAction(itemAction: RoomDetailAction) {
+        roomDetailViewModel.handle(itemAction)
     }
 
     override fun onRoomCreateLinkClicked(url: String) {

@@ -26,6 +26,7 @@ import im.vector.riotx.core.extensions.addFragmentToBackstack
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.roomprofile.members.RoomMemberListFragment
+import im.vector.riotx.features.roomprofile.settings.RoomSettingsFragment
 
 class RoomProfileActivity : VectorBaseActivity(), ToolbarConfigurable {
 
@@ -69,7 +70,7 @@ class RoomProfileActivity : VectorBaseActivity(), ToolbarConfigurable {
     }
 
     private fun openRoomSettings() {
-        notImplemented("Open room settings")
+        addFragmentToBackstack(R.id.simpleFragmentContainer, RoomSettingsFragment::class.java, roomProfileArgs)
     }
 
     private fun openRoomMembers() {

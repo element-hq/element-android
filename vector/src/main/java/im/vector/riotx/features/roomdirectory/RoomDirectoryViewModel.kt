@@ -33,6 +33,7 @@ import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.postLiveEvent
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.LiveEvent
 import timber.log.Timber
@@ -41,7 +42,7 @@ private const val PUBLIC_ROOMS_LIMIT = 20
 
 class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState: PublicRoomsViewState,
                                                          private val session: Session)
-    : VectorViewModel<PublicRoomsViewState, RoomDirectoryAction>(initialState) {
+    : VectorViewModel<PublicRoomsViewState, RoomDirectoryAction, EmptyViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {

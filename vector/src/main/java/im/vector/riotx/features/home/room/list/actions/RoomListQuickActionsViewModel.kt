@@ -24,11 +24,12 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.platform.EmptyAction
+import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 
 class RoomListQuickActionsViewModel @AssistedInject constructor(@Assisted initialState: RoomListQuickActionsState,
-                                                                session: Session
-) : VectorViewModel<RoomListQuickActionsState, EmptyAction>(initialState) {
+                                                                private val session: Session
+) : VectorViewModel<RoomListQuickActionsState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -53,7 +54,7 @@ class RoomListQuickActionsViewModel @AssistedInject constructor(@Assisted initia
 
     private fun observeNotificationState() {
         room
-                .rx()
+                .rx(session)
                 .liveNotificationState()
                 .execute {
                     copy(roomNotificationState = it)
@@ -62,7 +63,7 @@ class RoomListQuickActionsViewModel @AssistedInject constructor(@Assisted initia
 
     private fun observeRoomSummary() {
         room
-                .rx()
+                .rx(session)
                 .liveRoomSummary()
                 .unwrap()
                 .execute {
