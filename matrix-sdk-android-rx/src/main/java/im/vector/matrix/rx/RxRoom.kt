@@ -46,7 +46,7 @@ class RxRoom(private val room: Room, private val session: Session) {
                     it.getOrNull()?.let { roomSummary ->
                         if (roomSummary.isEncrypted) {
                             // Return the list of other users
-                            roomSummary.otherMemberIds
+                            roomSummary.otherMemberIds + listOf(session.myUserId)
                         } else {
                             // Return an empty list, the room is not encrypted
                             emptyList()
@@ -56,21 +56,21 @@ class RxRoom(private val room: Room, private val session: Session) {
 
         // Observe the device info of the users in the room
         val cryptoDeviceInfoObservable = memberIdsChangeObservable
-                .switchMap { otherUserIds ->
-                    session.getLiveCryptoDeviceInfo(otherUserIds)
+                .switchMap { membersIds ->
+                    session.getLiveCryptoDeviceInfo(membersIds)
                             .asObservable()
                             .map {
                                 // If any key change, emit the userIds list
-                                otherUserIds
+                                membersIds
                             }
                 }
 
         val roomEncryptionTrustLevelObservable = cryptoDeviceInfoObservable
-                .map { otherUserIds ->
-                    if (otherUserIds.isEmpty()) {
+                .map { userIds ->
+                    if (userIds.isEmpty()) {
                         Optional<RoomEncryptionTrustLevel>(null)
                     } else {
-                        session.getCrossSigningService().getTrustLevelForUsers(otherUserIds).toOptional()
+                        session.getCrossSigningService().getTrustLevelForUsers(userIds).toOptional()
                     }
                 }
 

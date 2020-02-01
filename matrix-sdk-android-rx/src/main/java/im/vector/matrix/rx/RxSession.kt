@@ -51,7 +51,7 @@ class RxSession(private val session: Session) {
                             summaries.map {
                                 if (it.isEncrypted) {
                                     it.copy(
-                                            roomEncryptionTrustLevel = session.getCrossSigningService().getTrustLevelForUsers(it.otherMemberIds)
+                                            roomEncryptionTrustLevel = session.getCrossSigningService().getTrustLevelForUsers(it.otherMemberIds + listOf(session.myUserId))
                                     )
                                 } else {
                                     it
