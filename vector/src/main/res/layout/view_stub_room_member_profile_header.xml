@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <im.vector.riotx.core.platform.StateView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/memberProfileStateView"
     android:layout_width="match_parent"
@@ -7,68 +8,84 @@
     android:background="?riotx_background"
     android:padding="16dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/memberProfileInfoContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/memberProfileNameView"
+        app:layout_constraintTop_toTopOf="@+id/memberProfileNameView">
 
         <ImageView
             android:id="@+id/memberProfileAvatarView"
             android:layout_width="128dp"
             android:layout_height="128dp"
-            android:layout_gravity="center_horizontal"
             android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/memberProfileNameView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="spread_inside"
             tools:src="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/memberProfileNameView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:textAppearance="@style/Vector.Toolbar.Title"
             android:textSize="20sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/memberProfileIdView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/memberProfileAvatarView"
             tools:text="@sample/matrix.json/data/displayName" />
 
         <TextView
             android:id="@+id/memberProfileIdView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
+            android:gravity="center"
             android:textAppearance="@style/Vector.Toolbar.Title"
             android:textSize="14sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/memberProfilePowerLevelView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/memberProfileNameView"
             tools:text="@sample/matrix.json/data/mxid" />
 
         <TextView
             android:id="@+id/memberProfilePowerLevelView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
             android:layout_marginBottom="16dp"
             android:gravity="center"
             android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/memberProfileStatusView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/memberProfileIdView"
             tools:text="Admin in Matrix" />
 
         <TextView
             android:id="@+id/memberProfileStatusView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
             android:gravity="center"
             android:textSize="14sp"
             android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/memberProfilePowerLevelView"
             tools:text="Here is a profile status"
             tools:visibility="visible" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </im.vector.riotx.core.platform.StateView>
