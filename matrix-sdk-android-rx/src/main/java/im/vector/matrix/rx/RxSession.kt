@@ -41,11 +41,11 @@ class RxSession(private val session: Session) {
     fun liveRoomSummaries(queryParams: RoomSummaryQueryParams): Observable<List<RoomSummary>> {
         val summariesObservable = session.getRoomSummariesLive(queryParams).asObservable()
                 .startWith(session.getRoomSummaries(queryParams))
-                .doOnNext { Timber.d("RX: summaries emitted: size: ${it.size}") }
+                .doOnNext { Timber.v("RX: summaries emitted: size: ${it.size}") }
 
         val cryptoDeviceInfoObservable = session.getLiveCryptoDeviceInfo().asObservable()
                 .startWith(emptyList<CryptoDeviceInfo>())
-                .doOnNext { Timber.d("RX: crypto device info emitted: size: ${it.size}") }
+                .doOnNext { Timber.v("RX: crypto device info emitted: size: ${it.size}") }
 
         return Observable
                 .combineLatest<List<RoomSummary>, List<CryptoDeviceInfo>, List<RoomSummary>>(
