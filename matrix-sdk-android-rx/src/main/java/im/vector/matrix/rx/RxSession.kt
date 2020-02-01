@@ -34,15 +34,18 @@ import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
+import timber.log.Timber
 
 class RxSession(private val session: Session) {
 
     fun liveRoomSummaries(queryParams: RoomSummaryQueryParams): Observable<List<RoomSummary>> {
         val summariesObservable = session.getRoomSummariesLive(queryParams).asObservable()
                 .startWith(session.getRoomSummaries(queryParams))
+                .doOnNext { Timber.d("RX: summaries emitted: size: ${it.size}") }
 
         val cryptoDeviceInfoObservable = session.getLiveCryptoDeviceInfo().asObservable()
                 .startWith(emptyList<CryptoDeviceInfo>())
+                .doOnNext { Timber.d("RX: crypto device info emitted: size: ${it.size}") }
 
         return Observable
                 .combineLatest<List<RoomSummary>, List<CryptoDeviceInfo>, List<RoomSummary>>(
@@ -60,6 +63,7 @@ class RxSession(private val session: Session) {
                             }
                         }
                 )
+                .doOnNext { Timber.d("RX: final summaries emitted: size: ${it.size}") }
     }
 
     fun liveGroupSummaries(queryParams: GroupSummaryQueryParams): Observable<List<GroupSummary>> {
