@@ -24,6 +24,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -85,7 +86,12 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
     }
 
     init {
-        setState { copy(isMine = session.myUserId == this.userId) }
+        setState {
+            copy(
+                    isMine = session.myUserId == this.userId,
+                    userMatrixItem = room?.getRoomMember(initialState.userId)?.toMatrixItem()?.let { Success(it) } ?: Uninitialized
+            )
+        }
         observeIgnoredState()
         viewModelScope.launch(Dispatchers.Main) {
             // Do we have a room member for this id.
@@ -101,26 +107,26 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                 observeRoomMemberSummary(room)
                 observeRoomSummaryAndPowerLevels(room)
             }
-
-            session.rx().liveUserCryptoDevices(initialState.userId)
-                    .map {
-                        Pair(
-                                it.fold(true, { prev, dev -> prev && dev.isVerified }),
-                                it.fold(true, { prev, dev -> prev && (dev.trustLevel?.crossSigningVerified == true) })
-                        )
-                    }
-                    .execute { it ->
-                        copy(
-                                allDevicesAreTrusted = it()?.first == true,
-                                allDevicesAreCrossSignedTrusted = it()?.second == true
-                        )
-                    }
-
-            session.rx().liveCrossSigningInfo(initialState.userId)
-                    .execute {
-                        copy(userMXCrossSigningInfo = it.invoke()?.getOrNull())
-                    }
         }
+
+        session.rx().liveUserCryptoDevices(initialState.userId)
+                .map {
+                    Pair(
+                            it.fold(true, { prev, dev -> prev && dev.isVerified }),
+                            it.fold(true, { prev, dev -> prev && (dev.trustLevel?.crossSigningVerified == true) })
+                    )
+                }
+                .execute { it ->
+                    copy(
+                            allDevicesAreTrusted = it()?.first == true,
+                            allDevicesAreCrossSignedTrusted = it()?.second == true
+                    )
+                }
+
+        session.rx().liveCrossSigningInfo(initialState.userId)
+                .execute {
+                    copy(userMXCrossSigningInfo = it.invoke()?.getOrNull())
+                }
     }
 
     private fun observeIgnoredState() {
