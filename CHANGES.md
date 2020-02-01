@@ -1,7 +1,8 @@
-Changes in RiotX 0.14.0 (2020-XX-XX)
+Changes in RiotX 0.14.0 (2020-02-01)
 ===================================================
 
 Features ✨:
+ - First implementation of Cross-signing
  - Enable encryption in unencrypted rooms, from the room settings (#212)
  - Negotiate E2E by default for DMs (#907)
 
@@ -12,12 +13,6 @@ Improvements 🙌:
 
 Other changes:
  - Add support for /rainbow and /rainbowme commands (#879)
-
-Bugfix 🐛:
- -
-
-Translations 🗣:
- -
 
 Build 🧱:
  - Ensure builds are reproducible (#842)
