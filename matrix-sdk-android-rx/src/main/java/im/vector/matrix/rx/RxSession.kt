@@ -42,6 +42,7 @@ class RxSession(private val session: Session) {
                 .startWith(session.getRoomSummaries(queryParams))
 
         val cryptoDeviceInfoObservable = session.getLiveCryptoDeviceInfo().asObservable()
+                .startWith(emptyList<CryptoDeviceInfo>())
 
         return Observable
                 .combineLatest<List<RoomSummary>, List<CryptoDeviceInfo>, List<RoomSummary>>(

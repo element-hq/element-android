@@ -93,6 +93,7 @@ class RxRoom(private val room: Room, private val session: Session) {
 
         // TODO Do it only for room members of the room (switchMap)
         val cryptoDeviceInfoObservable = session.getLiveCryptoDeviceInfo().asObservable()
+                .startWith(emptyList<CryptoDeviceInfo>())
 
         return Observable
                 .combineLatest<List<RoomMemberSummary>, List<CryptoDeviceInfo>, List<RoomMemberSummary>>(
