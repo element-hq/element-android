@@ -52,6 +52,7 @@ internal class RoomSummaryUpdater @Inject constructor(
 
     // TODO: maybe allow user of SDK to give that list
     private val PREVIEWABLE_TYPES = listOf(
+            // TODO filter message type (KEY_VERIFICATION_READY, etc.)
             EventType.MESSAGE,
             EventType.STATE_ROOM_NAME,
             EventType.STATE_ROOM_TOPIC,

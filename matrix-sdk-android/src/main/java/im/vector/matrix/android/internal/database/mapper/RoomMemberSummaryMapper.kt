@@ -26,7 +26,8 @@ internal object RoomMemberSummaryMapper {
                 userId = roomMemberSummaryEntity.userId,
                 avatarUrl = roomMemberSummaryEntity.avatarUrl,
                 displayName = roomMemberSummaryEntity.displayName,
-                membership = roomMemberSummaryEntity.membership
+                membership = roomMemberSummaryEntity.membership,
+                userEncryptionTrustLevel = null
         )
     }
 }

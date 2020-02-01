@@ -63,7 +63,7 @@ class CrossSigningEpoxyController @Inject constructor(
         } else if (data.xSigningKeysAreTrusted) {
             genericItem {
                 id("trusted")
-                titleIconResourceId(R.drawable.ic_shield_warning)
+                titleIconResourceId(R.drawable.ic_shield_custom)
                 title(stringProvider.getString(R.string.encryption_information_dg_xsigning_trusted))
             }
             if (!data.isUploadingKeys) {

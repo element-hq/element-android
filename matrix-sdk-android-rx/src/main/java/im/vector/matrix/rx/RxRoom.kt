@@ -30,9 +30,11 @@ import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
+import timber.log.Timber
 
 class RxRoom(private val room: Room, private val session: Session) {
 
@@ -40,39 +42,45 @@ class RxRoom(private val room: Room, private val session: Session) {
         val summaryObservable = room.getRoomSummaryLive()
                 .asObservable()
                 .startWith(room.roomSummary().toOptional())
+                .doOnNext { Timber.d("RX: summary emitted for: ${it.getOrNull()?.roomId}") }
 
         val memberIdsChangeObservable = summaryObservable
                 .map {
                     it.getOrNull()?.let { roomSummary ->
                         if (roomSummary.isEncrypted) {
                             // Return the list of other users
-                            roomSummary.otherMemberIds
+                            roomSummary.otherMemberIds + listOf(session.myUserId)
                         } else {
                             // Return an empty list, the room is not encrypted
                             emptyList()
                         }
                     }.orEmpty()
                 }.distinctUntilChanged()
+                .doOnNext { Timber.d("RX: memberIds emitted. Size: ${it.size}") }
 
         // Observe the device info of the users in the room
         val cryptoDeviceInfoObservable = memberIdsChangeObservable
-                .switchMap { otherUserIds ->
-                    session.getLiveCryptoDeviceInfo(otherUserIds)
+                .switchMap { membersIds ->
+                    session.getLiveCryptoDeviceInfo(membersIds)
                             .asObservable()
                             .map {
                                 // If any key change, emit the userIds list
-                                otherUserIds
+                                membersIds
                             }
+                            .startWith(membersIds)
+                            .doOnNext { Timber.d("RX: CryptoDeviceInfo emitted. Size: ${it.size}") }
                 }
+                .doOnNext { Timber.d("RX: cryptoDeviceInfo emitted 2. Size: ${it.size}") }
 
         val roomEncryptionTrustLevelObservable = cryptoDeviceInfoObservable
-                .map { otherUserIds ->
-                    if (otherUserIds.isEmpty()) {
+                .map { userIds ->
+                    if (userIds.isEmpty()) {
                         Optional<RoomEncryptionTrustLevel>(null)
                     } else {
-                        session.getCrossSigningService().getTrustLevelForUsers(otherUserIds).toOptional()
+                        session.getCrossSigningService().getTrustLevelForUsers(userIds).toOptional()
                     }
                 }
+                .doOnNext { Timber.d("RX: roomEncryptionTrustLevel emitted: ${it.getOrNull()?.name}") }
 
         return Observable
                 .combineLatest<Optional<RoomSummary>, Optional<RoomEncryptionTrustLevel>, Optional<RoomSummary>>(
@@ -84,11 +92,37 @@ class RxRoom(private val room: Room, private val session: Session) {
                             ).toOptional()
                         }
                 )
+                .doOnNext { Timber.d("RX: final room summary emitted for ${it.getOrNull()?.roomId}") }
     }
 
     fun liveRoomMembers(queryParams: RoomMemberQueryParams): Observable<List<RoomMemberSummary>> {
-        return room.getRoomMembersLive(queryParams).asObservable()
+        val roomMembersObservable = room.getRoomMembersLive(queryParams).asObservable()
                 .startWith(room.getRoomMembers(queryParams))
+                .doOnNext { Timber.d("RX: room members emitted. Size: ${it.size}") }
+
+        // TODO Do it only for room members of the room (switchMap)
+        val cryptoDeviceInfoObservable = session.getLiveCryptoDeviceInfo().asObservable()
+                .startWith(emptyList<CryptoDeviceInfo>())
+                .doOnNext { Timber.d("RX: cryptoDeviceInfo emitted. Size: ${it.size}") }
+
+        return Observable
+                .combineLatest<List<RoomMemberSummary>, List<CryptoDeviceInfo>, List<RoomMemberSummary>>(
+                        roomMembersObservable,
+                        cryptoDeviceInfoObservable,
+                        BiFunction { summaries, _ ->
+                            summaries.map {
+                                if (room.isEncrypted()) {
+                                    it.copy(
+                                            // Get the trust level of a virtual room with only this user
+                                            userEncryptionTrustLevel = session.getCrossSigningService().getTrustLevelForUsers(listOf(it.userId))
+                                    )
+                                } else {
+                                    it
+                                }
+                            }
+                        }
+                )
+                .doOnNext { Timber.d("RX: final room members emitted. Size: ${it.size}") }
     }
 
     fun liveAnnotationSummary(eventId: String): Observable<Optional<EventAnnotationsSummary>> {

@@ -62,6 +62,7 @@ class RoomMemberListController @Inject constructor(
                             id(roomMember.userId)
                             matrixItem(roomMember.toMatrixItem())
                             avatarRenderer(avatarRenderer)
+                            userEncryptionTrustLevel(roomMember.userEncryptionTrustLevel)
                             clickListener { _ ->
                                 callback?.onRoomMemberClicked(roomMember)
                             }

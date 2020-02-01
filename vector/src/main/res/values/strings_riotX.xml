@@ -91,6 +91,8 @@
 
     <string name="unignore">Unignore</string>
 
+    <string name="verify_cannot_cross_sign">This session is unable to share this verification with your other sessions.\nThe verification will be saved locally and shared in a future version of the app.</string>
+
     <string name="room_list_sharing_header_recent_rooms">Recent rooms</string>
     <string name="room_list_sharing_header_other_rooms">Other rooms</string>
 

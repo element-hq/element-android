@@ -35,7 +35,8 @@ data class RoomMemberProfileViewState(
         val userPowerLevelString: Async<String> = Uninitialized,
         val userMatrixItem: Async<MatrixItem> = Uninitialized,
         val userMXCrossSigningInfo: MXCrossSigningInfo? = null,
-        val allDevicesAreTrusted: Async<Boolean> = Uninitialized
+        val allDevicesAreTrusted: Boolean = false,
+        val allDevicesAreCrossSignedTrusted: Boolean = false
 ) : MvRxState {
 
     constructor(args: RoomMemberProfileArgs) : this(roomId = args.roomId, userId = args.userId)

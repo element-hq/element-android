@@ -120,6 +120,12 @@ class CrossSigningSettingsFragment @Inject constructor(
     }
 
     override fun onResetCrossSigningKeys() {
-        viewModel.handle(CrossSigningAction.InitializeCrossSigning())
+        AlertDialog.Builder(requireContext())
+                .setTitle(R.string.dialog_title_confirmation)
+                .setMessage(R.string.are_you_sure)
+                .setPositiveButton(R.string.ok) { _, _ ->
+                    viewModel.handle(CrossSigningAction.InitializeCrossSigning())
+                }
+                .show()
     }
 }
