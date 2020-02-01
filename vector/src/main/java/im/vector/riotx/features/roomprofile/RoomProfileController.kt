@@ -61,7 +61,7 @@ class RoomProfileController @Inject constructor(
             centered(false)
             text(stringProvider.getString(learnMoreSubtitle))
         }
-        
+
         // More
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
         buildProfileAction(
