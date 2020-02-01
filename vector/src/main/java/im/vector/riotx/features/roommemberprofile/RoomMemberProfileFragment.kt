@@ -20,6 +20,7 @@ package im.vector.riotx.features.roommemberprofile
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
@@ -100,9 +101,22 @@ class RoomMemberProfileFragment @Inject constructor(
                 is Success -> {
                     when (val action = async.invoke()) {
                         is RoomMemberProfileAction.VerifyUser -> {
-                            VerificationBottomSheet
-                                    .withArgs(roomId = null, otherUserId = action.userId!!)
-                                    .show(parentFragmentManager, "VERIF")
+                            if (action.canCrossSign == true) {
+                                VerificationBottomSheet
+                                        .withArgs(roomId = null, otherUserId = action.userId!!)
+                                        .show(parentFragmentManager, "VERIF")
+                            } else {
+                                AlertDialog.Builder(requireContext())
+                                        .setTitle(R.string.dialog_title_warning)
+                                        .setMessage(R.string.verify_cannot_cross_sign)
+                                        .setPositiveButton(R.string.verification_profile_verify) { _, _ ->
+                                            VerificationBottomSheet
+                                                    .withArgs(roomId = null, otherUserId = action.userId!!)
+                                                    .show(parentFragmentManager, "VERIF")
+                                        }
+                                        .setNegativeButton(R.string.cancel, null)
+                                        .show()
+                            }
                         }
                     }
                 }

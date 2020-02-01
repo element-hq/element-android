@@ -149,7 +149,12 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
             if (!state.isMine && state.userMXCrossSigningInfo?.isTrusted() == false) {
                 // ok, let's find or create the DM room
                 _actionResultLiveData.postValue(
-                        LiveEvent(Success(action.copy(userId = state.userId)))
+                        LiveEvent(Success(
+                                action.copy(
+                                        userId = state.userId,
+                                        canCrossSign = session.getCrossSigningService().canCrossSign()
+                                )
+                        ))
                 )
             }
         }
