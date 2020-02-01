@@ -112,6 +112,15 @@ class RoomMemberProfileController @Inject constructor(
                                 divider = false,
                                 action = { callback?.onTapVerify() }
                         )
+                    } else {
+                        buildProfileAction(
+                                id = "learn_more",
+                                title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
+                                dividerColor = dividerColor,
+                                editable = false,
+                                divider = false,
+                                action = { callback?.onShowDeviceListNoCrossSigning() }
+                        )
                     }
 
                     genericFooterItem {
