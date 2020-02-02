@@ -93,7 +93,6 @@ class CrossSigningSettingsFragment @Inject constructor(
     }
 
     private fun requestPassword(sessionId: String) {
-
         val inflater = requireActivity().layoutInflater
         val layout = inflater.inflate(R.layout.dialog_prompt_password, null)
         val passwordEditText = layout.findViewById<EditText>(R.id.prompt_password)
