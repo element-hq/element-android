@@ -1,23 +1,7 @@
-Changes in RiotX 0.15.0 (2020-XX-XX)
+Changes in RiotX 0.14.2 (2020-02-02)
 ===================================================
 
-Features ✨:
- -
-
-Improvements 🙌:
- -
-
-Other changes:
- -
-
-Bugfix 🐛:
- -
-
-Translations 🗣:
- -
-
-Build 🧱:
- -
+Fix RiotX not starting issue
 
 Changes in RiotX 0.14.1 (2020-02-02)
 ===================================================
