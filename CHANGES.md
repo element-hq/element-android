@@ -1,3 +1,10 @@
+Changes in RiotX 0.14.1 (2020-02-02)
+===================================================
+
+Bugfix 🐛:
+ - Cross-signing: fix UX issue when closing the bottom sheet verification (#813)
+ - Room and room member profile: fix issues on dark and black themes
+
 Changes in RiotX 0.14.0 (2020-02-01)
 ===================================================
 
@@ -321,7 +328,7 @@ Mode details here: https://medium.com/@RiotChat/introducing-the-riotx-beta-for-a
 =======================================================
 
 
-Changes in RiotX 0.0.0 (2020-XX-XX)
+Changes in RiotX 0.X.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:

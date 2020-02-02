@@ -131,8 +131,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                     EventType.KEY_VERIFICATION_ACCEPT,
                     EventType.KEY_VERIFICATION_START,
                     EventType.KEY_VERIFICATION_MAC,
-                        // TODO Add ?
-                        //  EventType.KEY_VERIFICATION_READY,
+                    EventType.KEY_VERIFICATION_READY,
                     EventType.KEY_VERIFICATION_KEY -> {
                         Timber.v("## SAS REF in room $roomId for event ${event.eventId}")
                         event.content.toModel<MessageRelationContent>()?.relatesTo?.let {
@@ -161,8 +160,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                                 EventType.KEY_VERIFICATION_ACCEPT,
                                 EventType.KEY_VERIFICATION_START,
                                 EventType.KEY_VERIFICATION_MAC,
-                                    // TODO Add ?
-                                    // EventType.KEY_VERIFICATION_READY,
+                                EventType.KEY_VERIFICATION_READY,
                                 EventType.KEY_VERIFICATION_KEY -> {
                                     Timber.v("## SAS REF in room $roomId for event ${event.eventId}")
                                     encryptedEventContent.relatesTo.eventId?.let {
@@ -459,6 +457,9 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                     updateVerificationState(currentState, VerificationState.WAITING)
                 }
                 EventType.KEY_VERIFICATION_ACCEPT -> {
+                    updateVerificationState(currentState, VerificationState.WAITING)
+                }
+                EventType.KEY_VERIFICATION_READY -> {
                     updateVerificationState(currentState, VerificationState.WAITING)
                 }
                 EventType.KEY_VERIFICATION_KEY    -> {

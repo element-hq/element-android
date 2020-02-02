@@ -57,6 +57,7 @@ internal class MXMegolmDecryption(private val userId: String,
 
     var newSessionListener: NewSessionListener? = null
 
+    var hasCheckUserCrossSigning = false
     /**
      * Events which we couldn't decrypt due to unknown sessions / indexes: map from
      * senderKey|sessionId to timelines to list of MatrixEvents.
@@ -65,6 +66,11 @@ internal class MXMegolmDecryption(private val userId: String,
 
     override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         // If cross signing is enabled, we don't send request until the keys are trusted
+        // There could be a race effect here when xsigning is enabled, we should ensure that keys was downloaded once
+        if (!hasCheckUserCrossSigning) {
+            deviceListManager.downloadKeys(listOf(userId), true)
+            hasCheckUserCrossSigning = true
+        }
         val requestOnFail =
                 if (cryptoStore.getMyCrossSigningInfo() != null) {
                     cryptoStore.getMyCrossSigningInfo()?.isTrusted() == true

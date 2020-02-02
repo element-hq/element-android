@@ -46,9 +46,7 @@ fun EpoxyController.buildProfileAction(
         id("action_$id")
         subtitle(subtitle)
         editable(editable)
-        apply {
-            editableRes?.let { editableRes(editableRes) }
-        }
+        editableRes?.let { editableRes(editableRes) }
         destructive(destructive)
         title(title)
         listener { _ ->
