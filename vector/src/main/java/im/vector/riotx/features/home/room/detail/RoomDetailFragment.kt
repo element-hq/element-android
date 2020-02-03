@@ -350,9 +350,11 @@ class RoomDetailFragment @Inject constructor(
             roomDetailViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
             jumpToBottomView.visibility = View.INVISIBLE
             if (!roomDetailViewModel.timeline.isLive) {
+                scrollOnNewMessageCallback.forceScrollOnNextUpdate()
                 roomDetailViewModel.timeline.restartWithEventId(null)
+            } else {
+                layoutManager.scrollToPosition(0)
             }
-            layoutManager.scrollToPosition(0)
         }
 
         jumpToBottomViewVisibilityManager = JumpToBottomViewVisibilityManager(

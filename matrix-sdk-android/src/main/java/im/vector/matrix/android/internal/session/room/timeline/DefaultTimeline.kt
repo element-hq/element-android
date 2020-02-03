@@ -120,7 +120,7 @@ internal class DefaultTimeline(
         if (!results.isLoaded || !results.isValid) {
             return@OrderedRealmCollectionChangeListener
         }
-        handleUpdates(changeSet)
+        handleUpdates(results, changeSet)
     }
 
     private val relationsListener = OrderedRealmCollectionChangeListener<RealmResults<EventAnnotationsSummaryEntity>> { collection, changeSet ->
@@ -185,7 +185,7 @@ internal class DefaultTimeline(
                         .filterEventsWithSettings()
                         .findAll()
                 handleInitialLoad()
-                filteredEvents.addChangeListener(eventsChangeListener)
+                nonFilteredEvents.addChangeListener(eventsChangeListener)
 
                 eventRelations = EventAnnotationsSummaryEntity.whereInRoom(realm, roomId)
                         .findAllAsync()
@@ -215,8 +215,8 @@ internal class DefaultTimeline(
                 if (this::eventRelations.isInitialized) {
                     eventRelations.removeAllChangeListeners()
                 }
-                if (this::filteredEvents.isInitialized) {
-                    filteredEvents.removeAllChangeListeners()
+                if (this::nonFilteredEvents.isInitialized) {
+                    nonFilteredEvents.removeAllChangeListeners()
                 }
                 if (settings.shouldHandleHiddenReadReceipts()) {
                     hiddenReadReceipts.dispose()
@@ -452,7 +452,7 @@ internal class DefaultTimeline(
         var shouldFetchInitialEvent = false
         val currentInitialEventId = initialEventId
         val initialDisplayIndex = if (currentInitialEventId == null) {
-            filteredEvents.firstOrNull()?.displayIndex
+            nonFilteredEvents.firstOrNull()?.displayIndex
         } else {
             val initialEvent = nonFilteredEvents.where()
                     .equalTo(TimelineEventEntityFields.EVENT_ID, initialEventId)
@@ -480,7 +480,7 @@ internal class DefaultTimeline(
     /**
      * This has to be called on TimelineThread as it access realm live results
      */
-    private fun handleUpdates(changeSet: OrderedCollectionChangeSet) {
+    private fun handleUpdates(results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet) {
         // If changeSet has deletion we are having a gap, so we clear everything
         if (changeSet.deletionRanges.isNotEmpty()) {
             clearAllValues()
@@ -488,9 +488,9 @@ internal class DefaultTimeline(
         var postSnapshot = false
         changeSet.insertionRanges.forEach { range ->
             val (startDisplayIndex, direction) = if (range.startIndex == 0) {
-                Pair(filteredEvents[range.length - 1]!!.displayIndex, Timeline.Direction.FORWARDS)
+                Pair(results[range.length - 1]!!.displayIndex, Timeline.Direction.FORWARDS)
             } else {
-                Pair(filteredEvents[range.startIndex]!!.displayIndex, Timeline.Direction.BACKWARDS)
+                Pair(results[range.startIndex]!!.displayIndex, Timeline.Direction.BACKWARDS)
             }
             val state = getState(direction)
             if (state.isPaginating) {
@@ -503,7 +503,7 @@ internal class DefaultTimeline(
             }
         }
         changeSet.changes.forEach { index ->
-            val eventEntity = filteredEvents[index]
+            val eventEntity = results[index]
             eventEntity?.eventId?.let { eventId ->
                 postSnapshot = rebuildEvent(eventId) {
                     buildTimelineEvent(eventEntity)

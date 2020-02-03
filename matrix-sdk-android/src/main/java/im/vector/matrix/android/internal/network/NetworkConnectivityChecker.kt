@@ -20,7 +20,6 @@ import androidx.annotation.WorkerThread
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.homeserver.HomeServerPinger
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
-import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.runBlocking
 import java.util.Collections
 import java.util.concurrent.atomic.AtomicBoolean

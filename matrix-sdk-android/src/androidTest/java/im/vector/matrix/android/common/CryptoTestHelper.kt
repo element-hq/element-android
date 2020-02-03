@@ -241,6 +241,11 @@ class CryptoTestHelper(val mTestHelper: CommonTestHelper) {
 
         val bobEventsListener = object : Timeline.Listener {
             override fun onTimelineFailure(throwable: Throwable) {
+                // noop
+            }
+
+            override fun onNewTimelineEvents(eventIds: List<String>) {
+                // noop
             }
 
             override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {

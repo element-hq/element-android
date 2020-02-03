@@ -20,15 +20,15 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.InstrumentedTest
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.internal.database.helper.add
-import im.vector.matrix.android.internal.database.helper.lastStateIndex
+import im.vector.matrix.android.api.session.room.send.SendState
+import im.vector.matrix.android.internal.database.helper.addTimelineEvent
 import im.vector.matrix.android.internal.database.helper.merge
+import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.SessionRealmModule
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import im.vector.matrix.android.session.room.timeline.RoomDataHelper.createFakeListOfEvents
 import im.vector.matrix.android.session.room.timeline.RoomDataHelper.createFakeMessageEvent
-import im.vector.matrix.android.session.room.timeline.RoomDataHelper.createFakeRoomMemberEvent
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.createObject
@@ -58,8 +58,11 @@ internal class ChunkEntityTest : InstrumentedTest {
     fun add_shouldAdd_whenNotAlreadyIncluded() {
         monarchy.runTransactionSync { realm ->
             val chunk: ChunkEntity = realm.createObject()
-            val fakeEvent = createFakeMessageEvent()
-            chunk.add("roomId", fakeEvent, PaginationDirection.FORWARDS)
+
+            val fakeEvent = createFakeMessageEvent().toEntity(ROOM_ID, SendState.SYNCED).let {
+                realm.copyToRealmOrUpdate(it)
+            }
+            chunk.addTimelineEvent(ROOM_ID, fakeEvent, PaginationDirection.FORWARDS, emptyMap())
             chunk.timelineEvents.size shouldEqual 1
         }
     }
@@ -68,54 +71,12 @@ internal class ChunkEntityTest : InstrumentedTest {
     fun add_shouldNotAdd_whenAlreadyIncluded() {
         monarchy.runTransactionSync { realm ->
             val chunk: ChunkEntity = realm.createObject()
-            val fakeEvent = createFakeMessageEvent()
-            chunk.add("roomId", fakeEvent, PaginationDirection.FORWARDS)
-            chunk.add("roomId", fakeEvent, PaginationDirection.FORWARDS)
+            val fakeEvent = createFakeMessageEvent().toEntity(ROOM_ID, SendState.SYNCED).let {
+                realm.copyToRealmOrUpdate(it)
+            }
+            chunk.addTimelineEvent(ROOM_ID, fakeEvent, PaginationDirection.FORWARDS, emptyMap())
+            chunk.addTimelineEvent(ROOM_ID, fakeEvent, PaginationDirection.FORWARDS, emptyMap())
             chunk.timelineEvents.size shouldEqual 1
-        }
-    }
-
-    @Test
-    fun add_shouldStateIndexIncremented_whenStateEventIsAddedForward() {
-        monarchy.runTransactionSync { realm ->
-            val chunk: ChunkEntity = realm.createObject()
-            val fakeEvent = createFakeRoomMemberEvent()
-            chunk.add("roomId", fakeEvent, PaginationDirection.FORWARDS)
-            chunk.lastStateIndex(PaginationDirection.FORWARDS) shouldEqual 1
-        }
-    }
-
-    @Test
-    fun add_shouldStateIndexNotIncremented_whenNoStateEventIsAdded() {
-        monarchy.runTransactionSync { realm ->
-            val chunk: ChunkEntity = realm.createObject()
-            val fakeEvent = createFakeMessageEvent()
-            chunk.add("roomId", fakeEvent, PaginationDirection.FORWARDS)
-            chunk.lastStateIndex(PaginationDirection.FORWARDS) shouldEqual 0
-        }
-    }
-
-    @Test
-    fun addAll_shouldStateIndexIncremented_whenStateEventsAreAddedForward() {
-        monarchy.runTransactionSync { realm ->
-            val chunk: ChunkEntity = realm.createObject()
-            val fakeEvents = createFakeListOfEvents(30)
-            val numberOfStateEvents = fakeEvents.filter { it.isStateEvent() }.size
-            chunk.addAll("roomId", fakeEvents, PaginationDirection.FORWARDS)
-            chunk.lastStateIndex(PaginationDirection.FORWARDS) shouldEqual numberOfStateEvents
-        }
-    }
-
-    @Test
-    fun addAll_shouldStateIndexDecremented_whenStateEventsAreAddedBackward() {
-        monarchy.runTransactionSync { realm ->
-            val chunk: ChunkEntity = realm.createObject()
-            val fakeEvents = createFakeListOfEvents(30)
-            val numberOfStateEvents = fakeEvents.filter { it.isStateEvent() }.size
-            val lastIsState = fakeEvents.last().isStateEvent()
-            val expectedStateIndex = if (lastIsState) -numberOfStateEvents + 1 else -numberOfStateEvents
-            chunk.addAll("roomId", fakeEvents, PaginationDirection.BACKWARDS)
-            chunk.lastStateIndex(PaginationDirection.BACKWARDS) shouldEqual expectedStateIndex
         }
     }
 
@@ -124,9 +85,9 @@ internal class ChunkEntityTest : InstrumentedTest {
         monarchy.runTransactionSync { realm ->
             val chunk1: ChunkEntity = realm.createObject()
             val chunk2: ChunkEntity = realm.createObject()
-            chunk1.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
-            chunk2.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
-            chunk1.merge("roomId", chunk2, PaginationDirection.BACKWARDS)
+            chunk1.addAll(ROOM_ID, createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
+            chunk2.addAll(ROOM_ID, createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
+            chunk1.merge(ROOM_ID, chunk2, PaginationDirection.BACKWARDS)
             chunk1.timelineEvents.size shouldEqual 60
         }
     }
@@ -140,9 +101,9 @@ internal class ChunkEntityTest : InstrumentedTest {
             val eventsForChunk2 = eventsForChunk1 + createFakeListOfEvents(10)
             chunk1.isLastForward = true
             chunk2.isLastForward = false
-            chunk1.addAll("roomId", eventsForChunk1, PaginationDirection.FORWARDS)
-            chunk2.addAll("roomId", eventsForChunk2, PaginationDirection.BACKWARDS)
-            chunk1.merge("roomId", chunk2, PaginationDirection.BACKWARDS)
+            chunk1.addAll(ROOM_ID, eventsForChunk1, PaginationDirection.FORWARDS)
+            chunk2.addAll(ROOM_ID, eventsForChunk2, PaginationDirection.BACKWARDS)
+            chunk1.merge(ROOM_ID, chunk2, PaginationDirection.BACKWARDS)
             chunk1.timelineEvents.size shouldEqual 40
             chunk1.isLastForward.shouldBeTrue()
         }
@@ -155,9 +116,9 @@ internal class ChunkEntityTest : InstrumentedTest {
             val chunk2: ChunkEntity = realm.createObject()
             val prevToken = "prev_token"
             chunk1.prevToken = prevToken
-            chunk1.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
-            chunk2.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
-            chunk1.merge("roomId", chunk2, PaginationDirection.FORWARDS)
+            chunk1.addAll(ROOM_ID, createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
+            chunk2.addAll(ROOM_ID, createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
+            chunk1.merge(ROOM_ID, chunk2, PaginationDirection.FORWARDS)
             chunk1.prevToken shouldEqual prevToken
         }
     }
@@ -169,19 +130,25 @@ internal class ChunkEntityTest : InstrumentedTest {
             val chunk2: ChunkEntity = realm.createObject()
             val nextToken = "next_token"
             chunk1.nextToken = nextToken
-            chunk1.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
-            chunk2.addAll("roomId", createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
-            chunk1.merge("roomId", chunk2, PaginationDirection.BACKWARDS)
+            chunk1.addAll(ROOM_ID, createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
+            chunk2.addAll(ROOM_ID, createFakeListOfEvents(30), PaginationDirection.BACKWARDS)
+            chunk1.merge(ROOM_ID, chunk2, PaginationDirection.BACKWARDS)
             chunk1.nextToken shouldEqual nextToken
         }
     }
 
     private fun ChunkEntity.addAll(roomId: String,
                                    events: List<Event>,
-                                   direction: PaginationDirection,
-                                   stateIndexOffset: Int = 0) {
+                                   direction: PaginationDirection) {
         events.forEach { event ->
-            add(roomId, event, direction)
+            val fakeEvent = event.toEntity(roomId, SendState.SYNCED).let {
+                realm.copyToRealmOrUpdate(it)
+            }
+            addTimelineEvent(roomId, fakeEvent, direction, emptyMap())
         }
+    }
+
+    companion object {
+        private const val ROOM_ID = "roomId"
     }
 }

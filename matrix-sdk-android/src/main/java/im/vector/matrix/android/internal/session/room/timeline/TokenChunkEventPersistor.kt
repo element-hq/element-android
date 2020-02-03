@@ -167,7 +167,6 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
 
     private fun handleReachEnd(realm: Realm, roomId: String, direction: PaginationDirection, currentChunk: ChunkEntity) {
         Timber.v("Reach end of $roomId")
-        roomId.isBlank()
         if (direction == PaginationDirection.FORWARDS) {
             val currentLiveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
             if (currentChunk != currentLiveChunk) {

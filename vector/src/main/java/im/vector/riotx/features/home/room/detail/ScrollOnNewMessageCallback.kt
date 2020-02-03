@@ -27,12 +27,22 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
                                  private val timelineEventController: TimelineEventController) : DefaultListUpdateCallback {
 
     private val newTimelineEventIds = CopyOnWriteArrayList<String>()
+    private var forceScroll = false
 
     fun addNewTimelineEventIds(eventIds: List<String>) {
         newTimelineEventIds.addAll(0, eventIds)
     }
 
+    fun forceScrollOnNextUpdate() {
+        forceScroll = true
+    }
+
     override fun onInserted(position: Int, count: Int) {
+        if (forceScroll) {
+            forceScroll = false
+            layoutManager.scrollToPosition(position)
+            return
+        }
         Timber.v("On inserted $count count at position: $position")
         if (layoutManager.findFirstVisibleItemPosition() != position) {
             return

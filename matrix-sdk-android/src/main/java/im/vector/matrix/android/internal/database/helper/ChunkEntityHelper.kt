@@ -62,27 +62,7 @@ internal fun ChunkEntity.merge(roomId: String, chunkToMerge: ChunkEntity, direct
     }
     return eventsToMerge
             .forEach {
-                if (timelineEvents.find(it.eventId) == null) {
-                    val eventId = it.eventId
-                    if (timelineEvents.find(eventId) != null) {
-                        return
-                    }
-                    val displayIndex = nextDisplayIndex(direction)
-                    val localId = TimelineEventEntity.nextId(realm)
-                    val copied = localRealm.createObject<TimelineEventEntity>().apply {
-                        this.localId = localId
-                        this.root = it.root
-                        this.eventId = it.eventId
-                        this.roomId = it.roomId
-                        this.annotations = it.annotations
-                        this.readReceipts = it.readReceipts
-                        this.displayIndex = displayIndex
-                        this.senderAvatar = it.senderAvatar
-                        this.senderName = it.senderName
-                        this.isUniqueDisplayName = it.isUniqueDisplayName
-                    }
-                    timelineEvents.add(copied)
-                }
+                addTimelineEventFromMerge(localRealm, it, direction)
             }
 }
 
@@ -108,7 +88,7 @@ internal fun ChunkEntity.addStateEvent(roomId: String, stateEvent: EventEntity, 
 internal fun ChunkEntity.addTimelineEvent(roomId: String,
                                           eventEntity: EventEntity,
                                           direction: PaginationDirection,
-                                          roomMemberContentsByUser: HashMap<String, RoomMemberContent?>) {
+                                          roomMemberContentsByUser: Map<String, RoomMemberContent?>) {
     val eventId = eventEntity.eventId
     if (timelineEvents.find(eventId) != null) {
         return
@@ -130,26 +110,58 @@ internal fun ChunkEntity.addTimelineEvent(roomId: String,
         val roomMemberContent = roomMemberContentsByUser[senderId]
         this.senderAvatar = roomMemberContent?.avatarUrl
         this.senderName = roomMemberContent?.displayName
-        if (roomMemberContent?.displayName != null) {
-            val isHistoricalUnique = roomMemberContentsByUser.values.find {
-                it != roomMemberContent && it?.displayName == roomMemberContent.displayName
-            } == null
-            isUniqueDisplayName = if (isLastForward) {
-                val isLiveUnique = RoomMemberSummaryEntity
-                        .where(realm, roomId)
-                        .equalTo(RoomMemberSummaryEntityFields.DISPLAY_NAME, roomMemberContent.displayName)
-                        .findAll().none {
-                            !roomMemberContentsByUser.containsKey(it.userId)
-                        }
-                isHistoricalUnique && isLiveUnique
-            } else {
-                isHistoricalUnique
-            }
+        isUniqueDisplayName = if (roomMemberContent?.displayName != null) {
+            computeIsUnique(realm, roomId, isLastForward, roomMemberContent, roomMemberContentsByUser)
         } else {
-            isUniqueDisplayName = true
+            true
         }
     }
     timelineEvents.add(timelineEventEntity)
+}
+
+private fun computeIsUnique(
+        realm: Realm,
+        roomId: String,
+        isLastForward: Boolean,
+        myRoomMemberContent: RoomMemberContent,
+        roomMemberContentsByUser: Map<String, RoomMemberContent?>
+): Boolean {
+    val isHistoricalUnique = roomMemberContentsByUser.values.find {
+        it != myRoomMemberContent && it?.displayName == myRoomMemberContent.displayName
+    } == null
+    return if (isLastForward) {
+        val isLiveUnique = RoomMemberSummaryEntity
+                .where(realm, roomId)
+                .equalTo(RoomMemberSummaryEntityFields.DISPLAY_NAME, myRoomMemberContent.displayName)
+                .findAll().none {
+                    !roomMemberContentsByUser.containsKey(it.userId)
+                }
+        isHistoricalUnique && isLiveUnique
+    } else {
+        isHistoricalUnique
+    }
+}
+
+private fun ChunkEntity.addTimelineEventFromMerge(realm: Realm, timelineEventEntity: TimelineEventEntity, direction: PaginationDirection) {
+    val eventId = timelineEventEntity.eventId
+    if (timelineEvents.find(eventId) != null) {
+        return
+    }
+    val displayIndex = nextDisplayIndex(direction)
+    val localId = TimelineEventEntity.nextId(realm)
+    val copied = realm.createObject<TimelineEventEntity>().apply {
+        this.localId = localId
+        this.root = timelineEventEntity.root
+        this.eventId = timelineEventEntity.eventId
+        this.roomId = timelineEventEntity.roomId
+        this.annotations = timelineEventEntity.annotations
+        this.readReceipts = timelineEventEntity.readReceipts
+        this.displayIndex = displayIndex
+        this.senderAvatar = timelineEventEntity.senderAvatar
+        this.senderName = timelineEventEntity.senderName
+        this.isUniqueDisplayName = timelineEventEntity.isUniqueDisplayName
+    }
+    timelineEvents.add(copied)
 }
 
 private fun handleReadReceipts(realm: Realm, roomId: String, eventEntity: EventEntity, senderId: String): ReadReceiptsSummaryEntity {
