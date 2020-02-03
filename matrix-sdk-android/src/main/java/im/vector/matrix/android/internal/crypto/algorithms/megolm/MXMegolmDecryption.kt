@@ -21,7 +21,12 @@ import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.internal.crypto.*
+import im.vector.matrix.android.internal.crypto.DeviceListManager
+import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
+import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
+import im.vector.matrix.android.internal.crypto.MXOlmDevice
+import im.vector.matrix.android.internal.crypto.NewSessionListener
+import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequestManager
 import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.algorithms.IMXDecrypting
@@ -59,7 +64,10 @@ internal class MXMegolmDecryption(private val userId: String,
     private var pendingEvents: MutableMap<String /* senderKey|sessionId */, MutableMap<String /* timelineId */, MutableList<Event>>> = HashMap()
 
     override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
-        return decryptEvent(event, timeline, true)
+        // If cross signing is enabled, we don't send request until the keys are trusted
+        // There could be a race effect here when xsigning is enabled, we should ensure that keys was downloaded once
+        val requestOnFail = cryptoStore.getMyCrossSigningInfo()?.isTrusted() == true
+        return decryptEvent(event, timeline, requestOnFail)
     }
 
     private fun decryptEvent(event: Event, timeline: String, requestKeysOnFail: Boolean): MXEventDecryptionResult {
@@ -297,7 +305,7 @@ internal class MXMegolmDecryption(private val userId: String,
             runCatching { deviceListManager.downloadKeys(listOf(userId), false) }
                     .mapCatching {
                         val deviceId = request.deviceId
-                        val deviceInfo = cryptoStore.getUserDevice(deviceId ?: "", userId)
+                        val deviceInfo = cryptoStore.getUserDevice(userId, deviceId ?: "")
                         if (deviceInfo == null) {
                             throw RuntimeException()
                         } else {

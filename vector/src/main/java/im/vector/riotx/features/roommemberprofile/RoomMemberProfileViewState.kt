@@ -20,6 +20,7 @@ package im.vector.riotx.features.roommemberprofile
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.util.MatrixItem
 
@@ -32,7 +33,10 @@ data class RoomMemberProfileViewState(
         val isRoomEncrypted: Boolean = false,
         val powerLevelsContent: Async<PowerLevelsContent> = Uninitialized,
         val userPowerLevelString: Async<String> = Uninitialized,
-        val userMatrixItem: Async<MatrixItem> = Uninitialized
+        val userMatrixItem: Async<MatrixItem> = Uninitialized,
+        val userMXCrossSigningInfo: MXCrossSigningInfo? = null,
+        val allDevicesAreTrusted: Boolean = false,
+        val allDevicesAreCrossSignedTrusted: Boolean = false
 ) : MvRxState {
 
     constructor(args: RoomMemberProfileArgs) : this(roomId = args.roomId, userId = args.userId)

@@ -49,3 +49,5 @@ fun convertFromUTF8(s: String): String {
         s
     }
 }
+
+fun String.withoutPrefix(prefix: String) = if (startsWith(prefix)) substringAfter(prefix) else this

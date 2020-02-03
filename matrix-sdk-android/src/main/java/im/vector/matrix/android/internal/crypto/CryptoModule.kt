@@ -21,14 +21,68 @@ import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
+import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
+import im.vector.matrix.android.internal.crypto.crosssigning.DefaultCrossSigningService
 import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
-import im.vector.matrix.android.internal.crypto.keysbackup.tasks.*
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.CreateKeysBackupVersionTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultCreateKeysBackupVersionTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultDeleteBackupTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultDeleteRoomSessionDataTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultDeleteRoomSessionsDataTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultDeleteSessionsDataTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultGetKeysBackupLastVersionTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultGetKeysBackupVersionTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultGetRoomSessionDataTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultGetRoomSessionsDataTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultGetSessionsDataTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultStoreRoomSessionDataTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultStoreRoomSessionsDataTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultStoreSessionsDataTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultUpdateKeysBackupVersionTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DeleteBackupTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DeleteRoomSessionDataTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DeleteRoomSessionsDataTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DeleteSessionsDataTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.GetKeysBackupLastVersionTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.GetKeysBackupVersionTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.GetRoomSessionDataTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.GetRoomSessionsDataTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.GetSessionsDataTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.StoreRoomSessionDataTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.StoreRoomSessionsDataTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.StoreSessionsDataTask
+import im.vector.matrix.android.internal.crypto.keysbackup.tasks.UpdateKeysBackupVersionTask
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreMigration
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreModule
-import im.vector.matrix.android.internal.crypto.tasks.*
+import im.vector.matrix.android.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
+import im.vector.matrix.android.internal.crypto.tasks.DefaultClaimOneTimeKeysForUsersDevice
+import im.vector.matrix.android.internal.crypto.tasks.DefaultDeleteDeviceTask
+import im.vector.matrix.android.internal.crypto.tasks.DefaultDeleteDeviceWithUserPasswordTask
+import im.vector.matrix.android.internal.crypto.tasks.DefaultDownloadKeysForUsers
+import im.vector.matrix.android.internal.crypto.tasks.DefaultEncryptEventTask
+import im.vector.matrix.android.internal.crypto.tasks.DefaultGetDeviceInfoTask
+import im.vector.matrix.android.internal.crypto.tasks.DefaultGetDevicesTask
+import im.vector.matrix.android.internal.crypto.tasks.DefaultSendToDeviceTask
+import im.vector.matrix.android.internal.crypto.tasks.DefaultSendVerificationMessageTask
+import im.vector.matrix.android.internal.crypto.tasks.DefaultSetDeviceNameTask
+import im.vector.matrix.android.internal.crypto.tasks.DefaultUploadKeysTask
+import im.vector.matrix.android.internal.crypto.tasks.DefaultUploadSignaturesTask
+import im.vector.matrix.android.internal.crypto.tasks.DefaultUploadSigningKeysTask
+import im.vector.matrix.android.internal.crypto.tasks.DeleteDeviceTask
+import im.vector.matrix.android.internal.crypto.tasks.DeleteDeviceWithUserPasswordTask
+import im.vector.matrix.android.internal.crypto.tasks.DownloadKeysForUsersTask
+import im.vector.matrix.android.internal.crypto.tasks.EncryptEventTask
+import im.vector.matrix.android.internal.crypto.tasks.GetDeviceInfoTask
+import im.vector.matrix.android.internal.crypto.tasks.GetDevicesTask
+import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
+import im.vector.matrix.android.internal.crypto.tasks.SendVerificationMessageTask
+import im.vector.matrix.android.internal.crypto.tasks.SetDeviceNameTask
+import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
+import im.vector.matrix.android.internal.crypto.tasks.UploadSignaturesTask
+import im.vector.matrix.android.internal.crypto.tasks.UploadSigningKeysTask
 import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.di.CryptoDatabase
 import im.vector.matrix.android.internal.di.SessionFilesDirectory
@@ -133,6 +187,12 @@ internal abstract class CryptoModule {
     abstract fun bindUploadKeysTask(uploadKeysTask: DefaultUploadKeysTask): UploadKeysTask
 
     @Binds
+    abstract fun bindUploadSigningKeysTask(uploadKeysTask: DefaultUploadSigningKeysTask): UploadSigningKeysTask
+
+    @Binds
+    abstract fun bindUploadSignaturesTask(uploadSignaturesTask: DefaultUploadSignaturesTask): UploadSignaturesTask
+
+    @Binds
     abstract fun bindDownloadKeysForUsersTask(downloadKeysForUsersTask: DefaultDownloadKeysForUsers): DownloadKeysForUsersTask
 
     @Binds
@@ -181,10 +241,19 @@ internal abstract class CryptoModule {
     abstract fun bindSendToDeviceTask(sendToDeviceTask: DefaultSendToDeviceTask): SendToDeviceTask
 
     @Binds
+    abstract fun bindEncryptEventTask(encryptEventTask: DefaultEncryptEventTask): EncryptEventTask
+
+    @Binds
+    abstract fun bindSendVerificationMessageTask(sendDefaultSendVerificationMessageTask: DefaultSendVerificationMessageTask): SendVerificationMessageTask
+
+    @Binds
     abstract fun bindClaimOneTimeKeysForUsersDeviceTask(claimOneTimeKeysForUsersDevice: DefaultClaimOneTimeKeysForUsersDevice)
             : ClaimOneTimeKeysForUsersDeviceTask
 
     @Binds
     abstract fun bindDeleteDeviceWithUserPasswordTask(deleteDeviceWithUserPasswordTask: DefaultDeleteDeviceWithUserPasswordTask)
             : DeleteDeviceWithUserPasswordTask
+
+    @Binds
+    abstract fun bindCrossSigningService(crossSigningService: DefaultCrossSigningService): CrossSigningService
 }

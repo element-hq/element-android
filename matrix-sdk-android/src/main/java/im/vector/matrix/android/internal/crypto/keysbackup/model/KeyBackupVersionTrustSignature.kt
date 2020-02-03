@@ -16,7 +16,7 @@
 
 package im.vector.matrix.android.internal.crypto.keysbackup.model
 
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 
 /**
  * A signature in a the `KeyBackupVersionTrust` object.
@@ -26,7 +26,7 @@ class KeyBackupVersionTrustSignature {
     /**
      * The device that signed the backup version.
      */
-    var device: MXDeviceInfo? = null
+    var device: CryptoDeviceInfo? = null
 
     /**
      *Flag to indicate the signature from this device is valid.

@@ -85,14 +85,15 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy, isInitialSync: Boolean, reporter: DefaultInitialSyncProgressService?) {
+        val syncLocalTimeStampMillis = System.currentTimeMillis()
         val rooms = when (handlingStrategy) {
             is HandlingStrategy.JOINED  ->
                 handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_joined_rooms, 0.6f) {
-                    handleJoinedRoom(realm, it.key, it.value, isInitialSync)
+                    handleJoinedRoom(realm, it.key, it.value, isInitialSync, syncLocalTimeStampMillis)
                 }
             is HandlingStrategy.INVITED ->
                 handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_invited_rooms, 0.1f) {
-                    handleInvitedRoom(realm, it.key, it.value)
+                    handleInvitedRoom(realm, it.key, it.value, syncLocalTimeStampMillis)
                 }
 
             is HandlingStrategy.LEFT    -> {
@@ -107,7 +108,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
     private fun handleJoinedRoom(realm: Realm,
                                  roomId: String,
                                  roomSync: RoomSync,
-                                 isInitialSync: Boolean): RoomEntity {
+                                 isInitialSync: Boolean,
+                                 syncLocalTimestampMillis: Long): RoomEntity {
         Timber.v("Handle join sync for room $roomId")
 
         var ephemeralResult: EphemeralResult? = null
@@ -151,7 +153,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     roomEntity,
                     roomSync.timeline.events,
                     roomSync.timeline.prevToken,
-                    roomSync.timeline.limited
+                    roomSync.timeline.limited,
+                    syncLocalTimestampMillis
             )
             roomEntity.addOrUpdate(chunkEntity)
         }
@@ -174,12 +177,13 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
 
     private fun handleInvitedRoom(realm: Realm,
                                   roomId: String,
-                                  roomSync: InvitedRoomSync): RoomEntity {
+                                  roomSync: InvitedRoomSync,
+                                  syncLocalTimestampMillis: Long): RoomEntity {
         Timber.v("Handle invited sync for room $roomId")
         val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: realm.createObject(roomId)
         roomEntity.membership = Membership.INVITE
         if (roomSync.inviteState != null && roomSync.inviteState.events.isNotEmpty()) {
-            val chunkEntity = handleTimelineEvents(realm, roomId, roomEntity, roomSync.inviteState.events)
+            val chunkEntity = handleTimelineEvents(realm, roomId, roomEntity, roomSync.inviteState.events, syncLocalTimestampMillis = syncLocalTimestampMillis)
             roomEntity.addOrUpdate(chunkEntity)
         }
         val hasRoomMember = roomSync.inviteState?.events?.firstOrNull {
@@ -205,7 +209,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                      roomEntity: RoomEntity,
                                      eventList: List<Event>,
                                      prevToken: String? = null,
-                                     isLimited: Boolean = true): ChunkEntity {
+                                     isLimited: Boolean = true,
+                                     syncLocalTimestampMillis: Long): ChunkEntity {
         val lastChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomEntity.roomId)
         val chunkEntity = if (!isLimited && lastChunk != null) {
             lastChunk
@@ -223,7 +228,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 continue
             }
             eventIds.add(event.eventId)
-            val eventEntity = event.toEntity(roomId, SendState.SYNCED).let {
+            val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
+            val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).let {
                 realm.copyToRealmOrUpdate(it)
             }
             if (event.isStateEvent() && event.stateKey != null) {

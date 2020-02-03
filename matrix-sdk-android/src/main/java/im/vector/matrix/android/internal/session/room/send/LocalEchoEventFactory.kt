@@ -37,6 +37,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageFileConten
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
 import im.vector.matrix.android.api.session.room.model.message.ThumbnailInfo
 import im.vector.matrix.android.api.session.room.model.message.VideoInfo
@@ -300,6 +301,25 @@ internal class LocalEchoEventFactory @Inject constructor(
                 eventId = localID,
                 type = EventType.MESSAGE,
                 content = content.toContent(),
+                unsignedData = UnsignedData(age = null, transactionId = localID)
+        )
+    }
+
+    fun createVerificationRequest(roomId: String, fromDevice: String, toUserId: String, methods: List<String>): Event {
+        val localID = LocalEcho.createLocalEchoId()
+        return Event(
+                roomId = roomId,
+                originServerTs = dummyOriginServerTs(),
+                senderId = userId,
+                eventId = localID,
+                type = EventType.MESSAGE,
+                content = MessageVerificationRequestContent(
+                        body = stringProvider.getString(R.string.key_verification_request_fallback_message, userId),
+                        fromDevice = fromDevice,
+                        toUserId = toUserId,
+                        timestamp = System.currentTimeMillis(),
+                        methods = methods
+                ).toContent(),
                 unsignedData = UnsignedData(age = null, transactionId = localID)
         )
     }

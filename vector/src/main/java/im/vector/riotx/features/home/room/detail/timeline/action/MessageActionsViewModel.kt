@@ -28,10 +28,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.isTextMessage
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
-import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
@@ -137,7 +134,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun observeEvent() {
         if (room == null) return
-        room.rx()
+        room.rx(session)
                 .liveTimelineEvent(eventId)
                 .unwrap()
                 .execute {
@@ -147,7 +144,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun observeReactions() {
         if (room == null) return
-        room.rx()
+        room.rx(session)
                 .liveAnnotationSummary(eventId)
                 .map { annotations ->
                     EmojiDataSource.quickEmojis.map { emoji ->
@@ -182,6 +179,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                             ?: messageContent.body
 
                     eventHtmlRenderer.get().render(html)
+                } else if (messageContent is MessageVerificationRequestContent) {
+                    stringProvider.getString(R.string.verification_request)
                 } else {
                     messageContent?.body
                 }

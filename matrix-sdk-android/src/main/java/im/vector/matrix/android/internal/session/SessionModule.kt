@@ -31,6 +31,7 @@ import im.vector.matrix.android.api.session.InitialSyncProgressService
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
+import im.vector.matrix.android.internal.crypto.verification.VerificationMessageLiveObserver
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
 import im.vector.matrix.android.internal.di.*
@@ -82,6 +83,13 @@ internal abstract class SessionModule {
         @SessionScope
         fun providesUserId(credentials: Credentials): String {
             return credentials.userId
+        }
+
+        @JvmStatic
+        @DeviceId
+        @Provides
+        fun providesDeviceId(credentials: Credentials): String? {
+            return credentials.deviceId
         }
 
         @JvmStatic
@@ -219,6 +227,10 @@ internal abstract class SessionModule {
     @Binds
     @IntoSet
     abstract fun bindRoomCreateEventLiveObserver(roomCreateEventLiveObserver: RoomCreateEventLiveObserver): LiveEntityObserver
+
+    @Binds
+    @IntoSet
+    abstract fun bindVerificationMessageLiveObserver(verificationMessageLiveObserver: VerificationMessageLiveObserver): LiveEntityObserver
 
     @Binds
     abstract fun bindInitialSyncProgressService(initialSyncProgressService: DefaultInitialSyncProgressService): InitialSyncProgressService

@@ -56,7 +56,7 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: R
     }
 
     private fun observeRoomSummary() {
-        room.rx().liveRoomSummary()
+        room.rx(session).liveRoomSummary()
                 .unwrap()
                 .execute {
                     copy(roomSummary = it)

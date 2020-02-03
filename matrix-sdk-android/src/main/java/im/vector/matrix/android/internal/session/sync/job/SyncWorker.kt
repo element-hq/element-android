@@ -16,15 +16,17 @@
 package im.vector.matrix.android.internal.session.sync.job
 
 import android.content.Context
-import androidx.work.*
+import androidx.work.BackoffPolicy
+import androidx.work.CoroutineWorker
+import androidx.work.ExistingWorkPolicy
+import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.failure.isTokenError
+import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.sync.SyncTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
-import im.vector.matrix.android.internal.worker.WorkManagerUtil
-import im.vector.matrix.android.internal.worker.WorkManagerUtil.matrixOneTimeWorkRequestBuilder
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
 import timber.log.Timber
@@ -75,30 +77,33 @@ internal class SyncWorker(context: Context,
 
     companion object {
 
-        const val BG_SYNC_WORK_NAME = "BG_SYNCP"
+        private const val BG_SYNC_WORK_NAME = "BG_SYNCP"
 
-        fun requireBackgroundSync(context: Context, sessionId: String, serverTimeout: Long = 0) {
+        fun requireBackgroundSync(workManagerProvider: WorkManagerProvider, sessionId: String, serverTimeout: Long = 0) {
             val data = WorkerParamsFactory.toData(Params(sessionId, serverTimeout, false))
-            val workRequest = matrixOneTimeWorkRequestBuilder<SyncWorker>()
-                    .setConstraints(WorkManagerUtil.workConstraints)
+            val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SyncWorker>()
+                    .setConstraints(WorkManagerProvider.workConstraints)
                     .setBackoffCriteria(BackoffPolicy.LINEAR, 1_000, TimeUnit.MILLISECONDS)
                     .setInputData(data)
                     .build()
-            WorkManager.getInstance(context).enqueueUniqueWork(BG_SYNC_WORK_NAME, ExistingWorkPolicy.REPLACE, workRequest)
+            workManagerProvider.workManager
+                    .enqueueUniqueWork(BG_SYNC_WORK_NAME, ExistingWorkPolicy.REPLACE, workRequest)
         }
 
-        fun automaticallyBackgroundSync(context: Context, sessionId: String, serverTimeout: Long = 0, delay: Long = 30_000) {
+        fun automaticallyBackgroundSync(workManagerProvider: WorkManagerProvider, sessionId: String, serverTimeout: Long = 0, delay: Long = 30_000) {
             val data = WorkerParamsFactory.toData(Params(sessionId, serverTimeout, true))
-            val workRequest = matrixOneTimeWorkRequestBuilder<SyncWorker>()
-                    .setConstraints(WorkManagerUtil.workConstraints)
+            val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SyncWorker>()
+                    .setConstraints(WorkManagerProvider.workConstraints)
                     .setInputData(data)
                     .setBackoffCriteria(BackoffPolicy.LINEAR, delay, TimeUnit.MILLISECONDS)
                     .build()
-            WorkManager.getInstance(context).enqueueUniqueWork(BG_SYNC_WORK_NAME, ExistingWorkPolicy.REPLACE, workRequest)
+            workManagerProvider.workManager
+                    .enqueueUniqueWork(BG_SYNC_WORK_NAME, ExistingWorkPolicy.REPLACE, workRequest)
         }
 
-        fun stopAnyBackgroundSync(context: Context) {
-            WorkManager.getInstance(context).cancelUniqueWork(BG_SYNC_WORK_NAME)
+        fun stopAnyBackgroundSync(workManagerProvider: WorkManagerProvider) {
+            workManagerProvider.workManager
+                    .cancelUniqueWork(BG_SYNC_WORK_NAME)
         }
     }
 }

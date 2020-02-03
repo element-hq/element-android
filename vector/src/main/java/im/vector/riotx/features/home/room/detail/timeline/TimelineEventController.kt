@@ -31,6 +31,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.epoxy.LoadingItem_
 import im.vector.riotx.core.extensions.localDateTime
+import im.vector.riotx.features.home.room.detail.RoomDetailAction
 import im.vector.riotx.features.home.room.detail.RoomDetailViewState
 import im.vector.riotx.features.home.room.detail.UnreadState
 import im.vector.riotx.features.home.room.detail.timeline.factory.MergedHeaderItemFactory
@@ -62,6 +63,9 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         fun onFileMessageClicked(eventId: String, messageFileContent: MessageFileContent)
         fun onAudioMessageClicked(messageAudioContent: MessageAudioContent)
         fun onEditedDecorationClicked(informationData: MessageInformationData)
+
+        // TODO move all callbacks to this?
+        fun onTimelineItemAction(itemAction: RoomDetailAction)
     }
 
     interface ReactionPillCallback {

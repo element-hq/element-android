@@ -38,7 +38,8 @@ internal open class EventEntity(@PrimaryKey var eventId: String = "",
                                 var unsignedData: String? = null,
                                 var redacts: String? = null,
                                 var decryptionResultJson: String? = null,
-                                var decryptionErrorCode: String? = null
+                                var decryptionErrorCode: String? = null,
+                                var ageLocalTs: Long? = null
 ) : RealmObject() {
 
     private var sendStateStr: String = SendState.UNKNOWN.name

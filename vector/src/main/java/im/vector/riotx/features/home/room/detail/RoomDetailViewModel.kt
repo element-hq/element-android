@@ -71,6 +71,7 @@ import im.vector.riotx.core.utils.subscribeLogError
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
 import im.vector.riotx.features.home.room.detail.composer.rainbow.RainbowGenerator
+import im.vector.riotx.features.crypto.verification.supportedVerificationMethods
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import im.vector.riotx.features.home.room.typing.TypingHelper
 import im.vector.riotx.features.settings.VectorPreferences
@@ -157,8 +158,8 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         observeUnreadState()
         observeMyRoomMember()
         room.getRoomSummaryLive()
-        room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, object : MatrixCallback<Any> {})
+        room.rx(session).loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         // Inform the SDK that the room is displayed
         session.onRoomDisplayed(initialState.roomId)
     }
@@ -167,7 +168,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         val queryParams = roomMemberQueryParams {
             this.userId = QueryStringValue.Equals(session.myUserId, QueryStringValue.Case.SENSITIVE)
         }
-        room.rx()
+        room.rx(session)
                 .liveRoomMembers(queryParams)
                 .map {
                     it.firstOrNull().toOptional()
@@ -209,6 +210,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailAction.IgnoreUser                       -> handleIgnoreUser(action)
             is RoomDetailAction.EnterTrackingUnreadMessagesState -> startTrackingUnreadMessages()
             is RoomDetailAction.ExitTrackingUnreadMessagesState  -> stopTrackingUnreadMessages()
+            is RoomDetailAction.AcceptVerificationRequest        -> handleAcceptVerification(action)
+            is RoomDetailAction.DeclineVerificationRequest       -> handleDeclineVerification(action)
+            is RoomDetailAction.RequestVerification              -> handleRequestVerification(action)
+            is RoomDetailAction.ResumeVerification               -> handleResumeRequestVerification(action)
         }
     }
 
@@ -250,7 +255,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun observeDrafts() {
-        room.rx().liveDrafts()
+        room.rx(session).liveDrafts()
                 .subscribe {
                     Timber.d("Draft update --> SetState")
                     setState {
@@ -429,6 +434,23 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                                     "[${stringProvider.getString(R.string.spoiler)}](${slashCommandResult.message})",
                                     "<span data-mx-spoiler>${slashCommandResult.message}</span>"
                             )
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+                            popDraft()
+                        }
+                        is ParsedCommand.SendShrug                -> {
+                            val sequence = buildString {
+                                append("¯\\_(ツ)_/¯")
+                                if (slashCommandResult.message.isNotEmpty()) {
+                                    append(" ")
+                                    append(slashCommandResult.message)
+                                }
+                            }
+                            room.sendTextMessage(sequence)
+                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+                            popDraft()
+                        }
+                        is ParsedCommand.VerifyUser               -> {
+                            session.getVerificationService().requestKeyVerificationInDMs(supportedVerificationMethods, slashCommandResult.userId, room.roomId)
                             _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
                             popDraft()
                         }
@@ -824,6 +846,44 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         })
     }
 
+    private fun handleAcceptVerification(action: RoomDetailAction.AcceptVerificationRequest) {
+        Timber.v("## SAS handleAcceptVerification ${action.otherUserId},  roomId:${room.roomId}, txId:${action.transactionId}")
+        if (session.getVerificationService().readyPendingVerificationInDMs(
+                        supportedVerificationMethods,
+                        action.otherUserId,
+                        room.roomId,
+                        action.transactionId)) {
+            _requestLiveData.postValue(LiveEvent(Success(action)))
+        } else {
+            // TODO
+        }
+    }
+
+    private fun handleDeclineVerification(action: RoomDetailAction.DeclineVerificationRequest) {
+        session.getVerificationService().declineVerificationRequestInDMs(
+                action.otherUserId,
+                action.otherdDeviceId,
+                action.transactionId,
+                room.roomId)
+    }
+
+    private fun handleRequestVerification(action: RoomDetailAction.RequestVerification) {
+        if (action.userId == session.myUserId) return
+        _requestLiveData.postValue(LiveEvent(Success(action)))
+    }
+
+    private fun handleResumeRequestVerification(action: RoomDetailAction.ResumeVerification) {
+        // Check if this request is still active and handled by me
+        session.getVerificationService().getExistingVerificationRequestInRoom(room.roomId, action.transactionId)?.let {
+            if (it.handledByOtherSession) return
+            if (!it.isFinished) {
+                _requestLiveData.postValue(LiveEvent(Success(action.copy(
+                        otherUserId = it.otherUserId
+                ))))
+            }
+        }
+    }
+
     private fun observeSyncState() {
         session.rx()
                 .liveSyncState()
@@ -836,7 +896,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun observeRoomSummary() {
-        room.rx().liveRoomSummary()
+        room.rx(session).liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     val typingRoomMembers =
@@ -854,7 +914,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         Observable
                 .combineLatest<List<TimelineEvent>, RoomSummary, UnreadState>(
                         timelineEvents.observeOn(Schedulers.computation()),
-                        room.rx().liveRoomSummary().unwrap(),
+                        room.rx(session).liveRoomSummary().unwrap(),
                         BiFunction { timelineEvents, roomSummary ->
                             computeUnreadState(timelineEvents, roomSummary)
                         }

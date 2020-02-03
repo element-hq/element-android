@@ -40,6 +40,7 @@ import io.realm.annotations.RealmModule
             EventAnnotationsSummaryEntity::class,
             ReactionAggregatedSummaryEntity::class,
             EditAggregatedSummaryEntity::class,
+            ReferencesAggregatedSummaryEntity::class,
             PushRulesEntity::class,
             PushRuleEntity::class,
             PushConditionEntity::class,

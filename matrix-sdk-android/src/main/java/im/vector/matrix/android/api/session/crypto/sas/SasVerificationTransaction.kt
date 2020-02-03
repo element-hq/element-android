@@ -16,18 +16,7 @@
 
 package im.vector.matrix.android.api.session.crypto.sas
 
-interface SasVerificationTransaction {
-    val state: SasVerificationTxState
-
-    val cancelledReason: CancelCode?
-
-    val transactionId: String
-
-    val otherUserId: String
-
-    var otherDeviceId: String?
-
-    val isIncoming: Boolean
+interface SasVerificationTransaction : VerificationTransaction {
 
     fun supportsEmoji(): Boolean
 
@@ -38,13 +27,10 @@ interface SasVerificationTransaction {
     fun getDecimalCodeRepresentation(): String
 
     /**
-     * User wants to cancel the transaction
-     */
-    fun cancel()
-
-    /**
      * To be called by the client when the user has verified that
      * both short codes do match
      */
     fun userHasVerifiedShortCode()
+
+    fun shortCodeDoesNotMatch()
 }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:minHeight="64dp"
+    android:paddingLeft="@dimen/layout_horizontal_margin"
+    android:paddingTop="8dp"
+    android:paddingRight="@dimen/layout_horizontal_margin"
+    android:paddingBottom="8dp">
+
+    <TextView
+        android:id="@+id/itemVerificationActionTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/riotx_accent"
+        android:textSize="16sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@+id/itemVerificationActionSubTitle"
+        app:layout_constraintEnd_toStartOf="@+id/itemVerificationActionIcon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="@string/start_verification" />
+
+    <TextView
+        android:id="@+id/itemVerificationActionSubTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/itemVerificationActionIcon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemVerificationActionTitle"
+        tools:text="For maximum security, do this in person"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/itemVerificationActionIcon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="center"
+        android:tint="?riotx_text_primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_arrow_right" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -98,10 +98,9 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
     }
 
     private fun setupRecyclerView() {
-        // Don't activate animation as we might have way to much item animation when filtering
-        recyclerView.itemAnimator = null
         knownUsersController.callback = this
-        recyclerView.configureWith(knownUsersController)
+        // Don't activate animation as we might have way to much item animation when filtering
+        recyclerView.configureWith(knownUsersController, disableItemAnimation = true)
     }
 
     private fun setupFilterView() {

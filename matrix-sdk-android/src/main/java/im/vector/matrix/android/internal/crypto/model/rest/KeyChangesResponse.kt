@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
  * This class describes the key changes response
  */
 @JsonClass(generateAdapter = true)
-data class KeyChangesResponse(
+internal data class KeyChangesResponse(
         // list of user ids which have new devices
         @Json(name = "changed")
         var changed: List<String>? = null,

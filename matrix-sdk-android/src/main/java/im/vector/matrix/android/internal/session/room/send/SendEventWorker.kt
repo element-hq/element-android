@@ -20,8 +20,7 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.failure.MatrixError
+import im.vector.matrix.android.api.failure.shouldBeRetried
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
@@ -33,7 +32,8 @@ import im.vector.matrix.android.internal.worker.getSessionComponent
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
-internal class SendEventWorker constructor(context: Context, params: WorkerParameters)
+internal class SendEventWorker(context: Context,
+                               params: WorkerParameters)
     : CoroutineWorker(context, params) {
 
     @JsonClass(generateAdapter = true)
@@ -77,11 +77,6 @@ internal class SendEventWorker constructor(context: Context, params: WorkerParam
                 Result.success()
             }
         }
-    }
-
-    private fun Throwable.shouldBeRetried(): Boolean {
-        return this is Failure.NetworkConnection
-                || (this is Failure.ServerError && error.code == MatrixError.M_LIMIT_EXCEEDED)
     }
 
     private suspend fun sendEvent(eventId: String, eventType: String, content: Content?, roomId: String) {

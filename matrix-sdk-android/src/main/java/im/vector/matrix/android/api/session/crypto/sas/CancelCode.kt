@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+// TODO Rename package
 package im.vector.matrix.android.api.session.crypto.sas
 
 enum class CancelCode(val value: String, val humanReadable: String) {
@@ -25,7 +27,9 @@ enum class CancelCode(val value: String, val humanReadable: String) {
     UnexpectedMessage("m.unexpected_message", "the device received an unexpected message"),
     InvalidMessage("m.invalid_message", "an invalid message was received"),
     MismatchedKeys("m.key_mismatch", "Key mismatch"),
-    UserMismatchError("m.user_error", "User mismatch")
+    UserError("m.user_error", "User error"),
+    MismatchedUser("m.user_mismatch", "User mismatch"),
+    QrCodeInvalid("m.qr_code.invalid", "Invalid QR code")
 }
 
 fun safeValueOf(code: String?): CancelCode {

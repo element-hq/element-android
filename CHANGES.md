@@ -1,9 +1,43 @@
-Changes in RiotX 0.14.0 (2020-XX-XX)
+Changes in RiotX 0.15.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:
+ -
+
+Improvements 🙌:
+ -
+
+Other changes:
+ -
+
+Bugfix 🐛:
+ -
+
+Translations 🗣:
+ -
+
+Build 🧱:
+ -
+
+Changes in RiotX 0.14.2 (2020-02-02)
+===================================================
+
+Fix RiotX not starting issue
+
+Changes in RiotX 0.14.1 (2020-02-02)
+===================================================
+
+Bugfix 🐛:
+ - Cross-signing: fix UX issue when closing the bottom sheet verification (#813)
+ - Room and room member profile: fix issues on dark and black themes
+
+Changes in RiotX 0.14.0 (2020-02-01)
+===================================================
+
+Features ✨:
+ - First implementation of Cross-signing
  - Enable encryption in unencrypted rooms, from the room settings (#212)
- - Enable e2e by default when creating DM, and give the possibility to enable encryption when creating room (#837)
+ - Negotiate E2E by default for DMs (#907)
 
 Improvements 🙌:
  - Sharing things to RiotX: sort list by recent room first (#771)
@@ -12,12 +46,6 @@ Improvements 🙌:
 
 Other changes:
  - Add support for /rainbow and /rainbowme commands (#879)
-
-Bugfix 🐛:
- -
-
-Translations 🗣:
- -
 
 Build 🧱:
  - Ensure builds are reproducible (#842)
@@ -120,6 +148,7 @@ Changes in RiotX 0.9.0 (2019-12-05)
 Features ✨:
  - Account creation. It's now possible to create account on any homeserver with RiotX (#34)
  - Iteration of the login flow (#613)
+ - [SDK] MSC2241 / verification in DMs (#707)
 
 Improvements 🙌:
  - Send mention Pills from composer
@@ -325,7 +354,7 @@ Mode details here: https://medium.com/@RiotChat/introducing-the-riotx-beta-for-a
 =======================================================
 
 
-Changes in RiotX 0.0.0 (2020-XX-XX)
+Changes in RiotX 0.X.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:

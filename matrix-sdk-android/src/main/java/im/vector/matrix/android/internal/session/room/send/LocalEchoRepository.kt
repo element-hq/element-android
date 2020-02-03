@@ -24,17 +24,14 @@ import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import im.vector.matrix.android.internal.database.helper.addTimelineEvent
 import im.vector.matrix.android.internal.database.helper.nextId
 import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.mapper.toEntity
-import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.findAllInRoomWithSendStates
-import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
@@ -45,7 +42,6 @@ import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import java.lang.IllegalStateException
 import javax.inject.Inject
-import kotlin.random.Random
 
 internal class LocalEchoRepository @Inject constructor(private val monarchy: Monarchy,
                                                        private val roomSummaryUpdater: RoomSummaryUpdater,
@@ -84,9 +80,7 @@ internal class LocalEchoRepository @Inject constructor(private val monarchy: Mon
     suspend fun deleteFailedEcho(roomId: String, localEcho: TimelineEvent) {
         monarchy.awaitTransaction { realm ->
             TimelineEventEntity.where(realm, roomId = roomId, eventId = localEcho.root.eventId ?: "").findFirst()?.deleteFromRealm()
-            EventEntity.where(realm, eventId = localEcho.root.eventId ?: "").findFirst()?.let {
-                it.deleteFromRealm()
-            }
+            EventEntity.where(realm, eventId = localEcho.root.eventId ?: "").findFirst()?.deleteFromRealm()
         }
     }
 

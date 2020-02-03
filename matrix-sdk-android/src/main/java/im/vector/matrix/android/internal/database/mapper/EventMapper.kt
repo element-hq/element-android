@@ -71,6 +71,7 @@ internal object EventMapper {
                 unsignedData = ud,
                 redacts = eventEntity.redacts
         ).also {
+            it.ageLocalTs = eventEntity.ageLocalTs
             it.sendState = eventEntity.sendState
             eventEntity.decryptionResultJson?.let { json ->
                 try {
@@ -91,8 +92,9 @@ internal fun EventEntity.asDomain(): Event {
     return EventMapper.map(this)
 }
 
-internal fun Event.toEntity(roomId: String, sendState: SendState): EventEntity {
+internal fun Event.toEntity(roomId: String, sendState: SendState, ageLocalTs: Long? = null): EventEntity {
     return EventMapper.map(this, roomId).apply {
         this.sendState = sendState
+        this.ageLocalTs = ageLocalTs
     }
 }

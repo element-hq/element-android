@@ -17,12 +17,8 @@
 package im.vector.riotx.features.home.room.detail.timeline.reactions
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
-import butterknife.ButterKnife
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -54,11 +50,7 @@ class ViewReactionsBottomSheet : VectorBaseBottomSheetDialogFragment() {
         injector.inject(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.bottom_sheet_generic_list_with_title, container, false)
-        ButterKnife.bind(this, view)
-        return view
-    }
+    override fun getLayoutResId() = R.layout.bottom_sheet_generic_list_with_title
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

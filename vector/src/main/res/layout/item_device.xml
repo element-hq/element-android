@@ -6,93 +6,90 @@
     android:layout_height="wrap_content"
     android:background="?riotx_background"
     android:foreground="?attr/selectableItemBackground"
-    android:orientation="vertical"
-    android:paddingStart="16dp"
-    android:paddingTop="8dp"
-    android:paddingEnd="16dp"
-    android:paddingBottom="8dp">
-
-    <TextView
-        android:id="@+id/itemDeviceDisplayNameLabel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:text="@string/devices_details_name_title"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="12sp" />
-
-    <TextView
-        android:id="@+id/itemDeviceDisplayName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="?riotx_text_primary"
-        android:textSize="16sp"
-        tools:text="Android phone" />
-
-    <TextView
-        android:id="@+id/itemDeviceIdLabel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:text="@string/devices_details_id_title"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="12sp" />
-
-    <im.vector.riotx.core.platform.EllipsizingTextView
-        android:id="@+id/itemDeviceId"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="?riotx_text_primary"
-        android:textSize="15sp"
-        tools:text="XUIDERFZAA" />
-
-    <TextView
-        android:id="@+id/itemDeviceLastSeenLabel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:text="@string/devices_details_last_seen_title"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="12sp" />
-
-    <TextView
-        android:id="@+id/itemDeviceLastSeen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="?riotx_text_primary"
-        android:textSize="15sp"
-        tools:text="x.x.x.x @ 01/01 00:00:00" />
+    android:orientation="horizontal"
+    android:padding="8dp">
 
     <LinearLayout
-        android:id="@+id/itemDeviceButtons"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginTop="4dp"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        tools:visibility="visible">
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/itemDeviceRename"
-            style="@style/VectorButtonStyleText"
-            android:layout_width="wrap_content"
+        <!-- In compact mode only this is shown-->
+        <TextView
+            android:id="@+id/itemDeviceSimpleSummary"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/rename" />
+            android:gravity="center_vertical"
+            android:minHeight="40dp"
+            android:textColor="?riotx_text_primary"
+            android:textSize="16sp"
+            tools:text="Riot X" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/itemDeviceDelete"
-            style="@style/VectorButtonStyleText"
-            android:layout_width="wrap_content"
+        <!---
+            The following detailed informations are displayed in developper mode
+        -->
+        <TextView
+            android:id="@+id/itemDeviceDisplayNameLabel"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="@string/delete"
-            android:textColor="@color/riotx_notice"
-            android:visibility="gone"
-            tools:visibility="visible" />
+            android:layout_marginTop="6dp"
+            android:text="@string/devices_details_name_title"
+            android:textColor="?riotx_text_secondary"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/itemDeviceDisplayName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?riotx_text_primary"
+            android:textSize="16sp"
+            tools:text="Android phone" />
+
+        <TextView
+            android:id="@+id/itemDeviceIdLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/devices_details_id_title"
+            android:textColor="?riotx_text_secondary"
+            android:textSize="12sp" />
+
+        <im.vector.riotx.core.platform.EllipsizingTextView
+            android:id="@+id/itemDeviceId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="?riotx_text_primary"
+            android:textSize="15sp"
+            tools:text="XUIDERFZAA" />
+
+        <TextView
+            android:id="@+id/itemDeviceLastSeenLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/devices_details_last_seen_title"
+            android:textColor="?riotx_text_secondary"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/itemDeviceLastSeen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?riotx_text_primary"
+            android:textSize="15sp"
+            tools:text="x.x.x.x @ 01/01 00:00:00" />
 
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/itemDeviceTrustLevelIcon"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        tools:src="@drawable/ic_shield_trusted" />
+
 </LinearLayout>
+

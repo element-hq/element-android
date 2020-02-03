@@ -1500,7 +1500,7 @@ Why choose Riot.im?
 
     <string name="sas_verified">Verified!</string>
     <string name="sas_verified_successful">You\'ve successfully verified this device.</string>
-    <string name="sas_verified_successful_description">Secure messages with this user are end-to-end encrypted and not able to be read by third parties.</string>
+    <string name="sas_verified_successful_description">Messages with this user in this room are end-to-end encrypted and can\'t be read by third parties.</string>
     <string name="sas_got_it">Got it</string>
 
     <string name="sas_verifying_keys">Nothing appearing? Not all clients supports interactive verification yet. Use legacy verification.</string>
@@ -1964,7 +1964,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="notification_initial_sync">Initial Sync…</string>
 
-    <string name="settings_show_devices_list">See all my devices</string>
+    <string name="settings_show_devices_list">See all my sessions</string>
     <string name="settings_advanced_settings">Advanced settings</string>
     <string name="settings_developer_mode">Developer mode</string>
     <string name="settings_developer_mode_summary">The developer mode activates hidden features and may also make the application less stable. For developers only!</string>
@@ -1973,8 +1973,8 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="settings_rageshake_detection_threshold_summary">Shake your phone to test the detection threshold</string>
     <string name="rageshake_detected">Shake detected!</string>
     <string name="settings">Settings</string>
-    <string name="devices_current_device">Current device</string>
-    <string name="devices_other_devices">Other devices</string>
+    <string name="devices_current_device">Current session</string>
+    <string name="devices_other_devices">Other sessions</string>
 
     <string name="autocomplete_limited_results">Showing only the first results, type more letters…</string>
 

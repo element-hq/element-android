@@ -17,11 +17,15 @@
 package im.vector.matrix.android.common
 
 import android.os.SystemClock
+import androidx.lifecycle.Observer
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toContent
+import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
+import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
@@ -29,8 +33,16 @@ import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupAuthData
 import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
-import org.junit.Assert.*
-import java.util.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import java.util.Arrays
+import java.util.HashMap
 import java.util.concurrent.CountDownLatch
 
 class CryptoTestHelper(val mTestHelper: CommonTestHelper) {
@@ -49,7 +61,7 @@ class CryptoTestHelper(val mTestHelper: CommonTestHelper) {
         var roomId: String? = null
         val lock1 = CountDownLatch(1)
 
-        aliceSession.createRoom(CreateRoomParams().apply { name = "MyRoom" }, object : TestMatrixCallback<String>(lock1) {
+        aliceSession.createRoom(CreateRoomParams(name = "MyRoom"), object : TestMatrixCallback<String>(lock1) {
             override fun onSuccess(data: String) {
                 roomId = data
                 super.onSuccess(data)
@@ -78,26 +90,31 @@ class CryptoTestHelper(val mTestHelper: CommonTestHelper) {
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId
 
-        val room = aliceSession.getRoom(aliceRoomId)!!
+        val aliceRoom = aliceSession.getRoom(aliceRoomId)!!
 
         val bobSession = mTestHelper.createAccount(TestConstants.USER_BOB, defaultSessionParams)
 
         val lock1 = CountDownLatch(2)
 
-//        val bobEventListener = object : MXEventListener() {
-//            override fun onNewRoom(roomId: String) {
-//                if (TextUtils.equals(roomId, aliceRoomId)) {
-//                    if (!statuses.containsKey("onNewRoom")) {
-//                        statuses["onNewRoom"] = "onNewRoom"
-//                        lock1.countDown()
-//                    }
-//                }
-//            }
-//        }
-//
-//        bobSession.dataHandler.addListener(bobEventListener)
+        val bobRoomSummariesLive = runBlocking(Dispatchers.Main) {
+            bobSession.getRoomSummariesLive(roomSummaryQueryParams { })
+        }
 
-        room.invite(bobSession.myUserId, callback = object : TestMatrixCallback<Unit>(lock1) {
+        val newRoomObserver = object : Observer<List<RoomSummary>> {
+            override fun onChanged(t: List<RoomSummary>?) {
+                if (t?.isNotEmpty() == true) {
+                    statuses["onNewRoom"] = "onNewRoom"
+                    lock1.countDown()
+                    bobRoomSummariesLive.removeObserver(this)
+                }
+            }
+        }
+
+        GlobalScope.launch(Dispatchers.Main) {
+            bobRoomSummariesLive.observeForever(newRoomObserver)
+        }
+
+        aliceRoom.invite(bobSession.myUserId, callback = object : TestMatrixCallback<Unit>(lock1) {
             override fun onSuccess(data: Unit) {
                 statuses["invite"] = "invite"
                 super.onSuccess(data)
@@ -108,25 +125,25 @@ class CryptoTestHelper(val mTestHelper: CommonTestHelper) {
 
         assertTrue(statuses.containsKey("invite") && statuses.containsKey("onNewRoom"))
 
-//        bobSession.dataHandler.removeListener(bobEventListener)
-
         val lock2 = CountDownLatch(2)
 
-        bobSession.joinRoom(aliceRoomId, callback = TestMatrixCallback(lock2))
+        val roomJoinedObserver = object : Observer<List<RoomSummary>> {
+            override fun onChanged(t: List<RoomSummary>?) {
+                if (bobSession.getRoom(aliceRoomId)
+                                ?.getRoomMember(aliceSession.myUserId)
+                                ?.membership == Membership.JOIN) {
+                    statuses["AliceJoin"] = "AliceJoin"
+                    lock2.countDown()
+                    bobRoomSummariesLive.removeObserver(this)
+                }
+            }
+        }
 
-//        room.addEventListener(object : MXEventListener() {
-//            override fun onLiveEvent(event: Event, roomState: RoomState) {
-//                if (TextUtils.equals(event.getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
-//                    val contentToConsider = event.contentAsJsonObject
-//                    val member = JsonUtils.toRoomMember(contentToConsider)
-//
-//                    if (TextUtils.equals(member.membership, RoomMember.MEMBERSHIP_JOIN)) {
-//                        statuses["AliceJoin"] = "AliceJoin"
-//                        lock2.countDown()
-//                    }
-//                }
-//            }
-//        })
+        GlobalScope.launch(Dispatchers.Main) {
+            bobRoomSummariesLive.observeForever(roomJoinedObserver)
+        }
+
+        bobSession.joinRoom(aliceRoomId, callback = TestMatrixCallback(lock2))
 
         mTestHelper.await(lock2)
 

@@ -23,6 +23,7 @@ import im.vector.riotx.core.epoxy.profiles.buildProfileAction
 import im.vector.riotx.core.epoxy.profiles.buildProfileSection
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.core.ui.list.genericFooterItem
 import javax.inject.Inject
 
 class RoomMemberProfileController @Inject constructor(
@@ -36,7 +37,9 @@ class RoomMemberProfileController @Inject constructor(
 
     interface Callback {
         fun onIgnoreClicked()
-        fun onLearnMoreClicked()
+        fun onTapVerify()
+        fun onShowDeviceList()
+        fun onShowDeviceListNoCrossSigning()
         fun onJumpToReadReceiptClicked()
         fun onMentionClicked()
     }
@@ -70,20 +73,80 @@ class RoomMemberProfileController @Inject constructor(
     private fun buildRoomMemberActions(state: RoomMemberProfileViewState) {
         // Security
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
-        val learnMoreSubtitle = if (state.isRoomEncrypted) {
-            R.string.room_profile_encrypted_subtitle
+
+        if (state.isRoomEncrypted) {
+            if (state.userMXCrossSigningInfo != null) {
+                // Cross signing is enabled for this user
+                if (state.userMXCrossSigningInfo.isTrusted()) {
+                    // User is trusted
+                    val icon = if (state.allDevicesAreTrusted) {
+                        R.drawable.ic_shield_trusted
+                    } else {
+                        R.drawable.ic_shield_warning
+                    }
+
+                    val titleRes = if (state.allDevicesAreTrusted) {
+                        R.string.verification_profile_verified
+                    } else {
+                        R.string.verification_profile_warning
+                    }
+
+                    buildProfileAction(
+                            id = "learn_more",
+                            title = stringProvider.getString(titleRes),
+                            dividerColor = dividerColor,
+                            editable = true,
+                            icon = icon,
+                            divider = false,
+                            action = { callback?.onShowDeviceList() }
+                    )
+                } else {
+                    // Not trusted, propose to verify
+                    if (!state.isMine) {
+                        buildProfileAction(
+                                id = "learn_more",
+                                title = stringProvider.getString(R.string.verification_profile_verify),
+                                dividerColor = dividerColor,
+                                editable = true,
+                                icon = R.drawable.ic_shield_black,
+                                divider = false,
+                                action = { callback?.onTapVerify() }
+                        )
+                    } else {
+                        buildProfileAction(
+                                id = "learn_more",
+                                title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
+                                dividerColor = dividerColor,
+                                editable = false,
+                                divider = false,
+                                action = { callback?.onShowDeviceListNoCrossSigning() }
+                        )
+                    }
+
+                    genericFooterItem {
+                        id("verify_footer")
+                        text(stringProvider.getString(R.string.room_profile_encrypted_subtitle))
+                        centered(false)
+                    }
+                }
+            } else {
+                buildProfileAction(
+                        id = "learn_more",
+                        title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
+                        dividerColor = dividerColor,
+                        editable = false,
+                        divider = false,
+                        subtitle = stringProvider.getString(R.string.room_profile_encrypted_subtitle),
+                        action = { callback?.onShowDeviceListNoCrossSigning() }
+                )
+            }
         } else {
-            R.string.room_profile_not_encrypted_subtitle
+            genericFooterItem {
+                id("verify_footer_not_encrypted")
+                text(stringProvider.getString(R.string.room_profile_not_encrypted_subtitle))
+                centered(false)
+            }
         }
-        buildProfileAction(
-                id = "learn_more",
-                title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
-                dividerColor = dividerColor,
-                editable = false,
-                divider = false,
-                subtitle = stringProvider.getString(learnMoreSubtitle),
-                action = { callback?.onLearnMoreClicked() }
-        )
 
         // More
         if (!state.isMine) {

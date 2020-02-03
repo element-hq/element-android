@@ -28,7 +28,7 @@ import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 
 class RoomListQuickActionsViewModel @AssistedInject constructor(@Assisted initialState: RoomListQuickActionsState,
-                                                                session: Session
+                                                                private val session: Session
 ) : VectorViewModel<RoomListQuickActionsState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedInject.Factory
@@ -54,7 +54,7 @@ class RoomListQuickActionsViewModel @AssistedInject constructor(@Assisted initia
 
     private fun observeNotificationState() {
         room
-                .rx()
+                .rx(session)
                 .liveNotificationState()
                 .execute {
                     copy(roomNotificationState = it)
@@ -63,7 +63,7 @@ class RoomListQuickActionsViewModel @AssistedInject constructor(@Assisted initia
 
     private fun observeRoomSummary() {
         room
-                .rx()
+                .rx(session)
                 .liveRoomSummary()
                 .unwrap()
                 .execute {

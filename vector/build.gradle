@@ -15,7 +15,7 @@ androidExtensions {
 }
 
 ext.versionMajor = 0
-ext.versionMinor = 14
+ext.versionMinor = 15
 ext.versionPatch = 0
 
 static def getGitTimestamp() {
@@ -367,6 +367,11 @@ dependencies {
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
     implementation "androidx.emoji:emoji-appcompat:1.0.0"
+
+    // QR-code
+    // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170
+    implementation 'com.google.zxing:core:3.3.3'
+    implementation 'me.dm7.barcodescanner:zxing:1.9.13'
 
     // TESTS
     testImplementation 'junit:junit:4.12'

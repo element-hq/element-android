@@ -21,5 +21,6 @@ internal enum class TaskThread {
     COMPUTATION,
     IO,
     CALLER,
-    CRYPTO
+    CRYPTO,
+    DM_VERIF
 }

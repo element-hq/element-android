@@ -20,6 +20,8 @@ package im.vector.riotx.features.roommemberprofile
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
+import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
@@ -33,10 +35,13 @@ import im.vector.riotx.core.animations.MatrixItemAppBarStateChangeListener
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
+import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.roommemberprofile.devices.DeviceListBottomSheet
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_matrix_profile.*
 import kotlinx.android.synthetic.main.view_stub_room_member_profile_header.*
@@ -76,8 +81,13 @@ class RoomMemberProfileFragment @Inject constructor(
         memberProfileStateView.contentView = memberProfileInfoContainer
         matrixProfileRecyclerView.configureWith(roomMemberProfileController, hasFixedSize = true)
         roomMemberProfileController.callback = this
-        appBarStateChangeListener = MatrixItemAppBarStateChangeListener(headerView, listOf(matrixProfileToolbarAvatarImageView,
-                matrixProfileToolbarTitleView))
+        appBarStateChangeListener = MatrixItemAppBarStateChangeListener(headerView,
+                listOf(
+                        matrixProfileToolbarAvatarImageView,
+                        matrixProfileToolbarTitleView,
+                        matrixProfileDecorationToolbarAvatarImageView
+                )
+        )
         matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         viewModel.observeViewEvents {
             when (it) {
@@ -85,6 +95,32 @@ class RoomMemberProfileFragment @Inject constructor(
                 is RoomMemberProfileViewEvents.Failure               -> showFailure(it.throwable)
                 is RoomMemberProfileViewEvents.OnIgnoreActionSuccess -> Unit
             }.exhaustive
+        }
+        viewModel.actionResultLiveData.observeEvent(this) { async ->
+            when (async) {
+                is Success -> {
+                    when (val action = async.invoke()) {
+                        is RoomMemberProfileAction.VerifyUser -> {
+                            if (action.canCrossSign == true) {
+                                VerificationBottomSheet
+                                        .withArgs(roomId = null, otherUserId = action.userId!!)
+                                        .show(parentFragmentManager, "VERIF")
+                            } else {
+                                AlertDialog.Builder(requireContext())
+                                        .setTitle(R.string.dialog_title_warning)
+                                        .setMessage(R.string.verify_cannot_cross_sign)
+                                        .setPositiveButton(R.string.verification_profile_verify) { _, _ ->
+                                            VerificationBottomSheet
+                                                    .withArgs(roomId = null, otherUserId = action.userId!!)
+                                                    .show(parentFragmentManager, "VERIF")
+                                        }
+                                        .setNegativeButton(R.string.cancel, null)
+                                        .show()
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -117,6 +153,37 @@ class RoomMemberProfileFragment @Inject constructor(
                 matrixProfileToolbarTitleView.text = bestName
                 avatarRenderer.render(userMatrixItem, memberProfileAvatarView)
                 avatarRenderer.render(userMatrixItem, matrixProfileToolbarAvatarImageView)
+
+                if (state.isRoomEncrypted) {
+                    memberProfileDecorationImageView.isVisible = true
+                    if (state.userMXCrossSigningInfo != null) {
+                        // Cross signing is enabled for this user
+                        val icon = if (state.userMXCrossSigningInfo.isTrusted()) {
+                            // User is trusted
+                            if (state.allDevicesAreCrossSignedTrusted) {
+                                R.drawable.ic_shield_trusted
+                            } else {
+                                R.drawable.ic_shield_warning
+                            }
+                        } else {
+                            R.drawable.ic_shield_black
+                        }
+
+                        memberProfileDecorationImageView.setImageResource(icon)
+                        matrixProfileDecorationToolbarAvatarImageView.setImageResource(icon)
+                    } else {
+                        // Legacy
+                        if (state.allDevicesAreTrusted) {
+                            memberProfileDecorationImageView.setImageResource(R.drawable.ic_shield_trusted)
+                            matrixProfileDecorationToolbarAvatarImageView.setImageResource(R.drawable.ic_shield_trusted)
+                        } else {
+                            memberProfileDecorationImageView.setImageResource(R.drawable.ic_shield_warning)
+                            matrixProfileDecorationToolbarAvatarImageView.setImageResource(R.drawable.ic_shield_warning)
+                        }
+                    }
+                } else {
+                    memberProfileDecorationImageView.isVisible = false
+                }
             }
         }
         memberProfilePowerLevelView.setTextOrHide(state.userPowerLevelString())
@@ -129,8 +196,16 @@ class RoomMemberProfileFragment @Inject constructor(
         viewModel.handle(RoomMemberProfileAction.IgnoreUser)
     }
 
-    override fun onLearnMoreClicked() {
-        vectorBaseActivity.notImplemented("Learn more")
+    override fun onTapVerify() {
+        viewModel.handle(RoomMemberProfileAction.VerifyUser())
+    }
+
+    override fun onShowDeviceList() = withState(viewModel) {
+        DeviceListBottomSheet.newInstance(it.userId).show(parentFragmentManager, "DEV_LIST")
+    }
+
+    override fun onShowDeviceListNoCrossSigning() = withState(viewModel) {
+        DeviceListBottomSheet.newInstance(it.userId).show(parentFragmentManager, "DEV_LIST")
     }
 
     override fun onJumpToReadReceiptClicked() {

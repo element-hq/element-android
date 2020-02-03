@@ -34,7 +34,13 @@ import im.vector.matrix.android.internal.session.room.timeline.EventContextRespo
 import im.vector.matrix.android.internal.session.room.timeline.PaginationResponse
 import im.vector.matrix.android.internal.session.room.typing.TypingBody
 import retrofit2.Call
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Headers
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 internal interface RoomAPI {
 
@@ -60,9 +66,12 @@ internal interface RoomAPI {
     /**
      * Create a room.
      * Ref: https://matrix.org/docs/spec/client_server/r0.4.0.html#post-matrix-client-r0-createroom
+     * Set all the timeouts to 1 minute, because if the server takes time to answer, we will not execute the
+     * create direct chat request if any
      *
      * @param param the creation room parameter
      */
+    @Headers("CONNECT_TIMEOUT:60000", "READ_TIMEOUT:60000", "WRITE_TIMEOUT:60000")
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "createRoom")
     fun createRoom(@Body param: CreateRoomParams): Call<CreateRoomResponse>
 
