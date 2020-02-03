@@ -11,7 +11,7 @@ Other changes:
  -
 
 Bugfix 🐛:
- -
+ - Ask for permission before opening the camera (#934)
 
 Translations 🗣:
  -
