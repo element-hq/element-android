@@ -118,7 +118,7 @@ class CommonTestHelper(context: Context) {
             }
 
             override fun onNewTimelineEvents(eventIds: List<String>) {
-                //noop
+                // noop
             }
 
             override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {

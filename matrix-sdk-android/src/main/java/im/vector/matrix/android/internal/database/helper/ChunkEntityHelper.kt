@@ -36,7 +36,6 @@ import im.vector.matrix.android.internal.session.room.timeline.PaginationDirecti
 import io.realm.Realm
 import io.realm.Sort
 import io.realm.kotlin.createObject
-import kotlinx.coroutines.coroutineScope
 import timber.log.Timber
 
 internal fun ChunkEntity.deleteOnCascade() {
@@ -110,7 +109,6 @@ internal fun ChunkEntity.addTimelineEvent(roomId: String,
                                           eventEntity: EventEntity,
                                           direction: PaginationDirection,
                                           roomMemberContentsByUser: HashMap<String, RoomMemberContent?>) {
-
     val eventId = eventEntity.eventId
     if (timelineEvents.find(eventId) != null) {
         return
@@ -134,8 +132,7 @@ internal fun ChunkEntity.addTimelineEvent(roomId: String,
         this.senderName = roomMemberContent?.displayName
         if (roomMemberContent?.displayName != null) {
             val isHistoricalUnique = roomMemberContentsByUser.values.find {
-                roomMemberContent != it &&
-                        it?.displayName == roomMemberContent.displayName
+                it != roomMemberContent && it?.displayName == roomMemberContent.displayName
             } == null
             isUniqueDisplayName = if (isLastForward) {
                 val isLiveUnique = RoomMemberSummaryEntity

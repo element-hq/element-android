@@ -33,7 +33,6 @@ import androidx.annotation.MainThread
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.airbnb.mvrx.BaseMvRxFragment

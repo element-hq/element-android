@@ -26,7 +26,7 @@ import im.vector.matrix.android.api.util.Optional
  */
 interface ReadService {
 
-    enum class MarkAsReadParams{
+    enum class MarkAsReadParams {
         READ_RECEIPT,
         READ_MARKER,
         BOTH

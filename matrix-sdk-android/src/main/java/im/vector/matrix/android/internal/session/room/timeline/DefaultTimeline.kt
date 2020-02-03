@@ -27,7 +27,6 @@ import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
-import im.vector.matrix.android.api.session.room.timeline.hasBeenEdited
 import im.vector.matrix.android.api.util.CancelableBag
 import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
@@ -665,7 +664,6 @@ internal class DefaultTimeline(
         val params = GetContextOfEventTask.Params(roomId, eventId)
         cancelableBag += contextOfEventTask.configureWith(params) {
             callback = object : MatrixCallback<TokenChunkEventPersistor.Result> {
-
                 override fun onSuccess(data: TokenChunkEventPersistor.Result) {
                     postSnapshot()
                 }

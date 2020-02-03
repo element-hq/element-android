@@ -122,5 +122,4 @@ internal class DefaultReadService @AssistedInject constructor(
     private fun ReadService.MarkAsReadParams.forceReadReceipt(): Boolean {
         return this == ReadService.MarkAsReadParams.READ_RECEIPT || this == ReadService.MarkAsReadParams.BOTH
     }
-
 }

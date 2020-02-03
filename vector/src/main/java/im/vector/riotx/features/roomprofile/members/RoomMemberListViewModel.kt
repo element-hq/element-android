@@ -74,7 +74,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                 .combineLatest<List<RoomMemberSummary>, PowerLevelsContent, RoomMemberSummaries>(
                         room.rx(session).liveRoomMembers(roomMemberQueryParams),
                         room.rx(session)
-                                .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS,"")
+                                .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, "")
                                 .mapOptional { it.content.toModel<PowerLevelsContent>() }
                                 .unwrap(),
                         BiFunction { roomMembers, powerLevelsContent ->

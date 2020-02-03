@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.Network
+import android.os.Build
 import javax.inject.Inject
 
 internal interface NetworkCallbackStrategy {
@@ -47,7 +48,7 @@ internal class FallbackNetworkCallbackStrategy @Inject constructor(private val c
     }
 }
 
-@TargetApi(android.os.Build.VERSION_CODES.N)
+@TargetApi(Build.VERSION_CODES.N)
 internal class PreferredNetworkCallbackStrategy @Inject constructor(context: Context) : NetworkCallbackStrategy {
 
     private var hasChangedCallback: (() -> Unit)? = null

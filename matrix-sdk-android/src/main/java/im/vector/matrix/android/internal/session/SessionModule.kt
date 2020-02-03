@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session
 
 import android.content.Context
+import android.os.Build
 import com.zhuinden.monarchy.Monarchy
 import dagger.Binds
 import dagger.Lazy
@@ -194,7 +195,7 @@ internal abstract class SessionModule {
         fun providesNetworkCallbackStrategy(fallbackNetworkCallbackStrategy: Provider<FallbackNetworkCallbackStrategy>,
                                             preferredNetworkCallbackStrategy: Provider<PreferredNetworkCallbackStrategy>
         ): NetworkCallbackStrategy {
-            return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 preferredNetworkCallbackStrategy.get()
             } else {
                 fallbackNetworkCallbackStrategy.get()
@@ -241,4 +242,3 @@ internal abstract class SessionModule {
     @Binds
     abstract fun bindHomeServerCapabilitiesService(homeServerCapabilitiesService: DefaultHomeServerCapabilitiesService): HomeServerCapabilitiesService
 }
-

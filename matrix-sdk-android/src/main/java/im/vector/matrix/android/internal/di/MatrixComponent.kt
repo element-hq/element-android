@@ -26,7 +26,6 @@ import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.AuthModule
 import im.vector.matrix.android.internal.auth.SessionParamsStore
-import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers

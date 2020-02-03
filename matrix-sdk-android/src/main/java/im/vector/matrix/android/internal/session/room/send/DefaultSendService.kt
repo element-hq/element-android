@@ -16,12 +16,10 @@
 
 package im.vector.matrix.android.internal.session.room.send
 
-import android.content.Context
 import androidx.work.BackoffPolicy
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.Operation
-import androidx.work.WorkManager
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy

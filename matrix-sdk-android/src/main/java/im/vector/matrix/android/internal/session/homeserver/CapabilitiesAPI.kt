@@ -31,6 +31,6 @@ internal interface CapabilitiesAPI {
     /**
      * Request the versions
      */
-    @GET(NetworkConstants.URI_API_PREFIX_PATH_+"versions")
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_ + "versions")
     fun getVersions(): Call<Unit>
 }

@@ -158,4 +158,5 @@ Formatter\.formatFileSize===1
 Formatter\.formatShortFileSize===1
 
 ### Use kotlin stdlib to test or compare strings
-android\.text\.TextUtils
+# DISABLED
+# android\.text\.TextUtils

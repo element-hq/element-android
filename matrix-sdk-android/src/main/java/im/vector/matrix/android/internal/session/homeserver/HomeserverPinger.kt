@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.session.homeserver
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.TaskExecutor
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

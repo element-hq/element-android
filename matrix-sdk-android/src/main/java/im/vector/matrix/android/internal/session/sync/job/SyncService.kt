@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.session.sync.job
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.failure.isTokenError
 import im.vector.matrix.android.api.session.Session

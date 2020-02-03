@@ -28,7 +28,6 @@ import im.vector.matrix.android.internal.database.helper.deleteOnCascade
 import im.vector.matrix.android.internal.database.helper.merge
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.model.CurrentStateEventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
@@ -168,13 +167,19 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
 
     private fun handleReachEnd(realm: Realm, roomId: String, direction: PaginationDirection, currentChunk: ChunkEntity) {
         Timber.v("Reach end of $roomId")
+        roomId.isBlank()
         if (direction == PaginationDirection.FORWARDS) {
             val currentLiveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
             if (currentChunk != currentLiveChunk) {
                 currentChunk.isLastForward = true
                 currentLiveChunk?.deleteOnCascade()
                 RoomSummaryEntity.where(realm, roomId).findFirst()?.apply {
-                    latestPreviewableEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true, filterTypes = RoomSummaryUpdater.PREVIEWABLE_TYPES)
+                    latestPreviewableEvent = TimelineEventEntity.latestEvent(
+                            realm,
+                            roomId,
+                            includesSending = true,
+                            filterTypes = RoomSummaryUpdater.PREVIEWABLE_TYPES
+                    )
                 }
             }
         } else {
@@ -237,7 +242,12 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
         }
         if (shouldUpdateSummary) {
             val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
-            val latestPreviewableEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true, filterTypes = RoomSummaryUpdater.PREVIEWABLE_TYPES)
+            val latestPreviewableEvent = TimelineEventEntity.latestEvent(
+                    realm,
+                    roomId,
+                    includesSending = true,
+                    filterTypes = RoomSummaryUpdater.PREVIEWABLE_TYPES
+            )
             roomSummaryEntity.latestPreviewableEvent = latestPreviewableEvent
         }
         RoomEntity.where(realm, roomId).findFirst()?.addOrUpdate(currentChunk)

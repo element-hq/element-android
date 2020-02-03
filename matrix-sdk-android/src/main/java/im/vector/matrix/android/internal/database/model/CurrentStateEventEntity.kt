@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.database.model
 
 import io.realm.RealmObject
 import io.realm.annotations.Index
-import io.realm.annotations.PrimaryKey
 
 internal open class CurrentStateEventEntity(var eventId: String = "",
                                             var root: EventEntity? = null,

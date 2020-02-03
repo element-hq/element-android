@@ -35,7 +35,8 @@ internal fun TimelineEventEntity.Companion.where(realm: Realm, roomId: String, e
 
 internal fun TimelineEventEntity.Companion.whereRoomId(realm: Realm,
                                                        roomId: String): RealmQuery<TimelineEventEntity> {
-    return realm.where<TimelineEventEntity>().equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
+    return realm.where<TimelineEventEntity>()
+            .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
 }
 
 internal fun TimelineEventEntity.Companion.findWithSenderMembershipEvent(realm: Realm, senderMembershipEventId: String): List<TimelineEventEntity> {

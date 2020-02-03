@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.session.room.draft
 import androidx.lifecycle.LiveData
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.send.DraftService
 import im.vector.matrix.android.api.session.room.send.UserDraft

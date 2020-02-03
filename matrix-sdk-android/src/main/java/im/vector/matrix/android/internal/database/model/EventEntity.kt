@@ -21,9 +21,7 @@ import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.di.MoshiProvider
 import io.realm.RealmObject
-import io.realm.RealmResults
 import io.realm.annotations.Index
-import io.realm.annotations.LinkingObjects
 import io.realm.annotations.PrimaryKey
 
 internal open class EventEntity(@PrimaryKey var eventId: String = "",
