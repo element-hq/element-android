@@ -19,11 +19,15 @@ package im.vector.matrix.android.internal.session.room.timeline
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.RelationType
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.ReadReceipt
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
+import im.vector.matrix.android.api.session.room.timeline.hasBeenEdited
 import im.vector.matrix.android.api.util.CancelableBag
 import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
@@ -407,7 +411,7 @@ internal class DefaultTimeline(
     private fun buildSendingEvents(): List<TimelineEvent> {
         val sendingEvents = ArrayList<TimelineEvent>()
         if (hasReachedEnd(Timeline.Direction.FORWARDS) && !hasMoreInCache(Timeline.Direction.FORWARDS)) {
-            sendingEvents.addAll(inMemorySendingEvents)
+            sendingEvents.addAll(inMemorySendingEvents.filterEventsWithSettings())
             roomEntity?.sendingTimelineEvents
                     ?.where()
                     ?.filterEventsWithSettings()
@@ -725,6 +729,23 @@ internal class DefaultTimeline(
             not().like(TimelineEventEntityFields.ROOT.CONTENT, FilterContent.EDIT_TYPE)
         }
         return this
+    }
+
+    private fun List<TimelineEvent>.filterEventsWithSettings(): List<TimelineEvent> {
+        return filter {
+            val filterType = if (settings.filterTypes) {
+                settings.allowedTypes.contains(it.root.type)
+            } else {
+                true
+            }
+            val filterEdits = if (settings.filterEdits && it.root.type == EventType.MESSAGE) {
+                val messageContent = it.root.content.toModel<MessageContent>()
+                messageContent?.relatesTo?.type != RelationType.REPLACE
+            } else {
+                true
+            }
+            filterType && filterEdits
+        }
     }
 
     private data class State(
