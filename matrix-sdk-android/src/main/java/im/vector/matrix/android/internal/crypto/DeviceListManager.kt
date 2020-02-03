@@ -319,10 +319,11 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         for (userId in filteredUsers) {
             // al devices =
             val models = response.deviceKeys?.get(userId)?.mapValues { entry -> CryptoInfoMapper.map(entry.value) }
-                    ?.toMutableMap()
+
 
             Timber.v("## doKeyDownloadForUsers() : Got keys for $userId : $models")
             if (!models.isNullOrEmpty()) {
+                val workingCopy = models.toMutableMap()
                 for ((deviceId, deviceInfo) in models) {
                     // Get the potential previously store device keys for this device
                     val previouslyStoredDeviceKeys = cryptoStore.getUserDevice(userId, deviceId)
@@ -335,21 +336,21 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
                     // Validate received keys
                     if (!validateDeviceKeys(deviceInfo, userId, deviceId, previouslyStoredDeviceKeys)) {
                         // New device keys are not valid. Do not store them
-                        models.remove(deviceId)
+                        workingCopy.remove(deviceId)
                         if (null != previouslyStoredDeviceKeys) {
                             // But keep old validated ones if any
-                            models[deviceId] = previouslyStoredDeviceKeys
+                            workingCopy[deviceId] = previouslyStoredDeviceKeys
                         }
                     } else if (null != previouslyStoredDeviceKeys) {
                         // The verified status is not sync'ed with hs.
                         // This is a client side information, valid only for this client.
                         // So, transfer its previous value
-                        models[deviceId]!!.trustLevel = previouslyStoredDeviceKeys.trustLevel
+                        workingCopy[deviceId]!!.trustLevel = previouslyStoredDeviceKeys.trustLevel
                     }
                 }
                 // Update the store
                 // Note that devices which aren't in the response will be removed from the stores
-                cryptoStore.storeUserDevices(userId, models)
+                cryptoStore.storeUserDevices(userId, workingCopy)
             }
 
             // Handle cross signing keys update
