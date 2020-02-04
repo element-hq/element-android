@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.crypto
+package im.vector.matrix.android.api.crypto
 
 /**
  * Class to define the parameters used to customize or configure the end-to-end crypto.
  */
 data class MXCryptoConfig(
         // Tell whether the encryption of the event content is enabled for the invited members.
-        // By default, we encrypt messages only for the joined members.
-        // The encryption for the invited members will be blocked if the history visibility is "joined".
-        var enableEncryptionForInvitedMembers: Boolean = false
+        // SDK clients can disable this by settings it to false.
+        // Note that the encryption for the invited members will be blocked if the history visibility is "joined".
+        var enableEncryptionForInvitedMembers: Boolean = true
 )

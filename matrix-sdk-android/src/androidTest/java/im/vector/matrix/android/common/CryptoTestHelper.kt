@@ -74,7 +74,7 @@ class CryptoTestHelper(val mTestHelper: CommonTestHelper) {
         val room = aliceSession.getRoom(roomId!!)!!
 
         val lock2 = CountDownLatch(1)
-        room.enableEncryptionWithAlgorithm(MXCRYPTO_ALGORITHM_MEGOLM, object : TestMatrixCallback<Unit>(lock2) {})
+        room.enableEncryption(callback = TestMatrixCallback(lock2))
         mTestHelper.await(lock2)
 
         return CryptoTestData(aliceSession, roomId!!)
