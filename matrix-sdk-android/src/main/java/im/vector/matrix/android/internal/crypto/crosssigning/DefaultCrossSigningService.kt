@@ -20,7 +20,6 @@ import androidx.lifecycle.LiveData
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
-import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.api.util.Optional
@@ -39,9 +38,8 @@ import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
-import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.withoutPrefix
-import kotlinx.coroutines.CoroutineScope
+import org.greenrobot.eventbus.EventBus
 import org.matrix.olm.OlmPkSigning
 import org.matrix.olm.OlmUtility
 import timber.log.Timber
@@ -56,9 +54,9 @@ internal class DefaultCrossSigningService @Inject constructor(
         private val deviceListManager: DeviceListManager,
         private val uploadSigningKeysTask: UploadSigningKeysTask,
         private val uploadSignaturesTask: UploadSignaturesTask,
-        private val cryptoCoroutineScope: CoroutineScope,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val taskExecutor: TaskExecutor) : CrossSigningService, DeviceListManager.UserDevicesUpdateListener {
+        private val computeTrustTask: ComputeTrustTask,
+        private val taskExecutor: TaskExecutor,
+        val eventBus: EventBus) : CrossSigningService, DeviceListManager.UserDevicesUpdateListener {
 
     private var olmUtility: OlmUtility? = null
 
@@ -630,13 +628,14 @@ internal class DefaultCrossSigningService @Inject constructor(
                 // In this case it will change my MSK trust, and should then re-trigger a check of all other user trust
                 setUserKeysAsTrusted(otherUserId, checkSelfTrust().isVerified())
             }
+
+            eventBus.post(CryptoToSessionUserTrustChange(users))
         }
     }
 
     private fun setUserKeysAsTrusted(otherUserId: String, trusted: Boolean) {
         val currentTrust = cryptoStore.getCrossSigningInfo(otherUserId)?.isTrusted()
         cryptoStore.setUserKeysAsTrusted(otherUserId, trusted)
-
         // If it's me, recheck trust of all users and devices?
         val users = ArrayList<String>()
         if (otherUserId == userId && currentTrust != trusted) {
@@ -655,36 +654,7 @@ internal class DefaultCrossSigningService @Inject constructor(
         }
     }
 
-    override fun getTrustLevelForUsers(userIds: List<String>): RoomEncryptionTrustLevel {
-        val allTrusted = userIds
-                .filter { getUserCrossSigningKeys(it)?.isTrusted() == true }
-
-        val allUsersAreVerified = userIds.size == allTrusted.size
-
-        return if (allTrusted.isEmpty()) {
-            RoomEncryptionTrustLevel.Default
-        } else {
-            // If one of the verified user as an untrusted device -> warning
-            // Green if all devices of all verified users are trusted -> green
-            // else black
-            val allDevices = allTrusted.mapNotNull {
-                cryptoStore.getUserDeviceList(it)
-            }.flatten()
-            if (getMyCrossSigningKeys() != null) {
-                val hasWarning = allDevices.any { !it.trustLevel?.crossSigningVerified.orFalse() }
-                if (hasWarning) {
-                    RoomEncryptionTrustLevel.Warning
-                } else {
-                    if (allUsersAreVerified) RoomEncryptionTrustLevel.Trusted else RoomEncryptionTrustLevel.Default
-                }
-            } else {
-                val hasWarningLegacy = allDevices.any { !it.isVerified }
-                if (hasWarningLegacy) {
-                    RoomEncryptionTrustLevel.Warning
-                } else {
-                    if (allUsersAreVerified) RoomEncryptionTrustLevel.Trusted else RoomEncryptionTrustLevel.Default
-                }
-            }
-        }
+    override suspend fun getTrustLevelForUsers(userIds: List<String>): RoomEncryptionTrustLevel {
+        return computeTrustTask.execute(ComputeTrustTask.Params(userIds))
     }
 }

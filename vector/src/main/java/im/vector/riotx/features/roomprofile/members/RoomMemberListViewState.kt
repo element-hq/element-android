@@ -20,6 +20,7 @@ import androidx.annotation.StringRes
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
 import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.R
@@ -28,7 +29,8 @@ import im.vector.riotx.features.roomprofile.RoomProfileArgs
 data class RoomMemberListViewState(
         val roomId: String,
         val roomSummary: Async<RoomSummary> = Uninitialized,
-        val roomMemberSummaries: Async<RoomMemberSummaries> = Uninitialized
+        val roomMemberSummaries: Async<RoomMemberSummaries> = Uninitialized,
+        val trustLevelMap: Async<Map<String, RoomEncryptionTrustLevel?>> = Uninitialized
 ) : MvRxState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)

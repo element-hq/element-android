@@ -86,7 +86,7 @@ class ViewReactionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun observeEventAnnotationSummaries() {
-        RxRoom(room, session)
+        RxRoom(room)
                 .liveAnnotationSummary(eventId)
                 .unwrap()
                 .flatMapSingle { summaries ->

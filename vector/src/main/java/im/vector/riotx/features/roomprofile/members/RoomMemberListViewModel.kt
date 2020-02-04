@@ -21,6 +21,8 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -31,12 +33,14 @@ import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsConstants
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
+import im.vector.matrix.rx.asObservable
 import im.vector.matrix.rx.mapOptional
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 
 class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomMemberListViewState,
@@ -70,11 +74,12 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
             displayName = QueryStringValue.IsNotEmpty
             memberships = Membership.activeMemberships()
         }
+
         Observable
                 .combineLatest<List<RoomMemberSummary>, PowerLevelsContent, RoomMemberSummaries>(
-                        room.rx(session).liveRoomMembers(roomMemberQueryParams),
-                        room.rx(session)
-                                .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, "")
+                        room.rx().liveRoomMembers(roomMemberQueryParams),
+                        room.rx()
+                                .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
                                 .mapOptional { it.content.toModel<PowerLevelsContent>() }
                                 .unwrap(),
                         BiFunction { roomMembers, powerLevelsContent ->
@@ -84,10 +89,35 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                 .execute { async ->
                     copy(roomMemberSummaries = async)
                 }
+
+        if (room.isEncrypted()) {
+            room.rx().liveRoomMembers(roomMemberQueryParams)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .switchMap { membersSummary ->
+                        session.getLiveCryptoDeviceInfo(membersSummary.map { it.userId })
+                                .asObservable()
+                                .map { deviceList ->
+                                    // If any key change, emit the userIds list
+                                    deviceList.groupBy { it.userId }.mapValues {
+                                        val allDeviceTrusted = it.value.fold(it.value.isNotEmpty()) { prev, next ->
+                                            prev && next.trustLevel?.isCrossSigningVerified().orFalse()
+                                        }
+                                        if (session.getCrossSigningService().getUserCrossSigningKeys(it.key)?.isTrusted().orFalse()) {
+                                            if (allDeviceTrusted) RoomEncryptionTrustLevel.Trusted else RoomEncryptionTrustLevel.Warning
+                                        } else {
+                                            RoomEncryptionTrustLevel.Default
+                                        }
+                                    }
+                                }
+                    }
+                    .execute { async ->
+                        copy(trustLevelMap = async)
+                    }
+        }
     }
 
     private fun observeRoomSummary() {
-        room.rx(session).liveRoomSummary()
+        room.rx().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     copy(roomSummary = async)

@@ -54,7 +54,7 @@ class RoomListQuickActionsViewModel @AssistedInject constructor(@Assisted initia
 
     private fun observeNotificationState() {
         room
-                .rx(session)
+                .rx()
                 .liveNotificationState()
                 .execute {
                     copy(roomNotificationState = it)
@@ -63,7 +63,7 @@ class RoomListQuickActionsViewModel @AssistedInject constructor(@Assisted initia
 
     private fun observeRoomSummary() {
         room
-                .rx(session)
+                .rx()
                 .liveRoomSummary()
                 .unwrap()
                 .execute {

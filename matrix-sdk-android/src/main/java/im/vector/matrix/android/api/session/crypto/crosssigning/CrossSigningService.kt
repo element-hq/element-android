@@ -64,5 +64,5 @@ interface CrossSigningService {
                          otherDeviceId: String,
                          locallyTrusted: Boolean?): DeviceTrustResult
 
-    fun getTrustLevelForUsers(userIds: List<String>): RoomEncryptionTrustLevel
+    suspend fun getTrustLevelForUsers(userIds: List<String>): RoomEncryptionTrustLevel
 }

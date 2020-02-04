@@ -38,11 +38,18 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() 
     lateinit var title: String
     @EpoxyAttribute
     var subtitle: String? = null
+
     @EpoxyAttribute
     var iconRes: Int = 0
 
     @EpoxyAttribute
+    var tintIcon: Boolean = true
+
+    @EpoxyAttribute
     var editableRes: Int = R.drawable.ic_arrow_right
+
+    @EpoxyAttribute
+    var accessoryRes: Int = 0
 
     @EpoxyAttribute
     var editable: Boolean = true
@@ -70,10 +77,21 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() 
         holder.subtitle.setTextOrHide(subtitle)
         if (iconRes != 0) {
             holder.icon.setImageResource(iconRes)
-            ImageViewCompat.setImageTintList(holder.icon, ColorStateList.valueOf(tintColor))
+            if (tintIcon) {
+                ImageViewCompat.setImageTintList(holder.icon, ColorStateList.valueOf(tintColor))
+            } else {
+                ImageViewCompat.setImageTintList(holder.icon, null)
+            }
             holder.icon.isVisible = true
         } else {
             holder.icon.isVisible = false
+        }
+
+        if (accessoryRes != 0) {
+            holder.secondaryAccessory.setImageResource(accessoryRes)
+            holder.secondaryAccessory.isVisible = true
+        } else {
+            holder.secondaryAccessory.isVisible = false
         }
 
         if (editableRes != 0) {
@@ -95,5 +113,6 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() 
         val title by bind<TextView>(R.id.actionTitle)
         val subtitle by bind<TextView>(R.id.actionSubtitle)
         val editable by bind<ImageView>(R.id.actionEditable)
+        val secondaryAccessory by bind<ImageView>(R.id.actionSecondaryAccessory)
     }
 }

@@ -23,7 +23,10 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
+import im.vector.matrix.android.internal.crypto.crosssigning.ComputeTrustTask
+import im.vector.matrix.android.internal.crypto.crosssigning.DefaultComputeTrustTask
 import im.vector.matrix.android.internal.crypto.crosssigning.DefaultCrossSigningService
+import im.vector.matrix.android.internal.crypto.crosssigning.ShieldTrustUpdater
 import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
 import im.vector.matrix.android.internal.crypto.keysbackup.tasks.CreateKeysBackupVersionTask
 import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultCreateKeysBackupVersionTask
@@ -139,15 +142,6 @@ internal abstract class CryptoModule {
 
         @JvmStatic
         @Provides
-        fun providesCryptoStore(@CryptoDatabase
-                                realmConfiguration: RealmConfiguration, credentials: Credentials): IMXCryptoStore {
-            return RealmCryptoStore(
-                    realmConfiguration,
-                    credentials)
-        }
-
-        @JvmStatic
-        @Provides
         @SessionScope
         fun providesCryptoAPI(retrofit: Retrofit): CryptoApi {
             return retrofit.create(CryptoApi::class.java)
@@ -249,4 +243,10 @@ internal abstract class CryptoModule {
 
     @Binds
     abstract fun bindCrossSigningService(crossSigningService: DefaultCrossSigningService): CrossSigningService
+
+    @Binds
+    abstract fun bindCryptoStore(realmCryptoStore: RealmCryptoStore): IMXCryptoStore
+
+    @Binds
+    abstract fun bindComputeShieldTrustTask(defaultShieldTrustUpdater: DefaultComputeTrustTask): ComputeTrustTask
 }

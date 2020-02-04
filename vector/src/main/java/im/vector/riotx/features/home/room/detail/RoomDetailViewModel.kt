@@ -159,7 +159,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         observeMyRoomMember()
         room.getRoomSummaryLive()
         room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, NoOpMatrixCallback())
-        room.rx(session).loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
+        room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         // Inform the SDK that the room is displayed
         session.onRoomDisplayed(initialState.roomId)
     }
@@ -168,7 +168,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         val queryParams = roomMemberQueryParams {
             this.userId = QueryStringValue.Equals(session.myUserId, QueryStringValue.Case.SENSITIVE)
         }
-        room.rx(session)
+        room.rx()
                 .liveRoomMembers(queryParams)
                 .map {
                     it.firstOrNull().toOptional()
@@ -255,7 +255,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun observeDrafts() {
-        room.rx(session).liveDrafts()
+        room.rx().liveDrafts()
                 .subscribe {
                     Timber.d("Draft update --> SetState")
                     setState {
@@ -896,7 +896,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun observeRoomSummary() {
-        room.rx(session).liveRoomSummary()
+        room.rx().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     val typingRoomMembers =
@@ -914,7 +914,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         Observable
                 .combineLatest<List<TimelineEvent>, RoomSummary, UnreadState>(
                         timelineEvents.observeOn(Schedulers.computation()),
-                        room.rx(session).liveRoomSummary().unwrap(),
+                        room.rx().liveRoomSummary().unwrap(),
                         BiFunction { timelineEvents, roomSummary ->
                             computeUnreadState(timelineEvents, roomSummary)
                         }

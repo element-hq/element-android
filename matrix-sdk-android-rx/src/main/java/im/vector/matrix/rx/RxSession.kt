@@ -33,40 +33,14 @@ import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.functions.BiFunction
-import timber.log.Timber
 
 class RxSession(private val session: Session) {
 
     fun liveRoomSummaries(queryParams: RoomSummaryQueryParams): Observable<List<RoomSummary>> {
-        val summariesObservable = session.getRoomSummariesLive(queryParams).asObservable()
+        return session.getRoomSummariesLive(queryParams).asObservable()
                 .startWithCallable {
                     session.getRoomSummaries(queryParams)
                 }
-                .doOnNext { Timber.v("RX: summaries emitted: size: ${it.size}") }
-
-        val cryptoDeviceInfoObservable = session.getLiveCryptoDeviceInfo().asObservable()
-                .startWith(emptyList<CryptoDeviceInfo>())
-                .doOnNext { Timber.v("RX: crypto device info emitted: size: ${it.size}") }
-
-        return Observable
-                .combineLatest<List<RoomSummary>, List<CryptoDeviceInfo>, List<RoomSummary>>(
-                        summariesObservable,
-                        cryptoDeviceInfoObservable,
-                        BiFunction { summaries, _ ->
-                            summaries.map {
-                                if (it.isEncrypted) {
-                                    it.copy(
-                                            roomEncryptionTrustLevel = session.getCrossSigningService()
-                                                    .getTrustLevelForUsers(it.otherMemberIds + session.myUserId)
-                                    )
-                                } else {
-                                    it
-                                }
-                            }
-                        }
-                )
-                .doOnNext { Timber.d("RX: final summaries emitted: size: ${it.size}") }
     }
 
     fun liveGroupSummaries(queryParams: GroupSummaryQueryParams): Observable<List<GroupSummary>> {
