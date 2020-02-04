@@ -23,6 +23,7 @@ import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
+import im.vector.matrix.android.api.MatrixConfiguration
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
@@ -32,7 +33,6 @@ import im.vector.matrix.android.api.session.InitialSyncProgressService
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
-import im.vector.matrix.android.internal.MatrixConfigurationHolder
 import im.vector.matrix.android.internal.crypto.verification.VerificationMessageLiveObserver
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
@@ -192,8 +192,8 @@ internal abstract class SessionModule {
         @JvmStatic
         @Provides
         @SessionScope
-        fun providesMxCryptoConfig(matrixConfigurationHolder: MatrixConfigurationHolder): MXCryptoConfig {
-            return matrixConfigurationHolder.matrixConfiguration?.cryptoConfig ?: MXCryptoConfig()
+        fun providesMxCryptoConfig(matrixConfiguration: MatrixConfiguration): MXCryptoConfig {
+            return matrixConfiguration.cryptoConfig
         }
     }
 

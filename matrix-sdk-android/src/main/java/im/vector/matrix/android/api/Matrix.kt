@@ -24,7 +24,6 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.matrix.android.api.crypto.MXCryptoConfig
-import im.vector.matrix.android.internal.MatrixConfigurationHolder
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachments
@@ -54,20 +53,17 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
 
     @Inject internal lateinit var authenticationService: AuthenticationService
     @Inject internal lateinit var userAgentHolder: UserAgentHolder
-    @Inject internal lateinit var matrixConfigurationHolder: MatrixConfigurationHolder
     @Inject internal lateinit var backgroundDetectionObserver: BackgroundDetectionObserver
     @Inject internal lateinit var olmManager: OlmManager
     @Inject internal lateinit var sessionManager: SessionManager
 
     init {
         Monarchy.init(context)
-        DaggerMatrixComponent.factory().create(context).inject(this)
+        DaggerMatrixComponent.factory().create(context, matrixConfiguration).inject(this)
         if (context.applicationContext !is Configuration.Provider) {
             WorkManager.initialize(context, Configuration.Builder().build())
         }
         ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
-        matrixConfigurationHolder.matrixConfiguration = matrixConfiguration.copy()
-        userAgentHolder.setApplicationFlavor(matrixConfiguration.applicationFlavor)
     }
 
     fun getUserAgent() = userAgentHolder.userAgent

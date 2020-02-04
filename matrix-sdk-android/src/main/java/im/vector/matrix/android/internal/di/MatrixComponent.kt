@@ -22,8 +22,8 @@ import com.squareup.moshi.Moshi
 import dagger.BindsInstance
 import dagger.Component
 import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.api.MatrixConfiguration
 import im.vector.matrix.android.api.auth.AuthenticationService
-import im.vector.matrix.android.internal.MatrixConfigurationHolder
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.AuthModule
 import im.vector.matrix.android.internal.auth.SessionParamsStore
@@ -47,9 +47,9 @@ internal interface MatrixComponent {
 
     fun authenticationService(): AuthenticationService
 
-    fun matrixConfigurationHolder(): MatrixConfigurationHolder
-
     fun context(): Context
+
+    fun matrixConfiguration(): MatrixConfiguration
 
     fun resources(): Resources
 
@@ -69,6 +69,7 @@ internal interface MatrixComponent {
 
     @Component.Factory
     interface Factory {
-        fun create(@BindsInstance context: Context): MatrixComponent
+        fun create(@BindsInstance context: Context,
+                   @BindsInstance matrixConfiguration: MatrixConfiguration): MatrixComponent
     }
 }
