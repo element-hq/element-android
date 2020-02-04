@@ -12,6 +12,7 @@ Other changes:
 
 Bugfix 🐛:
  - Ask for permission before opening the camera (#934)
+ - Encrypt for invited users by default, if the room state allows it (#803)
 
 Translations 🗣:
  -
