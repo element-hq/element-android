@@ -19,14 +19,12 @@ package im.vector.matrix.android.internal.crypto
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.crosssigning.ComputeTrustTask
 import im.vector.matrix.android.internal.crypto.crosssigning.DefaultComputeTrustTask
 import im.vector.matrix.android.internal.crypto.crosssigning.DefaultCrossSigningService
-import im.vector.matrix.android.internal.crypto.crosssigning.ShieldTrustUpdater
 import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
 import im.vector.matrix.android.internal.crypto.keysbackup.tasks.CreateKeysBackupVersionTask
 import im.vector.matrix.android.internal.crypto.keysbackup.tasks.DefaultCreateKeysBackupVersionTask

@@ -16,8 +16,6 @@
 
 package im.vector.matrix.android.api.session.room.model
 
-import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
-
 /**
  * Class representing a simplified version of EventType.STATE_ROOM_MEMBER state event content
  */

@@ -127,7 +127,6 @@ internal class ShieldTrustUpdater @Inject constructor(
                     }
                 }
             }
-
         }
     }
 }
