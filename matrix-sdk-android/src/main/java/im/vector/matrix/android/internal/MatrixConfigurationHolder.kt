@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.crypto
+package im.vector.matrix.android.internal
 
-/**
- * Class to define the parameters used to customize or configure the end-to-end crypto.
- */
-data class MXCryptoConfig(
-        // Tell whether the encryption of the event content is enabled for the invited members.
-        // SDK clients can disable this by settings it to false.
-        // Note that the encryption for the invited members will be blocked if the history visibility is "joined".
-        var enableEncryptionForInvitedMembers: Boolean = true
-)
+import im.vector.matrix.android.api.MatrixConfiguration
+import im.vector.matrix.android.internal.di.MatrixScope
+import javax.inject.Inject
+
+@MatrixScope
+internal class MatrixConfigurationHolder @Inject constructor() {
+
+    var matrixConfiguration: MatrixConfiguration? = null
+}

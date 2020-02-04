@@ -27,14 +27,24 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.auth.data.sessionId
+import im.vector.matrix.android.api.crypto.MXCryptoConfig
 import im.vector.matrix.android.api.session.InitialSyncProgressService
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
+import im.vector.matrix.android.internal.MatrixConfigurationHolder
 import im.vector.matrix.android.internal.crypto.verification.VerificationMessageLiveObserver
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
-import im.vector.matrix.android.internal.di.*
+import im.vector.matrix.android.internal.di.Authenticated
+import im.vector.matrix.android.internal.di.DeviceId
+import im.vector.matrix.android.internal.di.SessionCacheDirectory
+import im.vector.matrix.android.internal.di.SessionDatabase
+import im.vector.matrix.android.internal.di.SessionFilesDirectory
+import im.vector.matrix.android.internal.di.SessionId
+import im.vector.matrix.android.internal.di.Unauthenticated
+import im.vector.matrix.android.internal.di.UserId
+import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
@@ -177,6 +187,13 @@ internal abstract class SessionModule {
         @SessionScope
         fun providesEventBus(): EventBus {
             return EventBus.builder().build()
+        }
+
+        @JvmStatic
+        @Provides
+        @SessionScope
+        fun providesMxCryptoConfig(matrixConfigurationHolder: MatrixConfigurationHolder): MXCryptoConfig {
+            return matrixConfigurationHolder.matrixConfiguration?.cryptoConfig ?: MXCryptoConfig()
         }
     }
 

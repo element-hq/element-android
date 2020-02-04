@@ -159,13 +159,6 @@ internal abstract class CryptoModule {
         fun providesRoomKeysAPI(retrofit: Retrofit): RoomKeysApi {
             return retrofit.create(RoomKeysApi::class.java)
         }
-
-        @JvmStatic
-        @Provides
-        @SessionScope
-        fun providesCryptoConfig(): MXCryptoConfig {
-            return MXCryptoConfig()
-        }
     }
 
     @Binds

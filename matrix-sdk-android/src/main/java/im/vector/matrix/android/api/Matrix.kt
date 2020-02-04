@@ -23,6 +23,8 @@ import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.auth.AuthenticationService
+import im.vector.matrix.android.api.crypto.MXCryptoConfig
+import im.vector.matrix.android.internal.MatrixConfigurationHolder
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachments
@@ -35,7 +37,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 data class MatrixConfiguration(
-        val applicationFlavor: String = "Default-application-flavor"
+        val applicationFlavor: String = "Default-application-flavor",
+        val cryptoConfig: MXCryptoConfig = MXCryptoConfig()
 ) {
 
     interface Provider {
@@ -51,6 +54,7 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
 
     @Inject internal lateinit var authenticationService: AuthenticationService
     @Inject internal lateinit var userAgentHolder: UserAgentHolder
+    @Inject internal lateinit var matrixConfigurationHolder: MatrixConfigurationHolder
     @Inject internal lateinit var backgroundDetectionObserver: BackgroundDetectionObserver
     @Inject internal lateinit var olmManager: OlmManager
     @Inject internal lateinit var sessionManager: SessionManager
@@ -62,6 +66,7 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
             WorkManager.initialize(context, Configuration.Builder().build())
         }
         ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
+        matrixConfigurationHolder.matrixConfiguration = matrixConfiguration.copy()
         userAgentHolder.setApplicationFlavor(matrixConfiguration.applicationFlavor)
     }
 
