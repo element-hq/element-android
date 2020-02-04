@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentFactory
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import im.vector.riotx.features.attachments.preview.AttachmentsPreviewFragment
 import im.vector.riotx.features.createdirect.CreateDirectRoomDirectoryUsersFragment
 import im.vector.riotx.features.createdirect.CreateDirectRoomKnownUsersFragment
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
@@ -348,4 +349,10 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(CrossSigningSettingsFragment::class)
     fun bindCrossSigningSettingsFragment(fragment: CrossSigningSettingsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(AttachmentsPreviewFragment::class)
+    fun bindAttachmentsPreviewFragment(fragment: AttachmentsPreviewFragment): Fragment
+
 }
