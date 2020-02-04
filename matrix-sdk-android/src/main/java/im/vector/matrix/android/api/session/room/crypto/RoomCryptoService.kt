@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session.room.crypto
 
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 
 interface RoomCryptoService {
 
@@ -26,5 +27,9 @@ interface RoomCryptoService {
 
     fun shouldEncryptForInvitedMembers(): Boolean
 
-    fun enableEncryptionWithAlgorithm(algorithm: String, callback: MatrixCallback<Unit>)
+    /**
+     * Enable encryption of the room
+     */
+    fun enableEncryption(algorithm: String = MXCRYPTO_ALGORITHM_MEGOLM,
+                         callback: MatrixCallback<Unit>)
 }
