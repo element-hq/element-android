@@ -83,6 +83,10 @@ class LoginWebFragment @Inject constructor(
     private fun setupWebView(state: LoginViewState) {
         loginWebWebView.settings.javaScriptEnabled = true
 
+        // Enable local storage to support SSO with Firefox accounts
+        loginWebWebView.settings.domStorageEnabled = true
+        loginWebWebView.settings.databaseEnabled = true
+
         // Due to https://developers.googleblog.com/2016/08/modernizing-oauth-interactions-in-native-apps.html, we hack
         // the user agent to bypass the limitation of Google, as a quick fix (a proper solution will be to use the SSO SDK)
         loginWebWebView.settings.userAgentString = "Mozilla/5.0 Google"
@@ -90,7 +94,7 @@ class LoginWebFragment @Inject constructor(
         // AppRTC requires third party cookies to work
         val cookieManager = android.webkit.CookieManager.getInstance()
 
-        // clear the cookies must be cleared
+        // clear the cookies
         if (cookieManager == null) {
             launchWebView(state)
         } else {
@@ -225,12 +229,8 @@ class LoginWebFragment @Inject constructor(
                         val action = javascriptResponse.action
 
                         if (state.signMode == SignMode.SignIn) {
-                            try {
-                                if (action == "onLogin") {
-                                    javascriptResponse.credentials?.let { notifyViewModel(it) }
-                                }
-                            } catch (e: Exception) {
-                                Timber.e(e, "## shouldOverrideUrlLoading() : failed")
+                            if (action == "onLogin") {
+                                javascriptResponse.credentials?.let { notifyViewModel(it) }
                             }
                         } else {
                             // MODE_REGISTER

@@ -9,7 +9,7 @@ Improvements 🙌:
  - Improve network detection. It is now based on the sync request status (#873, #882) 
 
 Other changes:
- -
+ - Support SSO login with Firefox account (#606)
 
 Bugfix 🐛:
  - Ask for permission before opening the camera (#934)
