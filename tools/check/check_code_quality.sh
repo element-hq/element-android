@@ -111,7 +111,7 @@ fi
 echo
 echo "Search for long files..."
 
-${checkLongFilesScript} 2000 \
+${checkLongFilesScript} 2500 \
     ./vector/src/main/java \
     ./vector/src/main/res/layout \
     ./vector/src/main/res/values \
