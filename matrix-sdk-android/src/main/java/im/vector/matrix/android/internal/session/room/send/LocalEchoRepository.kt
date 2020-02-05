@@ -116,7 +116,7 @@ internal class LocalEchoRepository @Inject constructor(private val monarchy: Mon
                             EventType.REACTION -> {
                                 val content = event.getClearContent().toModel<MessageContent>()
                                 if (content != null) {
-                                    when (content.type) {
+                                    when (content.msgType) {
                                         MessageType.MSGTYPE_EMOTE,
                                         MessageType.MSGTYPE_NOTICE,
                                         MessageType.MSGTYPE_LOCATION,
@@ -127,11 +127,11 @@ internal class LocalEchoRepository @Inject constructor(private val monarchy: Mon
                                         MessageType.MSGTYPE_VIDEO,
                                         MessageType.MSGTYPE_IMAGE,
                                         MessageType.MSGTYPE_AUDIO -> {
-                                            // need to resend the attachement
+                                            // need to resend the attachment
                                             false
                                         }
                                         else                      -> {
-                                            Timber.e("Cannot resend message ${event.type} / ${content.type}")
+                                            Timber.e("Cannot resend message ${event.type} / ${content.msgType}")
                                             false
                                         }
                                     }

@@ -41,7 +41,7 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
             // Decrypt event if necessary
             decryptEvent(event, null)
             if (event.getClearType() == EventType.MESSAGE
-                    && event.getClearContent()?.toModel<MessageContent>()?.type == "m.bad.encrypted") {
+                    && event.getClearContent()?.toModel<MessageContent>()?.msgType == "m.bad.encrypted") {
                 Timber.e("## handleToDeviceEvent() : Warning: Unable to decrypt to-device event : ${event.content}")
             } else {
                 verificationService.onToDeviceEvent(event)

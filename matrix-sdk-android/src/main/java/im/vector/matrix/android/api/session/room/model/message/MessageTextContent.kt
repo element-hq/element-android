@@ -23,10 +23,26 @@ import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultC
 
 @JsonClass(generateAdapter = true)
 data class MessageTextContent(
-        @Json(name = "msgtype") override val type: String,
+        /**
+         * Required. Must be 'm.text'.
+         */
+        @Json(name = "msgtype") override val msgType: String,
+
+        /**
+         * Required. The body of the message.
+         */
         @Json(name = "body") override val body: String,
+
+        /**
+         * The format used in the formatted_body. Currently only org.matrix.custom.html is supported.
+         */
         @Json(name = "format") val format: String? = null,
+
+        /**
+         * The formatted version of the body. This is required if format is specified.
+         */
         @Json(name = "formatted_body") val formattedBody: String? = null,
+
         @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
         @Json(name = "m.new_content") override val newContent: Content? = null
 ) : MessageContent

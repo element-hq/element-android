@@ -88,7 +88,7 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
                 // done from another device of mine
 
                 if (EventType.MESSAGE == event.type) {
-                    val msgType = event.getClearContent().toModel<MessageContent>()?.type
+                    val msgType = event.getClearContent().toModel<MessageContent>()?.msgType
                     if (MessageType.MSGTYPE_VERIFICATION_REQUEST == msgType) {
                         event.getClearContent().toModel<MessageVerificationRequestContent>()?.let {
                             if (it.fromDevice != deviceId) {
@@ -144,7 +144,7 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
                     params.verificationService.onRoomEvent(event)
                 }
                 EventType.MESSAGE -> {
-                    if (MessageType.MSGTYPE_VERIFICATION_REQUEST == event.getClearContent().toModel<MessageContent>()?.type) {
+                    if (MessageType.MSGTYPE_VERIFICATION_REQUEST == event.getClearContent().toModel<MessageContent>()?.msgType) {
                         params.verificationService.onRoomRequestReceived(event)
                     }
                 }

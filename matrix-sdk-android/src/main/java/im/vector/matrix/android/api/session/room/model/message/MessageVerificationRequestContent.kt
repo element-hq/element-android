@@ -24,7 +24,7 @@ import im.vector.matrix.android.internal.crypto.verification.VerificationInfoReq
 
 @JsonClass(generateAdapter = true)
 data class MessageVerificationRequestContent(
-        @Json(name = "msgtype") override val type: String = MessageType.MSGTYPE_VERIFICATION_REQUEST,
+        @Json(name = "msgtype") override val msgType: String = MessageType.MSGTYPE_VERIFICATION_REQUEST,
         @Json(name = "body") override val body: String,
         @Json(name = "from_device") override val fromDevice: String?,
         @Json(name = "methods") override val methods: List<String>,

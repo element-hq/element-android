@@ -83,7 +83,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         if (msgType == MessageType.MSGTYPE_TEXT || msgType == MessageType.MSGTYPE_EMOTE) {
             return createFormattedTextEvent(roomId, createTextContent(text, autoMarkdown), msgType)
         }
-        val content = MessageTextContent(type = msgType, body = text.toString())
+        val content = MessageTextContent(msgType = msgType, body = text.toString())
         return createEvent(roomId, content)
     }
 
@@ -122,7 +122,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                                compatibilityText: String): Event {
         return createEvent(roomId,
                 MessageTextContent(
-                        type = msgType,
+                        msgType = msgType,
                         body = compatibilityText,
                         relatesTo = RelationDefaultContent(RelationType.REPLACE, targetEventId),
                         newContent = createTextContent(newBodyText, newBodyAutoMarkdown)
@@ -131,7 +131,8 @@ internal class LocalEchoEventFactory @Inject constructor(
                 ))
     }
 
-    fun createReplaceTextOfReply(roomId: String, eventReplaced: TimelineEvent,
+    fun createReplaceTextOfReply(roomId: String,
+                                 eventReplaced: TimelineEvent,
                                  originalEvent: TimelineEvent,
                                  newBodyText: String,
                                  newBodyAutoMarkdown: Boolean,
@@ -157,11 +158,11 @@ internal class LocalEchoEventFactory @Inject constructor(
 
         return createEvent(roomId,
                 MessageTextContent(
-                        type = msgType,
+                        msgType = msgType,
                         body = compatibilityText,
                         relatesTo = RelationDefaultContent(RelationType.REPLACE, eventReplaced.root.eventId),
                         newContent = MessageTextContent(
-                                type = msgType,
+                                msgType = msgType,
                                 format = MessageType.FORMAT_MATRIX_HTML,
                                 body = replyFallback,
                                 formattedBody = replyFormatted
@@ -214,7 +215,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         }
 
         val content = MessageImageContent(
-                type = MessageType.MSGTYPE_IMAGE,
+                msgType = MessageType.MSGTYPE_IMAGE,
                 body = attachment.name ?: "image",
                 info = ImageInfo(
                         mimeType = attachment.mimeType,
@@ -246,7 +247,7 @@ internal class LocalEchoEventFactory @Inject constructor(
             )
         }
         val content = MessageVideoContent(
-                type = MessageType.MSGTYPE_VIDEO,
+                msgType = MessageType.MSGTYPE_VIDEO,
                 body = attachment.name ?: "video",
                 videoInfo = VideoInfo(
                         mimeType = attachment.mimeType,
@@ -265,7 +266,7 @@ internal class LocalEchoEventFactory @Inject constructor(
 
     private fun createAudioEvent(roomId: String, attachment: ContentAttachmentData): Event {
         val content = MessageAudioContent(
-                type = MessageType.MSGTYPE_AUDIO,
+                msgType = MessageType.MSGTYPE_AUDIO,
                 body = attachment.name ?: "audio",
                 audioInfo = AudioInfo(
                         mimeType = attachment.mimeType?.takeIf { it.isNotBlank() } ?: "audio/mpeg",
@@ -278,7 +279,7 @@ internal class LocalEchoEventFactory @Inject constructor(
 
     private fun createFileEvent(roomId: String, attachment: ContentAttachmentData): Event {
         val content = MessageFileContent(
-                type = MessageType.MSGTYPE_FILE,
+                msgType = MessageType.MSGTYPE_FILE,
                 body = attachment.name ?: "file",
                 info = FileInfo(
                         mimeType = attachment.mimeType?.takeIf { it.isNotBlank() }
@@ -349,7 +350,7 @@ internal class LocalEchoEventFactory @Inject constructor(
 
         val eventId = eventReplied.root.eventId ?: return null
         val content = MessageTextContent(
-                type = MessageType.MSGTYPE_TEXT,
+                msgType = MessageType.MSGTYPE_TEXT,
                 format = MessageType.FORMAT_MATRIX_HTML,
                 body = replyFallback,
                 formattedBody = replyFormatted,
@@ -383,7 +384,7 @@ internal class LocalEchoEventFactory @Inject constructor(
      * himself a reply, but it will contain the fallbacks, so we have to trim them.
      */
     private fun bodyForReply(content: MessageContent?, originalContent: MessageContent?): TextContent {
-        when (content?.type) {
+        when (content?.msgType) {
             MessageType.MSGTYPE_EMOTE,
             MessageType.MSGTYPE_TEXT,
             MessageType.MSGTYPE_NOTICE -> {

@@ -12,7 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package im.vector.matrix.android.api.session.room.model.message
@@ -28,7 +27,7 @@ data class MessageStickerContent(
         /**
          * Set in local, not from server
          */
-        override val type: String = MessageType.MSGTYPE_STICKER_LOCAL,
+        override val msgType: String = MessageType.MSGTYPE_STICKER_LOCAL,
 
         /**
          * Required. A textual representation of the image. This could be the alt text of the image, the filename of the image,
@@ -42,7 +41,7 @@ data class MessageStickerContent(
         @Json(name = "info") override val info: ImageInfo? = null,
 
         /**
-         * Required. Required if the file is unencrypted. The URL (typically MXC URI) to the image.
+         * Required if the file is unencrypted. The URL (typically MXC URI) to the image.
          */
         @Json(name = "url") override val url: String? = null,
 

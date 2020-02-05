@@ -480,7 +480,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         val existingBody = messageContent?.body ?: ""
                         if (existingBody != action.text) {
                             room.editTextMessage(state.sendMode.timelineEvent.root.eventId ?: "",
-                                    messageContent?.type ?: MessageType.MSGTYPE_TEXT,
+                                    messageContent?.msgType ?: MessageType.MSGTYPE_TEXT,
                                     action.text,
                                     action.autoMarkdown)
                         } else {
