@@ -1,4 +1,8 @@
 /*
+ * Copyright (C) 2011 Micah Hainline
+ * Copyright (C) 2012 Triposo
+ * Copyright (C) 2013 Paul Imhoff
+ * Copyright (C) 2014 Shahin Yousefi
  * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +20,6 @@
  */
 package im.vector.riotx.core.platform
 
-import android.R
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -26,12 +29,21 @@ import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.StaticLayout
-import android.text.TextUtils.*
+import android.text.TextUtils.TruncateAt
+import android.text.TextUtils.concat
+import android.text.TextUtils.copySpansFrom
+import android.text.TextUtils.indexOf
+import android.text.TextUtils.lastIndexOf
+import android.text.TextUtils.substring
 import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 import java.util.ArrayList
 import java.util.regex.Pattern
+
+/*
+ * Imported from https://gist.github.com/hateum/d2095575b441007d62b8
+ */
 
 /**
  * A [android.widget.TextView] that ellipsizes more intelligently.
@@ -42,7 +54,7 @@ import java.util.regex.Pattern
  * Note: [TruncateAt.MARQUEE] ellipsizing type is not supported.
  * This as to be used to get rid of the StaticLayout issue with maxLines and ellipsize causing some performance issues.
  */
-class EllipsizingTextView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = R.attr.textViewStyle)
+class EllipsizingTextView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = android.R.attr.textViewStyle)
     : AppCompatTextView(context, attrs, defStyle) {
 
     private val ELLIPSIS = SpannableString("\u2026")
@@ -387,7 +399,7 @@ class EllipsizingTextView @JvmOverloads constructor(context: Context, attrs: Att
     }
 
     init {
-        val a = context.obtainStyledAttributes(attrs, intArrayOf(R.attr.maxLines, R.attr.ellipsize), defStyle, 0)
+        val a = context.obtainStyledAttributes(attrs, intArrayOf(android.R.attr.maxLines, android.R.attr.ellipsize), defStyle, 0)
         maxLines = a.getInt(0, Int.MAX_VALUE)
         a.recycle()
         setEndPunctuationPattern(DEFAULT_END_PUNCTUATION)
