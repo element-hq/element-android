@@ -20,13 +20,14 @@ package im.vector.riotx.features.attachments.preview
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
-import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseFragment
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_attachments_preview.*
@@ -39,8 +40,9 @@ data class AttachmentsPreviewArgs(
 
 class AttachmentsPreviewFragment @Inject constructor(
         val viewModelFactory: AttachmentsPreviewViewModel.Factory,
-        private val attachmentPreviewController: AttachmentPreviewController
-) : VectorBaseFragment() {
+        private val attachmentMiniaturePreviewController: AttachmentMiniaturePreviewController,
+        private val attachmentBigPreviewController: AttachmentBigPreviewController
+) : VectorBaseFragment(), AttachmentMiniaturePreviewController.Callback {
 
     private val fragmentArgs: AttachmentsPreviewArgs by args()
     private val viewModel: AttachmentsPreviewViewModel by fragmentViewModel()
@@ -49,19 +51,36 @@ class AttachmentsPreviewFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupRecyclerView()
+        setupRecyclerViews()
+        setupToolbar(attachmentPreviewerToolbar)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        attachmentPreviewerList.cleanup()
+        attachmentPreviewerMiniatureList.cleanup()
     }
 
-    private fun setupRecyclerView() {
-        attachmentPreviewerList.configureWith(attachmentPreviewController, hasFixedSize = true)
+    private fun setupRecyclerViews() {
+        attachmentPreviewerMiniatureList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        attachmentPreviewerMiniatureList.setHasFixedSize(true)
+        attachmentPreviewerMiniatureList.adapter = attachmentMiniaturePreviewController.adapter
+        attachmentMiniaturePreviewController.callback = this
+
+        attachmentPreviewerBigList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        val snapHelper = PagerSnapHelper()
+        snapHelper.attachToRecyclerView(attachmentPreviewerBigList)
+        attachmentPreviewerBigList.setHasFixedSize(true)
+        attachmentPreviewerBigList.adapter = attachmentBigPreviewController.adapter
+
     }
 
     override fun invalidate() = withState(viewModel) { state ->
+        attachmentMiniaturePreviewController.setData(state)
+        attachmentBigPreviewController.setData(state)
+    }
+
+    override fun onAttachmentClicked(contentAttachmentData: ContentAttachmentData) {
 
     }
+
 }

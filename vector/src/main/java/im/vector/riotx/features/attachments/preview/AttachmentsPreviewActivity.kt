@@ -19,6 +19,8 @@ package im.vector.riotx.features.attachments.preview
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
+import android.view.WindowManager
 import androidx.appcompat.widget.Toolbar
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.addFragment
@@ -30,15 +32,21 @@ class AttachmentsPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
     companion object {
 
         private const val EXTRA_FRAGMENT_ARGS = "EXTRA_FRAGMENT_ARGS"
+        const val REQUEST_CODE = 55
 
         fun newIntent(context: Context, args: AttachmentsPreviewArgs): Intent {
-            return Intent(context, AttachmentsPreviewArgs::class.java).apply {
+            return Intent(context, AttachmentsPreviewActivity::class.java).apply {
                 putExtra(EXTRA_FRAGMENT_ARGS, args)
             }
         }
     }
 
     override fun getLayoutRes() = R.layout.activity_simple
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun initUiAndData() {
         if (isFirstCreation()) {

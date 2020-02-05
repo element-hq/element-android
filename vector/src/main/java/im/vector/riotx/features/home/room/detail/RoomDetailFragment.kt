@@ -116,6 +116,8 @@ import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.attachments.AttachmentTypeSelectorView
 import im.vector.riotx.features.attachments.AttachmentsHelper
 import im.vector.riotx.features.attachments.ContactAttachment
+import im.vector.riotx.features.attachments.preview.AttachmentsPreviewActivity
+import im.vector.riotx.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.riotx.features.command.Command
 import im.vector.riotx.features.crypto.util.toImageRes
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
@@ -1337,7 +1339,8 @@ class RoomDetailFragment @Inject constructor(
     // AttachmentsHelper.Callback
 
     override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
-        roomDetailViewModel.handle(RoomDetailAction.SendMedia(attachments))
+        val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(attachments))
+        startActivityForResult(intent, AttachmentsPreviewActivity.REQUEST_CODE)
     }
 
     override fun onAttachmentsProcessFailed() {
