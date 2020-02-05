@@ -36,7 +36,7 @@ class RxRoom(private val room: Room) {
     fun liveRoomSummary(): Observable<Optional<RoomSummary>> {
         return room.getRoomSummaryLive()
                 .asObservable()
-                .startWith(room.roomSummary().toOptional())
+                .startWithCallable { room.roomSummary().toOptional() }
     }
 
     fun liveRoomMembers(queryParams: RoomMemberQueryParams): Observable<List<RoomMemberSummary>> {

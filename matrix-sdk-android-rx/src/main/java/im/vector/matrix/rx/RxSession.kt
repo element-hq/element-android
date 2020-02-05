@@ -110,12 +110,16 @@ class RxSession(private val session: Session) {
     }
 
     fun liveUserCryptoDevices(userId: String): Observable<List<CryptoDeviceInfo>> {
-        return session.getLiveCryptoDeviceInfo(userId).asObservable()
+        return session.getLiveCryptoDeviceInfo(userId).asObservable().startWithCallable {
+            session.getCryptoDeviceInfo(userId)
+        }
     }
 
     fun liveCrossSigningInfo(userId: String): Observable<Optional<MXCrossSigningInfo>> {
         return session.getCrossSigningService().getLiveCrossSigningKeys(userId).asObservable()
-                .startWith(session.getCrossSigningService().getUserCrossSigningKeys(userId).toOptional())
+                .startWithCallable {
+                    session.getCrossSigningService().getUserCrossSigningKeys(userId).toOptional()
+                }
     }
 }
 
