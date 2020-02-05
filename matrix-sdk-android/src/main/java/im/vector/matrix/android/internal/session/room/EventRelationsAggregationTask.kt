@@ -25,13 +25,12 @@ import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.ReferencesAggregatedContent
-import im.vector.matrix.android.api.session.events.model.*
 import im.vector.matrix.android.api.session.room.model.PollSummaryContent
+import im.vector.matrix.android.api.session.room.model.ReferencesAggregatedContent
 import im.vector.matrix.android.api.session.room.model.VoteInfo
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageRelationContent
 import im.vector.matrix.android.api.session.room.model.message.MessagePollResponseContent
+import im.vector.matrix.android.api.session.room.model.message.MessageRelationContent
 import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
@@ -291,7 +290,13 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
         }
     }
 
-    private fun handleResponse(realm: Realm, userId: String, event: Event, content: MessageContent, roomId: String, isLocalEcho: Boolean, relatedEventId: String? = null) {
+    private fun handleResponse(realm: Realm,
+                               userId: String,
+                               event: Event,
+                               content: MessageContent,
+                               roomId: String,
+                               isLocalEcho: Boolean,
+                               relatedEventId: String? = null) {
         val eventId = event.eventId ?: return
         val senderId = event.senderId ?: return
         val targetEventId = relatedEventId ?: content.relatesTo?.eventId ?: return
@@ -556,7 +561,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                 EventType.KEY_VERIFICATION_ACCEPT -> {
                     updateVerificationState(currentState, VerificationState.WAITING)
                 }
-                EventType.KEY_VERIFICATION_READY -> {
+                EventType.KEY_VERIFICATION_READY  -> {
                     updateVerificationState(currentState, VerificationState.WAITING)
                 }
                 EventType.KEY_VERIFICATION_KEY    -> {
