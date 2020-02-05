@@ -43,6 +43,8 @@ import java.util.regex.Pattern
 
 /*
  * Imported from https://gist.github.com/hateum/d2095575b441007d62b8
+ *
+ * Use it in your layout to avoid this issue: https://issuetracker.google.com/issues/121092510
  */
 
 /**
