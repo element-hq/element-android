@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.task
 
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
 import java.util.UUID
 
@@ -47,7 +48,7 @@ internal data class ConfigurableTask<PARAMS, RESULT>(
             var callbackThread: TaskThread = TaskThread.MAIN,
             var executionThread: TaskThread = TaskThread.IO,
             var retryCount: Int = 0,
-            var callback: MatrixCallback<RESULT> = object : MatrixCallback<RESULT> {}
+            var callback: MatrixCallback<RESULT> = NoOpMatrixCallback()
     ) {
 
         fun build() = ConfigurableTask(

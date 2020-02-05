@@ -158,7 +158,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         observeUnreadState()
         observeMyRoomMember()
         room.getRoomSummaryLive()
-        room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, object : MatrixCallback<Any> {})
+        room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, NoOpMatrixCallback())
         room.rx(session).loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         // Inform the SDK that the room is displayed
         session.onRoomDisplayed(initialState.roomId)
@@ -225,7 +225,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun stopTrackingUnreadMessages() {
         if (trackUnreadMessages.getAndSet(false)) {
             mostRecentDisplayedEvent?.root?.eventId?.also {
-                room.setReadMarker(it, callback = object : MatrixCallback<Unit> {})
+                room.setReadMarker(it, callback = NoOpMatrixCallback())
             }
             mostRecentDisplayedEvent = null
         }
@@ -525,7 +525,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun popDraft() {
-        room.deleteDraft(object : MatrixCallback<Unit> {})
+        room.deleteDraft(NoOpMatrixCallback())
     }
 
     private fun legacyRiotQuoteText(quotedText: String?, myText: String): String {
@@ -631,11 +631,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleRejectInvite() {
-        room.leave(null, object : MatrixCallback<Unit> {})
+        room.leave(null, NoOpMatrixCallback())
     }
 
     private fun handleAcceptInvite() {
-        room.join(callback = object : MatrixCallback<Unit> {})
+        room.join(callback = NoOpMatrixCallback())
     }
 
     private fun handleEditAction(action: RoomDetailAction.EnterEditMode) {
@@ -808,14 +808,14 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         }
                     }
                     bufferedMostRecentDisplayedEvent.root.eventId?.let { eventId ->
-                        room.setReadReceipt(eventId, callback = object : MatrixCallback<Unit> {})
+                        room.setReadReceipt(eventId, callback = NoOpMatrixCallback())
                     }
                 })
                 .disposeOnClear()
     }
 
     private fun handleMarkAllAsRead() {
-        room.markAsRead(ReadService.MarkAsReadParams.BOTH, object : MatrixCallback<Any> {})
+        room.markAsRead(ReadService.MarkAsReadParams.BOTH, NoOpMatrixCallback())
     }
 
     private fun handleReportContent(action: RoomDetailAction.ReportContent) {

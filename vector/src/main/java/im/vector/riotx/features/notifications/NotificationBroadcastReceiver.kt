@@ -20,7 +20,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.RemoteInput
-import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.read.ReadService
@@ -75,21 +75,21 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     private fun handleJoinRoom(roomId: String) {
         activeSessionHolder.getSafeActiveSession()?.let { session ->
             session.getRoom(roomId)
-                    ?.join(callback = object : MatrixCallback<Unit> {})
+                    ?.join(callback = NoOpMatrixCallback())
         }
     }
 
     private fun handleRejectRoom(roomId: String) {
         activeSessionHolder.getSafeActiveSession()?.let { session ->
             session.getRoom(roomId)
-                    ?.leave(callback = object : MatrixCallback<Unit> {})
+                    ?.leave(callback = NoOpMatrixCallback())
         }
     }
 
     private fun handleMarkAsRead(roomId: String) {
         activeSessionHolder.getActiveSession().let { session ->
             session.getRoom(roomId)
-                    ?.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, object : MatrixCallback<Unit> {})
+                    ?.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, NoOpMatrixCallback())
         }
     }
 

@@ -26,6 +26,7 @@ import com.squareup.moshi.Types
 import com.zhuinden.monarchy.Monarchy
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.listeners.ProgressListener
@@ -189,7 +190,7 @@ internal class DefaultCryptoService @Inject constructor(
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             // bg refresh of crypto device
-                            downloadKeys(listOf(credentials.userId), true, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {})
+                            downloadKeys(listOf(credentials.userId), true, NoOpMatrixCallback())
                             callback.onSuccess(data)
                         }
 
