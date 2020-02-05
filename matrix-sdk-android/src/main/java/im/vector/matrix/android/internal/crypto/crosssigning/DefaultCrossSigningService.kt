@@ -393,7 +393,7 @@ internal class DefaultCrossSigningService @Inject constructor(
                         return@forEach
                     } catch (failure: Throwable) {
                         // log
-                        Timber.v(failure)
+                        Timber.w(failure, "Signature not valid?")
                     }
                 }
             }

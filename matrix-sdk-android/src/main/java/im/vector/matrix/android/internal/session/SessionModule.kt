@@ -66,6 +66,11 @@ internal abstract class SessionModule {
     companion object {
         internal fun getKeyAlias(userMd5: String) = "session_db_$userMd5"
 
+        /**
+         * Rules:
+         * Annotate methods with @SessionScope only the @Provides annotated methods with computation and logic.
+         */
+
         @JvmStatic
         @Provides
         fun providesHomeServerConnectionConfig(sessionParams: SessionParams): HomeServerConnectionConfig {

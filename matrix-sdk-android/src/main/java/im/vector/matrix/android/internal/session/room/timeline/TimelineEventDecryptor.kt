@@ -110,7 +110,7 @@ internal class TimelineEventDecryptor(
                 eventEntity.setDecryptionResult(result)
             }
         } catch (e: MXCryptoError) {
-            Timber.v(e, "Failed to decrypt event $eventId")
+            Timber.w(e, "Failed to decrypt event $eventId")
             if (e is MXCryptoError.Base && e.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
                 // Keep track of unknown sessions to automatically try to decrypt on new session
                 realm.executeTransaction {

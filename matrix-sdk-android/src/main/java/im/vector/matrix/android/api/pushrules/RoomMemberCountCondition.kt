@@ -59,7 +59,7 @@ class RoomMemberCountCondition(val iz: String) : Condition(Kind.room_member_coun
             val (prefix, count) = match.destructured
             return prefix to count.toInt()
         } catch (t: Throwable) {
-            Timber.d(t)
+            Timber.e(t, "Unable to parse 'is' field")
         }
         return null
     }

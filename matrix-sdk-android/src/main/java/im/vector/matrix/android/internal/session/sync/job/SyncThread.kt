@@ -174,7 +174,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                 Timber.v("Cancelled")
             } else if (failure.isTokenError()) {
                 // No token or invalid token, stop the thread
-                Timber.w(failure)
+                Timber.w(failure, "Token error")
                 isStarted = false
                 isTokenValid = false
             } else {

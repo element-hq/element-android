@@ -51,8 +51,8 @@ internal class RoomSummaryUpdater @Inject constructor(
         private val roomAvatarResolver: RoomAvatarResolver,
         private val monarchy: Monarchy) {
 
-    // TODO: maybe allow user of SDK to give that list
     companion object {
+        // TODO: maybe allow user of SDK to give that list
         val PREVIEWABLE_TYPES = listOf(
                 // TODO filter message type (KEY_VERIFICATION_READY, etc.)
                 EventType.MESSAGE,
