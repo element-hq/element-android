@@ -28,11 +28,6 @@ interface StateService {
      */
     fun updateTopic(topic: String, callback: MatrixCallback<Unit>)
 
-    /**
-     * Enable encryption of the room
-     */
-    fun enableEncryption(algorithm: String, callback: MatrixCallback<Unit>)
-
     fun getStateEvent(eventType: String, stateKey: String): Event?
 
     fun getStateEventLive(eventType: String, stateKey: String): LiveData<Optional<Event>>

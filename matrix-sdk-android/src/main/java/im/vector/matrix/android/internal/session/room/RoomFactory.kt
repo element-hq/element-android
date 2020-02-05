@@ -29,8 +29,10 @@ import im.vector.matrix.android.internal.session.room.relation.DefaultRelationSe
 import im.vector.matrix.android.internal.session.room.reporting.DefaultReportingService
 import im.vector.matrix.android.internal.session.room.send.DefaultSendService
 import im.vector.matrix.android.internal.session.room.state.DefaultStateService
+import im.vector.matrix.android.internal.session.room.state.SendStateTask
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineService
 import im.vector.matrix.android.internal.session.room.typing.DefaultTypingService
+import im.vector.matrix.android.internal.task.TaskExecutor
 import javax.inject.Inject
 
 internal interface RoomFactory {
@@ -50,7 +52,9 @@ internal class DefaultRoomFactory @Inject constructor(private val monarchy: Mona
                                                       private val typingServiceFactory: DefaultTypingService.Factory,
                                                       private val relationServiceFactory: DefaultRelationService.Factory,
                                                       private val membershipServiceFactory: DefaultMembershipService.Factory,
-                                                      private val roomPushRuleServiceFactory: DefaultRoomPushRuleService.Factory):
+                                                      private val roomPushRuleServiceFactory: DefaultRoomPushRuleService.Factory,
+                                                      private val taskExecutor: TaskExecutor,
+                                                      private val sendStateTask: SendStateTask) :
         RoomFactory {
 
     override fun create(roomId: String): Room {
@@ -68,7 +72,9 @@ internal class DefaultRoomFactory @Inject constructor(private val monarchy: Mona
                 cryptoService = cryptoService,
                 relationService = relationServiceFactory.create(roomId),
                 roomMembersService = membershipServiceFactory.create(roomId),
-                roomPushRuleService = roomPushRuleServiceFactory.create(roomId)
+                roomPushRuleService = roomPushRuleServiceFactory.create(roomId),
+                taskExecutor = taskExecutor,
+                sendStateTask = sendStateTask
         )
     }
 }

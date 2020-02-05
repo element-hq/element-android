@@ -11,7 +11,8 @@ Other changes:
  -
 
 Bugfix 🐛:
- -
+ - Ask for permission before opening the camera (#934)
+ - Encrypt for invited users by default, if the room state allows it (#803)
 
 Translations 🗣:
  -
@@ -19,10 +20,17 @@ Translations 🗣:
 Build 🧱:
  -
 
+Changes in RiotX 0.14.3 (2020-02-03)
+===================================================
+
+Bugfix 🐛:
+ - Fix Exception in DeviceListManager
+
 Changes in RiotX 0.14.2 (2020-02-02)
 ===================================================
 
-Fix RiotX not starting issue
+Bugfix 🐛:
+ - Fix RiotX not starting issue
 
 Changes in RiotX 0.14.1 (2020-02-02)
 ===================================================

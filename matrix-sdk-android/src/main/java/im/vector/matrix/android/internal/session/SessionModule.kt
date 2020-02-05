@@ -35,7 +35,15 @@ import im.vector.matrix.android.api.session.securestorage.SecureStorageService
 import im.vector.matrix.android.internal.crypto.verification.VerificationMessageLiveObserver
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
-import im.vector.matrix.android.internal.di.*
+import im.vector.matrix.android.internal.di.Authenticated
+import im.vector.matrix.android.internal.di.DeviceId
+import im.vector.matrix.android.internal.di.SessionCacheDirectory
+import im.vector.matrix.android.internal.di.SessionDatabase
+import im.vector.matrix.android.internal.di.SessionFilesDirectory
+import im.vector.matrix.android.internal.di.SessionId
+import im.vector.matrix.android.internal.di.Unauthenticated
+import im.vector.matrix.android.internal.di.UserId
+import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import im.vector.matrix.android.internal.network.DefaultNetworkConnectivityChecker
 import im.vector.matrix.android.internal.network.FallbackNetworkCallbackStrategy

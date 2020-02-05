@@ -43,7 +43,9 @@ import im.vector.riotx.R
 import im.vector.riotx.core.extensions.getMeasurements
 import im.vector.riotx.core.utils.PERMISSIONS_EMPTY
 import im.vector.riotx.core.utils.PERMISSIONS_FOR_PICKING_CONTACT
+import im.vector.riotx.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.riotx.core.utils.PERMISSIONS_FOR_WRITING_FILES
+import im.vector.riotx.features.attachments.AttachmentTypeSelectorView.Callback
 import kotlin.math.max
 
 private const val ANIMATION_DURATION = 250
@@ -146,10 +148,10 @@ class AttachmentTypeSelectorView(context: Context,
     private fun animateWindowInCircular(anchor: View, contentView: View) {
         val coordinates = getClickCoordinates(anchor, contentView)
         val animator = ViewAnimationUtils.createCircularReveal(contentView,
-                                                               coordinates.first,
-                                                               coordinates.second,
-                                                               0f,
-                                                               max(contentView.width, contentView.height).toFloat())
+                coordinates.first,
+                coordinates.second,
+                0f,
+                max(contentView.width, contentView.height).toFloat())
         animator.duration = ANIMATION_DURATION.toLong()
         animator.start()
     }
@@ -164,10 +166,10 @@ class AttachmentTypeSelectorView(context: Context,
     private fun animateWindowOutCircular(anchor: View, contentView: View) {
         val coordinates = getClickCoordinates(anchor, contentView)
         val animator = ViewAnimationUtils.createCircularReveal(getContentView(),
-                                                               coordinates.first,
-                                                               coordinates.second,
-                                                               max(getContentView().width, getContentView().height).toFloat(),
-                                                               0f)
+                coordinates.first,
+                coordinates.second,
+                max(getContentView().width, getContentView().height).toFloat(),
+                0f)
 
         animator.duration = ANIMATION_DURATION.toLong()
         animator.addListener(object : AnimatorListenerAdapter() {
@@ -222,8 +224,7 @@ class AttachmentTypeSelectorView(context: Context,
      * The all possible types to pick with their required permissions.
      */
     enum class Type(val permissionsBit: Int) {
-
-        CAMERA(PERMISSIONS_EMPTY),
+        CAMERA(PERMISSIONS_FOR_TAKING_PHOTO),
         GALLERY(PERMISSIONS_FOR_WRITING_FILES),
         FILE(PERMISSIONS_FOR_WRITING_FILES),
         STICKER(PERMISSIONS_EMPTY),

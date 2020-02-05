@@ -28,6 +28,7 @@ import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.crypto.MXCryptoConfig
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.session.crypto.CryptoService
@@ -117,7 +118,7 @@ internal class DefaultCryptoService @Inject constructor(
         // Olm device
         private val olmDevice: MXOlmDevice,
         // Set of parameters used to configure/customize the end-to-end crypto.
-        private val cryptoConfig: MXCryptoConfig = MXCryptoConfig(),
+        private val mxCryptoConfig: MXCryptoConfig,
         // Device list manager
         private val deviceListManager: DeviceListManager,
         // The key backup service.
@@ -400,6 +401,7 @@ internal class DefaultCryptoService @Inject constructor(
             null
         }
     }
+
     override fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
         return cryptoStore.getUserDevices(userId)?.map { it.value } ?: emptyList()
     }
@@ -546,8 +548,8 @@ internal class DefaultCryptoService @Inject constructor(
         return cryptoStore.getUserDevices(userId)?.values?.toMutableList() ?: ArrayList()
     }
 
-    fun isEncryptionEnabledForInvitedUser(): Boolean {
-        return cryptoConfig.enableEncryptionForInvitedMembers
+    private fun isEncryptionEnabledForInvitedUser(): Boolean {
+        return mxCryptoConfig.enableEncryptionForInvitedMembers
     }
 
     override fun getEncryptionAlgorithm(roomId: String): String? {
@@ -780,7 +782,7 @@ internal class DefaultCryptoService @Inject constructor(
                 deviceListManager.startTrackingDeviceList(listOf(userId))
             } else if (membership == Membership.INVITE
                     && shouldEncryptForInvitedMembers(roomId)
-                    && cryptoConfig.enableEncryptionForInvitedMembers) {
+                    && isEncryptionEnabledForInvitedUser()) {
                 // track the deviceList for this invited user.
                 // Caution: there's a big edge case here in that federated servers do not
                 // know what other servers are in the room at the time they've been invited.

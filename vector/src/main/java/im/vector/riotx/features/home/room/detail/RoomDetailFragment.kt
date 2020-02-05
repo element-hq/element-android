@@ -1318,7 +1318,7 @@ class RoomDetailFragment @Inject constructor(
             AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio()
             AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact()
             AttachmentTypeSelectorView.Type.STICKER -> vectorBaseActivity.notImplemented("Adding stickers")
-        }
+        }.exhaustive
     }
 
     // AttachmentsHelper.Callback
