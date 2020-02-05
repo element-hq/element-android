@@ -68,7 +68,7 @@ interface SendService {
      * @param optionValue The option value (for compatibility)
      * @return a [Cancelable]
      */
-    fun sendPollReply(pollEventId: String, optionIndex: Int, optionValue: String): Cancelable
+    fun sendOptionsReply(pollEventId: String, optionIndex: Int, optionValue: String): Cancelable
 
     /**
      * @param options list of (label, value)

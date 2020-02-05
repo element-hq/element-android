@@ -84,8 +84,8 @@ internal class DefaultSendService @AssistedInject constructor(
         return sendEvent(event)
     }
 
-    override fun sendPollReply(pollEventId: String, optionIndex: Int, optionValue: String): Cancelable {
-        val event = localEchoEventFactory.createPollReplyEvent(roomId, pollEventId, optionIndex, optionValue).also {
+    override fun sendOptionsReply(pollEventId: String, optionIndex: Int, optionValue: String): Cancelable {
+        val event = localEchoEventFactory.createOptionsReplyEvent(roomId, pollEventId, optionIndex, optionValue).also {
             saveLocalEcho(it)
         }
         return sendEvent(event)

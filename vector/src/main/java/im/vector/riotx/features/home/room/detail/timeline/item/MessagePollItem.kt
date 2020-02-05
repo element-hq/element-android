@@ -145,7 +145,7 @@ abstract class MessagePollItem : AbsMessageItem<MessagePollItem.Holder>() {
                 val optionIndex = buttons.indexOf(it)
                 if (optionIndex != -1 && pollId != null) {
                     val compatValue = if (optionIndex < optionValues?.size ?: 0) optionValues?.get(optionIndex) else null
-                    callback?.onTimelineItemAction(RoomDetailAction.ReplyToPoll(pollId!!, optionIndex, compatValue
+                    callback?.onTimelineItemAction(RoomDetailAction.ReplyToOptionsPoll(pollId!!, optionIndex, compatValue
                             ?: "$optionIndex"))
                 }
             })

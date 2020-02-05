@@ -199,7 +199,8 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailAction.IgnoreUser                       -> handleIgnoreUser(action)
             is RoomDetailAction.EnterTrackingUnreadMessagesState -> startTrackingUnreadMessages()
             is RoomDetailAction.ExitTrackingUnreadMessagesState  -> stopTrackingUnreadMessages()
-            is RoomDetailAction.ReplyToPoll -> replyToPoll(action)
+            is RoomDetailAction.ReplyToOptionsPoll               -> replyToPoll(action)
+            is RoomDetailAction.ReplyToOptionsButtons            -> replyToButtons(action)
             is RoomDetailAction.AcceptVerificationRequest        -> handleAcceptVerification(action)
             is RoomDetailAction.DeclineVerificationRequest       -> handleDeclineVerification(action)
             is RoomDetailAction.RequestVerification              -> handleRequestVerification(action)
@@ -861,8 +862,12 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         }
     }
 
-    private fun replyToPoll(action: RoomDetailAction.ReplyToPoll) {
-        room.sendPollReply(action.eventId, action.optionIndex, action.optionValue)
+    private fun replyToPoll(action: RoomDetailAction.ReplyToOptionsPoll) {
+        room.sendOptionsReply(action.eventId, action.optionIndex, action.optionValue)
+    }
+
+    private fun replyToButtons(action: RoomDetailAction.ReplyToOptionsButtons) {
+        room.sendOptionsReply(action.eventId, action.optionIndex, action.optionValue)
     }
 
     private fun observeSyncState() {

@@ -151,6 +151,11 @@
         <item name="android:textColor">@color/button_positive_text_color_selector</item>
     </style>
 
+    <style name="VectorButtonStyleInlineBot" parent="VectorButtonStyleDestructive">
+        <item name="backgroundTint">@color/button_bot_background_selector</item>
+        <item name="android:textColor">@color/button_bot_enabled_text_color</item>
+    </style>
+
     <!--Widget.AppCompat.Button.Borderless.Colored, which sets the text color to colorAccent,
         using colorControlHighlight as an overlay for focused and pressed states.-->
     <style name="VectorButtonStyleText" parent="Widget.MaterialComponents.Button.TextButton">

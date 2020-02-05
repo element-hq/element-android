@@ -39,6 +39,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageTextConten
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
+import im.vector.matrix.android.api.session.room.model.message.OptionsType
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
@@ -66,6 +67,7 @@ import im.vector.riotx.features.home.room.detail.timeline.item.MessageFileItem_
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageImageVideoItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageImageVideoItem_
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageOptionsItem_
 import im.vector.riotx.features.home.room.detail.timeline.item.MessagePollItem_
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem_
@@ -139,24 +141,36 @@ class MessageItemFactory @Inject constructor(
             is MessageFileContent                -> buildFileMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageAudioContent               -> buildAudioMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageOptionsContent             -> buildPollMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageOptionsContent             -> buildOptionsMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessagePollResponseContent        -> noticeItemFactory.create(event, highlight, callback)
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
     }
 
-    private fun buildPollMessageItem(messageContent: MessageOptionsContent,
-                                     informationData: MessageInformationData,
-                                     highlight: Boolean,
-                                     callback: TimelineEventController.Callback?,
-                                     attributes: AbsMessageItem.Attributes): VectorEpoxyModel<*>? {
-        return MessagePollItem_()
-                .attributes(attributes)
-                .callback(callback)
-                .informationData(informationData)
-                .leftGuideline(avatarSizeProvider.leftGuideline)
-                .optionsContent(messageContent)
-                .highlighted(highlight)
+    private fun buildOptionsMessageItem(messageContent: MessageOptionsContent,
+                                        informationData: MessageInformationData,
+                                        highlight: Boolean,
+                                        callback: TimelineEventController.Callback?,
+                                        attributes: AbsMessageItem.Attributes): VectorEpoxyModel<*>? {
+        if (messageContent.optionType == OptionsType.POLL.value) {
+            return MessagePollItem_()
+                    .attributes(attributes)
+                    .callback(callback)
+                    .informationData(informationData)
+                    .leftGuideline(avatarSizeProvider.leftGuideline)
+                    .optionsContent(messageContent)
+                    .highlighted(highlight)
+        } else  if (messageContent.optionType == OptionsType.BUTTONS.value) {
+            return MessageOptionsItem_()
+                    .attributes(attributes)
+                    .callback(callback)
+                    .informationData(informationData)
+                    .leftGuideline(avatarSizeProvider.leftGuideline)
+                    .optionsContent(messageContent)
+                    .highlighted(highlight)
+        } else {
+            return null
+        }
     }
 
     private fun buildAudioMessageItem(messageContent: MessageAudioContent,

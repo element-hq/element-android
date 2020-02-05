@@ -136,10 +136,10 @@ internal class LocalEchoEventFactory @Inject constructor(
                 ))
     }
 
-    fun createPollReplyEvent(roomId: String,
-                             pollEventId: String,
-                             optionIndex: Int,
-                             optionLabel: String): Event {
+    fun createOptionsReplyEvent(roomId: String,
+                                pollEventId: String,
+                                optionIndex: Int,
+                                optionLabel: String): Event {
         return createEvent(roomId,
                 MessagePollResponseContent(
                         body = optionLabel,
