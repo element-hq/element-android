@@ -58,7 +58,7 @@ private class LiveDataObservable<T>(
     }
 }
 
-internal fun <T> LiveData<T>.asObservable(): Observable<T> {
+fun <T> LiveData<T>.asObservable(): Observable<T> {
     return LiveDataObservable(this).observeOn(Schedulers.computation())
 }
 

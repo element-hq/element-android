@@ -42,6 +42,7 @@ import im.vector.riotx.core.platform.VectorViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
+import timber.log.Timber
 
 class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomMemberListViewState,
                                                           private val roomMemberSummaryComparator: RoomMemberSummaryComparator,
@@ -79,7 +80,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                 .combineLatest<List<RoomMemberSummary>, PowerLevelsContent, RoomMemberSummaries>(
                         room.rx().liveRoomMembers(roomMemberQueryParams),
                         room.rx()
-                                .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
+                                .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, "")
                                 .mapOptional { it.content.toModel<PowerLevelsContent>() }
                                 .unwrap(),
                         BiFunction { roomMembers, powerLevelsContent ->
@@ -96,6 +97,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                     .switchMap { membersSummary ->
                         session.getLiveCryptoDeviceInfo(membersSummary.map { it.userId })
                                 .asObservable()
+                                .doOnError { Timber.e(it) }
                                 .map { deviceList ->
                                     // If any key change, emit the userIds list
                                     deviceList.groupBy { it.userId }.mapValues {
