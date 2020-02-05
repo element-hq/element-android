@@ -36,6 +36,7 @@ import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventConten
 data class TimelineEvent(
         val root: Event,
         val localId: Long,
+        val eventId: String,
         val displayIndex: Int,
         val senderName: String?,
         val isUniqueDisplayName: Boolean,

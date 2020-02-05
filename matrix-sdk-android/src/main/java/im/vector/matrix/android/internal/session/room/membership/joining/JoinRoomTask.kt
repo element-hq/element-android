@@ -64,7 +64,7 @@ internal class DefaultJoinRoomTask @Inject constructor(
     }
 
     private suspend fun setReadMarkers(roomId: String) {
-        val setReadMarkerParams = SetReadMarkersTask.Params(roomId, markAllAsRead = true)
+        val setReadMarkerParams = SetReadMarkersTask.Params(roomId, forceReadMarker = true, forceReadReceipt = true)
         readMarkersTask.execute(setReadMarkerParams)
     }
 }

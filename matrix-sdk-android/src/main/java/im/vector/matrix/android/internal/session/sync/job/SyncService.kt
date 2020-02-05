@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.session.sync.job
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.Matrix
 import im.vector.matrix.android.api.failure.isTokenError
 import im.vector.matrix.android.api.session.Session
@@ -28,7 +27,10 @@ import im.vector.matrix.android.internal.session.sync.SyncTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -97,14 +99,6 @@ abstract class SyncService : Service() {
     }
 
     private suspend fun doSync() {
-        if (!networkConnectivityChecker.hasInternetAccess()) {
-            Timber.v("No network reschedule to avoid wasting resources")
-            sessionId?.also {
-                onRescheduleAsked(it, isInitialSync, delay = 10_000L)
-            }
-            stopMe()
-            return
-        }
         Timber.v("Execute sync request with timeout 0")
         val params = SyncTask.Params(TIME_OUT)
         try {
@@ -120,9 +114,11 @@ abstract class SyncService : Service() {
             if (throwable.isTokenError()) {
                 stopMe()
             } else {
-                Timber.v("Retry to sync in 5s")
-                delay(DELAY_FAILURE)
-                doSync()
+                Timber.v("Should be rescheduled to avoid wasting resources")
+                sessionId?.also {
+                    onRescheduleAsked(it, isInitialSync, delay = 10_000L)
+                }
+                stopMe()
             }
         }
     }
@@ -146,9 +142,6 @@ abstract class SyncService : Service() {
             backgroundDetectionObserver = matrix.backgroundDetectionObserver
             return true
         } catch (exception: Exception) {
-            if (BuildConfig.DEBUG) {
-                throw exception
-            }
             Timber.e(exception, "An exception occurred during initialisation")
             return false
         }
@@ -165,6 +158,5 @@ abstract class SyncService : Service() {
     companion object {
         const val EXTRA_SESSION_ID = "EXTRA_SESSION_ID"
         private const val TIME_OUT = 0L
-        private const val DELAY_FAILURE = 5_000L
     }
 }

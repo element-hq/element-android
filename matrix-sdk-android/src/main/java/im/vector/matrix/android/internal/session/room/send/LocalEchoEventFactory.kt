@@ -18,26 +18,43 @@ package im.vector.matrix.android.internal.session.room.send
 
 import android.media.MediaMetadataRetriever
 import androidx.exifinterface.media.ExifInterface
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
-import im.vector.matrix.android.api.session.events.model.*
-import im.vector.matrix.android.api.session.room.model.message.*
+import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.LocalEcho
+import im.vector.matrix.android.api.session.events.model.RelationType
+import im.vector.matrix.android.api.session.events.model.UnsignedData
+import im.vector.matrix.android.api.session.events.model.toContent
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.message.AudioInfo
+import im.vector.matrix.android.api.session.room.model.message.FileInfo
+import im.vector.matrix.android.api.session.room.model.message.ImageInfo
+import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
+import im.vector.matrix.android.api.session.room.model.message.MessageFormat
+import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
+import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
+import im.vector.matrix.android.api.session.room.model.message.ThumbnailInfo
+import im.vector.matrix.android.api.session.room.model.message.VideoInfo
+import im.vector.matrix.android.api.session.room.model.message.isReply
 import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
 import im.vector.matrix.android.api.session.room.model.relation.ReactionInfo
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 import im.vector.matrix.android.api.session.room.model.relation.ReplyToContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
-import im.vector.matrix.android.internal.database.helper.addSendingEvent
-import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
-import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.send.pills.TextPillsUtils
+import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.StringProvider
+import kotlinx.coroutines.launch
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import javax.inject.Inject
@@ -54,8 +71,9 @@ import javax.inject.Inject
 internal class LocalEchoEventFactory @Inject constructor(
         @UserId private val userId: String,
         private val stringProvider: StringProvider,
-        private val roomSummaryUpdater: RoomSummaryUpdater,
-        private val textPillsUtils: TextPillsUtils
+        private val textPillsUtils: TextPillsUtils,
+        private val taskExecutor: TaskExecutor,
+        private val localEchoRepository: LocalEchoRepository
 ) {
     // TODO Inject
     private val parser = Parser.builder().build()
@@ -66,7 +84,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         if (msgType == MessageType.MSGTYPE_TEXT || msgType == MessageType.MSGTYPE_EMOTE) {
             return createFormattedTextEvent(roomId, createTextContent(text, autoMarkdown), msgType)
         }
-        val content = MessageTextContent(type = msgType, body = text.toString())
+        val content = MessageTextContent(msgType = msgType, body = text.toString())
         return createEvent(roomId, content)
     }
 
@@ -105,7 +123,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                                compatibilityText: String): Event {
         return createEvent(roomId,
                 MessageTextContent(
-                        type = msgType,
+                        msgType = msgType,
                         body = compatibilityText,
                         relatesTo = RelationDefaultContent(RelationType.REPLACE, targetEventId),
                         newContent = createTextContent(newBodyText, newBodyAutoMarkdown)
@@ -114,7 +132,8 @@ internal class LocalEchoEventFactory @Inject constructor(
                 ))
     }
 
-    fun createReplaceTextOfReply(roomId: String, eventReplaced: TimelineEvent,
+    fun createReplaceTextOfReply(roomId: String,
+                                 eventReplaced: TimelineEvent,
                                  originalEvent: TimelineEvent,
                                  newBodyText: String,
                                  newBodyAutoMarkdown: Boolean,
@@ -140,12 +159,12 @@ internal class LocalEchoEventFactory @Inject constructor(
 
         return createEvent(roomId,
                 MessageTextContent(
-                        type = msgType,
+                        msgType = msgType,
                         body = compatibilityText,
                         relatesTo = RelationDefaultContent(RelationType.REPLACE, eventReplaced.root.eventId),
                         newContent = MessageTextContent(
-                                type = msgType,
-                                format = MessageType.FORMAT_MATRIX_HTML,
+                                msgType = msgType,
+                                format = MessageFormat.FORMAT_MATRIX_HTML,
                                 body = replyFallback,
                                 formattedBody = replyFormatted
                         )
@@ -197,7 +216,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         }
 
         val content = MessageImageContent(
-                type = MessageType.MSGTYPE_IMAGE,
+                msgType = MessageType.MSGTYPE_IMAGE,
                 body = attachment.name ?: "image",
                 info = ImageInfo(
                         mimeType = attachment.mimeType,
@@ -229,7 +248,7 @@ internal class LocalEchoEventFactory @Inject constructor(
             )
         }
         val content = MessageVideoContent(
-                type = MessageType.MSGTYPE_VIDEO,
+                msgType = MessageType.MSGTYPE_VIDEO,
                 body = attachment.name ?: "video",
                 videoInfo = VideoInfo(
                         mimeType = attachment.mimeType,
@@ -248,7 +267,7 @@ internal class LocalEchoEventFactory @Inject constructor(
 
     private fun createAudioEvent(roomId: String, attachment: ContentAttachmentData): Event {
         val content = MessageAudioContent(
-                type = MessageType.MSGTYPE_AUDIO,
+                msgType = MessageType.MSGTYPE_AUDIO,
                 body = attachment.name ?: "audio",
                 audioInfo = AudioInfo(
                         mimeType = attachment.mimeType?.takeIf { it.isNotBlank() } ?: "audio/mpeg",
@@ -261,7 +280,7 @@ internal class LocalEchoEventFactory @Inject constructor(
 
     private fun createFileEvent(roomId: String, attachment: ContentAttachmentData): Event {
         val content = MessageFileContent(
-                type = MessageType.MSGTYPE_FILE,
+                msgType = MessageType.MSGTYPE_FILE,
                 body = attachment.name ?: "file",
                 info = FileInfo(
                         mimeType = attachment.mimeType?.takeIf { it.isNotBlank() }
@@ -332,8 +351,8 @@ internal class LocalEchoEventFactory @Inject constructor(
 
         val eventId = eventReplied.root.eventId ?: return null
         val content = MessageTextContent(
-                type = MessageType.MSGTYPE_TEXT,
-                format = MessageType.FORMAT_MATRIX_HTML,
+                msgType = MessageType.MSGTYPE_TEXT,
+                format = MessageFormat.FORMAT_MATRIX_HTML,
                 body = replyFallback,
                 formattedBody = replyFormatted,
                 relatesTo = RelationDefaultContent(null, null, ReplyToContent(eventId))
@@ -366,13 +385,13 @@ internal class LocalEchoEventFactory @Inject constructor(
      * himself a reply, but it will contain the fallbacks, so we have to trim them.
      */
     private fun bodyForReply(content: MessageContent?, originalContent: MessageContent?): TextContent {
-        when (content?.type) {
+        when (content?.msgType) {
             MessageType.MSGTYPE_EMOTE,
             MessageType.MSGTYPE_TEXT,
             MessageType.MSGTYPE_NOTICE -> {
                 var formattedText: String? = null
                 if (content is MessageTextContent) {
-                    if (content.format == MessageType.FORMAT_MATRIX_HTML) {
+                    if (content.format == MessageFormat.FORMAT_MATRIX_HTML) {
                         formattedText = content.formattedBody
                     }
                 }
@@ -421,13 +440,10 @@ internal class LocalEchoEventFactory @Inject constructor(
         )
     }
 
-    fun saveLocalEcho(monarchy: Monarchy, event: Event) {
+    fun createLocalEcho(event: Event) {
         checkNotNull(event.roomId) { "Your event should have a roomId" }
-        monarchy.writeAsync { realm ->
-            val roomEntity = RoomEntity.where(realm, roomId = event.roomId).findFirst()
-                    ?: return@writeAsync
-            roomEntity.addSendingEvent(event)
-            roomSummaryUpdater.update(realm, event.roomId)
+        taskExecutor.executorScope.launch {
+            localEchoRepository.createLocalEcho(event)
         }
     }
 

@@ -24,6 +24,7 @@ import io.realm.annotations.LinkingObjects
 internal open class TimelineEventEntity(var localId: Long = 0,
                                         @Index var eventId: String = "",
                                         @Index var roomId: String = "",
+                                        @Index var displayIndex: Int = 0,
                                         var root: EventEntity? = null,
                                         var annotations: EventAnnotationsSummaryEntity? = null,
                                         var senderName: String? = null,

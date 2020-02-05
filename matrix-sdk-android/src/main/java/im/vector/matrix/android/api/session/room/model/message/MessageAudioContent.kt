@@ -25,9 +25,9 @@ import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
 @JsonClass(generateAdapter = true)
 data class MessageAudioContent(
         /**
-         * Not documented
+         * Required. Must be 'm.audio'.
          */
-        @Json(name = "msgtype") override val type: String,
+        @Json(name = "msgtype") override val msgType: String,
 
         /**
          * Required. A description of the audio e.g. 'Bee Gees - Stayin' Alive', or some kind of content description for accessibility e.g. 'audio attachment'.
@@ -40,7 +40,7 @@ data class MessageAudioContent(
         @Json(name = "info") val audioInfo: AudioInfo? = null,
 
         /**
-         * Required. Required if the file is not encrypted. The URL (typically MXC URI) to the audio clip.
+         * Required if the file is not encrypted. The URL (typically MXC URI) to the audio clip.
          */
         @Json(name = "url") override val url: String? = null,
 

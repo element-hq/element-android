@@ -59,22 +59,22 @@ internal class DefaultRoomFactory @Inject constructor(private val monarchy: Mona
 
     override fun create(roomId: String): Room {
         return DefaultRoom(
-                roomId,
-                monarchy,
-                roomSummaryMapper,
-                timelineServiceFactory.create(roomId),
-                sendServiceFactory.create(roomId),
-                draftServiceFactory.create(roomId),
-                stateServiceFactory.create(roomId),
-                reportingServiceFactory.create(roomId),
-                readServiceFactory.create(roomId),
-                typingServiceFactory.create(roomId),
-                cryptoService,
-                relationServiceFactory.create(roomId),
-                membershipServiceFactory.create(roomId),
-                roomPushRuleServiceFactory.create(roomId),
-                taskExecutor,
-                sendStateTask
+                roomId = roomId,
+                monarchy = monarchy,
+                roomSummaryMapper = roomSummaryMapper,
+                timelineService = timelineServiceFactory.create(roomId),
+                sendService = sendServiceFactory.create(roomId),
+                draftService = draftServiceFactory.create(roomId),
+                stateService = stateServiceFactory.create(roomId),
+                reportingService = reportingServiceFactory.create(roomId),
+                readService = readServiceFactory.create(roomId),
+                typingService = typingServiceFactory.create(roomId),
+                cryptoService = cryptoService,
+                relationService = relationServiceFactory.create(roomId),
+                roomMembersService = membershipServiceFactory.create(roomId),
+                roomPushRuleService = roomPushRuleServiceFactory.create(roomId),
+                taskExecutor = taskExecutor,
+                sendStateTask = sendStateTask
         )
     }
 }

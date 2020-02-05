@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session
 
 import android.content.Context
+import android.os.Build
 import com.zhuinden.monarchy.Monarchy
 import dagger.Binds
 import dagger.Lazy
@@ -46,6 +47,11 @@ import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.network.AccessTokenInterceptor
+import im.vector.matrix.android.internal.network.DefaultNetworkConnectivityChecker
+import im.vector.matrix.android.internal.network.FallbackNetworkCallbackStrategy
+import im.vector.matrix.android.internal.network.NetworkCallbackStrategy
+import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
+import im.vector.matrix.android.internal.network.PreferredNetworkCallbackStrategy
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
@@ -61,6 +67,7 @@ import okhttp3.OkHttpClient
 import org.greenrobot.eventbus.EventBus
 import retrofit2.Retrofit
 import java.io.File
+import javax.inject.Provider
 
 @Module
 internal abstract class SessionModule {
@@ -68,6 +75,11 @@ internal abstract class SessionModule {
     @Module
     companion object {
         internal fun getKeyAlias(userMd5: String) = "session_db_$userMd5"
+
+        /**
+         * Rules:
+         * Annotate methods with @SessionScope only the @Provides annotated methods with computation and logic.
+         */
 
         @JvmStatic
         @Provides
@@ -84,6 +96,7 @@ internal abstract class SessionModule {
         @JvmStatic
         @UserId
         @Provides
+        @SessionScope
         fun providesUserId(credentials: Credentials): String {
             return credentials.userId
         }
@@ -98,6 +111,7 @@ internal abstract class SessionModule {
         @JvmStatic
         @UserMd5
         @Provides
+        @SessionScope
         fun providesUserMd5(@UserId userId: String): String {
             return userId.md5()
         }
@@ -105,6 +119,7 @@ internal abstract class SessionModule {
         @JvmStatic
         @SessionId
         @Provides
+        @SessionScope
         fun providesSessionId(credentials: Credentials): String {
             return credentials.sessionId()
         }
@@ -192,6 +207,19 @@ internal abstract class SessionModule {
         @JvmStatic
         @Provides
         @SessionScope
+        fun providesNetworkCallbackStrategy(fallbackNetworkCallbackStrategy: Provider<FallbackNetworkCallbackStrategy>,
+                                            preferredNetworkCallbackStrategy: Provider<PreferredNetworkCallbackStrategy>
+        ): NetworkCallbackStrategy {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                preferredNetworkCallbackStrategy.get()
+            } else {
+                fallbackNetworkCallbackStrategy.get()
+            }
+        }
+
+        @JvmStatic
+        @Provides
+        @SessionScope
         fun providesMxCryptoConfig(matrixConfiguration: MatrixConfiguration): MXCryptoConfig {
             return matrixConfiguration.cryptoConfig
         }
@@ -199,6 +227,9 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindSession(session: DefaultSession): Session
+
+    @Binds
+    abstract fun bindNetworkConnectivityChecker(networkConnectivityChecker: DefaultNetworkConnectivityChecker): NetworkConnectivityChecker
 
     @Binds
     @IntoSet

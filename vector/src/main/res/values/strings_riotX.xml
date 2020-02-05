@@ -123,7 +123,7 @@
 
     <string name="encryption_information_cross_signing_state">Cross-Signing</string>
     <string name="encryption_information_dg_xsigning_complete">Cross-Signing is enabled\nPrivate Keys on device.</string>
-        <string name="encryption_information_dg_xsigning_trusted">Cross-Signing is enabled\nKeys are trusted.\nPrivate keys are not known</string>
+    <string name="encryption_information_dg_xsigning_trusted">Cross-Signing is enabled\nKeys are trusted.\nPrivate keys are not known</string>
     <string name="encryption_information_dg_xsigning_not_trusted">Cross-Signing is enabled.\nKeys are not trusted</string>
     <string name="encryption_information_dg_xsigning_disabled">Cross-Signing is not enabled</string>
 
@@ -172,4 +172,6 @@
     <string name="qr_code_scanned_by_other_notice">Did the other user successfully scan the QR code?</string>
     <string name="qr_code_scanned_by_other_yes">Yes</string>
     <string name="qr_code_scanned_by_other_no">No</string>
+
+    <string name="no_connectivity_to_the_server_indicator">Connectivity to the server has been lost</string>
 </resources>

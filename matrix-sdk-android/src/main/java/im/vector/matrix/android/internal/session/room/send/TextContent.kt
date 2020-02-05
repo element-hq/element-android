@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.session.room.send
 
+import im.vector.matrix.android.api.session.room.model.message.MessageFormat
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.util.ContentUtils.extractUsefulTextFromHtmlReply
@@ -33,8 +34,8 @@ data class TextContent(
 
 fun TextContent.toMessageTextContent(msgType: String = MessageType.MSGTYPE_TEXT): MessageTextContent {
     return MessageTextContent(
-            type = msgType,
-            format = MessageType.FORMAT_MATRIX_HTML.takeIf { formattedText != null },
+            msgType = msgType,
+            format = MessageFormat.FORMAT_MATRIX_HTML.takeIf { formattedText != null },
             body = text,
             formattedBody = formattedText
     )

@@ -34,16 +34,17 @@ import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.fetchCopyMap
+import org.greenrobot.eventbus.EventBus
 
 internal class DefaultTimelineService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                   private val monarchy: Monarchy,
+                                                                  private val eventBus: EventBus,
                                                                   private val taskExecutor: TaskExecutor,
                                                                   private val contextOfEventTask: GetContextOfEventTask,
                                                                   private val cryptoService: CryptoService,
                                                                   private val paginationTask: PaginationTask,
                                                                   private val timelineEventMapper: TimelineEventMapper,
-                                                                  private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,
-                                                                  private val clearUnlinkedEventsTask: ClearUnlinkedEventsTask
+                                                                  private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper
 ) : TimelineService {
 
     @AssistedInject.Factory
@@ -52,17 +53,18 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
     }
 
     override fun createTimeline(eventId: String?, settings: TimelineSettings): Timeline {
-        return DefaultTimeline(roomId,
-                eventId,
-                monarchy.realmConfiguration,
-                taskExecutor,
-                contextOfEventTask,
-                clearUnlinkedEventsTask,
-                paginationTask,
-                cryptoService,
-                timelineEventMapper,
-                settings,
-                TimelineHiddenReadReceipts(readReceiptsSummaryMapper, roomId, settings)
+        return DefaultTimeline(
+                roomId = roomId,
+                initialEventId = eventId,
+                realmConfiguration = monarchy.realmConfiguration,
+                taskExecutor = taskExecutor,
+                contextOfEventTask = contextOfEventTask,
+                paginationTask = paginationTask,
+                cryptoService = cryptoService,
+                timelineEventMapper = timelineEventMapper,
+                settings = settings,
+                hiddenReadReceipts = TimelineHiddenReadReceipts(readReceiptsSummaryMapper, roomId, settings),
+                eventBus = eventBus
         )
     }
 

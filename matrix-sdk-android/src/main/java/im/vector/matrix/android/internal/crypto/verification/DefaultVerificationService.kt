@@ -165,7 +165,7 @@ internal class DefaultVerificationService @Inject constructor(
                     onRoomDoneReceived(event)
                 }
                 EventType.MESSAGE                 -> {
-                    if (MessageType.MSGTYPE_VERIFICATION_REQUEST == event.getClearContent().toModel<MessageContent>()?.type) {
+                    if (MessageType.MSGTYPE_VERIFICATION_REQUEST == event.getClearContent().toModel<MessageContent>()?.msgType) {
                         onRoomRequestReceived(event)
                     }
                 }

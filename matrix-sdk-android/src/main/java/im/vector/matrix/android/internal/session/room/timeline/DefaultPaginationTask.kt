@@ -43,6 +43,7 @@ internal class DefaultPaginationTask @Inject constructor(
     override suspend fun execute(params: PaginationTask.Params): TokenChunkEventPersistor.Result {
         val filter = filterRepository.getRoomFilter()
         val chunk = executeRequest<PaginationResponse>(eventBus) {
+            isRetryable = true
             apiCall = roomAPI.getRoomMessagesFrom(params.roomId, params.from, params.direction.value, params.limit, filter)
         }
         return tokenChunkEventPersistor.insertInDb(chunk, params.roomId, params.direction)

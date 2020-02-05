@@ -26,9 +26,9 @@ import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
 @JsonClass(generateAdapter = true)
 data class MessageFileContent(
         /**
-         * Not documented
+         * Required. Must be 'm.file'.
          */
-        @Json(name = "msgtype") override val type: String,
+        @Json(name = "msgtype") override val msgType: String,
 
         /**
          * Required. A human-readable description of the file. This is recommended to be the filename of the original upload.
@@ -46,13 +46,16 @@ data class MessageFileContent(
         @Json(name = "info") val info: FileInfo? = null,
 
         /**
-         * Required. Required if the file is unencrypted. The URL (typically MXC URI) to the file.
+         * Required if the file is unencrypted. The URL (typically MXC URI) to the file.
          */
         @Json(name = "url") override val url: String? = null,
 
         @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
         @Json(name = "m.new_content") override val newContent: Content? = null,
 
+        /**
+         * Required if the file is encrypted. Information on the encrypted file, as specified in End-to-end encryption.
+         */
         @Json(name = "file") override val encryptedFileInfo: EncryptedFileInfo? = null
 ) : MessageEncryptedContent {
 

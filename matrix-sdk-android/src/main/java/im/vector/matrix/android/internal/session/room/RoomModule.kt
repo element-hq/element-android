@@ -130,9 +130,6 @@ internal abstract class RoomModule {
     abstract fun bindGetContextOfEventTask(task: DefaultGetContextOfEventTask): GetContextOfEventTask
 
     @Binds
-    abstract fun bindClearUnlinkedEventsTask(task: DefaultClearUnlinkedEventsTask): ClearUnlinkedEventsTask
-
-    @Binds
     abstract fun bindPaginationTask(task: DefaultPaginationTask): PaginationTask
 
     @Binds

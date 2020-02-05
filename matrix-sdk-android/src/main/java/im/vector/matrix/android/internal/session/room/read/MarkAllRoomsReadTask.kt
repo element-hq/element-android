@@ -29,7 +29,7 @@ internal class DefaultMarkAllRoomsReadTask @Inject constructor(private val readM
 
     override suspend fun execute(params: MarkAllRoomsReadTask.Params) {
         params.roomIds.forEach { roomId ->
-            readMarkersTask.execute(SetReadMarkersTask.Params(roomId, markAllAsRead = true))
+            readMarkersTask.execute(SetReadMarkersTask.Params(roomId, forceReadMarker = true, forceReadReceipt = true))
         }
     }
 }

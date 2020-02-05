@@ -27,7 +27,7 @@ data class MessageImageContent(
         /**
          * Required. Must be 'm.image'.
          */
-        @Json(name = "msgtype") override val type: String,
+        @Json(name = "msgtype") override val msgType: String,
 
         /**
          * Required. A textual representation of the image. This could be the alt text of the image, the filename of the image,
@@ -41,7 +41,7 @@ data class MessageImageContent(
         @Json(name = "info") override val info: ImageInfo? = null,
 
         /**
-         * Required. Required if the file is unencrypted. The URL (typically MXC URI) to the image.
+         * Required if the file is unencrypted. The URL (typically MXC URI) to the image.
          */
         @Json(name = "url") override val url: String? = null,
 

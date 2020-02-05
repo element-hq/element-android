@@ -23,4 +23,5 @@ import im.vector.riotx.core.platform.VectorViewEvents
  */
 sealed class RoomDetailViewEvents : VectorViewEvents {
     data class Failure(val throwable: Throwable) : RoomDetailViewEvents()
+    data class OnNewTimelineEvents(val eventIds: List<String>) : RoomDetailViewEvents()
 }

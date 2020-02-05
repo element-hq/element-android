@@ -26,7 +26,6 @@ import android.widget.FrameLayout
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.airbnb.mvrx.MvRx
@@ -65,10 +64,10 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
     private lateinit var viewModelFactory: ViewModelProvider.Factory
 
     protected val activityViewModelProvider
-        get() = ViewModelProviders.of(requireActivity(), viewModelFactory)
+        get() = ViewModelProvider(requireActivity(), viewModelFactory)
 
     protected val fragmentViewModelProvider
-        get() = ViewModelProviders.of(this, viewModelFactory)
+        get() = ViewModelProvider(this, viewModelFactory)
 
     /* ==========================================================================================
      * BottomSheetBehavior

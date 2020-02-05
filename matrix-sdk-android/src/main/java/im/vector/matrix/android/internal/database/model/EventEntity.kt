@@ -21,11 +21,10 @@ import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.di.MoshiProvider
 import io.realm.RealmObject
-import io.realm.RealmResults
 import io.realm.annotations.Index
-import io.realm.annotations.LinkingObjects
+import io.realm.annotations.PrimaryKey
 
-internal open class EventEntity(@Index var eventId: String = "",
+internal open class EventEntity(@PrimaryKey var eventId: String = "",
                                 @Index var roomId: String = "",
                                 @Index var type: String = "",
                                 var content: String? = null,
@@ -36,19 +35,10 @@ internal open class EventEntity(@Index var eventId: String = "",
                                 var age: Long? = 0,
                                 var unsignedData: String? = null,
                                 var redacts: String? = null,
-                                @Index var stateIndex: Int = 0,
-                                @Index var displayIndex: Int = 0,
-                                @Index var isUnlinked: Boolean = false,
                                 var decryptionResultJson: String? = null,
                                 var decryptionErrorCode: String? = null,
                                 var ageLocalTs: Long? = null
 ) : RealmObject() {
-
-    enum class LinkFilterMode {
-        LINKED_ONLY,
-        UNLINKED_ONLY,
-        BOTH
-    }
 
     private var sendStateStr: String = SendState.UNKNOWN.name
 
@@ -62,12 +52,6 @@ internal open class EventEntity(@Index var eventId: String = "",
 
     companion object
 
-    @LinkingObjects("untimelinedStateEvents")
-    val room: RealmResults<RoomEntity>? = null
-
-    @LinkingObjects("root")
-    val timelineEventEntity: RealmResults<TimelineEventEntity>? = null
-
     fun setDecryptionResult(result: MXEventDecryptionResult) {
         val decryptionResult = OlmDecryptionResult(
                 payload = result.clearEvent,
@@ -78,6 +62,5 @@ internal open class EventEntity(@Index var eventId: String = "",
         val adapter = MoshiProvider.providesMoshi().adapter<OlmDecryptionResult>(OlmDecryptionResult::class.java)
         decryptionResultJson = adapter.toJson(decryptionResult)
         decryptionErrorCode = null
-        timelineEventEntity?.firstOrNull()?.root = this
     }
 }

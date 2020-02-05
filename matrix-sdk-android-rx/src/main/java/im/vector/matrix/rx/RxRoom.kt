@@ -41,7 +41,9 @@ class RxRoom(private val room: Room, private val session: Session) {
     fun liveRoomSummary(): Observable<Optional<RoomSummary>> {
         val summaryObservable = room.getRoomSummaryLive()
                 .asObservable()
-                .startWith(room.roomSummary().toOptional())
+                .startWithCallable {
+                    room.roomSummary().toOptional()
+                }
                 .doOnNext { Timber.v("RX: summary emitted for: ${it.getOrNull()?.roomId}") }
 
         val memberIdsChangeObservable = summaryObservable
@@ -97,7 +99,9 @@ class RxRoom(private val room: Room, private val session: Session) {
 
     fun liveRoomMembers(queryParams: RoomMemberQueryParams): Observable<List<RoomMemberSummary>> {
         val roomMembersObservable = room.getRoomMembersLive(queryParams).asObservable()
-                .startWith(room.getRoomMembers(queryParams))
+                .startWithCallable {
+                    room.getRoomMembers(queryParams)
+                }
                 .doOnNext { Timber.v("RX: room members emitted. Size: ${it.size}") }
 
         // TODO Do it only for room members of the room (switchMap)
@@ -127,17 +131,23 @@ class RxRoom(private val room: Room, private val session: Session) {
 
     fun liveAnnotationSummary(eventId: String): Observable<Optional<EventAnnotationsSummary>> {
         return room.getEventAnnotationsSummaryLive(eventId).asObservable()
-                .startWith(room.getEventAnnotationsSummary(eventId).toOptional())
+                .startWithCallable {
+                    room.getEventAnnotationsSummary(eventId).toOptional()
+                }
     }
 
     fun liveTimelineEvent(eventId: String): Observable<Optional<TimelineEvent>> {
         return room.getTimeLineEventLive(eventId).asObservable()
-                .startWith(room.getTimeLineEvent(eventId).toOptional())
+                .startWithCallable {
+                    room.getTimeLineEvent(eventId).toOptional()
+                }
     }
 
-    fun liveStateEvent(eventType: String): Observable<Optional<Event>> {
-        return room.getStateEventLive(eventType).asObservable()
-                .startWith(room.getStateEvent(eventType).toOptional())
+    fun liveStateEvent(eventType: String, stateKey: String): Observable<Optional<Event>> {
+        return room.getStateEventLive(eventType, stateKey).asObservable()
+                .startWithCallable {
+                    room.getStateEvent(eventType, stateKey).toOptional()
+                }
     }
 
     fun liveReadMarker(): Observable<Optional<String>> {

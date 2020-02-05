@@ -40,7 +40,9 @@ class RxSession(private val session: Session) {
 
     fun liveRoomSummaries(queryParams: RoomSummaryQueryParams): Observable<List<RoomSummary>> {
         val summariesObservable = session.getRoomSummariesLive(queryParams).asObservable()
-                .startWith(session.getRoomSummaries(queryParams))
+                .startWithCallable {
+                    session.getRoomSummaries(queryParams)
+                }
                 .doOnNext { Timber.v("RX: summaries emitted: size: ${it.size}") }
 
         val cryptoDeviceInfoObservable = session.getLiveCryptoDeviceInfo().asObservable()
@@ -69,12 +71,16 @@ class RxSession(private val session: Session) {
 
     fun liveGroupSummaries(queryParams: GroupSummaryQueryParams): Observable<List<GroupSummary>> {
         return session.getGroupSummariesLive(queryParams).asObservable()
-                .startWith(session.getGroupSummaries(queryParams))
+                .startWithCallable {
+                    session.getGroupSummaries(queryParams)
+                }
     }
 
     fun liveBreadcrumbs(): Observable<List<RoomSummary>> {
         return session.getBreadcrumbsLive().asObservable()
-                .startWith(session.getBreadcrumbs())
+                .startWithCallable {
+                    session.getBreadcrumbs()
+                }
     }
 
     fun liveSyncState(): Observable<SyncState> {
@@ -87,7 +93,9 @@ class RxSession(private val session: Session) {
 
     fun liveUser(userId: String): Observable<Optional<User>> {
         return session.getUserLive(userId).asObservable()
-                .startWith(session.getUser(userId).toOptional())
+                .startWithCallable {
+                    session.getUser(userId).toOptional()
+                }
     }
 
     fun liveUsers(): Observable<List<User>> {

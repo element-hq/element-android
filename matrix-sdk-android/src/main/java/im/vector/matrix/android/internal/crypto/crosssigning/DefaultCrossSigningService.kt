@@ -36,7 +36,6 @@ import im.vector.matrix.android.internal.crypto.tasks.UploadSignaturesTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadSigningKeysTask
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.task.TaskConstraints
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
@@ -211,7 +210,6 @@ internal class DefaultCrossSigningService @Inject constructor(
         cryptoStore.storePrivateKeysInfo(masterKeyPrivateKey?.toBase64NoPadding(), uskPrivateKey?.toBase64NoPadding(), sskPrivateKey?.toBase64NoPadding())
 
         uploadSigningKeysTask.configureWith(params) {
-            this.constraints = TaskConstraints(true)
             this.callback = object : MatrixCallback<Unit> {
                 override fun onSuccess(data: Unit) {
                     Timber.i("## CrossSigning - Keys successfully uploaded")
@@ -247,7 +245,6 @@ internal class DefaultCrossSigningService @Inject constructor(
                     resetTrustOnKeyChange()
                     uploadSignaturesTask.configureWith(UploadSignaturesTask.Params(uploadSignatureQueryBuilder.build())) {
                         // this.retryCount = 3
-                        this.constraints = TaskConstraints(true)
                         this.callback = object : MatrixCallback<Unit> {
                             override fun onSuccess(data: Unit) {
                                 Timber.i("## CrossSigning - signatures successfully uploaded")
@@ -396,7 +393,7 @@ internal class DefaultCrossSigningService @Inject constructor(
                         return@forEach
                     } catch (failure: Throwable) {
                         // log
-                        Timber.v(failure)
+                        Timber.w(failure, "Signature not valid?")
                     }
                 }
             }

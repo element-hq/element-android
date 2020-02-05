@@ -331,7 +331,7 @@ internal class VerificationTransportRoomMessage(
                 content = content,
                 unsignedData = UnsignedData(age = null, transactionId = localID)
         ).also {
-            localEchoEventFactory.saveLocalEcho(monarchy, it)
+            localEchoEventFactory.createLocalEcho(it)
         }
     }
 

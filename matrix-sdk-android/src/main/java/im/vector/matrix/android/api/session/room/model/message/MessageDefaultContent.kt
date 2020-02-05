@@ -23,7 +23,7 @@ import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultC
 
 @JsonClass(generateAdapter = true)
 data class MessageDefaultContent(
-        @Json(name = "msgtype") override val type: String,
+        @Json(name = "msgtype") override val msgType: String,
         @Json(name = "body") override val body: String,
         @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
         @Json(name = "m.new_content") override val newContent: Content? = null
