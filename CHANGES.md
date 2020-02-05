@@ -2,7 +2,7 @@ Changes in RiotX 0.16.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Polls and Bot Buttons (MSC 2192)
 
 Improvements 🙌:
  - Show confirmation dialog before deleting a message (#967)
