@@ -25,9 +25,11 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.DataSource
 import im.vector.riotx.features.home.RoomListDisplayMode
+import im.vector.riotx.features.share.SharedData
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
@@ -67,13 +69,38 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
             is RoomListAction.MarkAllRoomsRead            -> handleMarkAllRoomsRead()
             is RoomListAction.LeaveRoom                   -> handleLeaveRoom(action)
             is RoomListAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
+            is RoomListAction.ShareToSelectedRooms        -> handleShareToSelectedRooms(action)
+        }.exhaustive
+    }
+
+    private fun handleShareToSelectedRooms(action: RoomListAction.ShareToSelectedRooms) = withState {
+        val sharedData = action.sharedData
+        it.selectedRoomIds.forEach { roomId ->
+            val room = session.getRoom(roomId)
+            if (sharedData is SharedData.Text) {
+                room?.sendTextMessage(sharedData.text)
+            } else if (sharedData is SharedData.Attachments) {
+                room?.sendMedias(sharedData.attachmentData)
+            }
         }
     }
 
     // PRIVATE METHODS *****************************************************************************
 
-    private fun handleSelectRoom(action: RoomListAction.SelectRoom) {
-        _viewEvents.post(RoomListViewEvents.SelectRoom(action.roomSummary.roomId))
+    private fun handleSelectRoom(action: RoomListAction.SelectRoom) = withState {
+        if (it.multiSelectionEnabled) {
+            val selectedRooms = it.selectedRoomIds
+            val newSelectedRooms = if (selectedRooms.contains(action.roomSummary.roomId)) {
+                selectedRooms.minus(action.roomSummary.roomId)
+            } else {
+                selectedRooms.plus(action.roomSummary.roomId)
+            }
+            setState { copy(multiSelectionEnabled = newSelectedRooms.isNotEmpty(), selectedRoomIds = newSelectedRooms) }
+        } else if (action.enableMultiSelect) {
+            setState { copy(multiSelectionEnabled = true, selectedRoomIds = setOf(action.roomSummary.roomId)) }
+        } else {
+            _viewEvents.post(RoomListViewEvents.SelectRoom(action.roomSummary))
+        }
     }
 
     private fun handleToggleCategory(action: RoomListAction.ToggleCategory) = setState {

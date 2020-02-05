@@ -55,4 +55,17 @@
         tools:layout_marginEnd="144dp"
         tools:visibility="visible" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/sendShareButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:accessibilityTraversalBefore="@+id/roomListView"
+        android:contentDescription="@string/a11y_create_room"
+        android:src="@drawable/ic_send"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
 </im.vector.riotx.core.platform.StateView>

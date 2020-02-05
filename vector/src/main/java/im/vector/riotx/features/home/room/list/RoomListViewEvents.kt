@@ -17,6 +17,7 @@
 
 package im.vector.riotx.features.home.room.list
 
+import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.core.platform.VectorViewEvents
 
 /**
@@ -26,5 +27,5 @@ sealed class RoomListViewEvents : VectorViewEvents {
     data class Loading(val message: CharSequence? = null) : RoomListViewEvents()
     data class Failure(val throwable: Throwable) : RoomListViewEvents()
 
-    data class SelectRoom(val roomId: String) : RoomListViewEvents()
+    data class SelectRoom(val roomSummary: RoomSummary) : RoomListViewEvents()
 }

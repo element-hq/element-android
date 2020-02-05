@@ -106,8 +106,13 @@ class RoomListFragment @Inject constructor(
             when (it) {
                 is RoomListViewEvents.Loading    -> showLoading(it.message)
                 is RoomListViewEvents.Failure    -> showFailure(it.throwable)
-                is RoomListViewEvents.SelectRoom -> openSelectedRoom(it)
+                is RoomListViewEvents.SelectRoom -> handleSelectRoom(it)
             }.exhaustive
+        }
+
+        sendShareButton.setOnClickListener { _ ->
+            roomListViewModel.handle(RoomListAction.ShareToSelectedRooms(roomListParams.sharedData!!))
+            requireActivity().finish()
         }
 
         createChatFabMenu.listener = this
@@ -131,12 +136,19 @@ class RoomListFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    private fun openSelectedRoom(event: RoomListViewEvents.SelectRoom) {
+    private fun handleSelectRoom(event: RoomListViewEvents.SelectRoom) {
         if (roomListParams.displayMode == RoomListDisplayMode.SHARE) {
             val sharedData = roomListParams.sharedData ?: return
-            navigator.openRoomForSharing(requireActivity(), event.roomId, sharedData)
+            AlertDialog.Builder(requireActivity())
+                    .setTitle(R.string.send_attachment)
+                    .setMessage(getString(R.string.share_confirm_room, event.roomSummary.displayName))
+                    .setPositiveButton(R.string.send) { _, _ ->
+                        navigator.openRoomForSharing(requireActivity(), event.roomSummary.roomId, sharedData)
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .show()
         } else {
-            navigator.openRoom(requireActivity(), event.roomId)
+            navigator.openRoom(requireActivity(), event.roomSummary.roomId)
         }
     }
 
@@ -256,7 +268,7 @@ class RoomListFragment @Inject constructor(
             is Fail       -> renderFailure(state.asyncFilteredRooms.error)
         }
         roomController.update(state)
-
+        sendShareButton.isVisible = state.multiSelectionEnabled
         // Mark all as read menu
         when (roomListParams.displayMode) {
             RoomListDisplayMode.HOME,
@@ -338,22 +350,24 @@ class RoomListFragment @Inject constructor(
         if (createChatFabMenu.onBackPressed()) {
             return true
         }
-
         return false
     }
 
     // RoomSummaryController.Callback **************************************************************
 
     override fun onRoomClicked(room: RoomSummary) {
-        roomListViewModel.handle(RoomListAction.SelectRoom(room))
+        roomListViewModel.handle(RoomListAction.SelectRoom(room, enableMultiSelect = false))
     }
 
     override fun onRoomLongClicked(room: RoomSummary): Boolean {
-        roomController.onRoomLongClicked()
-
-        RoomListQuickActionsBottomSheet
-                .newInstance(room.roomId, RoomListActionsArgs.Mode.FULL)
-                .show(childFragmentManager, "ROOM_LIST_QUICK_ACTIONS")
+        if (roomListParams.displayMode == RoomListDisplayMode.SHARE) {
+            roomListViewModel.handle(RoomListAction.SelectRoom(room, enableMultiSelect = true))
+        } else {
+            roomController.onRoomLongClicked()
+            RoomListQuickActionsBottomSheet
+                    .newInstance(room.roomId, RoomListActionsArgs.Mode.FULL)
+                    .show(childFragmentManager, "ROOM_LIST_QUICK_ACTIONS")
+        }
         return true
     }
 

@@ -88,7 +88,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".features.share.IncomingShareActivity">
+        <activity
+            android:name=".features.share.IncomingShareActivity"
+            android:parentActivityName=".features.home.HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".features.home.HomeActivity" />
+
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <data android:mimeType="*/*" />

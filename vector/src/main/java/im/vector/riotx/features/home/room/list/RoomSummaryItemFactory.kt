@@ -36,7 +36,6 @@ import javax.inject.Inject
 
 class RoomSummaryItemFactory @Inject constructor(private val displayableEventFormatter: DisplayableEventFormatter,
                                                  private val dateFormatter: VectorDateFormatter,
-                                                 private val colorProvider: ColorProvider,
                                                  private val stringProvider: StringProvider,
                                                  private val typingHelper: TypingHelper,
                                                  private val session: Session,
@@ -47,10 +46,11 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                joiningErrorRoomsIds: Set<String>,
                rejectingRoomsIds: Set<String>,
                rejectingErrorRoomsIds: Set<String>,
+               selectedRoomIds: Set<String>,
                listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
         return when (roomSummary.membership) {
             Membership.INVITE -> createInvitationItem(roomSummary, joiningRoomsIds, joiningErrorRoomsIds, rejectingRoomsIds, rejectingErrorRoomsIds, listener)
-            else              -> createRoomItem(roomSummary, listener)
+            else              -> createRoomItem(roomSummary, selectedRoomIds, listener)
         }
     }
 
@@ -82,10 +82,10 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .listener { listener?.onRoomClicked(roomSummary) }
     }
 
-    private fun createRoomItem(roomSummary: RoomSummary, listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
+    private fun createRoomItem(roomSummary: RoomSummary, selectedRoomIds: Set<String>, listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
         val unreadCount = roomSummary.notificationCount
         val showHighlighted = roomSummary.highlightCount > 0
-
+        val showSelected = selectedRoomIds.contains(roomSummary.roomId)
         var latestFormattedEvent: CharSequence = ""
         var latestEventTime: CharSequence = ""
         val latestEvent = roomSummary.latestPreviewableEvent
@@ -119,6 +119,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .typingString(typingString)
                 .lastFormattedEvent(latestFormattedEvent)
                 .showHighlighted(showHighlighted)
+                .showSelected(showSelected)
                 .unreadNotificationCount(unreadCount)
                 .hasUnreadMessage(roomSummary.hasUnreadMessages)
                 .hasDraft(roomSummary.userDrafts.isNotEmpty())

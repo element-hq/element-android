@@ -16,14 +16,17 @@
 
 package im.vector.riotx.features.home.room.list
 
+import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import com.amulyakhare.textdrawable.TextDrawable
 import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
@@ -48,11 +51,15 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
     @EpoxyAttribute var showHighlighted: Boolean = false
     @EpoxyAttribute var itemLongClickListener: View.OnLongClickListener? = null
     @EpoxyAttribute var itemClickListener: View.OnClickListener? = null
+    @EpoxyAttribute var showSelected: Boolean = false
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.rootView.setOnClickListener(itemClickListener)
-        holder.rootView.setOnLongClickListener(itemLongClickListener)
+        holder.rootView.setOnLongClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+            itemLongClickListener?.onLongClick(it) ?: false
+        }
         holder.titleView.text = matrixItem.getBestName()
         holder.lastEventTimeView.text = lastEventTime
         holder.lastEventView.text = lastFormattedEvent
@@ -64,6 +71,19 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         avatarRenderer.render(matrixItem, holder.avatarImageView)
         holder.roomAvatarDecorationImageView.isVisible = encryptionTrustLevel != null
         holder.roomAvatarDecorationImageView.setImageResource(encryptionTrustLevel.toImageRes())
+        renderSelection(holder, showSelected)
+    }
+
+    private fun renderSelection(holder: Holder, isSelected: Boolean) {
+        if (isSelected) {
+            holder.avatarCheckedImageView.visibility = View.VISIBLE
+            val backgroundColor = ContextCompat.getColor(holder.view.context, R.color.riotx_accent)
+            val backgroundDrawable = TextDrawable.builder().buildRound("", backgroundColor)
+            holder.avatarImageView.setImageDrawable(backgroundDrawable)
+        } else {
+            holder.avatarCheckedImageView.visibility = View.GONE
+            avatarRenderer.render(matrixItem, holder.avatarImageView)
+        }
     }
 
     class Holder : VectorEpoxyHolder() {
@@ -74,6 +94,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         val typingView by bind<TextView>(R.id.roomTypingView)
         val draftView by bind<ImageView>(R.id.roomDraftBadge)
         val lastEventTimeView by bind<TextView>(R.id.roomLastEventTimeView)
+        val avatarCheckedImageView by bind<ImageView>(R.id.roomAvatarCheckedImageView)
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
         val roomAvatarDecorationImageView by bind<ImageView>(R.id.roomAvatarDecorationImageView)
         val rootView by bind<ViewGroup>(R.id.itemRoomLayout)

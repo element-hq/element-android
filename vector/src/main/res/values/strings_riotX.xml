@@ -21,6 +21,7 @@
 
     <!-- BEGIN Strings added by Benoit -->
     <string name="message_action_item_redact">Remove…</string>
+    <string name="share_confirm_room">Do you want to send this attachment to %1$s?</string>
     <!-- END Strings added by Benoit -->
 
 

@@ -19,6 +19,7 @@ package im.vector.riotx.features.share
 import android.content.ClipDescription
 import android.content.Intent
 import android.os.Bundle
+import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import com.airbnb.mvrx.viewModel

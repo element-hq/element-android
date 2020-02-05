@@ -46,7 +46,9 @@ data class RoomListViewState(
         val isServerNoticeRoomsExpanded: Boolean = true,
         // For sharing
         val isRecentExpanded: Boolean = true,
-        val isOtherExpanded: Boolean = true
+        val isOtherExpanded: Boolean = true,
+        val selectedRoomIds: Set<String> = emptySet(),
+        val multiSelectionEnabled: Boolean = false
 ) : MvRxState {
 
     constructor(args: RoomListParams) : this(displayMode = args.displayMode)
