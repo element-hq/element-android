@@ -24,10 +24,12 @@ import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
+import im.vector.matrix.android.api.MatrixConfiguration
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.auth.data.sessionId
+import im.vector.matrix.android.api.crypto.MXCryptoConfig
 import im.vector.matrix.android.api.session.InitialSyncProgressService
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
@@ -213,6 +215,13 @@ internal abstract class SessionModule {
             } else {
                 fallbackNetworkCallbackStrategy.get()
             }
+        }
+
+        @JvmStatic
+        @Provides
+        @SessionScope
+        fun providesMxCryptoConfig(matrixConfiguration: MatrixConfiguration): MXCryptoConfig {
+            return matrixConfiguration.cryptoConfig
         }
     }
 

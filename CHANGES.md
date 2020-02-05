@@ -5,7 +5,8 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Improve navigation to the timeline (#789, #862)
+ - Improve network detection. It is now based on the sync request status (#873, #882) 
 
 Other changes:
  -
