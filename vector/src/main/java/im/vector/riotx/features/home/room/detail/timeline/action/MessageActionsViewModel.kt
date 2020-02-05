@@ -172,7 +172,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             EventType.MESSAGE,
             EventType.STICKER     -> {
                 val messageContent: MessageContent? = timelineEvent.getLastMessageContent()
-                if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
+                if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
                     val html = messageContent.formattedBody
                             ?.takeIf { it.isNotBlank() }
                             ?.let { htmlCompressor.compress(it) }
@@ -315,7 +315,6 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             MessageType.MSGTYPE_TEXT,
             MessageType.MSGTYPE_NOTICE,
             MessageType.MSGTYPE_EMOTE,
-            MessageType.FORMAT_MATRIX_HTML,
             MessageType.MSGTYPE_LOCATION -> {
                 true
             }
@@ -357,7 +356,6 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             MessageType.MSGTYPE_TEXT,
             MessageType.MSGTYPE_NOTICE,
             MessageType.MSGTYPE_EMOTE,
-            MessageType.FORMAT_MATRIX_HTML,
             MessageType.MSGTYPE_LOCATION -> true
             else                         -> false
         }

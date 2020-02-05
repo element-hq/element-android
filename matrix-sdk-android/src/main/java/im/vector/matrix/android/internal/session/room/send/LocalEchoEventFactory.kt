@@ -34,6 +34,7 @@ import im.vector.matrix.android.api.session.room.model.message.ImageInfo
 import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
+import im.vector.matrix.android.api.session.room.model.message.MessageFormat
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
@@ -163,7 +164,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         relatesTo = RelationDefaultContent(RelationType.REPLACE, eventReplaced.root.eventId),
                         newContent = MessageTextContent(
                                 msgType = msgType,
-                                format = MessageType.FORMAT_MATRIX_HTML,
+                                format = MessageFormat.FORMAT_MATRIX_HTML,
                                 body = replyFallback,
                                 formattedBody = replyFormatted
                         )
@@ -351,7 +352,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         val eventId = eventReplied.root.eventId ?: return null
         val content = MessageTextContent(
                 msgType = MessageType.MSGTYPE_TEXT,
-                format = MessageType.FORMAT_MATRIX_HTML,
+                format = MessageFormat.FORMAT_MATRIX_HTML,
                 body = replyFallback,
                 formattedBody = replyFormatted,
                 relatesTo = RelationDefaultContent(null, null, ReplyToContent(eventId))
@@ -390,7 +391,7 @@ internal class LocalEchoEventFactory @Inject constructor(
             MessageType.MSGTYPE_NOTICE -> {
                 var formattedText: String? = null
                 if (content is MessageTextContent) {
-                    if (content.format == MessageType.FORMAT_MATRIX_HTML) {
+                    if (content.format == MessageFormat.FORMAT_MATRIX_HTML) {
                         formattedText = content.formattedBody
                     }
                 }
