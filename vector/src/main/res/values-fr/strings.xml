@@ -1980,4 +1980,22 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="permalink_malformed">Votre lien matrix.to était malformé</string>
     <string name="bug_report_error_too_short">La description est trop courte</string>
 
+    <string name="notification_initial_sync">Synchronisation initiale…</string>
+
+    <string name="settings_show_devices_list">Voir tous mes appareils</string>
+    <string name="settings_advanced_settings">Paramètres avancés</string>
+    <string name="settings_developer_mode">Mode développeur</string>
+    <string name="settings_developer_mode_summary">Le mode développeur active des fonctionnalités cachées et peut rendre l’application moins stable. Réservé aux développeurs !</string>
+    <string name="settings_rageshake">Secouer de frustration</string>
+    <string name="settings_rageshake_detection_threshold">Seuil de détection</string>
+    <string name="settings_rageshake_detection_threshold_summary">Secouez votre téléphone pour tester le seuil de détection</string>
+    <string name="rageshake_detected">Secousse détectée !</string>
+    <string name="settings">Paramètres</string>
+    <string name="devices_current_device">Cet appareil</string>
+    <string name="devices_other_devices">Autres appareils</string>
+
+    <string name="autocomplete_limited_results">Seuls les premiers résultats sont affichés, saisissez plus de lettres…</string>
+
+    <string name="settings_developer_mode_fail_fast_title">Défaillance rapide</string>
+    <string name="settings_developer_mode_fail_fast_summary">RiotX peut planter plus souvent quand une erreur inattendue survient</string>
 </resources>

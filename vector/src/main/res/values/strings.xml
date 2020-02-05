@@ -32,14 +32,14 @@
     <string name="title_activity_choose_sticker">Send a sticker</string>
     <string name="title_activity_keys_backup_setup">Key Backup</string>
     <string name="title_activity_keys_backup_restore">Use Key Backup</string>
-    <string name="title_activity_verify_device">Verify device</string>
+    <string name="title_activity_verify_device">Verify session</string>
 
     <!-- Signing out screen -->
 
     <string name="keys_backup_is_not_finished_please_wait">Keys backup is not finished, please wait…</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">You’ll lose your encrypted messages if you sign out now</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Key backup in progress. If you sign out now you’ll lose access to your encrypted messages.</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">Secure Key Backup should be active on all of your devices to avoid losing access to your encrypted messages.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Secure Key Backup should be active on all of your sessions to avoid losing access to your encrypted messages.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">I don’t want my encrypted messages</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Backing up keys…</string>
     <string name="keys_backup_activate">Use Key Backup</string>
@@ -88,7 +88,7 @@
     <string name="missing_permissions_error">"Due to missing permissions, this action is not possible.</string>
     <string name="missing_permissions_to_start_conf_call">You need permission to invite to start a conference in this room</string>
     <string name="missing_permissions_title_to_start_conf_call">Cannot start call</string>
-    <string name="device_information">Device information</string>
+    <string name="device_information">Session information</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Conference calls are not supported in encrypted rooms</string>
     <string name="call_anyway">Call Anyway</string>
     <string name="send_anyway">Send Anyway</string>
@@ -272,7 +272,7 @@
     <string name="auth_reset_password_missing_password">A new password must be entered.</string>
     <string name="auth_reset_password_email_validation_message">An email has been sent to %s. Once you’ve followed the link it contains, click below.</string>
     <string name="auth_reset_password_error_unauthorized">Failed to verify email address: make sure you clicked the link in the email</string>
-    <string name="auth_reset_password_success_message">Your password has been reset.\n\nYou have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, re-log in on each device.</string>
+    <string name="auth_reset_password_success_message">Your password has been reset.\n\nYou have been logged out of all sessions and will no longer receive push notifications. To re-enable notifications, re-log in on each device.</string>
     <string name="auth_accept_policies">"Please review and accept the policies of this homeserver:"</string>
 
     <!-- Login Screen -->
@@ -298,15 +298,15 @@
     <string name="login_error_login_email_not_yet">The email link which has not been clicked yet</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver.\nThis is a once off.\nSorry for the inconvenience.</string>
+    <string name="e2e_need_log_in_again">You need to log back in to generate end-to-end encryption keys for this session and submit the public key to your homeserver.\nThis is a once off.\nSorry for the inconvenience.</string>
 
     <!-- request again e2e key -->
-    <string name="e2e_re_request_encryption_key"><u>Re-request encryption keys</u> from your other devices.</string>
+    <string name="e2e_re_request_encryption_key"><u>Re-request encryption keys</u> from your other sessions.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Key request sent.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Request sent</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Please launch Riot on another device that can decrypt the message so it can send the keys to this device.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Please launch Riot on another device that can decrypt the message so it can send the keys to this session.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Read Receipts List</string>
@@ -462,7 +462,7 @@
     <string name="room_participants_header_admin_tools">ADMIN TOOLS</string>
     <string name="room_participants_header_call">CALL</string>
     <string name="room_participants_header_direct_chats">DIRECT CHATS</string>
-    <string name="room_participants_header_devices">DEVICES</string>
+    <string name="room_participants_header_devices">SESSIONS</string>
 
     <string name="room_participants_action_invite">Invite</string>
     <string name="room_participants_action_leave">Leave this room</string>
@@ -478,7 +478,7 @@
     <string name="room_participants_action_unignore_prompt">Show all messages from this user?\n\nNote that this action will restart the app and it may take some time.</string>
     <string name="room_participants_invite_search_another_user">User ID, Name or email</string>
     <string name="room_participants_action_mention">Mention</string>
-    <string name="room_participants_action_devices_list">Show Device List</string>
+    <string name="room_participants_action_devices_list">Show Session List</string>
     <string name="room_participants_power_level_prompt">You will not be able to undo this change as you are promoting the user to have the same power level as yourself.\nAre you sure?</string>
 
     <plurals name="room_participants_kick_prompt_msg">
@@ -521,7 +521,7 @@
     <string name="room_message_placeholder_reply_to_not_encrypted">Send a reply (unencrypted)…</string>
     <string name="room_offline_notification">Connectivity to the server has been lost.</string>
     <string name="room_unsent_messages_notification">Messages not sent. %1$s or %2$s now?</string>
-    <string name="room_unknown_devices_messages_notification">Messages not sent due to unknown devices being present. %1$s or %2$s now?</string>
+    <string name="room_unknown_devices_messages_notification">Messages not sent due to unknown sessions being present. %1$s or %2$s now?</string>
     <string name="room_prompt_resend">Resend all</string>
     <string name="room_prompt_cancel">Cancel all</string>
     <string name="room_resend_unsent_messages">Resend unsent messages</string>
@@ -659,9 +659,9 @@
     <string name="settings_troubleshoot_test_account_settings_failed">Notifications are disabled for your account.\nPlease check account settings.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Enable</string>
 
-    <string name="settings_troubleshoot_test_device_settings_title">Device Settings.</string>
-    <string name="settings_troubleshoot_test_device_settings_success">Notifications are enabled for this device.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Notifications are not allowed for this device.\nPlease check the Riot settings.</string>
+    <string name="settings_troubleshoot_test_device_settings_title">Session Settings.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Notifications are enabled for this session.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Notifications are not enabled for this session.\nPlease check the Riot settings.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Enable</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Custom Settings.</string>
@@ -723,7 +723,7 @@
 
     <string name="settings_notification_ringtone">Notification sound</string>
     <string name="settings_enable_all_notif">Enable notifications for this account</string>
-    <string name="settings_enable_this_device">Enable notifications for this device</string>
+    <string name="settings_enable_this_device">Enable notifications for this session</string>
     <string name="settings_turn_screen_on">Turn the screen on for 3 seconds</string>
     <string name="settings_noisy_notifications_preferences">Configure Noisy Notifications</string>
     <string name="settings_call_notifications_preferences">Configure Call Notifications</string>
@@ -785,7 +785,7 @@
     <string name="settings_home_display">Home display</string>
     <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
     <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
-    <string name="settings_devices_list">Devices</string>
+    <string name="settings_devices_list">Sessions</string>
     <string name="settings_inline_url_preview">Inline URL preview</string>
     <string name="settings_inline_url_preview_summary">Preview links within the chat when your homeserver supports this feature.</string>
     <string name="settings_send_typing_notifs">Send typing notifications</string>
@@ -828,7 +828,7 @@
     <string name="settings_data_save_mode">Data save mode</string>
     <string name="settings_data_save_mode_summary">Data save mode applies a specific filter so presence updates and typing notifications are filtered out.</string>
 
-    <string name="devices_details_dialog_title">Device information</string>
+    <string name="devices_details_dialog_title">Session information</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Public Name</string>
     <string name="devices_details_device_name">Update Public Name</string>
@@ -951,8 +951,8 @@
     <string name="room_settings_labs_end_to_end">End-to-End Encryption</string>
     <string name="room_settings_labs_end_to_end_is_active">End-to-End Encryption is active</string>
     <string name="room_settings_labs_end_to_end_warnings">You need to logout to be able to enable the encryption.</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">Encrypt to verified devices only</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified devices in this room from this device.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Encrypt to verified sessions only</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified sessions in this room from this session.</string>
 
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">This room has no local addresses</string>
@@ -996,13 +996,13 @@
     <string name="encryption_information_session_id">Session ID</string>
     <string name="encryption_information_decryption_error">Decryption error</string>
 
-    <string name="encryption_information_sender_device_information">Sender device information</string>
+    <string name="encryption_information_sender_device_information">Sender session information</string>
     <string name="encryption_information_device_name">Public name</string>
     <string name="encryption_information_device_name_with_warning">Public name (visible to people you communicate with)</string>
-    <string name="device_name_warning">"A device's public name is visible to people you communicate with"</string>
+    <string name="device_name_warning">"A session's public name is visible to people you communicate with"</string>
     <string name="encryption_information_name">Public name</string>
     <string name="encryption_information_device_id">ID</string>
-    <string name="encryption_information_device_key">Device key</string>
+    <string name="encryption_information_device_key">Session key</string>
     <string name="encryption_information_verification">Verification</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 fingerprint</string>
 
@@ -1020,15 +1020,15 @@
     <string name="encryption_import_room_keys">Import room keys</string>
     <string name="encryption_import_room_keys_summary">Import the keys from a local file</string>
     <string name="encryption_import_import">Import</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Encrypt to verified devices only</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified devices from this device.</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Encrypt to verified sessions only</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified sessions from this session.</string>
     <string name="encryption_import_room_keys_success">%1$d/%2$d key(s) imported with success.</string>
 
     <string name="encryption_information_not_verified">NOT Verified</string>
     <string name="encryption_information_verified">Verified</string>
     <string name="encryption_information_blocked">Blacklisted</string>
 
-    <string name="encryption_information_unknown_device">unknown device</string>
+    <string name="encryption_information_unknown_device">unknown session</string>
     <string name="encryption_information_unknown_ip">unknown ip</string>
     <string name="encryption_information_none">none</string>
 
@@ -1037,16 +1037,16 @@
     <string name="encryption_information_block">Blacklist</string>
     <string name="encryption_information_unblock">Unblacklist</string>
 
-    <string name="encryption_information_verify_device">Verify device</string>
-    <string name="encryption_information_verify_device_warning">To verify that this device can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this device matches the key below:</string>
-    <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. If it doesn’t, then someone else is intercepting this device and you should probably blacklist it. In the future this verification process will be more sophisticated.</string>
+    <string name="encryption_information_verify_device">Verify session</string>
+    <string name="encryption_information_verify_device_warning">To verify that this session can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this session matches the key below:</string>
+    <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. If it doesn’t, then someone else is intercepting this session and you should probably blacklist it. In the future this verification process will be more sophisticated.</string>
     <string name="encryption_information_verify_key_match">I verify that the keys match</string>
 
     <string name="e2e_enabling_on_app_update">Riot now supports end-to-end encryption but you need to log in again to enable it.\n\nYou can do it now or later from the application settings.</string>
 
-    <!-- unknown devices management -->
-    <string name="unknown_devices_alert_title">Room contains unknown devices</string>
-    <string name="unknown_devices_alert_message">This room contains unknown devices which have not been verified.\nThis means there is no guarantee that the devices belong to the users they claim to.\nWe recommend you go through the verification process for each device before continuing, but you can resend the message without verifying if you prefer.\n\nUnknown devices:</string>
+    <!-- unknown sessions management -->
+    <string name="unknown_devices_alert_title">Room contains unknown sessions</string>
+    <string name="unknown_devices_alert_message">This room contains unknown sessions which have not been verified.\nThis means there is no guarantee that the sessions belong to the users they claim to.\nWe recommend you go through the verification process for each session before continuing, but you can resend the message without verifying if you prefer.\n\nUnknown sessions:</string>
 
     <!-- directory activity  -->
     <string name="select_room_directory">Select a room directory</string>
@@ -1163,10 +1163,10 @@
     <string name="widget_integration_review_terms">To continue you need to accept the Terms of this service.</string>
 
     <!-- share keys -->
-    <string name="you_added_a_new_device">You added a new device \'%s\', which is requesting encryption keys.</string>
-    <string name="you_added_a_new_device_with_info">A new device is requesting encryption keys.\nDevice name: %1$s\nLast seen: %2$s\nIf you didn’t log in on another device, ignore this request.</string>
-    <string name="your_unverified_device_requesting">Your unverified device  \'%s\' is requesting encryption keys.</string>
-    <string name="your_unverified_device_requesting_with_info">An unverified device is requesting encryption keys.\nDevice name: %1$s\nLast seen: %2$s\nIf you didn’t log in on another device, ignore this request.</string>
+    <string name="you_added_a_new_device">You added a new session \'%s\', which is requesting encryption keys.</string>
+    <string name="you_added_a_new_device_with_info">A new session is requesting encryption keys.\Session name: %1$s\nLast seen: %2$s\nIf you didn’t log in on another session, ignore this request.</string>
+    <string name="your_unverified_device_requesting">Your unverified session  \'%s\' is requesting encryption keys.</string>
+    <string name="your_unverified_device_requesting_with_info">An unverified session is requesting encryption keys.\nSession name: %1$s\nLast seen: %2$s\nIf you didn’t log in on another session, ignore this request.</string>
 
     <string name="start_verification">Start verification</string>
     <!-- Keep the label as small as possible-->
@@ -1371,7 +1371,7 @@ Why choose Riot.im?
     <string name="recovery_key_export_saved_as_warning">The recovery key has been saved to \'%s\'.\n\nWarning: this file may be deleted if the application is uninstalled.</string>
 
     <string name="keys_backup_setup_override_backup_prompt_tile">A backup already exist on your HomeServer</string>
-    <string name="keys_backup_setup_override_backup_prompt_description">It looks like you already have setup key backup from another device. Do you want to replace it with the one you’re creating?</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">It looks like you already have setup key backup from another session. Do you want to replace it with the one you’re creating?</string>
     <string name="keys_backup_setup_override_replace">Replace</string>
     <string name="keys_backup_setup_override_stop">Stop</string>
 
@@ -1413,14 +1413,14 @@ Why choose Riot.im?
 
     <!-- %s will be replaced by an emoji -->
     <string name="keys_backup_restore_success_title">Backup Restored %s !</string>
-    <string name="keys_backup_restore_success_description">Restored %1$d session keys, and added %2$d new key(s) that was not known by this device</string>
+    <string name="keys_backup_restore_success_description">Restored %1$d session keys, and added %2$d new key(s) that was not known by this session</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Restored a backup with %d key.</item>
         <item quantity="other">Restored a backup with %d keys.</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-        <item quantity="one">%d new key has been added to this device.</item>
-        <item quantity="other">%d new keys have been added to this device.</item>
+        <item quantity="one">%d new key has been added to this session.</item>
+        <item quantity="other">%d new keys have been added to this session.</item>
     </plurals>
 
     <string name="keys_backup_get_version_error">Failed to get latest restore keys version (%s).</string>
@@ -1430,20 +1430,20 @@ Why choose Riot.im?
     <string name="keys_backup_settings_restore_backup_button">Restore from Backup</string>
     <string name="keys_backup_settings_delete_backup_button">Delete Backup</string>
 
-    <string name="keys_backup_settings_status_ok">Key Backup has been correctly set up for this device.</string>
-    <string name="keys_backup_settings_status_ko">Key Backup is not active on this device.</string>
-    <string name="keys_backup_settings_status_not_setup">Your keys are not being backed up from this device.</string>
+    <string name="keys_backup_settings_status_ok">Key Backup has been correctly set up for this session.</string>
+    <string name="keys_backup_settings_status_ko">Key Backup is not active on this session.</string>
+    <string name="keys_backup_settings_status_not_setup">Your keys are not being backed up from this session.</string>
 
-    <string name="keys_backup_settings_signature_from_unknown_device">Backup has a signature from unknown device with ID %s.</string>
-    <string name="keys_backup_settings_valid_signature_from_this_device">Backup has a valid signature from this device.</string>
-    <string name="keys_backup_settings_valid_signature_from_verified_device">Backup has a valid signature from verified device %s.</string>
-    <string name="keys_backup_settings_valid_signature_from_unverified_device">Backup has a valid signature from unverified device %s</string>
-    <string name="keys_backup_settings_invalid_signature_from_verified_device">Backup has a invalid signature from verified device %s</string>
-    <string name="keys_backup_settings_invalid_signature_from_unverified_device">Backup has a invalid signature from unverified device %s</string>
+    <string name="keys_backup_settings_signature_from_unknown_device">Backup has a signature from unknown session with ID %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_this_device">Backup has a valid signature from this session.</string>
+    <string name="keys_backup_settings_valid_signature_from_verified_device">Backup has a valid signature from verified session %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">Backup has a valid signature from unverified session %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_verified_device">Backup has a invalid signature from verified session %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_unverified_device">Backup has a invalid signature from unverified session %s</string>
     <string name="keys_backup_get_trust_error">Failed to get trust info for backup (%s).</string>
 
     <!-- renamed key keys_backup_settings_verify_device_now -->
-    <string name="keys_backup_settings_untrusted_backup">To use Key Backup on this device, restore with your passphrase or recovery key now.</string>
+    <string name="keys_backup_settings_untrusted_backup">To use Key Backup on this session, restore with your passphrase or recovery key now.</string>
     <string name="keys_backup_settings_deleting_backup">Deleting backup…</string>
     <string name="keys_backup_settings_delete_backup_error">Failed to delete backup (%s)</string>
 
@@ -1488,19 +1488,19 @@ Why choose Riot.im?
     <string name="sas_security_advise">For maximum security, we recommend you do this in person or use another trusted means of communication.</string>
     <string name="sas_verify_start_button_title">Begin Verifying</string>
     <string name="sas_incoming_request_title">Incoming Verification Request</string>
-    <string name="sas_incoming_request_description">Verify this device to mark it as trusted. Trusting devices of partners gives you extra peace of mind when using end-to-end encrypted messages."</string>
-    <string name="sas_incoming_request_description_2">Verifying this device will mark it as trusted, and also mark your device as trusted to the partner."</string>
+    <string name="sas_incoming_request_description">Verify this session to mark it as trusted. Trusting sessions of partners gives you extra peace of mind when using end-to-end encrypted messages."</string>
+    <string name="sas_incoming_request_description_2">Verifying this session will mark it as trusted, and also mark your session as trusted to the partner."</string>
 
-    <string name="sas_emoji_description">Verify this device by confirming the following emoji appear on the screen of the partner"</string>
-    <string name="sas_decimal_description">Verify this device by confirming the following numbers appear on the screen of the partner"</string>
+    <string name="sas_emoji_description">Verify this session by confirming the following emoji appear on the screen of the partner"</string>
+    <string name="sas_decimal_description">Verify this session by confirming the following numbers appear on the screen of the partner"</string>
 
     <string name="sas_incoming_verification_request_dialog">You received an incoming verification request.</string>
     <string name="sas_view_request_action">View request</string>
     <string name="sas_waiting_for_partner">Waiting for partner to confirm…</string>
 
     <string name="sas_verified">Verified!</string>
-    <string name="sas_verified_successful">You\'ve successfully verified this device.</string>
-    <string name="sas_verified_successful_description">Messages with this user in this room are end-to-end encrypted and can\'t be read by third parties.</string>
+    <string name="sas_verified_successful">You\'ve successfully verified this session.</string>
+    <string name="sas_verified_successful_description">Secure messages with this user are end-to-end encrypted and not able to be read by third parties.</string>
     <string name="sas_got_it">Got it</string>
 
     <string name="sas_verifying_keys">Nothing appearing? Not all clients supports interactive verification yet. Use legacy verification.</string>
@@ -1511,18 +1511,18 @@ Why choose Riot.im?
     <string name="sas_cancelled_by_other">The other party cancelled the verification.\n%s</string>
     <string name="sas_cancelled_by_me">The verification is canceled.\nReason: %s</string>
 
-    <string name="sas_verification_request_notification_channel">Interactive Device Verification</string>
+    <string name="sas_verification_request_notification_channel">Interactive Session Verification</string>
     <string name="sas_incoming_request_notif_title">Verification Request</string>
-    <string name="sas_incoming_request_notif_content">%s wants to verify your device</string>
+    <string name="sas_incoming_request_notif_content">%s wants to verify your session</string>
 
     <!-- SAS Errors -->
     <string name="sas_error_m_user">The user cancelled the verification</string>
     <string name="sas_error_m_timeout">The verification process timed out</string>
-    <string name="sas_error_m_unknown_transaction">The device does not know about that transaction</string>
-    <string name="sas_error_m_unknown_method">The device can’t agree on a key agreement, hash, MAC, or SAS method</string>
+    <string name="sas_error_m_unknown_transaction">The session does not know about that transaction</string>
+    <string name="sas_error_m_unknown_method">The session can’t agree on a key agreement, hash, MAC, or SAS method</string>
     <string name="sas_error_m_mismatched_commitment">The hash commitment did not match</string>
     <string name="sas_error_m_mismatched_sas">The SAS did not match</string>
-    <string name="sas_error_m_unexpected_message">The device received an unexpected message</string>
+    <string name="sas_error_m_unexpected_message">The session received an unexpected message</string>
     <string name="sas_error_m_invalid_message">An invalid message was received</string>
     <string name="sas_error_m_key_mismatch">Key mismatch</string>
     <string name="sas_error_m_user_error">User mismatch</string>
@@ -1619,7 +1619,7 @@ Why choose Riot.im?
     <string name="push_gateway_item_app_id">app_id:</string>
     <string name="push_gateway_item_push_key">push_key:</string>
     <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_device_name">device_name:</string>
+    <string name="push_gateway_item_device_name">session_name:</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Format:</string>
 
@@ -1868,7 +1868,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="login_reset_password_password_hint">New password</string>
 
     <string name="login_reset_password_warning_title">Warning!</string>
-    <string name="login_reset_password_warning_content">Changing your password will reset any end-to-end encryption keys on all of your devices, making encrypted chat history unreadable. Set up Key Backup or export your room keys from another device before resetting your password.</string>
+    <string name="login_reset_password_warning_content">Changing your password will reset any end-to-end encryption keys on all of your sessions, making encrypted chat history unreadable. Set up Key Backup or export your room keys from another session before resetting your password.</string>
     <string name="login_reset_password_warning_submit">Continue</string>
 
     <string name="login_reset_password_error_not_found">This email is not linked to any account</string>
@@ -1881,7 +1881,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="login_reset_password_success_title">Success!</string>
     <string name="login_reset_password_success_notice">Your password has been reset.</string>
-    <string name="login_reset_password_success_notice_2">You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device.</string>
+    <string name="login_reset_password_success_notice_2">You have been logged out of all sessions and will no longer receive push notifications. To re-enable notifications, sign in again on each device.</string>
     <string name="login_reset_password_success_submit">Back to Sign In</string>
 
     <string name="login_reset_password_cancel_confirmation_title">Warning</string>
@@ -1939,7 +1939,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="seen_by">Seen by</string>
 
     <string name="signed_out_title">You’re signed out</string>
-    <string name="signed_out_notice">It can be due to various reasons:\n\n• You’ve changed your password on another device.\n\n• You have deleted this device from another device.\n\n• The administrator of your server has invalidated your access for security reason.</string>
+    <string name="signed_out_notice">It can be due to various reasons:\n\n• You’ve changed your password on another session.\n\n• You have deleted this session from another session.\n\n• The administrator of your server has invalidated your access for security reason.</string>
     <string name="signed_out_submit">Sign in again</string>
 
     <string name="soft_logout_title">You’re signed out</string>
@@ -1980,4 +1980,176 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="settings_developer_mode_fail_fast_title">Fail-fast</string>
     <string name="settings_developer_mode_fail_fast_summary">RiotX may crash more often when an unexpected error occurs</string>
+
+    <string name="command_description_verify">Request to verify the given userID</string>
+    <string name="command_description_shrug">Prepends ¯\\_(ツ)_/¯ to a plain-text message</string>
+
+    <string name="create_room_encryption_title">"Enable encryption"</string>
+    <string name="create_room_encryption_description">"Once enabled, encryption cannot be disabled."</string>
+
+    <string name="login_error_threepid_denied">Your email domain is not authorized to register on this server</string>
+
+    <string name="verification_conclusion_warning">Untrusted sign in</string>
+    <string name="verification_sas_match">They match</string>
+    <string name="verification_sas_do_not_match">They don\'t match</string>
+    <string name="verify_user_sas_emoji_help_text">Verify this user by confirming the following unique emoji appear on their screen, in the same order."</string>
+    <string name="verify_user_sas_emoji_security_tip">For ultimate security, use another trusted means of communication or do this in person.</string>
+    <string name="verification_green_shield">Look for the green shield to ensure a user is trusted. Trust all users in a room to ensure the room is secure.</string>
+
+    <string name="verification_conclusion_not_secure">Not secure</string>
+    <string name="verification_conclusion_compromised">One of the following may be compromised:\n\n   - Your homeserver\n   - The homeserver the user you’re verifying is connected to\n   - Yours, or the other users’ internet connection\n   - Yours, or the other users’ device
+    </string>
+
+    <string name="sent_a_video">Video.</string>
+    <string name="sent_an_image">Image.</string>
+    <string name="sent_an_audio_file">Audio</string>
+    <string name="sent_a_file">File</string>
+
+    <string name="verification_request_waiting">Waiting…</string>
+    <string name="verification_request_other_cancelled">%s cancelled</string>
+    <string name="verification_request_you_cancelled">You cancelled</string>
+    <string name="verification_request_other_accepted">%s accepted</string>
+    <string name="verification_request_you_accepted">You accepted</string>
+    <string name="verification_sent">Verification Sent</string>
+    <string name="verification_request">Verification Request</string>
+
+
+    <string name="verification_verify_device">Verify this session</string>
+    <string name="verification_verify_device_manually">Manually verify</string>
+
+    <!-- Sender name of a message when it is send by you, e.g. You: Hello!-->
+    <string name="you">You</string>
+
+    <string name="verification_scan_notice">Scan the code with the other user\'s device to securely verify each other</string>
+    <string name="verification_scan_their_code">Scan their code</string>
+    <string name="verification_scan_emoji_title">Can\'t scan</string>
+    <string name="verification_scan_emoji_subtitle">If you\'re not in person, compare emoji instead</string>
+
+    <string name="verification_no_scan_emoji_title">Verify by comparing emojis</string>
+
+    <string name="verify_by_emoji_title">Verify by Emoji</string>
+    <string name="verify_by_emoji_description">If you can’t scan the code above, verify by comparing a short, unique selection of emoji.</string>
+
+    <string name="a13n_qr_code_description">QR code image</string>
+
+    <string name="verification_verify_user">Verify %s</string>
+    <string name="verification_verified_user">Verified %s</string>
+    <string name="verification_request_waiting_for">Waiting for %s…</string>
+    <string name="verification_request_alert_description">For extra security, verify %s by checking a one-time code on both your devices.\n\nFor maximum security, do this in person.</string>
+    <string name="room_profile_not_encrypted_subtitle">Messages in this room are not end-to-end encrypted.</string>
+    <string name="room_profile_encrypted_subtitle">Messages in this room are end-to-end encrypted.\n\nYour messages are secured with locks and only you and the recipient have the unique keys to unlock them.</string>
+    <string name="room_profile_section_security">Security</string>
+    <string name="room_profile_section_security_learn_more">Learn more</string>
+    <string name="room_profile_section_more">More</string>
+    <string name="room_profile_section_more_settings">Room settings</string>
+    <string name="room_profile_section_more_notifications">Notifications</string>
+    <plurals name="room_profile_section_more_member_list">
+        <item quantity="one">"One person"</item>
+        <item quantity="other">"%1$d people"</item>
+    </plurals>
+    <string name="room_profile_section_more_uploads">Uploads</string>
+    <string name="room_profile_section_more_leave">Leave Room</string>
+    <string name="room_profile_leaving_room">"Leaving the room…"</string>
+
+    <string name="room_member_power_level_admins">Admins</string>
+    <string name="room_member_power_level_moderators">Moderators</string>
+    <string name="room_member_power_level_custom">Custom</string>
+    <string name="room_member_power_level_invites">Invites</string>
+    <string name="room_member_power_level_users">Users</string>
+
+    <string name="room_member_power_level_admin_in">Admin in %1$s</string>
+    <string name="room_member_power_level_moderator_in">Moderator in %1$s</string>
+    <string name="room_member_power_level_custom_in">Custom (%1$d) in %2$s</string>
+
+    <string name="room_member_jump_to_read_receipt">Jump to read receipt</string>
+
+    <string name="rendering_event_error_type_of_event_not_handled">"RiotX does not handle events of type '%1$s' (yet)"</string>
+    <string name="rendering_event_error_type_of_message_not_handled">"RiotX does not handle message of type '%1$s' (yet)"</string>
+    <string name="rendering_event_error_exception">"RiotX encountered an issue when rendering content of event with id '%1$s'"</string>
+
+    <string name="unignore">Unignore</string>
+
+    <string name="verify_cannot_cross_sign">This session is unable to share this verification with your other sessions.\nThe verification will be saved locally and shared in a future version of the app.</string>
+
+    <string name="room_list_sharing_header_recent_rooms">Recent rooms</string>
+    <string name="room_list_sharing_header_other_rooms">Other rooms</string>
+
+    <string name="command_description_rainbow">Sends the given message colored as a rainbow</string>
+    <string name="command_description_rainbow_emote">Sends the given emote colored as a rainbow</string>
+
+    <!-- Title for category in the settings which affect what is displayed in the timeline (ex: show read receipts, etc.) -->
+    <string name="settings_category_timeline">Timeline</string>
+
+    <!-- Title for category in the settings which affect the behavior of the message editor (ex: enable Markdown, send typing notification, etc.) -->
+    <string name="settings_category_composer">Message editor</string>
+
+    <string name="room_settings_enable_encryption">Enable end-to-end encryption</string>
+    <string name="room_settings_enable_encryption_warning">Once enabled, encryption cannot be disabled.</string>
+
+    <string name="room_settings_enable_encryption_dialog_title">Enable encryption?</string>
+    <string name="room_settings_enable_encryption_dialog_content">Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly.</string>
+    <string name="room_settings_enable_encryption_dialog_submit">Enable encryption</string>
+
+    <string name="verification_request_notice">To be secure, verify %s by checking a one-time code.</string>
+    <string name="verification_request_start_notice">To be secure, do this in person or use another way to communicate.</string>
+
+    <string name="verification_emoji_notice">Compare the unique emoji, ensuring they appear in the same order.</string>
+    <string name="verification_code_notice">Compare the code with the one displayed on the other user\'s screen.</string>
+    <string name="verification_conclusion_ok_notice">Messages with this user are end-to-end encrypted and can\'t be read by third parties.</string>
+    <string name="verification_conclusion_ok_self_notice">Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.</string>
+
+
+    <string name="encryption_information_cross_signing_state">Cross-Signing</string>
+    <string name="encryption_information_dg_xsigning_complete">Cross-Signing is enabled\nPrivate Keys on device.</string>
+    <string name="encryption_information_dg_xsigning_trusted">Cross-Signing is enabled\nKeys are trusted.\nPrivate keys are not known</string>
+    <string name="encryption_information_dg_xsigning_not_trusted">Cross-Signing is enabled.\nKeys are not trusted</string>
+    <string name="encryption_information_dg_xsigning_disabled">Cross-Signing is not enabled</string>
+
+
+    <string name="settings_active_sessions_list">Active Sessions</string>
+    <string name="settings_active_sessions_show_all">Show All Sessions</string>
+    <string name="settings_active_sessions_manage">Manage Sessions</string>
+    <string name="settings_active_sessions_signout_device">Sign out this session</string>
+
+    <string name="settings_failed_to_get_crypto_device_info">No cryptographic information available</string>
+
+    <string name="settings_active_sessions_verified_device_desc">This session is trusted for secure messaging because you verified it:</string>
+    <string name="settings_active_sessions_unverified_device_desc">Verify this session to mark it as trusted &amp; grant it access to encrypted messages. If you didn’t sign in to this session your account may be compromised:</string>
+
+    <plurals name="settings_active_sessions_count">
+        <item quantity="one">%d active session</item>
+        <item quantity="other">%d active sessions</item>
+    </plurals>
+
+    <string name="crosssigning_verify_this_session">Verify this session</string>
+    <string name="crosssigning_other_user_not_trust">Other users may not trust it</string>
+    <string name="complete_security">Complete Security</string>
+
+    <string name="verification_open_other_to_verify">Open an existing session &amp; use it to verify this one, granting it access to encrypted messages. If you can’t access one, use your recovery key or passphrase.</string>
+
+
+    <string name="verification_profile_verify">Verify</string>
+    <string name="verification_profile_verified">Verified</string>
+    <string name="verification_profile_warning">Warning</string>
+
+    <string name="room_member_profile_failed_to_get_devices">Failed to get sessions</string>
+    <string name="room_member_profile_sessions_section_title">Sessions</string>
+    <string name="trusted">Trusted</string>
+    <string name="not_trusted">Not Trusted</string>
+
+    <string name="verification_profile_device_verified_because">This session is trusted for secure messaging because %1$s (%2$s) verified it:</string>
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) signed in using a new session:</string>
+    <string name="verification_profile_device_untrust_info">Until this user trusts this session, messages sent to and from it are labelled with warnings. Alternatively, you can manually verify it.</string>
+
+
+    <string name="initialize_cross_signing">Initialize CrossSigning</string>
+    <string name="reset_cross_signing">Reset Keys</string>
+
+    <string name="a11y_qr_code_for_verification">QR code</string>
+
+    <string name="qr_code_scanned_by_other_notice">Did the other user successfully scan the QR code?</string>
+    <string name="qr_code_scanned_by_other_yes">Yes</string>
+    <string name="qr_code_scanned_by_other_no">No</string>
+
+    <string name="no_connectivity_to_the_server_indicator">Connectivity to the server has been lost</string>
 </resources>

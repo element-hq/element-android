@@ -185,4 +185,17 @@
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s 接受 %2$s 的邀請。理由：%3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s 撤回了對 %2$s 的邀請。理由：%3$s</string>
 
+    <plurals name="notice_room_aliases_added">
+        <item quantity="other">%1$s 新增了 %2$s 為此聊天室的地址。</item>
+    </plurals>
+
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="other">%1$s 移除了此聊天室的 %3$s 地址。</item>
+    </plurals>
+
+    <string name="notice_room_aliases_added_and_removed">%1$s 為此聊天室新增 %2$s 並移除 %3$s 地址。</string>
+
+    <string name="notice_room_canonical_alias_set">%1$s 為此聊天室設定了 %2$s 為主地址。</string>
+    <string name="notice_room_canonical_alias_unset">%1$s 為此聊天室移除了主要地址。</string>
+
 </resources>

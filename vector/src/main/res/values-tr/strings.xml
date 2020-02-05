@@ -1325,4 +1325,8 @@ Neden Riot.im’i seçmeliyim?
     <string name="auth_login_sso">Tek oturum açma ile giriş yap</string>
     <string name="auth_add_email_message_2">Hesap kurtarması için email ayarla, ve sonradan da isteğe bağlı olarak başklarının seni tanıyan kişilerin bulması için kullan.</string>
     <string name="login_error_unknown_host">Bu adrese erişilemiyor, lütfen kontrol et</string>
+    <string name="settings_notification_privacy_no_background_sync">Bu uygulamanın arkaplanda anasunucuya bağlanması <b>gerekmez</b>, bu durum batarya kullanımını azaltır.</string>
+    <string name="settings_send_message_with_enter">Enter ile mesaj gönder</string>
+    <string name="settings_send_message_with_enter_summary">Klavyedeki Enter tuşuna bastığında alt satıra geçmek yerine mesajı gönder</string>
+
 </resources>

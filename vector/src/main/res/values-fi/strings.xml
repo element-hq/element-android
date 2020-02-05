@@ -1822,7 +1822,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="a11y_create_menu_open">Avaa huoneen luontivalikko</string>
     <string name="a11y_create_menu_close">Sulje huoneen luontivalikko…</string>
     <string name="a11y_close_keys_backup_banner">Sulje avainten varmuuskopion mainos</string>
-    <string name="error_file_too_big">Tiedosto ”%s$s” (%2$s) on liian iso lähetettäväksi. Raja on %3$s.</string>
+    <string name="error_file_too_big">Tiedosto ”%1$s” (%2$s) on liian iso lähetettäväksi. Raja on %3$s.</string>
 
     <string name="attachment_type_contact">Yhteystieto</string>
     <string name="attachment_type_audio">Ääni</string>

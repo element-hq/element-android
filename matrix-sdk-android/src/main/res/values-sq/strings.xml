@@ -183,4 +183,19 @@
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s pranoi ftesën për %2$s. Arsye: %3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s tërhoqi mbrapsht ftesën për %2$s. Arsye: %3$s</string>
 
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s shtoi %2$s si një adresë për këtë dhomë.</item>
+        <item quantity="other">%1$s shtoi %2$s si adresa për këtë dhomë.</item>
+    </plurals>
+
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s hoqi %2$s si adresë për këtë dhomë.</item>
+        <item quantity="other">%1$s hoqi %3$s si adresa për këtë dhomë.</item>
+    </plurals>
+
+    <string name="notice_room_aliases_added_and_removed">%1$s shtoi %2$s dhe hoqi %3$s si adresa për këtë dhomë.</string>
+
+    <string name="notice_room_canonical_alias_set">%1$s caktoi %2$s si adresë kryesore për këtë dhomë.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s hoqi adresën kryesore për këtë dhomë.</string>
+
 </resources>

@@ -1556,7 +1556,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="sas_decimal_description">Überprüfen Sie dieses Gerät, indem Sie bestätigen, dass die folgenden Zahlen auf dem Bildschirm des Partners angezeigt werden</string>
 
     <string name="sas_verifying_keys">Es ist nichts aufgetaucht\? Noch nicht alle Clients unterstützen die interaktive Verifikation. <button>Nutze alte Verifikation</button>.</string>
-    <string name="sas_legacy_verification_button_title">Verwenden Sie die Alte-Überprüfung</string>
+    <string name="sas_legacy_verification_button_title">Verwenden Sie die alte Überprüfung.</string>
 
     <string name="sas_error_m_unknown_transaction">Das Gerät kennt diese Transaktion nicht</string>
     <string name="sas_error_m_mismatched_commitment">Die Hash-Verpflichtung stimmte nicht überein</string>
@@ -1677,7 +1677,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
 
     <string name="settings_set_workmanager_delay">Bevorzugtes Synchronisationsintervall</string>
-    <string name="settings_discovery_category">Discovery</string>
+    <string name="settings_discovery_category">Fund</string>
     <string name="encryption_information_device_name_with_warning">Öffentlicher Name (sichtbar für Personen, mit denen Sie kommunizieren)</string>
     <string name="device_name_warning">Der öffentliche Name eines Geräts ist für Personen sichtbar, mit denen Sie kommunizieren</string>
     <string name="widget_integration_review_terms">Um fortzufahren, müssen Sie die Bedingungen dieses Dienstes akzeptieren.</string>
@@ -1784,10 +1784,177 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="settings_discovery_no_terms">Der Identitätsserver den du ausgewählt hast, hat keine Nutzungsbedingungen. Fahre nur fort, wenn du dem Besitzer des Dienstes vertraust</string>
     <string name="settings_text_message_sent">Eine Textnachricht wurde an %s gesendet. Bitte gebe den Verifizierungscode ein, den sie enthält.</string>
 
-    <string name="labs_allow_extended_logging">Aktiviere gesprächige Logs.</string>
+    <string name="labs_allow_extended_logging">Aktiviere ausführliche Logs.</string>
     <string name="labs_allow_extended_logging_summary">Gesprächige Logs wird den Entwicklern helfen indem sie mehr Informationen enthalten, wenn du einen Fehlerbericht sendest. Auch wenn dies aktiviert ist, werden keine Nachrichteninhalte oder andere privaten Daten aufgezeichnet.</string>
 
 
     <string name="error_terms_not_accepted">Bitte erneut versuchen, nachdem du die Nutzungsbedingungendeines Home-Servers akzeptiert hast.</string>
 
+    <string name="room_widget_permission_webview_shared_info_title">Bei Benutzung könnten Cookies gesetzt werden und es könnten Daten mit %s geteilt werden:</string>
+    <string name="room_widget_permission_shared_info_title">Bei Benutzung könnten Daten mit %s geteilt werden:</string>
+    <string name="settings_discovery_no_msisdn">Optionen zum Finden werden erscheinen, sobald du eine Telefonnummer hinzugefügt hast.</string>
+    <string name="settings_discovery_confirm_mail">Wir haben dir eine Bestätigungsmail an %s gesendet. Prüfe dein Postfach und klicke auf den Bestätigungslink</string>
+    <string name="error_network_timeout">Es sieht aus, als würde der Server zu viel Zeit benötigen, um zu antworten. Der Grund kann eine schlechte Verbindung oder ein Fehler mit dem Server sein. Bitte versuche es später erneut.</string>
+
+    <string name="send_attachment">Anhang senden</string>
+
+    <string name="a11y_open_drawer">Navigationsmenü öffnen</string>
+    <string name="a11y_create_menu_open">Raumerstellungsmenü öffnen</string>
+    <string name="a11y_create_menu_close">Schließe das Raumerstellungsmenü…</string>
+    <string name="a11y_create_direct_message">Starte einen neuen Privatchat</string>
+    <string name="a11y_create_room">Erstelle einen neuen Raum</string>
+    <string name="a11y_close_keys_backup_banner">Schließe Key Backup Einblendung</string>
+    <string name="a11y_show_password">Passwort anzeigen</string>
+    <string name="a11y_hide_password">Passwort verstecken</string>
+    <string name="a11y_jump_to_bottom">Zum Ende springen</string>
+
+    <string name="three_users_read">gelesen von %1$s, %2$s und %3$s</string>
+    <string name="two_users_read">gelesen von %1$s und %2$s</string>
+    <string name="one_user_read">gelesen von %s</string>
+    <plurals name="fallback_users_read">
+        <item quantity="one">gelesen von einem Nutzer</item>
+        <item quantity="other">gelesen von %d Nutzern</item>
+    </plurals>
+
+    <string name="error_file_too_big">Die Datei \'%1$s\' (%2$s) ist zu groß, um sie hochzuladen. Das Limit ist %3$s.</string>
+
+    <string name="error_attachment">Beim Abrufen des Anhangs ist ein Fehler aufgetreten.</string>
+    <string name="attachment_type_file">Datei</string>
+    <string name="attachment_type_contact">Kontakt</string>
+    <string name="attachment_type_camera">Kamera</string>
+    <string name="attachment_type_audio">Audio</string>
+    <string name="attachment_type_gallery">Gallerie</string>
+    <string name="attachment_type_sticker">Sticker</string>
+    <string name="report_content_spam">Es ist Spam</string>
+    <string name="report_content_inappropriate">Es ist unangebracht</string>
+    <string name="report_content_custom">Benutzerdefinierte Meldung…</string>
+    <string name="report_content_custom_title">Diesen Inhalt melden</string>
+    <string name="report_content_custom_hint">Meldegrund</string>
+    <string name="report_content_custom_submit">MELDEN</string>
+    <string name="block_user">NUTZER BLOCKIEREN</string>
+
+    <string name="content_reported_title">Inhalt gemeldet</string>
+    <string name="content_reported_content">Dieser Inhalt wurde gemeldet.
+\n
+\nWenn du keine weiteren Inhalte dieses Nutzers sehen möchtest, kannst du ihn blockieren, um seine Nachrichten auszublenden</string>
+    <string name="content_reported_as_spam_title">Als Spam gemeldet</string>
+    <string name="content_reported_as_spam_content">Dieser Inhalt wurde als Spam gemeldet
+\n
+\nWenn du keine weiteren Inhalte dieses Nutzers mehr sehen möchtest, kannst du ihn blockieren, um seine Nachrichten auszublenden</string>
+    <string name="content_reported_as_inappropriate_title">Als unangebracht gemeldet</string>
+    <string name="content_reported_as_inappropriate_content">Dieser Inhalt wurde als unangebracht gemeldet
+\n
+\nWenn du keine weiteren Inhalte dieses Nutzers mehr sehen möchtest, kannst du ihn blockieren, um seine Nachrichten auszublenden</string>
+
+    <string name="permissions_rationale_msg_keys_backup_export">Riot benötigt Berechtigungen, um deine E2E Schlüssel zu speichern.
+\n
+\nBitte erlaube den Zugriff im nächsten Pop-Up sodass du deine Schlüssel manuell exportieren kannst.</string>
+
+    <string name="no_network_indicator">Aktuell besteht keine Netzwerkverbindung</string>
+
+    <string name="message_ignore_user">Nutzer blockieren</string>
+
+    <string name="room_list_quick_actions_notifications_all_noisy">Alle Nachrichten (laut)</string>
+    <string name="room_list_quick_actions_notifications_all">Alle Nachrichten</string>
+    <string name="room_list_quick_actions_notifications_mentions">Nur Erwähnungen</string>
+    <string name="room_list_quick_actions_notifications_mute">Stumm schalten</string>
+    <string name="room_list_quick_actions_settings">Einstellungen</string>
+    <string name="room_list_quick_actions_leave">Raum verlassen</string>
+    <string name="notice_member_no_changes">%1$s hat keine Änderungen gemacht</string>
+    <string name="command_description_spoiler">Sendet die Nachricht als Spoiler</string>
+    <string name="no_ignored_users">Du ignorierst keine Nutzer</string>
+
+    <string name="help_long_click_on_room_for_more_options">Halte auf einem Raum um mehr Optionen anzuzeigen</string>
+
+
+    <string name="room_join_rules_public">%1$s hat den Raum für jeden, der den Link hat, öffentlich gemacht.</string>
+    <string name="timeline_unread_messages">Ungelesene Nachrichten</string>
+
+    <string name="login_splash_text1">Privat oder in Gruppen mit Leuten chatten</string>
+    <string name="login_splash_text2">Halte Gespräche mittels Verschlüsselung privat</string>
+    <string name="login_splash_submit">Beginne</string>
+
+    <string name="login_server_title">Wähle einen Server</string>
+    <string name="login_server_text">Genau wie bei Emails haben Accounts ein Zuhause, auch wenn du mit jedem kommunizieren kannst</string>
+    <string name="login_server_matrix_org_text">Folge Millionen anderen kostenlos auf dem größten öffentlichen Server</string>
+    <string name="login_server_modular_text">Premium Hosting für Organisationen</string>
+    <string name="login_server_modular_learn_more">Mehr erfahren</string>
+    <string name="login_server_other_title">Andere</string>
+    <string name="login_server_other_text">Benutzerdefinierte &amp; erweiterte Einstellungen</string>
+
+    <string name="login_continue">Fortfahren</string>
+    <string name="settings_discovery_disconnect_identity_server_info">Eine Trennung von deinem Identitätsserver würde bedeuten, dass du weder von anderen Nutzern gefunden werden, noch diese per E-Mail oder Telefonnummer einladen kannst.</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">Derzeitig teilst du deine E-Mail-Adresse oder Telefonnummer über den Identitätsserver %1$s. Du müsstest dich erneut zu %2$s verbinden um dies zu unterbinden.</string>
+    <string name="settings_agree_to_terms">Stimme den Nutzungsbedingungen des Identitätsservers (%s) zu, um zu erlauben per E-Mail oder Telefonnummer gefunden werden zu können.</string>
+
+    <string name="two_and_some_others_read">gelesen von %1$s, %2$s und %3$d anderen</string>
+    <string name="error_handling_incoming_share">Zu teilende Daten nicht verarbeitbar</string>
+
+    <string name="login_splash_text3">Erweitere &amp; individualisiere dein Benutzererlebnis</string>
+    <string name="login_connect_to">Verbinde mit %1$s</string>
+    <string name="login_connect_to_modular">Mit Modular verbinden</string>
+    <string name="login_connect_to_a_custom_server">Mit einem benutzerdefinierten Server verbinden</string>
+    <string name="login_signin_to">Bei %1$s anmelden</string>
+    <string name="login_signup">Registrieren</string>
+    <string name="login_signin">Anmelden</string>
+    <string name="login_signin_sso">Mit einmaligem Anmelden fortfahren</string>
+
+    <string name="login_server_url_form_modular_hint">Modular Adresse</string>
+    <string name="login_server_url_form_other_hint">Adresse</string>
+    <string name="login_sso_error_message">Ein Fehler beim Laden der Seite %1$s (%2$d) ist aufgetreten</string>
+    <string name="login_registration_disabled">Es tut uns leid. Dieser Server akzeptiert keine neuen Benutzerkonten.</string>
+    <string name="login_registration_not_supported">Die Anwendung kann kein neues Benutzerkonto auf diesem Server erstellen.
+\n
+\nMöchtest du dich über eine Web-Anwendung anmelden\?</string>
+
+    <string name="login_login_with_email_error">Diese E-Mail-Adresse ist mit keinem Benutzerkonto verknüpft.</string>
+
+    <string name="login_reset_password_on">Passwort auf %1$s zurücksetzen</string>
+    <string name="login_reset_password_email_hint">E-Mail</string>
+    <string name="login_reset_password_password_hint">Neues Passwort</string>
+
+    <string name="login_reset_password_warning_title">Achtung!</string>
+    <string name="login_reset_password_warning_content">Eine Änderung deines Passworts wird alle Ende-zu-Ende-Verschlüsselungsschlüssel zurücksetzen. Dein verschlüsselter Chatverlauf wird dadurch unlesbar. Richte eine Schlüsselsicherung ein oder exportiere deine Raumschlüssel von einem anderen Gerät bevor du dein Passwort zurücksetzt.</string>
+    <string name="login_reset_password_warning_submit">Fortfahren</string>
+
+    <string name="login_reset_password_error_not_found">Diese E-Mail-Adresse ist mit keinem Benutzerkonto verknüpft</string>
+
+    <string name="login_reset_password_mail_confirmation_title">Prüfe deinen Posteingang</string>
+    <string name="login_reset_password_mail_confirmation_notice">Eine Bestätigungsemail wurde an %1$s versendet.</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">Klicke auf den Link um dein neues Passwort zu bestätigen. Sobald du dem enthaltenen Link gefolgt bist, klicke unten.</string>
+    <string name="login_reset_password_mail_confirmation_submit">Ich habe meine E-Mail-Adresse bestätigt</string>
+
+    <string name="login_reset_password_success_title">Erfolgreich!</string>
+    <string name="login_reset_password_success_notice">Dein Passwort wurde zurückgesetzt.</string>
+    <string name="login_reset_password_success_submit">Zurück zur Anmeldung</string>
+
+    <string name="login_reset_password_cancel_confirmation_content">Dein Passwort wurde noch nicht geändert.
+\n
+\nMöchtest du die Passwortänderung stoppen\?</string>
+
+    <string name="login_set_email_title">E-Mail-Adresse angeben</string>
+    <string name="login_set_email_mandatory_hint">E-Mail</string>
+    <string name="login_set_email_optional_hint">E-Mail (optional)</string>
+    <string name="login_set_msisdn_mandatory_hint">Telefonnummer</string>
+    <string name="login_set_msisdn_optional_hint">Telefonnummer (optional)</string>
+    <string name="login_msisdn_confirm_title">Telefonnummer bestätigen</string>
+    <string name="login_msisdn_confirm_notice">Wir haben einen Code an %1$s gesendet. Gib diesen unten ein um dich zu verifizieren.</string>
+    <string name="login_msisdn_confirm_hint">Code eingeben</string>
+    <string name="login_msisdn_confirm_send_again">Erneut senden</string>
+    <string name="login_signup_username_hint">Benutzername oder E-Mail-Adresse</string>
+    <string name="login_signup_password_hint">Passwort</string>
+    <string name="login_signup_error_user_in_use">Dieser Benutzername ist bereits belegt</string>
+    <string name="login_signup_cancel_confirmation_content">Dein Benutzerkonto ist noch nicht erstellt.
+\n
+\nMöchtest du die Registrierung stoppen\?</string>
+
+    <string name="login_a11y_choose_matrix_org">matrix.org auswählen</string>
+    <string name="login_a11y_choose_modular">modular auswählen</string>
+    <string name="login_a11y_choose_other">Benutzerdefinierten Server auswählen</string>
+    <string name="login_terms_title">Bedingungen akzeptieren um fortzufahren</string>
+
+    <string name="login_wait_for_email_title">Bitte überprüfe deine E-Mails</string>
+    <string name="login_wait_for_email_notice">Wir haben dir eine E-Mail an %1$s gesendet.
+\nBitte öffne den darin enthaltenen Link, um mit der Benutzerkontoerstellung fortzufahren.</string>
+    <string name="login_validation_code_is_not_correct">Der eingegebene Code ist nicht korrekt. Bitte überprüfe deine Eingabe.</string>
 </resources>

@@ -84,6 +84,7 @@ cp ../riot-android/vector/src/main/res/values-es-rMX/strings.xml    ./vector/src
 cp ../riot-android/vector/src/main/res/values-eu/strings.xml        ./vector/src/main/res/values-eu/strings.xml
 cp ../riot-android/vector/src/main/res/values-fa/strings.xml        ./vector/src/main/res/values-fa/strings.xml
 cp ../riot-android/vector/src/main/res/values-fi/strings.xml        ./vector/src/main/res/values-fi/strings.xml
+cp ../riot-android/vector/src/main/res/values-fy/strings.xml        ./vector/src/main/res/values-fy/strings.xml
 cp ../riot-android/vector/src/main/res/values-fr/strings.xml        ./vector/src/main/res/values-fr/strings.xml
 cp ../riot-android/vector/src/main/res/values-fr-rCA/strings.xml    ./vector/src/main/res/values-fr-rCA/strings.xml
 cp ../riot-android/vector/src/main/res/values-gl/strings.xml        ./vector/src/main/res/values-gl/strings.xml

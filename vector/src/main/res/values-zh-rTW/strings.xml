@@ -1931,4 +1931,22 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="permalink_malformed">您的 matrix.to 連結格式錯誤</string>
     <string name="bug_report_error_too_short">描述太短了</string>
 
+    <string name="notification_initial_sync">初始化同步……</string>
+
+    <string name="settings_show_devices_list">檢視我的所有裝置</string>
+    <string name="settings_advanced_settings">進階設定</string>
+    <string name="settings_developer_mode">開發者模式</string>
+    <string name="settings_developer_mode_summary">開發者模式會啟用隱藏的功能，但可能會造成應用程式較不穩定。僅供開發者使用！</string>
+    <string name="settings_rageshake">憤怒搖晃</string>
+    <string name="settings_rageshake_detection_threshold">偵測閾值</string>
+    <string name="settings_rageshake_detection_threshold_summary">搖晃您的手機以測試偵測閾值</string>
+    <string name="rageshake_detected">偵測到搖晃！</string>
+    <string name="settings">設定</string>
+    <string name="devices_current_device">目前的裝置</string>
+    <string name="devices_other_devices">其他裝置</string>
+
+    <string name="autocomplete_limited_results">僅顯示第一個結果，輸入更多字母……</string>
+
+    <string name="settings_developer_mode_fail_fast_title">快速失敗</string>
+    <string name="settings_developer_mode_fail_fast_summary">在發生非預期的錯誤時，RiotX 可能更常當機</string>
 </resources>

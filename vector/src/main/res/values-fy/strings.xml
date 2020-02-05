@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="resources_language">fy</string>
+    <string name="resources_country_code">FY</string>
+    <string name="resources_script">Latn</string>
+
+    <string name="light_theme">Ljocht tema</string>
+    <string name="dark_theme">Donker tema</string>
+    <string name="black_them">Swart tema</string>
+    <string name="status_theme">Status.im-tema</string>
+
+    <string name="notification_sync_init">Tsjinst inisjalisearje</string>
+    <string name="notification_sync_in_progress">Syngronisearje…</string>
+    <string name="notification_listening_for_events">Lústerje nei barrens</string>
+    <string name="notification_noisy_notifications">Lûdsmeldingen</string>
+    <string name="notification_silent_notifications">Stille meldingen</string>
+
+    <string name="title_activity_home">Berjochten</string>
+    <string name="title_activity_room">Petear</string>
+    <string name="title_activity_settings">Ynstellingen</string>
+    <string name="title_activity_member_details">Ynfo oer dielnimmer</string>
+    <string name="title_activity_historical">Historysk</string>
+    <string name="title_activity_bug_report">Flatermelding</string>
+    <string name="title_activity_group_details">Ynfo oer mienskip</string>
+    <string name="title_activity_choose_sticker">Ferstjoer in stikker</string>
+    <string name="title_activity_keys_backup_setup">Kaaireservekopy</string>
+    <string name="title_activity_keys_backup_restore">Kaaireservekopy brûke</string>
+    <string name="title_activity_verify_device">Apparaat ferifiearje</string>
+
+    <string name="keys_backup_is_not_finished_please_wait">Kaaireservekopy is noch net ree, in amerijke…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">As jo jo no ôfmelde, sille jo jo fersifere berjochten kwytreitsje</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Kaaireservekopy is dwaande. Asto dy no ôfmeldst, silsto de tagong ta dyn fersifere berjochten kwytreitsje.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Feilige kaaireservekopy moat op al dyn apparaten aktyf wêze om de tagong ta dyn fersifere berjochten net kwyt te reitsjen.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Ik wol myn fersifere berjochten net</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Reservekopy fan kaaien wurdt makke…</string>
+    <string name="keys_backup_activate">Kaaireservekopy brûke</string>
+    <string name="are_you_sure">Binne jo wis\?</string>
+    <string name="backup">Reservekopy meitsje</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Do silst de tagong ta dyn fersifere berjochten ferlieze, útsein asto earst in reservekopy fan dyn kaaien makkest eardatsto dy ôfmeldst.</string>
+
+    <string name="dialog_title_third_party_licences">Lisinsjes fan tredde partijen</string>
+
+    <string name="loading">Lade…</string>
+
+    <string name="ok">Oké</string>
+    <string name="cancel">Annulearje</string>
+    <string name="save">Bewarje</string>
+    <string name="leave">Ferlitte</string>
+    <string name="stay">Bliuwe</string>
+    <string name="send">Ferstjoere</string>
+    <string name="copy">Kopiearje</string>
+    <string name="resend">Opnij ferstjoere</string>
+    <string name="redact">Fuortsmite</string>
+    <string name="quote">Sitearje</string>
+    <string name="download">Downloade</string>
+    <string name="share">Diele</string>
+    <string name="speak">Ynsprekke</string>
+    <string name="clear">Wiskje</string>
+    <string name="later">Letter</string>
+    <string name="forward">Trochstjoere</string>
+    <string name="permalink">Permalink</string>
+    <string name="view_source">Boarne werjaan</string>
+    <string name="view_decrypted_source">Untskoattele boarne werjaan</string>
+    <string name="delete">Fuortsmite</string>
+    <string name="rename">Omneame</string>
+    <string name="none">Gjin</string>
+    <string name="revoke">Ynlûke</string>
+    <string name="disconnect">Ferbining ferbrekke</string>
+    <string name="report_content">Ynhâld melde</string>
+    <string name="active_call">Aktive petear</string>
+    <string name="ongoing_conference_call">Rinnend gearkomstpetear. 
+\nNim diel mei %1$s of %2$s</string>
+    <string name="ongoing_conference_call_voice">mikrofoan</string>
+    <string name="ongoing_conference_call_video">kamera</string>
+    <string name="cannot_start_call">Kin de oprop net starte, probearje it letter nochris</string>
+    <string name="missing_permissions_warning">Guon funksjes binne miskien ôfwêzich fanwegen ûntbrekkende rjochten…</string>
+    <string name="missing_permissions_error">Dizze aksje is net mooglik fanwegen ûntbrekkende rjochten.</string>
+    <string name="missing_permissions_to_start_conf_call">Om in gearkomst yn dit groepspetear te starten hasto útnûgingsrjochten nedich</string>
+    <string name="missing_permissions_title_to_start_conf_call">Kin de oprop net starte</string>
+    <string name="device_information">Apparaatynformaasje</string>
+</resources>

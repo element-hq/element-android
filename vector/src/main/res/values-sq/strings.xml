@@ -1933,4 +1933,24 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="permalink_malformed">Lidhja juaj matrix.to është e keqformuar</string>
     <string name="bug_report_error_too_short">Përshkrimi është shumë i shkurtër</string>
 
+    <string name="room_settings_labs_pref_title">Labs</string>
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">Token regjistrimi</string>
+
+    <string name="command_description_spoiler">E dërgon mesazhin e dhënë si <em>spoiler</em></string>
+    <string name="notification_initial_sync">Njëkohësimi Fillestar…</string>
+
+    <string name="settings_show_devices_list">Shih krejt pajisjet e mia</string>
+    <string name="settings_advanced_settings">Rregullime të mëtejshme</string>
+    <string name="settings_developer_mode">Mënyra zhvillues</string>
+    <string name="settings_developer_mode_summary">Mënyra zhvillim aktivizon veçori të fshehura dhe mundet gjithashtu ta bëjë aplikacionin më pak të qëndrueshëm. Vetëm për zhvilluesit!</string>
+    <string name="settings_rageshake_detection_threshold">Prag pikasjeje</string>
+    <string name="settings_rageshake_detection_threshold_summary">Tundeni telefonin tuaj që të testoni prag pikasjeje</string>
+    <string name="rageshake_detected">U zbulua tundje!</string>
+    <string name="settings">Rregullime</string>
+    <string name="devices_current_device">Pajisja e tanishme</string>
+    <string name="devices_other_devices">Pajisje të tjera</string>
+
+    <string name="autocomplete_limited_results">Po shfaqen vetëm përfundimet e para, shtypni më shumë shkronja…</string>
+
+    <string name="settings_developer_mode_fail_fast_summary">RiotX mund të vithiset më shpesh, kur ndodh një gabim i papritur</string>
 </resources>

@@ -147,7 +147,7 @@
     <string name="auth_missing_email_or_phone">E-mail helbidea edo telefono zenbakia falta da</string>
     <string name="auth_invalid_token">Kate baliogabea</string>
     <string name="auth_password_dont_match">Pasahitzak ez datoz bat</string>
-    <string name="auth_forgot_password">Pasahitza ahaztu duzu?</string>
+    <string name="auth_forgot_password">Pasahitza ahaztuta\?</string>
     <string name="auth_use_server_options">Erabili zerbitzari pertsonalizatuaren ezarpenak (aurreratua)</string>
     <string name="auth_email_validation_message">Egiaztatu zure e-mail helbidea erregistroarekin jarraitzeko</string>
     <string name="auth_threepid_warning_message">Ezin zara e-mail eta telefono zenbakia aldi berean erabiliz erregistratu oringoz, API-a bukatu arte. Soilik telefono zenbakia erabiliko da.
@@ -1977,4 +1977,22 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="permalink_malformed">Zure matrix.to esteka gaizki osatua dago</string>
     <string name="bug_report_error_too_short">Deskripzio hau laburregia da</string>
 
+    <string name="notification_initial_sync">Lehen sinkronizazioa…</string>
+
+    <string name="settings_show_devices_list">Ikusi nire gailu guztiak</string>
+    <string name="settings_advanced_settings">Ezarpen aurreratuak</string>
+    <string name="settings_developer_mode">Garatzaile modua</string>
+    <string name="settings_developer_mode_summary">Garatzaile moduak aplikazioa ezegonkor bihurtu dezaketen ezaugarri ezkutuak aktibatzen ditu. Garatzaileentzat besterik ez!</string>
+    <string name="settings_rageshake">Amorruz astintzea</string>
+    <string name="settings_rageshake_detection_threshold">Antzemate atalasea</string>
+    <string name="settings_rageshake_detection_threshold_summary">Astindu zure telefonoa antzemate atalasea probatzeko</string>
+    <string name="rageshake_detected">Astindua antzeman da!</string>
+    <string name="settings">Ezarpenak</string>
+    <string name="devices_current_device">Uneko gailua</string>
+    <string name="devices_other_devices">Beste gailuak</string>
+
+    <string name="autocomplete_limited_results">Soilik lehen emaitzak erakusten, idatzi letra gehiago…</string>
+
+    <string name="settings_developer_mode_fail_fast_title">Hutsegin-azkar</string>
+    <string name="settings_developer_mode_fail_fast_summary">RiotX aplikazioa ustekabeko erroreen aurrean maizago kraskatu daiteke</string>
 </resources>

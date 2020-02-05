@@ -2026,4 +2026,22 @@
     <string name="permalink_malformed">Il tuo collegamento matrix.to non è corretto</string>
     <string name="bug_report_error_too_short">La descrizione è troppo breve</string>
 
+    <string name="notification_initial_sync">Sync iniziale…</string>
+
+    <string name="settings_show_devices_list">Vedi tutti i miei dispositivi</string>
+    <string name="settings_advanced_settings">Impostazioni avanzate</string>
+    <string name="settings_developer_mode">Modalità sviluppatore</string>
+    <string name="settings_developer_mode_summary">La modalità sviluppatore abilita funzionalità nascoste e potrebbe anche rendere l\'app meno stabile. Solo per sviluppatori!</string>
+    <string name="settings_rageshake">Scuotimento</string>
+    <string name="settings_rageshake_detection_threshold">Soglia di rilevamento</string>
+    <string name="settings_rageshake_detection_threshold_summary">Scuoti il telefono per testare la soglia di rilevamento</string>
+    <string name="rageshake_detected">Scuotimento rilevato!</string>
+    <string name="settings">Impostazioni</string>
+    <string name="devices_current_device">Dispositivo attuale</string>
+    <string name="devices_other_devices">Altri dispositivi</string>
+
+    <string name="autocomplete_limited_results">Mostrati solo i primi risultati, digita più lettere…</string>
+
+    <string name="settings_developer_mode_fail_fast_title">Crash facile</string>
+    <string name="settings_developer_mode_fail_fast_summary">RiotX potrebbe crashare più spesso quando si verifica un errore imprevisto</string>
 </resources>

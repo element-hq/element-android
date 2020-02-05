@@ -187,4 +187,19 @@
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s ha accettato l\'invito per %2$s. Motivo: %3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s ha rifiutato l\'invito di %2$s. Motivo: %3$s</string>
 
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s ha aggiunto %2$s come indirizzo per questa stanza.</item>
+        <item quantity="other">%1$s ha aggiunto %2$s come indirizzi per questa stanza.</item>
+    </plurals>
+
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s ha rimosso %2$s come indirizzo per questa stanza.</item>
+        <item quantity="other">%1$s ha rimosso %3$s come indirizzi per questa stanza.</item>
+    </plurals>
+
+    <string name="notice_room_aliases_added_and_removed">%1$s ha aggiunto %2$s e rimosso %3$s come indirizzi per questa stanza.</string>
+
+    <string name="notice_room_canonical_alias_set">%1$s ha impostato l\'indirizzo principale per questa stanza a %2$s.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s ha rimosso l\'indirizzo principale per questa stanza.</string>
+
 </resources>
