@@ -31,6 +31,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.matrix.android.api.session.crypto.sas.VerificationService
 import im.vector.matrix.android.internal.session.room.VerificationState
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
@@ -102,12 +103,7 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
                 }
                 holder.statusTextView.isVisible = true
             }
-            else                                -> {
-                holder.buttonBar.isVisible = false
-                holder.statusTextView.text = null
-                holder.statusTextView.isVisible = false
-            }
-        }
+        }.exhaustive
 
         // Always hide buttons if request is too old
         if (!VerificationService.isValidRequest(attributes.informationData.ageLocalTS)) {

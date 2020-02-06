@@ -104,11 +104,9 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                         }
                         .toList(),
                 referencesInfoData = event.annotations?.referencesAggregatedSummary?.let { referencesAggregatedSummary ->
-                    val stateStr = referencesAggregatedSummary.content.toModel<ReferencesAggregatedContent>()?.verificationSummary
-                    ReferencesInfoData(
-                            VerificationState.values().firstOrNull { stateStr == it.name }
-                                    ?: VerificationState.REQUEST
-                    )
+                    val verificationState = referencesAggregatedSummary.content.toModel<ReferencesAggregatedContent>()?.verificationState
+                            ?: VerificationState.REQUEST
+                    ReferencesInfoData(verificationState)
                 },
                 sentByMe = event.root.senderId == session.myUserId
         )

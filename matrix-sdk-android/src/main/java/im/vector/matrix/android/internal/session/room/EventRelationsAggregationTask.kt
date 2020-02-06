@@ -73,6 +73,21 @@ fun VerificationState.isCanceled(): Boolean {
     return this == VerificationState.CANCELED_BY_ME || this == VerificationState.CANCELED_BY_OTHER
 }
 
+// State transition with control
+private fun VerificationState?.toState(newState: VerificationState): VerificationState {
+    // Cancel is always prioritary ?
+    // Eg id i found that mac or keys mismatch and send a cancel and the other send a done, i have to
+    // consider as canceled
+    if (newState.isCanceled()) {
+        return newState
+    }
+    // never move out of cancel
+    if (this?.isCanceled() == true) {
+        return this
+    }
+    return newState
+}
+
 /**
  * Called by EventRelationAggregationUpdater, when new events that can affect relations are inserted in base.
  */
@@ -550,26 +565,26 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
         } else {
             ContentMapper.map(verifSummary.content)?.toModel<ReferencesAggregatedContent>()
             var data = ContentMapper.map(verifSummary.content)?.toModel<ReferencesAggregatedContent>()
-                    ?: ReferencesAggregatedContent(VerificationState.REQUEST.name)
+                    ?: ReferencesAggregatedContent(VerificationState.REQUEST)
             // TODO ignore invalid messages? e.g a START after a CANCEL?
             // i.e. never change state if already canceled/done
-            val currentState = VerificationState.values().firstOrNull { data.verificationSummary == it.name }
+            val currentState = data.verificationState
             val newState = when (event.getClearType()) {
                 EventType.KEY_VERIFICATION_START,
                 EventType.KEY_VERIFICATION_ACCEPT,
                 EventType.KEY_VERIFICATION_READY,
                 EventType.KEY_VERIFICATION_KEY,
-                EventType.KEY_VERIFICATION_MAC    -> updateVerificationState(currentState, VerificationState.WAITING)
-                EventType.KEY_VERIFICATION_CANCEL -> updateVerificationState(currentState, if (event.senderId == userId) {
+                EventType.KEY_VERIFICATION_MAC    -> currentState.toState(VerificationState.WAITING)
+                EventType.KEY_VERIFICATION_CANCEL -> currentState.toState(if (event.senderId == userId) {
                     VerificationState.CANCELED_BY_ME
                 } else {
                     VerificationState.CANCELED_BY_OTHER
                 })
-                EventType.KEY_VERIFICATION_DONE   -> updateVerificationState(currentState, VerificationState.DONE)
+                EventType.KEY_VERIFICATION_DONE   -> currentState.toState(VerificationState.DONE)
                 else                              -> VerificationState.REQUEST
             }
 
-            data = data.copy(verificationSummary = newState.name)
+            data = data.copy(verificationState = newState)
             verifSummary.content = ContentMapper.map(data.toContent())
         }
 
@@ -579,20 +594,5 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
             verifSummary.sourceLocalEcho.remove(txId)
             verifSummary.sourceEvents.add(event.eventId)
         }
-    }
-
-    // TODO Ben refacto -> fun VerifcationState?.toState(state): State
-    private fun updateVerificationState(oldState: VerificationState?, newState: VerificationState): VerificationState {
-        // Cancel is always prioritary ?
-        // Eg id i found that mac or keys mismatch and send a cancel and the other send a done, i have to
-        // consider as canceled
-        if (newState.isCanceled()) {
-            return newState
-        }
-        // never move out of cancel
-        if (oldState?.isCanceled() == true) {
-            return oldState
-        }
-        return newState
     }
 }
