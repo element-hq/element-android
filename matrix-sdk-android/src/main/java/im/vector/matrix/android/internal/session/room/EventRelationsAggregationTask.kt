@@ -555,29 +555,17 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
             // i.e. never change state if already canceled/done
             val currentState = VerificationState.values().firstOrNull { data.verificationSummary == it.name }
             val newState = when (event.getClearType()) {
-                EventType.KEY_VERIFICATION_START  -> {
-                    updateVerificationState(currentState, VerificationState.WAITING)
-                }
-                EventType.KEY_VERIFICATION_ACCEPT -> {
-                    updateVerificationState(currentState, VerificationState.WAITING)
-                }
-                EventType.KEY_VERIFICATION_READY  -> {
-                    updateVerificationState(currentState, VerificationState.WAITING)
-                }
-                EventType.KEY_VERIFICATION_KEY    -> {
-                    updateVerificationState(currentState, VerificationState.WAITING)
-                }
-                EventType.KEY_VERIFICATION_MAC    -> {
-                    updateVerificationState(currentState, VerificationState.WAITING)
-                }
-                EventType.KEY_VERIFICATION_CANCEL -> {
-                    updateVerificationState(currentState, if (event.senderId == userId) {
-                        VerificationState.CANCELED_BY_ME
-                    } else VerificationState.CANCELED_BY_OTHER)
-                }
-                EventType.KEY_VERIFICATION_DONE   -> {
-                    updateVerificationState(currentState, VerificationState.DONE)
-                }
+                EventType.KEY_VERIFICATION_START,
+                EventType.KEY_VERIFICATION_ACCEPT,
+                EventType.KEY_VERIFICATION_READY,
+                EventType.KEY_VERIFICATION_KEY,
+                EventType.KEY_VERIFICATION_MAC    -> updateVerificationState(currentState, VerificationState.WAITING)
+                EventType.KEY_VERIFICATION_CANCEL -> updateVerificationState(currentState, if (event.senderId == userId) {
+                    VerificationState.CANCELED_BY_ME
+                } else {
+                    VerificationState.CANCELED_BY_OTHER
+                })
+                EventType.KEY_VERIFICATION_DONE   -> updateVerificationState(currentState, VerificationState.DONE)
                 else                              -> VerificationState.REQUEST
             }
 
@@ -593,15 +581,16 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
         }
     }
 
+    // TODO Ben refacto -> fun VerifcationState?.toState(state): State
     private fun updateVerificationState(oldState: VerificationState?, newState: VerificationState): VerificationState {
         // Cancel is always prioritary ?
         // Eg id i found that mac or keys mismatch and send a cancel and the other send a done, i have to
         // consider as canceled
-        if (newState == VerificationState.CANCELED_BY_OTHER || newState == VerificationState.CANCELED_BY_ME) {
+        if (newState.isCanceled()) {
             return newState
         }
         // never move out of cancel
-        if (oldState == VerificationState.CANCELED_BY_OTHER || oldState == VerificationState.CANCELED_BY_ME) {
+        if (oldState?.isCanceled() == true) {
             return oldState
         }
         return newState
