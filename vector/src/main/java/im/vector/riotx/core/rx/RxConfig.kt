@@ -31,14 +31,13 @@ class RxConfig @Inject constructor(
     fun setupRxPlugin() {
         RxJavaPlugins.setErrorHandler { throwable ->
             Timber.e(throwable, "RxError")
-            //is InterruptedException -> fine, some blocking code was interrupted by a dispose call
+            // is InterruptedException -> fine, some blocking code was interrupted by a dispose call
             if (throwable !is InterruptedException) {
                 // Avoid crash in production, except if user wants it
                 if (vectorPreferences.failFast()) {
                     throw throwable
                 }
             }
-
         }
     }
 }

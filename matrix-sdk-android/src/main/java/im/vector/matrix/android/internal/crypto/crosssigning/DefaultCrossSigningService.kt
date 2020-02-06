@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.crypto.crosssigning
 import androidx.lifecycle.LiveData
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.api.util.Optional
@@ -616,11 +615,10 @@ internal class DefaultCrossSigningService @Inject constructor(
         }
     }
 
-    override fun onUsersDeviceUpdate(users: List<String>) {
+    override fun onUsersDeviceUpdate(userIds: List<String>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            Timber.d("## CrossSigning - onUsersDeviceUpdate for ${users.size} users")
-            users.forEach { otherUserId ->
-
+            Timber.d("## CrossSigning - onUsersDeviceUpdate for ${userIds.size} users")
+            userIds.forEach { otherUserId ->
                 checkUserTrust(otherUserId).let {
                     Timber.d("## CrossSigning - update trust for $otherUserId , verified=${it.isVerified()}")
                     setUserKeysAsTrusted(otherUserId, it.isVerified())
@@ -640,7 +638,7 @@ internal class DefaultCrossSigningService @Inject constructor(
                     setUserKeysAsTrusted(otherUserId, checkSelfTrust().isVerified())
                 }
 
-                eventBus.post(CryptoToSessionUserTrustChange(users))
+                eventBus.post(CryptoToSessionUserTrustChange(userIds))
             }
         }
     }
@@ -666,9 +664,5 @@ internal class DefaultCrossSigningService @Inject constructor(
                 }
             }
         }
-    }
-
-    override suspend fun getTrustLevelForUsers(userIds: List<String>): RoomEncryptionTrustLevel {
-        return computeTrustTask.execute(ComputeTrustTask.Params(userIds))
     }
 }

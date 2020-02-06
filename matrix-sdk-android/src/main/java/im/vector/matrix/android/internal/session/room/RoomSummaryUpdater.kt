@@ -144,7 +144,7 @@ internal class RoomSummaryUpdater @Inject constructor(
             roomSummaryEntity.otherMemberIds.clear()
             roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers)
             if (roomSummaryEntity.isEncrypted) {
-                eventBus.post(SessionToCryptoRoomMembersUpdate(roomId, roomSummaryEntity.otherMemberIds.map { it } + userId))
+                eventBus.post(SessionToCryptoRoomMembersUpdate(roomId, roomSummaryEntity.otherMemberIds.toList() + userId))
             }
         }
     }

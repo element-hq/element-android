@@ -44,7 +44,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
                                                      taskExecutor: TaskExecutor) {
 
     interface UserDevicesUpdateListener {
-        fun onUsersDeviceUpdate(users: List<String>)
+        fun onUsersDeviceUpdate(userIds: List<String>)
     }
 
     private val deviceChangeListeners = mutableListOf<UserDevicesUpdateListener>()

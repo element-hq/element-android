@@ -16,10 +16,10 @@
 package im.vector.matrix.android.internal.crypto.crosssigning
 
 data class SessionToCryptoRoomMembersUpdate(
-        val encryptedRoomMembersUpdate: String,
-        val userList: List<String>
+        val roomId: String,
+        val userIds: List<String>
 )
 
 data class CryptoToSessionUserTrustChange(
-        val userList: List<String>
+        val userIds: List<String>
 )

@@ -32,12 +32,12 @@ import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
 internal class ShieldTrustUpdater @Inject constructor(
-        val eventBus: EventBus,
+        private val eventBus: EventBus,
         private val computeTrustTask: ComputeTrustTask,
-        val taskExecutor: TaskExecutor,
-        @CryptoDatabase val cryptoRealmConfiguration: RealmConfiguration,
-        @SessionDatabase val sessionRealmConfiguration: RealmConfiguration,
-        val roomSummaryUpdater: RoomSummaryUpdater
+        private val taskExecutor: TaskExecutor,
+        @CryptoDatabase private val cryptoRealmConfiguration: RealmConfiguration,
+        @SessionDatabase private val sessionRealmConfiguration: RealmConfiguration,
+        private val roomSummaryUpdater: RoomSummaryUpdater
 ) {
 
     companion object {
@@ -84,12 +84,12 @@ internal class ShieldTrustUpdater @Inject constructor(
     @Subscribe
     fun onRoomMemberChange(update: SessionToCryptoRoomMembersUpdate) {
         taskExecutor.executorScope.launch {
-            val updatedTrust = computeTrustTask.execute(ComputeTrustTask.Params(update.userList))
+            val updatedTrust = computeTrustTask.execute(ComputeTrustTask.Params(update.userIds))
             // We need to send that back to session base
 
             BACKGROUND_HANDLER.post {
                 backgroundSessionRealm.get().executeTransaction { realm ->
-                    roomSummaryUpdater.updateShieldTrust(realm, update.encryptedRoomMembersUpdate, updatedTrust)
+                    roomSummaryUpdater.updateShieldTrust(realm, update.roomId, updatedTrust)
                 }
             }
         }
@@ -97,7 +97,7 @@ internal class ShieldTrustUpdater @Inject constructor(
 
     @Subscribe
     fun onTrustUpdate(update: CryptoToSessionUserTrustChange) {
-        onCryptoDevicesChange(update.userList)
+        onCryptoDevicesChange(update.userIds)
     }
 
     private fun onCryptoDevicesChange(users: List<String>) {

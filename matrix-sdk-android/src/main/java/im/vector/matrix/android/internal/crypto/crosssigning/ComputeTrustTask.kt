@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 internal interface ComputeTrustTask : Task<ComputeTrustTask.Params, RoomEncryptionTrustLevel> {
     data class Params(
-            val userList: List<String>
+            val userIds: List<String>
     )
 }
 
@@ -33,36 +33,38 @@ internal class DefaultComputeTrustTask @Inject constructor(
 ) : ComputeTrustTask {
 
     override suspend fun execute(params: ComputeTrustTask.Params): RoomEncryptionTrustLevel {
-        val userIds = params.userList
-        val allTrusted = userIds
-                .filter { getUserCrossSigningKeys(it)?.isTrusted() == true }
+        val allTrustedUserIds = params.userIds
+                .filter { userId -> getUserCrossSigningKeys(userId)?.isTrusted() == true }
 
-        val allUsersAreVerified = userIds.size == allTrusted.size
-
-        return if (allTrusted.isEmpty()) {
+        return if (allTrustedUserIds.isEmpty()) {
             RoomEncryptionTrustLevel.Default
         } else {
             // If one of the verified user as an untrusted device -> warning
-            // Green if all devices of all verified users are trusted -> green
-            // else black
-            val allDevices = allTrusted.mapNotNull {
-                cryptoStore.getUserDeviceList(it)
-            }.flatten()
-            if (getMyCrossSigningKeys() != null) {
-                val hasWarning = allDevices.any { !it.trustLevel?.crossSigningVerified.orFalse() }
-                if (hasWarning) {
-                    RoomEncryptionTrustLevel.Warning
-                } else {
-                    if (allUsersAreVerified) RoomEncryptionTrustLevel.Trusted else RoomEncryptionTrustLevel.Default
-                }
-            } else {
-                val hasWarningLegacy = allDevices.any { !it.isVerified }
-                if (hasWarningLegacy) {
-                    RoomEncryptionTrustLevel.Warning
-                } else {
-                    if (allUsersAreVerified) RoomEncryptionTrustLevel.Trusted else RoomEncryptionTrustLevel.Default
-                }
-            }
+            // If all devices of all verified users are trusted -> green
+            // else -> black
+            allTrustedUserIds
+                    .mapNotNull { cryptoStore.getUserDeviceList(it) }
+                    .flatten()
+                    .let { allDevices ->
+                        if (getMyCrossSigningKeys() != null) {
+                            allDevices.any { !it.trustLevel?.crossSigningVerified.orFalse() }
+                        } else {
+                            // Legacy method
+                            allDevices.any { !it.isVerified }
+                        }
+                    }
+                    .let { hasWarning ->
+                        if (hasWarning) {
+                            RoomEncryptionTrustLevel.Warning
+                        } else {
+                            if (params.userIds.size == allTrustedUserIds.size) {
+                                // all users are trusted and all devices are verified
+                                RoomEncryptionTrustLevel.Trusted
+                            } else {
+                                RoomEncryptionTrustLevel.Default
+                            }
+                        }
+                    }
         }
     }
 
