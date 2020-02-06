@@ -36,9 +36,13 @@ import im.vector.matrix.android.internal.crypto.tasks.UploadSigningKeysTask
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.withoutPrefix
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.matrix.olm.OlmPkSigning
 import org.matrix.olm.OlmUtility
@@ -56,6 +60,8 @@ internal class DefaultCrossSigningService @Inject constructor(
         private val uploadSignaturesTask: UploadSignaturesTask,
         private val computeTrustTask: ComputeTrustTask,
         private val taskExecutor: TaskExecutor,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val cryptoCoroutineScope: CoroutineScope,
         val eventBus: EventBus) : CrossSigningService, DeviceListManager.UserDevicesUpdateListener {
 
     private var olmUtility: OlmUtility? = null
@@ -208,6 +214,7 @@ internal class DefaultCrossSigningService @Inject constructor(
         cryptoStore.storePrivateKeysInfo(masterKeyPrivateKey?.toBase64NoPadding(), uskPrivateKey?.toBase64NoPadding(), sskPrivateKey?.toBase64NoPadding())
 
         uploadSigningKeysTask.configureWith(params) {
+            this.executionThread = TaskThread.CRYPTO
             this.callback = object : MatrixCallback<Unit> {
                 override fun onSuccess(data: Unit) {
                     Timber.i("## CrossSigning - Keys successfully uploaded")
@@ -243,6 +250,7 @@ internal class DefaultCrossSigningService @Inject constructor(
                     resetTrustOnKeyChange()
                     uploadSignaturesTask.configureWith(UploadSignaturesTask.Params(uploadSignatureQueryBuilder.build())) {
                         // this.retryCount = 3
+                        this.executionThread = TaskThread.CRYPTO
                         this.callback = object : MatrixCallback<Unit> {
                             override fun onSuccess(data: Unit) {
                                 Timber.i("## CrossSigning - signatures successfully uploaded")
@@ -495,6 +503,7 @@ internal class DefaultCrossSigningService @Inject constructor(
                 .withSigningKeyInfo(otherMasterKeys.copyForSignature(userId, userPubKey, newSignature))
                 .build()
         uploadSignaturesTask.configureWith(UploadSignaturesTask.Params(uploadQuery)) {
+            this.executionThread = TaskThread.CRYPTO
             this.callback = callback
         }.executeBy(taskExecutor)
     }
@@ -541,6 +550,7 @@ internal class DefaultCrossSigningService @Inject constructor(
                 .withDeviceInfo(toUpload)
                 .build()
         uploadSignaturesTask.configureWith(UploadSignaturesTask.Params(uploadQuery)) {
+            this.executionThread = TaskThread.CRYPTO
             this.callback = callback
         }.executeBy(taskExecutor)
     }
@@ -607,48 +617,52 @@ internal class DefaultCrossSigningService @Inject constructor(
     }
 
     override fun onUsersDeviceUpdate(users: List<String>) {
-        Timber.d("## CrossSigning - onUsersDeviceUpdate for ${users.size} users")
-        users.forEach { otherUserId ->
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            Timber.d("## CrossSigning - onUsersDeviceUpdate for ${users.size} users")
+            users.forEach { otherUserId ->
 
-            checkUserTrust(otherUserId).let {
-                Timber.d("## CrossSigning - update trust for $otherUserId , verified=${it.isVerified()}")
-                setUserKeysAsTrusted(otherUserId, it.isVerified())
+                checkUserTrust(otherUserId).let {
+                    Timber.d("## CrossSigning - update trust for $otherUserId , verified=${it.isVerified()}")
+                    setUserKeysAsTrusted(otherUserId, it.isVerified())
+                }
+
+                // TODO if my keys have changes, i should recheck all devices of all users?
+                val devices = cryptoStore.getUserDeviceList(otherUserId)
+                devices?.forEach { device ->
+                    val updatedTrust = checkDeviceTrust(otherUserId, device.deviceId, device.trustLevel?.isLocallyVerified() ?: false)
+                    Timber.d("## CrossSigning - update trust for device ${device.deviceId} of user $otherUserId , verified=$updatedTrust")
+                    cryptoStore.setDeviceTrust(otherUserId, device.deviceId, updatedTrust.isCrossSignedVerified(), updatedTrust.isLocallyVerified())
+                }
+
+                if (otherUserId == userId) {
+                    // It's me, i should check if a newly trusted device is signing my master key
+                    // In this case it will change my MSK trust, and should then re-trigger a check of all other user trust
+                    setUserKeysAsTrusted(otherUserId, checkSelfTrust().isVerified())
+                }
+
+                eventBus.post(CryptoToSessionUserTrustChange(users))
             }
-
-            // TODO if my keys have changes, i should recheck all devices of all users?
-            val devices = cryptoStore.getUserDeviceList(otherUserId)
-            devices?.forEach { device ->
-                val updatedTrust = checkDeviceTrust(otherUserId, device.deviceId, device.trustLevel?.isLocallyVerified() ?: false)
-                Timber.d("## CrossSigning - update trust for device ${device.deviceId} of user $otherUserId , verified=$updatedTrust")
-                cryptoStore.setDeviceTrust(otherUserId, device.deviceId, updatedTrust.isCrossSignedVerified(), updatedTrust.isLocallyVerified())
-            }
-
-            if (otherUserId == userId) {
-                // It's me, i should check if a newly trusted device is signing my master key
-                // In this case it will change my MSK trust, and should then re-trigger a check of all other user trust
-                setUserKeysAsTrusted(otherUserId, checkSelfTrust().isVerified())
-            }
-
-            eventBus.post(CryptoToSessionUserTrustChange(users))
         }
     }
 
     private fun setUserKeysAsTrusted(otherUserId: String, trusted: Boolean) {
-        val currentTrust = cryptoStore.getCrossSigningInfo(otherUserId)?.isTrusted()
-        cryptoStore.setUserKeysAsTrusted(otherUserId, trusted)
-        // If it's me, recheck trust of all users and devices?
-        val users = ArrayList<String>()
-        if (otherUserId == userId && currentTrust != trusted) {
-            cryptoStore.updateUsersTrust {
-                users.add(it)
-                checkUserTrust(it).isVerified()
-            }
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            val currentTrust = cryptoStore.getCrossSigningInfo(otherUserId)?.isTrusted()
+            cryptoStore.setUserKeysAsTrusted(otherUserId, trusted)
+            // If it's me, recheck trust of all users and devices?
+            val users = ArrayList<String>()
+            if (otherUserId == userId && currentTrust != trusted) {
+                cryptoStore.updateUsersTrust {
+                    users.add(it)
+                    checkUserTrust(it).isVerified()
+                }
 
-            users.forEach {
-                cryptoStore.getUserDeviceList(it)?.forEach { device ->
-                    val updatedTrust = checkDeviceTrust(it, device.deviceId, device.trustLevel?.isLocallyVerified() ?: false)
-                    Timber.d("## CrossSigning - update trust for device ${device.deviceId} of user $otherUserId , verified=$updatedTrust")
-                    cryptoStore.setDeviceTrust(it, device.deviceId, updatedTrust.isCrossSignedVerified(), updatedTrust.isLocallyVerified())
+                users.forEach {
+                    cryptoStore.getUserDeviceList(it)?.forEach { device ->
+                        val updatedTrust = checkDeviceTrust(it, device.deviceId, device.trustLevel?.isLocallyVerified() ?: false)
+                        Timber.d("## CrossSigning - update trust for device ${device.deviceId} of user $otherUserId , verified=$updatedTrust")
+                        cryptoStore.setDeviceTrust(it, device.deviceId, updatedTrust.isCrossSignedVerified(), updatedTrust.isLocallyVerified())
+                    }
                 }
             }
         }
