@@ -116,6 +116,8 @@ import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.attachments.AttachmentTypeSelectorView
 import im.vector.riotx.features.attachments.AttachmentsHelper
 import im.vector.riotx.features.attachments.ContactAttachment
+import im.vector.riotx.features.attachments.filterNonPreviewables
+import im.vector.riotx.features.attachments.filterPreviewables
 import im.vector.riotx.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.riotx.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.riotx.features.command.Command
@@ -502,7 +504,11 @@ class RoomDetailFragment @Inject constructor(
         val hasBeenHandled = attachmentsHelper.onActivityResult(requestCode, resultCode, data)
         if (!hasBeenHandled && resultCode == RESULT_OK && data != null) {
             when (requestCode) {
-                REACTION_SELECT_REQUEST_CODE -> {
+                AttachmentsPreviewActivity.REQUEST_CODE -> {
+                    val sendData = AttachmentsPreviewActivity.getOutput(data)
+                    roomDetailViewModel.handle(RoomDetailAction.SendMedia(sendData))
+                }
+                REACTION_SELECT_REQUEST_CODE            -> {
                     val (eventId, reaction) = EmojiReactionPickerActivity.getOutput(data) ?: return
                     roomDetailViewModel.handle(RoomDetailAction.SendReaction(eventId, reaction))
                 }
@@ -1342,8 +1348,15 @@ class RoomDetailFragment @Inject constructor(
     // AttachmentsHelper.Callback
 
     override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
-        val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(attachments))
-        startActivityForResult(intent, AttachmentsPreviewActivity.REQUEST_CODE)
+        val previewable = attachments.filterPreviewables()
+        val nonPreviewable = attachments.filterNonPreviewables()
+        if (nonPreviewable.isNotEmpty()) {
+            roomDetailViewModel.handle(RoomDetailAction.SendMedia(nonPreviewable))
+        }
+        if (previewable.isNotEmpty()) {
+            val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(roomDetailArgs.roomId, previewable))
+            startActivityForResult(intent, AttachmentsPreviewActivity.REQUEST_CODE)
+        }
     }
 
     override fun onAttachmentsProcessFailed() {

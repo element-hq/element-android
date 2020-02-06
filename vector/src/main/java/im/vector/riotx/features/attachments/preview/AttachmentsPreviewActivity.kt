@@ -19,19 +19,20 @@ package im.vector.riotx.features.attachments.preview
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
-import android.view.WindowManager
 import androidx.appcompat.widget.Toolbar
+import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.features.themes.ActivityOtherThemes
 
 class AttachmentsPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     companion object {
 
         private const val EXTRA_FRAGMENT_ARGS = "EXTRA_FRAGMENT_ARGS"
+        const val RESULT_NAME = "ATTACHMENTS_PREVIEW_RESULT"
         const val REQUEST_CODE = 55
 
         fun newIntent(context: Context, args: AttachmentsPreviewArgs): Intent {
@@ -39,14 +40,15 @@ class AttachmentsPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
                 putExtra(EXTRA_FRAGMENT_ARGS, args)
             }
         }
+
+        fun getOutput(intent: Intent): List<ContentAttachmentData> {
+            return intent.getParcelableArrayListExtra(RESULT_NAME)
+        }
     }
+
+    override fun getOtherThemes() = ActivityOtherThemes.AttachmentsPreview
 
     override fun getLayoutRes() = R.layout.activity_simple
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
-        super.onCreate(savedInstanceState)
-    }
 
     override fun initUiAndData() {
         if (isFirstCreation()) {

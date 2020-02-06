@@ -1,29 +1,32 @@
 /*
- * Copyright 2020 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
-package im.vector.riotx.features.attachments.preview
+package im.vector.riotx.features.attachments
 
-import com.airbnb.mvrx.MvRxState
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 
-data class AttachmentsPreviewViewState(
-        val attachments: List<ContentAttachmentData>,
-        val currentAttachmentIndex: Int = 0
-) : MvRxState {
-
-    constructor(args: AttachmentsPreviewArgs) : this(attachments = args.attachments)
+fun ContentAttachmentData.isPreviewable(): Boolean {
+    return type == ContentAttachmentData.Type.IMAGE || type == ContentAttachmentData.Type.VIDEO
 }
+
+fun List<ContentAttachmentData>.filterPreviewables(): List<ContentAttachmentData> {
+    return filter { it.isPreviewable() }
+}
+
+fun List<ContentAttachmentData>.filterNonPreviewables(): List<ContentAttachmentData> {
+    return filter { it.isPreviewable().not() }
+}
+

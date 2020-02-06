@@ -8,6 +8,9 @@
         <item name="colorPrimaryDark">@color/primary_color_dark</item>
     </style>
 
-    <style name="AppTheme.AttachmentsPreview" parent="AppTheme.Base.Black"/>
+    <style name="AppTheme.AttachmentsPreview" parent="AppTheme.Base.Black">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
 
 </resources>

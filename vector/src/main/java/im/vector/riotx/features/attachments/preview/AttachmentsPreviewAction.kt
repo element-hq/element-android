@@ -19,4 +19,10 @@ package im.vector.riotx.features.attachments.preview
 
 import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class AttachmentsPreviewAction : VectorViewModelAction
+sealed class AttachmentsPreviewAction : VectorViewModelAction {
+    object RemoveCurrentAttachment : AttachmentsPreviewAction()
+    data class SetCurrentAttachment(val index: Int): AttachmentsPreviewAction()
+    data class UpdatePathOfCurrentAttachment(val newPath: String): AttachmentsPreviewAction()
+
+
+}

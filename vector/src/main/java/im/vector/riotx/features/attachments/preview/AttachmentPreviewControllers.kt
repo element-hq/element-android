@@ -35,18 +35,18 @@ class AttachmentBigPreviewController @Inject constructor() : TypedEpoxyControlle
 class AttachmentMiniaturePreviewController @Inject constructor() : TypedEpoxyController<AttachmentsPreviewViewState>() {
 
     interface Callback {
-        fun onAttachmentClicked(contentAttachmentData: ContentAttachmentData)
+        fun onAttachmentClicked(position: Int, contentAttachmentData: ContentAttachmentData)
     }
 
     var callback: Callback? = null
 
     override fun buildModels(data: AttachmentsPreviewViewState) {
-        data.attachments.forEach {
+        data.attachments.forEachIndexed { index, contentAttachmentData ->
             attachmentMiniaturePreviewItem {
-                id(it.path)
-                attachment(it)
+                id(contentAttachmentData.path)
+                attachment(contentAttachmentData)
                 clickListener { _ ->
-                    callback?.onAttachmentClicked(it)
+                    callback?.onAttachmentClicked(index, contentAttachmentData)
                 }
             }
         }

@@ -17,12 +17,15 @@
 
 package im.vector.riotx.features.attachments.preview
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
+import kotlinx.coroutines.launch
 
 class AttachmentsPreviewViewModel @AssistedInject constructor(@Assisted initialState: AttachmentsPreviewViewState)
     : VectorViewModel<AttachmentsPreviewViewState, AttachmentsPreviewAction, AttachmentsPreviewViewEvents>(initialState) {
@@ -42,6 +45,36 @@ class AttachmentsPreviewViewModel @AssistedInject constructor(@Assisted initialS
     }
 
     override fun handle(action: AttachmentsPreviewAction) {
-        //TODO
+        when (action) {
+            is AttachmentsPreviewAction.SetCurrentAttachment          -> handleSetCurrentAttachment(action)
+            is AttachmentsPreviewAction.UpdatePathOfCurrentAttachment -> handleUpdatePathOfCurrentAttachment(action)
+            AttachmentsPreviewAction.RemoveCurrentAttachment          -> handleRemoveCurrentAttachment()
+        }.exhaustive
+    }
+
+    private fun handleRemoveCurrentAttachment() = withState {
+        val currentAttachment = it.attachments.getOrNull(it.currentAttachmentIndex) ?: return@withState
+        val attachments = it.attachments.minusElement(currentAttachment)
+        val newAttachmentIndex = it.currentAttachmentIndex.coerceAtMost(attachments.size - 1)
+        setState {
+            copy(attachments = attachments, currentAttachmentIndex = newAttachmentIndex)
+        }
+    }
+
+    private fun handleUpdatePathOfCurrentAttachment(action: AttachmentsPreviewAction.UpdatePathOfCurrentAttachment) = withState {
+        val attachments = it.attachments.mapIndexed { index, contentAttachmentData ->
+            if (index == it.currentAttachmentIndex) {
+                contentAttachmentData.copy(path = action.newPath)
+            } else {
+                contentAttachmentData
+            }
+        }
+        setState {
+            copy(attachments = attachments)
+        }
+    }
+
+    private fun handleSetCurrentAttachment(action: AttachmentsPreviewAction.SetCurrentAttachment) = setState {
+        copy(currentAttachmentIndex = action.index)
     }
 }

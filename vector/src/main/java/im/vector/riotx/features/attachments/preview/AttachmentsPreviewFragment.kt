@@ -17,24 +17,41 @@
 
 package im.vector.riotx.features.attachments.preview
 
+import android.app.Activity.RESULT_CANCELED
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.net.toUri
+import androidx.core.view.ViewCompat
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.yalantis.ucrop.UCrop
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.utils.OnSnapPositionChangeListener
+import im.vector.riotx.core.utils.SnapOnScrollListener
+import im.vector.riotx.core.utils.attachSnapHelperWithListener
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_attachments_preview.*
+import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 @Parcelize
 data class AttachmentsPreviewArgs(
+        val roomId: String,
         val attachments: List<ContentAttachmentData>
 ) : Parcelable
 
@@ -51,13 +68,107 @@ class AttachmentsPreviewFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        applyInsets()
         setupRecyclerViews()
         setupToolbar(attachmentPreviewerToolbar)
+        attachmentPreviewerSendButton.setOnClickListener {
+            setResultAndFinish()
+        }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == UCrop.REQUEST_CROP && data != null) {
+                Timber.v("Crop success")
+                handleCropResult(data)
+            }
+        }
+        if (resultCode == UCrop.RESULT_ERROR) {
+            Timber.v("Crop error")
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.attachmentsPreviewRemoveAction -> {
+                handleRemoveAction()
+                true
+            }
+            R.id.attachmentsPreviewEditAction   -> {
+                handleEditAction()
+                true
+            }
+            else                                -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
+    }
+
+    override fun getMenuRes() = R.menu.vector_attachments_preview
 
     override fun onDestroyView() {
         super.onDestroyView()
         attachmentPreviewerMiniatureList.cleanup()
+        attachmentPreviewerBigList.cleanup()
+    }
+
+    override fun invalidate() = withState(viewModel) { state ->
+        if (state.attachments.isEmpty()) {
+            requireActivity().setResult(RESULT_CANCELED)
+            requireActivity().finish()
+        } else {
+            attachmentMiniaturePreviewController.setData(state)
+            attachmentBigPreviewController.setData(state)
+            attachmentPreviewerBigList.scrollToPosition(state.currentAttachmentIndex)
+            attachmentPreviewerMiniatureList.scrollToPosition(state.currentAttachmentIndex)
+        }
+    }
+
+    override fun onAttachmentClicked(position: Int, contentAttachmentData: ContentAttachmentData) {
+        viewModel.handle(AttachmentsPreviewAction.SetCurrentAttachment(position))
+    }
+
+    private fun setResultAndFinish() = withState(viewModel) {
+        val resultIntent = Intent().apply {
+            putParcelableArrayListExtra(AttachmentsPreviewActivity.RESULT_NAME, ArrayList(it.attachments))
+        }
+        requireActivity().setResult(RESULT_OK, resultIntent)
+        requireActivity().finish()
+    }
+
+    private fun applyInsets() {
+        view?.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        ViewCompat.setOnApplyWindowInsetsListener(attachmentPreviewerBottomContainer) { v, insets ->
+            v.updatePadding(bottom = insets.systemWindowInsetBottom)
+            insets
+        }
+        ViewCompat.setOnApplyWindowInsetsListener(attachmentPreviewerToolbar) { v, insets ->
+            v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.systemWindowInsetTop
+            }
+            insets
+        }
+    }
+
+    private fun handleCropResult(result: Intent) {
+        val resultPath = UCrop.getOutput(result)?.path
+        if (resultPath != null) {
+            viewModel.handle(AttachmentsPreviewAction.UpdatePathOfCurrentAttachment(resultPath))
+        } else {
+            Toast.makeText(requireContext(), "Cannot retrieve cropped value", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun handleRemoveAction() {
+        viewModel.handle(AttachmentsPreviewAction.RemoveCurrentAttachment)
+    }
+
+    private fun handleEditAction() = withState(viewModel) {
+        val currentAttachment = it.attachments.getOrNull(it.currentAttachmentIndex) ?: return@withState
+        val destinationFile = File(requireContext().cacheDir, "${currentAttachment.name}_edited_image_${System.currentTimeMillis()}")
+        UCrop.of(currentAttachment.queryUri.toUri(), destinationFile.toUri())
+                .withOptions(UCrop.Options())
+                .start(requireContext(), this)
     }
 
     private fun setupRecyclerViews() {
@@ -67,20 +178,12 @@ class AttachmentsPreviewFragment @Inject constructor(
         attachmentMiniaturePreviewController.callback = this
 
         attachmentPreviewerBigList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        val snapHelper = PagerSnapHelper()
-        snapHelper.attachToRecyclerView(attachmentPreviewerBigList)
+        attachmentPreviewerBigList.attachSnapHelperWithListener(PagerSnapHelper(), SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL_STATE_IDLE, object : OnSnapPositionChangeListener {
+            override fun onSnapPositionChange(position: Int) {
+                viewModel.handle(AttachmentsPreviewAction.SetCurrentAttachment(position))
+            }
+        })
         attachmentPreviewerBigList.setHasFixedSize(true)
         attachmentPreviewerBigList.adapter = attachmentBigPreviewController.adapter
-
     }
-
-    override fun invalidate() = withState(viewModel) { state ->
-        attachmentMiniaturePreviewController.setData(state)
-        attachmentBigPreviewController.setData(state)
-    }
-
-    override fun onAttachmentClicked(contentAttachmentData: ContentAttachmentData) {
-
-    }
-
 }

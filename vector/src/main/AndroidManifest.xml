@@ -143,7 +143,10 @@
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".features.attachments.preview.AttachmentsPreviewActivity" />
+
+        <activity
+            android:name=".features.attachments.preview.AttachmentsPreviewActivity"
+            android:theme="@style/AppTheme.AttachmentsPreview" />
 
         <!-- Services -->
 
