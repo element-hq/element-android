@@ -378,8 +378,11 @@ dependencies {
 
     // TESTS
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.amshove.kluent:kluent-android:1.44'
+
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'org.amshove.kluent:kluent-android:1.44'
 }
 
 if (getGradle().getStartParameter().getTaskRequests().toString().contains("Gplay")) {
