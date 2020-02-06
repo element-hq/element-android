@@ -115,11 +115,20 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
      * It can be any mobile devices, and any browsers.
      */
     private fun refreshDevicesList() {
-        if (session.isCryptoEnabled() && !session.sessionParams.credentials.deviceId.isNullOrEmpty()) {
+        if (!session.sessionParams.credentials.deviceId.isNullOrEmpty()) {
+            // display something asap
+            val localKnown = session.getUserDevices(session.myUserId).map {
+                DeviceInfo(
+                        user_id = session.myUserId,
+                        deviceId = it.deviceId,
+                        displayName = it.displayName()
+                )
+            }
+
             setState {
                 copy(
                         // Keep known list if we have it, and let refresh go in backgroung
-                        devices = this.devices.takeIf { it is Success } ?: Loading()
+                        devices = this.devices.takeIf { it is Success } ?: Success(localKnown)
                 )
             }
 

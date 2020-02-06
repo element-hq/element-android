@@ -18,6 +18,7 @@
 package im.vector.riotx.features.roomprofile
 
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.profiles.buildProfileAction
 import im.vector.riotx.core.epoxy.profiles.buildProfileSection
@@ -79,11 +80,13 @@ class RoomProfileController @Inject constructor(
                 action = { callback?.onNotificationsClicked() }
         )
         val numberOfMembers = roomSummary.joinedMembersCount ?: 0
+        val hasWarning = roomSummary.isEncrypted && roomSummary.roomEncryptionTrustLevel == RoomEncryptionTrustLevel.Warning
         buildProfileAction(
                 id = "member_list",
                 title = stringProvider.getQuantityString(R.plurals.room_profile_section_more_member_list, numberOfMembers, numberOfMembers),
                 dividerColor = dividerColor,
                 icon = R.drawable.ic_room_profile_member_list,
+                accessory = R.drawable.ic_shield_warning.takeIf { hasWarning } ?: 0,
                 action = { callback?.onMemberListClicked() }
         )
         buildProfileAction(

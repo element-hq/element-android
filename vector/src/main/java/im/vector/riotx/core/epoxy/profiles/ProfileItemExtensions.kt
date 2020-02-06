@@ -36,19 +36,23 @@ fun EpoxyController.buildProfileAction(
         subtitle: String? = null,
         editable: Boolean = true,
         @DrawableRes icon: Int = 0,
+        tintIcon: Boolean = true,
         @DrawableRes editableRes: Int? = null,
         destructive: Boolean = false,
         divider: Boolean = true,
-        action: ClickListener? = null
+        action: ClickListener? = null,
+        @DrawableRes accessory: Int = 0
 ) {
     profileActionItem {
         iconRes(icon)
+        tintIcon(tintIcon)
         id("action_$id")
         subtitle(subtitle)
         editable(editable)
         editableRes?.let { editableRes(editableRes) }
         destructive(destructive)
         title(title)
+        accessoryRes(accessory)
         listener { _ ->
             action?.invoke()
         }

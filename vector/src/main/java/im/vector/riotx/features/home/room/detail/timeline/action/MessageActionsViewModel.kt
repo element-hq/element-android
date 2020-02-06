@@ -134,7 +134,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun observeEvent() {
         if (room == null) return
-        room.rx(session)
+        room.rx()
                 .liveTimelineEvent(eventId)
                 .unwrap()
                 .execute {
@@ -144,7 +144,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun observeReactions() {
         if (room == null) return
-        room.rx(session)
+        room.rx()
                 .liveAnnotationSummary(eventId)
                 .map { annotations ->
                     EmojiDataSource.quickEmojis.map { emoji ->

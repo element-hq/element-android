@@ -97,6 +97,7 @@ class RoomMemberProfileController @Inject constructor(
                             dividerColor = dividerColor,
                             editable = true,
                             icon = icon,
+                            tintIcon = false,
                             divider = false,
                             action = { callback?.onShowDeviceList() }
                     )
