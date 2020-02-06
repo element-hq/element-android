@@ -62,7 +62,7 @@ internal class DefaultCrossSigningService @Inject constructor(
         private val taskExecutor: TaskExecutor,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope,
-        val eventBus: EventBus) : CrossSigningService, DeviceListManager.UserDevicesUpdateListener {
+        private val eventBus: EventBus) : CrossSigningService, DeviceListManager.UserDevicesUpdateListener {
 
     private var olmUtility: OlmUtility? = null
 
