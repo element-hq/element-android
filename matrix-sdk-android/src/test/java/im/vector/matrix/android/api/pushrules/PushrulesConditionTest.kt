@@ -19,10 +19,10 @@ package im.vector.matrix.android.api.pushrules
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.room.Room
-import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMemberContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
+import im.vector.matrix.android.internal.session.room.RoomGetter
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert.assertFalse
@@ -137,7 +137,7 @@ class PushrulesConditionTest {
             every { getNumberOfJoinedMembers() } returns 3
         }
 
-        val sessionStub = mockk<RoomService> {
+        val roomGetterStub = mockk<RoomGetter> {
             every { getRoom(room2JoinedId) } returns roomStub2Joined
             every { getRoom(room3JoinedId) } returns roomStub3Joined
         }
@@ -148,9 +148,9 @@ class PushrulesConditionTest {
                 content = MessageTextContent("m.text", "A").toContent(),
                 originServerTs = 0,
                 roomId = room2JoinedId).also {
-            assertFalse("This room does not have 3 members", conditionEqual3.isSatisfied(it, sessionStub))
-            assertFalse("This room does not have 3 members", conditionEqual3Bis.isSatisfied(it, sessionStub))
-            assertTrue("This room has less than 3 members", conditionLessThan3.isSatisfied(it, sessionStub))
+            assertFalse("This room does not have 3 members", conditionEqual3.isSatisfied(it, roomGetterStub))
+            assertFalse("This room does not have 3 members", conditionEqual3Bis.isSatisfied(it, roomGetterStub))
+            assertTrue("This room has less than 3 members", conditionLessThan3.isSatisfied(it, roomGetterStub))
         }
 
         Event(
@@ -159,9 +159,9 @@ class PushrulesConditionTest {
                 content = MessageTextContent("m.text", "A").toContent(),
                 originServerTs = 0,
                 roomId = room3JoinedId).also {
-            assertTrue("This room has 3 members", conditionEqual3.isSatisfied(it, sessionStub))
-            assertTrue("This room has 3 members", conditionEqual3Bis.isSatisfied(it, sessionStub))
-            assertFalse("This room has more than 3 members", conditionLessThan3.isSatisfied(it, sessionStub))
+            assertTrue("This room has 3 members", conditionEqual3.isSatisfied(it, roomGetterStub))
+            assertTrue("This room has 3 members", conditionEqual3Bis.isSatisfied(it, roomGetterStub))
+            assertFalse("This room has more than 3 members", conditionLessThan3.isSatisfied(it, roomGetterStub))
         }
     }
 
