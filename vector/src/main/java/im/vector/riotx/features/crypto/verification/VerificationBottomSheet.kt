@@ -56,7 +56,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
             val verificationId: String? = null,
             val roomId: String? = null,
             // Special mode where UX should show loading wheel until other user sends a request/tx
-            val waitForIncomingRequest : Boolean = false
+            val waitForIncomingRequest: Boolean = false
     ) : Parcelable
 
     @Inject
@@ -250,7 +250,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
             }
         }
 
-        val WAITING_SELF_VERIF_TAG : String = "WAITING_SELF_VERIF_TAG"
+        const val WAITING_SELF_VERIF_TAG: String = "WAITING_SELF_VERIF_TAG"
     }
 }
 

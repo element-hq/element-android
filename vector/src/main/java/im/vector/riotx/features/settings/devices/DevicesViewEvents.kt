@@ -17,6 +17,7 @@
 
 package im.vector.riotx.features.settings.devices
 
+import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.riotx.core.platform.VectorViewEvents
 
 /**
@@ -25,4 +26,14 @@ import im.vector.riotx.core.platform.VectorViewEvents
 sealed class DevicesViewEvents : VectorViewEvents {
     data class Loading(val message: CharSequence? = null) : DevicesViewEvents()
     data class Failure(val throwable: Throwable) : DevicesViewEvents()
+
+    object RequestPassword : DevicesViewEvents()
+
+    data class PromptRenameDevice(val deviceInfo: DeviceInfo) : DevicesViewEvents()
+
+    data class ShowVerifyDevice(
+            val userId: String,
+            val deviceId: String,
+            val transactionId: String?
+    ) : DevicesViewEvents()
 }
