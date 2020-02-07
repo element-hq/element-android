@@ -27,4 +27,6 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
 
     data class ActionSuccess(val action: RoomDetailAction) : RoomDetailViewEvents()
     data class ActionFailure(val action: RoomDetailAction, val throwable: Throwable) : RoomDetailViewEvents()
+
+    data class ShowMessage(val message: String) : RoomDetailViewEvents()
 }

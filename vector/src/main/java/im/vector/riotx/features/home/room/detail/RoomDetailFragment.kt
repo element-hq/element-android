@@ -255,10 +255,6 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.subscribe { renderState(it) }
         roomDetailViewModel.sendMessageResultLiveData.observeEvent(viewLifecycleOwner) { renderSendMessageResult(it) }
 
-        roomDetailViewModel.nonBlockingPopAlert.observeEvent(this) { pair ->
-            val message = getString(pair.first, *pair.second.toTypedArray())
-            showSnackWithMessage(message, Snackbar.LENGTH_LONG)
-        }
         sharedActionViewModel
                 .observe()
                 .subscribe {
@@ -313,6 +309,7 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.OnNewTimelineEvents -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
                 is RoomDetailViewEvents.ActionSuccess       -> displayRoomDetailActionSuccess(it)
                 is RoomDetailViewEvents.ActionFailure       -> displayRoomDetailActionFailure(it)
+                is RoomDetailViewEvents.ShowMessage         -> showSnackWithMessage(it.message, Snackbar.LENGTH_LONG)
             }.exhaustive
         }
     }

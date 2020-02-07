@@ -314,10 +314,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     // TODO Cleanup this and use ViewEvents
-    private val _nonBlockingPopAlert = MutableLiveData<LiveEvent<Pair<Int, List<Any>>>>()
-    val nonBlockingPopAlert: LiveData<LiveEvent<Pair<Int, List<Any>>>>
-        get() = _nonBlockingPopAlert
-
     private val _sendMessageResultLiveData = MutableLiveData<LiveEvent<SendMessageResult>>()
     val sendMessageResultLiveData: LiveData<LiveEvent<SendMessageResult>>
         get() = _sendMessageResultLiveData
