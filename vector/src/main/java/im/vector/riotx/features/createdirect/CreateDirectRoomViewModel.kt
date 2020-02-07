@@ -41,7 +41,7 @@ private typealias DirectoryUsersSearch = String
 class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                                                             initialState: CreateDirectRoomViewState,
                                                             private val session: Session)
-    : VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectViewEvents>(initialState) {
+    : VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -94,7 +94,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
         val index = state.selectedUsers.indexOfFirst { it.userId == action.user.userId }
         val selectedUsers = state.selectedUsers.minus(action.user)
         setState { copy(selectedUsers = selectedUsers) }
-        _viewEvents.post(CreateDirectViewEvents.SelectUserAction(action.user, false, index))
+        _viewEvents.post(CreateDirectRoomViewEvents.SelectUserAction(action.user, false, index))
     }
 
     private fun handleSelectUser(action: CreateDirectRoomAction.SelectUser) = withState { state ->
@@ -114,7 +114,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
             isAddOperation = false
         }
         setState { copy(selectedUsers = selectedUsers) }
-        _viewEvents.post(CreateDirectViewEvents.SelectUserAction(action.user, isAddOperation, changeIndex))
+        _viewEvents.post(CreateDirectRoomViewEvents.SelectUserAction(action.user, isAddOperation, changeIndex))
     }
 
     private fun observeDirectoryUsers() {

@@ -22,7 +22,7 @@ import im.vector.riotx.core.platform.VectorViewEvents
 /**
  * Transient events for create direct room screen
  */
-sealed class CreateDirectViewEvents : VectorViewEvents {
+sealed class CreateDirectRoomViewEvents : VectorViewEvents {
     // data class Loading(val message: CharSequence? = null) : RoomDirectoryViewEvents()
     // data class Failure(val throwable: Throwable) : CreateDirectViewEvents()
 
@@ -30,5 +30,5 @@ sealed class CreateDirectViewEvents : VectorViewEvents {
             val user: User,
             val isAdded: Boolean,
             val index: Int
-    ) : CreateDirectViewEvents()
+    ) : CreateDirectRoomViewEvents()
 }

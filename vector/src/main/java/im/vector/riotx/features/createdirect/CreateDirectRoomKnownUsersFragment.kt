@@ -63,7 +63,7 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
         setupCloseView()
         viewModel.observeViewEvents {
             when (it) {
-                is CreateDirectViewEvents.SelectUserAction -> updateChipsView(it)
+                is CreateDirectRoomViewEvents.SelectUserAction -> updateChipsView(it)
             }.exhaustive
         }
         viewModel.selectSubscribe(this, CreateDirectRoomViewState::selectedUsers) {
@@ -138,7 +138,7 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
         knownUsersController.setData(it)
     }
 
-    private fun updateChipsView(data: CreateDirectViewEvents.SelectUserAction) {
+    private fun updateChipsView(data: CreateDirectRoomViewEvents.SelectUserAction) {
         if (data.isAdded) {
             addChipToGroup(data.user, chipGroup)
         } else {
