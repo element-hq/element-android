@@ -320,7 +320,6 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
             // al devices =
             val models = response.deviceKeys?.get(userId)?.mapValues { entry -> CryptoInfoMapper.map(entry.value) }
 
-
             Timber.v("## doKeyDownloadForUsers() : Got keys for $userId : $models")
             if (!models.isNullOrEmpty()) {
                 val workingCopy = models.toMutableMap()
