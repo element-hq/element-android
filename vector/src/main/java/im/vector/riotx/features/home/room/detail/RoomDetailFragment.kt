@@ -261,16 +261,6 @@ class RoomDetailFragment @Inject constructor(
                 }
                 .disposeOnDestroyView()
 
-        roomDetailViewModel.navigateToEvent.observeEvent(this) {
-            val scrollPosition = timelineEventController.searchPositionOfEvent(it)
-            if (scrollPosition == null) {
-                scrollOnHighlightedEventCallback.scheduleScrollTo(it)
-            } else {
-                recyclerView.stopScroll()
-                layoutManager.scrollToPosition(scrollPosition)
-            }
-        }
-
         roomDetailViewModel.fileTooBigEvent.observeEvent(this) {
             displayFileTooBigWarning(it)
         }
@@ -309,6 +299,7 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.ActionSuccess       -> displayRoomDetailActionSuccess(it)
                 is RoomDetailViewEvents.ActionFailure       -> displayRoomDetailActionFailure(it)
                 is RoomDetailViewEvents.ShowMessage         -> showSnackWithMessage(it.message, Snackbar.LENGTH_LONG)
+                is RoomDetailViewEvents.NavigateToEvent     -> navigateToEvent(it)
                 is RoomDetailViewEvents.SendMessageResult   -> renderSendMessageResult(it)
             }.exhaustive
         }
@@ -362,6 +353,16 @@ class RoomDetailFragment @Inject constructor(
 
     private fun setupJumpToReadMarkerView() {
         jumpToReadMarkerView.callback = this
+    }
+
+    private fun navigateToEvent(action: RoomDetailViewEvents.NavigateToEvent) {
+        val scrollPosition = timelineEventController.searchPositionOfEvent(action.eventId)
+        if (scrollPosition == null) {
+            scrollOnHighlightedEventCallback.scheduleScrollTo(action.eventId)
+        } else {
+            recyclerView.stopScroll()
+            layoutManager.scrollToPosition(scrollPosition)
+        }
     }
 
     private fun displayFileTooBigWarning(error: FileTooBigError) {

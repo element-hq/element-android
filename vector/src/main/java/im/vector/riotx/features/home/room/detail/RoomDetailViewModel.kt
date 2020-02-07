@@ -314,10 +314,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     // TODO Cleanup this and use ViewEvents
-    private val _navigateToEvent = MutableLiveData<LiveEvent<String>>()
-    val navigateToEvent: LiveData<LiveEvent<String>>
-        get() = _navigateToEvent
-
     private val _fileTooBigEvent = MutableLiveData<LiveEvent<FileTooBigError>>()
     val fileTooBigEvent: LiveData<LiveEvent<FileTooBigError>>
         get() = _fileTooBigEvent
@@ -735,7 +731,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         if (action.highlight) {
             setState { copy(highlightedEventId = correctedEventId) }
         }
-        _navigateToEvent.postLiveEvent(correctedEventId)
+        _viewEvents.post(RoomDetailViewEvents.NavigateToEvent(correctedEventId))
     }
 
     private fun handleResendEvent(action: RoomDetailAction.ResendMessage) {

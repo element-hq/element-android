@@ -32,6 +32,8 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
 
     data class ShowMessage(val message: String) : RoomDetailViewEvents()
 
+    data class NavigateToEvent(val eventId: String) : RoomDetailViewEvents()
+
     abstract class SendMessageResult : RoomDetailViewEvents()
 
     object MessageSent : SendMessageResult()
