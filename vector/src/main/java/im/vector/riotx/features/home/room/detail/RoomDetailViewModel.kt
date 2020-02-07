@@ -18,8 +18,6 @@ package im.vector.riotx.features.home.room.detail
 
 import android.net.Uri
 import androidx.annotation.IdRes
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
@@ -60,11 +58,9 @@ import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.exhaustive
-import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.resources.UserPreferencesProvider
-import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.core.utils.subscribeLogError
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
@@ -312,11 +308,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     }
         }
     }
-
-    // TODO Cleanup this and use ViewEvents
-    private val _downloadedFileEvent = MutableLiveData<LiveEvent<DownloadFileState>>()
-    val downloadedFileEvent: LiveData<LiveEvent<DownloadFileState>>
-        get() = _downloadedFileEvent
 
     fun isMenuItemVisible(@IdRes itemId: Int) = when (itemId) {
         R.id.clear_message_queue ->
@@ -701,7 +692,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 action.messageFileContent.encryptedFileInfo?.toElementToDecrypt(),
                 object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {
-                        _downloadedFileEvent.postLiveEvent(DownloadFileState(
+                        _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
                                 action.messageFileContent.getMimeType(),
                                 data,
                                 null
@@ -709,7 +700,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     }
 
                     override fun onFailure(failure: Throwable) {
-                        _downloadedFileEvent.postLiveEvent(DownloadFileState(
+                        _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
                                 action.messageFileContent.getMimeType(),
                                 null,
                                 failure

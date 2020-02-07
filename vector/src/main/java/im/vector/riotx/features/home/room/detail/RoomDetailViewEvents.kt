@@ -19,6 +19,7 @@ package im.vector.riotx.features.home.room.detail
 import androidx.annotation.StringRes
 import im.vector.riotx.core.platform.VectorViewEvents
 import im.vector.riotx.features.command.Command
+import java.io.File
 
 /**
  * Transient events for RoomDetail
@@ -38,6 +39,12 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
             val filename: String,
             val fileSizeInBytes: Long,
             val homeServerLimitInBytes: Long
+    ) : RoomDetailViewEvents()
+
+    data class DownloadFileState(
+            val mimeType: String,
+            val file: File?,
+            val throwable: Throwable?
     ) : RoomDetailViewEvents()
 
     abstract class SendMessageResult : RoomDetailViewEvents()

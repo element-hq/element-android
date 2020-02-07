@@ -89,7 +89,6 @@ import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.hideKeyboard
-import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.extensions.showKeyboard
 import im.vector.riotx.core.files.addEntryToDownloadManager
@@ -265,16 +264,6 @@ class RoomDetailFragment @Inject constructor(
             renderTombstoneEventHandling(it)
         }
 
-        roomDetailViewModel.downloadedFileEvent.observeEvent(this) { downloadFileState ->
-            val activity = requireActivity()
-            if (downloadFileState.throwable != null) {
-                activity.toast(errorFormatter.toHumanReadable(downloadFileState.throwable))
-            } else if (downloadFileState.file != null) {
-                activity.toast(getString(R.string.downloaded_file, downloadFileState.file.path))
-                addEntryToDownloadManager(activity, downloadFileState.file, downloadFileState.mimeType)
-            }
-        }
-
         roomDetailViewModel.selectSubscribe(RoomDetailViewState::sendMode) { mode ->
             when (mode) {
                 is SendMode.REGULAR -> renderRegularMode(mode.text)
@@ -297,6 +286,7 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.ShowMessage         -> showSnackWithMessage(it.message, Snackbar.LENGTH_LONG)
                 is RoomDetailViewEvents.NavigateToEvent     -> navigateToEvent(it)
                 is RoomDetailViewEvents.FileTooBigError     -> displayFileTooBigError(it)
+                is RoomDetailViewEvents.DownloadFileState   -> handleDownloadFileState(it)
                 is RoomDetailViewEvents.SendMessageResult   -> renderSendMessageResult(it)
             }.exhaustive
         }
@@ -372,6 +362,16 @@ class RoomDetailFragment @Inject constructor(
                 ))
                 .setPositiveButton(R.string.ok, null)
                 .show()
+    }
+
+    private fun handleDownloadFileState(action: RoomDetailViewEvents.DownloadFileState) {
+        val activity = requireActivity()
+        if (action.throwable != null) {
+            activity.toast(errorFormatter.toHumanReadable(action.throwable))
+        } else if (action.file != null) {
+            activity.toast(getString(R.string.downloaded_file, action.file.path))
+            addEntryToDownloadManager(activity, action.file, action.mimeType)
+        }
     }
 
     private fun setupNotificationView() {
