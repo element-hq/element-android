@@ -20,8 +20,6 @@ import android.net.Uri
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
@@ -32,6 +30,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.MatrixPatterns
+import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -66,12 +65,11 @@ import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.core.utils.LiveEvent
-import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.riotx.core.utils.subscribeLogError
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
-import im.vector.riotx.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.riotx.features.crypto.verification.supportedVerificationMethods
+import im.vector.riotx.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import im.vector.riotx.features.home.room.typing.TypingHelper
 import im.vector.riotx.features.settings.VectorPreferences
@@ -115,11 +113,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private var timelineEvents = PublishRelay.create<List<TimelineEvent>>()
     var timeline = room.createTimeline(eventId, timelineSettings)
         private set
-
-    // Can be used for several actions, for a one shot result
-    private val _requestLiveData = MutableLiveData<LiveEvent<Async<RoomDetailAction>>>()
-    val requestLiveData: LiveData<LiveEvent<Async<RoomDetailAction>>>
-        get() = _requestLiveData
 
     // Slot to keep a pending action during permission request
     var pendingAction: RoomDetailAction? = null
@@ -821,11 +814,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun handleReportContent(action: RoomDetailAction.ReportContent) {
         room.reportContent(action.eventId, -100, action.reason, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                _requestLiveData.postValue(LiveEvent(Success(action)))
+                _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
             }
 
             override fun onFailure(failure: Throwable) {
-                _requestLiveData.postValue(LiveEvent(Fail(failure)))
+                _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
             }
         })
     }
@@ -837,11 +830,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
         session.ignoreUserIds(listOf(action.userId), object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                _requestLiveData.postValue(LiveEvent(Success(action)))
+                _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
             }
 
             override fun onFailure(failure: Throwable) {
-                _requestLiveData.postValue(LiveEvent(Fail(failure)))
+                _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
             }
         })
     }
@@ -853,7 +846,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         action.otherUserId,
                         room.roomId,
                         action.transactionId)) {
-            _requestLiveData.postValue(LiveEvent(Success(action)))
+            _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
         } else {
             // TODO
         }
@@ -869,7 +862,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private fun handleRequestVerification(action: RoomDetailAction.RequestVerification) {
         if (action.userId == session.myUserId) return
-        _requestLiveData.postValue(LiveEvent(Success(action)))
+        _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
     }
 
     private fun handleResumeRequestVerification(action: RoomDetailAction.ResumeVerification) {
@@ -877,9 +870,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         session.getVerificationService().getExistingVerificationRequestInRoom(room.roomId, action.transactionId)?.let {
             if (it.handledByOtherSession) return
             if (!it.isFinished) {
-                _requestLiveData.postValue(LiveEvent(Success(action.copy(
+                _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action.copy(
                         otherUserId = it.otherUserId
-                ))))
+                )))
             }
         }
     }

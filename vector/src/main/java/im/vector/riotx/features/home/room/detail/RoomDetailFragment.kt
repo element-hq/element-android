@@ -307,14 +307,12 @@ class RoomDetailFragment @Inject constructor(
             syncStateView.render(syncState)
         }
 
-        roomDetailViewModel.requestLiveData.observeEvent(this) {
-            displayRoomDetailActionResult(it)
-        }
-
         roomDetailViewModel.observeViewEvents {
             when (it) {
                 is RoomDetailViewEvents.Failure             -> showErrorInSnackbar(it.throwable)
                 is RoomDetailViewEvents.OnNewTimelineEvents -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
+                is RoomDetailViewEvents.ActionSuccess       -> displayRoomDetailActionSuccess(it)
+                is RoomDetailViewEvents.ActionFailure       -> displayRoomDetailActionFailure(it)
             }.exhaustive
         }
     }
@@ -793,84 +791,81 @@ class RoomDetailFragment @Inject constructor(
                 .show()
     }
 
-    private fun displayRoomDetailActionResult(result: Async<RoomDetailAction>) {
-        when (result) {
-            is Fail    -> {
-                AlertDialog.Builder(requireActivity())
-                        .setTitle(R.string.dialog_title_error)
-                        .setMessage(errorFormatter.toHumanReadable(result.error))
-                        .setPositiveButton(R.string.ok, null)
-                        .show()
-            }
-            is Success -> {
-                when (val data = result.invoke()) {
-                    is RoomDetailAction.ReportContent             -> {
-                        when {
-                            data.spam          -> {
-                                AlertDialog.Builder(requireActivity())
-                                        .setTitle(R.string.content_reported_as_spam_title)
-                                        .setMessage(R.string.content_reported_as_spam_content)
-                                        .setPositiveButton(R.string.ok, null)
-                                        .setNegativeButton(R.string.block_user) { _, _ ->
-                                            roomDetailViewModel.handle(RoomDetailAction.IgnoreUser(data.senderId))
-                                        }
-                                        .show()
-                                        .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
-                            }
-                            data.inappropriate -> {
-                                AlertDialog.Builder(requireActivity())
-                                        .setTitle(R.string.content_reported_as_inappropriate_title)
-                                        .setMessage(R.string.content_reported_as_inappropriate_content)
-                                        .setPositiveButton(R.string.ok, null)
-                                        .setNegativeButton(R.string.block_user) { _, _ ->
-                                            roomDetailViewModel.handle(RoomDetailAction.IgnoreUser(data.senderId))
-                                        }
-                                        .show()
-                                        .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
-                            }
-                            else               -> {
-                                AlertDialog.Builder(requireActivity())
-                                        .setTitle(R.string.content_reported_title)
-                                        .setMessage(R.string.content_reported_content)
-                                        .setPositiveButton(R.string.ok, null)
-                                        .setNegativeButton(R.string.block_user) { _, _ ->
-                                            roomDetailViewModel.handle(RoomDetailAction.IgnoreUser(data.senderId))
-                                        }
-                                        .show()
-                                        .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
-                            }
-                        }
+    private fun displayRoomDetailActionFailure(result: RoomDetailViewEvents.ActionFailure) {
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(errorFormatter.toHumanReadable(result.throwable))
+                .setPositiveButton(R.string.ok, null)
+                .show()
+    }
+
+    private fun displayRoomDetailActionSuccess(result: RoomDetailViewEvents.ActionSuccess) {
+        when (val data = result.action) {
+            is RoomDetailAction.ReportContent             -> {
+                when {
+                    data.spam          -> {
+                        AlertDialog.Builder(requireActivity())
+                                .setTitle(R.string.content_reported_as_spam_title)
+                                .setMessage(R.string.content_reported_as_spam_content)
+                                .setPositiveButton(R.string.ok, null)
+                                .setNegativeButton(R.string.block_user) { _, _ ->
+                                    roomDetailViewModel.handle(RoomDetailAction.IgnoreUser(data.senderId))
+                                }
+                                .show()
+                                .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                     }
-                    is RoomDetailAction.RequestVerification       -> {
-                        Timber.v("## SAS RequestVerification action")
-                        VerificationBottomSheet.withArgs(
-                                roomDetailArgs.roomId,
-                                data.userId
-                        ).show(parentFragmentManager, "REQ")
+                    data.inappropriate -> {
+                        AlertDialog.Builder(requireActivity())
+                                .setTitle(R.string.content_reported_as_inappropriate_title)
+                                .setMessage(R.string.content_reported_as_inappropriate_content)
+                                .setPositiveButton(R.string.ok, null)
+                                .setNegativeButton(R.string.block_user) { _, _ ->
+                                    roomDetailViewModel.handle(RoomDetailAction.IgnoreUser(data.senderId))
+                                }
+                                .show()
+                                .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                     }
-                    is RoomDetailAction.AcceptVerificationRequest -> {
-                        Timber.v("## SAS AcceptVerificationRequest action")
-                        VerificationBottomSheet.withArgs(
-                                roomDetailArgs.roomId,
-                                data.otherUserId,
-                                data.transactionId
-                        ).show(parentFragmentManager, "REQ")
-                    }
-                    is RoomDetailAction.ResumeVerification        -> {
-                        val otherUserId = data.otherUserId ?: return
-                        VerificationBottomSheet().apply {
-                            arguments = Bundle().apply {
-                                putParcelable(MvRx.KEY_ARG, VerificationBottomSheet.VerificationArgs(
-                                        otherUserId, data.transactionId, roomId = roomDetailArgs.roomId))
-                            }
-                        }.show(parentFragmentManager, "REQ")
+                    else               -> {
+                        AlertDialog.Builder(requireActivity())
+                                .setTitle(R.string.content_reported_title)
+                                .setMessage(R.string.content_reported_content)
+                                .setPositiveButton(R.string.ok, null)
+                                .setNegativeButton(R.string.block_user) { _, _ ->
+                                    roomDetailViewModel.handle(RoomDetailAction.IgnoreUser(data.senderId))
+                                }
+                                .show()
+                                .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                     }
                 }
+            }
+            is RoomDetailAction.RequestVerification       -> {
+                Timber.v("## SAS RequestVerification action")
+                VerificationBottomSheet.withArgs(
+                        roomDetailArgs.roomId,
+                        data.userId
+                ).show(parentFragmentManager, "REQ")
+            }
+            is RoomDetailAction.AcceptVerificationRequest -> {
+                Timber.v("## SAS AcceptVerificationRequest action")
+                VerificationBottomSheet.withArgs(
+                        roomDetailArgs.roomId,
+                        data.otherUserId,
+                        data.transactionId
+                ).show(parentFragmentManager, "REQ")
+            }
+            is RoomDetailAction.ResumeVerification        -> {
+                val otherUserId = data.otherUserId ?: return
+                VerificationBottomSheet().apply {
+                    arguments = Bundle().apply {
+                        putParcelable(MvRx.KEY_ARG, VerificationBottomSheet.VerificationArgs(
+                                otherUserId, data.transactionId, roomId = roomDetailArgs.roomId))
+                    }
+                }.show(parentFragmentManager, "REQ")
             }
         }
     }
 
-// TimelineEventController.Callback ************************************************************
+    // TimelineEventController.Callback ************************************************************
 
     override fun onUrlClicked(url: String): Boolean {
         permalinkHandler
