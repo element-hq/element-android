@@ -31,7 +31,11 @@ import com.google.android.material.chip.ChipGroup
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
-import im.vector.riotx.core.extensions.*
+import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
+import im.vector.riotx.core.extensions.exhaustive
+import im.vector.riotx.core.extensions.hideKeyboard
+import im.vector.riotx.core.extensions.setupAsSearch
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.DimensionConverter
 import kotlinx.android.synthetic.main.fragment_create_direct_room.*
@@ -57,8 +61,10 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
         setupFilterView()
         setupAddByMatrixIdView()
         setupCloseView()
-        viewModel.selectUserEvent.observeEvent(this) {
-            updateChipsView(it)
+        viewModel.observeViewEvents {
+            when (it) {
+                is CreateDirectViewEvents.SelectUserAction -> updateChipsView(it)
+            }.exhaustive
         }
         viewModel.selectSubscribe(this, CreateDirectRoomViewState::selectedUsers) {
             renderSelectedUsers(it)
@@ -132,7 +138,7 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
         knownUsersController.setData(it)
     }
 
-    private fun updateChipsView(data: SelectUserAction) {
+    private fun updateChipsView(data: CreateDirectViewEvents.SelectUserAction) {
         if (data.isAdded) {
             addChipToGroup(data.user, chipGroup)
         } else {

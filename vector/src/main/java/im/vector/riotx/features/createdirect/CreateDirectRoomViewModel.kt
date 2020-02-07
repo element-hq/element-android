@@ -18,8 +18,6 @@
 
 package im.vector.riotx.features.createdirect
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import arrow.core.Option
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
@@ -32,10 +30,7 @@ import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.rx.rx
-import im.vector.riotx.core.extensions.postLiveEvent
-import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.core.utils.LiveEvent
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
@@ -43,16 +38,10 @@ import java.util.concurrent.TimeUnit
 private typealias KnowUsersFilter = String
 private typealias DirectoryUsersSearch = String
 
-data class SelectUserAction(
-        val user: User,
-        val isAdded: Boolean,
-        val index: Int
-)
-
 class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                                                             initialState: CreateDirectRoomViewState,
                                                             private val session: Session)
-    : VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, EmptyViewEvents>(initialState) {
+    : VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -61,10 +50,6 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
 
     private val knownUsersFilter = BehaviorRelay.createDefault<Option<KnowUsersFilter>>(Option.empty())
     private val directoryUsersSearch = BehaviorRelay.create<DirectoryUsersSearch>()
-
-    private val _selectUserEvent = MutableLiveData<LiveEvent<SelectUserAction>>()
-    val selectUserEvent: LiveData<LiveEvent<SelectUserAction>>
-        get() = _selectUserEvent
 
     companion object : MvRxViewModelFactory<CreateDirectRoomViewModel, CreateDirectRoomViewState> {
 
@@ -109,7 +94,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
         val index = state.selectedUsers.indexOfFirst { it.userId == action.user.userId }
         val selectedUsers = state.selectedUsers.minus(action.user)
         setState { copy(selectedUsers = selectedUsers) }
-        _selectUserEvent.postLiveEvent(SelectUserAction(action.user, false, index))
+        _viewEvents.post(CreateDirectViewEvents.SelectUserAction(action.user, false, index))
     }
 
     private fun handleSelectUser(action: CreateDirectRoomAction.SelectUser) = withState { state ->
@@ -129,7 +114,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
             isAddOperation = false
         }
         setState { copy(selectedUsers = selectedUsers) }
-        _selectUserEvent.postLiveEvent(SelectUserAction(action.user, isAddOperation, changeIndex))
+        _viewEvents.post(CreateDirectViewEvents.SelectUserAction(action.user, isAddOperation, changeIndex))
     }
 
     private fun observeDirectoryUsers() {
