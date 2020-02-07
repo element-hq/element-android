@@ -31,6 +31,10 @@ import org.junit.Test
 
 class PushrulesConditionTest {
 
+    /* ==========================================================================================
+     * Test EventMatchCondition
+     * ========================================================================================== */
+
     @Test
     fun test_eventmatch_type_condition() {
         val condition = EventMatchCondition("type", "m.room.message")
@@ -121,6 +125,24 @@ class PushrulesConditionTest {
     }
 
     @Test
+    fun test_notice_condition() {
+        val conditionEqual = EventMatchCondition("content.msgtype", "m.notice")
+
+        Event(
+                type = "m.room.message",
+                eventId = "mx0",
+                content = MessageTextContent("m.notice", "A").toContent(),
+                originServerTs = 0,
+                roomId = "2joined").also {
+            assertTrue("Notice", conditionEqual.isSatisfied(it))
+        }
+    }
+
+    /* ==========================================================================================
+     * Test RoomMemberCountCondition
+     * ========================================================================================== */
+
+    @Test
     fun test_roommember_condition() {
         val conditionEqual3 = RoomMemberCountCondition("3")
         val conditionEqual3Bis = RoomMemberCountCondition("==3")
@@ -162,20 +184,6 @@ class PushrulesConditionTest {
             assertTrue("This room has 3 members", conditionEqual3.isSatisfied(it, roomGetterStub))
             assertTrue("This room has 3 members", conditionEqual3Bis.isSatisfied(it, roomGetterStub))
             assertFalse("This room has more than 3 members", conditionLessThan3.isSatisfied(it, roomGetterStub))
-        }
-    }
-
-    @Test
-    fun test_notice_condition() {
-        val conditionEqual = EventMatchCondition("content.msgtype", "m.notice")
-
-        Event(
-                type = "m.room.message",
-                eventId = "mx0",
-                content = MessageTextContent("m.notice", "A").toContent(),
-                originServerTs = 0,
-                roomId = "2joined").also {
-            assertTrue("Notice", conditionEqual.isSatisfied(it))
         }
     }
 }
