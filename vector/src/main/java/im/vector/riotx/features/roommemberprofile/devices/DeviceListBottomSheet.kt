@@ -63,7 +63,7 @@ class DeviceListBottomSheet : VectorBaseBottomSheetDialogFragment() {
         withState(viewModel) {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (it.selectedDevice != null) {
-                    viewModel.selectDevice(null)
+                    viewModel.handle(DeviceListAction.DeselectDevice)
                     return@withState true
                 } else {
                     return@withState false

@@ -62,6 +62,6 @@ class DeviceTrustInfoActionFragment @Inject constructor(
     }
 
     override fun onVerifyManually(device: CryptoDeviceInfo) {
-        viewModel.manuallyVerify(device)
+        viewModel.handle(DeviceListAction.ManuallyVerify(device.deviceId))
     }
 }

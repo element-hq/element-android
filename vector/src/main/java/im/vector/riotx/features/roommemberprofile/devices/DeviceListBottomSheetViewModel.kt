@@ -32,7 +32,7 @@ import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.di.HasScreenInjector
-import im.vector.riotx.core.platform.EmptyAction
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 
 data class DeviceListViewState(
@@ -46,7 +46,7 @@ data class DeviceListViewState(
 class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted private val initialState: DeviceListViewState,
                                                                  @Assisted private val userId: String,
                                                                  private val session: Session)
-    : VectorViewModel<DeviceListViewState, EmptyAction, DeviceListBottomSheetViewEvents>(initialState) {
+    : VectorViewModel<DeviceListViewState, DeviceListAction, DeviceListBottomSheetViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -67,6 +67,16 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
                 }
     }
 
+    override fun handle(action: DeviceListAction) {
+        when (action) {
+            is DeviceListAction.Refresh        -> refreshSelectedId()
+            is DeviceListAction.SelectDevice   -> selectDevice(action)
+            is DeviceListAction.DeselectDevice -> deselectDevice()
+            is DeviceListAction.ManuallyVerify -> manuallyVerify(action)
+        }.exhaustive
+    }
+
+    // TODO Valere: not used?
     private fun refreshSelectedId() = withState { state ->
         if (state.selectedDevice != null) {
             state.cryptoDevices.invoke()?.firstOrNull { state.selectedDevice.deviceId == it.deviceId }?.let {
@@ -79,21 +89,23 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
         }
     }
 
-    // TODO Use handle()
-    fun selectDevice(device: CryptoDeviceInfo?) {
+    private fun selectDevice(action: DeviceListAction.SelectDevice) {
         setState {
-            copy(selectedDevice = device)
+            copy(selectedDevice = action.device)
         }
     }
 
-    // TODO Use handle()
-    fun manuallyVerify(device: CryptoDeviceInfo) {
-        session.getVerificationService().beginKeyVerification(VerificationMethod.SAS, userId, device.deviceId, null)?.let { txID ->
+    private fun deselectDevice() {
+        setState {
+            copy(selectedDevice = null)
+        }
+    }
+
+    private fun manuallyVerify(action: DeviceListAction.ManuallyVerify) {
+        session.getVerificationService().beginKeyVerification(VerificationMethod.SAS, userId, action.deviceId, null)?.let { txID ->
             _viewEvents.post(DeviceListBottomSheetViewEvents.Verify(userId, txID))
         }
     }
-
-    override fun handle(action: EmptyAction) {}
 
     companion object : MvRxViewModelFactory<DeviceListBottomSheetViewModel, DeviceListViewState> {
         @JvmStatic

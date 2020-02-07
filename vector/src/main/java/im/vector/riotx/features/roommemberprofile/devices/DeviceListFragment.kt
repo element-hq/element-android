@@ -62,6 +62,6 @@ class DeviceListFragment @Inject constructor(
     }
 
     override fun onDeviceSelected(device: CryptoDeviceInfo) {
-        viewModel.selectDevice(device)
+        viewModel.handle(DeviceListAction.SelectDevice(device))
     }
 }
