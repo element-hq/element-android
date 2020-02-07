@@ -253,7 +253,6 @@ class RoomDetailFragment @Inject constructor(
             navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
         }
         roomDetailViewModel.subscribe { renderState(it) }
-        roomDetailViewModel.sendMessageResultLiveData.observeEvent(viewLifecycleOwner) { renderSendMessageResult(it) }
 
         sharedActionViewModel
                 .observe()
@@ -310,6 +309,7 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.ActionSuccess       -> displayRoomDetailActionSuccess(it)
                 is RoomDetailViewEvents.ActionFailure       -> displayRoomDetailActionFailure(it)
                 is RoomDetailViewEvents.ShowMessage         -> showSnackWithMessage(it.message, Snackbar.LENGTH_LONG)
+                is RoomDetailViewEvents.SendMessageResult   -> renderSendMessageResult(it)
             }.exhaustive
         }
     }
@@ -734,31 +734,31 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private fun renderSendMessageResult(sendMessageResult: SendMessageResult) {
+    private fun renderSendMessageResult(sendMessageResult: RoomDetailViewEvents.SendMessageResult) {
         when (sendMessageResult) {
-            is SendMessageResult.MessageSent                -> {
+            is RoomDetailViewEvents.MessageSent                -> {
                 updateComposerText("")
             }
-            is SendMessageResult.SlashCommandHandled        -> {
+            is RoomDetailViewEvents.SlashCommandHandled        -> {
                 sendMessageResult.messageRes?.let { showSnackWithMessage(getString(it)) }
                 updateComposerText("")
             }
-            is SendMessageResult.SlashCommandError          -> {
+            is RoomDetailViewEvents.SlashCommandError          -> {
                 displayCommandError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
             }
-            is SendMessageResult.SlashCommandUnknown        -> {
+            is RoomDetailViewEvents.SlashCommandUnknown        -> {
                 displayCommandError(getString(R.string.unrecognized_command, sendMessageResult.command))
             }
-            is SendMessageResult.SlashCommandResultOk       -> {
+            is RoomDetailViewEvents.SlashCommandResultOk       -> {
                 updateComposerText("")
             }
-            is SendMessageResult.SlashCommandResultError    -> {
+            is RoomDetailViewEvents.SlashCommandResultError    -> {
                 displayCommandError(sendMessageResult.throwable.localizedMessage)
             }
-            is SendMessageResult.SlashCommandNotImplemented -> {
+            is RoomDetailViewEvents.SlashCommandNotImplemented -> {
                 displayCommandError(getString(R.string.not_implemented))
             }
-        }
+        } // .exhaustive
 
         lockSendButton = false
     }
