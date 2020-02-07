@@ -261,10 +261,6 @@ class RoomDetailFragment @Inject constructor(
                 }
                 .disposeOnDestroyView()
 
-        roomDetailViewModel.fileTooBigEvent.observeEvent(this) {
-            displayFileTooBigWarning(it)
-        }
-
         roomDetailViewModel.selectSubscribe(this, RoomDetailViewState::tombstoneEventHandling, uniqueOnly("tombstoneEventHandling")) {
             renderTombstoneEventHandling(it)
         }
@@ -300,6 +296,7 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.ActionFailure       -> displayRoomDetailActionFailure(it)
                 is RoomDetailViewEvents.ShowMessage         -> showSnackWithMessage(it.message, Snackbar.LENGTH_LONG)
                 is RoomDetailViewEvents.NavigateToEvent     -> navigateToEvent(it)
+                is RoomDetailViewEvents.FileTooBigError     -> displayFileTooBigError(it)
                 is RoomDetailViewEvents.SendMessageResult   -> renderSendMessageResult(it)
             }.exhaustive
         }
@@ -365,13 +362,13 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private fun displayFileTooBigWarning(error: FileTooBigError) {
+    private fun displayFileTooBigError(action: RoomDetailViewEvents.FileTooBigError) {
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.dialog_title_error)
                 .setMessage(getString(R.string.error_file_too_big,
-                        error.filename,
-                        TextUtils.formatFileSize(requireContext(), error.fileSizeInBytes),
-                        TextUtils.formatFileSize(requireContext(), error.homeServerLimitInBytes)
+                        action.filename,
+                        TextUtils.formatFileSize(requireContext(), action.fileSizeInBytes),
+                        TextUtils.formatFileSize(requireContext(), action.homeServerLimitInBytes)
                 ))
                 .setPositiveButton(R.string.ok, null)
                 .show()

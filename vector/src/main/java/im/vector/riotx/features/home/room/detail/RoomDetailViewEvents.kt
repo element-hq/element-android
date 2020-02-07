@@ -34,6 +34,12 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
 
     data class NavigateToEvent(val eventId: String) : RoomDetailViewEvents()
 
+    data class FileTooBigError(
+            val filename: String,
+            val fileSizeInBytes: Long,
+            val homeServerLimitInBytes: Long
+    ) : RoomDetailViewEvents()
+
     abstract class SendMessageResult : RoomDetailViewEvents()
 
     object MessageSent : SendMessageResult()

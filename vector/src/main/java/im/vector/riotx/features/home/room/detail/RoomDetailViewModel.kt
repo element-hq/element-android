@@ -314,10 +314,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     // TODO Cleanup this and use ViewEvents
-    private val _fileTooBigEvent = MutableLiveData<LiveEvent<FileTooBigError>>()
-    val fileTooBigEvent: LiveData<LiveEvent<FileTooBigError>>
-        get() = _fileTooBigEvent
-
     private val _downloadedFileEvent = MutableLiveData<LiveEvent<DownloadFileState>>()
     val downloadedFileEvent: LiveData<LiveEvent<DownloadFileState>>
         get() = _downloadedFileEvent
@@ -589,8 +585,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         } else {
             when (val tooBigFile = attachments.find { it.size > maxUploadFileSize }) {
                 null -> room.sendMedias(attachments)
-                else -> _fileTooBigEvent.postValue(LiveEvent(FileTooBigError(tooBigFile.name
-                        ?: tooBigFile.path, tooBigFile.size, maxUploadFileSize)))
+                else -> _viewEvents.post(RoomDetailViewEvents.FileTooBigError(
+                        tooBigFile.name ?: tooBigFile.path,
+                        tooBigFile.size,
+                        maxUploadFileSize
+                ))
             }
         }
     }
