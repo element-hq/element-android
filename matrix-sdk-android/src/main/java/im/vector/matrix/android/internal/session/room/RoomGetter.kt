@@ -54,13 +54,11 @@ internal class DefaultRoomGetter @Inject constructor(
         Realm.getInstance(monarchy.realmConfiguration).use { realm ->
             val candidates = RoomSummaryEntity.where(realm)
                     .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-                    .findAll()?.filter { dm ->
+                    .findAll()
+                    .filter { dm ->
                         dm.otherMemberIds.contains(otherUserId)
                                 && dm.membership == Membership.JOIN
-                    }?.map {
-                        it.roomId
-                    }
-                    ?: return null
+                    }.map { it.roomId }
             candidates.forEach { roomId ->
                 if (RoomMemberHelper(realm, roomId).getActiveRoomMemberIds().any { it == otherUserId }) {
                     return RoomEntity.where(realm, roomId).findFirst()?.let { roomFactory.create(roomId) }
