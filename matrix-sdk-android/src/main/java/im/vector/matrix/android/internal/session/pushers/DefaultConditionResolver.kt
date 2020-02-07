@@ -21,9 +21,11 @@ import im.vector.matrix.android.api.pushrules.EventMatchCondition
 import im.vector.matrix.android.api.pushrules.RoomMemberCountCondition
 import im.vector.matrix.android.api.pushrules.SenderNotificationPermissionCondition
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.RoomGetter
-import timber.log.Timber
 import javax.inject.Inject
 
 internal class DefaultConditionResolver @Inject constructor(
@@ -43,11 +45,15 @@ internal class DefaultConditionResolver @Inject constructor(
 
     override fun resolveSenderNotificationPermissionCondition(event: Event,
                                                               condition: SenderNotificationPermissionCondition): Boolean {
-//        val roomId = event.roomId ?: return false
-//        val room = roomService.getRoom(roomId) ?: return false
-        // TODO RoomState not yet managed
-        Timber.e("POWER LEVELS STATE NOT YET MANAGED BY RIOTX")
-        return false // senderNotificationPermissionCondition.isSatisfied(event, )
+        val roomId = event.roomId ?: return false
+        val room = roomGetter.getRoom(roomId) ?: return false
+
+        val powerLevelsContent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, "")
+                ?.content
+                ?.toModel<PowerLevelsContent>()
+                ?: PowerLevelsContent()
+
+        return condition.isSatisfied(event, powerLevelsContent)
     }
 
     override fun resolveContainsDisplayNameCondition(event: Event,
