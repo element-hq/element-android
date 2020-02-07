@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home
+package im.vector.riotx.features.share
 
-import androidx.annotation.StringRes
-import im.vector.riotx.R
+import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.riotx.core.platform.VectorViewEvents
 
-enum class RoomListDisplayMode(@StringRes val titleRes: Int) {
-        HOME(R.string.bottom_action_home),
-        PEOPLE(R.string.bottom_action_people_x),
-        ROOMS(R.string.bottom_action_rooms),
-        FILTERED(/* Not used */ 0)
-    }
+sealed class IncomingShareViewEvents : VectorViewEvents {
+    data class ShareToRoom(val roomSummary: RoomSummary, val sharedData: SharedData, val showAlert: Boolean) : IncomingShareViewEvents()
+}

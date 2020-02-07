@@ -16,71 +16,127 @@
 
 package im.vector.riotx.features.share
 
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
+import com.jakewharton.rxrelay2.BehaviorRelay
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.query.QueryStringValue
+import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
 import im.vector.matrix.rx.rx
-import im.vector.riotx.ActiveSessionDataSource
-import im.vector.riotx.core.platform.EmptyAction
-import im.vector.riotx.core.platform.EmptyViewEvents
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.home.room.list.BreadcrumbsRoomComparator
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
+import im.vector.riotx.features.home.room.list.ChronologicalRoomComparator
 import java.util.concurrent.TimeUnit
 
-data class IncomingShareState(private val dummy: Boolean = false) : MvRxState
-
-/**
- * View model used to observe the room list and post update to the ShareRoomListObservableStore
- */
-class IncomingShareViewModel @AssistedInject constructor(@Assisted initialState: IncomingShareState,
-                                                         private val sessionObservableStore: ActiveSessionDataSource,
-                                                         private val shareRoomListObservableStore: ShareRoomListDataSource,
-                                                         private val breadcrumbsRoomComparator: BreadcrumbsRoomComparator)
-    : VectorViewModel<IncomingShareState, EmptyAction, EmptyViewEvents>(initialState) {
+class IncomingShareViewModel @AssistedInject constructor(@Assisted initialState: IncomingShareViewState,
+                                                         private val session: Session,
+                                                         private val chronologicalRoomComparator: ChronologicalRoomComparator)
+    : VectorViewModel<IncomingShareViewState, IncomingShareAction, IncomingShareViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
-        fun create(initialState: IncomingShareState): IncomingShareViewModel
+        fun create(initialState: IncomingShareViewState): IncomingShareViewModel
     }
 
-    companion object : MvRxViewModelFactory<IncomingShareViewModel, IncomingShareState> {
+    companion object : MvRxViewModelFactory<IncomingShareViewModel, IncomingShareViewState> {
 
         @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: IncomingShareState): IncomingShareViewModel? {
-            val activity: IncomingShareActivity = (viewModelContext as ActivityViewModelContext).activity()
-            return activity.incomingShareViewModelFactory.create(state)
+        override fun create(viewModelContext: ViewModelContext, state: IncomingShareViewState): IncomingShareViewModel? {
+            val fragment: IncomingShareFragment = (viewModelContext as FragmentViewModelContext).fragment()
+            return fragment.incomingShareViewModelFactory.create(state)
         }
     }
+
+    private val filterStream: BehaviorRelay<String> = BehaviorRelay.createDefault("")
 
     init {
         observeRoomSummaries()
     }
 
     private fun observeRoomSummaries() {
-        val queryParams = roomSummaryQueryParams()
-        sessionObservableStore.observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .switchMap {
-                    it.orNull()?.rx()?.liveRoomSummaries(queryParams)
-                            ?: Observable.just(emptyList())
+        val queryParams = roomSummaryQueryParams {
+            memberships = listOf(Membership.JOIN)
+        }
+        session
+                .rx().liveRoomSummaries(queryParams)
+                .execute {
+                    copy(roomSummaries = it)
+                }
+
+        filterStream
+                .switchMap { filter ->
+                    val displayNameQuery = if (filter.isEmpty()) {
+                        QueryStringValue.NoCondition
+                    } else {
+                        QueryStringValue.Contains(filter, QueryStringValue.Case.INSENSITIVE)
+                    }
+                    val filterQueryParams = roomSummaryQueryParams {
+                        displayName = displayNameQuery
+                        memberships = listOf(Membership.JOIN)
+                    }
+                    session.rx().liveRoomSummaries(filterQueryParams)
                 }
                 .throttleLast(300, TimeUnit.MILLISECONDS)
-                .map {
-                    it.sortedWith(breadcrumbsRoomComparator)
+                .map { it.sortedWith(chronologicalRoomComparator) }
+                .execute {
+                    copy(filteredRoomSummaries = it)
                 }
-                .subscribe {
-                    shareRoomListObservableStore.post(it)
-                }
-                .disposeOnClear()
     }
 
-    override fun handle(action: EmptyAction) {
-        // No op
+    override fun handle(action: IncomingShareAction) {
+        when (action) {
+            is IncomingShareAction.SelectRoom           -> handleSelectRoom(action)
+            is IncomingShareAction.ShareToSelectedRooms -> handleShareToSelectedRooms()
+            is IncomingShareAction.FilterWith           -> handleFilter(action)
+            is IncomingShareAction.UpdateSharedData     -> handleUpdateSharedData(action)
+        }.exhaustive
+    }
+
+    private fun handleUpdateSharedData(action: IncomingShareAction.UpdateSharedData) {
+        setState { copy(sharedData = action.sharedData) }
+    }
+
+    private fun handleFilter(action: IncomingShareAction.FilterWith) {
+        filterStream.accept(action.filter)
+    }
+
+    private fun handleShareToSelectedRooms() = withState { state ->
+        val sharedData = state.sharedData ?: return@withState
+        if (state.selectedRoomIds.size == 1) {
+            val selectedRoomId = state.selectedRoomIds.first()
+            val selectedRoom = state.roomSummaries()?.find { it.roomId == selectedRoomId } ?: return@withState
+            _viewEvents.post(IncomingShareViewEvents.ShareToRoom(selectedRoom, sharedData, showAlert = false))
+        } else {
+            state.selectedRoomIds.forEach { roomId ->
+                val room = session.getRoom(roomId)
+                if (sharedData is SharedData.Text) {
+                    room?.sendTextMessage(sharedData.text)
+                } else if (sharedData is SharedData.Attachments) {
+                    room?.sendMedias(sharedData.attachmentData)
+                }
+            }
+        }
+    }
+
+    private fun handleSelectRoom(action: IncomingShareAction.SelectRoom) = withState {
+        if (it.multiSelectionEnabled) {
+            val selectedRooms = it.selectedRoomIds
+            val newSelectedRooms = if (selectedRooms.contains(action.roomSummary.roomId)) {
+                selectedRooms.minus(action.roomSummary.roomId)
+            } else {
+                selectedRooms.plus(action.roomSummary.roomId)
+            }
+            setState { copy(multiSelectionEnabled = newSelectedRooms.isNotEmpty(), selectedRoomIds = newSelectedRooms) }
+        } else if (action.enableMultiSelect) {
+            setState { copy(multiSelectionEnabled = true, selectedRoomIds = setOf(action.roomSummary.roomId)) }
+        } else {
+            val sharedData = it.sharedData ?: return@withState
+            _viewEvents.post(IncomingShareViewEvents.ShareToRoom(action.roomSummary, sharedData, showAlert = true))
+        }
     }
 }

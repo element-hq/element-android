@@ -50,15 +50,13 @@ import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsShare
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.riotx.features.home.room.list.widget.FabMenuView
 import im.vector.riotx.features.notifications.NotificationDrawerManager
-import im.vector.riotx.features.share.SharedData
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_list.*
 import javax.inject.Inject
 
 @Parcelize
 data class RoomListParams(
-        val displayMode: RoomListDisplayMode,
-        val sharedData: SharedData? = null
+        val displayMode: RoomListDisplayMode
 ) : Parcelable
 
 class RoomListFragment @Inject constructor(
@@ -110,11 +108,6 @@ class RoomListFragment @Inject constructor(
             }.exhaustive
         }
 
-        sendShareButton.setOnClickListener { _ ->
-            roomListViewModel.handle(RoomListAction.ShareToSelectedRooms(roomListParams.sharedData!!))
-            requireActivity().finish()
-        }
-
         createChatFabMenu.listener = this
 
         sharedActionViewModel
@@ -137,19 +130,7 @@ class RoomListFragment @Inject constructor(
     }
 
     private fun handleSelectRoom(event: RoomListViewEvents.SelectRoom) {
-        if (roomListParams.displayMode == RoomListDisplayMode.SHARE) {
-            val sharedData = roomListParams.sharedData ?: return
-            AlertDialog.Builder(requireActivity())
-                    .setTitle(R.string.send_attachment)
-                    .setMessage(getString(R.string.share_confirm_room, event.roomSummary.displayName))
-                    .setPositiveButton(R.string.send) { _, _ ->
-                        navigator.openRoomForSharing(requireActivity(), event.roomSummary.roomId, sharedData)
-                    }
-                    .setNegativeButton(R.string.cancel, null)
-                    .show()
-        } else {
-            navigator.openRoom(requireActivity(), event.roomSummary.roomId)
-        }
+        navigator.openRoom(requireActivity(), event.roomSummary.roomId)
     }
 
     private fun setupCreateRoomButton() {
@@ -268,7 +249,6 @@ class RoomListFragment @Inject constructor(
             is Fail       -> renderFailure(state.asyncFilteredRooms.error)
         }
         roomController.update(state)
-        sendShareButton.isVisible = state.multiSelectionEnabled
         // Mark all as read menu
         when (roomListParams.displayMode) {
             RoomListDisplayMode.HOME,
@@ -356,18 +336,14 @@ class RoomListFragment @Inject constructor(
     // RoomSummaryController.Callback **************************************************************
 
     override fun onRoomClicked(room: RoomSummary) {
-        roomListViewModel.handle(RoomListAction.SelectRoom(room, enableMultiSelect = false))
+        roomListViewModel.handle(RoomListAction.SelectRoom(room))
     }
 
     override fun onRoomLongClicked(room: RoomSummary): Boolean {
-        if (roomListParams.displayMode == RoomListDisplayMode.SHARE) {
-            roomListViewModel.handle(RoomListAction.SelectRoom(room, enableMultiSelect = true))
-        } else {
-            roomController.onRoomLongClicked()
-            RoomListQuickActionsBottomSheet
-                    .newInstance(room.roomId, RoomListActionsArgs.Mode.FULL)
-                    .show(childFragmentManager, "ROOM_LIST_QUICK_ACTIONS")
-        }
+        roomController.onRoomLongClicked()
+        RoomListQuickActionsBottomSheet
+                .newInstance(room.roomId, RoomListActionsArgs.Mode.FULL)
+                .show(childFragmentManager, "ROOM_LIST_QUICK_ACTIONS")
         return true
     }
 

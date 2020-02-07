@@ -75,6 +75,7 @@ import im.vector.riotx.features.settings.crosssigning.CrossSigningSettingsFragme
 import im.vector.riotx.features.settings.devices.VectorSettingsDevicesFragment
 import im.vector.riotx.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
+import im.vector.riotx.features.share.IncomingShareFragment
 import im.vector.riotx.features.signout.soft.SoftLogoutFragment
 
 @Module
@@ -354,5 +355,10 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(AttachmentsPreviewFragment::class)
     fun bindAttachmentsPreviewFragment(fragment: AttachmentsPreviewFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(IncomingShareFragment::class)
+    fun bindIncomingShareFragment(fragment: IncomingShareFragment): Fragment
 
 }

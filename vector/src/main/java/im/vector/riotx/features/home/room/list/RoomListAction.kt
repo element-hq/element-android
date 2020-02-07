@@ -16,20 +16,18 @@
 
 package im.vector.riotx.features.home.room.list
 
-import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.riotx.core.platform.VectorViewModelAction
 import im.vector.riotx.features.share.SharedData
 
 sealed class RoomListAction : VectorViewModelAction {
-    data class SelectRoom(val roomSummary: RoomSummary, val enableMultiSelect: Boolean) : RoomListAction()
+    data class SelectRoom(val roomSummary: RoomSummary) : RoomListAction()
     data class ToggleCategory(val category: RoomCategory) : RoomListAction()
     data class AcceptInvitation(val roomSummary: RoomSummary) : RoomListAction()
     data class RejectInvitation(val roomSummary: RoomSummary) : RoomListAction()
     data class FilterWith(val filter: String) : RoomListAction()
     data class ChangeRoomNotificationState(val roomId: String, val notificationState: RoomNotificationState) : RoomListAction()
     data class LeaveRoom(val roomId: String) : RoomListAction()
-    data class ShareToSelectedRooms(val sharedData: SharedData, val optionalMessage: String? = null): RoomListAction()
     object MarkAllRoomsRead : RoomListAction()
 }

@@ -28,7 +28,6 @@ import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.DataSource
-import im.vector.riotx.features.home.RoomListDisplayMode
 import im.vector.riotx.features.share.SharedData
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
@@ -69,38 +68,13 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
             is RoomListAction.MarkAllRoomsRead            -> handleMarkAllRoomsRead()
             is RoomListAction.LeaveRoom                   -> handleLeaveRoom(action)
             is RoomListAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
-            is RoomListAction.ShareToSelectedRooms        -> handleShareToSelectedRooms(action)
         }.exhaustive
-    }
-
-    private fun handleShareToSelectedRooms(action: RoomListAction.ShareToSelectedRooms) = withState {
-        val sharedData = action.sharedData
-        it.selectedRoomIds.forEach { roomId ->
-            val room = session.getRoom(roomId)
-            if (sharedData is SharedData.Text) {
-                room?.sendTextMessage(sharedData.text)
-            } else if (sharedData is SharedData.Attachments) {
-                room?.sendMedias(sharedData.attachmentData)
-            }
-        }
     }
 
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleSelectRoom(action: RoomListAction.SelectRoom) = withState {
-        if (it.multiSelectionEnabled) {
-            val selectedRooms = it.selectedRoomIds
-            val newSelectedRooms = if (selectedRooms.contains(action.roomSummary.roomId)) {
-                selectedRooms.minus(action.roomSummary.roomId)
-            } else {
-                selectedRooms.plus(action.roomSummary.roomId)
-            }
-            setState { copy(multiSelectionEnabled = newSelectedRooms.isNotEmpty(), selectedRoomIds = newSelectedRooms) }
-        } else if (action.enableMultiSelect) {
-            setState { copy(multiSelectionEnabled = true, selectedRoomIds = setOf(action.roomSummary.roomId)) }
-        } else {
-            _viewEvents.post(RoomListViewEvents.SelectRoom(action.roomSummary))
-        }
+        _viewEvents.post(RoomListViewEvents.SelectRoom(action.roomSummary))
     }
 
     private fun handleToggleCategory(action: RoomListAction.ToggleCategory) = setState {
@@ -231,54 +205,35 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     }
 
     private fun buildRoomSummaries(rooms: List<RoomSummary>): RoomSummaries {
-        if (displayMode == RoomListDisplayMode.SHARE) {
-            val recentRooms = ArrayList<RoomSummary>(20)
-            val otherRooms = ArrayList<RoomSummary>(rooms.size)
+        // Set up init size on directChats and groupRooms as they are the biggest ones
+        val invites = ArrayList<RoomSummary>()
+        val favourites = ArrayList<RoomSummary>()
+        val directChats = ArrayList<RoomSummary>(rooms.size)
+        val groupRooms = ArrayList<RoomSummary>(rooms.size)
+        val lowPriorities = ArrayList<RoomSummary>()
+        val serverNotices = ArrayList<RoomSummary>()
 
-            rooms
-                    .filter { roomListDisplayModeFilter.test(it) }
-                    .forEach { room ->
-                        when (room.breadcrumbsIndex) {
-                            RoomSummary.NOT_IN_BREADCRUMBS -> otherRooms.add(room)
-                            else                           -> recentRooms.add(room)
-                        }
+        rooms
+                .filter { roomListDisplayModeFilter.test(it) }
+                .forEach { room ->
+                    val tags = room.tags.map { it.name }
+                    when {
+                        room.membership == Membership.INVITE          -> invites.add(room)
+                        tags.contains(RoomTag.ROOM_TAG_SERVER_NOTICE) -> serverNotices.add(room)
+                        tags.contains(RoomTag.ROOM_TAG_FAVOURITE)     -> favourites.add(room)
+                        tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)  -> lowPriorities.add(room)
+                        room.isDirect                                 -> directChats.add(room)
+                        else                                          -> groupRooms.add(room)
                     }
+                }
 
-            return RoomSummaries().apply {
-                put(RoomCategory.RECENT_ROOMS, recentRooms)
-                put(RoomCategory.OTHER_ROOMS, otherRooms)
-            }
-        } else {
-            // Set up init size on directChats and groupRooms as they are the biggest ones
-            val invites = ArrayList<RoomSummary>()
-            val favourites = ArrayList<RoomSummary>()
-            val directChats = ArrayList<RoomSummary>(rooms.size)
-            val groupRooms = ArrayList<RoomSummary>(rooms.size)
-            val lowPriorities = ArrayList<RoomSummary>()
-            val serverNotices = ArrayList<RoomSummary>()
-
-            rooms
-                    .filter { roomListDisplayModeFilter.test(it) }
-                    .forEach { room ->
-                        val tags = room.tags.map { it.name }
-                        when {
-                            room.membership == Membership.INVITE          -> invites.add(room)
-                            tags.contains(RoomTag.ROOM_TAG_SERVER_NOTICE) -> serverNotices.add(room)
-                            tags.contains(RoomTag.ROOM_TAG_FAVOURITE)     -> favourites.add(room)
-                            tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)  -> lowPriorities.add(room)
-                            room.isDirect                                 -> directChats.add(room)
-                            else                                          -> groupRooms.add(room)
-                        }
-                    }
-
-            return RoomSummaries().apply {
-                put(RoomCategory.INVITE, invites)
-                put(RoomCategory.FAVOURITE, favourites)
-                put(RoomCategory.DIRECT, directChats)
-                put(RoomCategory.GROUP, groupRooms)
-                put(RoomCategory.LOW_PRIORITY, lowPriorities)
-                put(RoomCategory.SERVER_NOTICE, serverNotices)
-            }
+        return RoomSummaries().apply {
+            put(RoomCategory.INVITE, invites)
+            put(RoomCategory.FAVOURITE, favourites)
+            put(RoomCategory.DIRECT, directChats)
+            put(RoomCategory.GROUP, groupRooms)
+            put(RoomCategory.LOW_PRIORITY, lowPriorities)
+            put(RoomCategory.SERVER_NOTICE, serverNotices)
         }
     }
 }

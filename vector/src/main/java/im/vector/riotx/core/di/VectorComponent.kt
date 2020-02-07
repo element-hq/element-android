@@ -47,7 +47,6 @@ import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.reactions.data.EmojiDataSource
 import im.vector.riotx.features.session.SessionListener
 import im.vector.riotx.features.settings.VectorPreferences
-import im.vector.riotx.features.share.ShareRoomListDataSource
 import im.vector.riotx.features.ui.UiStateRepository
 import javax.inject.Singleton
 
@@ -96,8 +95,6 @@ interface VectorComponent {
     fun errorFormatter(): ErrorFormatter
 
     fun homeRoomListObservableStore(): HomeRoomListDataSource
-
-    fun shareRoomListObservableStore(): ShareRoomListDataSource
 
     fun selectedGroupStore(): SelectedGroupDataSource
 

@@ -25,7 +25,6 @@ import im.vector.riotx.R
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.extensions.localDateTime
-import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.DateProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
@@ -50,16 +49,16 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
         return when (roomSummary.membership) {
             Membership.INVITE -> createInvitationItem(roomSummary, joiningRoomsIds, joiningErrorRoomsIds, rejectingRoomsIds, rejectingErrorRoomsIds, listener)
-            else              -> createRoomItem(roomSummary, selectedRoomIds, listener)
+            else              -> createRoomItem(roomSummary, selectedRoomIds, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked })
         }
     }
 
-    private fun createInvitationItem(roomSummary: RoomSummary,
-                                     joiningRoomsIds: Set<String>,
-                                     joiningErrorRoomsIds: Set<String>,
-                                     rejectingRoomsIds: Set<String>,
-                                     rejectingErrorRoomsIds: Set<String>,
-                                     listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
+    fun createInvitationItem(roomSummary: RoomSummary,
+                             joiningRoomsIds: Set<String>,
+                             joiningErrorRoomsIds: Set<String>,
+                             rejectingRoomsIds: Set<String>,
+                             rejectingErrorRoomsIds: Set<String>,
+                             listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
         val secondLine = if (roomSummary.isDirect) {
             roomSummary.latestPreviewableEvent?.root?.senderId
         } else {
@@ -82,7 +81,12 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .listener { listener?.onRoomClicked(roomSummary) }
     }
 
-    private fun createRoomItem(roomSummary: RoomSummary, selectedRoomIds: Set<String>, listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
+    fun createRoomItem(
+            roomSummary: RoomSummary,
+            selectedRoomIds: Set<String>,
+            onClick: ((RoomSummary) -> Unit)?,
+            onLongClick: ((RoomSummary) -> Boolean)?
+    ): VectorEpoxyModel<*> {
         val unreadCount = roomSummary.notificationCount
         val showHighlighted = roomSummary.highlightCount > 0
         val showSelected = selectedRoomIds.contains(roomSummary.roomId)
@@ -124,11 +128,11 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .hasUnreadMessage(roomSummary.hasUnreadMessages)
                 .hasDraft(roomSummary.userDrafts.isNotEmpty())
                 .itemLongClickListener { _ ->
-                    listener?.onRoomLongClicked(roomSummary) ?: false
+                    onLongClick?.invoke(roomSummary) ?: false
                 }
                 .itemClickListener(
                         DebouncedClickListener(View.OnClickListener { _ ->
-                            listener?.onRoomClicked(roomSummary)
+                            onClick?.invoke(roomSummary)
                         })
                 )
     }
