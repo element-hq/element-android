@@ -29,7 +29,7 @@ import im.vector.riotx.core.platform.SimpleTextWatcher
 
 class ExportKeysDialog {
 
-    var passwordVisible = false
+    private var passwordVisible = false
 
     fun show(activity: Activity, exportKeyDialogListener: ExportKeyDialogListener) {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_export_e2e_keys, null)
