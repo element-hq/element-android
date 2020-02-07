@@ -37,7 +37,7 @@ data class PushCondition(
         val key: String? = null,
 
         /**
-         *Required for event_match conditions.
+         * Required for event_match conditions.
          */
         val pattern: String? = null,
 
@@ -51,30 +51,35 @@ data class PushCondition(
 ) {
 
     fun asExecutableCondition(): Condition? {
-        return when (Condition.Kind.fromString(this.kind)) {
-            Condition.Kind.event_match                    -> {
-                if (this.key != null && this.pattern != null) {
+        return when (Condition.Kind.fromString(kind)) {
+            Condition.Kind.EventMatch                   -> {
+                if (key != null && pattern != null) {
                     EventMatchCondition(key, pattern)
                 } else {
                     Timber.e("Malformed Event match condition")
                     null
                 }
             }
-            Condition.Kind.contains_display_name          -> {
+            Condition.Kind.ContainsDisplayName          -> {
                 ContainsDisplayNameCondition()
             }
-            Condition.Kind.room_member_count              -> {
-                if (this.iz.isNullOrBlank()) {
+            Condition.Kind.RoomMemberCount              -> {
+                if (iz.isNullOrEmpty()) {
                     Timber.e("Malformed ROOM_MEMBER_COUNT condition")
                     null
                 } else {
-                    RoomMemberCountCondition(this.iz)
+                    RoomMemberCountCondition(iz)
                 }
             }
-            Condition.Kind.sender_notification_permission -> {
-                this.key?.let { SenderNotificationPermissionCondition(it) }
+            Condition.Kind.SenderNotificationPermission -> {
+                if (key == null) {
+                    Timber.e("Malformed Sender Notification Permission condition")
+                    null
+                } else {
+                    SenderNotificationPermissionCondition(key)
+                }
             }
-            Condition.Kind.UNRECOGNIZE                    -> {
+            Condition.Kind.Unrecognised                 -> {
                 Timber.e("Unknown kind $kind")
                 null
             }

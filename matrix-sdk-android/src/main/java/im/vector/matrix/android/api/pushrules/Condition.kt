@@ -19,23 +19,22 @@ import im.vector.matrix.android.api.session.events.model.Event
 
 abstract class Condition(val kind: Kind) {
 
-    // Use @Json?
     enum class Kind(val value: String) {
-        event_match("event_match"),
-        contains_display_name("contains_display_name"),
-        room_member_count("room_member_count"),
-        sender_notification_permission("sender_notification_permission"),
-        UNRECOGNIZE("");
+        EventMatch("event_match"),
+        ContainsDisplayName("contains_display_name"),
+        RoomMemberCount("room_member_count"),
+        SenderNotificationPermission("sender_notification_permission"),
+        Unrecognised("");
 
         companion object {
 
             fun fromString(value: String): Kind {
                 return when (value) {
-                    "event_match"                    -> event_match
-                    "contains_display_name"          -> contains_display_name
-                    "room_member_count"              -> room_member_count
-                    "sender_notification_permission" -> sender_notification_permission
-                    else                             -> UNRECOGNIZE
+                    "event_match"                    -> EventMatch
+                    "contains_display_name"          -> ContainsDisplayName
+                    "room_member_count"              -> RoomMemberCount
+                    "sender_notification_permission" -> SenderNotificationPermission
+                    else                             -> Unrecognised
                 }
             }
         }

@@ -19,7 +19,17 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.di.MoshiProvider
 import timber.log.Timber
 
-class EventMatchCondition(val key: String, val pattern: String) : Condition(Kind.event_match) {
+class EventMatchCondition(
+        /**
+         * The dot-separated field of the event to match, e.g. content.body
+         */
+        val key: String,
+        /**
+         * The glob-style pattern to match against. Patterns with no special glob characters should
+         * be treated as having asterisks prepended and appended when testing the condition.
+         */
+        val pattern: String
+) : Condition(Kind.EventMatch) {
 
     override fun isSatisfied(event: Event, conditionResolver: ConditionResolver): Boolean {
         return conditionResolver.resolveEventMatchCondition(event, this)
