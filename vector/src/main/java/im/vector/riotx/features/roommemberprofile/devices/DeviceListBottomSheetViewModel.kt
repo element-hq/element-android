@@ -16,14 +16,11 @@
  */
 package im.vector.riotx.features.roommemberprofile.devices
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -36,11 +33,7 @@ import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.EmptyAction
-import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.core.utils.LiveEvent
-import im.vector.riotx.features.crypto.verification.VerificationAction
 
 data class DeviceListViewState(
         val userItem: MatrixItem? = null,
@@ -52,14 +45,8 @@ data class DeviceListViewState(
 
 class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted private val initialState: DeviceListViewState,
                                                                  @Assisted private val userId: String,
-                                                                 private val stringProvider: StringProvider,
                                                                  private val session: Session)
-    : VectorViewModel<DeviceListViewState, EmptyAction, EmptyViewEvents>(initialState) {
-
-    // Can be used for several actions, for a one shot result
-    private val _requestLiveData = MutableLiveData<LiveEvent<Async<VerificationAction>>>()
-    val requestLiveData: LiveData<LiveEvent<Async<VerificationAction>>>
-        get() = _requestLiveData
+    : VectorViewModel<DeviceListViewState, EmptyAction, DeviceListBottomSheetViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -67,7 +54,6 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
     }
 
     init {
-
         session.rx().liveUserCryptoDevices(userId)
                 .execute {
                     copy(cryptoDevices = it).also {
@@ -93,15 +79,17 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
         }
     }
 
+    // TODO Use handle()
     fun selectDevice(device: CryptoDeviceInfo?) {
         setState {
             copy(selectedDevice = device)
         }
     }
 
+    // TODO Use handle()
     fun manuallyVerify(device: CryptoDeviceInfo) {
         session.getVerificationService().beginKeyVerification(VerificationMethod.SAS, userId, device.deviceId, null)?.let { txID ->
-            _requestLiveData.postValue(LiveEvent(Success(VerificationAction.StartSASVerification(userId, txID))))
+            _viewEvents.post(DeviceListBottomSheetViewEvents.Verify(userId, txID))
         }
     }
 
