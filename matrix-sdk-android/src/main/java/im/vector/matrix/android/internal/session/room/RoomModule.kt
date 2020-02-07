@@ -46,12 +46,20 @@ import im.vector.matrix.android.internal.session.room.read.DefaultMarkAllRoomsRe
 import im.vector.matrix.android.internal.session.room.read.DefaultSetReadMarkersTask
 import im.vector.matrix.android.internal.session.room.read.MarkAllRoomsReadTask
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
-import im.vector.matrix.android.internal.session.room.relation.*
+import im.vector.matrix.android.internal.session.room.relation.DefaultFetchEditHistoryTask
+import im.vector.matrix.android.internal.session.room.relation.DefaultFindReactionEventForUndoTask
+import im.vector.matrix.android.internal.session.room.relation.DefaultUpdateQuickReactionTask
+import im.vector.matrix.android.internal.session.room.relation.FetchEditHistoryTask
+import im.vector.matrix.android.internal.session.room.relation.FindReactionEventForUndoTask
+import im.vector.matrix.android.internal.session.room.relation.UpdateQuickReactionTask
 import im.vector.matrix.android.internal.session.room.reporting.DefaultReportContentTask
 import im.vector.matrix.android.internal.session.room.reporting.ReportContentTask
 import im.vector.matrix.android.internal.session.room.state.DefaultSendStateTask
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
-import im.vector.matrix.android.internal.session.room.timeline.*
+import im.vector.matrix.android.internal.session.room.timeline.DefaultGetContextOfEventTask
+import im.vector.matrix.android.internal.session.room.timeline.DefaultPaginationTask
+import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventTask
+import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
 import im.vector.matrix.android.internal.session.room.typing.DefaultSendTypingTask
 import im.vector.matrix.android.internal.session.room.typing.SendTypingTask
 import retrofit2.Retrofit
@@ -71,6 +79,9 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindRoomFactory(factory: DefaultRoomFactory): RoomFactory
+
+    @Binds
+    abstract fun bindRoomGetter(getter: DefaultRoomGetter): RoomGetter
 
     @Binds
     abstract fun bindRoomService(service: DefaultRoomService): RoomService

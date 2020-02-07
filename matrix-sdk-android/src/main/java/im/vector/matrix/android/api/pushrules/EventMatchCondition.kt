@@ -21,8 +21,8 @@ import timber.log.Timber
 
 class EventMatchCondition(val key: String, val pattern: String) : Condition(Kind.event_match) {
 
-    override fun isSatisfied(conditionResolver: ConditionResolver) : Boolean {
-        return conditionResolver.resolveEventMatchCondition(this)
+    override fun isSatisfied(event: Event, conditionResolver: ConditionResolver): Boolean {
+        return conditionResolver.resolveEventMatchCondition(event, this)
     }
 
     override fun technicalDescription(): String {

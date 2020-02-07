@@ -23,8 +23,8 @@ import timber.log.Timber
 
 class ContainsDisplayNameCondition : Condition(Kind.contains_display_name) {
 
-    override fun isSatisfied(conditionResolver: ConditionResolver): Boolean {
-        return conditionResolver.resolveContainsDisplayNameCondition(this)
+    override fun isSatisfied(event: Event, conditionResolver: ConditionResolver): Boolean {
+        return conditionResolver.resolveContainsDisplayNameCondition(event, this)
     }
 
     override fun technicalDescription(): String {

@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
  * All push rulesets for a user.
  */
 @JsonClass(generateAdapter = true)
-data class GetPushRulesResponse(
+internal data class GetPushRulesResponse(
         /**
          * Global rules, account level applying to all devices
          */

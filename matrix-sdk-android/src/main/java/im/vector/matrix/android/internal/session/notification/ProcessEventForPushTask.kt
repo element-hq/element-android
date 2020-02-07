@@ -16,12 +16,11 @@
 
 package im.vector.matrix.android.internal.session.notification
 
+import im.vector.matrix.android.api.pushrules.ConditionResolver
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.internal.di.UserId
-import im.vector.matrix.android.internal.session.pushers.DefaultConditionResolver
 import im.vector.matrix.android.internal.session.sync.model.RoomsSyncResponse
 import im.vector.matrix.android.internal.task.Task
 import timber.log.Timber
@@ -36,7 +35,7 @@ internal interface ProcessEventForPushTask : Task<ProcessEventForPushTask.Params
 
 internal class DefaultProcessEventForPushTask @Inject constructor(
         private val defaultPushRuleService: DefaultPushRuleService,
-        private val roomService: RoomService,
+        private val conditionResolver: ConditionResolver,
         @UserId private val userId: String
 ) : ProcessEventForPushTask {
 
@@ -97,12 +96,10 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
     }
 
     private fun fulfilledBingRule(event: Event, rules: List<PushRule>): PushRule? {
-        // TODO This should be injected
-        val conditionResolver = DefaultConditionResolver(event, roomService, userId)
         return rules.firstOrNull { rule ->
             // All conditions must hold true for an event in order to apply the action for the event.
             rule.enabled && rule.conditions?.all {
-                it.asExecutableCondition()?.isSatisfied(conditionResolver) ?: false
+                it.asExecutableCondition()?.isSatisfied(event, conditionResolver) ?: false
             } ?: false
         }
     }

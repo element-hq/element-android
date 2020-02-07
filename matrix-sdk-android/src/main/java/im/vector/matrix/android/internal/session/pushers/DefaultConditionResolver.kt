@@ -15,26 +15,34 @@
  */
 package im.vector.matrix.android.internal.session.pushers
 
-import im.vector.matrix.android.api.pushrules.*
+import im.vector.matrix.android.api.pushrules.ConditionResolver
+import im.vector.matrix.android.api.pushrules.ContainsDisplayNameCondition
+import im.vector.matrix.android.api.pushrules.EventMatchCondition
+import im.vector.matrix.android.api.pushrules.RoomMemberCountCondition
+import im.vector.matrix.android.api.pushrules.SenderNotificationPermissionCondition
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.internal.di.UserId
+import im.vector.matrix.android.internal.session.room.RoomGetter
 import timber.log.Timber
+import javax.inject.Inject
 
-// TODO Inject constructor
-internal class DefaultConditionResolver(private val event: Event,
-                                        private val roomService: RoomService,
-                                        @UserId private val userId: String) : ConditionResolver {
+internal class DefaultConditionResolver @Inject constructor(
+        private val roomGetter: RoomGetter,
+        @UserId private val userId: String
+) : ConditionResolver {
 
-    override fun resolveEventMatchCondition(eventMatchCondition: EventMatchCondition): Boolean {
-        return eventMatchCondition.isSatisfied(event)
+    override fun resolveEventMatchCondition(event: Event,
+                                            condition: EventMatchCondition): Boolean {
+        return condition.isSatisfied(event)
     }
 
-    override fun resolveRoomMemberCountCondition(roomMemberCountCondition: RoomMemberCountCondition): Boolean {
-        return roomMemberCountCondition.isSatisfied(event, roomService)
+    override fun resolveRoomMemberCountCondition(event: Event,
+                                                 condition: RoomMemberCountCondition): Boolean {
+        return condition.isSatisfied(event, roomGetter)
     }
 
-    override fun resolveSenderNotificationPermissionCondition(senderNotificationPermissionCondition: SenderNotificationPermissionCondition): Boolean {
+    override fun resolveSenderNotificationPermissionCondition(event: Event,
+                                                              condition: SenderNotificationPermissionCondition): Boolean {
 //        val roomId = event.roomId ?: return false
 //        val room = roomService.getRoom(roomId) ?: return false
         // TODO RoomState not yet managed
@@ -42,10 +50,11 @@ internal class DefaultConditionResolver(private val event: Event,
         return false // senderNotificationPermissionCondition.isSatisfied(event, )
     }
 
-    override fun resolveContainsDisplayNameCondition(containsDisplayNameCondition: ContainsDisplayNameCondition): Boolean {
+    override fun resolveContainsDisplayNameCondition(event: Event,
+                                                     condition: ContainsDisplayNameCondition): Boolean {
         val roomId = event.roomId ?: return false
-        val room = roomService.getRoom(roomId) ?: return false
+        val room = roomGetter.getRoom(roomId) ?: return false
         val myDisplayName = room.getRoomMember(userId)?.displayName ?: return false
-        return containsDisplayNameCondition.isSatisfied(event, myDisplayName)
+        return condition.isSatisfied(event, myDisplayName)
     }
 }

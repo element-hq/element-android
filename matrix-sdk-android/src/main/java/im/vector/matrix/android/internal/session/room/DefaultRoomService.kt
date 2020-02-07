@@ -22,14 +22,12 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.RoomSummaryQueryParams
-import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.VersioningState
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
-import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.findByAlias
@@ -37,7 +35,6 @@ import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.query.process
 import im.vector.matrix.android.internal.session.room.alias.GetRoomIdByAliasTask
 import im.vector.matrix.android.internal.session.room.create.CreateRoomTask
-import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.session.room.read.MarkAllRoomsReadTask
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateBreadcrumbsTask
@@ -48,15 +45,17 @@ import io.realm.Realm
 import io.realm.RealmQuery
 import javax.inject.Inject
 
-internal class DefaultRoomService @Inject constructor(private val monarchy: Monarchy,
-                                                      private val roomSummaryMapper: RoomSummaryMapper,
-                                                      private val createRoomTask: CreateRoomTask,
-                                                      private val joinRoomTask: JoinRoomTask,
-                                                      private val markAllRoomsReadTask: MarkAllRoomsReadTask,
-                                                      private val updateBreadcrumbsTask: UpdateBreadcrumbsTask,
-                                                      private val roomIdByAliasTask: GetRoomIdByAliasTask,
-                                                      private val roomFactory: RoomFactory,
-                                                      private val taskExecutor: TaskExecutor) : RoomService {
+internal class DefaultRoomService @Inject constructor(
+        private val monarchy: Monarchy,
+        private val roomSummaryMapper: RoomSummaryMapper,
+        private val createRoomTask: CreateRoomTask,
+        private val joinRoomTask: JoinRoomTask,
+        private val markAllRoomsReadTask: MarkAllRoomsReadTask,
+        private val updateBreadcrumbsTask: UpdateBreadcrumbsTask,
+        private val roomIdByAliasTask: GetRoomIdByAliasTask,
+        private val roomGetter: RoomGetter,
+        private val taskExecutor: TaskExecutor
+) : RoomService {
 
     override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>): Cancelable {
         return createRoomTask
@@ -67,33 +66,11 @@ internal class DefaultRoomService @Inject constructor(private val monarchy: Mona
     }
 
     override fun getRoom(roomId: String): Room? {
-        return Realm.getInstance(monarchy.realmConfiguration).use {
-            if (RoomEntity.where(it, roomId).findFirst() != null) {
-                roomFactory.create(roomId)
-            } else {
-                null
-            }
-        }
+        return roomGetter.getRoom(roomId)
     }
 
     override fun getExistingDirectRoomWithUser(otherUserId: String): Room? {
-        Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            val candidates = RoomSummaryEntity.where(realm)
-                    .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-                    .findAll()?.filter { dm ->
-                        dm.otherMemberIds.contains(otherUserId)
-                                    && dm.membership == Membership.JOIN
-                    }?.map {
-                        it.roomId
-                    }
-                    ?: return null
-            candidates.forEach { roomId ->
-                if (RoomMemberHelper(realm, roomId).getActiveRoomMemberIds().any { it == otherUserId }) {
-                    return RoomEntity.where(realm, roomId).findFirst()?.let { roomFactory.create(roomId) }
-                }
-            }
-            return null
-        }
+        return roomGetter.getDirectRoomWith(otherUserId)
     }
 
     override fun getRoomSummary(roomIdOrAlias: String): RoomSummary? {

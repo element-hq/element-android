@@ -15,8 +15,11 @@
  */
 package im.vector.matrix.android.api.pushrules
 
+import im.vector.matrix.android.api.session.events.model.Event
+
 abstract class Condition(val kind: Kind) {
 
+    // Use @Json?
     enum class Kind(val value: String) {
         event_match("event_match"),
         contains_display_name("contains_display_name"),
@@ -38,7 +41,7 @@ abstract class Condition(val kind: Kind) {
         }
     }
 
-    abstract fun isSatisfied(conditionResolver: ConditionResolver): Boolean
+    abstract fun isSatisfied(event: Event, conditionResolver: ConditionResolver): Boolean
 
     open fun technicalDescription(): String {
         return "Kind: $kind"

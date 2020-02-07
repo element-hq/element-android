@@ -16,25 +16,25 @@
 package im.vector.matrix.android.api.pushrules
 
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.RoomService
+import im.vector.matrix.android.internal.session.room.RoomGetter
 import timber.log.Timber
 
 private val regex = Regex("^(==|<=|>=|<|>)?(\\d*)$")
 
 class RoomMemberCountCondition(val iz: String) : Condition(Kind.room_member_count) {
 
-    override fun isSatisfied(conditionResolver: ConditionResolver): Boolean {
-        return conditionResolver.resolveRoomMemberCountCondition(this)
+    override fun isSatisfied(event: Event, conditionResolver: ConditionResolver): Boolean {
+        return conditionResolver.resolveRoomMemberCountCondition(event, this)
     }
 
     override fun technicalDescription(): String {
         return "Room member count is $iz"
     }
 
-    fun isSatisfied(event: Event, session: RoomService?): Boolean {
-        // sanity check^
+    internal fun isSatisfied(event: Event, roomGetter: RoomGetter): Boolean {
+        // sanity checks
         val roomId = event.roomId ?: return false
-        val room = session?.getRoom(roomId) ?: return false
+        val room = roomGetter.getRoom(roomId) ?: return false
 
         // Parse the is field into prefix and number the first time
         val (prefix, count) = parseIsField() ?: return false

@@ -17,7 +17,11 @@ package im.vector.matrix.android.api.pushrules.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.pushrules.*
+import im.vector.matrix.android.api.pushrules.Condition
+import im.vector.matrix.android.api.pushrules.ContainsDisplayNameCondition
+import im.vector.matrix.android.api.pushrules.EventMatchCondition
+import im.vector.matrix.android.api.pushrules.RoomMemberCountCondition
+import im.vector.matrix.android.api.pushrules.SenderNotificationPermissionCondition
 import timber.log.Timber
 
 @JsonClass(generateAdapter = true)
@@ -30,13 +34,13 @@ data class PushCondition(
         /**
          * Required for event_match conditions. The dot- separated field of the event to match.
          */
-
         val key: String? = null,
+
         /**
          *Required for event_match conditions.
          */
-
         val pattern: String? = null,
+
         /**
          * Required for room_member_count conditions.
          * A decimal integer optionally prefixed by one of, ==, <, >, >= or <=.

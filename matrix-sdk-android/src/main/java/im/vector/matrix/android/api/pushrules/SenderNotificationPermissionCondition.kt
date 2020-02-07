@@ -21,8 +21,8 @@ import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 
 class SenderNotificationPermissionCondition(val key: String) : Condition(Kind.sender_notification_permission) {
 
-    override fun isSatisfied(conditionResolver: ConditionResolver): Boolean {
-        return conditionResolver.resolveSenderNotificationPermissionCondition(this)
+    override fun isSatisfied(event: Event, conditionResolver: ConditionResolver): Boolean {
+        return conditionResolver.resolveSenderNotificationPermissionCondition(event, this)
     }
 
     override fun technicalDescription(): String {
