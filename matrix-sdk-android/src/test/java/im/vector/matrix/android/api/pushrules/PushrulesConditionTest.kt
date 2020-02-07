@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageTextConten
 import im.vector.matrix.android.internal.session.room.RoomGetter
 import io.mockk.every
 import io.mockk.mockk
+import org.amshove.kluent.shouldBe
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -185,5 +186,32 @@ class PushrulesConditionTest {
             assertTrue("This room has 3 members", conditionEqual3Bis.isSatisfied(it, roomGetterStub))
             assertFalse("This room has more than 3 members", conditionLessThan3.isSatisfied(it, roomGetterStub))
         }
+    }
+
+    /* ==========================================================================================
+     * Test ContainsDisplayNameCondition
+     * ========================================================================================== */
+
+    @Test
+    fun test_displayName_condition() {
+        val condition = ContainsDisplayNameCondition()
+
+        val event = Event(
+                type = "m.room.message",
+                eventId = "mx0",
+                content = MessageTextContent("m.text", "How was the cake benoit?").toContent(),
+                originServerTs = 0,
+                roomId = "2joined")
+
+        condition.isSatisfied(event, "how") shouldBe true
+        condition.isSatisfied(event, "How") shouldBe true
+        condition.isSatisfied(event, "benoit") shouldBe true
+        condition.isSatisfied(event, "Benoit") shouldBe true
+        condition.isSatisfied(event, "cake") shouldBe true
+
+        condition.isSatisfied(event, "ben") shouldBe false
+        condition.isSatisfied(event, "oit") shouldBe false
+        condition.isSatisfied(event, "enoi") shouldBe false
+        condition.isSatisfied(event, "H") shouldBe false
     }
 }
