@@ -41,31 +41,26 @@ internal class DefaultRoomGetter @Inject constructor(
 ) : RoomGetter {
 
     override fun getRoom(roomId: String): Room? {
-        return Realm.getInstance(monarchy.realmConfiguration).use {
-            if (RoomEntity.where(it, roomId).findFirst() != null) {
-                roomFactory.create(roomId)
-            } else {
-                null
-            }
+        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+            createRoom(realm, roomId)
         }
     }
 
     override fun getDirectRoomWith(otherUserId: String): Room? {
-        Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            val candidates = RoomSummaryEntity.where(realm)
+        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+            RoomSummaryEntity.where(realm)
                     .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+                    .equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
                     .findAll()
-                    .filter { dm ->
-                        dm.otherMemberIds.contains(otherUserId)
-                                && dm.membership == Membership.JOIN
-                    }.map { it.roomId }
-            candidates.forEach { roomId ->
-                if (RoomMemberHelper(realm, roomId).getActiveRoomMemberIds().any { it == otherUserId }) {
-                    return RoomEntity.where(realm, roomId).findFirst()?.let { roomFactory.create(roomId) }
-                }
-            }
-            return null
+                    .filter { dm -> dm.otherMemberIds.contains(otherUserId) }
+                    .map { it.roomId }
+                    .firstOrNull { roomId -> otherUserId in RoomMemberHelper(realm, roomId).getActiveRoomMemberIds() }
+                    ?.let { roomId -> createRoom(realm, roomId) }
         }
     }
-}
 
+    private fun createRoom(realm: Realm, roomId: String): Room? {
+        return RoomEntity.where(realm, roomId).findFirst()
+                ?.let { roomFactory.create(roomId) }
+    }
+}
