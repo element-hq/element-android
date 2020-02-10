@@ -40,7 +40,7 @@
     <string name="missing_permissions_warning">Aufgrund fehlender Berechtigungen stehen eventuell einige Funktionen vielleicht nicht zur Verfügung…</string>
     <string name="missing_permissions_to_start_conf_call">Dir fehlt das Recht ein Konferenzgespräch in diesem Raum zu starten</string>
     <string name="missing_permissions_title_to_start_conf_call">Kann Gespräch nicht starten</string>
-    <string name="device_information">Geräteinformationen</string>
+    <string name="device_information">Sitzungsinformationen</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Konferenzgespräche werden in verschlüsselten Räumen nicht unterstützt</string>
     <string name="send_anyway">Trotzdem senden</string>
     <string name="or">oder</string>
@@ -1334,7 +1334,7 @@ Warnung: Diese Datei wird gelöscht wenn die Anwendung deinstalliert wird.</stri
 
     <string name="sign_out_bottom_sheet_warning_no_backup">Beim Ausloggen gehen ihre verschlüsselten Nachrichten verloren</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Schlüssel-Sicherung wird durchgeführt. Wenn sie sich jetzt ausloggen, dann gehen ihre verschlüsselten Nachrichten verloren.</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">Schlüssel-Sicherung sollte auf all deinen Geräten aktiviert sein um einen Verlust deiner verschlüsselten Nachrichten zu verhindern.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Schlüssel-Sicherung sollte bei all deinen Sitzungen aktiviert sein um einen Verlust deiner verschlüsselten Nachrichten zu verhindern.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Ich möchte meine verschlüsselten Nachrichten nicht</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Sichere Schlüssel…</string>
     <string name="keys_backup_activate">Schlüssel-Sicherung verwenden</string>
@@ -1444,7 +1444,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
 
     <string name="error_jitsi_not_supported_on_old_device">Entschuldige, doch Konferenzgespräche mittels Jitsi wird auf alten Geräten nicht unterstützt (älter als Android 5.0)</string>
 
-    <string name="title_activity_verify_device">Gerät verifizieren</string>
+    <string name="title_activity_verify_device">Sitzung verifizieren</string>
 
     <string name="encryption_information_unknown_ip">Unbekannte IP-Adresse</string>
     <string name="you_added_a_new_device_with_info">Ein neues Gerät fordert Verschlüsselungs-Schlüssel an.

@@ -44,7 +44,7 @@
     <string name="active_call">Thirrje aktive</string>
     <string name="cannot_start_call">S’fillohet dot thirrja, ju lutemi, riprovoni më vonë</string>
     <string name="missing_permissions_title_to_start_conf_call">S’fillohet dot thirrja</string>
-    <string name="device_information">Të dhëna pajisjeje</string>
+    <string name="device_information">Të dhëna Sesioni</string>
     <string name="call_anyway">Thirre Sido Qoftë</string>
     <string name="send_anyway">Dërgoje Sido Qoftë</string>
     <string name="invite">Ftoje</string>
@@ -268,7 +268,7 @@
     <string name="room_participants_header_admin_tools">MJETE PËRGJEGJËSI</string>
     <string name="room_participants_header_call">THIRRJE</string>
     <string name="room_participants_header_direct_chats">FJALOSJE TË DREJTPËRDREJTA</string>
-    <string name="room_participants_header_devices">PAJISJE</string>
+    <string name="room_participants_header_devices">SESIONE</string>
 
     <string name="room_participants_action_invite">Ftoje</string>
     <string name="room_participants_action_leave">Braktiseni këtë dhomë</string>
@@ -283,7 +283,7 @@
     <string name="room_participants_action_unignore">Shfaq krejt mesazhet nga ky përdorues</string>
     <string name="room_participants_invite_search_another_user">ID Përdoruesi, Emër ose email-i</string>
     <string name="room_participants_action_mention">Përmendje</string>
-    <string name="room_participants_action_devices_list">Shfaq Listë Pajisjesh</string>
+    <string name="room_participants_action_devices_list">Shfaq Listë Sesionesh</string>
     <plurals name="room_participants_kick_prompt_msg">
         <item quantity="one">Jeni i sigurt se doni të përzihet ky përdorues nga kjo fjalosje?</item>
         <item quantity="other">Jeni i sigurt se doni të përzihen këta përdorues nga kjo fjalosje?</item>
@@ -394,7 +394,7 @@
 
     <string name="settings_notification_ringtone">Tingull njoftimesh</string>
     <string name="settings_enable_all_notif">Aktivizo njoftime për këtë llogari</string>
-    <string name="settings_enable_this_device">Aktivizo njoftime për këtë pajisje</string>
+    <string name="settings_enable_this_device">Aktivizo njoftime për këtë sesion</string>
     <string name="settings_turn_screen_on">Ndize ekranin për 3 sekonda</string>
 
     <string name="settings_containing_my_display_name">Mesazhe që përmbajnë emrin tim të ekranit</string>
@@ -432,13 +432,13 @@
     <string name="settings_contacts_app_permission">Leje kontaktesh</string>
     <string name="settings_contacts_phonebook_country">Vend libri telefonash</string>
     <string name="settings_pin_unread_messages">Fikso dhomat me mesazhe të palexuar</string>
-    <string name="settings_devices_list">Pajisje</string>
+    <string name="settings_devices_list">Sesione</string>
     <string name="settings_inline_url_preview">Paraparje URL-je Brendazi</string>
     <string name="settings_send_typing_notifs">Dërgo njoftime shtypjesh</string>
     <string name="settings_send_markdown">Formatim Markdown</string>
     <string name="settings_always_show_timestamps">Shfaq vula kohore për krejt mesazhet</string>
     <string name="settings_12_24_timestamps">Vulat kohore shfaqi në formatin 12-orësh</string>
-    <string name="settings_show_read_receipts">Shfaq dëftesash leximi</string>
+    <string name="settings_show_read_receipts">Shfaq dëftesa leximi</string>
     <string name="settings_show_read_receipts_summary">Për një listë të hollësishme, klikoni mbi dëftesa leximi.</string>
     <string name="settings_show_join_leave_messages">Shfaq akte hyrjesh dhe daljesh</string>
     <string name="settings_show_avatar_display_name_changes_messages">Shfaq akte llogarie</string>
@@ -459,7 +459,7 @@
 
     <string name="settings_data_save_mode">Mënyrë ruajtjeje të dhënash</string>
 
-    <string name="devices_details_dialog_title">Të dhëna pajisjeje</string>
+    <string name="devices_details_dialog_title">Të dhëna Sesioni</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Emër Publik</string>
     <string name="devices_details_device_name">Përditësoni Emër Publik</string>
@@ -539,7 +539,7 @@
     <string name="room_settings_addresses_pref_title">Adresa</string>
     <string name="room_settings_labs_end_to_end">Fshehtëzim Skaj-Më-Skaj</string>
     <string name="room_settings_labs_end_to_end_is_active">Fshehtëzimi Skaj-më-Skaj është aktiv</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">Fshehtëzoje vetëm për pajisje të verifikuara</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Fshehtëzoje vetëm për sesione të verifikuar</string>
     <string name="room_settings_addresses_no_local_addresses">Kjo dhomë s’ka adresa vendore</string>
     <string name="room_settings_addresses_add_new_address">Adresë e re (p.sh., #foo:matrix.org)</string>
 
@@ -571,11 +571,11 @@
     <string name="encryption_information_session_id">ID sesioni</string>
     <string name="encryption_information_decryption_error">Gabim shfshehtëzimi</string>
 
-    <string name="encryption_information_sender_device_information">Të dhëna pajisjeje dërguesi</string>
+    <string name="encryption_information_sender_device_information">Të dhëna sesioni dërguesi</string>
     <string name="encryption_information_device_name">Emër publik</string>
     <string name="encryption_information_name">Emër publik</string>
     <string name="encryption_information_device_id">ID</string>
-    <string name="encryption_information_device_key">Kyç pajisjeje</string>
+    <string name="encryption_information_device_key">Kyç sesioni</string>
     <string name="encryption_information_verification">Verifikim</string>
     <string name="encryption_information_ed25519_fingerprint">Shenja gishtash Ed25519</string>
 
@@ -596,15 +596,15 @@
     <string name="encryption_information_verified">I verifikuar</string>
     <string name="encryption_information_blocked">Në Listë të Zezë</string>
 
-    <string name="encryption_information_unknown_device">pajisje e panjohur</string>
+    <string name="encryption_information_unknown_device">sesion i panjohur</string>
     <string name="encryption_information_none">asnjë</string>
 
     <string name="encryption_information_verify">Verifikoje</string>
     <string name="encryption_information_block">Listë e zezë</string>
-    <string name="encryption_information_verify_device">Verifiko pajisjen</string>
+    <string name="encryption_information_verify_device">Verifiko sesion</string>
     <string name="encryption_information_verify_key_match">Verifikoj se kyçet përputhen</string>
 
-    <string name="unknown_devices_alert_title">Dhoma përmban pajisje të panjohura</string>
+    <string name="unknown_devices_alert_title">Dhoma përmban sesione të panjohur</string>
     <string name="select_room_directory">Përzgjidhni një drejtori dhomash</string>
     <string name="directory_server_fail_to_retrieve_server">Shërbyesi mund të jetë i pakapshëm ose i mbingarkuar</string>
     <string name="directory_server_all_rooms_on_server">Krejt dhomat te shërbyesi %s</string>
@@ -748,11 +748,11 @@
 \n
 \nEmail-in tuaj mund ta shtoni te profili juaj, te rregullimet.</string>
     <string name="auth_reset_password_error_unauthorized">Verifikimi i adresës email dështoi: sigurohuni se keni klikuar lidhjen te email-i</string>
-    <string name="auth_reset_password_success_message">Fjalëkalimi juaj u ri caktua.
+    <string name="auth_reset_password_success_message">Fjalëkalimi juaj u ricaktua.
 \n
-\nËshtë bërë dalja juaj nga llogaria në krejt pajisjet dhe s’do të merrni më njoftime push. Për riaktivizim të njoftimeve, ribëni hyrjen në çdo pajisje.</string>
+\nËshtë bërë dalja juaj nga llogaria në krejt sesionet dhe s’do të merrni më njoftime push. Për riaktivizim të njoftimeve, ribëni hyrjen në çdo pajisje.</string>
 
-    <string name="e2e_re_request_encryption_key_dialog_content">Ju lutemi, niseni Riot-in në një tjetër pajisje që mundet të shfshehtëzojë mesazhin, që kështu të mund të dërgojë kyçet te kjo pajisje.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Ju lutemi, niseni Riot-in në një tjetër pajisje që mund të shfshehtëzojë mesazhin, që kështu të mund të dërgojë kyçet te ky sesion.</string>
 
     <string name="call_error_ice_failed">Lidhja e Medias Dështoi</string>
     <string name="media_picker_cannot_record_video">S’regjistrohet dot video</string>
@@ -784,11 +784,11 @@
 \n
 \nMund ta bëni tani ose më vonë, që prej rregullimeve të aplikacionit.</string>
 
-    <string name="unknown_devices_alert_message">Kjo dhomë përmban pajisje të panjohura që s’janë verifikuar.
-\nKjo do të thotë se nuk ka garanci se pajisjet u përkasin përdoruesve që pretendojnë se u përkasin.
-\nPërpara se të vazhdoni, këshillojmë që të kaloni në proces verifikimi çdo pajisje, por mund të ridërgoni mesazhin pa verifikuar gjë, nëse parapëlqeni kështu.
+    <string name="unknown_devices_alert_message">Kjo dhomë përmban sesione të panjohur që s’janë verifikuar.
+\nKjo do të thotë se nuk ka garanci se sesionet u përkasin përdoruesve që pretendojnë se u përkasin.
+\nPërpara se të vazhdoni, këshillojmë që të kaloni në proces verifikimi çdo sesion, por mund të ridërgoni mesazhin pa verifikuar gjë, nëse parapëlqeni kështu.
 \n
-\nPajisje të panjohura:</string>
+\nSesione të panjohur:</string>
 
     <string name="directory_server_type_homeserver">Shtypni një shërbyes home që të paraqiten dhoma publike prej tij</string>
     <string name="widget_no_power_to_manage">Ju duhen leje për të administruar widget-e në këtë dhomë</string>
@@ -831,7 +831,7 @@
     <string name="login_error_limit_exceeded">Janë dërguar shumë kërkesa</string>
     <string name="login_error_login_email_not_yet">Lidhja email që s’është klikuar ende</string>
 
-    <string name="e2e_re_request_encryption_key"><u>Rikërkoni kyçe fshehtëzimi</u> prej pajisjesh tuaja të tjera.</string>
+    <string name="e2e_re_request_encryption_key"><u>Rikërkoni kyçe fshehtëzimi</u> prej sesionesh tuaj të tjerë.</string>
 
     <plurals name="membership_changes">
         <item quantity="one">1 ndryshim anëtarësie</item>
@@ -902,7 +902,7 @@
     <string name="account_email_validation_error">S’arrihet të verifikohet adresë email. Ju lutemi, kontrolloni email-in tuaj dhe klikoni mbi lidhjen që përmban. Pasi të jetë bërë kjo, klikoni që të vazhdohet.</string>
     <string name="room_settings_labs_warning_message">Këto janë veçori eksperimentale që mund të ngecin në rrugë të papritura. Përdorini me kujdes.</string>
     <string name="room_settings_labs_end_to_end_warnings">Lypset të dilni nga llogaria, që të jeni në gjendje të aktivizoni fshehtëzimin.</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">Mos dërgo kurrë mesazhe të fshehtëzuar, nga kjo pajisje te pajisje të paverifikuara në këtë dhomë.</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Mos dërgo kurrë prej këtij sesioni mesazhe të fshehtëzuar te sesione të paverifikuar në këtë dhomë</string>
 
     <string name="failed_to_load_timeline_position">%s u rrek të ngarkonte një pikë të dhënë prej rrjedhës kohore në këtë dhomë, por s’qe në gjendje ta gjente.</string>
 
@@ -945,8 +945,8 @@
     <string name="resource_limit_soft_default">Ky shërbyes home ka tejkaluar një nga kufijtë mbi burimet, ndaj <b>disa përdorues s’do të jenë në gjendje të bëjnë hyrjen</b>.</string>
     <string name="resource_limit_soft_mau"> Ky shërbyes home ka tejkaluar kufirin Përdorues Aktivë Mujorë, ndaj <b>disa përdorues s’do të jenë në gjendje të bëjnë hyrjen</b>.</string>
     <string name="send_bug_report_logs_description">Që të mund të diagnostikohen probleme, regjistra prej këtij klienti do të dërgohen tok me këtë njoftim të metash. Ky njoftim të metash, përfshi regjistrat dhe foton e ekranit, nuk do të jenë të dukshëm publikisht. Nëse do të parapëlqenit të dërgohej vetëm teksti më sipër, ju lutemi, hiqjani shenjën kutizës:</string>
-    <string name="e2e_need_log_in_again">Që të prodhohen kyçe fshehtëzimi skaj-më-skaj për këtë pajisje, lypset të ribëni hyrjen dhe të parashtroni kyçin publik te shërbyesi juaj Home.
-\njo duhet vetëm një herë.
+    <string name="e2e_need_log_in_again">Që të prodhohen kyçe fshehtëzimi skaj-më-skaj për këtë sesion, lypset të ribëni hyrjen dhe të parashtroni kyçin publik te shërbyesi juaj Home.
+\nKjo duhet vetëm një herë.
 \nNa ndjeni për belanë.</string>
 
     <string name="ssl_cert_not_trust">Kjo mund të ishte shenjë se dikush po përgjon me dashakeqësi trafikun tuaj, ose se telefoni juaj nuk i beson dëshmisë së furnizuar nga shërbyesi i largët.</string>
@@ -1034,9 +1034,9 @@
 \nJu lutemi, kontrolloni rregullime llogarie.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Aktivizoje</string>
 
-    <string name="settings_troubleshoot_test_device_settings_title">Rregullime Pajisjeje.</string>
-    <string name="settings_troubleshoot_test_device_settings_success">Njoftimet janë të aktivizuara për këtë pajisje.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Nuk lejohen njoftime për këtë pajisje.
+    <string name="settings_troubleshoot_test_device_settings_title">Rregullime Sesioni.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Njoftimet janë të aktivizuara për këtë sesion.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Nuk janë aktivizuar njoftimet për këtë sesion. 
 \nJu lutemi, kontrolloni rregullimet e Riot-it.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Aktivizoje</string>
 
@@ -1243,7 +1243,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="sign_out_bottom_sheet_warning_no_backup">Nëse dilni tani nga llogaria, do të humbni mesazhet tuaj të fshehtëzuar</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Kopjeruajtja e kyçeve po kryhet. Nëse dilni tani nga llogaria, do të humbni hyrjen te mesazhet tuaj të fshehtëzuar.</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">Për të shmangur humbje të hyrjes në mesazhet tuaj të fshehtëzuar, Kopjeruajtja e Sigurt e Kyçeve duhet të jetë aktive në krejt pajisjet tuaja.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Për të shmangur humbje të hyrjes në mesazhet tuaj të fshehtëzuar, Kopjeruajtja e Sigurt e Kyçeve duhet të jetë aktive në krejt sesionet tuaj.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Nuk i dua mesazhet e mia të fshehtëzuar</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Po kopjeruhen kyçet…</string>
     <string name="keys_backup_activate">Përdor Kopjeruajtje Kyçesh</string>
@@ -1353,7 +1353,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="error_jitsi_not_supported_on_old_device">Na ndjeni, thirrjet konferencë me Jitsi-n nuk mbulohen në pajisje të vjetra (pajisje me Android OS nën 5.0)</string>
 
-    <string name="title_activity_verify_device">Verifikoni pajisje</string>
+    <string name="title_activity_verify_device">Verifiko sesion</string>
 
     <string name="encryption_information_unknown_ip">ip e panjohur</string>
     <string name="you_added_a_new_device_with_info">Një pajisje e re po kërkon kyçe fshehtëzimi.
@@ -1374,18 +1374,18 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="sas_security_advise">Për siguri maksimale, këshillojmë ta bëni këtë në prani të vetë personit, ose të përdorni një tjetër kanal të besuar komunikimesh.</string>
     <string name="sas_verify_start_button_title">Po Verifikohet</string>
     <string name="sas_incoming_request_title">Kërkesë Verifikimi e Ardhur</string>
-    <string name="sas_incoming_request_description">Që t’i vihet shenjë si e besuar, verifikojeni këtë pajisje. Besimi i pajisjeve të partnerëve ju jep ca qetësi më tepër kur përdoren mesazhe të fshehtëzuar skaj-më-skaj.</string>
-    <string name="sas_incoming_request_description_2">Verifikimi i kësaj pajisje do ta shënojë atë të besuar, dhe tuajën si të besuar te partneri.</string>
+    <string name="sas_incoming_request_description">Që t’i vihet shenjë si i besuar, verifikojeni këtë sesion. Besimi i sesioneve të partnerëve ju jep ca qetësi më tepër, kur përdoren mesazhe të fshehtëzuar skaj-më-skaj.</string>
+    <string name="sas_incoming_request_description_2">Verifikimi i këtij sesioni do t’i vërë shenjë atij si të besuar dhe sesionit tuaj si të besuar për partnerin.</string>
 
-    <string name="sas_emoji_description">Verifikojeni këtë pajisje duke ripohuar shfaqjen e emoji-t vijues në skenën e partnerit</string>
-    <string name="sas_decimal_description">Verifikojeni këtë pajisje duke ripohuar se numri vijues shfaqet në ekranin e partnerit</string>
+    <string name="sas_emoji_description">Verifikojeni këtë sesion duke ripohuar shfaqjen e emoji-t vijues në skenën e partnerit</string>
+    <string name="sas_decimal_description">Verifikojeni këtë sesion duke ripohuar se numrat vijues shfaqen në ekranin e partnerit</string>
 
     <string name="sas_incoming_verification_request_dialog">Morët një kërkesë verifikimi të ardhur.</string>
     <string name="sas_view_request_action">Shihni kërkesën</string>
     <string name="sas_waiting_for_partner">Po pritet ripohimi nga partneri…</string>
 
     <string name="sas_verified">U verifikua!</string>
-    <string name="sas_verified_successful">E verifikuat me sukses këtë pajisje.</string>
+    <string name="sas_verified_successful">E verifikuat me sukses këtë sesion.</string>
     <string name="sas_verified_successful_description">Mesazhet e sigurt me këtë përdorues fshehtëzohen skaj-më-skaj dhe janë të palexueshëm nga palë të treta.</string>
     <string name="sas_got_it">E mora vesh</string>
 
@@ -1399,16 +1399,16 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="sas_cancelled_by_me">Verifikimi u anulua.
 \nArsye: %s</string>
 
-    <string name="sas_verification_request_notification_channel">Verifikim Ndërveprues Pajisjesh</string>
+    <string name="sas_verification_request_notification_channel">Verifikim Ndërveprues Sesionesh</string>
     <string name="sas_incoming_request_notif_title">Kërkesë Verifikimi</string>
-    <string name="sas_incoming_request_notif_content">%s dëshiron të verifikojë pajisjen tuaj</string>
+    <string name="sas_incoming_request_notif_content">%s dëshiron të verifikojë sesionin tuaj</string>
 
     <string name="sas_error_m_user">Përdoruesi e anuloi verifikimin</string>
     <string name="sas_error_m_timeout">Procesit të verifikimit i mbaroi koha</string>
-    <string name="sas_error_m_unknown_transaction">Pajisja s’di gjë rreth këtij transaksioni</string>
-    <string name="sas_error_m_unknown_method">Pajisja s’bie dot dakord për metodë marrëveshjeje kyçesh, hash, MAC, ose SAS</string>
+    <string name="sas_error_m_unknown_transaction">Sesioni s’di gjë rreth atij transaksioni</string>
+    <string name="sas_error_m_unknown_method">Sesioni s’bie dot dakord për metodë marrëveshjeje kyçesh, hash, MAC, ose SAS</string>
     <string name="sas_error_m_mismatched_sas">SAS s’u përputhën</string>
-    <string name="sas_error_m_unexpected_message">Pajisja mori përgjigje të papritur</string>
+    <string name="sas_error_m_unexpected_message">Sesioni mori një mesazh të papritur</string>
     <string name="sas_error_m_invalid_message">U mor një mesazh i pavlefshëm</string>
     <string name="sas_error_m_key_mismatch">Mospërputhje kyçesh</string>
     <string name="sas_error_m_user_error">Mospërputhje përdoruesish</string>
@@ -1529,7 +1529,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="push_gateway_item_app_id">app_id:</string>
     <string name="push_gateway_item_push_key">push_key:</string>
     <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_device_name">device_name:</string>
+    <string name="push_gateway_item_device_name">emër_sesioni:</string>
     <string name="bottom_action_people_x">Mesazhe të Drejtpërdrejtë</string>
 
     <string name="send_file_step_idle">Po pritet…</string>
@@ -1623,7 +1623,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 \nNjëkohësimi mund të shtyhet për më vonë, në varësi të burimeve (baterisë) ose gjendjes së pajisjes (dremitje).</string>
     <string name="settings_discovery_manage">Administroni rregullimet tuaja për zbulime.</string>
     <string name="encryption_information_device_name_with_warning">Emër publik (i dukshëm për persona me të cilët komunikoni)</string>
-    <string name="device_name_warning">Emri publik i një pajisjeje është i dukshëm për persona me të cilët komunikoni</string>
+    <string name="device_name_warning">Emri publik i një sesioni është i dukshëm për persona me të cilët komunikoni</string>
     <string name="identity_server_not_defined">S’po përdorni ndonjë Shërbyes Identitetesh</string>
     <string name="identity_server_not_defined_for_password_reset">S’ka shërbyes identitetesh të formësuar, kjo është e domosdoshme për ricaktimin e fjalëkalimit tuaj.</string>
 
@@ -1901,12 +1901,12 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="seen_by">Parë nga</string>
 
     <string name="signed_out_title">Keni bërë dalje</string>
-    <string name="signed_out_notice">Mund të vijë për arsye të ndryshme:
-\n
-\n• Keni ndryshuar fjalëkalimin tuaj në një pajisje tjetër.
-\n
-\n• E keni fshirë këtë pajisje prej një pajisjeje tjetër.
-\n
+    <string name="signed_out_notice">Mund të vijë për arsye të ndryshme: 
+\n 
+\n• Keni ndryshuar fjalëkalimin tuaj në sesion tjetër. 
+\n 
+\n• E keni fshirë këtë sesion prej një sesioni tjetër. 
+\n 
 \n• Përgjegjësi i shërbyesit tuaj e ka bërë të pamundur hyrjen tuaj për arsye sigurie.</string>
     <string name="signed_out_submit">Ribëni hyrjen</string>
 
@@ -1939,7 +1939,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="command_description_spoiler">E dërgon mesazhin e dhënë si <em>spoiler</em></string>
     <string name="notification_initial_sync">Njëkohësimi Fillestar…</string>
 
-    <string name="settings_show_devices_list">Shih krejt pajisjet e mia</string>
+    <string name="settings_show_devices_list">Shihi krejt sesionet e mi</string>
     <string name="settings_advanced_settings">Rregullime të mëtejshme</string>
     <string name="settings_developer_mode">Mënyra zhvillues</string>
     <string name="settings_developer_mode_summary">Mënyra zhvillim aktivizon veçori të fshehura dhe mundet gjithashtu ta bëjë aplikacionin më pak të qëndrueshëm. Vetëm për zhvilluesit!</string>
@@ -1947,10 +1947,137 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="settings_rageshake_detection_threshold_summary">Tundeni telefonin tuaj që të testoni prag pikasjeje</string>
     <string name="rageshake_detected">U zbulua tundje!</string>
     <string name="settings">Rregullime</string>
-    <string name="devices_current_device">Pajisja e tanishme</string>
-    <string name="devices_other_devices">Pajisje të tjera</string>
+    <string name="devices_current_device">Sesioni i tanishëm</string>
+    <string name="devices_other_devices">Shfaq sesione të tjera</string>
 
     <string name="autocomplete_limited_results">Po shfaqen vetëm përfundimet e para, shtypni më shumë shkronja…</string>
 
     <string name="settings_developer_mode_fail_fast_summary">RiotX mund të vithiset më shpesh, kur ndodh një gabim i papritur</string>
+    <string name="settings_call_ringtone_use_default_stun">Lejoni shërbyes rrugëzgjidhje asistimi thirrjesh</string>
+    <string name="command_description_verify">Kërko të verifikohet userID-ja i dhënë</string>
+    <string name="command_description_shrug">Parashtoji ¯\\_(ツ)_/¯ një mesazhi tekst të thjeshtë</string>
+
+    <string name="create_room_encryption_title">Aktivizoni fshehtëzim</string>
+    <string name="create_room_encryption_description">Pasi të aktivizohet, fshehtëzimi s’mund të çaktivizohet më.</string>
+
+    <string name="verification_sas_match">Përputhen</string>
+    <string name="verification_sas_do_not_match">S’përputhen</string>
+    <string name="verification_conclusion_not_secure">Jo i sigurt</string>
+    <string name="sent_a_video">Video.</string>
+    <string name="sent_an_image">Figurë.</string>
+    <string name="sent_an_audio_file">Audio</string>
+    <string name="sent_a_file">Kartelë</string>
+
+    <string name="verification_request_waiting">Në pritje…</string>
+    <string name="verification_request_you_cancelled">Anuluat</string>
+    <string name="verification_request_you_accepted">Pranuat</string>
+    <string name="verification_sent">Verifikimi u Dërgua</string>
+    <string name="verification_request">Kërkesë Verifikimi</string>
+
+
+    <string name="verification_verify_device">Verifikoni këtë sesion</string>
+    <string name="verification_verify_device_manually">Verifikojeni dorazi</string>
+
+    <string name="you">Ju</string>
+
+    <string name="verification_scan_their_code">Skanoni kodin e tyre</string>
+    <string name="verification_scan_emoji_title">S’skanohet dot</string>
+    <string name="verification_no_scan_emoji_title">Verifikoje duke krahasuar emojis</string>
+
+    <string name="verify_by_emoji_title">Verifikoje përmes Emoji-t</string>
+    <string name="a13n_qr_code_description">Figurë kodi QR</string>
+
+    <string name="verification_verify_user">Verifikoni %s</string>
+    <string name="verification_request_waiting_for">Po pritet për %s…</string>
+    <string name="room_profile_not_encrypted_subtitle">Mesazhet në këtë dhomë s’fshehtëzohen skaj-më-skaj.</string>
+    <string name="room_profile_encrypted_subtitle">Mesazhet në këtë dhomë fshehtëzohen skaj-më-skaj.
+\n
+\nMesazhet tuaj sigurohen me kyçe dhe vetëm ju dhe marrësi kanë kyçet unikë për t’i shkyçur.</string>
+    <string name="room_profile_section_security">Siguri</string>
+    <string name="room_profile_section_security_learn_more">Mësoni më tepër</string>
+    <string name="room_profile_section_more">Më tepër</string>
+    <string name="room_profile_section_more_settings">Rregullime dhome</string>
+    <string name="room_profile_section_more_notifications">Njoftime</string>
+    <plurals name="room_profile_section_more_member_list">
+        <item quantity="one">Një person</item>
+        <item quantity="other">%1$d persona</item>
+    </plurals>
+    <string name="room_profile_section_more_uploads">Ngarkime</string>
+    <string name="room_profile_section_more_leave">Dilni Nga Dhoma</string>
+    <string name="room_profile_leaving_room">Po iket nga dhoma…</string>
+
+    <string name="room_member_power_level_admins">Administratorë</string>
+    <string name="room_member_power_level_moderators">Moderatorë</string>
+    <string name="room_member_power_level_custom">Vetjake</string>
+    <string name="room_member_power_level_invites">Ftesa</string>
+    <string name="room_member_power_level_users">Përdorues</string>
+
+    <string name="room_member_power_level_admin_in">Administrator te %1$s</string>
+    <string name="room_member_power_level_moderator_in">Moderator te %1$s</string>
+    <string name="room_member_power_level_custom_in">Vetjake (%1$d) te %2$s</string>
+
+    <string name="room_member_jump_to_read_receipt">Hidhuni te leximi i faturës</string>
+
+    <string name="unignore">Shpërfille</string>
+
+    <string name="room_list_sharing_header_recent_rooms">Dhoma së fundi</string>
+    <string name="room_list_sharing_header_other_rooms">Dhoma të tjera</string>
+
+    <string name="command_description_rainbow">E dërgon mesazhin e dhënë të ngjyrosur si ylber</string>
+    <string name="command_description_rainbow_emote">E dërgon emote-n e dhënë të ngjyrosur si ylber</string>
+
+    <string name="settings_category_timeline">Rrjedhë kohore</string>
+
+    <string name="settings_category_composer">Përpunues mesazhesh</string>
+
+    <string name="room_settings_enable_encryption">Aktivizoni fshehtëzim skaj-më-skaj</string>
+    <string name="room_settings_enable_encryption_warning">Pasi të aktivizohet, fshehtëzimi s’mund të çaktivizohet më.</string>
+
+    <string name="room_settings_enable_encryption_dialog_title">Të aktivizohet fshehtëzimi\?</string>
+    <string name="room_settings_enable_encryption_dialog_content">Pasi të aktivizohet, fshehtëzimi për një dhomë nuk mund të çaktivizohet. Mesazhet e dërguar në një dhomë të fshehtëzuar s’mund të shihen nga shërbyesi, vetëm nga pjesëmarrësit te dhoma. Aktivizimi i fshehtëzimit mund të pengojë funksionimin si duhet të mjaft robotëve dhe urave.</string>
+    <string name="room_settings_enable_encryption_dialog_submit">Aktivizoni fshehtëzim</string>
+
+    <string name="verification_conclusion_ok_notice">Mesazhet me këtë përdorues fshehtëzohen skaj-më-skaj dhe janë të palexueshëm nga palë të treta.</string>
+    <string name="verification_conclusion_ok_self_notice">Sesioni juaj i ri tani është i verifikuar. Ka hyrje te mesazhet tuaj të fshehtëzuar dhe përdoruesit e tjerë do ta shohin si të besuar.</string>
+
+
+    <string name="encryption_information_cross_signing_state"><em>Cross-signing</em></string>
+    <string name="encryption_information_dg_xsigning_complete"><em>Cross-signing</em> është i aktivizuar
+\nKyçe Privatë në pajisje.</string>
+    <string name="encryption_information_dg_xsigning_not_trusted"><em>Cross-signing</em> është i aktivizuar.
+\nKyçet s’janë besuar</string>
+    <string name="encryption_information_dg_xsigning_disabled"><em>Cross-signing</em> s’është i aktivizuar</string>
+
+
+    <string name="settings_active_sessions_list">Sesione aktive</string>
+    <string name="settings_active_sessions_show_all">Shfaq Krejt Sesionet</string>
+    <string name="settings_active_sessions_manage">Administroni Sesione</string>
+    <string name="settings_active_sessions_signout_device">Dilni nga ky sesion</string>
+
+    <string name="settings_failed_to_get_crypto_device_info">S’ka të dhëna kriptografike</string>
+
+    <string name="settings_active_sessions_verified_device_desc">Ky sesion është besuar për shkëmbim të sigurt mesazhesh, ngaqë e verifikuat:</string>
+    <plurals name="settings_active_sessions_count">
+        <item quantity="one">%d sesion aktiv</item>
+        <item quantity="other">%d sesione aktive</item>
+    </plurals>
+
+    <string name="crosssigning_verify_this_session">Verifikoni këtë sesion</string>
+    <string name="crosssigning_other_user_not_trust">Përdorues të tjerë mund të mos e besojnë</string>
+    <string name="complete_security">Siguri e Plotë</string>
+
+    <string name="verification_profile_verify">Verifikoje</string>
+    <string name="verification_profile_verified">I verifikuar</string>
+    <string name="verification_profile_warning">Kujdes</string>
+
+    <string name="room_member_profile_failed_to_get_devices">S’u arrit të merren sesione</string>
+    <string name="room_member_profile_sessions_section_title">Sesione</string>
+    <string name="trusted">I besuar</string>
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) bëri hyrjen duke përdorur një sesion të ri:</string>
+    <string name="verification_profile_device_untrust_info">Deri sa ky përdorues ta besojë këtë sesion, mesazhet te dhe prej tij etiketohen me sinjalizime. Ndryshe, mund ta verifikoni dorazi.</string>
+
+
+    <string name="a11y_qr_code_for_verification">Kod QR</string>
+
+    <string name="qr_code_scanned_by_other_yes">Po</string>
 </resources>
