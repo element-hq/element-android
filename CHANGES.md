@@ -1,8 +1,5 @@
-Changes in RiotX 0.15.0 (2020-XX-XX)
+Changes in RiotX 0.15.0 (2020-02-10)
 ===================================================
-
-Features ✨:
- -
 
 Improvements 🙌:
  - Improve navigation to the timeline (#789, #862)
@@ -14,12 +11,6 @@ Other changes:
 Bugfix 🐛:
  - Ask for permission before opening the camera (#934)
  - Encrypt for invited users by default, if the room state allows it (#803)
-
-Translations 🗣:
- -
-
-Build 🧱:
- -
 
 Changes in RiotX 0.14.3 (2020-02-03)
 ===================================================
