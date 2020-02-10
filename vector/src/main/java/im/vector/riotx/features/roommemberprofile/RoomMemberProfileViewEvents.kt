@@ -26,4 +26,9 @@ sealed class RoomMemberProfileViewEvents : VectorViewEvents {
     data class Failure(val throwable: Throwable) : RoomMemberProfileViewEvents()
 
     object OnIgnoreActionSuccess : RoomMemberProfileViewEvents()
+
+    data class StartVerification(
+            val userId: String,
+            val canCrossSign: Boolean
+    ) : RoomMemberProfileViewEvents()
 }

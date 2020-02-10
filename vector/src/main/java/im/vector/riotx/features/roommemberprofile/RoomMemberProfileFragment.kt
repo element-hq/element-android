@@ -35,7 +35,6 @@ import im.vector.riotx.core.animations.MatrixItemAppBarStateChangeListener
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
-import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -94,33 +93,27 @@ class RoomMemberProfileFragment @Inject constructor(
                 is RoomMemberProfileViewEvents.Loading               -> showLoading(it.message)
                 is RoomMemberProfileViewEvents.Failure               -> showFailure(it.throwable)
                 is RoomMemberProfileViewEvents.OnIgnoreActionSuccess -> Unit
+                is RoomMemberProfileViewEvents.StartVerification     -> handleStartVerification(it)
             }.exhaustive
         }
-        viewModel.actionResultLiveData.observeEvent(this) { async ->
-            when (async) {
-                is Success -> {
-                    when (val action = async.invoke()) {
-                        is RoomMemberProfileAction.VerifyUser -> {
-                            if (action.canCrossSign == true) {
-                                VerificationBottomSheet
-                                        .withArgs(roomId = null, otherUserId = action.userId!!)
-                                        .show(parentFragmentManager, "VERIF")
-                            } else {
-                                AlertDialog.Builder(requireContext())
-                                        .setTitle(R.string.dialog_title_warning)
-                                        .setMessage(R.string.verify_cannot_cross_sign)
-                                        .setPositiveButton(R.string.verification_profile_verify) { _, _ ->
-                                            VerificationBottomSheet
-                                                    .withArgs(roomId = null, otherUserId = action.userId!!)
-                                                    .show(parentFragmentManager, "VERIF")
-                                        }
-                                        .setNegativeButton(R.string.cancel, null)
-                                        .show()
-                            }
-                        }
+    }
+
+    private fun handleStartVerification(startVerification: RoomMemberProfileViewEvents.StartVerification) {
+        if (startVerification.canCrossSign) {
+            VerificationBottomSheet
+                    .withArgs(roomId = null, otherUserId = startVerification.userId)
+                    .show(parentFragmentManager, "VERIF")
+        } else {
+            AlertDialog.Builder(requireContext())
+                    .setTitle(R.string.dialog_title_warning)
+                    .setMessage(R.string.verify_cannot_cross_sign)
+                    .setPositiveButton(R.string.verification_profile_verify) { _, _ ->
+                        VerificationBottomSheet
+                                .withArgs(roomId = null, otherUserId = startVerification.userId)
+                                .show(parentFragmentManager, "VERIF")
                     }
-                }
-            }
+                    .setNegativeButton(R.string.cancel, null)
+                    .show()
         }
     }
 
@@ -197,7 +190,7 @@ class RoomMemberProfileFragment @Inject constructor(
     }
 
     override fun onTapVerify() {
-        viewModel.handle(RoomMemberProfileAction.VerifyUser())
+        viewModel.handle(RoomMemberProfileAction.VerifyUser)
     }
 
     override fun onShowDeviceList() = withState(viewModel) {

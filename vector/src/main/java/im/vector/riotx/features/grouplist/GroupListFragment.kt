@@ -26,7 +26,7 @@ import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
-import im.vector.riotx.core.extensions.observeEvent
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.home.HomeActivitySharedAction
@@ -51,8 +51,10 @@ class GroupListFragment @Inject constructor(
         stateView.contentView = groupListView
         groupListView.configureWith(groupController)
         viewModel.subscribe { renderState(it) }
-        viewModel.openGroupLiveData.observeEvent(this) {
-            sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup)
+        viewModel.observeViewEvents {
+            when (it) {
+                is GroupListViewEvents.OpenGroupSummary -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup)
+            }.exhaustive
         }
     }
 

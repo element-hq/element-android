@@ -17,8 +17,6 @@
 
 package im.vector.riotx.features.grouplist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import arrow.core.Option
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
@@ -32,11 +30,8 @@ import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.rx.rx
 import im.vector.riotx.R
-import im.vector.riotx.core.extensions.postLiveEvent
-import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.core.utils.LiveEvent
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 
@@ -46,7 +41,7 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
                                                      private val selectedGroupStore: SelectedGroupDataSource,
                                                      private val session: Session,
                                                      private val stringProvider: StringProvider
-) : VectorViewModel<GroupListViewState, GroupListAction, EmptyViewEvents>(initialState) {
+) : VectorViewModel<GroupListViewState, GroupListAction, GroupListViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -62,9 +57,7 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
         }
     }
 
-    private val _openGroupLiveData = MutableLiveData<LiveEvent<GroupSummary>>()
-    val openGroupLiveData: LiveData<LiveEvent<GroupSummary>>
-        get() = _openGroupLiveData
+    private var currentGroupId = ""
 
     init {
         observeGroupSummaries()
@@ -74,10 +67,10 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
     private fun observeSelectionState() {
         selectSubscribe(GroupListViewState::selectedGroup) { groupSummary ->
             if (groupSummary != null) {
-                val selectedGroup = _openGroupLiveData.value?.peekContent()
                 // We only want to open group if the updated selectedGroup is a different one.
-                if (selectedGroup?.groupId != groupSummary.groupId) {
-                    _openGroupLiveData.postLiveEvent(groupSummary)
+                if (currentGroupId != groupSummary.groupId) {
+                    currentGroupId = groupSummary.groupId
+                    _viewEvents.post(GroupListViewEvents.OpenGroupSummary)
                 }
                 val optionGroup = Option.just(groupSummary)
                 selectedGroupStore.post(optionGroup)

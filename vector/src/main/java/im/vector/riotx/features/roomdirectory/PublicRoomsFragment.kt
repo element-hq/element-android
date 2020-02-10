@@ -28,7 +28,7 @@ import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
-import im.vector.riotx.core.extensions.observeEvent
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseFragment
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_public_rooms.*
@@ -75,11 +75,18 @@ class PublicRoomsFragment @Inject constructor(
             sharedActionViewModel.post(RoomDirectorySharedAction.CreateRoom)
         }
 
-        // TODO remove this, replace by ViewEvents
-        viewModel.joinRoomErrorLiveData.observeEvent(this) { throwable ->
-            Snackbar.make(publicRoomsCoordinator, errorFormatter.toHumanReadable(throwable), Snackbar.LENGTH_SHORT)
-                    .show()
+        viewModel.observeViewEvents {
+            handleViewEvents(it)
         }
+    }
+
+    private fun handleViewEvents(viewEvents: RoomDirectoryViewEvents) {
+        when (viewEvents) {
+            is RoomDirectoryViewEvents.Failure -> {
+                Snackbar.make(publicRoomsCoordinator, errorFormatter.toHumanReadable(viewEvents.throwable), Snackbar.LENGTH_SHORT)
+                        .show()
+            }
+        }.exhaustive
     }
 
     override fun onDestroyView() {

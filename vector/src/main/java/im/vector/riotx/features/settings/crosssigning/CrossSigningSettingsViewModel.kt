@@ -15,14 +15,9 @@
  */
 package im.vector.riotx.features.settings.crosssigning
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -36,11 +31,9 @@ import im.vector.matrix.android.internal.crypto.crosssigning.isVerified
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.rx.rx
-import im.vector.riotx.core.platform.EmptyViewEvents
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.platform.VectorViewModelAction
-import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.core.utils.LiveEvent
 
 data class CrossSigningSettingsViewState(
         val crossSigningInfo: MXCrossSigningInfo? = null,
@@ -51,19 +44,13 @@ data class CrossSigningSettingsViewState(
 ) : MvRxState
 
 sealed class CrossSigningAction : VectorViewModelAction {
-    data class InitializeCrossSigning(val auth: UserPasswordAuth? = null) : CrossSigningAction()
-    data class RequestPasswordAuth(val sessionId: String) : CrossSigningAction()
+    object InitializeCrossSigning : CrossSigningAction()
+    data class PasswordEntered(val password: String) : CrossSigningAction()
 }
 
 class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted private val initialState: CrossSigningSettingsViewState,
-                                                                private val stringProvider: StringProvider,
                                                                 private val session: Session)
-    : VectorViewModel<CrossSigningSettingsViewState, CrossSigningAction, EmptyViewEvents>(initialState) {
-
-    // Can be used for several actions, for a one shot result
-    private val _requestLiveData = MutableLiveData<LiveEvent<Async<CrossSigningAction>>>()
-    val requestLiveData: LiveData<LiveEvent<Async<CrossSigningAction>>>
-        get() = _requestLiveData
+    : VectorViewModel<CrossSigningSettingsViewState, CrossSigningAction, CrossSigningSettingsViewEvents>(initialState) {
 
     init {
         session.rx().liveCrossSigningInfo(session.myUserId)
@@ -81,6 +68,9 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted privat
                 }
     }
 
+    // Storage when password is required
+    private var _pendingSession: String? = null
+
     @AssistedInject.Factory
     interface Factory {
         fun create(initialState: CrossSigningSettingsViewState): CrossSigningSettingsViewModel
@@ -89,26 +79,37 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted privat
     override fun handle(action: CrossSigningAction) {
         when (action) {
             is CrossSigningAction.InitializeCrossSigning -> {
-                initializeCrossSigning(action.auth?.copy(user = session.myUserId))
+                initializeCrossSigning(null)
             }
-        }
+            is CrossSigningAction.PasswordEntered        -> {
+                initializeCrossSigning(UserPasswordAuth(
+                        session = _pendingSession,
+                        user = session.myUserId,
+                        password = action.password
+                ))
+            }
+        }.exhaustive
     }
 
     private fun initializeCrossSigning(auth: UserPasswordAuth?) {
+        _pendingSession = null
+
         setState {
             copy(isUploadingKeys = true)
         }
         session.getCrossSigningService().initializeCrossSigning(auth, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
+                _pendingSession = null
+
                 setState {
                     copy(isUploadingKeys = false)
                 }
             }
 
             override fun onFailure(failure: Throwable) {
-                if (failure is Failure.OtherServerError
-                        && failure.httpCode == 401
-                ) {
+                _pendingSession = null
+
+                if (failure is Failure.OtherServerError && failure.httpCode == 401) {
                     try {
                         MoshiProvider.providesMoshi()
                                 .adapter(RegistrationFlowResponse::class.java)
@@ -118,23 +119,23 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted privat
                     }?.let { flowResponse ->
                         // Retry with authentication
                         if (flowResponse.flows?.any { it.stages?.contains(LoginFlowTypes.PASSWORD) == true } == true) {
-                            _requestLiveData.postValue(LiveEvent(Success(CrossSigningAction.RequestPasswordAuth(flowResponse.session ?: ""))))
+                            _pendingSession = flowResponse.session ?: ""
+                            _viewEvents.post(CrossSigningSettingsViewEvents.RequestPassword)
                             return
                         } else {
-                            _requestLiveData.postValue(LiveEvent(Fail(Throwable("You cannot do that from mobile"))))
                             // can't do this from here
+                            _viewEvents.post(CrossSigningSettingsViewEvents.Failure(Throwable("You cannot do that from mobile")))
+
+                            setState {
+                                copy(isUploadingKeys = false)
+                            }
                             return
                         }
                     }
                 }
-                when (failure) {
-                    is Failure.ServerError -> {
-                        _requestLiveData.postValue(LiveEvent(Fail(Throwable(failure.error.message))))
-                    }
-                    else                   -> {
-                        _requestLiveData.postValue(LiveEvent(Fail(failure)))
-                    }
-                }
+
+                _viewEvents.post(CrossSigningSettingsViewEvents.Failure(failure))
+
                 setState {
                     copy(isUploadingKeys = false)
                 }
