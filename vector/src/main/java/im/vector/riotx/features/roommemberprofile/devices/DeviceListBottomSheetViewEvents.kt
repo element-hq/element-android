@@ -22,8 +22,5 @@ import im.vector.riotx.core.platform.VectorViewEvents
  * Transient events for device list screen
  */
 sealed class DeviceListBottomSheetViewEvents : VectorViewEvents {
-    // data class Loading(val message: CharSequence? = null) : RoomDirectoryViewEvents()
-    // data class Failure(val throwable: Throwable) : DeviceListBottomSheetViewEvents()
-
     data class Verify(val userId: String, val txID: String) : DeviceListBottomSheetViewEvents()
 }

@@ -22,8 +22,5 @@ import im.vector.riotx.core.platform.VectorViewEvents
  * Transient events for the verification bottom sheet
  */
 sealed class VerificationBottomSheetViewEvents : VectorViewEvents {
-    // data class Loading(val message: CharSequence? = null) : RoomDirectoryViewEvents()
-    // data class Failure(val throwable: Throwable) : CreateDirectViewEvents()
-
     object Dismiss : VerificationBottomSheetViewEvents()
 }

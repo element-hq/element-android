@@ -69,14 +69,12 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
 
     override fun handle(action: DeviceListAction) {
         when (action) {
-            is DeviceListAction.Refresh        -> refreshSelectedId()
             is DeviceListAction.SelectDevice   -> selectDevice(action)
             is DeviceListAction.DeselectDevice -> deselectDevice()
             is DeviceListAction.ManuallyVerify -> manuallyVerify(action)
         }.exhaustive
     }
 
-    // TODO Valere: not used?
     private fun refreshSelectedId() = withState { state ->
         if (state.selectedDevice != null) {
             state.cryptoDevices.invoke()?.firstOrNull { state.selectedDevice.deviceId == it.deviceId }?.let {

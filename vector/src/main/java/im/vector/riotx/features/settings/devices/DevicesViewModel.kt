@@ -176,7 +176,6 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
         val txID = session.getVerificationService().requestKeyVerification(supportedVerificationMethods, session.myUserId, listOf(action.deviceId))
         _viewEvents.post(DevicesViewEvents.ShowVerifyDevice(
                 session.myUserId,
-                action.deviceId,
                 txID.transactionId
         ))
     }

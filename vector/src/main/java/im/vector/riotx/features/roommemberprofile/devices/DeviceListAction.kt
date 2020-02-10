@@ -20,9 +20,6 @@ import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.riotx.core.platform.VectorViewModelAction
 
 sealed class DeviceListAction : VectorViewModelAction {
-    // TODO Valere, this is not used?
-    object Refresh : DeviceListAction()
-
     data class SelectDevice(val device: CryptoDeviceInfo) : DeviceListAction()
     object DeselectDevice : DeviceListAction()
 

@@ -23,9 +23,6 @@ import im.vector.riotx.core.platform.VectorViewEvents
  * Transient events for create direct room screen
  */
 sealed class CreateDirectRoomViewEvents : VectorViewEvents {
-    // data class Loading(val message: CharSequence? = null) : RoomDirectoryViewEvents()
-    // data class Failure(val throwable: Throwable) : CreateDirectViewEvents()
-
     data class SelectUserAction(
             val user: User,
             val isAdded: Boolean,

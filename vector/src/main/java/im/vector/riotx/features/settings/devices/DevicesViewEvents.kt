@@ -33,7 +33,6 @@ sealed class DevicesViewEvents : VectorViewEvents {
 
     data class ShowVerifyDevice(
             val userId: String,
-            val deviceId: String,
             val transactionId: String?
     ) : DevicesViewEvents()
 }

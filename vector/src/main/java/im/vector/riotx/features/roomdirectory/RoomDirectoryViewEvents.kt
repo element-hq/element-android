@@ -22,6 +22,5 @@ import im.vector.riotx.core.platform.VectorViewEvents
  * Transient events for room directory screen
  */
 sealed class RoomDirectoryViewEvents : VectorViewEvents {
-    // data class Loading(val message: CharSequence? = null) : RoomDirectoryViewEvents()
     data class Failure(val throwable: Throwable) : RoomDirectoryViewEvents()
 }

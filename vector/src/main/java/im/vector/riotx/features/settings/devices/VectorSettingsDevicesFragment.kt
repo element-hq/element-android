@@ -67,7 +67,6 @@ class VectorSettingsDevicesFragment @Inject constructor(
                 is DevicesViewEvents.RequestPassword    -> maybeShowDeleteDeviceWithPasswordDialog()
                 is DevicesViewEvents.PromptRenameDevice -> displayDeviceRenameDialog(it.deviceInfo)
                 is DevicesViewEvents.ShowVerifyDevice   -> {
-                    // TODO Valere: We should pass the deviceId here
                     VerificationBottomSheet.withArgs(
                             roomId = null,
                             otherUserId = it.userId,
