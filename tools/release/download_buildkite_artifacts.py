@@ -44,7 +44,6 @@ parser.add_argument('-b',
 parser.add_argument('-e',
                     '--expecting',
                     type=int,
-                    default=-1,
                     help='the expected number of artifacts. If omitted, no check will be done.')
 parser.add_argument('-d',
                     '--directory',
@@ -93,8 +92,8 @@ print("   git commit message : \"%s\"" % data0.get('message'))
 print("   build state        : %s" % data0.get('state'))
 
 if data0.get('state') != 'passed':
-    print("❌ Error, the build failed (state: %s)" % data0.get('state'))
-    exit(0)
+    print("❌ Error, the build is in state '%s', and not 'passed'" % data0.get('state'))
+    exit(1)
 
 ### Fetch artifacts list
 
@@ -110,7 +109,7 @@ data = json.loads(r.content.decode())
 
 print("   %d artifact(s) found." % len(data))
 
-if args.expecting != -1 and args.expecting != len(data):
+if args.expecting is not None and args.expecting != len(data):
     print("Error, expecting %d artifacts and found %d." % (args.expecting, len(data)))
     exit(1)
 
