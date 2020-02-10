@@ -19,15 +19,43 @@ package im.vector.riotx.features.home.room.detail
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.riotx.core.platform.DefaultListUpdateCallback
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotx.features.home.room.detail.timeline.item.BaseEventItem
 import timber.log.Timber
+import java.util.concurrent.CopyOnWriteArrayList
 
 class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
                                  private val timelineEventController: TimelineEventController) : DefaultListUpdateCallback {
 
+    private val newTimelineEventIds = CopyOnWriteArrayList<String>()
+    private var forceScroll = false
+
+    fun addNewTimelineEventIds(eventIds: List<String>) {
+        newTimelineEventIds.addAll(0, eventIds)
+    }
+
+    fun forceScrollOnNextUpdate() {
+        forceScroll = true
+    }
+
     override fun onInserted(position: Int, count: Int) {
+        if (forceScroll) {
+            forceScroll = false
+            layoutManager.scrollToPosition(position)
+            return
+        }
         Timber.v("On inserted $count count at position: $position")
-        if (position == 0 && layoutManager.findFirstVisibleItemPosition() == 0 && !timelineEventController.isLoadingForward()) {
-            layoutManager.scrollToPosition(0)
+        if (layoutManager.findFirstVisibleItemPosition() != position) {
+            return
+        }
+        val firstNewItem = timelineEventController.adapter.getModelAtPosition(position) as? BaseEventItem ?: return
+        val firstNewItemIds = firstNewItem.getEventIds().firstOrNull()
+        val indexOfFirstNewItem = newTimelineEventIds.indexOf(firstNewItemIds)
+        if (indexOfFirstNewItem != -1) {
+            Timber.v("Should scroll to position: $position")
+            repeat(newTimelineEventIds.size - indexOfFirstNewItem) {
+                newTimelineEventIds.removeAt(indexOfFirstNewItem)
+            }
+            layoutManager.scrollToPosition(position)
         }
     }
 }

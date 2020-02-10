@@ -353,7 +353,7 @@ Quizás quieras iniciar sesión con otra cuenta, o añadir este correo electrón
     <string name="room_unsent_messages_notification">Los mensajes no se enviaron. ¿%1$s o %2$s ahora?</string>
     <string name="room_unknown_devices_messages_notification">Los mensajes no se enviaron debido a la presencia de dispositivos desconocidos. ¿%1$s o %2$s ahora?</string>
     <string name="room_prompt_resend">Reenviar todo</string>
-    <string name="room_prompt_cancel">cancelar todo</string>
+    <string name="room_prompt_cancel">Cancelar todo</string>
     <string name="room_resend_unsent_messages">Reenviar mensajes no enviados</string>
     <string name="room_delete_unsent_messages">Eliminar mensajes no enviados</string>
     <string name="room_message_file_not_found">Archivo no encontrado</string>
@@ -483,10 +483,10 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_pin_missed_notifications">Fijar salas con notificaciones pendientes</string>
     <string name="settings_pin_unread_messages">Fijar salas con mensajes no leídos</string>
     <string name="settings_devices_list">Dispositivos</string>
-    <string name="devices_details_dialog_title">Detalles de dispositivo</string>
+    <string name="devices_details_dialog_title">Detalles del dispositivo</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Nombre</string>
-    <string name="devices_details_device_name">Nombre de Dispositivo</string>
+    <string name="devices_details_device_name">Actualizar Nombre Público</string>
     <string name="devices_details_last_seen_title">Visto por última vez</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_text">Esta operación requiere autenticación adicional.
@@ -621,7 +621,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="encryption_information_sender_device_information">Información del dispositivo emisor</string>
     <string name="encryption_information_device_name">Nombre de dispositivo</string>
     <string name="encryption_information_name">Nombre</string>
-    <string name="encryption_information_device_id">ID de Dispositivo</string>
+    <string name="encryption_information_device_id">ID</string>
     <string name="encryption_information_device_key">Clave de dispositivo</string>
     <string name="encryption_information_verification">Verificación</string>
     <string name="encryption_information_ed25519_fingerprint">Huella digital Ed25519</string>
@@ -1473,7 +1473,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="sas_incoming_request_description">Verifica este dispositivo para marcarlo como confiable. Confiar en dispositivos de otros te da aún más tranquilidad cuando usas cifrado punto a punto de mensajes.</string>
     <string name="sas_incoming_request_description_2">Verificar este dispositivo lo marcará como confiable, y también marcará como confiable tu dispositivo para la contraparte.</string>
 
-    <string name="sas_emoji_description">Verifica este dispositivo confirmando el emoji que aparece en la pantalla de la contraparte.</string>
+    <string name="sas_emoji_description">Verifica este dispositivo confirmando los emojis que aparecen en la pantalla de tu compañero</string>
     <string name="sas_decimal_description">Verifica este dispositivo confirmando que los siguietes números aparecen en la pantalla de la contraparte</string>
 
     <string name="sas_incoming_verification_request_dialog">Se ha recibido una solicitud de verificación.</string>
@@ -1598,4 +1598,14 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="settings_discovery_category">Descubrimiento</string>
     <string name="settings_discovery_manage">Gestione sus preferencias de descubrimiento.</string>
     <string name="room_list_catchup_welcome_body">Entérese aquí de los mensajes sin leer</string>
+    <string name="call_failed_no_ice_description">Por favor, pídele al administrador de tu servidor doméstico (%1$s) que configure un servidor TURN para que las llamadas funcionen de forma fiable.
+\n
+\nAlternativamente, puedes intentar usar el servidor público en %2$s, pero no será tan confiable, y compartirá tu dirección IP con ese servidor. También puedes cambiar esto en Configuración.</string>
+    <string name="auth_add_email_message_2">Configura un correo electrónico para la recuperación de la cuenta, y más tarde configúralo ser descubierto opcionalmente por personas que te conozcan</string>
+    <string name="auth_add_email_phone_message_2">Configura un correo electrónico para la recuperación de la cuenta. Usa el correo electrónico o el teléfono más tarde para ser descubierto opcionalmente por personas que te conozcan.</string>
+    <string name="auth_add_email_and_phone_message_2">Configura un correo electrónico para la recuperación de la cuenta. Usa el correo electrónico o el teléfono más tarde para ser descubierto opcionalmente por personas que te conozcan.</string>
+    <string name="login_error_no_homeserver_found">Esta no es una dirección de servidor Matrix válida</string>
+    <string name="login_error_homeserver_not_found">No se puede acceder al servidor en esta URL, por favor, compruébelo</string>
+    <string name="sas_error_m_mismatched_sas">El SAS no coincidió</string>
+    <string name="alpha_disclaimer_title">¡Bienvenido a la beta!</string>
 </resources>

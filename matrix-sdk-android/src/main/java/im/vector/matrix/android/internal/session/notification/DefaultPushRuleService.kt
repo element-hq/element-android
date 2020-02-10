@@ -38,12 +38,13 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @SessionScope
-internal class DefaultPushRuleService @Inject constructor(private val getPushRulesTask: GetPushRulesTask,
-                                                          private val updatePushRuleEnableStatusTask: UpdatePushRuleEnableStatusTask,
-                                                          private val addPushRuleTask: AddPushRuleTask,
-                                                          private val removePushRuleTask: RemovePushRuleTask,
-                                                          private val taskExecutor: TaskExecutor,
-                                                          private val monarchy: Monarchy
+internal class DefaultPushRuleService @Inject constructor(
+        private val getPushRulesTask: GetPushRulesTask,
+        private val updatePushRuleEnableStatusTask: UpdatePushRuleEnableStatusTask,
+        private val addPushRuleTask: AddPushRuleTask,
+        private val removePushRuleTask: RemovePushRuleTask,
+        private val taskExecutor: TaskExecutor,
+        private val monarchy: Monarchy
 ) : PushRuleService {
 
     private var listeners = mutableSetOf<PushRuleService.PushRuleListener>()

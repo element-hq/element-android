@@ -27,6 +27,9 @@ import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.DownloadKeysForUsersTask
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -36,10 +39,12 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
                                                      private val olmDevice: MXOlmDevice,
                                                      private val syncTokenStore: SyncTokenStore,
                                                      private val credentials: Credentials,
-                                                     private val downloadKeysForUsersTask: DownloadKeysForUsersTask) {
+                                                     private val downloadKeysForUsersTask: DownloadKeysForUsersTask,
+                                                     coroutineDispatchers: MatrixCoroutineDispatchers,
+                                                     taskExecutor: TaskExecutor) {
 
     interface UserDevicesUpdateListener {
-        fun onUsersDeviceUpdate(users: List<String>)
+        fun onUsersDeviceUpdate(userIds: List<String>)
     }
 
     private val deviceChangeListeners = mutableListOf<UserDevicesUpdateListener>()
@@ -72,17 +77,19 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
     private val notReadyToRetryHS = mutableSetOf<String>()
 
     init {
-        var isUpdated = false
-        val deviceTrackingStatuses = cryptoStore.getDeviceTrackingStatuses().toMutableMap()
-        for ((userId, status) in deviceTrackingStatuses) {
-            if (TRACKING_STATUS_DOWNLOAD_IN_PROGRESS == status || TRACKING_STATUS_UNREACHABLE_SERVER == status) {
-                // if a download was in progress when we got shut down, it isn't any more.
-                deviceTrackingStatuses[userId] = TRACKING_STATUS_PENDING_DOWNLOAD
-                isUpdated = true
+        taskExecutor.executorScope.launch(coroutineDispatchers.crypto) {
+            var isUpdated = false
+            val deviceTrackingStatuses = cryptoStore.getDeviceTrackingStatuses().toMutableMap()
+            for ((userId, status) in deviceTrackingStatuses) {
+                if (TRACKING_STATUS_DOWNLOAD_IN_PROGRESS == status || TRACKING_STATUS_UNREACHABLE_SERVER == status) {
+                    // if a download was in progress when we got shut down, it isn't any more.
+                    deviceTrackingStatuses[userId] = TRACKING_STATUS_PENDING_DOWNLOAD
+                    isUpdated = true
+                }
             }
-        }
-        if (isUpdated) {
-            cryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
+            if (isUpdated) {
+                cryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
+            }
         }
     }
 
@@ -319,7 +326,6 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         for (userId in filteredUsers) {
             // al devices =
             val models = response.deviceKeys?.get(userId)?.mapValues { entry -> CryptoInfoMapper.map(entry.value) }
-
 
             Timber.v("## doKeyDownloadForUsers() : Got keys for $userId : $models")
             if (!models.isNullOrEmpty()) {

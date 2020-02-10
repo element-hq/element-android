@@ -18,18 +18,20 @@ package im.vector.matrix.android.internal.network
 
 import android.content.Context
 import im.vector.matrix.android.BuildConfig
+import im.vector.matrix.android.api.MatrixConfiguration
 import im.vector.matrix.android.internal.di.MatrixScope
 import timber.log.Timber
 import javax.inject.Inject
 
 @MatrixScope
-internal class UserAgentHolder @Inject constructor(private val context: Context) {
+internal class UserAgentHolder @Inject constructor(private val context: Context,
+                                                   matrixConfiguration: MatrixConfiguration) {
 
     var userAgent: String = ""
         private set
 
     init {
-        setApplicationFlavor("NoFlavor")
+        setApplicationFlavor(matrixConfiguration.applicationFlavor)
     }
 
     /**
@@ -38,7 +40,7 @@ internal class UserAgentHolder @Inject constructor(private val context: Context)
      *
      * @param flavorDescription the flavor description
      */
-    fun setApplicationFlavor(flavorDescription: String) {
+    private fun setApplicationFlavor(flavorDescription: String) {
         var appName = ""
         var appVersion = ""
 

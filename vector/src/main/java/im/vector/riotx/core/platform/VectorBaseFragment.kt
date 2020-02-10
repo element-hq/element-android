@@ -33,7 +33,6 @@ import androidx.annotation.MainThread
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.airbnb.mvrx.BaseMvRxFragment
@@ -78,10 +77,10 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     private lateinit var viewModelFactory: ViewModelProvider.Factory
 
     protected val activityViewModelProvider
-        get() = ViewModelProviders.of(requireActivity(), viewModelFactory)
+        get() = ViewModelProvider(requireActivity(), viewModelFactory)
 
     protected val fragmentViewModelProvider
-        get() = ViewModelProviders.of(this, viewModelFactory)
+        get() = ViewModelProvider(this, viewModelFactory)
 
     /* ==========================================================================================
      * Life cycle

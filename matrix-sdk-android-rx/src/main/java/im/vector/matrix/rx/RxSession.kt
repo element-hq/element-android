@@ -33,48 +33,28 @@ import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.functions.BiFunction
-import timber.log.Timber
 
 class RxSession(private val session: Session) {
 
     fun liveRoomSummaries(queryParams: RoomSummaryQueryParams): Observable<List<RoomSummary>> {
-        val summariesObservable = session.getRoomSummariesLive(queryParams).asObservable()
-                .startWith(session.getRoomSummaries(queryParams))
-                .doOnNext { Timber.v("RX: summaries emitted: size: ${it.size}") }
-
-        val cryptoDeviceInfoObservable = session.getLiveCryptoDeviceInfo().asObservable()
-                .startWith(emptyList<CryptoDeviceInfo>())
-                .doOnNext { Timber.v("RX: crypto device info emitted: size: ${it.size}") }
-
-        return Observable
-                .combineLatest<List<RoomSummary>, List<CryptoDeviceInfo>, List<RoomSummary>>(
-                        summariesObservable,
-                        cryptoDeviceInfoObservable,
-                        BiFunction { summaries, _ ->
-                            summaries.map {
-                                if (it.isEncrypted) {
-                                    it.copy(
-                                            roomEncryptionTrustLevel = session.getCrossSigningService()
-                                                    .getTrustLevelForUsers(it.otherMemberIds + session.myUserId)
-                                    )
-                                } else {
-                                    it
-                                }
-                            }
-                        }
-                )
-                .doOnNext { Timber.d("RX: final summaries emitted: size: ${it.size}") }
+        return session.getRoomSummariesLive(queryParams).asObservable()
+                .startWithCallable {
+                    session.getRoomSummaries(queryParams)
+                }
     }
 
     fun liveGroupSummaries(queryParams: GroupSummaryQueryParams): Observable<List<GroupSummary>> {
         return session.getGroupSummariesLive(queryParams).asObservable()
-                .startWith(session.getGroupSummaries(queryParams))
+                .startWithCallable {
+                    session.getGroupSummaries(queryParams)
+                }
     }
 
     fun liveBreadcrumbs(): Observable<List<RoomSummary>> {
         return session.getBreadcrumbsLive().asObservable()
-                .startWith(session.getBreadcrumbs())
+                .startWithCallable {
+                    session.getBreadcrumbs()
+                }
     }
 
     fun liveSyncState(): Observable<SyncState> {
@@ -87,7 +67,9 @@ class RxSession(private val session: Session) {
 
     fun liveUser(userId: String): Observable<Optional<User>> {
         return session.getUserLive(userId).asObservable()
-                .startWith(session.getUser(userId).toOptional())
+                .startWithCallable {
+                    session.getUser(userId).toOptional()
+                }
     }
 
     fun liveUsers(): Observable<List<User>> {
@@ -128,12 +110,16 @@ class RxSession(private val session: Session) {
     }
 
     fun liveUserCryptoDevices(userId: String): Observable<List<CryptoDeviceInfo>> {
-        return session.getLiveCryptoDeviceInfo(userId).asObservable()
+        return session.getLiveCryptoDeviceInfo(userId).asObservable().startWithCallable {
+            session.getCryptoDeviceInfo(userId)
+        }
     }
 
     fun liveCrossSigningInfo(userId: String): Observable<Optional<MXCrossSigningInfo>> {
         return session.getCrossSigningService().getLiveCrossSigningKeys(userId).asObservable()
-                .startWith(session.getCrossSigningService().getUserCrossSigningKeys(userId).toOptional())
+                .startWithCallable {
+                    session.getCrossSigningService().getUserCrossSigningKeys(userId).toOptional()
+                }
     }
 }
 

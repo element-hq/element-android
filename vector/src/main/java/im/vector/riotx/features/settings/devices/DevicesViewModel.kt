@@ -16,8 +16,6 @@
 
 package im.vector.riotx.features.settings.devices
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -41,9 +39,7 @@ import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.matrix.rx.rx
-import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.features.crypto.verification.supportedVerificationMethods
 
 data class DevicesViewState(
@@ -76,15 +72,6 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
     private var _currentDeviceId: String? = null
     private var _currentSession: String? = null
 
-    private val _requestPasswordLiveData = MutableLiveData<LiveEvent<Unit>>()
-    val requestPasswordLiveData: LiveData<LiveEvent<Unit>>
-        get() = _requestPasswordLiveData
-
-    // Used to communicate back from model to fragment
-    private val _requestLiveData = MutableLiveData<LiveEvent<Async<DevicesAction>>>()
-    val fragmentActionLiveData: LiveData<LiveEvent<Async<DevicesAction>>>
-        get() = _requestLiveData
-
     init {
         refreshDevicesList()
         session.getVerificationService().addListener(this)
@@ -115,11 +102,20 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
      * It can be any mobile devices, and any browsers.
      */
     private fun refreshDevicesList() {
-        if (session.isCryptoEnabled() && !session.sessionParams.credentials.deviceId.isNullOrEmpty()) {
+        if (!session.sessionParams.credentials.deviceId.isNullOrEmpty()) {
+            // display something asap
+            val localKnown = session.getUserDevices(session.myUserId).map {
+                DeviceInfo(
+                        user_id = session.myUserId,
+                        deviceId = it.deviceId,
+                        displayName = it.displayName()
+                )
+            }
+
             setState {
                 copy(
                         // Keep known list if we have it, and let refresh go in backgroung
-                        devices = this.devices.takeIf { it is Success } ?: Loading()
+                        devices = this.devices.takeIf { it is Success } ?: Success(localKnown)
                 )
             }
 
@@ -178,25 +174,21 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
 
     private fun handleVerify(action: DevicesAction.VerifyMyDevice) {
         val txID = session.getVerificationService().requestKeyVerification(supportedVerificationMethods, session.myUserId, listOf(action.deviceId))
-        _requestLiveData.postValue(LiveEvent(Success(
-                action.copy(
-                        userId = session.myUserId,
-                        transactionId = txID.transactionId
-                )
-        )))
+        _viewEvents.post(DevicesViewEvents.ShowVerifyDevice(
+                session.myUserId,
+                txID.transactionId
+        ))
     }
 
     private fun handlePromptRename(action: DevicesAction.PromptRename) = withState { state ->
         val info = state.devices.invoke()?.firstOrNull { it.deviceId == action.deviceId }
-        if (info == null) {
-            _requestLiveData.postValue(LiveEvent(Uninitialized))
-        } else {
-            _requestLiveData.postValue(LiveEvent(Success(action.copy(deviceInfo = info))))
+        if (info != null) {
+            _viewEvents.post(DevicesViewEvents.PromptRenameDevice(info))
         }
     }
 
     private fun handleRename(action: DevicesAction.Rename) {
-        session.setDeviceName(action.deviceInfo.deviceId!!, action.newName, object : MatrixCallback<Unit> {
+        session.setDeviceName(action.deviceId, action.newName, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 setState {
                     copy(
@@ -252,7 +244,7 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
                             )
                         }
 
-                        _requestPasswordLiveData.postLiveEvent(Unit)
+                        _viewEvents.post(DevicesViewEvents.RequestPassword)
                     }
                 }
 

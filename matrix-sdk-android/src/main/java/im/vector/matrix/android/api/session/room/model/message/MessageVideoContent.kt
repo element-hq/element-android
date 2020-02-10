@@ -27,7 +27,7 @@ data class MessageVideoContent(
         /**
          * Required. Must be 'm.video'.
          */
-        @Json(name = "msgtype") override val type: String,
+        @Json(name = "msgtype") override val msgType: String,
 
         /**
          * Required. A description of the video e.g. 'Gangnam style', or some kind of content description for accessibility e.g. 'video attachment'.
@@ -40,7 +40,7 @@ data class MessageVideoContent(
         @Json(name = "info") val videoInfo: VideoInfo? = null,
 
         /**
-         * Required. Required if the file is unencrypted. The URL (typically MXC URI) to the video clip.
+         * Required if the file is unencrypted. The URL (typically MXC URI) to the video clip.
          */
         @Json(name = "url") override val url: String? = null,
 

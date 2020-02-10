@@ -50,7 +50,7 @@
         app:layout_constraintTop_toBottomOf="@+id/roomAvatarImageView"
         tools:layout_marginStart="20dp" />
 
-    <TextView
+    <im.vector.riotx.core.platform.EllipsizingTextView
         android:id="@+id/roomNameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -122,7 +122,7 @@
         app:layout_constraintTop_toTopOf="@+id/roomNameView"
         tools:text="@tools:sample/date/hhmm" />
 
-    <TextView
+    <im.vector.riotx.core.platform.EllipsizingTextView
         android:id="@+id/roomLastEventView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -138,7 +138,7 @@
         app:layout_constraintTop_toBottomOf="@+id/roomNameView"
         tools:text="@sample/matrix.json/data/message" />
 
-    <TextView
+    <im.vector.riotx.core.platform.EllipsizingTextView
         android:id="@+id/roomTypingView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

@@ -1810,4 +1810,10 @@
     <string name="room_widget_open_in_browser">Открыть в браузере</string>
     <string name="room_widget_permission_widget_id">ID виджета</string>
     <string name="room_widget_resource_grant_permission">Принять</string>
+    <string name="settings_add_3pid_flow_not_supported">Вы это не можете делать на мобильном Riot</string>
+    <string name="room_widget_permission_added_by">Этот виджет был добавлен:</string>
+    <string name="room_widget_permission_theme">Ваши тема</string>
+    <string name="room_widget_permission_room_id">ID комнаты</string>
+
+
 </resources>

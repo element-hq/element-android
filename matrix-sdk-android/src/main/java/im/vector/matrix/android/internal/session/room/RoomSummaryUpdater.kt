@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.room
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
@@ -24,17 +25,19 @@ import im.vector.matrix.android.api.session.room.model.RoomAliasesContent
 import im.vector.matrix.android.api.session.room.model.RoomCanonicalAliasContent
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import im.vector.matrix.android.internal.crypto.crosssigning.SessionToCryptoRoomMembersUpdate
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
+import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntityFields
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.getOrCreate
+import im.vector.matrix.android.internal.database.query.getOrNull
 import im.vector.matrix.android.internal.database.query.isEventRead
 import im.vector.matrix.android.internal.database.query.latestEvent
-import im.vector.matrix.android.internal.database.query.prev
-import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.database.query.whereType
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.membership.RoomDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
@@ -42,31 +45,35 @@ import im.vector.matrix.android.internal.session.sync.RoomSyncHandler
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncSummary
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncUnreadNotifications
 import io.realm.Realm
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal class RoomSummaryUpdater @Inject constructor(
         @UserId private val userId: String,
         private val roomDisplayNameResolver: RoomDisplayNameResolver,
         private val roomAvatarResolver: RoomAvatarResolver,
+        private val eventBus: EventBus,
         private val monarchy: Monarchy) {
 
-    // TODO: maybe allow user of SDK to give that list
-    private val PREVIEWABLE_TYPES = listOf(
-            // TODO filter message type (KEY_VERIFICATION_READY, etc.)
-            EventType.MESSAGE,
-            EventType.STATE_ROOM_NAME,
-            EventType.STATE_ROOM_TOPIC,
-            EventType.STATE_ROOM_MEMBER,
-            EventType.STATE_ROOM_HISTORY_VISIBILITY,
-            EventType.CALL_INVITE,
-            EventType.CALL_HANGUP,
-            EventType.CALL_ANSWER,
-            EventType.ENCRYPTED,
-            EventType.STATE_ROOM_ENCRYPTION,
-            EventType.STATE_ROOM_THIRD_PARTY_INVITE,
-            EventType.STICKER,
-            EventType.STATE_ROOM_CREATE
-    )
+    companion object {
+        // TODO: maybe allow user of SDK to give that list
+        val PREVIEWABLE_TYPES = listOf(
+                // TODO filter message type (KEY_VERIFICATION_READY, etc.)
+                EventType.MESSAGE,
+                EventType.STATE_ROOM_NAME,
+                EventType.STATE_ROOM_TOPIC,
+                EventType.STATE_ROOM_MEMBER,
+                EventType.STATE_ROOM_HISTORY_VISIBILITY,
+                EventType.CALL_INVITE,
+                EventType.CALL_HANGUP,
+                EventType.CALL_ANSWER,
+                EventType.ENCRYPTED,
+                EventType.STATE_ROOM_ENCRYPTION,
+                EventType.STATE_ROOM_THIRD_PARTY_INVITE,
+                EventType.STICKER,
+                EventType.STATE_ROOM_CREATE
+        )
+    }
 
     fun update(realm: Realm,
                roomId: String,
@@ -96,12 +103,15 @@ internal class RoomSummaryUpdater @Inject constructor(
         }
 
         val latestPreviewableEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true, filterTypes = PREVIEWABLE_TYPES)
-        val lastTopicEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_TOPIC).prev()
-        val lastCanonicalAliasEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_CANONICAL_ALIAS).prev()
-        val lastAliasesEvent = EventEntity.where(realm, roomId, EventType.STATE_ROOM_ALIASES).prev()
-        val encryptionEvent = EventEntity.where(realm, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION)
+
+        val lastTopicEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_TOPIC, stateKey = "")?.root
+        val lastCanonicalAliasEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_CANONICAL_ALIAS, stateKey = "")?.root
+        val lastAliasesEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_ALIASES, stateKey = "")?.root
+
+        // Don't use current state for this one as we are only interested in having MXCRYPTO_ALGORITHM_MEGOLM event in the room
+        val encryptionEvent = EventEntity.whereType(realm, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION)
                 .contains(EventEntityFields.CONTENT, "\"algorithm\":\"$MXCRYPTO_ALGORITHM_MEGOLM\"")
-                .prev()
+                .findFirst()
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0
                 // avoid this call if we are sure there are unread events
@@ -133,6 +143,18 @@ internal class RoomSummaryUpdater @Inject constructor(
 
             roomSummaryEntity.otherMemberIds.clear()
             roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers)
+            if (roomSummaryEntity.isEncrypted) {
+                eventBus.post(SessionToCryptoRoomMembersUpdate(roomId, roomSummaryEntity.otherMemberIds.toList() + userId))
+            }
+        }
+    }
+
+    fun updateShieldTrust(realm: Realm,
+                          roomId: String,
+                          trust: RoomEncryptionTrustLevel?) {
+        val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
+        if (roomSummaryEntity.isEncrypted) {
+            roomSummaryEntity.roomEncryptionTrustLevel = trust
         }
     }
 }

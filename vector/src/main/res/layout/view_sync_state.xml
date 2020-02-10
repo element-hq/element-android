@@ -21,6 +21,7 @@
             android:layout_gravity="center"
             android:background="?riotx_header_panel_background"
             android:indeterminate="true" />
+
     </FrameLayout>
 
     <TextView
@@ -29,7 +30,7 @@
         android:layout_height="wrap_content"
         android:background="@color/vector_warning_color"
         android:gravity="center"
-        android:text="@string/no_network_indicator"
+        android:text="@string/no_connectivity_to_the_server_indicator"
         android:textColor="@color/white"
         android:visibility="gone"
         tools:visibility="visible" />

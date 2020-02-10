@@ -41,7 +41,7 @@
     <string name="missing_permissions_warning">Poichè i tuoi permessi non sono sufficienti, alcune funzioni potrebbero non esser disponibili…</string>
     <string name="missing_permissions_to_start_conf_call">Non hai permessi sufficienti per avviare una conferenza in questa stanza</string>
     <string name="missing_permissions_title_to_start_conf_call">Impossibile avviare la chiamata</string>
-    <string name="device_information">Informazioni sul dispositivo</string>
+    <string name="device_information">Informazioni sulla sessione</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Le stanze criptate non supportano le conferenze</string>
     <string name="send_anyway">Invia comunque</string>
     <string name="or">o</string>
@@ -177,8 +177,8 @@
     <string name="auth_reset_password_email_validation_message">E\' stata inviata una mail a %s. Dopo che avrai seguito il link che contiene, clicca qui sotto.</string>
     <string name="auth_reset_password_error_unauthorized">La verifica del tuo indirizzo email è fallita: assicurati di aver cliccato sul link contenuto nella mail</string>
     <string name="auth_reset_password_success_message">La tua password è stata reimpostata. 
-\n
-\nSei stato disconnesso da tutti i dispositivi e non riceverai più alcuna notifica. Per ripristinare le notifiche, riconnettiti su ciascun dispositivo.</string>
+\n 
+\nSei stato disconnesso da tutte le sessioni e non riceverai più alcuna notifica. Per ripristinare le notifiche, riconnettiti su ciascun dispositivo.</string>
 
     <!-- Login Screen -->
     <string name="login_error_must_start_http">L\'URL deve iniziare con http[s]://</string>
@@ -198,7 +198,7 @@
     <string name="login_error_login_email_not_yet">Il link nella mail non è ancora stato cliccato</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">È necessario eseguire nuovamente l\'accesso per generare le chiavi crittografiche per questo dispositivo ed inviare la chiave pubblica al\'Home Server.
+    <string name="e2e_need_log_in_again">È necessario eseguire nuovamente l\'accesso per generare le chiavi crittografiche per questa sessione ed inviare la chiave pubblica all\'homeserver 
 \nQuesto inconveniente non capiterà più. 
 \nScusa per il disguido.</string>
 
@@ -312,7 +312,7 @@
     <string name="room_participants_header_admin_tools">STRUMENTI ADMIN</string>
     <string name="room_participants_header_call">CHIAMATA</string>
     <string name="room_participants_header_direct_chats">CHAT DIRETTE</string>
-    <string name="room_participants_header_devices">DISPOSITIVI</string>
+    <string name="room_participants_header_devices">SESSIONI</string>
 
     <string name="room_participants_action_invite">Invita</string>
     <string name="room_participants_action_leave">Esci da questa stanza</string>
@@ -326,7 +326,7 @@
     <string name="room_participants_action_unignore">Mostra tutti i messaggi di questo utente</string>
     <string name="room_participants_invite_search_another_user">ID utente, nome o email</string>
     <string name="room_participants_action_mention">Cita</string>
-    <string name="room_participants_action_devices_list">Mostra l\'elenco dei dispositivi</string>
+    <string name="room_participants_action_devices_list">Mostra l\'elenco delle sessioni</string>
     <string name="room_participants_power_level_prompt">La nomina non potrà essere annullata perché darai a questo utente i tuoi stessi poteri.
 \nSicuro di voler procedere\?</string>
 
@@ -351,7 +351,7 @@
     <string name="room_message_placeholder_not_encrypted">Messaggio non criptato…</string>
     <string name="room_offline_notification">La connessione al server è stata persa.</string>
     <string name="room_unsent_messages_notification">Messaggi non inviati. %1$s o %2$s ora?</string>
-    <string name="room_unknown_devices_messages_notification">Messaggi non inviati a causa della presenza di dispositivi sconosciuti. %1$s o %2$s ora\?</string>
+    <string name="room_unknown_devices_messages_notification">Messaggi non inviati a causa della presenza di sessioni sconosciute. %1$s o %2$s ora\?</string>
     <string name="room_prompt_resend">Rispedisci tutto</string>
     <string name="room_prompt_cancel">Annulla tutto</string>
     <string name="room_resend_unsent_messages">Rispedisci messaggi non inviati</string>
@@ -443,7 +443,7 @@
     <string name="settings_app_info_link_title">Informazioni sull\'App</string>
 
     <string name="settings_enable_all_notif">Abilita le notifiche per questo account</string>
-    <string name="settings_enable_this_device">Abilita le notifiche per questo dispositivo</string>
+    <string name="settings_enable_this_device">Attiva le notifiche per questa sessione</string>
     <string name="settings_turn_screen_on">Accendi lo schermo per 3 secondi alla notifica</string>
 
     <string name="settings_messages_in_one_to_one">Messaggi nelle chat dirette</string>
@@ -483,11 +483,11 @@
     <string name="settings_home_display">Schermata iniziale</string>
     <string name="settings_pin_missed_notifications">Segna le stanze con notifiche perse</string>
     <string name="settings_pin_unread_messages">Segna le stanze con messaggi non letti</string>
-    <string name="settings_devices_list">Dispositivi</string>
+    <string name="settings_devices_list">Sessioni</string>
     <string name="settings_always_show_timestamps">Mostra data e ora di tutti i messaggi</string>
     <string name="settings_data_save_mode">Modalità risparmio dati</string>
 
-    <string name="devices_details_dialog_title">Informazioni sul dispositivo</string>
+    <string name="devices_details_dialog_title">Informazioni sulla sessione</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Nome pubblico</string>
     <string name="devices_details_device_name">Aggiorna il nome pubblico</string>
@@ -591,8 +591,8 @@
     <string name="room_settings_labs_end_to_end">Crittografia da-utente-a-utente</string>
     <string name="room_settings_labs_end_to_end_is_active">La crittografia da-utente-a-utente è attiva</string>
     <string name="room_settings_labs_end_to_end_warnings">Devi disconnetterti per abilitare la crittografia.</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">Cripta solo per i dispositivi verificati</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">Non inviare mai da questa stanza dei messaggi criptati verso dispositivi che non siano stati verificati da questo stesso dispositivo.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Cripta solo per le sessioni verificate</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Non inviare mai da questa sessione messaggi cifrati verso sessioni in questa stanza non verificate.</string>
 
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">Questa stanza non ha indirizzi locali</string>
@@ -630,11 +630,11 @@
     <string name="encryption_information_session_id">ID sessione</string>
     <string name="encryption_information_decryption_error">Errore di decriptazione</string>
 
-    <string name="encryption_information_sender_device_information">Informazioni sul dispositivo mittente</string>
+    <string name="encryption_information_sender_device_information">Informazioni sessione del mittente</string>
     <string name="encryption_information_device_name">Nome pubblico</string>
     <string name="encryption_information_name">Nome pubblico</string>
     <string name="encryption_information_device_id">ID</string>
-    <string name="encryption_information_device_key">Chiave dispositivo</string>
+    <string name="encryption_information_device_key">Chiave sessione</string>
     <string name="encryption_information_verification">Verifica</string>
     <string name="encryption_information_ed25519_fingerprint">Impronta digitale Ed25519</string>
 
@@ -652,14 +652,14 @@
     <string name="encryption_import_room_keys">Importa le chiavi della stanza</string>
     <string name="encryption_import_room_keys_summary">Importa le chiavi da un file locale</string>
     <string name="encryption_import_import">Importa</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Cripta solo per i dispositivi verificati</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Non inviare mai da questo dispositivo messaggi criptati verso dispositivi non verificati.</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Cripta solo per le sessioni verificate</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Non inviare mai da questa sessione messaggi cifrati verso sessioni non verificate.</string>
 
     <string name="encryption_information_not_verified">NON verificato</string>
     <string name="encryption_information_verified">Verificato</string>
     <string name="encryption_information_blocked">Metti in lista nera</string>
 
-    <string name="encryption_information_unknown_device">dispositivo sconosciuto</string>
+    <string name="encryption_information_unknown_device">sessione sconosciuta</string>
     <string name="encryption_information_none">niente</string>
 
     <string name="encryption_information_verify">Conferma</string>
@@ -667,9 +667,9 @@
     <string name="encryption_information_block">Lista nera</string>
     <string name="encryption_information_unblock">Togli dalla lista nera</string>
 
-    <string name="encryption_information_verify_device">Verifica il dispositivo</string>
-    <string name="encryption_information_verify_device_warning">Per verificare se quel dispositivo è affidabile, contatta il suo proprietario utilizzando altri canali di comunicazione (ad esempio, per persona o per telefono) e chiedigli se nelle Impostazioni, sezione Crittografia, la chiave del dispositivo corrisponde a quella riportata qui sotto:</string>
-    <string name="encryption_information_verify_device_warning2">Se corrisponde, premi il pulsante di verifica qui sotto. In caso contrario, qualcun altro sta intercettando questo dispositivo e probabilmente dovresti metterlo in lista nera. In futuro il processo di verifica sarà più sofisticato.</string>
+    <string name="encryption_information_verify_device">Verifica la sessione</string>
+    <string name="encryption_information_verify_device_warning">Per verificare se questa sessione sia affidabile, contatta il suo proprietario utilizzando altre vie di comunicazione (es. di persona o per telefono) e chiedigli se la chiave che vede nelle Impostazioni Utente per questa sessione corrisponde a quella riportata sotto:</string>
+    <string name="encryption_information_verify_device_warning2">Se corrisponde, premi il pulsante di verifica qui sotto. In caso contrario, qualcun altro sta intercettando questa sessione e probabilmente dovresti metterlo in lista nera. In futuro il processo di verifica sarà più sofisticato.</string>
     <string name="encryption_information_verify_key_match">Ho verificato che le chiavi corrispondono</string>
 
     <string name="e2e_enabling_on_app_update">Riot supporta ora la crittografia da-utente-a-utente, ma per abilitarla devi riconnetterti.
@@ -677,12 +677,12 @@
 \nPuoi farlo ora, o più tardi, dalle impostazioni dell\'applicazione.</string>
 
     <!-- unknown devices management -->
-    <string name="unknown_devices_alert_title">La stanza contiene dispositivi sconosciuti</string>
-    <string name="unknown_devices_alert_message">Questa stanza contiene dispositivi sconosciuti che non sono stati verificati.
-\nNon v\'è alcuna garanzia che le persone che utilizzano quei dispositivi siano davvero chi dicono d\'essere.
-\nSi consiglia di verificare ogni dispositivo prima di continuare, ma se si preferisce, è comunque possibile inviare ugualmente il messaggio anche senza la verifica.
-\n
-\nDispositivi sconosciuti:</string>
+    <string name="unknown_devices_alert_title">La stanza contiene sessioni sconosciute</string>
+    <string name="unknown_devices_alert_message">Questa stanza contiene sessioni sconosciute che non sono state verificate. 
+\nNon v\'è alcuna garanzia che le sessioni appartengano agli utenti dichiarati. 
+\nTi consigliamo di verificare ogni sessione prima di continuare, ma se lo preferisci, è comunque possibile inviare il messaggio anche senza la verifica. 
+\n 
+\nSessioni sconosciute:</string>
 
     <!-- directory activity  -->
     <string name="select_room_directory">Scegli un elenco di stanze</string>
@@ -832,8 +832,8 @@
     <string name="settings_labs_native_camera">Usa la fotocamera di sistema</string>
 
     <!-- share keys -->
-    <string name="you_added_a_new_device">Hai aggiunto un nuovo dispositivo \'%s\' che sta richiedendo le chiavi crittografiche.</string>
-    <string name="your_unverified_device_requesting">Il tuo dispositivo non verificato \'%s\' sta chiedendo le chiavi crittografiche.</string>
+    <string name="you_added_a_new_device">Hai aggiunto una nuova sessione \'%s\' che sta richiedendo le chiavi crittografiche.</string>
+    <string name="your_unverified_device_requesting">La tua sessione non verificata \'%s\' sta chiedendo le chiavi crittografiche.</string>
     <string name="start_verification">Avvia la verifica</string>
     <string name="share_without_verifying">Condividi senza verificare</string>
     <string name="ignore_request">Ignora la richiesta</string>
@@ -939,12 +939,12 @@
     <string name="download">Scarica</string>
     <string name="speak">Parla</string>
     <string name="clear">Svuota</string>
-    <string name="e2e_re_request_encryption_key"><u>Richiedi di nuovo le chiavi di crittografia</u> dagli altri tuoi dispositivi.</string>
+    <string name="e2e_re_request_encryption_key"><u>Richiedi di nuovo le chiavi di crittografia</u> dalle tue altre sessioni.</string>
 
     <string name="e2e_re_request_encryption_key_sent">La richiesta della chiave è stata inviata.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Richiesta inviata</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Avvia Riot su un altro dispositivo che possa decifrare il messaggio, in modo che possa inviare le chiavi a questo dispositivo.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Avvia Riot su un altro dispositivo che possa decifrare il messaggio, in modo che possa inviare le chiavi a questa sessione.</string>
 
     <string name="lock_screen_hint">Digita qui…</string>
 
@@ -1127,9 +1127,9 @@
 \nControlla le impostazioni dell\'account.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Abilita</string>
 
-    <string name="settings_troubleshoot_test_device_settings_title">Impostazioni dispositivo.</string>
-    <string name="settings_troubleshoot_test_device_settings_success">Le notifiche sono abilitate per questo dispositivo.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Le notifiche non sono abilitate per questo dispositivo.
+    <string name="settings_troubleshoot_test_device_settings_title">Impostazioni sessione.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Le notifiche sono attive per questa sessione.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Le notifiche non sono attive per questa sessione. 
 \nControlla le impostazioni di Riot.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Abilita</string>
 
@@ -1220,7 +1220,7 @@
     <string name="settings_notification_advanced">Impostazioni di notifica avanzate</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Se ti disconnetti adesso perderai i tuoi messaggi cifrati</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Il Backup delle chiavi è in corso. Se ti disconnetti adesso perderai i tuoi messaggi cifrati.</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">Il Backup delle chiavi deve essere attivo su tutti i tuoi dispositivi per evitare di perdere l\'accesso ai tuoi messaggi cifrati.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Il Backup delle chiavi deve essere attivo su tutte le tue sessioni per evitare di perdere l\'accesso ai tuoi messaggi cifrati.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Non voglio i miei messaggi cifrati</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Backup delle chiavi…</string>
     <string name="keys_backup_activate">Usa il Backup delle chiavi</string>
@@ -1345,14 +1345,14 @@
     <string name="keys_backup_recovery_code_error_decrypt">Impossibile decifrare il backup con questo codice di recupero: verifica di avere inserito il codice di recupero corretto.</string>
 
     <string name="keys_backup_restore_success_title">Backup ripristinato %s !</string>
-    <string name="keys_backup_restore_success_description">Ripristinate %1$d Session-Keys e aggiunte %2$d nuove Key(s) finora sconosciute a questo dispositivo</string>
+    <string name="keys_backup_restore_success_description">Ripristinate %1$d chiavi di sessione e aggiunte %2$d nuove chiavi finora sconosciute a questa sessione</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Ripristinato un Backup con %d chiave.</item>
         <item quantity="other">Ripristinato un Backup con %d chiavi.</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-        <item quantity="one">%d nuova chiave è stata aggiunta a questo dispositivo.</item>
-        <item quantity="other">%d nuove chiavi sono state aggiunte a questo dispositivo.</item>
+        <item quantity="one">%d nuova chiave è stata aggiunta a questa sessione.</item>
+        <item quantity="other">%d nuove chiavi sono state aggiunte a questa sessione.</item>
     </plurals>
 
     <string name="keys_backup_get_version_error">Rilevazione ultima versione codici di recupero fallita (%s).</string>
@@ -1362,19 +1362,19 @@
     <string name="keys_backup_settings_restore_backup_button">Ripristina da backup</string>
     <string name="keys_backup_settings_delete_backup_button">Elimina backup</string>
 
-    <string name="keys_backup_settings_status_ok">Il Backup delle chiavi è stato impostato correttamente su questo dispositivo.</string>
-    <string name="keys_backup_settings_status_ko">Il Backup delle chiavi non è attivo su questo dispositivo.</string>
-    <string name="keys_backup_settings_status_not_setup">Questo dispositivo non sta facendo il Backup delle chiavi.</string>
+    <string name="keys_backup_settings_status_ok">Il backup delle chiavi è stato impostato correttamente per questa sessione.</string>
+    <string name="keys_backup_settings_status_ko">Il backup delle chiavi non è attivo su questa sessione.</string>
+    <string name="keys_backup_settings_status_not_setup">Questa sessione non sta facendo il backup delle chiavi.</string>
 
-    <string name="keys_backup_settings_signature_from_unknown_device">Il backup ha una firma da un dispositivo sconosciuto con ID %s.</string>
-    <string name="keys_backup_settings_valid_signature_from_this_device">Il backup ha una firma valida da questo dispositivo.</string>
-    <string name="keys_backup_settings_valid_signature_from_verified_device">Il backup ha una firma valida dal dispositivo verificato %s.</string>
-    <string name="keys_backup_settings_valid_signature_from_unverified_device">Il backup ha una firma valida dal dispositivo non verificato %s</string>
-    <string name="keys_backup_settings_invalid_signature_from_verified_device">Il backup ha una firma non valida dal dispositivo verificato %s</string>
-    <string name="keys_backup_settings_invalid_signature_from_unverified_device">Il backup ha una firma non valida dal dispositivo non verificato %s</string>
+    <string name="keys_backup_settings_signature_from_unknown_device">Il backup ha una firma da una sessione sconosciuta con ID %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_this_device">Il backup ha una firma valida da questa sessione.</string>
+    <string name="keys_backup_settings_valid_signature_from_verified_device">Il backup ha una firma valida dalla sessione verificata %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">Il backup ha una firma valida dalla sessione non verificata %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_verified_device">Il backup ha una firma non valida dalla sessione verificata %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_unverified_device">Il backup ha una firma non valida dalla sessione non verificata %s</string>
     <string name="keys_backup_get_trust_error">Impossibile ottenere info di fiducia per il backup (%s).</string>
 
-    <string name="keys_backup_settings_untrusted_backup">Per utilizzare il Backup delle chiavi crittografiche su questo dispositivo, devi accedervi con la password o con il codice di recupero.</string>
+    <string name="keys_backup_settings_untrusted_backup">Per usare il backup delle chiavi crittografiche su questa sessione, devi accedervi con la password o con il codice di recupero.</string>
     <string name="keys_backup_settings_deleting_backup">Eliminazione backup…</string>
     <string name="keys_backup_settings_delete_backup_error">Eliminazione backup fallita (%s)</string>
 
@@ -1441,17 +1441,16 @@
 
     <string name="error_jitsi_not_supported_on_old_device">Purtroppo i vecchi dispositivi (quelli con Android precedenti al 5.0) non supportano le conferenze con Jitsi</string>
 
-    <string name="title_activity_verify_device">Verifica dispositivo</string>
+    <string name="title_activity_verify_device">Verifica sessione</string>
 
     <string name="encryption_information_unknown_ip">IP sconosciuto</string>
-    <string name="you_added_a_new_device_with_info">Un nuovo dispositivo sta chiedendo le chiavi crittografiche. 
-\nNome dispositivo: %1$s 
+    <string name="you_added_a_new_device_with_info">Una nuova sessione sta chiedendo le chiavi crittografiche. Nome sessione: %1$s 
 \nUltimo accesso: %2$s 
-\nSe non hai effettuato l\'accesso da un altro dispositivo, ignora questa richiesta.</string>
-    <string name="your_unverified_device_requesting_with_info">Un dispositivo non verificato sta chiedendo le chiavi crittografiche. 
-\nNome dispositivo: %1$s 
+\nSe non hai effettuato l\'accesso da un\'altra sessione, ignora questa richiesta.</string>
+    <string name="your_unverified_device_requesting_with_info">Una sessione non verificata sta chiedendo le chiavi crittografiche. 
+\nNome sessione: %1$s 
 \nUltimo accesso: %2$s 
-\nSe non hai effettuato l\'accesso da un altro dispositivo, ignora questa richiesta.</string>
+\nSe non hai effettuato l\'accesso da un\'altra sessione, ignora questa richiesta.</string>
 
     <string name="start_verification_short_label">Verifica</string>
     <string name="share_without_verifying_short_label">Condividi</string>
@@ -1462,18 +1461,18 @@
     <string name="sas_security_advise">Per la massima sicurezza, consigliamo di farlo di persona o di utilizzare un altro metodo di comunicazione fidato.</string>
     <string name="sas_verify_start_button_title">Inizia la verifica</string>
     <string name="sas_incoming_request_title">Richiesta di verifica in arrivo</string>
-    <string name="sas_incoming_request_description">Verifica questo dispositivo per segnarlo come fidato. Verificare i dispositivi dei partner ti dà una maggiore tranquillità quando usi messaggi cifrati end-to-end.</string>
-    <string name="sas_incoming_request_description_2">Verificare questo dispositivo lo segnerà come fidato e segnerà anche il tuo dispositivo come fidato per il tuo partner.</string>
+    <string name="sas_incoming_request_description">Verifica questa sessione per segnarla come fidata. Verificare le sessioni dei partner ti dà una maggiore tranquillità quando usi messaggi cifrati end-to-end.</string>
+    <string name="sas_incoming_request_description_2">Verificare questa sessione la segnerà come fidata e segnerà anche la tua sessione come fidata per il tuo partner.</string>
 
-    <string name="sas_emoji_description">Verifica questo dispositivo confermando che il seguente emoji compare sullo schermo del partner</string>
-    <string name="sas_decimal_description">Verifica questo dispositivo confermando che i seguenti numeri compaiono sullo schermo del partner</string>
+    <string name="sas_emoji_description">Verifica questa sessione confermando che le seguenti emoji appaiono sullo schermo del partner</string>
+    <string name="sas_decimal_description">Verifica questa sessione confermando che i seguenti numeri appaiono sullo schermo del partner</string>
 
     <string name="sas_incoming_verification_request_dialog">Hai ricevuto una richiesta di verifica.</string>
     <string name="sas_view_request_action">Vedi la richiesta</string>
     <string name="sas_waiting_for_partner">In attesa che il partner confermi…</string>
 
     <string name="sas_verified">Verificato!</string>
-    <string name="sas_verified_successful">Hai verificato correttamente questo dispositivo.</string>
+    <string name="sas_verified_successful">Hai verificato correttamente questa sessione.</string>
     <string name="sas_verified_successful_description">I messaggi sicuri con questo utente sono cifrati end-to-end e impossibili da leggere da parte di terze parti.</string>
     <string name="sas_got_it">Capito</string>
 
@@ -1487,24 +1486,24 @@
     <string name="sas_cancelled_by_me">La verifica è annullata.
 \nMotivo: %s</string>
 
-    <string name="sas_verification_request_notification_channel">Verifica dispositivo interattiva</string>
+    <string name="sas_verification_request_notification_channel">Verifica sessione interattiva</string>
     <string name="sas_incoming_request_notif_title">Richiesta di verifica</string>
-    <string name="sas_incoming_request_notif_content">%s vuole verificare il tuo dispositivo</string>
+    <string name="sas_incoming_request_notif_content">%s vuole verificare la tua sessione</string>
 
     <string name="sas_error_m_user">L\'utente ha annullato la verifica</string>
     <string name="sas_error_m_timeout">Il processo di verifica è scaduto</string>
-    <string name="sas_error_m_unknown_transaction">Il dispositivo non sa della transazione</string>
-    <string name="sas_error_m_unknown_method">Il dispositivo non riesce ad accordarsi sulla chiave, hash, MAC, o metodo SAS</string>
+    <string name="sas_error_m_unknown_transaction">La sessione non sa della transazione</string>
+    <string name="sas_error_m_unknown_method">La sessione non riesce ad accordarsi sulla chiave, hash, MAC, o metodo SAS</string>
     <string name="sas_error_m_mismatched_commitment">L\'hash non corrispondeva</string>
     <string name="sas_error_m_mismatched_sas">Il SAS non corrispondeva</string>
-    <string name="sas_error_m_unexpected_message">Il dispositivo ha ricevuto un messaggio inaspettato</string>
+    <string name="sas_error_m_unexpected_message">La sessione ha ricevuto un messaggio inaspettato</string>
     <string name="sas_error_m_invalid_message">È stato ricevuto un messaggio non valido</string>
     <string name="sas_error_m_key_mismatch">Le chiavi non corrispondono</string>
     <string name="sas_error_m_user_error">Utente non corrispondente</string>
     <string name="sas_error_unknown">Errore sconosciuto</string>
 
     <string name="keys_backup_setup_override_backup_prompt_tile">Esiste già un backup sul tuo Home Server</string>
-    <string name="keys_backup_setup_override_backup_prompt_description">Sembra tu abbia già impostato il Backup delle chiavi crittografiche da un altro dispositivo. Vuoi sostituirlo con il Backup che stai creando\?</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Sembra tu abbia già impostato il backup delle chiavi crittografiche da un\'altra sessione. Vuoi sostituirlo con il backup che stai creando\?</string>
     <string name="keys_backup_setup_override_replace">Sostituisci</string>
     <string name="keys_backup_setup_override_stop">Ferma</string>
 
@@ -1589,7 +1588,7 @@
     <string name="push_gateway_item_app_id">id_app:</string>
     <string name="push_gateway_item_push_key">chiave_push:</string>
     <string name="push_gateway_item_app_display_name">nome_visualizzato_app:</string>
-    <string name="push_gateway_item_device_name">nome_dispositivo:</string>
+    <string name="push_gateway_item_device_name">nome_sessione:</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Formato:</string>
 
@@ -1718,7 +1717,7 @@
     <string name="settings_discovery_category">Farsi trovare</string>
     <string name="settings_discovery_manage">Configura l\'Identity Server per trovare e farsi trovare dagli altri utenti.</string>
     <string name="encryption_information_device_name_with_warning">Nome pubblico (visibile alle persone con cui comunichi)</string>
-    <string name="device_name_warning">Il nome pubblico di un dispositivo è visibile alle persone con cui comunichi</string>
+    <string name="device_name_warning">Il nome pubblico di una sessione è visibile alle persone con cui comunichi</string>
     <string name="identity_server_not_defined">Non stai usando alcun Identity Server</string>
     <string name="identity_server_not_defined_for_password_reset">Nessun Identity Server configurato. E\' necessario per poter ripristinare la tua password.</string>
 
@@ -1921,7 +1920,7 @@
     <string name="login_reset_password_password_hint">Nuova password</string>
 
     <string name="login_reset_password_warning_title">Attenzione!</string>
-    <string name="login_reset_password_warning_content">Cambiare la password reimposterà qualunque chiave di cifratura end-to-end su tutti i tuoi dispositivi, rendendo illeggibile la cronologia delle chat criptate. Imposta il Backup Chiavi o esporta le tue chiavi della stanza da un altro dispositivo prima di reimpostare la password.</string>
+    <string name="login_reset_password_warning_content">Cambiare la password reimposterà qualunque chiave di cifratura end-to-end su tutte le tue sessioni, rendendo illeggibile la cronologia delle chat criptate. Imposta il Backup Chiavi o esporta le tue chiavi della stanza da un\'altra sessione prima di reimpostare la password.</string>
     <string name="login_reset_password_warning_submit">Continua</string>
 
     <string name="login_reset_password_error_not_found">Questa email non è collegata ad alcun account</string>
@@ -1933,7 +1932,7 @@
 
     <string name="login_reset_password_success_title">Successo!</string>
     <string name="login_reset_password_success_notice">La tua password è stata reimpostata.</string>
-    <string name="login_reset_password_success_notice_2">Sei stato disconnesso da tutti i dispositivi e non riceverai più notifiche push. Per riattivare le notifiche, riaccedi su ogni dispositivo.</string>
+    <string name="login_reset_password_success_notice_2">Sei stato disconnesso da tutte le sessioni e non riceverai più notifiche push. Per riattivare le notifiche, riaccedi su ogni dispositivo.</string>
     <string name="login_reset_password_success_submit">Torna all\'accesso</string>
 
     <string name="login_reset_password_cancel_confirmation_title">Attenzione</string>
@@ -1994,12 +1993,12 @@
     <string name="seen_by">Visto da</string>
 
     <string name="signed_out_title">Sei disconnesso</string>
-    <string name="signed_out_notice">Può essere dovuto a vari motivi:
-\n
-\n• Hai cambiato la password su un altro dispositivo.
-\n
-\n• Hai eliminato questo dispositivo da un altro dispositivo.
-\n
+    <string name="signed_out_notice">Può essere dovuto a vari motivi: 
+\n 
+\n• Hai cambiato la password su un\'altra sessione.
+\n 
+\n• Hai eliminato questa sessione da un\'altra sessione. 
+\n 
 \n• L\'amministratore del server ha bloccato il tuo accesso per motivi di sicurezza.</string>
     <string name="signed_out_submit">Accedi di nuovo</string>
 
@@ -2026,4 +2025,203 @@
     <string name="permalink_malformed">Il tuo collegamento matrix.to non è corretto</string>
     <string name="bug_report_error_too_short">La descrizione è troppo breve</string>
 
+    <string name="notification_initial_sync">Sync iniziale…</string>
+
+    <string name="settings_show_devices_list">Vedi tutte le mie sessioni</string>
+    <string name="settings_advanced_settings">Impostazioni avanzate</string>
+    <string name="settings_developer_mode">Modalità sviluppatore</string>
+    <string name="settings_developer_mode_summary">La modalità sviluppatore abilita funzionalità nascoste e potrebbe anche rendere l\'app meno stabile. Solo per sviluppatori!</string>
+    <string name="settings_rageshake">Scuotimento</string>
+    <string name="settings_rageshake_detection_threshold">Soglia di rilevamento</string>
+    <string name="settings_rageshake_detection_threshold_summary">Scuoti il telefono per testare la soglia di rilevamento</string>
+    <string name="rageshake_detected">Scuotimento rilevato!</string>
+    <string name="settings">Impostazioni</string>
+    <string name="devices_current_device">Sessione attuale</string>
+    <string name="devices_other_devices">Altre sessioni</string>
+
+    <string name="autocomplete_limited_results">Mostrati solo i primi risultati, digita più lettere…</string>
+
+    <string name="settings_developer_mode_fail_fast_title">Crash facile</string>
+    <string name="settings_developer_mode_fail_fast_summary">RiotX potrebbe crashare più spesso quando si verifica un errore imprevisto</string>
+    <string name="command_description_verify">Richiedi di verificare l\'ID utente in questione</string>
+    <string name="command_description_shrug">Antepone ¯\\_(ツ)_/¯ ad un messaggio testuale</string>
+
+    <string name="create_room_encryption_title">Attiva la cifratura</string>
+    <string name="create_room_encryption_description">Una volta attivata, la cifratura non può essere disattivata.</string>
+
+    <string name="login_error_threepid_denied">Il dominio della tua email non è autorizzato alla registrazione in questo server</string>
+
+    <string name="verification_conclusion_warning">Accesso non fidato</string>
+    <string name="verification_sas_match">Corrispondono</string>
+    <string name="verification_sas_do_not_match">Non corrispondono</string>
+    <string name="verify_user_sas_emoji_help_text">Verifica questo utente confermando che le seguenti emoji appaiono sul suo schermo, nello stesso ordine.</string>
+    <string name="verify_user_sas_emoji_security_tip">Per la massima sicurezza, usate un\'altra via di comunicazione fidata o fatelo di persona.</string>
+    <string name="verification_green_shield">Cerca lo scudo verde per garantire la fiducia dell\'utente. Fidati di tutti gli utenti in una stanza per garantire che essa sia sicura.</string>
+
+    <string name="verification_conclusion_not_secure">Non sicuro</string>
+    <string name="verification_conclusion_compromised">Uno dei seguenti potrebbe essere compromesso:
+\n
+\n - Il tuo homeserver
+\n - L\'homeserver al quale è connesso l\'utente che stai verificando
+\n - La tua connessione internet o quella dell\'altro utente
+\n - Il tuo dispositivo o quello dell\'altro utente</string>
+
+    <string name="sent_a_video">Video.</string>
+    <string name="sent_an_image">Immagine.</string>
+    <string name="sent_an_audio_file">Audio</string>
+    <string name="sent_a_file">File</string>
+
+    <string name="verification_request_waiting">In attesa…</string>
+    <string name="verification_request_other_cancelled">%s ha annullato</string>
+    <string name="verification_request_you_cancelled">Hai annullato</string>
+    <string name="verification_request_other_accepted">%s ha accettato</string>
+    <string name="verification_request_you_accepted">Hai accettato</string>
+    <string name="verification_sent">Verifica inviata</string>
+    <string name="verification_request">Richiesta di verifica</string>
+
+
+    <string name="verification_verify_device">Verifica questa sessione</string>
+    <string name="verification_verify_device_manually">Verifica manualmente</string>
+
+    <string name="you">Tu</string>
+
+    <string name="verification_scan_notice">Scansiona il codice con il dispositivo dell\'altro utente per verificarvi a vicenda</string>
+    <string name="verification_scan_their_code">Scansiona il suo codice</string>
+    <string name="verification_scan_emoji_title">Impossibile scansionare</string>
+    <string name="verification_scan_emoji_subtitle">Se non siete di persona, confrontate invece le emoji</string>
+
+    <string name="verification_no_scan_emoji_title">Verifica confrontando le emoji</string>
+
+    <string name="verify_by_emoji_title">Verifica via emoji</string>
+    <string name="verify_by_emoji_description">Se non potete scansionare il codice sopra, verificate confrontando una breve selezione univoca di emoji.</string>
+
+    <string name="a13n_qr_code_description">Immagine codice QR</string>
+
+    <string name="verification_verify_user">Verifica %s</string>
+    <string name="verification_verified_user">%s verificato</string>
+    <string name="verification_request_waiting_for">In attesa di %s…</string>
+    <string name="verification_request_alert_description">Per maggiore sicurezza, verifica %s controllando un codice univoco su entrambi i dispositivi.
+\n
+\nPer la massima sicurezza, fatelo di persona.</string>
+    <string name="room_profile_not_encrypted_subtitle">I messaggi in questa stanza non sono cifrati end-to-end.</string>
+    <string name="room_profile_encrypted_subtitle">I messaggi in questa stanza sono cifrati end-to-end.
+\n
+\nI tuoi messaggi sono protetti con lucchetti e solo tu e il destinatario avete le chiavi univoche per sbloccarli.</string>
+    <string name="room_profile_section_security">Sicurezza</string>
+    <string name="room_profile_section_security_learn_more">Maggiori info</string>
+    <string name="room_profile_section_more">Altro</string>
+    <string name="room_profile_section_more_settings">Impostazioni stanza</string>
+    <string name="room_profile_section_more_notifications">Notifiche</string>
+    <plurals name="room_profile_section_more_member_list">
+        <item quantity="one">Una persona</item>
+        <item quantity="other">%1$d persone</item>
+    </plurals>
+    <string name="room_profile_section_more_uploads">File caricati</string>
+    <string name="room_profile_section_more_leave">Lascia stanza</string>
+    <string name="room_profile_leaving_room">Uscita dalla stanza…</string>
+
+    <string name="room_member_power_level_admins">Amministratori</string>
+    <string name="room_member_power_level_moderators">Moderatori</string>
+    <string name="room_member_power_level_custom">Personalizzato</string>
+    <string name="room_member_power_level_invites">Inviti</string>
+    <string name="room_member_power_level_users">Utenti</string>
+
+    <string name="room_member_power_level_admin_in">Amministratore in %1$s</string>
+    <string name="room_member_power_level_moderator_in">Moderatore in %1$s</string>
+    <string name="room_member_power_level_custom_in">Personalizzato (%1$d) in %2$s</string>
+
+    <string name="room_member_jump_to_read_receipt">Vai alla ricevuta di lettura</string>
+
+    <string name="rendering_event_error_type_of_event_not_handled">RiotX non gestisce eventi del tipo \'%1$s\' (non ancora)</string>
+    <string name="rendering_event_error_type_of_message_not_handled">RiotX non gestisce messaggi del tipo \'%1$s\' (non ancora)</string>
+    <string name="rendering_event_error_exception">RiotX ha riscontrato un errore con il rendering del contenuto dell\'evento con id \'%1$s\'</string>
+
+    <string name="unignore">Non ignorare</string>
+
+    <string name="verify_cannot_cross_sign">Questa sessione non riesce a condividere questa verifica con le tue altre sessioni.
+\nLa verifica sarà salvata in locale e condivisa in una versione futura dell\'app.</string>
+
+    <string name="room_list_sharing_header_recent_rooms">Stanze recenti</string>
+    <string name="room_list_sharing_header_other_rooms">Altre stanze</string>
+
+    <string name="command_description_rainbow">Invia il messaggio in questione colorato ad arcobaleno</string>
+    <string name="command_description_rainbow_emote">Invia l\'emoticon in questione colorata ad arcobaleno</string>
+
+    <string name="settings_category_timeline">Cronologia</string>
+
+    <string name="settings_category_composer">Editor messaggi</string>
+
+    <string name="room_settings_enable_encryption">Attiva cifratura end-to-end</string>
+    <string name="room_settings_enable_encryption_warning">Una volta attivata, la cifratura non può essere disattivata.</string>
+
+    <string name="room_settings_enable_encryption_dialog_title">Attivare la cifratura\?</string>
+    <string name="room_settings_enable_encryption_dialog_content">Una volta attivata, la cifratura di una stanza non può essere disattivata. I messaggi inviati in una stanza cifrata non possono essere visti dal server, solo dai partecipanti della stanza. L\'attivazione della cifratura può impedire il funzionamento di molti bot e bridge.</string>
+    <string name="room_settings_enable_encryption_dialog_submit">Attiva cifratura</string>
+
+    <string name="verification_request_notice">Per sicurezza, verifica %s controllando un codice univoco.</string>
+    <string name="verification_request_start_notice">Per sicurezza, fatelo di persona o usate un\'altra via di comunicazione.</string>
+
+    <string name="verification_emoji_notice">Confronta le emoji, assicurandoti che appaiono nello stesso ordine.</string>
+    <string name="verification_code_notice">Confronta il codice con quello mostrato nello schermo dell\'altro utente.</string>
+    <string name="verification_conclusion_ok_notice">I messaggi con questo utente sono cifrati end-to-end e non possono essere letti da terze parti.</string>
+    <string name="verification_conclusion_ok_self_notice">La tua nuova sessione ora è verificata. Ha accesso ai messaggi cifrati e gli altri utenti la vedranno come fidata.</string>
+
+
+    <string name="encryption_information_cross_signing_state">Firma incrociata</string>
+    <string name="encryption_information_dg_xsigning_complete">La firma incrociata è attiva
+\nChiavi private nel dispositivo.</string>
+    <string name="encryption_information_dg_xsigning_trusted">La firma incrociata è attiva
+\nLe chiavi sono fidate.
+\nChiavi private non conosciute</string>
+    <string name="encryption_information_dg_xsigning_not_trusted">La firma incrociata è attiva.
+\nLe chiavi non sono fidate</string>
+    <string name="encryption_information_dg_xsigning_disabled">La firma incrociata non è attiva</string>
+
+
+    <string name="settings_active_sessions_list">Sessioni attive</string>
+    <string name="settings_active_sessions_show_all">Mostra tutte le sessioni</string>
+    <string name="settings_active_sessions_manage">Gestisci sessioni</string>
+    <string name="settings_active_sessions_signout_device">Disconnetti questa sessione</string>
+
+    <string name="settings_failed_to_get_crypto_device_info">Nessuna informazione crittografica disponibile</string>
+
+    <string name="settings_active_sessions_verified_device_desc">Questa sessione è fidata per i messaggi sicuri perchè l\'hai verificata:</string>
+    <string name="settings_active_sessions_unverified_device_desc">Verifica questa sessione per segnarla come fidata e darle l\'accesso ai messaggi cifrati. Se non hai fatto l\'accesso a questa sessione il tuo account potrebbe essere compromesso:</string>
+
+    <plurals name="settings_active_sessions_count">
+        <item quantity="one">%d sessione attiva</item>
+        <item quantity="other">%d sessioni attive</item>
+    </plurals>
+
+    <string name="crosssigning_verify_this_session">Verifica questa sessione</string>
+    <string name="crosssigning_other_user_not_trust">Gli altri utenti potrebbero non fidarsi</string>
+    <string name="complete_security">Completa la sicurezza</string>
+
+    <string name="verification_open_other_to_verify">Apri una sessione esistente e usala per verificare questa, dandole l\'accesso ai messaggi cifrati. Se non riesci ad accedere a nessuna, usa la tua chiave o password di recupero.</string>
+
+
+    <string name="verification_profile_verify">Verifica</string>
+    <string name="verification_profile_verified">Verificato</string>
+    <string name="verification_profile_warning">Attenzione</string>
+
+    <string name="room_member_profile_failed_to_get_devices">Rilevazione sessioni fallita</string>
+    <string name="room_member_profile_sessions_section_title">Sessioni</string>
+    <string name="trusted">Fidato</string>
+    <string name="not_trusted">Non fidato</string>
+
+    <string name="verification_profile_device_verified_because">Questa sessione è fidata per i messaggi sicuri perchè %1$s (%2$s) l\'ha verificata:</string>
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) ha fatto l\'accesso con una nuova sessione:</string>
+    <string name="verification_profile_device_untrust_info">Finché questo utente non si fida di questa sessione, i messaggi inviati da e verso di essa sono etichettati con avvisi. In alternativa, puoi verificarlo manualmente.</string>
+
+
+    <string name="initialize_cross_signing">Inizializza la firma incrociata</string>
+    <string name="reset_cross_signing">Reimposta chiavi</string>
+
+    <string name="a11y_qr_code_for_verification">Codice QR</string>
+
+    <string name="qr_code_scanned_by_other_notice">L\'altro utente ha scansionato correttamente il codice QR\?</string>
+    <string name="qr_code_scanned_by_other_yes">Sì</string>
+    <string name="qr_code_scanned_by_other_no">No</string>
+
+    <string name="no_connectivity_to_the_server_indicator">La connessione al server è stata persa</string>
 </resources>

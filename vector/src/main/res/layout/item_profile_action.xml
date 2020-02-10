@@ -20,7 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:scaleType="center"
-        android:tint="?riotx_text_primary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +27,7 @@
         tools:src="@drawable/ic_room_profile_notification"
         tools:visibility="visible" />
 
-    <TextView
+    <im.vector.riotx.core.platform.EllipsizingTextView
         android:id="@+id/actionTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -48,7 +47,7 @@
         app:layout_goneMarginStart="0dp"
         tools:text="@string/room_profile_section_security_learn_more" />
 
-    <TextView
+    <im.vector.riotx.core.platform.EllipsizingTextView
         android:id="@+id/actionSubtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,12 +59,25 @@
         android:textSize="12sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/actionEditable"
+        app:layout_constraintEnd_toStartOf="@+id/actionSecondaryAccessory"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/actionIcon"
         app:layout_constraintTop_toBottomOf="@id/actionTitle"
         app:layout_goneMarginStart="0dp"
         tools:text="@string/room_profile_encrypted_subtitle" />
+
+    <ImageView
+        android:id="@+id/actionSecondaryAccessory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:src="@drawable/ic_shield_warning"
+        android:layout_marginRight="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/actionEditable"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
 
     <ImageView
         android:id="@+id/actionEditable"

@@ -187,4 +187,19 @@
     <string name="notice_room_third_party_registered_invite_with_reason">"%1$s erabiltzaileak %2$s gelarako gonbidapena onartu du. Arrazoia: %3$s"</string>
     <string name="notice_room_withdraw_with_reason">"%1$s erabiltzaileak %2$s erabiltzailearen gonbidapena indargabetu du. Arrazoia: %3$s"</string>
 
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s erabiltzaileak %2$s gehitu du gela honen helbide gisa.</item>
+        <item quantity="other">%1$s erabiltzaileak %2$s gehitu ditu gela honen helbide gisa.</item>
+    </plurals>
+
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s erabiltzaileak %2$s kendu du gela honen helbide gisa.</item>
+        <item quantity="other">%1$s erabiltzaileak %3$s kendu ditu gela honen helbide gisa.</item>
+    </plurals>
+
+    <string name="notice_room_aliases_added_and_removed">%1$s erabiltzaileak %2$s gehitu %3$s eta kendu ditu gela honen helbide gisa.</string>
+
+    <string name="notice_room_canonical_alias_set">%1$s erabiltzaileak %2$s ezarri du gela honen helbide nagusi gisa.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s erabiltzaileak gela honen helbide nagusia kendu du.</string>
+
 </resources>

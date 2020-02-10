@@ -229,7 +229,7 @@ class MessageItemFactory @Inject constructor(
                                            informationData: MessageInformationData,
                                            highlight: Boolean,
                                            callback: TimelineEventController.Callback?): DefaultItem? {
-        val text = stringProvider.getString(R.string.rendering_event_error_type_of_message_not_handled, messageContent.type)
+        val text = stringProvider.getString(R.string.rendering_event_error_type_of_message_not_handled, messageContent.msgType)
         return defaultItemFactory.create(text, informationData, highlight, callback)
     }
 
@@ -258,7 +258,7 @@ class MessageItemFactory @Inject constructor(
                 .highlighted(highlight)
                 .mediaData(data)
                 .apply {
-                    if (messageContent.type == MessageType.MSGTYPE_STICKER_LOCAL) {
+                    if (messageContent.msgType == MessageType.MSGTYPE_STICKER_LOCAL) {
                         mode(ImageContentRenderer.Mode.STICKER)
                     } else {
                         clickListener(

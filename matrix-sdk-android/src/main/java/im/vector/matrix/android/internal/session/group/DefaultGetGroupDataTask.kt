@@ -25,6 +25,7 @@ import im.vector.matrix.android.internal.session.group.model.GroupRooms
 import im.vector.matrix.android.internal.session.group.model.GroupSummaryResponse
 import im.vector.matrix.android.internal.session.group.model.GroupUsers
 import im.vector.matrix.android.internal.task.Task
+import im.vector.matrix.android.internal.util.awaitTransaction
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
@@ -53,12 +54,12 @@ internal class DefaultGetGroupDataTask @Inject constructor(
         insertInDb(groupSummary, groupRooms, groupUsers, groupId)
     }
 
-    private fun insertInDb(groupSummary: GroupSummaryResponse,
+    private suspend fun insertInDb(groupSummary: GroupSummaryResponse,
                            groupRooms: GroupRooms,
                            groupUsers: GroupUsers,
                            groupId: String) {
         monarchy
-                .writeAsync { realm ->
+                .awaitTransaction { realm ->
                     val groupSummaryEntity = GroupSummaryEntity.where(realm, groupId).findFirst()
                             ?: realm.createObject(GroupSummaryEntity::class.java, groupId)
 

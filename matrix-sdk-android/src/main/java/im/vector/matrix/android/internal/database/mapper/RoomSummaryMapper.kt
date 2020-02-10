@@ -17,11 +17,11 @@
 package im.vector.matrix.android.internal.database.mapper
 
 import im.vector.matrix.android.api.session.crypto.CryptoService
-import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
+import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 
@@ -49,7 +49,8 @@ internal class RoomSummaryMapper @Inject constructor(
                         keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
                         forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
                 )
-            } catch (e: MXCryptoError) {
+            } catch (e: Throwable) {
+                Timber.d(e)
             }
         }
 
@@ -75,7 +76,8 @@ internal class RoomSummaryMapper @Inject constructor(
                 aliases = roomSummaryEntity.aliases.toList(),
                 isEncrypted = roomSummaryEntity.isEncrypted,
                 typingRoomMemberIds = roomSummaryEntity.typingUserIds.toList(),
-                breadcrumbsIndex = roomSummaryEntity.breadcrumbsIndex
+                breadcrumbsIndex = roomSummaryEntity.breadcrumbsIndex,
+                roomEncryptionTrustLevel = roomSummaryEntity.roomEncryptionTrustLevel
         )
     }
 }

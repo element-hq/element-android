@@ -22,11 +22,11 @@ import com.squareup.moshi.Moshi
 import dagger.BindsInstance
 import dagger.Component
 import im.vector.matrix.android.api.Matrix
+import im.vector.matrix.android.api.MatrixConfiguration
 import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.AuthModule
 import im.vector.matrix.android.internal.auth.SessionParamsStore
-import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
@@ -48,6 +48,8 @@ internal interface MatrixComponent {
 
     fun context(): Context
 
+    fun matrixConfiguration(): MatrixConfiguration
+
     fun resources(): Resources
 
     fun olmManager(): OlmManager
@@ -55,8 +57,6 @@ internal interface MatrixComponent {
     fun taskExecutor(): TaskExecutor
 
     fun sessionParamsStore(): SessionParamsStore
-
-    fun networkConnectivityChecker(): NetworkConnectivityChecker
 
     fun backgroundDetectionObserver(): BackgroundDetectionObserver
 
@@ -66,6 +66,7 @@ internal interface MatrixComponent {
 
     @Component.Factory
     interface Factory {
-        fun create(@BindsInstance context: Context): MatrixComponent
+        fun create(@BindsInstance context: Context,
+                   @BindsInstance matrixConfiguration: MatrixConfiguration): MatrixComponent
     }
 }

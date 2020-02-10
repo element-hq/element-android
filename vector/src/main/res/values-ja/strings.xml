@@ -1055,4 +1055,20 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="backup">バックアップ</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">サインアウトする前に鍵をバックアップしないと、暗号化されたメッセージにアクセスできなくなります。</string>
 
+    <string name="settings_cryptography_manage_keys">暗号鍵の管理</string>
+    <string name="start_verification_short_label">検証</string>
+    <string name="keys_backup_settings_restore_backup_button">バックアップから復元</string>
+    <string name="keys_backup_settings_delete_backup_button">バックアップを削除</string>
+
+    <string name="keys_backup_banner_in_progress">鍵をバックアップ中…</string>
+
+    <string name="keys_backup_info_keys_all_backup_up">全ての鍵をバックアップしました</string>
+    <plurals name="keys_backup_info_keys_backing_up">
+        <item quantity="other">%d 件の鍵をバックアップ中…</item>
+    </plurals>
+
+    <string name="keys_backup_info_title_version">バージョン</string>
+    <string name="keys_backup_info_title_algorithm">アルゴリズム</string>
+    <string name="keys_backup_info_title_signature">署名</string>
+
 </resources>

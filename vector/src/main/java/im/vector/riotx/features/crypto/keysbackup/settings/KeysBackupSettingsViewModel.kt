@@ -19,6 +19,7 @@ import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
@@ -68,7 +69,7 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
     }
 
     private fun init() {
-        keysBackupService.forceUsingLastVersion(object : MatrixCallback<Boolean> {})
+        keysBackupService.forceUsingLastVersion(NoOpMatrixCallback())
     }
 
     private fun getKeysBackupTrust() = withState { state ->

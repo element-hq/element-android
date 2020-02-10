@@ -187,4 +187,19 @@
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s прие поканата за %2$s. Причина: %3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s оттегли поканата на %2$s. Причина: %3$s</string>
 
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s добави %2$s като адрес за тази стая.</item>
+        <item quantity="other">%1$s добави %2$s като адреси за тази стая.</item>
+    </plurals>
+
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s премахна %2$s като адрес за тази стая.</item>
+        <item quantity="other">%1$s премахна %2$s като адреси за тази стая.</item>
+    </plurals>
+
+    <string name="notice_room_aliases_added_and_removed">%1$s добави %2$s и премахна %3$s като адреси за тази стая.</string>
+
+    <string name="notice_room_canonical_alias_set">%1$s настрой %2$s като основен адрес за тази стая.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s премахна основния адрес за тази стая.</string>
+
 </resources>

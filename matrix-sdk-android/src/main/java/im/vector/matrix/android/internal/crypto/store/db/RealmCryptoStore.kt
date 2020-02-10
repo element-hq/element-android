@@ -61,6 +61,7 @@ import im.vector.matrix.android.internal.crypto.store.db.query.delete
 import im.vector.matrix.android.internal.crypto.store.db.query.get
 import im.vector.matrix.android.internal.crypto.store.db.query.getById
 import im.vector.matrix.android.internal.crypto.store.db.query.getOrCreate
+import im.vector.matrix.android.internal.di.CryptoDatabase
 import im.vector.matrix.android.internal.session.SessionScope
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -70,11 +71,13 @@ import io.realm.kotlin.where
 import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmException
 import timber.log.Timber
+import javax.inject.Inject
 import kotlin.collections.set
 
 @SessionScope
-internal class RealmCryptoStore(private val realmConfiguration: RealmConfiguration,
-                                private val credentials: Credentials) : IMXCryptoStore {
+internal class RealmCryptoStore @Inject constructor(
+        @CryptoDatabase private val realmConfiguration: RealmConfiguration,
+        private val credentials: Credentials) : IMXCryptoStore {
 
     /* ==========================================================================================
      * Memory cache, to correctly release JNI objects
@@ -403,14 +406,14 @@ internal class RealmCryptoStore(private val realmConfiguration: RealmConfigurati
                 { realm: Realm ->
                     realm
                             .where<UserEntity>()
-                            .`in`(UserEntityFields.USER_ID, userIds.toTypedArray())
+                            .`in`(UserEntityFields.USER_ID, userIds.distinct().toTypedArray())
                 },
                 { entity ->
                     entity.devices.map { CryptoMapper.mapToModel(it) }
                 }
         )
         return Transformations.map(liveData) {
-            it.firstOrNull() ?: emptyList()
+            it.flatten()
         }
     }
 

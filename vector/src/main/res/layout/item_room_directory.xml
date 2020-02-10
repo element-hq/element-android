@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
 
-    <TextView
+    <im.vector.riotx.core.platform.EllipsizingTextView
         android:id="@+id/itemRoomDirectoryName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="@tools:sample/lorem/random" />
 
-    <TextView
+    <im.vector.riotx.core.platform.EllipsizingTextView
         android:id="@+id/itemRoomDirectoryDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

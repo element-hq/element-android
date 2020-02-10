@@ -24,7 +24,7 @@ import im.vector.matrix.android.internal.crypto.tasks.RoomVerificationUpdateTask
 import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.query.types
+import im.vector.matrix.android.internal.database.query.whereTypes
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -42,7 +42,7 @@ internal class VerificationMessageLiveObserver @Inject constructor(
 ) : RealmLiveEntityObserver<EventEntity>(realmConfiguration) {
 
     override val query = Monarchy.Query {
-        EventEntity.types(it, listOf(
+        EventEntity.whereTypes(it, listOf(
                 EventType.KEY_VERIFICATION_START,
                 EventType.KEY_VERIFICATION_ACCEPT,
                 EventType.KEY_VERIFICATION_KEY,

@@ -37,7 +37,9 @@ internal class DefaultUploadSignaturesTask @Inject constructor(
     override suspend fun execute(params: UploadSignaturesTask.Params) {
         try {
             val response = executeRequest<SignatureUploadResponse>(eventBus) {
-                apiCall = cryptoApi.uploadSignatures(params.signatures)
+                this.isRetryable = true
+                this.maxRetryCount = 10
+                this.apiCall = cryptoApi.uploadSignatures(params.signatures)
             }
             if (response.failures?.isNotEmpty() == true) {
                 throw Throwable(response.failures.toString())

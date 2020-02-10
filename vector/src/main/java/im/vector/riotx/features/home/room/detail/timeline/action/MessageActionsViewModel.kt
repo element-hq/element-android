@@ -134,7 +134,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun observeEvent() {
         if (room == null) return
-        room.rx(session)
+        room.rx()
                 .liveTimelineEvent(eventId)
                 .unwrap()
                 .execute {
@@ -144,7 +144,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun observeReactions() {
         if (room == null) return
-        room.rx(session)
+        room.rx()
                 .liveAnnotationSummary(eventId)
                 .map { annotations ->
                     EmojiDataSource.quickEmojis.map { emoji ->
@@ -172,7 +172,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             EventType.MESSAGE,
             EventType.STICKER     -> {
                 val messageContent: MessageContent? = timelineEvent.getLastMessageContent()
-                if (messageContent is MessageTextContent && messageContent.format == MessageType.FORMAT_MATRIX_HTML) {
+                if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
                     val html = messageContent.formattedBody
                             ?.takeIf { it.isNotBlank() }
                             ?.let { htmlCompressor.compress(it) }
@@ -203,7 +203,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     private fun actionsForEvent(timelineEvent: TimelineEvent): List<EventSharedAction> {
         val messageContent: MessageContent? = timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
                 ?: timelineEvent.root.getClearContent().toModel()
-        val type = messageContent?.type
+        val msgType = messageContent?.msgType
 
         return arrayListOf<EventSharedAction>().apply {
             if (timelineEvent.root.sendState.hasFailed()) {
@@ -230,7 +230,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                         add(EventSharedAction.Delete(eventId))
                     }
 
-                    if (canCopy(type)) {
+                    if (canCopy(msgType)) {
                         // TODO copy images? html? see ClipBoard
                         add(EventSharedAction.Copy(messageContent!!.body))
                     }
@@ -251,7 +251,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                         add(EventSharedAction.ViewEditHistory(informationData))
                     }
 
-                    if (canShare(type)) {
+                    if (canShare(msgType)) {
                         if (messageContent is MessageImageContent) {
                             session.contentUrlResolver().resolveFullSize(messageContent.url)?.let { url ->
                                 add(EventSharedAction.Share(url))
@@ -296,7 +296,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     private fun canReply(event: TimelineEvent, messageContent: MessageContent?): Boolean {
         // Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
         if (event.root.getClearType() != EventType.MESSAGE) return false
-        return when (messageContent?.type) {
+        return when (messageContent?.msgType) {
             MessageType.MSGTYPE_TEXT,
             MessageType.MSGTYPE_NOTICE,
             MessageType.MSGTYPE_EMOTE,
@@ -311,11 +311,10 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     private fun canQuote(event: TimelineEvent, messageContent: MessageContent?): Boolean {
         // Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
         if (event.root.getClearType() != EventType.MESSAGE) return false
-        return when (messageContent?.type) {
+        return when (messageContent?.msgType) {
             MessageType.MSGTYPE_TEXT,
             MessageType.MSGTYPE_NOTICE,
             MessageType.MSGTYPE_EMOTE,
-            MessageType.FORMAT_MATRIX_HTML,
             MessageType.MSGTYPE_LOCATION -> {
                 true
             }
@@ -347,24 +346,23 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         // TODO if user is admin or moderator
         val messageContent = event.root.getClearContent().toModel<MessageContent>()
         return event.root.senderId == myUserId && (
-                messageContent?.type == MessageType.MSGTYPE_TEXT
-                        || messageContent?.type == MessageType.MSGTYPE_EMOTE
+                messageContent?.msgType == MessageType.MSGTYPE_TEXT
+                        || messageContent?.msgType == MessageType.MSGTYPE_EMOTE
                 )
     }
 
-    private fun canCopy(type: String?): Boolean {
-        return when (type) {
+    private fun canCopy(msgType: String?): Boolean {
+        return when (msgType) {
             MessageType.MSGTYPE_TEXT,
             MessageType.MSGTYPE_NOTICE,
             MessageType.MSGTYPE_EMOTE,
-            MessageType.FORMAT_MATRIX_HTML,
             MessageType.MSGTYPE_LOCATION -> true
             else                         -> false
         }
     }
 
-    private fun canShare(type: String?): Boolean {
-        return when (type) {
+    private fun canShare(msgType: String?): Boolean {
+        return when (msgType) {
             MessageType.MSGTYPE_IMAGE,
             MessageType.MSGTYPE_AUDIO,
             MessageType.MSGTYPE_VIDEO -> true

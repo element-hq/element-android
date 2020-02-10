@@ -18,9 +18,28 @@ package im.vector.matrix.android.api.session.room.model
 
 import com.squareup.moshi.Json
 
+/**
+ * Ref: https://matrix.org/docs/spec/client_server/latest#room-history-visibility
+ */
 enum class RoomHistoryVisibility {
+    /**
+     * All events while this is the m.room.history_visibility value may be shared by any
+     * participating homeserver with anyone, regardless of whether they have ever joined the room.
+     */
+    @Json(name = "world_readable") WORLD_READABLE,
+    /**
+     * Previous events are always accessible to newly joined members. All events in the
+     * room are accessible, even those sent when the member was not a part of the room.
+     */
     @Json(name = "shared") SHARED,
+    /**
+     * Events are accessible to newly joined members from the point they were invited onwards.
+     * Events stop being accessible when the member's state changes to something other than invite or join.
+     */
     @Json(name = "invited") INVITED,
-    @Json(name = "joined") JOINED,
-    @Json(name = "world_readable") WORLD_READABLE
+    /**
+     * Events are accessible to newly joined members from the point they joined the room onwards.
+     * Events stop being accessible when the member's state changes to something other than join.
+     */
+    @Json(name = "joined") JOINED
 }

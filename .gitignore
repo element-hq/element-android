@@ -4,6 +4,7 @@
 # idea files: exclude everything except dictionnaries
 .idea/caches
 .idea/libraries
+.idea/inspectionProfiles
 .idea/*.xml
 .DS_Store
 /build
@@ -13,7 +14,3 @@
 /tmp
 
 ktlint
-.idea/copyright/New_vector.xml
-.idea/copyright/profiles_settings.xml
-
-.idea/copyright/New_Vector_Ltd.xml

@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.task
 
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
 import java.util.UUID
 
@@ -36,8 +37,6 @@ internal data class ConfigurableTask<PARAMS, RESULT>(
         val id: UUID,
         val callbackThread: TaskThread,
         val executionThread: TaskThread,
-        val constraints: TaskConstraints,
-        val retryCount: Int,
         val callback: MatrixCallback<RESULT>
 
 ) : Task<PARAMS, RESULT> by task {
@@ -48,9 +47,8 @@ internal data class ConfigurableTask<PARAMS, RESULT>(
             var id: UUID = UUID.randomUUID(),
             var callbackThread: TaskThread = TaskThread.MAIN,
             var executionThread: TaskThread = TaskThread.IO,
-            var constraints: TaskConstraints = TaskConstraints(),
             var retryCount: Int = 0,
-            var callback: MatrixCallback<RESULT> = object : MatrixCallback<RESULT> {}
+            var callback: MatrixCallback<RESULT> = NoOpMatrixCallback()
     ) {
 
         fun build() = ConfigurableTask(
@@ -59,8 +57,6 @@ internal data class ConfigurableTask<PARAMS, RESULT>(
                 id = id,
                 callbackThread = callbackThread,
                 executionThread = executionThread,
-                constraints = constraints,
-                retryCount = retryCount,
                 callback = callback
         )
     }

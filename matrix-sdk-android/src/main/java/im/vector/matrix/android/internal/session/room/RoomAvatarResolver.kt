@@ -21,10 +21,9 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomAvatarContent
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
-import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
 import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntityFields
-import im.vector.matrix.android.internal.database.query.prev
-import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.database.query.getOrNull
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import javax.inject.Inject
@@ -40,7 +39,7 @@ internal class RoomAvatarResolver @Inject constructor(private val monarchy: Mona
     fun resolve(roomId: String): String? {
         var res: String? = null
         monarchy.doWithRealm { realm ->
-            val roomName = EventEntity.where(realm, roomId, EventType.STATE_ROOM_AVATAR).prev()
+            val roomName = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_AVATAR, stateKey = "")?.root
             res = ContentMapper.map(roomName?.content).toModel<RoomAvatarContent>()?.avatarUrl
             if (!res.isNullOrEmpty()) {
                 return@doWithRealm

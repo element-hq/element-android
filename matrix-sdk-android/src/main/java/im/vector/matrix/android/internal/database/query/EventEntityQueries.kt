@@ -17,12 +17,10 @@
 package im.vector.matrix.android.internal.database.query
 
 import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.EventEntity.LinkFilterMode.*
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmQuery
-import io.realm.Sort
 import io.realm.kotlin.where
 
 internal fun EventEntity.Companion.where(realm: Realm, eventId: String): RealmQuery<EventEntity> {
@@ -35,59 +33,26 @@ internal fun EventEntity.Companion.where(realm: Realm, eventIds: List<String>): 
             .`in`(EventEntityFields.EVENT_ID, eventIds.toTypedArray())
 }
 
-internal fun EventEntity.Companion.where(realm: Realm,
-                                         roomId: String? = null,
-                                         type: String? = null,
-                                         linkFilterMode: EventEntity.LinkFilterMode = LINKED_ONLY): RealmQuery<EventEntity> {
+internal fun EventEntity.Companion.whereType(realm: Realm,
+                                             type: String,
+                                             roomId: String? = null
+): RealmQuery<EventEntity> {
     val query = realm.where<EventEntity>()
     if (roomId != null) {
         query.equalTo(EventEntityFields.ROOM_ID, roomId)
     }
-    if (type != null) {
-        query.equalTo(EventEntityFields.TYPE, type)
-    }
-    return when (linkFilterMode) {
-        LINKED_ONLY   -> query.equalTo(EventEntityFields.IS_UNLINKED, false)
-        UNLINKED_ONLY -> query.equalTo(EventEntityFields.IS_UNLINKED, true)
-        BOTH          -> query
-    }
+    return query.equalTo(EventEntityFields.TYPE, type)
 }
 
-internal fun EventEntity.Companion.types(realm: Realm,
-                                         typeList: List<String> = emptyList()): RealmQuery<EventEntity> {
+internal fun EventEntity.Companion.whereTypes(realm: Realm,
+                                              typeList: List<String> = emptyList(),
+                                              roomId: String? = null): RealmQuery<EventEntity> {
     val query = realm.where<EventEntity>()
     query.`in`(EventEntityFields.TYPE, typeList.toTypedArray())
+    if (roomId != null) {
+        query.equalTo(EventEntityFields.ROOM_ID, roomId)
+    }
     return query
-}
-
-internal fun RealmQuery<EventEntity>.descending(since: Int? = null, strict: Boolean = false): RealmQuery<EventEntity> {
-    if (since != null) {
-        if (strict) {
-            this.lessThan(EventEntityFields.STATE_INDEX, since)
-        } else {
-            this.lessThanOrEqualTo(EventEntityFields.STATE_INDEX, since)
-        }
-    }
-    return this.sort(EventEntityFields.STATE_INDEX, Sort.DESCENDING)
-}
-
-internal fun RealmQuery<EventEntity>.ascending(from: Int? = null, strict: Boolean = true): RealmQuery<EventEntity> {
-    if (from != null) {
-        if (strict) {
-            this.greaterThan(EventEntityFields.STATE_INDEX, from)
-        } else {
-            this.greaterThanOrEqualTo(EventEntityFields.STATE_INDEX, from)
-        }
-    }
-    return this.sort(EventEntityFields.STATE_INDEX, Sort.ASCENDING)
-}
-
-internal fun RealmQuery<EventEntity>.next(from: Int? = null, strict: Boolean = true): EventEntity? {
-    return this.ascending(from, strict).findFirst()
-}
-
-internal fun RealmQuery<EventEntity>.prev(since: Int? = null, strict: Boolean = false): EventEntity? {
-    return descending(since, strict).findFirst()
 }
 
 internal fun RealmList<EventEntity>.find(eventId: String): EventEntity? {

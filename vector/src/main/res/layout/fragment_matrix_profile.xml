@@ -71,7 +71,7 @@
                         tools:ignore="MissingConstraints"
                         tools:src="@drawable/ic_shield_trusted" />
 
-                    <TextView
+                    <im.vector.riotx.core.platform.EllipsizingTextView
                         android:id="@+id/matrixProfileToolbarTitleView"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -90,7 +90,6 @@
                         tools:text="@sample/matrix.json/data/roomName" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
 
             </androidx.appcompat.widget.Toolbar>
 

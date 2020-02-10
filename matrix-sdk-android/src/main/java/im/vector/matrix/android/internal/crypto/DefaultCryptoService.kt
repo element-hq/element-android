@@ -26,7 +26,9 @@ import com.squareup.moshi.Types
 import com.zhuinden.monarchy.Monarchy
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.crypto.MXCryptoConfig
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.session.crypto.CryptoService
@@ -70,7 +72,7 @@ import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
 import im.vector.matrix.android.internal.crypto.verification.DefaultVerificationService
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
-import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.database.query.whereType
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.session.SessionScope
@@ -116,7 +118,7 @@ internal class DefaultCryptoService @Inject constructor(
         // Olm device
         private val olmDevice: MXOlmDevice,
         // Set of parameters used to configure/customize the end-to-end crypto.
-        private val cryptoConfig: MXCryptoConfig = MXCryptoConfig(),
+        private val mxCryptoConfig: MXCryptoConfig,
         // Device list manager
         private val deviceListManager: DeviceListManager,
         // The key backup service.
@@ -189,7 +191,7 @@ internal class DefaultCryptoService @Inject constructor(
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             // bg refresh of crypto device
-                            downloadKeys(listOf(credentials.userId), true, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {})
+                            downloadKeys(listOf(credentials.userId), true, NoOpMatrixCallback())
                             callback.onSuccess(data)
                         }
 
@@ -399,6 +401,7 @@ internal class DefaultCryptoService @Inject constructor(
             null
         }
     }
+
     override fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
         return cryptoStore.getUserDevices(userId)?.map { it.value } ?: emptyList()
     }
@@ -531,7 +534,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     override fun isRoomEncrypted(roomId: String): Boolean {
         val encryptionEvent = monarchy.fetchCopied { realm ->
-            EventEntity.where(realm, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION)
+            EventEntity.whereType(realm, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION)
                     .contains(EventEntityFields.CONTENT, "\"algorithm\":\"$MXCRYPTO_ALGORITHM_MEGOLM\"")
                     .findFirst()
         }
@@ -545,8 +548,8 @@ internal class DefaultCryptoService @Inject constructor(
         return cryptoStore.getUserDevices(userId)?.values?.toMutableList() ?: ArrayList()
     }
 
-    fun isEncryptionEnabledForInvitedUser(): Boolean {
-        return cryptoConfig.enableEncryptionForInvitedMembers
+    private fun isEncryptionEnabledForInvitedUser(): Boolean {
+        return mxCryptoConfig.enableEncryptionForInvitedMembers
     }
 
     override fun getEncryptionAlgorithm(roomId: String): String? {
@@ -779,7 +782,7 @@ internal class DefaultCryptoService @Inject constructor(
                 deviceListManager.startTrackingDeviceList(listOf(userId))
             } else if (membership == Membership.INVITE
                     && shouldEncryptForInvitedMembers(roomId)
-                    && cryptoConfig.enableEncryptionForInvitedMembers) {
+                    && isEncryptionEnabledForInvitedUser()) {
                 // track the deviceList for this invited user.
                 // Caution: there's a big edge case here in that federated servers do not
                 // know what other servers are in the room at the time they've been invited.

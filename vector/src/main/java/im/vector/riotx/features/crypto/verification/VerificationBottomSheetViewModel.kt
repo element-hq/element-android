@@ -15,8 +15,6 @@
  */
 package im.vector.riotx.features.crypto.verification
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -43,9 +41,7 @@ import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.core.extensions.exhaustive
-import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.core.utils.LiveEvent
 
 data class VerificationBottomSheetViewState(
         val otherUserMxItem: MatrixItem? = null,
@@ -63,13 +59,8 @@ data class VerificationBottomSheetViewState(
 class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted initialState: VerificationBottomSheetViewState,
                                                                    @Assisted args: VerificationBottomSheet.VerificationArgs,
                                                                    private val session: Session)
-    : VectorViewModel<VerificationBottomSheetViewState, VerificationAction, EmptyViewEvents>(initialState),
+    : VectorViewModel<VerificationBottomSheetViewState, VerificationAction, VerificationBottomSheetViewEvents>(initialState),
         VerificationService.VerificationListener {
-
-    // Can be used for several actions, for a one shot result
-    private val _requestLiveData = MutableLiveData<LiveEvent<Async<VerificationAction>>>()
-    val requestLiveData: LiveData<LiveEvent<Async<VerificationAction>>>
-        get() = _requestLiveData
 
     init {
         session.getVerificationService().addListener(this)
@@ -255,7 +246,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                         ?.shortCodeDoesNotMatch()
             }
             is VerificationAction.GotItConclusion              -> {
-                _requestLiveData.postValue(LiveEvent(Success(action)))
+                _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
             }
         }.exhaustive
     }

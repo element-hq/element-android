@@ -20,6 +20,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.sync.SyncState
@@ -51,6 +52,7 @@ sealed class UnreadState {
 data class RoomDetailViewState(
         val roomId: String,
         val eventId: String?,
+        val myRoomMember: Async<RoomMemberSummary> = Uninitialized,
         val asyncInviter: Async<User> = Uninitialized,
         val asyncRoomSummary: Async<RoomSummary> = Uninitialized,
         val typingRoomMembers: List<MatrixItem.UserItem>? = null,

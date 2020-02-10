@@ -20,6 +20,7 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
@@ -182,7 +183,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                 ?.filter { it.membership == Membership.JOIN }
                 ?.map { it.roomId }
                 ?.toList()
-                ?.let { session.markAllAsRead(it, object : MatrixCallback<Unit> {}) }
+                ?.let { session.markAllAsRead(it, NoOpMatrixCallback()) }
     }
 
     private fun handleChangeNotificationMode(action: RoomListAction.ChangeRoomNotificationState) {

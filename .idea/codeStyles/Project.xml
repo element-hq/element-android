@@ -1,5 +1,6 @@
 <component name="ProjectCodeStyleConfiguration">
   <code_scheme name="Project" version="173">
+    <option name="RIGHT_MARGIN" value="160" />
     <AndroidXmlCodeStyleSettings>
       <option name="ARRANGEMENT_SETTINGS_MIGRATED_TO_191" value="true" />
     </AndroidXmlCodeStyleSettings>

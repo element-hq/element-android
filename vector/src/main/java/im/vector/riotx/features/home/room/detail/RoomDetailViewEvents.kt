@@ -16,11 +16,45 @@
 
 package im.vector.riotx.features.home.room.detail
 
+import androidx.annotation.StringRes
 import im.vector.riotx.core.platform.VectorViewEvents
+import im.vector.riotx.features.command.Command
+import java.io.File
 
 /**
  * Transient events for RoomDetail
  */
 sealed class RoomDetailViewEvents : VectorViewEvents {
     data class Failure(val throwable: Throwable) : RoomDetailViewEvents()
+    data class OnNewTimelineEvents(val eventIds: List<String>) : RoomDetailViewEvents()
+
+    data class ActionSuccess(val action: RoomDetailAction) : RoomDetailViewEvents()
+    data class ActionFailure(val action: RoomDetailAction, val throwable: Throwable) : RoomDetailViewEvents()
+
+    data class ShowMessage(val message: String) : RoomDetailViewEvents()
+
+    data class NavigateToEvent(val eventId: String) : RoomDetailViewEvents()
+
+    data class FileTooBigError(
+            val filename: String,
+            val fileSizeInBytes: Long,
+            val homeServerLimitInBytes: Long
+    ) : RoomDetailViewEvents()
+
+    data class DownloadFileState(
+            val mimeType: String,
+            val file: File?,
+            val throwable: Throwable?
+    ) : RoomDetailViewEvents()
+
+    abstract class SendMessageResult : RoomDetailViewEvents()
+
+    object MessageSent : SendMessageResult()
+    class SlashCommandError(val command: Command) : SendMessageResult()
+    class SlashCommandUnknown(val command: String) : SendMessageResult()
+    data class SlashCommandHandled(@StringRes val messageRes: Int? = null) : SendMessageResult()
+    object SlashCommandResultOk : SendMessageResult()
+    class SlashCommandResultError(val throwable: Throwable) : SendMessageResult()
+    // TODO Remove
+    object SlashCommandNotImplemented : SendMessageResult()
 }

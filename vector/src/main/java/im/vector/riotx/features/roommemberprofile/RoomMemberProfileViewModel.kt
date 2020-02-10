@@ -17,10 +17,7 @@
 
 package im.vector.riotx.features.roommemberprofile
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
@@ -49,7 +46,6 @@ import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.core.utils.LiveEvent
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import kotlinx.coroutines.Dispatchers
@@ -74,10 +70,6 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
             return fragment.viewModelFactory.create(state)
         }
     }
-
-    private val _actionResultLiveData = MutableLiveData<LiveEvent<Async<RoomMemberProfileAction>>>()
-    val actionResultLiveData: LiveData<LiveEvent<Async<RoomMemberProfileAction>>>
-        get() = _actionResultLiveData
 
     private val room = if (initialState.roomId != null) {
         session.getRoom(initialState.roomId)
@@ -145,23 +137,19 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         when (action) {
             is RoomMemberProfileAction.RetryFetchingInfo -> fetchProfileInfo()
             is RoomMemberProfileAction.IgnoreUser        -> handleIgnoreAction()
-            is RoomMemberProfileAction.VerifyUser        -> prepareVerification(action)
+            is RoomMemberProfileAction.VerifyUser        -> prepareVerification()
         }
     }
 
-    private fun prepareVerification(action: RoomMemberProfileAction.VerifyUser) = withState { state ->
+    private fun prepareVerification() = withState { state ->
         // Sanity
         if (state.isRoomEncrypted) {
             if (!state.isMine && state.userMXCrossSigningInfo?.isTrusted() == false) {
                 // ok, let's find or create the DM room
-                _actionResultLiveData.postValue(
-                        LiveEvent(Success(
-                                action.copy(
-                                        userId = state.userId,
-                                        canCrossSign = session.getCrossSigningService().canCrossSign()
-                                )
-                        ))
-                )
+                _viewEvents.post(RoomMemberProfileViewEvents.StartVerification(
+                        userId = state.userId,
+                        canCrossSign = session.getCrossSigningService().canCrossSign()
+                ))
             }
         }
     }
@@ -170,7 +158,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         val queryParams = roomMemberQueryParams {
             this.userId = QueryStringValue.Equals(initialState.userId, QueryStringValue.Case.SENSITIVE)
         }
-        room.rx(session).liveRoomMembers(queryParams)
+        room.rx().liveRoomMembers(queryParams)
                 .map { it.firstOrNull()?.toMatrixItem().toOptional() }
                 .unwrap()
                 .execute {
@@ -193,8 +181,8 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
     }
 
     private fun observeRoomSummaryAndPowerLevels(room: Room) {
-        val roomSummaryLive = room.rx(session).liveRoomSummary().unwrap()
-        val powerLevelsContentLive = room.rx(session).liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
+        val roomSummaryLive = room.rx().liveRoomSummary().unwrap()
+        val powerLevelsContentLive = room.rx().liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, "")
                 .mapOptional { it.content.toModel<PowerLevelsContent>() }
                 .unwrap()
 

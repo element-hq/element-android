@@ -25,12 +25,22 @@ import android.os.Build
 import android.os.PowerManager
 import androidx.core.content.ContextCompat
 import im.vector.matrix.android.internal.session.sync.job.SyncService
+import im.vector.riotx.core.di.HasVectorInjector
 import im.vector.riotx.core.services.VectorSyncService
 import timber.log.Timber
 
 class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
+        val appContext = context.applicationContext
+        if (appContext is HasVectorInjector) {
+            val activeSession = appContext.injector().activeSessionHolder().getSafeActiveSession()
+            if (activeSession == null) {
+                Timber.v("No active session don't launch sync service.")
+                return
+            }
+        }
+
         // Acquire a lock to give enough time for the sync :/
         (context.getSystemService(Context.POWER_SERVICE) as PowerManager).run {
             newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "riotx:fdroidSynclock").apply {
@@ -51,7 +61,6 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
         }
 
         scheduleAlarm(context, sessionId, 30_000L)
-
         Timber.i("Alarm scheduled to restart service")
     }
 

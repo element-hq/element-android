@@ -18,10 +18,6 @@ package im.vector.riotx.features.home.room.detail
 
 import android.net.Uri
 import androidx.annotation.IdRes
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
@@ -32,6 +28,8 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.MatrixPatterns
+import im.vector.matrix.android.api.NoOpMatrixCallback
+import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.isImageMessage
@@ -39,6 +37,7 @@ import im.vector.matrix.android.api.session.events.model.isTextMessage
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
+import im.vector.matrix.android.api.session.room.members.roomMemberQueryParams
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
@@ -46,27 +45,27 @@ import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneContent
+import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
+import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.exhaustive
-import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.resources.UserPreferencesProvider
-import im.vector.riotx.core.utils.LiveEvent
 import im.vector.riotx.core.utils.subscribeLogError
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
-import im.vector.riotx.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.riotx.features.crypto.verification.supportedVerificationMethods
+import im.vector.riotx.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import im.vector.riotx.features.home.room.typing.TypingHelper
 import im.vector.riotx.features.settings.VectorPreferences
@@ -111,11 +110,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     var timeline = room.createTimeline(eventId, timelineSettings)
         private set
 
-    // Can be used for several actions, for a one shot result
-    private val _requestLiveData = MutableLiveData<LiveEvent<Async<RoomDetailAction>>>()
-    val requestLiveData: LiveData<LiveEvent<Async<RoomDetailAction>>>
-        get() = _requestLiveData
-
     // Slot to keep a pending action during permission request
     var pendingAction: RoomDetailAction? = null
     // Slot to keep a pending uri during permission request
@@ -151,10 +145,27 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         observeEventDisplayedActions()
         observeDrafts()
         observeUnreadState()
+        observeMyRoomMember()
         room.getRoomSummaryLive()
-        room.rx(session).loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
+        room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, NoOpMatrixCallback())
+        room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         // Inform the SDK that the room is displayed
         session.onRoomDisplayed(initialState.roomId)
+    }
+
+    private fun observeMyRoomMember() {
+        val queryParams = roomMemberQueryParams {
+            this.userId = QueryStringValue.Equals(session.myUserId, QueryStringValue.Case.SENSITIVE)
+        }
+        room.rx()
+                .liveRoomMembers(queryParams)
+                .map {
+                    it.firstOrNull().toOptional()
+                }
+                .unwrap()
+                .execute {
+                    copy(myRoomMember = it)
+                }
     }
 
     override fun handle(action: RoomDetailAction) {
@@ -203,7 +214,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun stopTrackingUnreadMessages() {
         if (trackUnreadMessages.getAndSet(false)) {
             mostRecentDisplayedEvent?.root?.eventId?.also {
-                room.setReadMarker(it, callback = object : MatrixCallback<Unit> {})
+                room.setReadMarker(it, callback = NoOpMatrixCallback())
             }
             mostRecentDisplayedEvent = null
         }
@@ -224,16 +235,16 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun handleSaveDraft(action: RoomDetailAction.SaveDraft) {
         withState {
             when (it.sendMode) {
-                is SendMode.REGULAR -> room.saveDraft(UserDraft.REGULAR(action.draft))
-                is SendMode.REPLY   -> room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, action.draft))
-                is SendMode.QUOTE   -> room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, action.draft))
-                is SendMode.EDIT    -> room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, action.draft))
+                is SendMode.REGULAR -> room.saveDraft(UserDraft.REGULAR(action.draft), NoOpMatrixCallback())
+                is SendMode.REPLY   -> room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
+                is SendMode.QUOTE   -> room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
+                is SendMode.EDIT    -> room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
             }
         }
     }
 
     private fun observeDrafts() {
-        room.rx(session).liveDrafts()
+        room.rx().liveDrafts()
                 .subscribe {
                     Timber.d("Draft update --> SetState")
                     setState {
@@ -298,27 +309,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         }
     }
 
-    // TODO Cleanup this and use ViewEvents
-    private val _nonBlockingPopAlert = MutableLiveData<LiveEvent<Pair<Int, List<Any>>>>()
-    val nonBlockingPopAlert: LiveData<LiveEvent<Pair<Int, List<Any>>>>
-        get() = _nonBlockingPopAlert
-
-    private val _sendMessageResultLiveData = MutableLiveData<LiveEvent<SendMessageResult>>()
-    val sendMessageResultLiveData: LiveData<LiveEvent<SendMessageResult>>
-        get() = _sendMessageResultLiveData
-
-    private val _navigateToEvent = MutableLiveData<LiveEvent<String>>()
-    val navigateToEvent: LiveData<LiveEvent<String>>
-        get() = _navigateToEvent
-
-    private val _fileTooBigEvent = MutableLiveData<LiveEvent<FileTooBigError>>()
-    val fileTooBigEvent: LiveData<LiveEvent<FileTooBigError>>
-        get() = _fileTooBigEvent
-
-    private val _downloadedFileEvent = MutableLiveData<LiveEvent<DownloadFileState>>()
-    val downloadedFileEvent: LiveData<LiveEvent<DownloadFileState>>
-        get() = _downloadedFileEvent
-
     fun isMenuItemVisible(@IdRes itemId: Int) = when (itemId) {
         R.id.clear_message_queue ->
             /* For now always disable on production, worker cancellation is not working properly */
@@ -338,17 +328,17 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         is ParsedCommand.ErrorNotACommand         -> {
                             // Send the text message to the room
                             room.sendTextMessage(action.text, autoMarkdown = action.autoMarkdown)
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.MessageSent)
+                            _viewEvents.post(RoomDetailViewEvents.MessageSent)
                             popDraft()
                         }
                         is ParsedCommand.ErrorSyntax              -> {
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandError(slashCommandResult.command))
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandError(slashCommandResult.command))
                         }
                         is ParsedCommand.ErrorEmptySlashCommand   -> {
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandUnknown("/"))
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandUnknown("/"))
                         }
                         is ParsedCommand.ErrorUnknownSlashCommand -> {
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandUnknown(slashCommandResult.slashCommand))
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandUnknown(slashCommandResult.slashCommand))
                         }
                         is ParsedCommand.Invite                   -> {
                             handleInviteSlashCommand(slashCommandResult)
@@ -356,55 +346,55 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         }
                         is ParsedCommand.SetUserPowerLevel        -> {
                             // TODO
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.ClearScalarToken         -> {
                             // TODO
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.SetMarkdown              -> {
                             vectorPreferences.setMarkdownEnabled(slashCommandResult.enable)
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled(
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled(
                                     if (slashCommandResult.enable) R.string.markdown_has_been_enabled else R.string.markdown_has_been_disabled))
                             popDraft()
                         }
                         is ParsedCommand.UnbanUser                -> {
                             // TODO
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.BanUser                  -> {
                             // TODO
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.KickUser                 -> {
                             // TODO
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.JoinRoom                 -> {
                             // TODO
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.PartRoom                 -> {
                             // TODO
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.SendEmote                -> {
                             room.sendTextMessage(slashCommandResult.message, msgType = MessageType.MSGTYPE_EMOTE)
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
                         is ParsedCommand.SendRainbow              -> {
                             slashCommandResult.message.toString().let {
                                 room.sendFormattedTextMessage(it, rainbowGenerator.generate(it))
                             }
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
                         is ParsedCommand.SendRainbowEmote         -> {
                             slashCommandResult.message.toString().let {
                                 room.sendFormattedTextMessage(it, rainbowGenerator.generate(it), MessageType.MSGTYPE_EMOTE)
                             }
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
                         is ParsedCommand.SendSpoiler              -> {
@@ -412,7 +402,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                                     "[${stringProvider.getString(R.string.spoiler)}](${slashCommandResult.message})",
                                     "<span data-mx-spoiler>${slashCommandResult.message}</span>"
                             )
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
                         is ParsedCommand.SendShrug                -> {
@@ -424,12 +414,12 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                                 }
                             }
                             room.sendTextMessage(sequence)
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
                         is ParsedCommand.VerifyUser               -> {
                             session.getVerificationService().requestKeyVerificationInDMs(supportedVerificationMethods, slashCommandResult.userId, room.roomId)
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
                         is ParsedCommand.ChangeTopic              -> {
@@ -438,7 +428,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         }
                         is ParsedCommand.ChangeDisplayName        -> {
                             // TODO
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                     }.exhaustive
                 }
@@ -458,14 +448,14 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         val existingBody = messageContent?.body ?: ""
                         if (existingBody != action.text) {
                             room.editTextMessage(state.sendMode.timelineEvent.root.eventId ?: "",
-                                    messageContent?.type ?: MessageType.MSGTYPE_TEXT,
+                                    messageContent?.msgType ?: MessageType.MSGTYPE_TEXT,
                                     action.text,
                                     action.autoMarkdown)
                         } else {
                             Timber.w("Same message content, do not send edition")
                         }
                     }
-                    _sendMessageResultLiveData.postLiveEvent(SendMessageResult.MessageSent)
+                    _viewEvents.post(RoomDetailViewEvents.MessageSent)
                     popDraft()
                 }
                 is SendMode.QUOTE   -> {
@@ -488,13 +478,13 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     } else {
                         room.sendFormattedTextMessage(finalText, htmlText)
                     }
-                    _sendMessageResultLiveData.postLiveEvent(SendMessageResult.MessageSent)
+                    _viewEvents.post(RoomDetailViewEvents.MessageSent)
                     popDraft()
                 }
                 is SendMode.REPLY   -> {
                     state.sendMode.timelineEvent.let {
                         room.replyToMessage(it, action.text.toString(), action.autoMarkdown)
-                        _sendMessageResultLiveData.postLiveEvent(SendMessageResult.MessageSent)
+                        _viewEvents.post(RoomDetailViewEvents.MessageSent)
                         popDraft()
                     }
                 }
@@ -503,7 +493,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun popDraft() {
-        room.deleteDraft()
+        room.deleteDraft(NoOpMatrixCallback())
     }
 
     private fun legacyRiotQuoteText(quotedText: String?, myText: String): String {
@@ -527,29 +517,29 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleChangeTopicSlashCommand(changeTopic: ParsedCommand.ChangeTopic) {
-        _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+        _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
 
         room.updateTopic(changeTopic.topic, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandResultOk)
+                _viewEvents.post(RoomDetailViewEvents.SlashCommandResultOk)
             }
 
             override fun onFailure(failure: Throwable) {
-                _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandResultError(failure))
+                _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
             }
         })
     }
 
     private fun handleInviteSlashCommand(invite: ParsedCommand.Invite) {
-        _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+        _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
 
         room.invite(invite.userId, invite.reason, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandResultOk)
+                _viewEvents.post(RoomDetailViewEvents.SlashCommandResultOk)
             }
 
             override fun onFailure(failure: Throwable) {
-                _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandResultError(failure))
+                _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
             }
         })
     }
@@ -586,8 +576,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         } else {
             when (val tooBigFile = attachments.find { it.size > maxUploadFileSize }) {
                 null -> room.sendMedias(attachments)
-                else -> _fileTooBigEvent.postValue(LiveEvent(FileTooBigError(tooBigFile.name
-                        ?: tooBigFile.path, tooBigFile.size, maxUploadFileSize)))
+                else -> _viewEvents.post(RoomDetailViewEvents.FileTooBigError(
+                        tooBigFile.name ?: tooBigFile.path,
+                        tooBigFile.size,
+                        maxUploadFileSize
+                ))
             }
         }
     }
@@ -609,11 +602,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleRejectInvite() {
-        room.leave(null, object : MatrixCallback<Unit> {})
+        room.leave(null, NoOpMatrixCallback())
     }
 
     private fun handleAcceptInvite() {
-        room.join(callback = object : MatrixCallback<Unit> {})
+        room.join(callback = NoOpMatrixCallback())
     }
 
     private fun handleEditAction(action: RoomDetailAction.EnterEditMode) {
@@ -622,7 +615,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
             setState { copy(sendMode = SendMode.EDIT(timelineEvent, action.text)) }
             timelineEvent.root.eventId?.let {
-                room.saveDraft(UserDraft.EDIT(it, timelineEvent.getTextEditableContent() ?: ""))
+                room.saveDraft(UserDraft.EDIT(it, timelineEvent.getTextEditableContent() ?: ""), NoOpMatrixCallback())
             }
         }
     }
@@ -636,9 +629,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 // Save a new draft and keep the previously entered text, if it was not an edit
                 timelineEvent.root.eventId?.let {
                     if (state.sendMode is SendMode.EDIT) {
-                        room.saveDraft(UserDraft.QUOTE(it, ""))
+                        room.saveDraft(UserDraft.QUOTE(it, ""), NoOpMatrixCallback())
                     } else {
-                        room.saveDraft(UserDraft.QUOTE(it, action.text))
+                        room.saveDraft(UserDraft.QUOTE(it, action.text), NoOpMatrixCallback())
                     }
                 }
             }
@@ -654,9 +647,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 // Save a new draft and keep the previously entered text, if it was not an edit
                 timelineEvent.root.eventId?.let {
                     if (state.sendMode is SendMode.EDIT) {
-                        room.saveDraft(UserDraft.REPLY(it, ""))
+                        room.saveDraft(UserDraft.REPLY(it, ""), NoOpMatrixCallback())
                     } else {
-                        room.saveDraft(UserDraft.REPLY(it, action.text))
+                        room.saveDraft(UserDraft.REPLY(it, action.text), NoOpMatrixCallback())
                     }
                 }
             }
@@ -668,10 +661,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         withState {
             if (draft.isNotBlank()) {
                 when (it.sendMode) {
-                    is SendMode.REGULAR -> room.saveDraft(UserDraft.REGULAR(draft))
-                    is SendMode.REPLY   -> room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, draft))
-                    is SendMode.QUOTE   -> room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, draft))
-                    is SendMode.EDIT    -> room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, draft))
+                    is SendMode.REGULAR -> room.saveDraft(UserDraft.REGULAR(draft), NoOpMatrixCallback())
+                    is SendMode.REPLY   -> room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, draft), NoOpMatrixCallback())
+                    is SendMode.QUOTE   -> room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, draft), NoOpMatrixCallback())
+                    is SendMode.EDIT    -> room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, draft), NoOpMatrixCallback())
                 }
             }
         }
@@ -682,10 +675,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         withState { state ->
             // For edit, just delete the current draft
             if (state.sendMode is SendMode.EDIT) {
-                room.deleteDraft()
+                room.deleteDraft(NoOpMatrixCallback())
             } else {
                 // Save a new draft and keep the previously entered text
-                room.saveDraft(UserDraft.REGULAR(action.text))
+                room.saveDraft(UserDraft.REGULAR(action.text), NoOpMatrixCallback())
             }
         }
     }
@@ -699,7 +692,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 action.messageFileContent.encryptedFileInfo?.toElementToDecrypt(),
                 object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {
-                        _downloadedFileEvent.postLiveEvent(DownloadFileState(
+                        _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
                                 action.messageFileContent.getMimeType(),
                                 data,
                                 null
@@ -707,7 +700,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     }
 
                     override fun onFailure(failure: Throwable) {
-                        _downloadedFileEvent.postLiveEvent(DownloadFileState(
+                        _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
                                 action.messageFileContent.getMimeType(),
                                 null,
                                 failure
@@ -728,7 +721,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         if (action.highlight) {
             setState { copy(highlightedEventId = correctedEventId) }
         }
-        _navigateToEvent.postLiveEvent(correctedEventId)
+        _viewEvents.post(RoomDetailViewEvents.NavigateToEvent(correctedEventId))
     }
 
     private fun handleResendEvent(action: RoomDetailAction.ResendMessage) {
@@ -786,24 +779,24 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         }
                     }
                     bufferedMostRecentDisplayedEvent.root.eventId?.let { eventId ->
-                        room.setReadReceipt(eventId, callback = object : MatrixCallback<Unit> {})
+                        room.setReadReceipt(eventId, callback = NoOpMatrixCallback())
                     }
                 })
                 .disposeOnClear()
     }
 
     private fun handleMarkAllAsRead() {
-        room.markAllAsRead(object : MatrixCallback<Any> {})
+        room.markAsRead(ReadService.MarkAsReadParams.BOTH, NoOpMatrixCallback())
     }
 
     private fun handleReportContent(action: RoomDetailAction.ReportContent) {
         room.reportContent(action.eventId, -100, action.reason, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                _requestLiveData.postValue(LiveEvent(Success(action)))
+                _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
             }
 
             override fun onFailure(failure: Throwable) {
-                _requestLiveData.postValue(LiveEvent(Fail(failure)))
+                _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
             }
         })
     }
@@ -815,11 +808,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
         session.ignoreUserIds(listOf(action.userId), object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                _requestLiveData.postValue(LiveEvent(Success(action)))
+                _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
             }
 
             override fun onFailure(failure: Throwable) {
-                _requestLiveData.postValue(LiveEvent(Fail(failure)))
+                _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
             }
         })
     }
@@ -831,7 +824,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         action.otherUserId,
                         room.roomId,
                         action.transactionId)) {
-            _requestLiveData.postValue(LiveEvent(Success(action)))
+            _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
         } else {
             // TODO
         }
@@ -847,7 +840,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private fun handleRequestVerification(action: RoomDetailAction.RequestVerification) {
         if (action.userId == session.myUserId) return
-        _requestLiveData.postValue(LiveEvent(Success(action)))
+        _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
     }
 
     private fun handleResumeRequestVerification(action: RoomDetailAction.ResumeVerification) {
@@ -855,9 +848,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         session.getVerificationService().getExistingVerificationRequestInRoom(room.roomId, action.transactionId)?.let {
             if (it.handledByOtherSession) return
             if (!it.isFinished) {
-                _requestLiveData.postValue(LiveEvent(Success(action.copy(
+                _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action.copy(
                         otherUserId = it.otherUserId
-                ))))
+                )))
             }
         }
     }
@@ -874,7 +867,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun observeRoomSummary() {
-        room.rx(session).liveRoomSummary()
+        room.rx().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     val typingRoomMembers =
@@ -892,7 +885,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         Observable
                 .combineLatest<List<TimelineEvent>, RoomSummary, UnreadState>(
                         timelineEvents.observeOn(Schedulers.computation()),
-                        room.rx(session).liveRoomSummary().unwrap(),
+                        room.rx().liveRoomSummary().unwrap(),
                         BiFunction { timelineEvents, roomSummary ->
                             computeUnreadState(timelineEvents, roomSummary)
                         }
@@ -952,7 +945,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     setState { copy(asyncInviter = Success(it)) }
                 }
             }
-            room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE)?.also {
+            room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE, "")?.also {
                 setState { copy(tombstoneEvent = it) }
             }
         }
@@ -966,6 +959,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         // If we have a critical timeline issue, we get back to live.
         timeline.restartWithEventId(null)
         _viewEvents.post(RoomDetailViewEvents.Failure(throwable))
+    }
+
+    override fun onNewTimelineEvents(eventIds: List<String>) {
+        Timber.v("On new timeline events: $eventIds")
+        _viewEvents.post(RoomDetailViewEvents.OnNewTimelineEvents(eventIds))
     }
 
     override fun onCleared() {

@@ -275,4 +275,9 @@
     <string name="notice_room_guest_access_can_join">"%1$s has allowed guests to join the room."</string>
     <string name="notice_room_guest_access_forbidden">"%1$s has prevented guests from joining the room."</string>
 
+    <string name="notice_end_to_end_ok">%1$s turned on end-to-end encryption.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s turned on end-to-end encryption (unrecognised algorithm %2$s).</string>
+
+    <string name="key_verification_request_fallback_message">%s is requesting to verify your key, but your client does not support in-chat key verification. You will need to use legacy key verification to verify keys.</string>
+
 </resources>

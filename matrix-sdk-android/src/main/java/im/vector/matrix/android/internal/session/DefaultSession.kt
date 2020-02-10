@@ -43,6 +43,7 @@ import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
+import im.vector.matrix.android.internal.crypto.crosssigning.ShieldTrustUpdater
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.WorkManagerProvider
@@ -89,7 +90,8 @@ internal class DefaultSession @Inject constructor(
         private val sessionParamsStore: SessionParamsStore,
         private val contentUploadProgressTracker: ContentUploadStateTracker,
         private val initialSyncProgressService: Lazy<InitialSyncProgressService>,
-        private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>)
+        private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>,
+        private val shieldTrustUpdater: ShieldTrustUpdater)
     : Session,
         RoomService by roomService.get(),
         RoomDirectoryService by roomDirectoryService.get(),
@@ -119,6 +121,7 @@ internal class DefaultSession @Inject constructor(
         isOpen = true
         liveEntityObservers.forEach { it.start() }
         eventBus.register(this)
+        shieldTrustUpdater.start()
     }
 
     override fun requireBackgroundSync() {
@@ -160,6 +163,7 @@ internal class DefaultSession @Inject constructor(
         isOpen = false
         eventBus.unregister(this)
         syncTaskSequencer.close()
+        shieldTrustUpdater.stop()
     }
 
     override fun getSyncStateLive(): LiveData<SyncState> {

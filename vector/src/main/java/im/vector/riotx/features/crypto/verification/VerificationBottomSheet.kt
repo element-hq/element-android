@@ -23,18 +23,17 @@ import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import butterknife.BindView
 import com.airbnb.mvrx.MvRx
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.commitTransactionNow
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.features.crypto.verification.choose.VerificationChooseMethodFragment
 import im.vector.riotx.features.crypto.verification.conclusion.VerificationConclusionFragment
@@ -56,7 +55,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
             val verificationId: String? = null,
             val roomId: String? = null,
             // Special mode where UX should show loading wheel until other user sends a request/tx
-            val waitForIncomingRequest : Boolean = false
+            val waitForIncomingRequest: Boolean = false
     ) : Parcelable
 
     @Inject
@@ -84,17 +83,11 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.requestLiveData.observe(viewLifecycleOwner, Observer {
-            it.peekContent().let { va ->
-                when (va) {
-                    is Success -> {
-                        if (va.invoke() is VerificationAction.GotItConclusion) {
-                            dismiss()
-                        }
-                    }
-                }
-            }
-        })
+        viewModel.observeViewEvents {
+            when (it) {
+                is VerificationBottomSheetViewEvents.Dismiss -> dismiss()
+            }.exhaustive
+        }
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -250,7 +243,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
             }
         }
 
-        val WAITING_SELF_VERIF_TAG : String = "WAITING_SELF_VERIF_TAG"
+        const val WAITING_SELF_VERIF_TAG: String = "WAITING_SELF_VERIF_TAG"
     }
 }
 

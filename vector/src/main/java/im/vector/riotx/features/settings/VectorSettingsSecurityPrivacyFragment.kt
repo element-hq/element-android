@@ -426,6 +426,15 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     // ==============================================================================================================
 
     private fun refreshMyDevice() {
+        session.getUserDevices(session.myUserId).map {
+            DeviceInfo(
+                    user_id = session.myUserId,
+                    deviceId = it.deviceId,
+                    displayName = it.displayName()
+            )
+        }.let {
+            refreshCryptographyPreference(it)
+        }
         // TODO Move to a ViewModel...
         session.getDevicesList(object : MatrixCallback<DevicesListResponse> {
             override fun onSuccess(data: DevicesListResponse) {

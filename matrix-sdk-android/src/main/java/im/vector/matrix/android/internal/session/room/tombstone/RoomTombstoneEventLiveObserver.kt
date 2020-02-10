@@ -27,7 +27,7 @@ import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.query.types
+import im.vector.matrix.android.internal.database.query.whereTypes
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionDatabase
 import io.realm.OrderedCollectionChangeSet
@@ -41,7 +41,7 @@ internal class RoomTombstoneEventLiveObserver @Inject constructor(@SessionDataba
     : RealmLiveEntityObserver<EventEntity>(realmConfiguration) {
 
     override val query = Monarchy.Query<EventEntity> {
-        EventEntity.types(it, listOf(EventType.STATE_ROOM_TOMBSTONE))
+        EventEntity.whereTypes(it, listOf(EventType.STATE_ROOM_TOMBSTONE))
     }
 
     override fun onChange(results: RealmResults<EventEntity>, changeSet: OrderedCollectionChangeSet) {

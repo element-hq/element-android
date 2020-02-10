@@ -86,3 +86,10 @@ steps:
     plugins:
       - docker#v3.1.0:
           image: "openjdk"
+
+  # Check that indonesians files are identical.
+  # Due to Android issue, the resource folder must be values-in/, and Weblate export data into values-id/.
+  # If this step fails, it means that Weblate has updated the file in value-id/ so to fix it, copy the file to values-in/
+  - label: "Indonesian"
+    command:
+      - "diff ./vector/src/main/res/values-id/strings.xml ./vector/src/main/res/values-in/strings.xml"

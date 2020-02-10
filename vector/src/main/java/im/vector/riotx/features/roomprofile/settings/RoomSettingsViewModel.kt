@@ -23,7 +23,6 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.platform.VectorViewModel
@@ -53,7 +52,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
     }
 
     private fun observeRoomSummary() {
-        room.rx(session).liveRoomSummary()
+        room.rx().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     copy(roomSummary = async)
@@ -71,7 +70,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
             copy(isLoading = true)
         }
 
-        room.enableEncryption(MXCRYPTO_ALGORITHM_MEGOLM, object : MatrixCallback<Unit> {
+        room.enableEncryption(callback = object : MatrixCallback<Unit> {
             override fun onFailure(failure: Throwable) {
                 setState {
                     copy(isLoading = false)

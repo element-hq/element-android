@@ -46,7 +46,7 @@ class DisplayableEventFormatter @Inject constructor(
         when (timelineEvent.root.getClearType()) {
             EventType.MESSAGE -> {
                 timelineEvent.getLastMessageContent()?.let { messageContent ->
-                    when (messageContent.type) {
+                    when (messageContent.msgType) {
                         MessageType.MSGTYPE_VERIFICATION_REQUEST -> {
                             return simpleFormat(senderName, stringProvider.getString(R.string.verification_request), appendAuthor)
                         }

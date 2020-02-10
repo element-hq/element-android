@@ -245,6 +245,10 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         // no-op, already handled
     }
 
+    override fun onNewTimelineEvents(eventIds: List<String>) {
+        // no-op, already handled
+    }
+
     private fun submitSnapshot(newSnapshot: List<TimelineEvent>) {
         backgroundHandler.post {
             inSubmitList = true
@@ -252,7 +256,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             currentSnapshot = newSnapshot
             val diffResult = DiffUtil.calculateDiff(diffCallback)
             diffResult.dispatchUpdatesTo(listUpdateCallback)
-            requestDelayedModelBuild(100)
+            requestModelBuild()
             inSubmitList = false
         }
     }
@@ -349,8 +353,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     fun getPositionOfReadMarker(): Int? = synchronized(modelCache) {
         return positionOfReadMarker
     }
-
-    fun isLoadingForward() = showingForwardLoader
 
     private data class CacheItemData(
             val localId: Long,

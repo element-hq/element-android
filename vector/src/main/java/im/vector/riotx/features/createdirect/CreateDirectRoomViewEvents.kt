@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.crypto
+package im.vector.riotx.features.createdirect
+
+import im.vector.matrix.android.api.session.user.model.User
+import im.vector.riotx.core.platform.VectorViewEvents
 
 /**
- * Class to define the parameters used to customize or configure the end-to-end crypto.
+ * Transient events for create direct room screen
  */
-data class MXCryptoConfig(
-        // Tell whether the encryption of the event content is enabled for the invited members.
-        // By default, we encrypt messages only for the joined members.
-        // The encryption for the invited members will be blocked if the history visibility is "joined".
-        var enableEncryptionForInvitedMembers: Boolean = false
-)
+sealed class CreateDirectRoomViewEvents : VectorViewEvents {
+    data class SelectUserAction(
+            val user: User,
+            val isAdded: Boolean,
+            val index: Int
+    ) : CreateDirectRoomViewEvents()
+}

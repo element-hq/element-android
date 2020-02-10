@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.database.model
 
+import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.VersioningState
@@ -47,7 +48,8 @@ internal open class RoomSummaryEntity(
         // this is required for querying
         var flatAliases: String = "",
         var isEncrypted: Boolean = false,
-        var typingUserIds: RealmList<String> = RealmList()
+        var typingUserIds: RealmList<String> = RealmList(),
+        var roomEncryptionTrustLevelStr: String? = null
 ) : RealmObject() {
 
     private var membershipStr: String = Membership.NONE.name
@@ -66,6 +68,20 @@ internal open class RoomSummaryEntity(
         }
         set(value) {
             versioningStateStr = value.name
+        }
+
+    var roomEncryptionTrustLevel: RoomEncryptionTrustLevel?
+        get() {
+            return roomEncryptionTrustLevelStr?.let {
+                try {
+                    RoomEncryptionTrustLevel.valueOf(it)
+                } catch (failure: Throwable) {
+                    null
+                }
+            }
+        }
+        set(value) {
+            roomEncryptionTrustLevelStr = value?.name
         }
 
     companion object
