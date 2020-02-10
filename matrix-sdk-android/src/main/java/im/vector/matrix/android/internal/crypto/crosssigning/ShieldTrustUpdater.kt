@@ -110,9 +110,11 @@ internal class ShieldTrustUpdater @Inject constructor(
 
             val map = HashMap<String, List<String>>()
             impactedRoomsId.forEach { roomId ->
-                RoomMemberSummaryEntity.where(backgroundSessionRealm.get(), roomId).findAll()?.let { results ->
-                    map[roomId] = results.map { it.userId }
-                }
+                RoomMemberSummaryEntity.where(backgroundSessionRealm.get(), roomId)
+                        .findAll()
+                        .let { results ->
+                            map[roomId] = results.map { it.userId }
+                        }
             }
 
             map.forEach { entry ->

@@ -38,7 +38,7 @@ internal object PushRulesMapper {
                 enabled = pushrule.enabled,
                 ruleId = pushrule.ruleId,
                 conditions = listOf(
-                        PushCondition(Condition.Kind.event_match.name, "content.body", pushrule.pattern)
+                        PushCondition(Condition.Kind.EventMatch.name, "content.body", pushrule.pattern)
                 )
         )
     }
@@ -59,7 +59,7 @@ internal object PushRulesMapper {
                 enabled = pushrule.enabled,
                 ruleId = pushrule.ruleId,
                 conditions = listOf(
-                        PushCondition(Condition.Kind.event_match.name, "room_id", pushrule.ruleId)
+                        PushCondition(Condition.Kind.EventMatch.name, "room_id", pushrule.ruleId)
                 )
         )
     }
@@ -71,7 +71,7 @@ internal object PushRulesMapper {
                 enabled = pushrule.enabled,
                 ruleId = pushrule.ruleId,
                 conditions = listOf(
-                        PushCondition(Condition.Kind.event_match.name, "user_id", pushrule.ruleId)
+                        PushCondition(Condition.Kind.EventMatch.name, "user_id", pushrule.ruleId)
                 )
         )
     }

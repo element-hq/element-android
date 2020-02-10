@@ -21,10 +21,10 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import timber.log.Timber
 
-class ContainsDisplayNameCondition : Condition(Kind.contains_display_name) {
+class ContainsDisplayNameCondition : Condition(Kind.ContainsDisplayName) {
 
-    override fun isSatisfied(conditionResolver: ConditionResolver): Boolean {
-        return conditionResolver.resolveContainsDisplayNameCondition(this)
+    override fun isSatisfied(event: Event, conditionResolver: ConditionResolver): Boolean {
+        return conditionResolver.resolveContainsDisplayNameCondition(event, this)
     }
 
     override fun technicalDescription(): String {

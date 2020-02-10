@@ -18,7 +18,7 @@ package im.vector.matrix.android.api.pushrules.rest
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class Ruleset(
+internal data class Ruleset(
         val content: List<PushRule>? = null,
         val override: List<PushRule>? = null,
         val room: List<PushRule>? = null,
