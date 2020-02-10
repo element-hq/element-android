@@ -61,6 +61,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.ImageLoader
+import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -793,6 +794,24 @@ class RoomDetailFragment @Inject constructor(
                 .show()
     }
 
+    private fun promptReasonToDeleteEvent(eventId: String) {
+        val layout = requireActivity().layoutInflater.inflate(R.layout.dialog_delete_event, null)
+        val reasonCheckBox = layout.findViewById<MaterialCheckBox>(R.id.deleteEventReasonCheck)
+        val reasonInput = layout.findViewById<TextInputEditText>(R.id.deleteEventReasonInput)
+
+        reasonCheckBox.setOnCheckedChangeListener { _, isChecked -> reasonInput.isEnabled = isChecked }
+
+        AlertDialog.Builder(requireActivity())
+                .setView(layout)
+                .setTitle(R.string.delete_event_dialog_title)
+                .setPositiveButton(R.string.remove) { _, _ ->
+                    val reason = if (reasonCheckBox.isChecked) reasonInput.text.toString().takeIf { it.isNotBlank() } else null
+                    roomDetailViewModel.handle(RoomDetailAction.RedactAction(eventId, reason))
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
+    }
+
     private fun displayRoomDetailActionResult(result: Async<RoomDetailAction>) {
         when (result) {
             is Fail    -> {
@@ -1108,14 +1127,7 @@ class RoomDetailFragment @Inject constructor(
                 showSnackWithMessage(getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
             }
             is EventSharedAction.Delete                     -> {
-                val layout = requireActivity().layoutInflater.inflate(R.layout.dialog_delete_event, null)
-                AlertDialog.Builder(requireActivity())
-                        .setView(layout)
-                        .setPositiveButton(R.string.delete) { _, _ ->
-                            roomDetailViewModel.handle(RoomDetailAction.RedactAction(action.eventId, context?.getString(R.string.event_redacted_by_user_reason)))
-                        }
-                        .setNegativeButton(R.string.cancel, null)
-                        .show()
+                promptReasonToDeleteEvent(action.eventId)
             }
             is EventSharedAction.Share                      -> {
                 // TODO current data communication is too limited
