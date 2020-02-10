@@ -4,6 +4,7 @@
 # idea files: exclude everything except dictionnaries
 .idea/caches
 .idea/libraries
+.idea/inspectionProfiles
 .idea/*.xml
 .DS_Store
 /build
