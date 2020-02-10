@@ -5,9 +5,9 @@ Features ✨:
  -
 
 Improvements 🙌:
- - Show confirmation dialog before deleting a message (#967)
  - Improve navigation to the timeline (#789, #862)
- - Improve network detection. It is now based on the sync request status (#873, #882) 
+ - Improve network detection. It is now based on the sync request status (#873, #882)
+ - Show confirmation dialog before deleting a message (#967)
 
 Other changes:
  - Support SSO login with Firefox account (#606)
