@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class UserAccountDataFallback(
+data class UserAccountDataFallback(
         @Json(name = "type") override val type: String,
         @Json(name = "content") val content: Map<String, Any>
 ) : UserAccountData()

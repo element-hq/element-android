@@ -18,7 +18,7 @@ package im.vector.matrix.android.internal.session.sync.model.accountdata
 
 import com.squareup.moshi.Json
 
-internal abstract class UserAccountData {
+abstract class UserAccountData {
 
     @Json(name = "type") abstract val type: String
 

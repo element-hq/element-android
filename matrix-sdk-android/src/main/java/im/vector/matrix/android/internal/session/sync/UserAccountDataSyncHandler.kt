@@ -19,9 +19,12 @@ package im.vector.matrix.android.internal.session.sync
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.pushrules.RuleScope
 import im.vector.matrix.android.api.pushrules.RuleSetKey
+import im.vector.matrix.android.api.session.events.model.Content
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomMemberContent
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.PushRulesMapper
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.BreadcrumbsEntity
@@ -29,15 +32,18 @@ import im.vector.matrix.android.internal.database.model.IgnoredUserEntity
 import im.vector.matrix.android.internal.database.model.PushRulesEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
+import im.vector.matrix.android.internal.database.model.UserAccountDataEntity
+import im.vector.matrix.android.internal.database.model.UserAccountDataEntityFields
 import im.vector.matrix.android.internal.database.query.getDirectRooms
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataBreadcrumbs
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataDirectMessages
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataFallback
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataIgnoredUsers
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataPushRules
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataSync
@@ -45,6 +51,7 @@ import im.vector.matrix.android.internal.session.user.accountdata.DirectChatsHel
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
 import io.realm.Realm
 import io.realm.RealmList
+import io.realm.kotlin.where
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -56,21 +63,23 @@ internal class UserAccountDataSyncHandler @Inject constructor(
 
     fun handle(realm: Realm, accountData: UserAccountDataSync?) {
         accountData?.list?.forEach {
-            when (it) {
-                is UserAccountDataDirectMessages -> handleDirectChatRooms(realm, it)
-                is UserAccountDataPushRules      -> handlePushRules(realm, it)
-                is UserAccountDataIgnoredUsers   -> handleIgnoredUsers(realm, it)
-                is UserAccountDataBreadcrumbs    -> handleBreadcrumbs(realm, it)
-                is UserAccountDataFallback       -> Timber.d("Receive account data of unhandled type ${it.type}")
-                else                             -> error("Missing code here!")
+            // Generic handling, just save in base
+            handleGenericAccountData(realm, it.type, it.content)
+
+            // Didn't want to break too much thing, so i re-serialize to jsonString before reparsing
+            // TODO would be better to have a mapper?
+            val toJson = MoshiProvider.providesMoshi().adapter(Event::class.java).toJson(it)
+            val model = toJson?.let { json ->
+                MoshiProvider.providesMoshi().adapter(UserAccountData::class.java).fromJson(json)
+            }
+            // Specific parsing
+            when (model) {
+                is UserAccountDataDirectMessages -> handleDirectChatRooms(realm, model)
+                is UserAccountDataPushRules      -> handlePushRules(realm, model)
+                is UserAccountDataIgnoredUsers   -> handleIgnoredUsers(realm, model)
+                is UserAccountDataBreadcrumbs    -> handleBreadcrumbs(realm, model)
             }
         }
-
-        // TODO Store all account data, app can be interested of it
-        // accountData?.list?.forEach {
-        //     it.toString()
-        //     MoshiProvider.providesMoshi()
-        // }
     }
 
     // If we get some direct chat invites, we synchronize the user account data including those.
@@ -198,6 +207,20 @@ internal class UserAccountDataSyncHandler @Inject constructor(
             RoomSummaryEntity.where(realm, roomId)
                     .findFirst()
                     ?.breadcrumbsIndex = index
+        }
+    }
+
+    private fun handleGenericAccountData(realm: Realm, type: String, content: Content?) {
+        val existing = realm.where<UserAccountDataEntity>().equalTo(UserAccountDataEntityFields.TYPE, type)
+                .findFirst()
+        if (existing != null) {
+            // Update current value
+            existing.contentStr = ContentMapper.map(content)
+        } else {
+            realm.createObject(UserAccountDataEntity::class.java).let { accountDataEntity ->
+                accountDataEntity.type = type
+                accountDataEntity.contentStr = ContentMapper.map(content)
+            }
         }
     }
 }

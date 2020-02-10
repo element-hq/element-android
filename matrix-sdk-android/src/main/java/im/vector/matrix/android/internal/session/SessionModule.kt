@@ -32,6 +32,7 @@ import im.vector.matrix.android.api.auth.data.sessionId
 import im.vector.matrix.android.api.crypto.MXCryptoConfig
 import im.vector.matrix.android.api.session.InitialSyncProgressService
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.accountdata.AccountDataService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
 import im.vector.matrix.android.internal.crypto.verification.VerificationMessageLiveObserver
@@ -61,6 +62,7 @@ import im.vector.matrix.android.internal.session.room.create.RoomCreateEventLive
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
 import im.vector.matrix.android.internal.session.room.tombstone.RoomTombstoneEventLiveObserver
 import im.vector.matrix.android.internal.session.securestorage.DefaultSecureStorageService
+import im.vector.matrix.android.internal.session.user.accountdata.DefaultAccountDataService
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
@@ -263,4 +265,7 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindHomeServerCapabilitiesService(homeServerCapabilitiesService: DefaultHomeServerCapabilitiesService): HomeServerCapabilitiesService
+
+    @Binds
+    abstract fun bindAccountDataServiceService(accountDataService: DefaultAccountDataService): AccountDataService
 }

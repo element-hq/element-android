@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.failure.GlobalError
 import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.session.InitialSyncProgressService
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.accountdata.AccountDataService
 import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
@@ -91,6 +92,7 @@ internal class DefaultSession @Inject constructor(
         private val contentUploadProgressTracker: ContentUploadStateTracker,
         private val initialSyncProgressService: Lazy<InitialSyncProgressService>,
         private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>,
+        private val accountDataService: Lazy<AccountDataService>,
         private val shieldTrustUpdater: ShieldTrustUpdater)
     : Session,
         RoomService by roomService.get(),
@@ -106,7 +108,8 @@ internal class DefaultSession @Inject constructor(
         InitialSyncProgressService by initialSyncProgressService.get(),
         SecureStorageService by secureStorageService.get(),
         HomeServerCapabilitiesService by homeServerCapabilitiesService.get(),
-        ProfileService by profileService.get() {
+        ProfileService by profileService.get(),
+        AccountDataService by accountDataService.get() {
 
     private var isOpen = false
 

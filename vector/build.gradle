@@ -354,6 +354,9 @@ dependencies {
     compileOnly 'com.squareup.inject:assisted-inject-annotations-dagger2:0.5.0'
     kapt 'com.squareup.inject:assisted-inject-processor-dagger2:0.5.0'
 
+    // Json viewer
+    implementation "com.yuyh.json:jsonviewer:1.0.6"
+
     // gplay flavor only
     // Warning: due to the exclude, Android Studio does not propose to upgrade. Uncomment next line to be proposed to upgrade
     // implementation 'com.google.firebase:firebase-messaging:20.0.0'

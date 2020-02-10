@@ -31,6 +31,7 @@ import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -119,6 +120,13 @@ class RxSession(private val session: Session) {
         return session.getCrossSigningService().getLiveCrossSigningKeys(userId).asObservable()
                 .startWithCallable {
                     session.getCrossSigningService().getUserCrossSigningKeys(userId).toOptional()
+                }
+    }
+
+    fun liveAccountData(filter: List<String>): Observable<List<UserAccountData>> {
+        return session.getLiveAccountData(filter).asObservable()
+                .startWithCallable {
+                    session.getAccountData(filter)
                 }
     }
 }

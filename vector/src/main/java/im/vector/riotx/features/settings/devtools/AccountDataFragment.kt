@@ -1,0 +1,65 @@
+/*
+ * Copyright (c) 2020 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package im.vector.riotx.features.settings.devtools
+
+import android.os.Bundle
+import android.view.View
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
+import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataFallback
+import im.vector.riotx.R
+import im.vector.riotx.core.extensions.configureWith
+import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.core.platform.VectorBaseFragment
+import kotlinx.android.synthetic.main.fragment_generic_recycler.*
+import javax.inject.Inject
+
+class AccountDataFragment @Inject constructor(
+        val viewModelFactory: AccountDataViewModel.Factory,
+        private val epoxyController: AccountDataEpoxyController
+) : VectorBaseFragment(), AccountDataEpoxyController.InteractionListener {
+
+    override fun getLayoutResId() = R.layout.fragment_generic_recycler
+
+    private val viewModel: AccountDataViewModel by fragmentViewModel(AccountDataViewModel::class)
+
+    override fun onResume() {
+        super.onResume()
+        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_account_data)
+    }
+
+    override fun invalidate() = withState(viewModel) { state ->
+        epoxyController.setData(state)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        recyclerView.configureWith(epoxyController, showDivider = true)
+        epoxyController.interactionListener = this
+    }
+
+    override fun didTap(data: UserAccountData) {
+        val fb = data as? UserAccountDataFallback ?: return
+        val jsonString = MoshiProvider.providesMoshi()
+                .adapter(UserAccountDataFallback::class.java)
+                .toJson(fb)
+        JsonViewerBottomSheetDialog.newInstance(jsonString)
+                .show(childFragmentManager, "JSON_VIEWER")
+    }
+}
