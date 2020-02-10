@@ -805,7 +805,9 @@ class RoomDetailFragment @Inject constructor(
                 .setView(layout)
                 .setTitle(R.string.delete_event_dialog_title)
                 .setPositiveButton(R.string.remove) { _, _ ->
-                    val reason = if (reasonCheckBox.isChecked) reasonInput.text.toString().takeIf { it.isNotBlank() } else null
+                    val reason = reasonInput.text.toString()
+                            .takeIf { reasonCheckBox.isChecked }
+                            ?.takeIf { it.isNotBlank() }
                     roomDetailViewModel.handle(RoomDetailAction.RedactAction(eventId, reason))
                 }
                 .setNegativeButton(R.string.cancel, null)
