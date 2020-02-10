@@ -19,6 +19,10 @@
 
     <!-- END Strings added by Benoit -->
 
+    <!-- BEGIN Strings added by Onuray -->
+    <string name="delete_event_dialog_content">Delete message?</string>
+    <!-- END Strings added by Onuray -->
+
 
     <!-- BEGIN Strings added by Others -->
 

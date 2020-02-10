@@ -1108,7 +1108,14 @@ class RoomDetailFragment @Inject constructor(
                 showSnackWithMessage(getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
             }
             is EventSharedAction.Delete                     -> {
-                roomDetailViewModel.handle(RoomDetailAction.RedactAction(action.eventId, context?.getString(R.string.event_redacted_by_user_reason)))
+                val layout = requireActivity().layoutInflater.inflate(R.layout.dialog_delete_event, null)
+                AlertDialog.Builder(requireActivity())
+                        .setView(layout)
+                        .setPositiveButton(R.string.delete) { _, _ ->
+                            roomDetailViewModel.handle(RoomDetailAction.RedactAction(action.eventId, context?.getString(R.string.event_redacted_by_user_reason)))
+                        }
+                        .setNegativeButton(R.string.cancel, null)
+                        .show()
             }
             is EventSharedAction.Share                      -> {
                 // TODO current data communication is too limited
