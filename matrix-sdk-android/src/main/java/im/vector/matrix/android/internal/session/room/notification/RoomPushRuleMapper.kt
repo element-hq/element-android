@@ -54,7 +54,7 @@ internal fun RoomNotificationState.toRoomPushRule(roomId: String): RoomPushRule?
         }
         else                                             -> {
             val condition = PushCondition(
-                    kind = Condition.Kind.event_match.value,
+                    kind = Condition.Kind.EventMatch.value,
                     key = "room_id",
                     pattern = roomId
             )

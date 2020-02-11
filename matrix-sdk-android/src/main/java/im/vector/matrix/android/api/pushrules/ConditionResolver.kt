@@ -15,14 +15,22 @@
  */
 package im.vector.matrix.android.api.pushrules
 
+import im.vector.matrix.android.api.session.events.model.Event
+
 /**
  * Acts like a visitor on Conditions.
  * This class as all required context needed to evaluate rules
  */
 interface ConditionResolver {
+    fun resolveEventMatchCondition(event: Event,
+                                   condition: EventMatchCondition): Boolean
 
-    fun resolveEventMatchCondition(eventMatchCondition: EventMatchCondition): Boolean
-    fun resolveRoomMemberCountCondition(roomMemberCountCondition: RoomMemberCountCondition): Boolean
-    fun resolveSenderNotificationPermissionCondition(senderNotificationPermissionCondition: SenderNotificationPermissionCondition): Boolean
-    fun resolveContainsDisplayNameCondition(containsDisplayNameCondition: ContainsDisplayNameCondition) : Boolean
+    fun resolveRoomMemberCountCondition(event: Event,
+                                        condition: RoomMemberCountCondition): Boolean
+
+    fun resolveSenderNotificationPermissionCondition(event: Event,
+                                                     condition: SenderNotificationPermissionCondition): Boolean
+
+    fun resolveContainsDisplayNameCondition(event: Event,
+                                            condition: ContainsDisplayNameCondition): Boolean
 }

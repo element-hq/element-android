@@ -21,15 +21,13 @@ import android.os.Bundle
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.MvRx
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.commitTransaction
-import im.vector.riotx.core.extensions.observeEvent
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
-import im.vector.riotx.features.crypto.verification.VerificationAction
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import javax.inject.Inject
 import kotlin.reflect.KClass
@@ -48,20 +46,16 @@ class DeviceListBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.requestLiveData.observeEvent(this) { async ->
-            when (async) {
-                is Success -> {
-                    when (val action = async.invoke()) {
-                        is VerificationAction.StartSASVerification -> {
-                            VerificationBottomSheet.withArgs(
-                                    roomId = null,
-                                    otherUserId = action.otherUserId,
-                                    transactionId = action.pendingRequestTransactionId
-                            ).show(requireActivity().supportFragmentManager, "REQPOP")
-                        }
-                    }
+        viewModel.observeViewEvents {
+            when (it) {
+                is DeviceListBottomSheetViewEvents.Verify -> {
+                    VerificationBottomSheet.withArgs(
+                            roomId = null,
+                            otherUserId = it.userId,
+                            transactionId = it.txID
+                    ).show(requireActivity().supportFragmentManager, "REQPOP")
                 }
-            }
+            }.exhaustive
         }
     }
 
@@ -69,7 +63,7 @@ class DeviceListBottomSheet : VectorBaseBottomSheetDialogFragment() {
         withState(viewModel) {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (it.selectedDevice != null) {
-                    viewModel.selectDevice(null)
+                    viewModel.handle(DeviceListAction.DeselectDevice)
                     return@withState true
                 } else {
                     return@withState false

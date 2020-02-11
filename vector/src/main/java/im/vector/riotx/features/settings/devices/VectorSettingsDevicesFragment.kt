@@ -23,7 +23,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
@@ -32,7 +31,6 @@ import im.vector.riotx.core.dialogs.PromptPasswordDialog
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
-import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
@@ -64,35 +62,18 @@ class VectorSettingsDevicesFragment @Inject constructor(
         recyclerView.configureWith(devicesController, showDivider = true)
         viewModel.observeViewEvents {
             when (it) {
-                is DevicesViewEvents.Loading -> showLoading(it.message)
-                is DevicesViewEvents.Failure -> showFailure(it.throwable)
-            }.exhaustive
-        }
-        viewModel.requestPasswordLiveData.observeEvent(this) {
-            maybeShowDeleteDeviceWithPasswordDialog()
-        }
-
-        viewModel.fragmentActionLiveData.observeEvent(this) { async ->
-            when (async) {
-                is Success -> {
-                    when (val action = async.invoke()) {
-                        is DevicesAction.PromptRename   -> {
-                            action.deviceInfo?.let { deviceInfo ->
-                                displayDeviceRenameDialog(deviceInfo)
-                            }
-                        }
-                        is DevicesAction.VerifyMyDevice -> {
-                            if (context is VectorBaseActivity) {
-                                VerificationBottomSheet.withArgs(
-                                        roomId = null,
-                                        otherUserId = action.userId!!,
-                                        transactionId = action.transactionId!!
-                                ).show(childFragmentManager, "REQPOP")
-                            }
-                        }
-                    }
+                is DevicesViewEvents.Loading            -> showLoading(it.message)
+                is DevicesViewEvents.Failure            -> showFailure(it.throwable)
+                is DevicesViewEvents.RequestPassword    -> maybeShowDeleteDeviceWithPasswordDialog()
+                is DevicesViewEvents.PromptRenameDevice -> displayDeviceRenameDialog(it.deviceInfo)
+                is DevicesViewEvents.ShowVerifyDevice   -> {
+                    VerificationBottomSheet.withArgs(
+                            roomId = null,
+                            otherUserId = it.userId,
+                            transactionId = it.transactionId
+                    ).show(childFragmentManager, "REQPOP")
                 }
-            }
+            }.exhaustive
         }
     }
 
@@ -152,7 +133,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
                 .setPositiveButton(R.string.ok) { _, _ ->
                     val newName = input.text.toString()
 
-                    viewModel.handle(DevicesAction.Rename(deviceInfo, newName))
+                    viewModel.handle(DevicesAction.Rename(deviceInfo.deviceId!!, newName))
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()

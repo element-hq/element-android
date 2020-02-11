@@ -37,6 +37,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import im.vector.riotx.core.di.DaggerScreenComponent
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.utils.DimensionConverter
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import timber.log.Timber
 
 /**
@@ -87,10 +90,18 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
         return view
     }
 
+    @CallSuper
     override fun onDestroyView() {
         super.onDestroyView()
         unBinder?.unbind()
         unBinder = null
+        uiDisposables.clear()
+    }
+
+    @CallSuper
+    override fun onDestroy() {
+        uiDisposables.dispose()
+        super.onDestroy()
     }
 
     override fun onAttach(context: Context) {
@@ -145,5 +156,30 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
 
     protected fun setArguments(args: Parcelable? = null) {
         arguments = args?.let { Bundle().apply { putParcelable(MvRx.KEY_ARG, it) } }
+    }
+
+    /* ==========================================================================================
+     * Disposable
+     * ========================================================================================== */
+
+    private val uiDisposables = CompositeDisposable()
+
+    protected fun Disposable.disposeOnDestroyView(): Disposable {
+        uiDisposables.add(this)
+        return this
+    }
+
+    /* ==========================================================================================
+     * ViewEvents
+     * ========================================================================================== */
+
+    protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(observer: (T) -> Unit) {
+        viewEvents
+                .observe()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    observer(it)
+                }
+                .disposeOnDestroyView()
     }
 }

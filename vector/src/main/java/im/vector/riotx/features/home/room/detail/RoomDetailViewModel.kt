@@ -18,10 +18,6 @@ package im.vector.riotx.features.home.room.detail
 
 import android.net.Uri
 import androidx.annotation.IdRes
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
@@ -32,6 +28,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.MatrixPatterns
+import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -61,17 +58,14 @@ import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.exhaustive
-import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.resources.UserPreferencesProvider
-import im.vector.riotx.core.utils.LiveEvent
-import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.riotx.core.utils.subscribeLogError
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
-import im.vector.riotx.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.riotx.features.crypto.verification.supportedVerificationMethods
+import im.vector.riotx.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import im.vector.riotx.features.home.room.typing.TypingHelper
 import im.vector.riotx.features.settings.VectorPreferences
@@ -115,11 +109,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private var timelineEvents = PublishRelay.create<List<TimelineEvent>>()
     var timeline = room.createTimeline(eventId, timelineSettings)
         private set
-
-    // Can be used for several actions, for a one shot result
-    private val _requestLiveData = MutableLiveData<LiveEvent<Async<RoomDetailAction>>>()
-    val requestLiveData: LiveData<LiveEvent<Async<RoomDetailAction>>>
-        get() = _requestLiveData
 
     // Slot to keep a pending action during permission request
     var pendingAction: RoomDetailAction? = null
@@ -320,27 +309,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         }
     }
 
-    // TODO Cleanup this and use ViewEvents
-    private val _nonBlockingPopAlert = MutableLiveData<LiveEvent<Pair<Int, List<Any>>>>()
-    val nonBlockingPopAlert: LiveData<LiveEvent<Pair<Int, List<Any>>>>
-        get() = _nonBlockingPopAlert
-
-    private val _sendMessageResultLiveData = MutableLiveData<LiveEvent<SendMessageResult>>()
-    val sendMessageResultLiveData: LiveData<LiveEvent<SendMessageResult>>
-        get() = _sendMessageResultLiveData
-
-    private val _navigateToEvent = MutableLiveData<LiveEvent<String>>()
-    val navigateToEvent: LiveData<LiveEvent<String>>
-        get() = _navigateToEvent
-
-    private val _fileTooBigEvent = MutableLiveData<LiveEvent<FileTooBigError>>()
-    val fileTooBigEvent: LiveData<LiveEvent<FileTooBigError>>
-        get() = _fileTooBigEvent
-
-    private val _downloadedFileEvent = MutableLiveData<LiveEvent<DownloadFileState>>()
-    val downloadedFileEvent: LiveData<LiveEvent<DownloadFileState>>
-        get() = _downloadedFileEvent
-
     fun isMenuItemVisible(@IdRes itemId: Int) = when (itemId) {
         R.id.clear_message_queue ->
             /* For now always disable on production, worker cancellation is not working properly */
@@ -360,17 +328,17 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         is ParsedCommand.ErrorNotACommand         -> {
                             // Send the text message to the room
                             room.sendTextMessage(action.text, autoMarkdown = action.autoMarkdown)
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.MessageSent)
+                            _viewEvents.post(RoomDetailViewEvents.MessageSent)
                             popDraft()
                         }
                         is ParsedCommand.ErrorSyntax              -> {
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandError(slashCommandResult.command))
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandError(slashCommandResult.command))
                         }
                         is ParsedCommand.ErrorEmptySlashCommand   -> {
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandUnknown("/"))
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandUnknown("/"))
                         }
                         is ParsedCommand.ErrorUnknownSlashCommand -> {
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandUnknown(slashCommandResult.slashCommand))
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandUnknown(slashCommandResult.slashCommand))
                         }
                         is ParsedCommand.Invite                   -> {
                             handleInviteSlashCommand(slashCommandResult)
@@ -378,55 +346,55 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         }
                         is ParsedCommand.SetUserPowerLevel        -> {
                             // TODO
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.ClearScalarToken         -> {
                             // TODO
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.SetMarkdown              -> {
                             vectorPreferences.setMarkdownEnabled(slashCommandResult.enable)
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled(
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled(
                                     if (slashCommandResult.enable) R.string.markdown_has_been_enabled else R.string.markdown_has_been_disabled))
                             popDraft()
                         }
                         is ParsedCommand.UnbanUser                -> {
                             // TODO
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.BanUser                  -> {
                             // TODO
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.KickUser                 -> {
                             // TODO
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.JoinRoom                 -> {
                             // TODO
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.PartRoom                 -> {
                             // TODO
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.SendEmote                -> {
                             room.sendTextMessage(slashCommandResult.message, msgType = MessageType.MSGTYPE_EMOTE)
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
                         is ParsedCommand.SendRainbow              -> {
                             slashCommandResult.message.toString().let {
                                 room.sendFormattedTextMessage(it, rainbowGenerator.generate(it))
                             }
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
                         is ParsedCommand.SendRainbowEmote         -> {
                             slashCommandResult.message.toString().let {
                                 room.sendFormattedTextMessage(it, rainbowGenerator.generate(it), MessageType.MSGTYPE_EMOTE)
                             }
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
                         is ParsedCommand.SendSpoiler              -> {
@@ -434,7 +402,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                                     "[${stringProvider.getString(R.string.spoiler)}](${slashCommandResult.message})",
                                     "<span data-mx-spoiler>${slashCommandResult.message}</span>"
                             )
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
                         is ParsedCommand.SendShrug                -> {
@@ -446,12 +414,12 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                                 }
                             }
                             room.sendTextMessage(sequence)
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
                         is ParsedCommand.VerifyUser               -> {
                             session.getVerificationService().requestKeyVerificationInDMs(supportedVerificationMethods, slashCommandResult.userId, room.roomId)
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
                         is ParsedCommand.ChangeTopic              -> {
@@ -460,7 +428,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         }
                         is ParsedCommand.ChangeDisplayName        -> {
                             // TODO
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandNotImplemented)
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                     }.exhaustive
                 }
@@ -487,7 +455,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                             Timber.w("Same message content, do not send edition")
                         }
                     }
-                    _sendMessageResultLiveData.postLiveEvent(SendMessageResult.MessageSent)
+                    _viewEvents.post(RoomDetailViewEvents.MessageSent)
                     popDraft()
                 }
                 is SendMode.QUOTE   -> {
@@ -510,13 +478,13 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     } else {
                         room.sendFormattedTextMessage(finalText, htmlText)
                     }
-                    _sendMessageResultLiveData.postLiveEvent(SendMessageResult.MessageSent)
+                    _viewEvents.post(RoomDetailViewEvents.MessageSent)
                     popDraft()
                 }
                 is SendMode.REPLY   -> {
                     state.sendMode.timelineEvent.let {
                         room.replyToMessage(it, action.text.toString(), action.autoMarkdown)
-                        _sendMessageResultLiveData.postLiveEvent(SendMessageResult.MessageSent)
+                        _viewEvents.post(RoomDetailViewEvents.MessageSent)
                         popDraft()
                     }
                 }
@@ -549,29 +517,29 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleChangeTopicSlashCommand(changeTopic: ParsedCommand.ChangeTopic) {
-        _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+        _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
 
         room.updateTopic(changeTopic.topic, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandResultOk)
+                _viewEvents.post(RoomDetailViewEvents.SlashCommandResultOk)
             }
 
             override fun onFailure(failure: Throwable) {
-                _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandResultError(failure))
+                _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
             }
         })
     }
 
     private fun handleInviteSlashCommand(invite: ParsedCommand.Invite) {
-        _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+        _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
 
         room.invite(invite.userId, invite.reason, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandResultOk)
+                _viewEvents.post(RoomDetailViewEvents.SlashCommandResultOk)
             }
 
             override fun onFailure(failure: Throwable) {
-                _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandResultError(failure))
+                _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
             }
         })
     }
@@ -608,8 +576,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         } else {
             when (val tooBigFile = attachments.find { it.size > maxUploadFileSize }) {
                 null -> room.sendMedias(attachments)
-                else -> _fileTooBigEvent.postValue(LiveEvent(FileTooBigError(tooBigFile.name
-                        ?: tooBigFile.path, tooBigFile.size, maxUploadFileSize)))
+                else -> _viewEvents.post(RoomDetailViewEvents.FileTooBigError(
+                        tooBigFile.name ?: tooBigFile.path,
+                        tooBigFile.size,
+                        maxUploadFileSize
+                ))
             }
         }
     }
@@ -721,7 +692,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 action.messageFileContent.encryptedFileInfo?.toElementToDecrypt(),
                 object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {
-                        _downloadedFileEvent.postLiveEvent(DownloadFileState(
+                        _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
                                 action.messageFileContent.getMimeType(),
                                 data,
                                 null
@@ -729,7 +700,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                     }
 
                     override fun onFailure(failure: Throwable) {
-                        _downloadedFileEvent.postLiveEvent(DownloadFileState(
+                        _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
                                 action.messageFileContent.getMimeType(),
                                 null,
                                 failure
@@ -750,7 +721,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         if (action.highlight) {
             setState { copy(highlightedEventId = correctedEventId) }
         }
-        _navigateToEvent.postLiveEvent(correctedEventId)
+        _viewEvents.post(RoomDetailViewEvents.NavigateToEvent(correctedEventId))
     }
 
     private fun handleResendEvent(action: RoomDetailAction.ResendMessage) {
@@ -821,11 +792,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun handleReportContent(action: RoomDetailAction.ReportContent) {
         room.reportContent(action.eventId, -100, action.reason, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                _requestLiveData.postValue(LiveEvent(Success(action)))
+                _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
             }
 
             override fun onFailure(failure: Throwable) {
-                _requestLiveData.postValue(LiveEvent(Fail(failure)))
+                _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
             }
         })
     }
@@ -837,11 +808,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
         session.ignoreUserIds(listOf(action.userId), object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                _requestLiveData.postValue(LiveEvent(Success(action)))
+                _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
             }
 
             override fun onFailure(failure: Throwable) {
-                _requestLiveData.postValue(LiveEvent(Fail(failure)))
+                _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
             }
         })
     }
@@ -853,7 +824,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         action.otherUserId,
                         room.roomId,
                         action.transactionId)) {
-            _requestLiveData.postValue(LiveEvent(Success(action)))
+            _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
         } else {
             // TODO
         }
@@ -869,7 +840,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private fun handleRequestVerification(action: RoomDetailAction.RequestVerification) {
         if (action.userId == session.myUserId) return
-        _requestLiveData.postValue(LiveEvent(Success(action)))
+        _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
     }
 
     private fun handleResumeRequestVerification(action: RoomDetailAction.ResumeVerification) {
@@ -877,9 +848,9 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         session.getVerificationService().getExistingVerificationRequestInRoom(room.roomId, action.transactionId)?.let {
             if (it.handledByOtherSession) return
             if (!it.isFinished) {
-                _requestLiveData.postValue(LiveEvent(Success(action.copy(
+                _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action.copy(
                         otherUserId = it.otherUserId
-                ))))
+                )))
             }
         }
     }

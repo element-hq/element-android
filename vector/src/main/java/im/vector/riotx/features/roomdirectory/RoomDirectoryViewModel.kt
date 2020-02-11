@@ -16,9 +16,13 @@
 
 package im.vector.riotx.features.roomdirectory
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.ActivityViewModelContext
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.appendAt
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
@@ -32,17 +36,14 @@ import im.vector.matrix.android.api.session.room.model.thirdparty.RoomDirectoryD
 import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.rx.rx
-import im.vector.riotx.core.extensions.postLiveEvent
-import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.core.utils.LiveEvent
 import timber.log.Timber
 
 private const val PUBLIC_ROOMS_LIMIT = 20
 
 class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState: PublicRoomsViewState,
                                                          private val session: Session)
-    : VectorViewModel<PublicRoomsViewState, RoomDirectoryAction, EmptyViewEvents>(initialState) {
+    : VectorViewModel<PublicRoomsViewState, RoomDirectoryAction, RoomDirectoryViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -57,10 +58,6 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
             return activity.roomDirectoryViewModelFactory.create(state)
         }
     }
-
-    private val _joinRoomErrorLiveData = MutableLiveData<LiveEvent<Throwable>>()
-    val joinRoomErrorLiveData: LiveData<LiveEvent<Throwable>>
-        get() = _joinRoomErrorLiveData
 
     private var since: String? = null
 
@@ -109,9 +106,9 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
     override fun handle(action: RoomDirectoryAction) {
         when (action) {
             is RoomDirectoryAction.SetRoomDirectoryData -> setRoomDirectoryData(action)
-            is RoomDirectoryAction.FilterWith -> filterWith(action)
-            RoomDirectoryAction.LoadMore -> loadMore()
-            is RoomDirectoryAction.JoinRoom -> joinRoom(action)
+            is RoomDirectoryAction.FilterWith           -> filterWith(action)
+            RoomDirectoryAction.LoadMore                -> loadMore()
+            is RoomDirectoryAction.JoinRoom             -> joinRoom(action)
         }
     }
 
@@ -227,7 +224,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
 
             override fun onFailure(failure: Throwable) {
                 // Notify the user
-                _joinRoomErrorLiveData.postLiveEvent(failure)
+                _viewEvents.post(RoomDirectoryViewEvents.Failure(failure))
 
                 setState {
                     copy(

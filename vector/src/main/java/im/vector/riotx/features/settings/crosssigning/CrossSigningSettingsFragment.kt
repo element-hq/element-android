@@ -18,16 +18,13 @@ package im.vector.riotx.features.settings.crosssigning
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.PromptPasswordDialog
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
-import im.vector.riotx.core.extensions.observeEvent
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
@@ -44,23 +41,20 @@ class CrossSigningSettingsFragment @Inject constructor(
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.requestLiveData.observeEvent(this) {
+        viewModel.observeViewEvents {
             when (it) {
-                is Fail    -> {
+                is CrossSigningSettingsViewEvents.Failure         -> {
                     AlertDialog.Builder(requireContext())
                             .setTitle(R.string.dialog_title_error)
-                            .setMessage(it.error.message)
+                            .setMessage(errorFormatter.toHumanReadable(it.throwable))
                             .setPositiveButton(R.string.ok, null)
                             .show()
+                    Unit
                 }
-                is Success -> {
-                    when (val action = it.invoke()) {
-                        is CrossSigningAction.RequestPasswordAuth -> {
-                            requestPassword(action.sessionId)
-                        }
-                    }
+                is CrossSigningSettingsViewEvents.RequestPassword -> {
+                    requestPassword()
                 }
-            }
+            }.exhaustive
         }
     }
 
@@ -89,18 +83,14 @@ class CrossSigningSettingsFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    private fun requestPassword(sessionId: String) {
+    private fun requestPassword() {
         PromptPasswordDialog().show(requireActivity()) { password ->
-            // TODO sessionId should never get out the ViewModel
-            viewModel.handle(CrossSigningAction.InitializeCrossSigning(UserPasswordAuth(
-                    session = sessionId,
-                    password = password
-            )))
+            viewModel.handle(CrossSigningAction.PasswordEntered(password))
         }
     }
 
     override fun onInitializeCrossSigningKeys() {
-        viewModel.handle(CrossSigningAction.InitializeCrossSigning())
+        viewModel.handle(CrossSigningAction.InitializeCrossSigning)
     }
 
     override fun onResetCrossSigningKeys() {
@@ -108,7 +98,7 @@ class CrossSigningSettingsFragment @Inject constructor(
                 .setTitle(R.string.dialog_title_confirmation)
                 .setMessage(R.string.are_you_sure)
                 .setPositiveButton(R.string.ok) { _, _ ->
-                    viewModel.handle(CrossSigningAction.InitializeCrossSigning())
+                    viewModel.handle(CrossSigningAction.InitializeCrossSigning)
                 }
                 .show()
     }

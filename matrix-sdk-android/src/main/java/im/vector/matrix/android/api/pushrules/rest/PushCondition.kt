@@ -17,7 +17,11 @@ package im.vector.matrix.android.api.pushrules.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.pushrules.*
+import im.vector.matrix.android.api.pushrules.Condition
+import im.vector.matrix.android.api.pushrules.ContainsDisplayNameCondition
+import im.vector.matrix.android.api.pushrules.EventMatchCondition
+import im.vector.matrix.android.api.pushrules.RoomMemberCountCondition
+import im.vector.matrix.android.api.pushrules.SenderNotificationPermissionCondition
 import timber.log.Timber
 
 @JsonClass(generateAdapter = true)
@@ -30,13 +34,13 @@ data class PushCondition(
         /**
          * Required for event_match conditions. The dot- separated field of the event to match.
          */
-
         val key: String? = null,
-        /**
-         *Required for event_match conditions.
-         */
 
+        /**
+         * Required for event_match conditions.
+         */
         val pattern: String? = null,
+
         /**
          * Required for room_member_count conditions.
          * A decimal integer optionally prefixed by one of, ==, <, >, >= or <=.
@@ -47,30 +51,35 @@ data class PushCondition(
 ) {
 
     fun asExecutableCondition(): Condition? {
-        return when (Condition.Kind.fromString(this.kind)) {
-            Condition.Kind.event_match                    -> {
-                if (this.key != null && this.pattern != null) {
+        return when (Condition.Kind.fromString(kind)) {
+            Condition.Kind.EventMatch                   -> {
+                if (key != null && pattern != null) {
                     EventMatchCondition(key, pattern)
                 } else {
                     Timber.e("Malformed Event match condition")
                     null
                 }
             }
-            Condition.Kind.contains_display_name          -> {
+            Condition.Kind.ContainsDisplayName          -> {
                 ContainsDisplayNameCondition()
             }
-            Condition.Kind.room_member_count              -> {
-                if (this.iz.isNullOrBlank()) {
+            Condition.Kind.RoomMemberCount              -> {
+                if (iz.isNullOrEmpty()) {
                     Timber.e("Malformed ROOM_MEMBER_COUNT condition")
                     null
                 } else {
-                    RoomMemberCountCondition(this.iz)
+                    RoomMemberCountCondition(iz)
                 }
             }
-            Condition.Kind.sender_notification_permission -> {
-                this.key?.let { SenderNotificationPermissionCondition(it) }
+            Condition.Kind.SenderNotificationPermission -> {
+                if (key == null) {
+                    Timber.e("Malformed Sender Notification Permission condition")
+                    null
+                } else {
+                    SenderNotificationPermissionCondition(key)
+                }
             }
-            Condition.Kind.UNRECOGNIZE                    -> {
+            Condition.Kind.Unrecognised                 -> {
                 Timber.e("Unknown kind $kind")
                 null
             }

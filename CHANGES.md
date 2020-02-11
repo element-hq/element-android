@@ -1,13 +1,30 @@
-Changes in RiotX 0.15.0 (2020-XX-XX)
+Changes in RiotX 0.16.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:
  -
 
 Improvements 🙌:
+ - Show confirmation dialog before deleting a message (#967)
+
+Other changes:
+ -
+
+Bugfix 🐛:
+ -
+
+Translations 🗣:
+ -
+
+Build 🧱:
+ -
+
+Changes in RiotX 0.15.0 (2020-02-10)
+===================================================
+
+Improvements 🙌:
  - Improve navigation to the timeline (#789, #862)
  - Improve network detection. It is now based on the sync request status (#873, #882)
- - Show confirmation dialog before deleting a message (#967)
 
 Other changes:
  - Support SSO login with Firefox account (#606)
@@ -15,12 +32,6 @@ Other changes:
 Bugfix 🐛:
  - Ask for permission before opening the camera (#934)
  - Encrypt for invited users by default, if the room state allows it (#803)
-
-Translations 🗣:
- -
-
-Build 🧱:
- -
 
 Changes in RiotX 0.14.3 (2020-02-03)
 ===================================================
