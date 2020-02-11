@@ -64,6 +64,7 @@ import com.github.piasy.biv.loader.ImageLoader
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
@@ -790,9 +791,10 @@ class RoomDetailFragment @Inject constructor(
     private fun promptReasonToDeleteEvent(eventId: String) {
         val layout = requireActivity().layoutInflater.inflate(R.layout.dialog_delete_event, null)
         val reasonCheckBox = layout.findViewById<MaterialCheckBox>(R.id.deleteEventReasonCheck)
+        val reasonTextInputLayout = layout.findViewById<TextInputLayout>(R.id.deleteEventReasonTextInputLayout)
         val reasonInput = layout.findViewById<TextInputEditText>(R.id.deleteEventReasonInput)
 
-        reasonCheckBox.setOnCheckedChangeListener { _, isChecked -> reasonInput.isEnabled = isChecked }
+        reasonCheckBox.setOnCheckedChangeListener { _, isChecked -> reasonTextInputLayout.isEnabled = isChecked }
 
         AlertDialog.Builder(requireActivity())
                 .setView(layout)
