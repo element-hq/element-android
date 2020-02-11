@@ -145,7 +145,6 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
                         }
                         dismissedAction = Runnable {
                             session?.getVerificationService()?.declineVerificationRequestInDMs(pr.otherUserId,
-                                    pr.requestInfo?.fromDevice ?: "",
                                     pr.transactionId ?: "",
                                     pr.roomId ?: ""
                             )

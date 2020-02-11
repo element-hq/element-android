@@ -833,7 +833,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun handleDeclineVerification(action: RoomDetailAction.DeclineVerificationRequest) {
         session.getVerificationService().declineVerificationRequestInDMs(
                 action.otherUserId,
-                action.otherdDeviceId,
                 action.transactionId,
                 room.roomId)
     }

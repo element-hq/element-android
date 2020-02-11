@@ -68,11 +68,11 @@ interface VerificationService {
                                otherDevices: List<String>?): PendingVerificationRequest
 
     fun declineVerificationRequestInDMs(otherUserId: String,
-                                        otherDeviceId: String,
                                         transactionId: String,
                                         roomId: String)
 
     // Only SAS method is supported for the moment
+    // TODO Parameter otherDeviceId should be removed in this case
     fun beginKeyVerificationInDMs(method: VerificationMethod,
                                   transactionId: String,
                                   roomId: String,

@@ -1151,9 +1151,9 @@ internal class DefaultVerificationService @Inject constructor(
         return verificationRequest
     }
 
-    override fun declineVerificationRequestInDMs(otherUserId: String, otherDeviceId: String, transactionId: String, roomId: String) {
+    override fun declineVerificationRequestInDMs(otherUserId: String, transactionId: String, roomId: String) {
         verificationTransportRoomMessageFactory.createTransport(roomId, null)
-                .cancelTransaction(transactionId, otherUserId, otherDeviceId, CancelCode.User)
+                .cancelTransaction(transactionId, otherUserId, null, CancelCode.User)
 
         getExistingVerificationRequest(otherUserId, transactionId)?.let {
             updatePendingRequest(it.copy(
