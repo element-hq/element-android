@@ -32,7 +32,7 @@ class CoroutineSequencersTest {
 
     @Test
     fun sequencer_should_run_sequential() {
-        val sequencer = ChannelCoroutineSequencer<String>()
+        val sequencer = SemaphoreCoroutineSequencer()
         val results = ArrayList<String>()
 
         val jobs = listOf(
@@ -63,9 +63,9 @@ class CoroutineSequencersTest {
 
     @Test
     fun sequencer_should_run_parallel() {
-        val sequencer1 = ChannelCoroutineSequencer<String>()
-        val sequencer2 = ChannelCoroutineSequencer<String>()
-        val sequencer3 = ChannelCoroutineSequencer<String>()
+        val sequencer1 = SemaphoreCoroutineSequencer()
+        val sequencer2 = SemaphoreCoroutineSequencer()
+        val sequencer3 = SemaphoreCoroutineSequencer()
         val results = ArrayList<String>()
         val jobs = listOf(
                 GlobalScope.launch(dispatcher) {
@@ -92,7 +92,7 @@ class CoroutineSequencersTest {
 
     @Test
     fun sequencer_should_jump_to_next_when_current_job_canceled() {
-        val sequencer = ChannelCoroutineSequencer<String>()
+        val sequencer = SemaphoreCoroutineSequencer()
         val results = ArrayList<String>()
         val jobs = listOf(
                 GlobalScope.launch(dispatcher) {
