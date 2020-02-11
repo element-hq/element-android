@@ -25,11 +25,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/attachmentPreviewerBottomContainer"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:background="#80000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,7 +41,9 @@
             android:padding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:itemCount="1"
+            tools:listitem="@layout/item_attachment_miniature_preview" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -52,8 +53,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:src="@drawable/ic_send"
-        app:layout_constraintTop_toTopOf="@id/attachmentPreviewerBottomContainer"
         app:layout_constraintBottom_toTopOf="@id/attachmentPreviewerBottomContainer"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/attachmentPreviewerBottomContainer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

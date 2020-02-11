@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Launcher Theme, only used for VectorLauncherActivity (will be use even before the Activity is started) -->
-    <style name="AppTheme.Launcher" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash</item>
-
-        <item name="colorPrimaryDark">@color/primary_color_dark</item>
-    </style>
-
     <style name="AppTheme.AttachmentsPreview" parent="AppTheme.Base.Black">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
