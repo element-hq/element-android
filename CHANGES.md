@@ -11,7 +11,7 @@ Other changes:
  -
 
 Bugfix 🐛:
- -
+ - Fix crash by removing all notifications after clearing cache (#878)
 
 Translations 🗣:
  -
