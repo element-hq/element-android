@@ -20,6 +20,7 @@ package im.vector.riotx.features.attachments.preview
 import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.MenuItem
@@ -36,10 +37,12 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.yalantis.ucrop.UCrop
+import com.yalantis.ucrop.UCropActivity
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.OnSnapPositionChangeListener
 import im.vector.riotx.core.utils.SnapOnScrollListener
 import im.vector.riotx.core.utils.attachSnapHelperWithListener
@@ -58,7 +61,8 @@ data class AttachmentsPreviewArgs(
 class AttachmentsPreviewFragment @Inject constructor(
         val viewModelFactory: AttachmentsPreviewViewModel.Factory,
         private val attachmentMiniaturePreviewController: AttachmentMiniaturePreviewController,
-        private val attachmentBigPreviewController: AttachmentBigPreviewController
+        private val attachmentBigPreviewController: AttachmentBigPreviewController,
+        private val colorProvider: ColorProvider
 ) : VectorBaseFragment(), AttachmentMiniaturePreviewController.Callback {
 
     private val fragmentArgs: AttachmentsPreviewArgs by args()
@@ -167,7 +171,29 @@ class AttachmentsPreviewFragment @Inject constructor(
         val currentAttachment = it.attachments.getOrNull(it.currentAttachmentIndex) ?: return@withState
         val destinationFile = File(requireContext().cacheDir, "${currentAttachment.name}_edited_image_${System.currentTimeMillis()}")
         UCrop.of(currentAttachment.queryUri.toUri(), destinationFile.toUri())
-                .withOptions(UCrop.Options())
+                .withOptions(
+                        UCrop.Options()
+                                .apply {
+                                    setAllowedGestures(
+                                            /* tabScale = */ UCropActivity.SCALE,
+                                            /* tabRotate = */ UCropActivity.ALL,
+                                            /* tabAspectRatio = */ UCropActivity.SCALE
+                                    )
+                                    setToolbarTitle(currentAttachment.name)
+                                    setFreeStyleCropEnabled(true)
+                                    // Color used for toolbar icon and text
+                                    setToolbarColor(colorProvider.getColorFromAttribute(R.attr.riotx_background))
+                                    setToolbarWidgetColor(colorProvider.getColorFromAttribute(R.attr.vctr_toolbar_primary_text_color))
+                                    // Background
+                                    setRootViewBackgroundColor(colorProvider.getColorFromAttribute(R.attr.riotx_background))
+                                    // Status bar color (pb in dark mode, icon of the status bar are dark)
+                                    setStatusBarColor(colorProvider.getColorFromAttribute(R.attr.riotx_header_panel_background))
+                                    // Known issue: there is still orange color used by the lib
+                                    setActiveControlsWidgetColor(colorProvider.getColor(R.color.riotx_accent))
+                                    // Hide the logo (does not work)
+                                    setLogoColor(Color.TRANSPARENT)
+                                }
+                )
                 .start(requireContext(), this)
     }
 
