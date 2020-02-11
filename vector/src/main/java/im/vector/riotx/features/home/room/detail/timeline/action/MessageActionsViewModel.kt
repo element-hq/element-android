@@ -227,7 +227,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     }
 
                     if (canRedact(timelineEvent, session.myUserId)) {
-                        add(EventSharedAction.Delete(eventId))
+                        add(EventSharedAction.Redact(eventId))
                     }
 
                     if (canCopy(msgType)) {

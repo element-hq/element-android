@@ -788,7 +788,7 @@ class RoomDetailFragment @Inject constructor(
                 .show()
     }
 
-    private fun promptReasonToDeleteEvent(eventId: String) {
+    private fun promptReasonToRedactEvent(eventId: String) {
         val layout = requireActivity().layoutInflater.inflate(R.layout.dialog_delete_event, null)
         val reasonCheckBox = layout.findViewById<MaterialCheckBox>(R.id.deleteEventReasonCheck)
         val reasonTextInputLayout = layout.findViewById<TextInputLayout>(R.id.deleteEventReasonTextInputLayout)
@@ -797,8 +797,8 @@ class RoomDetailFragment @Inject constructor(
         reasonCheckBox.setOnCheckedChangeListener { _, isChecked -> reasonTextInputLayout.isEnabled = isChecked }
 
         AlertDialog.Builder(requireActivity())
-                .setView(layout)
                 .setTitle(R.string.delete_event_dialog_title)
+                .setView(layout)
                 .setPositiveButton(R.string.remove) { _, _ ->
                     val reason = reasonInput.text.toString()
                             .takeIf { reasonCheckBox.isChecked }
@@ -1120,8 +1120,8 @@ class RoomDetailFragment @Inject constructor(
                 copyToClipboard(requireContext(), action.content, false)
                 showSnackWithMessage(getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
             }
-            is EventSharedAction.Delete                     -> {
-                promptReasonToDeleteEvent(action.eventId)
+            is EventSharedAction.Redact                     -> {
+                promptReasonToRedactEvent(action.eventId)
             }
             is EventSharedAction.Share                      -> {
                 // TODO current data communication is too limited
