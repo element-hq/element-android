@@ -1351,6 +1351,7 @@ class RoomDetailFragment @Inject constructor(
         val previewable = attachments.filterPreviewables()
         val nonPreviewable = attachments.filterNonPreviewables()
         if (nonPreviewable.isNotEmpty()) {
+            // Send the non previewable event right now (?)
             roomDetailViewModel.handle(RoomDetailAction.SendMedia(nonPreviewable))
         }
         if (previewable.isNotEmpty()) {
