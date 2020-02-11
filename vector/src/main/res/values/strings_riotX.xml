@@ -19,6 +19,13 @@
 
     <!-- END Strings added by Benoit -->
 
+    <!-- BEGIN Strings added by Onuray -->
+    <string name="delete_event_dialog_title">Confirm Removal</string>
+    <string name="delete_event_dialog_content">Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.</string>
+    <string name="delete_event_dialog_reason_checkbox">Include a reason</string>
+    <string name="delete_event_dialog_reason_hint">Reason for redacting</string>
+    <!-- END Strings added by Onuray -->
+
 
     <!-- BEGIN Strings added by Others -->
 
