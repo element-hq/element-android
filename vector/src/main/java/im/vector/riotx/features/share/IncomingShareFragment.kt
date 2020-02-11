@@ -21,6 +21,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
@@ -35,6 +36,10 @@ import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.utils.PERMISSIONS_FOR_WRITING_FILES
+import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_PICK_ATTACHMENT
+import im.vector.riotx.core.utils.allGranted
+import im.vector.riotx.core.utils.checkPermissions
 import im.vector.riotx.features.attachments.AttachmentsHelper
 import im.vector.riotx.features.login.LoginActivity
 import kotlinx.android.synthetic.main.fragment_incoming_share.*
@@ -72,10 +77,10 @@ class IncomingShareFragment @Inject constructor(
                 isShareManaged = handleTextShare(intent)
             }
             if (!isShareManaged) {
-                cannotManageShare()
+                cannotManageShare(R.string.error_handling_incoming_share)
             }
         } else {
-            cannotManageShare()
+            cannotManageShare(R.string.error_handling_incoming_share)
         }
 
         incomingShareSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -95,6 +100,22 @@ class IncomingShareFragment @Inject constructor(
             when (it) {
                 is IncomingShareViewEvents.ShareToRoom -> handleShareToRoom(it)
             }.exhaustive
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // We need the read file permission
+        checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_PICK_ATTACHMENT)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == PERMISSION_REQUEST_CODE_PICK_ATTACHMENT && !allGranted(grantResults)) {
+            // Permission is mandatory
+            cannotManageShare(R.string.missing_permissions_error)
         }
     }
 
@@ -127,11 +148,11 @@ class IncomingShareFragment @Inject constructor(
     }
 
     override fun onAttachmentsProcessFailed() {
-        cannotManageShare()
+        cannotManageShare(R.string.error_handling_incoming_share)
     }
 
-    private fun cannotManageShare() {
-        Toast.makeText(requireContext(), R.string.error_handling_incoming_share, Toast.LENGTH_LONG).show()
+    private fun cannotManageShare(@StringRes messageResId: Int) {
+        Toast.makeText(requireContext(), messageResId, Toast.LENGTH_LONG).show()
         requireActivity().finish()
     }
 
