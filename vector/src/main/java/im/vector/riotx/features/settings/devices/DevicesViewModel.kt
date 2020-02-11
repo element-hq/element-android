@@ -89,7 +89,6 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
         super.onCleared()
     }
 
-    override fun transactionCreated(tx: VerificationTransaction) {}
     override fun transactionUpdated(tx: VerificationTransaction) {
         if (tx.state == VerificationTxState.Verified) {
             refreshDevicesList()

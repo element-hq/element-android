@@ -262,9 +262,6 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
         }
     }
 
-    override fun transactionCreated(tx: VerificationTransaction) {
-    }
-
     override fun transactionUpdated(tx: VerificationTransaction) {
         if (tx is SasVerificationTransaction) {
             val state = tx.state

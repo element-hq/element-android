@@ -48,8 +48,6 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
         this.session = null
     }
 
-    override fun transactionCreated(tx: VerificationTransaction) {}
-
     override fun transactionUpdated(tx: VerificationTransaction) {
         if (!tx.isToDeviceTransport()) return
         // TODO maybe check also if
@@ -111,9 +109,6 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
         }
     }
 
-    override fun markedAsManuallyVerified(userId: String, deviceId: String) {
-    }
-
     override fun verificationRequestCreated(pr: PendingVerificationRequest) {
         // For incoming request we should prompt (if not in activity where this request apply)
         if (pr.isIncoming) {
@@ -162,7 +157,6 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
         if (pr.isIncoming && (pr.isReady || pr.handledByOtherSession)) {
             PopupAlertManager.cancelAlert(uniqueIdForVerificationRequest(pr))
         }
-        super.verificationRequestUpdated(pr)
     }
 
     private fun uniqueIdForVerificationRequest(pr: PendingVerificationRequest) =

@@ -95,15 +95,13 @@ interface VerificationService {
                                  otherUserId: String,
                                  transactionId: String): Boolean
 
-    // fun transactionUpdated(tx: SasVerificationTransaction)
-
     interface VerificationListener {
-        fun transactionCreated(tx: VerificationTransaction)
-        fun transactionUpdated(tx: VerificationTransaction)
-        fun markedAsManuallyVerified(userId: String, deviceId: String) {}
-
         fun verificationRequestCreated(pr: PendingVerificationRequest) {}
         fun verificationRequestUpdated(pr: PendingVerificationRequest) {}
+
+        fun transactionCreated(tx: VerificationTransaction) {}
+        fun transactionUpdated(tx: VerificationTransaction) {}
+        fun markedAsManuallyVerified(userId: String, deviceId: String) {}
     }
 
     companion object {
