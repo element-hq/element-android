@@ -22,28 +22,29 @@
         android:id="@+id/deleteEventReasonCheck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:checked="true"
         android:text="@string/delete_event_dialog_reason_checkbox"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/deleteEventConfirmationText"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deleteEventConfirmationText" />
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/deleteEventReasonTextInputLayout"
         style="@style/VectorTextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/delete_event_dialog_reason_hint"
         app:counterEnabled="true"
         app:counterMaxLength="240"
-        app:layout_constraintTop_toBottomOf="@+id/deleteEventReasonCheck"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/deleteEventReasonCheck">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/deleteEventReasonInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/event_redacted_by_user_reason"/>
+            android:text="@string/event_redacted_by_user_reason" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
