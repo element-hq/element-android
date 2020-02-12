@@ -38,4 +38,3 @@ data class MessageOptionsContent(
         @Json(name = "options") val options: List<OptionItem>? = null,
         @Json(name = "m.new_content") override val newContent: Content? = null
 ) : MessageContent
-

@@ -102,7 +102,8 @@ internal class RoomSummaryUpdater @Inject constructor(
             roomSummaryEntity.membership = membership
         }
 
-        val latestPreviewableEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true, filterTypes = PREVIEWABLE_TYPES, filterContentRelation = true)
+        val latestPreviewableEvent = TimelineEventEntity.latestEvent(realm, roomId, includesSending = true,
+                filterTypes = PREVIEWABLE_TYPES, filterContentRelation = true)
 
         val lastTopicEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_TOPIC, stateKey = "")?.root
         val lastCanonicalAliasEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_CANONICAL_ALIAS, stateKey = "")?.root
