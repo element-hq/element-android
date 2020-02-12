@@ -426,7 +426,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         }
                         is ParsedCommand.SendPoll -> {
                             room.sendPoll(slashCommandResult.question, slashCommandResult.options.mapIndexed { index, s -> s to "$index. $s"  })
-                            _sendMessageResultLiveData.postLiveEvent(SendMessageResult.SlashCommandHandled())
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
                         is ParsedCommand.ChangeTopic              -> {
