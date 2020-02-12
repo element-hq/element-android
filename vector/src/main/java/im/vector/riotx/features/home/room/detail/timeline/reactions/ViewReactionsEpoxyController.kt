@@ -35,7 +35,7 @@ class ViewReactionsEpoxyController @Inject constructor(
         private val emojiCompatWrapper: EmojiCompatWrapper)
     : TypedEpoxyController<DisplayReactionsViewState>() {
 
-    var listener: ViewReactionsEpoxyControllerListener? = null
+    var listener: Listener? = null
 
     override fun buildModels(state: DisplayReactionsViewState) {
         when (state.mapReactionKeyToMemberList) {
@@ -64,7 +64,7 @@ class ViewReactionsEpoxyController @Inject constructor(
         }
     }
 
-    interface ViewReactionsEpoxyControllerListener {
-        fun didSelectUser(senderId: String)
+    interface Listener {
+        fun didSelectUser(userId: String)
     }
 }

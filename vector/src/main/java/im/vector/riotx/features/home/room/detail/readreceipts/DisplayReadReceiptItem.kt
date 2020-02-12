@@ -17,7 +17,6 @@
 package im.vector.riotx.features.home.room.detail.readreceipts
 
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
@@ -45,11 +44,10 @@ abstract class DisplayReadReceiptItem : EpoxyModelWithHolder<DisplayReadReceiptI
         } ?: run {
             holder.timestampView.isVisible = false
         }
-        holder.rootLayout.setOnClickListener { userClicked?.invoke() }
+        holder.view.setOnClickListener { userClicked?.invoke() }
     }
 
     class Holder : VectorEpoxyHolder() {
-        val rootLayout by bind<LinearLayout>(R.id.readReceiptRootLayout)
         val avatarView by bind<ImageView>(R.id.readReceiptAvatar)
         val displayNameView by bind<TextView>(R.id.readReceiptName)
         val timestampView by bind<TextView>(R.id.readReceiptDate)

@@ -42,7 +42,7 @@ data class DisplayReadReceiptArgs(
 /**
  * Bottom sheet displaying list of read receipts for a given event ordered by descending timestamp
  */
-class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment(), DisplayReadReceiptsController.DisplayReadReceiptsControllerListener {
+class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment(), DisplayReadReceiptsController.Listener {
 
     @Inject lateinit var epoxyController: DisplayReadReceiptsController
 
@@ -70,11 +70,12 @@ class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment(), Di
 
     override fun onDestroyView() {
         recyclerView.cleanup()
+        epoxyController.listener = null
         super.onDestroyView()
     }
 
-    override fun didSelectUser(senderId: String) {
-        sharedActionViewModel.post(EventSharedAction.OpenUserProfile(senderId))
+    override fun didSelectUser(userId: String) {
+        sharedActionViewModel.post(EventSharedAction.OpenUserProfile(userId))
     }
 
     // we are not using state for this one as it's static, so no need to override invalidate()

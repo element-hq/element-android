@@ -37,7 +37,7 @@ import javax.inject.Inject
 /**
  * Bottom sheet displaying list of reactions for a given event ordered by timestamp
  */
-class ViewReactionsBottomSheet : VectorBaseBottomSheetDialogFragment(), ViewReactionsEpoxyController.ViewReactionsEpoxyControllerListener {
+class ViewReactionsBottomSheet : VectorBaseBottomSheetDialogFragment(), ViewReactionsEpoxyController.Listener {
 
     private val viewModel: ViewReactionsViewModel by fragmentViewModel(ViewReactionsViewModel::class)
 
@@ -65,11 +65,12 @@ class ViewReactionsBottomSheet : VectorBaseBottomSheetDialogFragment(), ViewReac
 
     override fun onDestroyView() {
         recyclerView.cleanup()
+        epoxyController.listener = null
         super.onDestroyView()
     }
 
-    override fun didSelectUser(senderId: String) {
-        sharedActionViewModel.post(EventSharedAction.OpenUserProfile(senderId))
+    override fun didSelectUser(userId: String) {
+        sharedActionViewModel.post(EventSharedAction.OpenUserProfile(userId))
     }
 
     override fun invalidate() = withState(viewModel) {

@@ -48,7 +48,7 @@ abstract class ReactionInfoSimpleItem : EpoxyModelWithHolder<ReactionInfoSimpleI
         } ?: run {
             holder.timeStampView.isVisible = false
         }
-        holder.displayNameView.setOnClickListener { userClicked?.invoke() }
+        holder.view.setOnClickListener { userClicked?.invoke() }
     }
 
     class Holder : VectorEpoxyHolder() {

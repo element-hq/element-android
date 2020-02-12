@@ -32,7 +32,7 @@ class DisplayReadReceiptsController @Inject constructor(private val dateFormatte
                                                         private val avatarRender: AvatarRenderer)
     : TypedEpoxyController<List<ReadReceiptData>>() {
 
-    var listener: DisplayReadReceiptsControllerListener? = null
+    var listener: Listener? = null
 
     override fun buildModels(readReceipts: List<ReadReceiptData>) {
         readReceipts.forEach {
@@ -47,7 +47,7 @@ class DisplayReadReceiptsController @Inject constructor(private val dateFormatte
         }
     }
 
-    interface DisplayReadReceiptsControllerListener {
-        fun didSelectUser(senderId: String)
+    interface Listener {
+        fun didSelectUser(userId: String)
     }
 }

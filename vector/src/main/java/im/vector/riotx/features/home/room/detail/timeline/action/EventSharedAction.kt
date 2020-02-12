@@ -28,7 +28,7 @@ sealed class EventSharedAction(@StringRes val titleRes: Int,
     object Separator :
             EventSharedAction(0, 0)
 
-    data class OpenUserProfile(val senderId: String) :
+    data class OpenUserProfile(val userId: String) :
             EventSharedAction(0, 0)
 
     data class AddReaction(val eventId: String) :
