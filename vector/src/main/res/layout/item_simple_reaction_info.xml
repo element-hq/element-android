@@ -18,7 +18,7 @@
         android:layout_marginRight="8dp"
         android:gravity="center"
         android:lines="1"
-        android:textColor="?android:textColorPrimary"
+        android:textColor="@color/black"
         android:textSize="18sp"
         tools:text="@sample/reactions.json/data/reaction" />
 
