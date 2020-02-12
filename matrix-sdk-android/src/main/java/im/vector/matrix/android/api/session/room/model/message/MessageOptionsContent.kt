@@ -21,7 +21,7 @@ import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 
 // Possible values for optionType
-const val OPTION_TYPE_POLL = "org.matrix.pool"
+const val OPTION_TYPE_POLL = "org.matrix.poll"
 const val OPTION_TYPE_BUTTONS = "org.matrix.buttons"
 
 /**
