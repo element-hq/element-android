@@ -28,8 +28,7 @@ import im.vector.matrix.android.internal.database.model.UserAccountDataEntity
 import im.vector.matrix.android.internal.database.model.UserAccountDataEntityFields
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.di.SessionId
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataFallback
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import javax.inject.Inject
@@ -44,17 +43,17 @@ internal class DefaultAccountDataService @Inject constructor(
     private val moshi = MoshiProvider.providesMoshi()
     private val adapter = moshi.adapter<Map<String, Any>>(JSON_DICT_PARAMETERIZED_TYPE)
 
-    override fun getAccountData(type: String): UserAccountData? {
+    override fun getAccountData(type: String): UserAccountDataEvent? {
         return getAccountData(listOf(type)).firstOrNull()
     }
 
-    override fun getLiveAccountData(type: String): LiveData<Optional<UserAccountData>> {
+    override fun getLiveAccountData(type: String): LiveData<Optional<UserAccountDataEvent>> {
         return Transformations.map(getLiveAccountData(listOf(type))) {
             it.firstOrNull()?.toOptional()
         }
     }
 
-    override fun getAccountData(filterType: List<String>): List<UserAccountData> {
+    override fun getAccountData(filterType: List<String>): List<UserAccountDataEvent> {
         return monarchy.fetchAllCopiedSync { realm ->
             realm.where(UserAccountDataEntity::class.java)
                     .apply {
@@ -64,7 +63,7 @@ internal class DefaultAccountDataService @Inject constructor(
                     }
         }?.mapNotNull { entity ->
             entity.type?.let { type ->
-                UserAccountDataFallback(
+                UserAccountDataEvent(
                         type = type,
                         content = entity.contentStr?.let { adapter.fromJson(it) } ?: emptyMap()
                 )
@@ -72,7 +71,7 @@ internal class DefaultAccountDataService @Inject constructor(
         } ?: emptyList()
     }
 
-    override fun getLiveAccountData(filterType: List<String>): LiveData<List<UserAccountData>> {
+    override fun getLiveAccountData(filterType: List<String>): LiveData<List<UserAccountDataEvent>> {
         return monarchy.findAllMappedWithChanges({ realm ->
             realm.where(UserAccountDataEntity::class.java)
                     .apply {
@@ -81,7 +80,7 @@ internal class DefaultAccountDataService @Inject constructor(
                         }
                     }
         }, { entity ->
-            UserAccountDataFallback(
+            UserAccountDataEvent(
                     type = entity.type ?: "",
                     content = entity.contentStr?.let { adapter.fromJson(it) } ?: emptyMap()
             )

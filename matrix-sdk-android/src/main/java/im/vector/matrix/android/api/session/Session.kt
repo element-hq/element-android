@@ -34,6 +34,7 @@ import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
+import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageService
 import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.sync.SyncState
@@ -161,4 +162,6 @@ interface Session :
          */
         fun onGlobalError(globalError: GlobalError)
     }
+
+    val sharedSecretStorageService: SharedSecretStorageService
 }

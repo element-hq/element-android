@@ -31,7 +31,7 @@ import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -123,7 +123,7 @@ class RxSession(private val session: Session) {
                 }
     }
 
-    fun liveAccountData(filter: List<String>): Observable<List<UserAccountData>> {
+    fun liveAccountData(filter: List<String>): Observable<List<UserAccountDataEvent>> {
         return session.getLiveAccountData(filter).asObservable()
                 .startWithCallable {
                     session.getAccountData(filter)

@@ -22,7 +22,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataFallback
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseActivity
@@ -55,9 +55,9 @@ class AccountDataFragment @Inject constructor(
     }
 
     override fun didTap(data: UserAccountData) {
-        val fb = data as? UserAccountDataFallback ?: return
+        val fb = data as? UserAccountDataEvent ?: return
         val jsonString = MoshiProvider.providesMoshi()
-                .adapter(UserAccountDataFallback::class.java)
+                .adapter(UserAccountDataEvent::class.java)
                 .toJson(fb)
         JsonViewerBottomSheetDialog.newInstance(jsonString)
                 .show(childFragmentManager, "JSON_VIEWER")

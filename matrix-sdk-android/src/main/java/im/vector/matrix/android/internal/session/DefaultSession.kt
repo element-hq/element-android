@@ -38,6 +38,7 @@ import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
+import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageService
 import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.sync.SyncState
@@ -93,6 +94,7 @@ internal class DefaultSession @Inject constructor(
         private val initialSyncProgressService: Lazy<InitialSyncProgressService>,
         private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>,
         private val accountDataService: Lazy<AccountDataService>,
+        private val _sharedSecretStorageService: Lazy<SharedSecretStorageService>,
         private val shieldTrustUpdater: ShieldTrustUpdater)
     : Session,
         RoomService by roomService.get(),
@@ -110,6 +112,9 @@ internal class DefaultSession @Inject constructor(
         HomeServerCapabilitiesService by homeServerCapabilitiesService.get(),
         ProfileService by profileService.get(),
         AccountDataService by accountDataService.get() {
+
+    override val sharedSecretStorageService: SharedSecretStorageService
+        get() = _sharedSecretStorageService.get()
 
     private var isOpen = false
 
