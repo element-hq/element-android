@@ -36,6 +36,8 @@ abstract class ReactionInfoSimpleItem : EpoxyModelWithHolder<ReactionInfoSimpleI
     lateinit var authorDisplayName: CharSequence
     @EpoxyAttribute
     var timeStamp: CharSequence? = null
+    @EpoxyAttribute
+    var userClicked: (() -> Unit)? = null
 
     override fun bind(holder: Holder) {
         holder.emojiReactionView.text = reactionKey
@@ -46,6 +48,7 @@ abstract class ReactionInfoSimpleItem : EpoxyModelWithHolder<ReactionInfoSimpleI
         } ?: run {
             holder.timeStampView.isVisible = false
         }
+        holder.displayNameView.setOnClickListener { userClicked?.invoke() }
     }
 
     class Holder : VectorEpoxyHolder() {
