@@ -25,9 +25,9 @@ object MessageType {
     const val MSGTYPE_VIDEO = "m.video"
     const val MSGTYPE_LOCATION = "m.location"
     const val MSGTYPE_FILE = "m.file"
-    const val MSGTYPE_OPTIONS = "m.options"
-    const val MSGTYPE_RESPONSE = "m.response"
-    const val MSGTYPE_POLL_CLOSED = "m.poll_closed"
+    const val MSGTYPE_OPTIONS = "org.matrix.options"
+    const val MSGTYPE_RESPONSE = "org.matrix.response"
+    const val MSGTYPE_POLL_CLOSED = "org.matrix.poll_closed"
     const val MSGTYPE_VERIFICATION_REQUEST = "m.key.verification.request"
     // Add, in local, a fake message type in order to StickerMessage can inherit Message class
     // Because sticker isn't a message type but a event type without msgtype field

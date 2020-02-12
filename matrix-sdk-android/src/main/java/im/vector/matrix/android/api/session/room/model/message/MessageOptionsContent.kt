@@ -21,8 +21,8 @@ import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 
 // Possible values for optionType
-const val OPTION_TYPE_POLL = "m.pool"
-const val OPTION_TYPE_BUTTONS = "m.buttons"
+const val OPTION_TYPE_POLL = "org.matrix.pool"
+const val OPTION_TYPE_BUTTONS = "org.matrix.buttons"
 
 /**
  * Polls and bot buttons are m.room.message events with a msgtype of m.options,
