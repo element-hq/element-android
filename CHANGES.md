@@ -12,6 +12,7 @@ Other changes:
 
 Bugfix 🐛:
  - Fix crash by removing all notifications after clearing cache (#878)
+ - Fix issue with verification when other client declares it can only show QR code (#988)
 
 Translations 🗣:
  -
