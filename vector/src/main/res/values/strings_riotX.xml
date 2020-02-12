@@ -6,7 +6,16 @@
     <!-- Sections has been created to avoid merge conflict. Let's see if it's better -->
 
     <!-- BEGIN Strings added by Valere -->
-
+    <plurals name="poll_info">
+        <item quantity="zero">%d vote</item>
+        <item quantity="other">%d votes</item>
+    </plurals>
+    <plurals name="poll_info_final">
+        <item quantity="zero">%d vote - Final results</item>
+        <item quantity="other">%d votes - Final results</item>
+    </plurals>
+    <string name="poll_item_selected_aria">Selected Option</string>
+    <string name="command_description_poll">Creates a simple poll</string>
     <!-- END Strings added by Valere -->
 
 

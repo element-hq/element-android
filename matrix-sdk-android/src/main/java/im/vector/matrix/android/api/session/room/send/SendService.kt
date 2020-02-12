@@ -19,6 +19,7 @@ package im.vector.matrix.android.api.session.room.send
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.message.OptionItem
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
 
@@ -62,7 +63,24 @@ interface SendService {
     fun sendMedias(attachments: List<ContentAttachmentData>): Cancelable
 
     /**
-     * Redacts (delete) the given event.
+     * Send a poll to the room.
+     * @param question the question
+     * @param options list of (label, value)
+     * @return a [Cancelable]
+     */
+    fun sendPoll(question: String, options: List<OptionItem>): Cancelable
+
+    /**
+     * Method to send a poll response.
+     * @param pollEventId the poll currently replied to
+     * @param optionIndex The reply index
+     * @param optionValue The option value (for compatibility)
+     * @return a [Cancelable]
+     */
+    fun sendOptionsReply(pollEventId: String, optionIndex: Int, optionValue: String): Cancelable
+
+    /**
+     * Redact (delete) the given event.
      * @param event The event to redact
      * @param reason Optional reason string
      */

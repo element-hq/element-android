@@ -36,10 +36,14 @@ import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFormat
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageOptionsContent
+import im.vector.matrix.android.api.session.room.model.message.MessagePollResponseContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
+import im.vector.matrix.android.api.session.room.model.message.OPTION_TYPE_POLL
+import im.vector.matrix.android.api.session.room.model.message.OptionItem
 import im.vector.matrix.android.api.session.room.model.message.ThumbnailInfo
 import im.vector.matrix.android.api.session.room.model.message.VideoInfo
 import im.vector.matrix.android.api.session.room.model.message.isReply
@@ -130,6 +134,43 @@ internal class LocalEchoEventFactory @Inject constructor(
                                 .toMessageTextContent(msgType)
                                 .toContent()
                 ))
+    }
+
+    fun createOptionsReplyEvent(roomId: String,
+                                pollEventId: String,
+                                optionIndex: Int,
+                                optionLabel: String): Event {
+        return createEvent(roomId,
+                MessagePollResponseContent(
+                        body = optionLabel,
+                        relatesTo = RelationDefaultContent(
+                                type = RelationType.RESPONSE,
+                                option = optionIndex,
+                                eventId = pollEventId)
+
+                ))
+    }
+
+    fun createPollEvent(roomId: String,
+                        question: String,
+                        options: List<OptionItem>): Event {
+        val compatLabel = buildString {
+            append("[Poll] ")
+            append(question)
+            options.forEach {
+                append("\n")
+                append(it.value)
+            }
+        }
+        return createEvent(
+                roomId,
+                MessageOptionsContent(
+                        body = compatLabel,
+                        label = question,
+                        optionType = OPTION_TYPE_POLL,
+                        options = options.toList()
+                )
+        )
     }
 
     fun createReplaceTextOfReply(roomId: String,
