@@ -96,12 +96,31 @@ interface VerificationService {
                                  transactionId: String): Boolean
 
     interface Listener {
-        // TODO javadoc
+        /**
+         * Called when a verification request is created either by the user, or by the other user.
+         */
         fun verificationRequestCreated(pr: PendingVerificationRequest) {}
+
+        /**
+         * Called when a verification request is updated.
+         */
         fun verificationRequestUpdated(pr: PendingVerificationRequest) {}
 
+        /**
+         * Called when a transaction is created, either by the user or initiated by the other user.
+         */
         fun transactionCreated(tx: VerificationTransaction) {}
+
+        /**
+         * Called when a transaction is updated. You may be interested to track the state of the VerificationTransaction.
+         */
         fun transactionUpdated(tx: VerificationTransaction) {}
+
+        /**
+         * Inform the the deviceId of the userId has been marked as manually verified by the SDK.
+         * It will be called after VerificationService.markedLocallyAsManuallyVerified() is called.
+         *
+         */
         fun markedAsManuallyVerified(userId: String, deviceId: String) {}
     }
 
