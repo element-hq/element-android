@@ -33,6 +33,7 @@ import im.vector.matrix.android.common.CryptoTestHelper
 import im.vector.matrix.android.common.SessionTestParams
 import im.vector.matrix.android.common.TestConstants
 import im.vector.matrix.android.common.TestMatrixCallback
+import im.vector.matrix.android.internal.crypto.crosssigning.toBase64NoPadding
 import im.vector.matrix.android.internal.crypto.secrets.DefaultSharedSecureStorage
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 import kotlinx.coroutines.Dispatchers
@@ -164,9 +165,9 @@ class QuadSTests : InstrumentedTest {
                 TestMatrixCallback(storeCountDownLatch)
         )
 
-        val secretAccountData = assertAccountData(aliceSession,"secret.of.life" )
+        val secretAccountData = assertAccountData(aliceSession, "secret.of.life")
 
-        val encryptedContent = secretAccountData.content.get("encrypted") as? Map<*,*>
+        val encryptedContent = secretAccountData.content.get("encrypted") as? Map<*, *>
         Assert.assertNotNull("Element should be encrypted", encryptedContent)
         Assert.assertNotNull("Secret should be encrypted with default key", encryptedContent?.get(keyId))
 
@@ -182,12 +183,12 @@ class QuadSTests : InstrumentedTest {
         var decryptedSecret: String? = null
 
         val decryptCountDownLatch = CountDownLatch(1)
-        aliceSession.sharedSecretStorageService.getSecret("secret.of.life" ,
-                 null, //default key
+        aliceSession.sharedSecretStorageService.getSecret("secret.of.life",
+                null, //default key
                 keySpec!!,
                 object : MatrixCallback<String> {
                     override fun onFailure(failure: Throwable) {
-                        fail("Fail to decrypt -> " +failure.localizedMessage)
+                        fail("Fail to decrypt -> " + failure.localizedMessage)
                         decryptCountDownLatch.countDown()
                     }
 
@@ -202,7 +203,136 @@ class QuadSTests : InstrumentedTest {
 
         Assert.assertEquals("Secret mismatch", clearSecret, decryptedSecret)
         mTestHelper.signout(aliceSession)
+    }
 
+    @Test
+    fun test_SetDefaultLocalEcho() {
+        val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
+
+        val quadS = aliceSession.sharedSecretStorageService
+
+        val emptyKeySigner = object : KeySigner {
+            override fun sign(canonicalJson: String): Map<String, Map<String, String>>? {
+                return null
+            }
+        }
+
+        val TEST_KEY_ID = "my.test.Key"
+
+        val countDownLatch = CountDownLatch(1)
+        quadS.generateKey(TEST_KEY_ID, "Test Key", emptyKeySigner,
+                TestMatrixCallback(countDownLatch))
+
+        mTestHelper.await(countDownLatch)
+
+        //Test that we don't need to wait for an account data sync to access directly the keyid from DB
+        val defaultLatch = CountDownLatch(1)
+        quadS.setDefaultKey(TEST_KEY_ID, TestMatrixCallback(defaultLatch))
+        mTestHelper.await(defaultLatch)
+
+
+        mTestHelper.signout(aliceSession)
+    }
+
+    @Test
+    fun test_StoreSecretWithMultipleKey() {
+        val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
+        val keyId1 = "Key.1"
+        val key1Info = generatedSecret(aliceSession, keyId1, true)
+        val keyId2 = "Key2"
+        val key2Info = generatedSecret(aliceSession, keyId2, true)
+
+        val mySecretText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+
+        val storeLatch = CountDownLatch(1)
+        aliceSession.sharedSecretStorageService.storeSecret(
+                "my.secret",
+                mySecretText.toByteArray().toBase64NoPadding(),
+                listOf(keyId1, keyId2),
+                TestMatrixCallback(storeLatch)
+        )
+        mTestHelper.await(storeLatch)
+
+        val accountDataEvent = aliceSession.getAccountData("my.secret")
+        val encryptedContent = accountDataEvent?.content?.get("encrypted") as? Map<*, *>
+
+        Assert.assertEquals("Content should contains two encryptions", 2, encryptedContent?.keys?.size ?: 0)
+
+        Assert.assertNotNull(encryptedContent?.get(keyId1))
+        Assert.assertNotNull(encryptedContent?.get(keyId2))
+
+        // Assert that can decrypt with both keys
+        val decryptCountDownLatch = CountDownLatch(2)
+        aliceSession.sharedSecretStorageService.getSecret("my.secret",
+                keyId1,
+                Curve25519AesSha2KeySpec.fromRecoveryKey(key1Info.recoveryKey)!!,
+                TestMatrixCallback(decryptCountDownLatch)
+        )
+
+        aliceSession.sharedSecretStorageService.getSecret("my.secret",
+                keyId2,
+                Curve25519AesSha2KeySpec.fromRecoveryKey(key2Info.recoveryKey)!!,
+                TestMatrixCallback(decryptCountDownLatch)
+        )
+
+        mTestHelper.await(decryptCountDownLatch)
+
+        mTestHelper.signout(aliceSession)
+    }
+
+    @Test
+    fun test_GetSecretWithBadPassphrase() {
+        val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
+        val keyId1 = "Key.1"
+        val passphrase = "The good pass phrase"
+        val key1Info = generatedSecretFromPassphrase(aliceSession, passphrase, keyId1, true)
+
+        val mySecretText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+
+        val storeLatch = CountDownLatch(1)
+        aliceSession.sharedSecretStorageService.storeSecret(
+                "my.secret",
+                mySecretText.toByteArray().toBase64NoPadding(),
+                listOf(keyId1),
+                TestMatrixCallback(storeLatch)
+        )
+        mTestHelper.await(storeLatch)
+
+        val decryptCountDownLatch = CountDownLatch(2)
+        aliceSession.sharedSecretStorageService.getSecret("my.secret",
+                keyId1,
+                Curve25519AesSha2KeySpec.fromPassphrase(
+                        "A bad passphrase",
+                        key1Info.content?.passphrase?.salt ?: "",
+                        key1Info.content?.passphrase?.iterations ?: 0,
+                        null),
+                object : MatrixCallback<String> {
+                    override fun onSuccess(data: String) {
+                        decryptCountDownLatch.countDown()
+                        fail("Should not be able to decrypt")
+                    }
+
+                    override fun onFailure(failure: Throwable) {
+                        Assert.assertTrue(true)
+                        decryptCountDownLatch.countDown()
+                    }
+                }
+        )
+
+        // Now try with correct key
+        aliceSession.sharedSecretStorageService.getSecret("my.secret",
+                keyId1,
+                Curve25519AesSha2KeySpec.fromPassphrase(
+                        passphrase,
+                        key1Info.content?.passphrase?.salt ?: "",
+                        key1Info.content?.passphrase?.iterations ?: 0,
+                        null),
+                TestMatrixCallback(decryptCountDownLatch)
+        )
+
+        mTestHelper.await(decryptCountDownLatch)
+
+        mTestHelper.signout(aliceSession)
     }
 
     private fun assertAccountData(session: Session, type: String): UserAccountDataEvent {
@@ -241,6 +371,52 @@ class QuadSTests : InstrumentedTest {
         val generateLatch = CountDownLatch(1)
 
         quadS.generateKey(keyId, keyId, emptyKeySigner,
+                object : MatrixCallback<SSSSKeyCreationInfo> {
+
+                    override fun onSuccess(data: SSSSKeyCreationInfo) {
+                        creationInfo = data
+                        generateLatch.countDown()
+                    }
+
+                    override fun onFailure(failure: Throwable) {
+                        Assert.fail("onFailure " + failure.localizedMessage)
+                        generateLatch.countDown()
+                    }
+                })
+
+        mTestHelper.await(generateLatch)
+
+        Assert.assertNotNull(creationInfo)
+
+        assertAccountData(session, "m.secret_storage.key.$keyId")
+        if (asDefault) {
+            val setDefaultLatch = CountDownLatch(1)
+            quadS.setDefaultKey(keyId, TestMatrixCallback(setDefaultLatch))
+            mTestHelper.await(setDefaultLatch)
+            assertAccountData(session, DefaultSharedSecureStorage.DEFAULT_KEY_ID)
+        }
+
+        return creationInfo!!
+    }
+
+    private fun generatedSecretFromPassphrase(session: Session, passphrase: String, keyId: String, asDefault: Boolean = true): SSSSKeyCreationInfo {
+
+        val quadS = session.sharedSecretStorageService
+
+        val emptyKeySigner = object : KeySigner {
+            override fun sign(canonicalJson: String): Map<String, Map<String, String>>? {
+                return null
+            }
+        }
+
+        var creationInfo: SSSSKeyCreationInfo? = null
+
+        val generateLatch = CountDownLatch(1)
+
+        quadS.generateKeyWithPassphrase(keyId, keyId,
+                passphrase,
+                emptyKeySigner,
+                null,
                 object : MatrixCallback<SSSSKeyCreationInfo> {
 
                     override fun onSuccess(data: SSSSKeyCreationInfo) {

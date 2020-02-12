@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.session.accountdata
 
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 
@@ -31,5 +32,5 @@ interface AccountDataService {
 
     fun getLiveAccountData(filterType: List<String>): LiveData<List<UserAccountDataEvent>>
 
-    fun updateAccountData(type: String, data: Any, callback: MatrixCallback<Unit>? = null)
+    fun updateAccountData(type: String, content: Content, callback: MatrixCallback<Unit>? = null)
 }

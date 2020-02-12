@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.crypto.secrets
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.session.accountdata.AccountDataService
+import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.securestorage.Curve25519AesSha2KeySpec
 import im.vector.matrix.android.api.session.securestorage.EncryptedSecretContent
 import im.vector.matrix.android.api.session.securestorage.KeyInfo
@@ -82,7 +83,7 @@ internal class DefaultSharedSecureStorage @Inject constructor(
 
             accountDataService.updateAccountData(
                     "$KEY_ID_BASE.$keyId",
-                    signedContent,
+                    signedContent.toContent(),
                     object : MatrixCallback<Unit> {
                         override fun onFailure(failure: Throwable) {
                             callback.onFailure(failure)
@@ -136,7 +137,7 @@ internal class DefaultSharedSecureStorage @Inject constructor(
 
             accountDataService.updateAccountData(
                     "$KEY_ID_BASE.$keyId",
-                    signedContent,
+                    signedContent.toContent(),
                     object : MatrixCallback<Unit> {
                         override fun onFailure(failure: Throwable) {
                             callback.onFailure(failure)
@@ -254,7 +255,7 @@ internal class DefaultSharedSecureStorage @Inject constructor(
 
                 accountDataService.updateAccountData(
                         type = name,
-                        data = mapOf(
+                        content = mapOf(
                                 "encrypted" to encryptedContents
                         ),
                         callback = callback

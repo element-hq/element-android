@@ -21,6 +21,7 @@ import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.accountdata.AccountDataService
+import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.util.JSON_DICT_PARAMETERIZED_TYPE
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
@@ -28,6 +29,7 @@ import im.vector.matrix.android.internal.database.model.UserAccountDataEntity
 import im.vector.matrix.android.internal.database.model.UserAccountDataEntityFields
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.di.SessionId
+import im.vector.matrix.android.internal.session.sync.UserAccountDataSyncHandler
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -37,6 +39,7 @@ internal class DefaultAccountDataService @Inject constructor(
         private val monarchy: Monarchy,
         @SessionId private val sessionId: String,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
+        private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
         private val taskExecutor: TaskExecutor
 ) : AccountDataService {
 
@@ -87,13 +90,24 @@ internal class DefaultAccountDataService @Inject constructor(
         })
     }
 
-    override fun updateAccountData(type: String, data: Any, callback: MatrixCallback<Unit>?) {
+    override fun updateAccountData(type: String, content: Content, callback: MatrixCallback<Unit>?) {
         updateUserAccountDataTask.configureWith(UpdateUserAccountDataTask.AnyParams(
                 type = type,
-                any = data
+                any = content
         )) {
             this.retryCount = 5
-            callback?.let { this.callback = it }
+            this.callback = object : MatrixCallback<Unit> {
+                override fun onSuccess(data: Unit) {
+                    monarchy.runTransactionSync { realm ->
+                        userAccountDataSyncHandler.handleGenericAccountData(realm, type, content)
+                    }
+                    callback?.onSuccess(data)
+                }
+
+                override fun onFailure(failure: Throwable) {
+                    callback?.onFailure(failure)
+                }
+            }
         }
                 .executeBy(taskExecutor)
     }
