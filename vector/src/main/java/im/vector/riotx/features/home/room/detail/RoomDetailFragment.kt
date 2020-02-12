@@ -1045,7 +1045,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onAvatarClicked(informationData: MessageInformationData) {
-        // roomDetailViewModel.handle(RoomDetailAction.RequestVerification(informationData.senderId))
+        // roomDetailViewModel.handle(RoomDetailAction.RequestVerification(informationData.userId))
         openRoomMemberProfile(informationData.senderId)
     }
 
@@ -1106,7 +1106,7 @@ class RoomDetailFragment @Inject constructor(
     private fun handleActions(action: EventSharedAction) {
         when (action) {
             is EventSharedAction.OpenUserProfile            -> {
-                openRoomMemberProfile(action.senderId)
+                openRoomMemberProfile(action.userId)
             }
             is EventSharedAction.AddReaction                -> {
                 startActivityForResult(EmojiReactionPickerActivity.intent(requireContext(), action.eventId), REACTION_SELECT_REQUEST_CODE)

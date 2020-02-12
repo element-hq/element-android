@@ -35,6 +35,8 @@ class ViewReactionsEpoxyController @Inject constructor(
         private val emojiCompatWrapper: EmojiCompatWrapper)
     : TypedEpoxyController<DisplayReactionsViewState>() {
 
+    var listener: Listener? = null
+
     override fun buildModels(state: DisplayReactionsViewState) {
         when (state.mapReactionKeyToMemberList) {
             is Incomplete -> {
@@ -55,9 +57,14 @@ class ViewReactionsEpoxyController @Inject constructor(
                         timeStamp(it.timestamp)
                         reactionKey(emojiCompatWrapper.safeEmojiSpanify(it.reactionKey))
                         authorDisplayName(it.authorName ?: it.authorId)
+                        userClicked { listener?.didSelectUser(it.authorId) }
                     }
                 }
             }
         }
+    }
+
+    interface Listener {
+        fun didSelectUser(userId: String)
     }
 }

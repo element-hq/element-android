@@ -27,6 +27,8 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.riotx.features.home.room.detail.timeline.action.EventSharedAction
+import im.vector.riotx.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.riotx.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import kotlinx.android.synthetic.main.bottom_sheet_generic_list_with_title.*
@@ -35,11 +37,12 @@ import javax.inject.Inject
 /**
  * Bottom sheet displaying list of reactions for a given event ordered by timestamp
  */
-class ViewReactionsBottomSheet : VectorBaseBottomSheetDialogFragment() {
+class ViewReactionsBottomSheet : VectorBaseBottomSheetDialogFragment(), ViewReactionsEpoxyController.Listener {
 
     private val viewModel: ViewReactionsViewModel by fragmentViewModel(ViewReactionsViewModel::class)
 
     @Inject lateinit var viewReactionsViewModelFactory: ViewReactionsViewModel.Factory
+    private lateinit var sharedActionViewModel: MessageSharedActionViewModel
 
     @BindView(R.id.bottomSheetRecyclerView)
     lateinit var recyclerView: RecyclerView
@@ -54,13 +57,20 @@ class ViewReactionsBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
         recyclerView.configureWith(epoxyController, hasFixedSize = false)
         bottomSheetTitle.text = context?.getString(R.string.reactions)
+        epoxyController.listener = this
     }
 
     override fun onDestroyView() {
         recyclerView.cleanup()
+        epoxyController.listener = null
         super.onDestroyView()
+    }
+
+    override fun didSelectUser(userId: String) {
+        sharedActionViewModel.post(EventSharedAction.OpenUserProfile(userId))
     }
 
     override fun invalidate() = withState(viewModel) {

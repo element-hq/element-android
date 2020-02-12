@@ -6,6 +6,7 @@ Features ✨:
 
 Improvements 🙌:
  - Show confirmation dialog before deleting a message (#967)
+ - Open room member profile from reactions list and read receipts list (#875)
 
 Other changes:
  -
