@@ -354,9 +354,6 @@ dependencies {
     compileOnly 'com.squareup.inject:assisted-inject-annotations-dagger2:0.5.0'
     kapt 'com.squareup.inject:assisted-inject-processor-dagger2:0.5.0'
 
-    // Json viewer
-    implementation "com.yuyh.json:jsonviewer:1.0.6"
-
     // gplay flavor only
     // Warning: due to the exclude, Android Studio does not propose to upgrade. Uncomment next line to be proposed to upgrade
     // implementation 'com.google.firebase:firebase-messaging:20.0.0'
@@ -370,6 +367,8 @@ dependencies {
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
     implementation "androidx.emoji:emoji-appcompat:1.0.0"
+
+    implementation 'com.github.BillCarsonFr:JsonViewer:0.4'
 
     // QR-code
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170

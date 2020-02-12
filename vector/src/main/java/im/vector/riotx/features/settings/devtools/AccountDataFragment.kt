@@ -27,12 +27,16 @@ import im.vector.riotx.R
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.resources.ColorProvider
+import im.vector.riotx.core.utils.jsonViewerStyler
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
+import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import javax.inject.Inject
 
 class AccountDataFragment @Inject constructor(
         val viewModelFactory: AccountDataViewModel.Factory,
-        private val epoxyController: AccountDataEpoxyController
+        private val epoxyController: AccountDataEpoxyController,
+        private val colorProvider: ColorProvider
 ) : VectorBaseFragment(), AccountDataEpoxyController.InteractionListener {
 
     override fun getLayoutResId() = R.layout.fragment_generic_recycler
@@ -59,7 +63,10 @@ class AccountDataFragment @Inject constructor(
         val jsonString = MoshiProvider.providesMoshi()
                 .adapter(UserAccountDataEvent::class.java)
                 .toJson(fb)
-        JsonViewerBottomSheetDialog.newInstance(jsonString)
-                .show(childFragmentManager, "JSON_VIEWER")
+        JSonViewerDialog.newInstance(
+                jsonString,
+                -1, // open All
+                jsonViewerStyler(colorProvider)
+        ).show(childFragmentManager, "JSON_VIEWER")
     }
 }
