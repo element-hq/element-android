@@ -32,6 +32,8 @@ class DisplayReadReceiptsController @Inject constructor(private val dateFormatte
                                                         private val avatarRender: AvatarRenderer)
     : TypedEpoxyController<List<ReadReceiptData>>() {
 
+    var listener: DisplayReadReceiptsControllerListener? = null
+
     override fun buildModels(readReceipts: List<ReadReceiptData>) {
         readReceipts.forEach {
             val timestamp = dateFormatter.formatRelativeDateTime(it.timestamp)
@@ -40,7 +42,12 @@ class DisplayReadReceiptsController @Inject constructor(private val dateFormatte
                     .matrixItem(it.toMatrixItem())
                     .avatarRenderer(avatarRender)
                     .timestamp(timestamp)
+                    .userClicked { listener?.didSelectUser(it.userId) }
                     .addIf(session.myUserId != it.userId, this)
         }
+    }
+
+    interface DisplayReadReceiptsControllerListener {
+        fun didSelectUser(senderId: String)
     }
 }

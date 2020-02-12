@@ -27,6 +27,8 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.riotx.features.home.room.detail.timeline.action.EventSharedAction
+import im.vector.riotx.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.bottom_sheet_generic_list_with_title.*
@@ -40,7 +42,7 @@ data class DisplayReadReceiptArgs(
 /**
  * Bottom sheet displaying list of read receipts for a given event ordered by descending timestamp
  */
-class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment() {
+class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment(), DisplayReadReceiptsController.DisplayReadReceiptsControllerListener {
 
     @Inject lateinit var epoxyController: DisplayReadReceiptsController
 
@@ -48,6 +50,8 @@ class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment() {
     lateinit var recyclerView: RecyclerView
 
     private val displayReadReceiptArgs: DisplayReadReceiptArgs by args()
+
+    private lateinit var sharedActionViewModel: MessageSharedActionViewModel
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -57,14 +61,20 @@ class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
         recyclerView.configureWith(epoxyController, hasFixedSize = false)
         bottomSheetTitle.text = getString(R.string.seen_by)
+        epoxyController.listener = this
         epoxyController.setData(displayReadReceiptArgs.readReceipts)
     }
 
     override fun onDestroyView() {
         recyclerView.cleanup()
         super.onDestroyView()
+    }
+
+    override fun didSelectUser(senderId: String) {
+        sharedActionViewModel.post(EventSharedAction.OpenUserProfile(senderId))
     }
 
     // we are not using state for this one as it's static, so no need to override invalidate()
