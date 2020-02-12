@@ -60,8 +60,7 @@ abstract class MessageOptionsItem : AbsMessageItem<MessageOptionsItem.Holder>() 
             holder.buttonContainer.addView(materialButton, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             materialButton.text = option.label
             materialButton.setOnClickListener {
-                callback?.onTimelineItemAction(RoomDetailAction.ReplyToOptionsButtons(relatedEventId, index, option.value
-                        ?: "$index"))
+                callback?.onTimelineItemAction(RoomDetailAction.ReplyToOptions(relatedEventId, index, option.value ?: "$index"))
             }
         }
     }

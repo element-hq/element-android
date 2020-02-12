@@ -42,8 +42,8 @@ import im.vector.matrix.android.api.session.room.model.message.MessageTextConten
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
-import im.vector.matrix.android.api.session.room.model.message.OptionItems
-import im.vector.matrix.android.api.session.room.model.message.OptionsType
+import im.vector.matrix.android.api.session.room.model.message.OPTION_TYPE_POLL
+import im.vector.matrix.android.api.session.room.model.message.OptionItem
 import im.vector.matrix.android.api.session.room.model.message.ThumbnailInfo
 import im.vector.matrix.android.api.session.room.model.message.VideoInfo
 import im.vector.matrix.android.api.session.room.model.message.isReply
@@ -153,13 +153,13 @@ internal class LocalEchoEventFactory @Inject constructor(
 
     fun createPollEvent(roomId: String,
                         question: String,
-                        options: List<Pair<String, String>>): Event {
+                        options: List<OptionItem>): Event {
         val compatLabel = buildString {
+            append("[Poll] ")
             append(question)
-            append("\n")
             options.forEach {
                 append("\n")
-                append(it.second)
+                append(it.value)
             }
         }
         return createEvent(
@@ -167,10 +167,8 @@ internal class LocalEchoEventFactory @Inject constructor(
                 MessageOptionsContent(
                         body = compatLabel,
                         label = question,
-                        optionType = OptionsType.POLL.value,
-                        options = options.map {
-                            OptionItems(it.first, it.second)
-                        }
+                        optionType = OPTION_TYPE_POLL,
+                        options = options.toList()
                 )
         )
     }

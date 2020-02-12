@@ -9,9 +9,9 @@
         android:id="@+id/optionLabelText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:textColor="?riotx_text_primary"
         android:textSize="14sp"
-        android:layout_marginBottom="8dp"
         android:textStyle="normal"
         tools:text="What would you like to do?" />
 

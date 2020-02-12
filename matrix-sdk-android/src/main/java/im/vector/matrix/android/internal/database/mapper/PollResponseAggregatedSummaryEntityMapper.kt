@@ -1,6 +1,5 @@
-package im.vector.matrix.android.internal.database.mapper
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +13,8 @@ package im.vector.matrix.android.internal.database.mapper
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package im.vector.matrix.android.internal.database.mapper
 
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.events.model.toModel

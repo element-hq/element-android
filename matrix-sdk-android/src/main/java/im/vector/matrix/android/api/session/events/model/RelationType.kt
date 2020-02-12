@@ -19,13 +19,12 @@ package im.vector.matrix.android.api.session.events.model
  * Constants defining known event relation types from Matrix specifications
  */
 object RelationType {
-
     /** Lets you define an event which annotates an existing event.*/
     const val ANNOTATION = "m.annotation"
     /** Lets you define an event which replaces an existing event.*/
     const val REPLACE = "m.replace"
     /** Lets you define an event which references an existing event.*/
     const val REFERENCE = "m.reference"
-    /** Lets you define an event which references an existing event.*/
+    /** Lets you define an event which adds a response to an existing event.*/
     const val RESPONSE = "m.response"
 }

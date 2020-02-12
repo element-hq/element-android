@@ -265,11 +265,11 @@ object CommandParser {
                 }
                 Command.POLL.command                   -> {
                     val rawCommand = textMessage.substring(Command.POLL.command.length).trim()
-                    val splited = rawCommand.split("|").map { it.trim() }
-                    if (splited.size > 2) {
-                        ParsedCommand.SendPoll(splited[0], splited.subList(1, splited.size))
+                    val split = rawCommand.split("|").map { it.trim() }
+                    if (split.size > 2) {
+                        ParsedCommand.SendPoll(split[0], split.subList(1, split.size))
                     } else {
-                        ParsedCommand.ErrorUnknownSlashCommand(slashCommand)
+                        ParsedCommand.ErrorSyntax(Command.POLL)
                     }
                 }
                 else                                   -> {

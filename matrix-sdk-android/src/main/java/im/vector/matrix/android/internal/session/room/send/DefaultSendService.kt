@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.isImageMessage
 import im.vector.matrix.android.api.session.events.model.isTextMessage
+import im.vector.matrix.android.api.session.room.model.message.OptionItem
 import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -80,7 +81,13 @@ internal class DefaultSendService @AssistedInject constructor(
         val event = localEchoEventFactory.createFormattedTextEvent(roomId, TextContent(text, formattedText), msgType).also {
             createLocalEcho(it)
         }
+        return sendEvent(event)
+    }
 
+    override fun sendPoll(question: String, options: List<OptionItem>): Cancelable {
+        val event = localEchoEventFactory.createPollEvent(roomId, question, options).also {
+            createLocalEcho(it)
+        }
         return sendEvent(event)
     }
 
@@ -89,13 +96,6 @@ internal class DefaultSendService @AssistedInject constructor(
             createLocalEcho(it)
         }
         return sendEvent(event)
-    }
-
-    override fun sendPoll(question: String, options: List<Pair<String, String>>) {
-        localEchoEventFactory.createPollEvent(roomId, question, options).also {
-            createLocalEcho(it)
-            sendEvent(it)
-        }
     }
 
     private fun sendEvent(event: Event): Cancelable {
@@ -172,123 +172,123 @@ internal class DefaultSendService @AssistedInject constructor(
         }
     }
 
-        override fun clearSendingQueue() {
-            timelineSendEventWorkCommon.cancelAllWorks(roomId)
-            workManagerProvider.workManager.cancelUniqueWork(buildWorkName(UPLOAD_WORK))
+    override fun clearSendingQueue() {
+        timelineSendEventWorkCommon.cancelAllWorks(roomId)
+        workManagerProvider.workManager.cancelUniqueWork(buildWorkName(UPLOAD_WORK))
 
-            // Replace the worker chains with a AlwaysSuccessfulWorker, to ensure the queues are well emptied
-            workManagerProvider.matrixOneTimeWorkRequestBuilder<AlwaysSuccessfulWorker>()
-                    .build().let {
-                        timelineSendEventWorkCommon.postWork(roomId, it, ExistingWorkPolicy.REPLACE)
+        // Replace the worker chains with a AlwaysSuccessfulWorker, to ensure the queues are well emptied
+        workManagerProvider.matrixOneTimeWorkRequestBuilder<AlwaysSuccessfulWorker>()
+                .build().let {
+                    timelineSendEventWorkCommon.postWork(roomId, it, ExistingWorkPolicy.REPLACE)
 
-                        // need to clear also image sending queue
-                        workManagerProvider.workManager
-                                .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.REPLACE, it)
-                                .enqueue()
-                    }
-            taskExecutor.executorScope.launch {
-                localEchoRepository.clearSendingQueue(roomId)
-            }
-        }
-
-        override fun resendAllFailedMessages() {
-            taskExecutor.executorScope.launch {
-                val eventsToResend = localEchoRepository.getAllFailedEventsToResend(roomId)
-                eventsToResend.forEach {
-                    sendEvent(it)
+                    // need to clear also image sending queue
+                    workManagerProvider.workManager
+                            .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.REPLACE, it)
+                            .enqueue()
                 }
-                localEchoRepository.updateSendState(roomId, eventsToResend.mapNotNull { it.eventId }, SendState.UNSENT)
-            }
-        }
-
-        override fun sendMedia(attachment: ContentAttachmentData): Cancelable {
-            // Create an event with the media file path
-            val event = localEchoEventFactory.createMediaEvent(roomId, attachment).also {
-                createLocalEcho(it)
-            }
-            return internalSendMedia(event, attachment)
-        }
-
-        private fun internalSendMedia(localEcho: Event, attachment: ContentAttachmentData): Cancelable {
-            val isRoomEncrypted = cryptoService.isRoomEncrypted(roomId)
-
-            val uploadWork = createUploadMediaWork(localEcho, attachment, isRoomEncrypted, startChain = true)
-            val sendWork = createSendEventWork(localEcho, false)
-
-            if (isRoomEncrypted) {
-                val encryptWork = createEncryptEventWork(localEcho, false /*not start of chain, take input error*/)
-
-                val op: Operation = workManagerProvider.workManager
-                        .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
-                        .then(encryptWork)
-                        .then(sendWork)
-                        .enqueue()
-                op.result.addListener(Runnable {
-                    if (op.result.isCancelled) {
-                        Timber.e("CHAIN WAS CANCELLED")
-                    } else if (op.state.value is Operation.State.FAILURE) {
-                        Timber.e("CHAIN DID FAIL")
-                    }
-                }, workerFutureListenerExecutor)
-            } else {
-                workManagerProvider.workManager
-                        .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
-                        .then(sendWork)
-                        .enqueue()
-            }
-
-            return CancelableWork(workManagerProvider.workManager, sendWork.id)
-        }
-
-        private fun createLocalEcho(event: Event) {
-            localEchoEventFactory.createLocalEcho(event)
-        }
-
-        private fun buildWorkName(identifier: String): String {
-            return "${roomId}_$identifier"
-        }
-
-        private fun createEncryptEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
-            // Same parameter
-            val params = EncryptEventWorker.Params(sessionId, roomId, event)
-            val sendWorkData = WorkerParamsFactory.toData(params)
-
-            return workManagerProvider.matrixOneTimeWorkRequestBuilder<EncryptEventWorker>()
-                    .setConstraints(WorkManagerProvider.workConstraints)
-                    .setInputData(sendWorkData)
-                    .startChain(startChain)
-                    .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
-                    .build()
-        }
-
-        private fun createSendEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
-            val sendContentWorkerParams = SendEventWorker.Params(sessionId, roomId, event)
-            val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
-
-            return timelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, startChain)
-        }
-
-        private fun createRedactEventWork(event: Event, reason: String?): OneTimeWorkRequest {
-            val redactEvent = localEchoEventFactory.createRedactEvent(roomId, event.eventId!!, reason).also {
-                createLocalEcho(it)
-            }
-            val sendContentWorkerParams = RedactEventWorker.Params(sessionId, redactEvent.eventId!!, roomId, event.eventId, reason)
-            val redactWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
-            return timelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData, true)
-        }
-
-        private fun createUploadMediaWork(event: Event,
-                                          attachment: ContentAttachmentData,
-                                          isRoomEncrypted: Boolean,
-                                          startChain: Boolean): OneTimeWorkRequest {
-            val uploadMediaWorkerParams = UploadContentWorker.Params(sessionId, roomId, event, attachment, isRoomEncrypted)
-            val uploadWorkData = WorkerParamsFactory.toData(uploadMediaWorkerParams)
-
-            return workManagerProvider.matrixOneTimeWorkRequestBuilder<UploadContentWorker>()
-                    .setConstraints(WorkManagerProvider.workConstraints)
-                    .startChain(startChain)
-                    .setInputData(uploadWorkData)
-                    .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
-                    .build()
+        taskExecutor.executorScope.launch {
+            localEchoRepository.clearSendingQueue(roomId)
         }
     }
+
+    override fun resendAllFailedMessages() {
+        taskExecutor.executorScope.launch {
+            val eventsToResend = localEchoRepository.getAllFailedEventsToResend(roomId)
+            eventsToResend.forEach {
+                sendEvent(it)
+            }
+            localEchoRepository.updateSendState(roomId, eventsToResend.mapNotNull { it.eventId }, SendState.UNSENT)
+        }
+    }
+
+    override fun sendMedia(attachment: ContentAttachmentData): Cancelable {
+        // Create an event with the media file path
+        val event = localEchoEventFactory.createMediaEvent(roomId, attachment).also {
+            createLocalEcho(it)
+        }
+        return internalSendMedia(event, attachment)
+    }
+
+    private fun internalSendMedia(localEcho: Event, attachment: ContentAttachmentData): Cancelable {
+        val isRoomEncrypted = cryptoService.isRoomEncrypted(roomId)
+
+        val uploadWork = createUploadMediaWork(localEcho, attachment, isRoomEncrypted, startChain = true)
+        val sendWork = createSendEventWork(localEcho, false)
+
+        if (isRoomEncrypted) {
+            val encryptWork = createEncryptEventWork(localEcho, false /*not start of chain, take input error*/)
+
+            val op: Operation = workManagerProvider.workManager
+                    .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
+                    .then(encryptWork)
+                    .then(sendWork)
+                    .enqueue()
+            op.result.addListener(Runnable {
+                if (op.result.isCancelled) {
+                    Timber.e("CHAIN WAS CANCELLED")
+                } else if (op.state.value is Operation.State.FAILURE) {
+                    Timber.e("CHAIN DID FAIL")
+                }
+            }, workerFutureListenerExecutor)
+        } else {
+            workManagerProvider.workManager
+                    .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
+                    .then(sendWork)
+                    .enqueue()
+        }
+
+        return CancelableWork(workManagerProvider.workManager, sendWork.id)
+    }
+
+    private fun createLocalEcho(event: Event) {
+        localEchoEventFactory.createLocalEcho(event)
+    }
+
+    private fun buildWorkName(identifier: String): String {
+        return "${roomId}_$identifier"
+    }
+
+    private fun createEncryptEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
+        // Same parameter
+        val params = EncryptEventWorker.Params(sessionId, roomId, event)
+        val sendWorkData = WorkerParamsFactory.toData(params)
+
+        return workManagerProvider.matrixOneTimeWorkRequestBuilder<EncryptEventWorker>()
+                .setConstraints(WorkManagerProvider.workConstraints)
+                .setInputData(sendWorkData)
+                .startChain(startChain)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
+                .build()
+    }
+
+    private fun createSendEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
+        val sendContentWorkerParams = SendEventWorker.Params(sessionId, roomId, event)
+        val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
+
+        return timelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, startChain)
+    }
+
+    private fun createRedactEventWork(event: Event, reason: String?): OneTimeWorkRequest {
+        val redactEvent = localEchoEventFactory.createRedactEvent(roomId, event.eventId!!, reason).also {
+            createLocalEcho(it)
+        }
+        val sendContentWorkerParams = RedactEventWorker.Params(sessionId, redactEvent.eventId!!, roomId, event.eventId, reason)
+        val redactWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
+        return timelineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData, true)
+    }
+
+    private fun createUploadMediaWork(event: Event,
+                                      attachment: ContentAttachmentData,
+                                      isRoomEncrypted: Boolean,
+                                      startChain: Boolean): OneTimeWorkRequest {
+        val uploadMediaWorkerParams = UploadContentWorker.Params(sessionId, roomId, event, attachment, isRoomEncrypted)
+        val uploadWorkData = WorkerParamsFactory.toData(uploadMediaWorkerParams)
+
+        return workManagerProvider.matrixOneTimeWorkRequestBuilder<UploadContentWorker>()
+                .setConstraints(WorkManagerProvider.workConstraints)
+                .startChain(startChain)
+                .setInputData(uploadWorkData)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, BACKOFF_DELAY, TimeUnit.MILLISECONDS)
+                .build()
+    }
+}

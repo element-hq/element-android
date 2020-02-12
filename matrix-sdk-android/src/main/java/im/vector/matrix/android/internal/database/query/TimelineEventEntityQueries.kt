@@ -16,10 +16,16 @@
 
 package im.vector.matrix.android.internal.database.query
 
-import android.service.autofill.Validators.not
 import im.vector.matrix.android.api.session.room.send.SendState
-import im.vector.matrix.android.internal.database.model.*
-import io.realm.*
+import im.vector.matrix.android.internal.database.model.ChunkEntity
+import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.model.TimelineEventEntity
+import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
+import io.realm.Realm
+import io.realm.RealmList
+import io.realm.RealmQuery
+import io.realm.RealmResults
+import io.realm.Sort
 import io.realm.kotlin.where
 
 internal fun TimelineEventEntity.Companion.where(realm: Realm, roomId: String, eventId: String): RealmQuery<TimelineEventEntity> {
@@ -55,7 +61,8 @@ internal fun TimelineEventEntity.Companion.latestEvent(realm: Realm,
     val sendingTimelineEvents = roomEntity.sendingTimelineEvents.where().filterTypes(filterTypes)
     val liveEvents = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)?.timelineEvents?.where()?.filterTypes(filterTypes)
     if (filterContentRelation) {
-        liveEvents?.not()?.like(TimelineEventEntityFields.ROOT.CONTENT, FilterContent.EDIT_TYPE)
+        liveEvents
+                ?.not()?.like(TimelineEventEntityFields.ROOT.CONTENT, FilterContent.EDIT_TYPE)
                 ?.not()?.like(TimelineEventEntityFields.ROOT.CONTENT, FilterContent.RESPONSE_TYPE)
     }
     val query = if (includesSending && sendingTimelineEvents.findAll().isNotEmpty()) {

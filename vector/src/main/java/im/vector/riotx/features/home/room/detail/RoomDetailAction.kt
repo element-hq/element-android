@@ -53,8 +53,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class ResendMessage(val eventId: String) : RoomDetailAction()
     data class RemoveFailedEcho(val eventId: String) : RoomDetailAction()
 
-    data class ReplyToOptionsPoll(val eventId: String, val optionIndex: Int, val optionValue: String) : RoomDetailAction()
-    data class ReplyToOptionsButtons(val eventId: String, val optionIndex: Int, val optionValue: String) : RoomDetailAction()
+    data class ReplyToOptions(val eventId: String, val optionIndex: Int, val optionValue: String) : RoomDetailAction()
 
     data class ReportContent(
             val eventId: String,

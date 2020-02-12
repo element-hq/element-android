@@ -39,7 +39,8 @@ import im.vector.matrix.android.api.session.room.model.message.MessageTextConten
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
-import im.vector.matrix.android.api.session.room.model.message.OptionsType
+import im.vector.matrix.android.api.session.room.model.message.OPTION_TYPE_BUTTONS
+import im.vector.matrix.android.api.session.room.model.message.OPTION_TYPE_POLL
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
@@ -152,24 +153,29 @@ class MessageItemFactory @Inject constructor(
                                         highlight: Boolean,
                                         callback: TimelineEventController.Callback?,
                                         attributes: AbsMessageItem.Attributes): VectorEpoxyModel<*>? {
-        if (messageContent.optionType == OptionsType.POLL.value) {
-            return MessagePollItem_()
-                    .attributes(attributes)
-                    .callback(callback)
-                    .informationData(informationData)
-                    .leftGuideline(avatarSizeProvider.leftGuideline)
-                    .optionsContent(messageContent)
-                    .highlighted(highlight)
-        } else  if (messageContent.optionType == OptionsType.BUTTONS.value) {
-            return MessageOptionsItem_()
-                    .attributes(attributes)
-                    .callback(callback)
-                    .informationData(informationData)
-                    .leftGuideline(avatarSizeProvider.leftGuideline)
-                    .optionsContent(messageContent)
-                    .highlighted(highlight)
-        } else {
-            return null
+        return when (messageContent.optionType) {
+            OPTION_TYPE_POLL    -> {
+                MessagePollItem_()
+                        .attributes(attributes)
+                        .callback(callback)
+                        .informationData(informationData)
+                        .leftGuideline(avatarSizeProvider.leftGuideline)
+                        .optionsContent(messageContent)
+                        .highlighted(highlight)
+            }
+            OPTION_TYPE_BUTTONS -> {
+                MessageOptionsItem_()
+                        .attributes(attributes)
+                        .callback(callback)
+                        .informationData(informationData)
+                        .leftGuideline(avatarSizeProvider.leftGuideline)
+                        .optionsContent(messageContent)
+                        .highlighted(highlight)
+            }
+            else                -> {
+                // Not supported optionType
+                buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
+            }
         }
     }
 
