@@ -56,7 +56,7 @@ import kotlin.collections.HashMap
 @Singleton
 class KeyRequestHandler @Inject constructor(private val context: Context)
     : RoomKeysRequestListener,
-        VerificationService.VerificationListener {
+        VerificationService.Listener {
 
     private val alertsToRequests = HashMap<String, ArrayList<IncomingRoomKeyRequest>>()
 

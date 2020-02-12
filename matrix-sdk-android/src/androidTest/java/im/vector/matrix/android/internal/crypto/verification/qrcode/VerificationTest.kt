@@ -178,7 +178,7 @@ class VerificationTest : InstrumentedTest {
         var bobReadyPendingVerificationRequest: PendingVerificationRequest? = null
 
         val latch = CountDownLatch(2)
-        val aliceListener = object : VerificationService.VerificationListener {
+        val aliceListener = object : VerificationService.Listener {
             override fun verificationRequestUpdated(pr: PendingVerificationRequest) {
                 // Step 4: Alice receive the ready request
                 if (pr.isReady) {
@@ -189,7 +189,7 @@ class VerificationTest : InstrumentedTest {
         }
         aliceVerificationService.addListener(aliceListener)
 
-        val bobListener = object : VerificationService.VerificationListener {
+        val bobListener = object : VerificationService.Listener {
             override fun verificationRequestCreated(pr: PendingVerificationRequest) {
                 // Step 2: Bob accepts the verification request
                 bobVerificationService.readyPendingVerificationInDMs(

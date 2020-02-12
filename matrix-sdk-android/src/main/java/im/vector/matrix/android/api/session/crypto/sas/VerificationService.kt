@@ -30,9 +30,9 @@ import im.vector.matrix.android.internal.crypto.verification.PendingVerification
  */
 interface VerificationService {
 
-    fun addListener(listener: VerificationListener)
+    fun addListener(listener: Listener)
 
-    fun removeListener(listener: VerificationListener)
+    fun removeListener(listener: Listener)
 
     /**
      * Mark this device as verified manually
@@ -95,7 +95,8 @@ interface VerificationService {
                                  otherUserId: String,
                                  transactionId: String): Boolean
 
-    interface VerificationListener {
+    interface Listener {
+        // TODO javadoc
         fun verificationRequestCreated(pr: PendingVerificationRequest) {}
         fun verificationRequestUpdated(pr: PendingVerificationRequest) {}
 

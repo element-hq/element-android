@@ -52,7 +52,7 @@ data class DevicesViewState(
 
 class DevicesViewModel @AssistedInject constructor(@Assisted initialState: DevicesViewState,
                                                    private val session: Session)
-    : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvents>(initialState), VerificationService.VerificationListener {
+    : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvents>(initialState), VerificationService.Listener {
 
     @AssistedInject.Factory
     interface Factory {

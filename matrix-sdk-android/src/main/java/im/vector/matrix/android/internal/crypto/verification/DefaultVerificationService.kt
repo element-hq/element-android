@@ -176,9 +176,9 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-    private var listeners = ArrayList<VerificationService.VerificationListener>()
+    private var listeners = ArrayList<VerificationService.Listener>()
 
-    override fun addListener(listener: VerificationService.VerificationListener) {
+    override fun addListener(listener: VerificationService.Listener) {
         uiHandler.post {
             if (!listeners.contains(listener)) {
                 listeners.add(listener)
@@ -186,7 +186,7 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-    override fun removeListener(listener: VerificationService.VerificationListener) {
+    override fun removeListener(listener: VerificationService.Listener) {
         uiHandler.post {
             listeners.remove(listener)
         }
