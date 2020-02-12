@@ -185,7 +185,6 @@ class QuadSTests : InstrumentedTest {
         aliceSession.sharedSecretStorageService.getSecret("secret.of.life" ,
                  null, //default key
                 keySpec!!,
-                null,
                 object : MatrixCallback<String> {
                     override fun onFailure(failure: Throwable) {
                         fail("Fail to decrypt -> " +failure.localizedMessage)
