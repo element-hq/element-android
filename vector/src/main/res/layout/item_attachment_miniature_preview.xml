@@ -8,10 +8,12 @@
     card_view:cardBackgroundColor="@android:color/transparent"
     card_view:cardElevation="0dp">
 
-    <ImageView
+    <im.vector.riotx.core.platform.CheckableImageView
         android:id="@+id/attachmentMiniatureImageView"
         android:layout_width="64dp"
         android:layout_height="64dp"
+        android:background="@drawable/background_checked_accent_color"
+        android:padding="2dp"
         android:scaleType="centerCrop"
         tools:src="@tools:sample/backgrounds/scenic" />
 

@@ -45,6 +45,7 @@ class AttachmentMiniaturePreviewController @Inject constructor() : TypedEpoxyCon
             attachmentMiniaturePreviewItem {
                 id(contentAttachmentData.path)
                 attachment(contentAttachmentData)
+                checked(data.currentAttachmentIndex == index)
                 clickListener { _ ->
                     callback?.onAttachmentClicked(index, contentAttachmentData)
                 }

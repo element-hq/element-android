@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import im.vector.riotx.core.platform.CheckableImageView
 
 abstract class AttachmentPreviewItem<H : AttachmentPreviewItem.Holder> : VectorEpoxyModel<H>() {
 
@@ -56,16 +57,19 @@ abstract class AttachmentMiniaturePreviewItem : AttachmentPreviewItem<Attachment
     @EpoxyAttribute override lateinit var attachment: ContentAttachmentData
     @EpoxyAttribute
     var clickListener: View.OnClickListener? = null
+    @EpoxyAttribute
+    var checked: Boolean = false
 
     override fun bind(holder: Holder) {
         super.bind(holder)
+        holder.imageView.isChecked = checked
         holder.view.setOnClickListener(clickListener)
     }
 
     class Holder : AttachmentPreviewItem.Holder() {
-        override val imageView: ImageView
+        override val imageView: CheckableImageView
             get() = miniatureImageView
-        private val miniatureImageView by bind<ImageView>(R.id.attachmentMiniatureImageView)
+        private val miniatureImageView by bind<CheckableImageView>(R.id.attachmentMiniatureImageView)
     }
 }
 
