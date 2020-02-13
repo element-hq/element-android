@@ -214,13 +214,13 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     ?.get("reason") as? String)
                     ?.takeIf { it.isNotBlank() }
                     ?.let { reason ->
-                        when (timelineEvent.root.senderId == session.myUserId) {
+                        when (timelineEvent.root.senderId == timelineEvent.root.unsignedData?.redactedEvent?.senderId) {
                             true  -> stringProvider.getString(R.string.event_redacted_by_user_reason_with_reason, reason)
                             false -> stringProvider.getString(R.string.event_redacted_by_admin_reason_with_reason, reason)
                         }
                     }
                     ?: run {
-                        when (timelineEvent.root.senderId == session.myUserId) {
+                        when (timelineEvent.root.senderId == timelineEvent.root.unsignedData?.redactedEvent?.senderId) {
                             true  -> stringProvider.getString(R.string.event_redacted_by_user_reason)
                             false -> stringProvider.getString(R.string.event_redacted_by_admin_reason)
                         }
