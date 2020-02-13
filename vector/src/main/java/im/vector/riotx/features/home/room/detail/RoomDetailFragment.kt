@@ -1028,7 +1028,7 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View) {
         if (messageContent is MessageVerificationRequestContent) {
-            roomDetailViewModel.handle(RoomDetailAction.ResumeVerification(informationData.eventId))
+            roomDetailViewModel.handle(RoomDetailAction.ResumeVerification(informationData.eventId, null))
         }
     }
 

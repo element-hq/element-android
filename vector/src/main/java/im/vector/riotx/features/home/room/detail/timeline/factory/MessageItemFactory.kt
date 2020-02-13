@@ -219,7 +219,6 @@ class MessageItemFactory @Inject constructor(
                         VerificationRequestItem.Attributes(
                                 otherUserId = otherUserId,
                                 otherUserName = otherUserName.toString(),
-                                fromDevide = messageContent.fromDevice ?: "",
                                 referenceId = informationData.eventId,
                                 informationData = informationData,
                                 avatarRenderer = attributes.avatarRenderer,

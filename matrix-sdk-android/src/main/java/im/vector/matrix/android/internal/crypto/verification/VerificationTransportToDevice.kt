@@ -80,7 +80,7 @@ internal class VerificationTransportToDevice(
 
     override fun sendVerificationReady(keyReq: VerificationInfoReady,
                                        otherUserId: String,
-                                       otherDeviceId: String,
+                                       otherDeviceId: String?,
                                        callback: (() -> Unit)?) {
         Timber.d("## SAS sending verification ready with methods: ${keyReq.methods}")
         val contentMap = MXUsersDevicesMap<Any>()
@@ -159,7 +159,7 @@ internal class VerificationTransportToDevice(
                 .executeBy(taskExecutor)
     }
 
-    override fun cancelTransaction(transactionId: String, otherUserId: String, otherUserDeviceId: String, code: CancelCode) {
+    override fun cancelTransaction(transactionId: String, otherUserId: String, otherUserDeviceId: String?, code: CancelCode) {
         Timber.d("## SAS canceling transaction $transactionId for reason $code")
         val cancelMessage = KeyVerificationCancel.create(transactionId, code)
         val contentMap = MXUsersDevicesMap<Any>()

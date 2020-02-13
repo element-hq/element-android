@@ -52,7 +52,7 @@ data class VerificationEmojiCodeViewState(
 class VerificationEmojiCodeViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationEmojiCodeViewState,
         private val session: Session
-) : VectorViewModel<VerificationEmojiCodeViewState, EmptyAction, EmptyViewEvents>(initialState), VerificationService.VerificationListener {
+) : VectorViewModel<VerificationEmojiCodeViewState, EmptyAction, EmptyViewEvents>(initialState), VerificationService.Listener {
 
     init {
         withState { state ->

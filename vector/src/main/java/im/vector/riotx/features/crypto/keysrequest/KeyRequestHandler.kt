@@ -56,7 +56,7 @@ import kotlin.collections.HashMap
 @Singleton
 class KeyRequestHandler @Inject constructor(private val context: Context)
     : RoomKeysRequestListener,
-        VerificationService.VerificationListener {
+        VerificationService.Listener {
 
     private val alertsToRequests = HashMap<String, ArrayList<IncomingRoomKeyRequest>>()
 
@@ -260,9 +260,6 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
             PopupAlertManager.cancelAlert(alertMgrUniqueKey)
             alertsToRequests.remove(keyForMap(userId, deviceId))
         }
-    }
-
-    override fun transactionCreated(tx: VerificationTransaction) {
     }
 
     override fun transactionUpdated(tx: VerificationTransaction) {

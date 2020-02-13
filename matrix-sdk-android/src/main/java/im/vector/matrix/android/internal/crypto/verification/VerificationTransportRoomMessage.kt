@@ -208,7 +208,7 @@ internal class VerificationTransportRoomMessage(
         }
     }
 
-    override fun cancelTransaction(transactionId: String, otherUserId: String, otherUserDeviceId: String, code: CancelCode) {
+    override fun cancelTransaction(transactionId: String, otherUserId: String, otherUserDeviceId: String?, code: CancelCode) {
         Timber.d("## SAS canceling transaction $transactionId for reason $code")
         val event = createEventAndLocalEcho(
                 type = EventType.KEY_VERIFICATION_CANCEL,
@@ -337,7 +337,7 @@ internal class VerificationTransportRoomMessage(
 
     override fun sendVerificationReady(keyReq: VerificationInfoReady,
                                        otherUserId: String,
-                                       otherDeviceId: String,
+                                       otherDeviceId: String?,
                                        callback: (() -> Unit)?) {
         // Not applicable (send event is called directly)
         Timber.w("## SAS ignored verification ready with methods: ${keyReq.methods}")

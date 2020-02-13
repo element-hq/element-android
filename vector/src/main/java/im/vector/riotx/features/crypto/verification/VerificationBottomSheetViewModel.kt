@@ -60,7 +60,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                                                                    @Assisted args: VerificationBottomSheet.VerificationArgs,
                                                                    private val session: Session)
     : VectorViewModel<VerificationBottomSheetViewState, VerificationAction, VerificationBottomSheetViewEvents>(initialState),
-        VerificationService.VerificationListener {
+        VerificationService.Listener {
 
     init {
         session.getVerificationService().addListener(this)
