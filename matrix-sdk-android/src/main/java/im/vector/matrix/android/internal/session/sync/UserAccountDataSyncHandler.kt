@@ -211,7 +211,8 @@ internal class UserAccountDataSyncHandler @Inject constructor(
     }
 
     fun handleGenericAccountData(realm: Realm, type: String, content: Content?) {
-        val existing = realm.where<UserAccountDataEntity>().equalTo(UserAccountDataEntityFields.TYPE, type)
+        val existing = realm.where<UserAccountDataEntity>()
+                .equalTo(UserAccountDataEntityFields.TYPE, type)
                 .findFirst()
         if (existing != null) {
             // Update current value

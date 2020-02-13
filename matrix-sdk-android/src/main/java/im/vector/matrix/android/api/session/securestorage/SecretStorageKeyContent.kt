@@ -98,4 +98,3 @@ data class SSSSPassphrase(
         @Json(name = "iterations") val iterations: Int,
         @Json(name = "salt") val salt: String?
 )
-

@@ -64,4 +64,3 @@ data class Curve25519AesSha2KeySpec(
         return privateKey.contentHashCode()
     }
 }
-

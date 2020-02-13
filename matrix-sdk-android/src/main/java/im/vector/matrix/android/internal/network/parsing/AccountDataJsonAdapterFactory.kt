@@ -22,8 +22,7 @@ import java.lang.reflect.Type
 
 class AccountDataJsonAdapterFactory<UserAccountData> : JsonAdapter.Factory {
 
-
     override fun create(type: Type, annotations: MutableSet<out Annotation>, moshi: Moshi): JsonAdapter<*>? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 }

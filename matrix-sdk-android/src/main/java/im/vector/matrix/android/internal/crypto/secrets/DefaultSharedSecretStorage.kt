@@ -42,7 +42,7 @@ import org.matrix.olm.OlmPkEncryption
 import org.matrix.olm.OlmPkMessage
 import javax.inject.Inject
 
-internal class DefaultSharedSecureStorage @Inject constructor(
+internal class DefaultSharedSecretStorage @Inject constructor(
         private val accountDataService: AccountDataService,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope
@@ -52,7 +52,6 @@ internal class DefaultSharedSecureStorage @Inject constructor(
                              keyName: String,
                              keySigner: KeySigner,
                              callback: MatrixCallback<SSSSKeyCreationInfo>) {
-
         cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             val pkDecryption = OlmPkDecryption()
             val pubKey: String
@@ -108,7 +107,6 @@ internal class DefaultSharedSecureStorage @Inject constructor(
                                            progressListener: ProgressListener?,
                                            callback: MatrixCallback<SSSSKeyCreationInfo>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.main) {
-
             val privatePart = generatePrivateKeyWithPassword(passphrase, progressListener)
 
             val pkDecryption = OlmPkDecryption()
@@ -152,7 +150,6 @@ internal class DefaultSharedSecureStorage @Inject constructor(
                         }
                     }
             )
-
         }
     }
 
@@ -191,13 +188,11 @@ internal class DefaultSharedSecureStorage @Inject constructor(
     }
 
     override fun storeSecret(name: String, secretBase64: String, keys: List<String>?, callback: MatrixCallback<Unit>) {
-
         cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             val encryptedContents = HashMap<String, EncryptedSecretContent>()
             try {
-
                 if (keys == null || keys.isEmpty()) {
-                    //use default key
+                    // use default key
                     val key = getDefaultKey()
                     when (key) {
                         is KeyInfoResult.Success -> {
@@ -263,7 +258,6 @@ internal class DefaultSharedSecureStorage @Inject constructor(
             } catch (failure: Throwable) {
                 callback.onFailure(failure)
             }
-
         }
 
         // Add default key
@@ -363,5 +357,3 @@ internal class DefaultSharedSecureStorage @Inject constructor(
         }
     }
 }
-
-

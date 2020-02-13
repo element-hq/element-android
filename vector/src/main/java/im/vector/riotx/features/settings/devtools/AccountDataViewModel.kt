@@ -39,7 +39,6 @@ class AccountDataViewModel @AssistedInject constructor(@Assisted initialState: A
                                                        private val session: Session)
     : VectorViewModel<AccountDataViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
-
     init {
         session.rx().liveAccountData(emptyList())
                 .execute {
