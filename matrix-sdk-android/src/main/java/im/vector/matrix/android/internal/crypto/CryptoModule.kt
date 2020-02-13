@@ -154,97 +154,95 @@ internal abstract class CryptoModule {
     }
 
     @Binds
-    abstract fun bindCryptoService(cryptoService: DefaultCryptoService): CryptoService
+    abstract fun bindCryptoService(service: DefaultCryptoService): CryptoService
 
     @Binds
-    abstract fun bindDeleteDeviceTask(deleteDeviceTask: DefaultDeleteDeviceTask): DeleteDeviceTask
+    abstract fun bindDeleteDeviceTask(task: DefaultDeleteDeviceTask): DeleteDeviceTask
 
     @Binds
-    abstract fun bindGetDevicesTask(getDevicesTask: DefaultGetDevicesTask): GetDevicesTask
+    abstract fun bindGetDevicesTask(task: DefaultGetDevicesTask): GetDevicesTask
 
     @Binds
     abstract fun bindGetDeviceInfoTask(task: DefaultGetDeviceInfoTask): GetDeviceInfoTask
 
     @Binds
-    abstract fun bindSetDeviceNameTask(setDeviceNameTask: DefaultSetDeviceNameTask): SetDeviceNameTask
+    abstract fun bindSetDeviceNameTask(task: DefaultSetDeviceNameTask): SetDeviceNameTask
 
     @Binds
-    abstract fun bindUploadKeysTask(uploadKeysTask: DefaultUploadKeysTask): UploadKeysTask
+    abstract fun bindUploadKeysTask(task: DefaultUploadKeysTask): UploadKeysTask
 
     @Binds
-    abstract fun bindUploadSigningKeysTask(uploadKeysTask: DefaultUploadSigningKeysTask): UploadSigningKeysTask
+    abstract fun bindUploadSigningKeysTask(task: DefaultUploadSigningKeysTask): UploadSigningKeysTask
 
     @Binds
-    abstract fun bindUploadSignaturesTask(uploadSignaturesTask: DefaultUploadSignaturesTask): UploadSignaturesTask
+    abstract fun bindUploadSignaturesTask(task: DefaultUploadSignaturesTask): UploadSignaturesTask
 
     @Binds
-    abstract fun bindDownloadKeysForUsersTask(downloadKeysForUsersTask: DefaultDownloadKeysForUsers): DownloadKeysForUsersTask
+    abstract fun bindDownloadKeysForUsersTask(task: DefaultDownloadKeysForUsers): DownloadKeysForUsersTask
 
     @Binds
-    abstract fun bindCreateKeysBackupVersionTask(createKeysBackupVersionTask: DefaultCreateKeysBackupVersionTask): CreateKeysBackupVersionTask
+    abstract fun bindCreateKeysBackupVersionTask(task: DefaultCreateKeysBackupVersionTask): CreateKeysBackupVersionTask
 
     @Binds
-    abstract fun bindDeleteBackupTask(deleteBackupTask: DefaultDeleteBackupTask): DeleteBackupTask
+    abstract fun bindDeleteBackupTask(task: DefaultDeleteBackupTask): DeleteBackupTask
 
     @Binds
-    abstract fun bindDeleteRoomSessionDataTask(deleteRoomSessionDataTask: DefaultDeleteRoomSessionDataTask): DeleteRoomSessionDataTask
+    abstract fun bindDeleteRoomSessionDataTask(task: DefaultDeleteRoomSessionDataTask): DeleteRoomSessionDataTask
 
     @Binds
-    abstract fun bindDeleteRoomSessionsDataTask(deleteRoomSessionsDataTask: DefaultDeleteRoomSessionsDataTask): DeleteRoomSessionsDataTask
+    abstract fun bindDeleteRoomSessionsDataTask(task: DefaultDeleteRoomSessionsDataTask): DeleteRoomSessionsDataTask
 
     @Binds
-    abstract fun bindDeleteSessionsDataTask(deleteSessionsDataTask: DefaultDeleteSessionsDataTask): DeleteSessionsDataTask
+    abstract fun bindDeleteSessionsDataTask(task: DefaultDeleteSessionsDataTask): DeleteSessionsDataTask
 
     @Binds
-    abstract fun bindGetKeysBackupLastVersionTask(getKeysBackupLastVersionTask: DefaultGetKeysBackupLastVersionTask): GetKeysBackupLastVersionTask
+    abstract fun bindGetKeysBackupLastVersionTask(task: DefaultGetKeysBackupLastVersionTask): GetKeysBackupLastVersionTask
 
     @Binds
-    abstract fun bindGetKeysBackupVersionTask(getKeysBackupVersionTask: DefaultGetKeysBackupVersionTask): GetKeysBackupVersionTask
+    abstract fun bindGetKeysBackupVersionTask(task: DefaultGetKeysBackupVersionTask): GetKeysBackupVersionTask
 
     @Binds
-    abstract fun bindGetRoomSessionDataTask(getRoomSessionDataTask: DefaultGetRoomSessionDataTask): GetRoomSessionDataTask
+    abstract fun bindGetRoomSessionDataTask(task: DefaultGetRoomSessionDataTask): GetRoomSessionDataTask
 
     @Binds
-    abstract fun bindGetRoomSessionsDataTask(getRoomSessionsDataTask: DefaultGetRoomSessionsDataTask): GetRoomSessionsDataTask
+    abstract fun bindGetRoomSessionsDataTask(task: DefaultGetRoomSessionsDataTask): GetRoomSessionsDataTask
 
     @Binds
-    abstract fun bindGetSessionsDataTask(getSessionsDataTask: DefaultGetSessionsDataTask): GetSessionsDataTask
+    abstract fun bindGetSessionsDataTask(task: DefaultGetSessionsDataTask): GetSessionsDataTask
 
     @Binds
-    abstract fun bindStoreRoomSessionDataTask(storeRoomSessionDataTask: DefaultStoreRoomSessionDataTask): StoreRoomSessionDataTask
+    abstract fun bindStoreRoomSessionDataTask(task: DefaultStoreRoomSessionDataTask): StoreRoomSessionDataTask
 
     @Binds
-    abstract fun bindStoreRoomSessionsDataTask(storeRoomSessionsDataTask: DefaultStoreRoomSessionsDataTask): StoreRoomSessionsDataTask
+    abstract fun bindStoreRoomSessionsDataTask(task: DefaultStoreRoomSessionsDataTask): StoreRoomSessionsDataTask
 
     @Binds
-    abstract fun bindStoreSessionsDataTask(storeSessionsDataTask: DefaultStoreSessionsDataTask): StoreSessionsDataTask
+    abstract fun bindStoreSessionsDataTask(task: DefaultStoreSessionsDataTask): StoreSessionsDataTask
 
     @Binds
-    abstract fun bindUpdateKeysBackupVersionTask(updateKeysBackupVersionTask: DefaultUpdateKeysBackupVersionTask): UpdateKeysBackupVersionTask
+    abstract fun bindUpdateKeysBackupVersionTask(task: DefaultUpdateKeysBackupVersionTask): UpdateKeysBackupVersionTask
 
     @Binds
-    abstract fun bindSendToDeviceTask(sendToDeviceTask: DefaultSendToDeviceTask): SendToDeviceTask
+    abstract fun bindSendToDeviceTask(task: DefaultSendToDeviceTask): SendToDeviceTask
 
     @Binds
-    abstract fun bindEncryptEventTask(encryptEventTask: DefaultEncryptEventTask): EncryptEventTask
+    abstract fun bindEncryptEventTask(task: DefaultEncryptEventTask): EncryptEventTask
 
     @Binds
-    abstract fun bindSendVerificationMessageTask(sendDefaultSendVerificationMessageTask: DefaultSendVerificationMessageTask): SendVerificationMessageTask
+    abstract fun bindSendVerificationMessageTask(task: DefaultSendVerificationMessageTask): SendVerificationMessageTask
 
     @Binds
-    abstract fun bindClaimOneTimeKeysForUsersDeviceTask(claimOneTimeKeysForUsersDevice: DefaultClaimOneTimeKeysForUsersDevice)
-            : ClaimOneTimeKeysForUsersDeviceTask
+    abstract fun bindClaimOneTimeKeysForUsersDeviceTask(task: DefaultClaimOneTimeKeysForUsersDevice): ClaimOneTimeKeysForUsersDeviceTask
 
     @Binds
-    abstract fun bindDeleteDeviceWithUserPasswordTask(deleteDeviceWithUserPasswordTask: DefaultDeleteDeviceWithUserPasswordTask)
-            : DeleteDeviceWithUserPasswordTask
+    abstract fun bindDeleteDeviceWithUserPasswordTask(task: DefaultDeleteDeviceWithUserPasswordTask): DeleteDeviceWithUserPasswordTask
 
     @Binds
-    abstract fun bindCrossSigningService(crossSigningService: DefaultCrossSigningService): CrossSigningService
+    abstract fun bindCrossSigningService(service: DefaultCrossSigningService): CrossSigningService
 
     @Binds
-    abstract fun bindCryptoStore(realmCryptoStore: RealmCryptoStore): IMXCryptoStore
+    abstract fun bindCryptoStore(store: RealmCryptoStore): IMXCryptoStore
 
     @Binds
-    abstract fun bindComputeShieldTrustTask(defaultShieldTrustUpdater: DefaultComputeTrustTask): ComputeTrustTask
+    abstract fun bindComputeShieldTrustTask(task: DefaultComputeTrustTask): ComputeTrustTask
 }

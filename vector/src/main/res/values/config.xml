@@ -13,7 +13,9 @@
         https://matrix.org/docs/spec/client_server/r0.4.0#id128
      -->
 
+    <!-- Note: pusher_http_url should have path '/_matrix/push/v1/notify' -->
     <string name="pusher_http_url" translatable="false">https://matrix.org/_matrix/push/v1/notify</string>
+    <!-- Note: pusher_app_id cannot exceed 64 chars -->
     <string name="pusher_app_id" translatable="false">im.vector.app.android</string>
 
     <string-array name="room_directory_servers" translatable="false">

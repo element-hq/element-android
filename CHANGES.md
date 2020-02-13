@@ -8,16 +8,20 @@ Improvements 🙌:
  - Show confirmation dialog before deleting a message (#967)
  - Open room member profile from reactions list and read receipts list (#875)
 
-Other changes:
- -
-
 Bugfix 🐛:
  - Fix crash by removing all notifications after clearing cache (#878)
 
 Translations 🗣:
  -
 
+SDK API changes 🔞:
+ - Javadoc improved for PushersService
+ - PushersService.pushers() has been renamed to PushersService.getPushers()
+
 Build 🧱:
+ -
+
+Other changes:
  -
 
 Changes in RiotX 0.15.0 (2020-02-10)
@@ -385,15 +389,18 @@ Features ✨:
 Improvements 🙌:
  -
 
-Other changes:
- -
-
 Bugfix 🐛:
  -
 
 Translations 🗣:
  -
 
+SDK API changes 🔞:
+ - 
+
 Build 🧱:
+ -
+
+Other changes:
  -
 

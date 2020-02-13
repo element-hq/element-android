@@ -21,6 +21,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.pushers.Pusher
 import im.vector.matrix.android.api.session.pushers.PushersService
+import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.PusherEntity
 import im.vector.matrix.android.internal.database.query.where
@@ -29,11 +30,12 @@ import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
-import java.util.*
+import java.security.InvalidParameterException
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-internal class DefaultPusherService @Inject constructor(
+internal class DefaultPushersService @Inject constructor(
         private val workManagerProvider: WorkManagerProvider,
         private val monarchy: Monarchy,
         @SessionId private val sessionId: String,
@@ -48,10 +50,21 @@ internal class DefaultPusherService @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
-    override fun addHttpPusher(pushkey: String, appId: String, profileTag: String,
-                               lang: String, appDisplayName: String, deviceDisplayName: String,
-                               url: String, append: Boolean, withEventIdOnly: Boolean)
+    override fun addHttpPusher(pushkey: String,
+                               appId: String,
+                               profileTag: String,
+                               lang: String,
+                               appDisplayName: String,
+                               deviceDisplayName: String,
+                               url: String,
+                               append: Boolean,
+                               withEventIdOnly: Boolean)
             : UUID {
+        // Do some parameter checks. It's ok to throw Exception, to inform developer of the problem
+        if (pushkey.length > 512) throw InvalidParameterException("pushkey should not exceed 512 chars")
+        if (appId.length > 64) throw InvalidParameterException("appId should not exceed 64 chars")
+        if ("/_matrix/push/v1/notify" !in url) throw InvalidParameterException("url should contain '/_matrix/push/v1/notify'")
+
         val pusher = JsonPusher(
                 pushKey = pushkey,
                 kind = "http",
@@ -60,7 +73,7 @@ internal class DefaultPusherService @Inject constructor(
                 deviceDisplayName = deviceDisplayName,
                 profileTag = profileTag,
                 lang = lang,
-                data = JsonPusherData(url, if (withEventIdOnly) PushersService.EVENT_ID_ONLY else null),
+                data = JsonPusherData(url, EVENT_ID_ONLY.takeIf { withEventIdOnly }),
                 append = append)
 
         val params = AddHttpPusherWorker.Params(sessionId, pusher)
@@ -74,9 +87,9 @@ internal class DefaultPusherService @Inject constructor(
         return request.id
     }
 
-    override fun removeHttpPusher(pushkey: String, appId: String, callback: MatrixCallback<Unit>) {
+    override fun removeHttpPusher(pushkey: String, appId: String, callback: MatrixCallback<Unit>): Cancelable {
         val params = RemovePusherTask.Params(pushkey, appId)
-        removePusherTask
+        return removePusherTask
                 .configureWith(params) {
                     this.callback = callback
                 }
@@ -91,7 +104,11 @@ internal class DefaultPusherService @Inject constructor(
         )
     }
 
-    override fun pushers(): List<Pusher> {
+    override fun getPushers(): List<Pusher> {
         return monarchy.fetchAllCopiedSync { PusherEntity.where(it) }.map { it.asDomain() }
+    }
+
+    companion object {
+        const val EVENT_ID_ONLY = "event_id_only"
     }
 }

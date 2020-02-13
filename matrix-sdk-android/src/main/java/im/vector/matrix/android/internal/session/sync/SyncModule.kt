@@ -36,5 +36,5 @@ internal abstract class SyncModule {
     }
 
     @Binds
-    abstract fun bindSyncTask(syncTask: DefaultSyncTask): SyncTask
+    abstract fun bindSyncTask(task: DefaultSyncTask): SyncTask
 }

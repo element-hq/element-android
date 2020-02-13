@@ -37,11 +37,11 @@ internal abstract class FilterModule {
     }
 
     @Binds
-    abstract fun bindFilterRepository(filterRepository: DefaultFilterRepository): FilterRepository
+    abstract fun bindFilterRepository(repository: DefaultFilterRepository): FilterRepository
 
     @Binds
-    abstract fun bindFilterService(filterService: DefaultFilterService): FilterService
+    abstract fun bindFilterService(service: DefaultFilterService): FilterService
 
     @Binds
-    abstract fun bindSaveFilterTask(saveFilterTask: DefaultSaveFilterTask): SaveFilterTask
+    abstract fun bindSaveFilterTask(task: DefaultSaveFilterTask): SaveFilterTask
 }
