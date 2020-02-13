@@ -508,7 +508,7 @@ class RoomDetailFragment @Inject constructor(
                 AttachmentsPreviewActivity.REQUEST_CODE -> {
                     val sendData = AttachmentsPreviewActivity.getOutput(data)
                     val keepOriginalSize = AttachmentsPreviewActivity.getKeepOriginalSize(data)
-                    roomDetailViewModel.handle(RoomDetailAction.SendMedia(sendData, keepOriginalSize))
+                    roomDetailViewModel.handle(RoomDetailAction.SendMedia(sendData, !keepOriginalSize))
                 }
                 REACTION_SELECT_REQUEST_CODE            -> {
                     val (eventId, reaction) = EmojiReactionPickerActivity.getOutput(data) ?: return
@@ -1352,7 +1352,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
         val grouped = attachments.toGroupedContentAttachmentData()
         if (grouped.notPreviewables.isNotEmpty()) {
-            // Send the not previewable attachment right now (?)
+            // Send the not previewable attachments right now (?)
             roomDetailViewModel.handle(RoomDetailAction.SendMedia(grouped.notPreviewables, false))
         }
         if (grouped.previewables.isNotEmpty()) {

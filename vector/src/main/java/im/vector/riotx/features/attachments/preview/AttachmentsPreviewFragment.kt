@@ -124,6 +124,7 @@ class AttachmentsPreviewFragment @Inject constructor(
             attachmentBigPreviewController.setData(state)
             attachmentPreviewerBigList.scrollToPosition(state.currentAttachmentIndex)
             attachmentPreviewerMiniatureList.scrollToPosition(state.currentAttachmentIndex)
+            attachmentPreviewerSendImageOriginalSize.text = resources.getQuantityString(R.plurals.send_images_with_original_size, state.attachments.size)
         }
     }
 

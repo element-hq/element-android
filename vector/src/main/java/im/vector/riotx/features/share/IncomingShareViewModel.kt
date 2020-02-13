@@ -142,7 +142,7 @@ class IncomingShareViewModel @AssistedInject constructor(@Assisted initialState:
         if (proposeMediaEdition) {
             val grouped = attachmentData.toGroupedContentAttachmentData()
             if (grouped.notPreviewables.isNotEmpty()) {
-                // Send the not previewable attachment right now (?)
+                // Send the not previewable attachments right now (?)
                 // Pick the first room to send the media
                 selectedRoomIds.firstOrNull()
                         ?.let { roomId -> session.getRoom(roomId) }
