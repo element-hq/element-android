@@ -38,6 +38,7 @@ import im.vector.matrix.android.internal.session.pushers.PushersModule
 import im.vector.matrix.android.internal.session.room.RoomModule
 import im.vector.matrix.android.internal.session.room.relation.SendRelationWorker
 import im.vector.matrix.android.internal.session.room.send.EncryptEventWorker
+import im.vector.matrix.android.internal.session.room.send.MultipleEventSendingDispatcherWorker
 import im.vector.matrix.android.internal.session.room.send.RedactEventWorker
 import im.vector.matrix.android.internal.session.room.send.SendEventWorker
 import im.vector.matrix.android.internal.session.signout.SignOutModule
@@ -85,23 +86,25 @@ internal interface SessionComponent {
 
     fun taskExecutor(): TaskExecutor
 
-    fun inject(sendEventWorker: SendEventWorker)
+    fun inject(worker: SendEventWorker)
 
-    fun inject(sendEventWorker: SendRelationWorker)
+    fun inject(worker: SendRelationWorker)
 
-    fun inject(encryptEventWorker: EncryptEventWorker)
+    fun inject(worker: EncryptEventWorker)
 
-    fun inject(redactEventWorker: RedactEventWorker)
+    fun inject(worker: MultipleEventSendingDispatcherWorker)
 
-    fun inject(getGroupDataWorker: GetGroupDataWorker)
+    fun inject(worker: RedactEventWorker)
 
-    fun inject(uploadContentWorker: UploadContentWorker)
+    fun inject(worker: GetGroupDataWorker)
 
-    fun inject(syncWorker: SyncWorker)
+    fun inject(worker: UploadContentWorker)
 
-    fun inject(addHttpPusherWorker: AddHttpPusherWorker)
+    fun inject(worker: SyncWorker)
 
-    fun inject(sendVerificationMessageWorker: SendVerificationMessageWorker)
+    fun inject(worker: AddHttpPusherWorker)
+
+    fun inject(worker: SendVerificationMessageWorker)
 
     @Component.Factory
     interface Factory {

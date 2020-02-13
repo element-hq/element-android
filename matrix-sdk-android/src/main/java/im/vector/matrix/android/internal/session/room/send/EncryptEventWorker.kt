@@ -20,7 +20,6 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
@@ -39,9 +38,8 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
     @JsonClass(generateAdapter = true)
     internal data class Params(
             override val sessionId: String,
-            val roomId: String,
             val event: Event,
-            /**Do not encrypt these keys, keep them as is in encrypted content (e.g. m.relates_to)*/
+            /** Do not encrypt these keys, keep them as is in encrypted content (e.g. m.relates_to) */
             val keepKeys: List<String>? = null,
             override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
@@ -53,7 +51,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
         Timber.v("Start Encrypt work")
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success().also {
-                    Timber.v("Work cancelled due to input error from parent")
+                    Timber.e("Work cancelled due to input error from parent")
                 }
 
         Timber.v("Start Encrypt work for event ${params.event.eventId}")
@@ -80,7 +78,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
         var result: MXEncryptEventContentResult? = null
         try {
             result = awaitCallback {
-                crypto.encryptEventContent(localMutableContent, localEvent.type, params.roomId, it)
+                crypto.encryptEventContent(localMutableContent, localEvent.type, localEvent.roomId!!, it)
             }
         } catch (throwable: Throwable) {
             error = throwable
@@ -98,7 +96,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
                     type = safeResult.eventType,
                     content = safeResult.eventContent
             )
-            val nextWorkerParams = SendEventWorker.Params(params.sessionId, params.roomId, encryptedEvent)
+            val nextWorkerParams = SendEventWorker.Params(params.sessionId, encryptedEvent)
             return Result.success(WorkerParamsFactory.toData(nextWorkerParams))
         } else {
             val sendState = when (error) {
@@ -107,7 +105,7 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
             }
             localEchoUpdater.updateSendState(localEvent.eventId, sendState)
             // always return success, or the chain will be stuck for ever!
-            val nextWorkerParams = SendEventWorker.Params(params.sessionId, params.roomId, localEvent, error?.localizedMessage
+            val nextWorkerParams = SendEventWorker.Params(params.sessionId, localEvent, error?.localizedMessage
                     ?: "Error")
             return Result.success(WorkerParamsFactory.toData(nextWorkerParams))
         }

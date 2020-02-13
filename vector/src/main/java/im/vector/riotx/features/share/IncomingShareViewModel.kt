@@ -135,19 +135,19 @@ class IncomingShareViewModel @AssistedInject constructor(@Assisted initialState:
                                  proposeMediaEdition: Boolean,
                                  compressMediaBeforeSending: Boolean) {
         if (!proposeMediaEdition) {
-            selectedRoomIds.forEach { roomId ->
-                val room = session.getRoom(roomId)
-                room?.sendMedias(attachmentData, compressMediaBeforeSending)
-            }
+            // Pick the first room to send the media
+            selectedRoomIds.firstOrNull()
+                    ?.let { roomId -> session.getRoom(roomId) }
+                    ?.sendMedias(attachmentData, compressMediaBeforeSending, selectedRoomIds)
         } else {
             val previewable = attachmentData.filterPreviewables()
             val nonPreviewable = attachmentData.filterNonPreviewables()
             if (nonPreviewable.isNotEmpty()) {
                 // Send the non previewable attachment right now (?)
-                selectedRoomIds.forEach { roomId ->
-                    val room = session.getRoom(roomId)
-                    room?.sendMedias(nonPreviewable, compressMediaBeforeSending)
-                }
+                // Pick the first room to send the media
+                selectedRoomIds.firstOrNull()
+                        ?.let { roomId -> session.getRoom(roomId) }
+                        ?.sendMedias(nonPreviewable, compressMediaBeforeSending, selectedRoomIds)
             }
             if (previewable.isNotEmpty()) {
                 // In case of multiple share of media, edit them first

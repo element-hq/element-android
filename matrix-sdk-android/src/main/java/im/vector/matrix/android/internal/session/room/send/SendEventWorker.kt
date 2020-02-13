@@ -30,6 +30,7 @@ import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
 import org.greenrobot.eventbus.EventBus
+import timber.log.Timber
 import javax.inject.Inject
 
 internal class SendEventWorker(context: Context,
@@ -39,7 +40,6 @@ internal class SendEventWorker(context: Context,
     @JsonClass(generateAdapter = true)
     internal data class Params(
             override val sessionId: String,
-            val roomId: String,
             val event: Event,
             override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
@@ -50,7 +50,9 @@ internal class SendEventWorker(context: Context,
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.success()
+                ?: return Result.success().also {
+                    Timber.e("Work cancelled due to input error from parent")
+                }
 
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
@@ -66,7 +68,7 @@ internal class SendEventWorker(context: Context,
             return Result.success(inputData)
         }
         return try {
-            sendEvent(event.eventId, event.type, event.content, params.roomId)
+            sendEvent(event)
             Result.success()
         } catch (exception: Throwable) {
             if (exception.shouldBeRetried()) {
@@ -79,16 +81,16 @@ internal class SendEventWorker(context: Context,
         }
     }
 
-    private suspend fun sendEvent(eventId: String, eventType: String, content: Content?, roomId: String) {
-        localEchoUpdater.updateSendState(eventId, SendState.SENDING)
+    private suspend fun sendEvent(event: Event) {
+        localEchoUpdater.updateSendState(event.eventId!!, SendState.SENDING)
         executeRequest<SendResponse>(eventBus) {
             apiCall = roomAPI.send(
-                    eventId,
-                    roomId,
-                    eventType,
-                    content
+                    event.eventId,
+                    event.roomId!!,
+                    event.type,
+                    event.content
             )
         }
-        localEchoUpdater.updateSendState(eventId, SendState.SENT)
+        localEchoUpdater.updateSendState(event.eventId, SendState.SENT)
     }
 }
