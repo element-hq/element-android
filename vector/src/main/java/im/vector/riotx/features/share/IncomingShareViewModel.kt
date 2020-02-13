@@ -31,12 +31,13 @@ import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.attachments.toGroupedContentAttachmentData
-import im.vector.riotx.features.home.room.list.ChronologicalRoomComparator
+import im.vector.riotx.features.home.room.list.BreadcrumbsRoomComparator
 import java.util.concurrent.TimeUnit
 
-class IncomingShareViewModel @AssistedInject constructor(@Assisted initialState: IncomingShareViewState,
-                                                         private val session: Session,
-                                                         private val chronologicalRoomComparator: ChronologicalRoomComparator)
+class IncomingShareViewModel @AssistedInject constructor(
+        @Assisted initialState: IncomingShareViewState,
+        private val session: Session,
+        private val breadcrumbsRoomComparator: BreadcrumbsRoomComparator)
     : VectorViewModel<IncomingShareViewState, IncomingShareAction, IncomingShareViewEvents>(initialState) {
 
     @AssistedInject.Factory
@@ -83,7 +84,7 @@ class IncomingShareViewModel @AssistedInject constructor(@Assisted initialState:
                     session.rx().liveRoomSummaries(filterQueryParams)
                 }
                 .throttleLast(300, TimeUnit.MILLISECONDS)
-                .map { it.sortedWith(chronologicalRoomComparator) }
+                .map { it.sortedWith(breadcrumbsRoomComparator) }
                 .execute {
                     copy(filteredRoomSummaries = it)
                 }
