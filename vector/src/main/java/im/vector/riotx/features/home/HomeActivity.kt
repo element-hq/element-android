@@ -145,41 +145,12 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         val crossSigningEnabledOnAccount = myCrossSigningKeys != null
 
         if (crossSigningEnabledOnAccount && myCrossSigningKeys?.isTrusted() == false) {
+
             // We need to ask
             sharedActionViewModel.hasDisplayedCompleteSecurityPrompt = true
-            PopupAlertManager.postVectorAlert(
-                    PopupAlertManager.VectorAlert(
-                            uid = "completeSecurity",
-                            title = getString(R.string.crosssigning_verify_this_session),
-                            description = getString(R.string.crosssigning_other_user_not_trust),
-                            iconId = R.drawable.ic_shield_warning
-                    ).apply {
-                        colorInt = ContextCompat.getColor(this@HomeActivity, R.color.riotx_positive_accent)
-                        contentAction = Runnable {
-                            Runnable {
-                                (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
-                                    it.navigator.waitSessionVerification(it)
-                                }
-                            }
-                        }
-                        dismissedAction = Runnable {
-                            //                            tx.cancel()
-                        }
-                        addButton(
-                                getString(R.string.later),
-                                Runnable {
-                                }
-                        )
-                        addButton(
-                                getString(R.string.verification_profile_verify),
-                                Runnable {
-                                    (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
-                                        it.navigator.waitSessionVerification(it)
-                                    }
-                                }
-                        )
-                    }
-            )
+            navigator.waitSessionVerification(this)
+        } else {
+            // TODO upgrade security -> bootstrap cross signing
         }
     }
 

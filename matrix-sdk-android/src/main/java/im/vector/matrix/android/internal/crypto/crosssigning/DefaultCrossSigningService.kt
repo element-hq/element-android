@@ -374,7 +374,9 @@ internal class DefaultCrossSigningService @Inject constructor(
                 ?.fromBase64NoPadding()
 
         var isMaterKeyTrusted = false
-        if (masterPrivateKey != null) {
+        if (myMasterKey.trustLevel?.locallyVerified == true) {
+            isMaterKeyTrusted = true
+        } else if (masterPrivateKey != null) {
             // Check if private match public
             var olmPkSigning: OlmPkSigning? = null
             try {
@@ -505,6 +507,11 @@ internal class DefaultCrossSigningService @Inject constructor(
             this.executionThread = TaskThread.CRYPTO
             this.callback = callback
         }.executeBy(taskExecutor)
+    }
+
+    override fun markMyMasterKeyAsTrusted() {
+        cryptoStore.markMyMasterKeyAsLocallyTrusted(true)
+        checkSelfTrust()
     }
 
     override fun signDevice(deviceId: String, callback: MatrixCallback<Unit>) {

@@ -2143,7 +2143,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
         <item quantity="other">%d munkamenet használatban</item>
     </plurals>
 
-    <string name="crosssigning_verify_this_session">Munkamenet ellenőrzése</string>
     <string name="crosssigning_other_user_not_trust">Más felhasználók lehet, hogy nem bíznak benne</string>
     <string name="complete_security">Biztonság beállítása</string>
 

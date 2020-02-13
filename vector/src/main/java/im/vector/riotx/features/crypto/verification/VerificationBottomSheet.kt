@@ -29,6 +29,7 @@ import butterknife.BindView
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
@@ -54,8 +55,8 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
             val otherUserId: String,
             val verificationId: String? = null,
             val roomId: String? = null,
-            // Special mode where UX should show loading wheel until other user sends a request/tx
-            val waitForIncomingRequest: Boolean = false
+            // Special mode where UX should show loading wheel until other session sends a request/tx
+            val selfVerificationMode: Boolean = false
     ) : Parcelable
 
     @Inject
@@ -183,7 +184,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
 
         // If it's an outgoing
-        if (state.pendingRequest.invoke() == null || state.pendingRequest.invoke()?.isIncoming == false || state.waitForOtherUserMode) {
+        if (state.pendingRequest.invoke() == null || state.pendingRequest.invoke()?.isIncoming == false || state.selfVerificationMode) {
             Timber.v("## SAS show bottom sheet for outgoing request")
             if (state.pendingRequest.invoke()?.isReady == true) {
                 Timber.v("## SAS show bottom sheet for outgoing and ready request")
@@ -230,14 +231,25 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     }
 
     companion object {
-        fun withArgs(roomId: String?, otherUserId: String, transactionId: String? = null, waitForIncomingRequest: Boolean = false): VerificationBottomSheet {
+        fun withArgs(roomId: String?, otherUserId: String, transactionId: String? = null): VerificationBottomSheet {
             return VerificationBottomSheet().apply {
                 arguments = Bundle().apply {
                     putParcelable(MvRx.KEY_ARG, VerificationArgs(
                             otherUserId = otherUserId,
                             roomId = roomId,
                             verificationId = transactionId,
-                            waitForIncomingRequest = waitForIncomingRequest
+                            selfVerificationMode = false
+                    ))
+                }
+            }
+        }
+
+        fun forSelfVerification(session: Session) : VerificationBottomSheet{
+            return VerificationBottomSheet().apply {
+                arguments = Bundle().apply {
+                    putParcelable(MvRx.KEY_ARG, VerificationArgs(
+                            otherUserId = session.myUserId,
+                            selfVerificationMode = true
                     ))
                 }
             }

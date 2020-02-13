@@ -50,7 +50,7 @@ class VerificationRequestController @Inject constructor(
         val state = viewState ?: return
         val matrixItem = viewState?.otherUserMxItem ?: return
 
-        if (state.waitForOtherUserMode) {
+        if (state.selfVerificationMode) {
             bottomSheetVerificationNoticeItem {
                 id("notice")
                 notice(stringProvider.getString(R.string.verification_open_other_to_verify))
@@ -62,8 +62,28 @@ class VerificationRequestController @Inject constructor(
 
             bottomSheetVerificationWaitingItem {
                 id("waiting")
-                title(stringProvider.getString(R.string.verification_request_waiting_for, matrixItem.getBestName()))
+                title(stringProvider.getString(R.string.verification_request_waiting, matrixItem.getBestName()))
             }
+
+            bottomSheetVerificationActionItem {
+                id("passphrase")
+                title(stringProvider.getString(R.string.verification_cannot_access_other_session))
+                titleColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                subTitle(stringProvider.getString(R.string.verification_use_passphrase))
+                iconRes(R.drawable.ic_arrow_right)
+                iconColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                listener { listener?.onClickRecoverFromPassphrase() }
+            }
+            bottomSheetVerificationActionItem {
+                id("skip")
+                title(stringProvider.getString(R.string.skip))
+                titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
+//                subTitle(stringProvider.getString(R.string.verification_use_passphrase))
+                iconRes(R.drawable.ic_arrow_right)
+                iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
+                listener { listener?.onClickDismiss() }
+            }
+
         } else {
             val styledText = matrixItem.let {
                 stringProvider.getString(R.string.verification_request_notice, it.id)
@@ -112,5 +132,7 @@ class VerificationRequestController @Inject constructor(
 
     interface Listener {
         fun onClickOnVerificationStart()
+        fun onClickRecoverFromPassphrase()
+        fun onClickDismiss()
     }
 }

@@ -2140,7 +2140,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
         <item quantity="other">%d saio aktibo</item>
     </plurals>
 
-    <string name="crosssigning_verify_this_session">Egiaztatu saio hau</string>
     <string name="crosssigning_other_user_not_trust">Beste erabiltzaile batzuk ez fidagarritzat jo lezakete</string>
     <string name="complete_security">Bete segurtasuna</string>
 

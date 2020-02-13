@@ -52,7 +52,7 @@ data class VerificationBottomSheetViewState(
         val qrTransactionState: VerificationTxState? = null,
         val transactionId: String? = null,
         // true when we display the loading and we wait for the other (incoming request)
-        val waitForOtherUserMode: Boolean = false,
+        val selfVerificationMode: Boolean = false,
         val isMe: Boolean = false
 ) : MvRxState
 
@@ -67,10 +67,10 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
 
         val userItem = session.getUser(args.otherUserId)
 
-        val isWaitingForOtherMode = args.waitForIncomingRequest
+        val selfVerificationMode = args.selfVerificationMode
 
         var autoReady = false
-        val pr = if (isWaitingForOtherMode) {
+        val pr = if (selfVerificationMode) {
             // See if active tx for this user and take it
 
             session.cryptoService().verificationService().getExistingVerificationRequest(args.otherUserId)
@@ -100,7 +100,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                     qrTransactionState = qrTx?.state,
                     transactionId = pr?.transactionId ?: args.verificationId,
                     pendingRequest = if (pr != null) Success(pr) else Uninitialized,
-                    waitForOtherUserMode = isWaitingForOtherMode,
+                    selfVerificationMode = selfVerificationMode,
                     roomId = args.roomId,
                     isMe = args.otherUserId == session.myUserId
             )
@@ -250,6 +250,9 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
             is VerificationAction.GotItConclusion              -> {
                 _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
             }
+            is VerificationAction.SkipVerification              -> {
+                _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
+            }
         }.exhaustive
     }
 
@@ -258,7 +261,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
     }
 
     override fun transactionUpdated(tx: VerificationTransaction) = withState { state ->
-        if (state.waitForOtherUserMode && state.transactionId == null) {
+        if (state.selfVerificationMode && state.transactionId == null) {
             // is this an incoming with that user
             if (tx.isIncoming && tx.otherUserId == state.otherUserMxItem?.id) {
                 // Also auto accept incoming if needed!
@@ -308,7 +311,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
 
     override fun verificationRequestUpdated(pr: PendingVerificationRequest) = withState { state ->
 
-        if (state.waitForOtherUserMode && state.pendingRequest.invoke() == null && state.transactionId == null) {
+        if (state.selfVerificationMode && state.pendingRequest.invoke() == null && state.transactionId == null) {
             // is this an incoming with that user
             if (pr.isIncoming && pr.otherUserId == state.otherUserMxItem?.id) {
                 if (!pr.isReady) {
