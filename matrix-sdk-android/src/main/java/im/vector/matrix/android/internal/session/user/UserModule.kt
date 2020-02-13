@@ -43,10 +43,10 @@ internal abstract class UserModule {
     }
 
     @Binds
-    abstract fun bindUserService(userService: DefaultUserService): UserService
+    abstract fun bindUserService(service: DefaultUserService): UserService
 
     @Binds
-    abstract fun bindSearchUserTask(searchUserTask: DefaultSearchUserTask): SearchUserTask
+    abstract fun bindSearchUserTask(task: DefaultSearchUserTask): SearchUserTask
 
     @Binds
     abstract fun bindSaveIgnoredUsersTask(task: DefaultSaveIgnoredUsersTask): SaveIgnoredUsersTask
@@ -55,5 +55,5 @@ internal abstract class UserModule {
     abstract fun bindUpdateIgnoredUserIdsTask(task: DefaultUpdateIgnoredUserIdsTask): UpdateIgnoredUserIdsTask
 
     @Binds
-    abstract fun bindUserStore(userStore: RealmUserStore): UserStore
+    abstract fun bindUserStore(store: RealmUserStore): UserStore
 }

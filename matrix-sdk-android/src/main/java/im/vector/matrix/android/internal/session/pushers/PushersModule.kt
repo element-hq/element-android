@@ -49,38 +49,38 @@ internal abstract class PushersModule {
     }
 
     @Binds
-    abstract fun bindPusherService(pusherService: DefaultPushersService): PushersService
+    abstract fun bindPusherService(service: DefaultPushersService): PushersService
 
     @Binds
-    abstract fun bindConditionResolver(conditionResolver: DefaultConditionResolver): ConditionResolver
+    abstract fun bindConditionResolver(resolver: DefaultConditionResolver): ConditionResolver
 
     @Binds
-    abstract fun bindGetPushersTask(getPushersTask: DefaultGetPushersTask): GetPushersTask
+    abstract fun bindGetPushersTask(task: DefaultGetPushersTask): GetPushersTask
 
     @Binds
-    abstract fun bindGetPushRulesTask(getPushRulesTask: DefaultGetPushRulesTask): GetPushRulesTask
+    abstract fun bindGetPushRulesTask(task: DefaultGetPushRulesTask): GetPushRulesTask
 
     @Binds
-    abstract fun bindSavePushRulesTask(savePushRulesTask: DefaultSavePushRulesTask): SavePushRulesTask
+    abstract fun bindSavePushRulesTask(task: DefaultSavePushRulesTask): SavePushRulesTask
 
     @Binds
-    abstract fun bindRemovePusherTask(removePusherTask: DefaultRemovePusherTask): RemovePusherTask
+    abstract fun bindRemovePusherTask(task: DefaultRemovePusherTask): RemovePusherTask
 
     @Binds
-    abstract fun bindUpdatePushRuleEnableStatusTask(updatePushRuleEnableStatusTask: DefaultUpdatePushRuleEnableStatusTask): UpdatePushRuleEnableStatusTask
+    abstract fun bindUpdatePushRuleEnableStatusTask(task: DefaultUpdatePushRuleEnableStatusTask): UpdatePushRuleEnableStatusTask
 
     @Binds
-    abstract fun bindAddPushRuleTask(addPushRuleTask: DefaultAddPushRuleTask): AddPushRuleTask
+    abstract fun bindAddPushRuleTask(task: DefaultAddPushRuleTask): AddPushRuleTask
 
     @Binds
-    abstract fun bindRemovePushRuleTask(removePushRuleTask: DefaultRemovePushRuleTask): RemovePushRuleTask
+    abstract fun bindRemovePushRuleTask(task: DefaultRemovePushRuleTask): RemovePushRuleTask
 
     @Binds
-    abstract fun bindSetRoomNotificationStateTask(setRoomNotificationStateTask: DefaultSetRoomNotificationStateTask): SetRoomNotificationStateTask
+    abstract fun bindSetRoomNotificationStateTask(task: DefaultSetRoomNotificationStateTask): SetRoomNotificationStateTask
 
     @Binds
-    abstract fun bindPushRuleService(pushRuleService: DefaultPushRuleService): PushRuleService
+    abstract fun bindPushRuleService(service: DefaultPushRuleService): PushRuleService
 
     @Binds
-    abstract fun bindProcessEventForPushTask(processEventForPushTask: DefaultProcessEventForPushTask): ProcessEventForPushTask
+    abstract fun bindProcessEventForPushTask(task: DefaultProcessEventForPushTask): ProcessEventForPushTask
 }

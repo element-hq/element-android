@@ -37,8 +37,8 @@ internal abstract class GroupModule {
     }
 
     @Binds
-    abstract fun bindGetGroupDataTask(getGroupDataTask: DefaultGetGroupDataTask): GetGroupDataTask
+    abstract fun bindGetGroupDataTask(task: DefaultGetGroupDataTask): GetGroupDataTask
 
     @Binds
-    abstract fun bindGroupService(groupService: DefaultGroupService): GroupService
+    abstract fun bindGroupService(service: DefaultGroupService): GroupService
 }
