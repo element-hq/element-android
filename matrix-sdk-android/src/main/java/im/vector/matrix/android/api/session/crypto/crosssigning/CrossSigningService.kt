@@ -53,6 +53,8 @@ interface CrossSigningService {
     fun trustUser(otherUserId: String,
                   callback: MatrixCallback<Unit>)
 
+    fun markMyMasterKeyAsTrusted()
+
     /**
      * Sign one of your devices and upload the signature
      */

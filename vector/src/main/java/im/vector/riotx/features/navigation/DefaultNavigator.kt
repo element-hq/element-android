@@ -95,12 +95,8 @@ class DefaultNavigator @Inject constructor(
     override fun waitSessionVerification(context: Context) {
         val session = sessionHolder.getSafeActiveSession() ?: return
         if (context is VectorBaseActivity) {
-            VerificationBottomSheet.withArgs(
-                    roomId = null,
-                    otherUserId = session.myUserId,
-                    waitForIncomingRequest = true
-
-            ).show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
+            VerificationBottomSheet.forSelfVerification(session)
+                    .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
         }
     }
 

@@ -2062,7 +2062,6 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
         <item quantity="other">%d sesione aktive</item>
     </plurals>
 
-    <string name="crosssigning_verify_this_session">Verifikoni këtë sesion</string>
     <string name="crosssigning_other_user_not_trust">Përdorues të tjerë mund të mos e besojnë</string>
     <string name="complete_security">Siguri e Plotë</string>
 

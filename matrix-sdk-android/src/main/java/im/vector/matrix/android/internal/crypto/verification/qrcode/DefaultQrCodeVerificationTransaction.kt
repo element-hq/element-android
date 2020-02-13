@@ -222,14 +222,19 @@ internal class DefaultQrCodeVerificationTransaction(
 
     private fun trust(canTrustOtherUserMasterKey: Boolean, toVerifyDeviceIds: List<String>) {
         // If not me sign his MSK and upload the signature
-        if (otherUserId != userId && canTrustOtherUserMasterKey) {
-            // we should trust this master key
-            // And check verification MSK -> SSK?
-            crossSigningService.trustUser(otherUserId, object : MatrixCallback<Unit> {
-                override fun onFailure(failure: Throwable) {
-                    Timber.e(failure, "## QR Verification: Failed to trust User $otherUserId")
-                }
-            })
+        if (canTrustOtherUserMasterKey) {
+            if (otherUserId != userId ) {
+                // we should trust this master key
+                // And check verification MSK -> SSK?
+                crossSigningService.trustUser(otherUserId, object : MatrixCallback<Unit> {
+                    override fun onFailure(failure: Throwable) {
+                        Timber.e(failure, "## QR Verification: Failed to trust User $otherUserId")
+                    }
+                })
+            } else {
+                //Mark my keys as trusted locally
+                crossSigningService.markMyMasterKeyAsTrusted()
+            }
         }
 
         if (otherUserId == userId) {

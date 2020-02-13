@@ -1094,6 +1094,24 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
+    override fun markMyMasterKeyAsLocallyTrusted(trusted: Boolean) {
+        doRealmTransaction(realmConfiguration) { realm ->
+            realm.where<CryptoMetadataEntity>().findFirst()?.userId?.let { myUserId ->
+                CrossSigningInfoEntity.get(realm, myUserId)?.getMasterKey()?.let { xInfoEntity ->
+                    val level = xInfoEntity.trustLevelEntity
+                    if (level == null) {
+                        val newLevel = realm.createObject(TrustLevelEntity::class.java)
+                        newLevel.locallyVerified = trusted
+                        xInfoEntity.trustLevelEntity = newLevel
+                    } else {
+                        level.locallyVerified = trusted
+                    }
+                }
+
+            }
+        }
+    }
+
     private fun addOrUpdateCrossSigningInfo(realm: Realm, userId: String, info: MXCrossSigningInfo?): CrossSigningInfoEntity? {
         var existing = CrossSigningInfoEntity.get(realm, userId)
         if (info == null) {
