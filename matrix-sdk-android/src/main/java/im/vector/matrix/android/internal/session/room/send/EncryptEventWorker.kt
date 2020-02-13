@@ -76,9 +76,6 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
             localMutableContent.remove(it)
         }
 
-        crypto.downloadKeys(listOf("@testxsigningvfe:matrix.org"), true, object : MatrixCallback<Any> {
-        })
-
         var error: Throwable? = null
         var result: MXEncryptEventContentResult? = null
         try {
