@@ -88,18 +88,14 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
             File(attachment.path)
         } catch (e: Exception) {
             Timber.e(e)
-            params.events
-                    .mapNotNull { it.eventId }
-                    .forEach {
-                        contentUploadStateTracker.setFailure(it, e)
-                    }
+            notifyTracker(params) { contentUploadStateTracker.setFailure(it, e) }
             return Result.success(
                     WorkerParamsFactory.toData(params.copy(
                             lastFailureMessage = e.localizedMessage
                     ))
             )
         }
-                .let {originalFile ->
+                .let { originalFile ->
                     if (attachment.type == ContentAttachmentData.Type.IMAGE) {
                         if (params.compressBeforeSending) {
                             Compressor.compress(context, originalFile) {
@@ -135,22 +131,14 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
         ThumbnailExtractor.extractThumbnail(params.attachment)?.let { thumbnailData ->
             val thumbnailProgressListener = object : ProgressRequestBody.Listener {
                 override fun onProgress(current: Long, total: Long) {
-                    params.events
-                            .mapNotNull { it.eventId }
-                            .forEach {
-                                contentUploadStateTracker.setProgressThumbnail(it, current, total)
-                            }
+                    notifyTracker(params) { contentUploadStateTracker.setProgressThumbnail(it, current, total) }
                 }
             }
 
             try {
                 val contentUploadResponse = if (params.isRoomEncrypted) {
                     Timber.v("Encrypt thumbnail")
-                    params.events
-                            .mapNotNull { it.eventId }
-                            .forEach {
-                                contentUploadStateTracker.setEncryptingThumbnail(it)
-                            }
+                    notifyTracker(params) { contentUploadStateTracker.setEncryptingThumbnail(it) }
                     val encryptionResult = MXEncryptedAttachments.encryptAttachment(ByteArrayInputStream(thumbnailData.bytes), thumbnailData.mimeType)
                     uploadedThumbnailEncryptedFileInfo = encryptionResult.encryptedFileInfo
                     fileUploader.uploadByteArray(encryptionResult.encryptedByteArray,
@@ -173,15 +161,13 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
 
         val progressListener = object : ProgressRequestBody.Listener {
             override fun onProgress(current: Long, total: Long) {
-                params.events
-                        .mapNotNull { it.eventId }
-                        .forEach {
-                            if (isStopped) {
-                                contentUploadStateTracker.setFailure(it, Throwable("Cancelled"))
-                            } else {
-                                contentUploadStateTracker.setProgress(it, current, total)
-                            }
-                        }
+                notifyTracker(params) {
+                    if (isStopped) {
+                        contentUploadStateTracker.setFailure(it, Throwable("Cancelled"))
+                    } else {
+                        contentUploadStateTracker.setProgress(it, current, total)
+                    }
+                }
             }
         }
 
@@ -190,11 +176,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
         return try {
             val contentUploadResponse = if (params.isRoomEncrypted) {
                 Timber.v("Encrypt file")
-                params.events
-                        .mapNotNull { it.eventId }
-                        .forEach {
-                            contentUploadStateTracker.setEncrypting(it)
-                        }
+                notifyTracker(params) { contentUploadStateTracker.setEncrypting(it) }
 
                 val encryptionResult = MXEncryptedAttachments.encryptAttachment(FileInputStream(attachmentFile), attachment.mimeType)
                 uploadedFileEncryptedFileInfo = encryptionResult.encryptedFileInfo
@@ -219,11 +201,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
     }
 
     private fun handleFailure(params: Params, failure: Throwable): Result {
-        params.events
-                .mapNotNull { it.eventId }
-                .forEach {
-                    contentUploadStateTracker.setFailure(it, failure)
-                }
+        notifyTracker(params) { contentUploadStateTracker.setFailure(it, failure) }
 
         return Result.success(
                 WorkerParamsFactory.toData(
@@ -241,11 +219,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                               thumbnailEncryptedFileInfo: EncryptedFileInfo?,
                               newImageAttributes: NewImageAttributes?): Result {
         Timber.v("handleSuccess $attachmentUrl, work is stopped $isStopped")
-        params.events
-                .mapNotNull { it.eventId }
-                .forEach {
-                    contentUploadStateTracker.setSuccess(it)
-                }
+        notifyTracker(params) { contentUploadStateTracker.setSuccess(it) }
 
         val updatedEvents = params.events
                 .map {
@@ -271,6 +245,12 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
             else                   -> messageContent
         }
         return event.copy(content = updatedContent.toContent())
+    }
+
+    private fun notifyTracker(params: Params, function: (String) -> Unit) {
+        params.events
+                .mapNotNull { it.eventId }
+                .forEach { eventId -> function.invoke(eventId) }
     }
 
     private fun MessageImageContent.update(url: String,
