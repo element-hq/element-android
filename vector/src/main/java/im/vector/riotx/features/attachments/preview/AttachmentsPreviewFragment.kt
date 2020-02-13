@@ -188,6 +188,7 @@ class AttachmentsPreviewFragment @Inject constructor(
                                     // Status bar color (pb in dark mode, icon of the status bar are dark)
                                     setStatusBarColor(colorProvider.getColorFromAttribute(R.attr.riotx_header_panel_background))
                                     // Known issue: there is still orange color used by the lib
+                                    // https://github.com/Yalantis/uCrop/issues/602
                                     setActiveControlsWidgetColor(colorProvider.getColor(R.color.riotx_accent))
                                     // Hide the logo (does not work)
                                     setLogoColor(Color.TRANSPARENT)
@@ -203,11 +204,14 @@ class AttachmentsPreviewFragment @Inject constructor(
         attachmentMiniaturePreviewController.callback = this
 
         attachmentPreviewerBigList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        attachmentPreviewerBigList.attachSnapHelperWithListener(PagerSnapHelper(), SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL_STATE_IDLE, object : OnSnapPositionChangeListener {
-            override fun onSnapPositionChange(position: Int) {
-                viewModel.handle(AttachmentsPreviewAction.SetCurrentAttachment(position))
-            }
-        })
+        attachmentPreviewerBigList.attachSnapHelperWithListener(
+                PagerSnapHelper(),
+                SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL_STATE_IDLE,
+                object : OnSnapPositionChangeListener {
+                    override fun onSnapPositionChange(position: Int) {
+                        viewModel.handle(AttachmentsPreviewAction.SetCurrentAttachment(position))
+                    }
+                })
         attachmentPreviewerBigList.setHasFixedSize(true)
         attachmentPreviewerBigList.adapter = attachmentBigPreviewController.adapter
     }

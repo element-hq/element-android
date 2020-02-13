@@ -28,7 +28,6 @@ import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.utils.DataSource
-import im.vector.riotx.features.share.SharedData
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject

@@ -36,4 +36,3 @@ class IncomingShareActivity : VectorBaseActivity(), ToolbarConfigurable {
         configureToolbar(toolbar, displayBack = false)
     }
 }
-

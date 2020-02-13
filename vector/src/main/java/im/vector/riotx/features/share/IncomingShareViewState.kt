@@ -28,5 +28,3 @@ data class IncomingShareViewState(
         val selectedRoomIds: Set<String> = emptySet(),
         val isInMultiSelectionMode: Boolean = false
 ) : MvRxState
-
-

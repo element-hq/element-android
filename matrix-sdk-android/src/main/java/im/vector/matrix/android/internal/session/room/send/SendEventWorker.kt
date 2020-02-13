@@ -21,7 +21,6 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.failure.shouldBeRetried
-import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.network.executeRequest

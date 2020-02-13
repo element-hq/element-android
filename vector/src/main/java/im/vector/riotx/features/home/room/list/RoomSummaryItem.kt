@@ -57,7 +57,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         super.bind(holder)
         holder.rootView.setOnClickListener(itemClickListener)
         holder.rootView.setOnLongClickListener {
-            it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+            it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             itemLongClickListener?.onLongClick(it) ?: false
         }
         holder.titleView.text = matrixItem.getBestName()

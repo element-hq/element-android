@@ -22,7 +22,6 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.helpFooterItem
-import im.vector.riotx.core.epoxy.noResultItem
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.features.home.RoomListDisplayMode
@@ -161,7 +160,13 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                                 selectedRoomIds: Set<String>) {
         summaries.forEach { roomSummary ->
             roomSummaryItemFactory
-                    .create(roomSummary, joiningRoomsIds, joiningErrorRoomsIds, rejectingRoomsIds, rejectingErrorRoomsIds,selectedRoomIds, listener)
+                    .create(roomSummary,
+                            joiningRoomsIds,
+                            joiningErrorRoomsIds,
+                            rejectingRoomsIds,
+                            rejectingErrorRoomsIds,
+                            selectedRoomIds,
+                            listener)
                     .addTo(this)
         }
     }

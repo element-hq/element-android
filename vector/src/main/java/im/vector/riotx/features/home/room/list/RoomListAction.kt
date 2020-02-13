@@ -19,7 +19,6 @@ package im.vector.riotx.features.home.room.list
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.riotx.core.platform.VectorViewModelAction
-import im.vector.riotx.features.share.SharedData
 
 sealed class RoomListAction : VectorViewModelAction {
     data class SelectRoom(val roomSummary: RoomSummary) : RoomListAction()

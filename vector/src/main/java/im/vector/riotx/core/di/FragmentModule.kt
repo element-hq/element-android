@@ -360,5 +360,4 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(IncomingShareFragment::class)
     fun bindIncomingShareFragment(fragment: IncomingShareFragment): Fragment
-
 }
