@@ -227,7 +227,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     }
 
                     if (canRedact(timelineEvent, session.myUserId)) {
-                        add(EventSharedAction.Redact(eventId))
+                        add(EventSharedAction.Redact(eventId, askForReason = informationData.senderId != session.myUserId))
                     }
 
                     if (canCopy(msgType)) {

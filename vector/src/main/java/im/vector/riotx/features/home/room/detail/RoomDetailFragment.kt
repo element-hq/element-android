@@ -788,11 +788,14 @@ class RoomDetailFragment @Inject constructor(
                 .show()
     }
 
-    private fun promptReasonToRedactEvent(eventId: String) {
+    private fun promptConfirmationToRedactEvent(eventId: String, askForReason: Boolean) {
         val layout = requireActivity().layoutInflater.inflate(R.layout.dialog_delete_event, null)
         val reasonCheckBox = layout.findViewById<MaterialCheckBox>(R.id.deleteEventReasonCheck)
         val reasonTextInputLayout = layout.findViewById<TextInputLayout>(R.id.deleteEventReasonTextInputLayout)
         val reasonInput = layout.findViewById<TextInputEditText>(R.id.deleteEventReasonInput)
+
+        reasonCheckBox.isVisible = askForReason
+        reasonTextInputLayout.isVisible = askForReason
 
         reasonCheckBox.setOnCheckedChangeListener { _, isChecked -> reasonTextInputLayout.isEnabled = isChecked }
 
@@ -801,7 +804,8 @@ class RoomDetailFragment @Inject constructor(
                 .setView(layout)
                 .setPositiveButton(R.string.remove) { _, _ ->
                     val reason = reasonInput.text.toString()
-                            .takeIf { reasonCheckBox.isChecked }
+                            .takeIf { askForReason }
+                            ?.takeIf { reasonCheckBox.isChecked }
                             ?.takeIf { it.isNotBlank() }
                     roomDetailViewModel.handle(RoomDetailAction.RedactAction(eventId, reason))
                 }
@@ -1121,7 +1125,7 @@ class RoomDetailFragment @Inject constructor(
                 showSnackWithMessage(getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
             }
             is EventSharedAction.Redact                     -> {
-                promptReasonToRedactEvent(action.eventId)
+                promptConfirmationToRedactEvent(action.eventId, action.askForReason)
             }
             is EventSharedAction.Share                      -> {
                 // TODO current data communication is too limited
