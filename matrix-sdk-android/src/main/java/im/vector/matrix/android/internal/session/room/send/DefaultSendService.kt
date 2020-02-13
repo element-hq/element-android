@@ -42,6 +42,7 @@ import im.vector.matrix.android.internal.util.CancelableWork
 import im.vector.matrix.android.internal.worker.AlwaysSuccessfulWorker
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.startChain
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.Executors
@@ -54,7 +55,7 @@ internal class DefaultSendService @AssistedInject constructor(
         private val workManagerProvider: WorkManagerProvider,
         private val timelineSendEventWorkCommon: TimelineSendEventWorkCommon,
         @SessionId private val sessionId: String,
-        private val localEchoEventFactory: LocalEchoEventFactory,
+        private val eventFactory: EventFactory,
         private val cryptoService: CryptoService,
         private val taskExecutor: TaskExecutor,
         private val localEchoRepository: LocalEchoRepository
@@ -68,29 +69,29 @@ internal class DefaultSendService @AssistedInject constructor(
     private val workerFutureListenerExecutor = Executors.newSingleThreadExecutor()
 
     override fun sendTextMessage(text: CharSequence, msgType: String, autoMarkdown: Boolean): Cancelable {
-        val event = localEchoEventFactory.createTextEvent(roomId, msgType, text, autoMarkdown).also {
-            createLocalEcho(it)
+        val event = eventFactory.createTextEvent(roomId, msgType, text, autoMarkdown).also {
+            taskExecutor.executorScope.createLocalEcho(it)
         }
         return sendEvent(event)
     }
 
     override fun sendFormattedTextMessage(text: String, formattedText: String, msgType: String): Cancelable {
-        val event = localEchoEventFactory.createFormattedTextEvent(roomId, TextContent(text, formattedText), msgType).also {
-            createLocalEcho(it)
+        val event = eventFactory.createFormattedTextEvent(roomId, TextContent(text, formattedText), msgType).also {
+            taskExecutor.executorScope.createLocalEcho(it)
         }
         return sendEvent(event)
     }
 
     override fun sendPoll(question: String, options: List<OptionItem>): Cancelable {
-        val event = localEchoEventFactory.createPollEvent(roomId, question, options).also {
-            createLocalEcho(it)
+        val event = eventFactory.createPollEvent(roomId, question, options).also {
+            taskExecutor.executorScope.createLocalEcho(it)
         }
         return sendEvent(event)
     }
 
     override fun sendOptionsReply(pollEventId: String, optionIndex: Int, optionValue: String): Cancelable {
-        val event = localEchoEventFactory.createOptionsReplyEvent(roomId, pollEventId, optionIndex, optionValue).also {
-            createLocalEcho(it)
+        val event = eventFactory.createOptionsReplyEvent(roomId, pollEventId, optionIndex, optionValue).also {
+            taskExecutor.executorScope.createLocalEcho(it)
         }
         return sendEvent(event)
     }
@@ -175,7 +176,6 @@ internal class DefaultSendService @AssistedInject constructor(
     override fun clearSendingQueue() {
         timelineSendEventWorkCommon.cancelAllWorks(roomId)
         workManagerProvider.workManager.cancelUniqueWork(buildWorkName(UPLOAD_WORK))
-
         // Replace the worker chains with a AlwaysSuccessfulWorker, to ensure the queues are well emptied
         workManagerProvider.matrixOneTimeWorkRequestBuilder<AlwaysSuccessfulWorker>()
                 .build().let {
@@ -210,8 +210,8 @@ internal class DefaultSendService @AssistedInject constructor(
 
         // Create local echo for each room
         val allLocalEchoes = allRoomIds.map {
-            localEchoEventFactory.createMediaEvent(it, attachment).also { event ->
-                createLocalEcho(event)
+            eventFactory.createMediaEvent(it, attachment).also { event ->
+                taskExecutor.executorScope.createLocalEcho(event)
             }
         }
         return internalSendMedia(allLocalEchoes, attachment, compressBeforeSending)
@@ -253,10 +253,6 @@ internal class DefaultSendService @AssistedInject constructor(
         return cancelableBag
     }
 
-    private fun createLocalEcho(event: Event) {
-        localEchoEventFactory.createLocalEcho(event)
-    }
-
     private fun buildWorkName(identifier: String): String {
         return "${roomId}_$identifier"
     }
@@ -277,13 +273,18 @@ internal class DefaultSendService @AssistedInject constructor(
     private fun createSendEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
         val sendContentWorkerParams = SendEventWorker.Params(sessionId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
-
         return timelineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, startChain)
     }
 
+    private fun CoroutineScope.createLocalEcho(event: Event) {
+        launch {
+            localEchoRepository.createLocalEcho(event)
+        }
+    }
+
     private fun createRedactEventWork(event: Event, reason: String?): OneTimeWorkRequest {
-        val redactEvent = localEchoEventFactory.createRedactEvent(roomId, event.eventId!!, reason).also {
-            createLocalEcho(it)
+        val redactEvent = eventFactory.createRedactEvent(roomId, event.eventId!!, reason).also {
+            taskExecutor.executorScope.createLocalEcho(it)
         }
         val sendContentWorkerParams = RedactEventWorker.Params(sessionId, redactEvent.eventId!!, roomId, event.eventId, reason)
         val redactWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)

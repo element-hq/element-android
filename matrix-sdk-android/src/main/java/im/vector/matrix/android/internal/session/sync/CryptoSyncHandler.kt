@@ -25,6 +25,7 @@ import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.crypto.verification.DefaultVerificationService
+import im.vector.matrix.android.internal.crypto.verification.VerificationEventHandler
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.session.sync.model.ToDeviceSyncResponse
@@ -32,7 +33,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class CryptoSyncHandler @Inject constructor(private val cryptoService: DefaultCryptoService,
-                                                     private val verificationService: DefaultVerificationService) {
+                                                     private val verificationEventHandler: VerificationEventHandler) {
 
     fun handleToDevice(toDevice: ToDeviceSyncResponse, initialSyncProgressService: DefaultInitialSyncProgressService? = null) {
         val total = toDevice.events?.size ?: 0
@@ -44,7 +45,7 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
                     && event.getClearContent()?.toModel<MessageContent>()?.msgType == "m.bad.encrypted") {
                 Timber.e("## handleToDeviceEvent() : Warning: Unable to decrypt to-device event : ${event.content}")
             } else {
-                verificationService.onToDeviceEvent(event)
+                verificationEventHandler.onToDeviceEvent(event)
                 cryptoService.onToDeviceEvent(event)
             }
         }

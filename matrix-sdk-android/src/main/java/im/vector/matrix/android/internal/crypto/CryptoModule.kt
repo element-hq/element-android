@@ -84,6 +84,8 @@ import im.vector.matrix.android.internal.crypto.tasks.SetDeviceNameTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadSignaturesTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadSigningKeysTask
+import im.vector.matrix.android.internal.crypto.verification.DefaultVerificationService
+import im.vector.matrix.android.internal.crypto.verification.VerificationEventHandler
 import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.di.CryptoDatabase
 import im.vector.matrix.android.internal.di.SessionFilesDirectory
@@ -245,4 +247,8 @@ internal abstract class CryptoModule {
 
     @Binds
     abstract fun bindComputeShieldTrustTask(task: DefaultComputeTrustTask): ComputeTrustTask
+
+    @Binds
+    abstract fun bindVerificationEventHandler(verificationEventHandler: DefaultVerificationService): VerificationEventHandler
+
 }

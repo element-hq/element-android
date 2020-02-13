@@ -47,19 +47,12 @@ import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.task.Task
+import im.vector.matrix.android.internal.di.UserId
+import im.vector.matrix.android.internal.session.sync.RoomEventsProcessor
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import timber.log.Timber
 import javax.inject.Inject
-
-internal interface EventRelationsAggregationTask : Task<EventRelationsAggregationTask.Params, Unit> {
-
-    data class Params(
-            val events: List<Event>,
-            val userId: String
-    )
-}
 
 enum class VerificationState {
     REQUEST,
@@ -89,33 +82,27 @@ private fun VerificationState?.toState(newState: VerificationState): Verificatio
 }
 
 /**
- * Called by EventRelationAggregationUpdater, when new events that can affect relations are inserted in base.
+ * Called when new events that can affect relations are synced.
  */
-internal class DefaultEventRelationsAggregationTask @Inject constructor(
+internal class EventRelationsAggregationProcessor @Inject constructor(
         private val monarchy: Monarchy,
-        private val cryptoService: CryptoService) : EventRelationsAggregationTask {
+        @UserId private val userId: String,
+        private val cryptoService: CryptoService) : RoomEventsProcessor {
 
     // OPT OUT serer aggregation until API mature enough
     private val SHOULD_HANDLE_SERVER_AGREGGATION = false
 
-    override suspend fun execute(params: EventRelationsAggregationTask.Params) {
-        val events = params.events
-        val userId = params.userId
+    override suspend fun process(mode: RoomEventsProcessor.Mode, roomId: String, events: List<Event>) {
         monarchy.awaitTransaction { realm ->
-            Timber.v(">>> DefaultEventRelationsAggregationTask[${params.hashCode()}] called with ${events.size} events")
-            update(realm, events, userId)
-            Timber.v("<<< DefaultEventRelationsAggregationTask[${params.hashCode()}] finished")
+            Timber.v(">>> EventRelationsAggregationProcessor called with ${events.size} events")
+            update(realm, roomId, events, userId)
+            Timber.v("<<< EventRelationsAggregationProcessor finished")
         }
     }
 
-    private fun update(realm: Realm, events: List<Event>, userId: String) {
+    private suspend fun update(realm: Realm, roomId: String, events: List<Event>, userId: String) {
         events.forEach { event ->
             try { // Temporary catch, should be removed
-                val roomId = event.roomId
-                if (roomId == null) {
-                    Timber.w("Event has no room id ${event.eventId}")
-                    return@forEach
-                }
                 val isLocalEcho = LocalEcho.isLocalEchoId(event.eventId ?: "")
                 when (event.type) {
                     EventType.REACTION             -> {
@@ -227,7 +214,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
         }
     }
 
-    private fun decryptIfNeeded(event: Event) {
+    private suspend fun decryptIfNeeded(event: Event) {
         if (event.mxDecryptionResult == null) {
             try {
                 val result = cryptoService.decryptEvent(event, event.roomId ?: "")

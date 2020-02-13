@@ -37,7 +37,7 @@ import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesSer
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
 import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageService
 import im.vector.matrix.android.internal.crypto.secrets.DefaultSharedSecretStorageService
-import im.vector.matrix.android.internal.crypto.verification.VerificationMessageLiveObserver
+import im.vector.matrix.android.internal.crypto.tasks.RoomEventVerificationProcessor
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
 import im.vector.matrix.android.internal.di.Authenticated
@@ -59,12 +59,13 @@ import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.homeserver.DefaultHomeServerCapabilitiesService
-import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
+import im.vector.matrix.android.internal.session.room.EventRelationsAggregationProcessor
 import im.vector.matrix.android.internal.session.room.create.RoomCreateEventLiveObserver
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
 import im.vector.matrix.android.internal.session.room.tombstone.RoomTombstoneEventLiveObserver
 import im.vector.matrix.android.internal.session.securestorage.DefaultSecureStorageService
 import im.vector.matrix.android.internal.session.user.accountdata.DefaultAccountDataService
+import im.vector.matrix.android.internal.session.sync.RoomEventsProcessor
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
@@ -245,19 +246,11 @@ internal abstract class SessionModule {
 
     @Binds
     @IntoSet
-    abstract fun bindEventRelationsAggregationUpdater(eventRelationsAggregationUpdater: EventRelationsAggregationUpdater): LiveEntityObserver
-
-    @Binds
-    @IntoSet
     abstract fun bindRoomTombstoneEventLiveObserver(roomTombstoneEventLiveObserver: RoomTombstoneEventLiveObserver): LiveEntityObserver
 
     @Binds
     @IntoSet
     abstract fun bindRoomCreateEventLiveObserver(roomCreateEventLiveObserver: RoomCreateEventLiveObserver): LiveEntityObserver
-
-    @Binds
-    @IntoSet
-    abstract fun bindVerificationMessageLiveObserver(verificationMessageLiveObserver: VerificationMessageLiveObserver): LiveEntityObserver
 
     @Binds
     abstract fun bindInitialSyncProgressService(initialSyncProgressService: DefaultInitialSyncProgressService): InitialSyncProgressService
@@ -273,4 +266,13 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindSharedSecretStorageService(service: DefaultSharedSecretStorageService): SharedSecretStorageService
+
+    @IntoSet
+    @Binds
+    abstract fun bindEventRelationsAggregationProcessor(eventRelationsAggregationProcessor: EventRelationsAggregationProcessor): RoomEventsProcessor
+
+    @Binds
+    @IntoSet
+    abstract fun bindRoomVerificationUpdateProcessor(roomVerificationUpdateProcessor: RoomEventVerificationProcessor): RoomEventsProcessor
+
 }

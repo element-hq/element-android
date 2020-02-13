@@ -64,21 +64,13 @@ import org.commonmark.renderer.html.HtmlRenderer
 import javax.inject.Inject
 
 /**
- * Creates local echo of events for room events.
- * A local echo is an event that is persisted even if not yet sent to the server,
- * in an optimistic way (as if the server as responded immediately). Local echo are using a local id,
- * (the transaction ID), this id is used when receiving an event from a sync to check if this event
- * is matching an existing local echo.
- *
- * The transactionID is used as loc
+ * Creates events for sending them in room.
  */
-internal class LocalEchoEventFactory @Inject constructor(
+internal class EventFactory @Inject constructor(
         @UserId private val userId: String,
         private val stringProvider: StringProvider,
-        private val textPillsUtils: TextPillsUtils,
-        private val taskExecutor: TaskExecutor,
-        private val localEchoRepository: LocalEchoRepository
-) {
+        private val textPillsUtils: TextPillsUtils) {
+
     // TODO Inject
     private val parser = Parser.builder().build()
     // TODO Inject
@@ -479,13 +471,6 @@ internal class LocalEchoEventFactory @Inject constructor(
                 content = reason?.let { mapOf("reason" to it).toContent() },
                 unsignedData = UnsignedData(age = null, transactionId = localID)
         )
-    }
-
-    fun createLocalEcho(event: Event) {
-        checkNotNull(event.roomId) { "Your event should have a roomId" }
-        taskExecutor.executorScope.launch {
-            localEchoRepository.createLocalEcho(event)
-        }
     }
 
     companion object {

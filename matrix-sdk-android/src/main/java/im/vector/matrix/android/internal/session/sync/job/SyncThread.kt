@@ -84,7 +84,6 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
             Timber.v("Pause sync...")
             isStarted = false
             retryNoNetworkTask?.cancel()
-            syncScope.coroutineContext.cancelChildren()
         }
     }
 

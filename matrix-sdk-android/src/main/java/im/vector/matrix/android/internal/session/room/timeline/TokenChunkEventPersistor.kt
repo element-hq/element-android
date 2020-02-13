@@ -39,6 +39,8 @@ import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
+import im.vector.matrix.android.internal.session.sync.RoomEventsProcessor
+import im.vector.matrix.android.internal.session.sync.RoomEventsProcessors
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import timber.log.Timber
@@ -47,7 +49,8 @@ import javax.inject.Inject
 /**
  * Insert Chunk in DB, and eventually merge with existing chunk event
  */
-internal class TokenChunkEventPersistor @Inject constructor(private val monarchy: Monarchy) {
+internal class TokenChunkEventPersistor @Inject constructor(private val monarchy: Monarchy,
+                                                            private val roomEventsProcessors: RoomEventsProcessors) {
 
     /**
      * <pre>
@@ -154,6 +157,9 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                         handlePagination(realm, roomId, direction, receivedChunk, currentChunk)
                     }
                 }
+        roomEventsProcessors.process(RoomEventsProcessor.Mode.PAGINATING, roomId, receivedChunk.events)
+        roomEventsProcessors.process(RoomEventsProcessor.Mode.PAGINATING, roomId, receivedChunk.stateEvents)
+
         return if (receivedChunk.events.isEmpty()) {
             if (receivedChunk.start != receivedChunk.end) {
                 Result.SHOULD_FETCH_MORE

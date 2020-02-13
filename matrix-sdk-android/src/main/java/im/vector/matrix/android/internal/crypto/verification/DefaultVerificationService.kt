@@ -91,7 +91,7 @@ internal class DefaultVerificationService @Inject constructor(
         private val verificationTransportRoomMessageFactory: VerificationTransportRoomMessageFactory,
         private val verificationTransportToDeviceFactory: VerificationTransportToDeviceFactory,
         private val crossSigningService: CrossSigningService
-) : DefaultVerificationTransaction.Listener, VerificationService {
+) : DefaultVerificationTransaction.Listener, VerificationService, VerificationEventHandler {
 
     private val uiHandler = Handler(Looper.getMainLooper())
 
@@ -108,7 +108,7 @@ internal class DefaultVerificationService @Inject constructor(
     private val pendingRequests = HashMap<String, ArrayList<PendingVerificationRequest>>()
 
     // Event received from the sync
-    fun onToDeviceEvent(event: Event) {
+    override fun onToDeviceEvent(event: Event) {
         GlobalScope.launch(coroutineDispatchers.crypto) {
             when (event.getClearType()) {
                 EventType.KEY_VERIFICATION_START         -> {
@@ -139,7 +139,7 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-    fun onRoomEvent(event: Event) {
+    override fun onRoomEvent(event: Event) {
         GlobalScope.launch(coroutineDispatchers.crypto) {
             when (event.getClearType()) {
                 EventType.KEY_VERIFICATION_START  -> {
@@ -254,7 +254,7 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-    fun onRoomRequestHandledByOtherDevice(event: Event) {
+    override fun onRoomRequestHandledByOtherDevice(event: Event) {
         val requestInfo = event.getClearContent().toModel<MessageRelationContent>()
                 ?: return
         val requestId = requestInfo.relatesTo?.eventId ?: return
@@ -305,7 +305,7 @@ internal class DefaultVerificationService @Inject constructor(
         dispatchRequestAdded(pendingVerificationRequest)
     }
 
-    suspend fun onRoomRequestReceived(event: Event) {
+    private suspend fun onRoomRequestReceived(event: Event) {
         Timber.v("## SAS Verification request from ${event.senderId} in room ${event.roomId}")
         val requestInfo = event.getClearContent().toModel<MessageVerificationRequestContent>()
                 ?: return

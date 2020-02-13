@@ -21,6 +21,7 @@ import im.vector.matrix.android.R
 import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.pushrules.RuleScope
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.notification.ProcessEventForPushTask
 import im.vector.matrix.android.internal.session.reportSubtask
@@ -40,7 +41,8 @@ internal class SyncResponseHandler @Inject constructor(private val monarchy: Mon
                                                        private val tokenStore: SyncTokenStore,
                                                        private val processEventForPushTask: ProcessEventForPushTask,
                                                        private val pushRuleService: PushRuleService,
-                                                       private val initialSyncProgressService: DefaultInitialSyncProgressService) {
+                                                       private val initialSyncProgressService: DefaultInitialSyncProgressService,
+                                                       private val roomEventsProcessors: RoomEventsProcessors) {
 
     suspend fun handleResponse(syncResponse: SyncResponse, fromToken: String?) {
         val isInitialSync = fromToken == null
@@ -108,6 +110,19 @@ internal class SyncResponseHandler @Inject constructor(private val monarchy: Mon
         syncResponse.rooms?.also {
             checkPushRules(it, isInitialSync)
             userAccountDataSyncHandler.synchronizeWithServerIfNeeded(it.invite)
+        }
+        val processMode = if (isInitialSync) {
+            RoomEventsProcessor.Mode.INITIAL_SYNC
+        } else {
+            RoomEventsProcessor.Mode.INCREMENTAL_SYNC
+        }
+        syncResponse.rooms?.join?.forEach {
+            val roomId = it.key
+            val roomSync = it.value
+            roomEventsProcessors.process(processMode, roomId, roomSync.timeline?.events ?: emptyList())
+            roomEventsProcessors.process(processMode, roomId, roomSync.accountData?.events ?: emptyList())
+            roomEventsProcessors.process(processMode, roomId, roomSync.ephemeral?.events ?: emptyList())
+            roomEventsProcessors.process(processMode, roomId, roomSync.state?.events ?: emptyList())
         }
         Timber.v("On sync completed")
         cryptoSyncHandler.onSyncCompleted(syncResponse)

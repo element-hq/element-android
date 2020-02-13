@@ -19,7 +19,7 @@ import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
-import im.vector.matrix.android.internal.session.room.send.LocalEchoUpdater
+import im.vector.matrix.android.internal.session.room.send.LocalEchoRepository
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitCallback
 import javax.inject.Inject
@@ -35,7 +35,7 @@ internal interface EncryptEventTask : Task<EncryptEventTask.Params, Event> {
 
 internal class DefaultEncryptEventTask @Inject constructor(
 //        private val crypto: CryptoService
-        private val localEchoUpdater: LocalEchoUpdater
+        private val localEchoRepository: LocalEchoRepository
 ) : EncryptEventTask {
     override suspend fun execute(params: EncryptEventTask.Params): Event {
         if (!params.crypto.isRoomEncrypted(params.roomId)) return params.event
@@ -44,7 +44,7 @@ internal class DefaultEncryptEventTask @Inject constructor(
             throw IllegalArgumentException()
         }
 
-        localEchoUpdater.updateSendState(localEvent.eventId, SendState.ENCRYPTING)
+        localEchoRepository.updateSendState(localEvent.eventId, SendState.ENCRYPTING)
 
         val localMutableContent = localEvent.content?.toMutableMap() ?: mutableMapOf()
         params.keepKeys?.forEach {

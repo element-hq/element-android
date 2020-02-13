@@ -39,7 +39,8 @@ import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.session.room.send.EncryptEventWorker
-import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
+import im.vector.matrix.android.internal.session.room.send.EventFactory
+import im.vector.matrix.android.internal.session.room.send.LocalEchoRepository
 import im.vector.matrix.android.internal.session.room.send.RedactEventWorker
 import im.vector.matrix.android.internal.session.room.send.SendEventWorker
 import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEventWorkCommon
@@ -47,18 +48,20 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.fetchCopyMap
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 internal class DefaultRelationService @AssistedInject constructor(
         @Assisted private val roomId: String,
         @SessionId private val sessionId: String,
         private val timeLineSendEventWorkCommon: TimelineSendEventWorkCommon,
-        private val eventFactory: LocalEchoEventFactory,
+        private val eventFactory: EventFactory,
         private val cryptoService: CryptoService,
         private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
         private val fetchEditHistoryTask: FetchEditHistoryTask,
         private val timelineEventMapper: TimelineEventMapper,
         private val monarchy: Monarchy,
+        private val localEchoRepository: LocalEchoRepository,
         private val taskExecutor: TaskExecutor)
     : RelationService {
 
@@ -233,6 +236,8 @@ internal class DefaultRelationService @AssistedInject constructor(
      * the same transaction id is received (in unsigned data)
      */
     private fun saveLocalEcho(event: Event) {
-        eventFactory.createLocalEcho(event)
+        taskExecutor.executorScope.launch {
+            localEchoRepository.createLocalEcho(event)
+        }
     }
 }

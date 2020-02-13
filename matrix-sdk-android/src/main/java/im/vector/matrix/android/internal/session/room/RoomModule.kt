@@ -93,9 +93,6 @@ internal abstract class RoomModule {
     abstract fun bindFileService(service: DefaultFileService): FileService
 
     @Binds
-    abstract fun bindEventRelationsAggregationTask(task: DefaultEventRelationsAggregationTask): EventRelationsAggregationTask
-
-    @Binds
     abstract fun bindCreateRoomTask(task: DefaultCreateRoomTask): CreateRoomTask
 
     @Binds
