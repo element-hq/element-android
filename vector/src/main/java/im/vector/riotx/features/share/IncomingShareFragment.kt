@@ -48,6 +48,10 @@ import im.vector.riotx.features.login.LoginActivity
 import kotlinx.android.synthetic.main.fragment_incoming_share.*
 import javax.inject.Inject
 
+/**
+ * Display the list of rooms
+ * The user can select multiple rooms to send the data to
+ */
 class IncomingShareFragment @Inject constructor(
         val incomingShareViewModelFactory: IncomingShareViewModel.Factory,
         private val incomingShareController: IncomingShareController,
@@ -55,7 +59,7 @@ class IncomingShareFragment @Inject constructor(
 ) : VectorBaseFragment(), AttachmentsHelper.Callback, IncomingShareController.Callback {
 
     private lateinit var attachmentsHelper: AttachmentsHelper
-    private val incomingShareViewModel: IncomingShareViewModel by fragmentViewModel()
+    private val viewModel: IncomingShareViewModel by fragmentViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_incoming_share
 
@@ -92,18 +96,26 @@ class IncomingShareFragment @Inject constructor(
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                incomingShareViewModel.handle(IncomingShareAction.FilterWith(newText))
+                viewModel.handle(IncomingShareAction.FilterWith(newText))
                 return true
             }
         })
         sendShareButton.setOnClickListener { _ ->
             handleSendShare()
         }
-        incomingShareViewModel.observeViewEvents {
+        viewModel.observeViewEvents {
             when (it) {
                 is IncomingShareViewEvents.ShareToRoom            -> handleShareToRoom(it)
                 is IncomingShareViewEvents.EditMediaBeforeSending -> handleEditMediaBeforeSending(it)
+                is IncomingShareViewEvents.MultipleRoomsShareDone -> handleMultipleRoomsShareDone(it)
             }.exhaustive
+        }
+    }
+
+    private fun handleMultipleRoomsShareDone(viewEvent: IncomingShareViewEvents.MultipleRoomsShareDone) {
+        requireActivity().let {
+            navigator.openRoom(it, viewEvent.roomId)
+            it.finish()
         }
     }
 
@@ -119,8 +131,8 @@ class IncomingShareFragment @Inject constructor(
                 AttachmentsPreviewActivity.REQUEST_CODE -> {
                     val sendData = AttachmentsPreviewActivity.getOutput(data)
                     val keepOriginalSize = AttachmentsPreviewActivity.getKeepOriginalSize(data)
-                    incomingShareViewModel.handle(IncomingShareAction.UpdateSharedData(SharedData.Attachments(sendData)))
-                    incomingShareViewModel.handle(IncomingShareAction.ShareMedia(keepOriginalSize))
+                    viewModel.handle(IncomingShareAction.UpdateSharedData(SharedData.Attachments(sendData)))
+                    viewModel.handle(IncomingShareAction.ShareMedia(keepOriginalSize))
                 }
             }
         }
@@ -146,12 +158,12 @@ class IncomingShareFragment @Inject constructor(
         if (event.showAlert) {
             showConfirmationDialog(event.roomSummary, event.sharedData)
         } else {
-            navigator.openRoomForSharing(requireActivity(), event.roomSummary.roomId, event.sharedData)
+            navigator.openRoomForSharingAndFinish(requireActivity(), event.roomSummary.roomId, event.sharedData)
         }
     }
 
     private fun handleSendShare() {
-        incomingShareViewModel.handle(IncomingShareAction.ShareToSelectedRooms)
+        viewModel.handle(IncomingShareAction.ShareToSelectedRooms)
     }
 
     override fun onDestroyView() {
@@ -167,7 +179,7 @@ class IncomingShareFragment @Inject constructor(
 
     override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
         val sharedData = SharedData.Attachments(attachments)
-        incomingShareViewModel.handle(IncomingShareAction.UpdateSharedData(sharedData))
+        viewModel.handle(IncomingShareAction.UpdateSharedData(sharedData))
     }
 
     override fun onAttachmentsProcessFailed() {
@@ -186,7 +198,7 @@ class IncomingShareFragment @Inject constructor(
                 false
             } else {
                 val sharedData = SharedData.Text(sharedText)
-                incomingShareViewModel.handle(IncomingShareAction.UpdateSharedData(sharedData))
+                viewModel.handle(IncomingShareAction.UpdateSharedData(sharedData))
                 true
             }
         }
@@ -198,7 +210,7 @@ class IncomingShareFragment @Inject constructor(
                 .setTitle(R.string.send_attachment)
                 .setMessage(getString(R.string.share_confirm_room, roomSummary.displayName))
                 .setPositiveButton(R.string.send) { _, _ ->
-                    navigator.openRoomForSharing(requireActivity(), roomSummary.roomId, sharedData)
+                    navigator.openRoomForSharingAndFinish(requireActivity(), roomSummary.roomId, sharedData)
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
@@ -211,17 +223,17 @@ class IncomingShareFragment @Inject constructor(
         requireActivity().finish()
     }
 
-    override fun invalidate() = withState(incomingShareViewModel) {
+    override fun invalidate() = withState(viewModel) {
         sendShareButton.isVisible = it.isInMultiSelectionMode
         incomingShareController.setData(it)
     }
 
     override fun onRoomClicked(roomSummary: RoomSummary) {
-        incomingShareViewModel.handle(IncomingShareAction.SelectRoom(roomSummary, false))
+        viewModel.handle(IncomingShareAction.SelectRoom(roomSummary, false))
     }
 
     override fun onRoomLongClicked(roomSummary: RoomSummary): Boolean {
-        incomingShareViewModel.handle(IncomingShareAction.SelectRoom(roomSummary, true))
+        viewModel.handle(IncomingShareAction.SelectRoom(roomSummary, true))
         return true
     }
 }

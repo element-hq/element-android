@@ -129,16 +129,17 @@ class IncomingShareViewModel @AssistedInject constructor(@Assisted initialState:
         }
     }
 
+    private fun handleShareMediaToSelectedRooms(action: IncomingShareAction.ShareMedia) = withState { state ->
+        (state.sharedData as? SharedData.Attachments)?.let {
+            shareAttachments(it.attachmentData, state.selectedRoomIds, proposeMediaEdition = false, compressMediaBeforeSending = !action.keepOriginalSize)
+        }
+    }
+
     private fun shareAttachments(attachmentData: List<ContentAttachmentData>,
                                  selectedRoomIds: Set<String>,
                                  proposeMediaEdition: Boolean,
                                  compressMediaBeforeSending: Boolean) {
-        if (!proposeMediaEdition) {
-            // Pick the first room to send the media
-            selectedRoomIds.firstOrNull()
-                    ?.let { roomId -> session.getRoom(roomId) }
-                    ?.sendMedias(attachmentData, compressMediaBeforeSending, selectedRoomIds)
-        } else {
+        if (proposeMediaEdition) {
             val grouped = attachmentData.toGroupedContentAttachmentData()
             if (grouped.notPreviewables.isNotEmpty()) {
                 // Send the not previewable attachment right now (?)
@@ -146,17 +147,28 @@ class IncomingShareViewModel @AssistedInject constructor(@Assisted initialState:
                 selectedRoomIds.firstOrNull()
                         ?.let { roomId -> session.getRoom(roomId) }
                         ?.sendMedias(grouped.notPreviewables, compressMediaBeforeSending, selectedRoomIds)
+
+                // Ensure they will not be sent twice
+                setState {
+                    copy(
+                            sharedData = SharedData.Attachments(grouped.previewables)
+                    )
+                }
             }
             if (grouped.previewables.isNotEmpty()) {
                 // In case of multiple share of media, edit them first
                 _viewEvents.post(IncomingShareViewEvents.EditMediaBeforeSending(grouped.previewables))
+            } else {
+                // This is it, pass the first roomId to let the screen open it
+                _viewEvents.post(IncomingShareViewEvents.MultipleRoomsShareDone(selectedRoomIds.first()))
             }
-        }
-    }
-
-    private fun handleShareMediaToSelectedRooms(action: IncomingShareAction.ShareMedia) = withState { state ->
-        (state.sharedData as? SharedData.Attachments)?.let {
-            shareAttachments(it.attachmentData, state.selectedRoomIds, proposeMediaEdition = false, compressMediaBeforeSending = !action.keepOriginalSize)
+        } else {
+            // Pick the first room to send the media
+            selectedRoomIds.firstOrNull()
+                    ?.let { roomId -> session.getRoom(roomId) }
+                    ?.sendMedias(attachmentData, compressMediaBeforeSending, selectedRoomIds)
+            // This is it, pass the first roomId to let the screen open it
+            _viewEvents.post(IncomingShareViewEvents.MultipleRoomsShareDone(selectedRoomIds.first()))
         }
     }
 

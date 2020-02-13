@@ -1352,7 +1352,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
         val grouped = attachments.toGroupedContentAttachmentData()
         if (grouped.notPreviewables.isNotEmpty()) {
-            // Send the non previewable attachment right now (?)
+            // Send the not previewable attachment right now (?)
             roomDetailViewModel.handle(RoomDetailAction.SendMedia(grouped.notPreviewables, false))
         }
         if (grouped.previewables.isNotEmpty()) {
