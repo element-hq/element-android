@@ -214,15 +214,17 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     ?.get("reason") as? String)
                     ?.takeIf { it.isNotBlank() }
                     ?.let { reason ->
-                        stringProvider.getString(
-                                (R.string.event_redacted_by_user_reason_with_reason
-                                        .takeIf { timelineEvent.root.senderId == session.myUserId }
-                                        ?: R.string.event_redacted_by_admin_reason_with_reason), reason
-                        )
-                    } ?: stringProvider.getString(
-                    R.string.event_redacted_by_user_reason
-                            .takeIf { timelineEvent.root.senderId == session.myUserId }
-                            ?: R.string.event_redacted_by_admin_reason_with_reason)
+                        when (timelineEvent.root.senderId == session.myUserId) {
+                            true  -> stringProvider.getString(R.string.event_redacted_by_user_reason_with_reason, reason)
+                            false -> stringProvider.getString(R.string.event_redacted_by_admin_reason_with_reason, reason)
+                        }
+                    }
+                    ?: run {
+                        when (timelineEvent.root.senderId == session.myUserId) {
+                            true  -> stringProvider.getString(R.string.event_redacted_by_user_reason)
+                            false -> stringProvider.getString(R.string.event_redacted_by_admin_reason)
+                        }
+                    }
 
     private fun actionsForEvent(timelineEvent: TimelineEvent): List<EventSharedAction> {
         val messageContent: MessageContent? = timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
