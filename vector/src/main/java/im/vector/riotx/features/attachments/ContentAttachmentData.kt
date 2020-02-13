@@ -22,11 +22,17 @@ fun ContentAttachmentData.isPreviewable(): Boolean {
     return type == ContentAttachmentData.Type.IMAGE || type == ContentAttachmentData.Type.VIDEO
 }
 
-fun List<ContentAttachmentData>.filterPreviewables(): List<ContentAttachmentData> {
-    return filter { it.isPreviewable() }
-}
+data class GroupedContentAttachmentData(
+        val previewables: List<ContentAttachmentData>,
+        val notPreviewables: List<ContentAttachmentData>
+)
 
-fun List<ContentAttachmentData>.filterNonPreviewables(): List<ContentAttachmentData> {
-    return filter { it.isPreviewable().not() }
+fun List<ContentAttachmentData>.toGroupedContentAttachmentData(): GroupedContentAttachmentData {
+    return groupBy { it.isPreviewable() }
+            .let {
+                GroupedContentAttachmentData(
+                        it[true].orEmpty(),
+                        it[false].orEmpty()
+                )
+            }
 }
-

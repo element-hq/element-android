@@ -30,8 +30,7 @@ import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.features.attachments.filterNonPreviewables
-import im.vector.riotx.features.attachments.filterPreviewables
+import im.vector.riotx.features.attachments.toGroupedContentAttachmentData
 import im.vector.riotx.features.home.room.list.ChronologicalRoomComparator
 import java.util.concurrent.TimeUnit
 
@@ -140,18 +139,17 @@ class IncomingShareViewModel @AssistedInject constructor(@Assisted initialState:
                     ?.let { roomId -> session.getRoom(roomId) }
                     ?.sendMedias(attachmentData, compressMediaBeforeSending, selectedRoomIds)
         } else {
-            val previewable = attachmentData.filterPreviewables()
-            val nonPreviewable = attachmentData.filterNonPreviewables()
-            if (nonPreviewable.isNotEmpty()) {
-                // Send the non previewable attachment right now (?)
+            val grouped = attachmentData.toGroupedContentAttachmentData()
+            if (grouped.notPreviewables.isNotEmpty()) {
+                // Send the not previewable attachment right now (?)
                 // Pick the first room to send the media
                 selectedRoomIds.firstOrNull()
                         ?.let { roomId -> session.getRoom(roomId) }
-                        ?.sendMedias(nonPreviewable, compressMediaBeforeSending, selectedRoomIds)
+                        ?.sendMedias(grouped.notPreviewables, compressMediaBeforeSending, selectedRoomIds)
             }
-            if (previewable.isNotEmpty()) {
+            if (grouped.previewables.isNotEmpty()) {
                 // In case of multiple share of media, edit them first
-                _viewEvents.post(IncomingShareViewEvents.EditMediaBeforeSending(previewable))
+                _viewEvents.post(IncomingShareViewEvents.EditMediaBeforeSending(grouped.previewables))
             }
         }
     }

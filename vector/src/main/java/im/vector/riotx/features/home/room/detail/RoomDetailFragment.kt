@@ -116,10 +116,9 @@ import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.attachments.AttachmentTypeSelectorView
 import im.vector.riotx.features.attachments.AttachmentsHelper
 import im.vector.riotx.features.attachments.ContactAttachment
-import im.vector.riotx.features.attachments.filterNonPreviewables
-import im.vector.riotx.features.attachments.filterPreviewables
 import im.vector.riotx.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.riotx.features.attachments.preview.AttachmentsPreviewArgs
+import im.vector.riotx.features.attachments.toGroupedContentAttachmentData
 import im.vector.riotx.features.command.Command
 import im.vector.riotx.features.crypto.util.toImageRes
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
@@ -1351,14 +1350,13 @@ class RoomDetailFragment @Inject constructor(
     // AttachmentsHelper.Callback
 
     override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
-        val previewable = attachments.filterPreviewables()
-        val nonPreviewable = attachments.filterNonPreviewables()
-        if (nonPreviewable.isNotEmpty()) {
+        val grouped = attachments.toGroupedContentAttachmentData()
+        if (grouped.notPreviewables.isNotEmpty()) {
             // Send the non previewable attachment right now (?)
-            roomDetailViewModel.handle(RoomDetailAction.SendMedia(nonPreviewable, false))
+            roomDetailViewModel.handle(RoomDetailAction.SendMedia(grouped.notPreviewables, false))
         }
-        if (previewable.isNotEmpty()) {
-            val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(previewable))
+        if (grouped.previewables.isNotEmpty()) {
+            val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(grouped.previewables))
             startActivityForResult(intent, AttachmentsPreviewActivity.REQUEST_CODE)
         }
     }
