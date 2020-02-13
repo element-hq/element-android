@@ -52,9 +52,9 @@ interface PushersService {
      * @param withEventIdOnly   true to limit the push content to only id and not message content
      *                          Ref: https://matrix.org/docs/spec/push_gateway/r0.1.1#homeserver-behaviour
      *
-     * @return A work request uuid. Can be used to listen to the status
+     * @return                  A work request uuid. Can be used to listen to the status
+     *                          (LiveData<WorkInfo> status = workManager.getWorkInfoByIdLiveData(<UUID>))
      * @throws [InvalidParameterException] if a parameter is not correct
-     * (LiveData<WorkInfo> status = workManager.getWorkInfoByIdLiveData(<UUID>))
      */
     fun addHttpPusher(pushkey: String,
                       appId: String,
