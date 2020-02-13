@@ -47,10 +47,10 @@ class TestTokenRegistration @Inject constructor(private val context: AppCompatAc
             status = TestStatus.FAILED
             return
         }
-        val pusher = session.pushers().filter {
+        val pushers = session.getPushers().filter {
             it.pushKey == fcmToken && it.state == PusherState.REGISTERED
         }
-        if (pusher.isEmpty()) {
+        if (pushers.isEmpty()) {
             description = stringProvider.getString(R.string.settings_troubleshoot_test_token_registration_failed,
                     stringProvider.getString(R.string.sas_error_unknown))
             quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_token_registration_quick_fix) {

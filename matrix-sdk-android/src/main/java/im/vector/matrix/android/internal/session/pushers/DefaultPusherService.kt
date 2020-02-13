@@ -21,6 +21,7 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.pushers.Pusher
 import im.vector.matrix.android.api.session.pushers.PushersService
+import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.PusherEntity
 import im.vector.matrix.android.internal.database.query.where
@@ -86,9 +87,9 @@ internal class DefaultPusherService @Inject constructor(
         return request.id
     }
 
-    override fun removeHttpPusher(pushkey: String, appId: String, callback: MatrixCallback<Unit>) {
+    override fun removeHttpPusher(pushkey: String, appId: String, callback: MatrixCallback<Unit>): Cancelable {
         val params = RemovePusherTask.Params(pushkey, appId)
-        removePusherTask
+        return removePusherTask
                 .configureWith(params) {
                     this.callback = callback
                 }
@@ -103,7 +104,7 @@ internal class DefaultPusherService @Inject constructor(
         )
     }
 
-    override fun pushers(): List<Pusher> {
+    override fun getPushers(): List<Pusher> {
         return monarchy.fetchAllCopiedSync { PusherEntity.where(it) }.map { it.asDomain() }
     }
 

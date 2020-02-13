@@ -17,6 +17,7 @@ package im.vector.matrix.android.api.session.pushers
 
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.util.Cancelable
 import java.util.UUID
 
 interface PushersService {
@@ -27,7 +28,8 @@ interface PushersService {
     fun refreshPushers()
 
     /**
-     * Add a new HTTP pusher. Only `http` kind is supported by the SDK for now.
+     * Add a new HTTP pusher.
+     * Note that only `http` kind is supported by the SDK for now.
      * Ref: https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-pushers-set
      *
      * @param pushkey           This is a unique identifier for this pusher. The value you should use for
@@ -64,9 +66,18 @@ interface PushersService {
                       append: Boolean,
                       withEventIdOnly: Boolean): UUID
 
-    fun removeHttpPusher(pushkey: String, appId: String, callback: MatrixCallback<Unit>)
+    /**
+     * Remove the http pusher
+     */
+    fun removeHttpPusher(pushkey: String, appId: String, callback: MatrixCallback<Unit>): Cancelable
 
+    /**
+     * Get the current pushers, as a LiveData
+     */
     fun getPushersLive(): LiveData<List<Pusher>>
 
-    fun pushers(): List<Pusher>
+    /**
+     * Get the current pushers
+     */
+    fun getPushers(): List<Pusher>
 }
