@@ -27,17 +27,29 @@ interface PushersService {
     fun refreshPushers()
 
     /**
-     * Add a new HTTP pusher.
+     * Add a new HTTP pusher. Only `http` kind is supported by the SDK for now.
+     * Ref: https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-pushers-set
      *
-     * @param pushkey           the pushkey
+     * @param pushkey           This is a unique identifier for this pusher. The value you should use for
+     *                          this is the routing or destination address information for the notification,
+     *                          for example, the APNS token for APNS or the Registration ID for GCM. If your
+     *                          notification client has no such concept, use any unique identifier. Max length, 512 bytes.
+     *                          If the kind is "email", this is the email address to send notifications to.
      * @param appId             the application id
-     * @param profileTag        the profile tag
-     * @param lang              the language
-     * @param appDisplayName    a human-readable application name
-     * @param deviceDisplayName a human-readable device name
-     * @param url               the URL that should be used to send notifications
-     * @param append            append the pusher
-     * @param withEventIdOnly   true to limit the push content
+     *                          This is a reverse-DNS style identifier for the application. It is recommended
+     *                          that this end with the platform, such that different platform versions get
+     *                          different app identifiers. Max length, 64 chars.
+     *                          If the kind is "email", this is "m.email".
+     * @param profileTag        This string determines which set of device specific rules this pusher executes.
+     * @param lang              The preferred language for receiving notifications (e.g. "en" or "en-US").
+     * @param appDisplayName    A human readable string that will allow the user to identify what application owns this pusher.
+     * @param deviceDisplayName A human readable string that will allow the user to identify what device owns this pusher.
+     * @param url               The URL to use to send notifications to. MUST be an HTTPS URL with a path of /_matrix/push/v1/notify.
+     * @param append            If true, the homeserver should add another pusher with the given pushkey and App ID in addition
+     *                          to any others with different user IDs. Otherwise, the homeserver must remove any other pushers
+     *                          with the same App ID and pushkey for different users.
+     * @param withEventIdOnly   true to limit the push content to only id and not message content
+     *                          Ref: https://matrix.org/docs/spec/push_gateway/r0.1.1#homeserver-behaviour
      *
      * @return A work request uuid. Can be used to listen to the status
      * (LiveData<WorkInfo> status = workManager.getWorkInfoByIdLiveData(<UUID>))
@@ -54,11 +66,7 @@ interface PushersService {
 
     fun removeHttpPusher(pushkey: String, appId: String, callback: MatrixCallback<Unit>)
 
-    companion object {
-        const val EVENT_ID_ONLY = "event_id_only"
-    }
-
     fun getPushersLive(): LiveData<List<Pusher>>
 
-    fun pushers() : List<Pusher>
+    fun pushers(): List<Pusher>
 }

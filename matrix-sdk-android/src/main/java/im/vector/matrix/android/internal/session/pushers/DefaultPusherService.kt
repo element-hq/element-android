@@ -29,7 +29,7 @@ import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
-import java.util.*
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -48,9 +48,15 @@ internal class DefaultPusherService @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
-    override fun addHttpPusher(pushkey: String, appId: String, profileTag: String,
-                               lang: String, appDisplayName: String, deviceDisplayName: String,
-                               url: String, append: Boolean, withEventIdOnly: Boolean)
+    override fun addHttpPusher(pushkey: String,
+                               appId: String,
+                               profileTag: String,
+                               lang: String,
+                               appDisplayName: String,
+                               deviceDisplayName: String,
+                               url: String,
+                               append: Boolean,
+                               withEventIdOnly: Boolean)
             : UUID {
         val pusher = JsonPusher(
                 pushKey = pushkey,
@@ -60,7 +66,7 @@ internal class DefaultPusherService @Inject constructor(
                 deviceDisplayName = deviceDisplayName,
                 profileTag = profileTag,
                 lang = lang,
-                data = JsonPusherData(url, if (withEventIdOnly) PushersService.EVENT_ID_ONLY else null),
+                data = JsonPusherData(url, EVENT_ID_ONLY.takeIf { withEventIdOnly }),
                 append = append)
 
         val params = AddHttpPusherWorker.Params(sessionId, pusher)
@@ -93,5 +99,9 @@ internal class DefaultPusherService @Inject constructor(
 
     override fun pushers(): List<Pusher> {
         return monarchy.fetchAllCopiedSync { PusherEntity.where(it) }.map { it.asDomain() }
+    }
+
+    companion object {
+        const val EVENT_ID_ONLY = "event_id_only"
     }
 }
