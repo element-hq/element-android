@@ -170,6 +170,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     private fun computeMessageBody(timelineEvent: TimelineEvent): CharSequence {
         return when (timelineEvent.root.getClearType()) {
             EventType.MESSAGE,
+            EventType.ENCRYPTED,
             EventType.STICKER     -> {
                 when (timelineEvent.root.isRedacted()) {
                     true  -> getRedactionReason(timelineEvent)
