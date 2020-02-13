@@ -49,7 +49,7 @@ internal abstract class PushersModule {
     }
 
     @Binds
-    abstract fun bindPusherService(pusherService: DefaultPusherService): PushersService
+    abstract fun bindPusherService(pusherService: DefaultPushersService): PushersService
 
     @Binds
     abstract fun bindConditionResolver(conditionResolver: DefaultConditionResolver): ConditionResolver

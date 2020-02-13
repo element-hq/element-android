@@ -35,7 +35,7 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-internal class DefaultPusherService @Inject constructor(
+internal class DefaultPushersService @Inject constructor(
         private val workManagerProvider: WorkManagerProvider,
         private val monarchy: Monarchy,
         @SessionId private val sessionId: String,
