@@ -22,7 +22,8 @@ import im.vector.matrix.android.api.session.content.ContentAttachmentData
 
 data class AttachmentsPreviewViewState(
         val attachments: List<ContentAttachmentData>,
-        val currentAttachmentIndex: Int = 0
+        val currentAttachmentIndex: Int = 0,
+        val sendImagesWithOriginalSize: Boolean = false
 ) : MvRxState {
 
     constructor(args: AttachmentsPreviewArgs) : this(attachments = args.attachments)

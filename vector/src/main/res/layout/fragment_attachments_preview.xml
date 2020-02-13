@@ -39,11 +39,24 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/attachmentPreviewerSendImageOriginalSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:itemCount="1"
+            tools:listitem="@layout/item_attachment_miniature_preview" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/attachmentPreviewerSendImageOriginalSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:itemCount="1"
-            tools:listitem="@layout/item_attachment_miniature_preview" />
+            app:layout_constraintTop_toBottomOf="@+id/attachmentPreviewerMiniatureList"
+            tools:text="@plurals/send_images_with_original_size" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

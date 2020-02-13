@@ -26,7 +26,7 @@ data class IncomingShareViewState(
         val roomSummaries: Async<List<RoomSummary>> = Uninitialized,
         val filteredRoomSummaries: Async<List<RoomSummary>> = Uninitialized,
         val selectedRoomIds: Set<String> = emptySet(),
-        val multiSelectionEnabled: Boolean = false
+        val isInMultiSelectionMode: Boolean = false
 ) : MvRxState
 
 

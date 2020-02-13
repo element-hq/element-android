@@ -17,7 +17,6 @@
 
 package im.vector.riotx.features.attachments.preview
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -25,7 +24,6 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
-import kotlinx.coroutines.launch
 
 class AttachmentsPreviewViewModel @AssistedInject constructor(@Assisted initialState: AttachmentsPreviewViewState)
     : VectorViewModel<AttachmentsPreviewViewState, AttachmentsPreviewAction, AttachmentsPreviewViewEvents>(initialState) {

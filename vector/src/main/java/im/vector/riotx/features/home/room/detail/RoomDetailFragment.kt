@@ -156,7 +156,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
-import kotlinx.android.synthetic.main.merge_composer_layout.*
 import kotlinx.android.synthetic.main.merge_composer_layout.view.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import org.commonmark.parser.Parser
@@ -306,7 +305,10 @@ class RoomDetailFragment @Inject constructor(
                 is SharedData.Text        -> {
                     roomDetailViewModel.handle(RoomDetailAction.ExitSpecialMode(composerLayout.text.toString()))
                 }
-                is SharedData.Attachments -> roomDetailViewModel.handle(RoomDetailAction.SendMedia(sharedData.attachmentData))
+                is SharedData.Attachments -> {
+                    // open share edition
+                    onContentAttachmentsReady(sharedData.attachmentData)
+                }
                 null                      -> Timber.v("No share data to process")
             }
         }
@@ -506,7 +508,8 @@ class RoomDetailFragment @Inject constructor(
             when (requestCode) {
                 AttachmentsPreviewActivity.REQUEST_CODE -> {
                     val sendData = AttachmentsPreviewActivity.getOutput(data)
-                    roomDetailViewModel.handle(RoomDetailAction.SendMedia(sendData))
+                    val keepOriginalSize = AttachmentsPreviewActivity.getKeepOriginalSize(data)
+                    roomDetailViewModel.handle(RoomDetailAction.SendMedia(sendData, keepOriginalSize))
                 }
                 REACTION_SELECT_REQUEST_CODE            -> {
                     val (eventId, reaction) = EmojiReactionPickerActivity.getOutput(data) ?: return
@@ -1351,11 +1354,11 @@ class RoomDetailFragment @Inject constructor(
         val previewable = attachments.filterPreviewables()
         val nonPreviewable = attachments.filterNonPreviewables()
         if (nonPreviewable.isNotEmpty()) {
-            // Send the non previewable event right now (?)
-            roomDetailViewModel.handle(RoomDetailAction.SendMedia(nonPreviewable))
+            // Send the non previewable attachment right now (?)
+            roomDetailViewModel.handle(RoomDetailAction.SendMedia(nonPreviewable, false))
         }
         if (previewable.isNotEmpty()) {
-            val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(roomDetailArgs.roomId, previewable))
+            val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(previewable))
             startActivityForResult(intent, AttachmentsPreviewActivity.REQUEST_CODE)
         }
     }

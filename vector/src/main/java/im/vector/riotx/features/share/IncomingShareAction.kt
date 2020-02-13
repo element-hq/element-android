@@ -19,9 +19,10 @@ package im.vector.riotx.features.share
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class IncomingShareAction: VectorViewModelAction {
+sealed class IncomingShareAction : VectorViewModelAction {
     data class SelectRoom(val roomSummary: RoomSummary, val enableMultiSelect: Boolean) : IncomingShareAction()
-    object ShareToSelectedRooms: IncomingShareAction()
+    object ShareToSelectedRooms : IncomingShareAction()
+    data class ShareMedia(val keepOriginalSize: Boolean) : IncomingShareAction()
     data class FilterWith(val filter: String) : IncomingShareAction()
-    data class UpdateSharedData(val sharedData: SharedData): IncomingShareAction()
+    data class UpdateSharedData(val sharedData: SharedData) : IncomingShareAction()
 }

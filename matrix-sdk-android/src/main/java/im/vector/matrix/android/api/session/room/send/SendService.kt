@@ -51,16 +51,21 @@ interface SendService {
     /**
      * Method to send a media asynchronously.
      * @param attachment the media to send
+     * @param compressBeforeSending set to true to compress media before sending them
      * @return a [Cancelable]
      */
-    fun sendMedia(attachment: ContentAttachmentData): Cancelable
+    fun sendMedia(attachment: ContentAttachmentData,
+            // TODO Change to a Compression Level Enum
+                  compressBeforeSending: Boolean): Cancelable
 
     /**
      * Method to send a list of media asynchronously.
      * @param attachments the list of media to send
      * @return a [Cancelable]
      */
-    fun sendMedias(attachments: List<ContentAttachmentData>): Cancelable
+    fun sendMedias(attachments: List<ContentAttachmentData>,
+            // TODO Change to a Compression Level Enum
+                   compressBeforeSending: Boolean): Cancelable
 
     /**
      * Send a poll to the room.

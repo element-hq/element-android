@@ -21,7 +21,11 @@ import com.kbeanie.multipicker.api.callbacks.ContactPickerCallback
 import com.kbeanie.multipicker.api.callbacks.FilePickerCallback
 import com.kbeanie.multipicker.api.callbacks.ImagePickerCallback
 import com.kbeanie.multipicker.api.callbacks.VideoPickerCallback
-import com.kbeanie.multipicker.api.entity.*
+import com.kbeanie.multipicker.api.entity.ChosenAudio
+import com.kbeanie.multipicker.api.entity.ChosenContact
+import com.kbeanie.multipicker.api.entity.ChosenFile
+import com.kbeanie.multipicker.api.entity.ChosenImage
+import com.kbeanie.multipicker.api.entity.ChosenVideo
 
 /**
  * This class delegates the PickerManager callbacks to an [AttachmentsHelper.Callback]

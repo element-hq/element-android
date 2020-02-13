@@ -16,9 +16,11 @@
 
 package im.vector.riotx.features.share
 
+import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.core.platform.VectorViewEvents
 
 sealed class IncomingShareViewEvents : VectorViewEvents {
     data class ShareToRoom(val roomSummary: RoomSummary, val sharedData: SharedData, val showAlert: Boolean) : IncomingShareViewEvents()
+    data class EditMediaBeforeSending(val contentAttachmentData: List<ContentAttachmentData>) : IncomingShareViewEvents()
 }

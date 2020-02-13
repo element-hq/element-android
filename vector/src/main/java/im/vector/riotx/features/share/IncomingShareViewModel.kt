@@ -24,12 +24,14 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.features.home.room.list.BreadcrumbsRoomComparator
+import im.vector.riotx.features.attachments.filterNonPreviewables
+import im.vector.riotx.features.attachments.filterPreviewables
 import im.vector.riotx.features.home.room.list.ChronologicalRoomComparator
 import java.util.concurrent.TimeUnit
 
@@ -92,6 +94,7 @@ class IncomingShareViewModel @AssistedInject constructor(@Assisted initialState:
         when (action) {
             is IncomingShareAction.SelectRoom           -> handleSelectRoom(action)
             is IncomingShareAction.ShareToSelectedRooms -> handleShareToSelectedRooms()
+            is IncomingShareAction.ShareMedia           -> handleShareMediaToSelectedRooms(action)
             is IncomingShareAction.FilterWith           -> handleFilter(action)
             is IncomingShareAction.UpdateSharedData     -> handleUpdateSharedData(action)
         }.exhaustive
@@ -108,34 +111,70 @@ class IncomingShareViewModel @AssistedInject constructor(@Assisted initialState:
     private fun handleShareToSelectedRooms() = withState { state ->
         val sharedData = state.sharedData ?: return@withState
         if (state.selectedRoomIds.size == 1) {
+            // In this case the edition of the media will be handled by the RoomDetailFragment
             val selectedRoomId = state.selectedRoomIds.first()
             val selectedRoom = state.roomSummaries()?.find { it.roomId == selectedRoomId } ?: return@withState
             _viewEvents.post(IncomingShareViewEvents.ShareToRoom(selectedRoom, sharedData, showAlert = false))
         } else {
-            state.selectedRoomIds.forEach { roomId ->
-                val room = session.getRoom(roomId)
-                if (sharedData is SharedData.Text) {
-                    room?.sendTextMessage(sharedData.text)
-                } else if (sharedData is SharedData.Attachments) {
-                    room?.sendMedias(sharedData.attachmentData)
+            when (sharedData) {
+                is SharedData.Text        -> {
+                    state.selectedRoomIds.forEach { roomId ->
+                        val room = session.getRoom(roomId)
+                        room?.sendTextMessage(sharedData.text)
+                    }
+                }
+                is SharedData.Attachments -> {
+                    shareAttachments(sharedData.attachmentData, state.selectedRoomIds, proposeMediaEdition = true, compressMediaBeforeSending = false)
                 }
             }
         }
     }
 
-    private fun handleSelectRoom(action: IncomingShareAction.SelectRoom) = withState {
-        if (it.multiSelectionEnabled) {
-            val selectedRooms = it.selectedRoomIds
+    private fun shareAttachments(attachmentData: List<ContentAttachmentData>,
+                                 selectedRoomIds: Set<String>,
+                                 proposeMediaEdition: Boolean,
+                                 compressMediaBeforeSending: Boolean) {
+        if (!proposeMediaEdition) {
+            selectedRoomIds.forEach { roomId ->
+                val room = session.getRoom(roomId)
+                room?.sendMedias(attachmentData, compressMediaBeforeSending)
+            }
+        } else {
+            val previewable = attachmentData.filterPreviewables()
+            val nonPreviewable = attachmentData.filterNonPreviewables()
+            if (nonPreviewable.isNotEmpty()) {
+                // Send the non previewable attachment right now (?)
+                selectedRoomIds.forEach { roomId ->
+                    val room = session.getRoom(roomId)
+                    room?.sendMedias(nonPreviewable, compressMediaBeforeSending)
+                }
+            }
+            if (previewable.isNotEmpty()) {
+                // In case of multiple share of media, edit them first
+                _viewEvents.post(IncomingShareViewEvents.EditMediaBeforeSending(previewable))
+            }
+        }
+    }
+
+    private fun handleShareMediaToSelectedRooms(action: IncomingShareAction.ShareMedia) = withState { state ->
+        (state.sharedData as? SharedData.Attachments)?.let {
+            shareAttachments(it.attachmentData, state.selectedRoomIds, proposeMediaEdition = false, compressMediaBeforeSending = !action.keepOriginalSize)
+        }
+    }
+
+    private fun handleSelectRoom(action: IncomingShareAction.SelectRoom) = withState { state ->
+        if (state.isInMultiSelectionMode) {
+            val selectedRooms = state.selectedRoomIds
             val newSelectedRooms = if (selectedRooms.contains(action.roomSummary.roomId)) {
                 selectedRooms.minus(action.roomSummary.roomId)
             } else {
                 selectedRooms.plus(action.roomSummary.roomId)
             }
-            setState { copy(multiSelectionEnabled = newSelectedRooms.isNotEmpty(), selectedRoomIds = newSelectedRooms) }
+            setState { copy(isInMultiSelectionMode = newSelectedRooms.isNotEmpty(), selectedRoomIds = newSelectedRooms) }
         } else if (action.enableMultiSelect) {
-            setState { copy(multiSelectionEnabled = true, selectedRoomIds = setOf(action.roomSummary.roomId)) }
+            setState { copy(isInMultiSelectionMode = true, selectedRoomIds = setOf(action.roomSummary.roomId)) }
         } else {
-            val sharedData = it.sharedData ?: return@withState
+            val sharedData = state.sharedData ?: return@withState
             _viewEvents.post(IncomingShareViewEvents.ShareToRoom(action.roomSummary, sharedData, showAlert = true))
         }
     }

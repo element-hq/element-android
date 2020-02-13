@@ -30,10 +30,11 @@ import im.vector.riotx.features.themes.ActivityOtherThemes
 class AttachmentsPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     companion object {
+        const val REQUEST_CODE = 55
 
         private const val EXTRA_FRAGMENT_ARGS = "EXTRA_FRAGMENT_ARGS"
-        const val RESULT_NAME = "ATTACHMENTS_PREVIEW_RESULT"
-        const val REQUEST_CODE = 55
+        private const val ATTACHMENTS_PREVIEW_RESULT = "ATTACHMENTS_PREVIEW_RESULT"
+        private const val KEEP_ORIGINAL_IMAGES_SIZE = "KEEP_ORIGINAL_IMAGES_SIZE"
 
         fun newIntent(context: Context, args: AttachmentsPreviewArgs): Intent {
             return Intent(context, AttachmentsPreviewActivity::class.java).apply {
@@ -42,7 +43,11 @@ class AttachmentsPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
         }
 
         fun getOutput(intent: Intent): List<ContentAttachmentData> {
-            return intent.getParcelableArrayListExtra(RESULT_NAME)
+            return intent.getParcelableArrayListExtra(ATTACHMENTS_PREVIEW_RESULT)
+        }
+
+        fun getKeepOriginalSize(intent: Intent): Boolean {
+            return intent.getBooleanExtra(KEEP_ORIGINAL_IMAGES_SIZE, false)
         }
     }
 
@@ -52,10 +57,18 @@ class AttachmentsPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            val fragmentArgs: AttachmentsPreviewArgs = intent?.extras?.getParcelable(EXTRA_FRAGMENT_ARGS)
-                    ?: return
+            val fragmentArgs: AttachmentsPreviewArgs = intent?.extras?.getParcelable(EXTRA_FRAGMENT_ARGS) ?: return
             addFragment(R.id.simpleFragmentContainer, AttachmentsPreviewFragment::class.java, fragmentArgs)
         }
+    }
+
+    fun setResultAndFinish(data: List<ContentAttachmentData>, keepOriginalImageSize: Boolean) {
+        val resultIntent = Intent().apply {
+            putParcelableArrayListExtra(ATTACHMENTS_PREVIEW_RESULT, ArrayList(data))
+            putExtra(KEEP_ORIGINAL_IMAGES_SIZE, keepOriginalImageSize)
+        }
+        setResult(RESULT_OK, resultIntent)
+        finish()
     }
 
     override fun configure(toolbar: Toolbar) {

@@ -16,7 +16,11 @@
 
 package im.vector.riotx.features.attachments
 
-import com.kbeanie.multipicker.api.entity.*
+import com.kbeanie.multipicker.api.entity.ChosenAudio
+import com.kbeanie.multipicker.api.entity.ChosenContact
+import com.kbeanie.multipicker.api.entity.ChosenFile
+import com.kbeanie.multipicker.api.entity.ChosenImage
+import com.kbeanie.multipicker.api.entity.ChosenVideo
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import timber.log.Timber
 

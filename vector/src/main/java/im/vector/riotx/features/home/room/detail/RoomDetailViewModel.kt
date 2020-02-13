@@ -579,10 +579,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
         if (maxUploadFileSize == HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN) {
             // Unknown limitation
-            room.sendMedias(attachments)
+            room.sendMedias(attachments, action.compressBeforeSending)
         } else {
             when (val tooBigFile = attachments.find { it.size > maxUploadFileSize }) {
-                null -> room.sendMedias(attachments)
+                null -> room.sendMedias(attachments, action.compressBeforeSending)
                 else -> _viewEvents.post(RoomDetailViewEvents.FileTooBigError(
                         tooBigFile.name ?: tooBigFile.path,
                         tooBigFile.size,

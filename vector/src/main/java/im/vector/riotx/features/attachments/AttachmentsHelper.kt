@@ -20,11 +20,16 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.kbeanie.multipicker.api.Picker.*
+import com.kbeanie.multipicker.api.Picker.PICK_AUDIO
+import com.kbeanie.multipicker.api.Picker.PICK_CONTACT
+import com.kbeanie.multipicker.api.Picker.PICK_FILE
+import com.kbeanie.multipicker.api.Picker.PICK_IMAGE_CAMERA
+import com.kbeanie.multipicker.api.Picker.PICK_IMAGE_DEVICE
 import com.kbeanie.multipicker.core.PickerManager
 import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.riotx.core.platform.Restorable
+import im.vector.riotx.features.attachments.AttachmentsHelper.Callback
 import timber.log.Timber
 
 private const val CAPTURE_PATH_KEY = "CAPTURE_PATH_KEY"

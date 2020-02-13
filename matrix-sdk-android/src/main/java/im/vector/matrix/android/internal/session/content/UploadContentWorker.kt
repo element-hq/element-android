@@ -47,6 +47,7 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
             val event: Event,
             val attachment: ContentAttachmentData,
             val isRoomEncrypted: Boolean,
+            val compressBeforeSending: Boolean,
             override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
@@ -81,6 +82,8 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
                     ))
             )
         }
+
+        // TODO Use compressBeforeSending
 
         var uploadedThumbnailUrl: String? = null
         var uploadedThumbnailEncryptedFileInfo: EncryptedFileInfo? = null

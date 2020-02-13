@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.share
 
+import android.app.Activity
 import android.content.ClipDescription
 import android.content.Intent
 import android.os.Bundle
@@ -41,6 +42,8 @@ import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_PICK_ATTACHMENT
 import im.vector.riotx.core.utils.allGranted
 import im.vector.riotx.core.utils.checkPermissions
 import im.vector.riotx.features.attachments.AttachmentsHelper
+import im.vector.riotx.features.attachments.preview.AttachmentsPreviewActivity
+import im.vector.riotx.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.riotx.features.login.LoginActivity
 import kotlinx.android.synthetic.main.fragment_incoming_share.*
 import javax.inject.Inject
@@ -98,8 +101,28 @@ class IncomingShareFragment @Inject constructor(
         }
         incomingShareViewModel.observeViewEvents {
             when (it) {
-                is IncomingShareViewEvents.ShareToRoom -> handleShareToRoom(it)
+                is IncomingShareViewEvents.ShareToRoom            -> handleShareToRoom(it)
+                is IncomingShareViewEvents.EditMediaBeforeSending -> handleEditMediaBeforeSending(it)
             }.exhaustive
+        }
+    }
+
+    private fun handleEditMediaBeforeSending(event: IncomingShareViewEvents.EditMediaBeforeSending) {
+        val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(event.contentAttachmentData))
+        startActivityForResult(intent, AttachmentsPreviewActivity.REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val hasBeenHandled = attachmentsHelper.onActivityResult(requestCode, resultCode, data)
+        if (!hasBeenHandled && resultCode == Activity.RESULT_OK && data != null) {
+            when (requestCode) {
+                AttachmentsPreviewActivity.REQUEST_CODE -> {
+                    val sendData = AttachmentsPreviewActivity.getOutput(data)
+                    val keepOriginalSize = AttachmentsPreviewActivity.getKeepOriginalSize(data)
+                    incomingShareViewModel.handle(IncomingShareAction.UpdateSharedData(SharedData.Attachments(sendData)))
+                    incomingShareViewModel.handle(IncomingShareAction.ShareMedia(keepOriginalSize))
+                }
+            }
         }
     }
 
@@ -189,7 +212,7 @@ class IncomingShareFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(incomingShareViewModel) {
-        sendShareButton.isVisible = it.multiSelectionEnabled
+        sendShareButton.isVisible = it.isInMultiSelectionMode
         incomingShareController.setData(it)
     }
 

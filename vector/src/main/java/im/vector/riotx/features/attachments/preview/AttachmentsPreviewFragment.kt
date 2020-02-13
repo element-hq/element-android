@@ -54,7 +54,6 @@ import javax.inject.Inject
 
 @Parcelize
 data class AttachmentsPreviewArgs(
-        val roomId: String,
         val attachments: List<ContentAttachmentData>
 ) : Parcelable
 
@@ -133,11 +132,10 @@ class AttachmentsPreviewFragment @Inject constructor(
     }
 
     private fun setResultAndFinish() = withState(viewModel) {
-        val resultIntent = Intent().apply {
-            putParcelableArrayListExtra(AttachmentsPreviewActivity.RESULT_NAME, ArrayList(it.attachments))
-        }
-        requireActivity().setResult(RESULT_OK, resultIntent)
-        requireActivity().finish()
+        (requireActivity() as? AttachmentsPreviewActivity)?.setResultAndFinish(
+                it.attachments,
+                attachmentPreviewerSendImageOriginalSize.isChecked
+        )
     }
 
     private fun applyInsets() {

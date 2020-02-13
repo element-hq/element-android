@@ -111,9 +111,9 @@ internal class DefaultSendService @AssistedInject constructor(
         }
     }
 
-    override fun sendMedias(attachments: List<ContentAttachmentData>): Cancelable {
+    override fun sendMedias(attachments: List<ContentAttachmentData>, compressBeforeSending: Boolean): Cancelable {
         return attachments.mapTo(CancelableBag()) {
-            sendMedia(it)
+            sendMedia(it, compressBeforeSending)
         }
     }
 
@@ -201,18 +201,18 @@ internal class DefaultSendService @AssistedInject constructor(
         }
     }
 
-    override fun sendMedia(attachment: ContentAttachmentData): Cancelable {
+    override fun sendMedia(attachment: ContentAttachmentData, compressBeforeSending: Boolean): Cancelable {
         // Create an event with the media file path
         val event = localEchoEventFactory.createMediaEvent(roomId, attachment).also {
             createLocalEcho(it)
         }
-        return internalSendMedia(event, attachment)
+        return internalSendMedia(event, attachment, compressBeforeSending)
     }
 
-    private fun internalSendMedia(localEcho: Event, attachment: ContentAttachmentData): Cancelable {
+    private fun internalSendMedia(localEcho: Event, attachment: ContentAttachmentData, compressBeforeSending: Boolean): Cancelable {
         val isRoomEncrypted = cryptoService.isRoomEncrypted(roomId)
 
-        val uploadWork = createUploadMediaWork(localEcho, attachment, isRoomEncrypted, startChain = true)
+        val uploadWork = createUploadMediaWork(localEcho, attachment, isRoomEncrypted, compressBeforeSending, startChain = true)
         val sendWork = createSendEventWork(localEcho, false)
 
         if (isRoomEncrypted) {
@@ -280,8 +280,9 @@ internal class DefaultSendService @AssistedInject constructor(
     private fun createUploadMediaWork(event: Event,
                                       attachment: ContentAttachmentData,
                                       isRoomEncrypted: Boolean,
+                                      compressBeforeSending: Boolean,
                                       startChain: Boolean): OneTimeWorkRequest {
-        val uploadMediaWorkerParams = UploadContentWorker.Params(sessionId, roomId, event, attachment, isRoomEncrypted)
+        val uploadMediaWorkerParams = UploadContentWorker.Params(sessionId, roomId, event, attachment, isRoomEncrypted, compressBeforeSending)
         val uploadWorkData = WorkerParamsFactory.toData(uploadMediaWorkerParams)
 
         return workManagerProvider.matrixOneTimeWorkRequestBuilder<UploadContentWorker>()
