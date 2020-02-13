@@ -33,13 +33,12 @@ interface PushersService {
      * @param pushkey           This is a unique identifier for this pusher. The value you should use for
      *                          this is the routing or destination address information for the notification,
      *                          for example, the APNS token for APNS or the Registration ID for GCM. If your
-     *                          notification client has no such concept, use any unique identifier. Max length, 512 bytes.
+     *                          notification client has no such concept, use any unique identifier. Max length, 512 chars.
      *                          If the kind is "email", this is the email address to send notifications to.
      * @param appId             the application id
      *                          This is a reverse-DNS style identifier for the application. It is recommended
      *                          that this end with the platform, such that different platform versions get
      *                          different app identifiers. Max length, 64 chars.
-     *                          If the kind is "email", this is "m.email".
      * @param profileTag        This string determines which set of device specific rules this pusher executes.
      * @param lang              The preferred language for receiving notifications (e.g. "en" or "en-US").
      * @param appDisplayName    A human readable string that will allow the user to identify what application owns this pusher.
@@ -52,6 +51,7 @@ interface PushersService {
      *                          Ref: https://matrix.org/docs/spec/push_gateway/r0.1.1#homeserver-behaviour
      *
      * @return A work request uuid. Can be used to listen to the status
+     * @throws [InvalidParameterException] if a parameter is not correct
      * (LiveData<WorkInfo> status = workManager.getWorkInfoByIdLiveData(<UUID>))
      */
     fun addHttpPusher(pushkey: String,

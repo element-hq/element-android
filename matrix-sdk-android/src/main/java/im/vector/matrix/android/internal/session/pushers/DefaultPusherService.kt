@@ -29,6 +29,7 @@ import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
+import java.security.InvalidParameterException
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -58,6 +59,11 @@ internal class DefaultPusherService @Inject constructor(
                                append: Boolean,
                                withEventIdOnly: Boolean)
             : UUID {
+        // Do some parameter checks. It's ok to throw Exception, to inform developer of the problem
+        if (pushkey.length > 512) throw InvalidParameterException("pushkey should not exceed 512 chars")
+        if (appId.length > 64) throw InvalidParameterException("appId should not exceed 64 chars")
+        if ("/_matrix/push/v1/notify" !in url) throw InvalidParameterException("url should contain '/_matrix/push/v1/notify'")
+
         val pusher = JsonPusher(
                 pushKey = pushkey,
                 kind = "http",
