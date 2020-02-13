@@ -171,18 +171,23 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         return when (timelineEvent.root.getClearType()) {
             EventType.MESSAGE,
             EventType.STICKER     -> {
-                val messageContent: MessageContent? = timelineEvent.getLastMessageContent()
-                if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
-                    val html = messageContent.formattedBody
-                            ?.takeIf { it.isNotBlank() }
-                            ?.let { htmlCompressor.compress(it) }
-                            ?: messageContent.body
+                when (timelineEvent.root.isRedacted()) {
+                    true  -> getRedactionReason(timelineEvent)
+                    false -> {
+                        val messageContent: MessageContent? = timelineEvent.getLastMessageContent()
+                        if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
+                            val html = messageContent.formattedBody
+                                    ?.takeIf { it.isNotBlank() }
+                                    ?.let { htmlCompressor.compress(it) }
+                                    ?: messageContent.body
 
-                    eventHtmlRenderer.get().render(html)
-                } else if (messageContent is MessageVerificationRequestContent) {
-                    stringProvider.getString(R.string.verification_request)
-                } else {
-                    messageContent?.body
+                            eventHtmlRenderer.get().render(html)
+                        } else if (messageContent is MessageVerificationRequestContent) {
+                            stringProvider.getString(R.string.verification_request)
+                        } else {
+                            messageContent?.body
+                        }
+                    }
                 }
             }
             EventType.STATE_ROOM_NAME,
@@ -199,6 +204,25 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             else                  -> null
         } ?: ""
     }
+
+    private fun getRedactionReason(timelineEvent: TimelineEvent) =
+            (timelineEvent
+                    .root
+                    .unsignedData
+                    ?.redactedEvent
+                    ?.content
+                    ?.get("reason") as? String)
+                    ?.takeIf { it.isNotBlank() }
+                    ?.let { reason ->
+                        stringProvider.getString(
+                                (R.string.event_redacted_by_user_reason_with_reason
+                                        .takeIf { timelineEvent.root.senderId == session.myUserId }
+                                        ?: R.string.event_redacted_by_admin_reason_with_reason), reason
+                        )
+                    } ?: stringProvider.getString(
+                    R.string.event_redacted_by_user_reason
+                            .takeIf { timelineEvent.root.senderId == session.myUserId }
+                            ?: R.string.event_redacted_by_admin_reason_with_reason)
 
     private fun actionsForEvent(timelineEvent: TimelineEvent): List<EventSharedAction> {
         val messageContent: MessageContent? = timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
