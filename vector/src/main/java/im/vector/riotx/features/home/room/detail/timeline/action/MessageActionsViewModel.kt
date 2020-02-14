@@ -171,7 +171,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         if (timelineEvent.root.isRedacted()) {
             return getRedactionReason(timelineEvent)
         }
-        
+
         return when (timelineEvent.root.getClearType()) {
             EventType.MESSAGE,
             EventType.STICKER     -> {

@@ -5,7 +5,7 @@ Features ✨:
  - Polls and Bot Buttons (MSC 2192 matrix-org/matrix-doc#2192)
 
 Improvements 🙌:
- - Show confirmation dialog before deleting a message (#967)
+ - Show confirmation dialog before deleting a message (#967, #1003)
  - Open room member profile from reactions list and read receipts list (#875)
 
 Bugfix 🐛:
