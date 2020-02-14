@@ -35,6 +35,7 @@ import im.vector.matrix.android.common.TestMatrixCallback
 import im.vector.matrix.android.internal.crypto.SSSS_ALGORITHM_CURVE25519_AES_SHA2
 import im.vector.matrix.android.internal.crypto.crosssigning.toBase64NoPadding
 import im.vector.matrix.android.internal.crypto.secrets.DefaultSharedSecretStorageService
+import im.vector.matrix.android.internal.crypto.tools.withOlmDecryption
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -100,10 +101,10 @@ class QuadSTests : InstrumentedTest {
         assertNotNull("Pubkey should be defined", parsed.publicKey)
 
         val privateKeySpec = Curve25519AesSha2KeySpec.fromRecoveryKey(ssssKeyCreationInfo.recoveryKey)
-        DefaultSharedSecretStorageService.withOlmDecryption { olmPkDecryption ->
-            val pubKey = olmPkDecryption.setPrivateKey(privateKeySpec!!.privateKey)
-            assertEquals("Unexpected Public Key", pubKey, parsed.publicKey)
+        val pubKey = withOlmDecryption { olmPkDecryption ->
+            olmPkDecryption.setPrivateKey(privateKeySpec!!.privateKey)
         }
+        assertEquals("Unexpected Public Key", pubKey, parsed.publicKey)
 
         // Set as default key
         quadS.setDefaultKey(TEST_KEY_ID, object : MatrixCallback<Unit> {})
