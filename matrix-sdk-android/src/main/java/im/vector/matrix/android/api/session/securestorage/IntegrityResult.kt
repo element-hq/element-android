@@ -14,16 +14,9 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.settings.crosssigning
+package im.vector.matrix.android.api.session.securestorage
 
-import im.vector.riotx.core.platform.VectorViewEvents
-
-/**
- * Transient events for cross signing settings screen
- */
-sealed class CrossSigningSettingsViewEvents : VectorViewEvents {
-    data class Failure(val throwable: Throwable) : CrossSigningSettingsViewEvents()
-
-    object RequestPassword : CrossSigningSettingsViewEvents()
-    object VerifySession : CrossSigningSettingsViewEvents()
+sealed class IntegrityResult {
+    data class Success(val passphraseBased: Boolean) : IntegrityResult()
+    data class Error(val cause: SharedSecretStorageError) : IntegrityResult()
 }

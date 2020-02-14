@@ -25,6 +25,8 @@
 
     <string name="new_signin">New Sign In</string>
 
+
+    <string name="enter_secret_storage_invalid">Cannot find secrets in storage</string>
     <string name="enter_secret_storage_passphrase">Enter secret storage passphrase</string>
     <string name="enter_secret_storage_passphrase_warning">Warning:</string>
     <string name="enter_secret_storage_passphrase_warning_text">You should only access secret storage from a trusted device</string>

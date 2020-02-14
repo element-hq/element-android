@@ -30,7 +30,8 @@ sealed class SharedSecureStorageAction : VectorViewModelAction {
 sealed class SharedSecureStorageViewEvent : VectorViewEvents {
 
     object Dismiss : SharedSecureStorageViewEvent()
-    data class Error(val message: String) : SharedSecureStorageViewEvent()
+    data class FinishSuccess(val cypherResult: String) : SharedSecureStorageViewEvent()
+    data class Error(val message: String, val dismiss: Boolean = false) : SharedSecureStorageViewEvent()
     data class InlineError(val message: String) : SharedSecureStorageViewEvent()
     object ShowModalLoading : SharedSecureStorageViewEvent()
     object HideModalLoading : SharedSecureStorageViewEvent()

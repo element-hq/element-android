@@ -31,6 +31,7 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
         val latestEvent = roomSummaryEntity.latestPreviewableEvent?.let {
             timelineEventMapper.map(it, buildReadReceipts = false)
         }
+
         return RoomSummary(
                 roomId = roomSummaryEntity.roomId,
                 displayName = roomSummaryEntity.displayName ?: "",

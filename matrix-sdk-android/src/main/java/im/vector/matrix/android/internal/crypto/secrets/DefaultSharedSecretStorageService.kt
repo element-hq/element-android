@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.session.accountdata.AccountDataService
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.securestorage.Curve25519AesSha2KeySpec
 import im.vector.matrix.android.api.session.securestorage.EncryptedSecretContent
+import im.vector.matrix.android.api.session.securestorage.IntegrityResult
 import im.vector.matrix.android.api.session.securestorage.KeyInfo
 import im.vector.matrix.android.api.session.securestorage.KeyInfoResult
 import im.vector.matrix.android.api.session.securestorage.KeySigner
@@ -326,5 +327,38 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         const val KEY_ID_BASE = "m.secret_storage.key"
         const val ENCRYPTED = "encrypted"
         const val DEFAULT_KEY_ID = "m.secret_storage.default_key"
+    }
+
+    override fun checkShouldBeAbleToAccessSecrets(secretNames: List<String>, keyId: String?): IntegrityResult {
+
+        if (secretNames.isEmpty()) {
+            return IntegrityResult.Error(SharedSecretStorageError.UnknownSecret("none"))
+        }
+
+        val keyInfoResult = if (keyId == null) {
+            getDefaultKey()
+        } else {
+            getKey(keyId)
+        }
+
+        val keyInfo = (keyInfoResult as? KeyInfoResult.Success)?.keyInfo
+                ?: return IntegrityResult.Error(SharedSecretStorageError.UnknownKey(keyId ?: ""))
+
+        if (keyInfo.content.algorithm != SSSS_ALGORITHM_CURVE25519_AES_SHA2) {
+            // Unsupported algorithm
+            return IntegrityResult.Error(
+                    SharedSecretStorageError.UnsupportedAlgorithm(keyInfo.content.algorithm ?: "")
+            )
+        }
+
+        secretNames.forEach { secretName ->
+            val secretEvent = accountDataService.getAccountDataEvent(secretName)
+                    ?: return IntegrityResult.Error(SharedSecretStorageError.UnknownSecret(secretName))
+            if ((secretEvent.content["encrypted"] as? Map<*, *>)?.get(keyInfo.id) == null) {
+                return IntegrityResult.Error(SharedSecretStorageError.SecretNotEncryptedWithKey(secretName, keyInfo.id))
+            }
+        }
+
+        return IntegrityResult.Success(keyInfo.content.passphrase != null)
     }
 }

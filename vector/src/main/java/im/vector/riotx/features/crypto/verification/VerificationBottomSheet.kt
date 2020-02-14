@@ -15,11 +15,14 @@
  */
 package im.vector.riotx.features.crypto.verification
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -30,6 +33,9 @@ import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
@@ -87,15 +93,47 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
         viewModel.observeViewEvents {
             when (it) {
-                is VerificationBottomSheetViewEvents.Dismiss -> dismiss()
+                is VerificationBottomSheetViewEvents.Dismiss           -> dismiss()
                 is VerificationBottomSheetViewEvents.AccessSecretStore -> {
-                    startActivity(SharedSecureStorageActivity.newIntent(requireContext(),null, listOf("m.cross_signing.user_signing")))
+                    startActivityForResult(SharedSecureStorageActivity.newIntent(
+                            requireContext(),
+                            null,// use default key
+                            listOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME),
+                            SharedSecureStorageActivity.RESULT_KEYSTORE_ALIAS
+                    ), SECRET_REQUEST_CODE)
+                }
+                is VerificationBottomSheetViewEvents.ModalError        -> {
+                    AlertDialog.Builder(requireContext())
+                            .setTitle(getString(R.string.dialog_title_error))
+                            .setMessage(it.errorMessage)
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.ok) { _, _ ->
+
+                            }
+                            .show()
+                    Unit
                 }
             }.exhaustive
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK && requestCode == SECRET_REQUEST_CODE) {
+            data?.getStringExtra(SharedSecureStorageActivity.EXTRA_DATA_RESULT)?.let {
+                viewModel.handle(VerificationAction.GotResultFromSsss(it, SharedSecureStorageActivity.RESULT_KEYSTORE_ALIAS))
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
     override fun invalidate() = withState(viewModel) { state ->
+
+        if (state.selfVerificationMode && state.verifiedFromPrivateKeys) {
+            showFragment(VerificationConclusionFragment::class, Bundle().apply {
+                putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null, state.isMe))
+            })
+            return@withState
+        }
         state.otherUserMxItem?.let { matrixItem ->
             if (state.isMe) {
                 if (state.sasTransactionState == VerificationTxState.Verified || state.qrTransactionState == VerificationTxState.Verified) {
@@ -235,6 +273,9 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     }
 
     companion object {
+
+        const val SECRET_REQUEST_CODE = 101
+
         fun withArgs(roomId: String?, otherUserId: String, transactionId: String? = null): VerificationBottomSheet {
             return VerificationBottomSheet().apply {
                 arguments = Bundle().apply {
@@ -248,7 +289,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
             }
         }
 
-        fun forSelfVerification(session: Session) : VerificationBottomSheet{
+        fun forSelfVerification(session: Session): VerificationBottomSheet {
             return VerificationBottomSheet().apply {
                 arguments = Bundle().apply {
                     putParcelable(MvRx.KEY_ARG, VerificationArgs(
