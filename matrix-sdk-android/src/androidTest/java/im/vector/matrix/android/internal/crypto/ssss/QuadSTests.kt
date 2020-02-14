@@ -25,11 +25,10 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.securestorage.Curve25519AesSha2KeySpec
 import im.vector.matrix.android.api.session.securestorage.EncryptedSecretContent
 import im.vector.matrix.android.api.session.securestorage.KeySigner
-import im.vector.matrix.android.api.session.securestorage.SsssKeyCreationInfo
 import im.vector.matrix.android.api.session.securestorage.SecretStorageKeyContent
+import im.vector.matrix.android.api.session.securestorage.SsssKeyCreationInfo
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.common.CommonTestHelper
-import im.vector.matrix.android.common.CryptoTestHelper
 import im.vector.matrix.android.common.SessionTestParams
 import im.vector.matrix.android.common.TestConstants
 import im.vector.matrix.android.common.TestMatrixCallback
@@ -50,11 +49,16 @@ import org.junit.runners.MethodSorters
 import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(MethodSorters.JVM)
 class QuadSTests : InstrumentedTest {
 
     private val mTestHelper = CommonTestHelper(context())
-    private val mCryptoTestHelper = CryptoTestHelper(mTestHelper)
+
+    private val emptyKeySigner = object : KeySigner {
+        override fun sign(canonicalJson: String): Map<String, Map<String, String>>? {
+            return null
+        }
+    }
 
     @Test
     fun test_Generate4SKey() {
@@ -63,12 +67,6 @@ class QuadSTests : InstrumentedTest {
         val aliceLatch = CountDownLatch(1)
 
         val quadS = aliceSession.sharedSecretStorageService
-
-        val emptyKeySigner = object : KeySigner {
-            override fun sign(canonicalJson: String): Map<String, Map<String, String>>? {
-                return null
-            }
-        }
 
         var recoveryKey: String? = null
 
@@ -206,12 +204,6 @@ class QuadSTests : InstrumentedTest {
         val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
 
         val quadS = aliceSession.sharedSecretStorageService
-
-        val emptyKeySigner = object : KeySigner {
-            override fun sign(canonicalJson: String): Map<String, Map<String, String>>? {
-                return null
-            }
-        }
 
         val TEST_KEY_ID = "my.test.Key"
 
@@ -354,12 +346,6 @@ class QuadSTests : InstrumentedTest {
     private fun generatedSecret(session: Session, keyId: String, asDefault: Boolean = true): SsssKeyCreationInfo {
         val quadS = session.sharedSecretStorageService
 
-        val emptyKeySigner = object : KeySigner {
-            override fun sign(canonicalJson: String): Map<String, Map<String, String>>? {
-                return null
-            }
-        }
-
         var creationInfo: SsssKeyCreationInfo? = null
 
         val generateLatch = CountDownLatch(1)
@@ -394,12 +380,6 @@ class QuadSTests : InstrumentedTest {
 
     private fun generatedSecretFromPassphrase(session: Session, passphrase: String, keyId: String, asDefault: Boolean = true): SsssKeyCreationInfo {
         val quadS = session.sharedSecretStorageService
-
-        val emptyKeySigner = object : KeySigner {
-            override fun sign(canonicalJson: String): Map<String, Map<String, String>>? {
-                return null
-            }
-        }
 
         var creationInfo: SsssKeyCreationInfo? = null
 
