@@ -24,6 +24,7 @@ import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -56,6 +57,12 @@ class AccountDataFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         recyclerView.configureWith(epoxyController, showDivider = true)
         epoxyController.interactionListener = this
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        recyclerView.cleanup()
+        epoxyController.interactionListener = null
     }
 
     override fun didTap(data: UserAccountData) {

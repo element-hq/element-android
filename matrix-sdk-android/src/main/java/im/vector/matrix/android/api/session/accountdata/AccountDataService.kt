@@ -24,13 +24,13 @@ import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAcco
 
 interface AccountDataService {
 
-    fun getAccountData(type: String): UserAccountDataEvent?
+    fun getAccountDataEvent(type: String): UserAccountDataEvent?
 
-    fun getLiveAccountData(type: String): LiveData<Optional<UserAccountDataEvent>>
+    fun getLiveAccountDataEvent(type: String): LiveData<Optional<UserAccountDataEvent>>
 
-    fun getAccountData(filterType: List<String>): List<UserAccountDataEvent>
+    fun getAccountDataEvents(filterType: List<String>): List<UserAccountDataEvent>
 
-    fun getLiveAccountData(filterType: List<String>): LiveData<List<UserAccountDataEvent>>
+    fun getLiveAccountDataEvents(filterType: List<String>): LiveData<List<UserAccountDataEvent>>
 
     fun updateAccountData(type: String, content: Content, callback: MatrixCallback<Unit>? = null)
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,26 +31,38 @@ import im.vector.matrix.android.api.listeners.ProgressListener
 interface SharedSecretStorageService {
 
     /**
-     * Add a key for encrypting secrets.
+     * Generates a SSSS key for encrypting secrets.
+     * Use the SsssKeyCreationInfo object returned by the callback to get more information about the created key (recovery key ...)
      *
-     * @param algorithm the algorithm used by the key.
-     * @param opts the options for the algorithm.  The properties used
-     *     depend on the algorithm given.
      * @param keyId the ID of the key
+     * @param keyName a human readable name
+     * @param keySigner Used to add a signature to the key (client should check key signature before storing secret)
      *
-     * @return {string} the ID of the key
+     * @param callback Get key creation info
      */
     fun generateKey(keyId: String,
                     keyName: String,
                     keySigner: KeySigner,
-                    callback: MatrixCallback<SSSSKeyCreationInfo>)
+                    callback: MatrixCallback<SsssKeyCreationInfo>)
 
+    /**
+     * Generates a SSSS key using the given passphrase.
+     * Use the SsssKeyCreationInfo object returned by the callback to get more information about the created key (recovery key, salt, iteration ...)
+     *
+     * @param keyId the ID of the key
+     * @param keyName human readable key name
+     * @param passphrase The passphrase used to generate the key
+     * @param keySigner Used to add a signature to the key (client should check key signature before retrieving secret)
+     * @param progressListener The derivation of the passphrase may take long depending on the device, use this to report progress
+     *
+     * @param callback Get key creation info
+     */
     fun generateKeyWithPassphrase(keyId: String,
                                   keyName: String,
                                   passphrase: String,
                                   keySigner: KeySigner,
                                   progressListener: ProgressListener?,
-                                  callback: MatrixCallback<SSSSKeyCreationInfo>)
+                                  callback: MatrixCallback<SsssKeyCreationInfo>)
 
     fun getKey(keyId: String): KeyInfoResult
 
@@ -92,11 +104,9 @@ interface SharedSecretStorageService {
      *
      * @param name The name of the secret
      * @param keyId The id of the key that should be used to decrypt (null for default key)
-     * @param privateKey the passphrase/secret
+     * @param secretKey the secret key to use (@see #Curve25519AesSha2KeySpec)
      *
-     * @return The decrypted value
      */
     @Throws
-
     fun getSecret(name: String, keyId: String?, secretKey: SSSSKeySpec, callback: MatrixCallback<String>)
 }

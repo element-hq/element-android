@@ -124,9 +124,9 @@ class RxSession(private val session: Session) {
     }
 
     fun liveAccountData(filter: List<String>): Observable<List<UserAccountDataEvent>> {
-        return session.getLiveAccountData(filter).asObservable()
+        return session.getLiveAccountDataEvents(filter).asObservable()
                 .startWithCallable {
-                    session.getAccountData(filter)
+                    session.getAccountDataEvents(filter)
                 }
     }
 }

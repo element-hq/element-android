@@ -25,12 +25,13 @@ import im.vector.matrix.android.api.session.securestorage.EncryptedSecretContent
 import im.vector.matrix.android.api.session.securestorage.KeyInfo
 import im.vector.matrix.android.api.session.securestorage.KeyInfoResult
 import im.vector.matrix.android.api.session.securestorage.KeySigner
-import im.vector.matrix.android.api.session.securestorage.SSSSKeyCreationInfo
+import im.vector.matrix.android.api.session.securestorage.SsssKeyCreationInfo
 import im.vector.matrix.android.api.session.securestorage.SSSSKeySpec
 import im.vector.matrix.android.api.session.securestorage.SSSSPassphrase
 import im.vector.matrix.android.api.session.securestorage.SecretStorageKeyContent
 import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageError
 import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageService
+import im.vector.matrix.android.internal.crypto.SSSS_ALGORITHM_CURVE25519_AES_SHA2
 import im.vector.matrix.android.internal.crypto.keysbackup.generatePrivateKeyWithPassword
 import im.vector.matrix.android.internal.crypto.keysbackup.util.computeRecoveryKey
 import im.vector.matrix.android.internal.extensions.foldToCallback
@@ -42,7 +43,7 @@ import org.matrix.olm.OlmPkEncryption
 import org.matrix.olm.OlmPkMessage
 import javax.inject.Inject
 
-internal class DefaultSharedSecretStorage @Inject constructor(
+internal class DefaultSharedSecretStorageService @Inject constructor(
         private val accountDataService: AccountDataService,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope
@@ -51,7 +52,7 @@ internal class DefaultSharedSecretStorage @Inject constructor(
     override fun generateKey(keyId: String,
                              keyName: String,
                              keySigner: KeySigner,
-                             callback: MatrixCallback<SSSSKeyCreationInfo>) {
+                             callback: MatrixCallback<SsssKeyCreationInfo>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             val pkDecryption = OlmPkDecryption()
             val pubKey: String
@@ -69,7 +70,7 @@ internal class DefaultSharedSecretStorage @Inject constructor(
 
             val storageKeyContent = SecretStorageKeyContent(
                     name = keyName,
-                    algorithm = ALGORITHM_CURVE25519_AES_SHA2,
+                    algorithm = SSSS_ALGORITHM_CURVE25519_AES_SHA2,
                     passphrase = null,
                     publicKey = pubKey
             )
@@ -89,7 +90,7 @@ internal class DefaultSharedSecretStorage @Inject constructor(
                         }
 
                         override fun onSuccess(data: Unit) {
-                            callback.onSuccess(SSSSKeyCreationInfo(
+                            callback.onSuccess(SsssKeyCreationInfo(
                                     keyId = keyId,
                                     content = storageKeyContent,
                                     recoveryKey = computeRecoveryKey(privateKey)
@@ -105,7 +106,7 @@ internal class DefaultSharedSecretStorage @Inject constructor(
                                            passphrase: String,
                                            keySigner: KeySigner,
                                            progressListener: ProgressListener?,
-                                           callback: MatrixCallback<SSSSKeyCreationInfo>) {
+                                           callback: MatrixCallback<SsssKeyCreationInfo>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             val privatePart = generatePrivateKeyWithPassword(passphrase, progressListener)
 
@@ -122,7 +123,7 @@ internal class DefaultSharedSecretStorage @Inject constructor(
             }
 
             val storageKeyContent = SecretStorageKeyContent(
-                    algorithm = ALGORITHM_CURVE25519_AES_SHA2,
+                    algorithm = SSSS_ALGORITHM_CURVE25519_AES_SHA2,
                     passphrase = SSSSPassphrase(algorithm = "m.pbkdf2", iterations = privatePart.iterations, salt = privatePart.salt),
                     publicKey = pubKey
             )
@@ -142,7 +143,7 @@ internal class DefaultSharedSecretStorage @Inject constructor(
                         }
 
                         override fun onSuccess(data: Unit) {
-                            callback.onSuccess(SSSSKeyCreationInfo(
+                            callback.onSuccess(SsssKeyCreationInfo(
                                     keyId = keyId,
                                     content = storageKeyContent,
                                     recoveryKey = computeRecoveryKey(privatePart.privateKey)
@@ -154,11 +155,11 @@ internal class DefaultSharedSecretStorage @Inject constructor(
     }
 
     override fun hasKey(keyId: String): Boolean {
-        return accountDataService.getAccountData("$KEY_ID_BASE.$keyId") != null
+        return accountDataService.getAccountDataEvent("$KEY_ID_BASE.$keyId") != null
     }
 
     override fun getKey(keyId: String): KeyInfoResult {
-        val accountData = accountDataService.getAccountData("$KEY_ID_BASE.$keyId")
+        val accountData = accountDataService.getAccountDataEvent("$KEY_ID_BASE.$keyId")
                 ?: return KeyInfoResult.Error(SharedSecretStorageError.UnknownKey(keyId))
         return SecretStorageKeyContent.fromJson(accountData.content)?.let {
             KeyInfoResult.Success(
@@ -180,7 +181,7 @@ internal class DefaultSharedSecretStorage @Inject constructor(
     }
 
     override fun getDefaultKey(): KeyInfoResult {
-        val accountData = accountDataService.getAccountData(DEFAULT_KEY_ID)
+        val accountData = accountDataService.getAccountDataEvent(DEFAULT_KEY_ID)
                 ?: return KeyInfoResult.Error(SharedSecretStorageError.UnknownKey(DEFAULT_KEY_ID))
         val keyId = accountData.content["key"] as? String
                 ?: return KeyInfoResult.Error(SharedSecretStorageError.UnknownKey(DEFAULT_KEY_ID))
@@ -196,7 +197,7 @@ internal class DefaultSharedSecretStorage @Inject constructor(
                     val key = getDefaultKey()
                     when (key) {
                         is KeyInfoResult.Success -> {
-                            if (key.keyInfo.content.algorithm == ALGORITHM_CURVE25519_AES_SHA2) {
+                            if (key.keyInfo.content.algorithm == SSSS_ALGORITHM_CURVE25519_AES_SHA2) {
                                 withOlmEncryption { olmEncrypt ->
                                     olmEncrypt.setRecipientKey(key.keyInfo.content.publicKey)
                                     val encryptedResult = olmEncrypt.encrypt(secretBase64)
@@ -224,7 +225,7 @@ internal class DefaultSharedSecretStorage @Inject constructor(
                         val key = getKey(keyId)
                         when (key) {
                             is KeyInfoResult.Success -> {
-                                if (key.keyInfo.content.algorithm == ALGORITHM_CURVE25519_AES_SHA2) {
+                                if (key.keyInfo.content.algorithm == SSSS_ALGORITHM_CURVE25519_AES_SHA2) {
                                     withOlmEncryption { olmEncrypt ->
                                         olmEncrypt.setRecipientKey(key.keyInfo.content.publicKey)
                                         val encryptedResult = olmEncrypt.encrypt(secretBase64)
@@ -264,7 +265,7 @@ internal class DefaultSharedSecretStorage @Inject constructor(
     }
 
     override fun getAlgorithmsForSecret(name: String): List<KeyInfoResult> {
-        val accountData = accountDataService.getAccountData(name)
+        val accountData = accountDataService.getAccountDataEvent(name)
                 ?: return listOf(KeyInfoResult.Error(SharedSecretStorageError.UnknownSecret(name)))
         val encryptedContent = accountData.content[ENCRYPTED] as? Map<*, *>
                 ?: return listOf(KeyInfoResult.Error(SharedSecretStorageError.SecretNotEncrypted(name)))
@@ -279,7 +280,7 @@ internal class DefaultSharedSecretStorage @Inject constructor(
     }
 
     override fun getSecret(name: String, keyId: String?, secretKey: SSSSKeySpec, callback: MatrixCallback<String>) {
-        val accountData = accountDataService.getAccountData(name) ?: return Unit.also {
+        val accountData = accountDataService.getAccountDataEvent(name) ?: return Unit.also {
             callback.onFailure(SharedSecretStorageError.UnknownSecret(name))
         }
         val encryptedContent = accountData.content[ENCRYPTED] as? Map<*, *> ?: return Unit.also {
@@ -299,7 +300,7 @@ internal class DefaultSharedSecretStorage @Inject constructor(
                 }
 
         val algorithm = key.keyInfo.content
-        if (ALGORITHM_CURVE25519_AES_SHA2 == algorithm.algorithm) {
+        if (SSSS_ALGORITHM_CURVE25519_AES_SHA2 == algorithm.algorithm) {
             val keySpec = secretKey as? Curve25519AesSha2KeySpec ?: return Unit.also {
                 callback.onFailure(SharedSecretStorageError.BadKeyFormat)
             }
@@ -331,8 +332,6 @@ internal class DefaultSharedSecretStorage @Inject constructor(
         const val KEY_ID_BASE = "m.secret_storage.key"
         const val ENCRYPTED = "encrypted"
         const val DEFAULT_KEY_ID = "m.secret_storage.default_key"
-
-        const val ALGORITHM_CURVE25519_AES_SHA2 = "m.secret_storage.v1.curve25519-aes-sha2"
 
         fun withOlmEncryption(block: (OlmPkEncryption) -> Unit) {
             val olmPkEncryption = OlmPkEncryption()

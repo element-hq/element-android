@@ -25,7 +25,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.securestorage.Curve25519AesSha2KeySpec
 import im.vector.matrix.android.api.session.securestorage.EncryptedSecretContent
 import im.vector.matrix.android.api.session.securestorage.KeySigner
-import im.vector.matrix.android.api.session.securestorage.SSSSKeyCreationInfo
+import im.vector.matrix.android.api.session.securestorage.SsssKeyCreationInfo
 import im.vector.matrix.android.api.session.securestorage.SecretStorageKeyContent
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.common.CommonTestHelper
@@ -33,8 +33,9 @@ import im.vector.matrix.android.common.CryptoTestHelper
 import im.vector.matrix.android.common.SessionTestParams
 import im.vector.matrix.android.common.TestConstants
 import im.vector.matrix.android.common.TestMatrixCallback
+import im.vector.matrix.android.internal.crypto.SSSS_ALGORITHM_CURVE25519_AES_SHA2
 import im.vector.matrix.android.internal.crypto.crosssigning.toBase64NoPadding
-import im.vector.matrix.android.internal.crypto.secrets.DefaultSharedSecretStorage
+import im.vector.matrix.android.internal.crypto.secrets.DefaultSharedSecretStorageService
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -74,8 +75,8 @@ class QuadSTests : InstrumentedTest {
         val TEST_KEY_ID = "my.test.Key"
 
         quadS.generateKey(TEST_KEY_ID, "Test Key", emptyKeySigner,
-                object : MatrixCallback<SSSSKeyCreationInfo> {
-                    override fun onSuccess(data: SSSSKeyCreationInfo) {
+                object : MatrixCallback<SsssKeyCreationInfo> {
+                    override fun onSuccess(data: SsssKeyCreationInfo) {
                         recoveryKey = data.recoveryKey
                         aliceLatch.countDown()
                     }
@@ -93,7 +94,7 @@ class QuadSTests : InstrumentedTest {
         var accountData: UserAccountDataEvent? = null
 
         val liveAccountData = runBlocking(Dispatchers.Main) {
-            aliceSession.getLiveAccountData("m.secret_storage.key.$TEST_KEY_ID")
+            aliceSession.getLiveAccountDataEvent("m.secret_storage.key.$TEST_KEY_ID")
         }
         val accountDataObserver = Observer<Optional<UserAccountDataEvent>?> { t ->
             if (t?.getOrNull()?.type == "m.secret_storage.key.$TEST_KEY_ID") {
@@ -108,13 +109,13 @@ class QuadSTests : InstrumentedTest {
         Assert.assertNotNull("Key should be stored in account data", accountData)
         val parsed = SecretStorageKeyContent.fromJson(accountData!!.content)
         Assert.assertNotNull("Key Content cannot be parsed", parsed)
-        Assert.assertEquals("Unexpected Algorithm", DefaultSharedSecretStorage.ALGORITHM_CURVE25519_AES_SHA2, parsed!!.algorithm)
+        Assert.assertEquals("Unexpected Algorithm", SSSS_ALGORITHM_CURVE25519_AES_SHA2, parsed!!.algorithm)
         Assert.assertEquals("Unexpected key name", "Test Key", parsed.name)
         Assert.assertNull("Key was not generated from passphrase", parsed.passphrase)
         Assert.assertNotNull("Pubkey should be defined", parsed.publicKey)
 
         val privateKeySpec = Curve25519AesSha2KeySpec.fromRecoveryKey(recoveryKey!!)
-        DefaultSharedSecretStorage.withOlmDecryption { olmPkDecryption ->
+        DefaultSharedSecretStorageService.withOlmDecryption { olmPkDecryption ->
             val pubKey = olmPkDecryption.setPrivateKey(privateKeySpec!!.privateKey)
             Assert.assertEquals("Unexpected Public Key", pubKey, parsed.publicKey)
         }
@@ -126,10 +127,10 @@ class QuadSTests : InstrumentedTest {
         val defaultDataLock = CountDownLatch(1)
 
         val liveDefAccountData = runBlocking(Dispatchers.Main) {
-            aliceSession.getLiveAccountData(DefaultSharedSecretStorage.DEFAULT_KEY_ID)
+            aliceSession.getLiveAccountDataEvent(DefaultSharedSecretStorageService.DEFAULT_KEY_ID)
         }
         val accountDefDataObserver = Observer<Optional<UserAccountDataEvent>?> { t ->
-            if (t?.getOrNull()?.type == DefaultSharedSecretStorage.DEFAULT_KEY_ID) {
+            if (t?.getOrNull()?.type == DefaultSharedSecretStorageService.DEFAULT_KEY_ID) {
                 defaultKeyAccountData = t.getOrNull()!!
                 defaultDataLock.countDown()
             }
@@ -247,7 +248,7 @@ class QuadSTests : InstrumentedTest {
         )
         mTestHelper.await(storeLatch)
 
-        val accountDataEvent = aliceSession.getAccountData("my.secret")
+        val accountDataEvent = aliceSession.getAccountDataEvent("my.secret")
         val encryptedContent = accountDataEvent?.content?.get("encrypted") as? Map<*, *>
 
         Assert.assertEquals("Content should contains two encryptions", 2, encryptedContent?.keys?.size ?: 0)
@@ -334,7 +335,7 @@ class QuadSTests : InstrumentedTest {
         var accountData: UserAccountDataEvent? = null
 
         val liveAccountData = runBlocking(Dispatchers.Main) {
-            session.getLiveAccountData(type)
+            session.getLiveAccountDataEvent(type)
         }
         val accountDataObserver = Observer<Optional<UserAccountDataEvent>?> { t ->
             if (t?.getOrNull()?.type == type) {
@@ -350,7 +351,7 @@ class QuadSTests : InstrumentedTest {
         return accountData!!
     }
 
-    private fun generatedSecret(session: Session, keyId: String, asDefault: Boolean = true): SSSSKeyCreationInfo {
+    private fun generatedSecret(session: Session, keyId: String, asDefault: Boolean = true): SsssKeyCreationInfo {
         val quadS = session.sharedSecretStorageService
 
         val emptyKeySigner = object : KeySigner {
@@ -359,13 +360,13 @@ class QuadSTests : InstrumentedTest {
             }
         }
 
-        var creationInfo: SSSSKeyCreationInfo? = null
+        var creationInfo: SsssKeyCreationInfo? = null
 
         val generateLatch = CountDownLatch(1)
 
         quadS.generateKey(keyId, keyId, emptyKeySigner,
-                object : MatrixCallback<SSSSKeyCreationInfo> {
-                    override fun onSuccess(data: SSSSKeyCreationInfo) {
+                object : MatrixCallback<SsssKeyCreationInfo> {
+                    override fun onSuccess(data: SsssKeyCreationInfo) {
                         creationInfo = data
                         generateLatch.countDown()
                     }
@@ -385,13 +386,13 @@ class QuadSTests : InstrumentedTest {
             val setDefaultLatch = CountDownLatch(1)
             quadS.setDefaultKey(keyId, TestMatrixCallback(setDefaultLatch))
             mTestHelper.await(setDefaultLatch)
-            assertAccountData(session, DefaultSharedSecretStorage.DEFAULT_KEY_ID)
+            assertAccountData(session, DefaultSharedSecretStorageService.DEFAULT_KEY_ID)
         }
 
         return creationInfo!!
     }
 
-    private fun generatedSecretFromPassphrase(session: Session, passphrase: String, keyId: String, asDefault: Boolean = true): SSSSKeyCreationInfo {
+    private fun generatedSecretFromPassphrase(session: Session, passphrase: String, keyId: String, asDefault: Boolean = true): SsssKeyCreationInfo {
         val quadS = session.sharedSecretStorageService
 
         val emptyKeySigner = object : KeySigner {
@@ -400,7 +401,7 @@ class QuadSTests : InstrumentedTest {
             }
         }
 
-        var creationInfo: SSSSKeyCreationInfo? = null
+        var creationInfo: SsssKeyCreationInfo? = null
 
         val generateLatch = CountDownLatch(1)
 
@@ -408,8 +409,8 @@ class QuadSTests : InstrumentedTest {
                 passphrase,
                 emptyKeySigner,
                 null,
-                object : MatrixCallback<SSSSKeyCreationInfo> {
-                    override fun onSuccess(data: SSSSKeyCreationInfo) {
+                object : MatrixCallback<SsssKeyCreationInfo> {
+                    override fun onSuccess(data: SsssKeyCreationInfo) {
                         creationInfo = data
                         generateLatch.countDown()
                     }
@@ -429,7 +430,7 @@ class QuadSTests : InstrumentedTest {
             val setDefaultLatch = CountDownLatch(1)
             quadS.setDefaultKey(keyId, TestMatrixCallback(setDefaultLatch))
             mTestHelper.await(setDefaultLatch)
-            assertAccountData(session, DefaultSharedSecretStorage.DEFAULT_KEY_ID)
+            assertAccountData(session, DefaultSharedSecretStorageService.DEFAULT_KEY_ID)
         }
 
         return creationInfo!!

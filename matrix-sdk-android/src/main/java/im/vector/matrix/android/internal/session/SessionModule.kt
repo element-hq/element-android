@@ -36,7 +36,7 @@ import im.vector.matrix.android.api.session.accountdata.AccountDataService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
 import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageService
-import im.vector.matrix.android.internal.crypto.secrets.DefaultSharedSecretStorage
+import im.vector.matrix.android.internal.crypto.secrets.DefaultSharedSecretStorageService
 import im.vector.matrix.android.internal.crypto.verification.VerificationMessageLiveObserver
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
@@ -269,8 +269,8 @@ internal abstract class SessionModule {
     abstract fun bindHomeServerCapabilitiesService(homeServerCapabilitiesService: DefaultHomeServerCapabilitiesService): HomeServerCapabilitiesService
 
     @Binds
-    abstract fun bindAccountDataServiceService(accountDataService: DefaultAccountDataService): AccountDataService
+    abstract fun bindAccountDataService(accountDataService: DefaultAccountDataService): AccountDataService
 
     @Binds
-    abstract fun bindSharedSecuredSecretStorageService(service: DefaultSharedSecretStorage): SharedSecretStorageService
+    abstract fun bindSharedSecretStorageService(service: DefaultSharedSecretStorageService): SharedSecretStorageService
 }

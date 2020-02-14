@@ -20,9 +20,10 @@ import io.realm.RealmObject
 import io.realm.annotations.Index
 
 /**
- * Clients can store custom config data for their account on their homeserver.
+ * Clients can store custom config data for their account on their HomeServer.
  * This account data will be synced between different devices and can persist across installations on a particular device.
- * Users may only view the account data for their own accountThe account_data may be either global or scoped to a particular rooms.
+ * Users may only view the account data for their own account.
+ * The account_data may be either global or scoped to a particular rooms.
  */
 internal open class UserAccountDataEntity(
         @Index var type: String? = null,

@@ -46,17 +46,17 @@ internal class DefaultAccountDataService @Inject constructor(
     private val moshi = MoshiProvider.providesMoshi()
     private val adapter = moshi.adapter<Map<String, Any>>(JSON_DICT_PARAMETERIZED_TYPE)
 
-    override fun getAccountData(type: String): UserAccountDataEvent? {
-        return getAccountData(listOf(type)).firstOrNull()
+    override fun getAccountDataEvent(type: String): UserAccountDataEvent? {
+        return getAccountDataEvents(listOf(type)).firstOrNull()
     }
 
-    override fun getLiveAccountData(type: String): LiveData<Optional<UserAccountDataEvent>> {
-        return Transformations.map(getLiveAccountData(listOf(type))) {
+    override fun getLiveAccountDataEvent(type: String): LiveData<Optional<UserAccountDataEvent>> {
+        return Transformations.map(getLiveAccountDataEvents(listOf(type))) {
             it.firstOrNull()?.toOptional()
         }
     }
 
-    override fun getAccountData(filterType: List<String>): List<UserAccountDataEvent> {
+    override fun getAccountDataEvents(filterType: List<String>): List<UserAccountDataEvent> {
         return monarchy.fetchAllCopiedSync { realm ->
             realm.where(UserAccountDataEntity::class.java)
                     .apply {
@@ -74,7 +74,7 @@ internal class DefaultAccountDataService @Inject constructor(
         } ?: emptyList()
     }
 
-    override fun getLiveAccountData(filterType: List<String>): LiveData<List<UserAccountDataEvent>> {
+    override fun getLiveAccountDataEvents(filterType: List<String>): LiveData<List<UserAccountDataEvent>> {
         return monarchy.findAllMappedWithChanges({ realm ->
             realm.where(UserAccountDataEntity::class.java)
                     .apply {
