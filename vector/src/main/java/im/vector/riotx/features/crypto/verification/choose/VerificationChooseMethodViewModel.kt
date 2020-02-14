@@ -21,9 +21,9 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.sas.QrCodeVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
 import im.vector.matrix.android.api.session.crypto.sas.VerificationService
 import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
@@ -45,7 +45,7 @@ data class VerificationChooseMethodViewState(
 class VerificationChooseMethodViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationChooseMethodViewState,
         private val session: Session
-) : VectorViewModel<VerificationChooseMethodViewState, EmptyAction, EmptyViewEvents>(initialState), VerificationService.VerificationListener {
+) : VectorViewModel<VerificationChooseMethodViewState, EmptyAction, EmptyViewEvents>(initialState), VerificationService.Listener {
 
     override fun transactionCreated(tx: VerificationTransaction) {
         transactionUpdated(tx)
@@ -66,9 +66,9 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
 
         setState {
             copy(
-                    otherCanShowQrCode = pvr?.hasMethod(VerificationMethod.QR_CODE_SHOW) ?: false,
-                    otherCanScanQrCode = pvr?.hasMethod(VerificationMethod.QR_CODE_SCAN) ?: false,
-                    SASModeAvailable = pvr?.hasMethod(VerificationMethod.SAS) ?: false
+                    otherCanShowQrCode = pvr?.otherCanShowQrCode().orFalse(),
+                    otherCanScanQrCode = pvr?.otherCanScanQrCode().orFalse(),
+                    SASModeAvailable = pvr?.isSasSupported().orFalse()
             )
         }
     }
@@ -103,10 +103,10 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
 
             return VerificationChooseMethodViewState(otherUserId = args.otherUserId,
                     transactionId = args.verificationId ?: "",
-                    otherCanShowQrCode = pvr?.hasMethod(VerificationMethod.QR_CODE_SHOW) ?: false,
-                    otherCanScanQrCode = pvr?.hasMethod(VerificationMethod.QR_CODE_SCAN) ?: false,
+                    otherCanShowQrCode = pvr?.otherCanShowQrCode().orFalse(),
+                    otherCanScanQrCode = pvr?.otherCanScanQrCode().orFalse(),
                     qrCodeText = (qrCodeVerificationTransaction as? QrCodeVerificationTransaction)?.qrCodeText,
-                    SASModeAvailable = pvr?.hasMethod(VerificationMethod.SAS) ?: false
+                    SASModeAvailable = pvr?.isSasSupported().orFalse()
             )
         }
     }

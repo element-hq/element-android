@@ -34,6 +34,8 @@ data class MessageInformationData(
         val showInformation: Boolean = true,
         /*List of reactions (emoji,count,isSelected)*/
         val orderedReactionList: List<ReactionInfoData>? = null,
+        val pollResponseAggregatedSummary: PollResponseData? = null,
+
         val hasBeenEdited: Boolean = false,
         val hasPendingEdits: Boolean = false,
         val readReceipts: List<ReadReceiptData> = emptyList(),
@@ -64,6 +66,13 @@ data class ReadReceiptData(
         val avatarUrl: String?,
         val displayName: String?,
         val timestamp: Long
+) : Parcelable
+
+@Parcelize
+data class PollResponseData(
+        val myVote: Int?,
+        val votes: Map<Int, Int>?,
+        val isClosed: Boolean = false
 ) : Parcelable
 
 fun ReadReceiptData.toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)

@@ -42,7 +42,7 @@ internal interface VerificationTransport {
 
     fun cancelTransaction(transactionId: String,
                           otherUserId: String,
-                          otherUserDeviceId: String,
+                          otherUserDeviceId: String?,
                           code: CancelCode)
 
     fun done(transactionId: String)
@@ -79,11 +79,13 @@ internal interface VerificationTransport {
 
     fun createMac(tid: String, mac: Map<String, String>, keys: String): VerificationInfoMac
 
-    fun createReady(tid: String, fromDevice: String, methods: List<String>): VerificationInfoReady
+    fun createReady(tid: String,
+                    fromDevice: String,
+                    methods: List<String>): VerificationInfoReady
 
     // TODO Refactor
     fun sendVerificationReady(keyReq: VerificationInfoReady,
                               otherUserId: String,
-                              otherDeviceId: String,
+                              otherDeviceId: String?,
                               callback: (() -> Unit)?)
 }

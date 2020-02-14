@@ -10,6 +10,7 @@
 
     <color name="riotx_destructive_accent">#FFFF4B55</color>
     <color name="riotx_destructive_accent_alpha12">#1EFF4B55</color>
+    <color name="riotx_button_primary_accent_alpha12">#14368BD6</color>
 
 
     <color name="riotx_positive_accent">#03B381</color>

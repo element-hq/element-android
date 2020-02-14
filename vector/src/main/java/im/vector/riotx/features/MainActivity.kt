@@ -85,7 +85,7 @@ class MainActivity : VectorBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         args = parseArgs()
-        if (args.clearCredentials || args.isUserLoggedOut) {
+        if (args.clearCredentials || args.isUserLoggedOut || args.clearCache) {
             clearNotifications()
         }
         // Handle some wanted cleanup

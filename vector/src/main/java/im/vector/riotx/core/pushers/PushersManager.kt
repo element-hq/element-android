@@ -47,8 +47,8 @@ class PushersManager @Inject constructor(
                 appNameProvider.getAppName(),
                 currentSession.sessionParams.credentials.deviceId ?: "MOBILE",
                 stringProvider.getString(R.string.pusher_http_url),
-                false,
-                true
+                append = false,
+                withEventIdOnly = true
         )
     }
 

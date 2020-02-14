@@ -36,5 +36,5 @@ internal abstract class HomeServerCapabilitiesModule {
     }
 
     @Binds
-    abstract fun bindGetHomeServerCapabilitiesTask(getHomeServerCapabilitiesTask: DefaultGetHomeServerCapabilitiesTask): GetHomeServerCapabilitiesTask
+    abstract fun bindGetHomeServerCapabilitiesTask(task: DefaultGetHomeServerCapabilitiesTask): GetHomeServerCapabilitiesTask
 }

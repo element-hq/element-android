@@ -61,8 +61,10 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.ImageLoader
+import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
@@ -786,6 +788,31 @@ class RoomDetailFragment @Inject constructor(
                 .show()
     }
 
+    private fun promptConfirmationToRedactEvent(action: EventSharedAction.Redact) {
+        val layout = requireActivity().layoutInflater.inflate(R.layout.dialog_delete_event, null)
+        val reasonCheckBox = layout.findViewById<MaterialCheckBox>(R.id.deleteEventReasonCheck)
+        val reasonTextInputLayout = layout.findViewById<TextInputLayout>(R.id.deleteEventReasonTextInputLayout)
+        val reasonInput = layout.findViewById<TextInputEditText>(R.id.deleteEventReasonInput)
+
+        reasonCheckBox.isVisible = action.askForReason
+        reasonTextInputLayout.isVisible = action.askForReason
+
+        reasonCheckBox.setOnCheckedChangeListener { _, isChecked -> reasonTextInputLayout.isEnabled = isChecked }
+
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.delete_event_dialog_title)
+                .setView(layout)
+                .setPositiveButton(R.string.remove) { _, _ ->
+                    val reason = reasonInput.text.toString()
+                            .takeIf { action.askForReason }
+                            ?.takeIf { reasonCheckBox.isChecked }
+                            ?.takeIf { it.isNotBlank() }
+                    roomDetailViewModel.handle(RoomDetailAction.RedactAction(action.eventId, reason))
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
+    }
+
     private fun displayRoomDetailActionFailure(result: RoomDetailViewEvents.ActionFailure) {
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.dialog_title_error)
@@ -1005,7 +1032,7 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onEventCellClicked(informationData: MessageInformationData, messageContent: MessageContent?, view: View) {
         if (messageContent is MessageVerificationRequestContent) {
-            roomDetailViewModel.handle(RoomDetailAction.ResumeVerification(informationData.eventId))
+            roomDetailViewModel.handle(RoomDetailAction.ResumeVerification(informationData.eventId, null))
         }
     }
 
@@ -1022,7 +1049,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onAvatarClicked(informationData: MessageInformationData) {
-        // roomDetailViewModel.handle(RoomDetailAction.RequestVerification(informationData.senderId))
+        // roomDetailViewModel.handle(RoomDetailAction.RequestVerification(informationData.userId))
         openRoomMemberProfile(informationData.senderId)
     }
 
@@ -1083,7 +1110,7 @@ class RoomDetailFragment @Inject constructor(
     private fun handleActions(action: EventSharedAction) {
         when (action) {
             is EventSharedAction.OpenUserProfile            -> {
-                openRoomMemberProfile(action.senderId)
+                openRoomMemberProfile(action.userId)
             }
             is EventSharedAction.AddReaction                -> {
                 startActivityForResult(EmojiReactionPickerActivity.intent(requireContext(), action.eventId), REACTION_SELECT_REQUEST_CODE)
@@ -1097,8 +1124,8 @@ class RoomDetailFragment @Inject constructor(
                 copyToClipboard(requireContext(), action.content, false)
                 showSnackWithMessage(getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
             }
-            is EventSharedAction.Delete                     -> {
-                roomDetailViewModel.handle(RoomDetailAction.RedactAction(action.eventId, context?.getString(R.string.event_redacted_by_user_reason)))
+            is EventSharedAction.Redact                     -> {
+                promptConfirmationToRedactEvent(action)
             }
             is EventSharedAction.Share                      -> {
                 // TODO current data communication is too limited

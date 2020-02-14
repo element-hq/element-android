@@ -15,8 +15,8 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.crypto.sas.CancelCode
-import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
 import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SCAN
 import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SHOW
 import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
@@ -46,11 +46,37 @@ data class PendingVerificationRequest(
 
     val isFinished: Boolean = isSuccessful || cancelConclusion != null
 
-    fun hasMethod(method: VerificationMethod): Boolean? {
-        return when (method) {
-            VerificationMethod.SAS          -> readyInfo?.methods?.contains(VERIFICATION_METHOD_SAS)
-            VerificationMethod.QR_CODE_SHOW -> readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW)
-            VerificationMethod.QR_CODE_SCAN -> readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN)
+    /**
+     * SAS is supported if I support it and the other party support it
+     */
+    fun isSasSupported(): Boolean {
+        return requestInfo?.methods?.contains(VERIFICATION_METHOD_SAS).orFalse()
+                && readyInfo?.methods?.contains(VERIFICATION_METHOD_SAS).orFalse()
+    }
+
+    /**
+     * Other can show QR code if I can scan QR code and other can show QR code
+     */
+    fun otherCanShowQrCode(): Boolean {
+        return if (isIncoming) {
+            requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse()
+                    && readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse()
+        } else {
+            requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse()
+                    && readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse()
+        }
+    }
+
+    /**
+     * Other can scan QR code if I can show QR code and other can scan QR code
+     */
+    fun otherCanScanQrCode(): Boolean {
+        return if (isIncoming) {
+            requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse()
+                    && readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse()
+        } else {
+            requestInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SHOW).orFalse()
+                    && readyInfo?.methods?.contains(VERIFICATION_METHOD_QR_CODE_SCAN).orFalse()
         }
     }
 }

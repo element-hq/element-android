@@ -134,12 +134,9 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
         private val _clickListener = DebouncedClickListener(View.OnClickListener {
             val att = attributes ?: return@OnClickListener
             if (it == acceptButton) {
-                callback?.onTimelineItemAction(RoomDetailAction.AcceptVerificationRequest(
-                        att.referenceId,
-                        att.otherUserId,
-                        att.fromDevide))
+                callback?.onTimelineItemAction(RoomDetailAction.AcceptVerificationRequest(att.referenceId, att.otherUserId))
             } else if (it == declineButton) {
-                callback?.onTimelineItemAction(RoomDetailAction.DeclineVerificationRequest(att.referenceId, att.otherUserId, att.fromDevide))
+                callback?.onTimelineItemAction(RoomDetailAction.DeclineVerificationRequest(att.referenceId, att.otherUserId))
             }
         })
 
@@ -169,7 +166,6 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
     data class Attributes(
             val otherUserId: String,
             val otherUserName: String,
-            val fromDevide: String,
             val referenceId: String,
 //            val avatarSize: Int,
             override val informationData: MessageInformationData,

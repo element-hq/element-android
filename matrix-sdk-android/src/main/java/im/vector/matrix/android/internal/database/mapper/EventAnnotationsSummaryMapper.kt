@@ -55,7 +55,11 @@ internal object EventAnnotationsSummaryMapper {
                             it.sourceEvents.toList(),
                             it.sourceLocalEcho.toList()
                     )
+                },
+                pollResponseSummary = annotationsSummary.pollResponseSummary?.let {
+                    PollResponseAggregatedSummaryEntityMapper.map(it)
                 }
+
         )
     }
 
@@ -92,6 +96,9 @@ internal object EventAnnotationsSummaryMapper {
                     RealmList<String>().apply { addAll(it.sourceEvents) },
                     RealmList<String>().apply { addAll(it.localEchos) }
             )
+        }
+        eventAnnotationsSummaryEntity.pollResponseSummary = annotationsSummary.pollResponseSummary?.let {
+            PollResponseAggregatedSummaryEntityMapper.map(it)
         }
         return eventAnnotationsSummaryEntity
     }

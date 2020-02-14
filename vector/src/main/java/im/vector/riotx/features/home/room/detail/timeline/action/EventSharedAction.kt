@@ -22,11 +22,13 @@ import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorSharedAction
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 
-sealed class EventSharedAction(@StringRes val titleRes: Int, @DrawableRes val iconResId: Int) : VectorSharedAction {
+sealed class EventSharedAction(@StringRes val titleRes: Int,
+                               @DrawableRes val iconResId: Int,
+                               val destructive: Boolean = false) : VectorSharedAction {
     object Separator :
             EventSharedAction(0, 0)
 
-    data class OpenUserProfile(val senderId: String) :
+    data class OpenUserProfile(val userId: String) :
             EventSharedAction(0, 0)
 
     data class AddReaction(val eventId: String) :
@@ -51,10 +53,10 @@ sealed class EventSharedAction(@StringRes val titleRes: Int, @DrawableRes val ic
             EventSharedAction(R.string.global_retry, R.drawable.ic_refresh_cw)
 
     data class Remove(val eventId: String) :
-            EventSharedAction(R.string.remove, R.drawable.ic_trash)
+            EventSharedAction(R.string.remove, R.drawable.ic_trash, true)
 
-    data class Delete(val eventId: String) :
-            EventSharedAction(R.string.delete, R.drawable.ic_delete)
+    data class Redact(val eventId: String, val askForReason: Boolean) :
+            EventSharedAction(R.string.message_action_item_redact, R.drawable.ic_delete, true)
 
     data class Cancel(val eventId: String) :
             EventSharedAction(R.string.cancel, R.drawable.ic_close_round)
@@ -81,7 +83,7 @@ sealed class EventSharedAction(@StringRes val titleRes: Int, @DrawableRes val ic
             EventSharedAction(R.string.report_content_custom, R.drawable.ic_report_custom)
 
     data class IgnoreUser(val senderId: String?) :
-            EventSharedAction(R.string.message_ignore_user, R.drawable.ic_alert_triangle)
+            EventSharedAction(R.string.message_ignore_user, R.drawable.ic_alert_triangle, true)
 
     data class QuickReact(val eventId: String, val clickedOn: String, val add: Boolean) :
             EventSharedAction(0, 0)

@@ -6,18 +6,37 @@
     <!-- Sections has been created to avoid merge conflict. Let's see if it's better -->
 
     <!-- BEGIN Strings added by Valere -->
-
+    <plurals name="poll_info">
+        <item quantity="zero">%d vote</item>
+        <item quantity="other">%d votes</item>
+    </plurals>
+    <plurals name="poll_info_final">
+        <item quantity="zero">%d vote - Final results</item>
+        <item quantity="other">%d votes - Final results</item>
+    </plurals>
+    <string name="poll_item_selected_aria">Selected Option</string>
+    <string name="command_description_poll">Creates a simple poll</string>
     <!-- END Strings added by Valere -->
 
 
     <!-- BEGIN Strings added by Benoit -->
-
+    <string name="message_action_item_redact">Remove…</string>
     <!-- END Strings added by Benoit -->
 
 
     <!-- BEGIN Strings added by Benoit -->
 
     <!-- END Strings added by Benoit -->
+
+    <!-- BEGIN Strings added by Onuray -->
+    <string name="delete_event_dialog_title">Confirm Removal</string>
+    <string name="delete_event_dialog_content">Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.</string>
+    <string name="delete_event_dialog_reason_checkbox">Include a reason</string>
+    <string name="delete_event_dialog_reason_hint">Reason for redacting</string>
+
+    <string name="event_redacted_by_user_reason_with_reason">Event deleted by user, reason: %1$s</string>
+    <string name="event_redacted_by_admin_reason_with_reason">Event moderated by room admin, reason: %1$s</string>
+    <!-- END Strings added by Onuray -->
 
 
     <!-- BEGIN Strings added by Others -->

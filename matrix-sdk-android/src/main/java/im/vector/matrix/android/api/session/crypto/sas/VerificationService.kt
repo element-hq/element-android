@@ -30,9 +30,9 @@ import im.vector.matrix.android.internal.crypto.verification.PendingVerification
  */
 interface VerificationService {
 
-    fun addListener(listener: VerificationListener)
+    fun addListener(listener: Listener)
 
-    fun removeListener(listener: VerificationListener)
+    fun removeListener(listener: Listener)
 
     /**
      * Mark this device as verified manually
@@ -68,11 +68,11 @@ interface VerificationService {
                                otherDevices: List<String>?): PendingVerificationRequest
 
     fun declineVerificationRequestInDMs(otherUserId: String,
-                                        otherDeviceId: String,
                                         transactionId: String,
                                         roomId: String)
 
     // Only SAS method is supported for the moment
+    // TODO Parameter otherDeviceId should be removed in this case
     fun beginKeyVerificationInDMs(method: VerificationMethod,
                                   transactionId: String,
                                   roomId: String,
@@ -95,15 +95,33 @@ interface VerificationService {
                                  otherUserId: String,
                                  transactionId: String): Boolean
 
-    // fun transactionUpdated(tx: SasVerificationTransaction)
-
-    interface VerificationListener {
-        fun transactionCreated(tx: VerificationTransaction)
-        fun transactionUpdated(tx: VerificationTransaction)
-        fun markedAsManuallyVerified(userId: String, deviceId: String) {}
-
+    interface Listener {
+        /**
+         * Called when a verification request is created either by the user, or by the other user.
+         */
         fun verificationRequestCreated(pr: PendingVerificationRequest) {}
+
+        /**
+         * Called when a verification request is updated.
+         */
         fun verificationRequestUpdated(pr: PendingVerificationRequest) {}
+
+        /**
+         * Called when a transaction is created, either by the user or initiated by the other user.
+         */
+        fun transactionCreated(tx: VerificationTransaction) {}
+
+        /**
+         * Called when a transaction is updated. You may be interested to track the state of the VerificationTransaction.
+         */
+        fun transactionUpdated(tx: VerificationTransaction) {}
+
+        /**
+         * Inform the the deviceId of the userId has been marked as manually verified by the SDK.
+         * It will be called after VerificationService.markedLocallyAsManuallyVerified() is called.
+         *
+         */
+        fun markedAsManuallyVerified(userId: String, deviceId: String) {}
     }
 
     companion object {

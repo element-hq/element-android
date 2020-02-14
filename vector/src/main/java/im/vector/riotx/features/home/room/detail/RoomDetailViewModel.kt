@@ -43,6 +43,7 @@ import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.message.OptionItem
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneContent
 import im.vector.matrix.android.api.session.room.read.ReadService
@@ -199,6 +200,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailAction.IgnoreUser                       -> handleIgnoreUser(action)
             is RoomDetailAction.EnterTrackingUnreadMessagesState -> startTrackingUnreadMessages()
             is RoomDetailAction.ExitTrackingUnreadMessagesState  -> stopTrackingUnreadMessages()
+            is RoomDetailAction.ReplyToOptions                   -> handleReplyToOptions(action)
             is RoomDetailAction.AcceptVerificationRequest        -> handleAcceptVerification(action)
             is RoomDetailAction.DeclineVerificationRequest       -> handleDeclineVerification(action)
             is RoomDetailAction.RequestVerification              -> handleRequestVerification(action)
@@ -419,6 +421,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         }
                         is ParsedCommand.VerifyUser               -> {
                             session.getVerificationService().requestKeyVerificationInDMs(supportedVerificationMethods, slashCommandResult.userId, room.roomId)
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+                            popDraft()
+                        }
+                        is ParsedCommand.SendPoll                 -> {
+                            room.sendPoll(slashCommandResult.question, slashCommandResult.options.mapIndexed { index, s -> OptionItem(s, "$index. $s") })
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
@@ -833,7 +840,6 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun handleDeclineVerification(action: RoomDetailAction.DeclineVerificationRequest) {
         session.getVerificationService().declineVerificationRequestInDMs(
                 action.otherUserId,
-                action.otherdDeviceId,
                 action.transactionId,
                 room.roomId)
     }
@@ -853,6 +859,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 )))
             }
         }
+    }
+
+    private fun handleReplyToOptions(action: RoomDetailAction.ReplyToOptions) {
+        room.sendOptionsReply(action.eventId, action.optionIndex, action.optionValue)
     }
 
     private fun observeSyncState() {

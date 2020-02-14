@@ -111,7 +111,7 @@ class MessageActionsEpoxyController @Inject constructor(
                     showExpand(action is EventSharedAction.ReportContent)
                     expanded(state.expendedReportContentMenu)
                     listener(View.OnClickListener { listener?.didSelectMenuAction(action) })
-                    destructive(action is EventSharedAction.IgnoreUser)
+                    destructive(action.destructive)
                 }
 
                 if (action is EventSharedAction.ReportContent && state.expendedReportContentMenu) {

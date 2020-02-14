@@ -33,10 +33,14 @@ import im.vector.matrix.android.api.session.room.model.message.MessageEmoteConte
 import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.model.message.MessageImageInfoContent
 import im.vector.matrix.android.api.session.room.model.message.MessageNoticeContent
+import im.vector.matrix.android.api.session.room.model.message.MessageOptionsContent
+import im.vector.matrix.android.api.session.room.model.message.MessagePollResponseContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
+import im.vector.matrix.android.api.session.room.model.message.OPTION_TYPE_BUTTONS
+import im.vector.matrix.android.api.session.room.model.message.OPTION_TYPE_POLL
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
@@ -57,7 +61,6 @@ import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformat
 import im.vector.riotx.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotx.features.home.room.detail.timeline.item.AbsMessageItem
-import im.vector.riotx.features.home.room.detail.timeline.item.DefaultItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageBlockCodeItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageBlockCodeItem_
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageFileItem
@@ -65,6 +68,8 @@ import im.vector.riotx.features.home.room.detail.timeline.item.MessageFileItem_
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageImageVideoItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageImageVideoItem_
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.riotx.features.home.room.detail.timeline.item.MessageOptionsItem_
+import im.vector.riotx.features.home.room.detail.timeline.item.MessagePollItem_
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem_
 import im.vector.riotx.features.home.room.detail.timeline.item.RedactedMessageItem
@@ -121,7 +126,7 @@ class MessageItemFactory @Inject constructor(
         if (messageContent.relatesTo?.type == RelationType.REPLACE
                 || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
         ) {
-            // This is an edit event, we should it when debugging as a notice event
+            // This is an edit event, we should display it when debugging as a notice event
             return noticeItemFactory.create(event, highlight, callback)
         }
         val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback)
@@ -137,7 +142,40 @@ class MessageItemFactory @Inject constructor(
             is MessageFileContent                -> buildFileMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageAudioContent               -> buildAudioMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
-            else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback)
+            is MessageOptionsContent             -> buildOptionsMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessagePollResponseContent        -> noticeItemFactory.create(event, highlight, callback)
+            else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
+        }
+    }
+
+    private fun buildOptionsMessageItem(messageContent: MessageOptionsContent,
+                                        informationData: MessageInformationData,
+                                        highlight: Boolean,
+                                        callback: TimelineEventController.Callback?,
+                                        attributes: AbsMessageItem.Attributes): VectorEpoxyModel<*>? {
+        return when (messageContent.optionType) {
+            OPTION_TYPE_POLL    -> {
+                MessagePollItem_()
+                        .attributes(attributes)
+                        .callback(callback)
+                        .informationData(informationData)
+                        .leftGuideline(avatarSizeProvider.leftGuideline)
+                        .optionsContent(messageContent)
+                        .highlighted(highlight)
+            }
+            OPTION_TYPE_BUTTONS -> {
+                MessageOptionsItem_()
+                        .attributes(attributes)
+                        .callback(callback)
+                        .informationData(informationData)
+                        .leftGuideline(avatarSizeProvider.leftGuideline)
+                        .optionsContent(messageContent)
+                        .highlighted(highlight)
+            }
+            else                -> {
+                // Not supported optionType
+                buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
+            }
         }
     }
 
@@ -181,7 +219,6 @@ class MessageItemFactory @Inject constructor(
                         VerificationRequestItem.Attributes(
                                 otherUserId = otherUserId,
                                 otherUserName = otherUserName.toString(),
-                                fromDevide = messageContent.fromDevice ?: "",
                                 referenceId = informationData.eventId,
                                 informationData = informationData,
                                 avatarRenderer = attributes.avatarRenderer,
@@ -228,9 +265,10 @@ class MessageItemFactory @Inject constructor(
     private fun buildNotHandledMessageItem(messageContent: MessageContent,
                                            informationData: MessageInformationData,
                                            highlight: Boolean,
-                                           callback: TimelineEventController.Callback?): DefaultItem? {
-        val text = stringProvider.getString(R.string.rendering_event_error_type_of_message_not_handled, messageContent.msgType)
-        return defaultItemFactory.create(text, informationData, highlight, callback)
+                                           callback: TimelineEventController.Callback?,
+                                           attributes: AbsMessageItem.Attributes): MessageTextItem? {
+        // For compatibility reason we should display the body
+        return buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
     }
 
     private fun buildImageMessageItem(messageContent: MessageImageInfoContent,

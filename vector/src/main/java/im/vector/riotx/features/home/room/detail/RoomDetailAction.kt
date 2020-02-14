@@ -53,6 +53,8 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class ResendMessage(val eventId: String) : RoomDetailAction()
     data class RemoveFailedEcho(val eventId: String) : RoomDetailAction()
 
+    data class ReplyToOptions(val eventId: String, val optionIndex: Int, val optionValue: String) : RoomDetailAction()
+
     data class ReportContent(
             val eventId: String,
             val senderId: String?,
@@ -65,8 +67,8 @@ sealed class RoomDetailAction : VectorViewModelAction {
     object ClearSendQueue : RoomDetailAction()
     object ResendAll : RoomDetailAction()
 
-    data class AcceptVerificationRequest(val transactionId: String, val otherUserId: String, val otherdDeviceId: String) : RoomDetailAction()
-    data class DeclineVerificationRequest(val transactionId: String, val otherUserId: String, val otherdDeviceId: String) : RoomDetailAction()
+    data class AcceptVerificationRequest(val transactionId: String, val otherUserId: String) : RoomDetailAction()
+    data class DeclineVerificationRequest(val transactionId: String, val otherUserId: String) : RoomDetailAction()
     data class RequestVerification(val userId: String) : RoomDetailAction()
-    data class ResumeVerification(val transactionId: String, val otherUserId: String? = null, val otherdDeviceId: String? = null) : RoomDetailAction()
+    data class ResumeVerification(val transactionId: String, val otherUserId: String?) : RoomDetailAction()
 }

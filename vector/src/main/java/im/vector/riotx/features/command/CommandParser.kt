@@ -80,12 +80,12 @@ object CommandParser {
 
                     ParsedCommand.SendEmote(message)
                 }
-                Command.RAINBOW.command                  -> {
+                Command.RAINBOW.command                -> {
                     val message = textMessage.subSequence(Command.RAINBOW.command.length, textMessage.length).trim()
 
                     ParsedCommand.SendRainbow(message)
                 }
-                Command.RAINBOW_EMOTE.command                  -> {
+                Command.RAINBOW_EMOTE.command          -> {
                     val message = textMessage.subSequence(Command.RAINBOW_EMOTE.command.length, textMessage.length).trim()
 
                     ParsedCommand.SendRainbowEmote(message)
@@ -251,7 +251,6 @@ object CommandParser {
                 }
                 Command.SPOILER.command                -> {
                     val message = textMessage.substring(Command.SPOILER.command.length).trim()
-
                     ParsedCommand.SendSpoiler(message)
                 }
                 Command.SHRUG.command                  -> {
@@ -259,11 +258,19 @@ object CommandParser {
 
                     ParsedCommand.SendShrug(message)
                 }
-
                 Command.VERIFY_USER.command            -> {
                     val message = textMessage.substring(Command.VERIFY_USER.command.length).trim()
 
                     ParsedCommand.VerifyUser(message)
+                }
+                Command.POLL.command                   -> {
+                    val rawCommand = textMessage.substring(Command.POLL.command.length).trim()
+                    val split = rawCommand.split("|").map { it.trim() }
+                    if (split.size > 2) {
+                        ParsedCommand.SendPoll(split[0], split.subList(1, split.size))
+                    } else {
+                        ParsedCommand.ErrorSyntax(Command.POLL)
+                    }
                 }
                 else                                   -> {
                     // Unknown command

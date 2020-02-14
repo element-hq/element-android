@@ -168,6 +168,10 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun computeMessageBody(timelineEvent: TimelineEvent): CharSequence {
+        if (timelineEvent.root.isRedacted()) {
+            return getRedactionReason(timelineEvent)
+        }
+
         return when (timelineEvent.root.getClearType()) {
             EventType.MESSAGE,
             EventType.STICKER     -> {
@@ -200,6 +204,31 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         } ?: ""
     }
 
+    private fun getRedactionReason(timelineEvent: TimelineEvent): String {
+            return (timelineEvent
+                    .root
+                    .unsignedData
+                    ?.redactedEvent
+                    ?.content
+                    ?.get("reason") as? String)
+                    ?.takeIf { it.isNotBlank() }
+                    .let { reason ->
+                        if (reason == null) {
+                            if (timelineEvent.root.isRedactedBySameUser()) {
+                                stringProvider.getString(R.string.event_redacted_by_user_reason)
+                            } else {
+                                stringProvider.getString(R.string.event_redacted_by_admin_reason)
+                            }
+                        } else {
+                            if (timelineEvent.root.isRedactedBySameUser()) {
+                                stringProvider.getString(R.string.event_redacted_by_user_reason_with_reason, reason)
+                            } else {
+                                stringProvider.getString(R.string.event_redacted_by_admin_reason_with_reason, reason)
+                            }
+                        }
+                    }
+    }
+
     private fun actionsForEvent(timelineEvent: TimelineEvent): List<EventSharedAction> {
         val messageContent: MessageContent? = timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
                 ?: timelineEvent.root.getClearContent().toModel()
@@ -227,7 +256,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     }
 
                     if (canRedact(timelineEvent, session.myUserId)) {
-                        add(EventSharedAction.Delete(eventId))
+                        add(EventSharedAction.Redact(eventId, askForReason = informationData.senderId != session.myUserId))
                     }
 
                     if (canCopy(msgType)) {

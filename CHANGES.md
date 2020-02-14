@@ -1,9 +1,28 @@
+Changes in RiotX 0.16.0 (2020-02-14)
+===================================================
+
+Features ✨:
+ - Polls and Bot Buttons (MSC 2192 matrix-org/matrix-doc#2192)
+
+Improvements 🙌:
+ - Show confirmation dialog before deleting a message (#967, #1003)
+ - Open room member profile from reactions list and read receipts list (#875)
+
+Bugfix 🐛:
+ - Fix crash by removing all notifications after clearing cache (#878)
+ - Fix issue with verification when other client declares it can only show QR code (#988)
+ - Fix too errors in the code (1941862499c9ec5268cc80882512ced379cafcfd, a250a895fe0a4acf08c671e03434edcd29ccd84f)
+
+SDK API changes ⚠️:
+ - Javadoc improved for PushersService
+ - PushersService.pushers() has been renamed to PushersService.getPushers()
+
 Changes in RiotX 0.15.0 (2020-02-10)
 ===================================================
 
 Improvements 🙌:
  - Improve navigation to the timeline (#789, #862)
- - Improve network detection. It is now based on the sync request status (#873, #882) 
+ - Improve network detection. It is now based on the sync request status (#873, #882)
 
 Other changes:
  - Support SSO login with Firefox account (#606)
@@ -363,15 +382,17 @@ Features ✨:
 Improvements 🙌:
  -
 
-Other changes:
- -
-
 Bugfix 🐛:
  -
 
 Translations 🗣:
  -
 
+SDK API changes ⚠️:
+ - 
+
 Build 🧱:
  -
 
+Other changes:
+ -

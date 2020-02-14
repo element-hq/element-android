@@ -34,7 +34,7 @@ import javax.inject.Singleton
  * Listens to the VerificationManager and add a new notification when an incoming request is detected.
  */
 @Singleton
-class IncomingVerificationRequestHandler @Inject constructor(private val context: Context) : VerificationService.VerificationListener {
+class IncomingVerificationRequestHandler @Inject constructor(private val context: Context) : VerificationService.Listener {
 
     private var session: Session? = null
 
@@ -47,8 +47,6 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
         session?.getVerificationService()?.removeListener(this)
         this.session = null
     }
-
-    override fun transactionCreated(tx: VerificationTransaction) {}
 
     override fun transactionUpdated(tx: VerificationTransaction) {
         if (!tx.isToDeviceTransport()) return
@@ -111,9 +109,6 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
         }
     }
 
-    override fun markedAsManuallyVerified(userId: String, deviceId: String) {
-    }
-
     override fun verificationRequestCreated(pr: PendingVerificationRequest) {
         // For incoming request we should prompt (if not in activity where this request apply)
         if (pr.isIncoming) {
@@ -145,7 +140,6 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
                         }
                         dismissedAction = Runnable {
                             session?.getVerificationService()?.declineVerificationRequestInDMs(pr.otherUserId,
-                                    pr.requestInfo?.fromDevice ?: "",
                                     pr.transactionId ?: "",
                                     pr.roomId ?: ""
                             )
@@ -163,7 +157,6 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
         if (pr.isIncoming && (pr.isReady || pr.handledByOtherSession)) {
             PopupAlertManager.cancelAlert(uniqueIdForVerificationRequest(pr))
         }
-        super.verificationRequestUpdated(pr)
     }
 
     private fun uniqueIdForVerificationRequest(pr: PendingVerificationRequest) =

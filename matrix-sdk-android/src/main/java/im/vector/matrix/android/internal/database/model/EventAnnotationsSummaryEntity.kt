@@ -25,7 +25,8 @@ internal open class EventAnnotationsSummaryEntity(
         var roomId: String? = null,
         var reactionsSummary: RealmList<ReactionAggregatedSummaryEntity> = RealmList(),
         var editSummary: EditAggregatedSummaryEntity? = null,
-        var referencesSummaryEntity: ReferencesAggregatedSummaryEntity? = null
+        var referencesSummaryEntity: ReferencesAggregatedSummaryEntity? = null,
+        var pollResponseSummary: PollResponseAggregatedSummaryEntity? = null
 ) : RealmObject() {
 
     companion object

@@ -725,6 +725,7 @@ internal class DefaultTimeline(
         }
         if (settings.filterEdits) {
             not().like(TimelineEventEntityFields.ROOT.CONTENT, FilterContent.EDIT_TYPE)
+            not().like(TimelineEventEntityFields.ROOT.CONTENT, FilterContent.RESPONSE_TYPE)
         }
         return this
     }
