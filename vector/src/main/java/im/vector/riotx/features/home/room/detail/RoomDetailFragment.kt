@@ -789,11 +789,14 @@ class RoomDetailFragment @Inject constructor(
                 .show()
     }
 
-    private fun promptReasonToRedactEvent(eventId: String) {
+    private fun promptConfirmationToRedactEvent(action: EventSharedAction.Redact) {
         val layout = requireActivity().layoutInflater.inflate(R.layout.dialog_delete_event, null)
         val reasonCheckBox = layout.findViewById<MaterialCheckBox>(R.id.deleteEventReasonCheck)
         val reasonTextInputLayout = layout.findViewById<TextInputLayout>(R.id.deleteEventReasonTextInputLayout)
         val reasonInput = layout.findViewById<TextInputEditText>(R.id.deleteEventReasonInput)
+
+        reasonCheckBox.isVisible = action.askForReason
+        reasonTextInputLayout.isVisible = action.askForReason
 
         reasonCheckBox.setOnCheckedChangeListener { _, isChecked -> reasonTextInputLayout.isEnabled = isChecked }
 
@@ -802,9 +805,10 @@ class RoomDetailFragment @Inject constructor(
                 .setView(layout)
                 .setPositiveButton(R.string.remove) { _, _ ->
                     val reason = reasonInput.text.toString()
-                            .takeIf { reasonCheckBox.isChecked }
+                            .takeIf { action.askForReason }
+                            ?.takeIf { reasonCheckBox.isChecked }
                             ?.takeIf { it.isNotBlank() }
-                    roomDetailViewModel.handle(RoomDetailAction.RedactAction(eventId, reason))
+                    roomDetailViewModel.handle(RoomDetailAction.RedactAction(action.eventId, reason))
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
@@ -1122,7 +1126,7 @@ class RoomDetailFragment @Inject constructor(
                 showSnackWithMessage(getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
             }
             is EventSharedAction.Redact                     -> {
-                promptReasonToRedactEvent(action.eventId)
+                promptConfirmationToRedactEvent(action)
             }
             is EventSharedAction.Share                      -> {
                 // TODO current data communication is too limited
