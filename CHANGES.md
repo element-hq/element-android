@@ -3,6 +3,10 @@ Changes in RiotX 0.16.0 (2020-XX-XX)
 
 Features ✨:
  - Polls and Bot Buttons (MSC 2192 matrix-org/matrix-doc#2192)
+ - It's now possible to select several rooms (with a possible mix of clear/encrypted rooms) when sharing elements to RiotX (#1010)
+ - Media preview: media are previewed before being sent to a room (#1010)
+ - Image edition: it's now possible to edit image before sending: crop, rotate, and delete actions are supported (#1010)
+ - Sending image: image are sent to rooms with a reduced size. It's still possible to send original image file (#1010)
 
 Improvements 🙌:
  - Show confirmation dialog before deleting a message (#967)
