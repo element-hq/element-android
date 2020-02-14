@@ -6,6 +6,8 @@
     <!-- Sections has been created to avoid merge conflict. Let's see if it's better -->
 
     <!-- BEGIN Strings added by Valere -->
+    <string name="settings_dev_tools">Dev Tools</string>
+    <string name="settings_account_data">Account Data</string>
     <plurals name="poll_info">
         <item quantity="zero">%d vote</item>
         <item quantity="other">%d votes</item>

@@ -49,6 +49,14 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
             return breadcrumbsContent
         }
     }
+
+    data class AnyParams(override val type: String,
+                         private val any: Any
+    ) : Params {
+        override fun getData(): Any {
+            return any
+        }
+    }
 }
 
 internal class DefaultUpdateUserAccountDataTask @Inject constructor(

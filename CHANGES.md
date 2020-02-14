@@ -2,7 +2,8 @@ Changes in RiotX 0.17.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Secured Shared Storage Support (#984, #936)
+ - Polls and Bot Buttons (MSC 2192 matrix-org/matrix-doc#2192)
 
 Improvements 🙌:
  -

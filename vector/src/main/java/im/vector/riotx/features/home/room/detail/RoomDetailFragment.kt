@@ -27,12 +27,10 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.text.Spannable
 import android.view.HapticFeedbackConstants
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.Window
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -96,6 +94,7 @@ import im.vector.riotx.core.extensions.showKeyboard
 import im.vector.riotx.core.files.addEntryToDownloadManager
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.ui.views.JumpToReadMarkerView
 import im.vector.riotx.core.ui.views.NotificationAreaView
 import im.vector.riotx.core.utils.Debouncer
@@ -110,6 +109,7 @@ import im.vector.riotx.core.utils.checkPermissions
 import im.vector.riotx.core.utils.copyToClipboard
 import im.vector.riotx.core.utils.createUIHandler
 import im.vector.riotx.core.utils.getColorFromUserId
+import im.vector.riotx.core.utils.jsonViewerStyler
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import im.vector.riotx.core.utils.shareMedia
 import im.vector.riotx.core.utils.toast
@@ -154,6 +154,7 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import kotlinx.android.synthetic.main.merge_composer_layout.view.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
 import timber.log.Timber
 import java.io.File
@@ -178,8 +179,8 @@ class RoomDetailFragment @Inject constructor(
         private val notificationDrawerManager: NotificationDrawerManager,
         val roomDetailViewModelFactory: RoomDetailViewModel.Factory,
         private val eventHtmlRenderer: EventHtmlRenderer,
-        private val vectorPreferences: VectorPreferences
-) :
+        private val vectorPreferences: VectorPreferences,
+        private val colorProvider: ColorProvider) :
         VectorBaseFragment(),
         TimelineEventController.Callback,
         VectorInviteView.Callback,
@@ -1159,26 +1160,18 @@ class RoomDetailFragment @Inject constructor(
                 onEditedDecorationClicked(action.messageInformationData)
             }
             is EventSharedAction.ViewSource                 -> {
-                val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_event_content, null)
-                view.findViewById<TextView>(R.id.event_content_text_view)?.let {
-                    it.text = action.content
-                }
-
-                AlertDialog.Builder(requireActivity())
-                        .setView(view)
-                        .setPositiveButton(R.string.ok, null)
-                        .show()
+                JSonViewerDialog.newInstance(
+                        action.content,
+                        -1,
+                        jsonViewerStyler(colorProvider)
+                ).show(childFragmentManager, "JSON_VIEWER")
             }
             is EventSharedAction.ViewDecryptedSource        -> {
-                val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_event_content, null)
-                view.findViewById<TextView>(R.id.event_content_text_view)?.let {
-                    it.text = action.content
-                }
-
-                AlertDialog.Builder(requireActivity())
-                        .setView(view)
-                        .setPositiveButton(R.string.ok, null)
-                        .show()
+                JSonViewerDialog.newInstance(
+                        action.content,
+                        -1,
+                        jsonViewerStyler(colorProvider)
+                ).show(childFragmentManager, "JSON_VIEWER")
             }
             is EventSharedAction.QuickReact                 -> {
                 // eventId,ClickedOn,Add
