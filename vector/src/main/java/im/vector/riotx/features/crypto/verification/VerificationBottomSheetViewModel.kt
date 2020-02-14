@@ -28,6 +28,9 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.QrCodeVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
@@ -39,6 +42,8 @@ import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
+import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64NoPadding
+import im.vector.matrix.android.internal.crypto.crosssigning.isVerified
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
@@ -53,6 +58,7 @@ data class VerificationBottomSheetViewState(
         val transactionId: String? = null,
         // true when we display the loading and we wait for the other (incoming request)
         val selfVerificationMode: Boolean = false,
+        val verifiedFromPrivateKeys: Boolean = false,
         val isMe: Boolean = false
 ) : MvRxState
 
@@ -250,11 +256,35 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
             is VerificationAction.GotItConclusion              -> {
                 _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
             }
-            is VerificationAction.SkipVerification              -> {
+            is VerificationAction.SkipVerification             -> {
                 _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
             }
-            is VerificationAction.VerifyFromPassphrase              -> {
+            is VerificationAction.VerifyFromPassphrase         -> {
                 _viewEvents.post(VerificationBottomSheetViewEvents.AccessSecretStore)
+            }
+            is VerificationAction.GotResultFromSsss            -> {
+                try {
+                    action.cypherData.fromBase64NoPadding().inputStream().use { ins ->
+                        val res = session.loadSecureSecret<Map<String, String>>(ins, action.alias)
+                        val trustResult = session.getCrossSigningService().checkTrustFromPrivateKeys(
+                                res?.get(MASTER_KEY_SSSS_NAME),
+                                res?.get(USER_SIGNING_KEY_SSSS_NAME),
+                                res?.get(SELF_SIGNING_KEY_SSSS_NAME)
+                        )
+                        if (trustResult.isVerified()) {
+                            setState {
+                                copy(verifiedFromPrivateKeys = true)
+                            }
+                        } else {
+                            // POP UP something
+                            _viewEvents.post(VerificationBottomSheetViewEvents.ModalError("Failed to import keys"))
+                        }
+                    }
+                } catch (failure: Throwable) {
+                    _viewEvents.post(VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage))
+                }
+
+                Unit
             }
         }.exhaustive
     }

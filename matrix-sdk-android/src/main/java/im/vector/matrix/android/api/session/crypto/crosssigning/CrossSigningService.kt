@@ -42,6 +42,11 @@ interface CrossSigningService {
     fun initializeCrossSigning(authParams: UserPasswordAuth?,
                                callback: MatrixCallback<Unit>? = null)
 
+    fun checkTrustFromPrivateKeys(masterKeyPrivateKey: String?,
+                                  uskKeyPrivateKey: String?,
+                                  sskPrivateKey: String?,
+                                  callback: MatrixCallback<Unit>? = null) : UserTrustResult
+
     fun getUserCrossSigningKeys(otherUserId: String): MXCrossSigningInfo?
 
     fun getLiveCrossSigningKeys(userId: String): LiveData<Optional<MXCrossSigningInfo>>

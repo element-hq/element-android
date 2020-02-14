@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.settings.crosssigning
+package im.vector.matrix.android.api.session.crypto.crosssigning
 
-import im.vector.riotx.core.platform.VectorViewEvents
+const val MASTER_KEY_SSSS_NAME = "m.cross_signing.master"
 
-/**
- * Transient events for cross signing settings screen
- */
-sealed class CrossSigningSettingsViewEvents : VectorViewEvents {
-    data class Failure(val throwable: Throwable) : CrossSigningSettingsViewEvents()
+const val USER_SIGNING_KEY_SSSS_NAME = "m.cross_signing.user_signing"
 
-    object RequestPassword : CrossSigningSettingsViewEvents()
-    object VerifySession : CrossSigningSettingsViewEvents()
-}
+const val SELF_SIGNING_KEY_SSSS_NAME = "m.cross_signing.self_signing"

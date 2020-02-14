@@ -28,13 +28,15 @@ import butterknife.OnClick
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.textfield.TextInputLayout
+import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.editorActionEvents
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.core.utils.DebouncedClickListener
+import io.reactivex.android.schedulers.AndroidSchedulers
 import me.gujun.android.span.span
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class SharedSecuredStoragePassphraseFragment : VectorBaseFragment() {
@@ -83,7 +85,8 @@ class SharedSecuredStoragePassphraseFragment : VectorBaseFragment() {
         reasonText.text = getString(R.string.enter_secret_storage_passphrase_reason_verify)
 
         mPassphraseTextEdit.editorActionEvents()
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
                         submit()
@@ -91,13 +94,6 @@ class SharedSecuredStoragePassphraseFragment : VectorBaseFragment() {
                 }
                 .disposeOnDestroyView()
 
-        mPassphraseTextEdit.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
-                submit()
-                return@setOnEditorActionListener true
-            }
-            return@setOnEditorActionListener false
-        }
 
         mPassphraseTextEdit.textChanges()
                 .subscribe {
@@ -114,17 +110,21 @@ class SharedSecuredStoragePassphraseFragment : VectorBaseFragment() {
             }
         }
 
-        submitButton.setOnClickListener(DebouncedClickListener(
-                View.OnClickListener {
+        submitButton.clicks()
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
                     submit()
                 }
-        ))
+                .disposeOnDestroyView()
 
-        cancelButton.setOnClickListener(DebouncedClickListener(
-                View.OnClickListener {
+        cancelButton.clicks()
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
                     sharedViewModel.handle(SharedSecureStorageAction.Cancel)
                 }
-        ))
+                .disposeOnDestroyView()
     }
 
     fun submit() {

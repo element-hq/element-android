@@ -45,6 +45,7 @@ data class CrossSigningSettingsViewState(
 
 sealed class CrossSigningAction : VectorViewModelAction {
     object InitializeCrossSigning : CrossSigningAction()
+    object VerifySession : CrossSigningAction()
     data class PasswordEntered(val password: String) : CrossSigningAction()
 }
 
@@ -87,6 +88,9 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted privat
                         user = session.myUserId,
                         password = action.password
                 ))
+            }
+            CrossSigningAction.VerifySession             -> {
+                _viewEvents.post(CrossSigningSettingsViewEvents.VerifySession)
             }
         }.exhaustive
     }

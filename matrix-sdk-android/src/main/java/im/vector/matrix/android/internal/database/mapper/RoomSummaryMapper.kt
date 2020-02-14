@@ -50,7 +50,7 @@ internal class RoomSummaryMapper @Inject constructor(
                         forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
                 )
             } catch (e: Throwable) {
-                Timber.d(e)
+                // Timber.d(e)
             }
         }
 

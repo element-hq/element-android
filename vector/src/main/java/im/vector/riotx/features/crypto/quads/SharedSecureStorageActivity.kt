@@ -22,6 +22,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import im.vector.riotx.R
@@ -34,6 +35,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class SharedSecureStorageActivity : SimpleFragmentActivity() {
@@ -78,7 +80,7 @@ class SharedSecureStorageActivity : SimpleFragmentActivity() {
                 .disposeOnDestroyView()
 
         viewModel.subscribe(this) {
-//            renderState(it)
+            //            renderState(it)
         }
     }
 
@@ -87,6 +89,19 @@ class SharedSecureStorageActivity : SimpleFragmentActivity() {
             is SharedSecureStorageViewEvent.Dismiss            -> {
                 setResult(Activity.RESULT_CANCELED)
                 finish()
+            }
+            is SharedSecureStorageViewEvent.Error              -> {
+                AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.dialog_title_error))
+                        .setMessage(it.message)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.ok) { _, _ ->
+                            if (it.dismiss) {
+                                setResult(Activity.RESULT_CANCELED)
+                                finish()
+                            }
+                        }
+                        .show()
             }
             is SharedSecureStorageViewEvent.ShowModalLoading   -> {
                 showWaitingView()
@@ -97,6 +112,12 @@ class SharedSecureStorageActivity : SimpleFragmentActivity() {
             is SharedSecureStorageViewEvent.UpdateLoadingState -> {
                 updateWaitingView(it.waitingData)
             }
+            is SharedSecureStorageViewEvent.FinishSuccess      -> {
+                val dataResult = Intent()
+                dataResult.putExtra(EXTRA_DATA_RESULT, it.cypherResult)
+                setResult(Activity.RESULT_OK, dataResult)
+                finish()
+            }
         }
     }
 
@@ -105,6 +126,7 @@ class SharedSecureStorageActivity : SimpleFragmentActivity() {
 
     companion object {
 
+        const val EXTRA_DATA_RESULT = "EXTRA_DATA_RESULT"
         const val RESULT_KEYSTORE_ALIAS = "SharedSecureStorageActivity"
         fun newIntent(context: Context, keyId: String? = null, requestedSecrets: List<String>, resultKeyStoreAlias: String = RESULT_KEYSTORE_ALIAS): Intent {
             require(requestedSecrets.isNotEmpty())

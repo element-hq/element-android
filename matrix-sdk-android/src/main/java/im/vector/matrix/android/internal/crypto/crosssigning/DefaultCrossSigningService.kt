@@ -292,6 +292,76 @@ internal class DefaultCrossSigningService @Inject constructor(
         cryptoStore.clearOtherUserTrust()
     }
 
+    override fun checkTrustFromPrivateKeys(masterKeyPrivateKey: String?, uskKeyPrivateKey: String?, sskPrivateKey: String?, callback: MatrixCallback<Unit>?): UserTrustResult {
+        val mxCrossSigningInfo = getMyCrossSigningKeys() ?: return UserTrustResult.CrossSigningNotConfigured(userId)
+
+        var masterKeyIsTrusted = false
+        var userKeyIsTrusted = false
+        var selfSignedKeyIsTrusted = false
+
+        masterKeyPrivateKey?.fromBase64NoPadding()
+                ?.let { privateKeySeed ->
+                    val pkSigning = OlmPkSigning()
+                    try {
+                        if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.masterKey()?.unpaddedBase64PublicKey) {
+                            masterPkSigning?.releaseSigning()
+                            masterPkSigning = pkSigning
+                            masterKeyIsTrusted = true
+                            Timber.i("## CrossSigning - Loading master key success")
+                        } else {
+                            pkSigning.releaseSigning()
+                        }
+                    } catch (failure: Throwable) {
+                        pkSigning.releaseSigning()
+                    }
+                }
+
+        uskKeyPrivateKey?.fromBase64NoPadding()
+                ?.let { privateKeySeed ->
+                    val pkSigning = OlmPkSigning()
+                    try {
+                        if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.userKey()?.unpaddedBase64PublicKey) {
+                            userPkSigning?.releaseSigning()
+                            userPkSigning = pkSigning
+                            userKeyIsTrusted = true
+                            Timber.i("## CrossSigning - Loading master key success")
+                        } else {
+                            pkSigning.releaseSigning()
+                        }
+                    } catch (failure: Throwable) {
+                        pkSigning.releaseSigning()
+                    }
+                }
+
+        sskPrivateKey?.fromBase64NoPadding()
+                ?.let { privateKeySeed ->
+                    val pkSigning = OlmPkSigning()
+                    try {
+                        if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.selfSigningKey()?.unpaddedBase64PublicKey) {
+                            selfSigningPkSigning?.releaseSigning()
+                            selfSigningPkSigning = pkSigning
+                            selfSignedKeyIsTrusted = true
+                            Timber.i("## CrossSigning - Loading master key success")
+                        } else {
+                            pkSigning.releaseSigning()
+                        }
+                    } catch (failure: Throwable) {
+                        pkSigning.releaseSigning()
+                    }
+                }
+
+        if (!masterKeyIsTrusted || !userKeyIsTrusted || !selfSignedKeyIsTrusted) {
+            return UserTrustResult.KeysNotTrusted(mxCrossSigningInfo)
+        } else {
+            cryptoStore.markMyMasterKeyAsLocallyTrusted(true)
+            val checkSelfTrust = checkSelfTrust()
+            if (checkSelfTrust.isVerified()) {
+                cryptoStore.storePrivateKeysInfo(masterKeyPrivateKey, uskKeyPrivateKey, sskPrivateKey)
+            }
+            return checkSelfTrust
+        }
+    }
+
     /**
      *
      *  ┏━━━━━━━━┓                             ┏━━━━━━━━┓
