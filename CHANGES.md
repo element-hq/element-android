@@ -1,4 +1,4 @@
-Changes in RiotX 0.16.0 (2020-XX-XX)
+Changes in RiotX 0.16.0 (2020-02-14)
 ===================================================
 
 Features ✨:
@@ -13,18 +13,9 @@ Bugfix 🐛:
  - Fix issue with verification when other client declares it can only show QR code (#988)
  - Fix too errors in the code (1941862499c9ec5268cc80882512ced379cafcfd, a250a895fe0a4acf08c671e03434edcd29ccd84f)
 
-Translations 🗣:
- -
-
 SDK API changes ⚠️:
  - Javadoc improved for PushersService
  - PushersService.pushers() has been renamed to PushersService.getPushers()
-
-Build 🧱:
- -
-
-Other changes:
- -
 
 Changes in RiotX 0.15.0 (2020-02-10)
 ===================================================
