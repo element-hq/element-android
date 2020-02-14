@@ -637,9 +637,9 @@ internal class DefaultCrossSigningService @Inject constructor(
                     // In this case it will change my MSK trust, and should then re-trigger a check of all other user trust
                     setUserKeysAsTrusted(otherUserId, checkSelfTrust().isVerified())
                 }
-
-                eventBus.post(CryptoToSessionUserTrustChange(userIds))
             }
+
+            eventBus.post(CryptoToSessionUserTrustChange(userIds))
         }
     }
 
