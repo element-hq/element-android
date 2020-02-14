@@ -79,10 +79,10 @@ class QuadSTests : InstrumentedTest {
         var accountData: UserAccountDataEvent? = null
 
         val liveAccountData = runBlocking(Dispatchers.Main) {
-            aliceSession.getLiveAccountDataEvent("m.secret_storage.key.$TEST_KEY_ID")
+            aliceSession.getLiveAccountDataEvent("${DefaultSharedSecretStorageService.KEY_ID_BASE}.$TEST_KEY_ID")
         }
         val accountDataObserver = Observer<Optional<UserAccountDataEvent>?> { t ->
-            if (t?.getOrNull()?.type == "m.secret_storage.key.$TEST_KEY_ID") {
+            if (t?.getOrNull()?.type == "${DefaultSharedSecretStorageService.KEY_ID_BASE}.$TEST_KEY_ID") {
                 accountData = t.getOrNull()
                 accountDataLock.countDown()
             }
@@ -328,7 +328,7 @@ class QuadSTests : InstrumentedTest {
             quadS.generateKey(keyId, keyId, emptyKeySigner, it)
         }
 
-        assertAccountData(session, "m.secret_storage.key.$keyId")
+        assertAccountData(session, "${DefaultSharedSecretStorageService.KEY_ID_BASE}.$keyId")
 
         if (asDefault) {
             mTestHelper.doSync<Unit> {
@@ -353,7 +353,7 @@ class QuadSTests : InstrumentedTest {
                     it)
         }
 
-        assertAccountData(session, "m.secret_storage.key.$keyId")
+        assertAccountData(session, "${DefaultSharedSecretStorageService.KEY_ID_BASE}.$keyId")
         if (asDefault) {
             val setDefaultLatch = CountDownLatch(1)
             quadS.setDefaultKey(keyId, TestMatrixCallback(setDefaultLatch))
