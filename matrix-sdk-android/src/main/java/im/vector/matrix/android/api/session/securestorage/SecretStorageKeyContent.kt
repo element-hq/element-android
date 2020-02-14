@@ -71,7 +71,7 @@ data class SecretStorageKeyContent(
                     ?.let { ssssPassphrase ->
                         this["passphrase"] = mapOf(
                                 "algorithm" to ssssPassphrase.algorithm,
-                                "iterations" to ssssPassphrase.salt,
+                                "iterations" to ssssPassphrase.iterations,
                                 "salt" to ssssPassphrase.salt
                         )
                     }
