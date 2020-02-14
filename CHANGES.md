@@ -11,6 +11,7 @@ Improvements 🙌:
 Bugfix 🐛:
  - Fix crash by removing all notifications after clearing cache (#878)
  - Fix issue with verification when other client declares it can only show QR code (#988)
+ - Fix too errors in the code (1941862499c9ec5268cc80882512ced379cafcfd, a250a895fe0a4acf08c671e03434edcd29ccd84f)
 
 Translations 🗣:
  -
