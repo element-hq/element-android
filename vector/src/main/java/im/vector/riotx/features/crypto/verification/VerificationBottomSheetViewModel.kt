@@ -253,6 +253,9 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
             is VerificationAction.SkipVerification              -> {
                 _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
             }
+            is VerificationAction.VerifyFromPassphrase              -> {
+                _viewEvents.post(VerificationBottomSheetViewEvents.AccessSecretStore)
+            }
         }.exhaustive
     }
 

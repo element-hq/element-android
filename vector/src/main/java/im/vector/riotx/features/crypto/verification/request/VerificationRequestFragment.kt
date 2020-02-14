@@ -63,6 +63,7 @@ class VerificationRequestFragment @Inject constructor(
     }
 
     override fun onClickRecoverFromPassphrase() {
+        viewModel.handle(VerificationAction.VerifyFromPassphrase)
     }
 
     override fun onClickDismiss() {

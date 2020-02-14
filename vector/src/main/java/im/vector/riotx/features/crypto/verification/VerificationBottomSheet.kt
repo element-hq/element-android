@@ -36,6 +36,7 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.commitTransactionNow
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.riotx.features.crypto.quads.SharedSecureStorageActivity
 import im.vector.riotx.features.crypto.verification.choose.VerificationChooseMethodFragment
 import im.vector.riotx.features.crypto.verification.conclusion.VerificationConclusionFragment
 import im.vector.riotx.features.crypto.verification.emoji.VerificationEmojiCodeFragment
@@ -87,6 +88,9 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         viewModel.observeViewEvents {
             when (it) {
                 is VerificationBottomSheetViewEvents.Dismiss -> dismiss()
+                is VerificationBottomSheetViewEvents.AccessSecretStore -> {
+                    startActivity(SharedSecureStorageActivity.newIntent(requireContext(),null, listOf("m.cross_signing.user_signing")))
+                }
             }.exhaustive
         }
     }

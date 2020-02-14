@@ -19,7 +19,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Light"
         tools:replace="android:allowBackup">
-
         <activity
             android:name=".features.MainActivity"
             android:theme="@style/AppTheme.Launcher" />
@@ -57,7 +56,6 @@
         <activity
             android:name=".features.crypto.keysbackup.settings.KeysBackupManageActivity"
             android:label="@string/encryption_message_recovery" />
-
         <activity
             android:name=".features.reactions.EmojiReactionPickerActivity"
             android:label="@string/title_activity_emoji_reaction_picker" />
@@ -73,7 +71,7 @@
                 android:value=".features.home.HomeActivity" />
         </activity>
         <activity android:name=".features.debug.DebugMenuActivity" />
-        <activity android:name="im.vector.riotx.features.createdirect.CreateDirectRoomActivity" />
+        <activity android:name=".features.createdirect.CreateDirectRoomActivity" />
         <activity android:name=".features.webview.VectorWebViewActivity" />
         <activity android:name=".features.link.LinkHandlerActivity">
             <intent-filter>
@@ -97,6 +95,7 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <data android:mimeType="*/*" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -104,15 +103,14 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND_MULTIPLE" />
+
                 <data android:mimeType="*/*" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.OPENABLE" />
             </intent-filter>
         </activity>
-
         <activity android:name=".features.roomprofile.RoomProfileActivity" />
-
         <activity android:name=".features.signout.hard.SignedOutActivity" />
         <activity
             android:name=".features.signout.soft.SoftLogoutActivity"
@@ -129,7 +127,6 @@
                 <data android:host="matrix.to" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".features.roommemberprofile.RoomMemberProfileActivity"
             android:parentActivityName=".features.home.HomeActivity">
@@ -137,9 +134,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".features.home.HomeActivity" />
         </activity>
-
         <activity android:name=".features.qrcode.QrCodeScannerActivity" />
 
+        <activity android:name=".features.crypto.quads.SharedSecureStorageActivity" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait" />
@@ -149,25 +146,17 @@
             android:theme="@style/AppTheme.AttachmentsPreview" />
 
         <!-- Services -->
-
         <service
             android:name=".core.services.CallService"
             android:exported="false" />
-
         <service
             android:name=".core.services.VectorSyncService"
-            android:exported="false" />
-
-        <!-- Receivers -->
-
+            android:exported="false" /> <!-- Receivers -->
         <!-- Exported false, should only be accessible from this app!! -->
         <receiver
             android:name=".features.notifications.NotificationBroadcastReceiver"
             android:enabled="true"
-            android:exported="false" />
-
-        <!-- Providers -->
-
+            android:exported="false" /> <!-- Providers -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"
