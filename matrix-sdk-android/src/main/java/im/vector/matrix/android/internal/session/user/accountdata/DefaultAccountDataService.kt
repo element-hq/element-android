@@ -22,13 +22,13 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.accountdata.AccountDataService
 import im.vector.matrix.android.api.session.events.model.Content
+import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.JSON_DICT_PARAMETERIZED_TYPE
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.database.model.UserAccountDataEntity
 import im.vector.matrix.android.internal.database.model.UserAccountDataEntityFields
 import im.vector.matrix.android.internal.di.MoshiProvider
-import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.session.sync.UserAccountDataSyncHandler
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -37,7 +37,6 @@ import javax.inject.Inject
 
 internal class DefaultAccountDataService @Inject constructor(
         private val monarchy: Monarchy,
-        @SessionId private val sessionId: String,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
         private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
         private val taskExecutor: TaskExecutor
@@ -47,39 +46,39 @@ internal class DefaultAccountDataService @Inject constructor(
     private val adapter = moshi.adapter<Map<String, Any>>(JSON_DICT_PARAMETERIZED_TYPE)
 
     override fun getAccountDataEvent(type: String): UserAccountDataEvent? {
-        return getAccountDataEvents(listOf(type)).firstOrNull()
+        return getAccountDataEvents(setOf(type)).firstOrNull()
     }
 
     override fun getLiveAccountDataEvent(type: String): LiveData<Optional<UserAccountDataEvent>> {
-        return Transformations.map(getLiveAccountDataEvents(listOf(type))) {
+        return Transformations.map(getLiveAccountDataEvents(setOf(type))) {
             it.firstOrNull()?.toOptional()
         }
     }
 
-    override fun getAccountDataEvents(filterType: List<String>): List<UserAccountDataEvent> {
+    override fun getAccountDataEvents(types: Set<String>): List<UserAccountDataEvent> {
         return monarchy.fetchAllCopiedSync { realm ->
             realm.where(UserAccountDataEntity::class.java)
                     .apply {
-                        if (filterType.isNotEmpty()) {
-                            `in`(UserAccountDataEntityFields.TYPE, filterType.toTypedArray())
+                        if (types.isNotEmpty()) {
+                            `in`(UserAccountDataEntityFields.TYPE, types.toTypedArray())
                         }
                     }
-        }?.mapNotNull { entity ->
+        }.mapNotNull { entity ->
             entity.type?.let { type ->
                 UserAccountDataEvent(
                         type = type,
                         content = entity.contentStr?.let { adapter.fromJson(it) } ?: emptyMap()
                 )
             }
-        } ?: emptyList()
+        }
     }
 
-    override fun getLiveAccountDataEvents(filterType: List<String>): LiveData<List<UserAccountDataEvent>> {
+    override fun getLiveAccountDataEvents(types: Set<String>): LiveData<List<UserAccountDataEvent>> {
         return monarchy.findAllMappedWithChanges({ realm ->
             realm.where(UserAccountDataEntity::class.java)
                     .apply {
-                        if (filterType.isNotEmpty()) {
-                            `in`(UserAccountDataEntityFields.TYPE, filterType.toTypedArray())
+                        if (types.isNotEmpty()) {
+                            `in`(UserAccountDataEntityFields.TYPE, types.toTypedArray())
                         }
                     }
         }, { entity ->
@@ -90,14 +89,15 @@ internal class DefaultAccountDataService @Inject constructor(
         })
     }
 
-    override fun updateAccountData(type: String, content: Content, callback: MatrixCallback<Unit>?) {
-        updateUserAccountDataTask.configureWith(UpdateUserAccountDataTask.AnyParams(
+    override fun updateAccountData(type: String, content: Content, callback: MatrixCallback<Unit>?): Cancelable {
+        return updateUserAccountDataTask.configureWith(UpdateUserAccountDataTask.AnyParams(
                 type = type,
                 any = content
         )) {
             this.retryCount = 5
             this.callback = object : MatrixCallback<Unit> {
                 override fun onSuccess(data: Unit) {
+                    // TODO Move that to the task (but it created a circular dependencies...)
                     monarchy.runTransactionSync { realm ->
                         userAccountDataSyncHandler.handleGenericAccountData(realm, type, content)
                     }
