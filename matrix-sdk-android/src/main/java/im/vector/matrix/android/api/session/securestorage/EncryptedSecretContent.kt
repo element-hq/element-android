@@ -19,6 +19,7 @@ package im.vector.matrix.android.api.session.securestorage
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.session.user.accountdata.AccountDataContent
 
 /**
  * The account_data will have an encrypted property that is a map from key ID to an object.
@@ -32,7 +33,7 @@ data class EncryptedSecretContent(
         @Json(name = "ciphertext") val ciphertext: String? = null,
         @Json(name = "mac") val mac: String? = null,
         @Json(name = "ephemeral") val ephemeral: String? = null
-) {
+) : AccountDataContent {
     companion object {
         /**
          * Facility method to convert from object which must be comprised of maps, lists,
