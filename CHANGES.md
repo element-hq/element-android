@@ -15,7 +15,7 @@ Bugfix 🐛:
 Translations 🗣:
  -
 
-SDK API changes 🔞:
+SDK API changes ⚠️:
  - Javadoc improved for PushersService
  - PushersService.pushers() has been renamed to PushersService.getPushers()
 
@@ -396,7 +396,7 @@ Bugfix 🐛:
 Translations 🗣:
  -
 
-SDK API changes 🔞:
+SDK API changes ⚠️:
  - 
 
 Build 🧱:
@@ -404,4 +404,3 @@ Build 🧱:
 
 Other changes:
  -
-
