@@ -108,5 +108,5 @@ interface SharedSecretStorageService {
      *
      */
     @Throws
-    fun getSecret(name: String, keyId: String?, secretKey: SSSSKeySpec, callback: MatrixCallback<String>)
+    fun getSecret(name: String, keyId: String?, secretKey: SsssKeySpec, callback: MatrixCallback<String>)
 }

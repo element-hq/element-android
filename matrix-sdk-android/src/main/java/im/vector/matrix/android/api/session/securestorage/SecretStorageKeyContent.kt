@@ -54,25 +54,28 @@ data class SecretStorageKeyContent(
         /** Currently support m.secret_storage.v1.curve25519-aes-sha2 */
         @Json(name = "algorithm") val algorithm: String? = null,
         @Json(name = "name") val name: String? = null,
-        @Json(name = "passphrase") val passphrase: SSSSPassphrase? = null,
+        @Json(name = "passphrase") val passphrase: SsssPassphrase? = null,
         @Json(name = "pubkey") val publicKey: String? = null,
-        @Json(name = "signatures")
-        var signatures: Map<String, Map<String, String>>? = null
+        @Json(name = "signatures") val signatures: Map<String, Map<String, String>>? = null
 ) {
 
     private fun signalableJSONDictionary(): Map<String, Any> {
-        val map = HashMap<String, Any>()
-        algorithm?.let { map["algorithm"] = it }
-        name?.let { map["name"] = it }
-        publicKey?.let { map["pubkey"] = it }
-        passphrase?.let { ssspp ->
-            map["passphrase"] = mapOf(
-                    "algorithm" to ssspp.algorithm,
-                    "iterations" to ssspp.salt,
-                    "salt" to ssspp.salt
-            )
+        return mutableMapOf<String, Any>().apply {
+            algorithm
+                    ?.let { this["algorithm"] = it }
+            name
+                    ?.let { this["name"] = it }
+            publicKey
+                    ?.let { this["pubkey"] = it }
+            passphrase
+                    ?.let { ssssPassphrase ->
+                        this["passphrase"] = mapOf(
+                                "algorithm" to ssssPassphrase.algorithm,
+                                "iterations" to ssssPassphrase.salt,
+                                "salt" to ssssPassphrase.salt
+                        )
+                    }
         }
-        return map
     }
 
     fun canonicalSignable(): String {
@@ -93,7 +96,7 @@ data class SecretStorageKeyContent(
 }
 
 @JsonClass(generateAdapter = true)
-data class SSSSPassphrase(
+data class SsssPassphrase(
         @Json(name = "algorithm") val algorithm: String?,
         @Json(name = "iterations") val iterations: Int,
         @Json(name = "salt") val salt: String?
