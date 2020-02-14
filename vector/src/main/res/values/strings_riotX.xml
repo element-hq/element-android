@@ -21,6 +21,15 @@
     
     <string name="verification_cannot_access_other_session">Can‘t access an existing session?</string>
     <string name="verification_use_passphrase">Use your recovery key or passphrase</string>
+
+
+    <string name="new_signin">New Sign In</string>
+
+    <string name="enter_secret_storage_passphrase">Enter secret storage passphrase</string>
+    <string name="enter_secret_storage_passphrase_warning">Warning:</string>
+    <string name="enter_secret_storage_passphrase_warning_text">You should only access secret storage from a trusted device</string>
+    <string name="enter_secret_storage_passphrase_reason_verify">Access your secure message history and your cross-signing identity for verifying other sessions by entering your passphrase</string>
+
     <!-- END Strings added by Valere -->
 
 

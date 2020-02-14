@@ -23,4 +23,5 @@ import im.vector.riotx.core.platform.VectorViewEvents
  */
 sealed class VerificationBottomSheetViewEvents : VectorViewEvents {
     object Dismiss : VerificationBottomSheetViewEvents()
+    object AccessSecretStore : VerificationBottomSheetViewEvents()
 }

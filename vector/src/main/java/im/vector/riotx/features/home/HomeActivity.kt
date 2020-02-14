@@ -148,9 +148,22 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
             // We need to ask
             sharedActionViewModel.hasDisplayedCompleteSecurityPrompt = true
-            navigator.waitSessionVerification(this)
-        } else {
-            // TODO upgrade security -> bootstrap cross signing
+            PopupAlertManager.postVectorAlert(
+                    PopupAlertManager.VectorAlert(
+                            uid = "completeSecurity",
+                            title = getString(R.string.new_signin),
+                            description = getString(R.string.complete_security),
+                            iconId = R.drawable.ic_shield_warning
+                    ).apply {
+                        colorInt = ContextCompat.getColor(this@HomeActivity, R.color.riotx_destructive_accent)
+                        contentAction = Runnable {
+                            (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
+                                it.navigator.waitSessionVerification(it)
+                            }
+                        }
+                        dismissedAction = Runnable {}
+                    }
+            )
         }
     }
 
