@@ -157,6 +157,11 @@ data class Event(
      */
     fun isRedacted() = unsignedData?.redactedEvent != null
 
+    /**
+     * Tells if the event is redacted by the user himself.
+     */
+    fun isRedactedBySameUser() = senderId == unsignedData?.redactedEvent?.senderId
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
