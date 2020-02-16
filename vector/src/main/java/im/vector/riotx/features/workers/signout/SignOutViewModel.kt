@@ -30,36 +30,36 @@ class SignOutViewModel @Inject constructor(private val session: Session) : ViewM
     var keysBackupState = MutableLiveData<KeysBackupState>()
 
     init {
-        session.getKeysBackupService().addListener(this)
+        session.cryptoService().keysBackupService().addListener(this)
 
-        keysBackupState.value = session.getKeysBackupService().state
+        keysBackupState.value = session.cryptoService().keysBackupService().state
     }
 
     /**
      * Safe way to get the current KeysBackup version
      */
     fun getCurrentBackupVersion(): String {
-        return session.getKeysBackupService().currentBackupVersion ?: ""
+        return session.cryptoService().keysBackupService().currentBackupVersion ?: ""
     }
 
     /**
      * Safe way to get the number of keys to backup
      */
     fun getNumberOfKeysToBackup(): Int {
-        return session.inboundGroupSessionsCount(false)
+        return session.cryptoService().inboundGroupSessionsCount(false)
     }
 
     /**
      * Safe way to tell if there are more keys on the server
      */
     fun canRestoreKeys(): Boolean {
-        return session.getKeysBackupService().canRestoreKeys()
+        return session.cryptoService().keysBackupService().canRestoreKeys()
     }
 
     override fun onCleared() {
         super.onCleared()
 
-        session.getKeysBackupService().removeListener(this)
+        session.cryptoService().keysBackupService().removeListener(this)
     }
 
     override fun onStateChange(newState: KeysBackupState) {
@@ -68,7 +68,7 @@ class SignOutViewModel @Inject constructor(private val session: Session) : ViewM
 
     fun refreshRemoteStateIfNeeded() {
         if (keysBackupState.value == KeysBackupState.Disabled) {
-            session.getKeysBackupService().checkAndStartKeysBackup()
+            session.cryptoService().keysBackupService().checkAndStartKeysBackup()
         }
     }
 }

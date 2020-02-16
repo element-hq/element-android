@@ -100,7 +100,7 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
                         if (it.isEncrypted() && it.mxDecryptionResult == null) {
                             // for now decrypt sync
                             try {
-                                val result = session.decryptEvent(it, timelineID)
+                                val result = session.cryptoService().decryptEvent(it, timelineID)
                                 it.mxDecryptionResult = OlmDecryptionResult(
                                         payload = result.clearEvent,
                                         senderKey = result.senderCurve25519Key,

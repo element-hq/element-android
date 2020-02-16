@@ -66,7 +66,7 @@ class DefaultNavigator @Inject constructor(
 
     override fun performDeviceVerification(context: Context, otherUserId: String, sasTransationId: String) {
         val session = sessionHolder.getSafeActiveSession() ?: return
-        val tx = session.getVerificationService().getExistingTransaction(otherUserId, sasTransationId) ?: return
+        val tx = session.cryptoService().verificationService().getExistingTransaction(otherUserId, sasTransationId) ?: return
         (tx as? IncomingSasVerificationTransaction)?.performAccept()
         if (context is VectorBaseActivity) {
             VerificationBottomSheet.withArgs(
@@ -79,10 +79,10 @@ class DefaultNavigator @Inject constructor(
 
     override fun requestSessionVerification(context: Context) {
         val session = sessionHolder.getSafeActiveSession() ?: return
-        val pr = session.getVerificationService().requestKeyVerification(
+        val pr = session.cryptoService().verificationService().requestKeyVerification(
                 listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SCAN, VerificationMethod.QR_CODE_SHOW),
                 session.myUserId,
-                session.getUserDevices(session.myUserId).map { it.deviceId })
+                session.cryptoService().getUserDevices(session.myUserId).map { it.deviceId })
         if (context is VectorBaseActivity) {
             VerificationBottomSheet.withArgs(
                     roomId = null,

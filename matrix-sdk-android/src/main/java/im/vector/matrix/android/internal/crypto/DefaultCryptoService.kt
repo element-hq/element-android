@@ -340,14 +340,14 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * @return the Keys backup Service
      */
-    override fun getKeysBackupService() = keysBackup
+    override fun keysBackupService() = keysBackup
 
     /**
      * @return the VerificationService
      */
-    override fun getVerificationService() = verificationService
+    override fun verificationService() = verificationService
 
-    override fun getCrossSigningService() = crossSigningService
+    override fun crossSigningService() = crossSigningService
 
     /**
      * A sync response has been received

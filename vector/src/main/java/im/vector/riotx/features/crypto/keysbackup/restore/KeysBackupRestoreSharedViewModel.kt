@@ -63,7 +63,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor() : ViewModel() {
     }
 
     fun getLatestVersion(context: Context) {
-        val keysBackup = session.getKeysBackupService()
+        val keysBackup = session.cryptoService().keysBackupService()
 
         loadingEvent.value = WaitingViewData(context.getString(R.string.keys_backup_restore_is_getting_backup_version))
 

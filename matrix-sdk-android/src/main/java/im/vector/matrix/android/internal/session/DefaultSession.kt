@@ -88,7 +88,6 @@ internal class DefaultSession @Inject constructor(
         private val syncThreadProvider: Provider<SyncThread>,
         private val contentUrlResolver: ContentUrlResolver,
         private val syncTokenStore: SyncTokenStore,
-        private val syncTaskSequencer: SyncTaskSequencer,
         private val sessionParamsStore: SessionParamsStore,
         private val contentUploadProgressTracker: ContentUploadStateTracker,
         private val initialSyncProgressService: Lazy<InitialSyncProgressService>,
@@ -101,7 +100,6 @@ internal class DefaultSession @Inject constructor(
         RoomDirectoryService by roomDirectoryService.get(),
         GroupService by groupService.get(),
         UserService by userService.get(),
-        CryptoService by cryptoService.get(),
         SignOutService by signOutService.get(),
         FilterService by filterService.get(),
         PushRuleService by pushRuleService.get(),
@@ -170,7 +168,6 @@ internal class DefaultSession @Inject constructor(
         cryptoService.get().close()
         isOpen = false
         eventBus.unregister(this)
-        syncTaskSequencer.close()
         shieldTrustUpdater.stop()
     }
 
@@ -211,6 +208,8 @@ internal class DefaultSession @Inject constructor(
     override fun contentUrlResolver() = contentUrlResolver
 
     override fun contentUploadProgressTracker() = contentUploadProgressTracker
+
+    override fun cryptoService(): CryptoService = cryptoService.get()
 
     override fun addListener(listener: Session.Listener) {
         sessionListeners.addListener(listener)

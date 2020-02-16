@@ -64,13 +64,13 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
 
     fun start(session: Session) {
         this.session = session
-        session.getVerificationService().addListener(this)
-        session.addRoomKeysRequestListener(this)
+        session.cryptoService().verificationService().addListener(this)
+        session.cryptoService().addRoomKeysRequestListener(this)
     }
 
     fun stop() {
-        session?.getVerificationService()?.removeListener(this)
-        session?.removeRoomKeysRequestListener(this)
+        session?.cryptoService()?.verificationService()?.removeListener(this)
+        session?.cryptoService()?.removeRoomKeysRequestListener(this)
         session = null
     }
 
@@ -100,7 +100,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
         alertsToRequests[mappingKey] = ArrayList<IncomingRoomKeyRequest>().apply { this.add(request) }
 
         // Add a notification for every incoming request
-        session?.downloadKeys(listOf(userId), false, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
+        session?.cryptoService()?.downloadKeys(listOf(userId), false, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
             override fun onSuccess(data: MXUsersDevicesMap<CryptoDeviceInfo>) {
                 val deviceInfo = data.getObject(userId, deviceId)
 
@@ -111,12 +111,12 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
                 }
 
                 if (deviceInfo.isUnknown) {
-                    session?.setDeviceVerification(DeviceTrustLevel(false, false), userId, deviceId)
+                    session?.cryptoService()?.setDeviceVerification(DeviceTrustLevel(false, false), userId, deviceId)
 
                     deviceInfo.trustLevel = DeviceTrustLevel(false, false)
 
                     // can we get more info on this device?
-                    session?.getDevicesList(object : MatrixCallback<DevicesListResponse> {
+                    session?.cryptoService()?.getDevicesList(object : MatrixCallback<DevicesListResponse> {
                         override fun onSuccess(data: DevicesListResponse) {
                             data.devices?.find { it.deviceId == deviceId }?.let {
                                 postAlert(context, userId, deviceId, true, deviceInfo, it)

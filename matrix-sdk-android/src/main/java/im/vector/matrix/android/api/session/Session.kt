@@ -39,6 +39,7 @@ import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.UserService
+import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 
 /**
  * This interface defines interactions with a session.
@@ -49,7 +50,6 @@ interface Session :
         RoomDirectoryService,
         GroupService,
         UserService,
-        CryptoService,
         CacheService,
         SignOutService,
         FilterService,
@@ -138,6 +138,11 @@ interface Session :
      * Returns the ContentUploadProgressTracker associated with the session
      */
     fun contentUploadProgressTracker(): ContentUploadStateTracker
+
+    /**
+     * Returns the cryptoService associated with the session
+     */
+    fun cryptoService(): CryptoService
 
     /**
      * Add a listener to the session.
