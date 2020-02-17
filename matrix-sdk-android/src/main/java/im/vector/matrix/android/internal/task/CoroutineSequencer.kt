@@ -20,7 +20,7 @@ import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 
 /**
- * This class intends to be used for ensure suspendable methods are played sequentially all the way long.
+ * This class intends to be used to ensure suspendable methods are played sequentially all the way long.
  */
 internal interface CoroutineSequencer {
     /**
@@ -32,7 +32,8 @@ internal interface CoroutineSequencer {
 
 internal open class SemaphoreCoroutineSequencer : CoroutineSequencer {
 
-    private val semaphore = Semaphore(1) // Permits 1 suspend function at a time.
+    // Permits 1 suspend function at a time.
+    private val semaphore = Semaphore(1)
 
     override suspend fun <T> post(block: suspend () -> T): T {
         return semaphore.withPermit {
