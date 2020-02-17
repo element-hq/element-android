@@ -221,55 +221,34 @@ internal class DefaultSendService @AssistedInject constructor(
      * We use the roomId of the local echo event
      */
     private fun internalSendMedia(allLocalEchoes: List<Event>, attachment: ContentAttachmentData, compressBeforeSending: Boolean): Cancelable {
-        val splitLocalEchoes = allLocalEchoes.groupBy { cryptoService.isRoomEncrypted(it.roomId!!) }
-
-        val encryptedLocalEchoes = splitLocalEchoes[true].orEmpty()
-        val clearLocalEchoes = splitLocalEchoes[false].orEmpty()
-
         val cancelableBag = CancelableBag()
 
-        if (encryptedLocalEchoes.isNotEmpty()) {
-            val uploadWork = createUploadMediaWork(encryptedLocalEchoes, attachment, true, compressBeforeSending, startChain = true)
+        allLocalEchoes.groupBy { cryptoService.isRoomEncrypted(it.roomId!!) }
+                .apply {
+                    keys.forEach { isRoomEncrypted ->
+                        // Should never be empty
+                        val localEchoes = get(isRoomEncrypted).orEmpty()
+                        val uploadWork = createUploadMediaWork(localEchoes, attachment, isRoomEncrypted, compressBeforeSending, startChain = true)
 
-            val dispatcherWork = createMultipleEventDispatcherWork(true)
+                        val dispatcherWork = createMultipleEventDispatcherWork(isRoomEncrypted)
 
-            workManagerProvider.workManager
-                    .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
-                    .then(dispatcherWork)
-                    .enqueue()
-                    .also { operation ->
-                        operation.result.addListener(Runnable {
-                            if (operation.result.isCancelled) {
-                                Timber.e("CHAIN WAS CANCELLED")
-                            } else if (operation.state.value is Operation.State.FAILURE) {
-                                Timber.e("CHAIN DID FAIL")
-                            }
-                        }, workerFutureListenerExecutor)
+                        workManagerProvider.workManager
+                                .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
+                                .then(dispatcherWork)
+                                .enqueue()
+                                .also { operation ->
+                                    operation.result.addListener(Runnable {
+                                        if (operation.result.isCancelled) {
+                                            Timber.e("CHAIN WAS CANCELLED")
+                                        } else if (operation.state.value is Operation.State.FAILURE) {
+                                            Timber.e("CHAIN DID FAIL")
+                                        }
+                                    }, workerFutureListenerExecutor)
+                                }
+
+                        cancelableBag.add(CancelableWork(workManagerProvider.workManager, dispatcherWork.id))
                     }
-
-            cancelableBag.add(CancelableWork(workManagerProvider.workManager, dispatcherWork.id))
-        }
-
-        if (clearLocalEchoes.isNotEmpty()) {
-            val uploadWork = createUploadMediaWork(clearLocalEchoes, attachment, false, compressBeforeSending, startChain = true)
-            val dispatcherWork = createMultipleEventDispatcherWork(false)
-
-            workManagerProvider.workManager
-                    .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
-                    .then(dispatcherWork)
-                    .enqueue()
-                    .also { operation ->
-                        operation.result.addListener(Runnable {
-                            if (operation.result.isCancelled) {
-                                Timber.e("CHAIN WAS CANCELLED")
-                            } else if (operation.state.value is Operation.State.FAILURE) {
-                                Timber.e("CHAIN DID FAIL")
-                            }
-                        }, workerFutureListenerExecutor)
-                    }
-
-            cancelableBag.add(CancelableWork(workManagerProvider.workManager, dispatcherWork.id))
-        }
+                }
 
         return cancelableBag
     }
