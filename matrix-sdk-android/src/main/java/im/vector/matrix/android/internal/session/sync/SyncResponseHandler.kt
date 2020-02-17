@@ -126,10 +126,10 @@ internal class SyncResponseHandler @Inject constructor(private val monarchy: Mon
         syncResponse.join.forEach {
             val roomId = it.key
             val roomSync = it.value
-            roomEventsProcessors.process(processMode, roomId, roomSync.timeline?.events ?: emptyList())
-            roomEventsProcessors.process(processMode, roomId, roomSync.accountData?.events ?: emptyList())
-            roomEventsProcessors.process(processMode, roomId, roomSync.ephemeral?.events ?: emptyList())
-            roomEventsProcessors.process(processMode, roomId, roomSync.state?.events ?: emptyList())
+            roomEventsProcessors.process(processMode, roomId, roomSync.timeline?.events.orEmpty())
+            roomEventsProcessors.process(processMode, roomId, roomSync.accountData?.events.orEmpty())
+            roomEventsProcessors.process(processMode, roomId, roomSync.ephemeral?.events.orEmpty())
+            roomEventsProcessors.process(processMode, roomId, roomSync.state?.events.orEmpty())
         }
         Timber.v("On sync completed")
     }

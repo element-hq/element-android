@@ -397,7 +397,7 @@ internal class RealmCryptoStore @Inject constructor(
                 }
         )
         return Transformations.map(liveData) {
-            it.firstOrNull() ?: emptyList()
+            it.firstOrNull().orEmpty()
         }
     }
 
@@ -427,7 +427,7 @@ internal class RealmCryptoStore @Inject constructor(
                 }
         )
         return Transformations.map(liveData) {
-            it.firstOrNull() ?: emptyList()
+            it.firstOrNull().orEmpty()
         }
     }
 

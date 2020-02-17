@@ -34,7 +34,7 @@ internal class EnsureOlmSessionsForUsersAction @Inject constructor(private val o
     suspend fun handle(users: List<String>): MXUsersDevicesMap<MXOlmSessionResult> {
         Timber.v("## ensureOlmSessionsForUsers() : ensureOlmSessionsForUsers $users")
         val devicesByUser = users.associateWith { userId ->
-            val devices = cryptoStore.getUserDevices(userId)?.values ?: emptyList()
+            val devices = cryptoStore.getUserDevices(userId)?.values.orEmpty()
 
             devices.filter {
                 // Don't bother setting up session to ourself

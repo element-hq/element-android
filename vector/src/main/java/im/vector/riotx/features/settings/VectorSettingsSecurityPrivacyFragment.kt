@@ -439,7 +439,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         session.cryptoService().getDevicesList(object : MatrixCallback<DevicesListResponse> {
             override fun onSuccess(data: DevicesListResponse) {
                 if (isAdded) {
-                    refreshCryptographyPreference(data.devices ?: emptyList())
+                    refreshCryptographyPreference(data.devices.orEmpty())
                 }
             }
 

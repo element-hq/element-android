@@ -64,8 +64,8 @@ import im.vector.matrix.android.internal.session.room.create.RoomCreateEventLive
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
 import im.vector.matrix.android.internal.session.room.tombstone.RoomTombstoneEventLiveObserver
 import im.vector.matrix.android.internal.session.securestorage.DefaultSecureStorageService
-import im.vector.matrix.android.internal.session.user.accountdata.DefaultAccountDataService
 import im.vector.matrix.android.internal.session.sync.RoomEventsProcessor
+import im.vector.matrix.android.internal.session.user.accountdata.DefaultAccountDataService
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
@@ -269,9 +269,9 @@ internal abstract class SessionModule {
 
     @IntoSet
     @Binds
-    abstract fun bindEventRelationsAggregationProcessor(eventRelationsAggregationProcessor: EventRelationsAggregationProcessor): RoomEventsProcessor
+    abstract fun bindEventRelationsAggregationProcessor(processor: EventRelationsAggregationProcessor): RoomEventsProcessor
 
     @Binds
     @IntoSet
-    abstract fun bindRoomVerificationUpdateProcessor(roomVerificationUpdateProcessor: RoomEventVerificationProcessor): RoomEventsProcessor
+    abstract fun bindRoomEventVerificationProcessor(processor: RoomEventVerificationProcessor): RoomEventsProcessor
 }

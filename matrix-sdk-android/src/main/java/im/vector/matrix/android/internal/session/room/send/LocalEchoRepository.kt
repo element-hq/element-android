@@ -153,6 +153,7 @@ internal class LocalEchoRepository @Inject constructor(private val monarchy: Mon
                                         MessageType.MSGTYPE_IMAGE,
                                         MessageType.MSGTYPE_AUDIO -> {
                                             // need to resend the attachment
+                                            Timber.w("Cannot resend message, we need to resend attachment first")
                                             false
                                         }
                                         else                      -> {

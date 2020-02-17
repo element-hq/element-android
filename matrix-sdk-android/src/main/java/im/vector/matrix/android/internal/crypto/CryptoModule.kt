@@ -249,5 +249,5 @@ internal abstract class CryptoModule {
     abstract fun bindComputeShieldTrustTask(task: DefaultComputeTrustTask): ComputeTrustTask
 
     @Binds
-    abstract fun bindVerificationEventHandler(verificationEventHandler: DefaultVerificationService): VerificationEventHandler
+    abstract fun bindVerificationEventHandler(handler: DefaultVerificationService): VerificationEventHandler
 }
