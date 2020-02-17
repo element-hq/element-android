@@ -420,7 +420,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                             popDraft()
                         }
                         is ParsedCommand.VerifyUser               -> {
-                            session.cryptoService().verificationService().requestKeyVerificationInDMs(supportedVerificationMethods, slashCommandResult.userId, room.roomId)
+                            session
+                                    .cryptoService()
+                                    .verificationService()
+                                    .requestKeyVerificationInDMs(supportedVerificationMethods, slashCommandResult.userId, room.roomId)
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }

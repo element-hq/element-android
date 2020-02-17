@@ -39,7 +39,6 @@ import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.UserService
-import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 
 /**
  * This interface defines interactions with a session.
