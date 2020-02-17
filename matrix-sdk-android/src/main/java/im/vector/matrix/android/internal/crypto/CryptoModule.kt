@@ -250,5 +250,4 @@ internal abstract class CryptoModule {
 
     @Binds
     abstract fun bindVerificationEventHandler(verificationEventHandler: DefaultVerificationService): VerificationEventHandler
-
 }

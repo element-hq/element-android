@@ -56,9 +56,7 @@ import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
 import im.vector.matrix.android.internal.session.room.send.pills.TextPillsUtils
-import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.StringProvider
-import kotlinx.coroutines.launch
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import javax.inject.Inject

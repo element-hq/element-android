@@ -274,5 +274,4 @@ internal abstract class SessionModule {
     @Binds
     @IntoSet
     abstract fun bindRoomVerificationUpdateProcessor(roomVerificationUpdateProcessor: RoomEventVerificationProcessor): RoomEventsProcessor
-
 }

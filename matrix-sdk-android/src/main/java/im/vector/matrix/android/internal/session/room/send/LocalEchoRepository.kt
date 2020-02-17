@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.session.room.send
 
 import com.zhuinden.monarchy.Monarchy
-import dagger.Lazy
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel

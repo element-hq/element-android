@@ -25,5 +25,4 @@ internal interface VerificationEventHandler {
     fun onRoomEvent(event: Event)
 
     fun onRoomRequestHandledByOtherDevice(event: Event)
-
 }
