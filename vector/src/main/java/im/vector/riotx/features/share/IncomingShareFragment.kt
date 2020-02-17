@@ -76,17 +76,19 @@ class IncomingShareFragment @Inject constructor(
         attachmentsHelper = AttachmentsHelper.create(this, this).register()
 
         val intent = vectorBaseActivity.intent
-        if (intent?.action == Intent.ACTION_SEND || intent?.action == Intent.ACTION_SEND_MULTIPLE) {
-            var isShareManaged = attachmentsHelper.handleShareIntent(
-                    IntentUtils.getPickerIntentForSharing(intent)
-            )
-            if (!isShareManaged) {
-                isShareManaged = handleTextShare(intent)
+        val isShareManaged = when (intent?.action) {
+            Intent.ACTION_SEND          -> {
+                var isShareManaged = attachmentsHelper.handleShareIntent(IntentUtils.getPickerIntentForSharing(intent))
+                if (!isShareManaged) {
+                    isShareManaged = handleTextShare(intent)
+                }
+                isShareManaged
             }
-            if (!isShareManaged) {
-                cannotManageShare(R.string.error_handling_incoming_share)
-            }
-        } else {
+            Intent.ACTION_SEND_MULTIPLE -> attachmentsHelper.handleShareIntent(intent)
+            else                        -> false
+        }
+
+        if (!isShareManaged) {
             cannotManageShare(R.string.error_handling_incoming_share)
         }
 
