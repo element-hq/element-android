@@ -23,6 +23,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -107,6 +108,16 @@ class AttachmentsPreviewFragment @Inject constructor(
         }
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        withState(viewModel) { state ->
+            val editMenuItem = menu.findItem(R.id.attachmentsPreviewEditAction)
+            val showEditMenuItem = state.attachments[state.currentAttachmentIndex].isEditable()
+            editMenuItem.setVisible(showEditMenuItem)
+        }
+
+        super.onPrepareOptionsMenu(menu)
+    }
+
     override fun getMenuRes() = R.menu.vector_attachments_preview
 
     override fun onDestroyView() {
@@ -116,6 +127,7 @@ class AttachmentsPreviewFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(viewModel) { state ->
+        requireActivity().invalidateOptionsMenu()
         if (state.attachments.isEmpty()) {
             requireActivity().setResult(RESULT_CANCELED)
             requireActivity().finish()
