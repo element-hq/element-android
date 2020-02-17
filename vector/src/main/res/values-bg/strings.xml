@@ -1907,7 +1907,7 @@
     <string name="login_msisdn_error_other">Телефонния номер изглежда невалиден. Моля проверете го</string>
 
     <string name="login_signup_to">Регистрация в %1$s</string>
-    <string name="login_signup_username_hint">Потребителско име или имейл</string>
+    <string name="login_signin_username_hint">Потребителско име или имейл</string>
     <string name="login_signup_password_hint">Парола</string>
     <string name="login_signup_submit">Напред</string>
     <string name="login_signup_error_user_in_use">Това потребителско име е заето</string>

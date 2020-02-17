@@ -23,9 +23,7 @@
 
     <!-- BEGIN Strings added by Benoit -->
     <string name="message_action_item_redact">Remove…</string>
-    <!-- END Strings added by Benoit -->
-
-
+    <string name="login_signup_username_hint">Username</string>
     <!-- BEGIN Strings added by Benoit -->
 
     <!-- END Strings added by Benoit -->

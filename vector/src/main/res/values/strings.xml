@@ -1912,7 +1912,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <!-- Replaced string is the homeserver url -->
     <string name="login_signup_to">Sign up to %1$s</string>
-    <string name="login_signup_username_hint">Username or email</string>
+    <string name="login_signin_username_hint">Username or email</string>
     <string name="login_signup_password_hint">Password</string>
     <string name="login_signup_submit">Next</string>
     <string name="login_signup_error_user_in_use">That username is taken</string>

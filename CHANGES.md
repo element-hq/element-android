@@ -9,7 +9,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Account creation: wrongly hints that an email can be used to create an account (#941)
 
 Translations 🗣:
  -

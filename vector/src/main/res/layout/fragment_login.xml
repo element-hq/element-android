@@ -50,8 +50,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:hint="@string/login_signup_username_hint"
-                app:errorEnabled="true">
+                app:errorEnabled="true"
+                tools:hint="@string/login_signin_username_hint">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/loginField"
