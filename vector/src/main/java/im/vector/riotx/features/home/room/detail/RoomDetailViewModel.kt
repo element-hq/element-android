@@ -422,7 +422,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                             popDraft()
                         }
                         is ParsedCommand.VerifyUser               -> {
-                            session.getVerificationService().requestKeyVerificationInDMs(supportedVerificationMethods, slashCommandResult.userId, room.roomId)
+                            session
+                                    .cryptoService()
+                                    .verificationService()
+                                    .requestKeyVerificationInDMs(supportedVerificationMethods, slashCommandResult.userId, room.roomId)
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
@@ -828,7 +831,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private fun handleAcceptVerification(action: RoomDetailAction.AcceptVerificationRequest) {
         Timber.v("## SAS handleAcceptVerification ${action.otherUserId},  roomId:${room.roomId}, txId:${action.transactionId}")
-        if (session.getVerificationService().readyPendingVerificationInDMs(
+        if (session.cryptoService().verificationService().readyPendingVerificationInDMs(
                         supportedVerificationMethods,
                         action.otherUserId,
                         room.roomId,
@@ -840,7 +843,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleDeclineVerification(action: RoomDetailAction.DeclineVerificationRequest) {
-        session.getVerificationService().declineVerificationRequestInDMs(
+        session.cryptoService().verificationService().declineVerificationRequestInDMs(
                 action.otherUserId,
                 action.transactionId,
                 room.roomId)
@@ -853,7 +856,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private fun handleResumeRequestVerification(action: RoomDetailAction.ResumeVerification) {
         // Check if this request is still active and handled by me
-        session.getVerificationService().getExistingVerificationRequestInRoom(room.roomId, action.transactionId)?.let {
+        session.cryptoService().verificationService().getExistingVerificationRequestInRoom(room.roomId, action.transactionId)?.let {
             if (it.handledByOtherSession) return
             if (!it.isFinished) {
                 _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action.copy(

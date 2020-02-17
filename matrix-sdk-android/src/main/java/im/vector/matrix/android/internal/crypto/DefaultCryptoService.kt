@@ -49,7 +49,7 @@ import im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmEncryp
 import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmEncryptionFactory
 import im.vector.matrix.android.internal.crypto.crosssigning.DefaultCrossSigningService
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
-import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
+import im.vector.matrix.android.internal.crypto.keysbackup.DefaultKeysBackupService
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
@@ -122,7 +122,7 @@ internal class DefaultCryptoService @Inject constructor(
         // Device list manager
         private val deviceListManager: DeviceListManager,
         // The key backup service.
-        private val keysBackup: KeysBackup,
+        private val keysBackupService: DefaultKeysBackupService,
         //
         private val objectSigner: ObjectSigner,
         //
@@ -301,7 +301,7 @@ internal class DefaultCryptoService @Inject constructor(
             uploadDeviceKeys()
             oneTimeKeysUploader.maybeUploadOneTimeKeys()
             outgoingRoomKeyRequestManager.start()
-            keysBackup.checkAndStartKeysBackup()
+            keysBackupService.checkAndStartKeysBackup()
             if (isInitialSync) {
                 // refresh the devices list for each known room members
                 deviceListManager.invalidateAllDeviceLists()
@@ -340,14 +340,14 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * @return the Keys backup Service
      */
-    override fun getKeysBackupService() = keysBackup
+    override fun keysBackupService() = keysBackupService
 
     /**
      * @return the VerificationService
      */
-    override fun getVerificationService() = verificationService
+    override fun verificationService() = verificationService
 
-    override fun getCrossSigningService() = crossSigningService
+    override fun crossSigningService() = crossSigningService
 
     /**
      * A sync response has been received
@@ -721,7 +721,7 @@ internal class DefaultCryptoService @Inject constructor(
             Timber.e("## onRoomKeyEvent() : Unable to handle keys for ${roomKeyContent.algorithm}")
             return
         }
-        alg.onRoomKeyEvent(event, keysBackup)
+        alg.onRoomKeyEvent(event, keysBackupService)
     }
 
     /**

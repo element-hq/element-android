@@ -18,7 +18,7 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
- -
+ - Get crypto methods through Session.cryptoService()
 
 Build 🧱:
  -

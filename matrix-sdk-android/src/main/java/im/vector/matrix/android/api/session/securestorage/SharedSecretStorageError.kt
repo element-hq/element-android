@@ -17,7 +17,6 @@
 package im.vector.matrix.android.api.session.securestorage
 
 sealed class SharedSecretStorageError(message: String?) : Throwable(message) {
-
     data class UnknownSecret(val secretName: String) : SharedSecretStorageError("Unknown Secret $secretName")
     data class UnknownKey(val keyId: String) : SharedSecretStorageError("Unknown key $keyId")
     data class UnknownAlgorithm(val keyId: String) : SharedSecretStorageError("Unknown algorithm $keyId")

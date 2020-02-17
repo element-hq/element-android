@@ -21,11 +21,11 @@ import im.vector.matrix.android.internal.crypto.keysbackup.deriveKey
 import im.vector.matrix.android.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 
 /** Tag class */
-interface SSSSKeySpec
+interface SsssKeySpec
 
 data class Curve25519AesSha2KeySpec(
         val privateKey: ByteArray
-) : SSSSKeySpec {
+) : SsssKeySpec {
 
     companion object {
 

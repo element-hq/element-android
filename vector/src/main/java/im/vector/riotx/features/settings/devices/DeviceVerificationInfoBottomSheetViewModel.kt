@@ -63,7 +63,7 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
         setState {
             copy(deviceInfo = Loading())
         }
-        session.getDeviceInfo(deviceId, object : MatrixCallback<DeviceInfo> {
+        session.cryptoService().getDeviceInfo(deviceId, object : MatrixCallback<DeviceInfo> {
             override fun onSuccess(data: DeviceInfo) {
                 setState {
                     copy(deviceInfo = Success(data))

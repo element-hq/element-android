@@ -49,7 +49,6 @@ interface Session :
         RoomDirectoryService,
         GroupService,
         UserService,
-        CryptoService,
         CacheService,
         SignOutService,
         FilterService,
@@ -138,6 +137,11 @@ interface Session :
      * Returns the ContentUploadProgressTracker associated with the session
      */
     fun contentUploadProgressTracker(): ContentUploadStateTracker
+
+    /**
+     * Returns the cryptoService associated with the session
+     */
+    fun cryptoService(): CryptoService
 
     /**
      * Add a listener to the session.

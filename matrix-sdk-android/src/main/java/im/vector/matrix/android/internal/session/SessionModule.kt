@@ -269,7 +269,7 @@ internal abstract class SessionModule {
     abstract fun bindHomeServerCapabilitiesService(homeServerCapabilitiesService: DefaultHomeServerCapabilitiesService): HomeServerCapabilitiesService
 
     @Binds
-    abstract fun bindAccountDataService(accountDataService: DefaultAccountDataService): AccountDataService
+    abstract fun bindAccountDataService(service: DefaultAccountDataService): AccountDataService
 
     @Binds
     abstract fun bindSharedSecretStorageService(service: DefaultSharedSecretStorageService): SharedSecretStorageService

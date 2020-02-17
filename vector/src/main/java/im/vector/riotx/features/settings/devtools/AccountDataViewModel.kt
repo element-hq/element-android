@@ -40,7 +40,7 @@ class AccountDataViewModel @AssistedInject constructor(@Assisted initialState: A
     : VectorViewModel<AccountDataViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     init {
-        session.rx().liveAccountData(emptyList())
+        session.rx().liveAccountData(emptySet())
                 .execute {
                     copy(accountData = it)
                 }

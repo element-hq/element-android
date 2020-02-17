@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.sync
+package im.vector.matrix.android.internal.session.user.accountdata
 
-import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.task.SemaphoreCoroutineSequencer
-import javax.inject.Inject
-
-@SessionScope
-internal class SyncTaskSequencer @Inject constructor() : SemaphoreCoroutineSequencer()
+/**
+ * Tag class to identify every account data content
+ */
+internal interface AccountDataContent
