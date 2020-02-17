@@ -128,6 +128,7 @@ class AttachmentsPreviewFragment @Inject constructor(
         super.onDestroyView()
         attachmentPreviewerMiniatureList.cleanup()
         attachmentPreviewerBigList.cleanup()
+        attachmentMiniaturePreviewController.callback = null
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -229,21 +230,26 @@ class AttachmentsPreviewFragment @Inject constructor(
     }
 
     private fun setupRecyclerViews() {
-        attachmentPreviewerMiniatureList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        attachmentPreviewerMiniatureList.setHasFixedSize(true)
-        attachmentPreviewerMiniatureList.adapter = attachmentMiniaturePreviewController.adapter
         attachmentMiniaturePreviewController.callback = this
 
-        attachmentPreviewerBigList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        attachmentPreviewerBigList.attachSnapHelperWithListener(
-                PagerSnapHelper(),
-                SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL_STATE_IDLE,
-                object : OnSnapPositionChangeListener {
-                    override fun onSnapPositionChange(position: Int) {
-                        viewModel.handle(AttachmentsPreviewAction.SetCurrentAttachment(position))
-                    }
-                })
-        attachmentPreviewerBigList.setHasFixedSize(true)
-        attachmentPreviewerBigList.adapter = attachmentBigPreviewController.adapter
+        attachmentPreviewerMiniatureList.let {
+            it.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            it.setHasFixedSize(true)
+            it.adapter = attachmentMiniaturePreviewController.adapter
+        }
+
+        attachmentPreviewerBigList.let {
+            it.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            it.attachSnapHelperWithListener(
+                    PagerSnapHelper(),
+                    SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL_STATE_IDLE,
+                    object : OnSnapPositionChangeListener {
+                        override fun onSnapPositionChange(position: Int) {
+                            viewModel.handle(AttachmentsPreviewAction.SetCurrentAttachment(position))
+                        }
+                    })
+            it.setHasFixedSize(true)
+            it.adapter = attachmentBigPreviewController.adapter
+        }
     }
 }
