@@ -1909,7 +1909,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="login_msisdn_error_other">Telefono zenbakia baliogabea dirudi. Egiaztatu ezazu</string>
 
     <string name="login_signup_to">Erregistratu %1$s zerbitzarian</string>
-    <string name="login_signup_username_hint">Erabiltzaile-izena edo e-maila</string>
+    <string name="login_signin_username_hint">Erabiltzaile-izena edo e-maila</string>
     <string name="login_signup_password_hint">Pasahitza</string>
     <string name="login_signup_submit">Hurrengoa</string>
     <string name="login_signup_error_user_in_use">Erabiltzaile-izen hori hartuta dago</string>

@@ -83,10 +83,10 @@ fun retrievePrivateKeyWithPassword(password: String,
  * @return a private key.
  */
 @WorkerThread
-private fun deriveKey(password: String,
-                      salt: String,
-                      iterations: Int,
-                      progressListener: ProgressListener?): ByteArray {
+fun deriveKey(password: String,
+              salt: String,
+              iterations: Int,
+              progressListener: ProgressListener?): ByteArray {
     // Note: copied and adapted from MXMegolmExportEncryption
     val t0 = System.currentTimeMillis()
 

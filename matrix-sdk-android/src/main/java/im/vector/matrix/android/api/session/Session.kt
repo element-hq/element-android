@@ -21,6 +21,7 @@ import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.failure.GlobalError
 import im.vector.matrix.android.api.pushrules.PushRuleService
+import im.vector.matrix.android.api.session.accountdata.AccountDataService
 import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
@@ -33,6 +34,7 @@ import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
+import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageService
 import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.sync.SyncState
@@ -57,7 +59,8 @@ interface Session :
         PushersService,
         InitialSyncProgressService,
         HomeServerCapabilitiesService,
-        SecureStorageService {
+        SecureStorageService,
+        AccountDataService {
 
     /**
      * The params associated to the session
@@ -159,4 +162,6 @@ interface Session :
          */
         fun onGlobalError(globalError: GlobalError)
     }
+
+    val sharedSecretStorageService: SharedSecretStorageService
 }

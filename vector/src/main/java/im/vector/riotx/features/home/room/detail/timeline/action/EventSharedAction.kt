@@ -55,7 +55,7 @@ sealed class EventSharedAction(@StringRes val titleRes: Int,
     data class Remove(val eventId: String) :
             EventSharedAction(R.string.remove, R.drawable.ic_trash, true)
 
-    data class Redact(val eventId: String) :
+    data class Redact(val eventId: String, val askForReason: Boolean) :
             EventSharedAction(R.string.message_action_item_redact, R.drawable.ic_delete, true)
 
     data class Cancel(val eventId: String) :

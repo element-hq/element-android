@@ -1,7 +1,8 @@
-Changes in RiotX 0.16.0 (2020-XX-XX)
+Changes in RiotX 0.17.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:
+ - Secured Shared Storage Support (#984, #936)
  - Polls and Bot Buttons (MSC 2192 matrix-org/matrix-doc#2192)
  - It's now possible to select several rooms (with a possible mix of clear/encrypted rooms) when sharing elements to RiotX (#1010)
  - Media preview: media are previewed before being sent to a room (#1010)
@@ -9,25 +10,41 @@ Features ✨:
  - Sending image: image are sent to rooms with a reduced size. It's still possible to send original image file (#1010)
 
 Improvements 🙌:
- - Show confirmation dialog before deleting a message (#967)
- - Open room member profile from reactions list and read receipts list (#875)
+ -
 
 Bugfix 🐛:
- - Fix crash by removing all notifications after clearing cache (#878)
- - Fix issue with verification when other client declares it can only show QR code (#988)
+ - Account creation: wrongly hints that an email can be used to create an account (#941)
 
 Translations 🗣:
  -
 
-SDK API changes 🔞:
- - Javadoc improved for PushersService
- - PushersService.pushers() has been renamed to PushersService.getPushers()
+SDK API changes ⚠️:
+ -
 
 Build 🧱:
  -
 
 Other changes:
  -
+
+Changes in RiotX 0.16.0 (2020-02-14)
+===================================================
+
+Features ✨:
+ - Polls and Bot Buttons (MSC 2192 matrix-org/matrix-doc#2192)
+
+Improvements 🙌:
+ - Show confirmation dialog before deleting a message (#967, #1003)
+ - Open room member profile from reactions list and read receipts list (#875)
+
+Bugfix 🐛:
+ - Fix crash by removing all notifications after clearing cache (#878)
+ - Fix issue with verification when other client declares it can only show QR code (#988)
+ - Fix too errors in the code (1941862499c9ec5268cc80882512ced379cafcfd, a250a895fe0a4acf08c671e03434edcd29ccd84f)
+
+SDK API changes ⚠️:
+ - Javadoc improved for PushersService
+ - PushersService.pushers() has been renamed to PushersService.getPushers()
 
 Changes in RiotX 0.15.0 (2020-02-10)
 ===================================================
@@ -400,7 +417,7 @@ Bugfix 🐛:
 Translations 🗣:
  -
 
-SDK API changes 🔞:
+SDK API changes ⚠️:
  - 
 
 Build 🧱:
@@ -408,4 +425,3 @@ Build 🧱:
 
 Other changes:
  -
-

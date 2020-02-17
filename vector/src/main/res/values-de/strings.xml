@@ -1941,7 +1941,7 @@ Wenn du diese neue Wiederherstellungsmethode nicht eingerichtet hast, kann ein A
     <string name="login_msisdn_confirm_notice">Wir haben einen Code an %1$s gesendet. Gib diesen unten ein um dich zu verifizieren.</string>
     <string name="login_msisdn_confirm_hint">Code eingeben</string>
     <string name="login_msisdn_confirm_send_again">Erneut senden</string>
-    <string name="login_signup_username_hint">Benutzername oder E-Mail-Adresse</string>
+    <string name="login_signin_username_hint">Benutzername oder E-Mail-Adresse</string>
     <string name="login_signup_password_hint">Passwort</string>
     <string name="login_signup_error_user_in_use">Dieser Benutzername ist bereits belegt</string>
     <string name="login_signup_cancel_confirmation_content">Dein Benutzerkonto ist noch nicht erstellt.

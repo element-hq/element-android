@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.sync.model.accountdata
+package im.vector.matrix.android.api.session.securestorage
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.session.events.model.Event
+sealed class KeyInfoResult {
+    data class Success(val keyInfo: KeyInfo) : KeyInfoResult()
+    data class Error(val error: SharedSecretStorageError) : KeyInfoResult()
 
-@JsonClass(generateAdapter = true)
-internal data class UserAccountDataSync(
-        @Json(name = "events") val list: List<Event> = emptyList()
-)
+    fun isSuccess(): Boolean = this is Success
+}

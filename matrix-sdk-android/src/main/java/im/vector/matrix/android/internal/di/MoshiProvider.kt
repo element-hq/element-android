@@ -23,7 +23,7 @@ import im.vector.matrix.android.internal.network.parsing.UriMoshiAdapter
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataBreadcrumbs
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataDirectMessages
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataFallback
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataIgnoredUsers
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataPushRules
 
@@ -31,7 +31,7 @@ object MoshiProvider {
 
     private val moshi: Moshi = Moshi.Builder()
             .add(UriMoshiAdapter())
-            .add(RuntimeJsonAdapterFactory.of(UserAccountData::class.java, "type", UserAccountDataFallback::class.java)
+            .add(RuntimeJsonAdapterFactory.of(UserAccountData::class.java, "type", UserAccountDataEvent::class.java)
                     .registerSubtype(UserAccountDataDirectMessages::class.java, UserAccountData.TYPE_DIRECT_MESSAGES)
                     .registerSubtype(UserAccountDataIgnoredUsers::class.java, UserAccountData.TYPE_IGNORED_USER_LIST)
                     .registerSubtype(UserAccountDataPushRules::class.java, UserAccountData.TYPE_PUSH_RULES)
