@@ -22,6 +22,7 @@ import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
@@ -30,6 +31,7 @@ import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.features.attachments.isPreviewable
 import im.vector.riotx.features.attachments.toGroupedContentAttachmentData
 import im.vector.riotx.features.home.room.list.BreadcrumbsRoomComparator
 import java.util.concurrent.TimeUnit
@@ -188,7 +190,9 @@ class IncomingShareViewModel @AssistedInject constructor(
             setState { copy(isInMultiSelectionMode = true, selectedRoomIds = setOf(action.roomSummary.roomId)) }
         } else {
             val sharedData = state.sharedData ?: return@withState
-            _viewEvents.post(IncomingShareViewEvents.ShareToRoom(action.roomSummary, sharedData, showAlert = true))
+            // Do not show alert if the shared data contains only previewable attachments, because the user will get another chance to cancel the share
+            val doNotShowAlert = (sharedData as? SharedData.Attachments)?.attachmentData?.all { it.isPreviewable() }.orFalse()
+            _viewEvents.post(IncomingShareViewEvents.ShareToRoom(action.roomSummary, sharedData, !doNotShowAlert))
         }
     }
 }
