@@ -257,7 +257,7 @@ class RoomListFragment @Inject constructor(
                 val newValue = state.hasUnread
                 if (hasUnreadRooms != newValue) {
                     hasUnreadRooms = newValue
-                    requireActivity().invalidateOptionsMenu()
+                    invalidateOptionsMenu()
                 }
             }
             else                      -> Unit

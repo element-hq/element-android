@@ -127,7 +127,7 @@ class AttachmentsPreviewFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        requireActivity().invalidateOptionsMenu()
+        invalidateOptionsMenu()
         if (state.attachments.isEmpty()) {
             requireActivity().setResult(RESULT_CANCELED)
             requireActivity().finish()
