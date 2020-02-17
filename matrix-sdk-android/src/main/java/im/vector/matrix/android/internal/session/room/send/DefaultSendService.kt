@@ -233,17 +233,19 @@ internal class DefaultSendService @AssistedInject constructor(
 
             val dispatcherWork = createMultipleEventDispatcherWork(true)
 
-            val operation = workManagerProvider.workManager
+            workManagerProvider.workManager
                     .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
                     .then(dispatcherWork)
                     .enqueue()
-            operation.result.addListener(Runnable {
-                if (operation.result.isCancelled) {
-                    Timber.e("CHAIN WAS CANCELLED")
-                } else if (operation.state.value is Operation.State.FAILURE) {
-                    Timber.e("CHAIN DID FAIL")
-                }
-            }, workerFutureListenerExecutor)
+                    .also { operation ->
+                        operation.result.addListener(Runnable {
+                            if (operation.result.isCancelled) {
+                                Timber.e("CHAIN WAS CANCELLED")
+                            } else if (operation.state.value is Operation.State.FAILURE) {
+                                Timber.e("CHAIN DID FAIL")
+                            }
+                        }, workerFutureListenerExecutor)
+                    }
 
             cancelableBag.add(CancelableWork(workManagerProvider.workManager, dispatcherWork.id))
         }
@@ -256,6 +258,15 @@ internal class DefaultSendService @AssistedInject constructor(
                     .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
                     .then(dispatcherWork)
                     .enqueue()
+                    .also { operation ->
+                        operation.result.addListener(Runnable {
+                            if (operation.result.isCancelled) {
+                                Timber.e("CHAIN WAS CANCELLED")
+                            } else if (operation.state.value is Operation.State.FAILURE) {
+                                Timber.e("CHAIN DID FAIL")
+                            }
+                        }, workerFutureListenerExecutor)
+                    }
 
             cancelableBag.add(CancelableWork(workManagerProvider.workManager, dispatcherWork.id))
         }
