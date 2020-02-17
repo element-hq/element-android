@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -81,6 +81,19 @@ private fun VerificationState?.toState(newState: VerificationState): Verificatio
     return newState
 }
 
+private val ALLOWED_TYPES = listOf(
+        EventType.MESSAGE,
+        EventType.REDACTION,
+        EventType.REACTION,
+        EventType.KEY_VERIFICATION_DONE,
+        EventType.KEY_VERIFICATION_CANCEL,
+        EventType.KEY_VERIFICATION_ACCEPT,
+        EventType.KEY_VERIFICATION_START,
+        EventType.KEY_VERIFICATION_MAC,
+        EventType.KEY_VERIFICATION_READY,
+        EventType.KEY_VERIFICATION_KEY,
+        EventType.ENCRYPTED)
+
 /**
  * Called when new events that can affect relations are synced.
  */
@@ -93,9 +106,15 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
     private val SHOULD_HANDLE_SERVER_AGREGGATION = false
 
     override suspend fun process(mode: RoomEventsProcessor.Mode, roomId: String, events: List<Event>) {
+        val filteredEvents = events.filter {
+            ALLOWED_TYPES.contains(it.type)
+        }
+        if (filteredEvents.isEmpty()) {
+            return
+        }
         monarchy.awaitTransaction { realm ->
-            Timber.v(">>> EventRelationsAggregationProcessor called with ${events.size} events")
-            update(realm, roomId, events, userId)
+            Timber.v(">>> EventRelationsAggregationProcessor called with ${filteredEvents.size} events")
+            update(realm, roomId, filteredEvents, userId)
             Timber.v("<<< EventRelationsAggregationProcessor finished")
         }
     }
@@ -214,7 +233,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         }
     }
 
-    private suspend fun decryptIfNeeded(event: Event) {
+    private fun decryptIfNeeded(event: Event) {
         if (event.mxDecryptionResult == null) {
             try {
                 val result = cryptoService.decryptEvent(event, event.roomId ?: "")

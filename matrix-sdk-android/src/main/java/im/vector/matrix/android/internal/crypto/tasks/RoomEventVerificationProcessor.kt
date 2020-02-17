@@ -47,6 +47,18 @@ internal class RoomEventVerificationProcessor @Inject constructor(
     companion object {
         // XXX what about multi-account?
         private val transactionsHandledByOtherDevice = ArrayList<String>()
+
+        private val ALLOWED_TYPES = listOf(
+                EventType.KEY_VERIFICATION_START,
+                EventType.KEY_VERIFICATION_ACCEPT,
+                EventType.KEY_VERIFICATION_KEY,
+                EventType.KEY_VERIFICATION_MAC,
+                EventType.KEY_VERIFICATION_CANCEL,
+                EventType.KEY_VERIFICATION_DONE,
+                EventType.KEY_VERIFICATION_READY,
+                EventType.MESSAGE,
+                EventType.ENCRYPTED
+        )
     }
 
     override suspend fun process(mode: RoomEventsProcessor.Mode, roomId: String, events: List<Event>) {
@@ -54,6 +66,9 @@ internal class RoomEventVerificationProcessor @Inject constructor(
             return
         }
         events.forEach { event ->
+            if (!ALLOWED_TYPES.contains(event.type)) {
+                return@forEach
+            }
             Timber.d("## SAS Verification: received msgId: ${event.eventId} msgtype: ${event.type} from ${event.senderId}")
             Timber.v("## SAS Verification: received msgId: $event")
 
