@@ -1962,7 +1962,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="login_msisdn_error_other">Puhelinnumero vaikuttaa epäkelvolta. Tarkista numero</string>
 
     <string name="login_signup_to">Rekisteröidy palvelimelle %1$s</string>
-    <string name="login_signup_username_hint">Käyttäjätunnus tai sähköpostiosoite</string>
+    <string name="login_signin_username_hint">Käyttäjätunnus tai sähköpostiosoite</string>
     <string name="login_signup_password_hint">Salasana</string>
     <string name="login_signup_submit">Seuraava</string>
     <string name="login_signup_error_user_in_use">Käyttäjätunnus on varattu</string>

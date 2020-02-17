@@ -1871,7 +1871,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="login_msisdn_error_other">Numri i telefonit duket se është i vlefshëm. Ju lutemi, kontrollojeni</string>
 
     <string name="login_signup_to">Regjistrohuni te %1$s</string>
-    <string name="login_signup_username_hint">Emër përdoruesi ose email</string>
+    <string name="login_signin_username_hint">Emër përdoruesi ose email</string>
     <string name="login_signup_password_hint">Fjalëkalim</string>
     <string name="login_signup_submit">Pasuesi</string>
     <string name="login_signup_error_user_in_use">Ai emër përdoruesi është i zënë</string>

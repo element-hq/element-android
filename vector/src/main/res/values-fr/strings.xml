@@ -1918,7 +1918,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="login_msisdn_error_other">Le numéro de téléphone n’a pas l’air d’être valide. Veuillez le vérifier</string>
 
     <string name="login_signup_to">S’inscrire sur %1$s</string>
-    <string name="login_signup_username_hint">Nom d’utilisateur ou e-mail</string>
+    <string name="login_signin_username_hint">Nom d’utilisateur ou e-mail</string>
     <string name="login_signup_password_hint">Mot de passe</string>
     <string name="login_signup_submit">Suivant</string>
     <string name="login_signup_error_user_in_use">Ce nom d’utilisateur est déjà pris</string>

@@ -1866,7 +1866,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="login_msisdn_error_other">電話號碼似乎無效。請檢查</string>
 
     <string name="login_signup_to">註冊至 %1$s</string>
-    <string name="login_signup_username_hint">使用者名稱或電子郵件</string>
+    <string name="login_signin_username_hint">使用者名稱或電子郵件</string>
     <string name="login_signup_password_hint">密碼</string>
     <string name="login_signup_submit">下一個</string>
     <string name="login_signup_error_user_in_use">使用者名稱已被使用</string>
