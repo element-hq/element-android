@@ -122,11 +122,13 @@ class IncomingShareViewModel @AssistedInject constructor(
                         val room = session.getRoom(roomId)
                         room?.sendTextMessage(sharedData.text)
                     }
+                    // This is it, pass the first roomId to let the screen open it
+                    _viewEvents.post(IncomingShareViewEvents.MultipleRoomsShareDone(state.selectedRoomIds.first()))
                 }
                 is SharedData.Attachments -> {
                     shareAttachments(sharedData.attachmentData, state.selectedRoomIds, proposeMediaEdition = true, compressMediaBeforeSending = false)
                 }
-            }
+            }.exhaustive
         }
     }
 

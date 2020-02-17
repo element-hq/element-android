@@ -309,8 +309,8 @@ class RoomDetailFragment @Inject constructor(
                     // open share edition
                     onContentAttachmentsReady(sharedData.attachmentData)
                 }
-                null                      -> Timber.v("No share data to process")
-            }
+                null -> Timber.v("No share data to process")
+            }.exhaustive
         }
     }
 
