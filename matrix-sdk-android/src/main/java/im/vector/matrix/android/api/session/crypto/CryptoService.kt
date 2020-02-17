@@ -40,6 +40,12 @@ import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 
 interface CryptoService {
 
+    fun verificationService(): VerificationService
+
+    fun crossSigningService(): CrossSigningService
+
+    fun keysBackupService(): KeysBackupService
+
     fun setDeviceName(deviceId: String, deviceName: String, callback: MatrixCallback<Unit>)
 
     fun deleteDevice(deviceId: String, callback: MatrixCallback<Unit>)
@@ -49,12 +55,6 @@ interface CryptoService {
     fun getCryptoVersion(context: Context, longFormat: Boolean): String
 
     fun isCryptoEnabled(): Boolean
-
-    fun getVerificationService(): VerificationService
-
-    fun getCrossSigningService(): CrossSigningService
-
-    fun getKeysBackupService(): KeysBackupService
 
     fun isRoomBlacklistUnverifiedDevices(roomId: String?): Boolean
 

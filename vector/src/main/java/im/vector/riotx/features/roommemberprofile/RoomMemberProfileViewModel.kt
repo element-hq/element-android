@@ -148,7 +148,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                 // ok, let's find or create the DM room
                 _viewEvents.post(RoomMemberProfileViewEvents.StartVerification(
                         userId = state.userId,
-                        canCrossSign = session.getCrossSigningService().canCrossSign()
+                        canCrossSign = session.cryptoService().crossSigningService().canCrossSign()
                 ))
             }
         }

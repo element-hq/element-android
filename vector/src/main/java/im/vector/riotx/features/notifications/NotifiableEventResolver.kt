@@ -114,7 +114,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                 // TODO use a global event decryptor? attache to session and that listen to new sessionId?
                 // for now decrypt sync
                 try {
-                    val result = session.decryptEvent(event.root, event.root.roomId + UUID.randomUUID().toString())
+                    val result = session.cryptoService().decryptEvent(event.root, event.root.roomId + UUID.randomUUID().toString())
                     event.root.mxDecryptionResult = OlmDecryptionResult(
                             payload = result.clearEvent,
                             senderKey = result.senderCurve25519Key,

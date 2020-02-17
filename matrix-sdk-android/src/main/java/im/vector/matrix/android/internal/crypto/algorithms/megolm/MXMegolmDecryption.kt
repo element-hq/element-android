@@ -30,7 +30,7 @@ import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequestManager
 import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.algorithms.IMXDecrypting
-import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
+import im.vector.matrix.android.internal.crypto.keysbackup.DefaultKeysBackupService
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.crypto.model.event.RoomKeyContent
@@ -198,7 +198,7 @@ internal class MXMegolmDecryption(private val userId: String,
      *
      * @param event the key event.
      */
-    override fun onRoomKeyEvent(event: Event, keysBackup: KeysBackup) {
+    override fun onRoomKeyEvent(event: Event, defaultKeysBackupService: DefaultKeysBackupService) {
         var exportFormat = false
         val roomKeyContent = event.getClearContent().toModel<RoomKeyContent>() ?: return
 
@@ -262,7 +262,7 @@ internal class MXMegolmDecryption(private val userId: String,
                 exportFormat)
 
         if (added) {
-            keysBackup.maybeBackupKeys()
+            defaultKeysBackupService.maybeBackupKeys()
 
             val content = RoomKeyRequestBody()
 

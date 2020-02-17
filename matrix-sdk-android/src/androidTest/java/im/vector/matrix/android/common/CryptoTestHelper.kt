@@ -230,9 +230,9 @@ class CryptoTestHelper(val mTestHelper: CommonTestHelper) {
         val aliceRoomId = cryptoTestData.roomId
         val bobSession = cryptoTestData.secondSession!!
 
-        bobSession.setWarnOnUnknownDevices(false)
+        bobSession.cryptoService().setWarnOnUnknownDevices(false)
 
-        aliceSession.setWarnOnUnknownDevices(false)
+        aliceSession.cryptoService().setWarnOnUnknownDevices(false)
 
         val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!

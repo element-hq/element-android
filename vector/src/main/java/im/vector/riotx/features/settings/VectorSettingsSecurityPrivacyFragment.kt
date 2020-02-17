@@ -134,10 +134,10 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
     private fun refreshXSigningStatus() {
         if (vectorPreferences.developerMode()) {
-            val crossSigningKeys = session.getCrossSigningService().getMyCrossSigningKeys()
+            val crossSigningKeys = session.cryptoService().crossSigningService().getMyCrossSigningKeys()
             val xSigningIsEnableInAccount = crossSigningKeys != null
-            val xSigningKeysAreTrusted = session.getCrossSigningService().checkUserTrust(session.myUserId).isVerified()
-            val xSigningKeyCanSign = session.getCrossSigningService().canCrossSign()
+            val xSigningKeysAreTrusted = session.cryptoService().crossSigningService().checkUserTrust(session.myUserId).isVerified()
+            val xSigningKeyCanSign = session.cryptoService().crossSigningService().canCrossSign()
 
             if (xSigningKeyCanSign) {
                 mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_trusted)
@@ -412,10 +412,10 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
         sendToUnverifiedDevicesPref.isChecked = false
 
-        sendToUnverifiedDevicesPref.isChecked = session.getGlobalBlacklistUnverifiedDevices()
+        sendToUnverifiedDevicesPref.isChecked = session.cryptoService().getGlobalBlacklistUnverifiedDevices()
 
         sendToUnverifiedDevicesPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            session.setGlobalBlacklistUnverifiedDevices(sendToUnverifiedDevicesPref.isChecked)
+            session.cryptoService().setGlobalBlacklistUnverifiedDevices(sendToUnverifiedDevicesPref.isChecked)
 
             true
         }
@@ -426,7 +426,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     // ==============================================================================================================
 
     private fun refreshMyDevice() {
-        session.getUserDevices(session.myUserId).map {
+        session.cryptoService().getUserDevices(session.myUserId).map {
             DeviceInfo(
                     user_id = session.myUserId,
                     deviceId = it.deviceId,
@@ -436,7 +436,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             refreshCryptographyPreference(it)
         }
         // TODO Move to a ViewModel...
-        session.getDevicesList(object : MatrixCallback<DevicesListResponse> {
+        session.cryptoService().getDevicesList(object : MatrixCallback<DevicesListResponse> {
             override fun onSuccess(data: DevicesListResponse) {
                 if (isAdded) {
                     refreshCryptographyPreference(data.devices ?: emptyList())

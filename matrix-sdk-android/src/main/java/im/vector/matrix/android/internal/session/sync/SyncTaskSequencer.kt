@@ -17,8 +17,8 @@
 package im.vector.matrix.android.internal.session.sync
 
 import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.task.ChannelCoroutineSequencer
+import im.vector.matrix.android.internal.task.SemaphoreCoroutineSequencer
 import javax.inject.Inject
 
 @SessionScope
-internal class SyncTaskSequencer @Inject constructor() : ChannelCoroutineSequencer<Unit>()
+internal class SyncTaskSequencer @Inject constructor() : SemaphoreCoroutineSequencer()

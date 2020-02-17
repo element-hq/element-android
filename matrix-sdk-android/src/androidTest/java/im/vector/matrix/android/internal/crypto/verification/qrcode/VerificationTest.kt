@@ -156,7 +156,7 @@ class VerificationTest : InstrumentedTest {
         val bobSession = cryptoTestData.secondSession!!
 
         mTestHelper.doSync<Unit> { callback ->
-            aliceSession.getCrossSigningService()
+            aliceSession.cryptoService().crossSigningService()
                     .initializeCrossSigning(UserPasswordAuth(
                             user = aliceSession.myUserId,
                             password = TestConstants.PASSWORD
@@ -164,15 +164,15 @@ class VerificationTest : InstrumentedTest {
         }
 
         mTestHelper.doSync<Unit> { callback ->
-            bobSession.getCrossSigningService()
+            bobSession.cryptoService().crossSigningService()
                     .initializeCrossSigning(UserPasswordAuth(
                             user = bobSession.myUserId,
                             password = TestConstants.PASSWORD
                     ), callback)
         }
 
-        val aliceVerificationService = aliceSession.getVerificationService()
-        val bobVerificationService = bobSession.getVerificationService()
+        val aliceVerificationService = aliceSession.cryptoService().verificationService()
+        val bobVerificationService = bobSession.cryptoService().verificationService()
 
         var aliceReadyPendingVerificationRequest: PendingVerificationRequest? = null
         var bobReadyPendingVerificationRequest: PendingVerificationRequest? = null

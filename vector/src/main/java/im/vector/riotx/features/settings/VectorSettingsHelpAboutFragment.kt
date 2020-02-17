@@ -77,7 +77,7 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
 
         // olm version
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_OLM_VERSION_PREFERENCE_KEY)!!
-                .summary = session.getCryptoVersion(requireContext(), false)
+                .summary = session.cryptoService().getCryptoVersion(requireContext(), false)
 
         // copyright
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_COPYRIGHT_PREFERENCE_KEY)!!

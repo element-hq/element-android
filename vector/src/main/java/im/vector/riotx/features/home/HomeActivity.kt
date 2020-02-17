@@ -130,7 +130,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         if (sharedActionViewModel.hasDisplayedCompleteSecurityPrompt) return
 
         // ensure keys are downloaded
-        session.downloadKeys(listOf(session.myUserId), true, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
+        session.cryptoService().downloadKeys(listOf(session.myUserId), true, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
             override fun onSuccess(data: MXUsersDevicesMap<CryptoDeviceInfo>) {
                 runOnUiThread {
                     alertCompleteSecurity(session)
@@ -140,7 +140,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     }
 
     private fun alertCompleteSecurity(session: Session) {
-        val myCrossSigningKeys = session.getCrossSigningService()
+        val myCrossSigningKeys = session.cryptoService().crossSigningService()
                 .getMyCrossSigningKeys()
         val crossSigningEnabledOnAccount = myCrossSigningKeys != null
 

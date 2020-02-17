@@ -59,7 +59,7 @@ class KeysImporter(private val session: Session) {
                     }
 
                     awaitCallback<ImportRoomKeysResult> {
-                        session.importRoomKeys(data, password, null, it)
+                        session.cryptoService().importRoomKeys(data, password, null, it)
                     }
                 }
             }.foldToCallback(callback)

@@ -49,7 +49,7 @@ class KeysBackupRestoreFromPassphraseViewModel @Inject constructor() : ViewModel
     }
 
     fun recoverKeys(context: Context, sharedViewModel: KeysBackupRestoreSharedViewModel) {
-        val keysBackup = sharedViewModel.session.getKeysBackupService()
+        val keysBackup = sharedViewModel.session.cryptoService().keysBackupService()
 
         passphraseErrorText.value = null
 

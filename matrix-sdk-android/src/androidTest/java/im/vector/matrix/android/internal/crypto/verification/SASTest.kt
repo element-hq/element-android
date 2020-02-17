@@ -62,8 +62,8 @@ class SASTest : InstrumentedTest {
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
 
-        val aliceVerificationService = aliceSession.getVerificationService()
-        val bobVerificationService = bobSession!!.getVerificationService()
+        val aliceVerificationService = aliceSession.cryptoService().verificationService()
+        val bobVerificationService = bobSession!!.cryptoService().verificationService()
 
         val bobTxCreatedLatch = CountDownLatch(1)
         val bobListener = object : VerificationService.Listener {
@@ -75,7 +75,7 @@ class SASTest : InstrumentedTest {
 
         val txID = aliceVerificationService.beginKeyVerification(VerificationMethod.SAS,
                 bobSession.myUserId,
-                bobSession.getMyDevice().deviceId,
+                bobSession.cryptoService().getMyDevice().deviceId,
                 null)
         assertNotNull("Alice should have a started transaction", txID)
 
@@ -157,7 +157,7 @@ class SASTest : InstrumentedTest {
                 }
             }
         }
-        bobSession.getVerificationService().addListener(bobListener)
+        bobSession.cryptoService().verificationService().addListener(bobListener)
 
         // TODO bobSession!!.dataHandler.addListener(object : MXEventListener() {
         // TODO     override fun onToDeviceEvent(event: Event?) {
@@ -172,7 +172,7 @@ class SASTest : InstrumentedTest {
 
         val aliceSession = cryptoTestData.firstSession
         val aliceUserID = aliceSession.myUserId
-        val aliceDevice = aliceSession.getMyDevice().deviceId
+        val aliceDevice = aliceSession.cryptoService().getMyDevice().deviceId
 
         val aliceListener = object : VerificationService.Listener {
             override fun transactionUpdated(tx: VerificationTransaction) {
@@ -181,7 +181,7 @@ class SASTest : InstrumentedTest {
                 }
             }
         }
-        aliceSession.getVerificationService().addListener(aliceListener)
+        aliceSession.cryptoService().verificationService().addListener(aliceListener)
 
         fakeBobStart(bobSession, aliceUserID, aliceDevice, tid, protocols = protocols)
 
@@ -218,7 +218,7 @@ class SASTest : InstrumentedTest {
 
         val aliceSession = cryptoTestData.firstSession
         val aliceUserID = aliceSession.myUserId
-        val aliceDevice = aliceSession.getMyDevice().deviceId
+        val aliceDevice = aliceSession.cryptoService().getMyDevice().deviceId
 
         fakeBobStart(bobSession, aliceUserID, aliceDevice, tid, mac = mac)
 
@@ -256,7 +256,7 @@ class SASTest : InstrumentedTest {
 
         val aliceSession = cryptoTestData.firstSession
         val aliceUserID = aliceSession.myUserId
-        val aliceDevice = aliceSession.getMyDevice().deviceId
+        val aliceDevice = aliceSession.cryptoService().getMyDevice().deviceId
 
         fakeBobStart(bobSession, aliceUserID, aliceDevice, tid, codes = codes)
 
@@ -277,7 +277,7 @@ class SASTest : InstrumentedTest {
                              mac: List<String> = SASDefaultVerificationTransaction.KNOWN_MACS,
                              codes: List<String> = SASDefaultVerificationTransaction.KNOWN_SHORT_CODES) {
         val startMessage = KeyVerificationStart(
-                fromDevice = bobSession.getMyDevice().deviceId,
+                fromDevice = bobSession.cryptoService().getMyDevice().deviceId,
                 method = VerificationMethod.SAS.toValue(),
                 transactionID = tid,
                 keyAgreementProtocols = protocols,
@@ -307,7 +307,7 @@ class SASTest : InstrumentedTest {
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
 
-        val aliceVerificationService = aliceSession.getVerificationService()
+        val aliceVerificationService = aliceSession.cryptoService().verificationService()
 
         val aliceCreatedLatch = CountDownLatch(2)
         val aliceCancelledLatch = CountDownLatch(2)
@@ -327,7 +327,7 @@ class SASTest : InstrumentedTest {
         aliceVerificationService.addListener(aliceListener)
 
         val bobUserId = bobSession!!.myUserId
-        val bobDeviceId = bobSession.getMyDevice().deviceId
+        val bobDeviceId = bobSession.cryptoService().getMyDevice().deviceId
         aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId, null)
         aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId, null)
 
@@ -347,8 +347,8 @@ class SASTest : InstrumentedTest {
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
 
-        val aliceVerificationService = aliceSession.getVerificationService()
-        val bobVerificationService = bobSession!!.getVerificationService()
+        val aliceVerificationService = aliceSession.cryptoService().verificationService()
+        val bobVerificationService = bobSession!!.cryptoService().verificationService()
 
         var accepted: KeyVerificationAccept? = null
         var startReq: KeyVerificationStart? = null
@@ -377,7 +377,7 @@ class SASTest : InstrumentedTest {
         bobVerificationService.addListener(bobListener)
 
         val bobUserId = bobSession.myUserId
-        val bobDeviceId = bobSession.getMyDevice().deviceId
+        val bobDeviceId = bobSession.cryptoService().getMyDevice().deviceId
         aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId, null)
         mTestHelper.await(aliceAcceptedLatch)
 
@@ -403,8 +403,8 @@ class SASTest : InstrumentedTest {
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
 
-        val aliceVerificationService = aliceSession.getVerificationService()
-        val bobVerificationService = bobSession!!.getVerificationService()
+        val aliceVerificationService = aliceSession.cryptoService().verificationService()
+        val bobVerificationService = bobSession!!.cryptoService().verificationService()
 
         val aliceSASLatch = CountDownLatch(1)
         val aliceListener = object : VerificationService.Listener {
@@ -438,7 +438,7 @@ class SASTest : InstrumentedTest {
         bobVerificationService.addListener(bobListener)
 
         val bobUserId = bobSession.myUserId
-        val bobDeviceId = bobSession.getMyDevice().deviceId
+        val bobDeviceId = bobSession.cryptoService().getMyDevice().deviceId
         val verificationSAS = aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId, null)
         mTestHelper.await(aliceSASLatch)
         mTestHelper.await(bobSASLatch)
@@ -459,8 +459,8 @@ class SASTest : InstrumentedTest {
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
 
-        val aliceVerificationService = aliceSession.getVerificationService()
-        val bobVerificationService = bobSession!!.getVerificationService()
+        val aliceVerificationService = aliceSession.cryptoService().verificationService()
+        val bobVerificationService = bobSession!!.cryptoService().verificationService()
 
         val aliceSASLatch = CountDownLatch(1)
         val aliceListener = object : VerificationService.Listener {
@@ -500,14 +500,14 @@ class SASTest : InstrumentedTest {
         bobVerificationService.addListener(bobListener)
 
         val bobUserId = bobSession.myUserId
-        val bobDeviceId = bobSession.getMyDevice().deviceId
+        val bobDeviceId = bobSession.cryptoService().getMyDevice().deviceId
         aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId, null)
         mTestHelper.await(aliceSASLatch)
         mTestHelper.await(bobSASLatch)
 
         // Assert that devices are verified
-        val bobDeviceInfoFromAlicePOV: CryptoDeviceInfo? = aliceSession.getDeviceInfo(bobUserId, bobDeviceId)
-        val aliceDeviceInfoFromBobPOV: CryptoDeviceInfo? = bobSession.getDeviceInfo(aliceSession.myUserId, aliceSession.getMyDevice().deviceId)
+        val bobDeviceInfoFromAlicePOV: CryptoDeviceInfo? = aliceSession.cryptoService().getDeviceInfo(bobUserId, bobDeviceId)
+        val aliceDeviceInfoFromBobPOV: CryptoDeviceInfo? = bobSession.cryptoService().getDeviceInfo(aliceSession.myUserId, aliceSession.cryptoService().getMyDevice().deviceId)
 
         // latch wait a bit again
         Thread.sleep(1000)

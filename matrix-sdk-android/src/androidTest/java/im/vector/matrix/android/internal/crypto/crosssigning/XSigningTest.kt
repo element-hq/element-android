@@ -35,7 +35,7 @@ class XSigningTest : InstrumentedTest {
         val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
 
         val aliceLatch = CountDownLatch(1)
-        aliceSession.getCrossSigningService()
+        aliceSession.cryptoService().crossSigningService()
                 .initializeCrossSigning(UserPasswordAuth(
                         user = aliceSession.myUserId,
                         password = TestConstants.PASSWORD
@@ -43,7 +43,7 @@ class XSigningTest : InstrumentedTest {
 
         mTestHelper.await(aliceLatch)
 
-        val myCrossSigningKeys = aliceSession.getCrossSigningService().getMyCrossSigningKeys()
+        val myCrossSigningKeys = aliceSession.cryptoService().crossSigningService().getMyCrossSigningKeys()
         val masterPubKey = myCrossSigningKeys?.masterKey()
         assertNotNull("Master key should be stored", masterPubKey?.unpaddedBase64PublicKey)
         val selfSigningKey = myCrossSigningKeys?.selfSigningKey()
@@ -53,7 +53,7 @@ class XSigningTest : InstrumentedTest {
 
         assertTrue("Signing Keys should be trusted", myCrossSigningKeys?.isTrusted() == true)
 
-        assertTrue("Signing Keys should be trusted", aliceSession.getCrossSigningService().checkUserTrust(aliceSession.myUserId).isVerified())
+        assertTrue("Signing Keys should be trusted", aliceSession.cryptoService().crossSigningService().checkUserTrust(aliceSession.myUserId).isVerified())
 
         mTestHelper.signout(aliceSession)
     }
@@ -76,23 +76,23 @@ class XSigningTest : InstrumentedTest {
 
         val latch = CountDownLatch(2)
 
-        aliceSession.getCrossSigningService().initializeCrossSigning(aliceAuthParams, TestMatrixCallback(latch))
-        bobSession.getCrossSigningService().initializeCrossSigning(bobAuthParams, TestMatrixCallback(latch))
+        aliceSession.cryptoService().crossSigningService().initializeCrossSigning(aliceAuthParams, TestMatrixCallback(latch))
+        bobSession.cryptoService().crossSigningService().initializeCrossSigning(bobAuthParams, TestMatrixCallback(latch))
 
         mTestHelper.await(latch)
 
         // Check that alice can see bob keys
         val downloadLatch = CountDownLatch(1)
-        aliceSession.downloadKeys(listOf(bobSession.myUserId), true, TestMatrixCallback(downloadLatch))
+        aliceSession.cryptoService().downloadKeys(listOf(bobSession.myUserId), true, TestMatrixCallback(downloadLatch))
         mTestHelper.await(downloadLatch)
 
-        val bobKeysFromAlicePOV = aliceSession.getCrossSigningService().getUserCrossSigningKeys(bobSession.myUserId)
+        val bobKeysFromAlicePOV = aliceSession.cryptoService().crossSigningService().getUserCrossSigningKeys(bobSession.myUserId)
         assertNotNull("Alice can see bob Master key", bobKeysFromAlicePOV!!.masterKey())
         assertNull("Alice should not see bob User key", bobKeysFromAlicePOV.userKey())
         assertNotNull("Alice can see bob SelfSigned key", bobKeysFromAlicePOV.selfSigningKey())
 
-        assertEquals("Bob keys from alice pov should match", bobKeysFromAlicePOV.masterKey()?.unpaddedBase64PublicKey, bobSession.getCrossSigningService().getMyCrossSigningKeys()?.masterKey()?.unpaddedBase64PublicKey)
-        assertEquals("Bob keys from alice pov should match", bobKeysFromAlicePOV.selfSigningKey()?.unpaddedBase64PublicKey, bobSession.getCrossSigningService().getMyCrossSigningKeys()?.selfSigningKey()?.unpaddedBase64PublicKey)
+        assertEquals("Bob keys from alice pov should match", bobKeysFromAlicePOV.masterKey()?.unpaddedBase64PublicKey, bobSession.cryptoService().crossSigningService().getMyCrossSigningKeys()?.masterKey()?.unpaddedBase64PublicKey)
+        assertEquals("Bob keys from alice pov should match", bobKeysFromAlicePOV.selfSigningKey()?.unpaddedBase64PublicKey, bobSession.cryptoService().crossSigningService().getMyCrossSigningKeys()?.selfSigningKey()?.unpaddedBase64PublicKey)
 
         assertFalse("Bob keys from alice pov should not be trusted", bobKeysFromAlicePOV.isTrusted())
 
@@ -118,22 +118,22 @@ class XSigningTest : InstrumentedTest {
 
         val latch = CountDownLatch(2)
 
-        aliceSession.getCrossSigningService().initializeCrossSigning(aliceAuthParams, TestMatrixCallback(latch))
-        bobSession.getCrossSigningService().initializeCrossSigning(bobAuthParams, TestMatrixCallback(latch))
+        aliceSession.cryptoService().crossSigningService().initializeCrossSigning(aliceAuthParams, TestMatrixCallback(latch))
+        bobSession.cryptoService().crossSigningService().initializeCrossSigning(bobAuthParams, TestMatrixCallback(latch))
 
         mTestHelper.await(latch)
 
         // Check that alice can see bob keys
         val downloadLatch = CountDownLatch(1)
         val bobUserId = bobSession.myUserId
-        aliceSession.downloadKeys(listOf(bobUserId), true, TestMatrixCallback(downloadLatch))
+        aliceSession.cryptoService().downloadKeys(listOf(bobUserId), true, TestMatrixCallback(downloadLatch))
         mTestHelper.await(downloadLatch)
 
-        val bobKeysFromAlicePOV = aliceSession.getCrossSigningService().getUserCrossSigningKeys(bobUserId)
+        val bobKeysFromAlicePOV = aliceSession.cryptoService().crossSigningService().getUserCrossSigningKeys(bobUserId)
         assertTrue("Bob keys from alice pov should not be trusted", bobKeysFromAlicePOV?.isTrusted() == false)
 
         val trustLatch = CountDownLatch(1)
-        aliceSession.getCrossSigningService().trustUser(bobUserId, object : MatrixCallback<Unit> {
+        aliceSession.cryptoService().crossSigningService().trustUser(bobUserId, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 trustLatch.countDown()
             }
@@ -152,7 +152,7 @@ class XSigningTest : InstrumentedTest {
 
         // Check that bob first session sees the new login
         val bobKeysLatch = CountDownLatch(1)
-        bobSession.downloadKeys(listOf(bobUserId), true, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
+        bobSession.cryptoService().downloadKeys(listOf(bobUserId), true, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
             override fun onFailure(failure: Throwable) {
                 fail("Failed to get device")
             }
@@ -166,12 +166,12 @@ class XSigningTest : InstrumentedTest {
         })
         mTestHelper.await(bobKeysLatch)
 
-        val bobSecondDevicePOVFirstDevice = bobSession.getDeviceInfo(bobUserId, bobSecondDeviceId)
+        val bobSecondDevicePOVFirstDevice = bobSession.cryptoService().getDeviceInfo(bobUserId, bobSecondDeviceId)
         assertNotNull("Bob Second device should be known and persisted from first", bobSecondDevicePOVFirstDevice)
 
         // Manually mark it as trusted from first session
         val bobSignLatch = CountDownLatch(1)
-        bobSession.getCrossSigningService().signDevice(bobSecondDeviceId!!, object : MatrixCallback<Unit> {
+        bobSession.cryptoService().crossSigningService().signDevice(bobSecondDeviceId!!, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 bobSignLatch.countDown()
             }
@@ -184,7 +184,7 @@ class XSigningTest : InstrumentedTest {
 
         // Now alice should cross trust bob's second device
         val aliceKeysLatch = CountDownLatch(1)
-        aliceSession.downloadKeys(listOf(bobUserId), true, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
+        aliceSession.cryptoService().downloadKeys(listOf(bobUserId), true, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
             override fun onFailure(failure: Throwable) {
                 fail("Failed to get device")
             }
@@ -199,7 +199,7 @@ class XSigningTest : InstrumentedTest {
         })
         mTestHelper.await(aliceKeysLatch)
 
-        val result = aliceSession.getCrossSigningService().checkDeviceTrust(bobUserId, bobSecondDeviceId, null)
+        val result = aliceSession.cryptoService().crossSigningService().checkDeviceTrust(bobUserId, bobSecondDeviceId, null)
         assertTrue("Bob second device should be trusted from alice POV", result.isCrossSignedVerified())
 
         mTestHelper.signout(aliceSession)
