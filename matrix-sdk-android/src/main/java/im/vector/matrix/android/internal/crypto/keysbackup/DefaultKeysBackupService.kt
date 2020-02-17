@@ -92,12 +92,11 @@ import javax.inject.Inject
 import kotlin.random.Random
 
 /**
- * A KeysBackup class instance manage incremental backup of e2e keys (megolm keys)
+ * A DefaultKeysBackupService class instance manage incremental backup of e2e keys (megolm keys)
  * to the user's homeserver.
  */
-
 @SessionScope
-internal class KeysBackup @Inject constructor(
+internal class DefaultKeysBackupService @Inject constructor(
         @UserId private val userId: String,
         private val credentials: Credentials,
         private val cryptoStore: IMXCryptoStore,

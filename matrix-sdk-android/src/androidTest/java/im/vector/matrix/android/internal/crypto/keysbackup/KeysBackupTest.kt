@@ -77,7 +77,7 @@ class KeysBackupTest : InstrumentedTest {
         val cryptoTestData = mCryptoTestHelper.doE2ETestWithAliceAndBobInARoomWithEncryptedMessages()
 
         // From doE2ETestWithAliceAndBobInARoomWithEncryptedMessages, we should have no backed up keys
-        val cryptoStore = (cryptoTestData.firstSession.cryptoService().keysBackupService() as KeysBackup).store
+        val cryptoStore = (cryptoTestData.firstSession.cryptoService().keysBackupService() as DefaultKeysBackupService).store
         val sessions = cryptoStore.inboundGroupSessionsToBackup(100)
         val sessionsCount = sessions.size
 
@@ -293,7 +293,7 @@ class KeysBackupTest : InstrumentedTest {
     fun testEncryptAndDecryptKeysBackupData() {
         val cryptoTestData = mCryptoTestHelper.doE2ETestWithAliceAndBobInARoomWithEncryptedMessages()
 
-        val keysBackup = cryptoTestData.firstSession.cryptoService().keysBackupService() as KeysBackup
+        val keysBackup = cryptoTestData.firstSession.cryptoService().keysBackupService() as DefaultKeysBackupService
 
         val stateObserver = StateObserver(keysBackup)
 
@@ -373,7 +373,7 @@ class KeysBackupTest : InstrumentedTest {
         val testData = createKeysBackupScenarioWithPassword(null)
 
         // - Check the SDK sent key share requests
-        val cryptoStore2 = (testData.aliceSession2.cryptoService().keysBackupService() as KeysBackup).store
+        val cryptoStore2 = (testData.aliceSession2.cryptoService().keysBackupService() as DefaultKeysBackupService).store
         val unsentRequest = cryptoStore2
                 .getOutgoingRoomKeyRequestByState(setOf(OutgoingRoomKeyRequest.RequestState.UNSENT))
         val sentRequest = cryptoStore2
@@ -1082,11 +1082,11 @@ class KeysBackupTest : InstrumentedTest {
         val latch = CountDownLatch(1)
 
         val megolmBackupCreationInfo = mCryptoTestHelper.createFakeMegolmBackupCreationInfo()
-        (keysBackup as KeysBackup).createFakeKeysBackupVersion(megolmBackupCreationInfo, TestMatrixCallback(latch))
+        (keysBackup as DefaultKeysBackupService).createFakeKeysBackupVersion(megolmBackupCreationInfo, TestMatrixCallback(latch))
         mTestHelper.await(latch)
 
         // Reset the store backup status for keys
-        (cryptoTestData.firstSession.cryptoService().keysBackupService() as KeysBackup).store.resetBackupMarkers()
+        (cryptoTestData.firstSession.cryptoService().keysBackupService() as DefaultKeysBackupService).store.resetBackupMarkers()
 
         // - Make alice back up all her keys again
         val latch2 = CountDownLatch(1)
@@ -1359,7 +1359,7 @@ class KeysBackupTest : InstrumentedTest {
     private fun createKeysBackupScenarioWithPassword(password: String?): KeysBackupScenarioData {
         val cryptoTestData = mCryptoTestHelper.doE2ETestWithAliceAndBobInARoomWithEncryptedMessages()
 
-        val cryptoStore = (cryptoTestData.firstSession.cryptoService().keysBackupService() as KeysBackup).store
+        val cryptoStore = (cryptoTestData.firstSession.cryptoService().keysBackupService() as DefaultKeysBackupService).store
         val keysBackup = cryptoTestData.firstSession.cryptoService().keysBackupService()
 
         val stateObserver = StateObserver(keysBackup)
@@ -1425,7 +1425,7 @@ class KeysBackupTest : InstrumentedTest {
 
         // - Alice must have the same keys on both devices
         for (aliceKey1 in testData.aliceKeys) {
-            val aliceKey2 = (testData.aliceSession2.cryptoService().keysBackupService() as KeysBackup).store
+            val aliceKey2 = (testData.aliceSession2.cryptoService().keysBackupService() as DefaultKeysBackupService).store
                     .getInboundGroupSession(aliceKey1.olmInboundGroupSession!!.sessionIdentifier(), aliceKey1.senderKey!!)
             assertNotNull(aliceKey2)
             assertKeysEquals(aliceKey1.exportKeys(), aliceKey2!!.exportKeys())

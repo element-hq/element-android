@@ -20,7 +20,7 @@ package im.vector.matrix.android.internal.crypto.algorithms
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
-import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
+import im.vector.matrix.android.internal.crypto.keysbackup.DefaultKeysBackupService
 
 /**
  * An interface for decrypting data
@@ -41,7 +41,7 @@ internal interface IMXDecrypting {
      *
      * @param event the key event.
      */
-    fun onRoomKeyEvent(event: Event, keysBackup: KeysBackup) {}
+    fun onRoomKeyEvent(event: Event, defaultKeysBackupService: DefaultKeysBackupService) {}
 
     /**
      * Check if the some messages can be decrypted with a new session
