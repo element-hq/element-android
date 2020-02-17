@@ -45,8 +45,12 @@ import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.OnSnapPositionChangeListener
+import im.vector.riotx.core.utils.PERMISSIONS_FOR_WRITING_FILES
+import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_PREVIEW_FRAGMENT
 import im.vector.riotx.core.utils.SnapOnScrollListener
+import im.vector.riotx.core.utils.allGranted
 import im.vector.riotx.core.utils.attachSnapHelperWithListener
+import im.vector.riotx.core.utils.checkPermissions
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_attachments_preview.*
 import timber.log.Timber
@@ -178,7 +182,22 @@ class AttachmentsPreviewFragment @Inject constructor(
         viewModel.handle(AttachmentsPreviewAction.RemoveCurrentAttachment)
     }
 
-    private fun handleEditAction() = withState(viewModel) {
+    private fun handleEditAction() {
+        // check permissions
+        if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_PREVIEW_FRAGMENT)) {
+            doHandleEditAction()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == PERMISSION_REQUEST_CODE_PREVIEW_FRAGMENT && allGranted(grantResults)) {
+            doHandleEditAction()
+        }
+    }
+
+    private fun doHandleEditAction() = withState(viewModel) {
         val currentAttachment = it.attachments.getOrNull(it.currentAttachmentIndex) ?: return@withState
         val destinationFile = File(requireContext().cacheDir, "${currentAttachment.name}_edited_image_${System.currentTimeMillis()}")
         UCrop.of(currentAttachment.queryUri.toUri(), destinationFile.toUri())
