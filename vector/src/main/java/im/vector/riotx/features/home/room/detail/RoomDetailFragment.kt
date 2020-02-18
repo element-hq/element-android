@@ -303,13 +303,14 @@ class RoomDetailFragment @Inject constructor(
         if (savedInstanceState == null) {
             when (val sharedData = roomDetailArgs.sharedData) {
                 is SharedData.Text        -> {
-                    roomDetailViewModel.handle(RoomDetailAction.ExitSpecialMode(composerLayout.text.toString()))
+                    // Save a draft to set the shared text to the composer
+                    roomDetailViewModel.handle(RoomDetailAction.SaveDraft(sharedData.text))
                 }
                 is SharedData.Attachments -> {
                     // open share edition
                     onContentAttachmentsReady(sharedData.attachmentData)
                 }
-                null -> Timber.v("No share data to process")
+                null                      -> Timber.v("No share data to process")
             }.exhaustive
         }
     }
@@ -435,7 +436,7 @@ class RoomDetailFragment @Inject constructor(
         composerLayout.collapse()
 
         updateComposerText(text)
-        composerLayout.sendButton.setContentDescription(getString(R.string.send))
+        composerLayout.sendButton.contentDescription = getString(R.string.send)
     }
 
     private fun renderSpecialMode(event: TimelineEvent,
