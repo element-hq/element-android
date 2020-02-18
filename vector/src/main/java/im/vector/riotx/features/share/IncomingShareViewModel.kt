@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.exhaustive
+import im.vector.riotx.core.extensions.toggle
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.attachments.isPreviewable
 import im.vector.riotx.features.attachments.toGroupedContentAttachmentData
@@ -180,11 +181,7 @@ class IncomingShareViewModel @AssistedInject constructor(
         if (state.isInMultiSelectionMode) {
             // One room is clicked (or long clicked) while in multi selection mode -> toggle this room
             val selectedRooms = state.selectedRoomIds
-            val newSelectedRooms = if (selectedRooms.contains(action.roomSummary.roomId)) {
-                selectedRooms.minus(action.roomSummary.roomId)
-            } else {
-                selectedRooms.plus(action.roomSummary.roomId)
-            }
+            val newSelectedRooms = selectedRooms.toggle(action.roomSummary.roomId)
             setState { copy(isInMultiSelectionMode = newSelectedRooms.isNotEmpty(), selectedRoomIds = newSelectedRooms) }
         } else if (action.enableMultiSelect) {
             // One room is long clicked, not in multi selection mode -> enable multi selection mode
