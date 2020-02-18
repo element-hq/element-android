@@ -22,7 +22,6 @@ import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
@@ -179,6 +178,7 @@ class IncomingShareViewModel @AssistedInject constructor(
 
     private fun handleSelectRoom(action: IncomingShareAction.SelectRoom) = withState { state ->
         if (state.isInMultiSelectionMode) {
+            // One room is clicked (or long clicked) while in multi selection mode -> toggle this room
             val selectedRooms = state.selectedRoomIds
             val newSelectedRooms = if (selectedRooms.contains(action.roomSummary.roomId)) {
                 selectedRooms.minus(action.roomSummary.roomId)
@@ -187,11 +187,21 @@ class IncomingShareViewModel @AssistedInject constructor(
             }
             setState { copy(isInMultiSelectionMode = newSelectedRooms.isNotEmpty(), selectedRoomIds = newSelectedRooms) }
         } else if (action.enableMultiSelect) {
+            // One room is long clicked, not in multi selection mode -> enable multi selection mode
             setState { copy(isInMultiSelectionMode = true, selectedRoomIds = setOf(action.roomSummary.roomId)) }
         } else {
+            // One room is clicked, not in multi selection mode -> direct share
             val sharedData = state.sharedData ?: return@withState
-            // Do not show alert if the shared data contains only previewable attachments, because the user will get another chance to cancel the share
-            val doNotShowAlert = (sharedData as? SharedData.Attachments)?.attachmentData?.all { it.isPreviewable() }.orFalse()
+            val doNotShowAlert = when (sharedData) {
+                is SharedData.Attachments -> {
+                    // Do not show alert if the shared data contains only previewable attachments, because the user will get another chance to cancel the share
+                    sharedData.attachmentData.all { it.isPreviewable() }
+                }
+                is SharedData.Text        -> {
+                    // Do not show alert when sharing text to one room, because it will just fill the composer
+                    true
+                }
+            }
             _viewEvents.post(IncomingShareViewEvents.ShareToRoom(action.roomSummary, sharedData, !doNotShowAlert))
         }
     }
