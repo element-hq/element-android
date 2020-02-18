@@ -116,7 +116,7 @@ class EllipsizingTextView @JvmOverloads constructor(context: Context, attrs: Att
         super.setLineSpacing(add, mult)
     }
 
-    override fun setText(text: CharSequence, type: BufferType) {
+    override fun setText(text: CharSequence?, type: BufferType) {
         if (!programmaticChange) {
             fullText = if (text is Spanned) text else text
             isStale = true

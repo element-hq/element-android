@@ -22,7 +22,7 @@ import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.matrix.android.api.session.user.model.User
-import java.util.*
+import java.util.Locale
 
 sealed class MatrixItem(
         open val id: String,
@@ -143,8 +143,14 @@ sealed class MatrixItem(
  * ========================================================================================== */
 
 fun User.toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)
+
 fun GroupSummary.toMatrixItem() = MatrixItem.GroupItem(groupId, displayName, avatarUrl)
+
 fun RoomSummary.toMatrixItem() = MatrixItem.RoomItem(roomId, displayName, avatarUrl)
+
 fun RoomSummary.toRoomAliasMatrixItem() = MatrixItem.RoomAliasItem(canonicalAlias ?: roomId, displayName, avatarUrl)
-fun PublicRoom.toMatrixItem() = MatrixItem.RoomItem(roomId, name, avatarUrl)
+
+// If no name is available, use room alias as Riot-Web does
+fun PublicRoom.toMatrixItem() = MatrixItem.RoomItem(roomId, name ?: canonicalAlias, avatarUrl)
+
 fun RoomMemberSummary.toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)

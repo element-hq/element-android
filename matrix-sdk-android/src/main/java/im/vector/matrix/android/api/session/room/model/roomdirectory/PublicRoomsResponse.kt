@@ -27,24 +27,24 @@ data class PublicRoomsResponse(
          * A pagination token for the response. The absence of this token means there are no more results to fetch and the client should stop paginating.
          */
         @Json(name = "next_batch")
-        var nextBatch: String? = null,
+        val nextBatch: String? = null,
 
         /**
          * A pagination token that allows fetching previous results. The absence of this token means there are no results before this batch,
          * i.e. this is the first batch.
          */
         @Json(name = "prev_batch")
-        var prevBatch: String? = null,
+        val prevBatch: String? = null,
 
         /**
          * A paginated chunk of public rooms.
          */
         @Json(name = "chunk")
-        var chunk: List<PublicRoom>? = null,
+        val chunk: List<PublicRoom>? = null,
 
         /**
          * An estimate on the total number of public rooms, if the server has an estimate.
          */
         @Json(name = "total_room_count_estimate")
-        var totalRoomCountEstimate: Int? = null
+        val totalRoomCountEstimate: Int? = null
 )
