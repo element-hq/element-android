@@ -16,71 +16,183 @@
 
 package im.vector.riotx.features.share
 
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
+import com.jakewharton.rxrelay2.BehaviorRelay
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.extensions.orFalse
+import im.vector.matrix.android.api.query.QueryStringValue
+import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
 import im.vector.matrix.rx.rx
-import im.vector.riotx.ActiveSessionDataSource
-import im.vector.riotx.core.platform.EmptyAction
-import im.vector.riotx.core.platform.EmptyViewEvents
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.features.attachments.isPreviewable
+import im.vector.riotx.features.attachments.toGroupedContentAttachmentData
 import im.vector.riotx.features.home.room.list.BreadcrumbsRoomComparator
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
 
-data class IncomingShareState(private val dummy: Boolean = false) : MvRxState
-
-/**
- * View model used to observe the room list and post update to the ShareRoomListObservableStore
- */
-class IncomingShareViewModel @AssistedInject constructor(@Assisted initialState: IncomingShareState,
-                                                         private val sessionObservableStore: ActiveSessionDataSource,
-                                                         private val shareRoomListObservableStore: ShareRoomListDataSource,
-                                                         private val breadcrumbsRoomComparator: BreadcrumbsRoomComparator)
-    : VectorViewModel<IncomingShareState, EmptyAction, EmptyViewEvents>(initialState) {
+class IncomingShareViewModel @AssistedInject constructor(
+        @Assisted initialState: IncomingShareViewState,
+        private val session: Session,
+        private val breadcrumbsRoomComparator: BreadcrumbsRoomComparator)
+    : VectorViewModel<IncomingShareViewState, IncomingShareAction, IncomingShareViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
-        fun create(initialState: IncomingShareState): IncomingShareViewModel
+        fun create(initialState: IncomingShareViewState): IncomingShareViewModel
     }
 
-    companion object : MvRxViewModelFactory<IncomingShareViewModel, IncomingShareState> {
+    companion object : MvRxViewModelFactory<IncomingShareViewModel, IncomingShareViewState> {
 
         @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: IncomingShareState): IncomingShareViewModel? {
-            val activity: IncomingShareActivity = (viewModelContext as ActivityViewModelContext).activity()
-            return activity.incomingShareViewModelFactory.create(state)
+        override fun create(viewModelContext: ViewModelContext, state: IncomingShareViewState): IncomingShareViewModel? {
+            val fragment: IncomingShareFragment = (viewModelContext as FragmentViewModelContext).fragment()
+            return fragment.incomingShareViewModelFactory.create(state)
         }
     }
+
+    private val filterStream: BehaviorRelay<String> = BehaviorRelay.createDefault("")
 
     init {
         observeRoomSummaries()
     }
 
     private fun observeRoomSummaries() {
-        val queryParams = roomSummaryQueryParams()
-        sessionObservableStore.observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .switchMap {
-                    it.orNull()?.rx()?.liveRoomSummaries(queryParams)
-                            ?: Observable.just(emptyList())
+        val queryParams = roomSummaryQueryParams {
+            memberships = listOf(Membership.JOIN)
+        }
+        session
+                .rx().liveRoomSummaries(queryParams)
+                .execute {
+                    copy(roomSummaries = it)
+                }
+
+        filterStream
+                .switchMap { filter ->
+                    val displayNameQuery = if (filter.isEmpty()) {
+                        QueryStringValue.NoCondition
+                    } else {
+                        QueryStringValue.Contains(filter, QueryStringValue.Case.INSENSITIVE)
+                    }
+                    val filterQueryParams = roomSummaryQueryParams {
+                        displayName = displayNameQuery
+                        memberships = listOf(Membership.JOIN)
+                    }
+                    session.rx().liveRoomSummaries(filterQueryParams)
                 }
                 .throttleLast(300, TimeUnit.MILLISECONDS)
-                .map {
-                    it.sortedWith(breadcrumbsRoomComparator)
+                .map { it.sortedWith(breadcrumbsRoomComparator) }
+                .execute {
+                    copy(filteredRoomSummaries = it)
                 }
-                .subscribe {
-                    shareRoomListObservableStore.post(it)
-                }
-                .disposeOnClear()
     }
 
-    override fun handle(action: EmptyAction) {
-        // No op
+    override fun handle(action: IncomingShareAction) {
+        when (action) {
+            is IncomingShareAction.SelectRoom           -> handleSelectRoom(action)
+            is IncomingShareAction.ShareToSelectedRooms -> handleShareToSelectedRooms()
+            is IncomingShareAction.ShareMedia           -> handleShareMediaToSelectedRooms(action)
+            is IncomingShareAction.FilterWith           -> handleFilter(action)
+            is IncomingShareAction.UpdateSharedData     -> handleUpdateSharedData(action)
+        }.exhaustive
+    }
+
+    private fun handleUpdateSharedData(action: IncomingShareAction.UpdateSharedData) {
+        setState { copy(sharedData = action.sharedData) }
+    }
+
+    private fun handleFilter(action: IncomingShareAction.FilterWith) {
+        filterStream.accept(action.filter)
+    }
+
+    private fun handleShareToSelectedRooms() = withState { state ->
+        val sharedData = state.sharedData ?: return@withState
+        if (state.selectedRoomIds.size == 1) {
+            // In this case the edition of the media will be handled by the RoomDetailFragment
+            val selectedRoomId = state.selectedRoomIds.first()
+            val selectedRoom = state.roomSummaries()?.find { it.roomId == selectedRoomId } ?: return@withState
+            _viewEvents.post(IncomingShareViewEvents.ShareToRoom(selectedRoom, sharedData, showAlert = false))
+        } else {
+            when (sharedData) {
+                is SharedData.Text        -> {
+                    state.selectedRoomIds.forEach { roomId ->
+                        val room = session.getRoom(roomId)
+                        room?.sendTextMessage(sharedData.text)
+                    }
+                    // This is it, pass the first roomId to let the screen open it
+                    _viewEvents.post(IncomingShareViewEvents.MultipleRoomsShareDone(state.selectedRoomIds.first()))
+                }
+                is SharedData.Attachments -> {
+                    shareAttachments(sharedData.attachmentData, state.selectedRoomIds, proposeMediaEdition = true, compressMediaBeforeSending = false)
+                }
+            }.exhaustive
+        }
+    }
+
+    private fun handleShareMediaToSelectedRooms(action: IncomingShareAction.ShareMedia) = withState { state ->
+        (state.sharedData as? SharedData.Attachments)?.let {
+            shareAttachments(it.attachmentData, state.selectedRoomIds, proposeMediaEdition = false, compressMediaBeforeSending = !action.keepOriginalSize)
+        }
+    }
+
+    private fun shareAttachments(attachmentData: List<ContentAttachmentData>,
+                                 selectedRoomIds: Set<String>,
+                                 proposeMediaEdition: Boolean,
+                                 compressMediaBeforeSending: Boolean) {
+        if (proposeMediaEdition) {
+            val grouped = attachmentData.toGroupedContentAttachmentData()
+            if (grouped.notPreviewables.isNotEmpty()) {
+                // Send the not previewable attachments right now (?)
+                // Pick the first room to send the media
+                selectedRoomIds.firstOrNull()
+                        ?.let { roomId -> session.getRoom(roomId) }
+                        ?.sendMedias(grouped.notPreviewables, compressMediaBeforeSending, selectedRoomIds)
+
+                // Ensure they will not be sent twice
+                setState {
+                    copy(
+                            sharedData = SharedData.Attachments(grouped.previewables)
+                    )
+                }
+            }
+            if (grouped.previewables.isNotEmpty()) {
+                // In case of multiple share of media, edit them first
+                _viewEvents.post(IncomingShareViewEvents.EditMediaBeforeSending(grouped.previewables))
+            } else {
+                // This is it, pass the first roomId to let the screen open it
+                _viewEvents.post(IncomingShareViewEvents.MultipleRoomsShareDone(selectedRoomIds.first()))
+            }
+        } else {
+            // Pick the first room to send the media
+            selectedRoomIds.firstOrNull()
+                    ?.let { roomId -> session.getRoom(roomId) }
+                    ?.sendMedias(attachmentData, compressMediaBeforeSending, selectedRoomIds)
+            // This is it, pass the first roomId to let the screen open it
+            _viewEvents.post(IncomingShareViewEvents.MultipleRoomsShareDone(selectedRoomIds.first()))
+        }
+    }
+
+    private fun handleSelectRoom(action: IncomingShareAction.SelectRoom) = withState { state ->
+        if (state.isInMultiSelectionMode) {
+            val selectedRooms = state.selectedRoomIds
+            val newSelectedRooms = if (selectedRooms.contains(action.roomSummary.roomId)) {
+                selectedRooms.minus(action.roomSummary.roomId)
+            } else {
+                selectedRooms.plus(action.roomSummary.roomId)
+            }
+            setState { copy(isInMultiSelectionMode = newSelectedRooms.isNotEmpty(), selectedRoomIds = newSelectedRooms) }
+        } else if (action.enableMultiSelect) {
+            setState { copy(isInMultiSelectionMode = true, selectedRoomIds = setOf(action.roomSummary.roomId)) }
+        } else {
+            val sharedData = state.sharedData ?: return@withState
+            // Do not show alert if the shared data contains only previewable attachments, because the user will get another chance to cancel the share
+            val doNotShowAlert = (sharedData as? SharedData.Attachments)?.attachmentData?.all { it.isPreviewable() }.orFalse()
+            _viewEvents.post(IncomingShareViewEvents.ShareToRoom(action.roomSummary, sharedData, !doNotShowAlert))
+        }
     }
 }

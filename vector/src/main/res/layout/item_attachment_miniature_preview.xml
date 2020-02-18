@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp"
+    card_view:cardBackgroundColor="@android:color/transparent"
+    card_view:cardElevation="0dp">
+
+    <im.vector.riotx.core.platform.CheckableImageView
+        android:id="@+id/attachmentMiniatureImageView"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="@drawable/background_checked_accent_color"
+        android:padding="2dp"
+        android:scaleType="centerCrop"
+        tools:src="@tools:sample/backgrounds/scenic" />
+
+</androidx.cardview.widget.CardView>

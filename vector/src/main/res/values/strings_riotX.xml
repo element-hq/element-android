@@ -23,7 +23,14 @@
 
     <!-- BEGIN Strings added by Benoit -->
     <string name="message_action_item_redact">Remove…</string>
+    <string name="share_confirm_room">Do you want to send this attachment to %1$s?</string>
+    <plurals name="send_images_with_original_size">
+        <item quantity="one">Send image with the original size</item>
+        <item quantity="other">Send images with the original size</item>
+    </plurals>
     <string name="login_signup_username_hint">Username</string>
+    <!-- END Strings added by Benoit -->
+
     <!-- BEGIN Strings added by Benoit -->
 
     <!-- END Strings added by Benoit -->

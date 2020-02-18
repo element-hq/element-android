@@ -50,15 +50,13 @@ import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsShare
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.riotx.features.home.room.list.widget.FabMenuView
 import im.vector.riotx.features.notifications.NotificationDrawerManager
-import im.vector.riotx.features.share.SharedData
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_list.*
 import javax.inject.Inject
 
 @Parcelize
 data class RoomListParams(
-        val displayMode: RoomListDisplayMode,
-        val sharedData: SharedData? = null
+        val displayMode: RoomListDisplayMode
 ) : Parcelable
 
 class RoomListFragment @Inject constructor(
@@ -106,7 +104,7 @@ class RoomListFragment @Inject constructor(
             when (it) {
                 is RoomListViewEvents.Loading    -> showLoading(it.message)
                 is RoomListViewEvents.Failure    -> showFailure(it.throwable)
-                is RoomListViewEvents.SelectRoom -> openSelectedRoom(it)
+                is RoomListViewEvents.SelectRoom -> handleSelectRoom(it)
             }.exhaustive
         }
 
@@ -131,13 +129,8 @@ class RoomListFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    private fun openSelectedRoom(event: RoomListViewEvents.SelectRoom) {
-        if (roomListParams.displayMode == RoomListDisplayMode.SHARE) {
-            val sharedData = roomListParams.sharedData ?: return
-            navigator.openRoomForSharing(requireActivity(), event.roomId, sharedData)
-        } else {
-            navigator.openRoom(requireActivity(), event.roomId)
-        }
+    private fun handleSelectRoom(event: RoomListViewEvents.SelectRoom) {
+        navigator.openRoom(requireActivity(), event.roomSummary.roomId)
     }
 
     private fun setupCreateRoomButton() {
@@ -256,7 +249,6 @@ class RoomListFragment @Inject constructor(
             is Fail       -> renderFailure(state.asyncFilteredRooms.error)
         }
         roomController.update(state)
-
         // Mark all as read menu
         when (roomListParams.displayMode) {
             RoomListDisplayMode.HOME,
@@ -265,7 +257,7 @@ class RoomListFragment @Inject constructor(
                 val newValue = state.hasUnread
                 if (hasUnreadRooms != newValue) {
                     hasUnreadRooms = newValue
-                    requireActivity().invalidateOptionsMenu()
+                    invalidateOptionsMenu()
                 }
             }
             else                      -> Unit
@@ -338,7 +330,6 @@ class RoomListFragment @Inject constructor(
         if (createChatFabMenu.onBackPressed()) {
             return true
         }
-
         return false
     }
 
@@ -350,7 +341,6 @@ class RoomListFragment @Inject constructor(
 
     override fun onRoomLongClicked(room: RoomSummary): Boolean {
         roomController.onRoomLongClicked()
-
         RoomListQuickActionsBottomSheet
                 .newInstance(room.roomId, RoomListActionsArgs.Mode.FULL)
                 .show(childFragmentManager, "ROOM_LIST_QUICK_ACTIONS")

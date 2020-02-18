@@ -17,7 +17,11 @@
 package im.vector.matrix.android.internal.di
 
 import android.content.Context
-import androidx.work.*
+import androidx.work.Constraints
+import androidx.work.ListenableWorker
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import javax.inject.Inject
 
 internal class WorkManagerProvider @Inject constructor(
@@ -54,5 +58,7 @@ internal class WorkManagerProvider @Inject constructor(
         val workConstraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
+
+        const val BACKOFF_DELAY = 10_000L
     }
 }

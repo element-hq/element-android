@@ -16,7 +16,11 @@
 
 package im.vector.riotx.features.attachments
 
-import com.kbeanie.multipicker.api.entity.*
+import com.kbeanie.multipicker.api.entity.ChosenAudio
+import com.kbeanie.multipicker.api.entity.ChosenContact
+import com.kbeanie.multipicker.api.entity.ChosenFile
+import com.kbeanie.multipicker.api.entity.ChosenImage
+import com.kbeanie.multipicker.api.entity.ChosenVideo
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import timber.log.Timber
 
@@ -37,7 +41,8 @@ fun ChosenFile.toContentAttachmentData(): ContentAttachmentData {
             type = mapType(),
             size = size,
             date = createdAt?.time ?: System.currentTimeMillis(),
-            name = displayName
+            name = displayName,
+            queryUri = queryUri
     )
 }
 
@@ -50,7 +55,8 @@ fun ChosenAudio.toContentAttachmentData(): ContentAttachmentData {
             size = size,
             date = createdAt?.time ?: System.currentTimeMillis(),
             name = displayName,
-            duration = duration
+            duration = duration,
+            queryUri = queryUri
     )
 }
 
@@ -74,7 +80,8 @@ fun ChosenImage.toContentAttachmentData(): ContentAttachmentData {
             height = height.toLong(),
             width = width.toLong(),
             exifOrientation = orientation,
-            date = createdAt?.time ?: System.currentTimeMillis()
+            date = createdAt?.time ?: System.currentTimeMillis(),
+            queryUri = queryUri
     )
 }
 
@@ -89,6 +96,7 @@ fun ChosenVideo.toContentAttachmentData(): ContentAttachmentData {
             height = height.toLong(),
             width = width.toLong(),
             duration = duration,
-            name = displayName
+            name = displayName,
+            queryUri = queryUri
     )
 }

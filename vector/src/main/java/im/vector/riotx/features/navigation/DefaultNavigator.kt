@@ -64,15 +64,15 @@ class DefaultNavigator @Inject constructor(
         startActivity(context, intent, buildTask)
     }
 
-    override fun performDeviceVerification(context: Context, otherUserId: String, sasTransationId: String) {
+    override fun performDeviceVerification(context: Context, otherUserId: String, sasTransactionId: String) {
         val session = sessionHolder.getSafeActiveSession() ?: return
-        val tx = session.cryptoService().verificationService().getExistingTransaction(otherUserId, sasTransationId) ?: return
+        val tx = session.cryptoService().verificationService().getExistingTransaction(otherUserId, sasTransactionId) ?: return
         (tx as? IncomingSasVerificationTransaction)?.performAccept()
         if (context is VectorBaseActivity) {
             VerificationBottomSheet.withArgs(
                     roomId = null,
                     otherUserId = otherUserId,
-                    transactionId = sasTransationId
+                    transactionId = sasTransactionId
             ).show(context.supportFragmentManager, "REQPOP")
         }
     }
@@ -126,7 +126,7 @@ class DefaultNavigator @Inject constructor(
         startActivity(context, intent, buildTask)
     }
 
-    override fun openRoomForSharing(activity: Activity, roomId: String, sharedData: SharedData) {
+    override fun openRoomForSharingAndFinish(activity: Activity, roomId: String, sharedData: SharedData) {
         val args = RoomDetailArgs(roomId, null, sharedData)
         val intent = RoomDetailActivity.newIntent(activity, args)
         activity.startActivity(intent)

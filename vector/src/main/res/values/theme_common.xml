@@ -8,4 +8,6 @@
         <item name="colorPrimaryDark">@color/primary_color_dark</item>
     </style>
 
+    <style name="AppTheme.AttachmentsPreview" parent="AppTheme.Base.Black"/>
+
 </resources>

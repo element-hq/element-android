@@ -115,6 +115,8 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     var pendingAction: RoomDetailAction? = null
     // Slot to keep a pending uri during permission request
     var pendingUri: Uri? = null
+    // Slot to store if we want to prevent preview of attachment
+    var preventAttachmentPreview = false
 
     private var trackUnreadMessages = AtomicBoolean(false)
     private var mostRecentDisplayedEvent: TimelineEvent? = null
@@ -582,10 +584,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
         if (maxUploadFileSize == HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN) {
             // Unknown limitation
-            room.sendMedias(attachments)
+            room.sendMedias(attachments, action.compressBeforeSending, emptySet())
         } else {
             when (val tooBigFile = attachments.find { it.size > maxUploadFileSize }) {
-                null -> room.sendMedias(attachments)
+                null -> room.sendMedias(attachments, action.compressBeforeSending, emptySet())
                 else -> _viewEvents.post(RoomDetailViewEvents.FileTooBigError(
                         tooBigFile.name ?: tooBigFile.path,
                         tooBigFile.size,

@@ -149,7 +149,7 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
     }
 
     private fun renderSelectedUsers(selectedUsers: Set<User>) {
-        vectorBaseActivity.invalidateOptionsMenu()
+        invalidateOptionsMenu()
         if (selectedUsers.isNotEmpty() && chipGroup.size == 0) {
             selectedUsers.forEach { addChipToGroup(it, chipGroup) }
         }
