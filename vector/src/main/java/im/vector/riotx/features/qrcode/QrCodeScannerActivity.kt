@@ -22,6 +22,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
+import com.google.zxing.ResultMetadataType
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.replaceFragment
@@ -43,13 +44,31 @@ class QrCodeScannerActivity : VectorBaseActivity() {
     }
 
     fun setResultAndFinish(result: Result?) {
-        result?.let {
+        if (result != null) {
+            val rawBytes = getRawBytes(result)
+            val rawBytesStr = rawBytes?.toString(Charsets.ISO_8859_1)
+
             setResult(RESULT_OK, Intent().apply {
-                putExtra(EXTRA_OUT_TEXT, it.text)
-                putExtra(EXTRA_OUT_IS_QR_CODE, it.barcodeFormat == BarcodeFormat.QR_CODE)
+                putExtra(EXTRA_OUT_TEXT, rawBytesStr ?: result.text)
+                putExtra(EXTRA_OUT_IS_QR_CODE, result.barcodeFormat == BarcodeFormat.QR_CODE)
             })
         }
         finish()
+    }
+
+    // Copied from https://github.com/markusfisch/BinaryEye/blob/
+    // 9d57889b810dcaa1a91d7278fc45c262afba1284/app/src/main/kotlin/de/markusfisch/android/binaryeye/activity/CameraActivity.kt#L434
+    private fun getRawBytes(result: Result): ByteArray? {
+        val metadata = result.resultMetadata ?: return null
+        val segments = metadata[ResultMetadataType.BYTE_SEGMENTS] ?: return null
+        var bytes = ByteArray(0)
+        @Suppress("UNCHECKED_CAST")
+        for (seg in segments as Iterable<ByteArray>) {
+            bytes += seg
+        }
+        // byte segments can never be shorter than the text.
+        // Zxing cuts off content prefixes like "WIFI:"
+        return if (bytes.size >= result.text.length) bytes else null
     }
 
     companion object {
