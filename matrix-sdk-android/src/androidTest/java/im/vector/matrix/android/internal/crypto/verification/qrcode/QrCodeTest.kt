@@ -218,6 +218,22 @@ class QrCodeTest : InstrumentedTest {
         compareArray(byteArray.copyOfRange(23 + 64, byteArray.size), sharedSecretByteArray)
     }
 
+    @Test
+    fun testLongTransactionId() {
+        // Size on two bytes (2_000 = 0x07D0)
+        val longTransactionId = "PatternId_".repeat(200)
+
+        val qrCode = qrCode1.copy(transactionId = longTransactionId)
+
+        val result = qrCode.toEncodedString()
+        val expected = value1.replace("\u0000\u000DMaTransaction", "\u0007\u00D0$longTransactionId")
+
+        result shouldEqual expected
+
+        // Reverse operation
+        expected.toQrCodeData() shouldEqual qrCode
+    }
+
     // Error cases
     @Test
     fun testErrorHeader() {
