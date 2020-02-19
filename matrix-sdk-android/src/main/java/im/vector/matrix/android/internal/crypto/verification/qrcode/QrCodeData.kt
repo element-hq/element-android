@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.crypto.verification.qrcode
 /**
  * Ref: https://github.com/uhoreg/matrix-doc/blob/qr_key_verification/proposals/1543-qr_code_key_verification.md#qr-code-format
  */
+//@Deprecated(message = "Use QrCodeDataV2")
 data class QrCodeData(
         val userId: String,
         // Request Id. Can be an arbitrary value. In DM, it will be the event ID of the associated verification request event.

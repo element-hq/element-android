@@ -45,6 +45,7 @@ private const val ENCODING = "utf-8"
  *     &other_device_key=WqSVLkBREDACTEDBsfszdvsdBEvefqsdcsfBvsfcsFb
  * </pre>
  */
+// @Deprecated(message = "Use QrCodeDataV2")
 fun QrCodeData.toUrl(): String {
     return buildString {
         append(PermalinkFactory.createPermalink(userId))
@@ -72,6 +73,7 @@ fun QrCodeData.toUrl(): String {
     }
 }
 
+// @Deprecated(message = "Use QrCodeDataV2")
 fun String.toQrCodeData(): QrCodeData? {
     if (!startsWith(PermalinkFactory.MATRIX_TO_URL_BASE)) {
         return null

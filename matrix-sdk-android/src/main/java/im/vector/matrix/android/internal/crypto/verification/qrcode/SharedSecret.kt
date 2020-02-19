@@ -27,3 +27,12 @@ fun generateSharedSecret(): String {
     secureRandom.nextBytes(secretBytes)
     return secretBytes.toBase64NoPadding()
 }
+
+fun generateSharedSecretV2(): String {
+    val secureRandom = SecureRandom()
+
+    // 8 bytes long
+    val secretBytes = ByteArray(8)
+    secureRandom.nextBytes(secretBytes)
+    return secretBytes.toBase64NoPadding()
+}
