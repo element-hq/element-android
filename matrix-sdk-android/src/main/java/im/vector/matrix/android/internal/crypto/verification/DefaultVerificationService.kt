@@ -66,7 +66,6 @@ import im.vector.matrix.android.internal.crypto.model.rest.toValue
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.verification.qrcode.DefaultQrCodeVerificationTransaction
 import im.vector.matrix.android.internal.crypto.verification.qrcode.QrCodeDataV2
-import im.vector.matrix.android.internal.crypto.verification.qrcode.generateSharedSecret
 import im.vector.matrix.android.internal.crypto.verification.qrcode.generateSharedSecretV2
 import im.vector.matrix.android.internal.di.DeviceId
 import im.vector.matrix.android.internal.di.UserId
@@ -797,17 +796,17 @@ internal class DefaultVerificationService @Inject constructor(
 
         return when {
             userId != otherUserId                        ->
-                createQrCodeDataForDistinctUser(requestId, otherUserId /*, otherDeviceId*/)
+                createQrCodeDataForDistinctUser(requestId, otherUserId)
             crossSigningService.isCrossSigningVerified() ->
                 // This is a self verification and I am the old device (Osborne2)
                 createQrCodeDataForVerifiedDevice(requestId, otherDeviceId)
             else                                         ->
                 // This is a self verification and I am the new device (Dynabook)
-                createQrCodeDataForUnVerifiedDevice(requestId/*, otherDeviceId*/)
+                createQrCodeDataForUnVerifiedDevice(requestId)
         }
     }
 
-    private fun createQrCodeDataForDistinctUser(requestId: String, otherUserId: String /*, otherDeviceId: String?*/): QrCodeDataV2.VerifyingAnotherUser? {
+    private fun createQrCodeDataForDistinctUser(requestId: String, otherUserId: String): QrCodeDataV2.VerifyingAnotherUser? {
         val myMasterKey = crossSigningService.getMyCrossSigningKeys()
                 ?.masterKey()
                 ?.unpaddedBase64PublicKey
@@ -823,25 +822,6 @@ internal class DefaultVerificationService @Inject constructor(
                     Timber.w("## Unable to get other user master key")
                     return null
                 }
-
-        /* TODO Cleanup
-        val myDeviceId = deviceId
-                ?: run {
-                    Timber.w("## Unable to get my deviceId")
-                    return null
-                }
-
-        val myDeviceKey = myDeviceInfoHolder.get().myDevice.fingerprint()
-                ?: run {
-                    Timber.w("## Unable to get my fingerprint")
-                    return null
-                }
-
-        val otherDeviceKey = otherDeviceId
-                ?.let {
-                    cryptoStore.getUserDevice(userId, otherDeviceId)?.fingerprint()
-                }
-         */
 
         return QrCodeDataV2.VerifyingAnotherUser(
                 transactionId = requestId,
@@ -870,20 +850,6 @@ internal class DefaultVerificationService @Inject constructor(
                     return null
                 }
 
-        /* TODO Cleanup
-        val myDeviceId = deviceId
-                ?: run {
-                    Timber.w("## Unable to get my deviceId")
-                    return null
-                }
-
-        val myDeviceKey = myDeviceInfoHolder.get().myDevice.fingerprint()
-                ?: run {
-                    Timber.w("## Unable to get my fingerprint")
-                    return null
-                }
-         */
-
         return QrCodeDataV2.SelfVerifyingMasterKeyTrusted(
                 transactionId = requestId,
                 userMasterCrossSigningPublicKey = myMasterKey,
@@ -893,7 +859,7 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     // Create a QR code to display on the new device (Dynabook)
-    private fun createQrCodeDataForUnVerifiedDevice(requestId: String/*, otherDeviceId: String?*/): QrCodeDataV2.SelfVerifyingMasterKeyNotTrusted? {
+    private fun createQrCodeDataForUnVerifiedDevice(requestId: String): QrCodeDataV2.SelfVerifyingMasterKeyNotTrusted? {
         val myMasterKey = crossSigningService.getMyCrossSigningKeys()
                 ?.masterKey()
                 ?.unpaddedBase64PublicKey
@@ -902,26 +868,11 @@ internal class DefaultVerificationService @Inject constructor(
                     return null
                 }
 
-        /* TODO Cleanup
-        val myDeviceId = deviceId
-                ?: run {
-                    Timber.w("## Unable to get my deviceId")
-                    return null
-                }
-         */
-
         val myDeviceKey = myDeviceInfoHolder.get().myDevice.fingerprint()
                 ?: run {
                     Timber.w("## Unable to get my fingerprint")
                     return null
                 }
-
-        /* TODO Cleanup
-        val otherDeviceKey = otherDeviceId
-                ?.let {
-                    cryptoStore.getUserDevice(userId, otherDeviceId)?.fingerprint()
-                }
-         */
 
         return QrCodeDataV2.SelfVerifyingMasterKeyNotTrusted(
                 transactionId = requestId,
