@@ -19,7 +19,7 @@ package im.vector.matrix.android.internal.crypto.verification.qrcode
 /**
  * Ref: https://github.com/uhoreg/matrix-doc/blob/qr_key_verification/proposals/1543-qr_code_key_verification.md#qr-code-format
  */
-sealed class QrCodeDataV2(
+sealed class QrCodeData(
         /**
          * the event ID or transaction_id of the associated verification
          */
@@ -52,7 +52,7 @@ sealed class QrCodeDataV2(
              */
             val otherUserMasterCrossSigningPublicKey: String,
             override val sharedSecret: String
-    ) : QrCodeDataV2(
+    ) : QrCodeData(
             transactionId,
             userMasterCrossSigningPublicKey,
             otherUserMasterCrossSigningPublicKey,
@@ -73,7 +73,7 @@ sealed class QrCodeDataV2(
              */
             val otherDeviceKey: String,
             override val sharedSecret: String
-    ) : QrCodeDataV2(
+    ) : QrCodeData(
             transactionId,
             userMasterCrossSigningPublicKey,
             otherDeviceKey,
@@ -94,7 +94,7 @@ sealed class QrCodeDataV2(
              */
             val userMasterCrossSigningPublicKey: String,
             override val sharedSecret: String
-    ) : QrCodeDataV2(
+    ) : QrCodeData(
             transactionId,
             deviceKey,
             userMasterCrossSigningPublicKey,

@@ -39,7 +39,7 @@ internal class DefaultQrCodeVerificationTransaction(
         private val crossSigningService: CrossSigningService,
         private val cryptoStore: IMXCryptoStore,
         // Not null only if other user is able to scan QR code
-        private val qrCodeData: QrCodeDataV2?,
+        private val qrCodeData: QrCodeData?,
         val userId: String,
         val deviceId: String,
         override val isIncoming: Boolean
@@ -62,7 +62,7 @@ internal class DefaultQrCodeVerificationTransaction(
         }
 
     override fun userHasScannedOtherQrCode(otherQrCodeText: String) {
-        val otherQrCodeData = otherQrCodeText.toQrCodeDataV2() ?: run {
+        val otherQrCodeData = otherQrCodeText.toQrCodeData() ?: run {
             Timber.d("## Verification QR: Invalid QR Code Data")
             cancel(CancelCode.QrCodeInvalid)
             return
@@ -77,21 +77,21 @@ internal class DefaultQrCodeVerificationTransaction(
 
         // check master key
         when (otherQrCodeData) {
-            is QrCodeDataV2.VerifyingAnotherUser             -> {
+            is QrCodeData.VerifyingAnotherUser             -> {
                 if (otherQrCodeData.otherUserMasterCrossSigningPublicKey != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
                     Timber.d("## Verification QR: Invalid other master key ${otherQrCodeData.otherUserMasterCrossSigningPublicKey}")
                     cancel(CancelCode.MismatchedKeys)
                     return
                 } else Unit
             }
-            is QrCodeDataV2.SelfVerifyingMasterKeyTrusted    -> {
+            is QrCodeData.SelfVerifyingMasterKeyTrusted    -> {
                 if (otherQrCodeData.userMasterCrossSigningPublicKey != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
                     Timber.d("## Verification QR: Invalid other master key ${otherQrCodeData.userMasterCrossSigningPublicKey}")
                     cancel(CancelCode.MismatchedKeys)
                     return
                 } else Unit
             }
-            is QrCodeDataV2.SelfVerifyingMasterKeyNotTrusted -> {
+            is QrCodeData.SelfVerifyingMasterKeyNotTrusted -> {
                 if (otherQrCodeData.userMasterCrossSigningPublicKey != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
                     Timber.d("## Verification QR: Invalid other master key ${otherQrCodeData.userMasterCrossSigningPublicKey}")
                     cancel(CancelCode.MismatchedKeys)
@@ -105,7 +105,7 @@ internal class DefaultQrCodeVerificationTransaction(
 
         // Check device key if available
         when (otherQrCodeData) {
-            is QrCodeDataV2.VerifyingAnotherUser             -> {
+            is QrCodeData.VerifyingAnotherUser             -> {
                 if (otherQrCodeData.userMasterCrossSigningPublicKey != crossSigningService.getUserCrossSigningKeys(otherUserId)?.masterKey()?.unpaddedBase64PublicKey) {
                     Timber.d("## Verification QR: Invalid user master key ${otherQrCodeData.userMasterCrossSigningPublicKey}")
                     cancel(CancelCode.MismatchedKeys)
@@ -115,14 +115,14 @@ internal class DefaultQrCodeVerificationTransaction(
                     Unit
                 }
             }
-            is QrCodeDataV2.SelfVerifyingMasterKeyTrusted    -> {
+            is QrCodeData.SelfVerifyingMasterKeyTrusted    -> {
                 if (otherQrCodeData.otherDeviceKey != cryptoStore.getUserDevice(userId, deviceId)?.fingerprint()) {
                     Timber.d("## Verification QR: Invalid other device key ${otherQrCodeData.otherDeviceKey}")
                     cancel(CancelCode.MismatchedKeys)
                     return
                 } else Unit
             }
-            is QrCodeDataV2.SelfVerifyingMasterKeyNotTrusted -> {
+            is QrCodeData.SelfVerifyingMasterKeyNotTrusted -> {
                 if (otherQrCodeData.deviceKey != cryptoStore.getUserDevice(otherUserId, otherDeviceId ?: "")?.fingerprint()) {
                     Timber.d("## Verification QR: Invalid device key ${otherQrCodeData.deviceKey}")
                     cancel(CancelCode.MismatchedKeys)

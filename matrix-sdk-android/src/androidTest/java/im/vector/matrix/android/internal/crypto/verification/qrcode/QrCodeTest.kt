@@ -29,9 +29,9 @@ import org.junit.runners.MethodSorters
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
-class QrCodeV2Test : InstrumentedTest {
+class QrCodeTest : InstrumentedTest {
 
-    private val qrCode1 = QrCodeDataV2.VerifyingAnotherUser(
+    private val qrCode1 = QrCodeData.VerifyingAnotherUser(
             transactionId = "MaTransaction",
             userMasterCrossSigningPublicKey = "ktEwcUP6su1xh+GuE+CYkQ3H6W/DIl+ybHFdaEOrolU",
             otherUserMasterCrossSigningPublicKey = "TXluZKTZLvSRWOTPlOqLq534bA+/K4zLFKSu9cGLQaU",
@@ -40,7 +40,7 @@ class QrCodeV2Test : InstrumentedTest {
 
     private val value1 = "MATRIX\u0002\u0000\u0000\u000DMaTransaction\u0092Ñ0qCú²íq\u0087á®\u0013à\u0098\u0091\u000DÇéoÃ\"_²lq]hC«¢UMynd¤Ù.ô\u0091XäÏ\u0094ê\u008B«\u009Døl\u000F¿+\u008CË\u0014¤®õÁ\u008BA¥12345678"
 
-    private val qrCode2 = QrCodeDataV2.SelfVerifyingMasterKeyTrusted(
+    private val qrCode2 = QrCodeData.SelfVerifyingMasterKeyTrusted(
             transactionId = "MaTransaction",
             userMasterCrossSigningPublicKey = "ktEwcUP6su1xh+GuE+CYkQ3H6W/DIl+ybHFdaEOrolU",
             otherDeviceKey = "TXluZKTZLvSRWOTPlOqLq534bA+/K4zLFKSu9cGLQaU",
@@ -49,7 +49,7 @@ class QrCodeV2Test : InstrumentedTest {
 
     private val value2 = "MATRIX\u0002\u0001\u0000\u000DMaTransaction\u0092Ñ0qCú²íq\u0087á®\u0013à\u0098\u0091\u000DÇéoÃ\"_²lq]hC«¢UMynd¤Ù.ô\u0091XäÏ\u0094ê\u008B«\u009Døl\u000F¿+\u008CË\u0014¤®õÁ\u008BA¥12345678"
 
-    private val qrCode3 = QrCodeDataV2.SelfVerifyingMasterKeyNotTrusted(
+    private val qrCode3 = QrCodeData.SelfVerifyingMasterKeyNotTrusted(
             transactionId = "MaTransaction",
             deviceKey = "TXluZKTZLvSRWOTPlOqLq534bA+/K4zLFKSu9cGLQaU",
             userMasterCrossSigningPublicKey = "ktEwcUP6su1xh+GuE+CYkQ3H6W/DIl+ybHFdaEOrolU",
@@ -153,17 +153,17 @@ class QrCodeV2Test : InstrumentedTest {
 
     @Test
     fun testSymmetry1() {
-        qrCode1.toEncodedString().toQrCodeDataV2() shouldEqual qrCode1
+        qrCode1.toEncodedString().toQrCodeData() shouldEqual qrCode1
     }
 
     @Test
     fun testSymmetry2() {
-        qrCode2.toEncodedString().toQrCodeDataV2() shouldEqual qrCode2
+        qrCode2.toEncodedString().toQrCodeData() shouldEqual qrCode2
     }
 
     @Test
     fun testSymmetry3() {
-        qrCode3.toEncodedString().toQrCodeDataV2() shouldEqual qrCode3
+        qrCode3.toEncodedString().toQrCodeData() shouldEqual qrCode3
     }
 
     @Test
@@ -221,44 +221,44 @@ class QrCodeV2Test : InstrumentedTest {
     // Error cases
     @Test
     fun testErrorHeader() {
-        value1.replace("MATRIX", "MOTRIX").toQrCodeDataV2().shouldBeNull()
-        value1.replace("MATRIX", "MATRI").toQrCodeDataV2().shouldBeNull()
-        value1.replace("MATRIX", "").toQrCodeDataV2().shouldBeNull()
+        value1.replace("MATRIX", "MOTRIX").toQrCodeData().shouldBeNull()
+        value1.replace("MATRIX", "MATRI").toQrCodeData().shouldBeNull()
+        value1.replace("MATRIX", "").toQrCodeData().shouldBeNull()
     }
 
     @Test
     fun testErrorVersion() {
-        value1.replace("MATRIX\u0002", "MATRIX\u0000").toQrCodeDataV2().shouldBeNull()
-        value1.replace("MATRIX\u0002", "MATRIX\u0001").toQrCodeDataV2().shouldBeNull()
-        value1.replace("MATRIX\u0002", "MATRIX\u0003").toQrCodeDataV2().shouldBeNull()
-        value1.replace("MATRIX\u0002", "MATRIX").toQrCodeDataV2().shouldBeNull()
+        value1.replace("MATRIX\u0002", "MATRIX\u0000").toQrCodeData().shouldBeNull()
+        value1.replace("MATRIX\u0002", "MATRIX\u0001").toQrCodeData().shouldBeNull()
+        value1.replace("MATRIX\u0002", "MATRIX\u0003").toQrCodeData().shouldBeNull()
+        value1.replace("MATRIX\u0002", "MATRIX").toQrCodeData().shouldBeNull()
     }
 
     @Test
     fun testErrorSecretTooShort() {
-        value1.replace("12345678", "1234567").toQrCodeDataV2().shouldBeNull()
+        value1.replace("12345678", "1234567").toQrCodeData().shouldBeNull()
     }
 
     @Test
     fun testErrorNoTransactionNoKeyNoSecret() {
         // But keep transaction length
-        "MATRIX\u0002\u0000\u0000\u000D".toQrCodeDataV2().shouldBeNull()
+        "MATRIX\u0002\u0000\u0000\u000D".toQrCodeData().shouldBeNull()
     }
 
     @Test
     fun testErrorNoKeyNoSecret() {
-        "MATRIX\u0002\u0000\u0000\u000DMaTransaction".toQrCodeDataV2().shouldBeNull()
+        "MATRIX\u0002\u0000\u0000\u000DMaTransaction".toQrCodeData().shouldBeNull()
     }
 
     @Test
     fun testErrorTransactionLengthTooShort() {
         // In this case, the secret will be longer, so this is not an error, but it will lead to keys mismatch
-        value1.replace("\u000DMaTransaction", "\u000CMaTransaction").toQrCodeDataV2().shouldNotBeNull()
+        value1.replace("\u000DMaTransaction", "\u000CMaTransaction").toQrCodeData().shouldNotBeNull()
     }
 
     @Test
     fun testErrorTransactionLengthTooBig() {
-        value1.replace("\u000DMaTransaction", "\u000EMaTransaction").toQrCodeDataV2().shouldBeNull()
+        value1.replace("\u000DMaTransaction", "\u000EMaTransaction").toQrCodeData().shouldBeNull()
     }
 
     private fun compareArray(actual: ByteArray, expected: ByteArray) {

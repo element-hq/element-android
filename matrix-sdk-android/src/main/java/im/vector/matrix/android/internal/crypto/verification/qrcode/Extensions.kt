@@ -22,7 +22,7 @@ import im.vector.matrix.android.internal.crypto.crosssigning.toBase64NoPadding
 // MATRIX
 private val prefix = "MATRIX".toByteArray(Charsets.ISO_8859_1)
 
-fun QrCodeDataV2.toEncodedString(): String {
+fun QrCodeData.toEncodedString(): String {
     var result = ByteArray(0)
 
     // MATRIX
@@ -35,9 +35,9 @@ fun QrCodeDataV2.toEncodedString(): String {
 
     // Mode
     result += when (this) {
-        is QrCodeDataV2.VerifyingAnotherUser             -> 0
-        is QrCodeDataV2.SelfVerifyingMasterKeyTrusted    -> 1
-        is QrCodeDataV2.SelfVerifyingMasterKeyNotTrusted -> 2
+        is QrCodeData.VerifyingAnotherUser             -> 0
+        is QrCodeData.SelfVerifyingMasterKeyTrusted    -> 1
+        is QrCodeData.SelfVerifyingMasterKeyNotTrusted -> 2
     }.toByte()
 
     // TransactionId length
@@ -66,7 +66,7 @@ fun QrCodeDataV2.toEncodedString(): String {
     return result.toString(Charsets.ISO_8859_1)
 }
 
-fun String.toQrCodeDataV2(): QrCodeDataV2? {
+fun String.toQrCodeData(): QrCodeData? {
     val byteArray = toByteArray(Charsets.ISO_8859_1)
 
     // Size should be min 6 + 1 + 1 + 2 + ? + 32 + 32 + ? = 74 + transactionLength + secretLength
@@ -115,9 +115,9 @@ fun String.toQrCodeDataV2(): QrCodeDataV2? {
     val secret = byteArray.copyOfRange(cursor, byteArray.size).toBase64NoPadding()
 
     return when (mode) {
-        0    -> QrCodeDataV2.VerifyingAnotherUser(transactionId, key1, key2, secret)
-        1    -> QrCodeDataV2.SelfVerifyingMasterKeyTrusted(transactionId, key1, key2, secret)
-        2    -> QrCodeDataV2.SelfVerifyingMasterKeyNotTrusted(transactionId, key1, key2, secret)
+        0    -> QrCodeData.VerifyingAnotherUser(transactionId, key1, key2, secret)
+        1    -> QrCodeData.SelfVerifyingMasterKeyTrusted(transactionId, key1, key2, secret)
+        2    -> QrCodeData.SelfVerifyingMasterKeyNotTrusted(transactionId, key1, key2, secret)
         else -> null
     }
 }

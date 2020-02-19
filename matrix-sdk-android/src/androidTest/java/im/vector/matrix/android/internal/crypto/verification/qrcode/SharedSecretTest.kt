@@ -27,7 +27,7 @@ import org.junit.runners.MethodSorters
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
-class SharedSecretV2Test : InstrumentedTest {
+class SharedSecretTest : InstrumentedTest {
 
     @Test
     fun testSharedSecretLengthCase() {
