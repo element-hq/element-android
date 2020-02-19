@@ -17,6 +17,7 @@ package im.vector.riotx.features.crypto.keysbackup.restore
 
 import android.os.Bundle
 import android.widget.TextView
+import androidx.core.view.isVisible
 import butterknife.BindView
 import butterknife.OnClick
 import im.vector.riotx.R
@@ -39,16 +40,20 @@ class KeysBackupRestoreSuccessFragment @Inject constructor() : VectorBaseFragmen
         super.onActivityCreated(savedInstanceState)
         sharedViewModel = activityViewModelProvider.get(KeysBackupRestoreSharedViewModel::class.java)
 
-        sharedViewModel.importKeyResult?.let {
-            val part1 = resources.getQuantityString(R.plurals.keys_backup_restore_success_description_part1,
-                    it.totalNumberOfKeys, it.totalNumberOfKeys)
-            val part2 = resources.getQuantityString(R.plurals.keys_backup_restore_success_description_part2,
-                    it.successfullyNumberOfImportedKeys, it.successfullyNumberOfImportedKeys)
-            mSuccessDetailsText.text = String.format("%s\n%s", part1, part2)
+        if (compareValues(sharedViewModel.importKeyResult?.totalNumberOfKeys, 0) > 0) {
+            sharedViewModel.importKeyResult?.let {
+                val part1 = resources.getQuantityString(R.plurals.keys_backup_restore_success_description_part1,
+                        it.totalNumberOfKeys, it.totalNumberOfKeys)
+                val part2 = resources.getQuantityString(R.plurals.keys_backup_restore_success_description_part2,
+                        it.successfullyNumberOfImportedKeys, it.successfullyNumberOfImportedKeys)
+                mSuccessDetailsText.text = String.format("%s\n%s", part1, part2)
+            }
+            // We don't put emoji in string xml as it will crash on old devices
+            mSuccessText.text = context?.getString(R.string.keys_backup_restore_success_title, "🎉")
+        } else {
+            mSuccessText.text = context?.getString(R.string.keys_backup_restore_success_title_already_up_to_date)
+            mSuccessDetailsText.isVisible = false
         }
-
-        // We don't put emoji in string xml as it will crash on old devices
-        mSuccessText.text = context?.getString(R.string.keys_backup_restore_success_title, "🎉")
     }
 
     @OnClick(R.id.keys_backup_setup_done_button)

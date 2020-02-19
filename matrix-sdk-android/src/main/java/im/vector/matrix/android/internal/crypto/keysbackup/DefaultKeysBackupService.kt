@@ -692,7 +692,7 @@ internal class DefaultKeysBackupService @Inject constructor(
                         null
                     }
 
-                    val result = megolmSessionDataImporter.handle(sessionsData, !backUp, uiHandler, progressListener)
+                    val result = megolmSessionDataImporter.handle(sessionsData, !backUp, progressListener)
 
                     // Do not back up the key if it comes from a backup recovery
                     if (backUp) {

@@ -14,6 +14,7 @@ Improvements 🙌:
 Bugfix 🐛:
  - Account creation: wrongly hints that an email can be used to create an account (#941)
  - Fix crash in the room directory, when public room has no name (#1023)
+ - Fix restoring keys backup with passphrase (#526)
 
 Translations 🗣:
  -

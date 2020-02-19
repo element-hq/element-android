@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/keys_backup_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?riotx_background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -64,9 +65,9 @@
             android:id="@+id/keys_backup_view_show_password"
             android:layout_width="@dimen/layout_touch_size"
             android:layout_height="@dimen/layout_touch_size"
+            android:layout_marginTop="8dp"
             android:background="?attr/selectableItemBackground"
             android:scaleType="center"
-            android:layout_marginTop="8dp"
             android:src="@drawable/ic_eye_black"
             android:tint="?colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
