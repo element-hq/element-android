@@ -9,7 +9,7 @@ Features ✨:
  - Sending image: image are sent to rooms with a reduced size. It's still possible to send original image file (#1010)
 
 Improvements 🙌:
- -
+ - Migrate to binary QR code verification (#994)
 
 Bugfix 🐛:
  - Account creation: wrongly hints that an email can be used to create an account (#941)
