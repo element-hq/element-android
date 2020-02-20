@@ -297,15 +297,11 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
         if (isRoomJoined) {
             setState { copy(tombstoneEventHandling = Success(roomId)) }
         } else {
-            val viaServer = MatrixPatterns.extractServerNameFromId(action.event.senderId).let {
-                if (it.isNullOrBlank()) {
-                    emptyList()
-                } else {
-                    listOf(it)
-                }
-            }
+            val viaServers = MatrixPatterns.extractServerNameFromId(action.event.senderId)
+                    ?.let { listOf(it) }
+                    .orEmpty()
             session.rx()
-                    .joinRoom(roomId, viaServers = viaServer)
+                    .joinRoom(roomId, viaServers = viaServers)
                     .map { roomId }
                     .execute {
                         copy(tombstoneEventHandling = it)
