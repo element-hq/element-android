@@ -50,11 +50,11 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
         setupToolbar(roomPreviewNoPreviewToolbar)
         // Toolbar
         avatarRenderer.render(roomPreviewData.matrixItem, roomPreviewNoPreviewToolbarAvatar)
-        roomPreviewNoPreviewToolbarTitle.text = roomPreviewData.roomName
+        roomPreviewNoPreviewToolbarTitle.text = roomPreviewData.roomName ?: roomPreviewData.roomAlias
 
         // Screen
         avatarRenderer.render(roomPreviewData.matrixItem, roomPreviewNoPreviewAvatar)
-        roomPreviewNoPreviewName.text = roomPreviewData.roomName
+        roomPreviewNoPreviewName.text = roomPreviewData.roomName ?: roomPreviewData.roomAlias
         roomPreviewNoPreviewTopic.setTextOrHide(roomPreviewData.topic)
 
         if (roomPreviewData.worldReadable) {
