@@ -62,7 +62,7 @@ internal class RoomTombstoneEventLiveObserver @Inject constructor(@SessionDataba
         for (event in tombstoneEvents) {
             if (event.roomId == null) continue
             val createRoomContent = event.getClearContent().toModel<RoomTombstoneContent>()
-            if (createRoomContent?.replacementRoom == null) continue
+            if (createRoomContent?.replacementRoomId == null) continue
 
             val predecessorRoomSummary = RoomSummaryEntity.where(realm, event.roomId).findFirst()
                                          ?: RoomSummaryEntity(event.roomId)
