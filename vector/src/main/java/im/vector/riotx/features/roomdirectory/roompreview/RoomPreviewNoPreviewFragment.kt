@@ -65,7 +65,7 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
 
         roomPreviewNoPreviewJoin.callback = object : ButtonStateView.Callback {
             override fun onButtonClicked() {
-                roomPreviewViewModel.handle(RoomPreviewAction.Join)
+                roomPreviewViewModel.handle(RoomPreviewAction.Join(roomPreviewData.roomAlias))
             }
 
             override fun onRetryClicked() {
