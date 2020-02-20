@@ -60,81 +60,9 @@ class QrCodeTest : InstrumentedTest {
 
     private val sharedSecretByteArray = "12345678".toByteArray(Charsets.ISO_8859_1)
 
-    // 4d 79 6e 64 a4 d9 2e f4 91 58 e4 cf 94 ea 8b ab 9d f8 6c 0f bf 2b 8c cb 14 a4 ae f5 c1 8b 41 a5
-    private val tlx_byteArray = ByteArray(32) {
-        when (it) {
-            0    -> 0x4D.toByte()
-            1    -> 0x79.toByte()
-            2    -> 0x6E.toByte()
-            3    -> 0x64.toByte()
-            4    -> 0xA4.toByte()
-            5    -> 0xD9.toByte()
-            6    -> 0x2E.toByte()
-            7    -> 0xF4.toByte()
-            8    -> 0x91.toByte()
-            9    -> 0x58.toByte()
-            10   -> 0xE4.toByte()
-            11   -> 0xCF.toByte()
-            12   -> 0x94.toByte()
-            13   -> 0xEA.toByte()
-            14   -> 0x8B.toByte()
-            15   -> 0xAB.toByte()
-            16   -> 0x9D.toByte()
-            17   -> 0xF8.toByte()
-            18   -> 0x6C.toByte()
-            19   -> 0x0F.toByte()
-            20   -> 0xBF.toByte()
-            21   -> 0x2B.toByte()
-            22   -> 0x8C.toByte()
-            23   -> 0xCB.toByte()
-            24   -> 0x14.toByte()
-            25   -> 0xA4.toByte()
-            26   -> 0xAE.toByte()
-            27   -> 0xF5.toByte()
-            28   -> 0xC1.toByte()
-            29   -> 0x8B.toByte()
-            30   -> 0x41.toByte()
-            else -> 0xA5.toByte()
-        }
-    }
+    private val tlx_byteArray = hexToByteArray("4d 79 6e 64 a4 d9 2e f4 91 58 e4 cf 94 ea 8b ab 9d f8 6c 0f bf 2b 8c cb 14 a4 ae f5 c1 8b 41 a5")
 
-    // 92 d1 30 71 43 fa b2 ed 71 87 e1 ae 13 e0 98 91 0d c7 e9 6f c3 22 5f b2 6c 71 5d 68 43 ab a2 55
-    private val kte_byteArray = ByteArray(32) {
-        when (it) {
-            0    -> 0x92.toByte()
-            1    -> 0xd1.toByte()
-            2    -> 0x30.toByte()
-            3    -> 0x71.toByte()
-            4    -> 0x43.toByte()
-            5    -> 0xfa.toByte()
-            6    -> 0xb2.toByte()
-            7    -> 0xed.toByte()
-            8    -> 0x71.toByte()
-            9    -> 0x87.toByte()
-            10   -> 0xe1.toByte()
-            11   -> 0xae.toByte()
-            12   -> 0x13.toByte()
-            13   -> 0xe0.toByte()
-            14   -> 0x98.toByte()
-            15   -> 0x91.toByte()
-            16   -> 0x0d.toByte()
-            17   -> 0xc7.toByte()
-            18   -> 0xe9.toByte()
-            19   -> 0x6f.toByte()
-            20   -> 0xc3.toByte()
-            21   -> 0x22.toByte()
-            22   -> 0x5f.toByte()
-            23   -> 0xb2.toByte()
-            24   -> 0x6c.toByte()
-            25   -> 0x71.toByte()
-            26   -> 0x5d.toByte()
-            27   -> 0x68.toByte()
-            28   -> 0x43.toByte()
-            29   -> 0xab.toByte()
-            30   -> 0xa2.toByte()
-            else -> 0x55.toByte()
-        }
-    }
+    private val kte_byteArray = hexToByteArray("92 d1 30 71 43 fa b2 ed 71 87 e1 ae 13 e0 98 91 0d c7 e9 6f c3 22 5f b2 6c 71 5d 68 43 ab a2 55")
 
     @Test
     fun testEncoding1() {
