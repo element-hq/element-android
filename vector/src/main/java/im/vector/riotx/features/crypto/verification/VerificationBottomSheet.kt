@@ -97,7 +97,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 is VerificationBottomSheetViewEvents.AccessSecretStore -> {
                     startActivityForResult(SharedSecureStorageActivity.newIntent(
                             requireContext(),
-                            null,// use default key
+                            null, // use default key
                             listOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME),
                             SharedSecureStorageActivity.RESULT_KEYSTORE_ALIAS
                     ), SECRET_REQUEST_CODE)
@@ -108,7 +108,6 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                             .setMessage(it.errorMessage)
                             .setCancelable(false)
                             .setPositiveButton(R.string.ok) { _, _ ->
-
                             }
                             .show()
                     Unit

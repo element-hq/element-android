@@ -145,7 +145,6 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         val crossSigningEnabledOnAccount = myCrossSigningKeys != null
 
         if (crossSigningEnabledOnAccount && myCrossSigningKeys?.isTrusted() == false) {
-
             // We need to ask
             sharedActionViewModel.hasDisplayedCompleteSecurityPrompt = true
             PopupAlertManager.postVectorAlert(

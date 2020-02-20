@@ -37,7 +37,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.io.ByteArrayOutputStream
 
 data class SharedSecureStorageViewState(
@@ -135,7 +134,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                         _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
                         val safeForIntentCypher = ByteArrayOutputStream().also {
                             it.use {
-                                session.securelyStoreObject(decryptedSecretMap as Map<String,String>, args.resultKeyStoreAlias, it)
+                                session.securelyStoreObject(decryptedSecretMap as Map<String, String>, args.resultKeyStoreAlias, it)
                             }
                         }.toByteArray().toBase64NoPadding()
                         _viewEvents.post(SharedSecureStorageViewEvent.FinishSuccess(safeForIntentCypher))

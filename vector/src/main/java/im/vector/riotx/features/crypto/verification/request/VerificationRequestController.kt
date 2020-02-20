@@ -83,7 +83,6 @@ class VerificationRequestController @Inject constructor(
                 iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
                 listener { listener?.onClickDismiss() }
             }
-
         } else {
             val styledText = matrixItem.let {
                 stringProvider.getString(R.string.verification_request_notice, it.id)

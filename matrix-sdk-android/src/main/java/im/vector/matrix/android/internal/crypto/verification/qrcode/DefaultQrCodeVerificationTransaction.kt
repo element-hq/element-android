@@ -223,7 +223,7 @@ internal class DefaultQrCodeVerificationTransaction(
     private fun trust(canTrustOtherUserMasterKey: Boolean, toVerifyDeviceIds: List<String>) {
         // If not me sign his MSK and upload the signature
         if (canTrustOtherUserMasterKey) {
-            if (otherUserId != userId ) {
+            if (otherUserId != userId) {
                 // we should trust this master key
                 // And check verification MSK -> SSK?
                 crossSigningService.trustUser(otherUserId, object : MatrixCallback<Unit> {
@@ -232,7 +232,7 @@ internal class DefaultQrCodeVerificationTransaction(
                     }
                 })
             } else {
-                //Mark my keys as trusted locally
+                // Mark my keys as trusted locally
                 crossSigningService.markMyMasterKeyAsTrusted()
             }
         }
