@@ -78,21 +78,24 @@ internal class DefaultQrCodeVerificationTransaction(
         // check master key
         when (otherQrCodeData) {
             is QrCodeData.VerifyingAnotherUser             -> {
-                if (otherQrCodeData.otherUserMasterCrossSigningPublicKey != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
+                if (otherQrCodeData.otherUserMasterCrossSigningPublicKey
+                        != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
                     Timber.d("## Verification QR: Invalid other master key ${otherQrCodeData.otherUserMasterCrossSigningPublicKey}")
                     cancel(CancelCode.MismatchedKeys)
                     return
                 } else Unit
             }
             is QrCodeData.SelfVerifyingMasterKeyTrusted    -> {
-                if (otherQrCodeData.userMasterCrossSigningPublicKey != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
+                if (otherQrCodeData.userMasterCrossSigningPublicKey
+                        != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
                     Timber.d("## Verification QR: Invalid other master key ${otherQrCodeData.userMasterCrossSigningPublicKey}")
                     cancel(CancelCode.MismatchedKeys)
                     return
                 } else Unit
             }
             is QrCodeData.SelfVerifyingMasterKeyNotTrusted -> {
-                if (otherQrCodeData.userMasterCrossSigningPublicKey != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
+                if (otherQrCodeData.userMasterCrossSigningPublicKey
+                        != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
                     Timber.d("## Verification QR: Invalid other master key ${otherQrCodeData.userMasterCrossSigningPublicKey}")
                     cancel(CancelCode.MismatchedKeys)
                     return
@@ -106,7 +109,8 @@ internal class DefaultQrCodeVerificationTransaction(
         // Check device key if available
         when (otherQrCodeData) {
             is QrCodeData.VerifyingAnotherUser             -> {
-                if (otherQrCodeData.userMasterCrossSigningPublicKey != crossSigningService.getUserCrossSigningKeys(otherUserId)?.masterKey()?.unpaddedBase64PublicKey) {
+                if (otherQrCodeData.userMasterCrossSigningPublicKey
+                        != crossSigningService.getUserCrossSigningKeys(otherUserId)?.masterKey()?.unpaddedBase64PublicKey) {
                     Timber.d("## Verification QR: Invalid user master key ${otherQrCodeData.userMasterCrossSigningPublicKey}")
                     cancel(CancelCode.MismatchedKeys)
                     return
@@ -116,14 +120,16 @@ internal class DefaultQrCodeVerificationTransaction(
                 }
             }
             is QrCodeData.SelfVerifyingMasterKeyTrusted    -> {
-                if (otherQrCodeData.otherDeviceKey != cryptoStore.getUserDevice(userId, deviceId)?.fingerprint()) {
+                if (otherQrCodeData.otherDeviceKey
+                        != cryptoStore.getUserDevice(userId, deviceId)?.fingerprint()) {
                     Timber.d("## Verification QR: Invalid other device key ${otherQrCodeData.otherDeviceKey}")
                     cancel(CancelCode.MismatchedKeys)
                     return
                 } else Unit
             }
             is QrCodeData.SelfVerifyingMasterKeyNotTrusted -> {
-                if (otherQrCodeData.deviceKey != cryptoStore.getUserDevice(otherUserId, otherDeviceId ?: "")?.fingerprint()) {
+                if (otherQrCodeData.deviceKey
+                        != cryptoStore.getUserDevice(otherUserId, otherDeviceId ?: "")?.fingerprint()) {
                     Timber.d("## Verification QR: Invalid device key ${otherQrCodeData.deviceKey}")
                     cancel(CancelCode.MismatchedKeys)
                     return
