@@ -23,14 +23,14 @@ import im.vector.matrix.android.internal.crypto.keysbackup.util.extractCurveKeyF
 /** Tag class */
 interface SsssKeySpec
 
-data class Curve25519AesSha2KeySpec(
+data class RawBytesKeySpec(
         val privateKey: ByteArray
 ) : SsssKeySpec {
 
     companion object {
 
-        fun fromPassphrase(passphrase: String, salt: String, iterations: Int, progressListener: ProgressListener?): Curve25519AesSha2KeySpec {
-            return Curve25519AesSha2KeySpec(
+        fun fromPassphrase(passphrase: String, salt: String, iterations: Int, progressListener: ProgressListener?): RawBytesKeySpec {
+            return RawBytesKeySpec(
                     privateKey = deriveKey(
                             passphrase,
                             salt,
@@ -40,9 +40,9 @@ data class Curve25519AesSha2KeySpec(
             )
         }
 
-        fun fromRecoveryKey(recoveryKey: String): Curve25519AesSha2KeySpec? {
+        fun fromRecoveryKey(recoveryKey: String): RawBytesKeySpec? {
             return extractCurveKeyFromRecoveryKey(recoveryKey)?.let {
-                Curve25519AesSha2KeySpec(
+                RawBytesKeySpec(
                         privateKey = it
                 )
             }
@@ -53,7 +53,7 @@ data class Curve25519AesSha2KeySpec(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Curve25519AesSha2KeySpec
+        other as RawBytesKeySpec
 
         if (!privateKey.contentEquals(other.privateKey)) return false
 

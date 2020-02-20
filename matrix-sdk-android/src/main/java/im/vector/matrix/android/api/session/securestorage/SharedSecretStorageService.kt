@@ -42,7 +42,7 @@ interface SharedSecretStorageService {
      */
     fun generateKey(keyId: String,
                     keyName: String,
-                    keySigner: KeySigner,
+                    keySigner: KeySigner?,
                     callback: MatrixCallback<SsssKeyCreationInfo>)
 
     /**
@@ -92,7 +92,7 @@ interface SharedSecretStorageService {
      * @param secret The secret contents.
      * @param keys The list of (ID,privateKey) of the keys to use to encrypt the secret.
      */
-    fun storeSecret(name: String, secretBase64: String, keys: List<String>?, callback: MatrixCallback<Unit>)
+    fun storeSecret(name: String, secretBase64: String, keys: List<Pair<String?, SsssKeySpec?>>, callback: MatrixCallback<Unit>)
 
     /**
      * Use this call to determine which SSSSKeySpec to use for requesting secret
@@ -104,7 +104,7 @@ interface SharedSecretStorageService {
      *
      * @param name The name of the secret
      * @param keyId The id of the key that should be used to decrypt (null for default key)
-     * @param secretKey the secret key to use (@see #Curve25519AesSha2KeySpec)
+     * @param secretKey the secret key to use (@see #RawBytesKeySpec)
      *
      */
     fun getSecret(name: String, keyId: String?, secretKey: SsssKeySpec, callback: MatrixCallback<String>)

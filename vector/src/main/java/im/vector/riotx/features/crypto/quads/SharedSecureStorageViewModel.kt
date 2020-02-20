@@ -24,7 +24,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.securestorage.Curve25519AesSha2KeySpec
+import im.vector.matrix.android.api.session.securestorage.RawBytesKeySpec
 import im.vector.matrix.android.api.session.securestorage.IntegrityResult
 import im.vector.matrix.android.api.session.securestorage.KeyInfoResult
 import im.vector.matrix.android.internal.crypto.crosssigning.toBase64NoPadding
@@ -99,7 +99,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                                         isIndeterminate = true
                                 )
                         ))
-                        val keySpec = Curve25519AesSha2KeySpec.fromPassphrase(
+                        val keySpec = RawBytesKeySpec.fromPassphrase(
                                 passphrase,
                                 keyInfo.content.passphrase?.salt ?: "",
                                 keyInfo.content.passphrase?.iterations ?: 0,
