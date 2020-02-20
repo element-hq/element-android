@@ -21,6 +21,7 @@ Translations 🗣:
 
 SDK API changes ⚠️:
  - Get crypto methods through Session.cryptoService()
+ - ProgressListener.onProgress() function will be invoked on the background thread instead of UI thread
 
 Build 🧱:
  -
