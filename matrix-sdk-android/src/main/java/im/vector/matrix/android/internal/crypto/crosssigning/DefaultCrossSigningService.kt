@@ -88,7 +88,8 @@ internal class DefaultCrossSigningService @Inject constructor(
                                     Timber.i("## CrossSigning - Loading master key success")
                                 } else {
                                     Timber.w("## CrossSigning - Public master key does not match the private key")
-                                    // TODO untrust
+                                    pkSigning.releaseSigning()
+                                    // TODO untrust?
                                 }
                             }
                     privateKeysInfo.user
@@ -100,7 +101,8 @@ internal class DefaultCrossSigningService @Inject constructor(
                                     Timber.i("## CrossSigning - Loading User Signing key success")
                                 } else {
                                     Timber.w("## CrossSigning - Public User key does not match the private key")
-                                    // TODO untrust
+                                    pkSigning.releaseSigning()
+                                    // TODO untrust?
                                 }
                             }
                     privateKeysInfo.selfSigned
@@ -112,7 +114,8 @@ internal class DefaultCrossSigningService @Inject constructor(
                                     Timber.i("## CrossSigning - Loading Self Signing key success")
                                 } else {
                                     Timber.w("## CrossSigning - Public Self Signing key does not match the private key")
-                                    // TODO untrust
+                                    pkSigning.releaseSigning()
+                                    // TODO untrust?
                                 }
                             }
                 }
