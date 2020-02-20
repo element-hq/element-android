@@ -17,38 +17,42 @@
 package im.vector.matrix.android.internal.crypto.secrets
 
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.session.accountdata.AccountDataService
 import im.vector.matrix.android.api.session.events.model.toContent
-import im.vector.matrix.android.api.session.securestorage.Curve25519AesSha2KeySpec
 import im.vector.matrix.android.api.session.securestorage.EncryptedSecretContent
 import im.vector.matrix.android.api.session.securestorage.IntegrityResult
 import im.vector.matrix.android.api.session.securestorage.KeyInfo
 import im.vector.matrix.android.api.session.securestorage.KeyInfoResult
 import im.vector.matrix.android.api.session.securestorage.KeySigner
-import im.vector.matrix.android.api.session.securestorage.SsssKeySpec
-import im.vector.matrix.android.api.session.securestorage.SsssPassphrase
+import im.vector.matrix.android.api.session.securestorage.RawBytesKeySpec
 import im.vector.matrix.android.api.session.securestorage.SecretStorageKeyContent
 import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageError
 import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageService
 import im.vector.matrix.android.api.session.securestorage.SsssKeyCreationInfo
+import im.vector.matrix.android.api.session.securestorage.SsssKeySpec
+import im.vector.matrix.android.api.session.securestorage.SsssPassphrase
+import im.vector.matrix.android.internal.crypto.SSSS_ALGORITHM_AES_HMAC_SHA2
 import im.vector.matrix.android.internal.crypto.SSSS_ALGORITHM_CURVE25519_AES_SHA2
+import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64NoPadding
+import im.vector.matrix.android.internal.crypto.crosssigning.toBase64NoPadding
 import im.vector.matrix.android.internal.crypto.keysbackup.generatePrivateKeyWithPassword
 import im.vector.matrix.android.internal.crypto.keysbackup.util.computeRecoveryKey
+import im.vector.matrix.android.internal.crypto.tools.HkdfSha256
 import im.vector.matrix.android.internal.crypto.tools.withOlmDecryption
-import im.vector.matrix.android.internal.crypto.tools.withOlmEncryption
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.olm.OlmPkMessage
+import java.security.SecureRandom
+import javax.crypto.Cipher
+import javax.crypto.Mac
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.SecretKeySpec
 import javax.inject.Inject
-
-private data class Key(
-        val publicKey: String,
-        @Suppress("ArrayInDataClass")
-        val privateKey: ByteArray
-)
+import kotlin.experimental.and
 
 internal class DefaultSharedSecretStorageService @Inject constructor(
         private val accountDataService: AccountDataService,
@@ -58,14 +62,12 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
 
     override fun generateKey(keyId: String,
                              keyName: String,
-                             keySigner: KeySigner,
+                             keySigner: KeySigner?,
                              callback: MatrixCallback<SsssKeyCreationInfo>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             val key = try {
-                withOlmDecryption { olmPkDecryption ->
-                    val pubKey = olmPkDecryption.generateKey()
-                    val privateKey = olmPkDecryption.privateKey()
-                    Key(pubKey, privateKey)
+                ByteArray(32).also {
+                    SecureRandom().nextBytes(it)
                 }
             } catch (failure: Throwable) {
                 callback.onFailure(failure)
@@ -74,12 +76,11 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
 
             val storageKeyContent = SecretStorageKeyContent(
                     name = keyName,
-                    algorithm = SSSS_ALGORITHM_CURVE25519_AES_SHA2,
-                    passphrase = null,
-                    publicKey = key.publicKey
+                    algorithm = SSSS_ALGORITHM_AES_HMAC_SHA2,
+                    passphrase = null
             )
 
-            val signedContent = keySigner.sign(storageKeyContent.canonicalSignable())?.let {
+            val signedContent = keySigner?.sign(storageKeyContent.canonicalSignable())?.let {
                 storageKeyContent.copy(
                         signatures = it
                 )
@@ -97,7 +98,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                             callback.onSuccess(SsssKeyCreationInfo(
                                     keyId = keyId,
                                     content = storageKeyContent,
-                                    recoveryKey = computeRecoveryKey(key.privateKey)
+                                    recoveryKey = computeRecoveryKey(key)
                             ))
                         }
                     }
@@ -114,19 +115,9 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             val privatePart = generatePrivateKeyWithPassword(passphrase, progressListener)
 
-            val pubKey = try {
-                withOlmDecryption { olmPkDecryption ->
-                    olmPkDecryption.setPrivateKey(privatePart.privateKey)
-                }
-            } catch (failure: Throwable) {
-                callback.onFailure(failure)
-                return@launch
-            }
-
             val storageKeyContent = SecretStorageKeyContent(
-                    algorithm = SSSS_ALGORITHM_CURVE25519_AES_SHA2,
-                    passphrase = SsssPassphrase(algorithm = "m.pbkdf2", iterations = privatePart.iterations, salt = privatePart.salt),
-                    publicKey = pubKey
+                    algorithm = SSSS_ALGORITHM_AES_HMAC_SHA2,
+                    passphrase = SsssPassphrase(algorithm = "m.pbkdf2", iterations = privatePart.iterations, salt = privatePart.salt)
             )
 
             val signedContent = keySigner.sign(storageKeyContent.canonicalSignable())?.let {
@@ -189,24 +180,19 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         return getKey(keyId)
     }
 
-    override fun storeSecret(name: String, secretBase64: String, keys: List<String>?, callback: MatrixCallback<Unit>) {
+    override fun storeSecret(name: String, secretBase64: String, keys: List<Pair<String?, SsssKeySpec?>>, callback: MatrixCallback<Unit>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             val encryptedContents = HashMap<String, EncryptedSecretContent>()
             try {
-                if (keys.isNullOrEmpty()) {
-                    // use default key
-                    when (val key = getDefaultKey()) {
+                keys.forEach {
+                    val keyId = it.first
+                    // encrypt the content
+                    when (val key = keyId?.let { getKey(keyId) } ?: getDefaultKey()) {
                         is KeyInfoResult.Success -> {
-                            if (key.keyInfo.content.algorithm == SSSS_ALGORITHM_CURVE25519_AES_SHA2) {
-                                val encryptedResult = withOlmEncryption { olmEncrypt ->
-                                    olmEncrypt.setRecipientKey(key.keyInfo.content.publicKey)
-                                    olmEncrypt.encrypt(secretBase64)
+                            if (key.keyInfo.content.algorithm == SSSS_ALGORITHM_AES_HMAC_SHA2) {
+                                encryptAesHmacSha2(it.second!!, name, secretBase64).let {
+                                    encryptedContents[key.keyInfo.id] = it
                                 }
-                                encryptedContents[key.keyInfo.id] = EncryptedSecretContent(
-                                        ciphertext = encryptedResult.mCipherText,
-                                        ephemeral = encryptedResult.mEphemeralKey,
-                                        mac = encryptedResult.mMac
-                                )
                             } else {
                                 // Unknown algorithm
                                 callback.onFailure(SharedSecretStorageError.UnknownAlgorithm(key.keyInfo.content.algorithm ?: ""))
@@ -216,34 +202,6 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                         is KeyInfoResult.Error   -> {
                             callback.onFailure(key.error)
                             return@launch
-                        }
-                    }
-                } else {
-                    keys.forEach {
-                        val keyId = it
-                        // encrypt the content
-                        when (val key = getKey(keyId)) {
-                            is KeyInfoResult.Success -> {
-                                if (key.keyInfo.content.algorithm == SSSS_ALGORITHM_CURVE25519_AES_SHA2) {
-                                    val encryptedResult = withOlmEncryption { olmEncrypt ->
-                                        olmEncrypt.setRecipientKey(key.keyInfo.content.publicKey)
-                                        olmEncrypt.encrypt(secretBase64)
-                                    }
-                                    encryptedContents[keyId] = EncryptedSecretContent(
-                                            ciphertext = encryptedResult.mCipherText,
-                                            ephemeral = encryptedResult.mEphemeralKey,
-                                            mac = encryptedResult.mMac
-                                    )
-                                } else {
-                                    // Unknown algorithm
-                                    callback.onFailure(SharedSecretStorageError.UnknownAlgorithm(key.keyInfo.content.algorithm ?: ""))
-                                    return@launch
-                                }
-                            }
-                            is KeyInfoResult.Error   -> {
-                                callback.onFailure(key.error)
-                                return@launch
-                            }
                         }
                     }
                 }
@@ -259,8 +217,107 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                 callback.onFailure(failure)
             }
         }
+    }
 
-        // Add default key
+    /**
+     * Encrytion algorithm m.secret_storage.v1.aes-hmac-sha2
+     * Secrets are encrypted using AES-CTR-256 and MACed using HMAC-SHA-256. The data is encrypted and MACed as follows:
+     *
+     * Given the secret storage key, generate 64 bytes by performing an HKDF with SHA-256 as the hash, a salt of 32 bytes of 0, and with the secret name as the info.
+     *
+     * The first 32 bytes are used as the AES key, and the next 32 bytes are used as the MAC key
+     *
+     * Generate 16 random bytes, set bit 63 to 0 (in order to work around differences in AES-CTR implementations), and use this as the AES initialization vector.
+     * This becomes the iv property, encoded using base64.
+     *
+     * Encrypt the data using AES-CTR-256 using the AES key generated above.
+     *
+     * This encrypted data, encoded using base64, becomes the ciphertext property.
+     *
+     * Pass the raw encrypted data (prior to base64 encoding) through HMAC-SHA-256 using the MAC key generated above.
+     * The resulting MAC is base64-encoded and becomes the mac property.
+     * (We use AES-CTR to match file encryption and key exports.)
+     */
+    @Throws
+    private fun encryptAesHmacSha2(secretKey: SsssKeySpec, secretName: String, clearDataBase64: String): EncryptedSecretContent {
+        secretKey as RawBytesKeySpec
+        val pseudoRandomKey = HkdfSha256.deriveSecret(
+                secretKey.privateKey,
+                ByteArray(32) { 0.toByte() },
+                secretName.toByteArray(),
+                64)
+
+        // The first 32 bytes are used as the AES key, and the next 32 bytes are used as the MAC key
+        val aesKey = pseudoRandomKey.copyOfRange(0, 32)
+        val macKey = pseudoRandomKey.copyOfRange(32, 64)
+
+        val secureRandom = SecureRandom()
+        val iv = ByteArray(16)
+        secureRandom.nextBytes(iv)
+
+        // clear bit 63 of the salt to stop us hitting the 64-bit counter boundary
+        // (which would mean we wouldn't be able to decrypt on Android). The loss
+        // of a single bit of salt is a price we have to pay.
+        iv[9] = iv[9] and 0x7f
+
+        val cipher = Cipher.getInstance("AES/CTR/NoPadding")
+
+        val secretKeySpec = SecretKeySpec(aesKey, "AES")
+        val ivParameterSpec = IvParameterSpec(iv)
+        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec)
+        // secret are not that big, just do Final
+        val cipherBytes = cipher.doFinal(clearDataBase64.fromBase64NoPadding())
+        require(cipherBytes.isNotEmpty())
+
+        val macKeySpec = SecretKeySpec(macKey, "HmacSHA256")
+        val mac = Mac.getInstance("HmacSHA256")
+        mac.init(macKeySpec)
+        val digest = mac.doFinal(cipherBytes)
+
+        return EncryptedSecretContent(
+                ciphertext = cipherBytes.toBase64NoPadding(),
+                initializationVector = iv.toBase64NoPadding(),
+                mac = digest.toBase64NoPadding()
+        )
+    }
+
+    private fun decryptAesHmacSha2(secretKey: SsssKeySpec, secretName: String, cipherContent: EncryptedSecretContent): String {
+        secretKey as RawBytesKeySpec
+        val pseudoRandomKey = HkdfSha256.deriveSecret(
+                secretKey.privateKey,
+                ByteArray(32) { 0.toByte() },
+                secretName.toByteArray(),
+                64)
+
+        // The first 32 bytes are used as the AES key, and the next 32 bytes are used as the MAC key
+        val aesKey = pseudoRandomKey.copyOfRange(0, 32)
+        val macKey = pseudoRandomKey.copyOfRange(32, 64)
+
+        val iv = cipherContent.initializationVector?.fromBase64NoPadding() ?: ByteArray(16)
+
+        val cipherRawBytes = cipherContent.ciphertext!!.fromBase64NoPadding()
+
+        val cipher = Cipher.getInstance("AES/CTR/NoPadding")
+
+        val secretKeySpec = SecretKeySpec(aesKey, "AES")
+        val ivParameterSpec = IvParameterSpec(iv)
+        cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec)
+        // secret are not that big, just do Final
+        val decryptedSecret = cipher.doFinal(cipherRawBytes)
+
+        require(decryptedSecret.isNotEmpty())
+
+        // Check Signature
+        val macKeySpec = SecretKeySpec(macKey, "HmacSHA256")
+        val mac = Mac.getInstance("HmacSHA256").apply { init(macKeySpec) }
+        val digest = mac.doFinal(cipherRawBytes)
+
+        if (!cipherContent.mac?.fromBase64NoPadding()?.contentEquals(digest).orFalse()) {
+            throw SharedSecretStorageError.BadMac
+        } else {
+            // we are good
+            return decryptedSecret.toBase64NoPadding()
+        }
     }
 
     override fun getAlgorithmsForSecret(name: String): List<KeyInfoResult> {
@@ -300,7 +357,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
 
         val algorithm = key.keyInfo.content
         if (SSSS_ALGORITHM_CURVE25519_AES_SHA2 == algorithm.algorithm) {
-            val keySpec = secretKey as? Curve25519AesSha2KeySpec ?: return Unit.also {
+            val keySpec = secretKey as? RawBytesKeySpec ?: return Unit.also {
                 callback.onFailure(SharedSecretStorageError.BadKeyFormat)
             }
             cryptoCoroutineScope.launch(coroutineDispatchers.main) {
@@ -316,6 +373,15 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                                 }
                         )
                     }
+                }.foldToCallback(callback)
+            }
+        } else if (SSSS_ALGORITHM_AES_HMAC_SHA2 == algorithm.algorithm) {
+            val keySpec = secretKey as? RawBytesKeySpec ?: return Unit.also {
+                callback.onFailure(SharedSecretStorageError.BadKeyFormat)
+            }
+            cryptoCoroutineScope.launch(coroutineDispatchers.main) {
+                kotlin.runCatching {
+                    decryptAesHmacSha2(keySpec, name, secretContent)
                 }.foldToCallback(callback)
             }
         } else {
@@ -343,7 +409,8 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         val keyInfo = (keyInfoResult as? KeyInfoResult.Success)?.keyInfo
                 ?: return IntegrityResult.Error(SharedSecretStorageError.UnknownKey(keyId ?: ""))
 
-        if (keyInfo.content.algorithm != SSSS_ALGORITHM_CURVE25519_AES_SHA2) {
+        if (keyInfo.content.algorithm != SSSS_ALGORITHM_AES_HMAC_SHA2
+                || keyInfo.content.algorithm != SSSS_ALGORITHM_CURVE25519_AES_SHA2) {
             // Unsupported algorithm
             return IntegrityResult.Error(
                     SharedSecretStorageError.UnsupportedAlgorithm(keyInfo.content.algorithm ?: "")

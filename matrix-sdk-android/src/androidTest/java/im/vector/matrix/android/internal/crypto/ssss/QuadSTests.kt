@@ -16,26 +16,25 @@
 
 package im.vector.matrix.android.internal.crypto.ssss
 
-import android.util.Base64
 import androidx.lifecycle.Observer
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import im.vector.matrix.android.InstrumentedTest
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.securestorage.Curve25519AesSha2KeySpec
 import im.vector.matrix.android.api.session.securestorage.EncryptedSecretContent
 import im.vector.matrix.android.api.session.securestorage.KeySigner
+import im.vector.matrix.android.api.session.securestorage.RawBytesKeySpec
 import im.vector.matrix.android.api.session.securestorage.SecretStorageKeyContent
 import im.vector.matrix.android.api.session.securestorage.SsssKeyCreationInfo
+import im.vector.matrix.android.api.session.securestorage.SsssKeySpec
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.common.CommonTestHelper
 import im.vector.matrix.android.common.SessionTestParams
 import im.vector.matrix.android.common.TestConstants
 import im.vector.matrix.android.common.TestMatrixCallback
-import im.vector.matrix.android.internal.crypto.SSSS_ALGORITHM_CURVE25519_AES_SHA2
+import im.vector.matrix.android.internal.crypto.SSSS_ALGORITHM_AES_HMAC_SHA2
 import im.vector.matrix.android.internal.crypto.crosssigning.toBase64NoPadding
 import im.vector.matrix.android.internal.crypto.secrets.DefaultSharedSecretStorageService
-import im.vector.matrix.android.internal.crypto.tools.withOlmDecryption
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -71,7 +70,7 @@ class QuadSTests : InstrumentedTest {
 
         val TEST_KEY_ID = "my.test.Key"
 
-        val ssssKeyCreationInfo = mTestHelper.doSync<SsssKeyCreationInfo> {
+        mTestHelper.doSync<SsssKeyCreationInfo> {
             quadS.generateKey(TEST_KEY_ID, "Test Key", emptyKeySigner, it)
         }
 
@@ -95,16 +94,9 @@ class QuadSTests : InstrumentedTest {
         assertNotNull("Key should be stored in account data", accountData)
         val parsed = SecretStorageKeyContent.fromJson(accountData!!.content)
         assertNotNull("Key Content cannot be parsed", parsed)
-        assertEquals("Unexpected Algorithm", SSSS_ALGORITHM_CURVE25519_AES_SHA2, parsed!!.algorithm)
+        assertEquals("Unexpected Algorithm", SSSS_ALGORITHM_AES_HMAC_SHA2, parsed!!.algorithm)
         assertEquals("Unexpected key name", "Test Key", parsed.name)
         assertNull("Key was not generated from passphrase", parsed.passphrase)
-        assertNotNull("Pubkey should be defined", parsed.publicKey)
-
-        val privateKeySpec = Curve25519AesSha2KeySpec.fromRecoveryKey(ssssKeyCreationInfo.recoveryKey)
-        val pubKey = withOlmDecryption { olmPkDecryption ->
-            olmPkDecryption.setPrivateKey(privateKeySpec!!.privateKey)
-        }
-        assertEquals("Unexpected Public Key", pubKey, parsed.publicKey)
 
         // Set as default key
         quadS.setDefaultKey(TEST_KEY_ID, object : MatrixCallback<Unit> {})
@@ -137,13 +129,15 @@ class QuadSTests : InstrumentedTest {
         val keyId = "My.Key"
         val info = generatedSecret(aliceSession, keyId, true)
 
+        val keySpec = RawBytesKeySpec.fromRecoveryKey(info.recoveryKey)
+
         // Store a secret
-        val clearSecret = Base64.encodeToString("42".toByteArray(), Base64.NO_PADDING or Base64.NO_WRAP)
+        val clearSecret = "42".toByteArray().toBase64NoPadding()
         mTestHelper.doSync<Unit> {
             aliceSession.sharedSecretStorageService.storeSecret(
                     "secret.of.life",
                     clearSecret,
-                    null, // default key
+                    listOf(Pair<String?, SsssKeySpec?>(null, keySpec)), // default key
                     it
             )
         }
@@ -157,14 +151,13 @@ class QuadSTests : InstrumentedTest {
         val secret = EncryptedSecretContent.fromJson(encryptedContent?.get(keyId))
         assertNotNull(secret?.ciphertext)
         assertNotNull(secret?.mac)
-        assertNotNull(secret?.ephemeral)
+        assertNotNull(secret?.initializationVector)
 
         // Try to decrypt??
 
-        val keySpec = Curve25519AesSha2KeySpec.fromRecoveryKey(info.recoveryKey)
-
         val decryptedSecret = mTestHelper.doSync<String> {
-            aliceSession.sharedSecretStorageService.getSecret("secret.of.life",
+            aliceSession.sharedSecretStorageService.getSecret(
+                    "secret.of.life",
                     null, // default key
                     keySpec!!,
                     it
@@ -209,7 +202,10 @@ class QuadSTests : InstrumentedTest {
             aliceSession.sharedSecretStorageService.storeSecret(
                     "my.secret",
                     mySecretText.toByteArray().toBase64NoPadding(),
-                    listOf(keyId1, keyId2),
+                    listOf(
+                            keyId1 to RawBytesKeySpec.fromRecoveryKey(key1Info.recoveryKey),
+                            keyId2 to RawBytesKeySpec.fromRecoveryKey(key2Info.recoveryKey)
+                    ),
                     it
             )
         }
@@ -226,7 +222,7 @@ class QuadSTests : InstrumentedTest {
         mTestHelper.doSync<String> {
             aliceSession.sharedSecretStorageService.getSecret("my.secret",
                     keyId1,
-                    Curve25519AesSha2KeySpec.fromRecoveryKey(key1Info.recoveryKey)!!,
+                    RawBytesKeySpec.fromRecoveryKey(key1Info.recoveryKey)!!,
                     it
             )
         }
@@ -234,7 +230,7 @@ class QuadSTests : InstrumentedTest {
         mTestHelper.doSync<String> {
             aliceSession.sharedSecretStorageService.getSecret("my.secret",
                     keyId2,
-                    Curve25519AesSha2KeySpec.fromRecoveryKey(key2Info.recoveryKey)!!,
+                    RawBytesKeySpec.fromRecoveryKey(key2Info.recoveryKey)!!,
                     it
             )
         }
@@ -255,7 +251,7 @@ class QuadSTests : InstrumentedTest {
             aliceSession.sharedSecretStorageService.storeSecret(
                     "my.secret",
                     mySecretText.toByteArray().toBase64NoPadding(),
-                    listOf(keyId1),
+                    listOf(keyId1 to RawBytesKeySpec.fromRecoveryKey(key1Info.recoveryKey)),
                     it
             )
         }
@@ -264,7 +260,7 @@ class QuadSTests : InstrumentedTest {
         var error = false
         aliceSession.sharedSecretStorageService.getSecret("my.secret",
                 keyId1,
-                Curve25519AesSha2KeySpec.fromPassphrase(
+                RawBytesKeySpec.fromPassphrase(
                         "A bad passphrase",
                         key1Info.content?.passphrase?.salt ?: "",
                         key1Info.content?.passphrase?.iterations ?: 0,
@@ -289,7 +285,7 @@ class QuadSTests : InstrumentedTest {
         mTestHelper.doSync<String> {
             aliceSession.sharedSecretStorageService.getSecret("my.secret",
                     keyId1,
-                    Curve25519AesSha2KeySpec.fromPassphrase(
+                    RawBytesKeySpec.fromPassphrase(
                             passphrase,
                             key1Info.content?.passphrase?.salt ?: "",
                             key1Info.content?.passphrase?.iterations ?: 0,
