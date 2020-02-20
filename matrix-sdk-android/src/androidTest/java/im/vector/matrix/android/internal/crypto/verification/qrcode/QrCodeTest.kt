@@ -234,6 +234,18 @@ class QrCodeTest : InstrumentedTest {
         expected.toQrCodeData() shouldEqual qrCode
     }
 
+    @Test
+    fun testAnyTransactionId() {
+        for (qty in 0 until 0x1FFF step 200) {
+            val longTransactionId = "a".repeat(qty)
+
+            val qrCode = qrCode1.copy(transactionId = longTransactionId)
+
+            // Symmetric operation
+            qrCode.toEncodedString().toQrCodeData() shouldEqual qrCode
+        }
+    }
+
     // Error cases
     @Test
     fun testErrorHeader() {

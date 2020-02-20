@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.crypto.verification.qrcode
 
 import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64NoPadding
 import im.vector.matrix.android.internal.crypto.crosssigning.toBase64NoPadding
+import im.vector.matrix.android.internal.util.toPositiveInt
 
 // MATRIX
 private val prefix = "MATRIX".toByteArray(Charsets.ISO_8859_1)
@@ -94,8 +95,8 @@ fun String.toQrCodeData(): QrCodeData? {
     cursor++
 
     // Get transaction length
-    val bigEndian1 = ensurePositive(byteArray[cursor])
-    val bigEndian2 = ensurePositive(byteArray[cursor + 1])
+    val bigEndian1 = byteArray[cursor].toPositiveInt()
+    val bigEndian2 = byteArray[cursor + 1].toPositiveInt()
 
     val transactionLength = bigEndian1 * 0x0100 + bigEndian2
 
@@ -122,13 +123,5 @@ fun String.toQrCodeData(): QrCodeData? {
         1    -> QrCodeData.SelfVerifyingMasterKeyTrusted(transactionId, key1, key2, secret)
         2    -> QrCodeData.SelfVerifyingMasterKeyNotTrusted(transactionId, key1, key2, secret)
         else -> null
-    }
-}
-
-fun ensurePositive(byte: Byte): Int {
-    return if (byte < 0) {
-        256 + byte
-    } else {
-        byte.toInt()
     }
 }
