@@ -36,11 +36,11 @@ interface RoomService {
 
     /**
      * Join a room by id
-     * @param roomId the roomId of the room to join
+     * @param roomIdOrAlias the roomId or the room alias of the room to join
      * @param reason optional reason for joining the room
      * @param viaServers the servers to attempt to join the room through. One of the servers must be participating in the room.
      */
-    fun joinRoom(roomId: String,
+    fun joinRoom(roomIdOrAlias: String,
                  reason: String? = null,
                  viaServers: List<String> = emptyList(),
                  callback: MatrixCallback<Unit>): Cancelable
