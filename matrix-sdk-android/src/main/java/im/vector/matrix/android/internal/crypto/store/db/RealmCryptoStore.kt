@@ -1106,7 +1106,6 @@ internal class RealmCryptoStore @Inject constructor(
                         level.locallyVerified = trusted
                     }
                 }
-
             }
         }
     }

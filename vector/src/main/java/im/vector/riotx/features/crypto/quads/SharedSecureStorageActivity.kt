@@ -35,7 +35,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity.*
-import timber.log.Timber
 import javax.inject.Inject
 
 class SharedSecureStorageActivity : SimpleFragmentActivity() {
@@ -69,7 +68,6 @@ class SharedSecureStorageActivity : SimpleFragmentActivity() {
         if (isFirstCreation()) {
             addFragment(R.id.container, SharedSecuredStoragePassphraseFragment::class.java)
         }
-
 
         viewModel.viewEvents
                 .observe()

@@ -36,7 +36,6 @@ import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import me.gujun.android.span.span
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class SharedSecuredStoragePassphraseFragment : VectorBaseFragment() {
@@ -93,7 +92,6 @@ class SharedSecuredStoragePassphraseFragment : VectorBaseFragment() {
                     }
                 }
                 .disposeOnDestroyView()
-
 
         mPassphraseTextEdit.textChanges()
                 .subscribe {

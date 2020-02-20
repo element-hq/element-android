@@ -330,7 +330,6 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
     }
 
     override fun checkShouldBeAbleToAccessSecrets(secretNames: List<String>, keyId: String?): IntegrityResult {
-
         if (secretNames.isEmpty()) {
             return IntegrityResult.Error(SharedSecretStorageError.UnknownSecret("none"))
         }

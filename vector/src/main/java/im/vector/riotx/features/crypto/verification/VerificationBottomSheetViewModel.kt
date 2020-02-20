@@ -266,7 +266,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                 try {
                     action.cypherData.fromBase64NoPadding().inputStream().use { ins ->
                         val res = session.loadSecureSecret<Map<String, String>>(ins, action.alias)
-                        val trustResult = session.getCrossSigningService().checkTrustFromPrivateKeys(
+                        val trustResult = session.cryptoService().crossSigningService().checkTrustFromPrivateKeys(
                                 res?.get(MASTER_KEY_SSSS_NAME),
                                 res?.get(USER_SIGNING_KEY_SSSS_NAME),
                                 res?.get(SELF_SIGNING_KEY_SSSS_NAME)

@@ -107,7 +107,7 @@ interface SharedSecretStorageService {
      * @param secretKey the secret key to use (@see #Curve25519AesSha2KeySpec)
      *
      */
-    fun getSecret(name: String, keyId: String?, secretKey: SSSSKeySpec, callback: MatrixCallback<String>)
+    fun getSecret(name: String, keyId: String?, secretKey: SsssKeySpec, callback: MatrixCallback<String>)
 
     fun checkShouldBeAbleToAccessSecrets(secretNames: List<String>, keyId: String?) : IntegrityResult
 }
