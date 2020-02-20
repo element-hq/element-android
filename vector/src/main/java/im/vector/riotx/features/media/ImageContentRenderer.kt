@@ -25,6 +25,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView.ORIENTATION_USE_EXIF
 import com.github.piasy.biv.view.BigImageView
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
@@ -36,6 +37,7 @@ import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.core.utils.isLocalFile
 import kotlinx.android.parcel.Parcelize
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 import kotlin.math.min
 
@@ -141,6 +143,13 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
             Timber.w("Invalid urls")
             return
         }
+
+        imageView.setImageLoaderCallback(object: DefaultImageLoaderCallback {
+            override fun onSuccess(image: File?) {
+                super.onSuccess(image)
+                imageView.ssiv.orientation = ORIENTATION_USE_EXIF
+            }
+        })
 
         imageView.showImage(
                 Uri.parse(thumbnail),
