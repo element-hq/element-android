@@ -16,6 +16,7 @@ Bugfix 🐛:
  - Fix crash in the room directory, when public room has no name (#1023)
  - Fix restoring keys backup with passphrase (#526)
  - Fix joining rooms from directory via federation isn't working. (#808)
+ - Leaving a room creates a stuck "leaving room" loading screen. (#1041)
 
 Translations 🗣:
  -
