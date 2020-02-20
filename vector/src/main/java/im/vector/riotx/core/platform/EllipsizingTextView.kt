@@ -242,7 +242,7 @@ class EllipsizingTextView @JvmOverloads constructor(context: Context, attrs: Att
         @Suppress("DEPRECATION")
         protected fun createWorkingLayout(workingText: CharSequence?): Layout {
             return StaticLayout(
-                    workingText,
+                    workingText ?: "",
                     paint,
                     width - compoundPaddingLeft - compoundPaddingRight,
                     Layout.Alignment.ALIGN_NORMAL,

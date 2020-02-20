@@ -151,6 +151,6 @@ fun RoomSummary.toMatrixItem() = MatrixItem.RoomItem(roomId, displayName, avatar
 fun RoomSummary.toRoomAliasMatrixItem() = MatrixItem.RoomAliasItem(canonicalAlias ?: roomId, displayName, avatarUrl)
 
 // If no name is available, use room alias as Riot-Web does
-fun PublicRoom.toMatrixItem() = MatrixItem.RoomItem(roomId, name ?: canonicalAlias, avatarUrl)
+fun PublicRoom.toMatrixItem() = MatrixItem.RoomItem(roomId, name ?: getPrimaryAlias() ?: "", avatarUrl)
 
 fun RoomMemberSummary.toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)

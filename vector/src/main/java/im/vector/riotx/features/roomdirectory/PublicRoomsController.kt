@@ -85,7 +85,7 @@ class PublicRoomsController @Inject constructor(private val stringProvider: Stri
             avatarRenderer(avatarRenderer)
             id(publicRoom.roomId)
             matrixItem(publicRoom.toMatrixItem())
-            roomAlias(publicRoom.canonicalAlias)
+            roomAlias(publicRoom.getPrimaryAlias())
             roomTopic(publicRoom.topic)
             nbOfMembers(publicRoom.numJoinedMembers)
 
