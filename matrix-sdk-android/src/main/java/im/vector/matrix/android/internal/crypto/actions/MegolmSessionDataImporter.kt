@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.actions
 
-import android.os.Handler
 import androidx.annotation.WorkerThread
 import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
@@ -46,7 +45,6 @@ internal class MegolmSessionDataImporter @Inject constructor(private val olmDevi
     @WorkerThread
     fun handle(megolmSessionsData: List<MegolmSessionData>,
                fromBackup: Boolean,
-               uiHandler: Handler,
                progressListener: ProgressListener?): ImportRoomKeysResult {
         val t0 = System.currentTimeMillis()
 
@@ -54,11 +52,7 @@ internal class MegolmSessionDataImporter @Inject constructor(private val olmDevi
         var lastProgress = 0
         var totalNumbersOfImportedKeys = 0
 
-        if (progressListener != null) {
-            uiHandler.post {
-                progressListener.onProgress(0, 100)
-            }
-        }
+        progressListener?.onProgress(0, 100)
         val olmInboundGroupSessionWrappers = olmDevice.importInboundGroupSessions(megolmSessionsData)
 
         megolmSessionsData.forEachIndexed { cpt, megolmSessionData ->
@@ -89,14 +83,12 @@ internal class MegolmSessionDataImporter @Inject constructor(private val olmDevi
             }
 
             if (progressListener != null) {
-                uiHandler.post {
-                    val progress = 100 * cpt / totalNumbersOfKeys
+                val progress = 100 * cpt / totalNumbersOfKeys
 
-                    if (lastProgress != progress) {
-                        lastProgress = progress
+                if (lastProgress != progress) {
+                    lastProgress = progress
 
-                        progressListener.onProgress(progress, 100)
-                    }
+                    progressListener.onProgress(progress, 100)
                 }
             }
         }

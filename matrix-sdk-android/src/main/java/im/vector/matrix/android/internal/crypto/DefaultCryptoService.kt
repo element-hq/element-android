@@ -887,7 +887,7 @@ internal class DefaultCryptoService @Inject constructor(
                         throw Exception("Error")
                     }
 
-                    megolmSessionDataImporter.handle(importedSessions, true, uiHandler, progressListener)
+                    megolmSessionDataImporter.handle(importedSessions, true, progressListener)
                 }
             }.foldToCallback(callback)
         }
