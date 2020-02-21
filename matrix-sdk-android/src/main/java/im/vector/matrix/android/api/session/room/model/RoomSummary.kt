@@ -63,5 +63,3 @@ data class RoomSummary constructor(
         const val NOT_IN_BREADCRUMBS = -1
     }
 }
-
-

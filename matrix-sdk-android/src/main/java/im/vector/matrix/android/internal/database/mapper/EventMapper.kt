@@ -32,7 +32,7 @@ internal object EventMapper {
         val uds = if (event.unsignedData == null) null
         else MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).toJson(event.unsignedData)
         val eventEntity = EventEntity()
-        //TODO change this as we shouldn't use event everywhere
+        // TODO change this as we shouldn't use event everywhere
         eventEntity.eventId = event.eventId ?: "$roomId-${System.currentTimeMillis()}-${event.hashCode()}"
         eventEntity.roomId = event.roomId ?: roomId
         eventEntity.content = ContentMapper.map(event.content)
