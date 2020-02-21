@@ -1087,8 +1087,12 @@ internal class DefaultVerificationService @Inject constructor(
         }
                 .distinct()
 
-        transport.sendVerificationRequest(methodValues, localID, otherUserId, null, targetDevices) { _, _ ->
+        transport.sendVerificationRequest(methodValues, localID, otherUserId, null, targetDevices) { _, info ->
             // Nothing special to do in to device mode
+            updatePendingRequest(verificationRequest.copy(
+                    // localId stays different
+                    requestInfo = info
+            ))
         }
 
         requestsForUser.add(verificationRequest)
