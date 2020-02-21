@@ -23,15 +23,20 @@ import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventConten
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.di.SessionDatabase
+import im.vector.matrix.android.internal.session.SessionScope
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import timber.log.Timber
+import java.util.UUID
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import javax.inject.Inject
 
-internal class TimelineEventDecryptor(
+@SessionScope
+internal class TimelineEventDecryptor @Inject constructor(
+        @SessionDatabase
         private val realmConfiguration: RealmConfiguration,
-        private val timelineId: String,
         private val cryptoService: CryptoService
 ) {
 
@@ -53,9 +58,9 @@ internal class TimelineEventDecryptor(
     private var executor: ExecutorService? = null
 
     // Set of eventIds which are currently decrypting
-    private val existingRequests = mutableSetOf<String>()
+    private val existingRequests = mutableSetOf<DecryptionRequest>()
     // sessionId -> list of eventIds
-    private val unknownSessionsFailure = mutableMapOf<String, MutableSet<String>>()
+    private val unknownSessionsFailure = mutableMapOf<String, MutableSet<DecryptionRequest>>()
 
     fun start() {
         executor = Executors.newSingleThreadExecutor()
@@ -74,53 +79,51 @@ internal class TimelineEventDecryptor(
         }
     }
 
-    fun requestDecryption(eventId: String) {
+    fun requestDecryption(request: DecryptionRequest) {
         synchronized(unknownSessionsFailure) {
-            for (eventIds in unknownSessionsFailure.values) {
-                if (eventId in eventIds) {
-                    Timber.d("Skip Decryption request for event $eventId, unknown session")
+            for (requests in unknownSessionsFailure.values) {
+                if (request in requests) {
+                    Timber.d("Skip Decryption request for event ${request.eventId}, unknown session")
                     return
                 }
             }
         }
         synchronized(existingRequests) {
-            if (!existingRequests.add(eventId)) {
-                Timber.d("Skip Decryption request for event $eventId, already requested")
+            if (!existingRequests.add(request)) {
+                Timber.d("Skip Decryption request for event ${request.eventId}, already requested")
                 return
             }
         }
         executor?.execute {
             Realm.getInstance(realmConfiguration).use { realm ->
-                processDecryptRequest(eventId, realm)
+                processDecryptRequest(request, realm)
             }
         }
     }
 
-    private fun processDecryptRequest(eventId: String, realm: Realm) {
+    private fun processDecryptRequest(request: DecryptionRequest, realm: Realm) = realm.executeTransaction {
+        val eventId = request.eventId
+        val timelineId = request.timelineId
         Timber.v("Decryption request for event $eventId")
         val eventEntity = EventEntity.where(realm, eventId = eventId).findFirst()
-                ?: return Unit.also {
+                ?: return@executeTransaction Unit.also {
                     Timber.d("Decryption request for unknown message")
                 }
         val event = eventEntity.asDomain()
         try {
             val result = cryptoService.decryptEvent(event, timelineId)
             Timber.v("Successfully decrypted event $eventId")
-            realm.executeTransaction {
-                eventEntity.setDecryptionResult(result)
-            }
+            eventEntity.setDecryptionResult(result)
         } catch (e: MXCryptoError) {
             Timber.w(e, "Failed to decrypt event $eventId")
             if (e is MXCryptoError.Base && e.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
                 // Keep track of unknown sessions to automatically try to decrypt on new session
-                realm.executeTransaction {
-                    eventEntity.decryptionErrorCode = e.errorType.name
-                }
+                eventEntity.decryptionErrorCode = e.errorType.name
                 event.content?.toModel<EncryptedEventContent>()?.let { content ->
                     content.sessionId?.let { sessionId ->
                         synchronized(unknownSessionsFailure) {
                             val list = unknownSessionsFailure.getOrPut(sessionId) { mutableSetOf() }
-                            list.add(eventId)
+                            list.add(request)
                         }
                     }
                 }
@@ -129,8 +132,13 @@ internal class TimelineEventDecryptor(
             Timber.e(t, "Failed to decrypt event $eventId")
         } finally {
             synchronized(existingRequests) {
-                existingRequests.remove(eventId)
+                existingRequests.remove(request)
             }
         }
     }
+
+    data class DecryptionRequest(
+            val eventId: String,
+            val timelineId: String
+    )
 }

@@ -73,11 +73,11 @@ internal class DefaultTimeline(
         private val taskExecutor: TaskExecutor,
         private val contextOfEventTask: GetContextOfEventTask,
         private val paginationTask: PaginationTask,
-        private val cryptoService: CryptoService,
         private val timelineEventMapper: TimelineEventMapper,
         private val settings: TimelineSettings,
         private val hiddenReadReceipts: TimelineHiddenReadReceipts,
-        private val eventBus: EventBus
+        private val eventBus: EventBus,
+        private val eventDecryptor: TimelineEventDecryptor
 ) : Timeline, TimelineHiddenReadReceipts.Delegate {
 
     data class OnNewTimelineEvents(val roomId: String, val eventIds: List<String>)
@@ -113,8 +113,6 @@ internal class DefaultTimeline(
 
     override val isLive
         get() = !hasMoreToLoad(Timeline.Direction.FORWARDS)
-
-    private val eventDecryptor = TimelineEventDecryptor(realmConfiguration, timelineID, cryptoService)
 
     private val eventsChangeListener = OrderedRealmCollectionChangeListener<RealmResults<TimelineEventEntity>> { results, changeSet ->
         if (!results.isLoaded || !results.isValid) {
@@ -607,7 +605,7 @@ internal class DefaultTimeline(
 
             if (timelineEvent.isEncrypted()
                     && timelineEvent.root.mxDecryptionResult == null) {
-                timelineEvent.root.eventId?.let { eventDecryptor.requestDecryption(it) }
+                timelineEvent.root.eventId?.also { eventDecryptor.requestDecryption(TimelineEventDecryptor.DecryptionRequest(it, timelineID)) }
             }
 
             val position = if (direction == Timeline.Direction.FORWARDS) 0 else builtEvents.size
