@@ -30,31 +30,31 @@ data class DeviceInfo(
          * The owner user id (not documented and useless but the homeserver sent it. You should not need it)
          */
         @Json(name = "user_id")
-        var user_id: String? = null,
+        val user_id: String? = null,
 
         /**
          * The device id
          */
         @Json(name = "device_id")
-        var deviceId: String? = null,
+        val deviceId: String? = null,
 
         /**
          * The device display name
          */
         @Json(name = "display_name")
-        var displayName: String? = null,
+        val displayName: String? = null,
 
         /**
          * The last time this device has been seen.
          */
         @Json(name = "last_seen_ts")
-        var lastSeenTs: Long? = null,
+        val lastSeenTs: Long? = null,
 
         /**
          * The last ip address
          */
         @Json(name = "last_seen_ip")
-        var lastSeenIp: String? = null
+        val lastSeenIp: String? = null
 ) : DatedObject {
 
     override val date: Long

@@ -27,11 +27,11 @@ data class OlmEventContent(
          *
          */
         @Json(name = "ciphertext")
-        var ciphertext: Map<String, Any>? = null,
+        val ciphertext: Map<String, Any>? = null,
 
         /**
          * the sender key
          */
         @Json(name = "sender_key")
-        var senderKey: String? = null
+        val senderKey: String? = null
 )

@@ -21,11 +21,12 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class EncryptedMessage(
-        var algorithm: String? = null,
+        @Json(name = "algorithm")
+        val algorithm: String? = null,
 
         @Json(name = "sender_key")
-        var senderKey: String? = null,
+        val senderKey: String? = null,
 
         @Json(name = "ciphertext")
-        var cipherText: Map<String, Any>? = null
+        val cipherText: Map<String, Any>? = null
 ) : SendToDeviceObject

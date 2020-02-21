@@ -46,13 +46,13 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class WellKnown(
         @Json(name = "m.homeserver")
-        var homeServer: WellKnownBaseConfig? = null,
+        val homeServer: WellKnownBaseConfig? = null,
 
         @Json(name = "m.identity_server")
-        var identityServer: WellKnownBaseConfig? = null,
+        val identityServer: WellKnownBaseConfig? = null,
 
         @Json(name = "m.integrations")
-        var integrations: Map<String, @JvmSuppressWildcards Any>? = null
+        val integrations: Map<String, @JvmSuppressWildcards Any>? = null
 ) {
     /**
      * Returns the list of integration managers proposed

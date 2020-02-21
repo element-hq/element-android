@@ -17,13 +17,43 @@
 package im.vector.matrix.android.internal.crypto
 
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShareCancellation
 
 /**
  * IncomingRoomKeyRequestCancellation describes the incoming room key cancellation.
  */
-class IncomingRoomKeyRequestCancellation(event: Event) : IncomingRoomKeyRequest(event) {
+data class IncomingRoomKeyRequestCancellation(
+        /**
+         * The user id
+         */
+        override val userId: String? = null,
 
-    init {
-        requestBody = null
+        /**
+         * The device id
+         */
+        override val deviceId: String? = null,
+
+        /**
+         * The request id
+         */
+        override val requestId: String? = null
+) : IncomingRoomKeyRequestCommon {
+    companion object {
+
+        /**
+         * Factory
+         *
+         * @param event the event
+         */
+        fun fromEvent(event: Event): IncomingRoomKeyRequestCancellation {
+            val roomKeyShareRequestCancellation = event.getClearContent().toModel<RoomKeyShareCancellation>()!!
+
+            return IncomingRoomKeyRequestCancellation(
+                    userId = event.senderId,
+                    deviceId = roomKeyShareRequestCancellation.requestingDeviceId,
+                    requestId = roomKeyShareRequestCancellation.requestId
+            )
+        }
     }
 }

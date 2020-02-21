@@ -21,7 +21,6 @@ internal object FilterUtil {
     /**
      * Patch the filterBody to enable or disable the data save mode
      *
-     *
      * If data save mode is on, FilterBody will contains
      * FIXME New expected filter:
      * "{\"room\": {\"ephemeral\": {\"notTypes\": [\"m.typing\"]}}, \"presence\":{\"notTypes\": [\"*\"]}}"
@@ -29,6 +28,7 @@ internal object FilterUtil {
      * @param filterBody      filterBody to patch
      * @param useDataSaveMode true to enable data save mode
      */
+    /*
     fun enableDataSaveMode(filterBody: FilterBody, useDataSaveMode: Boolean) {
         if (useDataSaveMode) {
             // Enable data save mode
@@ -79,9 +79,10 @@ internal object FilterUtil {
             }
         }
     }
+    */
 
     /**
-     * Patch the filterBody to enable or disable the lazy loading
+     * Compute a new filterBody to enable or disable the lazy loading
      *
      *
      * If lazy loading is on, the filterBody will looks like
@@ -90,29 +91,23 @@ internal object FilterUtil {
      * @param filterBody     filterBody to patch
      * @param useLazyLoading true to enable lazy loading
      */
-    fun enableLazyLoading(filterBody: FilterBody, useLazyLoading: Boolean) {
+    fun enableLazyLoading(filterBody: FilterBody, useLazyLoading: Boolean): FilterBody {
         if (useLazyLoading) {
             // Enable lazy loading
-            if (filterBody.room == null) {
-                filterBody.room = RoomFilter()
-            }
-            if (filterBody.room!!.state == null) {
-                filterBody.room!!.state = RoomEventFilter()
-            }
-
-            filterBody.room!!.state!!.lazyLoadMembers = true
+            return filterBody.copy(
+                    room = filterBody.room?.copy(
+                            state = filterBody.room.state?.copy(lazyLoadMembers = true)
+                                    ?: RoomEventFilter(lazyLoadMembers = true)
+                    )
+                            ?: RoomFilter(state = RoomEventFilter(lazyLoadMembers = true))
+            )
         } else {
-            if (filterBody.room != null && filterBody.room!!.state != null) {
-                filterBody.room!!.state!!.lazyLoadMembers = null
+            val newRoomEventFilter = filterBody.room?.state?.copy(lazyLoadMembers = null)?.takeIf { it.hasData() }
+            val newRoomFilter = filterBody.room?.copy(state = newRoomEventFilter)?.takeIf { it.hasData() }
 
-                if (!filterBody.room!!.state!!.hasData()) {
-                    filterBody.room!!.state = null
-                }
-
-                if (!filterBody.room!!.hasData()) {
-                    filterBody.room = null
-                }
-            }
+            return filterBody.copy(
+                    room = newRoomFilter
+            )
         }
     }
 }

@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.keysbackup.model.rest
 
-import com.squareup.moshi.Json
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupAuthData
 import im.vector.matrix.android.internal.di.MoshiProvider
@@ -38,19 +37,17 @@ import im.vector.matrix.android.internal.di.MoshiProvider
  *     }
  * </pre>
  */
-open class KeysAlgorithmAndData {
+interface KeysAlgorithmAndData {
 
     /**
      * The algorithm used for storing backups. Currently, only "m.megolm_backup.v1.curve25519-aes-sha2" is defined
      */
-    @Json(name = "algorithm")
-    var algorithm: String? = null
+    val algorithm: String?
 
     /**
      * algorithm-dependent data, for "m.megolm_backup.v1.curve25519-aes-sha2" see [im.vector.matrix.android.internal.crypto.keysbackup.MegolmBackupAuthData]
      */
-    @Json(name = "auth_data")
-    var authData: JsonDict? = null
+    val authData: JsonDict?
 
     /**
      * Facility method to convert authData to a MegolmBackupAuthData object

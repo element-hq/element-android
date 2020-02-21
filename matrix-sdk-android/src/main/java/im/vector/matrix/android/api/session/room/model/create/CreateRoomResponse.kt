@@ -24,7 +24,7 @@ internal data class CreateRoomResponse(
         /**
          * Required. The created room's ID.
          */
-        @Json(name = "room_id") var roomId: String
+        @Json(name = "room_id") val roomId: String
 )
 
 internal typealias JoinRoomResponse = CreateRoomResponse

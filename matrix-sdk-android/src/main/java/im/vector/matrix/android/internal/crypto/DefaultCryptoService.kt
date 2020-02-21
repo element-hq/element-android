@@ -1021,12 +1021,12 @@ internal class DefaultCryptoService @Inject constructor(
             return
         }
 
-        val requestBody = RoomKeyRequestBody()
-
-        requestBody.roomId = event.roomId
-        requestBody.algorithm = wireContent["algorithm"]?.toString()
-        requestBody.senderKey = wireContent["sender_key"]?.toString()
-        requestBody.sessionId = wireContent["session_id"]?.toString()
+        val requestBody = RoomKeyRequestBody(
+                algorithm = wireContent["algorithm"]?.toString(),
+                roomId = event.roomId,
+                senderKey = wireContent["sender_key"]?.toString(),
+                sessionId = wireContent["session_id"]?.toString()
+        )
 
         outgoingRoomKeyRequestManager.resendRoomKeyRequest(requestBody)
     }

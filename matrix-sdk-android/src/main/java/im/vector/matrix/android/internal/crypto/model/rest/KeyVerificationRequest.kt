@@ -27,7 +27,7 @@ internal data class KeyVerificationRequest(
         @Json(name = "from_device") override val fromDevice: String?,
         @Json(name = "methods") override val methods: List<String>,
         @Json(name = "timestamp") override val timestamp: Long?,
-        @Json(name = "transaction_id") override var transactionID: String? = null
+        @Json(name = "transaction_id") override val transactionID: String? = null
 
 ) : SendToDeviceObject, VerificationInfoRequest {
 

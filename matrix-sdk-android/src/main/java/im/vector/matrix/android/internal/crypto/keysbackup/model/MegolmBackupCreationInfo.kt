@@ -19,20 +19,19 @@ package im.vector.matrix.android.internal.crypto.keysbackup.model
 /**
  * Data retrieved from Olm library. algorithm and authData will be send to the homeserver, and recoveryKey will be displayed to the user
  */
-class MegolmBackupCreationInfo {
+data class MegolmBackupCreationInfo(
+        /**
+         * The algorithm used for storing backups [org.matrix.androidsdk.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP].
+         */
+        val algorithm: String = "",
 
-    /**
-     * The algorithm used for storing backups [org.matrix.androidsdk.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP].
-     */
-    var algorithm: String = ""
+        /**
+         * Authentication data.
+         */
+        val authData: MegolmBackupAuthData? = null,
 
-    /**
-     * Authentication data.
-     */
-    var authData: MegolmBackupAuthData? = null
-
-    /**
-     * The Base58 recovery key.
-     */
-    var recoveryKey: String = ""
-}
+        /**
+         * The Base58 recovery key.
+         */
+        val recoveryKey: String = ""
+)

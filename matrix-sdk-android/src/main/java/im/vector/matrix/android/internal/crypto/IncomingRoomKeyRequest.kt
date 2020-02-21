@@ -25,54 +25,54 @@ import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShareRequest
 /**
  * IncomingRoomKeyRequest class defines the incoming room keys request.
  */
-open class IncomingRoomKeyRequest {
-    /**
-     * The user id
-     */
-    var userId: String? = null
+data class IncomingRoomKeyRequest(
+        /**
+         * The user id
+         */
+        override val userId: String? = null,
 
-    /**
-     * The device id
-     */
-    var deviceId: String? = null
+        /**
+         * The device id
+         */
+        override val deviceId: String? = null,
 
-    /**
-     * The request id
-     */
-    var requestId: String? = null
+        /**
+         * The request id
+         */
+        override val requestId: String? = null,
 
-    /**
-     * The request body
-     */
-    var requestBody: RoomKeyRequestBody? = null
+        /**
+         * The request body
+         */
+        val requestBody: RoomKeyRequestBody? = null,
 
-    /**
-     * The runnable to call to accept to share the keys
-     */
-    @Transient
-    var share: Runnable? = null
+        /**
+         * The runnable to call to accept to share the keys
+         */
+        @Transient
+        var share: Runnable? = null,
 
-    /**
-     * The runnable to call to ignore the key share request.
-     */
-    @Transient
-    var ignore: Runnable? = null
+        /**
+         * The runnable to call to ignore the key share request.
+         */
+        @Transient
+        var ignore: Runnable? = null
+) : IncomingRoomKeyRequestCommon {
+    companion object {
+        /**
+         * Factory
+         *
+         * @param event the event
+         */
+        fun fromEvent(event: Event): IncomingRoomKeyRequest {
+            val roomKeyShareRequest = event.getClearContent().toModel<RoomKeyShareRequest>()!!
 
-    /**
-     * Constructor
-     *
-     * @param event the event
-     */
-    constructor(event: Event) {
-        userId = event.senderId
-        val roomKeyShareRequest = event.getClearContent().toModel<RoomKeyShareRequest>()!!
-        deviceId = roomKeyShareRequest.requestingDeviceId
-        requestId = roomKeyShareRequest.requestId
-        requestBody = if (null != roomKeyShareRequest.body) roomKeyShareRequest.body else RoomKeyRequestBody()
+            return IncomingRoomKeyRequest(
+                    userId = event.senderId,
+                    deviceId = roomKeyShareRequest.requestingDeviceId,
+                    requestId = roomKeyShareRequest.requestId,
+                    requestBody = roomKeyShareRequest.body ?: RoomKeyRequestBody()
+            )
+        }
     }
-
-    /**
-     * Constructor for object creation from crypto store
-     */
-    constructor()
 }

@@ -25,14 +25,14 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class RoomKeyRequestBody(
         @Json(name = "algorithm")
-        var algorithm: String? = null,
+        val algorithm: String? = null,
 
         @Json(name = "room_id")
-        var roomId: String? = null,
+        val roomId: String? = null,
 
         @Json(name = "sender_key")
-        var senderKey: String? = null,
+        val senderKey: String? = null,
 
         @Json(name = "session_id")
-        var sessionId: String? = null
+        val sessionId: String? = null
 )

@@ -24,13 +24,13 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class RoomFilter(
-        @Json(name = "not_rooms") var notRooms: List<String>? = null,
-        @Json(name = "rooms") var rooms: List<String>? = null,
-        @Json(name = "ephemeral") var ephemeral: RoomEventFilter? = null,
-        @Json(name = "include_leave") var includeLeave: Boolean? = null,
-        @Json(name = "state") var state: RoomEventFilter? = null,
-        @Json(name = "timeline") var timeline: RoomEventFilter? = null,
-        @Json(name = "account_data") var accountData: RoomEventFilter? = null
+        @Json(name = "not_rooms") val notRooms: List<String>? = null,
+        @Json(name = "rooms") val rooms: List<String>? = null,
+        @Json(name = "ephemeral") val ephemeral: RoomEventFilter? = null,
+        @Json(name = "include_leave") val includeLeave: Boolean? = null,
+        @Json(name = "state") val state: RoomEventFilter? = null,
+        @Json(name = "timeline") val timeline: RoomEventFilter? = null,
+        @Json(name = "account_data") val accountData: RoomEventFilter? = null
 ) {
 
     fun hasData(): Boolean {
