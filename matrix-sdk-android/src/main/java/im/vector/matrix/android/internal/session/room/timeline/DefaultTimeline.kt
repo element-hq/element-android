@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.session.room.timeline
 
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
