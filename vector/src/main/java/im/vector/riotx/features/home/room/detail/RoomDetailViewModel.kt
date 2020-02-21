@@ -292,20 +292,16 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun handleTombstoneEvent(action: RoomDetailAction.HandleTombstoneEvent) {
         val tombstoneContent = action.event.getClearContent().toModel<RoomTombstoneContent>() ?: return
 
-        val roomId = tombstoneContent.replacementRoom ?: ""
+        val roomId = tombstoneContent.replacementRoomId ?: ""
         val isRoomJoined = session.getRoom(roomId)?.roomSummary()?.membership == Membership.JOIN
         if (isRoomJoined) {
             setState { copy(tombstoneEventHandling = Success(roomId)) }
         } else {
-            val viaServer = MatrixPatterns.extractServerNameFromId(action.event.senderId).let {
-                if (it.isNullOrBlank()) {
-                    emptyList()
-                } else {
-                    listOf(it)
-                }
-            }
+            val viaServers = MatrixPatterns.extractServerNameFromId(action.event.senderId)
+                    ?.let { listOf(it) }
+                    .orEmpty()
             session.rx()
-                    .joinRoom(roomId, viaServers = viaServer)
+                    .joinRoom(roomId, viaServers = viaServers)
                     .map { roomId }
                     .execute {
                         copy(tombstoneEventHandling = it)

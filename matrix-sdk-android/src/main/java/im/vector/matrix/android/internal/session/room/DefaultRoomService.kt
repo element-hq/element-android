@@ -139,9 +139,9 @@ internal class DefaultRoomService @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
-    override fun joinRoom(roomId: String, reason: String?, viaServers: List<String>, callback: MatrixCallback<Unit>): Cancelable {
+    override fun joinRoom(roomIdOrAlias: String, reason: String?, viaServers: List<String>, callback: MatrixCallback<Unit>): Cancelable {
         return joinRoomTask
-                .configureWith(JoinRoomTask.Params(roomId, reason, viaServers)) {
+                .configureWith(JoinRoomTask.Params(roomIdOrAlias, reason, viaServers)) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)

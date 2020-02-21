@@ -134,7 +134,7 @@ class PublicRoomsFragment @Inject constructor(
 
     override fun onPublicRoomJoin(publicRoom: PublicRoom) {
         Timber.v("PublicRoomJoinClicked: $publicRoom")
-        viewModel.handle(RoomDirectoryAction.JoinRoom(publicRoom.roomId))
+        viewModel.handle(RoomDirectoryAction.JoinRoom(publicRoom.getPrimaryAlias(), publicRoom.roomId))
     }
 
     override fun loadMore() {

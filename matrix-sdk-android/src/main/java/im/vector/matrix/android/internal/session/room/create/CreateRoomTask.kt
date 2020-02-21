@@ -66,7 +66,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
         val createRoomResponse = executeRequest<CreateRoomResponse>(eventBus) {
             apiCall = roomAPI.createRoom(createRoomParams)
         }
-        val roomId = createRoomResponse.roomId!!
+        val roomId = createRoomResponse.roomId
         // Wait for room to come back from the sync (but it can maybe be in the DB if the sync response is received before)
         try {
             awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
