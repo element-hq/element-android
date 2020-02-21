@@ -27,6 +27,9 @@ interface TimelineService {
     /**
      * Instantiate a [Timeline] with an optional initial eventId, to be used with permalink.
      * You can also configure some settings with the [settings] param.
+     *
+     * Important: the returned Timeline has to be started
+     *
      * @param eventId the optional initial eventId.
      * @param settings settings to configure the timeline.
      * @return the instantiated timeline
