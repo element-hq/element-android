@@ -126,12 +126,6 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     override fun invalidate() = withState(viewModel) { state ->
 
-        if (state.selfVerificationMode && state.verifiedFromPrivateKeys) {
-            showFragment(VerificationConclusionFragment::class, Bundle().apply {
-                putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null, state.isMe))
-            })
-            return@withState
-        }
         state.otherUserMxItem?.let { matrixItem ->
             if (state.isMe) {
                 if (state.sasTransactionState == VerificationTxState.Verified
@@ -154,6 +148,13 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                     otherUserShield.isVisible = false
                 }
             }
+        }
+        
+        if (state.selfVerificationMode && state.verifiedFromPrivateKeys) {
+            showFragment(VerificationConclusionFragment::class, Bundle().apply {
+                putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null, state.isMe))
+            })
+            return@withState
         }
 
         // Did the request result in a SAS transaction?
