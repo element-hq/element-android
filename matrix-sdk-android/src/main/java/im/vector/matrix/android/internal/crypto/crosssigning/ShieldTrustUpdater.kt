@@ -22,6 +22,7 @@ import im.vector.matrix.android.internal.di.CryptoDatabase
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.createBackgroundHandler
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -36,6 +37,7 @@ internal class ShieldTrustUpdater @Inject constructor(
         private val eventBus: EventBus,
         private val computeTrustTask: ComputeTrustTask,
         private val taskExecutor: TaskExecutor,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
         @CryptoDatabase private val cryptoRealmConfiguration: RealmConfiguration,
         @SessionDatabase private val sessionRealmConfiguration: RealmConfiguration,
         private val roomSummaryUpdater: RoomSummaryUpdater
@@ -93,8 +95,7 @@ internal class ShieldTrustUpdater @Inject constructor(
         if (!isStarted.get()) {
             return
         }
-
-        taskExecutor.executorScope.launch {
+        taskExecutor.executorScope.launch(coroutineDispatchers.crypto) {
             val updatedTrust = computeTrustTask.execute(ComputeTrustTask.Params(update.userIds))
             // We need to send that back to session base
 
