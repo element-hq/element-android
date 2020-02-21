@@ -197,6 +197,10 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     private fun handleLeaveRoom(action: RoomListAction.LeaveRoom) {
         _viewEvents.post(RoomListViewEvents.Loading(null))
         session.getRoom(action.roomId)?.leave(null, object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                _viewEvents.post(RoomListViewEvents.Done)
+            }
+
             override fun onFailure(failure: Throwable) {
                 _viewEvents.post(RoomListViewEvents.Failure(failure))
             }

@@ -23,66 +23,71 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class PublicRoom(
-
         /**
          * Aliases of the room. May be empty.
          */
         @Json(name = "aliases")
-        var aliases: List<String>? = null,
+        val aliases: List<String>? = null,
 
         /**
          * The canonical alias of the room, if any.
          */
         @Json(name = "canonical_alias")
-        var canonicalAlias: String? = null,
+        val canonicalAlias: String? = null,
 
         /**
          * The name of the room, if any.
          */
         @Json(name = "name")
-        var name: String? = null,
+        val name: String? = null,
 
         /**
          * Required. The number of members joined to the room.
          */
         @Json(name = "num_joined_members")
-        var numJoinedMembers: Int = 0,
+        val numJoinedMembers: Int = 0,
 
         /**
          * Required. The ID of the room.
          */
         @Json(name = "room_id")
-        var roomId: String,
+        val roomId: String,
 
         /**
          * The topic of the room, if any.
          */
         @Json(name = "topic")
-        var topic: String? = null,
+        val topic: String? = null,
 
         /**
          * Required. Whether the room may be viewed by guest users without joining.
          */
         @Json(name = "world_readable")
-        var worldReadable: Boolean = false,
+        val worldReadable: Boolean = false,
 
         /**
          * Required. Whether guest users may join the room and participate in it. If they can,
          * they will be subject to ordinary power level rules like any other user.
          */
         @Json(name = "guest_can_join")
-        var guestCanJoin: Boolean = false,
+        val guestCanJoin: Boolean = false,
 
         /**
          * The URL for the room's avatar, if one is set.
          */
         @Json(name = "avatar_url")
-        var avatarUrl: String? = null,
+        val avatarUrl: String? = null,
 
         /**
          * Undocumented item
          */
         @Json(name = "m.federate")
-        var isFederated: Boolean = false
-
-)
+        val isFederated: Boolean = false
+) {
+    /**
+     * Return the canonical alias, or the first alias from the list of aliases, or null
+     */
+    fun getPrimaryAlias(): String? {
+        return canonicalAlias ?: aliases?.firstOrNull()
+    }
+}

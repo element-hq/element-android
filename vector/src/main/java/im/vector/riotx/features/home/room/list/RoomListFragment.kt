@@ -105,6 +105,7 @@ class RoomListFragment @Inject constructor(
                 is RoomListViewEvents.Loading    -> showLoading(it.message)
                 is RoomListViewEvents.Failure    -> showFailure(it.throwable)
                 is RoomListViewEvents.SelectRoom -> handleSelectRoom(it)
+                is RoomListViewEvents.Done       -> Unit
             }.exhaustive
         }
 

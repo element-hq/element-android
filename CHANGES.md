@@ -9,13 +9,15 @@ Features ✨:
  - Sending image: image are sent to rooms with a reduced size. It's still possible to send original image file (#1010)
 
 Improvements 🙌:
- -
+ - Migrate to binary QR code verification (#994)
 
 Bugfix 🐛:
  - Account creation: wrongly hints that an email can be used to create an account (#941)
  - Fix crash in the room directory, when public room has no name (#1023)
  - Fix restoring keys backup with passphrase (#526)
  - Fix rotation of full-size image (#647)
+ - Fix joining rooms from directory via federation isn't working. (#808)
+ - Leaving a room creates a stuck "leaving room" loading screen. (#1041)
 
 Translations 🗣:
  -

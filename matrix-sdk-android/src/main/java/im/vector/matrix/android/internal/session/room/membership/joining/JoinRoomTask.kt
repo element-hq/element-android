@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.room.membership.joining
 
 import im.vector.matrix.android.api.session.room.failure.JoinRoomFailure
+import im.vector.matrix.android.api.session.room.model.create.JoinRoomResponse
 import im.vector.matrix.android.internal.database.awaitNotEmptyResult
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomEntityFields
@@ -33,7 +34,7 @@ import javax.inject.Inject
 
 internal interface JoinRoomTask : Task<JoinRoomTask.Params, Unit> {
     data class Params(
-            val roomId: String,
+            val roomIdOrAlias: String,
             val reason: String?,
             val viaServers: List<String> = emptyList()
     )
@@ -48,19 +49,20 @@ internal class DefaultJoinRoomTask @Inject constructor(
 ) : JoinRoomTask {
 
     override suspend fun execute(params: JoinRoomTask.Params) {
-        executeRequest<Unit>(eventBus) {
-            apiCall = roomAPI.join(params.roomId, params.viaServers, mapOf("reason" to params.reason))
+        val joinRoomResponse = executeRequest<JoinRoomResponse>(eventBus) {
+            apiCall = roomAPI.join(params.roomIdOrAlias, params.viaServers, mapOf("reason" to params.reason))
         }
         // Wait for room to come back from the sync (but it can maybe be in the DB is the sync response is received before)
+        val roomId = joinRoomResponse.roomId
         try {
             awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
                 realm.where(RoomEntity::class.java)
-                        .equalTo(RoomEntityFields.ROOM_ID, params.roomId)
+                        .equalTo(RoomEntityFields.ROOM_ID, roomId)
             }
         } catch (exception: TimeoutCancellationException) {
             throw JoinRoomFailure.JoinedWithTimeout
         }
-        setReadMarkers(params.roomId)
+        setReadMarkers(roomId)
     }
 
     private suspend fun setReadMarkers(roomId: String) {

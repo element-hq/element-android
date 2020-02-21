@@ -28,4 +28,5 @@ sealed class RoomListViewEvents : VectorViewEvents {
     data class Failure(val throwable: Throwable) : RoomListViewEvents()
 
     data class SelectRoom(val roomSummary: RoomSummary) : RoomListViewEvents()
+    object Done : RoomListViewEvents()
 }

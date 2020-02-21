@@ -16,31 +16,37 @@
 
 package im.vector.matrix.android.internal.crypto.verification.qrcode
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import im.vector.matrix.android.InstrumentedTest
-import org.amshove.kluent.shouldBe
-import org.amshove.kluent.shouldNotBeEqualTo
+import org.amshove.kluent.shouldEqualTo
 import org.junit.FixMethodOrder
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 
-@RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
-class SharedSecretTest : InstrumentedTest {
+class BinaryStringTest {
 
+    /**
+     * I want to put bytes to a String, and vice versa
+     */
     @Test
-    fun testSharedSecretLengthCase() {
-        repeat(100) {
-            generateSharedSecretV2().length shouldBe 11
+    fun testNominalCase() {
+        val byteArray = ByteArray(256)
+        for (i in byteArray.indices) {
+            byteArray[i] = i.toByte() // Random.nextInt(255).toByte()
         }
-    }
 
-    @Test
-    fun testSharedDiffCase() {
-        val sharedSecret1 = generateSharedSecretV2()
-        val sharedSecret2 = generateSharedSecretV2()
+        val str = byteArray.toString(Charsets.ISO_8859_1)
 
-        sharedSecret1 shouldNotBeEqualTo sharedSecret2
+        str.length shouldEqualTo 256
+
+        // Ok convert back to bytearray
+
+        val result = str.toByteArray(Charsets.ISO_8859_1)
+
+        result.size shouldEqualTo 256
+
+        for (i in 0..255) {
+            result[i] shouldEqualTo i.toByte()
+            result[i] shouldEqualTo byteArray[i]
+        }
     }
 }

@@ -20,6 +20,7 @@ import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
+import im.vector.matrix.android.api.session.room.model.create.JoinRoomResponse
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsParams
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsResponse
 import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
@@ -223,13 +224,13 @@ internal interface RoomAPI {
      * Join the given room.
      *
      * @param roomIdOrAlias the room id or alias
-     * @param server_name the servers to attempt to join the room through
+     * @param viaServers the servers to attempt to join the room through
      * @param params the request body
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "join/{roomIdOrAlias}")
     fun join(@Path("roomIdOrAlias") roomIdOrAlias: String,
              @Query("server_name") viaServers: List<String>,
-             @Body params: Map<String, String?>): Call<Unit>
+             @Body params: Map<String, String?>): Call<JoinRoomResponse>
 
     /**
      * Leave the given room.

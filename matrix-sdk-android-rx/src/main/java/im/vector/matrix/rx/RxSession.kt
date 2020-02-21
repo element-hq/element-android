@@ -95,10 +95,10 @@ class RxSession(private val session: Session) {
         session.searchUsersDirectory(search, limit, excludedUserIds, it)
     }
 
-    fun joinRoom(roomId: String,
+    fun joinRoom(roomIdOrAlias: String,
                  reason: String? = null,
                  viaServers: List<String> = emptyList()): Single<Unit> = singleBuilder {
-        session.joinRoom(roomId, reason, viaServers, it)
+        session.joinRoom(roomIdOrAlias, reason, viaServers, it)
     }
 
     fun getRoomIdByAlias(roomAlias: String,

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,27 +19,84 @@ package im.vector.matrix.android.internal.crypto.verification.qrcode
 /**
  * Ref: https://github.com/uhoreg/matrix-doc/blob/qr_key_verification/proposals/1543-qr_code_key_verification.md#qr-code-format
  */
-data class QrCodeData(
-        val userId: String,
-        // Request Id. Can be an arbitrary value. In DM, it will be the event ID of the associated verification request event.
-        val requestId: String,
-        // The action
-        val action: String,
-        // key_<key_id>: each key that the user wants verified will have an entry of this form, where the value is the key in unpadded base64.
-        // The QR code should contain at least the user's master cross-signing key. In the case where a device does not have a cross-signing key
-        // (as in the case where a user logs in to a new device, and is verifying against another device), thin the QR code should contain at
-        // least the device's key.
-        val keys: Map<String, String>,
-        // random single-use shared secret in unpadded base64. It must be at least 256-bits long (43 characters when base64-encoded).
-        val sharedSecret: String,
-        // the other user's master cross-signing key, in unpadded base64. In other words, if Alice is displaying the QR code,
-        // this would be the copy of Bob's master cross-signing key that Alice has.
-        val otherUserKey: String?,
-        // The other device's key, in unpadded base64
-        // This is only needed when a user is verifying their own devices, where the other device has not yet been signed with the cross-signing key.
-        val otherDeviceKey: String?
+sealed class QrCodeData(
+        /**
+         * the event ID or transaction_id of the associated verification
+         */
+        open val transactionId: String,
+        /**
+         * First key (32 bytes, in base64 no padding)
+         */
+        val firstKey: String,
+        /**
+         * Second key (32 bytes, in base64 no padding)
+         */
+        val secondKey: String,
+        /**
+         * a random shared secret (in base64 no padding)
+         */
+        open val sharedSecret: String
 ) {
-    companion object {
-        const val ACTION_VERIFY = "verify"
-    }
+    /**
+     * verifying another user with cross-signing
+     * QR code verification mode: 0x00
+     */
+    data class VerifyingAnotherUser(
+            override val transactionId: String,
+            /**
+             * the user's own master cross-signing public key
+             */
+            val userMasterCrossSigningPublicKey: String,
+            /**
+             * what the device thinks the other user's master cross-signing key is
+             */
+            val otherUserMasterCrossSigningPublicKey: String,
+            override val sharedSecret: String
+    ) : QrCodeData(
+            transactionId,
+            userMasterCrossSigningPublicKey,
+            otherUserMasterCrossSigningPublicKey,
+            sharedSecret)
+
+    /**
+     * self-verifying in which the current device does trust the master key
+     * QR code verification mode: 0x01
+     */
+    data class SelfVerifyingMasterKeyTrusted(
+            override val transactionId: String,
+            /**
+             * the user's own master cross-signing public key
+             */
+            val userMasterCrossSigningPublicKey: String,
+            /**
+             * what the device thinks the other device's device key is
+             */
+            val otherDeviceKey: String,
+            override val sharedSecret: String
+    ) : QrCodeData(
+            transactionId,
+            userMasterCrossSigningPublicKey,
+            otherDeviceKey,
+            sharedSecret)
+
+    /**
+     * self-verifying in which the current device does not yet trust the master key
+     * QR code verification mode: 0x02
+     */
+    data class SelfVerifyingMasterKeyNotTrusted(
+            override val transactionId: String,
+            /**
+             * the current device's device key
+             */
+            val deviceKey: String,
+            /**
+             * what the device thinks the user's master cross-signing key is
+             */
+            val userMasterCrossSigningPublicKey: String,
+            override val sharedSecret: String
+    ) : QrCodeData(
+            transactionId,
+            deviceKey,
+            userMasterCrossSigningPublicKey,
+            sharedSecret)
 }

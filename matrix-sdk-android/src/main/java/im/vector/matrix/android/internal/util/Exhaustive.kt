@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.room.model.create
+package im.vector.matrix.android.internal.util
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-
-@JsonClass(generateAdapter = true)
-internal data class CreateRoomResponse(
-        /**
-         * Required. The created room's ID.
-         */
-        @Json(name = "room_id") var roomId: String
-)
-
-internal typealias JoinRoomResponse = CreateRoomResponse
+// Trick to ensure that when block is exhaustive
+internal val <T> T.exhaustive: T get() = this
