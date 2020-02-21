@@ -149,7 +149,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 }
             }
         }
-        
+
         if (state.selfVerificationMode && state.verifiedFromPrivateKeys) {
             showFragment(VerificationConclusionFragment::class, Bundle().apply {
                 putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null, state.isMe))

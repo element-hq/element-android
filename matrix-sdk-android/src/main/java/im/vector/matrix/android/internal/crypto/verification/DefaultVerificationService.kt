@@ -255,7 +255,7 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     fun onRoomRequestHandledByOtherDevice(event: Event) {
-        val requestInfo = event.getClearContent().toModel<MessageRelationContent>()
+        val requestInfo = event.content.toModel<MessageRelationContent>()
                 ?: return
         val requestId = requestInfo.relatesTo?.eventId ?: return
         getExistingVerificationRequestInRoom(event.roomId ?: "", requestId)?.let {
@@ -465,7 +465,11 @@ internal class DefaultVerificationService @Inject constructor(
                     Timber.v("## SAS onStartRequestReceived - request accepted ${startReq.transactionID!!}")
                     // If there is a corresponding request, we can auto accept
                     // as we are the one requesting in first place (or we accepted the request)
-                    val autoAccept = getExistingVerificationRequest(otherUserId)?.any { it.transactionId == startReq.transactionID }
+                    // I need to check if the pending request was related to this device also
+                    val autoAccept = getExistingVerificationRequest(otherUserId)?.any {
+                        it.transactionId == startReq.transactionID
+                                && (it.requestInfo?.fromDevice == this.deviceId || it.readyInfo?.fromDevice == this.deviceId)
+                    }
                             ?: false
                     val tx = DefaultIncomingSASDefaultVerificationTransaction(
 //                            this,
