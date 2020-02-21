@@ -19,12 +19,14 @@ package im.vector.riotx.features.roomprofile
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
@@ -35,6 +37,7 @@ import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.utils.startSharePlainTextIntent
 import im.vector.riotx.features.crypto.util.toImageRes
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.list.actions.RoomListActionsArgs
@@ -67,6 +70,8 @@ class RoomProfileFragment @Inject constructor(
 
     override fun getLayoutResId() = R.layout.fragment_matrix_profile
 
+    override fun getMenuRes() = R.menu.vector_room_profile
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         roomListQuickActionsSharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
@@ -89,12 +94,23 @@ class RoomProfileFragment @Inject constructor(
                 is RoomProfileViewEvents.Loading            -> showLoading(it.message)
                 is RoomProfileViewEvents.Failure            -> showFailure(it.throwable)
                 is RoomProfileViewEvents.OnLeaveRoomSuccess -> onLeaveRoom()
+                is RoomProfileViewEvents.ShareRoomProfile      -> onShareRoomProfile()
             }.exhaustive
         }
         roomListQuickActionsSharedActionViewModel
                 .observe()
                 .subscribe { handleQuickActions(it) }
                 .disposeOnDestroyView()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.roomProfileShareAction -> {
+                roomProfileViewModel.handle(RoomProfileAction.ShareRoomProfile)
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun handleQuickActions(action: RoomListQuickActionsSharedAction) = when (action) {
@@ -186,5 +202,11 @@ class RoomProfileFragment @Inject constructor(
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
+    }
+
+    private fun onShareRoomProfile() {
+        PermalinkFactory.createPermalink(roomProfileArgs.roomId)?.let { permalink ->
+            startSharePlainTextIntent(fragment = this, chooserTitle = null, text = permalink)
+        }
     }
 }

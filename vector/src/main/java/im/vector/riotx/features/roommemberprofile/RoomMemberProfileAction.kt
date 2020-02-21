@@ -23,4 +23,5 @@ sealed class RoomMemberProfileAction : VectorViewModelAction {
     object RetryFetchingInfo : RoomMemberProfileAction()
     object IgnoreUser : RoomMemberProfileAction()
     object VerifyUser : RoomMemberProfileAction()
+    object ShareRoomMemberProfile : RoomMemberProfileAction()
 }

@@ -10,6 +10,7 @@ Features ✨:
 
 Improvements 🙌:
  - Migrate to binary QR code verification (#994)
+ - Share action is added to room profile and room member profile (#858)
 
 Bugfix 🐛:
  - Account creation: wrongly hints that an email can be used to create an account (#941)

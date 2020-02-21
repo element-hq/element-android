@@ -135,9 +135,10 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
 
     override fun handle(action: RoomMemberProfileAction) {
         when (action) {
-            is RoomMemberProfileAction.RetryFetchingInfo -> fetchProfileInfo()
-            is RoomMemberProfileAction.IgnoreUser        -> handleIgnoreAction()
-            is RoomMemberProfileAction.VerifyUser        -> prepareVerification()
+            is RoomMemberProfileAction.RetryFetchingInfo      -> fetchProfileInfo()
+            is RoomMemberProfileAction.IgnoreUser             -> handleIgnoreAction()
+            is RoomMemberProfileAction.VerifyUser             -> prepareVerification()
+            is RoomMemberProfileAction.ShareRoomMemberProfile -> handleShareRoomMemberProfile()
         }
     }
 
@@ -233,5 +234,9 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         } else {
             session.ignoreUserIds(listOf(state.userId), ignoreActionCallback)
         }
+    }
+
+    private fun handleShareRoomMemberProfile() {
+        _viewEvents.post(RoomMemberProfileViewEvents.ShareRoomMemberProfile)
     }
 }

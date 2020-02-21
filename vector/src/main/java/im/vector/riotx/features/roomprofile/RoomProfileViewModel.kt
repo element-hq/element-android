@@ -66,6 +66,7 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: R
     override fun handle(action: RoomProfileAction) = when (action) {
         RoomProfileAction.LeaveRoom                      -> handleLeaveRoom()
         is RoomProfileAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
+        is RoomProfileAction.ShareRoomProfile -> handleShareRoomProfile()
     }
 
     private fun handleChangeNotificationMode(action: RoomProfileAction.ChangeRoomNotificationState) {
@@ -87,5 +88,9 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: R
                 _viewEvents.post(RoomProfileViewEvents.Failure(failure))
             }
         })
+    }
+
+    private fun handleShareRoomProfile() {
+        _viewEvents.post(RoomProfileViewEvents.ShareRoomProfile)
     }
 }

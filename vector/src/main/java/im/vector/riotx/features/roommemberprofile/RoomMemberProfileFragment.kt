@@ -19,6 +19,7 @@ package im.vector.riotx.features.roommemberprofile
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
@@ -28,6 +29,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.animations.AppBarStateChangeListener
@@ -38,6 +40,7 @@ import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.utils.startSharePlainTextIntent
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.roommemberprofile.devices.DeviceListBottomSheet
@@ -65,6 +68,8 @@ class RoomMemberProfileFragment @Inject constructor(
 
     override fun getLayoutResId() = R.layout.fragment_matrix_profile
 
+    override fun getMenuRes() = R.menu.vector_room_member_profile
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(matrixProfileToolbar)
@@ -90,12 +95,23 @@ class RoomMemberProfileFragment @Inject constructor(
         matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         viewModel.observeViewEvents {
             when (it) {
-                is RoomMemberProfileViewEvents.Loading               -> showLoading(it.message)
-                is RoomMemberProfileViewEvents.Failure               -> showFailure(it.throwable)
-                is RoomMemberProfileViewEvents.OnIgnoreActionSuccess -> Unit
-                is RoomMemberProfileViewEvents.StartVerification     -> handleStartVerification(it)
+                is RoomMemberProfileViewEvents.Loading                -> showLoading(it.message)
+                is RoomMemberProfileViewEvents.Failure                -> showFailure(it.throwable)
+                is RoomMemberProfileViewEvents.OnIgnoreActionSuccess  -> Unit
+                is RoomMemberProfileViewEvents.StartVerification      -> handleStartVerification(it)
+                is RoomMemberProfileViewEvents.ShareRoomMemberProfile -> handleShareRoomMemberProfile()
             }.exhaustive
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.roomMemberProfileShareAction -> {
+                viewModel.handle(RoomMemberProfileAction.ShareRoomMemberProfile)
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun handleStartVerification(startVerification: RoomMemberProfileViewEvents.StartVerification) {
@@ -207,5 +223,11 @@ class RoomMemberProfileFragment @Inject constructor(
 
     override fun onMentionClicked() {
         vectorBaseActivity.notImplemented("Mention")
+    }
+
+    private fun handleShareRoomMemberProfile() = withState(viewModel) {
+        PermalinkFactory.createPermalink(it.userId)?.let { permalink ->
+            startSharePlainTextIntent(fragment = this, chooserTitle = null, text = permalink)
+        }
     }
 }
