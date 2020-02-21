@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,116 +16,112 @@
 
 package im.vector.matrix.android.internal.crypto.verification.qrcode
 
-import im.vector.matrix.android.api.MatrixPatterns
-import im.vector.matrix.android.api.permalinks.PermalinkFactory
-import java.net.URLDecoder
-import java.net.URLEncoder
+import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64NoPadding
+import im.vector.matrix.android.internal.crypto.crosssigning.toBase64NoPadding
+import im.vector.matrix.android.internal.extensions.toUnsignedInt
 
-private const val ENCODING = "utf-8"
+// MATRIX
+private val prefix = "MATRIX".toByteArray(Charsets.ISO_8859_1)
 
-/**
- * Generate an URL to generate a QR code of the form:
- * <pre>
- * https://matrix.to/#/<user-id>?
- *     request=<event-id>
- *     &action=verify
- *     &key_<keyid>=<key-in-base64>...
- *     &secret=<shared_secret>
- *     &other_user_key=<master-key-in-base64>
- *     &other_device_key=<device-key-in-base64>
- *
- * Example:
- * https://matrix.to/#/@user:matrix.org?
- *     request=%24pBeIfm7REDACTEDSQJbgqvi-yYiwmPB8_H_W_O974
- *     &action=verify
- *     &key_VJEDVKUYTQ=DL7LWIw7Qp%2B4AREDACTEDOwy2BjygumSWAGfzaWY
- *     &key_fsh%2FfQ08N3xvh4ySXsINB%2BJ2hREDACTEDVcVOG4qqo=fsh%2FfQ08N3xvh4ySXsINB%2BJ2hREDACTEDVcVOG4qqo
- *     &secret=AjQqw51Fp6UBuPolZ2FAD5WnXc22ZhJG6iGslrVvIdw%3D
- *     &other_user_key=WqSVLkBCS%2Fi5NqRREDACTEDRPxBIuqK8Usl6Y3big
- *     &other_device_key=WqSVLkBREDACTEDBsfszdvsdBEvefqsdcsfBvsfcsFb
- * </pre>
- */
-fun QrCodeData.toUrl(): String {
-    return buildString {
-        append(PermalinkFactory.createPermalink(userId))
-        append("?request=")
-        append(URLEncoder.encode(requestId, ENCODING))
-        append("&action=")
-        append(URLEncoder.encode(action, ENCODING))
+fun QrCodeData.toEncodedString(): String {
+    var result = ByteArray(0)
 
-        for ((keyId, key) in keys) {
-            append("&key_${URLEncoder.encode(keyId, ENCODING)}=")
-            append(URLEncoder.encode(key, ENCODING))
-        }
-
-        append("&secret=")
-        append(URLEncoder.encode(sharedSecret, ENCODING))
-
-        if (!otherUserKey.isNullOrBlank()) {
-            append("&other_user_key=")
-            append(URLEncoder.encode(otherUserKey, ENCODING))
-        }
-        if (!otherDeviceKey.isNullOrBlank()) {
-            append("&other_device_key=")
-            append(URLEncoder.encode(otherDeviceKey, ENCODING))
-        }
+    // MATRIX
+    for (i in prefix.indices) {
+        result += prefix[i]
     }
+
+    // Version
+    result += 2
+
+    // Mode
+    result += when (this) {
+        is QrCodeData.VerifyingAnotherUser             -> 0
+        is QrCodeData.SelfVerifyingMasterKeyTrusted    -> 1
+        is QrCodeData.SelfVerifyingMasterKeyNotTrusted -> 2
+    }.toByte()
+
+    // TransactionId length
+    val length = transactionId.length
+    result += ((length and 0xFF00) shr 8).toByte()
+    result += length.toByte()
+
+    // TransactionId
+    transactionId.forEach {
+        result += it.toByte()
+    }
+
+    // Keys
+    firstKey.fromBase64NoPadding().forEach {
+        result += it
+    }
+    secondKey.fromBase64NoPadding().forEach {
+        result += it
+    }
+
+    // Secret
+    sharedSecret.fromBase64NoPadding().forEach {
+        result += it
+    }
+
+    return result.toString(Charsets.ISO_8859_1)
 }
 
 fun String.toQrCodeData(): QrCodeData? {
-    if (!startsWith(PermalinkFactory.MATRIX_TO_URL_BASE)) {
+    val byteArray = toByteArray(Charsets.ISO_8859_1)
+
+    // Size should be min 6 + 1 + 1 + 2 + ? + 32 + 32 + ? = 74 + transactionLength + secretLength
+
+    // Check header
+    // MATRIX
+    if (byteArray.size < 10) return null
+
+    for (i in prefix.indices) {
+        if (byteArray[i] != prefix[i]) {
+            return null
+        }
+    }
+
+    var cursor = prefix.size // 6
+
+    // Version
+    if (byteArray[cursor] != 2.toByte()) {
+        return null
+    }
+    cursor++
+
+    // Get mode
+    val mode = byteArray[cursor].toInt()
+    cursor++
+
+    // Get transaction length
+    val bigEndian1 = byteArray[cursor].toUnsignedInt()
+    val bigEndian2 = byteArray[cursor + 1].toUnsignedInt()
+
+    val transactionLength = bigEndian1 * 0x0100 + bigEndian2
+
+    cursor++
+    cursor++
+
+    val secretLength = byteArray.size - 74 - transactionLength
+
+    // ensure the secret length is 8 bytes min
+    if (secretLength < 8) {
         return null
     }
 
-    val fragment = substringAfter("#")
-    if (fragment.isEmpty()) {
-        return null
+    val transactionId = byteArray.copyOfRange(cursor, cursor + transactionLength).toString(Charsets.ISO_8859_1)
+    cursor += transactionLength
+    val key1 = byteArray.copyOfRange(cursor, cursor + 32).toBase64NoPadding()
+    cursor += 32
+    val key2 = byteArray.copyOfRange(cursor, cursor + 32).toBase64NoPadding()
+    cursor += 32
+    val secret = byteArray.copyOfRange(cursor, byteArray.size).toBase64NoPadding()
+
+    return when (mode) {
+        0    -> QrCodeData.VerifyingAnotherUser(transactionId, key1, key2, secret)
+        1    -> QrCodeData.SelfVerifyingMasterKeyTrusted(transactionId, key1, key2, secret)
+        2    -> QrCodeData.SelfVerifyingMasterKeyNotTrusted(transactionId, key1, key2, secret)
+        else -> null
     }
-
-    val safeFragment = fragment.substringBefore("?")
-
-    // we are limiting to 2 params
-    val params = safeFragment
-            .split(MatrixPatterns.SEP_REGEX.toRegex())
-            .filter { it.isNotEmpty() }
-
-    if (params.size != 1) {
-        return null
-    }
-
-    val userId = params.getOrNull(0)
-            ?.let { PermalinkFactory.unescape(it) }
-            ?.takeIf { MatrixPatterns.isUserId(it) } ?: return null
-
-    val urlParams = fragment.substringAfter("?")
-            .split("&".toRegex())
-            .filter { it.isNotEmpty() }
-
-    val keyValues = urlParams.map {
-        (it.substringBefore("=") to it.substringAfter("=").let { value -> URLDecoder.decode(value, ENCODING) })
-    }.toMap()
-
-    val action = keyValues["action"]?.takeIf { it.isNotBlank() } ?: return null
-
-    val requestEventId = keyValues["request"]?.takeIf { it.isNotBlank() } ?: return null
-    val sharedSecret = keyValues["secret"]?.takeIf { it.isNotBlank() } ?: return null
-    val otherUserKey = keyValues["other_user_key"]
-    val otherDeviceKey = keyValues["other_device_key"]
-
-    val keys = keyValues.keys
-            .filter { it.startsWith("key_") }
-            .map {
-                URLDecoder.decode(it.substringAfter("key_"), ENCODING) to (keyValues[it] ?: return null)
-            }
-            .toMap()
-
-    return QrCodeData(
-            userId,
-            requestEventId,
-            action,
-            keys,
-            sharedSecret,
-            otherUserKey,
-            otherDeviceKey
-    )
 }

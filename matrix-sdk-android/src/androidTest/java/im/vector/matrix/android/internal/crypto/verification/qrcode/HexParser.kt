@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,20 @@
 
 package im.vector.matrix.android.internal.crypto.verification.qrcode
 
-import im.vector.matrix.android.internal.crypto.crosssigning.toBase64NoPadding
-import java.security.SecureRandom
-
-fun generateSharedSecretV2(): String {
-    val secureRandom = SecureRandom()
-
-    // 8 bytes long
-    val secretBytes = ByteArray(8)
-    secureRandom.nextBytes(secretBytes)
-    return secretBytes.toBase64NoPadding()
+fun hexToByteArray(hex: String): ByteArray {
+    // Remove all spaces
+    return hex.replace(" ", "")
+            .let {
+                if (it.length % 2 != 0) "0$it" else it
+            }
+            .let {
+                ByteArray(it.length / 2)
+                        .apply {
+                            for (i in this.indices) {
+                                val index = i * 2
+                                val v = it.substring(index, index + 2).toInt(16)
+                                this[i] = v.toByte()
+                            }
+                        }
+            }
 }

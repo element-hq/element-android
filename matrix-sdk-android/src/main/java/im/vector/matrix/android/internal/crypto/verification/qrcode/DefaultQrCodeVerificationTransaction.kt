@@ -28,7 +28,7 @@ import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.verification.DefaultVerificationTransaction
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfo
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfoStart
-import im.vector.matrix.android.internal.util.withoutPrefix
+import im.vector.matrix.android.internal.util.exhaustive
 import timber.log.Timber
 
 internal class DefaultQrCodeVerificationTransaction(
@@ -46,7 +46,7 @@ internal class DefaultQrCodeVerificationTransaction(
 ) : DefaultVerificationTransaction(transactionId, otherUserId, otherDeviceId, isIncoming), QrCodeVerificationTransaction {
 
     override val qrCodeText: String?
-        get() = qrCodeData?.toUrl()
+        get() = qrCodeData?.toEncodedString()
 
     override var state: VerificationTxState = VerificationTxState.None
         set(newState) {
@@ -69,89 +69,76 @@ internal class DefaultQrCodeVerificationTransaction(
         }
 
         // Perform some checks
-        if (otherQrCodeData.action != QrCodeData.ACTION_VERIFY) {
-            Timber.d("## Verification QR: Invalid action ${otherQrCodeData.action}")
-            cancel(CancelCode.QrCodeInvalid)
-            return
-        }
-
-        if (otherQrCodeData.userId != otherUserId) {
-            Timber.d("## Verification QR: Mismatched user ${otherQrCodeData.userId}")
-            cancel(CancelCode.MismatchedUser)
-            return
-        }
-
-        if (otherQrCodeData.requestId != transactionId) {
-            Timber.d("## Verification QR: Invalid transaction actual ${otherQrCodeData.requestId} expected:$transactionId")
+        if (otherQrCodeData.transactionId != transactionId) {
+            Timber.d("## Verification QR: Invalid transaction actual ${otherQrCodeData.transactionId} expected:$transactionId")
             cancel(CancelCode.QrCodeInvalid)
             return
         }
 
         // check master key
-        if (otherQrCodeData.userId != userId
-                && otherQrCodeData.otherUserKey == null) {
-            // Verification with other user, other_user_key is mandatory in this case
-            Timber.d("## Verification QR: Invalid, missing other_user_key")
-            cancel(CancelCode.QrCodeInvalid)
-            return
-        }
-
-        if (otherQrCodeData.otherUserKey != null
-                && otherQrCodeData.otherUserKey != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
-            Timber.d("## Verification QR: Invalid other master key ${otherQrCodeData.otherUserKey}")
-            cancel(CancelCode.MismatchedKeys)
-            return
-        }
-
-        // Check device key if available
-        if (otherQrCodeData.otherDeviceKey != null
-                && otherQrCodeData.otherDeviceKey != cryptoStore.getUserDevice(userId, deviceId)?.fingerprint()) {
-            Timber.d("## Verification QR: Invalid other device key")
-            cancel(CancelCode.MismatchedKeys)
-            return
-        }
+        when (otherQrCodeData) {
+            is QrCodeData.VerifyingAnotherUser             -> {
+                if (otherQrCodeData.otherUserMasterCrossSigningPublicKey
+                        != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
+                    Timber.d("## Verification QR: Invalid other master key ${otherQrCodeData.otherUserMasterCrossSigningPublicKey}")
+                    cancel(CancelCode.MismatchedKeys)
+                    return
+                } else Unit
+            }
+            is QrCodeData.SelfVerifyingMasterKeyTrusted    -> {
+                if (otherQrCodeData.userMasterCrossSigningPublicKey
+                        != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
+                    Timber.d("## Verification QR: Invalid other master key ${otherQrCodeData.userMasterCrossSigningPublicKey}")
+                    cancel(CancelCode.MismatchedKeys)
+                    return
+                } else Unit
+            }
+            is QrCodeData.SelfVerifyingMasterKeyNotTrusted -> {
+                if (otherQrCodeData.userMasterCrossSigningPublicKey
+                        != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
+                    Timber.d("## Verification QR: Invalid other master key ${otherQrCodeData.userMasterCrossSigningPublicKey}")
+                    cancel(CancelCode.MismatchedKeys)
+                    return
+                } else Unit
+            }
+        }.exhaustive
 
         val toVerifyDeviceIds = mutableListOf<String>()
         var canTrustOtherUserMasterKey = false
 
-        val otherDevices = cryptoStore.getUserDevices(otherUserId)
-        otherQrCodeData.keys.keys.forEach { key ->
-            Timber.w("## Verification QR: Checking key $key")
-
-            when (val keyNoPrefix = key.withoutPrefix("ed25519:")) {
-                otherQrCodeData.keys[key] -> {
-                    // Maybe master key?
-                    if (otherQrCodeData.keys[key] == crossSigningService.getUserCrossSigningKeys(otherUserId)?.masterKey()?.unpaddedBase64PublicKey) {
-                        canTrustOtherUserMasterKey = true
-                    } else {
-                        cancel(CancelCode.MismatchedKeys)
-                        return
-                    }
-                }
-                else                      -> {
-                    when (val otherDevice = otherDevices?.get(keyNoPrefix)) {
-                        null -> {
-                            // Unknown device, ignore
-                        }
-                        else -> {
-                            when (otherDevice.fingerprint()) {
-                                null                      -> {
-                                    // Ignore
-                                }
-                                otherQrCodeData.keys[key] -> {
-                                    // Store the deviceId to verify after
-                                    toVerifyDeviceIds.add(key)
-                                }
-                                else                      -> {
-                                    cancel(CancelCode.MismatchedKeys)
-                                    return
-                                }
-                            }
-                        }
-                    }
+        // Check device key if available
+        when (otherQrCodeData) {
+            is QrCodeData.VerifyingAnotherUser             -> {
+                if (otherQrCodeData.userMasterCrossSigningPublicKey
+                        != crossSigningService.getUserCrossSigningKeys(otherUserId)?.masterKey()?.unpaddedBase64PublicKey) {
+                    Timber.d("## Verification QR: Invalid user master key ${otherQrCodeData.userMasterCrossSigningPublicKey}")
+                    cancel(CancelCode.MismatchedKeys)
+                    return
+                } else {
+                    canTrustOtherUserMasterKey = true
+                    Unit
                 }
             }
-        }
+            is QrCodeData.SelfVerifyingMasterKeyTrusted    -> {
+                if (otherQrCodeData.otherDeviceKey
+                        != cryptoStore.getUserDevice(userId, deviceId)?.fingerprint()) {
+                    Timber.d("## Verification QR: Invalid other device key ${otherQrCodeData.otherDeviceKey}")
+                    cancel(CancelCode.MismatchedKeys)
+                    return
+                } else Unit
+            }
+            is QrCodeData.SelfVerifyingMasterKeyNotTrusted -> {
+                if (otherQrCodeData.deviceKey
+                        != cryptoStore.getUserDevice(otherUserId, otherDeviceId ?: "")?.fingerprint()) {
+                    Timber.d("## Verification QR: Invalid device key ${otherQrCodeData.deviceKey}")
+                    cancel(CancelCode.MismatchedKeys)
+                    return
+                } else {
+                    toVerifyDeviceIds.add(otherQrCodeData.deviceKey)
+                    Unit
+                }
+            }
+        }.exhaustive
 
         if (!canTrustOtherUserMasterKey && toVerifyDeviceIds.isEmpty()) {
             // Nothing to verify
@@ -163,13 +150,6 @@ internal class DefaultQrCodeVerificationTransaction(
         // Send the shared secret so that sender can trust me
         // qrCodeData.sharedSecret will be used to send the start request
         start(otherQrCodeData.sharedSecret)
-
-        val safeOtherDeviceId = otherDeviceId
-        if (!otherQrCodeData.otherDeviceKey.isNullOrBlank()
-                && safeOtherDeviceId != null) {
-            // Locally verify the device
-            toVerifyDeviceIds.add(safeOtherDeviceId)
-        }
 
         // Trust the other user
         trust(canTrustOtherUserMasterKey, toVerifyDeviceIds.distinct())
@@ -264,8 +244,8 @@ internal class DefaultQrCodeVerificationTransaction(
 
         // TODO what if the otherDevice is not in this list? and should we
         toVerifyDeviceIds.forEach {
-                    setDeviceVerified(otherUserId, it)
-                }
+            setDeviceVerified(otherUserId, it)
+        }
         transport.done(transactionId)
         state = VerificationTxState.Verified
     }

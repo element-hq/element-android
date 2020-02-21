@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.crypto.verification.qrcode
+package im.vector.matrix.android.internal.util
 
-import im.vector.matrix.android.internal.crypto.crosssigning.toBase64NoPadding
-import java.security.SecureRandom
-
-fun generateSharedSecretV2(): String {
-    val secureRandom = SecureRandom()
-
-    // 8 bytes long
-    val secretBytes = ByteArray(8)
-    secureRandom.nextBytes(secretBytes)
-    return secretBytes.toBase64NoPadding()
-}
+// Trick to ensure that when block is exhaustive
+internal val <T> T.exhaustive: T get() = this
