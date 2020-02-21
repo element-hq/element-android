@@ -77,7 +77,8 @@ internal class RoomSummaryMapper @Inject constructor(
                 isEncrypted = roomSummaryEntity.isEncrypted,
                 typingRoomMemberIds = roomSummaryEntity.typingUserIds.toList(),
                 breadcrumbsIndex = roomSummaryEntity.breadcrumbsIndex,
-                roomEncryptionTrustLevel = roomSummaryEntity.roomEncryptionTrustLevel
+                roomEncryptionTrustLevel = roomSummaryEntity.roomEncryptionTrustLevel,
+                inviterId = roomSummaryEntity.inviterId
         )
     }
 }

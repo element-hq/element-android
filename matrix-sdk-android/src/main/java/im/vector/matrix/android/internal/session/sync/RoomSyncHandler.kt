@@ -32,6 +32,7 @@ import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.query.copyToRealmOrIgnore
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
 import im.vector.matrix.android.internal.database.query.getOrCreate
@@ -93,7 +94,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 }
             is HandlingStrategy.INVITED ->
                 handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_invited_rooms, 0.1f) {
-                    handleInvitedRoom(realm, it.key, it.value, syncLocalTimeStampMillis)
+                    handleInvitedRoom(realm, it.key, it.value)
                 }
 
             is HandlingStrategy.LEFT    -> {
@@ -134,9 +135,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 if (event.eventId == null || event.stateKey == null) {
                     continue
                 }
-                val eventEntity = event.toEntity(roomId, SendState.SYNCED).let {
-                    realm.copyToRealmOrUpdate(it)
-                }
+                val eventEntity = event.toEntity(roomId, SendState.SYNCED).copyToRealmOrIgnore(realm)
                 CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
                     eventId = event.eventId
                     root = eventEntity
@@ -177,19 +176,26 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
 
     private fun handleInvitedRoom(realm: Realm,
                                   roomId: String,
-                                  roomSync: InvitedRoomSync,
-                                  syncLocalTimestampMillis: Long): RoomEntity {
+                                  roomSync: InvitedRoomSync): RoomEntity {
         Timber.v("Handle invited sync for room $roomId")
         val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: realm.createObject(roomId)
         roomEntity.membership = Membership.INVITE
         if (roomSync.inviteState != null && roomSync.inviteState.events.isNotEmpty()) {
-            val chunkEntity = handleTimelineEvents(realm, roomId, roomEntity, roomSync.inviteState.events, syncLocalTimestampMillis = syncLocalTimestampMillis)
-            roomEntity.addOrUpdate(chunkEntity)
+            roomSync.inviteState.events.forEach {
+                if (it.stateKey == null) {
+                    return@forEach
+                }
+                val eventEntity = it.toEntity(roomId, SendState.SYNCED).copyToRealmOrIgnore(realm)
+                CurrentStateEventEntity.getOrCreate(realm, roomId, it.stateKey, it.type).apply {
+                    eventId = eventEntity.eventId
+                    root = eventEntity
+                }
+            }
         }
-        val hasRoomMember = roomSync.inviteState?.events?.firstOrNull {
+        val inviterEvent = roomSync.inviteState?.events?.lastOrNull {
             it.type == EventType.STATE_ROOM_MEMBER
-        } != null
-        roomSummaryUpdater.update(realm, roomId, Membership.INVITE, updateMembers = hasRoomMember)
+        }
+        roomSummaryUpdater.update(realm, roomId, Membership.INVITE, updateMembers = true, inviterId = inviterEvent?.senderId)
         return roomEntity
     }
 
@@ -197,7 +203,6 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                roomId: String,
                                roomSync: RoomSync): RoomEntity {
         val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: realm.createObject(roomId)
-
         roomEntity.membership = Membership.LEAVE
         roomEntity.chunks.deleteAllFromRealm()
         roomSummaryUpdater.update(realm, roomId, Membership.LEAVE, roomSync.summary, roomSync.unreadNotifications)
@@ -229,9 +234,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             }
             eventIds.add(event.eventId)
             val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
-            val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).let {
-                realm.copyToRealmOrUpdate(it)
-            }
+            val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm)
             if (event.isStateEvent() && event.stateKey != null) {
                 CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
                     eventId = event.eventId

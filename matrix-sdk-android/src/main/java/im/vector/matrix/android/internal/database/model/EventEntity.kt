@@ -24,7 +24,7 @@ import io.realm.RealmObject
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
 
-internal open class EventEntity(@PrimaryKey var eventId: String = "",
+internal open class EventEntity(@Index var eventId: String = "",
                                 @Index var roomId: String = "",
                                 @Index var type: String = "",
                                 var content: String? = null,

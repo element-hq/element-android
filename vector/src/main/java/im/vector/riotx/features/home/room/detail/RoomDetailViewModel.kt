@@ -950,8 +950,8 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun observeSummaryState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
             if (summary.membership == Membership.INVITE) {
-                summary.latestPreviewableEvent?.root?.senderId?.let { senderId ->
-                    session.getUser(senderId)
+                summary.inviterId?.let { inviterId ->
+                    session.getUser(inviterId)
                 }?.also {
                     setState { copy(asyncInviter = Success(it)) }
                 }

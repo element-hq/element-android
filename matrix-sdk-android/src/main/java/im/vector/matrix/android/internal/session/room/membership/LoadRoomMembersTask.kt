@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.database.mapper.toEntity
 import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
+import im.vector.matrix.android.internal.database.query.copyToRealmOrIgnore
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
@@ -73,9 +74,7 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
                 if (roomMemberEvent.eventId == null || roomMemberEvent.stateKey == null) {
                     continue
                 }
-                val eventEntity = roomMemberEvent.toEntity(roomId, SendState.SYNCED).let {
-                    realm.copyToRealmOrUpdate(it)
-                }
+                val eventEntity = roomMemberEvent.toEntity(roomId, SendState.SYNCED).copyToRealmOrIgnore(realm)
                 CurrentStateEventEntity.getOrCreate(realm, roomId, roomMemberEvent.stateKey, roomMemberEvent.type).apply {
                     eventId = roomMemberEvent.eventId
                     root = eventEntity

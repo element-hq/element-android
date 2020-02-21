@@ -45,7 +45,8 @@ data class RoomSummary constructor(
         val versioningState: VersioningState = VersioningState.NONE,
         val readMarkerId: String? = null,
         val userDrafts: List<UserDraft> = emptyList(),
-        var isEncrypted: Boolean,
+        val isEncrypted: Boolean,
+        val inviterId: String? = null,
         val typingRoomMemberIds: List<String> = emptyList(),
         val breadcrumbsIndex: Int = NOT_IN_BREADCRUMBS,
         // TODO Plug it
@@ -62,3 +63,5 @@ data class RoomSummary constructor(
         const val NOT_IN_BREADCRUMBS = -1
     }
 }
+
+
