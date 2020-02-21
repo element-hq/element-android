@@ -83,11 +83,15 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
             }
             Timber.v("## SAS Verification live observer: received msgId: ${event.eventId} type: ${event.getClearType()}")
 
+            // Relates to is not encrypted
+            val relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo?.eventId
+
             if (event.senderId == userId) {
                 // If it's send from me, we need to keep track of Requests or Start
                 // done from another device of mine
 
-                if (EventType.MESSAGE == event.type) {
+
+                if (EventType.MESSAGE == event.getClearType()) {
                     val msgType = event.getClearContent().toModel<MessageContent>()?.msgType
                     if (MessageType.MSGTYPE_VERIFICATION_REQUEST == msgType) {
                         event.getClearContent().toModel<MessageVerificationRequestContent>()?.let {
@@ -98,26 +102,26 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
                             }
                         }
                     }
-                } else if (EventType.KEY_VERIFICATION_START == event.type) {
+                } else if (EventType.KEY_VERIFICATION_START == event.getClearType()) {
                     event.getClearContent().toModel<MessageVerificationStartContent>()?.let {
                         if (it.fromDevice != deviceId) {
                             // The verification is started from another device
-                            Timber.v("## SAS Verification live observer: Transaction started by other device  tid:${it.transactionID} ")
-                            it.transactionID?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
+                            Timber.v("## SAS Verification live observer: Transaction started by other device  tid:${relatesTo} ")
+                            relatesTo?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
                             params.verificationService.onRoomRequestHandledByOtherDevice(event)
                         }
                     }
-                } else if (EventType.KEY_VERIFICATION_READY == event.type) {
+                } else if (EventType.KEY_VERIFICATION_READY == event.getClearType()) {
                     event.getClearContent().toModel<MessageVerificationReadyContent>()?.let {
                         if (it.fromDevice != deviceId) {
                             // The verification is started from another device
-                            Timber.v("## SAS Verification live observer: Transaction started by other device  tid:${it.transactionID} ")
-                            it.transactionID?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
+                            Timber.v("## SAS Verification live observer: Transaction started by other device  tid:${relatesTo} ")
+                            relatesTo?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
                             params.verificationService.onRoomRequestHandledByOtherDevice(event)
                         }
                     }
-                } else if (EventType.KEY_VERIFICATION_CANCEL == event.type || EventType.KEY_VERIFICATION_DONE == event.type) {
-                    event.getClearContent().toModel<MessageRelationContent>()?.relatesTo?.eventId?.let {
+                } else if (EventType.KEY_VERIFICATION_CANCEL == event.getClearType() || EventType.KEY_VERIFICATION_DONE == event.getClearType()) {
+                    relatesTo?.let {
                         transactionsHandledByOtherDevice.remove(it)
                         params.verificationService.onRoomRequestHandledByOtherDevice(event)
                     }
@@ -127,7 +131,6 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
                 return@forEach
             }
 
-            val relatesTo = event.getClearContent().toModel<MessageRelationContent>()?.relatesTo?.eventId
             if (relatesTo != null && transactionsHandledByOtherDevice.contains(relatesTo)) {
                 // Ignore this event, it is directed to another of my devices
                 Timber.v("## SAS Verification live observer: Ignore Transaction handled by other device  tid:$relatesTo ")
