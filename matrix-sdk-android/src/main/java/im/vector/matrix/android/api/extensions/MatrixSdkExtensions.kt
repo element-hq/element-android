@@ -33,7 +33,5 @@ fun CryptoDeviceInfo.getFingerprintHumanReadable() = fingerprint()
  * ========================================================================================== */
 
 fun List<DeviceInfo>.sortByLastSeen(): List<DeviceInfo> {
-    val list = toMutableList()
-    list.sortWith(DatedObjectComparators.descComparator)
-    return list
+    return this.sortedByDescending { it.lastSeenTs ?: 0 }
 }
