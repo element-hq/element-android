@@ -28,6 +28,7 @@ import io.realm.RealmConfiguration
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
@@ -47,6 +48,8 @@ internal class ShieldTrustUpdater @Inject constructor(
     private val backgroundCryptoRealm = AtomicReference<Realm>()
     private val backgroundSessionRealm = AtomicReference<Realm>()
 
+    private val isStarted = AtomicBoolean()
+
 //    private var cryptoDevicesResult: RealmResults<DeviceInfoEntity>? = null
 
 //    private val cryptoDeviceChangeListener = object : OrderedRealmCollectionChangeListener<RealmResults<DeviceInfoEntity>> {
@@ -57,38 +60,46 @@ internal class ShieldTrustUpdater @Inject constructor(
 //    }
 
     fun start() {
-        eventBus.register(this)
-        BACKGROUND_HANDLER.post {
-            val cryptoRealm = Realm.getInstance(cryptoRealmConfiguration)
-            backgroundCryptoRealm.set(cryptoRealm)
+        if (isStarted.compareAndSet(false, true)) {
+            eventBus.register(this)
+            BACKGROUND_HANDLER.post {
+                val cryptoRealm = Realm.getInstance(cryptoRealmConfiguration)
+                backgroundCryptoRealm.set(cryptoRealm)
 //            cryptoDevicesResult = cryptoRealm.where<DeviceInfoEntity>().findAll()
 //            cryptoDevicesResult?.addChangeListener(cryptoDeviceChangeListener)
 
-            backgroundSessionRealm.set(Realm.getInstance(sessionRealmConfiguration))
+                backgroundSessionRealm.set(Realm.getInstance(sessionRealmConfiguration))
+            }
         }
     }
 
     fun stop() {
-        eventBus.unregister(this)
-        BACKGROUND_HANDLER.post {
-            //            cryptoDevicesResult?.removeAllChangeListeners()
-            backgroundCryptoRealm.getAndSet(null).also {
-                it?.close()
-            }
-            backgroundSessionRealm.getAndSet(null).also {
-                it?.close()
+        if (isStarted.compareAndSet(true, false)) {
+            eventBus.unregister(this)
+            BACKGROUND_HANDLER.post {
+                //            cryptoDevicesResult?.removeAllChangeListeners()
+                backgroundCryptoRealm.getAndSet(null).also {
+                    it?.close()
+                }
+                backgroundSessionRealm.getAndSet(null).also {
+                    it?.close()
+                }
             }
         }
     }
 
     @Subscribe
     fun onRoomMemberChange(update: SessionToCryptoRoomMembersUpdate) {
+        if (!isStarted.get()) {
+            return
+        }
+
         taskExecutor.executorScope.launch {
             val updatedTrust = computeTrustTask.execute(ComputeTrustTask.Params(update.userIds))
             // We need to send that back to session base
 
             BACKGROUND_HANDLER.post {
-                backgroundSessionRealm.get().executeTransaction { realm ->
+                backgroundSessionRealm.get()?.executeTransaction { realm ->
                     roomSummaryUpdater.updateShieldTrust(realm, update.roomId, updatedTrust)
                 }
             }
@@ -97,6 +108,10 @@ internal class ShieldTrustUpdater @Inject constructor(
 
     @Subscribe
     fun onTrustUpdate(update: CryptoToSessionUserTrustChange) {
+        if (!isStarted.get()) {
+            return
+        }
+
         onCryptoDevicesChange(update.userIds)
     }
 
@@ -123,7 +138,7 @@ internal class ShieldTrustUpdater @Inject constructor(
                 taskExecutor.executorScope.launch {
                     val updatedTrust = computeTrustTask.execute(ComputeTrustTask.Params(userList))
                     BACKGROUND_HANDLER.post {
-                        backgroundSessionRealm.get().executeTransaction { realm ->
+                        backgroundSessionRealm.get()?.executeTransaction { realm ->
                             roomSummaryUpdater.updateShieldTrust(realm, roomId, updatedTrust)
                         }
                     }
