@@ -90,7 +90,6 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
                 // If it's send from me, we need to keep track of Requests or Start
                 // done from another device of mine
 
-
                 if (EventType.MESSAGE == event.getClearType()) {
                     val msgType = event.getClearContent().toModel<MessageContent>()?.msgType
                     if (MessageType.MSGTYPE_VERIFICATION_REQUEST == msgType) {
@@ -106,7 +105,7 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
                     event.getClearContent().toModel<MessageVerificationStartContent>()?.let {
                         if (it.fromDevice != deviceId) {
                             // The verification is started from another device
-                            Timber.v("## SAS Verification live observer: Transaction started by other device  tid:${relatesTo} ")
+                            Timber.v("## SAS Verification live observer: Transaction started by other device  tid:$relatesTo ")
                             relatesTo?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
                             params.verificationService.onRoomRequestHandledByOtherDevice(event)
                         }
@@ -115,7 +114,7 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
                     event.getClearContent().toModel<MessageVerificationReadyContent>()?.let {
                         if (it.fromDevice != deviceId) {
                             // The verification is started from another device
-                            Timber.v("## SAS Verification live observer: Transaction started by other device  tid:${relatesTo} ")
+                            Timber.v("## SAS Verification live observer: Transaction started by other device  tid:$relatesTo ")
                             relatesTo?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
                             params.verificationService.onRoomRequestHandledByOtherDevice(event)
                         }
