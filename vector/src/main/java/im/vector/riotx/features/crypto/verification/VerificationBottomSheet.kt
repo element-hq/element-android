@@ -26,8 +26,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.transition.AutoTransition
-import androidx.transition.TransitionManager
 import butterknife.BindView
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
@@ -39,7 +37,7 @@ import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY
 import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
-import im.vector.riotx.core.extensions.commitTransactionNow
+import im.vector.riotx.core.extensions.commitTransaction
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.features.crypto.quads.SharedSecureStorageActivity
@@ -50,7 +48,6 @@ import im.vector.riotx.features.crypto.verification.qrconfirmation.VerificationQ
 import im.vector.riotx.features.crypto.verification.request.VerificationRequestFragment
 import im.vector.riotx.features.home.AvatarRenderer
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.bottom_sheet_verification.*
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.reflect.KClass
@@ -65,6 +62,8 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
             // Special mode where UX should show loading wheel until other session sends a request/tx
             val selfVerificationMode: Boolean = false
     ) : Parcelable
+
+    override val showExpanded = true
 
     @Inject
     lateinit var verificationViewModelFactory: VerificationBottomSheetViewModel.Factory
@@ -258,12 +257,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     private fun showFragment(fragmentClass: KClass<out Fragment>, bundle: Bundle) {
         if (childFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
-            // We want to animate the bottomsheet bound changes
-            bottomSheetFragmentContainer.getParentCoordinatorLayout()?.let { coordinatorLayout ->
-                TransitionManager.beginDelayedTransition(coordinatorLayout, AutoTransition().apply { duration = 150 })
-            }
-            // Commit now, to ensure changes occurs before next rendering frame (or bottomsheet want animate)
-            childFragmentManager.commitTransactionNow {
+            childFragmentManager.commitTransaction {
                 replace(R.id.bottomSheetFragmentContainer,
                         fragmentClass.java,
                         bundle,
