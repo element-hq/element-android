@@ -28,10 +28,6 @@ data class CryptoDeviceInfo(
         override val keys: Map<String, String>? = null,
         override val signatures: Map<String, Map<String, String>>? = null,
         val unsigned: JsonDict? = null,
-
-        // TODO how to store if this device is verified by a user SSK, or is legacy trusted?
-        // I need to know if it is trusted via cross signing (Trusted because bob verified it)
-
         var trustLevel: DeviceTrustLevel? = null,
         var isBlocked: Boolean = false
 ) : CryptoInfo {
@@ -75,19 +71,6 @@ data class CryptoDeviceInfo(
         keys?.let { map["keys"] = it }
         return map
     }
-//
-//    /**
-//     * @return a dictionary of the parameters
-//     */
-//    fun toDeviceKeys(): DeviceKeys {
-//        return DeviceKeys(
-//                userId = userId,
-//                deviceId = deviceId,
-//                algorithms = algorithms!!,
-//                keys = keys!!,
-//                signatures = signatures!!
-//        )
-//    }
 }
 
 internal fun CryptoDeviceInfo.toRest(): RestDeviceInfo {
