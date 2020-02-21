@@ -227,6 +227,6 @@ class VerificationTest : InstrumentedTest {
             pr.otherCanScanQrCode() shouldBe expectedResultForBob.otherCanScanQrCode
         }
 
-        cryptoTestData.close()
+        cryptoTestData.cleanUp(mTestHelper)
     }
 }

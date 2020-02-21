@@ -129,7 +129,7 @@ class KeysBackupTest : InstrumentedTest {
         assertNotNull(megolmBackupCreationInfo.recoveryKey)
 
         stateObserver.stopAndCheckStates(null)
-        bobSession.close()
+        mTestHelper.signOutAndClose(bobSession)
     }
 
     /**
@@ -160,7 +160,7 @@ class KeysBackupTest : InstrumentedTest {
         assertTrue(keysBackup.isEnabled)
 
         stateObserver.stopAndCheckStates(null)
-        bobSession.close()
+        mTestHelper.signOutAndClose(bobSession)
     }
 
     /**
@@ -200,7 +200,7 @@ class KeysBackupTest : InstrumentedTest {
                         KeysBackupState.ReadyToBackUp
                 )
         )
-        cryptoTestData.close()
+        cryptoTestData.cleanUp(mTestHelper)
     }
 
     /**
@@ -239,7 +239,7 @@ class KeysBackupTest : InstrumentedTest {
         assertEquals("All keys must have been marked as backed up", nbOfKeys, backedUpKeys)
 
         stateObserver.stopAndCheckStates(null)
-        cryptoTestData.close()
+        cryptoTestData.cleanUp(mTestHelper)
     }
 
     /**
@@ -282,7 +282,7 @@ class KeysBackupTest : InstrumentedTest {
         assertKeysEquals(session.exportKeys(), sessionData)
 
         stateObserver.stopAndCheckStates(null)
-        cryptoTestData.close()
+        cryptoTestData.cleanUp(mTestHelper)
     }
 
     /**
@@ -308,7 +308,7 @@ class KeysBackupTest : InstrumentedTest {
 
         checkRestoreSuccess(testData, importRoomKeysResult.totalNumberOfKeys, importRoomKeysResult.successfullyNumberOfImportedKeys)
 
-        testData.cryptoTestData.close()
+        testData.cleanUp(mTestHelper)
     }
 
     /**
@@ -359,7 +359,7 @@ class KeysBackupTest : InstrumentedTest {
         // Request is either sent or unsent
         assertTrue(unsentRequestAfterRestoration == null && sentRequestAfterRestoration == null)
 
-        testData.cryptoTestData.close()
+        testData.cleanUp(mTestHelper)
     }
 
     /**
@@ -418,7 +418,7 @@ class KeysBackupTest : InstrumentedTest {
         assertEquals(2, keysBackupVersionTrust.signatures.size)
 
         stateObserver.stopAndCheckStates(null)
-        testData.cryptoTestData.close()
+        testData.cleanUp(mTestHelper)
     }
 
     /**
@@ -477,7 +477,7 @@ class KeysBackupTest : InstrumentedTest {
         assertEquals(2, keysBackupVersionTrust.signatures.size)
 
         stateObserver.stopAndCheckStates(null)
-        testData.cryptoTestData.close()
+        testData.cleanUp(mTestHelper)
     }
 
     /**
@@ -516,7 +516,7 @@ class KeysBackupTest : InstrumentedTest {
         assertEquals(KeysBackupState.NotTrusted, testData.aliceSession2.cryptoService().keysBackupService().state)
 
         stateObserver.stopAndCheckStates(null)
-        testData.cryptoTestData.close()
+        testData.cleanUp(mTestHelper)
     }
 
     /**
@@ -577,7 +577,7 @@ class KeysBackupTest : InstrumentedTest {
         assertEquals(2, keysBackupVersionTrust.signatures.size)
 
         stateObserver.stopAndCheckStates(null)
-        testData.cryptoTestData.close()
+        testData.cleanUp(mTestHelper)
     }
 
     /**
@@ -619,7 +619,7 @@ class KeysBackupTest : InstrumentedTest {
         assertEquals(KeysBackupState.NotTrusted, testData.aliceSession2.cryptoService().keysBackupService().state)
 
         stateObserver.stopAndCheckStates(null)
-        testData.cryptoTestData.close()
+        testData.cleanUp(mTestHelper)
     }
 
     /**
@@ -652,7 +652,7 @@ class KeysBackupTest : InstrumentedTest {
         // onSuccess may not have been called
         assertNull(importRoomKeysResult)
 
-        testData.cryptoTestData.close()
+        testData.cleanUp(mTestHelper)
     }
 
     /**
@@ -707,7 +707,7 @@ class KeysBackupTest : InstrumentedTest {
 
         checkRestoreSuccess(testData, importRoomKeysResult.totalNumberOfKeys, importRoomKeysResult.successfullyNumberOfImportedKeys)
 
-        testData.cryptoTestData.close()
+        testData.cleanUp(mTestHelper)
     }
 
     /**
@@ -743,7 +743,7 @@ class KeysBackupTest : InstrumentedTest {
         // onSuccess may not have been called
         assertNull(importRoomKeysResult)
 
-        testData.cryptoTestData.close()
+        testData.cleanUp(mTestHelper)
     }
 
     /**
@@ -771,7 +771,7 @@ class KeysBackupTest : InstrumentedTest {
 
         checkRestoreSuccess(testData, importRoomKeysResult.totalNumberOfKeys, importRoomKeysResult.successfullyNumberOfImportedKeys)
 
-        testData.cryptoTestData.close()
+        testData.cleanUp(mTestHelper)
     }
 
     /**
@@ -804,7 +804,7 @@ class KeysBackupTest : InstrumentedTest {
         // onSuccess may not have been called
         assertNull(importRoomKeysResult)
 
-        testData.cryptoTestData.close()
+        testData.cleanUp(mTestHelper)
     }
 
     /**
@@ -844,7 +844,7 @@ class KeysBackupTest : InstrumentedTest {
         assertEquals(signature.device!!.deviceId, cryptoTestData.firstSession.sessionParams.credentials.deviceId)
 
         stateObserver.stopAndCheckStates(null)
-        cryptoTestData.close()
+        cryptoTestData.cleanUp(mTestHelper)
     }
 
     /**
@@ -873,7 +873,7 @@ class KeysBackupTest : InstrumentedTest {
         // - Log Alice on a new device
         val aliceSession2 = mTestHelper.logIntoAccount(cryptoTestData.firstSession.myUserId, defaultSessionParamsWithInitialSync)
 
-        cryptoTestData.close()
+        cryptoTestData.cleanUp(mTestHelper)
 
         val keysBackup2 = aliceSession2.cryptoService().keysBackupService()
 
@@ -903,7 +903,7 @@ class KeysBackupTest : InstrumentedTest {
 
         stateObserver.stopAndCheckStates(null)
         stateObserver2.stopAndCheckStates(null)
-        aliceSession2.close()
+        mTestHelper.signOutAndClose(aliceSession2)
     }
 
     /**
@@ -970,7 +970,7 @@ class KeysBackupTest : InstrumentedTest {
         assertFalse(keysBackup.isEnabled)
 
         stateObserver.stopAndCheckStates(null)
-        cryptoTestData.close()
+        cryptoTestData.cleanUp(mTestHelper)
     }
 
     /**
@@ -1073,8 +1073,8 @@ class KeysBackupTest : InstrumentedTest {
 
         stateObserver.stopAndCheckStates(null)
         stateObserver2.stopAndCheckStates(null)
-        aliceSession2.close()
-        cryptoTestData.close()
+        mTestHelper.signOutAndClose(aliceSession2)
+        cryptoTestData.cleanUp(mTestHelper)
     }
 
     /**
@@ -1103,7 +1103,7 @@ class KeysBackupTest : InstrumentedTest {
         assertFalse(keysBackup.isEnabled)
 
         stateObserver.stopAndCheckStates(null)
-        cryptoTestData.close()
+        cryptoTestData.cleanUp(mTestHelper)
     }
 
     /* ==========================================================================================
@@ -1186,7 +1186,12 @@ class KeysBackupTest : InstrumentedTest {
     private data class KeysBackupScenarioData(val cryptoTestData: CryptoTestData,
                                               val aliceKeys: List<OlmInboundGroupSessionWrapper>,
                                               val prepareKeysBackupDataResult: PrepareKeysBackupDataResult,
-                                              val aliceSession2: Session)
+                                              val aliceSession2: Session) {
+        fun cleanUp(testHelper: CommonTestHelper) {
+            cryptoTestData.cleanUp(testHelper)
+            testHelper.signOutAndClose(aliceSession2)
+        }
+    }
 
     /**
      * Common initial condition

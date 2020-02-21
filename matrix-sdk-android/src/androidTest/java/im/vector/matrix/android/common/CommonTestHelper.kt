@@ -283,11 +283,10 @@ class CommonTestHelper(context: Context) {
     /**
      * Clear all provided sessions
      */
-    fun Iterable<Session>.close() = forEach { it.close() }
+    fun Iterable<Session>.signOutAndClose() = forEach { signOutAndClose(it) }
 
-    fun signout(session: Session) {
-        val lock = CountDownLatch(1)
-        session.signOut(true, TestMatrixCallback(lock))
-        await(lock)
+    fun signOutAndClose(session: Session) {
+        doSync<Unit> { session.signOut(true, it) }
+        session.close()
     }
 }

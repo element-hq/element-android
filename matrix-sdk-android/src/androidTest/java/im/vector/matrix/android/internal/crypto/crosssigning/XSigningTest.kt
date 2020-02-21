@@ -55,7 +55,7 @@ class XSigningTest : InstrumentedTest {
 
         assertTrue("Signing Keys should be trusted", aliceSession.cryptoService().crossSigningService().checkUserTrust(aliceSession.myUserId).isVerified())
 
-        mTestHelper.signout(aliceSession)
+        mTestHelper.signOutAndClose(aliceSession)
     }
 
     @Test
@@ -74,12 +74,8 @@ class XSigningTest : InstrumentedTest {
                 password = TestConstants.PASSWORD
         )
 
-        val latch = CountDownLatch(2)
-
-        aliceSession.cryptoService().crossSigningService().initializeCrossSigning(aliceAuthParams, TestMatrixCallback(latch))
-        bobSession.cryptoService().crossSigningService().initializeCrossSigning(bobAuthParams, TestMatrixCallback(latch))
-
-        mTestHelper.await(latch)
+        mTestHelper.doSync<Unit> { aliceSession.cryptoService().crossSigningService().initializeCrossSigning(aliceAuthParams, it) }
+        mTestHelper.doSync<Unit> { bobSession.cryptoService().crossSigningService().initializeCrossSigning(bobAuthParams, it) }
 
         // Check that alice can see bob keys
         val downloadLatch = CountDownLatch(1)
@@ -96,8 +92,8 @@ class XSigningTest : InstrumentedTest {
 
         assertFalse("Bob keys from alice pov should not be trusted", bobKeysFromAlicePOV.isTrusted())
 
-        mTestHelper.signout(aliceSession)
-        mTestHelper.signout(bobSession)
+        mTestHelper.signOutAndClose(aliceSession)
+        mTestHelper.signOutAndClose(bobSession)
     }
 
     @Test
@@ -202,8 +198,8 @@ class XSigningTest : InstrumentedTest {
         val result = aliceSession.cryptoService().crossSigningService().checkDeviceTrust(bobUserId, bobSecondDeviceId, null)
         assertTrue("Bob second device should be trusted from alice POV", result.isCrossSignedVerified())
 
-        mTestHelper.signout(aliceSession)
-        mTestHelper.signout(bobSession)
-        mTestHelper.signout(bobSession2)
+        mTestHelper.signOutAndClose(aliceSession)
+        mTestHelper.signOutAndClose(bobSession)
+        mTestHelper.signOutAndClose(bobSession2)
     }
 }

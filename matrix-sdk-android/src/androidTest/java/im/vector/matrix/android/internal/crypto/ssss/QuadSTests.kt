@@ -128,7 +128,7 @@ class QuadSTests : InstrumentedTest {
         assertNotNull(defaultKeyAccountData?.content)
         assertEquals("Unexpected default key ${defaultKeyAccountData?.content}", TEST_KEY_ID, defaultKeyAccountData?.content?.get("key"))
 
-        mTestHelper.signout(aliceSession)
+        mTestHelper.signOutAndClose(aliceSession)
     }
 
     @Test
@@ -172,7 +172,7 @@ class QuadSTests : InstrumentedTest {
         }
 
         assertEquals("Secret mismatch", clearSecret, decryptedSecret)
-        mTestHelper.signout(aliceSession)
+        mTestHelper.signOutAndClose(aliceSession)
     }
 
     @Test
@@ -192,7 +192,7 @@ class QuadSTests : InstrumentedTest {
             quadS.setDefaultKey(TEST_KEY_ID, it)
         }
 
-        mTestHelper.signout(aliceSession)
+        mTestHelper.signOutAndClose(aliceSession)
     }
 
     @Test
@@ -239,7 +239,7 @@ class QuadSTests : InstrumentedTest {
             )
         }
 
-        mTestHelper.signout(aliceSession)
+        mTestHelper.signOutAndClose(aliceSession)
     }
 
     @Test
@@ -298,7 +298,7 @@ class QuadSTests : InstrumentedTest {
             )
         }
 
-        mTestHelper.signout(aliceSession)
+        mTestHelper.signOutAndClose(aliceSession)
     }
 
     private fun assertAccountData(session: Session, type: String): UserAccountDataEvent {

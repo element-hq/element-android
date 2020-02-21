@@ -132,7 +132,7 @@ class SASTest : InstrumentedTest {
         assertNull(bobVerificationService.getExistingTransaction(aliceSession.myUserId, txID))
         assertNull(aliceVerificationService.getExistingTransaction(bobSession.myUserId, txID))
 
-        cryptoTestData.close()
+        cryptoTestData.cleanUp(mTestHelper)
     }
 
     @Test
@@ -189,7 +189,7 @@ class SASTest : InstrumentedTest {
 
         assertEquals("Request should be cancelled with m.unknown_method", CancelCode.UnknownMethod, cancelReason)
 
-        cryptoTestData.close()
+        cryptoTestData.cleanUp(mTestHelper)
     }
 
     @Test
@@ -227,7 +227,7 @@ class SASTest : InstrumentedTest {
         val cancelReq = canceledToDeviceEvent!!.content.toModel<KeyVerificationCancel>()!!
         assertEquals("Request should be cancelled with m.unknown_method", CancelCode.UnknownMethod.value, cancelReq.code)
 
-        cryptoTestData.close()
+        cryptoTestData.cleanUp(mTestHelper)
     }
 
     @Test
@@ -265,7 +265,7 @@ class SASTest : InstrumentedTest {
         val cancelReq = canceledToDeviceEvent!!.content.toModel<KeyVerificationCancel>()!!
         assertEquals("Request should be cancelled with m.unknown_method", CancelCode.UnknownMethod.value, cancelReq.code)
 
-        cryptoTestData.close()
+        cryptoTestData.cleanUp(mTestHelper)
     }
 
     private fun fakeBobStart(bobSession: Session,
@@ -334,7 +334,7 @@ class SASTest : InstrumentedTest {
         mTestHelper.await(aliceCreatedLatch)
         mTestHelper.await(aliceCancelledLatch)
 
-        cryptoTestData.close()
+        cryptoTestData.cleanUp(mTestHelper)
     }
 
     /**
@@ -393,7 +393,7 @@ class SASTest : InstrumentedTest {
             assertTrue("all agreed Short Code should be known by alice", startReq!!.shortAuthenticationStrings!!.contains(it))
         }
 
-        cryptoTestData.close()
+        cryptoTestData.cleanUp(mTestHelper)
     }
 
     @Test
@@ -449,7 +449,7 @@ class SASTest : InstrumentedTest {
         assertEquals("Should have same SAS", aliceTx.getShortCodeRepresentation(SasMode.DECIMAL),
                 bobTx.getShortCodeRepresentation(SasMode.DECIMAL))
 
-        cryptoTestData.close()
+        cryptoTestData.cleanUp(mTestHelper)
     }
 
     @Test
@@ -514,6 +514,6 @@ class SASTest : InstrumentedTest {
 
         assertTrue("alice device should be verified from bob point of view", aliceDeviceInfoFromBobPOV!!.isVerified)
         assertTrue("bob device should be verified from alice point of view", bobDeviceInfoFromAlicePOV!!.isVerified)
-        cryptoTestData.close()
+        cryptoTestData.cleanUp(mTestHelper)
     }
 }
