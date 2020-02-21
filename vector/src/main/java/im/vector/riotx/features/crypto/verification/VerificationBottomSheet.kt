@@ -135,7 +135,9 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
         state.otherUserMxItem?.let { matrixItem ->
             if (state.isMe) {
-                if (state.sasTransactionState == VerificationTxState.Verified || state.qrTransactionState == VerificationTxState.Verified) {
+                if (state.sasTransactionState == VerificationTxState.Verified
+                        || state.qrTransactionState == VerificationTxState.Verified
+                        || state.verifiedFromPrivateKeys) {
                     otherUserAvatarImageView.setImageResource(R.drawable.ic_shield_trusted)
                 } else {
                     otherUserAvatarImageView.setImageResource(R.drawable.ic_shield_warning)
