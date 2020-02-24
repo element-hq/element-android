@@ -19,7 +19,7 @@ Bugfix 🐛:
  - Fix rotation of full-size image (#647)
  - Fix joining rooms from directory via federation isn't working. (#808)
  - Leaving a room creates a stuck "leaving room" loading screen. (#1041)
- - Fix some invitation handling issues
+ - Fix some invitation handling issues (#1013)
 
 Translations 🗣:
  -
