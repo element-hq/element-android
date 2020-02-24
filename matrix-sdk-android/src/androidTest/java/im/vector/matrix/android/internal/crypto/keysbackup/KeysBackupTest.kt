@@ -861,6 +861,7 @@ class KeysBackupTest : InstrumentedTest {
      */
     @Test
     fun testCheckAndStartKeysBackupWhenRestartingAMatrixSession() {
+        fail("This test still fail. To investigate")
         // - Create a backup version
         val cryptoTestData = mCryptoTestHelper.doE2ETestWithAliceAndBobInARoomWithEncryptedMessages()
 
@@ -1010,9 +1011,6 @@ class KeysBackupTest : InstrumentedTest {
         val oldDeviceId = cryptoTestData.firstSession.sessionParams.credentials.deviceId!!
         val oldKeyBackupVersion = keysBackup.currentBackupVersion
         val aliceUserId = cryptoTestData.firstSession.myUserId
-
-        // Close first Alice session, else they will share the same Crypto store and the test fails.
-        cryptoTestData.firstSession.close()
 
         // - Log Alice on a new device
         val aliceSession2 = mTestHelper.logIntoAccount(aliceUserId, defaultSessionParamsWithInitialSync)
