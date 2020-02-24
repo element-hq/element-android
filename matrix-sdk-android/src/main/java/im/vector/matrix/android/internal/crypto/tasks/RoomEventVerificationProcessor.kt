@@ -93,7 +93,8 @@ internal class RoomEventVerificationProcessor @Inject constructor(
                             forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
                     )
                 } catch (e: MXCryptoError) {
-                    Timber.e("## SAS Failed to decrypt event: ${event.eventId}")
+                    Timber.w("## SAS Failed to decrypt event: ${event.eventId} cause: ${e.localizedMessage}")
+                    return@forEach
                 }
             }
             Timber.v("## SAS Verification: received msgId: ${event.eventId} type: ${event.getClearType()}")
