@@ -23,6 +23,7 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
@@ -90,7 +91,9 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: R
         })
     }
 
-    private fun handleShareRoomProfile() {
-        _viewEvents.post(RoomProfileViewEvents.ShareRoomProfile)
+    private fun handleShareRoomProfile() = withState { state ->
+        PermalinkFactory.createPermalink(state.roomId)?.let { permalink ->
+            _viewEvents.post(RoomProfileViewEvents.ShareRoomProfile(permalink))
+        }
     }
 }

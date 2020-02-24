@@ -26,7 +26,6 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
@@ -94,7 +93,7 @@ class RoomProfileFragment @Inject constructor(
                 is RoomProfileViewEvents.Loading            -> showLoading(it.message)
                 is RoomProfileViewEvents.Failure            -> showFailure(it.throwable)
                 is RoomProfileViewEvents.OnLeaveRoomSuccess -> onLeaveRoom()
-                is RoomProfileViewEvents.ShareRoomProfile      -> onShareRoomProfile()
+                is RoomProfileViewEvents.ShareRoomProfile   -> onShareRoomProfile(it.permalink)
             }.exhaustive
         }
         roomListQuickActionsSharedActionViewModel
@@ -204,9 +203,7 @@ class RoomProfileFragment @Inject constructor(
                 .show()
     }
 
-    private fun onShareRoomProfile() {
-        PermalinkFactory.createPermalink(roomProfileArgs.roomId)?.let { permalink ->
-            startSharePlainTextIntent(fragment = this, chooserTitle = null, text = permalink)
-        }
+    private fun onShareRoomProfile(permalink: String) {
+        startSharePlainTextIntent(fragment = this, chooserTitle = null, text = permalink)
     }
 }

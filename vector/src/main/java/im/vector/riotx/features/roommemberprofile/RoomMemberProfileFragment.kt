@@ -29,7 +29,6 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.animations.AppBarStateChangeListener
@@ -99,7 +98,7 @@ class RoomMemberProfileFragment @Inject constructor(
                 is RoomMemberProfileViewEvents.Failure                -> showFailure(it.throwable)
                 is RoomMemberProfileViewEvents.OnIgnoreActionSuccess  -> Unit
                 is RoomMemberProfileViewEvents.StartVerification      -> handleStartVerification(it)
-                is RoomMemberProfileViewEvents.ShareRoomMemberProfile -> handleShareRoomMemberProfile()
+                is RoomMemberProfileViewEvents.ShareRoomMemberProfile -> handleShareRoomMemberProfile(it.permalink)
             }.exhaustive
         }
     }
@@ -225,9 +224,7 @@ class RoomMemberProfileFragment @Inject constructor(
         vectorBaseActivity.notImplemented("Mention")
     }
 
-    private fun handleShareRoomMemberProfile() = withState(viewModel) {
-        PermalinkFactory.createPermalink(it.userId)?.let { permalink ->
-            startSharePlainTextIntent(fragment = this, chooserTitle = null, text = permalink)
-        }
+    private fun handleShareRoomMemberProfile(permalink: String) = withState(viewModel) {
+        startSharePlainTextIntent(fragment = this, chooserTitle = null, text = permalink)
     }
 }
