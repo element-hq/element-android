@@ -27,9 +27,11 @@ import im.vector.matrix.android.internal.util.createBackgroundHandler
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import java.util.concurrent.atomic.AtomicBoolean
+import timber.log.Timber
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
@@ -47,7 +49,6 @@ internal class ShieldTrustUpdater @Inject constructor(
         private val BACKGROUND_HANDLER = createBackgroundHandler("SHIELD_CRYPTO_DB_THREAD")
     }
 
-    private val backgroundCryptoRealm = AtomicReference<Realm>()
     private val backgroundSessionRealm = AtomicReference<Realm>()
 
     private val isStarted = AtomicBoolean()
@@ -65,11 +66,6 @@ internal class ShieldTrustUpdater @Inject constructor(
         if (isStarted.compareAndSet(false, true)) {
             eventBus.register(this)
             BACKGROUND_HANDLER.post {
-                val cryptoRealm = Realm.getInstance(cryptoRealmConfiguration)
-                backgroundCryptoRealm.set(cryptoRealm)
-//            cryptoDevicesResult = cryptoRealm.where<DeviceInfoEntity>().findAll()
-//            cryptoDevicesResult?.addChangeListener(cryptoDeviceChangeListener)
-
                 backgroundSessionRealm.set(Realm.getInstance(sessionRealmConfiguration))
             }
         }
@@ -79,10 +75,6 @@ internal class ShieldTrustUpdater @Inject constructor(
         if (isStarted.compareAndSet(true, false)) {
             eventBus.unregister(this)
             BACKGROUND_HANDLER.post {
-                //            cryptoDevicesResult?.removeAllChangeListeners()
-                backgroundCryptoRealm.getAndSet(null).also {
-                    it?.close()
-                }
                 backgroundSessionRealm.getAndSet(null).also {
                     it?.close()
                 }
@@ -118,29 +110,38 @@ internal class ShieldTrustUpdater @Inject constructor(
 
     private fun onCryptoDevicesChange(users: List<String>) {
         BACKGROUND_HANDLER.post {
-            val impactedRoomsId = backgroundSessionRealm.get().where(RoomMemberSummaryEntity::class.java)
-                    .`in`(RoomMemberSummaryEntityFields.USER_ID, users.toTypedArray())
-                    .findAll()
-                    .map { it.roomId }
-                    .distinct()
+            val impactedRoomsId = backgroundSessionRealm.get()?.where(RoomMemberSummaryEntity::class.java)
+                    ?.`in`(RoomMemberSummaryEntityFields.USER_ID, users.toTypedArray())
+                    ?.findAll()
+                    ?.map { it.roomId }
+                    ?.distinct()
 
             val map = HashMap<String, List<String>>()
-            impactedRoomsId.forEach { roomId ->
-                RoomMemberSummaryEntity.where(backgroundSessionRealm.get(), roomId)
-                        .findAll()
-                        .let { results ->
-                            map[roomId] = results.map { it.userId }
-                        }
+            impactedRoomsId?.forEach { roomId ->
+                backgroundSessionRealm.get()?.let { realm ->
+                    RoomMemberSummaryEntity.where(realm, roomId)
+                            .findAll()
+                            .let { results ->
+                                map[roomId] = results.map { it.userId }
+                            }
+                }
             }
 
             map.forEach { entry ->
                 val roomId = entry.key
                 val userList = entry.value
                 taskExecutor.executorScope.launch {
-                    val updatedTrust = computeTrustTask.execute(ComputeTrustTask.Params(userList))
-                    BACKGROUND_HANDLER.post {
-                        backgroundSessionRealm.get()?.executeTransaction { realm ->
-                            roomSummaryUpdater.updateShieldTrust(realm, roomId, updatedTrust)
+                    withContext(coroutineDispatchers.crypto) {
+                        try {
+                            // Can throw if the crypto database has been closed in between, in this case log and ignore?
+                            val updatedTrust = computeTrustTask.execute(ComputeTrustTask.Params(userList))
+                            BACKGROUND_HANDLER.post {
+                                backgroundSessionRealm.get()?.executeTransaction { realm ->
+                                    roomSummaryUpdater.updateShieldTrust(realm, roomId, updatedTrust)
+                                }
+                            }
+                        } catch (failure: Throwable) {
+                            Timber.e(failure)
                         }
                     }
                 }
