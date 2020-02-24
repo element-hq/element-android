@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.crypto.keysbackup.model.rest
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.network.parsing.ForceToBoolean
 
 /**
  * Backup data for one key.
@@ -39,7 +40,9 @@ data class KeyBackupData(
 
         /**
          * Whether the device backing up the key has verified the device that the key is from.
+         * Force to boolean because of https://github.com/matrix-org/synapse/issues/6977
          */
+        @ForceToBoolean
         @Json(name = "is_verified")
         val isVerified: Boolean = false,
 
