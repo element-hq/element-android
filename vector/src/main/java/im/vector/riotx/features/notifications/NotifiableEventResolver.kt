@@ -26,7 +26,6 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMemberContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getEditedEventId
-import im.vector.matrix.android.api.session.room.timeline.getLastMessageBody
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
