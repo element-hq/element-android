@@ -190,6 +190,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     eventId = eventEntity.eventId
                     root = eventEntity
                 }
+                roomMemberEventHandler.handle(realm, roomId, it)
             }
         }
         val inviterEvent = roomSync.inviteState?.events?.lastOrNull {
