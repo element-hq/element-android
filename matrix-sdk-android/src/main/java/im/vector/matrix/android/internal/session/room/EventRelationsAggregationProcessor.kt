@@ -17,7 +17,6 @@ package im.vector.matrix.android.internal.session.room
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.crypto.CryptoService
-import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.AggregatedAnnotation
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -32,7 +31,6 @@ import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessagePollResponseContent
 import im.vector.matrix.android.api.session.room.model.message.MessageRelationContent
 import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
-import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.EventMapper
@@ -172,36 +170,41 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                     EventType.ENCRYPTED            -> {
                         // Relation type is in clear
                         val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
-                        if (encryptedEventContent?.relatesTo?.type == RelationType.REPLACE
-                                || encryptedEventContent?.relatesTo?.type == RelationType.RESPONSE
-                        ) {
+                        val relationType = encryptedEventContent?.relatesTo?.type
+                        if (RelationType.REPLACE == relationType || RelationType.RESPONSE == relationType) {
                             // we need to decrypt if needed
-                            decryptIfNeeded(event)
-                            event.getClearContent().toModel<MessageContent>()?.let {
-                                if (encryptedEventContent.relatesTo.type == RelationType.REPLACE) {
-                                    Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
-                                    // A replace!
-                                    handleReplace(realm, event, it, roomId, isLocalEcho, encryptedEventContent.relatesTo.eventId)
-                                } else if (encryptedEventContent.relatesTo.type == RelationType.RESPONSE) {
-                                    Timber.v("###RESPONSE in room $roomId for event ${event.eventId}")
-                                    handleResponse(realm, userId, event, it, roomId, isLocalEcho, encryptedEventContent.relatesTo.eventId)
-                                }
-                            }
-                        } else if (encryptedEventContent?.relatesTo?.type == RelationType.REFERENCE) {
-                            decryptIfNeeded(event)
-                            when (event.getClearType()) {
-                                EventType.KEY_VERIFICATION_DONE,
-                                EventType.KEY_VERIFICATION_CANCEL,
-                                EventType.KEY_VERIFICATION_ACCEPT,
-                                EventType.KEY_VERIFICATION_START,
-                                EventType.KEY_VERIFICATION_MAC,
-                                EventType.KEY_VERIFICATION_READY,
-                                EventType.KEY_VERIFICATION_KEY -> {
-                                    Timber.v("## SAS REF in room $roomId for event ${event.eventId}")
-                                    encryptedEventContent.relatesTo.eventId?.let {
-                                        handleVerification(realm, event, roomId, isLocalEcho, it, userId)
+                            if (event.mxDecryptionResult != null) {
+                                event.getClearContent().toModel<MessageContent>()?.let {
+                                    if (encryptedEventContent.relatesTo.type == RelationType.REPLACE) {
+                                        Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
+                                        // A replace!
+                                        handleReplace(realm, event, it, roomId, isLocalEcho, encryptedEventContent.relatesTo.eventId)
+                                    } else if (encryptedEventContent.relatesTo.type == RelationType.RESPONSE) {
+                                        Timber.v("###RESPONSE in room $roomId for event ${event.eventId}")
+                                        handleResponse(realm, userId, event, it, roomId, isLocalEcho, encryptedEventContent.relatesTo.eventId)
                                     }
                                 }
+                            } else {
+                                Timber.v("## Ignore encrypted relation $relationType in room $roomId for event ${event.eventId}")
+                            }
+                        } else if (RelationType.REFERENCE == relationType) {
+                            if (event.mxDecryptionResult != null) {
+                                when (event.getClearType()) {
+                                    EventType.KEY_VERIFICATION_DONE,
+                                    EventType.KEY_VERIFICATION_CANCEL,
+                                    EventType.KEY_VERIFICATION_ACCEPT,
+                                    EventType.KEY_VERIFICATION_START,
+                                    EventType.KEY_VERIFICATION_MAC,
+                                    EventType.KEY_VERIFICATION_READY,
+                                    EventType.KEY_VERIFICATION_KEY -> {
+                                        Timber.v("## SAS REF in room $roomId for event ${event.eventId}")
+                                        encryptedEventContent.relatesTo.eventId?.let {
+                                            handleVerification(realm, event, roomId, isLocalEcho, it, userId)
+                                        }
+                                    }
+                                }
+                            } else {
+                                Timber.v("## Ignore encrypted relation $relationType in room $roomId for event ${event.eventId}")
                             }
                         }
                     }
@@ -229,23 +232,6 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 }
             } catch (t: Throwable) {
                 Timber.e(t, "## Should not happen ")
-            }
-        }
-    }
-
-    private fun decryptIfNeeded(event: Event) {
-        if (event.mxDecryptionResult == null) {
-            try {
-                val result = cryptoService.decryptEvent(event, event.roomId ?: "")
-                event.mxDecryptionResult = OlmDecryptionResult(
-                        payload = result.clearEvent,
-                        senderKey = result.senderCurve25519Key,
-                        keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
-                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
-                )
-            } catch (e: MXCryptoError) {
-                Timber.w("Failed to decrypt e2e replace")
-                // TODO -> we should keep track of this and retry, or aggregation will be broken
             }
         }
     }

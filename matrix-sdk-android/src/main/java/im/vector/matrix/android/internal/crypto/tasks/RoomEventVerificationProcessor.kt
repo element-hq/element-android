@@ -16,8 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.tasks
 
-import im.vector.matrix.android.api.session.crypto.CryptoService
-import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.crypto.sas.VerificationService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -28,21 +26,19 @@ import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationReadyContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationStartContent
-import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.crypto.verification.VerificationEventHandler
 import im.vector.matrix.android.internal.di.DeviceId
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.sync.RoomEventsProcessor
 import timber.log.Timber
 import java.util.ArrayList
-import java.util.UUID
 import javax.inject.Inject
 
 internal class RoomEventVerificationProcessor @Inject constructor(
         @DeviceId private val deviceId: String?,
         @UserId private val userId: String,
-        private val onVerificationEvent: VerificationEventHandler,
-        private val cryptoService: CryptoService) : RoomEventsProcessor {
+        private val onVerificationEvent: VerificationEventHandler
+) : RoomEventsProcessor {
 
     companion object {
         // XXX what about multi-account?
@@ -56,62 +52,61 @@ internal class RoomEventVerificationProcessor @Inject constructor(
                 EventType.KEY_VERIFICATION_CANCEL,
                 EventType.KEY_VERIFICATION_DONE,
                 EventType.KEY_VERIFICATION_READY,
-                EventType.MESSAGE,
-                EventType.ENCRYPTED
+                EventType.MESSAGE
         )
     }
 
     override suspend fun process(mode: RoomEventsProcessor.Mode, roomId: String, events: List<Event>) {
+
         if (mode != RoomEventsProcessor.Mode.INCREMENTAL_SYNC) {
+            // if it's a request automatically mark as outdated
             return
         }
         events.forEach { event ->
-            if (!ALLOWED_TYPES.contains(event.type)) {
-                return@forEach
-            }
+
             Timber.d("## SAS Verification: received msgId: ${event.eventId} msgtype: ${event.type} from ${event.senderId}")
             Timber.v("## SAS Verification: received msgId: $event")
 
             // If the request is in the future by more than 5 minutes or more than 10 minutes in the past,
             // the message should be ignored by the receiver.
 
-            if (!VerificationService.isValidRequest(event.ageLocalTs
-                            ?: event.originServerTs)) return@forEach Unit.also {
-                Timber.d("## SAS Verification: msgId: ${event.eventId} is outdated")
-            }
-
-            // decrypt if needed?
-            if (event.isEncrypted() && event.mxDecryptionResult == null) {
-                // TODO use a global event decryptor? attache to session and that listen to new sessionId?
-                // for now decrypt sync
-                try {
-                    val result = cryptoService.decryptEvent(event, roomId + UUID.randomUUID().toString())
-                    event.mxDecryptionResult = OlmDecryptionResult(
-                            payload = result.clearEvent,
-                            senderKey = result.senderCurve25519Key,
-                            keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
-                            forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
-                    )
-                } catch (e: MXCryptoError) {
-                    Timber.w("## SAS Failed to decrypt event: ${event.eventId} cause: ${e.localizedMessage}")
-                    return@forEach
+            if (!VerificationService.isValidRequest(event.ageLocalTs ?: event.originServerTs)) {
+                return@forEach Unit.also {
+                    Timber.d("## SAS Verification: msgId: ${event.eventId} is outdated")
                 }
             }
-            Timber.v("## SAS Verification: received msgId: ${event.eventId} type: ${event.getClearType()}")
+            // Event should be decrypted at this point
+
+            if (event.isEncrypted() && event.mxDecryptionResult == null) {
+                // TODO use a global event decryptor? attache to session and that listen to new sessionId?
+                Timber.w("## SAS Ignoring potential event, cannot decrypt event: ${event.eventId}")
+                return@forEach
+            }
+
+            val clearType = event.getClearType()
+            if (clearType == EventType.MESSAGE
+                    && MessageType.MSGTYPE_VERIFICATION_REQUEST != event.getClearContent().toModel<MessageContent>()?.msgType) {
+                Timber.d("## SAS Verification: discard msgId: ${event.eventId}, not interested")
+                return@forEach
+            }
+
+            if (!ALLOWED_TYPES.contains(clearType)) {
+                Timber.d("## SAS Verification: discard msgId: ${event.eventId}, not interested")
+                return@forEach
+            }
+
+            Timber.v("## SAS Verification: received msgId: ${event.eventId} type: $clearType")
 
             if (event.senderId == userId) {
                 // If it's send from me, we need to keep track of Requests or Start
                 // done from another device of mine
 
                 if (EventType.MESSAGE == event.type) {
-                    val msgType = event.getClearContent().toModel<MessageContent>()?.msgType
-                    if (MessageType.MSGTYPE_VERIFICATION_REQUEST == msgType) {
-                        event.getClearContent().toModel<MessageVerificationRequestContent>()?.let {
-                            if (it.fromDevice != deviceId) {
-                                // The verification is requested from another device
-                                Timber.v("## SAS Verification: Transaction requested from other device  tid:${event.eventId} ")
-                                event.eventId?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
-                            }
+                    event.getClearContent().toModel<MessageVerificationRequestContent>()?.let {
+                        if (it.fromDevice != deviceId) {
+                            // The verification is requested from another device
+                            Timber.v("## SAS Verification: Transaction requested from other device  tid:${event.eventId} ")
+                            event.eventId?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
                         }
                     }
                 } else if (EventType.KEY_VERIFICATION_START == event.type) {
@@ -139,7 +134,7 @@ internal class RoomEventVerificationProcessor @Inject constructor(
                     }
                 }
 
-                Timber.v("## SAS Verification ignoring message sent by me: ${event.eventId} type: ${event.getClearType()}")
+                Timber.v("## SAS Verification ignoring message sent by me: ${event.eventId} type: $clearType")
                 return@forEach
             }
 
