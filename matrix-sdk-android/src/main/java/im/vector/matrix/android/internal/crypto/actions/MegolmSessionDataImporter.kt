@@ -83,7 +83,7 @@ internal class MegolmSessionDataImporter @Inject constructor(private val olmDevi
             }
 
             if (progressListener != null) {
-                val progress = 100 * cpt / totalNumbersOfKeys
+                val progress = 100 * (cpt + 1) / totalNumbersOfKeys
 
                 if (lastProgress != progress) {
                     lastProgress = progress
