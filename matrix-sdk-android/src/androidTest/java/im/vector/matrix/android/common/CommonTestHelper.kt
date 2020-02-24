@@ -130,12 +130,14 @@ class CommonTestHelper(context: Context) {
             }
         }
         val timeline = room.createTimeline(null, TimelineSettings(10))
+        timeline.start()
         timeline.addListener(onEventSentListener)
         for (i in 0 until nbOfMessages) {
             room.sendTextMessage(message + " #" + (i + 1))
         }
         await(latch)
         timeline.removeListener(onEventSentListener)
+        timeline.dispose()
 
         // Check that all events has been created
         assertEquals(nbOfMessages.toLong(), sentEvents.size.toLong())

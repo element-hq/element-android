@@ -47,6 +47,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -101,6 +102,8 @@ class KeysBackupTest : InstrumentedTest {
         assertEquals(sessionsCount, sessions3.size)
         assertEquals(sessionsCount, cryptoTestData.firstSession.cryptoService().inboundGroupSessionsCount(false))
         assertEquals(0, cryptoTestData.firstSession.cryptoService().inboundGroupSessionsCount(true))
+
+        cryptoTestData.cleanUp(mTestHelper)
     }
 
     /**
@@ -325,6 +328,8 @@ class KeysBackupTest : InstrumentedTest {
      */
     @Test
     fun restoreKeysBackupAndKeyShareRequestTest() {
+        fail("Check with Valere for this test. I think we do not send key share request")
+
         val testData = createKeysBackupScenarioWithPassword(null)
 
         // - Check the SDK sent key share requests
@@ -885,12 +890,12 @@ class KeysBackupTest : InstrumentedTest {
         keysBackup2.addListener(object : KeysBackupStateListener {
             override fun onStateChange(newState: KeysBackupState) {
                 // Check the backup completes
-                if (keysBackup.state == KeysBackupState.ReadyToBackUp) {
+                if (newState == KeysBackupState.ReadyToBackUp) {
                     count++
 
                     if (count == 2) {
                         // Remove itself from the list of listeners
-                        keysBackup.removeListener(this)
+                        keysBackup2.removeListener(this)
 
                         latch.countDown()
                     }
@@ -1026,15 +1031,14 @@ class KeysBackupTest : InstrumentedTest {
 
         var isSuccessful = false
         val latch2 = CountDownLatch(1)
-        keysBackup2.backupAllGroupSessions(object : ProgressListener {
-            override fun onProgress(progress: Int, total: Int) {
-            }
-        }, object : TestMatrixCallback<Unit>(latch2, false) {
-            override fun onSuccess(data: Unit) {
-                isSuccessful = true
-                super.onSuccess(data)
-            }
-        })
+        keysBackup2.backupAllGroupSessions(
+                null,
+                object : TestMatrixCallback<Unit>(latch2, false) {
+                    override fun onSuccess(data: Unit) {
+                        isSuccessful = true
+                        super.onSuccess(data)
+                    }
+                })
         mTestHelper.await(latch2)
 
         assertFalse(isSuccessful)

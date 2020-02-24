@@ -236,7 +236,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
             }
         }
 
-        val bobTimeline = roomFromBobPOV.createTimeline(null, TimelineSettings(10))
+        val bobTimeline = roomFromBobPOV.createTimeline(null, TimelineSettings(20))
         bobTimeline.start()
         bobTimeline.addListener(bobEventsListener)
 

@@ -217,4 +217,9 @@ internal class DefaultSession @Inject constructor(
     override fun removeListener(listener: Session.Listener) {
         sessionListeners.removeListener(listener)
     }
+
+    // For easy debugging
+    override fun toString(): String {
+        return "$myUserId - ${sessionParams.credentials.deviceId}"
+    }
 }
