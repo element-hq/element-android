@@ -237,8 +237,8 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         }
     }
 
-    private fun handleShareRoomMemberProfile() = withState { state ->
-        PermalinkFactory.createPermalink(state.userId)?.let { permalink ->
+    private fun handleShareRoomMemberProfile() {
+        PermalinkFactory.createPermalink(initialState.userId)?.let { permalink ->
             _viewEvents.post(RoomMemberProfileViewEvents.ShareRoomMemberProfile(permalink))
         }
     }

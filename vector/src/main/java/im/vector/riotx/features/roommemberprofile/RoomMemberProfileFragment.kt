@@ -224,7 +224,7 @@ class RoomMemberProfileFragment @Inject constructor(
         vectorBaseActivity.notImplemented("Mention")
     }
 
-    private fun handleShareRoomMemberProfile(permalink: String) = withState(viewModel) {
+    private fun handleShareRoomMemberProfile(permalink: String) {
         startSharePlainTextIntent(fragment = this, chooserTitle = null, text = permalink)
     }
 }
