@@ -35,8 +35,9 @@ interface RoomEventsProcessor {
 class RoomEventsProcessors @Inject constructor(private val roomEventsProcessors: Lazy<Set<@JvmSuppressWildcards RoomEventsProcessor>>) : RoomEventsProcessor {
 
     override suspend fun process(mode: RoomEventsProcessor.Mode, roomId: String, events: List<Event>) {
+        val eventsWithRoomIds = if (mode == RoomEventsProcessor.Mode.INITIAL_SYNC) events.map { it.copy(roomId = roomId) } else events
         roomEventsProcessors.get().forEach {
-            it.process(mode, roomId, events)
+            it.process(mode, roomId, eventsWithRoomIds)
         }
     }
 }
