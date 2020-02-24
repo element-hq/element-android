@@ -80,6 +80,7 @@ import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.awaitCallback
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.olm.OlmException
@@ -809,7 +810,10 @@ internal class DefaultKeysBackupService @Inject constructor(
                 // new key is sent
                 val delayInMs = Random.nextLong(KEY_BACKUP_WAITING_TIME_TO_SEND_KEY_BACKUP_MILLIS)
 
-                uiHandler.postDelayed({ backupKeys() }, delayInMs)
+                cryptoCoroutineScope.launch {
+                    delay(delayInMs)
+                    uiHandler.post { backupKeys() }
+                }
             }
             else                                   -> {
                 Timber.v("maybeBackupKeys: Skip it because state: $state")
