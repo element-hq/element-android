@@ -1229,9 +1229,6 @@ class KeysBackupTest : InstrumentedTest {
 
         val aliceUserId = cryptoTestData.firstSession.myUserId
 
-        // Logout first Alice session, else they will share the same Crypto store and some tests may fail.
-        mTestHelper.doSync<Unit> { cryptoTestData.firstSession.signOut(true, it) }
-
         // - Log Alice on a new device
         val aliceSession2 = mTestHelper.logIntoAccount(aliceUserId, defaultSessionParamsWithInitialSync)
 
