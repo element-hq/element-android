@@ -26,6 +26,7 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -135,9 +136,10 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
 
     override fun handle(action: RoomMemberProfileAction) {
         when (action) {
-            is RoomMemberProfileAction.RetryFetchingInfo -> fetchProfileInfo()
-            is RoomMemberProfileAction.IgnoreUser        -> handleIgnoreAction()
-            is RoomMemberProfileAction.VerifyUser        -> prepareVerification()
+            is RoomMemberProfileAction.RetryFetchingInfo      -> fetchProfileInfo()
+            is RoomMemberProfileAction.IgnoreUser             -> handleIgnoreAction()
+            is RoomMemberProfileAction.VerifyUser             -> prepareVerification()
+            is RoomMemberProfileAction.ShareRoomMemberProfile -> handleShareRoomMemberProfile()
         }
     }
 
@@ -232,6 +234,12 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
             session.unIgnoreUserIds(listOf(state.userId), ignoreActionCallback)
         } else {
             session.ignoreUserIds(listOf(state.userId), ignoreActionCallback)
+        }
+    }
+
+    private fun handleShareRoomMemberProfile() {
+        PermalinkFactory.createPermalink(initialState.userId)?.let { permalink ->
+            _viewEvents.post(RoomMemberProfileViewEvents.ShareRoomMemberProfile(permalink))
         }
     }
 }

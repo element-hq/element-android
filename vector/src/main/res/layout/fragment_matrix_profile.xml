@@ -15,7 +15,7 @@
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/matrixProfileCollapsingToolbarLayout"
-            style="@style/VectorAppBarLayoutStyle"
+            android:theme="@style/Vector.Toolbar.Profile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?riotx_background"
