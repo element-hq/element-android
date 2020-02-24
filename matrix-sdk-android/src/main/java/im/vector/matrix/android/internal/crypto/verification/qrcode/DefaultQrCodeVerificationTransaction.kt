@@ -240,7 +240,7 @@ internal class DefaultQrCodeVerificationTransaction(
         if (otherUserId == userId) {
             // If me it's reasonable to sign and upload the device signature
             // Notice that i might not have the private keys, so may not be able to do it
-            crossSigningService.signDevice(otherDeviceId!!, object : MatrixCallback<Unit> {
+            crossSigningService.trustDevice(otherDeviceId!!, object : MatrixCallback<Unit> {
                 override fun onFailure(failure: Throwable) {
                     Timber.w(failure, "## QR Verification: Failed to sign new device $otherDeviceId")
                 }

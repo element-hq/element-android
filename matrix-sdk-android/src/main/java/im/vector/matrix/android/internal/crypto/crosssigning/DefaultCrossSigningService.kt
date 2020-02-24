@@ -587,7 +587,7 @@ internal class DefaultCrossSigningService @Inject constructor(
         checkSelfTrust()
     }
 
-    override fun signDevice(deviceId: String, callback: MatrixCallback<Unit>) {
+    override fun trustDevice(deviceId: String, callback: MatrixCallback<Unit>) {
         // This device should be yours
         val device = cryptoStore.getUserDevice(userId, deviceId)
         if (device == null) {

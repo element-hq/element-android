@@ -63,8 +63,8 @@ interface CrossSigningService {
     /**
      * Sign one of your devices and upload the signature
      */
-    fun signDevice(deviceId: String,
-                   callback: MatrixCallback<Unit>)
+    fun trustDevice(deviceId: String,
+                    callback: MatrixCallback<Unit>)
 
     fun checkDeviceTrust(otherUserId: String,
                          otherDeviceId: String,

@@ -47,6 +47,7 @@ import im.vector.matrix.android.internal.crypto.crosssigning.isVerified
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
+import timber.log.Timber
 
 data class VerificationBottomSheetViewState(
         val otherUserMxItem: MatrixItem? = null,
@@ -272,6 +273,16 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                                 res?.get(SELF_SIGNING_KEY_SSSS_NAME)
                         )
                         if (trustResult.isVerified()) {
+                            // Sign this device and upload the signature
+                            session.sessionParams.credentials.deviceId?.let { deviceId ->
+                                session.cryptoService()
+                                        .crossSigningService().trustDevice(deviceId, object : MatrixCallback<Unit> {
+                                            override fun onFailure(failure: Throwable) {
+                                                Timber.w("Failed to sign my device after recovery", failure)
+                                            }
+                                        })
+                            }
+
                             setState {
                                 copy(verifiedFromPrivateKeys = true)
                             }
