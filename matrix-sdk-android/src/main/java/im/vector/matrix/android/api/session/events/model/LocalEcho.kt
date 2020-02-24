@@ -20,7 +20,7 @@ import java.util.UUID
 
 object LocalEcho {
 
-    private const val PREFIX = "local."
+    private const val PREFIX = "\$local."
 
     fun isLocalEchoId(eventId: String) = eventId.startsWith(PREFIX)
 
