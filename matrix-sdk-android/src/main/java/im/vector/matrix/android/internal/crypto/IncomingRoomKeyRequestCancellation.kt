@@ -40,20 +40,21 @@ data class IncomingRoomKeyRequestCancellation(
         override val requestId: String? = null
 ) : IncomingRoomKeyRequestCommon {
     companion object {
-
         /**
          * Factory
          *
          * @param event the event
          */
-        fun fromEvent(event: Event): IncomingRoomKeyRequestCancellation {
-            val roomKeyShareRequestCancellation = event.getClearContent().toModel<RoomKeyShareCancellation>()!!
-
-            return IncomingRoomKeyRequestCancellation(
-                    userId = event.senderId,
-                    deviceId = roomKeyShareRequestCancellation.requestingDeviceId,
-                    requestId = roomKeyShareRequestCancellation.requestId
-            )
+        fun fromEvent(event: Event): IncomingRoomKeyRequestCancellation? {
+            return event.getClearContent()
+                    .toModel<RoomKeyShareCancellation>()
+                    ?.let {
+                        IncomingRoomKeyRequestCancellation(
+                                userId = event.senderId,
+                                deviceId = it.requestingDeviceId,
+                                requestId = it.requestId
+                        )
+                    }
         }
     }
 }

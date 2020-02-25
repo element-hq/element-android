@@ -53,8 +53,8 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
     fun onRoomKeyRequestEvent(event: Event) {
         val roomKeyShare = event.getClearContent().toModel<RoomKeyShare>()
         when (roomKeyShare?.action) {
-            RoomKeyShare.ACTION_SHARE_REQUEST      -> receivedRoomKeyRequests.add(IncomingRoomKeyRequest.fromEvent(event))
-            RoomKeyShare.ACTION_SHARE_CANCELLATION -> receivedRoomKeyRequestCancellations.add(IncomingRoomKeyRequestCancellation.fromEvent(event))
+            RoomKeyShare.ACTION_SHARE_REQUEST      -> IncomingRoomKeyRequest.fromEvent(event)?.let { receivedRoomKeyRequests.add(it) }
+            RoomKeyShare.ACTION_SHARE_CANCELLATION -> IncomingRoomKeyRequestCancellation.fromEvent(event)?.let { receivedRoomKeyRequestCancellations.add(it) }
             else                                   -> Timber.e("## onRoomKeyRequestEvent() : unsupported action ${roomKeyShare?.action}")
         }
     }

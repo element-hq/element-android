@@ -64,15 +64,17 @@ data class IncomingRoomKeyRequest(
          *
          * @param event the event
          */
-        fun fromEvent(event: Event): IncomingRoomKeyRequest {
-            val roomKeyShareRequest = event.getClearContent().toModel<RoomKeyShareRequest>()!!
-
-            return IncomingRoomKeyRequest(
-                    userId = event.senderId,
-                    deviceId = roomKeyShareRequest.requestingDeviceId,
-                    requestId = roomKeyShareRequest.requestId,
-                    requestBody = roomKeyShareRequest.body ?: RoomKeyRequestBody()
-            )
+        fun fromEvent(event: Event): IncomingRoomKeyRequest? {
+            return event.getClearContent()
+                    .toModel<RoomKeyShareRequest>()
+                    ?.let {
+                        IncomingRoomKeyRequest(
+                                userId = event.senderId,
+                                deviceId = it.requestingDeviceId,
+                                requestId = it.requestId,
+                                requestBody = it.body ?: RoomKeyRequestBody()
+                        )
+                    }
         }
     }
 }
