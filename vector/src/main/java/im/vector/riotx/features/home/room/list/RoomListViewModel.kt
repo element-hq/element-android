@@ -101,7 +101,18 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                 .observeOn(Schedulers.computation())
                 .map { buildRoomSummaries(it) }
                 .execute { async ->
-                    copy(asyncFilteredRooms = async)
+                    val invitedRooms = async()?.get(RoomCategory.INVITE)?.map { it.roomId }.orEmpty()
+                    val remainingJoining = joiningRoomsIds.intersect(invitedRooms)
+                    val remainingJoinErrors = joiningErrorRoomsIds.intersect(invitedRooms)
+                    val remainingRejecting = rejectingRoomsIds.intersect(invitedRooms)
+                    val remainingRejectErrors = rejectingErrorRoomsIds.intersect(invitedRooms)
+                    copy(
+                            asyncFilteredRooms = async,
+                            joiningRoomsIds = remainingJoining,
+                            joiningErrorRoomsIds = remainingJoinErrors,
+                            rejectingRoomsIds = remainingRejecting,
+                            rejectingErrorRoomsIds = remainingRejectErrors
+                    )
                 }
     }
 
@@ -229,7 +240,6 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                         else                                          -> groupRooms.add(room)
                     }
                 }
-
         return RoomSummaries().apply {
             put(RoomCategory.INVITE, invites)
             put(RoomCategory.FAVOURITE, favourites)

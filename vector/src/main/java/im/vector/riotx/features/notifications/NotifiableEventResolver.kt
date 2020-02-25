@@ -51,20 +51,20 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
     fun resolveEvent(event: Event/*, roomState: RoomState?, bingRule: PushRule?*/, session: Session): NotifiableEvent? {
         val roomID = event.roomId ?: return null
         val eventId = event.eventId ?: return null
+        if (event.getClearType() == EventType.STATE_ROOM_MEMBER) {
+            return resolveStateRoomEvent(event, session)
+        }
         val timelineEvent = session.getRoom(roomID)?.getTimeLineEvent(eventId) ?: return null
         when (event.getClearType()) {
-            EventType.MESSAGE           -> {
+            EventType.MESSAGE   -> {
                 return resolveMessageEvent(timelineEvent, session)
             }
-            EventType.ENCRYPTED         -> {
+            EventType.ENCRYPTED -> {
                 val messageEvent = resolveMessageEvent(timelineEvent, session)
                 messageEvent?.lockScreenVisibility = NotificationCompat.VISIBILITY_PRIVATE
                 return messageEvent
             }
-            EventType.STATE_ROOM_MEMBER -> {
-                return resolveStateRoomEvent(event, session)
-            }
-            else                        -> {
+            else                -> {
                 // If the event can be displayed, display it as is
                 Timber.w("NotifiableEventResolver Received an unsupported event matching a bing rule")
                 // TODO Better event text display

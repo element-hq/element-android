@@ -130,9 +130,9 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
     fun onEventRedacted(eventId: String) {
         synchronized(eventList) {
-            eventList.filter { it.eventId == eventId }.map { notifiableEvent ->
-                notifiableEvent.isRedacted = true
-                notifiableEvent.hasBeenDisplayed = false
+            eventList.find { it.eventId == eventId }?.apply {
+                isRedacted = true
+                hasBeenDisplayed = false
             }
         }
     }
@@ -182,7 +182,6 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                 e is InviteNotifiableEvent && e.roomId == roomId
             }
         }
-
         notificationUtils.cancelNotificationMessage(roomId, ROOM_INVITATION_NOTIFICATION_ID)
     }
 

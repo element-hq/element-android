@@ -60,9 +60,9 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                              rejectingErrorRoomsIds: Set<String>,
                              listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
         val secondLine = if (roomSummary.isDirect) {
-            roomSummary.latestPreviewableEvent?.root?.senderId
+            roomSummary.inviterId
         } else {
-            roomSummary.latestPreviewableEvent?.root?.senderId?.let {
+            roomSummary.inviterId?.let {
                 stringProvider.getString(R.string.invited_by, it)
             }
         }

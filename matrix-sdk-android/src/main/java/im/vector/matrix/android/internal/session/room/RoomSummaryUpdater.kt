@@ -81,7 +81,8 @@ internal class RoomSummaryUpdater @Inject constructor(
                roomSummary: RoomSyncSummary? = null,
                unreadNotifications: RoomSyncUnreadNotifications? = null,
                updateMembers: Boolean = false,
-               ephemeralResult: RoomSyncHandler.EphemeralResult? = null) {
+               ephemeralResult: RoomSyncHandler.EphemeralResult? = null,
+               inviterId: String? = null) {
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
         if (roomSummary != null) {
             if (roomSummary.heroes.isNotEmpty()) {
@@ -133,6 +134,12 @@ internal class RoomSummaryUpdater @Inject constructor(
         roomSummaryEntity.isEncrypted = encryptionEvent != null
         roomSummaryEntity.typingUserIds.clear()
         roomSummaryEntity.typingUserIds.addAll(ephemeralResult?.typingUserIds.orEmpty())
+
+        if (roomSummaryEntity.membership == Membership.INVITE && inviterId != null) {
+            roomSummaryEntity.inviterId = inviterId
+        } else if (roomSummaryEntity.membership != Membership.INVITE) {
+            roomSummaryEntity.inviterId = null
+        }
 
         if (updateMembers) {
             val otherRoomMembers = RoomMemberHelper(realm, roomId)

@@ -31,6 +31,7 @@ import im.vector.matrix.android.internal.database.model.ChunkEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
+import im.vector.matrix.android.internal.database.query.copyToRealmOrIgnore
 import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
@@ -199,9 +200,7 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
         val stateEvents = receivedChunk.stateEvents
 
         for (stateEvent in stateEvents) {
-            val stateEventEntity = stateEvent.toEntity(roomId, SendState.SYNCED).let {
-                realm.copyToRealmOrUpdate(it)
-            }
+            val stateEventEntity = stateEvent.toEntity(roomId, SendState.SYNCED).copyToRealmOrIgnore(realm)
             currentChunk.addStateEvent(roomId, stateEventEntity, direction)
             if (stateEvent.type == EventType.STATE_ROOM_MEMBER && stateEvent.stateKey != null) {
                 roomMemberContentsByUser[stateEvent.stateKey] = stateEvent.content.toModel<RoomMemberContent>()
@@ -213,9 +212,7 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                 continue
             }
             eventIds.add(event.eventId)
-            val eventEntity = event.toEntity(roomId, SendState.SYNCED).let {
-                realm.copyToRealmOrUpdate(it)
-            }
+            val eventEntity = event.toEntity(roomId, SendState.SYNCED).copyToRealmOrIgnore(realm)
             if (event.type == EventType.STATE_ROOM_MEMBER && event.stateKey != null) {
                 val contentToUse = if (direction == PaginationDirection.BACKWARDS) {
                     event.prevContent
