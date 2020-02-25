@@ -360,6 +360,7 @@ internal class DefaultCrossSigningService @Inject constructor(
             val checkSelfTrust = checkSelfTrust()
             if (checkSelfTrust.isVerified()) {
                 cryptoStore.storePrivateKeysInfo(masterKeyPrivateKey, uskKeyPrivateKey, sskPrivateKey)
+                setUserKeysAsTrusted(userId, true)
             }
             return checkSelfTrust
         }
