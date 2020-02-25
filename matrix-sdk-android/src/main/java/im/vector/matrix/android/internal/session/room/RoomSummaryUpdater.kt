@@ -134,7 +134,12 @@ internal class RoomSummaryUpdater @Inject constructor(
         roomSummaryEntity.isEncrypted = encryptionEvent != null
         roomSummaryEntity.typingUserIds.clear()
         roomSummaryEntity.typingUserIds.addAll(ephemeralResult?.typingUserIds.orEmpty())
-        roomSummaryEntity.inviterId = inviterId
+
+        if (roomSummaryEntity.membership == Membership.INVITE && inviterId != null) {
+            roomSummaryEntity.inviterId = inviterId
+        } else if (roomSummaryEntity.membership != Membership.INVITE) {
+            roomSummaryEntity.inviterId = null
+        }
 
         if (updateMembers) {
             val otherRoomMembers = RoomMemberHelper(realm, roomId)
