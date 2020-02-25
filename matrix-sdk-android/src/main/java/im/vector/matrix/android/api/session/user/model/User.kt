@@ -24,4 +24,9 @@ data class User(
         val userId: String,
         val displayName: String? = null,
         val avatarUrl: String? = null
-)
+) {
+    /**
+     * Return the display name or the user id
+     */
+    fun getBestName() = displayName?.takeIf { it.isNotEmpty() } ?: userId
+}

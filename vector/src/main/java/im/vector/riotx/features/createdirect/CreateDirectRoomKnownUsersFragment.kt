@@ -159,7 +159,7 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
         val chip = Chip(requireContext())
         chip.setChipBackgroundColorResource(android.R.color.transparent)
         chip.chipStrokeWidth = dimensionConverter.dpToPx(1).toFloat()
-        chip.text = if (user.displayName.isNullOrBlank()) user.userId else user.displayName
+        chip.text = user.getBestName()
         chip.isClickable = true
         chip.isCheckable = false
         chip.isCloseIconVisible = true

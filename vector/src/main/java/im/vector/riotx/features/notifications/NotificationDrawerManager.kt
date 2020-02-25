@@ -203,7 +203,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
         val user = session.getUser(session.myUserId)
         // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
-        val myUserDisplayName = user?.displayName?.takeIf { it.isNotBlank() } ?: session.myUserId
+        val myUserDisplayName = user?.getBestName() ?: session.myUserId
         val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(user?.avatarUrl, avatarSize, avatarSize, ContentUrlResolver.ThumbnailMethod.SCALE)
         synchronized(eventList) {
             Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER ")
