@@ -25,10 +25,12 @@ import im.vector.riotx.core.epoxy.profiles.buildProfileSection
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.ui.list.genericFooterItem
+import im.vector.riotx.features.settings.VectorPreferences
 import javax.inject.Inject
 
 class RoomProfileController @Inject constructor(
         private val stringProvider: StringProvider,
+        private val vectorPreferences: VectorPreferences,
         colorProvider: ColorProvider
 ) : TypedEpoxyController<RoomProfileViewState>() {
 
@@ -43,6 +45,7 @@ class RoomProfileController @Inject constructor(
         fun onUploadsClicked()
         fun onSettingsClicked()
         fun onLeaveRoomClicked()
+        fun onRoomIdClicked()
     }
 
     override fun buildModels(data: RoomProfileViewState?) {
@@ -105,5 +108,19 @@ class RoomProfileController @Inject constructor(
                 editable = false,
                 action = { callback?.onLeaveRoomClicked() }
         )
+
+        // Advanced
+        if (vectorPreferences.developerMode()) {
+            buildProfileSection(stringProvider.getString(R.string.room_settings_category_advanced_title))
+            buildProfileAction(
+                    id = "roomId",
+                    title = stringProvider.getString(R.string.room_settings_room_internal_id),
+                    subtitle = roomSummary.roomId,
+                    dividerColor = dividerColor,
+                    divider = false,
+                    editable = false,
+                    action = { callback?.onRoomIdClicked() }
+            )
+        }
     }
 }
