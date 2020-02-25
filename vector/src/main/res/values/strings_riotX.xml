@@ -18,7 +18,6 @@
     </plurals>
     <string name="poll_item_selected_aria">Selected Option</string>
     <string name="command_description_poll">Creates a simple poll</string>
-    
     <string name="verification_cannot_access_other_session">Can‘t access an existing session?</string>
     <string name="verification_use_passphrase">Use your recovery key or passphrase</string>
 

@@ -227,16 +227,18 @@ internal class DefaultCrossSigningService @Inject constructor(
                     val myDevice = myDeviceInfoHolder.get().myDevice
                     val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, myDevice.signalableJSONDictionary())
                     val signedDevice = selfSigningPkOlm.sign(canonicalJson)
-                    val updateSignatures = (myDevice.signatures?.toMutableMap() ?: HashMap()).also {
-                        it[userId] = (it[userId]
-                                ?: HashMap()) + mapOf("ed25519:$sskPublicKey" to signedDevice)
-                    }
+                    val updateSignatures = (myDevice.signatures?.toMutableMap() ?: HashMap())
+                            .also {
+                                it[userId] = (it[userId]
+                                        ?: HashMap()) + mapOf("ed25519:$sskPublicKey" to signedDevice)
+                            }
                     myDevice.copy(signatures = updateSignatures).let {
                         uploadSignatureQueryBuilder.withDeviceInfo(it)
                     }
 
                     // sign MSK with device key (migration) and upload signatures
-                    olmDevice.signMessage(JsonCanonicalizer.getCanonicalJson(Map::class.java, mskCrossSigningKeyInfo.signalableJSONDictionary()))?.let { sign ->
+                    val message = JsonCanonicalizer.getCanonicalJson(Map::class.java, mskCrossSigningKeyInfo.signalableJSONDictionary())
+                    olmDevice.signMessage(message)?.let { sign ->
                         val mskUpdatedSignatures = (mskCrossSigningKeyInfo.signatures?.toMutableMap()
                                 ?: HashMap()).also {
                             it[userId] = (it[userId]
@@ -295,7 +297,10 @@ internal class DefaultCrossSigningService @Inject constructor(
         cryptoStore.clearOtherUserTrust()
     }
 
-    override fun checkTrustFromPrivateKeys(masterKeyPrivateKey: String?, uskKeyPrivateKey: String?, sskPrivateKey: String?, callback: MatrixCallback<Unit>?): UserTrustResult {
+    override fun checkTrustFromPrivateKeys(masterKeyPrivateKey: String?,
+                                           uskKeyPrivateKey: String?,
+                                           sskPrivateKey: String?
+    ): UserTrustResult {
         val mxCrossSigningInfo = getMyCrossSigningKeys() ?: return UserTrustResult.CrossSigningNotConfigured(userId)
 
         var masterKeyIsTrusted = false

@@ -44,8 +44,7 @@ interface CrossSigningService {
 
     fun checkTrustFromPrivateKeys(masterKeyPrivateKey: String?,
                                   uskKeyPrivateKey: String?,
-                                  sskPrivateKey: String?,
-                                  callback: MatrixCallback<Unit>? = null) : UserTrustResult
+                                  sskPrivateKey: String?) : UserTrustResult
 
     fun getUserCrossSigningKeys(otherUserId: String): MXCrossSigningInfo?
 
