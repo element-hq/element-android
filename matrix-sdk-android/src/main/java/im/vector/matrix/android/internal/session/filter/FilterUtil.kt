@@ -78,8 +78,7 @@ internal object FilterUtil {
                 filterBody.presence = null
             }
         }
-    }
-    */
+    } */
 
     /**
      * Compute a new filterBody to enable or disable the lazy loading

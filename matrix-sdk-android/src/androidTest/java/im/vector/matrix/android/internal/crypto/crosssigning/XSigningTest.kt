@@ -144,7 +144,6 @@ class XSigningTest : InstrumentedTest {
         // Now alice should cross trust bob's second device
         val data2 = mTestHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> {
             aliceSession.cryptoService().downloadKeys(listOf(bobUserId), true, it)
-
         }
 
         // check that the device is seen
