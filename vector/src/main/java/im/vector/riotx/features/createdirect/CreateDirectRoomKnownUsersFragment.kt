@@ -142,7 +142,7 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
         if (data.isAdded) {
             addChipToGroup(data.user, chipGroup)
         } else {
-            if (chipGroup.size > data.index) {
+            if (data.index in 0..chipGroup.size) {
                 chipGroup.removeViewAt(data.index)
             }
         }
