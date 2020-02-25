@@ -16,16 +16,9 @@
 
 package im.vector.riotx.features.createdirect
 
-import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.core.platform.VectorViewEvents
 
 /**
  * Transient events for create direct room screen
  */
-sealed class CreateDirectRoomViewEvents : VectorViewEvents {
-    data class SelectUserAction(
-            val user: User,
-            val isAdded: Boolean,
-            val index: Int
-    ) : CreateDirectRoomViewEvents()
-}
+sealed class CreateDirectRoomViewEvents : VectorViewEvents
