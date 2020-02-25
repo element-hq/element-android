@@ -36,6 +36,7 @@ import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.utils.copyToClipboard
 import im.vector.riotx.core.utils.startSharePlainTextIntent
 import im.vector.riotx.features.crypto.util.toImageRes
 import im.vector.riotx.features.home.AvatarRenderer
@@ -201,6 +202,10 @@ class RoomProfileFragment @Inject constructor(
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
+    }
+
+    override fun onRoomIdClicked() {
+        copyToClipboard(requireContext(), roomProfileArgs.roomId)
     }
 
     private fun onShareRoomProfile(permalink: String) {
