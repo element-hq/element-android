@@ -318,7 +318,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
         }
     }
 
-    fun getRedactionReason(event: Event): String {
+    fun formatRedactedEvent(event: Event): String {
         return (event
                 .unsignedData
                 ?.redactedEvent

@@ -169,7 +169,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun computeMessageBody(timelineEvent: TimelineEvent): CharSequence {
         if (timelineEvent.root.isRedacted()) {
-            return noticeEventFormatter.getRedactionReason(timelineEvent.root)
+            return noticeEventFormatter.formatRedactedEvent(timelineEvent.root)
         }
 
         return when (timelineEvent.root.getClearType()) {
