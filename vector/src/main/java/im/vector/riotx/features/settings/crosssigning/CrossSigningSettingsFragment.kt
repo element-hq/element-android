@@ -54,6 +54,11 @@ class CrossSigningSettingsFragment @Inject constructor(
                 is CrossSigningSettingsViewEvents.RequestPassword -> {
                     requestPassword()
                 }
+                CrossSigningSettingsViewEvents.VerifySession      -> {
+                    (requireActivity() as? VectorBaseActivity)?.let { activity ->
+                        activity.navigator.waitSessionVerification(activity)
+                    }
+                }
             }.exhaustive
         }
     }
@@ -91,6 +96,10 @@ class CrossSigningSettingsFragment @Inject constructor(
 
     override fun onInitializeCrossSigningKeys() {
         viewModel.handle(CrossSigningAction.InitializeCrossSigning)
+    }
+
+    override fun verifySession() {
+        viewModel.handle(CrossSigningAction.VerifySession)
     }
 
     override fun onResetCrossSigningKeys() {

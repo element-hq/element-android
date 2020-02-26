@@ -43,12 +43,12 @@ internal open class OutgoingRoomKeyRequestEntity(
     fun toOutgoingRoomKeyRequest(): OutgoingRoomKeyRequest {
         val cancellationTxnId = this.cancellationTxnId
         return OutgoingRoomKeyRequest(
-                RoomKeyRequestBody().apply {
-                    algorithm = requestBodyAlgorithm
-                    roomId = requestBodyRoomId
-                    senderKey = requestBodySenderKey
-                    sessionId = requestBodySessionId
-                },
+                RoomKeyRequestBody(
+                        algorithm = requestBodyAlgorithm,
+                        roomId = requestBodyRoomId,
+                        senderKey = requestBodySenderKey,
+                        sessionId = requestBodySessionId
+                ),
                 getRecipients()!!,
                 requestId!!,
                 OutgoingRoomKeyRequest.RequestState.from(state)

@@ -21,32 +21,30 @@ import im.vector.matrix.android.api.session.events.model.EventType
 internal object FilterFactory {
 
     fun createDefaultFilterBody(): FilterBody {
-        val filterBody = FilterBody()
-        FilterUtil.enableLazyLoading(filterBody, true)
-        return filterBody
+        return FilterUtil.enableLazyLoading(FilterBody(), true)
     }
 
     fun createRiotFilterBody(): FilterBody {
-        val filterBody = FilterBody()
-        filterBody.room = RoomFilter().apply {
-            timeline = createRiotTimelineFilter()
-            state = createRiotStateFilter()
-        }
-        return filterBody
+        return FilterBody(
+                room = RoomFilter(
+                        timeline = createRiotTimelineFilter(),
+                        state = createRiotStateFilter()
+                )
+        )
     }
 
     fun createDefaultRoomFilter(): RoomEventFilter {
-        return RoomEventFilter().apply {
-            lazyLoadMembers = true
-        }
+        return RoomEventFilter(
+                lazyLoadMembers = true
+        )
     }
 
     fun createRiotRoomFilter(): RoomEventFilter {
-        return RoomEventFilter().apply {
-            lazyLoadMembers = true
-            // TODO Enable this for optimization
-            // types = (listOfSupportedEventTypes + listOfSupportedStateEventTypes).toMutableList()
-        }
+        return RoomEventFilter(
+                lazyLoadMembers = true
+                // TODO Enable this for optimization
+                // types = (listOfSupportedEventTypes + listOfSupportedStateEventTypes).toMutableList()
+        )
     }
 
     private fun createRiotTimelineFilter(): RoomEventFilter {
@@ -57,9 +55,9 @@ internal object FilterFactory {
     }
 
     private fun createRiotStateFilter(): RoomEventFilter {
-        return RoomEventFilter().apply {
-            lazyLoadMembers = true
-        }
+        return RoomEventFilter(
+                lazyLoadMembers = true
+        )
     }
 
     // Get only managed types by Riot

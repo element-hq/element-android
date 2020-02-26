@@ -20,6 +20,7 @@ package im.vector.matrix.android.internal.crypto.store
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.api.util.Optional
+import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequestCommon
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.NewSessionListener
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
@@ -382,7 +383,7 @@ internal interface IMXCryptoStore {
      *
      * @param incomingRoomKeyRequest the incoming key request
      */
-    fun deleteIncomingRoomKeyRequest(incomingRoomKeyRequest: IncomingRoomKeyRequest)
+    fun deleteIncomingRoomKeyRequest(incomingRoomKeyRequest: IncomingRoomKeyRequestCommon)
 
     /**
      * Search an IncomingRoomKeyRequest
@@ -411,6 +412,8 @@ internal interface IMXCryptoStore {
     fun getCrossSigningInfo(userId: String) : MXCrossSigningInfo?
     fun getLiveCrossSigningInfo(userId: String) : LiveData<Optional<MXCrossSigningInfo>>
     fun setCrossSigningInfo(userId: String, info: MXCrossSigningInfo?)
+
+    fun markMyMasterKeyAsLocallyTrusted(trusted: Boolean)
 
     fun storePrivateKeysInfo(msk: String?, usk: String?, ssk: String?)
     fun getCrossSigningPrivateKeys() : PrivateKeysInfo?

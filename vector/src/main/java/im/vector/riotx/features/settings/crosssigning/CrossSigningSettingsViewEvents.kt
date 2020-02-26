@@ -25,4 +25,5 @@ sealed class CrossSigningSettingsViewEvents : VectorViewEvents {
     data class Failure(val throwable: Throwable) : CrossSigningSettingsViewEvents()
 
     object RequestPassword : CrossSigningSettingsViewEvents()
+    object VerifySession : CrossSigningSettingsViewEvents()
 }

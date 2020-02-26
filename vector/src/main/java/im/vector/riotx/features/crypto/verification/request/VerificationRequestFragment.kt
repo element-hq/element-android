@@ -61,4 +61,12 @@ class VerificationRequestFragment @Inject constructor(
             viewModel.handle(VerificationAction.RequestVerificationByDM(otherUserId, state.roomId))
         }
     }
+
+    override fun onClickRecoverFromPassphrase() {
+        viewModel.handle(VerificationAction.VerifyFromPassphrase)
+    }
+
+    override fun onClickDismiss() {
+        viewModel.handle(VerificationAction.SkipVerification)
+    }
 }

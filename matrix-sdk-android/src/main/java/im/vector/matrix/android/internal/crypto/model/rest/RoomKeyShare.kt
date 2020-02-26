@@ -15,21 +15,17 @@
  */
 package im.vector.matrix.android.internal.crypto.model.rest
 
-import com.squareup.moshi.Json
-
 /**
- * Parent class representing an room key action request
+ * Interface representing an room key action request
  * Note: this class cannot be abstract because of [org.matrix.androidsdk.core.JsonUtils.toRoomKeyShare]
  */
-internal open class RoomKeyShare : SendToDeviceObject {
+internal interface RoomKeyShare : SendToDeviceObject {
 
-    var action: String? = null
+    val action: String?
 
-    @Json(name = "requesting_device_id")
-    var requestingDeviceId: String? = null
+    val requestingDeviceId: String?
 
-    @Json(name = "request_id")
-    var requestId: String? = null
+    val requestId: String?
 
     companion object {
         const val ACTION_SHARE_REQUEST = "request"

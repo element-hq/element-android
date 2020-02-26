@@ -12,6 +12,7 @@ Improvements 🙌:
  - Migrate to binary QR code verification (#994)
  - Share action is added to room profile and room member profile (#858)
  - Display avatar in fullscreen (#861)
+ - Fix some performance issues with crypto
 
 Bugfix 🐛:
  - Account creation: wrongly hints that an email can be used to create an account (#941)
@@ -22,6 +23,7 @@ Bugfix 🐛:
  - Leaving a room creates a stuck "leaving room" loading screen. (#1041)
  - Fix some invitation handling issues (#1013)
  - New direct chat: selecting a participant sometimes results in two breadcrumbs (#1022)
+ - New direct chat: selecting several participants was not adding the room to the direct chats list
 
 Translations 🗣:
  -
@@ -29,6 +31,7 @@ Translations 🗣:
 SDK API changes ⚠️:
  - Get crypto methods through Session.cryptoService()
  - ProgressListener.onProgress() function will be invoked on the background thread instead of UI thread
+ - Improve CreateRoomParams API (#1070)
 
 Build 🧱:
  -

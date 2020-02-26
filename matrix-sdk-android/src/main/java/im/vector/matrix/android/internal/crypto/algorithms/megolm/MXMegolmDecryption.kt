@@ -163,12 +163,12 @@ internal class MXMegolmDecryption(private val userId: String,
             recipients.add(senderMap)
         }
 
-        val requestBody = RoomKeyRequestBody()
-
-        requestBody.roomId = event.roomId
-        requestBody.algorithm = encryptedEventContent.algorithm
-        requestBody.senderKey = encryptedEventContent.senderKey
-        requestBody.sessionId = encryptedEventContent.sessionId
+        val requestBody = RoomKeyRequestBody(
+                roomId = event.roomId,
+                algorithm = encryptedEventContent.algorithm,
+                senderKey = encryptedEventContent.senderKey,
+                sessionId = encryptedEventContent.sessionId
+        )
 
         outgoingRoomKeyRequestManager.sendRoomKeyRequest(requestBody, recipients)
     }
@@ -264,12 +264,12 @@ internal class MXMegolmDecryption(private val userId: String,
         if (added) {
             defaultKeysBackupService.maybeBackupKeys()
 
-            val content = RoomKeyRequestBody()
-
-            content.algorithm = roomKeyContent.algorithm
-            content.roomId = roomKeyContent.roomId
-            content.sessionId = roomKeyContent.sessionId
-            content.senderKey = senderKey
+            val content = RoomKeyRequestBody(
+                    algorithm = roomKeyContent.algorithm,
+                    roomId = roomKeyContent.roomId,
+                    sessionId = roomKeyContent.sessionId,
+                    senderKey = senderKey
+            )
 
             outgoingRoomKeyRequestManager.cancelRoomKeyRequest(content)
 
@@ -290,8 +290,8 @@ internal class MXMegolmDecryption(private val userId: String,
 
     override fun hasKeysForKeyRequest(request: IncomingRoomKeyRequest): Boolean {
         val roomId = request.requestBody?.roomId ?: return false
-        val senderKey = request.requestBody?.senderKey ?: return false
-        val sessionId = request.requestBody?.sessionId ?: return false
+        val senderKey = request.requestBody.senderKey ?: return false
+        val sessionId = request.requestBody.sessionId ?: return false
         return olmDevice.hasInboundSessionKeys(roomId, senderKey, sessionId)
     }
 
@@ -319,15 +319,14 @@ internal class MXMegolmDecryption(private val userId: String,
                                 return@mapCatching
                             }
                             Timber.v("## shareKeysWithDevice() : sharing keys for session" +
-                                    " ${body?.senderKey}|${body?.sessionId} with device $userId:$deviceId")
+                                    " ${body.senderKey}|${body.sessionId} with device $userId:$deviceId")
 
                             val payloadJson = mutableMapOf<String, Any>("type" to EventType.FORWARDED_ROOM_KEY)
-                            runCatching { olmDevice.getInboundGroupSession(body?.sessionId, body?.senderKey, body?.roomId) }
+                            runCatching { olmDevice.getInboundGroupSession(body.sessionId, body.senderKey, body.roomId) }
                                     .fold(
                                             {
                                                 // TODO
-                                                payloadJson["content"] = it.exportKeys()
-                                                        ?: ""
+                                                payloadJson["content"] = it.exportKeys() ?: ""
                                             },
                                             {
                                                 // TODO

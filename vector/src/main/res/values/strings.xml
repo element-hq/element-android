@@ -2121,11 +2121,10 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
         <item quantity="other">%d active sessions</item>
     </plurals>
 
-    <string name="crosssigning_verify_this_session">Verify this session</string>
     <string name="crosssigning_other_user_not_trust">Other users may not trust it</string>
     <string name="complete_security">Complete Security</string>
 
-    <string name="verification_open_other_to_verify">Open an existing session &amp; use it to verify this one, granting it access to encrypted messages. If you can’t access one, use your recovery key or passphrase.</string>
+    <string name="verification_open_other_to_verify">Open an existing session &amp; use it to verify this one, granting it access to encrypted messages.</string>
 
 
     <string name="verification_profile_verify">Verify</string>

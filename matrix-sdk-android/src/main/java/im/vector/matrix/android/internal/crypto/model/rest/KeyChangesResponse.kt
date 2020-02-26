@@ -25,9 +25,9 @@ import com.squareup.moshi.JsonClass
 internal data class KeyChangesResponse(
         // list of user ids which have new devices
         @Json(name = "changed")
-        var changed: List<String>? = null,
+        val changed: List<String>? = null,
 
         //  List of user ids who are no more tracked.
         @Json(name = "left")
-        var left: List<String>? = null
+        val left: List<String>? = null
 )

@@ -24,9 +24,7 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class KeysBackupData(
-
         // the keys are the room IDs, and the values are RoomKeysBackupData
         @Json(name = "rooms")
-        var roomIdToRoomKeysBackupData: MutableMap<String, RoomKeysBackupData> = HashMap()
-
+        val roomIdToRoomKeysBackupData: MutableMap<String, RoomKeysBackupData> = HashMap()
 )

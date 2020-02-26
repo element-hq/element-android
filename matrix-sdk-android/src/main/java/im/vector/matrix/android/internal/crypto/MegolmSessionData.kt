@@ -28,46 +28,46 @@ data class MegolmSessionData(
          * The algorithm used.
          */
         @Json(name = "algorithm")
-        var algorithm: String? = null,
+        val algorithm: String? = null,
 
         /**
          * Unique id for the session.
          */
         @Json(name = "session_id")
-        var sessionId: String? = null,
+        val sessionId: String? = null,
 
         /**
          * Sender's Curve25519 device key.
          */
         @Json(name = "sender_key")
-        var senderKey: String? = null,
+        val senderKey: String? = null,
 
         /**
          * Room this session is used in.
          */
         @Json(name = "room_id")
-        var roomId: String? = null,
+        val roomId: String? = null,
 
         /**
          * Base64'ed key data.
          */
         @Json(name = "session_key")
-        var sessionKey: String? = null,
+        val sessionKey: String? = null,
 
         /**
          * Other keys the sender claims.
          */
         @Json(name = "sender_claimed_keys")
-        var senderClaimedKeys: Map<String, String>? = null,
+        val senderClaimedKeys: Map<String, String>? = null,
 
         // This is a shortcut for sender_claimed_keys.get("ed25519")
         // Keep it for compatibility reason.
         @Json(name = "sender_claimed_ed25519_key")
-        var senderClaimedEd25519Key: String? = null,
+        val senderClaimedEd25519Key: String? = null,
 
         /**
          * Devices which forwarded this session to us (normally empty).
          */
         @Json(name = "forwarding_curve25519_key_chain")
-        var forwardingCurve25519KeyChain: List<String>? = null
+        val forwardingCurve25519KeyChain: List<String>? = null
 )
