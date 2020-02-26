@@ -18,7 +18,6 @@ package im.vector.matrix.android.internal.crypto.crosssigning
 import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntityFields
 import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.di.CryptoDatabase
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -40,7 +39,6 @@ internal class ShieldTrustUpdater @Inject constructor(
         private val computeTrustTask: ComputeTrustTask,
         private val taskExecutor: TaskExecutor,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        @CryptoDatabase private val cryptoRealmConfiguration: RealmConfiguration,
         @SessionDatabase private val sessionRealmConfiguration: RealmConfiguration,
         private val roomSummaryUpdater: RoomSummaryUpdater
 ) {
@@ -52,15 +50,6 @@ internal class ShieldTrustUpdater @Inject constructor(
     private val backgroundSessionRealm = AtomicReference<Realm>()
 
     private val isStarted = AtomicBoolean()
-
-//    private var cryptoDevicesResult: RealmResults<DeviceInfoEntity>? = null
-
-//    private val cryptoDeviceChangeListener = object : OrderedRealmCollectionChangeListener<RealmResults<DeviceInfoEntity>> {
-//        override fun onChange(t: RealmResults<DeviceInfoEntity>, changeSet: OrderedCollectionChangeSet) {
-//            val grouped = t.groupBy { it.userId }
-//            onCryptoDevicesChange(grouped.keys.mapNotNull { it })
-//        }
-//    }
 
     fun start() {
         if (isStarted.compareAndSet(false, true)) {
