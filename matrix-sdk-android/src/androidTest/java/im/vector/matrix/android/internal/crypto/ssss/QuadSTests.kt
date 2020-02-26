@@ -25,8 +25,8 @@ import im.vector.matrix.android.api.session.securestorage.EncryptedSecretContent
 import im.vector.matrix.android.api.session.securestorage.KeySigner
 import im.vector.matrix.android.api.session.securestorage.RawBytesKeySpec
 import im.vector.matrix.android.api.session.securestorage.SecretStorageKeyContent
+import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageService
 import im.vector.matrix.android.api.session.securestorage.SsssKeyCreationInfo
-import im.vector.matrix.android.api.session.securestorage.SsssKeySpec
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.common.CommonTestHelper
 import im.vector.matrix.android.common.SessionTestParams
@@ -137,7 +137,7 @@ class QuadSTests : InstrumentedTest {
             aliceSession.sharedSecretStorageService.storeSecret(
                     "secret.of.life",
                     clearSecret,
-                    listOf(Pair<String?, SsssKeySpec?>(null, keySpec)), // default key
+                    listOf(SharedSecretStorageService.KeyRef(null, keySpec)), // default key
                     it
             )
         }
@@ -203,8 +203,8 @@ class QuadSTests : InstrumentedTest {
                     "my.secret",
                     mySecretText.toByteArray().toBase64NoPadding(),
                     listOf(
-                            keyId1 to RawBytesKeySpec.fromRecoveryKey(key1Info.recoveryKey),
-                            keyId2 to RawBytesKeySpec.fromRecoveryKey(key2Info.recoveryKey)
+                            SharedSecretStorageService.KeyRef(keyId1, RawBytesKeySpec.fromRecoveryKey(key1Info.recoveryKey)),
+                            SharedSecretStorageService.KeyRef(keyId2, RawBytesKeySpec.fromRecoveryKey(key2Info.recoveryKey))
                     ),
                     it
             )
@@ -251,7 +251,7 @@ class QuadSTests : InstrumentedTest {
             aliceSession.sharedSecretStorageService.storeSecret(
                     "my.secret",
                     mySecretText.toByteArray().toBase64NoPadding(),
-                    listOf(keyId1 to RawBytesKeySpec.fromRecoveryKey(key1Info.recoveryKey)),
+                    listOf(SharedSecretStorageService.KeyRef(keyId1, RawBytesKeySpec.fromRecoveryKey(key1Info.recoveryKey))),
                     it
             )
         }
