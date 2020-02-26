@@ -95,67 +95,67 @@ interface ScreenComponent {
 
     fun inject(activity: HomeActivity)
 
-    fun inject(messageActionsBottomSheet: MessageActionsBottomSheet)
+    fun inject(bottomSheet: MessageActionsBottomSheet)
 
-    fun inject(viewReactionsBottomSheet: ViewReactionsBottomSheet)
+    fun inject(bottomSheet: ViewReactionsBottomSheet)
 
-    fun inject(viewEditHistoryBottomSheet: ViewEditHistoryBottomSheet)
+    fun inject(bottomSheet: ViewEditHistoryBottomSheet)
 
-    fun inject(vectorSettingsActivity: VectorSettingsActivity)
+    fun inject(activity: VectorSettingsActivity)
 
-    fun inject(keysBackupManageActivity: KeysBackupManageActivity)
+    fun inject(activity: KeysBackupManageActivity)
 
-    fun inject(emojiReactionPickerActivity: EmojiReactionPickerActivity)
+    fun inject(activity: EmojiReactionPickerActivity)
 
-    fun inject(loginActivity: LoginActivity)
+    fun inject(activity: LoginActivity)
 
-    fun inject(linkHandlerActivity: LinkHandlerActivity)
+    fun inject(activity: LinkHandlerActivity)
 
-    fun inject(mainActivity: MainActivity)
+    fun inject(activity: MainActivity)
 
-    fun inject(roomDirectoryActivity: RoomDirectoryActivity)
+    fun inject(activity: RoomDirectoryActivity)
 
-    fun inject(bugReportActivity: BugReportActivity)
+    fun inject(activity: BugReportActivity)
 
-    fun inject(imageMediaViewerActivity: ImageMediaViewerActivity)
+    fun inject(activity: ImageMediaViewerActivity)
 
-    fun inject(filteredRoomsActivity: FilteredRoomsActivity)
+    fun inject(activity: FilteredRoomsActivity)
 
-    fun inject(createRoomActivity: CreateRoomActivity)
+    fun inject(activity: CreateRoomActivity)
 
-    fun inject(vectorInviteView: VectorInviteView)
+    fun inject(view: VectorInviteView)
 
-    fun inject(videoMediaViewerActivity: VideoMediaViewerActivity)
+    fun inject(activity: VideoMediaViewerActivity)
 
-    fun inject(userAvatarPreference: UserAvatarPreference)
+    fun inject(preference: UserAvatarPreference)
 
-    fun inject(createDirectRoomActivity: CreateDirectRoomActivity)
+    fun inject(activity: CreateDirectRoomActivity)
 
-    fun inject(displayReadReceiptsBottomSheet: DisplayReadReceiptsBottomSheet)
+    fun inject(bottomSheet: DisplayReadReceiptsBottomSheet)
 
-    fun inject(reactionButton: ReactionButton)
+    fun inject(button: ReactionButton)
 
-    fun inject(incomingShareActivity: IncomingShareActivity)
+    fun inject(activity: IncomingShareActivity)
 
-    fun inject(roomListActionsBottomSheet: RoomListQuickActionsBottomSheet)
+    fun inject(bottomSheet: RoomListQuickActionsBottomSheet)
 
     fun inject(activity: SoftLogoutActivity)
 
-    fun inject(verificationBottomSheet: VerificationBottomSheet)
+    fun inject(bottomSheet: VerificationBottomSheet)
 
-    fun inject(permalinkHandlerActivity: PermalinkHandlerActivity)
+    fun inject(activity: PermalinkHandlerActivity)
 
     fun inject(activity: QrCodeScannerActivity)
 
     fun inject(activity: DebugMenuActivity)
 
-    fun inject(deviceVerificationInfoBottomSheet: DeviceVerificationInfoBottomSheet)
+    fun inject(bottomSheet: DeviceVerificationInfoBottomSheet)
 
-    fun inject(deviceListBottomSheet: DeviceListBottomSheet)
+    fun inject(bottomSheet: DeviceListBottomSheet)
 
     fun inject(activity: SharedSecureStorageActivity)
 
-    fun inject(bigImageViewerActivity: BigImageViewerActivity)
+    fun inject(activity: BigImageViewerActivity)
 
     @Component.Factory
     interface Factory {
