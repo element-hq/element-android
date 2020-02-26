@@ -108,9 +108,6 @@ class SharedSecureStorageActivity : SimpleFragmentActivity() {
         }
     }
 
-//    fun renderState(state: SharedSecureStorageViewState) {
-//    }
-
     companion object {
 
         const val EXTRA_DATA_RESULT = "EXTRA_DATA_RESULT"
