@@ -213,7 +213,8 @@ class AttachmentsPreviewFragment @Inject constructor(
                                             /* tabAspectRatio = */ UCropActivity.SCALE
                                     )
                                     setToolbarTitle(currentAttachment.name)
-                                    setFreeStyleCropEnabled(true)
+                                    // Disable freestyle crop, usability was not easy
+                                    // setFreeStyleCropEnabled(true)
                                     // Color used for toolbar icon and text
                                     setToolbarColor(colorProvider.getColorFromAttribute(R.attr.riotx_background))
                                     setToolbarWidgetColor(colorProvider.getColorFromAttribute(R.attr.vctr_toolbar_primary_text_color))
