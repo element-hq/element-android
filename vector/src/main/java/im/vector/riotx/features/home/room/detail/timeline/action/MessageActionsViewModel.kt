@@ -169,7 +169,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun computeMessageBody(timelineEvent: TimelineEvent): CharSequence {
         if (timelineEvent.root.isRedacted()) {
-            return getRedactionReason(timelineEvent)
+            return noticeEventFormatter.getRedactionReason(timelineEvent.root)
         }
 
         return when (timelineEvent.root.getClearType()) {
@@ -202,31 +202,6 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             }
             else                  -> null
         } ?: ""
-    }
-
-    private fun getRedactionReason(timelineEvent: TimelineEvent): String {
-            return (timelineEvent
-                    .root
-                    .unsignedData
-                    ?.redactedEvent
-                    ?.content
-                    ?.get("reason") as? String)
-                    ?.takeIf { it.isNotBlank() }
-                    .let { reason ->
-                        if (reason == null) {
-                            if (timelineEvent.root.isRedactedBySameUser()) {
-                                stringProvider.getString(R.string.event_redacted_by_user_reason)
-                            } else {
-                                stringProvider.getString(R.string.event_redacted_by_admin_reason)
-                            }
-                        } else {
-                            if (timelineEvent.root.isRedactedBySameUser()) {
-                                stringProvider.getString(R.string.event_redacted_by_user_reason_with_reason, reason)
-                            } else {
-                                stringProvider.getString(R.string.event_redacted_by_admin_reason_with_reason, reason)
-                            }
-                        }
-                    }
     }
 
     private fun actionsForEvent(timelineEvent: TimelineEvent): List<EventSharedAction> {

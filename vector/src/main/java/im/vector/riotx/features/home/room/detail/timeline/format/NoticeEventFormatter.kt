@@ -317,4 +317,28 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             else                 -> null
         }
     }
+
+    fun getRedactionReason(event: Event): String {
+        return (event
+                .unsignedData
+                ?.redactedEvent
+                ?.content
+                ?.get("reason") as? String)
+                ?.takeIf { it.isNotBlank() }
+                .let { reason ->
+                    if (reason == null) {
+                        if (event.isRedactedBySameUser()) {
+                            sp.getString(R.string.event_redacted_by_user_reason)
+                        } else {
+                            sp.getString(R.string.event_redacted_by_admin_reason)
+                        }
+                    } else {
+                        if (event.isRedactedBySameUser()) {
+                            sp.getString(R.string.event_redacted_by_user_reason_with_reason, reason)
+                        } else {
+                            sp.getString(R.string.event_redacted_by_admin_reason_with_reason, reason)
+                        }
+                    }
+                }
+    }
 }
