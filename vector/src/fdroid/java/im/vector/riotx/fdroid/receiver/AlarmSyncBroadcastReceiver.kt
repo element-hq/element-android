@@ -48,7 +48,7 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
             }
         }
 
-        val sessionId = intent.getStringExtra(SyncService.EXTRA_SESSION_ID)
+        val sessionId = intent.getStringExtra(SyncService.EXTRA_SESSION_ID) ?: return
         // This method is called when the BroadcastReceiver is receiving an Intent broadcast.
         Timber.d("RestartBroadcastReceiver received intent")
         VectorSyncService.newIntent(context, sessionId).let {
