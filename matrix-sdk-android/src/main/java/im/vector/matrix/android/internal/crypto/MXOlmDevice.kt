@@ -770,7 +770,7 @@ internal class MXOlmDevice @Inject constructor(
                 return session
             }
         } else {
-            Timber.w("## getInboundGroupSession() : Cannot retrieve inbound group session $sessionId")
+            Timber.v("## getInboundGroupSession() : Cannot retrieve inbound group session $sessionId")
             throw MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID, MXCryptoError.UNKNOWN_INBOUND_SESSION_ID_REASON)
         }
     }
