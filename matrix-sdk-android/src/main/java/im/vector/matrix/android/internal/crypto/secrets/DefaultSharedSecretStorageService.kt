@@ -220,14 +220,16 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
     }
 
     /**
-     * Encrytion algorithm m.secret_storage.v1.aes-hmac-sha2
+     * Encryption algorithm m.secret_storage.v1.aes-hmac-sha2
      * Secrets are encrypted using AES-CTR-256 and MACed using HMAC-SHA-256. The data is encrypted and MACed as follows:
      *
-     * Given the secret storage key, generate 64 bytes by performing an HKDF with SHA-256 as the hash, a salt of 32 bytes of 0, and with the secret name as the info.
+     * Given the secret storage key, generate 64 bytes by performing an HKDF with SHA-256 as the hash, a salt of 32 bytes
+     * of 0, and with the secret name as the info.
      *
      * The first 32 bytes are used as the AES key, and the next 32 bytes are used as the MAC key
      *
-     * Generate 16 random bytes, set bit 63 to 0 (in order to work around differences in AES-CTR implementations), and use this as the AES initialization vector.
+     * Generate 16 random bytes, set bit 63 to 0 (in order to work around differences in AES-CTR implementations), and use
+     * this as the AES initialization vector.
      * This becomes the iv property, encoded using base64.
      *
      * Encrypt the data using AES-CTR-256 using the AES key generated above.
