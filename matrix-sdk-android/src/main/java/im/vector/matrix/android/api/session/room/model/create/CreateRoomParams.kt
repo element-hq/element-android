@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session.room.model.create
 
 import android.util.Patterns
+import androidx.annotation.CheckResult
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.MatrixPatterns.isUserId
@@ -120,14 +121,15 @@ data class CreateRoomParams(
         @Json(name = "power_level_content_override")
         val powerLevelContentOverride: PowerLevelsContent? = null
 ) {
-    /**
-     * Set to true means that if cross-signing is enabled and we can get keys for every invited users,
-     * the encryption will be enabled on the created room
-     */
     @Transient
     internal var enableEncryptionIfInvitedUsersSupportIt: Boolean = false
         private set
 
+    /**
+     * After calling this method, when the room will be created, if cross-signing is enabled and we can get keys for every invited users,
+     * the encryption will be enabled on the created room
+     * @return this, to allow chaining methods
+     */
     fun enableEncryptionIfInvitedUsersSupportIt(): CreateRoomParams {
         enableEncryptionIfInvitedUsersSupportIt = true
         return this
@@ -137,7 +139,9 @@ data class CreateRoomParams(
      * Add the crypto algorithm to the room creation parameters.
      *
      * @param algorithm the algorithm
+     * @return a modified copy of the CreateRoomParams object, or this if there is no modification
      */
+    @CheckResult
     fun enableEncryptionWithAlgorithm(algorithm: String = MXCRYPTO_ALGORITHM_MEGOLM): CreateRoomParams {
         return if (algorithm == MXCRYPTO_ALGORITHM_MEGOLM) {
             val contentMap = mapOf("algorithm" to algorithm)
@@ -161,7 +165,9 @@ data class CreateRoomParams(
      * Force the history visibility in the room creation parameters.
      *
      * @param historyVisibility the expected history visibility, set null to remove any existing value.
+     * @return a modified copy of the CreateRoomParams object
      */
+    @CheckResult
     fun setHistoryVisibility(historyVisibility: RoomHistoryVisibility?): CreateRoomParams {
         // Remove the existing value if any.
         val newInitialStates = initialStates
@@ -187,7 +193,9 @@ data class CreateRoomParams(
 
     /**
      * Mark as a direct message room.
+     * @return a modified copy of the CreateRoomParams object
      */
+    @CheckResult
     fun setDirectMessage(): CreateRoomParams {
         return copy(
                 preset = CreateRoomPreset.PRESET_TRUSTED_PRIVATE_CHAT,
@@ -217,6 +225,7 @@ data class CreateRoomParams(
     fun isDirect(): Boolean {
         return preset == CreateRoomPreset.PRESET_TRUSTED_PRIVATE_CHAT
                 && isDirect == true
+                // TODO This test is not ok
                 && (1 == getInviteCount() || 1 == getInvite3PidCount())
     }
 
@@ -232,7 +241,9 @@ data class CreateRoomParams(
      * ids might be a matrix id or an email address.
      *
      * @param ids the participant ids to add.
+     * @return a modified copy of the CreateRoomParams object
      */
+    @CheckResult
     fun addParticipantIds(hsConfig: HomeServerConnectionConfig,
                           userId: String,
                           ids: List<String>): CreateRoomParams {
