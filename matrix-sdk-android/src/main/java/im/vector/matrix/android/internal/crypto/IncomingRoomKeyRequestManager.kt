@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.crypto
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListener
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShare
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.session.SessionScope
@@ -51,11 +50,10 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
      * @param event the announcement event.
      */
     fun onRoomKeyRequestEvent(event: Event) {
-        val roomKeyShare = event.getClearContent().toModel<RoomKeyShare>()
-        when (roomKeyShare?.action) {
+        when (val roomKeyShareAction = event.getClearContent()?.get("action") as? String) {
             RoomKeyShare.ACTION_SHARE_REQUEST      -> IncomingRoomKeyRequest.fromEvent(event)?.let { receivedRoomKeyRequests.add(it) }
             RoomKeyShare.ACTION_SHARE_CANCELLATION -> IncomingRoomKeyRequestCancellation.fromEvent(event)?.let { receivedRoomKeyRequestCancellations.add(it) }
-            else                                   -> Timber.e("## onRoomKeyRequestEvent() : unsupported action ${roomKeyShare?.action}")
+            else                                   -> Timber.e("## onRoomKeyRequestEvent() : unsupported action $roomKeyShareAction")
         }
     }
 
