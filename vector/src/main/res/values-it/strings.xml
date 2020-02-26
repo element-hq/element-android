@@ -2193,7 +2193,6 @@
         <item quantity="other">%d sessioni attive</item>
     </plurals>
 
-    <string name="crosssigning_verify_this_session">Verifica questa sessione</string>
     <string name="crosssigning_other_user_not_trust">Gli altri utenti potrebbero non fidarsi</string>
     <string name="complete_security">Completa la sicurezza</string>
 

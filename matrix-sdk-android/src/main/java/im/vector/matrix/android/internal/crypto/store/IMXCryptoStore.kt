@@ -413,6 +413,8 @@ internal interface IMXCryptoStore {
     fun getLiveCrossSigningInfo(userId: String) : LiveData<Optional<MXCrossSigningInfo>>
     fun setCrossSigningInfo(userId: String, info: MXCrossSigningInfo?)
 
+    fun markMyMasterKeyAsLocallyTrusted(trusted: Boolean)
+
     fun storePrivateKeysInfo(msk: String?, usk: String?, ssk: String?)
     fun getCrossSigningPrivateKeys() : PrivateKeysInfo?
 

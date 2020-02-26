@@ -140,6 +140,7 @@
 
         <activity android:name=".features.qrcode.QrCodeScannerActivity" />
 
+        <activity android:name=".features.crypto.quads.SharedSecureStorageActivity" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait" />

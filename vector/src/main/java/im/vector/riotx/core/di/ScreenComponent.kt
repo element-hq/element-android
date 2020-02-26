@@ -26,6 +26,7 @@ import im.vector.riotx.core.preference.UserAvatarPreference
 import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.createdirect.CreateDirectRoomActivity
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
+import im.vector.riotx.features.crypto.quads.SharedSecureStorageActivity
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.debug.DebugMenuActivity
 import im.vector.riotx.features.home.HomeActivity
@@ -150,6 +151,8 @@ interface ScreenComponent {
     fun inject(deviceVerificationInfoBottomSheet: DeviceVerificationInfoBottomSheet)
 
     fun inject(deviceListBottomSheet: DeviceListBottomSheet)
+
+    fun inject(activity: SharedSecureStorageActivity)
 
     @Component.Factory
     interface Factory {

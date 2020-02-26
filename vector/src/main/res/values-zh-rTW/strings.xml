@@ -2093,7 +2093,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
         <item quantity="other">%d 活躍的工作階段</item>
     </plurals>
 
-    <string name="crosssigning_verify_this_session">驗證此工作階段</string>
     <string name="crosssigning_other_user_not_trust">其他使用者可能不會信任它</string>
     <string name="complete_security">全面的安全性</string>
 
