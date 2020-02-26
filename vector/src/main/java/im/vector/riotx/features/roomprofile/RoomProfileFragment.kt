@@ -22,13 +22,12 @@ import android.os.Parcelable
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityOptionsCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.animations.AppBarStateChangeListener
@@ -46,7 +45,6 @@ import im.vector.riotx.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
-import im.vector.riotx.features.media.BigImageViewerActivity
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_matrix_profile.*
 import kotlinx.android.synthetic.main.view_stub_room_profile_header.*
@@ -169,12 +167,7 @@ class RoomProfileFragment @Inject constructor(
                 matrixProfileDecorationToolbarAvatarImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
 
                 roomProfileAvatarView.setOnClickListener { view ->
-                    matrixItem.avatarUrl
-                            ?.takeIf { it.isNotBlank() }
-                            ?.let { avatarUrl ->
-                                val title = state.roomSummary()?.displayName ?: ""
-                                onAvatarClicked(view, title, avatarUrl)
-                            }
+                    onAvatarClicked(view, matrixItem)
                 }
             }
         }
@@ -224,9 +217,12 @@ class RoomProfileFragment @Inject constructor(
         startSharePlainTextIntent(fragment = this, chooserTitle = null, text = permalink)
     }
 
-    private fun onAvatarClicked(view: View, title: String, avatarUrl: String) {
-        val intent = BigImageViewerActivity.newIntent(context!!, title, avatarUrl)
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), view, ViewCompat.getTransitionName(view) ?: "")
-        startActivity(intent, options.toBundle())
+    private fun onAvatarClicked(view: View, matrixItem: MatrixItem.RoomItem) {
+        matrixItem.avatarUrl
+                ?.takeIf { it.isNotBlank() }
+                ?.let { avatarUrl ->
+                    val title = matrixItem.getBestName()
+                    navigator.openBigImageViewer(requireActivity(), view, title, avatarUrl)
+                }
     }
 }

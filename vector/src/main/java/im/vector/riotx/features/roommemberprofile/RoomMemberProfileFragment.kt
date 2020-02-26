@@ -22,8 +22,6 @@ import android.os.Parcelable
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityOptionsCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
@@ -44,7 +42,6 @@ import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.startSharePlainTextIntent
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.media.BigImageViewerActivity
 import im.vector.riotx.features.roommemberprofile.devices.DeviceListBottomSheet
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_matrix_profile.*
@@ -197,12 +194,7 @@ class RoomMemberProfileFragment @Inject constructor(
                 }
 
                 memberProfileAvatarView.setOnClickListener { view ->
-                    userMatrixItem.avatarUrl
-                            ?.takeIf { it.isNotBlank() }
-                            ?.let { avatarUrl ->
-                                val title = userMatrixItem.displayName ?: ""
-                                onAvatarClicked(view, title, avatarUrl)
-                            }
+                    onAvatarClicked(view, userMatrixItem)
                 }
             }
         }
@@ -240,9 +232,12 @@ class RoomMemberProfileFragment @Inject constructor(
         startSharePlainTextIntent(fragment = this, chooserTitle = null, text = permalink)
     }
 
-    private fun onAvatarClicked(view: View, title: String, avatarUrl: String) {
-        val intent = BigImageViewerActivity.newIntent(context!!, title, avatarUrl)
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), view, ViewCompat.getTransitionName(view) ?: "")
-        startActivity(intent, options.toBundle())
+    private fun onAvatarClicked(view: View, userMatrixItem: MatrixItem) {
+        userMatrixItem.avatarUrl
+                ?.takeIf { it.isNotBlank() }
+                ?.let { avatarUrl ->
+                    val title = userMatrixItem.getBestName()
+                    navigator.openBigImageViewer(requireActivity(), view, title, avatarUrl)
+                }
     }
 }
