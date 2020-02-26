@@ -144,9 +144,9 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
             return
         }
 
-        imageView.setImageLoaderCallback(object: DefaultImageLoaderCallback {
+        imageView.setImageLoaderCallback(object : DefaultImageLoaderCallback {
             override fun onSuccess(image: File?) {
-                imageView.ssiv.orientation = ORIENTATION_USE_EXIF
+                imageView.ssiv?.orientation = ORIENTATION_USE_EXIF
             }
         })
 

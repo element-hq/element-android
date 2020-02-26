@@ -25,6 +25,7 @@ import com.kbeanie.multipicker.api.Picker.PICK_CONTACT
 import com.kbeanie.multipicker.api.Picker.PICK_FILE
 import com.kbeanie.multipicker.api.Picker.PICK_IMAGE_CAMERA
 import com.kbeanie.multipicker.api.Picker.PICK_IMAGE_DEVICE
+import com.kbeanie.multipicker.core.ImagePickerImpl
 import com.kbeanie.multipicker.core.PickerManager
 import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
@@ -157,6 +158,9 @@ class AttachmentsHelper private constructor(private val context: Context,
         if (resultCode == Activity.RESULT_OK) {
             val pickerManager = getPickerManagerForRequestCode(requestCode)
             if (pickerManager != null) {
+                if (pickerManager is ImagePickerImpl) {
+                    pickerManager.reinitialize(capturePath)
+                }
                 pickerManager.submit(data)
                 return true
             }

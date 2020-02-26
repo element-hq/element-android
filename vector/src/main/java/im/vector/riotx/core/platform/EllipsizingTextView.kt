@@ -38,6 +38,7 @@ import android.text.TextUtils.substring
 import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
+import timber.log.Timber
 import java.util.ArrayList
 import java.util.regex.Pattern
 
@@ -300,7 +301,13 @@ class EllipsizingTextView @JvmOverloads constructor(context: Context, attrs: Att
     private inner class EllipsizeEndStrategy : EllipsizeStrategy() {
         override fun createEllipsizedText(fullText: CharSequence?): CharSequence? {
             val layout = createWorkingLayout(fullText)
-            val cutOffIndex = layout.getLineEnd(maxLines - 1)
+            val cutOffIndex = try {
+                layout.getLineEnd(maxLines - 1)
+            } catch (exception: IndexOutOfBoundsException) {
+                // Not sure to understand why this is happening
+                Timber.e(exception, "IndexOutOfBoundsException, maxLine: $maxLines")
+                0
+            }
             val textLength = fullText!!.length
             var cutOffLength = textLength - cutOffIndex
             if (cutOffLength < ELLIPSIS.length) cutOffLength = ELLIPSIS.length
