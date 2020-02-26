@@ -209,6 +209,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.DeclineVerificationRequest       -> handleDeclineVerification(action)
             is RoomDetailAction.RequestVerification              -> handleRequestVerification(action)
             is RoomDetailAction.ResumeVerification               -> handleResumeRequestVerification(action)
+            is RoomDetailAction.ReRequestKeys                    -> handleReRequestKeys(action)
         }
     }
 
@@ -883,6 +884,14 @@ class RoomDetailViewModel @AssistedInject constructor(
                         otherUserId = it.otherUserId
                 )))
             }
+        }
+    }
+
+    private fun handleReRequestKeys(action: RoomDetailAction.ReRequestKeys) {
+        // Check if this request is still active and handled by me
+        room.getTimeLineEvent(action.eventId)?.let {
+            session.cryptoService().reRequestRoomKeyForEvent(it.root)
+            _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.e2e_re_request_encryption_key_dialog_content)))
         }
     }
 

@@ -271,9 +271,13 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     }
                 }
 
+                if (timelineEvent.isEncrypted() && timelineEvent.root.mCryptoError != null) {
+                    add(EventSharedAction.ReRequestKey(timelineEvent.eventId))
+                }
+
                 if (vectorPreferences.developerMode()) {
                     add(EventSharedAction.ViewSource(timelineEvent.root.toContentStringWithIndent()))
-                    if (timelineEvent.isEncrypted()) {
+                    if (timelineEvent.isEncrypted() && timelineEvent.root.mxDecryptionResult != null) {
                         val decryptedContent = timelineEvent.root.toClearContentStringWithIndent()
                                 ?: stringProvider.getString(R.string.encryption_information_decryption_error)
                         add(EventSharedAction.ViewDecryptedSource(decryptedContent))

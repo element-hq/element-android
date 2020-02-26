@@ -1236,6 +1236,9 @@ class RoomDetailFragment @Inject constructor(
             is EventSharedAction.OnUrlLongClicked           -> {
                 onUrlLongClicked(action.url)
             }
+            is EventSharedAction.ReRequestKey               -> {
+                roomDetailViewModel.handle(RoomDetailAction.ReRequestKeys(action.eventId))
+            }
             else                                            -> {
                 Toast.makeText(context, "Action $action is not implemented yet", Toast.LENGTH_LONG).show()
             }
