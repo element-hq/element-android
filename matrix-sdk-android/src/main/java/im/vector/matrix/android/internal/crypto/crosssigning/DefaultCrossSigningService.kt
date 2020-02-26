@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.crypto.DeviceListManager
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.MyDeviceInfoHolder
+import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequestManager
 import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.KeyUsage
 import im.vector.matrix.android.internal.crypto.model.rest.UploadSignatureQueryBuilder
@@ -61,6 +62,7 @@ internal class DefaultCrossSigningService @Inject constructor(
         private val taskExecutor: TaskExecutor,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope,
+        private val outgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
         private val eventBus: EventBus) : CrossSigningService, DeviceListManager.UserDevicesUpdateListener {
 
     private var olmUtility: OlmUtility? = null
@@ -736,6 +738,7 @@ internal class DefaultCrossSigningService @Inject constructor(
             // If it's me, recheck trust of all users and devices?
             val users = ArrayList<String>()
             if (otherUserId == userId && currentTrust != trusted) {
+                reRequestAllPendingRoomKeyRequest()
                 cryptoStore.updateUsersTrust {
                     users.add(it)
                     checkUserTrust(it).isVerified()
@@ -751,4 +754,18 @@ internal class DefaultCrossSigningService @Inject constructor(
             }
         }
     }
+
+    private fun reRequestAllPendingRoomKeyRequest() {
+        Timber.d("## CrossSigning - reRequest pending outgoing room key requests")
+        cryptoStore.getOutgoingRoomKeyRequests().forEach {
+            it.requestBody?.let {requestBody ->
+                if (cryptoStore.getInboundGroupSession(requestBody.sessionId ?: "", requestBody.senderKey ?: "") == null) {
+                    outgoingRoomKeyRequestManager.resendRoomKeyRequest(requestBody)
+                } else {
+                    outgoingRoomKeyRequestManager.cancelRoomKeyRequest(requestBody)
+                }
+            }
+        }
+    }
+
 }

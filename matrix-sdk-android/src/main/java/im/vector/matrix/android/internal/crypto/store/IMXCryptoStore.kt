@@ -424,4 +424,8 @@ internal interface IMXCryptoStore {
     fun clearOtherUserTrust()
 
     fun updateUsersTrust(check: (String) -> Boolean)
+
+    // Dev tools
+
+    fun getOutgoingRoomKeyRequests() : List<OutgoingRoomKeyRequest>
 }

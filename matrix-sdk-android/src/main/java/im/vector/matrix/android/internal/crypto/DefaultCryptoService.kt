@@ -115,6 +115,7 @@ internal class DefaultCryptoService @Inject constructor(
         private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
         // the crypto store
         private val cryptoStore: IMXCryptoStore,
+
         // Olm device
         private val olmDevice: MXOlmDevice,
         // Set of parameters used to configure/customize the end-to-end crypto.
@@ -1090,5 +1091,9 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun toString(): String {
         return "DefaultCryptoService of " + credentials.userId + " (" + credentials.deviceId + ")"
+    }
+
+    override fun getOutgoingRoomKeyRequest(): List<OutgoingRoomKeyRequest> {
+        return cryptoStore.getOutgoingRoomKeyRequests()
     }
 }

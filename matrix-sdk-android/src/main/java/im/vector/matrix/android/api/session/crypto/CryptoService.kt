@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.crypto.NewSessionListener
+import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
@@ -129,4 +130,6 @@ interface CryptoService {
     fun addNewSessionListener(newSessionListener: NewSessionListener)
 
     fun removeSessionListener(listener: NewSessionListener)
+
+    fun getOutgoingRoomKeyRequest(): List<OutgoingRoomKeyRequest>
 }
