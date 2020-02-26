@@ -16,19 +16,12 @@
 
 package im.vector.matrix.android.internal.database.mapper
 
-import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
-import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import timber.log.Timber
-import java.util.UUID
 import javax.inject.Inject
 
-internal class RoomSummaryMapper @Inject constructor(
-        private val cryptoService: CryptoService,
-        private val timelineEventMapper: TimelineEventMapper
-) {
+internal class RoomSummaryMapper @Inject constructor(private val timelineEventMapper: TimelineEventMapper) {
 
     fun map(roomSummaryEntity: RoomSummaryEntity): RoomSummary {
         val tags = roomSummaryEntity.tags.map {
@@ -38,22 +31,6 @@ internal class RoomSummaryMapper @Inject constructor(
         val latestEvent = roomSummaryEntity.latestPreviewableEvent?.let {
             timelineEventMapper.map(it, buildReadReceipts = false)
         }
-        if (latestEvent?.root?.isEncrypted() == true && latestEvent.root.mxDecryptionResult == null) {
-            // TODO use a global event decryptor? attache to session and that listen to new sessionId?
-            // for now decrypt sync
-            try {
-                val result = cryptoService.decryptEvent(latestEvent.root, latestEvent.root.roomId + UUID.randomUUID().toString())
-                latestEvent.root.mxDecryptionResult = OlmDecryptionResult(
-                        payload = result.clearEvent,
-                        senderKey = result.senderCurve25519Key,
-                        keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
-                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
-                )
-            } catch (e: Throwable) {
-                Timber.d(e)
-            }
-        }
-
         return RoomSummary(
                 roomId = roomSummaryEntity.roomId,
                 displayName = roomSummaryEntity.displayName ?: "",
