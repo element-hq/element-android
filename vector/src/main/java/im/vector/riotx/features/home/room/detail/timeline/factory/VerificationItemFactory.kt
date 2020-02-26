@@ -27,8 +27,8 @@ import im.vector.matrix.android.api.session.room.model.message.MessageVerificati
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.session.room.VerificationState
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
-import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.UserPreferencesProvider
+import im.vector.riotx.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformationDataFactory
@@ -43,7 +43,7 @@ import javax.inject.Inject
  * several checks are made to see if this conclusion is attached to a known request
  */
 class VerificationItemFactory @Inject constructor(
-        private val colorProvider: ColorProvider,
+        private val messageColorProvider: MessageColorProvider,
         private val messageInformationDataFactory: MessageInformationDataFactory,
         private val messageItemAttributesFactory: MessageItemAttributesFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
@@ -97,7 +97,7 @@ class VerificationItemFactory @Inject constructor(
                                                 isPositive = false,
                                                 informationData = informationData,
                                                 avatarRenderer = attributes.avatarRenderer,
-                                                colorProvider = colorProvider,
+                                                messageColorProvider = messageColorProvider,
                                                 emojiTypeFace = attributes.emojiTypeFace,
                                                 itemClickListener = attributes.itemClickListener,
                                                 itemLongClickListener = attributes.itemLongClickListener,
@@ -130,7 +130,7 @@ class VerificationItemFactory @Inject constructor(
                                         isPositive = true,
                                         informationData = informationData,
                                         avatarRenderer = attributes.avatarRenderer,
-                                        colorProvider = colorProvider,
+                                        messageColorProvider = messageColorProvider,
                                         emojiTypeFace = attributes.emojiTypeFace,
                                         itemClickListener = attributes.itemClickListener,
                                         itemLongClickListener = attributes.itemLongClickListener,

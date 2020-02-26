@@ -26,8 +26,8 @@ import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
-import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_state)
@@ -80,7 +80,7 @@ abstract class VerificationRequestConclusionItem : AbsBaseMessageItem<Verificati
             val isPositive: Boolean,
             override val informationData: MessageInformationData,
             override val avatarRenderer: AvatarRenderer,
-            override val colorProvider: ColorProvider,
+            override val messageColorProvider: MessageColorProvider,
             override val itemLongClickListener: View.OnLongClickListener? = null,
             override val itemClickListener: View.OnClickListener? = null,
             override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
