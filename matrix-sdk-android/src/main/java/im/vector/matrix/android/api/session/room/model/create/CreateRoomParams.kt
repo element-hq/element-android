@@ -128,33 +128,46 @@ data class CreateRoomParams(
     /**
      * After calling this method, when the room will be created, if cross-signing is enabled and we can get keys for every invited users,
      * the encryption will be enabled on the created room
+     * @param value true to activate this behavior.
      * @return this, to allow chaining methods
      */
-    fun enableEncryptionIfInvitedUsersSupportIt(): CreateRoomParams {
-        enableEncryptionIfInvitedUsersSupportIt = true
+    fun enableEncryptionIfInvitedUsersSupportIt(value: Boolean = true): CreateRoomParams {
+        enableEncryptionIfInvitedUsersSupportIt = value
         return this
     }
 
     /**
      * Add the crypto algorithm to the room creation parameters.
      *
-     * @param algorithm the algorithm
+     * @param enable true to enable encryption.
+     * @param algorithm the algorithm, default to [MXCRYPTO_ALGORITHM_MEGOLM], which is actually the only supported algorithm for the moment
      * @return a modified copy of the CreateRoomParams object, or this if there is no modification
      */
     @CheckResult
-    fun enableEncryptionWithAlgorithm(algorithm: String = MXCRYPTO_ALGORITHM_MEGOLM): CreateRoomParams {
+    fun enableEncryptionWithAlgorithm(enable: Boolean = true,
+                                      algorithm: String = MXCRYPTO_ALGORITHM_MEGOLM): CreateRoomParams {
+        // Remove the existing value if any.
+        val newInitialStates = initialStates
+                ?.filter { it.type != EventType.STATE_ROOM_ENCRYPTION }
+
         return if (algorithm == MXCRYPTO_ALGORITHM_MEGOLM) {
-            val contentMap = mapOf("algorithm" to algorithm)
+            if (enable) {
+                val contentMap = mapOf("algorithm" to algorithm)
 
-            val algoEvent = Event(
-                    type = EventType.STATE_ROOM_ENCRYPTION,
-                    stateKey = "",
-                    content = contentMap.toContent()
-            )
+                val algoEvent = Event(
+                        type = EventType.STATE_ROOM_ENCRYPTION,
+                        stateKey = "",
+                        content = contentMap.toContent()
+                )
 
-            copy(
-                    initialStates = initialStates.orEmpty().filter { it.type != EventType.STATE_ROOM_ENCRYPTION } + algoEvent
-            )
+                copy(
+                        initialStates = newInitialStates.orEmpty() + algoEvent
+                )
+            } else {
+                return copy(
+                        initialStates = newInitialStates
+                )
+            }
         } else {
             Timber.e("Unsupported algorithm: $algorithm")
             this
