@@ -94,7 +94,6 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
                 // Encryption
                 .enableEncryptionWithAlgorithm(state.isEncrypted)
 
-
         session.createRoom(createRoomParams, object : MatrixCallback<String> {
             override fun onSuccess(data: String) {
                 setState {
