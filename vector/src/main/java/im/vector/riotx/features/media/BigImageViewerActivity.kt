@@ -28,10 +28,7 @@ import kotlinx.android.synthetic.main.activity_big_image_viewer.*
 import javax.inject.Inject
 
 class BigImageViewerActivity : VectorBaseActivity() {
-
     @Inject lateinit var sessionHolder: ActiveSessionHolder
-
-    private val imageUrl by lazy { intent.getStringExtra(EXTRA_IMAGE_URL) }
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -48,13 +45,19 @@ class BigImageViewerActivity : VectorBaseActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        val contentUrlResolver = sessionHolder.getActiveSession().contentUrlResolver()
-        val fullSize = contentUrlResolver.resolveFullSize(imageUrl)
-        bigImageViewerImageView.showImage(fullSize?.toUri())
+        val uri = sessionHolder.getSafeActiveSession()
+                ?.contentUrlResolver()
+                ?.resolveFullSize(intent.getStringExtra(EXTRA_IMAGE_URL))
+                ?.toUri()
+
+        if (uri == null) {
+            finish()
+        } else {
+            bigImageViewerImageView.showImage(uri)
+        }
     }
 
     companion object {
-
         private const val EXTRA_TITLE = "EXTRA_TITLE"
         private const val EXTRA_IMAGE_URL = "EXTRA_IMAGE_URL"
 
