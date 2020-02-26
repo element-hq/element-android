@@ -77,85 +77,69 @@ import im.vector.riotx.features.ui.UiStateRepository
 @ScreenScope
 interface ScreenComponent {
 
+    /* ==========================================================================================
+     * Shortcut to VectorComponent elements
+     * ========================================================================================== */
+
     fun activeSessionHolder(): ActiveSessionHolder
-
     fun fragmentFactory(): FragmentFactory
-
     fun viewModelFactory(): ViewModelProvider.Factory
-
     fun bugReporter(): BugReporter
-
     fun rageShake(): RageShake
-
     fun navigator(): Navigator
-
     fun errorFormatter(): ErrorFormatter
-
     fun uiStateRepository(): UiStateRepository
 
+    /* ==========================================================================================
+     * Activities
+     * ========================================================================================== */
+
     fun inject(activity: HomeActivity)
+    fun inject(activity: VectorSettingsActivity)
+    fun inject(activity: KeysBackupManageActivity)
+    fun inject(activity: EmojiReactionPickerActivity)
+    fun inject(activity: LoginActivity)
+    fun inject(activity: LinkHandlerActivity)
+    fun inject(activity: MainActivity)
+    fun inject(activity: RoomDirectoryActivity)
+    fun inject(activity: BugReportActivity)
+    fun inject(activity: ImageMediaViewerActivity)
+    fun inject(activity: FilteredRoomsActivity)
+    fun inject(activity: CreateRoomActivity)
+    fun inject(activity: VideoMediaViewerActivity)
+    fun inject(activity: CreateDirectRoomActivity)
+    fun inject(activity: IncomingShareActivity)
+    fun inject(activity: SoftLogoutActivity)
+    fun inject(activity: PermalinkHandlerActivity)
+    fun inject(activity: QrCodeScannerActivity)
+    fun inject(activity: DebugMenuActivity)
+    fun inject(activity: SharedSecureStorageActivity)
+    fun inject(activity: BigImageViewerActivity)
+
+    /* ==========================================================================================
+     * BottomSheets
+     * ========================================================================================== */
 
     fun inject(bottomSheet: MessageActionsBottomSheet)
-
     fun inject(bottomSheet: ViewReactionsBottomSheet)
-
     fun inject(bottomSheet: ViewEditHistoryBottomSheet)
-
-    fun inject(activity: VectorSettingsActivity)
-
-    fun inject(activity: KeysBackupManageActivity)
-
-    fun inject(activity: EmojiReactionPickerActivity)
-
-    fun inject(activity: LoginActivity)
-
-    fun inject(activity: LinkHandlerActivity)
-
-    fun inject(activity: MainActivity)
-
-    fun inject(activity: RoomDirectoryActivity)
-
-    fun inject(activity: BugReportActivity)
-
-    fun inject(activity: ImageMediaViewerActivity)
-
-    fun inject(activity: FilteredRoomsActivity)
-
-    fun inject(activity: CreateRoomActivity)
-
-    fun inject(view: VectorInviteView)
-
-    fun inject(activity: VideoMediaViewerActivity)
-
-    fun inject(preference: UserAvatarPreference)
-
-    fun inject(activity: CreateDirectRoomActivity)
-
     fun inject(bottomSheet: DisplayReadReceiptsBottomSheet)
-
-    fun inject(button: ReactionButton)
-
-    fun inject(activity: IncomingShareActivity)
-
     fun inject(bottomSheet: RoomListQuickActionsBottomSheet)
-
-    fun inject(activity: SoftLogoutActivity)
-
     fun inject(bottomSheet: VerificationBottomSheet)
-
-    fun inject(activity: PermalinkHandlerActivity)
-
-    fun inject(activity: QrCodeScannerActivity)
-
-    fun inject(activity: DebugMenuActivity)
-
     fun inject(bottomSheet: DeviceVerificationInfoBottomSheet)
-
     fun inject(bottomSheet: DeviceListBottomSheet)
 
-    fun inject(activity: SharedSecureStorageActivity)
+    /* ==========================================================================================
+     * Others
+     * ========================================================================================== */
 
-    fun inject(activity: BigImageViewerActivity)
+    fun inject(view: VectorInviteView)
+    fun inject(preference: UserAvatarPreference)
+    fun inject(button: ReactionButton)
+
+    /* ==========================================================================================
+     * Factory
+     * ========================================================================================== */
 
     @Component.Factory
     interface Factory {
