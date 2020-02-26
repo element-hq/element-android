@@ -17,7 +17,6 @@ package im.vector.matrix.android.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShare.Companion.ACTION_SHARE_CANCELLATION
 
 /**
  * Class representing a room key request cancellation content
@@ -25,7 +24,7 @@ import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShare.Companio
 @JsonClass(generateAdapter = true)
 internal data class RoomKeyShareCancellation(
         @Json(name = "action")
-        override val action: String? = ACTION_SHARE_CANCELLATION,
+        override val action: String? = RoomKeyShare.ACTION_SHARE_CANCELLATION,
 
         @Json(name = "requesting_device_id")
         override val requestingDeviceId: String? = null,
