@@ -19,7 +19,10 @@ package im.vector.riotx.features.navigation
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.view.View
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.TaskStackBuilder
+import androidx.core.view.ViewCompat
 import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
@@ -36,6 +39,7 @@ import im.vector.riotx.features.debug.DebugMenuActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailArgs
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
+import im.vector.riotx.features.media.BigImageViewerActivity
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewActivity
@@ -173,6 +177,14 @@ class DefaultNavigator @Inject constructor(
 
     override fun openRoomProfile(context: Context, roomId: String) {
         context.startActivity(RoomProfileActivity.newIntent(context, roomId))
+    }
+
+    override fun openBigImageViewer(activity: Activity, sharedElement: View?, title: String, avatarUrl: String) {
+        val intent = BigImageViewerActivity.newIntent(activity, title, avatarUrl)
+        val options = sharedElement?.let {
+            ActivityOptionsCompat.makeSceneTransitionAnimation(activity, it, ViewCompat.getTransitionName(it) ?: "")
+        }
+        activity.startActivity(intent, options?.toBundle())
     }
 
     private fun startActivity(context: Context, intent: Intent, buildTask: Boolean) {

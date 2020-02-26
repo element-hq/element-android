@@ -11,6 +11,7 @@ Features ✨:
 Improvements 🙌:
  - Migrate to binary QR code verification (#994)
  - Share action is added to room profile and room member profile (#858)
+ - Display avatar in fullscreen (#861)
  - Fix some performance issues with crypto
 
 Bugfix 🐛:
