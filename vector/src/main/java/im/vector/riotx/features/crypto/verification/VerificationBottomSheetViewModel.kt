@@ -278,7 +278,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                                 session.cryptoService()
                                         .crossSigningService().trustDevice(deviceId, object : MatrixCallback<Unit> {
                                             override fun onFailure(failure: Throwable) {
-                                                Timber.w("Failed to sign my device after recovery", failure)
+                                                Timber.w(failure, "Failed to sign my device after recovery")
                                             }
                                         })
                             }
