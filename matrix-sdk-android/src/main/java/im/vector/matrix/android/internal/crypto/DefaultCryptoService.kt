@@ -33,7 +33,7 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
-import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListener
+import im.vector.matrix.android.api.session.crypto.keyshare.GossipingRequestListener
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -308,7 +308,7 @@ internal class DefaultCryptoService @Inject constructor(
                 deviceListManager.invalidateAllDeviceLists()
                 deviceListManager.refreshOutdatedDeviceLists()
             } else {
-                incomingRoomKeyRequestManager.processReceivedRoomKeyRequests()
+                incomingRoomKeyRequestManager.processReceivedGossipingRequests()
             }
         }.fold(
                 {
@@ -369,7 +369,7 @@ internal class DefaultCryptoService @Inject constructor(
                     // Make sure we process to-device messages before generating new one-time-keys #2782
                     deviceListManager.refreshOutdatedDeviceLists()
                     oneTimeKeysUploader.maybeUploadOneTimeKeys()
-                    incomingRoomKeyRequestManager.processReceivedRoomKeyRequests()
+                    incomingRoomKeyRequestManager.processReceivedGossipingRequests()
                 }
             }
         }
@@ -694,8 +694,13 @@ internal class DefaultCryptoService @Inject constructor(
                 EventType.ROOM_KEY, EventType.FORWARDED_ROOM_KEY -> {
                     onRoomKeyEvent(event)
                 }
+
+                EventType.REQUEST_SECRET,
                 EventType.ROOM_KEY_REQUEST                       -> {
-                    incomingRoomKeyRequestManager.onRoomKeyRequestEvent(event)
+                    incomingRoomKeyRequestManager.onGossipingRequestEvent(event)
+                }
+                EventType.SEND_SECRET                            -> {
+                    // incomingRoomKeyRequestManager.onGossipingRequestEvent(event)
                 }
                 else                                             -> {
                     // ignore
@@ -1031,20 +1036,20 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Add a RoomKeysRequestListener listener.
+     * Add a GossipingRequestListener listener.
      *
      * @param listener listener
      */
-    override fun addRoomKeysRequestListener(listener: RoomKeysRequestListener) {
+    override fun addRoomKeysRequestListener(listener: GossipingRequestListener) {
         incomingRoomKeyRequestManager.addRoomKeysRequestListener(listener)
     }
 
     /**
-     * Add a RoomKeysRequestListener listener.
+     * Add a GossipingRequestListener listener.
      *
      * @param listener listener
      */
-    override fun removeRoomKeysRequestListener(listener: RoomKeysRequestListener) {
+    override fun removeRoomKeysRequestListener(listener: GossipingRequestListener) {
         incomingRoomKeyRequestManager.removeRoomKeysRequestListener(listener)
     }
 

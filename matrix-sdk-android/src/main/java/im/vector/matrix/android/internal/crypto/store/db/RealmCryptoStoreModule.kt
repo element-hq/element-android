@@ -21,11 +21,13 @@ import im.vector.matrix.android.internal.crypto.store.db.model.CryptoMetadataEnt
 import im.vector.matrix.android.internal.crypto.store.db.model.CryptoRoomEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.DeviceInfoEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.IncomingRoomKeyRequestEntity
+import im.vector.matrix.android.internal.crypto.store.db.model.IncomingSecretRequestEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.KeyInfoEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.OlmSessionEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.OutgoingRoomKeyRequestEntity
+import im.vector.matrix.android.internal.crypto.store.db.model.OutgoingSecretRequestEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.TrustLevelEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.UserEntity
 import io.realm.annotations.RealmModule
@@ -46,6 +48,8 @@ import io.realm.annotations.RealmModule
             UserEntity::class,
             KeyInfoEntity::class,
             CrossSigningInfoEntity::class,
-            TrustLevelEntity::class
+            TrustLevelEntity::class,
+            IncomingSecretRequestEntity::class,
+            OutgoingSecretRequestEntity::class
         ])
 internal class RealmCryptoStoreModule

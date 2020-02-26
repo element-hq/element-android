@@ -20,10 +20,12 @@ package im.vector.matrix.android.internal.crypto.store
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.api.util.Optional
+import im.vector.matrix.android.internal.crypto.IncomingShareRequestCommon
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
-import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequestCommon
+import im.vector.matrix.android.internal.crypto.IncomingSecretShareRequest
 import im.vector.matrix.android.internal.crypto.NewSessionListener
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
+import im.vector.matrix.android.internal.crypto.ShareRequestState
 import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
@@ -116,6 +118,7 @@ internal interface IMXCryptoStore {
      * @return the pending IncomingRoomKeyRequest requests
      */
     fun getPendingIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest>
+    fun getPendingIncomingSecretShareRequests(): List<IncomingSecretShareRequest>
 
     /**
      * Indicate if the store contains data for the passed account.
@@ -355,7 +358,7 @@ internal interface IMXCryptoStore {
      * @param states the states
      * @return an OutgoingRoomKeyRequest or null
      */
-    fun getOutgoingRoomKeyRequestByState(states: Set<OutgoingRoomKeyRequest.RequestState>): OutgoingRoomKeyRequest?
+    fun getOutgoingRoomKeyRequestByState(states: Set<ShareRequestState>): OutgoingRoomKeyRequest?
 
     /**
      * Update an existing outgoing request.
@@ -383,7 +386,9 @@ internal interface IMXCryptoStore {
      *
      * @param incomingRoomKeyRequest the incoming key request
      */
-    fun deleteIncomingRoomKeyRequest(incomingRoomKeyRequest: IncomingRoomKeyRequestCommon)
+    fun deleteIncomingRoomKeyRequest(incomingRoomKeyRequest: IncomingShareRequestCommon)
+
+    fun deleteIncomingSecretRequest(request: IncomingSecretShareRequest)
 
     /**
      * Search an IncomingRoomKeyRequest

@@ -1,6 +1,5 @@
 /*
- * Copyright 2016 OpenMarket Ltd
- * Copyright 2018 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,40 +16,21 @@
 
 package im.vector.matrix.android.internal.crypto
 
-import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
-
 /**
  * Represents an outgoing room key request
  */
-class OutgoingRoomKeyRequest(
-        // RequestBody
-        var requestBody: RoomKeyRequestBody?, // list of recipients for the request
-        override var recipients: List<Map<String, String>>, // Unique id for this request. Used for both
+class OutgoingSecretRequest(
+        // Secret Name
+        var secretName: String?,
+        // list of recipients for the request
+        override var recipients: List<Map<String, String>>,
+        // Unique id for this request. Used for both
         // an id within the request for later pairing with a cancellation, and for
         // the transaction id when sending the to_device messages to our local
-        override var requestId: String, // current state of this request
+        override var requestId: String,
+        // current state of this request
         override var state: ShareRequestState) : OutgoingShareRequest {
 
     // transaction id for the cancellation, if any
     override var cancellationTxnId: String? = null
-
-    /**
-     * Used only for log.
-     *
-     * @return the room id.
-     */
-    val roomId: String?
-        get() = if (null != requestBody) {
-            requestBody!!.roomId
-        } else null
-
-    /**
-     * Used only for log.
-     *
-     * @return the session id
-     */
-    val sessionId: String?
-        get() = if (null != requestBody) {
-            requestBody!!.sessionId
-        } else null
 }

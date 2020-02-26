@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,24 +16,20 @@
 
 package im.vector.matrix.android.internal.crypto.store.db.model
 
-import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
+import im.vector.matrix.android.internal.crypto.OutgoingSecretRequest
 import im.vector.matrix.android.internal.crypto.ShareRequestState
-import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.store.db.deserializeFromRealm
 import im.vector.matrix.android.internal.crypto.store.db.serializeForRealm
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
-internal open class OutgoingRoomKeyRequestEntity(
+internal open class OutgoingSecretRequestEntity(
         @PrimaryKey var requestId: String? = null,
         var cancellationTxnId: String? = null,
         // Serialized Json
         var recipientsData: String? = null,
         // RoomKeyRequestBody fields
-        var requestBodyAlgorithm: String? = null,
-        var requestBodyRoomId: String? = null,
-        var requestBodySenderKey: String? = null,
-        var requestBodySessionId: String? = null,
+        var secretName: String? = null,
         // State
         var state: Int = 0
 ) : RealmObject() {
@@ -41,16 +37,11 @@ internal open class OutgoingRoomKeyRequestEntity(
     /**
      * Convert to OutgoingRoomKeyRequest
      */
-    fun toOutgoingRoomKeyRequest(): OutgoingRoomKeyRequest {
+    fun toOutgoingSecretRequest(): OutgoingSecretRequest {
         val cancellationTxnId = this.cancellationTxnId
-        return OutgoingRoomKeyRequest(
-                RoomKeyRequestBody(
-                        algorithm = requestBodyAlgorithm,
-                        roomId = requestBodyRoomId,
-                        senderKey = requestBodySenderKey,
-                        sessionId = requestBodySessionId
-                ),
-                getRecipients()!!,
+        return OutgoingSecretRequest(
+                secretName,
+                getRecipients() ?: emptyList(),
                 requestId!!,
                 ShareRequestState.from(state)
         ).apply {
@@ -59,19 +50,14 @@ internal open class OutgoingRoomKeyRequestEntity(
     }
 
     private fun getRecipients(): List<Map<String, String>>? {
-        return deserializeFromRealm(recipientsData)
+        return try {
+            deserializeFromRealm(recipientsData)
+        } catch (failure: Throwable) {
+            null
+        }
     }
 
     fun putRecipients(recipients: List<Map<String, String>>?) {
         recipientsData = serializeForRealm(recipients)
-    }
-
-    fun putRequestBody(requestBody: RoomKeyRequestBody?) {
-        requestBody?.let {
-            requestBodyAlgorithm = it.algorithm
-            requestBodyRoomId = it.roomId
-            requestBodySenderKey = it.senderKey
-            requestBodySessionId = it.sessionId
-        }
     }
 }

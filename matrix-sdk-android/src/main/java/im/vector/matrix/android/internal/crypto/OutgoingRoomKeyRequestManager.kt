@@ -21,7 +21,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
-import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShareCancellation
+import im.vector.matrix.android.internal.crypto.model.rest.ShareRequestCancellation
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShareRequest
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
@@ -89,9 +89,9 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
      */
     fun sendRoomKeyRequest(requestBody: RoomKeyRequestBody?, recipients: List<Map<String, String>>) {
         val req = cryptoStore.getOrAddOutgoingRoomKeyRequest(
-                OutgoingRoomKeyRequest(requestBody, recipients, makeTxnId(), OutgoingRoomKeyRequest.RequestState.UNSENT))
+                OutgoingRoomKeyRequest(requestBody, recipients, makeTxnId(), ShareRequestState.UNSENT))
 
-        if (req?.state == OutgoingRoomKeyRequest.RequestState.UNSENT) {
+        if (req?.state == ShareRequestState.UNSENT) {
             startTimer()
         }
     }
@@ -132,20 +132,20 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
         Timber.v("cancelRoomKeyRequest: requestId: " + req.requestId + " state: " + req.state + " andResend: " + andResend)
 
         when (req.state) {
-            OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING,
-            OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING_AND_WILL_RESEND -> {
+            ShareRequestState.CANCELLATION_PENDING,
+            ShareRequestState.CANCELLATION_PENDING_AND_WILL_RESEND -> {
                 // nothing to do here
             }
-            OutgoingRoomKeyRequest.RequestState.UNSENT,
-            OutgoingRoomKeyRequest.RequestState.FAILED                               -> {
+            ShareRequestState.UNSENT,
+            ShareRequestState.FAILED                               -> {
                 Timber.v("## cancelRoomKeyRequest() : deleting unnecessary room key request for $requestBody")
                 cryptoStore.deleteOutgoingRoomKeyRequest(req.requestId)
             }
-            OutgoingRoomKeyRequest.RequestState.SENT                                 -> {
+            ShareRequestState.SENT                                 -> {
                 if (andResend) {
-                    req.state = OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING_AND_WILL_RESEND
+                    req.state = ShareRequestState.CANCELLATION_PENDING_AND_WILL_RESEND
                 } else {
-                    req.state = OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING
+                    req.state = ShareRequestState.CANCELLATION_PENDING
                 }
                 req.cancellationTxnId = makeTxnId()
                 cryptoStore.updateOutgoingRoomKeyRequest(req)
@@ -187,9 +187,9 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
 
         Timber.v("## sendOutgoingRoomKeyRequests() :  Looking for queued outgoing room key requests")
         val outgoingRoomKeyRequest = cryptoStore.getOutgoingRoomKeyRequestByState(
-                setOf(OutgoingRoomKeyRequest.RequestState.UNSENT,
-                        OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING,
-                        OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING_AND_WILL_RESEND))
+                setOf(ShareRequestState.UNSENT,
+                        ShareRequestState.CANCELLATION_PENDING,
+                        ShareRequestState.CANCELLATION_PENDING_AND_WILL_RESEND))
 
         if (null == outgoingRoomKeyRequest) {
             Timber.v("## sendOutgoingRoomKeyRequests() : No more outgoing room key requests")
@@ -197,7 +197,7 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
             return
         }
 
-        if (OutgoingRoomKeyRequest.RequestState.UNSENT === outgoingRoomKeyRequest.state) {
+        if (ShareRequestState.UNSENT === outgoingRoomKeyRequest.state) {
             sendOutgoingRoomKeyRequest(outgoingRoomKeyRequest)
         } else {
             sendOutgoingRoomKeyRequestCancellation(outgoingRoomKeyRequest)
@@ -220,8 +220,8 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
         )
 
         sendMessageToDevices(requestMessage, request.recipients, request.requestId, object : MatrixCallback<Unit> {
-            private fun onDone(state: OutgoingRoomKeyRequest.RequestState) {
-                if (request.state !== OutgoingRoomKeyRequest.RequestState.UNSENT) {
+            private fun onDone(state: ShareRequestState) {
+                if (request.state !== ShareRequestState.UNSENT) {
                     Timber.v("## sendOutgoingRoomKeyRequest() : Cannot update room key request from UNSENT as it was already updated to ${request.state}")
                 } else {
                     request.state = state
@@ -234,12 +234,12 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
 
             override fun onSuccess(data: Unit) {
                 Timber.v("## sendOutgoingRoomKeyRequest succeed")
-                onDone(OutgoingRoomKeyRequest.RequestState.SENT)
+                onDone(ShareRequestState.SENT)
             }
 
             override fun onFailure(failure: Throwable) {
                 Timber.e("## sendOutgoingRoomKeyRequest failed")
-                onDone(OutgoingRoomKeyRequest.RequestState.FAILED)
+                onDone(ShareRequestState.FAILED)
             }
         })
     }
@@ -254,7 +254,7 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
                 + " to " + request.recipients
                 + " cancellation id  " + request.cancellationTxnId)
 
-        val roomKeyShareCancellation = RoomKeyShareCancellation(
+        val roomKeyShareCancellation = ShareRequestCancellation(
                 requestingDeviceId = cryptoStore.getDeviceId(),
                 requestId = request.cancellationTxnId
         )
@@ -268,7 +268,7 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
 
             override fun onSuccess(data: Unit) {
                 Timber.v("## sendOutgoingRoomKeyRequestCancellation() : done")
-                val resend = request.state === OutgoingRoomKeyRequest.RequestState.CANCELLATION_PENDING_AND_WILL_RESEND
+                val resend = request.state === ShareRequestState.CANCELLATION_PENDING_AND_WILL_RESEND
 
                 onDone()
 

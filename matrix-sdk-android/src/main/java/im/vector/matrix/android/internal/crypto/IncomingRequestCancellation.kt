@@ -1,6 +1,5 @@
 /*
  * Copyright 2016 OpenMarket Ltd
- * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +18,12 @@ package im.vector.matrix.android.internal.crypto
 
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
-import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShareRequest
+import im.vector.matrix.android.internal.crypto.model.rest.ShareRequestCancellation
 
 /**
- * IncomingRoomKeyRequest class defines the incoming room keys request.
+ * IncomingRequestCancellation describes the incoming room key cancellation.
  */
-data class IncomingRoomKeyRequest(
+data class IncomingRequestCancellation(
         /**
          * The user id
          */
@@ -39,24 +37,7 @@ data class IncomingRoomKeyRequest(
         /**
          * The request id
          */
-        override val requestId: String? = null,
-
-        /**
-         * The request body
-         */
-        val requestBody: RoomKeyRequestBody? = null,
-
-        /**
-         * The runnable to call to accept to share the keys
-         */
-        @Transient
-        var share: Runnable? = null,
-
-        /**
-         * The runnable to call to ignore the key share request.
-         */
-        @Transient
-        var ignore: Runnable? = null
+        override val requestId: String? = null
 ) : IncomingShareRequestCommon {
     companion object {
         /**
@@ -64,15 +45,14 @@ data class IncomingRoomKeyRequest(
          *
          * @param event the event
          */
-        fun fromEvent(event: Event): IncomingRoomKeyRequest? {
+        fun fromEvent(event: Event): IncomingRequestCancellation? {
             return event.getClearContent()
-                    .toModel<RoomKeyShareRequest>()
+                    .toModel<ShareRequestCancellation>()
                     ?.let {
-                        IncomingRoomKeyRequest(
+                        IncomingRequestCancellation(
                                 userId = event.senderId,
                                 deviceId = it.requestingDeviceId,
-                                requestId = it.requestId,
-                                requestBody = it.body ?: RoomKeyRequestBody()
+                                requestId = it.requestId
                         )
                     }
         }

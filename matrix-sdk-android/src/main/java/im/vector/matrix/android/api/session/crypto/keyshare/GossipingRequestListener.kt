@@ -17,12 +17,13 @@
 package im.vector.matrix.android.api.session.crypto.keyshare
 
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
-import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequestCancellation
+import im.vector.matrix.android.internal.crypto.IncomingRequestCancellation
+import im.vector.matrix.android.internal.crypto.IncomingSecretShareRequest
 
 /**
  * Room keys events listener
  */
-interface RoomKeysRequestListener {
+interface GossipingRequestListener {
     /**
      * An room key request has been received.
      *
@@ -31,9 +32,15 @@ interface RoomKeysRequestListener {
     fun onRoomKeyRequest(request: IncomingRoomKeyRequest)
 
     /**
+     * Returns the secret value to be shared
+     * @return true if is handled
+     */
+    fun onSecretShareRequest(request: IncomingSecretShareRequest) : Boolean
+
+    /**
      * A room key request cancellation has been received.
      *
      * @param request the cancellation request
      */
-    fun onRoomKeyRequestCancellation(request: IncomingRoomKeyRequestCancellation)
+    fun onRoomKeyRequestCancellation(request: IncomingRequestCancellation)
 }

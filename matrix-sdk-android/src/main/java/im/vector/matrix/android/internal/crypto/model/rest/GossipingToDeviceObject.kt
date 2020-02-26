@@ -1,5 +1,4 @@
 /*
- * Copyright 2016 OpenMarket Ltd
  * Copyright 2019 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,23 +15,20 @@
  */
 package im.vector.matrix.android.internal.crypto.model.rest
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-
 /**
- * Class representing a room key request content
+ * Interface representing an room key action request
+ * Note: this class cannot be abstract because of [org.matrix.androidsdk.core.JsonUtils.toRoomKeyShare]
  */
-@JsonClass(generateAdapter = true)
-internal data class RoomKeyShareRequest(
-        @Json(name = "action")
-        override val action: String? = GossipingToDeviceObject.ACTION_SHARE_REQUEST,
+internal interface GossipingToDeviceObject : SendToDeviceObject {
 
-        @Json(name = "requesting_device_id")
-        override val requestingDeviceId: String? = null,
+    val action: String?
 
-        @Json(name = "request_id")
-        override val requestId: String? = null,
+    val requestingDeviceId: String?
 
-        @Json(name = "body")
-        val body: RoomKeyRequestBody? = null
-) : GossipingToDeviceObject
+    val requestId: String?
+
+    companion object {
+        const val ACTION_SHARE_REQUEST = "request"
+        const val ACTION_SHARE_CANCELLATION = "request_cancellation"
+    }
+}

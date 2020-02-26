@@ -24,9 +24,11 @@ import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningIn
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
-import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequestCommon
+import im.vector.matrix.android.internal.crypto.IncomingSecretShareRequest
+import im.vector.matrix.android.internal.crypto.IncomingShareRequestCommon
 import im.vector.matrix.android.internal.crypto.NewSessionListener
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
+import im.vector.matrix.android.internal.crypto.ShareRequestState
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
@@ -46,6 +48,8 @@ import im.vector.matrix.android.internal.crypto.store.db.model.DeviceInfoEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.DeviceInfoEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.IncomingRoomKeyRequestEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.IncomingRoomKeyRequestEntityFields
+import im.vector.matrix.android.internal.crypto.store.db.model.IncomingSecretRequestEntity
+import im.vector.matrix.android.internal.crypto.store.db.model.IncomingSecretRequestEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.KeyInfoEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
@@ -832,7 +836,7 @@ internal class RealmCryptoStore @Inject constructor(
         return request
     }
 
-    override fun getOutgoingRoomKeyRequestByState(states: Set<OutgoingRoomKeyRequest.RequestState>): OutgoingRoomKeyRequest? {
+    override fun getOutgoingRoomKeyRequestByState(states: Set<ShareRequestState>): OutgoingRoomKeyRequest? {
         val statesIndex = states.map { it.ordinal }.toTypedArray()
         return doRealmQueryAndCopy(realmConfiguration) {
             it.where<OutgoingRoomKeyRequestEntity>()
@@ -889,12 +893,24 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun deleteIncomingRoomKeyRequest(incomingRoomKeyRequest: IncomingRoomKeyRequestCommon) {
+    override fun deleteIncomingRoomKeyRequest(incomingRoomKeyRequest: IncomingShareRequestCommon) {
         doRealmTransaction(realmConfiguration) {
             it.where<IncomingRoomKeyRequestEntity>()
                     .equalTo(IncomingRoomKeyRequestEntityFields.USER_ID, incomingRoomKeyRequest.userId)
                     .equalTo(IncomingRoomKeyRequestEntityFields.DEVICE_ID, incomingRoomKeyRequest.deviceId)
                     .equalTo(IncomingRoomKeyRequestEntityFields.REQUEST_ID, incomingRoomKeyRequest.requestId)
+                    .findAll()
+                    .deleteAllFromRealm()
+        }
+    }
+
+    override fun deleteIncomingSecretRequest(request: IncomingSecretShareRequest) {
+        doRealmTransaction(realmConfiguration) {
+            it.where<IncomingSecretRequestEntity>()
+                    .equalTo(IncomingSecretRequestEntityFields.USER_ID, request.userId)
+                    .equalTo(IncomingSecretRequestEntityFields.DEVICE_ID, request.deviceId)
+                    .equalTo(IncomingSecretRequestEntityFields.REQUEST_ID, request.requestId)
+                    .equalTo(IncomingSecretRequestEntityFields.SECRET_NAME, request.secretName)
                     .findAll()
                     .deleteAllFromRealm()
         }
@@ -920,6 +936,15 @@ internal class RealmCryptoStore @Inject constructor(
                     it.toIncomingRoomKeyRequest()
                 }
                 .toMutableList()
+    }
+
+    override fun getPendingIncomingSecretShareRequests(): List<IncomingSecretShareRequest> {
+        return doRealmQueryAndCopyList(realmConfiguration) {
+            it.where<IncomingSecretRequestEntity>()
+                    .findAll()
+        }.map {
+            it.toIncomingSecretShareRequest()
+        }
     }
 
     /* ==========================================================================================

@@ -22,7 +22,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
-import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListener
+import im.vector.matrix.android.api.session.crypto.keyshare.GossipingRequestListener
 import im.vector.matrix.android.api.session.crypto.verification.VerificationService
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
@@ -91,9 +91,9 @@ interface CryptoService {
 
     fun cancelRoomKeyRequest(requestBody: RoomKeyRequestBody)
 
-    fun addRoomKeysRequestListener(listener: RoomKeysRequestListener)
+    fun addRoomKeysRequestListener(listener: GossipingRequestListener)
 
-    fun removeRoomKeysRequestListener(listener: RoomKeysRequestListener)
+    fun removeRoomKeysRequestListener(listener: GossipingRequestListener)
 
     fun getDevicesList(callback: MatrixCallback<DevicesListResponse>)
 

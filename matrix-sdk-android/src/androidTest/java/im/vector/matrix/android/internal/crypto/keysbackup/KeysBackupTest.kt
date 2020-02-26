@@ -34,7 +34,6 @@ import im.vector.matrix.android.common.assertDictEquals
 import im.vector.matrix.android.common.assertListEquals
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import im.vector.matrix.android.internal.crypto.MegolmSessionData
-import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.keysbackup.model.KeysBackupVersionTrust
 import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
@@ -335,9 +334,9 @@ class KeysBackupTest : InstrumentedTest {
         // - Check the SDK sent key share requests
         val cryptoStore2 = (testData.aliceSession2.cryptoService().keysBackupService() as DefaultKeysBackupService).store
         val unsentRequest = cryptoStore2
-                .getOutgoingRoomKeyRequestByState(setOf(OutgoingRoomKeyRequest.RequestState.UNSENT))
+                .getOutgoingRoomKeyRequestByState(setOf(ShareRequestState.UNSENT))
         val sentRequest = cryptoStore2
-                .getOutgoingRoomKeyRequestByState(setOf(OutgoingRoomKeyRequest.RequestState.SENT))
+                .getOutgoingRoomKeyRequestByState(setOf(ShareRequestState.SENT))
 
         // Request is either sent or unsent
         assertTrue(unsentRequest != null || sentRequest != null)
@@ -357,9 +356,9 @@ class KeysBackupTest : InstrumentedTest {
 
         // - There must be no more pending key share requests
         val unsentRequestAfterRestoration = cryptoStore2
-                .getOutgoingRoomKeyRequestByState(setOf(OutgoingRoomKeyRequest.RequestState.UNSENT))
+                .getOutgoingRoomKeyRequestByState(setOf(ShareRequestState.UNSENT))
         val sentRequestAfterRestoration = cryptoStore2
-                .getOutgoingRoomKeyRequestByState(setOf(OutgoingRoomKeyRequest.RequestState.SENT))
+                .getOutgoingRoomKeyRequestByState(setOf(ShareRequestState.SENT))
 
         // Request is either sent or unsent
         assertTrue(unsentRequestAfterRestoration == null && sentRequestAfterRestoration == null)

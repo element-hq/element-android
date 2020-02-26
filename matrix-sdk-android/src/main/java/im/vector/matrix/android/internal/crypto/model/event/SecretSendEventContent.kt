@@ -13,22 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package im.vector.matrix.android.internal.crypto.model.event
 
-package im.vector.matrix.android.internal.crypto
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-interface IncomingRoomKeyRequestCommon {
-    /**
-     * The user id
-     */
-    val userId: String?
-
-    /**
-     * The device id
-     */
-    val deviceId: String?
-
-    /**
-     * The request id
-     */
-    val requestId: String?
-}
+/**
+ * Class representing an encrypted event content
+ */
+@JsonClass(generateAdapter = true)
+data class SecretSendEventContent(
+        @Json(name = "request_id") val requestId: String,
+        @Json(name = "secret") val secretValue: String
+)
