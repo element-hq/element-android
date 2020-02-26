@@ -16,10 +16,23 @@
 
 package im.vector.matrix.android.internal.crypto.keysbackup.api
 
-import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.*
+import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.BackupKeysResult
+import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.CreateKeysBackupVersionBody
+import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeyBackupData
+import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysBackupData
+import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersion
+import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersionResult
+import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.RoomKeysBackupData
+import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.UpdateKeysBackupVersionBody
 import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 /**
  * Ref: https://github.com/uhoreg/matrix-doc/blob/e2e_backup/proposals/1219-storing-megolm-keys-serverside.md

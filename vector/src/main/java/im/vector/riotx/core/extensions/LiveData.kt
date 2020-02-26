@@ -20,8 +20,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import im.vector.riotx.core.utils.FirstThrottler
 import im.vector.riotx.core.utils.EventObserver
+import im.vector.riotx.core.utils.FirstThrottler
 import im.vector.riotx.core.utils.LiveEvent
 
 inline fun <T> LiveData<T>.observeK(owner: LifecycleOwner, crossinline observer: (T?) -> Unit) {

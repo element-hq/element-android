@@ -22,10 +22,19 @@ import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.internal.auth.data.RiotConfig
 import im.vector.matrix.android.internal.auth.login.ResetPasswordMailConfirmed
-import im.vector.matrix.android.internal.auth.registration.*
+import im.vector.matrix.android.internal.auth.registration.AddThreePidRegistrationParams
+import im.vector.matrix.android.internal.auth.registration.AddThreePidRegistrationResponse
+import im.vector.matrix.android.internal.auth.registration.RegistrationParams
+import im.vector.matrix.android.internal.auth.registration.SuccessResult
+import im.vector.matrix.android.internal.auth.registration.ValidationCodeBody
 import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Headers
+import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Url
 
 /**
  * The login REST API.

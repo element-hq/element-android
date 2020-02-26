@@ -18,7 +18,11 @@ package im.vector.matrix.android.internal.database
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.util.createBackgroundHandler
-import io.realm.*
+import io.realm.OrderedRealmCollectionChangeListener
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import io.realm.RealmObject
+import io.realm.RealmResults
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren

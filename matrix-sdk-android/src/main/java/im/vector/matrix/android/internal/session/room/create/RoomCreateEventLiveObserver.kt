@@ -27,8 +27,8 @@ import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.query.whereTypes
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.database.query.whereTypes
 import im.vector.matrix.android.internal.di.SessionDatabase
 import io.realm.OrderedCollectionChangeSet
 import io.realm.RealmConfiguration

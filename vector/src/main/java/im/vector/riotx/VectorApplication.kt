@@ -55,7 +55,8 @@ import im.vector.riotx.features.version.VersionProvider
 import im.vector.riotx.push.fcm.FcmHelper
 import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.Provider, androidx.work.Configuration.Provider {

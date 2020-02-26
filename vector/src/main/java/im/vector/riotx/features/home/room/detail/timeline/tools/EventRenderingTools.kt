@@ -25,7 +25,10 @@ import im.vector.riotx.core.linkify.VectorLinkify
 import im.vector.riotx.core.utils.isValidUrl
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.html.PillImageSpan
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 fun CharSequence.findPillsAndProcess(scope: CoroutineScope, processBlock: (PillImageSpan) -> Unit) {

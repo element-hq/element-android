@@ -16,7 +16,11 @@
 
 package im.vector.riotx.features.signout.soft
 
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import im.vector.riotx.features.login.LoginMode
 
 data class SoftLogoutViewState(

@@ -16,7 +16,11 @@
 
 package im.vector.riotx.receivers
 
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import androidx.core.content.edit
 import im.vector.riotx.core.utils.lsFiles
@@ -32,8 +36,8 @@ class DebugReceiver : BroadcastReceiver() {
 
         intent.action?.let {
             when {
-                it.endsWith(DEBUG_ACTION_DUMP_FILESYSTEM) -> lsFiles(context)
-                it.endsWith(DEBUG_ACTION_DUMP_PREFERENCES) -> dumpPreferences(context)
+                it.endsWith(DEBUG_ACTION_DUMP_FILESYSTEM)    -> lsFiles(context)
+                it.endsWith(DEBUG_ACTION_DUMP_PREFERENCES)   -> dumpPreferences(context)
                 it.endsWith(DEBUG_ACTION_ALTER_SCALAR_TOKEN) -> alterScalarToken(context)
             }
         }

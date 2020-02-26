@@ -19,7 +19,7 @@ package im.vector.matrix.android.internal.auth.db
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.internal.auth.login.ResetPasswordData
 import im.vector.matrix.android.internal.auth.registration.ThreePidData
-import java.util.*
+import java.util.UUID
 
 /**
  * This class holds all pending data when creating a session, either by login or by register

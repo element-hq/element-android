@@ -23,10 +23,10 @@ import android.content.Context
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListener
-import im.vector.matrix.android.api.session.crypto.verification.VerificationService
 import im.vector.matrix.android.api.session.crypto.verification.SasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
+import im.vector.matrix.android.api.session.crypto.verification.VerificationService
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequestCancellation
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
@@ -39,11 +39,10 @@ import im.vector.riotx.features.popup.PopupAlertManager
 import timber.log.Timber
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 /**
  * Manage the key share events.

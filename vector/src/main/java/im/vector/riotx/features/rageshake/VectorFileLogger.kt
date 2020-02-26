@@ -24,12 +24,16 @@ import java.io.File
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.text.SimpleDateFormat
-import java.util.*
-import java.util.logging.*
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
+import java.util.logging.FileHandler
 import java.util.logging.Formatter
+import java.util.logging.Level
+import java.util.logging.LogRecord
+import java.util.logging.Logger
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.collections.ArrayList
 
 private const val LOG_SIZE_BYTES = 20 * 1024 * 1024 // 20MB
 

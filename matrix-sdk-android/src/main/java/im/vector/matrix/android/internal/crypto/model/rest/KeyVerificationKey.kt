@@ -17,8 +17,8 @@ package im.vector.matrix.android.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.internal.crypto.verification.VerificationInfoKeyFactory
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfoKey
+import im.vector.matrix.android.internal.crypto.verification.VerificationInfoKeyFactory
 
 /**
  * Sent by both devices to send their ephemeral Curve25519 public key to the other device.

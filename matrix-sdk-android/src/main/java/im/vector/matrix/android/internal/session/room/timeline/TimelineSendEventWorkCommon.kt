@@ -15,7 +15,11 @@
  */
 package im.vector.matrix.android.internal.session.room.timeline
 
-import androidx.work.*
+import androidx.work.BackoffPolicy
+import androidx.work.Data
+import androidx.work.ExistingWorkPolicy
+import androidx.work.ListenableWorker
+import androidx.work.OneTimeWorkRequest
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.NoOpCancellable
 import im.vector.matrix.android.internal.di.WorkManagerProvider

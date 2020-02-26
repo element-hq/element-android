@@ -27,7 +27,11 @@ import im.vector.riotx.core.dialogs.ExportKeysDialog
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.SimpleFragmentActivity
-import im.vector.riotx.core.utils.*
+import im.vector.riotx.core.utils.PERMISSIONS_FOR_WRITING_FILES
+import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_EXPORT_KEYS
+import im.vector.riotx.core.utils.allGranted
+import im.vector.riotx.core.utils.checkPermissions
+import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.crypto.keys.KeysExporter
 
 class KeysBackupSetupActivity : SimpleFragmentActivity() {
