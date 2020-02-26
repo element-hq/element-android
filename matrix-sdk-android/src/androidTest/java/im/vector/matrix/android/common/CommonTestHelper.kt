@@ -28,7 +28,10 @@ import im.vector.matrix.android.api.auth.data.LoginFlowResult
 import im.vector.matrix.android.api.auth.registration.RegistrationResult
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.LocalEcho
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.Room
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
@@ -113,7 +116,7 @@ class CommonTestHelper(context: Context) {
     fun sendTextMessage(room: Room, message: String, nbOfMessages: Int): List<TimelineEvent> {
         val sentEvents = ArrayList<TimelineEvent>(nbOfMessages)
         val latch = CountDownLatch(nbOfMessages)
-        val onEventSentListener = object : Timeline.Listener {
+        val timelineListener = object : Timeline.Listener {
             override fun onTimelineFailure(throwable: Throwable) {
             }
 
@@ -122,20 +125,26 @@ class CommonTestHelper(context: Context) {
             }
 
             override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
-                // TODO Count only new messages?
-                if (snapshot.count { it.root.type == EventType.MESSAGE } == nbOfMessages) {
-                    sentEvents.addAll(snapshot.filter { it.root.type == EventType.MESSAGE })
+                val newMessages = snapshot
+                        .filter { LocalEcho.isLocalEchoId(it.eventId).not() }
+                        .filter { it.root.getClearType() == EventType.MESSAGE }
+                        .filter { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(message) == true }
+
+                if (newMessages.size == nbOfMessages) {
+                    sentEvents.addAll(newMessages)
                     latch.countDown()
                 }
             }
         }
         val timeline = room.createTimeline(null, TimelineSettings(10))
-        timeline.addListener(onEventSentListener)
+        timeline.start()
+        timeline.addListener(timelineListener)
         for (i in 0 until nbOfMessages) {
             room.sendTextMessage(message + " #" + (i + 1))
         }
         await(latch)
-        timeline.removeListener(onEventSentListener)
+        timeline.removeListener(timelineListener)
+        timeline.dispose()
 
         // Check that all events has been created
         assertEquals(nbOfMessages.toLong(), sentEvents.size.toLong())
@@ -283,11 +292,10 @@ class CommonTestHelper(context: Context) {
     /**
      * Clear all provided sessions
      */
-    fun Iterable<Session>.close() = forEach { it.close() }
+    fun Iterable<Session>.signOutAndClose() = forEach { signOutAndClose(it) }
 
-    fun signout(session: Session) {
-        val lock = CountDownLatch(1)
-        session.signOut(true, TestMatrixCallback(lock))
-        await(lock)
+    fun signOutAndClose(session: Session) {
+        doSync<Unit> { session.signOut(true, it) }
+        session.close()
     }
 }

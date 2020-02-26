@@ -23,13 +23,11 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 internal data class KeysUploadResponse(
-
         /**
          * The count per algorithm as returned by the home server: a map (algorithm to count).
          */
         @Json(name = "one_time_key_counts")
-        var oneTimeKeyCounts: Map<String, Int>? = null
-
+        val oneTimeKeyCounts: Map<String, Int>? = null
 ) {
     /**
      * Helper methods to extract information from 'oneTimeKeyCounts'

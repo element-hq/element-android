@@ -30,26 +30,27 @@ data class MegolmBackupAuthData(
          * The curve25519 public key used to encrypt the backups.
          */
         @Json(name = "public_key")
-        var publicKey: String = "",
+        val publicKey: String = "",
 
         /**
          * In case of a backup created from a password, the salt associated with the backup
          * private key.
          */
         @Json(name = "private_key_salt")
-        var privateKeySalt: String? = null,
+        val privateKeySalt: String? = null,
 
         /**
          * In case of a backup created from a password, the number of key derivations.
          */
         @Json(name = "private_key_iterations")
-        var privateKeyIterations: Int? = null,
+        val privateKeyIterations: Int? = null,
 
         /**
          * Signatures of the public key.
          * userId -> (deviceSignKeyId -> signature)
          */
-        var signatures: Map<String, Map<String, String>>? = null
+        @Json(name = "signatures")
+        val signatures: Map<String, Map<String, String>>? = null
 ) {
 
     fun toJsonString(): String {

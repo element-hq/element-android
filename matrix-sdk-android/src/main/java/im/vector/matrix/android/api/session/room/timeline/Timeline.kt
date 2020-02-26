@@ -41,12 +41,12 @@ interface Timeline {
     fun removeAllListeners()
 
     /**
-     * This should be called before any other method after creating the timeline. It ensures the underlying database is open
+     * This must be called before any other method after creating the timeline. It ensures the underlying database is open
      */
     fun start()
 
     /**
-     * This should be called when you don't need the timeline. It ensures the underlying database get closed.
+     * This must be called when you don't need the timeline. It ensures the underlying database get closed.
      */
     fun dispose()
 

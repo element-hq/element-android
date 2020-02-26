@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.crypto.keysbackup.model.rest
+package im.vector.matrix.android.internal.crypto
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+interface IncomingRoomKeyRequestCommon {
+    /**
+     * The user id
+     */
+    val userId: String?
 
-/**
- * Backup data for several keys in several rooms.
- */
-@JsonClass(generateAdapter = true)
-data class KeysBackupData(
-        // the keys are the room IDs, and the values are RoomKeysBackupData
-        @Json(name = "rooms")
-        val roomIdToRoomKeysBackupData: MutableMap<String, RoomKeysBackupData> = HashMap()
-)
+    /**
+     * The device id
+     */
+    val deviceId: String?
+
+    /**
+     * The request id
+     */
+    val requestId: String?
+}

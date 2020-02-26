@@ -38,9 +38,7 @@ class AccountCreationTest : InstrumentedTest {
     fun createAccountTest() {
         val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
 
-        commonTestHelper.signout(session)
-
-        session.close()
+        commonTestHelper.signOutAndClose(session)
     }
 
     @Test
@@ -50,14 +48,14 @@ class AccountCreationTest : InstrumentedTest {
         // Log again to the same account
         val session2 = commonTestHelper.logIntoAccount(session.myUserId, SessionTestParams(withInitialSync = true))
 
-        session.close()
-        session2.close()
+        commonTestHelper.signOutAndClose(session)
+        commonTestHelper.signOutAndClose(session2)
     }
 
     @Test
     fun simpleE2eTest() {
         val res = cryptoTestHelper.doE2ETestWithAliceInARoom()
 
-        res.close()
+        res.cleanUp(commonTestHelper)
     }
 }

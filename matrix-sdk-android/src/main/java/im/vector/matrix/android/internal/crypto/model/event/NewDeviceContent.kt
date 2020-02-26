@@ -20,12 +20,11 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class NewDeviceContent(
-
         // the device id
         @Json(name = "device_id")
-        var deviceId: String? = null,
+        val deviceId: String? = null,
 
         // the room ids list
         @Json(name = "rooms")
-        var rooms: List<String>? = null
+        val rooms: List<String>? = null
 )

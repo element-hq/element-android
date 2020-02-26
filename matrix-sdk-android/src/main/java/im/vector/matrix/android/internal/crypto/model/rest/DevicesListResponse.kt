@@ -24,5 +24,5 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class DevicesListResponse(
         @Json(name = "devices")
-        var devices: List<DeviceInfo>? = null
+        val devices: List<DeviceInfo>? = null
 )

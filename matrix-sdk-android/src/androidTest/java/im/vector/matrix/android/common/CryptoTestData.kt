@@ -23,9 +23,9 @@ data class CryptoTestData(val firstSession: Session,
                           val secondSession: Session? = null,
                           val thirdSession: Session? = null) {
 
-    fun close() {
-        firstSession.close()
-        secondSession?.close()
-        secondSession?.close()
+    fun cleanUp(testHelper: CommonTestHelper) {
+        testHelper.signOutAndClose(firstSession)
+        secondSession?.let { testHelper.signOutAndClose(it) }
+        thirdSession?.let { testHelper.signOutAndClose(it) }
     }
 }

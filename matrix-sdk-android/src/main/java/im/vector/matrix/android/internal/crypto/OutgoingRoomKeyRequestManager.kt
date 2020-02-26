@@ -213,10 +213,11 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
         Timber.v("## sendOutgoingRoomKeyRequest() : Requesting keys " + request.requestBody
                 + " from " + request.recipients + " id " + request.requestId)
 
-        val requestMessage = RoomKeyShareRequest()
-        requestMessage.requestingDeviceId = cryptoStore.getDeviceId()
-        requestMessage.requestId = request.requestId
-        requestMessage.body = request.requestBody
+        val requestMessage = RoomKeyShareRequest(
+                requestingDeviceId = cryptoStore.getDeviceId(),
+                requestId = request.requestId,
+                body = request.requestBody
+        )
 
         sendMessageToDevices(requestMessage, request.recipients, request.requestId, object : MatrixCallback<Unit> {
             private fun onDone(state: OutgoingRoomKeyRequest.RequestState) {
@@ -253,9 +254,10 @@ internal class OutgoingRoomKeyRequestManager @Inject constructor(
                 + " to " + request.recipients
                 + " cancellation id  " + request.cancellationTxnId)
 
-        val roomKeyShareCancellation = RoomKeyShareCancellation()
-        roomKeyShareCancellation.requestingDeviceId = cryptoStore.getDeviceId()
-        roomKeyShareCancellation.requestId = request.cancellationTxnId
+        val roomKeyShareCancellation = RoomKeyShareCancellation(
+                requestingDeviceId = cryptoStore.getDeviceId(),
+                requestId = request.cancellationTxnId
+        )
 
         sendMessageToDevices(roomKeyShareCancellation, request.recipients, request.cancellationTxnId, object : MatrixCallback<Unit> {
             private fun onDone() {

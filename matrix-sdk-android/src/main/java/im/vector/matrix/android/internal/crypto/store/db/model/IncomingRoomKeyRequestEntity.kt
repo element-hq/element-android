@@ -32,17 +32,17 @@ internal open class IncomingRoomKeyRequestEntity(
 ) : RealmObject() {
 
     fun toIncomingRoomKeyRequest(): IncomingRoomKeyRequest {
-        return IncomingRoomKeyRequest().also {
-            it.requestId = requestId
-            it.userId = userId
-            it.deviceId = deviceId
-            it.requestBody = RoomKeyRequestBody().apply {
-                algorithm = requestBodyAlgorithm
-                roomId = requestBodyRoomId
-                senderKey = requestBodySenderKey
-                sessionId = requestBodySessionId
-            }
-        }
+        return IncomingRoomKeyRequest(
+                requestId = requestId,
+                userId = userId,
+                deviceId = deviceId,
+                requestBody = RoomKeyRequestBody(
+                        algorithm = requestBodyAlgorithm,
+                        roomId = requestBodyRoomId,
+                        senderKey = requestBodySenderKey,
+                        sessionId = requestBodySessionId
+                )
+        )
     }
 
     fun putRequestBody(requestBody: RoomKeyRequestBody?) {

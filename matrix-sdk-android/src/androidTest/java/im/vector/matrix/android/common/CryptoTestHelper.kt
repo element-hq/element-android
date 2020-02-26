@@ -41,16 +41,15 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
-import java.util.Arrays
 import java.util.HashMap
 import java.util.concurrent.CountDownLatch
 
-class CryptoTestHelper(val mTestHelper: CommonTestHelper) {
+class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
 
-    val messagesFromAlice: List<String> = Arrays.asList("0 - Hello I'm Alice!", "4 - Go!")
-    val messagesFromBob: List<String> = Arrays.asList("1 - Hello I'm Bob!", "2 - Isn't life grand?", "3 - Let's go to the opera.")
+    private val messagesFromAlice: List<String> = listOf("0 - Hello I'm Alice!", "4 - Go!")
+    private val messagesFromBob: List<String> = listOf("1 - Hello I'm Bob!", "2 - Isn't life grand?", "3 - Let's go to the opera.")
 
-    val defaultSessionParams = SessionTestParams(true)
+    private val defaultSessionParams = SessionTestParams(true)
 
     /**
      * @return alice session
@@ -58,34 +57,23 @@ class CryptoTestHelper(val mTestHelper: CommonTestHelper) {
     fun doE2ETestWithAliceInARoom(): CryptoTestData {
         val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)
 
-        var roomId: String? = null
-        val lock1 = CountDownLatch(1)
+        val roomId = mTestHelper.doSync<String> {
+            aliceSession.createRoom(CreateRoomParams(name = "MyRoom"), it)
+        }
 
-        aliceSession.createRoom(CreateRoomParams(name = "MyRoom"), object : TestMatrixCallback<String>(lock1) {
-            override fun onSuccess(data: String) {
-                roomId = data
-                super.onSuccess(data)
-            }
-        })
+        val room = aliceSession.getRoom(roomId)!!
 
-        mTestHelper.await(lock1)
-        assertNotNull(roomId)
+        mTestHelper.doSync<Unit> {
+            room.enableEncryption(callback = it)
+        }
 
-        val room = aliceSession.getRoom(roomId!!)!!
-
-        val lock2 = CountDownLatch(1)
-        room.enableEncryption(callback = TestMatrixCallback(lock2))
-        mTestHelper.await(lock2)
-
-        return CryptoTestData(aliceSession, roomId!!)
+        return CryptoTestData(aliceSession, roomId)
     }
 
     /**
      * @return alice and bob sessions
      */
     fun doE2ETestWithAliceAndBobInARoom(): CryptoTestData {
-        val statuses = HashMap<String, String>()
-
         val cryptoTestData = doE2ETestWithAliceInARoom()
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId
@@ -94,7 +82,7 @@ class CryptoTestHelper(val mTestHelper: CommonTestHelper) {
 
         val bobSession = mTestHelper.createAccount(TestConstants.USER_BOB, defaultSessionParams)
 
-        val lock1 = CountDownLatch(2)
+        val lock1 = CountDownLatch(1)
 
         val bobRoomSummariesLive = runBlocking(Dispatchers.Main) {
             bobSession.getRoomSummariesLive(roomSummaryQueryParams { })
@@ -103,7 +91,6 @@ class CryptoTestHelper(val mTestHelper: CommonTestHelper) {
         val newRoomObserver = object : Observer<List<RoomSummary>> {
             override fun onChanged(t: List<RoomSummary>?) {
                 if (t?.isNotEmpty() == true) {
-                    statuses["onNewRoom"] = "onNewRoom"
                     lock1.countDown()
                     bobRoomSummariesLive.removeObserver(this)
                 }
@@ -114,26 +101,20 @@ class CryptoTestHelper(val mTestHelper: CommonTestHelper) {
             bobRoomSummariesLive.observeForever(newRoomObserver)
         }
 
-        aliceRoom.invite(bobSession.myUserId, callback = object : TestMatrixCallback<Unit>(lock1) {
-            override fun onSuccess(data: Unit) {
-                statuses["invite"] = "invite"
-                super.onSuccess(data)
-            }
-        })
+        mTestHelper.doSync<Unit> {
+            aliceRoom.invite(bobSession.myUserId, callback = it)
+        }
 
         mTestHelper.await(lock1)
 
-        assertTrue(statuses.containsKey("invite") && statuses.containsKey("onNewRoom"))
-
-        val lock2 = CountDownLatch(2)
+        val lock = CountDownLatch(1)
 
         val roomJoinedObserver = object : Observer<List<RoomSummary>> {
             override fun onChanged(t: List<RoomSummary>?) {
                 if (bobSession.getRoom(aliceRoomId)
                                 ?.getRoomMember(aliceSession.myUserId)
                                 ?.membership == Membership.JOIN) {
-                    statuses["AliceJoin"] = "AliceJoin"
-                    lock2.countDown()
+                    lock.countDown()
                     bobRoomSummariesLive.removeObserver(this)
                 }
             }
@@ -143,18 +124,14 @@ class CryptoTestHelper(val mTestHelper: CommonTestHelper) {
             bobRoomSummariesLive.observeForever(roomJoinedObserver)
         }
 
-        bobSession.joinRoom(aliceRoomId, callback = TestMatrixCallback(lock2))
+        mTestHelper.doSync<Unit> { bobSession.joinRoom(aliceRoomId, callback = it) }
 
-        mTestHelper.await(lock2)
+        mTestHelper.await(lock)
 
         // Ensure bob can send messages to the room
 //        val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
 //        assertNotNull(roomFromBobPOV.powerLevels)
 //        assertTrue(roomFromBobPOV.powerLevels.maySendMessage(bobSession.myUserId))
-
-        assertTrue(statuses.toString() + "", statuses.containsKey("AliceJoin"))
-
-//        bobSession.dataHandler.removeListener(bobEventListener)
 
         return CryptoTestData(aliceSession, aliceRoomId, bobSession)
     }
@@ -237,7 +214,7 @@ class CryptoTestHelper(val mTestHelper: CommonTestHelper) {
         val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
 
-        var lock = CountDownLatch(1)
+        val lock = CountDownLatch(1)
 
         val bobEventsListener = object : Timeline.Listener {
             override fun onTimelineFailure(throwable: Throwable) {
@@ -249,63 +226,35 @@ class CryptoTestHelper(val mTestHelper: CommonTestHelper) {
             }
 
             override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
-                val size = snapshot.filter { it.root.senderId != bobSession.myUserId && it.root.getClearType() == EventType.MESSAGE }
-                        .size
+                val messages = snapshot.filter { it.root.getClearType() == EventType.MESSAGE }
+                        .groupBy { it.root.senderId!! }
 
-                if (size == 3) {
+                // Alice has sent 2 messages and Bob has sent 3 messages
+                if (messages[aliceSession.myUserId]?.size == 2 && messages[bobSession.myUserId]?.size == 3) {
                     lock.countDown()
                 }
             }
         }
 
-        val bobTimeline = roomFromBobPOV.createTimeline(null, TimelineSettings(10))
+        val bobTimeline = roomFromBobPOV.createTimeline(null, TimelineSettings(20))
+        bobTimeline.start()
         bobTimeline.addListener(bobEventsListener)
-
-        val results = HashMap<String, Any>()
-
-        // bobSession.dataHandler.addListener(object : MXEventListener() {
-        //     override fun onToDeviceEvent(event: Event) {
-        //         results["onToDeviceEvent"] = event
-        //         lock.countDown()
-        //     }
-        // })
 
         // Alice sends a message
         roomFromAlicePOV.sendTextMessage(messagesFromAlice[0])
-        assertTrue(results.containsKey("onToDeviceEvent"))
-//        assertEquals(1, messagesReceivedByBobCount)
 
-        // Bob send a message
-        lock = CountDownLatch(1)
+        // Bob send 3 messages
         roomFromBobPOV.sendTextMessage(messagesFromBob[0])
-        // android does not echo the messages sent from itself
-//        messagesReceivedByBobCount++
-        mTestHelper.await(lock)
-//        assertEquals(2, messagesReceivedByBobCount)
-
-        // Bob send a message
-        lock = CountDownLatch(1)
         roomFromBobPOV.sendTextMessage(messagesFromBob[1])
-        // android does not echo the messages sent from itself
-//        messagesReceivedByBobCount++
-        mTestHelper.await(lock)
-//        assertEquals(3, messagesReceivedByBobCount)
-
-        // Bob send a message
-        lock = CountDownLatch(1)
         roomFromBobPOV.sendTextMessage(messagesFromBob[2])
-        // android does not echo the messages sent from itself
-//        messagesReceivedByBobCount++
-        mTestHelper.await(lock)
-//        assertEquals(4, messagesReceivedByBobCount)
 
         // Alice sends a message
-        lock = CountDownLatch(2)
         roomFromAlicePOV.sendTextMessage(messagesFromAlice[1])
+
         mTestHelper.await(lock)
-//        assertEquals(5, messagesReceivedByBobCount)
 
         bobTimeline.removeListener(bobEventsListener)
+        bobTimeline.dispose()
 
         return cryptoTestData
     }
@@ -340,18 +289,14 @@ class CryptoTestHelper(val mTestHelper: CommonTestHelper) {
     fun createFakeMegolmBackupAuthData(): MegolmBackupAuthData {
         return MegolmBackupAuthData(
                 publicKey = "abcdefg",
-                signatures = HashMap<String, Map<String, String>>().apply {
-                    this["something"] = HashMap<String, String>().apply {
-                        this["ed25519:something"] = "hijklmnop"
-                    }
-                }
+                signatures = mapOf("something" to mapOf("ed25519:something" to "hijklmnop"))
         )
     }
 
     fun createFakeMegolmBackupCreationInfo(): MegolmBackupCreationInfo {
-        return MegolmBackupCreationInfo().apply {
-            algorithm = MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
-            authData = createFakeMegolmBackupAuthData()
-        }
+        return MegolmBackupCreationInfo(
+                algorithm = MXCRYPTO_ALGORITHM_MEGOLM_BACKUP,
+                authData = createFakeMegolmBackupAuthData()
+        )
     }
 }

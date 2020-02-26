@@ -25,12 +25,11 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 internal data class KeysQueryBody(
-
         /**
          * The time (in milliseconds) to wait when downloading keys from remote servers. 10 seconds is the recommended default.
          */
         @Json(name = "timeout")
-        var timeout: Int? = null,
+        val timeout: Int? = null,
 
         /**
          * Required. The keys to be downloaded.
@@ -45,6 +44,5 @@ internal data class KeysQueryBody(
          * by the notification in that sync.
          */
         @Json(name = "token")
-        var token: String? = null
-
+        val token: String? = null
 )

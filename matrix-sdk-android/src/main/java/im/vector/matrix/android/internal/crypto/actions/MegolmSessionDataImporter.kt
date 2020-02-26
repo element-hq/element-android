@@ -66,12 +66,12 @@ internal class MegolmSessionDataImporter @Inject constructor(private val olmDevi
                     totalNumbersOfImportedKeys++
 
                     // cancel any outstanding room key requests for this session
-                    val roomKeyRequestBody = RoomKeyRequestBody()
-
-                    roomKeyRequestBody.algorithm = megolmSessionData.algorithm
-                    roomKeyRequestBody.roomId = megolmSessionData.roomId
-                    roomKeyRequestBody.senderKey = megolmSessionData.senderKey
-                    roomKeyRequestBody.sessionId = megolmSessionData.sessionId
+                    val roomKeyRequestBody = RoomKeyRequestBody(
+                            algorithm = megolmSessionData.algorithm,
+                            roomId = megolmSessionData.roomId,
+                            senderKey = megolmSessionData.senderKey,
+                            sessionId = megolmSessionData.sessionId
+                    )
 
                     outgoingRoomKeyRequestManager.cancelRoomKeyRequest(roomKeyRequestBody)
 
@@ -83,7 +83,7 @@ internal class MegolmSessionDataImporter @Inject constructor(private val olmDevi
             }
 
             if (progressListener != null) {
-                val progress = 100 * cpt / totalNumbersOfKeys
+                val progress = 100 * (cpt + 1) / totalNumbersOfKeys
 
                 if (lastProgress != progress) {
                     lastProgress = progress
