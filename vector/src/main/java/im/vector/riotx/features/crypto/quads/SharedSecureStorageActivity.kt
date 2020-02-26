@@ -109,10 +109,13 @@ class SharedSecureStorageActivity : SimpleFragmentActivity() {
     }
 
     companion object {
-
         const val EXTRA_DATA_RESULT = "EXTRA_DATA_RESULT"
-        const val RESULT_KEYSTORE_ALIAS = "SharedSecureStorageActivity"
-        fun newIntent(context: Context, keyId: String? = null, requestedSecrets: List<String>, resultKeyStoreAlias: String = RESULT_KEYSTORE_ALIAS): Intent {
+        const val DEFAULT_RESULT_KEYSTORE_ALIAS = "SharedSecureStorageActivity"
+
+        fun newIntent(context: Context,
+                      keyId: String? = null,
+                      requestedSecrets: List<String>,
+                      resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS): Intent {
             require(requestedSecrets.isNotEmpty())
             return Intent(context, SharedSecureStorageActivity::class.java).also {
                 it.putExtra(MvRx.KEY_ARG, Args(

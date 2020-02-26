@@ -98,7 +98,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                             requireContext(),
                             null, // use default key
                             listOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME),
-                            SharedSecureStorageActivity.RESULT_KEYSTORE_ALIAS
+                            SharedSecureStorageActivity.DEFAULT_RESULT_KEYSTORE_ALIAS
                     ), SECRET_REQUEST_CODE)
                 }
                 is VerificationBottomSheetViewEvents.ModalError        -> {
@@ -117,7 +117,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == SECRET_REQUEST_CODE) {
             data?.getStringExtra(SharedSecureStorageActivity.EXTRA_DATA_RESULT)?.let {
-                viewModel.handle(VerificationAction.GotResultFromSsss(it, SharedSecureStorageActivity.RESULT_KEYSTORE_ALIAS))
+                viewModel.handle(VerificationAction.GotResultFromSsss(it, SharedSecureStorageActivity.DEFAULT_RESULT_KEYSTORE_ALIAS))
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
