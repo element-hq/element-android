@@ -40,6 +40,7 @@
             android:name=".features.login.LoginActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".features.media.ImageMediaViewerActivity" />
+        <activity android:name=".features.media.BigImageViewerActivity" />
         <activity
             android:name=".features.rageshake.BugReportActivity"
             android:label="@string/title_activity_bug_report" />

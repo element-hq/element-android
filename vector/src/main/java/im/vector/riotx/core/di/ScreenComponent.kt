@@ -40,6 +40,7 @@ import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBotto
 import im.vector.riotx.features.invite.VectorInviteView
 import im.vector.riotx.features.link.LinkHandlerActivity
 import im.vector.riotx.features.login.LoginActivity
+import im.vector.riotx.features.media.BigImageViewerActivity
 import im.vector.riotx.features.media.ImageMediaViewerActivity
 import im.vector.riotx.features.media.VideoMediaViewerActivity
 import im.vector.riotx.features.navigation.Navigator
@@ -150,6 +151,8 @@ interface ScreenComponent {
     fun inject(deviceVerificationInfoBottomSheet: DeviceVerificationInfoBottomSheet)
 
     fun inject(deviceListBottomSheet: DeviceListBottomSheet)
+
+    fun inject(bigImageViewerActivity: BigImageViewerActivity)
 
     @Component.Factory
     interface Factory {
