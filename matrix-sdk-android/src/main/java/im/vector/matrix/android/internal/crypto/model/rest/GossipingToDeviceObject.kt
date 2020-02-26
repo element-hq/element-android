@@ -15,6 +15,9 @@
  */
 package im.vector.matrix.android.internal.crypto.model.rest
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
 /**
  * Interface representing an room key action request
  * Note: this class cannot be abstract because of [org.matrix.androidsdk.core.JsonUtils.toRoomKeyShare]
@@ -32,3 +35,10 @@ internal interface GossipingToDeviceObject : SendToDeviceObject {
         const val ACTION_SHARE_CANCELLATION = "request_cancellation"
     }
 }
+
+@JsonClass(generateAdapter = true)
+data class GossipingDefaultContent(
+        @Json(name = "action") override val action: String?,
+        @Json(name = "requesting_device_id") override val requestingDeviceId: String?,
+        @Json(name = "m.request_id") override val requestId: String? = null
+) : GossipingToDeviceObject

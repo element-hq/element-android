@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.session.crypto.keyshare.GossipingRequestList
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.internal.crypto.model.rest.GossipingDefaultContent
 import im.vector.matrix.android.internal.crypto.model.rest.GossipingToDeviceObject
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.session.SessionScope
@@ -58,7 +59,7 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
      * @param event the announcement event.
      */
     fun onGossipingRequestEvent(event: Event) {
-        val roomKeyShare = event.getClearContent().toModel<GossipingToDeviceObject>()
+        val roomKeyShare = event.getClearContent().toModel<GossipingDefaultContent>()
         when (roomKeyShare?.action) {
             GossipingToDeviceObject.ACTION_SHARE_REQUEST      -> {
                 if (event.getClearType() == EventType.REQUEST_SECRET) {
