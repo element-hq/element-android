@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,25 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.crypto.sas
+package im.vector.matrix.android.api.session.crypto.verification
 
-import androidx.annotation.StringRes
+interface VerificationTransaction {
 
-data class EmojiRepresentation(val emoji: String,
-                               @StringRes val nameResId: Int)
+    var state: VerificationTxState
+
+    val transactionId: String
+    val otherUserId: String
+    var otherDeviceId: String?
+
+    // TODO Not used. Remove?
+    val isIncoming: Boolean
+
+    /**
+     * User wants to cancel the transaction
+     */
+    fun cancel()
+
+    fun cancel(code: CancelCode)
+
+    fun isToDeviceTransport(): Boolean
+}

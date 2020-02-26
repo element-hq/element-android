@@ -29,7 +29,12 @@ import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.convertFromUTF8
 import im.vector.matrix.android.internal.util.convertToUTF8
-import org.matrix.olm.*
+import org.matrix.olm.OlmAccount
+import org.matrix.olm.OlmException
+import org.matrix.olm.OlmMessage
+import org.matrix.olm.OlmOutboundGroupSession
+import org.matrix.olm.OlmSession
+import org.matrix.olm.OlmUtility
 import timber.log.Timber
 import java.net.URLEncoder
 import javax.inject.Inject

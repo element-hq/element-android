@@ -23,7 +23,11 @@ import android.net.http.SslError
 import android.os.Build
 import android.os.Parcelable
 import android.view.KeyEvent
-import android.webkit.*
+import android.webkit.SslErrorHandler
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
@@ -34,7 +38,7 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_login_captcha.*
 import timber.log.Timber
 import java.net.URLDecoder
-import java.util.*
+import java.util.Formatter
 import javax.inject.Inject
 
 @Parcelize

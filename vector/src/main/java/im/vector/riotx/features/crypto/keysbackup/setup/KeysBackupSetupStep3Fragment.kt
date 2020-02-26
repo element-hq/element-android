@@ -32,7 +32,13 @@ import im.vector.riotx.R
 import im.vector.riotx.core.files.addEntryToDownloadManager
 import im.vector.riotx.core.files.writeToFile
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.core.utils.*
+import im.vector.riotx.core.utils.LiveEvent
+import im.vector.riotx.core.utils.PERMISSIONS_FOR_WRITING_FILES
+import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_EXPORT_KEYS
+import im.vector.riotx.core.utils.allGranted
+import im.vector.riotx.core.utils.checkPermissions
+import im.vector.riotx.core.utils.copyToClipboard
+import im.vector.riotx.core.utils.startSharePlainTextIntent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

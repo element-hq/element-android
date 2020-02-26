@@ -37,7 +37,7 @@ import im.vector.riotx.core.ui.list.genericLoaderItem
 import im.vector.riotx.features.html.EventHtmlRenderer
 import me.gujun.android.span.span
 import name.fraser.neil.plaintext.diff_match_patch
-import java.util.*
+import java.util.Calendar
 
 /**
  * Epoxy controller for edit history list

@@ -23,7 +23,13 @@ import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.CryptoModule
 import im.vector.matrix.android.internal.database.RealmKeysUtils
-import im.vector.matrix.android.internal.di.*
+import im.vector.matrix.android.internal.di.CryptoDatabase
+import im.vector.matrix.android.internal.di.SessionCacheDirectory
+import im.vector.matrix.android.internal.di.SessionDatabase
+import im.vector.matrix.android.internal.di.SessionFilesDirectory
+import im.vector.matrix.android.internal.di.SessionId
+import im.vector.matrix.android.internal.di.UserMd5
+import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.SessionModule
 import im.vector.matrix.android.internal.session.cache.ClearCacheTask

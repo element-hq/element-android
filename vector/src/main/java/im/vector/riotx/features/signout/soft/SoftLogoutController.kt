@@ -26,7 +26,14 @@ import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.toReducedUrl
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.login.LoginMode
-import im.vector.riotx.features.signout.soft.epoxy.*
+import im.vector.riotx.features.signout.soft.epoxy.loginCenterButtonItem
+import im.vector.riotx.features.signout.soft.epoxy.loginErrorWithRetryItem
+import im.vector.riotx.features.signout.soft.epoxy.loginHeaderItem
+import im.vector.riotx.features.signout.soft.epoxy.loginPasswordFormItem
+import im.vector.riotx.features.signout.soft.epoxy.loginRedButtonItem
+import im.vector.riotx.features.signout.soft.epoxy.loginTextItem
+import im.vector.riotx.features.signout.soft.epoxy.loginTitleItem
+import im.vector.riotx.features.signout.soft.epoxy.loginTitleSmallItem
 import javax.inject.Inject
 
 class SoftLogoutController @Inject constructor(

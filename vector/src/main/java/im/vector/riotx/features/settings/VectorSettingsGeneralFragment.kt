@@ -41,7 +41,12 @@ import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.SimpleTextWatcher
 import im.vector.riotx.core.preference.UserAvatarPreference
 import im.vector.riotx.core.preference.VectorPreference
-import im.vector.riotx.core.utils.*
+import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
+import im.vector.riotx.core.utils.TextUtils
+import im.vector.riotx.core.utils.allGranted
+import im.vector.riotx.core.utils.copyToClipboard
+import im.vector.riotx.core.utils.getSizeOfFiles
+import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.MainActivityArgs
 import im.vector.riotx.features.themes.ThemeUtils

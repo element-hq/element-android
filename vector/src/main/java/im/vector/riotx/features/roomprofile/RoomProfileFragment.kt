@@ -169,6 +169,9 @@ class RoomProfileFragment @Inject constructor(
                 roomProfileAvatarView.setOnClickListener { view ->
                     onAvatarClicked(view, matrixItem)
                 }
+                matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
+                    onAvatarClicked(view, matrixItem)
+                }
             }
         }
         roomProfileController.setData(state)
@@ -218,11 +221,6 @@ class RoomProfileFragment @Inject constructor(
     }
 
     private fun onAvatarClicked(view: View, matrixItem: MatrixItem.RoomItem) {
-        matrixItem.avatarUrl
-                ?.takeIf { it.isNotBlank() }
-                ?.let { avatarUrl ->
-                    val title = matrixItem.getBestName()
-                    navigator.openBigImageViewer(requireActivity(), view, title, avatarUrl)
-                }
+        navigator.openBigImageViewer(requireActivity(), view, matrixItem)
     }
 }

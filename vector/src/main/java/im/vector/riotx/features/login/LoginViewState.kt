@@ -16,7 +16,12 @@
 
 package im.vector.riotx.features.login
 
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.PersistState
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 
 data class LoginViewState(
         val asyncLoginAction: Async<Unit> = Uninitialized,

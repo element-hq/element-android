@@ -20,6 +20,7 @@ import android.app.Activity
 import android.content.Context
 import android.view.View
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.SharedData
 
@@ -61,5 +62,5 @@ interface Navigator {
 
     fun openRoomProfile(context: Context, roomId: String)
 
-    fun openBigImageViewer(activity: Activity, sharedElement: View?, title: String, avatarUrl: String)
+    fun openBigImageViewer(activity: Activity, sharedElement: View?, matrixItem: MatrixItem)
 }

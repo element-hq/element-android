@@ -201,7 +201,9 @@ class AttachmentsPreviewFragment @Inject constructor(
     private fun doHandleEditAction() = withState(viewModel) {
         val currentAttachment = it.attachments.getOrNull(it.currentAttachmentIndex) ?: return@withState
         val destinationFile = File(requireContext().cacheDir, "${currentAttachment.name}_edited_image_${System.currentTimeMillis()}")
-        UCrop.of(currentAttachment.queryUri.toUri(), destinationFile.toUri())
+        // Note: using currentAttachment.queryUri.toUri() make the app crash when sharing from Google Photos
+        val uri = File(currentAttachment.path).toUri()
+        UCrop.of(uri, destinationFile.toUri())
                 .withOptions(
                         UCrop.Options()
                                 .apply {
@@ -211,7 +213,8 @@ class AttachmentsPreviewFragment @Inject constructor(
                                             /* tabAspectRatio = */ UCropActivity.SCALE
                                     )
                                     setToolbarTitle(currentAttachment.name)
-                                    setFreeStyleCropEnabled(true)
+                                    // Disable freestyle crop, usability was not easy
+                                    // setFreeStyleCropEnabled(true)
                                     // Color used for toolbar icon and text
                                     setToolbarColor(colorProvider.getColorFromAttribute(R.attr.riotx_background))
                                     setToolbarWidgetColor(colorProvider.getColorFromAttribute(R.attr.vctr_toolbar_primary_text_color))

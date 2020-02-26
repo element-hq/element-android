@@ -196,6 +196,9 @@ class RoomMemberProfileFragment @Inject constructor(
                 memberProfileAvatarView.setOnClickListener { view ->
                     onAvatarClicked(view, userMatrixItem)
                 }
+                matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
+                    onAvatarClicked(view, userMatrixItem)
+                }
             }
         }
         memberProfilePowerLevelView.setTextOrHide(state.userPowerLevelString())
@@ -233,11 +236,6 @@ class RoomMemberProfileFragment @Inject constructor(
     }
 
     private fun onAvatarClicked(view: View, userMatrixItem: MatrixItem) {
-        userMatrixItem.avatarUrl
-                ?.takeIf { it.isNotBlank() }
-                ?.let { avatarUrl ->
-                    val title = userMatrixItem.getBestName()
-                    navigator.openBigImageViewer(requireActivity(), view, title, avatarUrl)
-                }
+        navigator.openBigImageViewer(requireActivity(), view, userMatrixItem)
     }
 }

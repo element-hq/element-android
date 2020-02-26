@@ -14,9 +14,21 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.crypto.sas
+package im.vector.matrix.android.api.session.crypto.verification
 
-object SasMode {
-    const val DECIMAL = "decimal"
-    const val EMOJI = "emoji"
+interface IncomingSasVerificationTransaction : SasVerificationTransaction {
+    val uxState: UxState
+
+    fun performAccept()
+
+    enum class UxState {
+        UNKNOWN,
+        SHOW_ACCEPT,
+        WAIT_FOR_KEY_AGREEMENT,
+        SHOW_SAS,
+        WAIT_FOR_VERIFICATION,
+        VERIFIED,
+        CANCELLED_BY_ME,
+        CANCELLED_BY_OTHER
+    }
 }

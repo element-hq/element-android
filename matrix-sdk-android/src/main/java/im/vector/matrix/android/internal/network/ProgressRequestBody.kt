@@ -18,7 +18,11 @@ package im.vector.matrix.android.internal.network
 
 import okhttp3.MediaType
 import okhttp3.RequestBody
-import okio.*
+import okio.Buffer
+import okio.BufferedSink
+import okio.ForwardingSink
+import okio.Sink
+import okio.buffer
 import java.io.IOException
 
 internal class ProgressRequestBody(private val delegate: RequestBody,

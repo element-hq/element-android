@@ -16,7 +16,7 @@
 
 package im.vector.matrix.android.api.crypto
 
-import im.vector.matrix.android.api.session.crypto.sas.EmojiRepresentation
+import im.vector.matrix.android.api.session.crypto.verification.EmojiRepresentation
 import im.vector.matrix.android.internal.crypto.verification.getEmojiForCode
 
 /**

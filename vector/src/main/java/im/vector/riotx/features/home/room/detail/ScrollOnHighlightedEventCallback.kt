@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.riotx.core.platform.DefaultListUpdateCallback
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
-import kotlinx.android.synthetic.main.fragment_room_detail.*
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicReference
 

@@ -24,7 +24,7 @@ import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
 import org.greenrobot.eventbus.EventBus
-import java.util.*
+import java.util.Date
 import javax.inject.Inject
 
 internal interface GetHomeServerCapabilitiesTask : Task<Unit, Unit>

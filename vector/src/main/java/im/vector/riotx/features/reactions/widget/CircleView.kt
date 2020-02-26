@@ -17,7 +17,11 @@ package im.vector.riotx.features.reactions.widget
 
 import android.animation.ArgbEvaluator
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
 import android.util.AttributeSet
 import android.util.Property
 import android.view.View

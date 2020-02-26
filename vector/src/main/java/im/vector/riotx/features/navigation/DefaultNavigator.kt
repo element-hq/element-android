@@ -23,9 +23,10 @@ import android.view.View
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.view.ViewCompat
-import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
+import im.vector.matrix.android.api.session.crypto.verification.IncomingSasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.error.fatalError
@@ -179,12 +180,16 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(RoomProfileActivity.newIntent(context, roomId))
     }
 
-    override fun openBigImageViewer(activity: Activity, sharedElement: View?, title: String, avatarUrl: String) {
-        val intent = BigImageViewerActivity.newIntent(activity, title, avatarUrl)
-        val options = sharedElement?.let {
-            ActivityOptionsCompat.makeSceneTransitionAnimation(activity, it, ViewCompat.getTransitionName(it) ?: "")
-        }
-        activity.startActivity(intent, options?.toBundle())
+    override fun openBigImageViewer(activity: Activity, sharedElement: View?, matrixItem: MatrixItem) {
+        matrixItem.avatarUrl
+                ?.takeIf { it.isNotBlank() }
+                ?.let { avatarUrl ->
+                    val intent = BigImageViewerActivity.newIntent(activity, matrixItem.getBestName(), avatarUrl)
+                    val options = sharedElement?.let {
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(activity, it, ViewCompat.getTransitionName(it) ?: "")
+                    }
+                    activity.startActivity(intent, options?.toBundle())
+                }
     }
 
     private fun startActivity(context: Context, intent: Intent, buildTask: Boolean) {

@@ -17,7 +17,7 @@ package im.vector.matrix.android.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.session.crypto.sas.SasMode
+import im.vector.matrix.android.api.session.crypto.verification.SasMode
 import im.vector.matrix.android.internal.crypto.verification.SASDefaultVerificationTransaction
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfoStart
 import im.vector.matrix.android.internal.util.JsonCanonicalizer

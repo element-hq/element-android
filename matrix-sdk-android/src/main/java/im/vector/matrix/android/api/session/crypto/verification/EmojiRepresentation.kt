@@ -14,21 +14,9 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.crypto.sas
+package im.vector.matrix.android.api.session.crypto.verification
 
-interface IncomingSasVerificationTransaction : SasVerificationTransaction {
-    val uxState: UxState
+import androidx.annotation.StringRes
 
-    fun performAccept()
-
-    enum class UxState {
-        UNKNOWN,
-        SHOW_ACCEPT,
-        WAIT_FOR_KEY_AGREEMENT,
-        SHOW_SAS,
-        WAIT_FOR_VERIFICATION,
-        VERIFIED,
-        CANCELLED_BY_ME,
-        CANCELLED_BY_OTHER
-    }
-}
+data class EmojiRepresentation(val emoji: String,
+                               @StringRes val nameResId: Int)
