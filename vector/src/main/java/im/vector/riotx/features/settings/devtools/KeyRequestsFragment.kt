@@ -44,7 +44,6 @@ class KeyRequestsFragment @Inject constructor() : VectorBaseFragment() {
         TabLayoutMediator(devToolKeyRequestTabs, devToolKeyRequestPager) { tab, _ ->
             tab.text = "Outgoing"
         }.attach()
-
     }
 
     private inner class KeyReqPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {

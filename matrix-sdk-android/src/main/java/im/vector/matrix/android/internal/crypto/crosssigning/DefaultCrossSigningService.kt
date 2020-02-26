@@ -758,7 +758,7 @@ internal class DefaultCrossSigningService @Inject constructor(
     private fun reRequestAllPendingRoomKeyRequest() {
         Timber.d("## CrossSigning - reRequest pending outgoing room key requests")
         cryptoStore.getOutgoingRoomKeyRequests().forEach {
-            it.requestBody?.let {requestBody ->
+            it.requestBody?.let { requestBody ->
                 if (cryptoStore.getInboundGroupSession(requestBody.sessionId ?: "", requestBody.senderKey ?: "") == null) {
                     outgoingRoomKeyRequestManager.resendRoomKeyRequest(requestBody)
                 } else {
@@ -767,5 +767,4 @@ internal class DefaultCrossSigningService @Inject constructor(
             }
         }
     }
-
 }

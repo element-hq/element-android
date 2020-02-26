@@ -1025,7 +1025,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun getOutgoingRoomKeyRequests(): List<OutgoingRoomKeyRequest> {
-        return monarchy.fetchAllMappedSync( { realm ->
+        return monarchy.fetchAllMappedSync({ realm ->
             realm.where(OutgoingRoomKeyRequestEntity::class.java)
         }, {
             it.toOutgoingRoomKeyRequest()

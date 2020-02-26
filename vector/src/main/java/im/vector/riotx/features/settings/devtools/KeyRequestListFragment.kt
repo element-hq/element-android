@@ -23,7 +23,6 @@ import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
-import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*

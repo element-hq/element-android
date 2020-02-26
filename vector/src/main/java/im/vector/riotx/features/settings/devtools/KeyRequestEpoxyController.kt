@@ -35,7 +35,7 @@ class KeyRequestEpoxyController @Inject constructor(
 ) : TypedEpoxyController<KeyRequestListViewState>() {
 
     interface InteractionListener {
-        //fun didTap(data: UserAccountData)
+        // fun didTap(data: UserAccountData)
     }
 
     var interactionListener: InteractionListener? = null
@@ -60,7 +60,6 @@ class KeyRequestEpoxyController @Inject constructor(
                     val requestList = async.invoke().groupBy { it.roomId }
 
                     requestList.forEach {
-
                         genericItemHeader {
                             id(it.key)
                             text("roomId: ${it.key}")
@@ -83,7 +82,6 @@ class KeyRequestEpoxyController @Inject constructor(
                                 )
                             }
                         }
-
                     }
                 }
             }.exhaustive

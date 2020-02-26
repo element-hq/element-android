@@ -108,5 +108,4 @@ sealed class EventSharedAction(@StringRes val titleRes: Int,
 
     object UseKeyBackup :
             EventSharedAction(R.string.e2e_use_keybackup, R.drawable.shield)
-
 }
