@@ -21,6 +21,7 @@ Bugfix 🐛:
  - Leaving a room creates a stuck "leaving room" loading screen. (#1041)
  - Fix some invitation handling issues (#1013)
  - New direct chat: selecting a participant sometimes results in two breadcrumbs (#1022)
+ - New direct chat: selecting several participants was not adding the room to the direct chats list
 
 Translations 🗣:
  -

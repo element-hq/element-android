@@ -217,20 +217,6 @@ data class CreateRoomParams(
     }
 
     /**
-     * @return the invite count
-     */
-    private fun getInviteCount(): Int {
-        return invitedUserIds?.size ?: 0
-    }
-
-    /**
-     * @return the pid invite count
-     */
-    private fun getInvite3PidCount(): Int {
-        return invite3pids?.size ?: 0
-    }
-
-    /**
      * Tells if the created room can be a direct chat one.
      *
      * @return true if it is a direct chat
@@ -238,8 +224,6 @@ data class CreateRoomParams(
     fun isDirect(): Boolean {
         return preset == CreateRoomPreset.PRESET_TRUSTED_PRIVATE_CHAT
                 && isDirect == true
-                // TODO This test is not ok
-                && (1 == getInviteCount() || 1 == getInvite3PidCount())
     }
 
     /**
