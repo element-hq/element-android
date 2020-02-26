@@ -31,8 +31,6 @@ import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.platform.SimpleFragmentActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity.*
 import javax.inject.Inject
@@ -45,13 +43,6 @@ class SharedSecureStorageActivity : SimpleFragmentActivity() {
             val requestedSecrets: List<String>,
             val resultKeyStoreAlias: String
     ) : Parcelable
-
-    private val uiDisposables = CompositeDisposable()
-
-    private fun Disposable.disposeOnDestroyView(): Disposable {
-        uiDisposables.add(this)
-        return this
-    }
 
     private val viewModel: SharedSecureStorageViewModel by viewModel()
     @Inject lateinit var viewModelFactory: SharedSecureStorageViewModel.Factory
@@ -75,7 +66,7 @@ class SharedSecureStorageActivity : SimpleFragmentActivity() {
                 .subscribe {
                     observeViewEvents(it)
                 }
-                .disposeOnDestroyView()
+                .disposeOnDestroy()
 
         viewModel.subscribe(this) {
             //            renderState(it)
@@ -85,7 +76,6 @@ class SharedSecureStorageActivity : SimpleFragmentActivity() {
     private fun observeViewEvents(it: SharedSecureStorageViewEvent?) {
         when (it) {
             is SharedSecureStorageViewEvent.Dismiss            -> {
-                setResult(Activity.RESULT_CANCELED)
                 finish()
             }
             is SharedSecureStorageViewEvent.Error              -> {
@@ -95,7 +85,6 @@ class SharedSecureStorageActivity : SimpleFragmentActivity() {
                         .setCancelable(false)
                         .setPositiveButton(R.string.ok) { _, _ ->
                             if (it.dismiss) {
-                                setResult(Activity.RESULT_CANCELED)
                                 finish()
                             }
                         }

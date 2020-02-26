@@ -180,17 +180,17 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         return getKey(keyId)
     }
 
-    override fun storeSecret(name: String, secretBase64: String, keys: List<Pair<String?, SsssKeySpec?>>, callback: MatrixCallback<Unit>) {
+    override fun storeSecret(name: String, secretBase64: String, keys: List<SharedSecretStorageService.KeyRef>, callback: MatrixCallback<Unit>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             val encryptedContents = HashMap<String, EncryptedSecretContent>()
             try {
                 keys.forEach {
-                    val keyId = it.first
+                    val keyId = it.keyId
                     // encrypt the content
                     when (val key = keyId?.let { getKey(keyId) } ?: getDefaultKey()) {
                         is KeyInfoResult.Success -> {
                             if (key.keyInfo.content.algorithm == SSSS_ALGORITHM_AES_HMAC_SHA2) {
-                                encryptAesHmacSha2(it.second!!, name, secretBase64).let {
+                                encryptAesHmacSha2(it.keySpec!!, name, secretBase64).let {
                                     encryptedContents[key.keyInfo.id] = it
                                 }
                             } else {

@@ -32,6 +32,5 @@
 
     <!-- Max width for some buttons -->
     <dimen name="button_max_width">280dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
 
 </resources>

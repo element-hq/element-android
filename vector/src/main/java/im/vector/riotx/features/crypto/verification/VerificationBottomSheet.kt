@@ -106,8 +106,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                             .setTitle(getString(R.string.dialog_title_error))
                             .setMessage(it.errorMessage)
                             .setCancelable(false)
-                            .setPositiveButton(R.string.ok) { _, _ ->
-                            }
+                            .setPositiveButton(R.string.ok, null)
                             .show()
                     Unit
                 }

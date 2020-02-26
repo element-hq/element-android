@@ -2151,5 +2151,4 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="qr_code_scanned_by_other_no">No</string>
 
     <string name="no_connectivity_to_the_server_indicator">Connectivity to the server has been lost</string>
-    <string name="title_activity_share_secure_storage">ShareSecureStorageActivity</string>
 </resources>

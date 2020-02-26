@@ -19,15 +19,8 @@ package im.vector.riotx.features.crypto.quads
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import butterknife.BindView
-import butterknife.OnClick
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.textfield.TextInputLayout
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.editorActionEvents
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -35,6 +28,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.android.synthetic.main.fragment_ssss_access_from_passphrase.*
 import me.gujun.android.span.span
 import java.util.concurrent.TimeUnit
 
@@ -44,36 +38,10 @@ class SharedSecuredStoragePassphraseFragment : VectorBaseFragment() {
 
     val sharedViewModel: SharedSecureStorageViewModel by activityViewModel()
 
-    @BindView(R.id.ssss_restore_with_passphrase_warning_text)
-    lateinit var warningText: TextView
-
-    @BindView(R.id.ssss_restore_with_passphrase_warning_reason)
-    lateinit var reasonText: TextView
-
-    @BindView(R.id.ssss_passphrase_enter_til)
-    lateinit var mPassphraseInputLayout: TextInputLayout
-
-    @BindView(R.id.ssss_passphrase_enter_edittext)
-    lateinit var mPassphraseTextEdit: EditText
-
-    @BindView(R.id.ssss_view_show_password)
-    lateinit var mPassphraseReveal: ImageView
-
-    @BindView(R.id.ssss_passphrase_submit)
-    lateinit var submitButton: Button
-
-    @BindView(R.id.ssss_passphrase_cancel)
-    lateinit var cancelButton: Button
-
-    @OnClick(R.id.ssss_view_show_password)
-    fun toggleVisibilityMode() {
-        sharedViewModel.handle(SharedSecureStorageAction.TogglePasswordVisibility)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        warningText.text = span {
+        ssss_restore_with_passphrase_warning_text.text = span {
             span(getString(R.string.enter_secret_storage_passphrase_warning)) {
                 textStyle = "bold"
             }
@@ -81,9 +49,9 @@ class SharedSecuredStoragePassphraseFragment : VectorBaseFragment() {
             +getString(R.string.enter_secret_storage_passphrase_warning_text)
         }
 
-        reasonText.text = getString(R.string.enter_secret_storage_passphrase_reason_verify)
+        ssss_restore_with_passphrase_warning_reason.text = getString(R.string.enter_secret_storage_passphrase_reason_verify)
 
-        mPassphraseTextEdit.editorActionEvents()
+        ssss_passphrase_enter_edittext.editorActionEvents()
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -93,22 +61,22 @@ class SharedSecuredStoragePassphraseFragment : VectorBaseFragment() {
                 }
                 .disposeOnDestroyView()
 
-        mPassphraseTextEdit.textChanges()
+        ssss_passphrase_enter_edittext.textChanges()
                 .subscribe {
-                    mPassphraseInputLayout.error = null
-                    submitButton.isEnabled = it.isNotBlank()
+                    ssss_passphrase_enter_til.error = null
+                    ssss_passphrase_submit.isEnabled = it.isNotBlank()
                 }
                 .disposeOnDestroyView()
 
         sharedViewModel.observeViewEvents {
             when (it) {
                 is SharedSecureStorageViewEvent.InlineError -> {
-                    mPassphraseInputLayout.error = it.message
+                    ssss_passphrase_enter_til.error = it.message
                 }
             }
         }
 
-        submitButton.clicks()
+        ssss_passphrase_submit.clicks()
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -116,25 +84,33 @@ class SharedSecuredStoragePassphraseFragment : VectorBaseFragment() {
                 }
                 .disposeOnDestroyView()
 
-        cancelButton.clicks()
+        ssss_passphrase_cancel.clicks()
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     sharedViewModel.handle(SharedSecureStorageAction.Cancel)
                 }
                 .disposeOnDestroyView()
+
+        ssss_view_show_password.clicks()
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    sharedViewModel.handle(SharedSecureStorageAction.TogglePasswordVisibility)
+                }
+                .disposeOnDestroyView()
     }
 
     fun submit() {
-        val text = mPassphraseTextEdit.text.toString()
+        val text = ssss_passphrase_enter_edittext.text.toString()
         if (text.isBlank()) return // Should not reach this point as button disabled
-        submitButton.isEnabled = false
+        ssss_passphrase_submit.isEnabled = false
         sharedViewModel.handle(SharedSecureStorageAction.SubmitPassphrase(text))
     }
 
     override fun invalidate() = withState(sharedViewModel) { state ->
         val shouldBeVisible = state.passphraseVisible
-        mPassphraseTextEdit.showPassword(shouldBeVisible)
-        mPassphraseReveal.setImageResource(if (shouldBeVisible) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
+        ssss_passphrase_enter_edittext.showPassword(shouldBeVisible)
+        ssss_view_show_password.setImageResource(if (shouldBeVisible) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
     }
 }

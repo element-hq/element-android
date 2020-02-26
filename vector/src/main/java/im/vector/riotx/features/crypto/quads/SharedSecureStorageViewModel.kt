@@ -24,9 +24,9 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.securestorage.RawBytesKeySpec
 import im.vector.matrix.android.api.session.securestorage.IntegrityResult
 import im.vector.matrix.android.api.session.securestorage.KeyInfoResult
+import im.vector.matrix.android.api.session.securestorage.RawBytesKeySpec
 import im.vector.matrix.android.internal.crypto.crosssigning.toBase64NoPadding
 import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.riotx.R
@@ -69,81 +69,87 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
 
     override fun handle(action: SharedSecureStorageAction) = withState {
         when (action) {
-            is SharedSecureStorageAction.TogglePasswordVisibility -> {
-                setState {
-                    copy(
-                            passphraseVisible = !passphraseVisible
-                    )
-                }
-            }
-            is SharedSecureStorageAction.Cancel                   -> {
-                _viewEvents.post(SharedSecureStorageViewEvent.Dismiss)
-            }
-            is SharedSecureStorageAction.SubmitPassphrase         -> {
-                val decryptedSecretMap = HashMap<String, String>()
-                GlobalScope.launch(Dispatchers.IO) {
-                    runCatching {
-                        _viewEvents.post(SharedSecureStorageViewEvent.ShowModalLoading)
-                        val passphrase = action.passphrase
-                        val keyInfoResult = session.sharedSecretStorageService.getDefaultKey()
-                        if (!keyInfoResult.isSuccess()) {
-                            _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
-                            _viewEvents.post(SharedSecureStorageViewEvent.Error("Cannot find ssss key"))
-                            return@launch
-                        }
-                        val keyInfo = (keyInfoResult as KeyInfoResult.Success).keyInfo
+            is SharedSecureStorageAction.TogglePasswordVisibility -> handleTogglePasswordVisibility()
+            is SharedSecureStorageAction.Cancel                   -> handleCancel()
+            is SharedSecureStorageAction.SubmitPassphrase         -> handleSubmitPassphrase(action)
+        }
+    }
 
-                        _viewEvents.post(SharedSecureStorageViewEvent.UpdateLoadingState(
-                                WaitingViewData(
-                                        message = stringProvider.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
-                                        isIndeterminate = true
-                                )
-                        ))
-                        val keySpec = RawBytesKeySpec.fromPassphrase(
-                                passphrase,
-                                keyInfo.content.passphrase?.salt ?: "",
-                                keyInfo.content.passphrase?.iterations ?: 0,
-                                // TODO
-                                object : ProgressListener {
-                                    override fun onProgress(progress: Int, total: Int) {
-                                        _viewEvents.post(SharedSecureStorageViewEvent.UpdateLoadingState(
-                                                WaitingViewData(
-                                                        message = stringProvider.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
-                                                        isIndeterminate = false,
-                                                        progress = progress,
-                                                        progressTotal = total
-                                                )
-                                        ))
-                                    }
-                                }
+    private fun handleSubmitPassphrase(action: SharedSecureStorageAction.SubmitPassphrase) {
+        val decryptedSecretMap = HashMap<String, String>()
+        GlobalScope.launch(Dispatchers.IO) {
+            runCatching {
+                _viewEvents.post(SharedSecureStorageViewEvent.ShowModalLoading)
+                val passphrase = action.passphrase
+                val keyInfoResult = session.sharedSecretStorageService.getDefaultKey()
+                if (!keyInfoResult.isSuccess()) {
+                    _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
+                    _viewEvents.post(SharedSecureStorageViewEvent.Error("Cannot find ssss key"))
+                    return@launch
+                }
+                val keyInfo = (keyInfoResult as KeyInfoResult.Success).keyInfo
+
+                _viewEvents.post(SharedSecureStorageViewEvent.UpdateLoadingState(
+                        WaitingViewData(
+                                message = stringProvider.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
+                                isIndeterminate = true
                         )
-
-                        withContext(Dispatchers.IO) {
-                            args.requestedSecrets.forEach {
-                                val res = awaitCallback<String> { callback ->
-                                    session.sharedSecretStorageService.getSecret(
-                                            name = it,
-                                            keyId = keyInfo.id,
-                                            secretKey = keySpec,
-                                            callback = callback)
-                                }
-                                decryptedSecretMap[it] = res
+                ))
+                val keySpec = RawBytesKeySpec.fromPassphrase(
+                        passphrase,
+                        keyInfo.content.passphrase?.salt ?: "",
+                        keyInfo.content.passphrase?.iterations ?: 0,
+                        // TODO
+                        object : ProgressListener {
+                            override fun onProgress(progress: Int, total: Int) {
+                                _viewEvents.post(SharedSecureStorageViewEvent.UpdateLoadingState(
+                                        WaitingViewData(
+                                                message = stringProvider.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
+                                                isIndeterminate = false,
+                                                progress = progress,
+                                                progressTotal = total
+                                        )
+                                ))
                             }
                         }
-                    }.fold({
-                        _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
-                        val safeForIntentCypher = ByteArrayOutputStream().also {
-                            it.use {
-                                session.securelyStoreObject(decryptedSecretMap as Map<String, String>, args.resultKeyStoreAlias, it)
-                            }
-                        }.toByteArray().toBase64NoPadding()
-                        _viewEvents.post(SharedSecureStorageViewEvent.FinishSuccess(safeForIntentCypher))
-                    }, {
-                        _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
-                        _viewEvents.post(SharedSecureStorageViewEvent.InlineError(it.localizedMessage))
-                    })
+                )
+
+                withContext(Dispatchers.IO) {
+                    args.requestedSecrets.forEach {
+                        val res = awaitCallback<String> { callback ->
+                            session.sharedSecretStorageService.getSecret(
+                                    name = it,
+                                    keyId = keyInfo.id,
+                                    secretKey = keySpec,
+                                    callback = callback)
+                        }
+                        decryptedSecretMap[it] = res
+                    }
                 }
-            }
+            }.fold({
+                _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
+                val safeForIntentCypher = ByteArrayOutputStream().also {
+                    it.use {
+                        session.securelyStoreObject(decryptedSecretMap as Map<String, String>, args.resultKeyStoreAlias, it)
+                    }
+                }.toByteArray().toBase64NoPadding()
+                _viewEvents.post(SharedSecureStorageViewEvent.FinishSuccess(safeForIntentCypher))
+            }, {
+                _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
+                _viewEvents.post(SharedSecureStorageViewEvent.InlineError(it.localizedMessage))
+            })
+        }
+    }
+
+    private fun handleCancel() {
+        _viewEvents.post(SharedSecureStorageViewEvent.Dismiss)
+    }
+
+    private fun handleTogglePasswordVisibility() {
+        setState {
+            copy(
+                    passphraseVisible = !passphraseVisible
+            )
         }
     }
 
