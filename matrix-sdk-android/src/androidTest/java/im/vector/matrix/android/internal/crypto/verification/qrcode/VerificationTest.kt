@@ -18,8 +18,8 @@ package im.vector.matrix.android.internal.crypto.verification.qrcode
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import im.vector.matrix.android.InstrumentedTest
-import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
-import im.vector.matrix.android.api.session.crypto.sas.VerificationService
+import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
+import im.vector.matrix.android.api.session.crypto.verification.VerificationService
 import im.vector.matrix.android.common.CommonTestHelper
 import im.vector.matrix.android.common.CryptoTestHelper
 import im.vector.matrix.android.common.TestConstants

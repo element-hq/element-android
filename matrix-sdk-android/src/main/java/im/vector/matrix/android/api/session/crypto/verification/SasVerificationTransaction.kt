@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 New Vector Ltd
+ * Copyright 2019 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,23 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.crypto.sas
+package im.vector.matrix.android.api.session.crypto.verification
 
-/**
- * Verification methods
- */
-enum class VerificationMethod {
-    // Use it when your application supports the SAS verification method
-    SAS,
-    // Use it if your application is able to display QR codes
-    QR_CODE_SHOW,
-    // Use it if your application is able to scan QR codes
-    QR_CODE_SCAN
+interface SasVerificationTransaction : VerificationTransaction {
+
+    fun supportsEmoji(): Boolean
+
+    fun supportsDecimal(): Boolean
+
+    fun getEmojiCodeRepresentation(): List<EmojiRepresentation>
+
+    fun getDecimalCodeRepresentation(): String
+
+    /**
+     * To be called by the client when the user has verified that
+     * both short codes do match
+     */
+    fun userHasVerifiedShortCode()
+
+    fun shortCodeDoesNotMatch()
 }

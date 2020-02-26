@@ -17,9 +17,9 @@ package im.vector.riotx.features.crypto.verification
 
 import android.content.Context
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.sas.VerificationService
-import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
+import im.vector.matrix.android.api.session.crypto.verification.VerificationService
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseActivity

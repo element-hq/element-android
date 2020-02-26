@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.crypto.sas
+package im.vector.matrix.android.api.session.crypto.verification
 
 interface QrCodeVerificationTransaction : VerificationTransaction {
 

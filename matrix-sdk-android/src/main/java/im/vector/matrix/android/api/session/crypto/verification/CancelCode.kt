@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-// TODO Rename package
-package im.vector.matrix.android.api.session.crypto.sas
+package im.vector.matrix.android.api.session.crypto.verification
 
 enum class CancelCode(val value: String, val humanReadable: String) {
     User("m.user", "the user cancelled the verification"),

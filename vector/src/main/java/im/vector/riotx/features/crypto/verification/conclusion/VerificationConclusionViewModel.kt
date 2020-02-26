@@ -18,8 +18,8 @@ package im.vector.riotx.features.crypto.verification.conclusion
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import im.vector.matrix.android.api.session.crypto.sas.CancelCode
-import im.vector.matrix.android.api.session.crypto.sas.safeValueOf
+import im.vector.matrix.android.api.session.crypto.verification.CancelCode
+import im.vector.matrix.android.api.session.crypto.verification.safeValueOf
 import im.vector.riotx.core.platform.EmptyAction
 import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel

@@ -14,25 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.crypto.sas
+package im.vector.matrix.android.api.session.crypto.verification
 
-interface VerificationTransaction {
-
-    var state: VerificationTxState
-
-    val transactionId: String
-    val otherUserId: String
-    var otherDeviceId: String?
-
-    // TODO Not used. Remove?
-    val isIncoming: Boolean
-
-    /**
-     * User wants to cancel the transaction
-     */
-    fun cancel()
-
-    fun cancel(code: CancelCode)
-
-    fun isToDeviceTransport(): Boolean
+/**
+ * Verification methods
+ */
+enum class VerificationMethod {
+    // Use it when your application supports the SAS verification method
+    SAS,
+    // Use it if your application is able to display QR codes
+    QR_CODE_SHOW,
+    // Use it if your application is able to scan QR codes
+    QR_CODE_SCAN
 }

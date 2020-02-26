@@ -23,8 +23,8 @@ import android.view.View
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.view.ViewCompat
-import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
+import im.vector.matrix.android.api.session.crypto.verification.IncomingSasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder

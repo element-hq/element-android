@@ -16,7 +16,7 @@
 
 package im.vector.riotx.features.crypto.verification
 
-import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
+import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
 
 val supportedVerificationMethods =
         listOf(

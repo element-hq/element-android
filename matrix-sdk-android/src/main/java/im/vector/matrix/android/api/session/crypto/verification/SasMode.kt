@@ -14,23 +14,9 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.crypto.sas
+package im.vector.matrix.android.api.session.crypto.verification
 
-interface SasVerificationTransaction : VerificationTransaction {
-
-    fun supportsEmoji(): Boolean
-
-    fun supportsDecimal(): Boolean
-
-    fun getEmojiCodeRepresentation(): List<EmojiRepresentation>
-
-    fun getDecimalCodeRepresentation(): String
-
-    /**
-     * To be called by the client when the user has verified that
-     * both short codes do match
-     */
-    fun userHasVerifiedShortCode()
-
-    fun shortCodeDoesNotMatch()
+object SasMode {
+    const val DECIMAL = "decimal"
+    const val EMOJI = "emoji"
 }

@@ -23,10 +23,10 @@ import android.content.Context
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListener
-import im.vector.matrix.android.api.session.crypto.sas.VerificationService
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
-import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.VerificationService
+import im.vector.matrix.android.api.session.crypto.verification.SasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequestCancellation
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
