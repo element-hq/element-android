@@ -136,7 +136,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 _viewEvents.post(SharedSecureStorageViewEvent.FinishSuccess(safeForIntentCypher))
             }, {
                 _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
-                _viewEvents.post(SharedSecureStorageViewEvent.InlineError(it.localizedMessage))
+                _viewEvents.post(SharedSecureStorageViewEvent.InlineError(stringProvider.getString(R.string.keys_backup_passphrase_error_decrypt)))
             })
         }
     }
