@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/imageMediaViewerToolbar"
+        android:id="@+id/bigImageViewerToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:elevation="4dp"
@@ -21,7 +21,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageMediaViewerToolbar"
+        app:layout_constraintTop_toBottomOf="@+id/bigImageViewerToolbar"
         app:optimizeDisplay="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

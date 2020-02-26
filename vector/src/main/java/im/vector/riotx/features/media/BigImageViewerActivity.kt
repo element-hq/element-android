@@ -41,7 +41,7 @@ class BigImageViewerActivity : VectorBaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_big_image_viewer)
 
-        setSupportActionBar(imageMediaViewerToolbar)
+        setSupportActionBar(bigImageViewerToolbar)
         supportActionBar?.apply {
             title = intent.getStringExtra(EXTRA_TITLE)
             setHomeButtonEnabled(true)
