@@ -20,7 +20,7 @@ Build 🧱:
  - Upgrade ktlint to version 0.36.0
 
 Other changes:
- -
+ - Restore availability to Chromebooks (#932)
 
 Changes in RiotX 0.17.0 (2020-02-27)
 ===================================================

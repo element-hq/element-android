@@ -43,4 +43,7 @@
     <issue id="InvalidPackage">
         <ignore path="**/htmlcompressor-1.4.jar" />
     </issue>
+
+    <!-- Manifest -->
+    <issue id="PermissionImpliesUnsupportedChromeOsHardware" severity="error" />
 </lint>
