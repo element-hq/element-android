@@ -6,6 +6,7 @@
     <issue id="MissingTranslation" severity="warning" />
     <issue id="TypographyEllipsis" severity="error" />
     <issue id="ImpliedQuantity" severity="warning" />
+    <issue id="IconXmlAndPng" severity="error" />
 
     <!-- UX -->
     <issue id="ButtonOrder" severity="error" />
