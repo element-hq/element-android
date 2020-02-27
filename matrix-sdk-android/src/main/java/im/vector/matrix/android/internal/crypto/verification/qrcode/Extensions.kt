@@ -94,11 +94,11 @@ fun String.toQrCodeData(): QrCodeData? {
     val mode = byteArray[cursor].toInt()
     cursor++
 
-    // Get transaction length
-    val bigEndian1 = byteArray[cursor].toUnsignedInt()
-    val bigEndian2 = byteArray[cursor + 1].toUnsignedInt()
+    // Get transaction length, Big Endian format
+    val msb = byteArray[cursor].toUnsignedInt()
+    val lsb = byteArray[cursor + 1].toUnsignedInt()
 
-    val transactionLength = bigEndian1 * 0x0100 + bigEndian2
+    val transactionLength =  msb.shl(8) + lsb
 
     cursor++
     cursor++
