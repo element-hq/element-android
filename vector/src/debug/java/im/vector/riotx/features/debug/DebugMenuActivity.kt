@@ -25,6 +25,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import butterknife.OnClick
+import im.vector.matrix.android.internal.crypto.verification.qrcode.toQrCodeData
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
@@ -208,6 +209,9 @@ class DebugMenuActivity : VectorBaseActivity() {
                     // Also update the current QR Code (reverse operation)
                     // renderQrCode(QrCodeScannerActivity.getResultText(data) ?: "")
                     val result = QrCodeScannerActivity.getResultText(data)!!
+
+                    val qrCodeData = result.toQrCodeData()
+                    Timber.e("qrCodeData: $qrCodeData")
 
                     if (result.length != buffer.size) {
                         Timber.e("Error, length are not the same")
