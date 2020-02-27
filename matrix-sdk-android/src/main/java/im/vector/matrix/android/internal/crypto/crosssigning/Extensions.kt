@@ -33,5 +33,5 @@ fun ByteArray.toBase64NoPadding(): String {
 }
 
 fun String.fromBase64NoPadding(): ByteArray {
-    return Base64.decode(this, Base64.NO_PADDING or Base64.NO_WRAP)
+    return Base64.decode(this, Base64.DEFAULT)
 }
