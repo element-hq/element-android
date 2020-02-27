@@ -1,4 +1,4 @@
-Changes in RiotX 0.17.0 (2020-XX-XX)
+Changes in RiotX 0.17.0 (2020-02-27)
 ===================================================
 
 Features ✨:
@@ -26,19 +26,10 @@ Bugfix 🐛:
  - New direct chat: selecting several participants was not adding the room to the direct chats list
  - Room overview shows deleted messages as “Encrypted message” (#758)
 
-Translations 🗣:
- -
-
 SDK API changes ⚠️:
  - Get crypto methods through Session.cryptoService()
  - ProgressListener.onProgress() function will be invoked on the background thread instead of UI thread
  - Improve CreateRoomParams API (#1070)
-
-Build 🧱:
- -
-
-Other changes:
- -
 
 Changes in RiotX 0.16.0 (2020-02-14)
 ===================================================
