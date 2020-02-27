@@ -26,14 +26,14 @@ import im.vector.matrix.android.internal.di.MoshiProvider
 @JsonClass(generateAdapter = true)
 data class RoomEventFilter(
         @Json(name = "limit") var limit: Int? = null,
-        @Json(name = "not_senders") var notSenders: MutableList<String>? = null,
-        @Json(name = "not_types") var notTypes: MutableList<String>? = null,
-        @Json(name = "senders") var senders: MutableList<String>? = null,
-        @Json(name = "types") var types: MutableList<String>? = null,
-        @Json(name = "rooms") var rooms: MutableList<String>? = null,
-        @Json(name = "not_rooms") var notRooms: List<String>? = null,
-        @Json(name = "contains_url") var containsUrl: Boolean? = null,
-        @Json(name = "lazy_load_members") var lazyLoadMembers: Boolean? = null
+        @Json(name = "not_senders") val notSenders: List<String>? = null,
+        @Json(name = "not_types") val notTypes: List<String>? = null,
+        @Json(name = "senders") val senders: List<String>? = null,
+        @Json(name = "types") val types: List<String>? = null,
+        @Json(name = "rooms") val rooms: List<String>? = null,
+        @Json(name = "not_rooms") val notRooms: List<String>? = null,
+        @Json(name = "contains_url") val containsUrl: Boolean? = null,
+        @Json(name = "lazy_load_members") val lazyLoadMembers: Boolean? = null
 ) {
 
     fun toJSONString(): String {

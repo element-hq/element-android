@@ -40,7 +40,7 @@
     <string name="missing_permissions_warning">"Из-за отсутствия разрешений некоторые функции могут быть недоступны..</string>
     <string name="missing_permissions_to_start_conf_call">Вам нужно разрешение на приглашение для начала конференции в этой комнате</string>
     <string name="missing_permissions_title_to_start_conf_call">Не удалось осуществить вызов</string>
-    <string name="device_information">Информация об устройстве</string>
+    <string name="device_information">Информация о сессии</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Конференц звонки не поддерживаются в зашифрованных комнатах</string>
     <string name="send_anyway">Все равно отправить</string>
     <string name="or">или</string>
@@ -176,9 +176,7 @@
     <string name="auth_reset_password_missing_password">Должен быть введен новый пароль.</string>
     <string name="auth_reset_password_email_validation_message">На адрес %s было отправлено письмо. После перехода по ссылке в письме, нажмите ниже.</string>
     <string name="auth_reset_password_error_unauthorized">Не удалось проверить email: убедитесь, что вы перешли по присланной ссылке</string>
-    <string name="auth_reset_password_success_message">Ваш пароль сброшен.
-
-Осуществлен выход на всех устройствах - вы не будете получать push уведомления. Для включения push уведомлений заново войдите на каждом из ваших устройств.</string>
+    <string name="auth_reset_password_success_message">Ваш пароль сброшен. Осуществлен выход на всех сессиях - вы не будете получать push уведомления. Для включения push уведомлений заново войдите на каждом из ваших устройств.</string>
 
     <!-- Login Screen -->
     <string name="login_error_must_start_http">URL должен начинаться с http[s]://</string>
@@ -198,8 +196,7 @@
     <string name="login_error_login_email_not_yet">Вы не перешли по высланной в email ссылке</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Вам нужно войти в систему, чтобы сгенерировать ключи шифрования для этого устройства и отправлять публичный ключ вашему серверу.
-Это необходимо только один раз; извините за неудобства.</string>
+    <string name="e2e_need_log_in_again">Вам нужно войти в систему, чтобы сгенерировать ключи шифрования для этой сессии и отправлять публичный ключ вашему серверу. Это необходимо только один раз; извините за неудобства.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Чтение списка вступивших</string>
@@ -305,7 +302,7 @@
     <string name="room_participants_header_admin_tools">АДМИНИСТРИРОВАНИЕ</string>
     <string name="room_participants_header_call">ВЫЗОВ</string>
     <string name="room_participants_header_direct_chats">ПРЯМЫЕ ЧАТЫ</string>
-    <string name="room_participants_header_devices">УСТРОЙСТВА</string>
+    <string name="room_participants_header_devices">СЕССИИ</string>
 
     <string name="room_participants_action_invite">Пригласить</string>
     <string name="room_participants_action_leave">Покинуть этот чат</string>
@@ -319,7 +316,7 @@
     <string name="room_participants_action_unignore">Отобразить все сообщения этого пользователя</string>
     <string name="room_participants_invite_search_another_user">ID пользователя, имя или email</string>
     <string name="room_participants_action_mention">Упомянуть</string>
-    <string name="room_participants_action_devices_list">Отобразить список устройств</string>
+    <string name="room_participants_action_devices_list">Отобразить список сессий</string>
     <string name="room_participants_power_level_prompt">Вы не сможете отменить это действие, поскольку пользователь получит такой же уровень доступа, как и у вас. Вы уверены?</string>
 
     <string name="room_participants_invite_prompt_msg">"Вы уверены что хотите пригласить %s в этот чат?"</string>
@@ -342,7 +339,7 @@
     <string name="room_message_placeholder_not_encrypted">Отправить сообщение…</string>
     <string name="room_offline_notification">Соединение с сервером потеряно.</string>
     <string name="room_unsent_messages_notification">Сообщения не отправлены. %1$s или %2$s сейчас?</string>
-    <string name="room_unknown_devices_messages_notification">Сообщения, не отправлены из-за присутствия неизвестных устройств. %1$s или %2$s сейчас?</string>
+    <string name="room_unknown_devices_messages_notification">Сообщения, не отправлены из-за присутствия неизвестных сессий. %1$s или %2$s сейчас\?</string>
     <string name="room_prompt_resend">Повторить отправку</string>
     <string name="room_prompt_cancel">Удалить все</string>
     <string name="room_resend_unsent_messages">Отправить неотправленные сообщения</string>
@@ -434,7 +431,7 @@
     <string name="settings_app_info_link_title">Сведения о приложении</string>
 
     <string name="settings_enable_all_notif">Включить уведомления для этой учетной записи</string>
-    <string name="settings_enable_this_device">Включить уведомления для этого устройства</string>
+    <string name="settings_enable_this_device">Включить уведомления для этой сессии</string>
     <string name="settings_turn_screen_on">Включить экран на 3 секунды</string>
 
     <string name="settings_messages_in_one_to_one">В персональных чатах</string>
@@ -473,8 +470,8 @@
     <string name="settings_home_display">Домашний экран</string>
     <string name="settings_pin_missed_notifications">Прикрепить комнаты с отключенными уведомлениями</string>
     <string name="settings_pin_unread_messages">Прикрепить комнаты с непрочитанными сообщениями</string>
-    <string name="settings_devices_list">Устройства</string>
-    <string name="devices_details_dialog_title">Информация об устройстве</string>
+    <string name="settings_devices_list">Сессии</string>
+    <string name="devices_details_dialog_title">Информация о сессии</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Общеизвестное имя</string>
     <string name="devices_details_device_name">Обновить публичное имя</string>
@@ -570,8 +567,8 @@
     <string name="room_settings_labs_end_to_end">Сквозное шифрование</string>
     <string name="room_settings_labs_end_to_end_is_active">Сквозное шифрование активно</string>
     <string name="room_settings_labs_end_to_end_warnings">Вам необходимо выйти, чтобы включить шифрование.</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">Шифровать сообщения только для проверенных устройств</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">Никогда не отправлять шифрованное сообщение на непроверенные устройства в этой комнате с этого устройства.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Шифровать сообщения только для проверенных сессий</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Никогда не отправлять шифрованное сообщение на непроверенные сессии в этой комнате с этой сессии.</string>
 
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">У этой комнаты еще нет локального адреса</string>
@@ -610,11 +607,11 @@
     <string name="encryption_information_session_id">ID сесии</string>
     <string name="encryption_information_decryption_error">Ошибка дешифровки</string>
 
-    <string name="encryption_information_sender_device_information">Информация об устройстве отправителя</string>
+    <string name="encryption_information_sender_device_information">Информация о сессии отправителя</string>
     <string name="encryption_information_device_name">Публичное имя</string>
     <string name="encryption_information_name">Публичное имя</string>
     <string name="encryption_information_device_id">ID</string>
-    <string name="encryption_information_device_key">Ключ устройства</string>
+    <string name="encryption_information_device_key">Ключ сеанса</string>
     <string name="encryption_information_verification">Проверка</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 отпечаток</string>
 
@@ -632,14 +629,14 @@
     <string name="encryption_import_room_keys">Импорт ключей комнаты</string>
     <string name="encryption_import_room_keys_summary">Импортировать ключи из локального файла</string>
     <string name="encryption_import_import">Импорт</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Шифровать только для проверенных устройств</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Не отправлять зашифрованные сообщения непроверенным устройствам.</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Шифровать только для проверенных сессий</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Не отправлять зашифрованные сообщения непроверенным сессиям с этой сессии.</string>
 
     <string name="encryption_information_not_verified">НЕ проверено</string>
     <string name="encryption_information_verified">Проверено</string>
     <string name="encryption_information_blocked">В черном списке</string>
 
-    <string name="encryption_information_unknown_device">неизвестное устройство</string>
+    <string name="encryption_information_unknown_device">неизвестная сессия</string>
     <string name="encryption_information_none">ничего</string>
 
     <string name="encryption_information_verify">Подтвердить</string>
@@ -647,11 +644,9 @@
     <string name="encryption_information_block">Блокировать</string>
     <string name="encryption_information_unblock">Разрешить</string>
 
-    <string name="encryption_information_verify_device">Проверить устройство</string>
-    <string name="encryption_information_verify_device_warning">Чтобы убедиться, что этому устройству можно доверять, обратитесь к его владельцу, используя другие способы (например, лично или по телефону), и спросите, соответствует ли ключ, который он видит в настройках для этого устройства:</string>
-    <string name="encryption_information_verify_device_warning2">"Если совпадает, то нажмите кнопку подтвердить ниже.
-Если не совпадает, возможно кто-то пытается перехватить устройство и  вы захотите добавить его в черный список.
-В будущем данный процесс будет улучшен."</string>
+    <string name="encryption_information_verify_device">Проверить сессию</string>
+    <string name="encryption_information_verify_device_warning">Чтобы убедиться, что этой сессии можно доверять, обратитесь к его владельцу, используя другие способы (например, лично или по телефону), и спросите, соответствует ли ключ, который он видит в настройках для этой сессии:</string>
+    <string name="encryption_information_verify_device_warning2">"Если совпадает, то нажмите кнопку подтвердить ниже. Если не совпадает, возможно кто-то пытается перехватить сессию и  вы захотите добавить его в черный список. В будущем данный процесс будет улучшен."</string>
     <string name="encryption_information_verify_key_match">Я проверил, что ключи совпадают</string>
 
     <string name="e2e_enabling_on_app_update">Riot теперь поддерживает сквозное шифрование, но вам нужно снова войти в систему, чтобы включить его.
@@ -659,12 +654,12 @@
 Вы можете сделать это сейчас или позже из настроек приложения.</string>
 
     <!-- unknown devices management -->
-    <string name="unknown_devices_alert_title">Комната содержит неизвестные устройства</string>
-    <string name="unknown_devices_alert_message">Эта комната содержит неизвестные устройства, которые не были подтверждены.
-Это означает, что эти устройства могут не принадлежать тем пользователям, на которых они претендуют. 
-Перед продолжением рекомендуем вам пройти процесс проверки для каждого устройства, но вы можете отправить сообщение повторно, не проверяя.
-
-Неизвестные устройства:</string>
+    <string name="unknown_devices_alert_title">Комната содержит неизвестные сессии</string>
+    <string name="unknown_devices_alert_message">Эта комната содержит неизвестные сессии, которые не были подтверждены. 
+\nЭто означает, что эти сессии могут не принадлежать тем пользователям, на которых они претендуют. 
+\nПеред продолжением рекомендуем вам пройти процесс проверки для каждой сессии, но вы можете отправить сообщение повторно, не проверяя.
+\n
+\nНеизвестные сессии:</string>
 
     <!-- directory activity  -->
     <string name="select_room_directory">Выбор списка комнат</string>
@@ -738,8 +733,8 @@
 
     <string name="call">Вызов</string>
     <string name="settings_containing_my_user_name">Сообщения, содержащие мое имя пользователя</string>
-    <string name="you_added_a_new_device">Вы добавили новое устройство \'%s\', запрашивающее ключи шифрования.</string>
-    <string name="your_unverified_device_requesting">Ваше непроверенное устройство \'%s\' запрашивает ключи шифрования.</string>
+    <string name="you_added_a_new_device">Вы добавили новою сессию \'%s\', запрашивающая ключи шифрования.</string>
+    <string name="your_unverified_device_requesting">Ваше непроверенная сессия \'%s\' запрашивает ключи шифрования.</string>
     <string name="settings_containing_my_display_name">Сообщения, содержащие мое отображаемое имя</string>
     <string name="start_verification">Начать проверку</string>
     <string name="share_without_verifying">Поделиться без проверки</string>
@@ -909,9 +904,9 @@
     </plurals>
     <string name="receipt_avatar">Получить аватар</string>
     <string name="notice_avatar">Заметка аватара</string>
-    <string name="settings_flair">Флэр</string>
+    <string name="settings_flair">Сообщества</string>
 
-    <string name="room_settings_no_flair">Эта комната не показывает флэр сообществ</string>
+    <string name="room_settings_no_flair">Эта комната не показывает любые сообщества</string>
     <string name="settings_notification_privacy">Конфиденциальность уведомлений</string>
     <string name="settings_notification_privacy_normal">Нормальный</string>
     <string name="settings_notification_privacy_need_permission">Приложение нуждается в разрешении на работу в фоновом режиме</string>
@@ -962,12 +957,12 @@
     <string name="download">Скачать</string>
     <string name="speak">Говорить</string>
     <string name="clear">Очистить</string>
-    <string name="e2e_re_request_encryption_key"><u>Повторно запросить ключи шифрования</u> с другого вашего устройства.</string>
+    <string name="e2e_re_request_encryption_key"><u>Повторно запросить ключи шифрования</u> с других ваших сессий.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Отправлен запрос ключа.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Запрос отправлен</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Запустите Riot на другом устройстве, которое может расшифровать сообщение, для отправки ключа на это устройство.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Запустите Riot на другом устройстве, которое может расшифровать сообщение, для отправки ключа на эту сессию.</string>
 
     <string name="lock_screen_hint">Введите здесь…</string>
 
@@ -1157,10 +1152,10 @@
 Пожалуйста, проверьте настройки аккаунта.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Включить</string>
 
-    <string name="settings_troubleshoot_test_device_settings_title">Настройки устройства.</string>
-    <string name="settings_troubleshoot_test_device_settings_success">Уведомления включены для этого устройства.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Уведомления не разрешены для этого устройства.
-Пожалуйста, проверьте настройки Riot.</string>
+    <string name="settings_troubleshoot_test_device_settings_title">Настройки сессии.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Уведомления включены для этой сессии.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Уведомления не включено для этой сессии. 
+\nПожалуйста, проверьте настройки Riot.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Включить</string>
 
     <string name="settings_troubleshoot_test_play_services_title">Проверка сервисов Play</string>
@@ -1429,7 +1424,7 @@
     <string name="settings_data_save_mode_summary">В режиме экономии траффика применяется специальный фильтр, поэтому обновление присутствия и уведомления о наборе отфильтровываются.</string>
 
     <string name="keys_backup_setup_step1_recovery_key_alternative">Или защитите резервную копию с помощью ключа восстановления, сохранив его в безопасном месте.</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">Безопасная резервная копия ключей должна быть активирована на всех ваших устройствах, чтобы не потерять доступ к зашифрованным сообщениям.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Безопасная резервная копия ключей должна быть активирована на всех ваших сессиях, чтобы не потерять доступ к зашифрованным сообщениям.</string>
     <string name="keys_backup_setup_step2_text_description">"Зашифрованная копия ключей  будет храниться на вашем сервере. Для безопасности, защитите её парольной фразой.
 
 Для максимальной безопасности он должен отличаться от пароля вашей учетной записи."</string>
@@ -1472,7 +1467,7 @@
     <string name="notification_sender_me">Мне</string>
     <string name="autodiscover_well_known_autofill_confirm">Использовать настройку</string>
 
-    <string name="title_activity_verify_device">Проверить устройство</string>
+    <string name="title_activity_verify_device">Проверить сессию</string>
 
     <string name="login_error_ssl_handshake">Ваше устройство использует устаревший TLS протокол, уязвимый для атак, для вашей же безопасности вам отказано в подключении</string>
     <string name="settings_notification_privacy_no_background_sync">Приложениям <b>не</b>" нужно  подключаться к HomeServer в фоновом режиме, это должно снизить расход заряда батареи"</string>
@@ -1485,10 +1480,10 @@
 
     <string name="error_jitsi_not_supported_on_old_device">К сожалению, конференц-звонки с Jitsi не поддерживаются на старых устройствах (ниже Android OS - 5.0)</string>
 
-    <string name="you_added_a_new_device_with_info">Новое устройство запрашивает ключи шифрования.
-\nИмя устройства: %1$s
-\nПоследний раз в сети: %2$s
-\nЕсли вы не вошли с другого устройства, проигнорируйте этот запрос.</string>
+    <string name="you_added_a_new_device_with_info">Новая сессия запрашивает ключи шифрования. 
+\nИмя сессии: %1$s 
+\nПоследний раз в сети: %2$s 
+\nЕсли вы не вошли с другой сессии, проигнорируйте этот запрос.</string>
     <string name="your_unverified_device_requesting_with_info">Непроверенное устройство запрашивает ключи шифрования.
 \nИмя устройства: %1$s
 \nПоследний раз в сети: %2$s
@@ -1763,7 +1758,7 @@
 \nСинхронизация может быть отложена в зависимости от ресурсов (батареи) или состояния устройства (спящий режим).</string>
     <string name="settings_discovery_manage">Управляйте настройками обнаружения.</string>
     <string name="encryption_information_device_name_with_warning">Публичное имя (видимое для людей, с которыми вы общаетесь)</string>
-    <string name="device_name_warning">Публичное имя устройства видны людям, с которыми вы общаетесь</string>
+    <string name="device_name_warning">Публичное имя сессии видны людям, с которыми вы общаетесь</string>
     <string name="identity_server_not_defined">Вы не используете какой-либо сервер идентификации</string>
     <string name="identity_server_not_defined_for_password_reset">Идентификационный сервер не настроен, требуется сброс пароля.</string>
 

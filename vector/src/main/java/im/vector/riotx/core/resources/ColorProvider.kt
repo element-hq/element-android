@@ -26,6 +26,7 @@ import javax.inject.Inject
 
 class ColorProvider @Inject constructor(private val context: Context) {
 
+    @ColorInt
     fun getColor(@ColorRes colorRes: Int): Int {
         return ContextCompat.getColor(context, colorRes)
     }

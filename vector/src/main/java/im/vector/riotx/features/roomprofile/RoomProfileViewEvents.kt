@@ -26,4 +26,5 @@ sealed class RoomProfileViewEvents : VectorViewEvents {
     data class Failure(val throwable: Throwable) : RoomProfileViewEvents()
 
     object OnLeaveRoomSuccess : RoomProfileViewEvents()
+    data class ShareRoomProfile(val permalink: String) : RoomProfileViewEvents()
 }

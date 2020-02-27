@@ -23,6 +23,13 @@ import io.realm.RealmList
 import io.realm.RealmQuery
 import io.realm.kotlin.where
 
+internal fun EventEntity.copyToRealmOrIgnore(realm: Realm): EventEntity {
+    return realm.where<EventEntity>()
+        .equalTo(EventEntityFields.EVENT_ID, eventId)
+        .equalTo(EventEntityFields.ROOM_ID, roomId)
+        .findFirst() ?: realm.copyToRealm(this)
+}
+
 internal fun EventEntity.Companion.where(realm: Realm, eventId: String): RealmQuery<EventEntity> {
     return realm.where<EventEntity>()
             .equalTo(EventEntityFields.EVENT_ID, eventId)

@@ -24,31 +24,31 @@ data class EncryptedFileKey(
          * Required. Algorithm. Must be "A256CTR".
          */
         @Json(name = "alg")
-        var alg: String? = null,
+        val alg: String? = null,
 
         /**
          * Required. Extractable. Must be true. This is a W3C extension.
          */
         @Json(name = "ext")
-        var ext: Boolean? = null,
+        val ext: Boolean? = null,
 
         /**
          * Required. Key operations. Must at least contain "encrypt" and "decrypt".
          */
         @Json(name = "key_ops")
-        var key_ops: List<String>? = null,
+        val key_ops: List<String>? = null,
 
         /**
          * Required. Key type. Must be "oct".
          */
         @Json(name = "kty")
-        var kty: String? = null,
+        val kty: String? = null,
 
         /**
          * Required. The key, encoded as urlsafe unpadded base64.
          */
         @Json(name = "k")
-        var k: String? = null
+        val k: String? = null
 ) {
     /**
      * Check what the spec tells us
@@ -62,7 +62,7 @@ data class EncryptedFileKey(
             return false
         }
 
-        if (key_ops?.contains("encrypt") != true || key_ops?.contains("decrypt") != true) {
+        if (key_ops?.contains("encrypt") != true || !key_ops.contains("decrypt")) {
             return false
         }
 

@@ -27,11 +27,11 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.sas.EmojiRepresentation
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.VerificationService
-import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
+import im.vector.matrix.android.api.session.crypto.verification.EmojiRepresentation
+import im.vector.matrix.android.api.session.crypto.verification.SasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.VerificationService
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.core.di.HasScreenInjector
@@ -56,16 +56,16 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
 
     init {
         withState { state ->
-            refreshStateFromTx(session.getVerificationService()
+            refreshStateFromTx(session.cryptoService().verificationService()
                     .getExistingTransaction(state.otherUser?.id ?: "", state.transactionId
                             ?: "") as? SasVerificationTransaction)
         }
 
-        session.getVerificationService().addListener(this)
+        session.cryptoService().verificationService().addListener(this)
     }
 
     override fun onCleared() {
-        session.getVerificationService().removeListener(this)
+        session.cryptoService().verificationService().removeListener(this)
         super.onCleared()
     }
 

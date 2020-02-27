@@ -119,6 +119,7 @@ dependencies {
 
     // Image
     implementation 'androidx.exifinterface:exifinterface:1.1.0'
+    implementation 'id.zelory:compressor:3.0.0'
 
     // Database
     implementation 'com.github.Zhuinden:realm-monarchy:0.5.1'

@@ -26,11 +26,11 @@ import im.vector.matrix.android.internal.di.MoshiProvider
  */
 @JsonClass(generateAdapter = true)
 internal data class FilterBody(
-        @Json(name = "event_fields") var eventFields: List<String>? = null,
-        @Json(name = "event_format") var eventFormat: String? = null,
-        @Json(name = "presence") var presence: Filter? = null,
-        @Json(name = "account_data") var accountData: Filter? = null,
-        @Json(name = "room") var room: RoomFilter? = null
+        @Json(name = "event_fields") val eventFields: List<String>? = null,
+        @Json(name = "event_format") val eventFormat: String? = null,
+        @Json(name = "presence") val presence: Filter? = null,
+        @Json(name = "account_data") val accountData: Filter? = null,
+        @Json(name = "room") val room: RoomFilter? = null
 ) {
 
     fun toJSONString(): String {

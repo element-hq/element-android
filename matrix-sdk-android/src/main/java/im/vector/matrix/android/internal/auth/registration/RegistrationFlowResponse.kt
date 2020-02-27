@@ -32,20 +32,20 @@ data class RegistrationFlowResponse(
          * The list of flows.
          */
         @Json(name = "flows")
-        var flows: List<InteractiveAuthenticationFlow>? = null,
+        val flows: List<InteractiveAuthenticationFlow>? = null,
 
         /**
          * The list of stages the client has completed successfully.
          */
         @Json(name = "completed")
-        var completedStages: List<String>? = null,
+        val completedStages: List<String>? = null,
 
         /**
          * The session identifier that the client must pass back to the home server, if one is provided,
          * in subsequent attempts to authenticate in the same API call.
          */
         @Json(name = "session")
-        var session: String? = null,
+        val session: String? = null,
 
         /**
          * The information that the client will need to know in order to use a given type of authentication.
@@ -53,7 +53,7 @@ data class RegistrationFlowResponse(
          * For example, the public key of reCAPTCHA stage could be given here.
          */
         @Json(name = "params")
-        var params: JsonDict? = null
+        val params: JsonDict? = null
 
         /**
          * WARNING,

@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.api.extensions
 
-import im.vector.matrix.android.api.comparators.DatedObjectComparators
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 
@@ -33,7 +32,5 @@ fun CryptoDeviceInfo.getFingerprintHumanReadable() = fingerprint()
  * ========================================================================================== */
 
 fun List<DeviceInfo>.sortByLastSeen(): List<DeviceInfo> {
-    val list = toMutableList()
-    list.sortWith(DatedObjectComparators.descComparator)
-    return list
+    return this.sortedByDescending { it.lastSeenTs ?: 0 }
 }

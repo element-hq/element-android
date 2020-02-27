@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.room
 
 import com.zhuinden.monarchy.Monarchy
+import dagger.Lazy
 import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -41,17 +42,20 @@ import im.vector.matrix.android.internal.database.query.whereType
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.membership.RoomDisplayNameResolver
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
+import im.vector.matrix.android.internal.session.room.timeline.TimelineEventDecryptor
 import im.vector.matrix.android.internal.session.sync.RoomSyncHandler
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncSummary
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncUnreadNotifications
 import io.realm.Realm
 import org.greenrobot.eventbus.EventBus
+import timber.log.Timber
 import javax.inject.Inject
 
 internal class RoomSummaryUpdater @Inject constructor(
         @UserId private val userId: String,
         private val roomDisplayNameResolver: RoomDisplayNameResolver,
         private val roomAvatarResolver: RoomAvatarResolver,
+        private val timelineEventDecryptor: Lazy<TimelineEventDecryptor>,
         private val eventBus: EventBus,
         private val monarchy: Monarchy) {
 
@@ -81,7 +85,8 @@ internal class RoomSummaryUpdater @Inject constructor(
                roomSummary: RoomSyncSummary? = null,
                unreadNotifications: RoomSyncUnreadNotifications? = null,
                updateMembers: Boolean = false,
-               ephemeralResult: RoomSyncHandler.EphemeralResult? = null) {
+               ephemeralResult: RoomSyncHandler.EphemeralResult? = null,
+               inviterId: String? = null) {
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
         if (roomSummary != null) {
             if (roomSummary.heroes.isNotEmpty()) {
@@ -133,6 +138,17 @@ internal class RoomSummaryUpdater @Inject constructor(
         roomSummaryEntity.isEncrypted = encryptionEvent != null
         roomSummaryEntity.typingUserIds.clear()
         roomSummaryEntity.typingUserIds.addAll(ephemeralResult?.typingUserIds.orEmpty())
+
+        if (roomSummaryEntity.membership == Membership.INVITE && inviterId != null) {
+            roomSummaryEntity.inviterId = inviterId
+        } else if (roomSummaryEntity.membership != Membership.INVITE) {
+            roomSummaryEntity.inviterId = null
+        }
+
+        if (latestPreviewableEvent?.root?.type == EventType.ENCRYPTED && latestPreviewableEvent.root?.decryptionResultJson == null) {
+            Timber.v("Should decrypt ${latestPreviewableEvent.eventId}")
+            timelineEventDecryptor.get().requestDecryption(TimelineEventDecryptor.DecryptionRequest(latestPreviewableEvent.eventId, ""))
+        }
 
         if (updateMembers) {
             val otherRoomMembers = RoomMemberHelper(realm, roomId)

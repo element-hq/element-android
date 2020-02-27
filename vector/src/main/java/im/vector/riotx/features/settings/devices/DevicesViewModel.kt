@@ -30,9 +30,9 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.sas.VerificationService
-import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
+import im.vector.matrix.android.api.session.crypto.verification.VerificationService
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
@@ -74,7 +74,7 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
 
     init {
         refreshDevicesList()
-        session.getVerificationService().addListener(this)
+        session.cryptoService().verificationService().addListener(this)
 
         session.rx().liveUserCryptoDevices(session.myUserId)
                 .execute {
@@ -85,7 +85,7 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
     }
 
     override fun onCleared() {
-        session.getVerificationService().removeListener(this)
+        session.cryptoService().verificationService().removeListener(this)
         super.onCleared()
     }
 
@@ -103,7 +103,7 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
     private fun refreshDevicesList() {
         if (!session.sessionParams.credentials.deviceId.isNullOrEmpty()) {
             // display something asap
-            val localKnown = session.getUserDevices(session.myUserId).map {
+            val localKnown = session.cryptoService().getUserDevices(session.myUserId).map {
                 DeviceInfo(
                         user_id = session.myUserId,
                         deviceId = it.deviceId,
@@ -118,7 +118,7 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
                 )
             }
 
-            session.getDevicesList(object : MatrixCallback<DevicesListResponse> {
+            session.cryptoService().getDevicesList(object : MatrixCallback<DevicesListResponse> {
                 override fun onSuccess(data: DevicesListResponse) {
                     setState {
                         copy(
@@ -141,16 +141,16 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
             setState {
                 copy(
                         myDeviceId = session.sessionParams.credentials.deviceId ?: "",
-                        cryptoDevices = Success(session.getUserDevices(session.myUserId))
+                        cryptoDevices = Success(session.cryptoService().getUserDevices(session.myUserId))
                 )
             }
 
             // then force download
-            session.downloadKeys(listOf(session.myUserId), true, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
+            session.cryptoService().downloadKeys(listOf(session.myUserId), true, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
                 override fun onSuccess(data: MXUsersDevicesMap<CryptoDeviceInfo>) {
                     setState {
                         copy(
-                                cryptoDevices = Success(session.getUserDevices(session.myUserId))
+                                cryptoDevices = Success(session.cryptoService().getUserDevices(session.myUserId))
                         )
                     }
                 }
@@ -172,7 +172,7 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
     }
 
     private fun handleVerify(action: DevicesAction.VerifyMyDevice) {
-        val txID = session.getVerificationService().requestKeyVerification(supportedVerificationMethods, session.myUserId, listOf(action.deviceId))
+        val txID = session.cryptoService().verificationService().requestKeyVerification(supportedVerificationMethods, session.myUserId, listOf(action.deviceId))
         _viewEvents.post(DevicesViewEvents.ShowVerifyDevice(
                 session.myUserId,
                 txID.transactionId
@@ -187,7 +187,7 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
     }
 
     private fun handleRename(action: DevicesAction.Rename) {
-        session.setDeviceName(action.deviceId, action.newName, object : MatrixCallback<Unit> {
+        session.cryptoService().setDeviceName(action.deviceId, action.newName, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 setState {
                     copy(
@@ -222,7 +222,7 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
             )
         }
 
-        session.deleteDevice(deviceId, object : MatrixCallback<Unit> {
+        session.cryptoService().deleteDevice(deviceId, object : MatrixCallback<Unit> {
             override fun onFailure(failure: Throwable) {
                 var isPasswordRequestFound = false
 
@@ -284,7 +284,7 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
             )
         }
 
-        session.deleteDeviceWithUserPassword(currentDeviceId, _currentSession, action.password, object : MatrixCallback<Unit> {
+        session.cryptoService().deleteDeviceWithUserPassword(currentDeviceId, _currentSession, action.password, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 _currentDeviceId = null
                 _currentSession = null

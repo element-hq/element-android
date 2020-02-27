@@ -25,7 +25,6 @@ import im.vector.riotx.R
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.extensions.localDateTime
-import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.DateProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
@@ -36,7 +35,6 @@ import javax.inject.Inject
 
 class RoomSummaryItemFactory @Inject constructor(private val displayableEventFormatter: DisplayableEventFormatter,
                                                  private val dateFormatter: VectorDateFormatter,
-                                                 private val colorProvider: ColorProvider,
                                                  private val stringProvider: StringProvider,
                                                  private val typingHelper: TypingHelper,
                                                  private val session: Session,
@@ -47,23 +45,24 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                joiningErrorRoomsIds: Set<String>,
                rejectingRoomsIds: Set<String>,
                rejectingErrorRoomsIds: Set<String>,
+               selectedRoomIds: Set<String>,
                listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
         return when (roomSummary.membership) {
             Membership.INVITE -> createInvitationItem(roomSummary, joiningRoomsIds, joiningErrorRoomsIds, rejectingRoomsIds, rejectingErrorRoomsIds, listener)
-            else              -> createRoomItem(roomSummary, listener)
+            else              -> createRoomItem(roomSummary, selectedRoomIds, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked })
         }
     }
 
-    private fun createInvitationItem(roomSummary: RoomSummary,
-                                     joiningRoomsIds: Set<String>,
-                                     joiningErrorRoomsIds: Set<String>,
-                                     rejectingRoomsIds: Set<String>,
-                                     rejectingErrorRoomsIds: Set<String>,
-                                     listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
+    fun createInvitationItem(roomSummary: RoomSummary,
+                             joiningRoomsIds: Set<String>,
+                             joiningErrorRoomsIds: Set<String>,
+                             rejectingRoomsIds: Set<String>,
+                             rejectingErrorRoomsIds: Set<String>,
+                             listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
         val secondLine = if (roomSummary.isDirect) {
-            roomSummary.latestPreviewableEvent?.root?.senderId
+            roomSummary.inviterId
         } else {
-            roomSummary.latestPreviewableEvent?.root?.senderId?.let {
+            roomSummary.inviterId?.let {
                 stringProvider.getString(R.string.invited_by, it)
             }
         }
@@ -82,10 +81,15 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .listener { listener?.onRoomClicked(roomSummary) }
     }
 
-    private fun createRoomItem(roomSummary: RoomSummary, listener: RoomSummaryController.Listener?): VectorEpoxyModel<*> {
+    fun createRoomItem(
+            roomSummary: RoomSummary,
+            selectedRoomIds: Set<String>,
+            onClick: ((RoomSummary) -> Unit)?,
+            onLongClick: ((RoomSummary) -> Boolean)?
+    ): VectorEpoxyModel<*> {
         val unreadCount = roomSummary.notificationCount
         val showHighlighted = roomSummary.highlightCount > 0
-
+        val showSelected = selectedRoomIds.contains(roomSummary.roomId)
         var latestFormattedEvent: CharSequence = ""
         var latestEventTime: CharSequence = ""
         val latestEvent = roomSummary.latestPreviewableEvent
@@ -119,15 +123,16 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .typingString(typingString)
                 .lastFormattedEvent(latestFormattedEvent)
                 .showHighlighted(showHighlighted)
+                .showSelected(showSelected)
                 .unreadNotificationCount(unreadCount)
                 .hasUnreadMessage(roomSummary.hasUnreadMessages)
                 .hasDraft(roomSummary.userDrafts.isNotEmpty())
                 .itemLongClickListener { _ ->
-                    listener?.onRoomLongClicked(roomSummary) ?: false
+                    onLongClick?.invoke(roomSummary) ?: false
                 }
                 .itemClickListener(
                         DebouncedClickListener(View.OnClickListener { _ ->
-                            listener?.onRoomClicked(roomSummary)
+                            onClick?.invoke(roomSummary)
                         })
                 )
     }

@@ -27,9 +27,9 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
-import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.rx.rx
+import im.vector.riotx.core.extensions.toggle
 import im.vector.riotx.core.platform.VectorViewModel
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -91,30 +91,15 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun handleRemoveSelectedUser(action: CreateDirectRoomAction.RemoveSelectedUser) = withState { state ->
-        val index = state.selectedUsers.indexOfFirst { it.userId == action.user.userId }
         val selectedUsers = state.selectedUsers.minus(action.user)
         setState { copy(selectedUsers = selectedUsers) }
-        _viewEvents.post(CreateDirectRoomViewEvents.SelectUserAction(action.user, false, index))
     }
 
     private fun handleSelectUser(action: CreateDirectRoomAction.SelectUser) = withState { state ->
         // Reset the filter asap
         directoryUsersSearch.accept("")
-        val isAddOperation: Boolean
-        val selectedUsers: Set<User>
-        val indexOfUser = state.selectedUsers.indexOfFirst { it.userId == action.user.userId }
-        val changeIndex: Int
-        if (indexOfUser == -1) {
-            changeIndex = state.selectedUsers.size
-            selectedUsers = state.selectedUsers.plus(action.user)
-            isAddOperation = true
-        } else {
-            changeIndex = indexOfUser
-            selectedUsers = state.selectedUsers.minus(action.user)
-            isAddOperation = false
-        }
+        val selectedUsers = state.selectedUsers.toggle(action.user)
         setState { copy(selectedUsers = selectedUsers) }
-        _viewEvents.post(CreateDirectRoomViewEvents.SelectUserAction(action.user, isAddOperation, changeIndex))
     }
 
     private fun observeDirectoryUsers() {

@@ -19,11 +19,11 @@ package im.vector.matrix.android.internal.crypto.verification.qrcode
 import im.vector.matrix.android.internal.crypto.crosssigning.toBase64NoPadding
 import java.security.SecureRandom
 
-fun generateSharedSecret(): String {
+fun generateSharedSecretV2(): String {
     val secureRandom = SecureRandom()
 
-    // 256 bits long
-    val secretBytes = ByteArray(32)
+    // 8 bytes long
+    val secretBytes = ByteArray(8)
     secureRandom.nextBytes(secretBytes)
     return secretBytes.toBase64NoPadding()
 }

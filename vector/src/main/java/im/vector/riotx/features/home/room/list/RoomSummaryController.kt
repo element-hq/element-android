@@ -22,7 +22,6 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.helpFooterItem
-import im.vector.riotx.core.epoxy.noResultItem
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.features.home.RoomListDisplayMode
@@ -60,7 +59,6 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
         val nonNullViewState = viewState ?: return
         when (nonNullViewState.displayMode) {
             RoomListDisplayMode.FILTERED -> buildFilteredRooms(nonNullViewState)
-            RoomListDisplayMode.SHARE    -> buildShareRooms(nonNullViewState)
             else                         -> buildRooms(nonNullViewState)
         }
     }
@@ -77,42 +75,10 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                 viewState.joiningRoomsIds,
                 viewState.joiningErrorRoomsIds,
                 viewState.rejectingRoomsIds,
-                viewState.rejectingErrorRoomsIds)
+                viewState.rejectingErrorRoomsIds,
+                emptySet())
 
         addFilterFooter(viewState)
-    }
-
-    private fun buildShareRooms(viewState: RoomListViewState) {
-        var hasResult = false
-        val roomSummaries = viewState.asyncFilteredRooms()
-
-        roomListNameFilter.filter = viewState.roomFilter
-
-        roomSummaries?.forEach { (category, summaries) ->
-            val filteredSummaries = summaries
-                    .filter { it.membership == Membership.JOIN && roomListNameFilter.test(it) }
-
-            if (filteredSummaries.isEmpty()) {
-                return@forEach
-            } else {
-                hasResult = true
-                val isExpanded = viewState.isCategoryExpanded(category)
-                buildRoomCategory(viewState, emptyList(), category.titleRes, viewState.isCategoryExpanded(category)) {
-                    listener?.onToggleRoomCategory(category)
-                }
-                if (isExpanded) {
-                    buildRoomModels(filteredSummaries,
-                            emptySet(),
-                            emptySet(),
-                            emptySet(),
-                            emptySet()
-                    )
-                }
-            }
-        }
-        if (!hasResult) {
-            addNoResultItem()
-        }
     }
 
     private fun buildRooms(viewState: RoomListViewState) {
@@ -131,7 +97,8 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                             viewState.joiningRoomsIds,
                             viewState.joiningErrorRoomsIds,
                             viewState.rejectingRoomsIds,
-                            viewState.rejectingErrorRoomsIds)
+                            viewState.rejectingErrorRoomsIds,
+                            emptySet())
                     // Never set showHelp to true for invitation
                     if (category != RoomCategory.INVITE) {
                         showHelp = userPreferencesProvider.shouldShowLongClickOnRoomHelp()
@@ -157,13 +124,6 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
             id("filter_footer")
             listener(listener)
             currentFilter(viewState.roomFilter)
-        }
-    }
-
-    private fun addNoResultItem() {
-        noResultItem {
-            id("no_result")
-            text(stringProvider.getString(R.string.no_result_placeholder))
         }
     }
 
@@ -196,10 +156,17 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
                                 joiningRoomsIds: Set<String>,
                                 joiningErrorRoomsIds: Set<String>,
                                 rejectingRoomsIds: Set<String>,
-                                rejectingErrorRoomsIds: Set<String>) {
+                                rejectingErrorRoomsIds: Set<String>,
+                                selectedRoomIds: Set<String>) {
         summaries.forEach { roomSummary ->
             roomSummaryItemFactory
-                    .create(roomSummary, joiningRoomsIds, joiningErrorRoomsIds, rejectingRoomsIds, rejectingErrorRoomsIds, listener)
+                    .create(roomSummary,
+                            joiningRoomsIds,
+                            joiningErrorRoomsIds,
+                            rejectingRoomsIds,
+                            rejectingErrorRoomsIds,
+                            selectedRoomIds,
+                            listener)
                     .addTo(this)
         }
     }

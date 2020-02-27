@@ -18,7 +18,9 @@ package im.vector.riotx.features.navigation
 
 import android.app.Activity
 import android.content.Context
+import android.view.View
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.SharedData
 
@@ -26,11 +28,13 @@ interface Navigator {
 
     fun openRoom(context: Context, roomId: String, eventId: String? = null, buildTask: Boolean = false)
 
-    fun performDeviceVerification(context: Context, otherUserId: String, sasTransationId: String)
+    fun performDeviceVerification(context: Context, otherUserId: String, sasTransactionId: String)
+
     fun requestSessionVerification(context: Context)
+
     fun waitSessionVerification(context: Context)
 
-    fun openRoomForSharing(activity: Activity, roomId: String, sharedData: SharedData)
+    fun openRoomForSharingAndFinish(activity: Activity, roomId: String, sharedData: SharedData)
 
     fun openNotJoinedRoom(context: Context, roomIdOrAlias: String?, eventId: String? = null, buildTask: Boolean = false)
 
@@ -57,4 +61,6 @@ interface Navigator {
     fun openRoomMemberProfile(userId: String, roomId: String?, context: Context, buildTask: Boolean = false)
 
     fun openRoomProfile(context: Context, roomId: String)
+
+    fun openBigImageViewer(activity: Activity, sharedElement: View?, matrixItem: MatrixItem)
 }

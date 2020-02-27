@@ -22,11 +22,11 @@ object TestConstants {
 
     const val TESTS_HOME_SERVER_URL = "http://10.0.2.2:8080"
 
-    // Time out to use when waiting for server response. 60s
-    private const val AWAIT_TIME_OUT_MILLIS = 60000
+    // Time out to use when waiting for server response. 10s
+    private const val AWAIT_TIME_OUT_MILLIS = 10_000
 
     // Time out to use when waiting for server response, when the debugger is connected. 10 minutes
-    private const val AWAIT_TIME_OUT_WITH_DEBUGGER_MILLIS = 10 * 60000
+    private const val AWAIT_TIME_OUT_WITH_DEBUGGER_MILLIS = 10 * 60_000
 
     const val USER_ALICE = "Alice"
     const val USER_BOB = "Bob"

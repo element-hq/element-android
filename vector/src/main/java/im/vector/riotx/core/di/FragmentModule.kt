@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentFactory
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import im.vector.riotx.features.attachments.preview.AttachmentsPreviewFragment
 import im.vector.riotx.features.createdirect.CreateDirectRoomDirectoryUsersFragment
 import im.vector.riotx.features.createdirect.CreateDirectRoomKnownUsersFragment
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
@@ -72,8 +73,10 @@ import im.vector.riotx.features.settings.VectorSettingsPreferencesFragment
 import im.vector.riotx.features.settings.VectorSettingsSecurityPrivacyFragment
 import im.vector.riotx.features.settings.crosssigning.CrossSigningSettingsFragment
 import im.vector.riotx.features.settings.devices.VectorSettingsDevicesFragment
+import im.vector.riotx.features.settings.devtools.AccountDataFragment
 import im.vector.riotx.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
+import im.vector.riotx.features.share.IncomingShareFragment
 import im.vector.riotx.features.signout.soft.SoftLogoutFragment
 
 @Module
@@ -348,4 +351,19 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(CrossSigningSettingsFragment::class)
     fun bindCrossSigningSettingsFragment(fragment: CrossSigningSettingsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(AttachmentsPreviewFragment::class)
+    fun bindAttachmentsPreviewFragment(fragment: AttachmentsPreviewFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(IncomingShareFragment::class)
+    fun bindIncomingShareFragment(fragment: IncomingShareFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(AccountDataFragment::class)
+    fun bindAccountDataFragment(fragment: AccountDataFragment): Fragment
 }

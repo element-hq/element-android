@@ -515,7 +515,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                     val joinIntent = Intent(context, NotificationBroadcastReceiver::class.java)
                     joinIntent.action = JOIN_ACTION
                     joinIntent.data = Uri.parse("foobar://$roomId&$matrixId")
-                    rejectIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
+                    joinIntent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId)
                     val joinIntentPendingIntent = PendingIntent.getBroadcast(context, System.currentTimeMillis().toInt(), joinIntent,
                             PendingIntent.FLAG_UPDATE_CURRENT)
                     addAction(

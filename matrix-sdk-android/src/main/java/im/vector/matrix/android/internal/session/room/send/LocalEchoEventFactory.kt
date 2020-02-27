@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.session.room.send
 
+import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import androidx.exifinterface.media.ExifInterface
 import im.vector.matrix.android.R
@@ -275,9 +276,9 @@ internal class LocalEchoEventFactory @Inject constructor(
         mediaDataRetriever.setDataSource(attachment.path)
 
         // Use frame to calculate height and width as we are sure to get the right ones
-        val firstFrame = mediaDataRetriever.frameAtTime
-        val height = firstFrame.height
-        val width = firstFrame.width
+        val firstFrame: Bitmap? = mediaDataRetriever.frameAtTime
+        val height = firstFrame?.height ?: 0
+        val width = firstFrame?.width ?: 0
         mediaDataRetriever.release()
 
         val thumbnailInfo = ThumbnailExtractor.extractThumbnail(attachment)?.let {

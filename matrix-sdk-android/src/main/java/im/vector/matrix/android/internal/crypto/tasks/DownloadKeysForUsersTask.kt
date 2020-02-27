@@ -29,7 +29,8 @@ internal interface DownloadKeysForUsersTask : Task<DownloadKeysForUsersTask.Para
             // the list of users to get keys for.
             val userIds: List<String>?,
             // the up-to token
-            val token: String?)
+            val token: String?
+    )
 }
 
 internal class DefaultDownloadKeysForUsers @Inject constructor(
@@ -41,12 +42,9 @@ internal class DefaultDownloadKeysForUsers @Inject constructor(
         val downloadQuery = params.userIds?.associateWith { emptyMap<String, Any>() }.orEmpty()
 
         val body = KeysQueryBody(
-                deviceKeys = downloadQuery
+                deviceKeys = downloadQuery,
+                token = params.token?.takeIf { it.isNotEmpty() }
         )
-
-        if (!params.token.isNullOrEmpty()) {
-            body.token = params.token
-        }
 
         return executeRequest(eventBus) {
             apiCall = cryptoApi.downloadKeysForUsers(body)

@@ -16,7 +16,10 @@
 
 package im.vector.matrix.android.common
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.fail
 
 /**
  * Compare two lists and their content

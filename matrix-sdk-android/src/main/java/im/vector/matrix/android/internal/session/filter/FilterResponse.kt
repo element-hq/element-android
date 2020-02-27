@@ -24,5 +24,5 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class FilterResponse(
-        @Json(name = "filter_id") var filterId: String
+        @Json(name = "filter_id") val filterId: String
 )

@@ -34,20 +34,23 @@ import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.riotx.features.crypto.verification.IncomingVerificationRequestHandler
+import im.vector.riotx.features.grouplist.SelectedGroupDataSource
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.HomeRoomListDataSource
-import im.vector.riotx.features.grouplist.SelectedGroupDataSource
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.VectorHtmlCompressor
 import im.vector.riotx.features.navigation.Navigator
-import im.vector.riotx.features.notifications.*
+import im.vector.riotx.features.notifications.NotifiableEventResolver
+import im.vector.riotx.features.notifications.NotificationBroadcastReceiver
+import im.vector.riotx.features.notifications.NotificationDrawerManager
+import im.vector.riotx.features.notifications.NotificationUtils
+import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.VectorFileLogger
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.reactions.data.EmojiDataSource
 import im.vector.riotx.features.session.SessionListener
 import im.vector.riotx.features.settings.VectorPreferences
-import im.vector.riotx.features.share.ShareRoomListDataSource
 import im.vector.riotx.features.ui.UiStateRepository
 import javax.inject.Singleton
 
@@ -96,8 +99,6 @@ interface VectorComponent {
     fun errorFormatter(): ErrorFormatter
 
     fun homeRoomListObservableStore(): HomeRoomListDataSource
-
-    fun shareRoomListObservableStore(): ShareRoomListDataSource
 
     fun selectedGroupStore(): SelectedGroupDataSource
 

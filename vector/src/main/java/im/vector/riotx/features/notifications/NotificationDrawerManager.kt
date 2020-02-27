@@ -130,9 +130,9 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
     fun onEventRedacted(eventId: String) {
         synchronized(eventList) {
-            eventList.filter { it.eventId == eventId }.map { notifiableEvent ->
-                notifiableEvent.isRedacted = true
-                notifiableEvent.hasBeenDisplayed = false
+            eventList.find { it.eventId == eventId }?.apply {
+                isRedacted = true
+                hasBeenDisplayed = false
             }
         }
     }
@@ -182,7 +182,6 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                 e is InviteNotifiableEvent && e.roomId == roomId
             }
         }
-
         notificationUtils.cancelNotificationMessage(roomId, ROOM_INVITATION_NOTIFICATION_ID)
     }
 
@@ -204,7 +203,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
 
         val user = session.getUser(session.myUserId)
         // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
-        val myUserDisplayName = user?.displayName?.takeIf { it.isNotBlank() } ?: session.myUserId
+        val myUserDisplayName = user?.getBestName() ?: session.myUserId
         val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(user?.avatarUrl, avatarSize, avatarSize, ContentUrlResolver.ThumbnailMethod.SCALE)
         synchronized(eventList) {
             Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER ")

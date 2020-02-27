@@ -21,6 +21,7 @@ package im.vector.matrix.android.api.listeners
  */
 interface ProgressListener {
     /**
+     * Will be invoked on the background thread, not in UI thread.
      * @param progress from 0 to total by contract
      * @param total
      */

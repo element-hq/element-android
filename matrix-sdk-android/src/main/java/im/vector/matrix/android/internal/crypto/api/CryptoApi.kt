@@ -16,10 +16,29 @@
  */
 package im.vector.matrix.android.internal.crypto.api
 
-import im.vector.matrix.android.internal.crypto.model.rest.*
+import im.vector.matrix.android.internal.crypto.model.rest.DeleteDeviceParams
+import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
+import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
+import im.vector.matrix.android.internal.crypto.model.rest.KeyChangesResponse
+import im.vector.matrix.android.internal.crypto.model.rest.KeysClaimBody
+import im.vector.matrix.android.internal.crypto.model.rest.KeysClaimResponse
+import im.vector.matrix.android.internal.crypto.model.rest.KeysQueryBody
+import im.vector.matrix.android.internal.crypto.model.rest.KeysQueryResponse
+import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadBody
+import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
+import im.vector.matrix.android.internal.crypto.model.rest.SendToDeviceBody
+import im.vector.matrix.android.internal.crypto.model.rest.SignatureUploadResponse
+import im.vector.matrix.android.internal.crypto.model.rest.UpdateDeviceInfoBody
+import im.vector.matrix.android.internal.crypto.model.rest.UploadSigningKeysBody
 import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.HTTP
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 internal interface CryptoApi {
 

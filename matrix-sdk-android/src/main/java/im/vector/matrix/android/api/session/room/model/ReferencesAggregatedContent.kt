@@ -17,6 +17,7 @@ package im.vector.matrix.android.api.session.room.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.internal.session.room.VerificationState
 
 /**
  * Contains an aggregated summary info of the references.
@@ -26,6 +27,6 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class ReferencesAggregatedContent(
         // Verification status info for m.key.verification.request msgType events
-        @Json(name = "verif_sum") val verificationSummary: String
+        @Json(name = "verif_sum") val verificationState: VerificationState
         // Add more fields for future summary info.
 )

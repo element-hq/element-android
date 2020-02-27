@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
 import im.vector.matrix.rx.rx
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.roomdirectory.JoinState
@@ -82,11 +83,11 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted initialState: R
 
     override fun handle(action: RoomPreviewAction) {
         when (action) {
-            RoomPreviewAction.Join -> joinRoom()
-        }
+            is RoomPreviewAction.Join -> handleJoinRoom(action)
+        }.exhaustive
     }
 
-    private fun joinRoom() = withState { state ->
+    private fun handleJoinRoom(action: RoomPreviewAction.Join) = withState { state ->
         if (state.roomJoinState == JoinState.JOINING) {
             // Request already sent, should not happen
             Timber.w("Try to join an already joining room. Should not happen")
@@ -100,7 +101,7 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted initialState: R
             )
         }
 
-        session.joinRoom(state.roomId, callback = object : MatrixCallback<Unit> {
+        session.joinRoom(action.roomAlias ?: state.roomId, callback = object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined

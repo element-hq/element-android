@@ -23,9 +23,9 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.sas.QrCodeVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.VerificationService
-import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.QrCodeVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.VerificationService
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.EmptyAction
@@ -62,7 +62,7 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
     }
 
     override fun verificationRequestUpdated(pr: PendingVerificationRequest) = withState { state ->
-        val pvr = session.getVerificationService().getExistingVerificationRequest(state.otherUserId, state.transactionId)
+        val pvr = session.cryptoService().verificationService().getExistingVerificationRequest(state.otherUserId, state.transactionId)
 
         setState {
             copy(
@@ -79,12 +79,12 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
     }
 
     init {
-        session.getVerificationService().addListener(this)
+        session.cryptoService().verificationService().addListener(this)
     }
 
     override fun onCleared() {
         super.onCleared()
-        session.getVerificationService().removeListener(this)
+        session.cryptoService().verificationService().removeListener(this)
     }
 
     companion object : MvRxViewModelFactory<VerificationChooseMethodViewModel, VerificationChooseMethodViewState> {
@@ -96,10 +96,11 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
         override fun initialState(viewModelContext: ViewModelContext): VerificationChooseMethodViewState? {
             val args: VerificationBottomSheet.VerificationArgs = viewModelContext.args()
             val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
-            val pvr = session.getVerificationService().getExistingVerificationRequest(args.otherUserId, args.verificationId)
+            val verificationService = session.cryptoService().verificationService()
+            val pvr = verificationService.getExistingVerificationRequest(args.otherUserId, args.verificationId)
 
             // Get the QR code now, because transaction is already created, so transactionCreated() will not be called
-            val qrCodeVerificationTransaction = session.getVerificationService().getExistingTransaction(args.otherUserId, args.verificationId ?: "")
+            val qrCodeVerificationTransaction = verificationService.getExistingTransaction(args.otherUserId, args.verificationId ?: "")
 
             return VerificationChooseMethodViewState(otherUserId = args.otherUserId,
                     transactionId = args.verificationId ?: "",

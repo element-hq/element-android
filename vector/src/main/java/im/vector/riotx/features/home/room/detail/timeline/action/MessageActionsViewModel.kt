@@ -28,7 +28,12 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.isTextMessage
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.*
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageFormat
+import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
+import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
@@ -169,7 +174,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun computeMessageBody(timelineEvent: TimelineEvent): CharSequence {
         if (timelineEvent.root.isRedacted()) {
-            return getRedactionReason(timelineEvent)
+            return noticeEventFormatter.formatRedactedEvent(timelineEvent.root)
         }
 
         return when (timelineEvent.root.getClearType()) {
@@ -202,31 +207,6 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             }
             else                  -> null
         } ?: ""
-    }
-
-    private fun getRedactionReason(timelineEvent: TimelineEvent): String {
-            return (timelineEvent
-                    .root
-                    .unsignedData
-                    ?.redactedEvent
-                    ?.content
-                    ?.get("reason") as? String)
-                    ?.takeIf { it.isNotBlank() }
-                    .let { reason ->
-                        if (reason == null) {
-                            if (timelineEvent.root.isRedactedBySameUser()) {
-                                stringProvider.getString(R.string.event_redacted_by_user_reason)
-                            } else {
-                                stringProvider.getString(R.string.event_redacted_by_admin_reason)
-                            }
-                        } else {
-                            if (timelineEvent.root.isRedactedBySameUser()) {
-                                stringProvider.getString(R.string.event_redacted_by_user_reason_with_reason, reason)
-                            } else {
-                                stringProvider.getString(R.string.event_redacted_by_admin_reason_with_reason, reason)
-                            }
-                        }
-                    }
     }
 
     private fun actionsForEvent(timelineEvent: TimelineEvent): List<EventSharedAction> {

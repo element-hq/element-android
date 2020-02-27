@@ -24,13 +24,13 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class Filter(
-        @Json(name = "limit") var limit: Int? = null,
-        @Json(name = "senders") var senders: MutableList<String>? = null,
-        @Json(name = "not_senders") var notSenders: MutableList<String>? = null,
-        @Json(name = "types") var types: MutableList<String>? = null,
-        @Json(name = "not_types") var notTypes: MutableList<String>? = null,
-        @Json(name = "rooms") var rooms: MutableList<String>? = null,
-        @Json(name = "not_rooms") var notRooms: MutableList<String>? = null
+        @Json(name = "limit") val limit: Int? = null,
+        @Json(name = "senders") val senders: List<String>? = null,
+        @Json(name = "not_senders") val notSenders: List<String>? = null,
+        @Json(name = "types") val types: List<String>? = null,
+        @Json(name = "not_types") val notTypes: List<String>? = null,
+        @Json(name = "rooms") val rooms: List<String>? = null,
+        @Json(name = "not_rooms") val notRooms: List<String>? = null
 ) {
     fun hasData(): Boolean {
         return (limit != null

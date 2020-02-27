@@ -25,6 +25,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import butterknife.OnClick
+import im.vector.matrix.android.internal.crypto.verification.qrcode.toQrCodeData
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
@@ -37,6 +38,7 @@ import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.debug.sas.DebugSasEmojiActivity
 import im.vector.riotx.features.qrcode.QrCodeScannerActivity
 import kotlinx.android.synthetic.debug.activity_debug_menu.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class DebugMenuActivity : VectorBaseActivity() {
@@ -50,8 +52,19 @@ class DebugMenuActivity : VectorBaseActivity() {
         injector.inject(this)
     }
 
+    private lateinit var buffer: ByteArray
+
     override fun initUiAndData() {
-        renderQrCode("https://www.example.org")
+        // renderQrCode("https://www.example.org")
+
+        buffer = ByteArray(256)
+        for (i in buffer.indices) {
+            buffer[i] = i.toByte()
+        }
+
+        val string = buffer.toString(Charsets.ISO_8859_1)
+
+        renderQrCode(string)
     }
 
     private fun renderQrCode(text: String) {
@@ -194,7 +207,23 @@ class DebugMenuActivity : VectorBaseActivity() {
                     toast("QrCode: " + QrCodeScannerActivity.getResultText(data) + " is QRCode: " + QrCodeScannerActivity.getResultIsQrCode(data))
 
                     // Also update the current QR Code (reverse operation)
-                    renderQrCode(QrCodeScannerActivity.getResultText(data) ?: "")
+                    // renderQrCode(QrCodeScannerActivity.getResultText(data) ?: "")
+                    val result = QrCodeScannerActivity.getResultText(data)!!
+
+                    val qrCodeData = result.toQrCodeData()
+                    Timber.e("qrCodeData: $qrCodeData")
+
+                    if (result.length != buffer.size) {
+                        Timber.e("Error, length are not the same")
+                    } else {
+                        // Convert to ByteArray
+                        val byteArrayResult = result.toByteArray(Charsets.ISO_8859_1)
+                        for (i in byteArrayResult.indices) {
+                            if (buffer[i] != byteArrayResult[i]) {
+                                Timber.e("Error for byte $i, expecting ${buffer[i]} and get ${byteArrayResult[i]}")
+                            }
+                        }
+                    }
                 }
             }
         }

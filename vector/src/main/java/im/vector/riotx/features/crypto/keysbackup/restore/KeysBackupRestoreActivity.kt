@@ -19,7 +19,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.addFragmentToBackstack
@@ -79,7 +78,6 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
                     addFragmentToBackstack(R.id.container, KeysBackupRestoreFromKeyFragment::class.java)
                 }
                 KeysBackupRestoreSharedViewModel.NAVIGATE_TO_SUCCESS          -> {
-                    supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     replaceFragment(R.id.container, KeysBackupRestoreSuccessFragment::class.java)
                 }
             }

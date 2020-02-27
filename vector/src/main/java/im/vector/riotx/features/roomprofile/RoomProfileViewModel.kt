@@ -23,6 +23,7 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
@@ -30,7 +31,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 
-class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: RoomProfileViewState,
+class RoomProfileViewModel @AssistedInject constructor(@Assisted private val initialState: RoomProfileViewState,
                                                        private val stringProvider: StringProvider,
                                                        private val session: Session)
     : VectorViewModel<RoomProfileViewState, RoomProfileAction, RoomProfileViewEvents>(initialState) {
@@ -66,6 +67,7 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: R
     override fun handle(action: RoomProfileAction) = when (action) {
         RoomProfileAction.LeaveRoom                      -> handleLeaveRoom()
         is RoomProfileAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
+        is RoomProfileAction.ShareRoomProfile            -> handleShareRoomProfile()
     }
 
     private fun handleChangeNotificationMode(action: RoomProfileAction.ChangeRoomNotificationState) {
@@ -87,5 +89,11 @@ class RoomProfileViewModel @AssistedInject constructor(@Assisted initialState: R
                 _viewEvents.post(RoomProfileViewEvents.Failure(failure))
             }
         })
+    }
+
+    private fun handleShareRoomProfile() {
+        PermalinkFactory.createPermalink(initialState.roomId)?.let { permalink ->
+            _viewEvents.post(RoomProfileViewEvents.ShareRoomProfile(permalink))
+        }
     }
 }

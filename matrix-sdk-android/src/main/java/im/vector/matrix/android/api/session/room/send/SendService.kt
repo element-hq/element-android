@@ -51,16 +51,26 @@ interface SendService {
     /**
      * Method to send a media asynchronously.
      * @param attachment the media to send
+     * @param compressBeforeSending set to true to compress images before sending them
+     * @param roomIds set of roomIds to where the media will be sent. The current roomId will be add to this set if not present.
+     *                It can be useful to send media to multiple room. It's safe to include the current roomId in this set
      * @return a [Cancelable]
      */
-    fun sendMedia(attachment: ContentAttachmentData): Cancelable
+    fun sendMedia(attachment: ContentAttachmentData,
+                  compressBeforeSending: Boolean,
+                  roomIds: Set<String>): Cancelable
 
     /**
      * Method to send a list of media asynchronously.
      * @param attachments the list of media to send
+     * @param compressBeforeSending set to true to compress images before sending them
+     * @param roomIds set of roomIds to where the media will be sent. The current roomId will be add to this set if not present.
+     *                It can be useful to send media to multiple room. It's safe to include the current roomId in this set
      * @return a [Cancelable]
      */
-    fun sendMedias(attachments: List<ContentAttachmentData>): Cancelable
+    fun sendMedias(attachments: List<ContentAttachmentData>,
+                   compressBeforeSending: Boolean,
+                   roomIds: Set<String>): Cancelable
 
     /**
      * Send a poll to the room.

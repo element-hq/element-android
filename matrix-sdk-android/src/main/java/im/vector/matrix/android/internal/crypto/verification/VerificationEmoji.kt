@@ -16,7 +16,7 @@
 package im.vector.matrix.android.internal.crypto.verification
 
 import im.vector.matrix.android.R
-import im.vector.matrix.android.api.session.crypto.sas.EmojiRepresentation
+import im.vector.matrix.android.api.session.crypto.verification.EmojiRepresentation
 
 internal fun getEmojiForCode(code: Int): EmojiRepresentation {
     return when (code % 64) {

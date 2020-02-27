@@ -23,10 +23,10 @@ import android.content.Context
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListener
-import im.vector.matrix.android.api.session.crypto.sas.VerificationService
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
-import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.SasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.VerificationService
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequestCancellation
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
@@ -39,11 +39,10 @@ import im.vector.riotx.features.popup.PopupAlertManager
 import timber.log.Timber
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 /**
  * Manage the key share events.
@@ -64,13 +63,13 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
 
     fun start(session: Session) {
         this.session = session
-        session.getVerificationService().addListener(this)
-        session.addRoomKeysRequestListener(this)
+        session.cryptoService().verificationService().addListener(this)
+        session.cryptoService().addRoomKeysRequestListener(this)
     }
 
     fun stop() {
-        session?.getVerificationService()?.removeListener(this)
-        session?.removeRoomKeysRequestListener(this)
+        session?.cryptoService()?.verificationService()?.removeListener(this)
+        session?.cryptoService()?.removeRoomKeysRequestListener(this)
         session = null
     }
 
@@ -100,7 +99,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
         alertsToRequests[mappingKey] = ArrayList<IncomingRoomKeyRequest>().apply { this.add(request) }
 
         // Add a notification for every incoming request
-        session?.downloadKeys(listOf(userId), false, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
+        session?.cryptoService()?.downloadKeys(listOf(userId), false, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
             override fun onSuccess(data: MXUsersDevicesMap<CryptoDeviceInfo>) {
                 val deviceInfo = data.getObject(userId, deviceId)
 
@@ -111,12 +110,12 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
                 }
 
                 if (deviceInfo.isUnknown) {
-                    session?.setDeviceVerification(DeviceTrustLevel(false, false), userId, deviceId)
+                    session?.cryptoService()?.setDeviceVerification(DeviceTrustLevel(false, false), userId, deviceId)
 
                     deviceInfo.trustLevel = DeviceTrustLevel(false, false)
 
                     // can we get more info on this device?
-                    session?.getDevicesList(object : MatrixCallback<DevicesListResponse> {
+                    session?.cryptoService()?.getDevicesList(object : MatrixCallback<DevicesListResponse> {
                         override fun onSuccess(data: DevicesListResponse) {
                             data.devices?.find { it.deviceId == deviceId }?.let {
                                 postAlert(context, userId, deviceId, true, deviceInfo, it)

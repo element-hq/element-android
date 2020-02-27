@@ -16,8 +16,16 @@
 
 package im.vector.matrix.android.internal.database
 
-import io.realm.*
-import kotlinx.coroutines.*
+import io.realm.Realm
+import io.realm.RealmChangeListener
+import io.realm.RealmConfiguration
+import io.realm.RealmQuery
+import io.realm.RealmResults
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 
 internal suspend fun <T> awaitNotEmptyResult(realmConfiguration: RealmConfiguration,
                                     timeoutMillis: Long,

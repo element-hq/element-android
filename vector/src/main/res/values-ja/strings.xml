@@ -218,7 +218,7 @@
     <string name="devices_details_dialog_title">端末詳細</string>
     <string name="devices_details_id_title">ID(端末固有番号)</string>
     <string name="devices_details_name_title">公開端末名</string>
-    <string name="devices_details_device_name">端末名</string>
+    <string name="devices_details_device_name">公開端末名の更新</string>
     <string name="devices_details_last_seen_title">最終接続日</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_title">認証</string>

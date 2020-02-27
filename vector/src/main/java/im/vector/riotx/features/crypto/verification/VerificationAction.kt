@@ -28,4 +28,7 @@ sealed class VerificationAction : VectorViewModelAction {
     data class SASMatchAction(val otherUserId: String, val sasTransactionId: String) : VerificationAction()
     data class SASDoNotMatchAction(val otherUserId: String, val sasTransactionId: String) : VerificationAction()
     object GotItConclusion : VerificationAction()
+    object SkipVerification : VerificationAction()
+    object VerifyFromPassphrase : VerificationAction()
+    data class GotResultFromSsss(val cypherData: String, val alias: String) : VerificationAction()
 }

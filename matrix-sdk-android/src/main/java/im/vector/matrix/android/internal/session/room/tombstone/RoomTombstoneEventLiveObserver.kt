@@ -27,8 +27,8 @@ import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.query.whereTypes
 import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.database.query.whereTypes
 import im.vector.matrix.android.internal.di.SessionDatabase
 import io.realm.OrderedCollectionChangeSet
 import io.realm.RealmConfiguration
@@ -62,7 +62,7 @@ internal class RoomTombstoneEventLiveObserver @Inject constructor(@SessionDataba
         for (event in tombstoneEvents) {
             if (event.roomId == null) continue
             val createRoomContent = event.getClearContent().toModel<RoomTombstoneContent>()
-            if (createRoomContent?.replacementRoom == null) continue
+            if (createRoomContent?.replacementRoomId == null) continue
 
             val predecessorRoomSummary = RoomSummaryEntity.where(realm, event.roomId).findFirst()
                                          ?: RoomSummaryEntity(event.roomId)

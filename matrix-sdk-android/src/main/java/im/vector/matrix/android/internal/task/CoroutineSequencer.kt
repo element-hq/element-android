@@ -16,72 +16,28 @@
 
 package im.vector.matrix.android.internal.task
 
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
-import java.util.concurrent.Executors
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 
 /**
- * This class intends to be used for ensure suspendable methods are played sequentially all the way long.
+ * This class intends to be used to ensure suspendable methods are played sequentially all the way long.
  */
-internal interface CoroutineSequencer<T> {
+internal interface CoroutineSequencer {
     /**
      * @param block the suspendable block to execute
      * @return the result of the block
      */
-    suspend fun post(block: suspend () -> T): T
-
-    /**
-     * Cancel all and close, so you won't be able to post anything else after
-     */
-    fun close()
+    suspend fun <T> post(block: suspend () -> T): T
 }
 
-internal open class ChannelCoroutineSequencer<T> : CoroutineSequencer<T> {
+internal open class SemaphoreCoroutineSequencer : CoroutineSequencer {
 
-    private data class Message<T>(
-            val block: suspend () -> T,
-            val deferred: CompletableDeferred<T>
-    )
+    // Permits 1 suspend function at a time.
+    private val semaphore = Semaphore(1)
 
-    private var messageChannel: Channel<Message<T>> = Channel()
-    private val coroutineScope = CoroutineScope(SupervisorJob())
-    // This will ensure
-    private val singleDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
-
-    init {
-        launchCoroutine()
-    }
-
-    private fun launchCoroutine() {
-        coroutineScope.launch(singleDispatcher) {
-            for (message in messageChannel) {
-                try {
-                    val result = message.block()
-                    message.deferred.complete(result)
-                } catch (exception: Throwable) {
-                    message.deferred.completeExceptionally(exception)
-                }
-            }
-        }
-    }
-
-    override fun close() {
-        coroutineScope.coroutineContext.cancelChildren()
-        messageChannel.close()
-    }
-
-    override suspend fun post(block: suspend () -> T): T {
-        val deferred = CompletableDeferred<T>()
-        val message = Message(block, deferred)
-        messageChannel.send(message)
-        return try {
-            deferred.await()
-        } catch (cancellation: CancellationException) {
-            // In case of cancellation, we stop the current coroutine context
-            // and relaunch one to consume next messages
-            coroutineScope.coroutineContext.cancelChildren()
-            launchCoroutine()
-            throw cancellation
+    override suspend fun <T> post(block: suspend () -> T): T {
+        return semaphore.withPermit {
+            block()
         }
     }
 }

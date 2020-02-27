@@ -20,7 +20,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import im.vector.matrix.android.api.session.crypto.sas.EmojiRepresentation
+import im.vector.matrix.android.api.session.crypto.verification.EmojiRepresentation
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel

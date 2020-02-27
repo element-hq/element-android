@@ -31,6 +31,7 @@ import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -94,10 +95,10 @@ class RxSession(private val session: Session) {
         session.searchUsersDirectory(search, limit, excludedUserIds, it)
     }
 
-    fun joinRoom(roomId: String,
+    fun joinRoom(roomIdOrAlias: String,
                  reason: String? = null,
                  viaServers: List<String> = emptyList()): Single<Unit> = singleBuilder {
-        session.joinRoom(roomId, reason, viaServers, it)
+        session.joinRoom(roomIdOrAlias, reason, viaServers, it)
     }
 
     fun getRoomIdByAlias(roomAlias: String,
@@ -110,15 +111,22 @@ class RxSession(private val session: Session) {
     }
 
     fun liveUserCryptoDevices(userId: String): Observable<List<CryptoDeviceInfo>> {
-        return session.getLiveCryptoDeviceInfo(userId).asObservable().startWithCallable {
-            session.getCryptoDeviceInfo(userId)
+        return session.cryptoService().getLiveCryptoDeviceInfo(userId).asObservable().startWithCallable {
+            session.cryptoService().getCryptoDeviceInfo(userId)
         }
     }
 
     fun liveCrossSigningInfo(userId: String): Observable<Optional<MXCrossSigningInfo>> {
-        return session.getCrossSigningService().getLiveCrossSigningKeys(userId).asObservable()
+        return session.cryptoService().crossSigningService().getLiveCrossSigningKeys(userId).asObservable()
                 .startWithCallable {
-                    session.getCrossSigningService().getUserCrossSigningKeys(userId).toOptional()
+                    session.cryptoService().crossSigningService().getUserCrossSigningKeys(userId).toOptional()
+                }
+    }
+
+    fun liveAccountData(types: Set<String>): Observable<List<UserAccountDataEvent>> {
+        return session.getLiveAccountDataEvents(types).asObservable()
+                .startWithCallable {
+                    session.getAccountDataEvents(types)
                 }
     }
 }

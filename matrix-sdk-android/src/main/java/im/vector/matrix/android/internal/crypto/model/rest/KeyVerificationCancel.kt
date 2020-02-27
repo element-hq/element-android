@@ -17,7 +17,7 @@ package im.vector.matrix.android.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.session.crypto.sas.CancelCode
+import im.vector.matrix.android.api.session.crypto.verification.CancelCode
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfoCancel
 
 /**

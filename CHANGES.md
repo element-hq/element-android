@@ -1,3 +1,36 @@
+Changes in RiotX 0.17.0 (2020-02-27)
+===================================================
+
+Features ✨:
+ - Secured Shared Storage Support (#984, #936)
+ - It's now possible to select several rooms (with a possible mix of clear/encrypted rooms) when sharing elements to RiotX (#1010)
+ - Media preview: media are previewed before being sent to a room (#1010)
+ - Image edition: it's now possible to edit image before sending: crop, rotate, and delete actions are supported (#1010)
+ - Sending image: image are sent to rooms with a reduced size. It's still possible to send original image file (#1010)
+
+Improvements 🙌:
+ - Migrate to binary QR code verification (#994)
+ - Share action is added to room profile and room member profile (#858)
+ - Display avatar in fullscreen (#861)
+ - Fix some performance issues with crypto
+
+Bugfix 🐛:
+ - Account creation: wrongly hints that an email can be used to create an account (#941)
+ - Fix crash in the room directory, when public room has no name (#1023)
+ - Fix restoring keys backup with passphrase (#526)
+ - Fix rotation of full-size image (#647)
+ - Fix joining rooms from directory via federation isn't working. (#808)
+ - Leaving a room creates a stuck "leaving room" loading screen. (#1041)
+ - Fix some invitation handling issues (#1013)
+ - New direct chat: selecting a participant sometimes results in two breadcrumbs (#1022)
+ - New direct chat: selecting several participants was not adding the room to the direct chats list
+ - Room overview shows deleted messages as “Encrypted message” (#758)
+
+SDK API changes ⚠️:
+ - Get crypto methods through Session.cryptoService()
+ - ProgressListener.onProgress() function will be invoked on the background thread instead of UI thread
+ - Improve CreateRoomParams API (#1070)
+
 Changes in RiotX 0.16.0 (2020-02-14)
 ===================================================
 

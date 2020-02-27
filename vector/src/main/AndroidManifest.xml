@@ -40,6 +40,7 @@
             android:name=".features.login.LoginActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".features.media.ImageMediaViewerActivity" />
+        <activity android:name=".features.media.BigImageViewerActivity" />
         <activity
             android:name=".features.rageshake.BugReportActivity"
             android:label="@string/title_activity_bug_report" />
@@ -88,7 +89,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".features.share.IncomingShareActivity">
+        <activity
+            android:name=".features.share.IncomingShareActivity"
+            android:parentActivityName=".features.home.HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".features.home.HomeActivity" />
+
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <data android:mimeType="*/*" />
@@ -133,6 +140,15 @@
         </activity>
 
         <activity android:name=".features.qrcode.QrCodeScannerActivity" />
+
+        <activity android:name=".features.crypto.quads.SharedSecureStorageActivity" />
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".features.attachments.preview.AttachmentsPreviewActivity"
+            android:theme="@style/AppTheme.AttachmentsPreview" />
 
         <!-- Services -->
 

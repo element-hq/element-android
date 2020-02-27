@@ -49,11 +49,10 @@ import java.io.File
 import java.io.IOException
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
-import java.util.*
+import java.util.Locale
 import java.util.zip.GZIPOutputStream
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.collections.ArrayList
 
 /**
  * BugReporter creates and sends the bug reports.
@@ -211,7 +210,7 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                 activeSessionHolder.getSafeActiveSession()?.let { session ->
                     userId = session.myUserId
                     deviceId = session.sessionParams.credentials.deviceId ?: "undefined"
-                    olmVersion = session.getCryptoVersion(context, true)
+                    olmVersion = session.cryptoService().getCryptoVersion(context, true)
                 }
 
                 if (!mIsCancelled) {

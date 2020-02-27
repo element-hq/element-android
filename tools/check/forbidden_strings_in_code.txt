@@ -67,9 +67,10 @@ DO NOT COMMIT
 
 ### invalid formatting
 \s{8}/\*\n     \*
-[^\w]if\(
-while\(
-for\(
+# Now checked by ktlint
+# [^\w]if\(
+# while\(
+# for\(
 
 # Add space after //
 # DISABLED To re-enable when code will be formatted globally

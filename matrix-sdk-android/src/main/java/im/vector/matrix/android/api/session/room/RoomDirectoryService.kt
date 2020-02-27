@@ -35,9 +35,9 @@ interface RoomDirectoryService {
                        callback: MatrixCallback<PublicRoomsResponse>): Cancelable
 
     /**
-     * Join a room by id
+     * Join a room by id, or room alias
      */
-    fun joinRoom(roomId: String,
+    fun joinRoom(roomIdOrAlias: String,
                  reason: String? = null,
                  callback: MatrixCallback<Unit>): Cancelable
 

@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.crypto.keysbackup.model.rest
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.network.parsing.ForceToBoolean
 
 /**
  * Backup data for one key.
@@ -29,25 +30,27 @@ data class KeyBackupData(
          * Required. The index of the first message in the session that the key can decrypt.
          */
         @Json(name = "first_message_index")
-        var firstMessageIndex: Long = 0,
+        val firstMessageIndex: Long = 0,
 
         /**
          * Required. The number of times this key has been forwarded.
          */
         @Json(name = "forwarded_count")
-        var forwardedCount: Int = 0,
+        val forwardedCount: Int = 0,
 
         /**
          * Whether the device backing up the key has verified the device that the key is from.
+         * Force to boolean because of https://github.com/matrix-org/synapse/issues/6977
          */
+        @ForceToBoolean
         @Json(name = "is_verified")
-        var isVerified: Boolean = false,
+        val isVerified: Boolean = false,
 
         /**
          * Algorithm-dependent data.
          */
         @Json(name = "session_data")
-        var sessionData: Map<String, Any>? = null
+        val sessionData: Map<String, Any>? = null
 ) {
 
     fun toJsonString(): String {

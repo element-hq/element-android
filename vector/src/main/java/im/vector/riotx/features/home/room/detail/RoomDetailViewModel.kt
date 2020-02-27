@@ -115,6 +115,8 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     var pendingAction: RoomDetailAction? = null
     // Slot to keep a pending uri during permission request
     var pendingUri: Uri? = null
+    // Slot to store if we want to prevent preview of attachment
+    var preventAttachmentPreview = false
 
     private var trackUnreadMessages = AtomicBoolean(false)
     private var mostRecentDisplayedEvent: TimelineEvent? = null
@@ -241,7 +243,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                 is SendMode.REPLY   -> room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
                 is SendMode.QUOTE   -> room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
                 is SendMode.EDIT    -> room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
-            }
+            }.exhaustive
         }
     }
 
@@ -290,20 +292,16 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun handleTombstoneEvent(action: RoomDetailAction.HandleTombstoneEvent) {
         val tombstoneContent = action.event.getClearContent().toModel<RoomTombstoneContent>() ?: return
 
-        val roomId = tombstoneContent.replacementRoom ?: ""
+        val roomId = tombstoneContent.replacementRoomId ?: ""
         val isRoomJoined = session.getRoom(roomId)?.roomSummary()?.membership == Membership.JOIN
         if (isRoomJoined) {
             setState { copy(tombstoneEventHandling = Success(roomId)) }
         } else {
-            val viaServer = MatrixPatterns.extractServerNameFromId(action.event.senderId).let {
-                if (it.isNullOrBlank()) {
-                    emptyList()
-                } else {
-                    listOf(it)
-                }
-            }
+            val viaServers = MatrixPatterns.extractServerNameFromId(action.event.senderId)
+                    ?.let { listOf(it) }
+                    .orEmpty()
             session.rx()
-                    .joinRoom(roomId, viaServers = viaServer)
+                    .joinRoom(roomId, viaServers = viaServers)
                     .map { roomId }
                     .execute {
                         copy(tombstoneEventHandling = it)
@@ -420,7 +418,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                             popDraft()
                         }
                         is ParsedCommand.VerifyUser               -> {
-                            session.getVerificationService().requestKeyVerificationInDMs(supportedVerificationMethods, slashCommandResult.userId, room.roomId)
+                            session
+                                    .cryptoService()
+                                    .verificationService()
+                                    .requestKeyVerificationInDMs(supportedVerificationMethods, slashCommandResult.userId, room.roomId)
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
@@ -579,10 +580,10 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
         if (maxUploadFileSize == HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN) {
             // Unknown limitation
-            room.sendMedias(attachments)
+            room.sendMedias(attachments, action.compressBeforeSending, emptySet())
         } else {
             when (val tooBigFile = attachments.find { it.size > maxUploadFileSize }) {
-                null -> room.sendMedias(attachments)
+                null -> room.sendMedias(attachments, action.compressBeforeSending, emptySet())
                 else -> _viewEvents.post(RoomDetailViewEvents.FileTooBigError(
                         tooBigFile.name ?: tooBigFile.path,
                         tooBigFile.size,
@@ -826,7 +827,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private fun handleAcceptVerification(action: RoomDetailAction.AcceptVerificationRequest) {
         Timber.v("## SAS handleAcceptVerification ${action.otherUserId},  roomId:${room.roomId}, txId:${action.transactionId}")
-        if (session.getVerificationService().readyPendingVerificationInDMs(
+        if (session.cryptoService().verificationService().readyPendingVerificationInDMs(
                         supportedVerificationMethods,
                         action.otherUserId,
                         room.roomId,
@@ -838,7 +839,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     }
 
     private fun handleDeclineVerification(action: RoomDetailAction.DeclineVerificationRequest) {
-        session.getVerificationService().declineVerificationRequestInDMs(
+        session.cryptoService().verificationService().declineVerificationRequestInDMs(
                 action.otherUserId,
                 action.transactionId,
                 room.roomId)
@@ -851,7 +852,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private fun handleResumeRequestVerification(action: RoomDetailAction.ResumeVerification) {
         // Check if this request is still active and handled by me
-        session.getVerificationService().getExistingVerificationRequestInRoom(room.roomId, action.transactionId)?.let {
+        session.cryptoService().verificationService().getExistingVerificationRequestInRoom(room.roomId, action.transactionId)?.let {
             if (it.handledByOtherSession) return
             if (!it.isFinished) {
                 _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action.copy(
@@ -949,8 +950,8 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun observeSummaryState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
             if (summary.membership == Membership.INVITE) {
-                summary.latestPreviewableEvent?.root?.senderId?.let { senderId ->
-                    session.getUser(senderId)
+                summary.inviterId?.let { inviterId ->
+                    session.getUser(inviterId)
                 }?.also {
                     setState { copy(asyncInviter = Success(it)) }
                 }

@@ -27,7 +27,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class UserIsTyping(val isTyping: Boolean) : RoomDetailAction()
     data class SaveDraft(val draft: String) : RoomDetailAction()
     data class SendMessage(val text: CharSequence, val autoMarkdown: Boolean) : RoomDetailAction()
-    data class SendMedia(val attachments: List<ContentAttachmentData>) : RoomDetailAction()
+    data class SendMedia(val attachments: List<ContentAttachmentData>, val compressBeforeSending: Boolean) : RoomDetailAction()
     data class TimelineEventTurnsVisible(val event: TimelineEvent) : RoomDetailAction()
     data class TimelineEventTurnsInvisible(val event: TimelineEvent) : RoomDetailAction()
     data class LoadMoreTimelineEvents(val direction: Timeline.Direction) : RoomDetailAction()

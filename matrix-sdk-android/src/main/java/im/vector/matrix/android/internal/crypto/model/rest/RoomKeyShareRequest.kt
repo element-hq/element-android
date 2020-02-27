@@ -16,16 +16,23 @@
  */
 package im.vector.matrix.android.internal.crypto.model.rest
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Class representing an room key request content
+ * Class representing a room key request content
  */
 @JsonClass(generateAdapter = true)
-internal class RoomKeyShareRequest : RoomKeyShare() {
-    var body: RoomKeyRequestBody? = null
+internal data class RoomKeyShareRequest(
+        @Json(name = "action")
+        override val action: String? = RoomKeyShare.ACTION_SHARE_REQUEST,
 
-    init {
-        action = ACTION_SHARE_REQUEST
-    }
-}
+        @Json(name = "requesting_device_id")
+        override val requestingDeviceId: String? = null,
+
+        @Json(name = "request_id")
+        override val requestId: String? = null,
+
+        @Json(name = "body")
+        val body: RoomKeyRequestBody? = null
+) : RoomKeyShare

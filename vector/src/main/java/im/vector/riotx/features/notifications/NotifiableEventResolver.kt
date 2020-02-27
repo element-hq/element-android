@@ -26,11 +26,11 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMemberContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getEditedEventId
-import im.vector.matrix.android.api.session.room.timeline.getLastMessageBody
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.riotx.features.home.room.detail.timeline.format.NoticeEventFormatter
 import timber.log.Timber
 import java.util.UUID
@@ -43,27 +43,28 @@ import javax.inject.Inject
  * this pattern allow decoupling between the object responsible of displaying notifications and the matrix sdk.
  */
 class NotifiableEventResolver @Inject constructor(private val stringProvider: StringProvider,
-                                                  private val noticeEventFormatter: NoticeEventFormatter) {
+                                                  private val noticeEventFormatter: NoticeEventFormatter,
+                                                  private val displayableEventFormatter: DisplayableEventFormatter) {
 
     // private val eventDisplay = RiotEventDisplay(context)
 
     fun resolveEvent(event: Event/*, roomState: RoomState?, bingRule: PushRule?*/, session: Session): NotifiableEvent? {
         val roomID = event.roomId ?: return null
         val eventId = event.eventId ?: return null
+        if (event.getClearType() == EventType.STATE_ROOM_MEMBER) {
+            return resolveStateRoomEvent(event, session)
+        }
         val timelineEvent = session.getRoom(roomID)?.getTimeLineEvent(eventId) ?: return null
         when (event.getClearType()) {
-            EventType.MESSAGE           -> {
+            EventType.MESSAGE   -> {
                 return resolveMessageEvent(timelineEvent, session)
             }
-            EventType.ENCRYPTED         -> {
+            EventType.ENCRYPTED -> {
                 val messageEvent = resolveMessageEvent(timelineEvent, session)
                 messageEvent?.lockScreenVisibility = NotificationCompat.VISIBILITY_PRIVATE
                 return messageEvent
             }
-            EventType.STATE_ROOM_MEMBER -> {
-                return resolveStateRoomEvent(event, session)
-            }
-            else                        -> {
+            else                -> {
                 // If the event can be displayed, display it as is
                 Timber.w("NotifiableEventResolver Received an unsupported event matching a bing rule")
                 // TODO Better event text display
@@ -90,9 +91,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
         if (room == null) {
             Timber.e("## Unable to resolve room for eventId [$event]")
             // Ok room is not known in store, but we can still display something
-            val body =
-                    event.getLastMessageBody()
-                            ?: stringProvider.getString(R.string.notification_unknown_new_event)
+            val body = displayableEventFormatter.format(event, false)
             val roomName = stringProvider.getString(R.string.notification_unknown_room_name)
             val senderDisplayName = event.getDisambiguatedDisplayName()
 
@@ -103,7 +102,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                     noisy = false, // will be updated
                     senderName = senderDisplayName,
                     senderId = event.root.senderId,
-                    body = body,
+                    body = body.toString(),
                     roomId = event.root.roomId!!,
                     roomName = roomName)
 
@@ -114,7 +113,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                 // TODO use a global event decryptor? attache to session and that listen to new sessionId?
                 // for now decrypt sync
                 try {
-                    val result = session.decryptEvent(event.root, event.root.roomId + UUID.randomUUID().toString())
+                    val result = session.cryptoService().decryptEvent(event.root, event.root.roomId + UUID.randomUUID().toString())
                     event.root.mxDecryptionResult = OlmDecryptionResult(
                             payload = result.clearEvent,
                             senderKey = result.senderCurve25519Key,
@@ -125,8 +124,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                 }
             }
 
-            val body = event.getLastMessageBody()
-                    ?: stringProvider.getString(R.string.notification_unknown_new_event)
+            val body = displayableEventFormatter.format(event, false).toString()
             val roomName = room.roomSummary()?.displayName ?: ""
             val senderDisplayName = event.getDisambiguatedDisplayName()
 

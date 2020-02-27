@@ -26,7 +26,7 @@ data class ThirdPartyProtocol(
          * where higher groupings are ordered first. For example, the name of a network should be searched before the nickname of a user.
          */
         @Json(name = "user_fields")
-        var userFields: List<String>? = null,
+        val userFields: List<String>? = null,
 
         /**
          * Required. Fields which may be used to identify a third party location. These should be ordered to suggest the way that
@@ -34,15 +34,15 @@ data class ThirdPartyProtocol(
          * searched before the name of a channel.
          */
         @Json(name = "location_fields")
-        var locationFields: List<String>? = null,
+        val locationFields: List<String>? = null,
 
         /**
          * Required. A content URI representing an icon for the third party protocol.
          *
-         * FIXDOC: This field was not present in legacy Riot, and it is sometimes sent by the server (no not Required?)
+         * FIXDOC: This field was not present in legacy Riot, and it is sometimes sent by the server (so not Required?)
          */
         @Json(name = "icon")
-        var icon: String? = null,
+        val icon: String? = null,
 
         /**
          * Required. The type definitions for the fields defined in the user_fields and location_fields. Each entry in those arrays MUST have an entry here.
@@ -51,12 +51,12 @@ data class ThirdPartyProtocol(
          * May be an empty object if no fields are defined.
          */
         @Json(name = "field_types")
-        var fieldTypes: Map<String, FieldType>? = null,
+        val fieldTypes: Map<String, FieldType>? = null,
 
         /**
          * Required. A list of objects representing independent instances of configuration. For example, multiple networks on IRC
          * if multiple are provided by the same application service.
          */
         @Json(name = "instances")
-        var instances: List<ThirdPartyProtocolInstance>? = null
+        val instances: List<ThirdPartyProtocolInstance>? = null
 )

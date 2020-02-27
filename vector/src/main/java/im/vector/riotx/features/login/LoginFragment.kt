@@ -40,7 +40,7 @@ import javax.inject.Inject
 
 /**
  * In this screen, in signin mode:
- * - the user is asked for login and password to sign in to a homeserver.
+ * - the user is asked for login (or email) and password to sign in to a homeserver.
  * - He also can reset his password
  * In signup mode:
  * - the user is asked for login and password
@@ -96,6 +96,12 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
             SignMode.SignUp  -> R.string.login_signup_to
             SignMode.SignIn  -> R.string.login_connect_to
         }
+
+        loginFieldTil.hint = getString(when (state.signMode) {
+            SignMode.Unknown -> error("developer error")
+            SignMode.SignUp  -> R.string.login_signup_username_hint
+            SignMode.SignIn  -> R.string.login_signin_username_hint
+        })
 
         when (state.serverType) {
             ServerType.MatrixOrg -> {

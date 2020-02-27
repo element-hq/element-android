@@ -15,7 +15,7 @@ androidExtensions {
 }
 
 ext.versionMajor = 0
-ext.versionMinor = 16
+ext.versionMinor = 17
 ext.versionPatch = 0
 
 static def getGitTimestamp() {
@@ -341,6 +341,7 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
     implementation 'com.danikula:videocache:2.7.1'
+    implementation 'com.github.yalantis:ucrop:2.2.4'
 
     // Badge for compatibility
     implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
@@ -368,6 +369,8 @@ dependencies {
 
     implementation "androidx.emoji:emoji-appcompat:1.0.0"
 
+    implementation 'com.github.BillCarsonFr:JsonViewer:0.4'
+
     // QR-code
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170
     implementation 'com.google.zxing:core:3.3.3'
@@ -375,8 +378,11 @@ dependencies {
 
     // TESTS
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.amshove.kluent:kluent-android:1.44'
+
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'org.amshove.kluent:kluent-android:1.44'
 }
 
 if (getGradle().getStartParameter().getTaskRequests().toString().contains("Gplay")) {

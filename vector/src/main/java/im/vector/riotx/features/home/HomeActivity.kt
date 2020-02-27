@@ -130,7 +130,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         if (sharedActionViewModel.hasDisplayedCompleteSecurityPrompt) return
 
         // ensure keys are downloaded
-        session.downloadKeys(listOf(session.myUserId), true, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
+        session.cryptoService().downloadKeys(listOf(session.myUserId), true, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
             override fun onSuccess(data: MXUsersDevicesMap<CryptoDeviceInfo>) {
                 runOnUiThread {
                     alertCompleteSecurity(session)
@@ -140,7 +140,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     }
 
     private fun alertCompleteSecurity(session: Session) {
-        val myCrossSigningKeys = session.getCrossSigningService()
+        val myCrossSigningKeys = session.cryptoService().crossSigningService()
                 .getMyCrossSigningKeys()
         val crossSigningEnabledOnAccount = myCrossSigningKeys != null
 
@@ -150,34 +150,17 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             PopupAlertManager.postVectorAlert(
                     PopupAlertManager.VectorAlert(
                             uid = "completeSecurity",
-                            title = getString(R.string.crosssigning_verify_this_session),
-                            description = getString(R.string.crosssigning_other_user_not_trust),
+                            title = getString(R.string.new_signin),
+                            description = getString(R.string.complete_security),
                             iconId = R.drawable.ic_shield_warning
                     ).apply {
-                        colorInt = ContextCompat.getColor(this@HomeActivity, R.color.riotx_positive_accent)
+                        colorInt = ContextCompat.getColor(this@HomeActivity, R.color.riotx_destructive_accent)
                         contentAction = Runnable {
-                            Runnable {
-                                (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
-                                    it.navigator.waitSessionVerification(it)
-                                }
+                            (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
+                                it.navigator.waitSessionVerification(it)
                             }
                         }
-                        dismissedAction = Runnable {
-                            //                            tx.cancel()
-                        }
-                        addButton(
-                                getString(R.string.later),
-                                Runnable {
-                                }
-                        )
-                        addButton(
-                                getString(R.string.verification_profile_verify),
-                                Runnable {
-                                    (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
-                                        it.navigator.waitSessionVerification(it)
-                                    }
-                                }
-                        )
+                        dismissedAction = Runnable {}
                     }
             )
         }

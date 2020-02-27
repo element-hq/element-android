@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,14 +32,14 @@ class SharedSecretTest : InstrumentedTest {
     @Test
     fun testSharedSecretLengthCase() {
         repeat(100) {
-            generateSharedSecret().length shouldBe 43
+            generateSharedSecretV2().length shouldBe 11
         }
     }
 
     @Test
     fun testSharedDiffCase() {
-        val sharedSecret1 = generateSharedSecret()
-        val sharedSecret2 = generateSharedSecret()
+        val sharedSecret1 = generateSharedSecretV2()
+        val sharedSecret2 = generateSharedSecretV2()
 
         sharedSecret1 shouldNotBeEqualTo sharedSecret2
     }

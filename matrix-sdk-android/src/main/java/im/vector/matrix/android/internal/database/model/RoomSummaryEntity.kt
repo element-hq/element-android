@@ -49,7 +49,8 @@ internal open class RoomSummaryEntity(
         var flatAliases: String = "",
         var isEncrypted: Boolean = false,
         var typingUserIds: RealmList<String> = RealmList(),
-        var roomEncryptionTrustLevelStr: String? = null
+        var roomEncryptionTrustLevelStr: String? = null,
+        var inviterId: String? = null
 ) : RealmObject() {
 
     private var membershipStr: String = Membership.NONE.name

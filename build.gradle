@@ -34,6 +34,10 @@ allprojects {
                 includeGroupByRegex "com\\.github\\.jaiselrahman"
                 // And monarchy
                 includeGroupByRegex "com\\.github\\.Zhuinden"
+                // And ucrop
+                includeGroupByRegex "com\\.github\\.yalantis"
+                // JsonViewer
+                includeGroupByRegex 'com\\.github\\.BillCarsonFr'
             }
         }
         maven {

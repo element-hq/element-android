@@ -26,48 +26,47 @@ import java.io.Serializable
 
 @JsonClass(generateAdapter = true)
 data class MXDeviceInfo(
-
         /**
          * The id of this device.
          */
         @Json(name = "device_id")
-        var deviceId: String,
+        val deviceId: String,
 
         /**
          * the user id
          */
         @Json(name = "user_id")
-        var userId: String,
+        val userId: String,
 
         /**
          * The list of algorithms supported by this device.
          */
         @Json(name = "algorithms")
-        var algorithms: List<String>? = null,
+        val algorithms: List<String>? = null,
 
         /**
          * A map from "<key type>:<deviceId>" to "<base64-encoded key>".
          */
         @Json(name = "keys")
-        var keys: Map<String, String>? = null,
+        val keys: Map<String, String>? = null,
 
         /**
          * The signature of this MXDeviceInfo.
          * A map from "<userId>" to a map from "<key type>:<deviceId>" to "<signature>"
          */
         @Json(name = "signatures")
-        var signatures: Map<String, Map<String, String>>? = null,
+        val signatures: Map<String, Map<String, String>>? = null,
 
         /*
          * Additional data from the home server.
          */
         @Json(name = "unsigned")
-        var unsigned: JsonDict? = null,
+        val unsigned: JsonDict? = null,
 
         /**
          * Verification state of this device.
          */
-        var verified: Int = DEVICE_VERIFICATION_UNKNOWN
+        val verified: Int = DEVICE_VERIFICATION_UNKNOWN
 ) : Serializable {
     /**
      * Tells if the device is unknown
@@ -137,11 +136,11 @@ data class MXDeviceInfo(
         map["user_id"] = userId
 
         if (null != algorithms) {
-            map["algorithms"] = algorithms!!
+            map["algorithms"] = algorithms
         }
 
         if (null != keys) {
-            map["keys"] = keys!!
+            map["keys"] = keys
         }
 
         return map

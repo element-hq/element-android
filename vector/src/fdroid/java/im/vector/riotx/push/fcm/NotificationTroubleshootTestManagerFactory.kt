@@ -18,7 +18,11 @@ package im.vector.riotx.push.fcm
 import androidx.fragment.app.Fragment
 import im.vector.riotx.fdroid.features.settings.troubleshoot.TestAutoStartBoot
 import im.vector.riotx.fdroid.features.settings.troubleshoot.TestBackgroundRestrictions
-import im.vector.riotx.features.settings.troubleshoot.*
+import im.vector.riotx.features.settings.troubleshoot.NotificationTroubleshootTestManager
+import im.vector.riotx.features.settings.troubleshoot.TestAccountSettings
+import im.vector.riotx.features.settings.troubleshoot.TestBingRulesSettings
+import im.vector.riotx.features.settings.troubleshoot.TestDeviceSettings
+import im.vector.riotx.features.settings.troubleshoot.TestSystemSettings
 import javax.inject.Inject
 
 class NotificationTroubleshootTestManagerFactory @Inject constructor(private val testSystemSettings: TestSystemSettings,

@@ -196,13 +196,13 @@ internal class DefaultRelationService @AssistedInject constructor(
 
     private fun createEncryptEventWork(event: Event, keepKeys: List<String>?): OneTimeWorkRequest {
         // Same parameter
-        val params = EncryptEventWorker.Params(sessionId, roomId, event, keepKeys)
+        val params = EncryptEventWorker.Params(sessionId, event, keepKeys)
         val sendWorkData = WorkerParamsFactory.toData(params)
         return timeLineSendEventWorkCommon.createWork<EncryptEventWorker>(sendWorkData, true)
     }
 
     private fun createSendEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
-        val sendContentWorkerParams = SendEventWorker.Params(sessionId, roomId, event)
+        val sendContentWorkerParams = SendEventWorker.Params(sessionId, event)
         val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
         return timeLineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, startChain)
     }

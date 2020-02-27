@@ -263,6 +263,9 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
         }
     }
 
+    // This should be provided by the framework
+    protected fun invalidateOptionsMenu() = requireActivity().invalidateOptionsMenu()
+
     /* ==========================================================================================
      * Common Dialogs
      * ========================================================================================== */

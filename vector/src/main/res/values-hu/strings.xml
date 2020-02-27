@@ -1913,7 +1913,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="login_msisdn_error_other">A telefonszám érvénytelennek látszik. Kérlek ellenőrizd</string>
 
     <string name="login_signup_to">Bejelentkezés ide: %1$s</string>
-    <string name="login_signup_username_hint">Felhasználónév vagy e-mail</string>
+    <string name="login_signin_username_hint">Felhasználónév vagy e-mail</string>
     <string name="login_signup_password_hint">Jelszó</string>
     <string name="login_signup_submit">Következő</string>
     <string name="login_signup_error_user_in_use">A felhasználónév már használatban van</string>

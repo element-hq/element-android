@@ -23,17 +23,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ScrollView
-import androidx.core.view.size
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
-import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.setupAsSearch
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -61,11 +58,6 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
         setupFilterView()
         setupAddByMatrixIdView()
         setupCloseView()
-        viewModel.observeViewEvents {
-            when (it) {
-                is CreateDirectRoomViewEvents.SelectUserAction -> updateChipsView(it)
-            }.exhaustive
-        }
         viewModel.selectSubscribe(this, CreateDirectRoomViewState::selectedUsers) {
             renderSelectedUsers(it)
         }
@@ -138,37 +130,34 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
         knownUsersController.setData(it)
     }
 
-    private fun updateChipsView(data: CreateDirectRoomViewEvents.SelectUserAction) {
-        if (data.isAdded) {
-            addChipToGroup(data.user, chipGroup)
-        } else {
-            if (chipGroup.size > data.index) {
-                chipGroup.removeViewAt(data.index)
+    private fun renderSelectedUsers(selectedUsers: Set<User>) {
+        invalidateOptionsMenu()
+
+        val currentNumberOfChips = chipGroup.childCount
+        val newNumberOfChips = selectedUsers.size
+
+        chipGroup.removeAllViews()
+        selectedUsers.forEach { addChipToGroup(it) }
+
+        // Scroll to the bottom when adding chips. When removing chips, do not scroll
+        if (newNumberOfChips >= currentNumberOfChips) {
+            chipGroupScrollView.post {
+                chipGroupScrollView.fullScroll(ScrollView.FOCUS_DOWN)
             }
         }
     }
 
-    private fun renderSelectedUsers(selectedUsers: Set<User>) {
-        vectorBaseActivity.invalidateOptionsMenu()
-        if (selectedUsers.isNotEmpty() && chipGroup.size == 0) {
-            selectedUsers.forEach { addChipToGroup(it, chipGroup) }
-        }
-    }
-
-    private fun addChipToGroup(user: User, chipGroup: ChipGroup) {
+    private fun addChipToGroup(user: User) {
         val chip = Chip(requireContext())
         chip.setChipBackgroundColorResource(android.R.color.transparent)
         chip.chipStrokeWidth = dimensionConverter.dpToPx(1).toFloat()
-        chip.text = if (user.displayName.isNullOrBlank()) user.userId else user.displayName
+        chip.text = user.getBestName()
         chip.isClickable = true
         chip.isCheckable = false
         chip.isCloseIconVisible = true
         chipGroup.addView(chip)
         chip.setOnCloseIconClickListener {
             viewModel.handle(CreateDirectRoomAction.RemoveSelectedUser(user))
-        }
-        chipGroupScrollView.post {
-            chipGroupScrollView.fullScroll(ScrollView.FOCUS_DOWN)
         }
     }
 

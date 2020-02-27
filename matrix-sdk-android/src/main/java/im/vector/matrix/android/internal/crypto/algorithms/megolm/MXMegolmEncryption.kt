@@ -28,7 +28,7 @@ import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
-import im.vector.matrix.android.internal.crypto.keysbackup.KeysBackup
+import im.vector.matrix.android.internal.crypto.keysbackup.DefaultKeysBackupService
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.repository.WarnOnUnknownDeviceRepository
@@ -42,7 +42,7 @@ internal class MXMegolmEncryption(
         // The id of the room we will be sending to.
         private var roomId: String,
         private val olmDevice: MXOlmDevice,
-        private val keysBackup: KeysBackup,
+        private val defaultKeysBackupService: DefaultKeysBackupService,
         private val cryptoStore: IMXCryptoStore,
         private val deviceListManager: DeviceListManager,
         private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
@@ -85,7 +85,7 @@ internal class MXMegolmEncryption(
         olmDevice.addInboundGroupSession(sessionId!!, olmDevice.getSessionKey(sessionId)!!, roomId, olmDevice.deviceCurve25519Key!!,
                 emptyList(), keysClaimedMap, false)
 
-        keysBackup.maybeBackupKeys()
+        defaultKeysBackupService.maybeBackupKeys()
 
         return MXOutboundSessionInfo(sessionId)
     }

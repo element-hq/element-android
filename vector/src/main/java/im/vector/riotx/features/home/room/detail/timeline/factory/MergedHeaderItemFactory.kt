@@ -20,7 +20,10 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotx.features.home.room.detail.timeline.helper.*
+import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
+import im.vector.riotx.features.home.room.detail.timeline.helper.MergedTimelineEventVisibilityStateChangedListener
+import im.vector.riotx.features.home.room.detail.timeline.helper.canBeMerged
+import im.vector.riotx.features.home.room.detail.timeline.helper.prevSameTypeEvents
 import im.vector.riotx.features.home.room.detail.timeline.item.MergedHeaderItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MergedHeaderItem_
 import javax.inject.Inject

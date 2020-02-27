@@ -30,7 +30,6 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.RoomDirectoryVisibility
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomPreset
-import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
@@ -91,10 +90,9 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
                 visibility = if (state.isInRoomDirectory) RoomDirectoryVisibility.PUBLIC else RoomDirectoryVisibility.PRIVATE,
                 // Public room
                 preset = if (state.isPublic) CreateRoomPreset.PRESET_PUBLIC_CHAT else CreateRoomPreset.PRESET_PRIVATE_CHAT
-        ).let {
-            // Encryption
-            if (state.isEncrypted) it.enableEncryptionWithAlgorithm(MXCRYPTO_ALGORITHM_MEGOLM) else it
-        }
+        )
+                // Encryption
+                .enableEncryptionWithAlgorithm(state.isEncrypted)
 
         session.createRoom(createRoomParams, object : MatrixCallback<String> {
             override fun onSuccess(data: String) {

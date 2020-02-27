@@ -17,18 +17,25 @@
 package im.vector.matrix.android.internal.session.content
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
+import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.default
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.*
+import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
+import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
 import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachments
 import im.vector.matrix.android.internal.crypto.model.rest.EncryptedFileInfo
 import im.vector.matrix.android.internal.network.ProgressRequestBody
-import im.vector.matrix.android.internal.session.room.send.SendEventWorker
+import im.vector.matrix.android.internal.session.room.send.MultipleEventSendingDispatcherWorker
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
@@ -38,15 +45,21 @@ import java.io.File
 import java.io.FileInputStream
 import javax.inject.Inject
 
-internal class UploadContentWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
+private data class NewImageAttributes(
+        val newWidth: Int?,
+        val newHeight: Int?,
+        val newFileSize: Int
+)
+
+internal class UploadContentWorker(val context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
             override val sessionId: String,
-            val roomId: String,
-            val event: Event,
+            val events: List<Event>,
             val attachment: ContentAttachmentData,
             val isRoomEncrypted: Boolean,
+            val compressBeforeSending: Boolean,
             override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
@@ -67,20 +80,50 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
 
-        val eventId = params.event.eventId ?: return Result.success()
         val attachment = params.attachment
+
+        var newImageAttributes: NewImageAttributes? = null
 
         val attachmentFile = try {
             File(attachment.path)
         } catch (e: Exception) {
             Timber.e(e)
-            contentUploadStateTracker.setFailure(params.event.eventId, e)
+            notifyTracker(params) { contentUploadStateTracker.setFailure(it, e) }
             return Result.success(
                     WorkerParamsFactory.toData(params.copy(
                             lastFailureMessage = e.localizedMessage
                     ))
             )
         }
+                .let { originalFile ->
+                    if (attachment.type == ContentAttachmentData.Type.IMAGE) {
+                        if (params.compressBeforeSending) {
+                            Compressor.compress(context, originalFile) {
+                                default(
+                                        width = MAX_IMAGE_SIZE,
+                                        height = MAX_IMAGE_SIZE
+                                )
+                            }.also { compressedFile ->
+                                // Update the params
+                                val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+                                BitmapFactory.decodeFile(compressedFile.absolutePath, options)
+                                val fileSize = compressedFile.length().toInt()
+
+                                newImageAttributes = NewImageAttributes(
+                                        options.outWidth,
+                                        options.outHeight,
+                                        fileSize
+                                )
+                            }
+                        } else {
+                            // TODO Fix here the image rotation issue
+                            originalFile
+                        }
+                    } else {
+                        // Other type
+                        originalFile
+                    }
+                }
 
         var uploadedThumbnailUrl: String? = null
         var uploadedThumbnailEncryptedFileInfo: EncryptedFileInfo? = null
@@ -88,14 +131,14 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
         ThumbnailExtractor.extractThumbnail(params.attachment)?.let { thumbnailData ->
             val thumbnailProgressListener = object : ProgressRequestBody.Listener {
                 override fun onProgress(current: Long, total: Long) {
-                    contentUploadStateTracker.setProgressThumbnail(eventId, current, total)
+                    notifyTracker(params) { contentUploadStateTracker.setProgressThumbnail(it, current, total) }
                 }
             }
 
             try {
                 val contentUploadResponse = if (params.isRoomEncrypted) {
                     Timber.v("Encrypt thumbnail")
-                    contentUploadStateTracker.setEncryptingThumbnail(eventId)
+                    notifyTracker(params) { contentUploadStateTracker.setEncryptingThumbnail(it) }
                     val encryptionResult = MXEncryptedAttachments.encryptAttachment(ByteArrayInputStream(thumbnailData.bytes), thumbnailData.mimeType)
                     uploadedThumbnailEncryptedFileInfo = encryptionResult.encryptedFileInfo
                     fileUploader.uploadByteArray(encryptionResult.encryptedByteArray,
@@ -118,10 +161,12 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
 
         val progressListener = object : ProgressRequestBody.Listener {
             override fun onProgress(current: Long, total: Long) {
-                if (isStopped) {
-                    contentUploadStateTracker.setFailure(eventId, Throwable("Cancelled"))
-                } else {
-                    contentUploadStateTracker.setProgress(eventId, current, total)
+                notifyTracker(params) {
+                    if (isStopped) {
+                        contentUploadStateTracker.setFailure(it, Throwable("Cancelled"))
+                    } else {
+                        contentUploadStateTracker.setProgress(it, current, total)
+                    }
                 }
             }
         }
@@ -131,7 +176,7 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
         return try {
             val contentUploadResponse = if (params.isRoomEncrypted) {
                 Timber.v("Encrypt file")
-                contentUploadStateTracker.setEncrypting(eventId)
+                notifyTracker(params) { contentUploadStateTracker.setEncrypting(it) }
 
                 val encryptionResult = MXEncryptedAttachments.encryptAttachment(FileInputStream(attachmentFile), attachment.mimeType)
                 uploadedFileEncryptedFileInfo = encryptionResult.encryptedFileInfo
@@ -143,7 +188,12 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
                         .uploadFile(attachmentFile, attachment.name, attachment.mimeType, progressListener)
             }
 
-            handleSuccess(params, contentUploadResponse.contentUri, uploadedFileEncryptedFileInfo, uploadedThumbnailUrl, uploadedThumbnailEncryptedFileInfo)
+            handleSuccess(params,
+                    contentUploadResponse.contentUri,
+                    uploadedFileEncryptedFileInfo,
+                    uploadedThumbnailUrl,
+                    uploadedThumbnailEncryptedFileInfo,
+                    newImageAttributes)
         } catch (t: Throwable) {
             Timber.e(t)
             handleFailure(params, t)
@@ -151,7 +201,8 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
     }
 
     private fun handleFailure(params: Params, failure: Throwable): Result {
-        contentUploadStateTracker.setFailure(params.event.eventId!!, failure)
+        notifyTracker(params) { contentUploadStateTracker.setFailure(it, failure) }
+
         return Result.success(
                 WorkerParamsFactory.toData(
                         params.copy(
@@ -165,11 +216,17 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
                               attachmentUrl: String,
                               encryptedFileInfo: EncryptedFileInfo?,
                               thumbnailUrl: String?,
-                              thumbnailEncryptedFileInfo: EncryptedFileInfo?): Result {
+                              thumbnailEncryptedFileInfo: EncryptedFileInfo?,
+                              newImageAttributes: NewImageAttributes?): Result {
         Timber.v("handleSuccess $attachmentUrl, work is stopped $isStopped")
-        contentUploadStateTracker.setSuccess(params.event.eventId!!)
-        val event = updateEvent(params.event, attachmentUrl, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo)
-        val sendParams = SendEventWorker.Params(params.sessionId, params.roomId, event)
+        notifyTracker(params) { contentUploadStateTracker.setSuccess(it) }
+
+        val updatedEvents = params.events
+                .map {
+                    updateEvent(it, attachmentUrl, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo, newImageAttributes)
+                }
+
+        val sendParams = MultipleEventSendingDispatcherWorker.Params(params.sessionId, updatedEvents, params.isRoomEncrypted)
         return Result.success(WorkerParamsFactory.toData(sendParams))
     }
 
@@ -177,10 +234,11 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
                             url: String,
                             encryptedFileInfo: EncryptedFileInfo?,
                             thumbnailUrl: String? = null,
-                            thumbnailEncryptedFileInfo: EncryptedFileInfo?): Event {
+                            thumbnailEncryptedFileInfo: EncryptedFileInfo?,
+                            newImageAttributes: NewImageAttributes?): Event {
         val messageContent: MessageContent = event.content.toModel() ?: return event
         val updatedContent = when (messageContent) {
-            is MessageImageContent -> messageContent.update(url, encryptedFileInfo)
+            is MessageImageContent -> messageContent.update(url, encryptedFileInfo, newImageAttributes)
             is MessageVideoContent -> messageContent.update(url, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo)
             is MessageFileContent  -> messageContent.update(url, encryptedFileInfo)
             is MessageAudioContent -> messageContent.update(url, encryptedFileInfo)
@@ -189,11 +247,23 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
         return event.copy(content = updatedContent.toContent())
     }
 
+    private fun notifyTracker(params: Params, function: (String) -> Unit) {
+        params.events
+                .mapNotNull { it.eventId }
+                .forEach { eventId -> function.invoke(eventId) }
+    }
+
     private fun MessageImageContent.update(url: String,
-                                           encryptedFileInfo: EncryptedFileInfo?): MessageImageContent {
+                                           encryptedFileInfo: EncryptedFileInfo?,
+                                           newImageAttributes: NewImageAttributes?): MessageImageContent {
         return copy(
                 url = if (encryptedFileInfo == null) url else null,
-                encryptedFileInfo = encryptedFileInfo?.copy(url = url)
+                encryptedFileInfo = encryptedFileInfo?.copy(url = url),
+                info = info?.copy(
+                        width = newImageAttributes?.newWidth ?: info.width,
+                        height = newImageAttributes?.newHeight ?: info.height,
+                        size = newImageAttributes?.newFileSize ?: info.size
+                )
         )
     }
 
@@ -225,5 +295,9 @@ internal class UploadContentWorker(context: Context, params: WorkerParameters) :
                 url = if (encryptedFileInfo == null) url else null,
                 encryptedFileInfo = encryptedFileInfo?.copy(url = url)
         )
+    }
+
+    companion object {
+        private const val MAX_IMAGE_SIZE = 640
     }
 }

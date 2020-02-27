@@ -16,7 +16,18 @@
 
 package im.vector.matrix.android.internal.crypto.store.db
 
-import im.vector.matrix.android.internal.crypto.store.db.model.*
+import im.vector.matrix.android.internal.crypto.store.db.model.CrossSigningInfoEntity
+import im.vector.matrix.android.internal.crypto.store.db.model.CryptoMetadataEntity
+import im.vector.matrix.android.internal.crypto.store.db.model.CryptoRoomEntity
+import im.vector.matrix.android.internal.crypto.store.db.model.DeviceInfoEntity
+import im.vector.matrix.android.internal.crypto.store.db.model.IncomingRoomKeyRequestEntity
+import im.vector.matrix.android.internal.crypto.store.db.model.KeyInfoEntity
+import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
+import im.vector.matrix.android.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
+import im.vector.matrix.android.internal.crypto.store.db.model.OlmSessionEntity
+import im.vector.matrix.android.internal.crypto.store.db.model.OutgoingRoomKeyRequestEntity
+import im.vector.matrix.android.internal.crypto.store.db.model.TrustLevelEntity
+import im.vector.matrix.android.internal.crypto.store.db.model.UserEntity
 import io.realm.annotations.RealmModule
 
 /**

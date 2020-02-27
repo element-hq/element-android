@@ -27,12 +27,10 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.text.Spannable
 import android.view.HapticFeedbackConstants
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.Window
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -96,6 +94,7 @@ import im.vector.riotx.core.extensions.showKeyboard
 import im.vector.riotx.core.files.addEntryToDownloadManager
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.ui.views.JumpToReadMarkerView
 import im.vector.riotx.core.ui.views.NotificationAreaView
 import im.vector.riotx.core.utils.Debouncer
@@ -110,12 +109,16 @@ import im.vector.riotx.core.utils.checkPermissions
 import im.vector.riotx.core.utils.copyToClipboard
 import im.vector.riotx.core.utils.createUIHandler
 import im.vector.riotx.core.utils.getColorFromUserId
+import im.vector.riotx.core.utils.jsonViewerStyler
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import im.vector.riotx.core.utils.shareMedia
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.attachments.AttachmentTypeSelectorView
 import im.vector.riotx.features.attachments.AttachmentsHelper
 import im.vector.riotx.features.attachments.ContactAttachment
+import im.vector.riotx.features.attachments.preview.AttachmentsPreviewActivity
+import im.vector.riotx.features.attachments.preview.AttachmentsPreviewArgs
+import im.vector.riotx.features.attachments.toGroupedContentAttachmentData
 import im.vector.riotx.features.command.Command
 import im.vector.riotx.features.crypto.util.toImageRes
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
@@ -154,6 +157,7 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import kotlinx.android.synthetic.main.merge_composer_layout.view.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
 import timber.log.Timber
 import java.io.File
@@ -178,8 +182,8 @@ class RoomDetailFragment @Inject constructor(
         private val notificationDrawerManager: NotificationDrawerManager,
         val roomDetailViewModelFactory: RoomDetailViewModel.Factory,
         private val eventHtmlRenderer: EventHtmlRenderer,
-        private val vectorPreferences: VectorPreferences
-) :
+        private val vectorPreferences: VectorPreferences,
+        private val colorProvider: ColorProvider) :
         VectorBaseFragment(),
         TimelineEventController.Callback,
         VectorInviteView.Callback,
@@ -298,10 +302,16 @@ class RoomDetailFragment @Inject constructor(
         super.onActivityCreated(savedInstanceState)
         if (savedInstanceState == null) {
             when (val sharedData = roomDetailArgs.sharedData) {
-                is SharedData.Text        -> roomDetailViewModel.handle(RoomDetailAction.SendMessage(sharedData.text, false))
-                is SharedData.Attachments -> roomDetailViewModel.handle(RoomDetailAction.SendMedia(sharedData.attachmentData))
+                is SharedData.Text        -> {
+                    // Save a draft to set the shared text to the composer
+                    roomDetailViewModel.handle(RoomDetailAction.SaveDraft(sharedData.text))
+                }
+                is SharedData.Attachments -> {
+                    // open share edition
+                    onContentAttachmentsReady(sharedData.attachmentData)
+                }
                 null                      -> Timber.v("No share data to process")
-            }
+            }.exhaustive
         }
     }
 
@@ -426,7 +436,7 @@ class RoomDetailFragment @Inject constructor(
         composerLayout.collapse()
 
         updateComposerText(text)
-        composerLayout.sendButton.setContentDescription(getString(R.string.send))
+        composerLayout.sendButton.contentDescription = getString(R.string.send)
     }
 
     private fun renderSpecialMode(event: TimelineEvent,
@@ -497,7 +507,12 @@ class RoomDetailFragment @Inject constructor(
         val hasBeenHandled = attachmentsHelper.onActivityResult(requestCode, resultCode, data)
         if (!hasBeenHandled && resultCode == RESULT_OK && data != null) {
             when (requestCode) {
-                REACTION_SELECT_REQUEST_CODE -> {
+                AttachmentsPreviewActivity.REQUEST_CODE -> {
+                    val sendData = AttachmentsPreviewActivity.getOutput(data)
+                    val keepOriginalSize = AttachmentsPreviewActivity.getKeepOriginalSize(data)
+                    roomDetailViewModel.handle(RoomDetailAction.SendMedia(sendData, !keepOriginalSize))
+                }
+                REACTION_SELECT_REQUEST_CODE            -> {
                     val (eventId, reaction) = EmojiReactionPickerActivity.getOutput(data) ?: return
                     roomDetailViewModel.handle(RoomDetailAction.SendReaction(eventId, reaction))
                 }
@@ -636,9 +651,11 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun sendUri(uri: Uri): Boolean {
+        roomDetailViewModel.preventAttachmentPreview = true
         val shareIntent = Intent(Intent.ACTION_SEND, uri)
         val isHandled = attachmentsHelper.handleShareIntent(shareIntent)
         if (!isHandled) {
+            roomDetailViewModel.preventAttachmentPreview = false
             Toast.makeText(requireContext(), R.string.error_handling_incoming_share, Toast.LENGTH_SHORT).show()
         }
         return isHandled
@@ -1159,26 +1176,18 @@ class RoomDetailFragment @Inject constructor(
                 onEditedDecorationClicked(action.messageInformationData)
             }
             is EventSharedAction.ViewSource                 -> {
-                val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_event_content, null)
-                view.findViewById<TextView>(R.id.event_content_text_view)?.let {
-                    it.text = action.content
-                }
-
-                AlertDialog.Builder(requireActivity())
-                        .setView(view)
-                        .setPositiveButton(R.string.ok, null)
-                        .show()
+                JSonViewerDialog.newInstance(
+                        action.content,
+                        -1,
+                        jsonViewerStyler(colorProvider)
+                ).show(childFragmentManager, "JSON_VIEWER")
             }
             is EventSharedAction.ViewDecryptedSource        -> {
-                val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_event_content, null)
-                view.findViewById<TextView>(R.id.event_content_text_view)?.let {
-                    it.text = action.content
-                }
-
-                AlertDialog.Builder(requireActivity())
-                        .setView(view)
-                        .setPositiveButton(R.string.ok, null)
-                        .show()
+                JSonViewerDialog.newInstance(
+                        action.content,
+                        -1,
+                        jsonViewerStyler(colorProvider)
+                ).show(childFragmentManager, "JSON_VIEWER")
             }
             is EventSharedAction.QuickReact                 -> {
                 // eventId,ClickedOn,Add
@@ -1341,10 +1350,24 @@ class RoomDetailFragment @Inject constructor(
     // AttachmentsHelper.Callback
 
     override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
-        roomDetailViewModel.handle(RoomDetailAction.SendMedia(attachments))
+        if (roomDetailViewModel.preventAttachmentPreview) {
+            roomDetailViewModel.preventAttachmentPreview = false
+            roomDetailViewModel.handle(RoomDetailAction.SendMedia(attachments, false))
+        } else {
+            val grouped = attachments.toGroupedContentAttachmentData()
+            if (grouped.notPreviewables.isNotEmpty()) {
+                // Send the not previewable attachments right now (?)
+                roomDetailViewModel.handle(RoomDetailAction.SendMedia(grouped.notPreviewables, false))
+            }
+            if (grouped.previewables.isNotEmpty()) {
+                val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(grouped.previewables))
+                startActivityForResult(intent, AttachmentsPreviewActivity.REQUEST_CODE)
+            }
+        }
     }
 
     override fun onAttachmentsProcessFailed() {
+        roomDetailViewModel.preventAttachmentPreview = false
         Toast.makeText(requireContext(), R.string.error_attachment, Toast.LENGTH_SHORT).show()
     }
 

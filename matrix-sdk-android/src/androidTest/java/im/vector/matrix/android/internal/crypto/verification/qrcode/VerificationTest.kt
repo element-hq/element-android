@@ -18,8 +18,8 @@ package im.vector.matrix.android.internal.crypto.verification.qrcode
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import im.vector.matrix.android.InstrumentedTest
-import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
-import im.vector.matrix.android.api.session.crypto.sas.VerificationService
+import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
+import im.vector.matrix.android.api.session.crypto.verification.VerificationService
 import im.vector.matrix.android.common.CommonTestHelper
 import im.vector.matrix.android.common.CryptoTestHelper
 import im.vector.matrix.android.common.TestConstants
@@ -156,7 +156,7 @@ class VerificationTest : InstrumentedTest {
         val bobSession = cryptoTestData.secondSession!!
 
         mTestHelper.doSync<Unit> { callback ->
-            aliceSession.getCrossSigningService()
+            aliceSession.cryptoService().crossSigningService()
                     .initializeCrossSigning(UserPasswordAuth(
                             user = aliceSession.myUserId,
                             password = TestConstants.PASSWORD
@@ -164,15 +164,15 @@ class VerificationTest : InstrumentedTest {
         }
 
         mTestHelper.doSync<Unit> { callback ->
-            bobSession.getCrossSigningService()
+            bobSession.cryptoService().crossSigningService()
                     .initializeCrossSigning(UserPasswordAuth(
                             user = bobSession.myUserId,
                             password = TestConstants.PASSWORD
                     ), callback)
         }
 
-        val aliceVerificationService = aliceSession.getVerificationService()
-        val bobVerificationService = bobSession.getVerificationService()
+        val aliceVerificationService = aliceSession.cryptoService().verificationService()
+        val bobVerificationService = bobSession.cryptoService().verificationService()
 
         var aliceReadyPendingVerificationRequest: PendingVerificationRequest? = null
         var bobReadyPendingVerificationRequest: PendingVerificationRequest? = null
@@ -227,6 +227,6 @@ class VerificationTest : InstrumentedTest {
             pr.otherCanScanQrCode() shouldBe expectedResultForBob.otherCanScanQrCode
         }
 
-        cryptoTestData.close()
+        cryptoTestData.cleanUp(mTestHelper)
     }
 }

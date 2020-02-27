@@ -23,4 +23,5 @@ import im.vector.riotx.core.platform.VectorViewModelAction
 sealed class RoomProfileAction: VectorViewModelAction {
     object LeaveRoom: RoomProfileAction()
     data class ChangeRoomNotificationState(val notificationState: RoomNotificationState) : RoomProfileAction()
+    object ShareRoomProfile : RoomProfileAction()
 }

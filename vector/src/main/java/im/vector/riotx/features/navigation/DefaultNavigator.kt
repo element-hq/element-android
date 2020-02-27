@@ -19,10 +19,14 @@ package im.vector.riotx.features.navigation
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.view.View
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.TaskStackBuilder
-import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
+import androidx.core.view.ViewCompat
+import im.vector.matrix.android.api.session.crypto.verification.IncomingSasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.error.fatalError
@@ -36,6 +40,7 @@ import im.vector.riotx.features.debug.DebugMenuActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailArgs
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
+import im.vector.riotx.features.media.BigImageViewerActivity
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewActivity
@@ -64,25 +69,25 @@ class DefaultNavigator @Inject constructor(
         startActivity(context, intent, buildTask)
     }
 
-    override fun performDeviceVerification(context: Context, otherUserId: String, sasTransationId: String) {
+    override fun performDeviceVerification(context: Context, otherUserId: String, sasTransactionId: String) {
         val session = sessionHolder.getSafeActiveSession() ?: return
-        val tx = session.getVerificationService().getExistingTransaction(otherUserId, sasTransationId) ?: return
+        val tx = session.cryptoService().verificationService().getExistingTransaction(otherUserId, sasTransactionId) ?: return
         (tx as? IncomingSasVerificationTransaction)?.performAccept()
         if (context is VectorBaseActivity) {
             VerificationBottomSheet.withArgs(
                     roomId = null,
                     otherUserId = otherUserId,
-                    transactionId = sasTransationId
+                    transactionId = sasTransactionId
             ).show(context.supportFragmentManager, "REQPOP")
         }
     }
 
     override fun requestSessionVerification(context: Context) {
         val session = sessionHolder.getSafeActiveSession() ?: return
-        val pr = session.getVerificationService().requestKeyVerification(
+        val pr = session.cryptoService().verificationService().requestKeyVerification(
                 listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SCAN, VerificationMethod.QR_CODE_SHOW),
                 session.myUserId,
-                session.getUserDevices(session.myUserId).map { it.deviceId })
+                session.cryptoService().getUserDevices(session.myUserId).map { it.deviceId })
         if (context is VectorBaseActivity) {
             VerificationBottomSheet.withArgs(
                     roomId = null,
@@ -95,12 +100,8 @@ class DefaultNavigator @Inject constructor(
     override fun waitSessionVerification(context: Context) {
         val session = sessionHolder.getSafeActiveSession() ?: return
         if (context is VectorBaseActivity) {
-            VerificationBottomSheet.withArgs(
-                    roomId = null,
-                    otherUserId = session.myUserId,
-                    waitForIncomingRequest = true
-
-            ).show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
+            VerificationBottomSheet.forSelfVerification(session)
+                    .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
         }
     }
 
@@ -126,7 +127,7 @@ class DefaultNavigator @Inject constructor(
         startActivity(context, intent, buildTask)
     }
 
-    override fun openRoomForSharing(activity: Activity, roomId: String, sharedData: SharedData) {
+    override fun openRoomForSharingAndFinish(activity: Activity, roomId: String, sharedData: SharedData) {
         val args = RoomDetailArgs(roomId, null, sharedData)
         val intent = RoomDetailActivity.newIntent(activity, args)
         activity.startActivity(intent)
@@ -177,6 +178,18 @@ class DefaultNavigator @Inject constructor(
 
     override fun openRoomProfile(context: Context, roomId: String) {
         context.startActivity(RoomProfileActivity.newIntent(context, roomId))
+    }
+
+    override fun openBigImageViewer(activity: Activity, sharedElement: View?, matrixItem: MatrixItem) {
+        matrixItem.avatarUrl
+                ?.takeIf { it.isNotBlank() }
+                ?.let { avatarUrl ->
+                    val intent = BigImageViewerActivity.newIntent(activity, matrixItem.getBestName(), avatarUrl)
+                    val options = sharedElement?.let {
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(activity, it, ViewCompat.getTransitionName(it) ?: "")
+                    }
+                    activity.startActivity(intent, options?.toBundle())
+                }
     }
 
     private fun startActivity(context: Context, intent: Intent, buildTask: Boolean) {

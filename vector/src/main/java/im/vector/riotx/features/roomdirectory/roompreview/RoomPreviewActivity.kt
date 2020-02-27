@@ -32,12 +32,13 @@ import kotlinx.android.parcel.Parcelize
 data class RoomPreviewData(
         val roomId: String,
         val roomName: String?,
+        val roomAlias: String?,
         val topic: String?,
         val worldReadable: Boolean,
         val avatarUrl: String?
 ) : Parcelable {
     val matrixItem: MatrixItem
-        get() = MatrixItem.RoomItem(roomId, roomName, avatarUrl)
+        get() = MatrixItem.RoomItem(roomId, roomName ?: roomAlias, avatarUrl)
 }
 
 class RoomPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
@@ -50,6 +51,7 @@ class RoomPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
                 putExtra(ARG, RoomPreviewData(
                         roomId = publicRoom.roomId,
                         roomName = publicRoom.name,
+                        roomAlias = publicRoom.getPrimaryAlias(),
                         topic = publicRoom.topic,
                         worldReadable = publicRoom.worldReadable,
                         avatarUrl = publicRoom.avatarUrl

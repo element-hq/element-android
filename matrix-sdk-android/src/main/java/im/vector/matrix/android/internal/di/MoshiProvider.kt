@@ -17,13 +17,27 @@
 package im.vector.matrix.android.internal.di
 
 import com.squareup.moshi.Moshi
-import im.vector.matrix.android.api.session.room.model.message.*
+import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageDefaultContent
+import im.vector.matrix.android.api.session.room.model.message.MessageEmoteContent
+import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
+import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageLocationContent
+import im.vector.matrix.android.api.session.room.model.message.MessageNoticeContent
+import im.vector.matrix.android.api.session.room.model.message.MessageOptionsContent
+import im.vector.matrix.android.api.session.room.model.message.MessagePollResponseContent
+import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
+import im.vector.matrix.android.api.session.room.model.message.MessageType
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
+import im.vector.matrix.android.internal.network.parsing.ForceToBooleanJsonAdapter
 import im.vector.matrix.android.internal.network.parsing.RuntimeJsonAdapterFactory
 import im.vector.matrix.android.internal.network.parsing.UriMoshiAdapter
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataBreadcrumbs
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataDirectMessages
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataFallback
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataIgnoredUsers
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataPushRules
 
@@ -31,7 +45,8 @@ object MoshiProvider {
 
     private val moshi: Moshi = Moshi.Builder()
             .add(UriMoshiAdapter())
-            .add(RuntimeJsonAdapterFactory.of(UserAccountData::class.java, "type", UserAccountDataFallback::class.java)
+            .add(ForceToBooleanJsonAdapter())
+            .add(RuntimeJsonAdapterFactory.of(UserAccountData::class.java, "type", UserAccountDataEvent::class.java)
                     .registerSubtype(UserAccountDataDirectMessages::class.java, UserAccountData.TYPE_DIRECT_MESSAGES)
                     .registerSubtype(UserAccountDataIgnoredUsers::class.java, UserAccountData.TYPE_IGNORED_USER_LIST)
                     .registerSubtype(UserAccountDataPushRules::class.java, UserAccountData.TYPE_PUSH_RULES)
