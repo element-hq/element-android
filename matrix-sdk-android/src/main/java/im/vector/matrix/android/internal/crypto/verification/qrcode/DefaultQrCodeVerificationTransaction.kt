@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
+import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64Safe
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.verification.DefaultVerificationTransaction
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfo
@@ -200,7 +201,7 @@ internal class DefaultQrCodeVerificationTransaction(
             return
         }
 
-        if ((startReq.sharedSecret?.fromBase64()?.contentEquals(qrCodeData.sharedSecret.fromBase64()) == true)) {
+        if (startReq.sharedSecret?.fromBase64Safe()?.contentEquals(qrCodeData.sharedSecret.fromBase64()) == true) {
             // Ok, we can trust the other user
             // We can only trust the master key in this case
             // But first, ask the user for a confirmation

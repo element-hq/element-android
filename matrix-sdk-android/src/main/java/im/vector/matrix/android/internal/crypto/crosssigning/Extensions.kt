@@ -19,6 +19,7 @@ import android.util.Base64
 import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
+import timber.log.Timber
 
 fun CryptoDeviceInfo.canonicalSignable(): String {
     return JsonCanonicalizer.getCanonicalJson(Map::class.java, signalableJSONDictionary())
@@ -34,4 +35,16 @@ fun ByteArray.toBase64NoPadding(): String {
 
 fun String.fromBase64(): ByteArray {
     return Base64.decode(this, Base64.DEFAULT)
+}
+
+/**
+ * Decode the base 64. Return null in case of bad format. Should be used when parsing received data from external source
+ */
+fun String.fromBase64Safe(): ByteArray? {
+    return try {
+        Base64.decode(this, Base64.DEFAULT)
+    } catch (throwable: Throwable) {
+        Timber.e(throwable, "Unable to decode base64 string")
+        null
+    }
 }

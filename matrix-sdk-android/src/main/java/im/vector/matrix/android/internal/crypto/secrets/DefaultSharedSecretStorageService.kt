@@ -297,7 +297,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
 
         val iv = cipherContent.initializationVector?.fromBase64() ?: ByteArray(16)
 
-        val cipherRawBytes = cipherContent.ciphertext!!.fromBase64()
+        val cipherRawBytes = cipherContent.ciphertext?.fromBase64() ?: throw SharedSecretStorageError.BadCipherText
 
         val cipher = Cipher.getInstance("AES/CTR/NoPadding")
 

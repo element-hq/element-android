@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.crypto.crosssigning
 
+import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldBeTrue
 import org.junit.Test
 
@@ -28,5 +29,10 @@ class ExtensionsKtTest {
         "NMJyumnhMic".fromBase64().contentEquals("NMJyumnhMic".fromBase64()).shouldBeTrue()
         // With padding
         "NMJyumnhMic".fromBase64().contentEquals("NMJyumnhMic=".fromBase64()).shouldBeTrue()
+    }
+
+    @Test
+    fun testBadBase64() {
+        "===".fromBase64Safe().shouldBeNull()
     }
 }

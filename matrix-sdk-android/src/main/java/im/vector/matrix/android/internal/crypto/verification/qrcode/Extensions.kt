@@ -98,7 +98,7 @@ fun String.toQrCodeData(): QrCodeData? {
     val msb = byteArray[cursor].toUnsignedInt()
     val lsb = byteArray[cursor + 1].toUnsignedInt()
 
-    val transactionLength =  msb.shl(8) + lsb
+    val transactionLength = msb.shl(8) + lsb
 
     cursor++
     cursor++
