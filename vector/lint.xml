@@ -30,6 +30,7 @@
     <issue id="SetTextI18n" severity="error" />
     <issue id="ViewConstructor" severity="error" />
     <issue id="UseValueOf" severity="error" />
+    <issue id="Recycle" severity="error" />
 
     <!-- Ignore error from HtmlCompressor lib -->
     <issue id="InvalidPackage">

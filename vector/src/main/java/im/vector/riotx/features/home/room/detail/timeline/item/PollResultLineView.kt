@@ -73,11 +73,11 @@ class PollResultLineView @JvmOverloads constructor(
         orientation = HORIZONTAL
         ButterKnife.bind(this)
 
-        val typedArray = context.obtainStyledAttributes(attrs,
-                R.styleable.PollResultLineView, 0, 0)
+        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.PollResultLineView, 0, 0)
         label = typedArray.getString(R.styleable.PollResultLineView_optionName) ?: ""
         percent = typedArray.getString(R.styleable.PollResultLineView_optionCount) ?: ""
         optionSelected = typedArray.getBoolean(R.styleable.PollResultLineView_optionSelected, false)
         isWinner = typedArray.getBoolean(R.styleable.PollResultLineView_optionIsWinner, false)
+        typedArray.recycle()
     }
 }
