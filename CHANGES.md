@@ -17,7 +17,7 @@ SDK API changes ⚠️:
  - 
 
 Build 🧱:
- -
+ - Upgrade ktlint to version 0.36.0
 
 Other changes:
  -
