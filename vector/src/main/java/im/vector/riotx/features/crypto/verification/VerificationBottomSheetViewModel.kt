@@ -177,7 +177,12 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                                                 session
                                                         .cryptoService()
                                                         .verificationService()
-                                                        .requestKeyVerificationInDMs(supportedVerificationMethodsProvider.provide(), otherUserId, data, pendingLocalId)
+                                                        .requestKeyVerificationInDMs(
+                                                                supportedVerificationMethodsProvider.provide(),
+                                                                otherUserId,
+                                                                data,
+                                                                pendingLocalId
+                                                        )
                                         )
                                 )
                             }
@@ -298,8 +303,6 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 } catch (failure: Throwable) {
                     _viewEvents.post(VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage))
                 }
-
-                Unit
             }
         }.exhaustive
     }
