@@ -9,6 +9,7 @@
     <issue id="IconXmlAndPng" severity="error" />
     <issue id="IconDipSize" severity="error" />
     <issue id="IconDuplicatesConfig" severity="error" />
+    <issue id="IconDuplicates" severity="error" />
 
     <!-- UX -->
     <issue id="ButtonOrder" severity="error" />
