@@ -35,7 +35,7 @@ import im.vector.matrix.android.api.session.securestorage.SsssKeySpec
 import im.vector.matrix.android.api.session.securestorage.SsssPassphrase
 import im.vector.matrix.android.internal.crypto.SSSS_ALGORITHM_AES_HMAC_SHA2
 import im.vector.matrix.android.internal.crypto.SSSS_ALGORITHM_CURVE25519_AES_SHA2
-import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64NoPadding
+import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
 import im.vector.matrix.android.internal.crypto.crosssigning.toBase64NoPadding
 import im.vector.matrix.android.internal.crypto.keysbackup.generatePrivateKeyWithPassword
 import im.vector.matrix.android.internal.crypto.keysbackup.util.computeRecoveryKey
@@ -268,7 +268,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         val ivParameterSpec = IvParameterSpec(iv)
         cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec)
         // secret are not that big, just do Final
-        val cipherBytes = cipher.doFinal(clearDataBase64.fromBase64NoPadding())
+        val cipherBytes = cipher.doFinal(clearDataBase64.fromBase64())
         require(cipherBytes.isNotEmpty())
 
         val macKeySpec = SecretKeySpec(macKey, "HmacSHA256")
@@ -295,9 +295,9 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         val aesKey = pseudoRandomKey.copyOfRange(0, 32)
         val macKey = pseudoRandomKey.copyOfRange(32, 64)
 
-        val iv = cipherContent.initializationVector?.fromBase64NoPadding() ?: ByteArray(16)
+        val iv = cipherContent.initializationVector?.fromBase64() ?: ByteArray(16)
 
-        val cipherRawBytes = cipherContent.ciphertext!!.fromBase64NoPadding()
+        val cipherRawBytes = cipherContent.ciphertext!!.fromBase64()
 
         val cipher = Cipher.getInstance("AES/CTR/NoPadding")
 
@@ -314,7 +314,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         val mac = Mac.getInstance("HmacSHA256").apply { init(macKeySpec) }
         val digest = mac.doFinal(cipherRawBytes)
 
-        if (!cipherContent.mac?.fromBase64NoPadding()?.contentEquals(digest).orFalse()) {
+        if (!cipherContent.mac?.fromBase64()?.contentEquals(digest).orFalse()) {
             throw SharedSecretStorageError.BadMac
         } else {
             // we are good
