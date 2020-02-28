@@ -85,6 +85,7 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
                     )
                 } catch (e: MXCryptoError) {
                     Timber.e("## SAS Failed to decrypt event: ${event.eventId}")
+                    params.verificationService.onPotentiallyInterestingEventRoomFailToDecrypt(event)
                 }
             }
             Timber.v("## SAS Verification live observer: received msgId: ${event.eventId} type: ${event.getClearType()}")

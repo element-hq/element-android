@@ -35,6 +35,7 @@ import im.vector.matrix.android.api.session.crypto.verification.safeValueOf
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.LocalEcho
+import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageRelationContent
@@ -54,6 +55,7 @@ import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAct
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
+import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationCancel
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationKey
@@ -352,6 +354,27 @@ internal class DefaultVerificationService @Inject constructor(
         * If both parties send an m.key.verification.start event, but they specify different verification methods,
         * the verification should be cancelled with a code of m.unexpected_message.
          */
+    }
+
+    override fun onPotentiallyInterestingEventRoomFailToDecrypt(event: Event) {
+        // When Should/Can we cancel??
+        val relationContent = event.content.toModel<EncryptedEventContent>()?.relatesTo
+        if (relationContent?.type == RelationType.REFERENCE) {
+            val relatedId = relationContent.eventId ?: return
+            // at least if request was sent by me, I can safely cancel without interfering
+            pendingRequests[event.senderId]?.firstOrNull {
+                it.transactionId == relatedId && !it.isIncoming
+            }?.let { pr ->
+                verificationTransportRoomMessageFactory.createTransport(event.roomId ?: "", null)
+                        .cancelTransaction(
+                                relatedId,
+                                event.senderId ?: "",
+                                event.getSenderKey() ?: "",
+                                CancelCode.InvalidMessage
+                        )
+                updatePendingRequest(pr.copy(cancelConclusion = CancelCode.InvalidMessage))
+            }
+        }
     }
 
     private suspend fun onRoomStartRequestReceived(event: Event) {

@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session.crypto.verification
 
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.LocalEcho
 
 /**
@@ -136,4 +137,6 @@ interface VerificationService {
             return age in tooInThePast..tooInTheFuture
         }
     }
+
+    fun onPotentiallyInterestingEventRoomFailToDecrypt(event: Event)
 }
