@@ -25,7 +25,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.pushrules.rest.PushRuleAndKind
 import im.vector.riotx.R
-import im.vector.riotx.core.preference.BingRulePreference
+import im.vector.riotx.core.preference.PushRulePreference
 import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.notifications.NotificationUtils
@@ -92,7 +92,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor(
 
         for (preferenceKey in prefKeyToPushRuleId.keys) {
             val preference = findPreference<VectorPreference>(preferenceKey)
-            if (preference is BingRulePreference) {
+            if (preference is PushRulePreference) {
                 // preference.isEnabled = null != rules && isConnected && pushManager.areDeviceNotificationsAllowed()
                 val ruleAndKind: PushRuleAndKind? = session.getPushRules().findDefaultRule(prefKeyToPushRuleId[preferenceKey])
 

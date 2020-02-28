@@ -27,7 +27,7 @@ import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.pushrules.rest.PushRuleAndKind
 import im.vector.riotx.R
 
-class BingRulePreference : VectorPreference {
+class PushRulePreference : VectorPreference {
 
     /**
      * @return the selected push rule and its kind
@@ -42,7 +42,7 @@ class BingRulePreference : VectorPreference {
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
     init {
-        layoutResource = R.layout.vector_preference_bing_rule
+        layoutResource = R.layout.vector_preference_push_rule
     }
 
     /**
