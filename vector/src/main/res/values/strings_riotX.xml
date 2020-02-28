@@ -12,6 +12,10 @@
 
     <!-- BEGIN Strings added by Benoit -->
     <string name="settings_notification_configuration">Notifications configuration</string>
+    <string name="settings_messages_at_room">Messages containing @room</string>
+    <string name="settings_messages_in_e2e_one_to_one">Encrypted messages in one-to-one chats</string>
+    <string name="settings_messages_in_e2e_group_chat">Encrypted messages in group chats</string>
+    <string name="settings_when_rooms_are_upgraded">When rooms are upgraded</string>
     <!-- END Strings added by Benoit -->
 
 

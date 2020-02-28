@@ -118,23 +118,27 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor(
                         if (newRule != null) {
                             displayLoadingView()
 
-                            session.updatePushRuleActions(ruleAndKind.kind, preference.ruleAndKind?.pushRule ?: ruleAndKind.pushRule, newRule, object : MatrixCallback<Unit> {
-                                override fun onSuccess(data: Unit) {
-                                    if (!isAdded) {
-                                        return
-                                    }
-                                    preference.setPushRule(ruleAndKind.copy(pushRule = newRule))
-                                    hideLoadingView()
-                                }
+                            session.updatePushRuleActions(
+                                    ruleAndKind.kind,
+                                    preference.ruleAndKind?.pushRule ?: ruleAndKind.pushRule,
+                                    newRule,
+                                    object : MatrixCallback<Unit> {
+                                        override fun onSuccess(data: Unit) {
+                                            if (!isAdded) {
+                                                return
+                                            }
+                                            preference.setPushRule(ruleAndKind.copy(pushRule = newRule))
+                                            hideLoadingView()
+                                        }
 
-                                override fun onFailure(failure: Throwable) {
-                                    if (!isAdded) {
-                                        return
-                                    }
-                                    hideLoadingView()
-                                    activity?.toast(errorFormatter.toHumanReadable(failure))
-                                }
-                            })
+                                        override fun onFailure(failure: Throwable) {
+                                            if (!isAdded) {
+                                                return
+                                            }
+                                            hideLoadingView()
+                                            activity?.toast(errorFormatter.toHumanReadable(failure))
+                                        }
+                                    })
                         }
                         false
                     }
@@ -216,14 +220,18 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor(
         private const val REQUEST_NOTIFICATION_RINGTONE = 888
 
         //  preference name <-> rule Id
-        private var mPrefKeyToBingRuleId = mapOf(
+        private val mPrefKeyToBingRuleId = mapOf(
                 VectorPreferences.SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY to PushRule.RULE_ID_CONTAIN_DISPLAY_NAME,
                 VectorPreferences.SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY to PushRule.RULE_ID_CONTAIN_USER_NAME,
                 VectorPreferences.SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY to PushRule.RULE_ID_ONE_TO_ONE_ROOM,
                 VectorPreferences.SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY to PushRule.RULE_ID_ALL_OTHER_MESSAGES_ROOMS,
                 VectorPreferences.SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY to PushRule.RULE_ID_INVITE_ME,
                 VectorPreferences.SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY to PushRule.RULE_ID_CALL,
-                VectorPreferences.SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY to PushRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS
+                VectorPreferences.SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY to PushRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS,
+                VectorPreferences.SETTINGS_MESSAGES_CONTAINING_AT_ROOM_PREFERENCE_KEY to PushRule.RULE_ID_AT_ROOMS,
+                VectorPreferences.SETTINGS_MESSAGES_IN_E2E_ONE_ONE_CHAT_PREFERENCE_KEY to PushRule.RULE_ID_E2E_ONE_TO_ONE_ROOM,
+                VectorPreferences.SETTINGS_MESSAGES_IN_E2E_GROUP_CHAT_PREFERENCE_KEY to PushRule.RULE_ID_E2E_GROUP,
+                VectorPreferences.SETTINGS_ROOMS_UPGRADED_KEY to PushRule.RULE_ID_TOMBSTONE
         )
     }
 }
