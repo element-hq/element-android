@@ -42,7 +42,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
     override fun bindPref() {
         findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY)!!.let { pref ->
             val pushRuleService = session
-            val mRuleMaster = pushRuleService.getPushRules()
+            val mRuleMaster = pushRuleService.getPushRules().getAllRules()
                     .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
 
             if (mRuleMaster == null) {
@@ -105,7 +105,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
     private fun updateEnabledForAccount(preference: Preference?) {
         val pushRuleService = session
         val switchPref = preference as SwitchPreference
-        pushRuleService.getPushRules()
+        pushRuleService.getPushRules().getAllRules()
                 .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
                 ?.let {
                     // Trick, we must enable this room to disable notifications

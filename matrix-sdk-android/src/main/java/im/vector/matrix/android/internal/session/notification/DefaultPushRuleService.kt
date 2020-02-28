@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.pushrules.RuleKind
 import im.vector.matrix.android.api.pushrules.RuleSetKey
 import im.vector.matrix.android.api.pushrules.getActions
 import im.vector.matrix.android.api.pushrules.rest.PushRule
+import im.vector.matrix.android.api.pushrules.rest.RuleSet
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.database.mapper.PushRulesMapper
@@ -55,7 +56,7 @@ internal class DefaultPushRuleService @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
-    override fun getPushRules(scope: String): List<PushRule> {
+    override fun getPushRules(scope: String): RuleSet {
         var contentRules: List<PushRule> = emptyList()
         var overrideRules: List<PushRule> = emptyList()
         var roomRules: List<PushRule> = emptyList()
@@ -90,8 +91,13 @@ internal class DefaultPushRuleService @Inject constructor(
                     }
         }
 
-        // Ref. for the order: https://matrix.org/docs/spec/client_server/latest#push-rules
-        return overrideRules + contentRules + roomRules + senderRules + underrideRules
+        return RuleSet(
+                content = contentRules,
+                override = overrideRules,
+                room = roomRules,
+                sender = senderRules,
+                underride = underrideRules
+        )
     }
 
     override fun updatePushRuleEnableStatus(kind: RuleKind, pushRule: PushRule, enabled: Boolean, callback: MatrixCallback<Unit>): Cancelable {

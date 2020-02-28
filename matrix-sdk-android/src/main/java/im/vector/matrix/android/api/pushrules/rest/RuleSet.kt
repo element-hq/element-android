@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
  * Ref: https://matrix.org/docs/spec/client_server/latest#get-matrix-client-r0-pushrules
  */
 @JsonClass(generateAdapter = true)
-internal data class RuleSet(
+data class RuleSet(
         @Json(name = "content")
         val content: List<PushRule>? = null,
         @Json(name = "override")
@@ -33,4 +33,9 @@ internal data class RuleSet(
         val sender: List<PushRule>? = null,
         @Json(name = "underride")
         val underride: List<PushRule>? = null
-)
+) {
+    fun getAllRules(): List<PushRule> {
+        // Ref. for the order: https://matrix.org/docs/spec/client_server/latest#push-rules
+        return override.orEmpty() + content.orEmpty() + room.orEmpty() + sender.orEmpty() + underride.orEmpty()
+    }
+}

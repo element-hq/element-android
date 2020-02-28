@@ -35,7 +35,7 @@ class PushRulesViewModel(initialState: PushRulesViewState)
 
         override fun initialState(viewModelContext: ViewModelContext): PushRulesViewState? {
             val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
-            val rules = session.getPushRules()
+            val rules = session.getPushRules().getAllRules()
             return PushRulesViewState(rules)
         }
     }

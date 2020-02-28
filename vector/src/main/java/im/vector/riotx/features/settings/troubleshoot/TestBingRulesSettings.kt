@@ -40,7 +40,7 @@ class TestBingRulesSettings @Inject constructor(private val activeSessionHolder:
 
     override fun perform() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
-        val pushRules = session.getPushRules()
+        val pushRules = session.getPushRules().getAllRules()
         var oneOrMoreRuleIsOff = false
         var oneOrMoreRuleAreSilent = false
         testedRules.forEach { ruleId ->

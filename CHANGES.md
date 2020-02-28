@@ -14,7 +14,7 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
- - 
+ - PushRuleService.getPushRules() now returns a RuleSet. Use getAllRules() on this object to get all the rules.
 
 Build 🧱:
  -

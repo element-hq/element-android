@@ -17,6 +17,7 @@ package im.vector.matrix.android.api.pushrules
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.pushrules.rest.PushRule
+import im.vector.matrix.android.api.pushrules.rest.RuleSet
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.util.Cancelable
 
@@ -27,8 +28,7 @@ interface PushRuleService {
      */
     fun fetchPushRules(scope: String = RuleScope.GLOBAL)
 
-    // TODO get push rule set
-    fun getPushRules(scope: String = RuleScope.GLOBAL): List<PushRule>
+    fun getPushRules(scope: String = RuleScope.GLOBAL): RuleSet
 
     // TODO update rule
 
