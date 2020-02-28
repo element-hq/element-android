@@ -19,30 +19,39 @@ package im.vector.matrix.android.api.pushrules.rest
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+/**
+ * Ref: https://matrix.org/docs/spec/client_server/latest#get-matrix-client-r0-pushrules
+ */
 @JsonClass(generateAdapter = true)
 data class PushRule(
         /**
          * Required. The actions to perform when this rule is matched.
          */
+        @Json(name = "actions")
         val actions: List<Any>,
         /**
          * Required. Whether this is a default rule, or has been set explicitly.
          */
+        @Json(name = "default")
         val default: Boolean? = false,
         /**
          * Required. Whether the push rule is enabled or not.
          */
+        @Json(name = "enabled")
         val enabled: Boolean,
         /**
          * Required. The ID of this rule.
          */
-        @Json(name = "rule_id") val ruleId: String,
+        @Json(name = "rule_id")
+        val ruleId: String,
         /**
          * The conditions that must hold true for an event in order for a rule to be applied to an event
          */
+        @Json(name = "conditions")
         val conditions: List<PushCondition>? = null,
         /**
          * The glob-style pattern to match against. Only applicable to content rules.
          */
+        @Json(name = "pattern")
         val pattern: String? = null
 )
