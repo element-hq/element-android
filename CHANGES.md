@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Fix crash on attachment preview screen (#1088)
 
 Translations 🗣:
  -
