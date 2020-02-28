@@ -32,6 +32,7 @@ import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.pushers.AddPushRuleTask
 import im.vector.matrix.android.internal.session.pushers.GetPushRulesTask
 import im.vector.matrix.android.internal.session.pushers.RemovePushRuleTask
+import im.vector.matrix.android.internal.session.pushers.UpdatePushRuleActionsTask
 import im.vector.matrix.android.internal.session.pushers.UpdatePushRuleEnableStatusTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -43,6 +44,7 @@ internal class DefaultPushRuleService @Inject constructor(
         private val getPushRulesTask: GetPushRulesTask,
         private val updatePushRuleEnableStatusTask: UpdatePushRuleEnableStatusTask,
         private val addPushRuleTask: AddPushRuleTask,
+        private val updatePushRuleActionsTask: UpdatePushRuleActionsTask,
         private val removePushRuleTask: RemovePushRuleTask,
         private val taskExecutor: TaskExecutor,
         private val monarchy: Monarchy
@@ -112,6 +114,14 @@ internal class DefaultPushRuleService @Inject constructor(
     override fun addPushRule(kind: RuleKind, pushRule: PushRule, callback: MatrixCallback<Unit>): Cancelable {
         return addPushRuleTask
                 .configureWith(AddPushRuleTask.Params(kind, pushRule)) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun updatePushRuleActions(kind: RuleKind, oldPushRule: PushRule, newPushRule: PushRule, callback: MatrixCallback<Unit>): Cancelable {
+        return updatePushRuleActionsTask
+                .configureWith(UpdatePushRuleActionsTask.Params(kind, oldPushRule, newPushRule)) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)

@@ -47,6 +47,7 @@ internal interface PushRulesApi {
 
     /**
      * Update the ruleID action
+     * Ref: https://matrix.org/docs/spec/client_server/latest#put-matrix-client-r0-pushrules-scope-kind-ruleid-actions
      *
      * @param kind    the notification kind (sender, room...)
      * @param ruleId  the ruleId

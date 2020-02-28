@@ -67,7 +67,7 @@ class BingRulePreference : VectorPreference {
             if (safeRule.enabled) {
                 return if (safeRule.shouldNotNotify()) {
                     NOTIFICATION_OFF_INDEX
-                } else if (null != safeRule.getNotificationSound()) {
+                } else if (safeRule.getNotificationSound() != null) {
                     NOTIFICATION_NOISY_INDEX
                 } else {
                     NOTIFICATION_SILENT_INDEX
@@ -104,7 +104,7 @@ class BingRulePreference : VectorPreference {
      * @param index index
      * @return a push rule with the updated flags / null if there is no update
      */
-    fun createRule(index: Int): PushRule? {
+    fun createNewRule(index: Int): PushRule? {
         val safeRule = ruleAndKind?.pushRule ?: return null
         val safeKind = ruleAndKind?.kind ?: return null
 
@@ -114,6 +114,7 @@ class BingRulePreference : VectorPreference {
                     NOTIFICATION_OFF_INDEX    -> {
                         safeRule.copy(enabled = true)
                                 .setNotify(false)
+                                .removeNotificationSound()
                     }
                     NOTIFICATION_SILENT_INDEX -> {
                         safeRule.copy(enabled = false)

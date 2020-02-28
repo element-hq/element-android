@@ -23,11 +23,13 @@ import android.os.Parcelable
 import androidx.core.content.edit
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.pushrules.rest.PushRuleAndKind
 import im.vector.riotx.R
 import im.vector.riotx.core.preference.BingRulePreference
 import im.vector.riotx.core.preference.VectorPreference
+import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.notifications.NotificationUtils
 import javax.inject.Inject
 
@@ -112,29 +114,27 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor(
                     preference.isVisible = true
                     preference.setPushRule(ruleAndKind)
                     preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                        val rule2 = preference.createRule(newValue as Int)
-                        if (null != rule2) {
-                            /*
-                              TODO
-                           displayLoadingView()
-                            session.dataHandler.bingRulesManager.updateRule(preference.rule,
-                                    rule,
-                                    object : BingRulesManager.onBingRuleUpdateListener {
-                                        private fun onDone() {
-                                            refreshDisplay()
-                                            hideLoadingView()
-                                        }
+                        val newRule = preference.createNewRule(newValue as Int)
+                        if (newRule != null) {
+                            displayLoadingView()
 
-                                        override fun onBingRuleUpdateSuccess() {
-                                            onDone()
-                                        }
+                            session.updatePushRuleActions(ruleAndKind.kind, preference.ruleAndKind?.pushRule ?: ruleAndKind.pushRule, newRule, object : MatrixCallback<Unit> {
+                                override fun onSuccess(data: Unit) {
+                                    if (!isAdded) {
+                                        return
+                                    }
+                                    preference.setPushRule(ruleAndKind.copy(pushRule = newRule))
+                                    hideLoadingView()
+                                }
 
-                                        override fun onBingRuleUpdateFailure(errorMessage: String) {
-                                            activity?.toast(errorMessage)
-                                            onDone()
-                                        }
-                                    })
-                                    */
+                                override fun onFailure(failure: Throwable) {
+                                    if (!isAdded) {
+                                        return
+                                    }
+                                    hideLoadingView()
+                                    activity?.toast(errorFormatter.toHumanReadable(failure))
+                                }
+                            })
                         }
                         false
                     }

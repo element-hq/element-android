@@ -22,7 +22,6 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.util.Cancelable
 
 interface PushRuleService {
-
     /**
      * Fetch the push rules from the server
      */
@@ -30,11 +29,11 @@ interface PushRuleService {
 
     fun getPushRules(scope: String = RuleScope.GLOBAL): RuleSet
 
-    // TODO update rule
-
     fun updatePushRuleEnableStatus(kind: RuleKind, pushRule: PushRule, enabled: Boolean, callback: MatrixCallback<Unit>): Cancelable
 
     fun addPushRule(kind: RuleKind, pushRule: PushRule, callback: MatrixCallback<Unit>): Cancelable
+
+    fun updatePushRuleActions(kind: RuleKind, oldPushRule: PushRule, newPushRule: PushRule, callback: MatrixCallback<Unit>): Cancelable
 
     fun removePushRule(kind: RuleKind, pushRule: PushRule, callback: MatrixCallback<Unit>): Cancelable
 

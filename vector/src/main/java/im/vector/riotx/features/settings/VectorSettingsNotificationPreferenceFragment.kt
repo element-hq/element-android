@@ -114,7 +114,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                             !switchPref.isChecked,
                             object : MatrixCallback<Unit> {
                                 override fun onSuccess(data: Unit) {
-                                    // Push rules will be updated form the sync
+                                    // Push rules will be updated from the sync
                                 }
 
                                 override fun onFailure(failure: Throwable) {
