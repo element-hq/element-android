@@ -299,14 +299,21 @@ internal abstract class SASDefaultVerificationTransaction(
         }
 
         // If not me sign his MSK and upload the signature
-        if (otherMasterKeyIsVerified && otherUserId != userId) {
+        if (otherMasterKeyIsVerified) {
             // we should trust this master key
             // And check verification MSK -> SSK?
-            crossSigningService.trustUser(otherUserId, object : MatrixCallback<Unit> {
-                override fun onFailure(failure: Throwable) {
-                    Timber.e(failure, "## SAS Verification: Failed to trust User $otherUserId")
+            if (otherUserId != userId) {
+                crossSigningService.trustUser(otherUserId, object : MatrixCallback<Unit> {
+                    override fun onFailure(failure: Throwable) {
+                        Timber.e(failure, "## SAS Verification: Failed to trust User $otherUserId")
+                    }
+                })
+            } else {
+                // Notice other master key is mine because other is me
+                if (otherMasterKey?.trustLevel?.isVerified() == false) {
+                    crossSigningService.markMyMasterKeyAsTrusted()
                 }
-            })
+            }
         }
 
         if (otherUserId == userId) {
