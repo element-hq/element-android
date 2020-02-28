@@ -80,7 +80,7 @@ internal class DefaultCrossSigningService @Inject constructor(
 
                 cryptoStore.getCrossSigningPrivateKeys()?.let { privateKeysInfo ->
                     privateKeysInfo.master
-                            ?.fromBase64NoPadding()
+                            ?.fromBase64()
                             ?.let { privateKeySeed ->
                                 val pkSigning = OlmPkSigning()
                                 if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.masterKey()?.unpaddedBase64PublicKey) {
@@ -93,7 +93,7 @@ internal class DefaultCrossSigningService @Inject constructor(
                                 }
                             }
                     privateKeysInfo.user
-                            ?.fromBase64NoPadding()
+                            ?.fromBase64()
                             ?.let { privateKeySeed ->
                                 val pkSigning = OlmPkSigning()
                                 if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.userKey()?.unpaddedBase64PublicKey) {
@@ -106,7 +106,7 @@ internal class DefaultCrossSigningService @Inject constructor(
                                 }
                             }
                     privateKeysInfo.selfSigned
-                            ?.fromBase64NoPadding()
+                            ?.fromBase64()
                             ?.let { privateKeySeed ->
                                 val pkSigning = OlmPkSigning()
                                 if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.selfSigningKey()?.unpaddedBase64PublicKey) {
@@ -307,7 +307,7 @@ internal class DefaultCrossSigningService @Inject constructor(
         var userKeyIsTrusted = false
         var selfSignedKeyIsTrusted = false
 
-        masterKeyPrivateKey?.fromBase64NoPadding()
+        masterKeyPrivateKey?.fromBase64()
                 ?.let { privateKeySeed ->
                     val pkSigning = OlmPkSigning()
                     try {
@@ -324,7 +324,7 @@ internal class DefaultCrossSigningService @Inject constructor(
                     }
                 }
 
-        uskKeyPrivateKey?.fromBase64NoPadding()
+        uskKeyPrivateKey?.fromBase64()
                 ?.let { privateKeySeed ->
                     val pkSigning = OlmPkSigning()
                     try {
@@ -341,7 +341,7 @@ internal class DefaultCrossSigningService @Inject constructor(
                     }
                 }
 
-        sskPrivateKey?.fromBase64NoPadding()
+        sskPrivateKey?.fromBase64()
                 ?.let { privateKeySeed ->
                     val pkSigning = OlmPkSigning()
                     try {
@@ -450,7 +450,7 @@ internal class DefaultCrossSigningService @Inject constructor(
         // 1) check if I know the private key
         val masterPrivateKey = cryptoStore.getCrossSigningPrivateKeys()
                 ?.master
-                ?.fromBase64NoPadding()
+                ?.fromBase64()
 
         var isMaterKeyTrusted = false
         if (myMasterKey.trustLevel?.locallyVerified == true) {
