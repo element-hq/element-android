@@ -36,29 +36,36 @@
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
-    <!-- For API < 26 -->
-    <im.vector.riotx.core.preference.VectorPreference
-        android:dialogTitle="@string/settings_notification_ringtone"
-        android:key="SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY"
-        android:title="@string/settings_notification_ringtone" />
-
-    <!-- For API >= 26 -->
-    <im.vector.riotx.core.preference.VectorPreference
-        android:key="SETTINGS_SYSTEM_NOISY_NOTIFICATION_PREFERENCE_KEY"
+    <im.vector.riotx.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_NOTIFICATION_CONFIGURATION"
         android:persistent="false"
-        android:summary="@string/settings_system_preferences_summary"
-        android:title="@string/settings_noisy_notifications_preferences" />
+        android:title="@string/settings_notification_configuration">
 
-    <im.vector.riotx.core.preference.VectorPreference
-        android:key="SETTINGS_SYSTEM_SILENT_NOTIFICATION_PREFERENCE_KEY"
-        android:persistent="false"
-        android:summary="@string/settings_system_preferences_summary"
-        android:title="@string/settings_silent_notifications_preferences" />
+        <!-- For API < 26 -->
+        <im.vector.riotx.core.preference.VectorPreference
+            android:dialogTitle="@string/settings_notification_ringtone"
+            android:key="SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY"
+            android:title="@string/settings_notification_ringtone" />
 
-    <im.vector.riotx.core.preference.VectorPreference
-        android:key="SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY"
-        android:persistent="false"
-        android:summary="@string/settings_system_preferences_summary"
-        android:title="@string/settings_call_notifications_preferences" />
+        <!-- For API >= 26 -->
+        <im.vector.riotx.core.preference.VectorPreference
+            android:key="SETTINGS_SYSTEM_NOISY_NOTIFICATION_PREFERENCE_KEY"
+            android:persistent="false"
+            android:summary="@string/settings_system_preferences_summary"
+            android:title="@string/settings_noisy_notifications_preferences" />
+
+        <im.vector.riotx.core.preference.VectorPreference
+            android:key="SETTINGS_SYSTEM_SILENT_NOTIFICATION_PREFERENCE_KEY"
+            android:persistent="false"
+            android:summary="@string/settings_system_preferences_summary"
+            android:title="@string/settings_silent_notifications_preferences" />
+
+        <im.vector.riotx.core.preference.VectorPreference
+            android:key="SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY"
+            android:persistent="false"
+            android:summary="@string/settings_system_preferences_summary"
+            android:title="@string/settings_call_notifications_preferences" />
+
+    </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

@@ -23,8 +23,9 @@ import android.os.Parcelable
 import androidx.core.content.edit
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
+import im.vector.matrix.android.api.pushrules.rest.PushRule
+import im.vector.matrix.android.api.pushrules.rest.PushRuleAndKind
 import im.vector.riotx.R
-import im.vector.riotx.core.preference.BingRule
 import im.vector.riotx.core.preference.BingRulePreference
 import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.features.notifications.NotificationUtils
@@ -102,14 +103,14 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor(
             val preference = findPreference<VectorPreference>(preferenceKey)
             if (preference is BingRulePreference) {
                 // preference.isEnabled = null != rules && isConnected && pushManager.areDeviceNotificationsAllowed()
-                val rule: BingRule? = null // TODO session.dataHandler.pushRules()?.findDefaultRule(mPrefKeyToBingRuleId[preferenceKey])
+                val ruleAndKind: PushRuleAndKind? = session.getPushRules().findDefaultRule(mPrefKeyToBingRuleId[preferenceKey])
 
-                if (rule == null) {
+                if (ruleAndKind == null) {
                     // The rule is not defined, hide the preference
                     preference.isVisible = false
                 } else {
                     preference.isVisible = true
-                    preference.setBingRule(rule)
+                    preference.setPushRule(ruleAndKind)
                     preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                         val rule2 = preference.createRule(newValue as Int)
                         if (null != rule2) {
@@ -181,7 +182,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor(
                         val rule = it.findDefaultRule(ruleId)
                         var isEnabled = null != rule && rule.isEnabled
 
-                        if (TextUtils.equals(ruleId, BingRule.RULE_ID_DISABLE_ALL) || TextUtils.equals(ruleId, BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
+                        if (TextUtils.equals(ruleId, PushRule.RULE_ID_DISABLE_ALL) || TextUtils.equals(ruleId, PushRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
                             isEnabled = !isEnabled
                         } else if (isEnabled) {
                             val domainActions = rule!!.domainActions
@@ -191,7 +192,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor(
                                 isEnabled = false
                             } else if (1 == domainActions.size) {
                                 try {
-                                    isEnabled = !TextUtils.equals(domainActions[0] as String, BingRule.ACTION_DONT_NOTIFY)
+                                    isEnabled = !TextUtils.equals(domainActions[0] as String, PushRule.ACTION_DONT_NOTIFY)
                                 } catch (e: Exception) {
                                     Timber.e(e, "## refreshPreferences failed")
                                 }
@@ -216,13 +217,13 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor(
 
         //  preference name <-> rule Id
         private var mPrefKeyToBingRuleId = mapOf(
-                VectorPreferences.SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY to BingRule.RULE_ID_CONTAIN_DISPLAY_NAME,
-                VectorPreferences.SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY to BingRule.RULE_ID_CONTAIN_USER_NAME,
-                VectorPreferences.SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY to BingRule.RULE_ID_ONE_TO_ONE_ROOM,
-                VectorPreferences.SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY to BingRule.RULE_ID_ALL_OTHER_MESSAGES_ROOMS,
-                VectorPreferences.SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY to BingRule.RULE_ID_INVITE_ME,
-                VectorPreferences.SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY to BingRule.RULE_ID_CALL,
-                VectorPreferences.SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY to BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS
+                VectorPreferences.SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY to PushRule.RULE_ID_CONTAIN_DISPLAY_NAME,
+                VectorPreferences.SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY to PushRule.RULE_ID_CONTAIN_USER_NAME,
+                VectorPreferences.SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY to PushRule.RULE_ID_ONE_TO_ONE_ROOM,
+                VectorPreferences.SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY to PushRule.RULE_ID_ALL_OTHER_MESSAGES_ROOMS,
+                VectorPreferences.SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY to PushRule.RULE_ID_INVITE_ME,
+                VectorPreferences.SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY to PushRule.RULE_ID_CALL,
+                VectorPreferences.SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY to PushRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS
         )
     }
 }

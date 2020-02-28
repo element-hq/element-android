@@ -22,49 +22,17 @@ import android.view.View
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.preference.PreferenceViewHolder
+import im.vector.matrix.android.api.pushrules.RuleSetKey
+import im.vector.matrix.android.api.pushrules.rest.PushRule
+import im.vector.matrix.android.api.pushrules.rest.PushRuleAndKind
 import im.vector.riotx.R
-
-// TODO Replace by real Bingrule class, then delete
-@Suppress("UNUSED_PARAMETER")
-class BingRule(rule: BingRule) {
-    fun shouldNotNotify() = false
-    fun shouldNotify() = false
-    fun setNotify(b: Boolean) {
-    }
-
-    fun setHighlight(b: Boolean) {
-    }
-
-    fun removeNotificationSound() {
-    }
-
-    val ruleId: CharSequence? = null
-    var isEnabled = false
-    var notificationSound: String? = null
-    val kind: CharSequence? = null
-
-    companion object {
-        const val RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS = "TODO"
-        const val ACTION_VALUE_DEFAULT = "TODO"
-        const val KIND_UNDERRIDE = "TODO"
-        const val RULE_ID_INVITE_ME = "TODO"
-        const val RULE_ID_CALL = "TODO"
-        const val ACTION_VALUE_RING = "TODO"
-        const val RULE_ID_DISABLE_ALL = "TODO"
-        const val ACTION_DONT_NOTIFY = "TODO"
-        const val RULE_ID_CONTAIN_DISPLAY_NAME = "TODO"
-        const val RULE_ID_CONTAIN_USER_NAME = "TODO"
-        const val RULE_ID_ONE_TO_ONE_ROOM = "TODO"
-        const val RULE_ID_ALL_OTHER_MESSAGES_ROOMS = "TODO"
-    }
-}
 
 class BingRulePreference : VectorPreference {
 
     /**
-     * @return the selected bing rule
+     * @return the selected push rule and its kind
      */
-    var rule: BingRule? = null
+    var ruleAndKind: PushRuleAndKind? = null
         private set
 
     constructor(context: Context) : super(context)
@@ -80,29 +48,29 @@ class BingRulePreference : VectorPreference {
     /**
      * @return the bing rule status index
      */
-    val ruleStatusIndex: Int
+    private val ruleStatusIndex: Int
         get() {
-            if (null != rule) {
-                if (rule!!.ruleId == BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
-                    if (rule!!.shouldNotNotify()) {
-                        return if (rule!!.isEnabled) {
-                            NOTIFICATION_OFF_INDEX
-                        } else {
-                            NOTIFICATION_SILENT_INDEX
-                        }
-                    } else if (rule!!.shouldNotify()) {
-                        return NOTIFICATION_NOISY_INDEX
-                    }
-                }
+            val safeRule = ruleAndKind?.pushRule ?: return NOTIFICATION_OFF_INDEX
 
-                if (rule!!.isEnabled) {
-                    return if (rule!!.shouldNotNotify()) {
+            if (safeRule.ruleId == PushRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
+                if (safeRule.shouldNotNotify()) {
+                    return if (safeRule.enabled) {
                         NOTIFICATION_OFF_INDEX
-                    } else if (null != rule!!.notificationSound) {
-                        NOTIFICATION_NOISY_INDEX
                     } else {
                         NOTIFICATION_SILENT_INDEX
                     }
+                } else if (safeRule.shouldNotify()) {
+                    return NOTIFICATION_NOISY_INDEX
+                }
+            }
+
+            if (safeRule.enabled) {
+                return if (safeRule.shouldNotNotify()) {
+                    NOTIFICATION_OFF_INDEX
+                } else if (null != safeRule.getNotificationSound()) {
+                    NOTIFICATION_NOISY_INDEX
+                } else {
+                    NOTIFICATION_SILENT_INDEX
                 }
             }
 
@@ -110,12 +78,12 @@ class BingRulePreference : VectorPreference {
         }
 
     /**
-     * Update the bing rule.
+     * Update the push rule.
      *
-     * @param aBingRule
+     * @param pushRule
      */
-    fun setBingRule(aBingRule: BingRule) {
-        rule = aBingRule
+    fun setPushRule(pushRuleAndKind: PushRuleAndKind?) {
+        ruleAndKind = pushRuleAndKind
         refreshSummary()
     }
 
@@ -131,63 +99,63 @@ class BingRulePreference : VectorPreference {
     }
 
     /**
-     * Create a bing rule with the updated required at index.
+     * Create a push rule with the updated required at index.
      *
      * @param index index
-     * @return a bing rule with the updated flags / null if there is no update
+     * @return a push rule with the updated flags / null if there is no update
      */
-    fun createRule(index: Int): BingRule? {
-        var rule: BingRule? = null
+    fun createRule(index: Int): PushRule? {
+        val safeRule = ruleAndKind?.pushRule ?: return null
+        val safeKind = ruleAndKind?.kind ?: return null
 
-        if (null != this.rule && index != ruleStatusIndex) {
-            rule = BingRule(this.rule!!)
-
-            if (rule.ruleId == BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
+        return if (index != ruleStatusIndex) {
+            if (safeRule.ruleId == PushRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
                 when (index) {
                     NOTIFICATION_OFF_INDEX    -> {
-                        rule.isEnabled = true
-                        rule.setNotify(false)
+                        safeRule.copy(enabled = true)
+                                .setNotify(false)
                     }
                     NOTIFICATION_SILENT_INDEX -> {
-                        rule.isEnabled = false
-                        rule.setNotify(false)
+                        safeRule.copy(enabled = false)
+                                .setNotify(false)
                     }
                     NOTIFICATION_NOISY_INDEX  -> {
-                        rule.isEnabled = true
-                        rule.setNotify(true)
-                        rule.notificationSound = BingRule.ACTION_VALUE_DEFAULT
+                        safeRule.copy(enabled = true)
+                                .setNotify(true)
+                                .setNotificationSound()
                     }
-                }
-
-                return rule
-            }
-
-            if (NOTIFICATION_OFF_INDEX == index) {
-                if (this.rule!!.kind == BingRule.KIND_UNDERRIDE
-                        || rule.ruleId == BingRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
-                    rule.setNotify(false)
-                } else {
-                    rule.isEnabled = false
+                    else                      -> safeRule
                 }
             } else {
-                rule.isEnabled = true
-                rule.setNotify(true)
-                rule.setHighlight(this.rule!!.kind != BingRule.KIND_UNDERRIDE
-                        && rule.ruleId != BingRule.RULE_ID_INVITE_ME
-                        && NOTIFICATION_NOISY_INDEX == index)
-                if (NOTIFICATION_NOISY_INDEX == index) {
-                    rule.notificationSound = if (rule.ruleId == BingRule.RULE_ID_CALL) {
-                        BingRule.ACTION_VALUE_RING
+                if (NOTIFICATION_OFF_INDEX == index) {
+                    if (safeKind == RuleSetKey.UNDERRIDE || safeRule.ruleId == PushRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS) {
+                        safeRule.setNotify(false)
                     } else {
-                        BingRule.ACTION_VALUE_DEFAULT
+                        safeRule.copy(enabled = false)
                     }
                 } else {
-                    rule.removeNotificationSound()
+                    val newRule = safeRule.copy(enabled = true)
+                            .setNotify(true)
+                            .setHighlight(safeKind != RuleSetKey.UNDERRIDE
+                                    && safeRule.ruleId != PushRule.RULE_ID_INVITE_ME
+                                    && NOTIFICATION_NOISY_INDEX == index)
+
+                    if (NOTIFICATION_NOISY_INDEX == index) {
+                        newRule.setNotificationSound(
+                                if (safeRule.ruleId == PushRule.RULE_ID_CALL) {
+                                    PushRule.ACTION_VALUE_RING
+                                } else {
+                                    PushRule.ACTION_VALUE_DEFAULT
+                                }
+                        )
+                    } else {
+                        newRule.removeNotificationSound()
+                    }
                 }
             }
+        } else {
+            safeRule
         }
-
-        return rule
     }
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
