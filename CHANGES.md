@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Restore the push rules configuration in the settings
 
 Bugfix 🐛:
  - Fix crash on attachment preview screen (#1088)
