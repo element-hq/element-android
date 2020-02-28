@@ -20,9 +20,7 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Parcelable
-import androidx.core.content.edit
 import androidx.preference.Preference
-import androidx.preference.PreferenceManager
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.pushrules.rest.PushRuleAndKind
@@ -36,15 +34,6 @@ import javax.inject.Inject
 class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences
 ) : VectorSettingsBaseFragment() {
-
-    // events listener
-    /* TODO
-    private val mEventsListener = object : MXEventListener() {
-        override fun onBingRulesUpdate() {
-            refreshPreferences()
-            refreshDisplay()
-        }
-    }    */
 
     override var titleRes: Int = R.string.settings_notification_advanced
 
@@ -101,11 +90,11 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor(
             }
         }
 
-        for (preferenceKey in mPrefKeyToBingRuleId.keys) {
+        for (preferenceKey in prefKeyToPushRuleId.keys) {
             val preference = findPreference<VectorPreference>(preferenceKey)
             if (preference is BingRulePreference) {
                 // preference.isEnabled = null != rules && isConnected && pushManager.areDeviceNotificationsAllowed()
-                val ruleAndKind: PushRuleAndKind? = session.getPushRules().findDefaultRule(mPrefKeyToBingRuleId[preferenceKey])
+                val ruleAndKind: PushRuleAndKind? = session.getPushRules().findDefaultRule(prefKeyToPushRuleId[preferenceKey])
 
                 if (ruleAndKind == null) {
                     // The rule is not defined, hide the preference
@@ -136,6 +125,8 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor(
                                                 return
                                             }
                                             hideLoadingView()
+                                            // Restore the previous value
+                                            refreshDisplay()
                                             activity?.toast(errorFormatter.toHumanReadable(failure))
                                         }
                                     })
@@ -170,48 +161,6 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor(
         }
     }
 
-    /**
-     * Refresh the known information about the account
-     */
-    private fun refreshPreferences() {
-        PreferenceManager.getDefaultSharedPreferences(activity).edit {
-            /* TODO
-            session.dataHandler.pushRules()?.let {
-                for (prefKey in mPrefKeyToBingRuleId.keys) {
-                    val preference = findPreference(prefKey)
-
-                    if (null != preference && preference is SwitchPreference) {
-                        val ruleId = mPrefKeyToBingRuleId[prefKey]
-
-                        val rule = it.findDefaultRule(ruleId)
-                        var isEnabled = null != rule && rule.isEnabled
-
-                        if (TextUtils.equals(ruleId, PushRule.RULE_ID_DISABLE_ALL) || TextUtils.equals(ruleId, PushRule.RULE_ID_SUPPRESS_BOTS_NOTIFICATIONS)) {
-                            isEnabled = !isEnabled
-                        } else if (isEnabled) {
-                            val domainActions = rule!!.domainActions
-
-                            // no action -> noting will be done
-                            if (null == domainActions || domainActions.isEmpty()) {
-                                isEnabled = false
-                            } else if (1 == domainActions.size) {
-                                try {
-                                    isEnabled = !TextUtils.equals(domainActions[0] as String, PushRule.ACTION_DONT_NOTIFY)
-                                } catch (e: Exception) {
-                                    Timber.e(e, "## refreshPreferences failed")
-                                }
-
-                            }
-                        }// check if the rule is only defined by don't notify
-
-                        putBoolean(prefKey, isEnabled)
-                    }
-                }
-            }
-            */
-        }
-    }
-
     /* ==========================================================================================
      * Companion
      * ========================================================================================== */
@@ -220,7 +169,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor(
         private const val REQUEST_NOTIFICATION_RINGTONE = 888
 
         //  preference name <-> rule Id
-        private val mPrefKeyToBingRuleId = mapOf(
+        private val prefKeyToPushRuleId = mapOf(
                 VectorPreferences.SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY to PushRule.RULE_ID_CONTAIN_DISPLAY_NAME,
                 VectorPreferences.SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY to PushRule.RULE_ID_CONTAIN_USER_NAME,
                 VectorPreferences.SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY to PushRule.RULE_ID_ONE_TO_ONE_ROOM,
