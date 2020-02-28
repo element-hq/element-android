@@ -39,6 +39,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.yalantis.ucrop.UCrop
 import com.yalantis.ucrop.UCropActivity
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
@@ -115,7 +116,7 @@ class AttachmentsPreviewFragment @Inject constructor(
     override fun onPrepareOptionsMenu(menu: Menu) {
         withState(viewModel) { state ->
             val editMenuItem = menu.findItem(R.id.attachmentsPreviewEditAction)
-            val showEditMenuItem = state.attachments[state.currentAttachmentIndex].isEditable()
+            val showEditMenuItem = state.attachments.getOrNull(state.currentAttachmentIndex)?.isEditable().orFalse()
             editMenuItem.setVisible(showEditMenuItem)
         }
 
