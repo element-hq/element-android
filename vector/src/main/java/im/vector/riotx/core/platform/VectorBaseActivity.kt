@@ -23,6 +23,7 @@ import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import androidx.annotation.AttrRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
@@ -181,6 +182,11 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         sessionListener = getVectorComponent().sessionListener()
         sessionListener.globalErrorLiveData.observeEvent(this) {
             handleGlobalError(it)
+        }
+
+        // Set flag FLAG_SECURE
+        if (vectorPreferences.useFlagSecure()) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
 
         doBeforeSetContentView()
