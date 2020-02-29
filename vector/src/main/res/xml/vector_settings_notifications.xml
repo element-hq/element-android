@@ -24,9 +24,41 @@
             android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
             android:key="SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY"
             android:persistent="false"
-            android:summary="@string/settings_notification_advanced_summary"
+            android:summary="@string/settings_notification_advanced_summary_riotx"
             android:title="@string/settings_notification_advanced"
             app:fragment="im.vector.riotx.features.settings.VectorSettingsAdvancedNotificationPreferenceFragment" />
+
+    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+
+    <im.vector.riotx.core.preference.VectorPreferenceCategory
+        android:persistent="false"
+        android:title="@string/settings_notification_configuration">
+
+        <!-- For API < 26 -->
+        <im.vector.riotx.core.preference.VectorPreference
+            android:dialogTitle="@string/settings_notification_ringtone"
+            android:key="SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_notification_ringtone" />
+
+        <!-- For API >= 26 -->
+        <im.vector.riotx.core.preference.VectorPreference
+            android:key="SETTINGS_SYSTEM_NOISY_NOTIFICATION_PREFERENCE_KEY"
+            android:persistent="false"
+            android:summary="@string/settings_system_preferences_summary"
+            android:title="@string/settings_noisy_notifications_preferences" />
+
+        <im.vector.riotx.core.preference.VectorPreference
+            android:key="SETTINGS_SYSTEM_SILENT_NOTIFICATION_PREFERENCE_KEY"
+            android:persistent="false"
+            android:summary="@string/settings_system_preferences_summary"
+            android:title="@string/settings_silent_notifications_preferences" />
+
+        <im.vector.riotx.core.preference.VectorPreference
+            android:key="SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY"
+            android:persistent="false"
+            android:summary="@string/settings_system_preferences_summary"
+            android:title="@string/settings_call_notifications_preferences" />
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 

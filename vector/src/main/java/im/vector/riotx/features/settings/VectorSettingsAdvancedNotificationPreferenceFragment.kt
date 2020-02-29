@@ -15,11 +15,6 @@
  */
 package im.vector.riotx.features.settings
 
-import android.app.Activity
-import android.content.Intent
-import android.media.RingtoneManager
-import android.net.Uri
-import android.os.Parcelable
 import androidx.preference.Preference
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.pushrules.rest.PushRule
@@ -28,7 +23,6 @@ import im.vector.riotx.R
 import im.vector.riotx.core.preference.PushRulePreference
 import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.core.utils.toast
-import im.vector.riotx.features.notifications.NotificationUtils
 import javax.inject.Inject
 
 class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor(
@@ -40,56 +34,6 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor(
     override val preferenceXmlRes = R.xml.vector_settings_notification_advanced_preferences
 
     override fun bindPref() {
-        val callNotificationsSystemOptions = findPreference<VectorPreference>(VectorPreferences.SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY)!!
-        if (NotificationUtils.supportNotificationChannels()) {
-            callNotificationsSystemOptions.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                NotificationUtils.openSystemSettingsForCallCategory(this)
-                false
-            }
-        } else {
-            callNotificationsSystemOptions.isVisible = false
-        }
-
-        val noisyNotificationsSystemOptions = findPreference<VectorPreference>(VectorPreferences.SETTINGS_SYSTEM_NOISY_NOTIFICATION_PREFERENCE_KEY)!!
-        if (NotificationUtils.supportNotificationChannels()) {
-            noisyNotificationsSystemOptions.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                NotificationUtils.openSystemSettingsForNoisyCategory(this)
-                false
-            }
-        } else {
-            noisyNotificationsSystemOptions.isVisible = false
-        }
-
-        val silentNotificationsSystemOptions = findPreference<VectorPreference>(VectorPreferences.SETTINGS_SYSTEM_SILENT_NOTIFICATION_PREFERENCE_KEY)!!
-        if (NotificationUtils.supportNotificationChannels()) {
-            silentNotificationsSystemOptions.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                NotificationUtils.openSystemSettingsForSilentCategory(this)
-                false
-            }
-        } else {
-            silentNotificationsSystemOptions.isVisible = false
-        }
-
-        // Ringtone
-        val ringtonePreference = findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY)!!
-
-        if (NotificationUtils.supportNotificationChannels()) {
-            ringtonePreference.isVisible = false
-        } else {
-            ringtonePreference.summary = vectorPreferences.getNotificationRingToneName()
-            ringtonePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
-
-                if (null != vectorPreferences.getNotificationRingTone()) {
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, vectorPreferences.getNotificationRingTone())
-                }
-
-                startActivityForResult(intent, REQUEST_NOTIFICATION_RINGTONE)
-                false
-            }
-        }
-
         for (preferenceKey in prefKeyToPushRuleId.keys) {
             val preference = findPreference<VectorPreference>(preferenceKey)
             if (preference is PushRulePreference) {
@@ -142,32 +86,11 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor(
         listView?.adapter?.notifyDataSetChanged()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                REQUEST_NOTIFICATION_RINGTONE -> {
-                    vectorPreferences.setNotificationRingTone(data?.getParcelableExtra<Parcelable>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI) as Uri?)
-
-                    // test if the selected ring tone can be played
-                    val notificationRingToneName = vectorPreferences.getNotificationRingToneName()
-                    if (null != notificationRingToneName) {
-                        vectorPreferences.setNotificationRingTone(vectorPreferences.getNotificationRingTone())
-                        findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY)!!
-                                .summary = notificationRingToneName
-                    }
-                }
-            }
-        }
-    }
-
     /* ==========================================================================================
      * Companion
      * ========================================================================================== */
 
     companion object {
-        private const val REQUEST_NOTIFICATION_RINGTONE = 888
-
         //  preference name <-> rule Id
         private val prefKeyToPushRuleId = mapOf(
                 "SETTINGS_PUSH_RULE_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY" to PushRule.RULE_ID_CONTAIN_DISPLAY_NAME,

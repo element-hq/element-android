@@ -17,6 +17,8 @@
     <string name="settings_messages_in_e2e_group_chat">Encrypted messages in group chats</string>
     <string name="settings_when_rooms_are_upgraded">When rooms are upgraded</string>
     <string name="settings_troubleshoot_title">Troubleshoot</string>
+    <string name="settings_notification_advanced_summary_riotx">Set notification importance by event</string>
+
     <!-- END Strings added by Benoit -->
 
 
