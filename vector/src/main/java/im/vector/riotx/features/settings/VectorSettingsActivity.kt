@@ -77,21 +77,14 @@ class VectorSettingsActivity : VectorBaseActivity(),
     }
 
     override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
-        val oFragment = when {
-            VectorPreferences.SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY == pref.key ->
-                supportFragmentManager.fragmentFactory.instantiate(classLoader, VectorSettingsNotificationsTroubleshootFragment::class.java.name)
-            VectorPreferences.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY == pref.key     ->
-                supportFragmentManager.fragmentFactory.instantiate(classLoader, VectorSettingsAdvancedNotificationPreferenceFragment::class.java.name)
-            else                                                                            ->
-                try {
-                    pref.fragment?.let {
-                        supportFragmentManager.fragmentFactory.instantiate(classLoader, it)
-                    }
-                } catch (e: Throwable) {
-                    showSnackbar(getString(R.string.not_implemented))
-                    Timber.e(e)
-                    null
-                }
+        val oFragment = try {
+            pref.fragment?.let {
+                supportFragmentManager.fragmentFactory.instantiate(classLoader, it)
+            }
+        } catch (e: Throwable) {
+            showSnackbar(getString(R.string.not_implemented))
+            Timber.e(e)
+            null
         }
 
         if (oFragment != null) {

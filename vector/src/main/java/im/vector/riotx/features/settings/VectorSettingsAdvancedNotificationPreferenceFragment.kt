@@ -25,9 +25,8 @@ import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.core.utils.toast
 import javax.inject.Inject
 
-class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor(
-        private val vectorPreferences: VectorPreferences
-) : VectorSettingsBaseFragment() {
+class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor()
+    : VectorSettingsBaseFragment() {
 
     override var titleRes: Int = R.string.settings_notification_advanced
 

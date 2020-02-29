@@ -136,7 +136,6 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         }
     }
 
-
     override fun onResume() {
         super.onResume()
         activeSessionHolder.getSafeActiveSession()?.refreshPushers()

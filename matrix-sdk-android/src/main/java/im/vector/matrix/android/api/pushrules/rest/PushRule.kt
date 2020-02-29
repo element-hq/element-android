@@ -85,7 +85,7 @@ data class PushRule(
      */
     fun removeNotificationSound(): PushRule {
         return copy(
-                actions = (getActions().filter { it !is Action.Sound }).toJson()
+                actions = getActions().filter { it !is Action.Sound }.toJson()
         )
     }
 
