@@ -2,9 +2,7 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <im.vector.riotx.core.preference.VectorPreferenceCategory
-        android:key="SETTINGS_NOTIFICATIONS_KEY"
-        android:title="@string/settings_notifications">
+    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_notifications">
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:defaultValue="true"
@@ -30,13 +28,16 @@
             android:title="@string/settings_notification_advanced"
             app:fragment="im.vector.riotx.features.settings.VectorSettingsAdvancedNotificationPreferenceFragment" />
 
+    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+
+    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_troubleshoot_title">
+
         <im.vector.riotx.core.preference.VectorPreference
             android:key="SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
             android:title="@string/settings_notification_troubleshoot"
             app:fragment="im.vector.riotx.features.settings.VectorSettingsNotificationsTroubleshootFragment" />
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
-
 
     <!--im.vector.riotx.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"

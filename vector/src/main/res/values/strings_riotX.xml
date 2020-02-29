@@ -16,6 +16,7 @@
     <string name="settings_messages_in_e2e_one_to_one">Encrypted messages in one-to-one chats</string>
     <string name="settings_messages_in_e2e_group_chat">Encrypted messages in group chats</string>
     <string name="settings_when_rooms_are_upgraded">When rooms are upgraded</string>
+    <string name="settings_troubleshoot_title">Troubleshoot</string>
     <!-- END Strings added by Benoit -->
 
 
