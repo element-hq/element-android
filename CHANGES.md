@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Add support for `/plain` command (#12)
 
 Bugfix 🐛:
  - Fix crash on attachment preview screen (#1088)

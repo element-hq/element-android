@@ -340,6 +340,12 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         is ParsedCommand.ErrorUnknownSlashCommand -> {
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandUnknown(slashCommandResult.slashCommand))
                         }
+                        is ParsedCommand.SendPlainText            -> {
+                            // Send the text message to the room, without markdown
+                            room.sendTextMessage(slashCommandResult.message, autoMarkdown = false)
+                            _viewEvents.post(RoomDetailViewEvents.MessageSent)
+                            popDraft()
+                        }
                         is ParsedCommand.Invite                   -> {
                             handleInviteSlashCommand(slashCommandResult)
                             popDraft()
