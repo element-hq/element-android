@@ -64,7 +64,7 @@ class LoginResetPasswordMailConfirmationFragment @Inject constructor() : Abstrac
                         .show()
             }
             is Success -> {
-                loginSharedActionViewModel.post(LoginNavigation.OnResetPasswordMailConfirmationSuccess)
+                Unit
             }
         }
     }

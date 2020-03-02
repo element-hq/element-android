@@ -95,14 +95,13 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
             // Request login flow here
             loginViewModel.handle(LoginAction.UpdateHomeServer(getString(R.string.matrix_org_server_url)))
         } else {
-            loginSharedActionViewModel.post(LoginNavigation.OnServerSelectionDone)
+            loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnServerSelectionDone))
         }
     }
 
     @OnClick(R.id.loginServerIKnowMyIdSubmit)
     fun loginWithMatrixId() {
         loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignInWithMatrixId))
-        loginSharedActionViewModel.post(LoginNavigation.OnSignModeSelected)
     }
 
     override fun resetViewModel() {
@@ -114,7 +113,7 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
 
         if (state.loginMode != LoginMode.Unknown) {
             // LoginFlow for matrix.org has been retrieved
-            loginSharedActionViewModel.post(LoginNavigation.OnLoginFlowRetrieved)
+            loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnLoginFlowRetrieved))
         }
     }
 }

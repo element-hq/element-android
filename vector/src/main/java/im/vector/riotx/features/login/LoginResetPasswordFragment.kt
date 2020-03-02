@@ -149,7 +149,7 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment()
                 resetPasswordEmailTil.error = errorFormatter.toHumanReadable(state.asyncResetPassword.error)
             }
             is Success -> {
-                loginSharedActionViewModel.post(LoginNavigation.OnResetPasswordSendThreePidDone)
+                Unit
             }
         }
     }
