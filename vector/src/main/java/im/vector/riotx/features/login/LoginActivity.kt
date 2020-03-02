@@ -197,7 +197,6 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                         LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.ConfirmMsisdn, true, loginViewEvents.msisdn),
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
-
         }
     }
 
