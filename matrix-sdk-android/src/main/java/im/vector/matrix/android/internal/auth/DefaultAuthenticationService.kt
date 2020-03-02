@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.auth.data.isLoginAndRegistrationSupportedByS
 import im.vector.matrix.android.api.auth.data.isSupportedBySdk
 import im.vector.matrix.android.api.auth.login.LoginWizard
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
+import im.vector.matrix.android.api.auth.wellknown.WellknownResult
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
@@ -38,9 +39,13 @@ import im.vector.matrix.android.internal.auth.data.RiotConfig
 import im.vector.matrix.android.internal.auth.db.PendingSessionData
 import im.vector.matrix.android.internal.auth.login.DefaultLoginWizard
 import im.vector.matrix.android.internal.auth.registration.DefaultRegistrationWizard
+import im.vector.matrix.android.internal.auth.wellknown.DirectLoginTask
+import im.vector.matrix.android.internal.auth.wellknown.GetWellknownTask
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.toCancelable
@@ -59,7 +64,10 @@ internal class DefaultAuthenticationService @Inject constructor(
         private val sessionParamsStore: SessionParamsStore,
         private val sessionManager: SessionManager,
         private val sessionCreator: SessionCreator,
-        private val pendingSessionStore: PendingSessionStore
+        private val pendingSessionStore: PendingSessionStore,
+        private val getWellknownTask: GetWellknownTask,
+        private val directLoginTask: DirectLoginTask,
+        private val taskExecutor: TaskExecutor
 ) : AuthenticationService {
 
     private var pendingSessionData: PendingSessionData? = pendingSessionStore.getPendingSessionData()
@@ -258,6 +266,26 @@ internal class DefaultAuthenticationService @Inject constructor(
         return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
             createSessionFromSso(credentials, homeServerConnectionConfig)
         }
+    }
+
+    override fun getWellKnownData(matrixId: String, callback: MatrixCallback<WellknownResult>): Cancelable {
+        return getWellknownTask
+                .configureWith(GetWellknownTask.Params(matrixId)) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun directAuthentication(homeServerConnectionConfig: HomeServerConnectionConfig,
+                                      matrixId: String,
+                                      password: String,
+                                      initialDeviceName: String,
+                                      callback: MatrixCallback<Session>): Cancelable {
+        return directLoginTask
+                .configureWith(DirectLoginTask.Params(homeServerConnectionConfig, matrixId, password, initialDeviceName)) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
     }
 
     private suspend fun createSessionFromSso(credentials: Credentials,

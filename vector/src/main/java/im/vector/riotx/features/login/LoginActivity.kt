@@ -38,6 +38,7 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.POP_BACK_STACK_EXCLUSIVE
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.extensions.addFragmentToBackstack
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.home.HomeActivity
@@ -125,9 +126,7 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
     }
 
     private fun handleLoginNavigation(loginNavigation: LoginNavigation) {
-        // Assigning to dummy make sure we do not forget a case
-        @Suppress("UNUSED_VARIABLE")
-        val dummy = when (loginNavigation) {
+        when (loginNavigation) {
             is LoginNavigation.OpenServerSelection                        ->
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         LoginServerSelectionFragment::class.java,
@@ -177,7 +176,7 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                         LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.ConfirmMsisdn, true, loginNavigation.msisdn),
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
-        }
+        }.exhaustive
     }
 
     private fun handleLoginViewEvents(loginViewEvents: LoginViewEvents) {
@@ -254,11 +253,11 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     private fun onSignModeSelected() = withState(loginViewModel) { state ->
         when (state.signMode) {
-            SignMode.Unknown -> error("Sign mode has to be set before calling this method")
-            SignMode.SignUp  -> {
+            SignMode.Unknown            -> error("Sign mode has to be set before calling this method")
+            SignMode.SignUp             -> {
                 // This is managed by the LoginViewEvents
             }
-            SignMode.SignIn  -> {
+            SignMode.SignIn             -> {
                 // It depends on the LoginMode
                 when (state.loginMode) {
                     LoginMode.Unknown     -> error("Developer error")
@@ -272,7 +271,11 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                     LoginMode.Unsupported -> onLoginModeNotSupported(state.loginModeSupportedTypes)
                 }
             }
-        }
+            SignMode.SignInWithMatrixId -> addFragmentToBackstack(R.id.loginFragmentContainer,
+                    LoginFragment::class.java,
+                    tag = FRAGMENT_LOGIN_TAG,
+                    option = commonOption)
+        }.exhaustive
     }
 
     private fun onRegistrationStageNotSupported() {

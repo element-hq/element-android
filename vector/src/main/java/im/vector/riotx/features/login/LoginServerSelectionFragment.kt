@@ -99,6 +99,12 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
         }
     }
 
+    @OnClick(R.id.loginServerIKnowMyIdSubmit)
+    fun loginWithMatrixId() {
+        loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignInWithMatrixId))
+        loginSharedActionViewModel.post(LoginNavigation.OnSignModeSelected)
+    }
+
     override fun resetViewModel() {
         loginViewModel.handle(LoginAction.ResetHomeServerType)
     }

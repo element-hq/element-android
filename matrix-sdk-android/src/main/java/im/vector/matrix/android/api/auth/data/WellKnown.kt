@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.auth.data
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.api.util.JsonDict
 
 /**
  * https://matrix.org/docs/spec/client_server/r0.4.0.html#server-discovery
@@ -52,7 +53,7 @@ data class WellKnown(
         val identityServer: WellKnownBaseConfig? = null,
 
         @Json(name = "m.integrations")
-        val integrations: Map<String, @JvmSuppressWildcards Any>? = null
+        val integrations: JsonDict? = null
 ) {
     /**
      * Returns the list of integration managers proposed

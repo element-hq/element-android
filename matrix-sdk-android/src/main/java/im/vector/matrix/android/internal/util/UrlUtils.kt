@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.login
+package im.vector.matrix.android.internal.util
 
-enum class SignMode {
-    Unknown,
-    // Account creation
-    SignUp,
-    // Login
-    SignIn,
-    // Login directly with matrix Id
-    SignInWithMatrixId
+import java.net.URL
+
+internal fun String.isValidUrl(): Boolean {
+    return try {
+        URL(this)
+        true
+    } catch (t: Throwable) {
+        false
+    }
 }

@@ -57,4 +57,12 @@
 
     <!-- END Strings added by Others -->
 
+    <string name="login_connect_using_matrix_id_notice">Alternatively, if you already have an account and you know your Matrix identifier and your password, you can use this method:</string>
+    <string name="login_connect_using_matrix_id_submit">Sign in with my Matrix identifier</string>
+    <string name="login_signin_matrix_id_title">Sign in</string>
+    <string name="login_signin_matrix_id_notice">Enter your identifier and your password</string>
+    <string name="login_signin_matrix_id_hint">User identifier</string>
+    <string name="login_signin_matrix_id_error_invalid_matrix_id">This is not a valid user identifier. Expected format: \'@user:homeserver.org\'</string>
+    <string name="autodiscover_well_known_error">Unable to find a valid homeserver. Please check your identifier</string>
+
 </resources>

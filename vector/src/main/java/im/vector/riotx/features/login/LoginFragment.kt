@@ -31,6 +31,7 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.failure.isInvalidPassword
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.extensions.toReducedUrl
@@ -73,16 +74,17 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
     private fun setupAutoFill(state: LoginViewState) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             when (state.signMode) {
-                SignMode.Unknown -> error("developer error")
-                SignMode.SignUp  -> {
+                SignMode.Unknown            -> error("developer error")
+                SignMode.SignUp             -> {
                     loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_USERNAME)
                     passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
                 }
-                SignMode.SignIn  -> {
+                SignMode.SignIn,
+                SignMode.SignInWithMatrixId -> {
                     loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_USERNAME)
                     passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_PASSWORD)
                 }
-            }
+            }.exhaustive
         }
     }
 
@@ -116,35 +118,44 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
     }
 
     private fun setupUi(state: LoginViewState) {
-        val resId = when (state.signMode) {
-            SignMode.Unknown -> error("developer error")
-            SignMode.SignUp  -> R.string.login_signup_to
-            SignMode.SignIn  -> R.string.login_connect_to
-        }
-
         loginFieldTil.hint = getString(when (state.signMode) {
-            SignMode.Unknown -> error("developer error")
-            SignMode.SignUp  -> R.string.login_signup_username_hint
-            SignMode.SignIn  -> R.string.login_signin_username_hint
+            SignMode.Unknown            -> error("developer error")
+            SignMode.SignUp             -> R.string.login_signup_username_hint
+            SignMode.SignIn             -> R.string.login_signin_username_hint
+            SignMode.SignInWithMatrixId -> R.string.login_signin_matrix_id_hint
         })
 
-        when (state.serverType) {
-            ServerType.MatrixOrg -> {
-                loginServerIcon.isVisible = true
-                loginServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
-                loginTitle.text = getString(resId, state.homeServerUrl.toReducedUrl())
-                loginNotice.text = getString(R.string.login_server_matrix_org_text)
+        // Handle direct signin first
+        if (state.signMode == SignMode.SignInWithMatrixId) {
+            loginServerIcon.isVisible = false
+            loginTitle.text = getString(R.string.login_signin_matrix_id_title)
+            loginNotice.text = getString(R.string.login_signin_matrix_id_notice)
+        } else {
+            val resId = when (state.signMode) {
+                SignMode.Unknown            -> error("developer error")
+                SignMode.SignUp             -> R.string.login_signup_to
+                SignMode.SignIn             -> R.string.login_connect_to
+                SignMode.SignInWithMatrixId -> R.string.login_connect_to
             }
-            ServerType.Modular   -> {
-                loginServerIcon.isVisible = true
-                loginServerIcon.setImageResource(R.drawable.ic_logo_modular)
-                loginTitle.text = getString(resId, "Modular")
-                loginNotice.text = getString(R.string.login_server_modular_text)
-            }
-            ServerType.Other     -> {
-                loginServerIcon.isVisible = false
-                loginTitle.text = getString(resId, state.homeServerUrl.toReducedUrl())
-                loginNotice.text = getString(R.string.login_server_other_text)
+
+            when (state.serverType) {
+                ServerType.MatrixOrg -> {
+                    loginServerIcon.isVisible = true
+                    loginServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
+                    loginTitle.text = getString(resId, state.homeServerUrl.toReducedUrl())
+                    loginNotice.text = getString(R.string.login_server_matrix_org_text)
+                }
+                ServerType.Modular   -> {
+                    loginServerIcon.isVisible = true
+                    loginServerIcon.setImageResource(R.drawable.ic_logo_modular)
+                    loginTitle.text = getString(resId, "Modular")
+                    loginNotice.text = getString(R.string.login_server_modular_text)
+                }
+                ServerType.Other     -> {
+                    loginServerIcon.isVisible = false
+                    loginTitle.text = getString(resId, state.homeServerUrl.toReducedUrl())
+                    loginNotice.text = getString(R.string.login_server_other_text)
+                }
             }
         }
     }
@@ -153,9 +164,10 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
         forgetPasswordButton.isVisible = state.signMode == SignMode.SignIn
 
         loginSubmit.text = getString(when (state.signMode) {
-            SignMode.Unknown -> error("developer error")
-            SignMode.SignUp  -> R.string.login_signup_submit
-            SignMode.SignIn  -> R.string.login_signin
+            SignMode.Unknown            -> error("developer error")
+            SignMode.SignUp             -> R.string.login_signup_submit
+            SignMode.SignIn,
+            SignMode.SignInWithMatrixId -> R.string.login_signin
         })
     }
 
