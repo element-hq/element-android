@@ -26,7 +26,7 @@
 
 
     <!-- BEGIN Strings added by Others -->
-
+    <string name="command_description_plain">Sends a message as plain text, without interpreting it as markdown</string>
     <!-- END Strings added by Others -->
 
 </resources>
