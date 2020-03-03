@@ -28,7 +28,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.kbeanie.multipicker.utils.IntentUtils
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.R
@@ -78,7 +77,7 @@ class IncomingShareFragment @Inject constructor(
         val intent = vectorBaseActivity.intent
         val isShareManaged = when (intent?.action) {
             Intent.ACTION_SEND          -> {
-                var isShareManaged = attachmentsHelper.handleShareIntent(IntentUtils.getPickerIntentForSharing(intent))
+                var isShareManaged = attachmentsHelper.handleShareIntent(intent)
                 if (!isShareManaged) {
                     isShareManaged = handleTextShare(intent)
                 }

@@ -3,4 +3,8 @@
     <cache-path
         name="shared"
         path="/" />
+
+    <files-path
+        name="ext_share"
+        path="ext_share/" />
 </paths>

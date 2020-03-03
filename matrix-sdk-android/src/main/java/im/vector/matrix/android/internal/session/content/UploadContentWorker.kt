@@ -205,7 +205,10 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
 
         return Result.success(
                 WorkerParamsFactory.toData(
-                        params.copy(
+                        MultipleEventSendingDispatcherWorker.Params(
+                                sessionId = params.sessionId,
+                                events = params.events,
+                                isEncrypted = params.isRoomEncrypted,
                                 lastFailureMessage = failure.localizedMessage
                         )
                 )

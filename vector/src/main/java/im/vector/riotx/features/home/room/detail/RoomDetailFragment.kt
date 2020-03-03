@@ -57,17 +57,17 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.github.piasy.biv.BigImageViewer
-import com.github.piasy.biv.loader.ImageLoader
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.jakewharton.rxbinding3.widget.textChanges
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
@@ -77,12 +77,14 @@ import im.vector.matrix.android.api.session.room.model.message.MessageImageInfoC
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
+import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
+import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.withColoredButton
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
@@ -1145,30 +1147,18 @@ class RoomDetailFragment @Inject constructor(
                 promptConfirmationToRedactEvent(action)
             }
             is EventSharedAction.Share                      -> {
-                // TODO current data communication is too limited
-                // Need to now the media type
-                // TODO bad, just POC
-                BigImageViewer.imageLoader().loadImage(
-                        action.hashCode(),
-                        Uri.parse(action.imageUrl),
-                        object : ImageLoader.Callback {
-                            override fun onFinish() {}
-
-                            override fun onSuccess(image: File?) {
-                                if (image != null) {
-                                    shareMedia(requireContext(), image, "image/*")
+                session.downloadFile(
+                        FileService.DownloadMode.FOR_EXTERNAL_SHARE,
+                        action.eventId,
+                        action.messageContent.body,
+                        action.messageContent.getFileUrl(),
+                        action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
+                        object : MatrixCallback<File> {
+                            override fun onSuccess(data: File) {
+                                if (isAdded) {
+                                    shareMedia(requireContext(), data, "image/*")
                                 }
                             }
-
-                            override fun onFail(error: Exception?) {}
-
-                            override fun onCacheHit(imageType: Int, image: File?) {}
-
-                            override fun onCacheMiss(imageType: Int, image: File?) {}
-
-                            override fun onProgress(progress: Int) {}
-
-                            override fun onStart() {}
                         }
                 )
             }

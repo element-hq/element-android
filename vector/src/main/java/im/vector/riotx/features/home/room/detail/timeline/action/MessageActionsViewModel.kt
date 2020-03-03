@@ -262,11 +262,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
                     if (canShare(msgType)) {
                         if (messageContent is MessageImageContent) {
-                            session.contentUrlResolver().resolveFullSize(messageContent.url)?.let { url ->
-                                add(EventSharedAction.Share(url))
-                            }
+                            add(EventSharedAction.Share(timelineEvent.eventId, messageContent))
                         }
-                        // TODO
+                        // TODO Support other media types
                     }
 
                     if (timelineEvent.root.sendState == SendState.SENT) {
