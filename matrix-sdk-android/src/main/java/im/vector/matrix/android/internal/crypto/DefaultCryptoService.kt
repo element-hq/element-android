@@ -21,6 +21,7 @@ package im.vector.matrix.android.internal.crypto
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import com.squareup.moshi.Types
 import com.zhuinden.monarchy.Monarchy
@@ -1192,4 +1193,11 @@ internal class DefaultCryptoService @Inject constructor(
     override fun getGossipingEventsTrail(): List<Event> {
         return cryptoStore.getGossipingEventsTrail()
     }
+
+    /* ==========================================================================================
+     * For test only
+     * ========================================================================================== */
+
+    @VisibleForTesting
+    val cryptoStoreForTesting = cryptoStore
 }

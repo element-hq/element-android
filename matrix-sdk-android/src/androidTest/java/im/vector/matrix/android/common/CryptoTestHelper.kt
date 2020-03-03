@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toContent
+import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
@@ -40,7 +41,6 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
 import java.util.HashMap
 import java.util.concurrent.CountDownLatch
 
@@ -140,62 +140,36 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
      * @return Alice, Bob and Sam session
      */
     fun doE2ETestWithAliceAndBobAndSamInARoom(): CryptoTestData {
-        val statuses = HashMap<String, String>()
-
         val cryptoTestData = doE2ETestWithAliceAndBobInARoom()
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId
 
         val room = aliceSession.getRoom(aliceRoomId)!!
 
-        val samSession = mTestHelper.createAccount(TestConstants.USER_SAM, defaultSessionParams)
-
-        val lock1 = CountDownLatch(2)
-
-//        val samEventListener = object : MXEventListener() {
-//            override fun onNewRoom(roomId: String) {
-//                if (TextUtils.equals(roomId, aliceRoomId)) {
-//                    if (!statuses.containsKey("onNewRoom")) {
-//                        statuses["onNewRoom"] = "onNewRoom"
-//                        lock1.countDown()
-//                    }
-//                }
-//            }
-//        }
-//
-//        samSession.dataHandler.addListener(samEventListener)
-
-        room.invite(samSession.myUserId, null, object : TestMatrixCallback<Unit>(lock1) {
-            override fun onSuccess(data: Unit) {
-                statuses["invite"] = "invite"
-                super.onSuccess(data)
-            }
-        })
-
-        mTestHelper.await(lock1)
-
-        assertTrue(statuses.containsKey("invite") && statuses.containsKey("onNewRoom"))
-
-//        samSession.dataHandler.removeListener(samEventListener)
-
-        val lock2 = CountDownLatch(1)
-
-        samSession.joinRoom(aliceRoomId, null, object : TestMatrixCallback<Unit>(lock2) {
-            override fun onSuccess(data: Unit) {
-                statuses["joinRoom"] = "joinRoom"
-                super.onSuccess(data)
-            }
-        })
-
-        mTestHelper.await(lock2)
-        assertTrue(statuses.containsKey("joinRoom"))
+        val samSession = createSamAccountAndInviteToTheRoom(room)
 
         // wait the initial sync
         SystemClock.sleep(1000)
 
-//        samSession.dataHandler.removeListener(samEventListener)
-
         return CryptoTestData(aliceSession, aliceRoomId, cryptoTestData.secondSession, samSession)
+    }
+
+    /**
+     * Create Sam account and invite him in the room. He will accept the invitation
+     * @Return Sam session
+     */
+    fun createSamAccountAndInviteToTheRoom(room: Room): Session {
+        val samSession = mTestHelper.createAccount(TestConstants.USER_SAM, defaultSessionParams)
+
+        mTestHelper.doSync<Unit> {
+            room.invite(samSession.myUserId, null, it)
+        }
+
+        mTestHelper.doSync<Unit> {
+            samSession.joinRoom(room.roomId, null, it)
+        }
+
+        return samSession
     }
 
     /**
