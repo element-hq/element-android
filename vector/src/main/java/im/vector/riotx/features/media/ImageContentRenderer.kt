@@ -127,23 +127,18 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
             GlideApp
                     .with(imageView)
                     .load(resolvedUrl)
-                    .listener(object : RequestListener<Drawable> {
-                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                            return false
-                        }
-
-                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                            data.url
-                                    ?.takeIf { it != resolvedUrl }
-                                    ?.let {
-                                        GlideApp
-                                                .with(imageView)
-                                                .load(it)
-                                        return false
-                                    }
-                            return true
-                        }
-                    })
+                    .apply {
+                        contentUrlResolver
+                                .resolveFullSize(data.url)
+                                ?.takeIf { it != resolvedUrl }
+                                ?.let { fullSizeUrl ->
+                                    error(
+                                            GlideApp
+                                                    .with(imageView)
+                                                    .load(fullSizeUrl)
+                                    )
+                                }
+                    }
         }
     }
 
