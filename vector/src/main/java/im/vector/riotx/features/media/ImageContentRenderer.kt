@@ -128,16 +128,13 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                     .with(imageView)
                     .load(resolvedUrl)
                     .apply {
-                        contentUrlResolver
-                                .resolveFullSize(data.url)
-                                ?.takeIf { it != resolvedUrl }
-                                ?.let { fullSizeUrl ->
-                                    error(
-                                            GlideApp
-                                                    .with(imageView)
-                                                    .load(fullSizeUrl)
-                                    )
-                                }
+                        if (mode == Mode.THUMBNAIL) {
+                            error(
+                                    GlideApp
+                                            .with(imageView)
+                                            .load(contentUrlResolver.resolveFullSize(data.url))
+                            )
+                        }
                     }
         }
     }
