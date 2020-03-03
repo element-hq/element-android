@@ -12,7 +12,7 @@ The Matrix SDK is able to open multiple sessions, for the same user, of for diff
 
 Integration tests need a homeserver running on localhost.
 
-The documentation describe what we do to have one, using [Synapse](https://github.com/matrix-org/synapse/), which is the Matrix reference homeserver.
+The documentation describes what we do to have one, using [Synapse](https://github.com/matrix-org/synapse/), which is the Matrix reference homeserver.
 
 ## Install and run Synapse
 
