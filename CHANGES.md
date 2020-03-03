@@ -9,6 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Fix crash on attachment preview screen (#1088)
+ - "Share" option is not appearing in encrypted rooms for images (#1031)
 
 Translations 🗣:
  -
