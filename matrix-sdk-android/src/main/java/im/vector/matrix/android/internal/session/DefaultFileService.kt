@@ -87,7 +87,7 @@ internal class DefaultFileService @Inject constructor(
                         if (elementToDecrypt != null) {
                             Timber.v("## decrypt file")
                             inputStream = MXEncryptedAttachments.decryptAttachment(inputStream, elementToDecrypt)
-                                    ?: throw IllegalStateException("Decryption error")
+                                    ?: return@flatMap Try.Failure(IllegalStateException("Decryption error"))
                         }
 
                         writeToFile(inputStream, destFile)
