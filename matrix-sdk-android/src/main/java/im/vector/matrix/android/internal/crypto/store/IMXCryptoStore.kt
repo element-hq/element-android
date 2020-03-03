@@ -262,7 +262,7 @@ internal interface IMXCryptoStore {
      * @param deviceKey the public key of the other device.
      * @return The Base64 end-to-end session, or null if not found
      */
-    fun getDeviceSession(sessionId: String?, deviceKey: String?): OlmSessionWrapper?
+    fun getDeviceSession(sessionId: String, deviceKey: String): OlmSessionWrapper?
 
     /**
      * Retrieve the last used sessionId, regarding `lastReceivedMessageTs`, or null if no session exist
