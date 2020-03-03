@@ -27,6 +27,10 @@ python3 -m pip install virtualenv
 - clone Synapse repository
 
 ```bash
+git clone https://github.com/matrix-org/synapse.git
+```
+or
+```bash
 git clone git@github.com:matrix-org/synapse.git
 ```
 
@@ -51,7 +55,7 @@ You should now have 3 running federated Synapse instances 🎉, at http://127.0.
 
 ## Run the test
 
-Its recommended to run tests using an Android Emulator and not a real device.
+Its recommended to run tests using an Android Emulator and not a real device. First reason for that is that the tests will use http://10.0.2.2:8080 to connect to Synapse, which run locally on your machine.
 
 You can run all the tests in the `androidTest` folders
 
@@ -73,4 +77,17 @@ deactivate
 
 You'll need python3 to be able to run synapse
 
-TBC
+### Android Emulator does cannot reach the homeserver
+
+Try on the Emulator browser to open "http://10.0.2.2:8080". You should see the "Synapse is running" message.
+
+### virtualenv command fails
+
+You can try using
+```bash
+python3 -m venv env
+```
+instead of
+```bash
+virtualenv -p python3 env
+```
