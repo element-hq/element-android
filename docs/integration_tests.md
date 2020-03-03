@@ -8,7 +8,7 @@ In a ideal world, every API of the SDK should be covered by integration tests. F
 
 The Matrix SDK is able to open multiple sessions, for the same user, of for different users. This way we can test communication between several sessions on a single device.
 
-## Prerequirments
+## Pre requirements
 
 Integration tests need a homeserver running on localhost.
 
@@ -20,24 +20,32 @@ Steps:
 
 - Install virtual env
 
-> python3 -m pip install virtualenv
+```bash
+python3 -m pip install virtualenv
+```
 
 - clone Synapse repository
 
-> git clone git@github.com:matrix-org/synapse.git
+```bash
+git clone git@github.com:matrix-org/synapse.git
+```
 
 You should have the develop branch cloned by default.
 
 - Run synapse, from the Synapse folder you just cloned
 
-> $ virtualenv -p python3 env
-> $ source env/bin/activate
-> (env) $ pip install -e .
-> (env) $ demo/start.sh --no-rate-limit
+```bash
+virtualenv -p python3 env
+source env/bin/activate
+pip install -e .
+demo/start.sh --no-rate-limit
+```
 
 Alternatively, to install the current Synapse package (and not using the cloned sources), you can run instead of `pip install -e .`:
 
-> (env) $ pip install matrix-synapse
+```bash
+pip install matrix-synapse
+```
 
 You should now have 3 running federated Synapse instances 🎉, at http://127.0.0.1:8080/, http://127.0.0.1:8081/ and  http://127.0.0.1:8082/, which should display a "It Works! Synapse is running" message.
 
@@ -51,11 +59,15 @@ You can run all the tests in the `androidTest` folders
 
 To stop Synapse, you can run the following commands:
 
-> (env) $ ./demo/stop.sh
+```bash
+./demo/stop.sh
+```
 
 And you can deactivate the virtualenv:
 
-> (env) $ deactivate
+```bash
+deactivate
+```
 
 ## Troubleshoot
 
