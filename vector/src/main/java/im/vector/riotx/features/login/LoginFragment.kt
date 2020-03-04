@@ -209,7 +209,14 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
                 } else {
                     // Trick to display the error without text.
                     loginFieldTil.error = " "
-                    passwordFieldTil.error = errorFormatter.toHumanReadable(state.asyncLoginAction.error)
+                    if (error is Failure.ServerError
+                            && error.error.code == MatrixError.M_FORBIDDEN
+                            && error.error.message == "Invalid password"
+                            && spaceInPassword()) {
+                        passwordFieldTil.error = getString(R.string.auth_invalid_login_param_space_in_password)
+                    } else {
+                        passwordFieldTil.error = errorFormatter.toHumanReadable(error)
+                    }
                 }
             }
             // Success is handled by the LoginActivity
@@ -226,4 +233,9 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
             is Success -> Unit
         }
     }
+
+    /**
+     * Detect if password ends or starts with spaces
+     */
+    private fun spaceInPassword() = passwordField.text.toString().let { it.trim() != it }
 }

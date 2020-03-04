@@ -26,7 +26,8 @@
 
 
     <!-- BEGIN Strings added by Others -->
-
+    <string name="command_description_plain">Sends a message as plain text, without interpreting it as markdown</string>
     <!-- END Strings added by Others -->
 
+    <string name="auth_invalid_login_param_space_in_password">Incorrect username and/or password. The entered password starts or ends with spaces, please check it.</string>
 </resources>

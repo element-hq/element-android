@@ -33,6 +33,7 @@ sealed class ParsedCommand {
 
     // Valid commands:
 
+    class SendPlainText(val message: CharSequence) : ParsedCommand()
     class SendEmote(val message: CharSequence) : ParsedCommand()
     class SendRainbow(val message: CharSequence) : ParsedCommand()
     class SendRainbowEmote(val message: CharSequence) : ParsedCommand()
