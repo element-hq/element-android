@@ -45,7 +45,7 @@ pip install -e .
 demo/start.sh --no-rate-limit
 ```
 
-Alternatively, to install the current Synapse package (and not using the cloned sources), you can run instead of `pip install -e .`:
+Alternatively, to install the latest Synapse release package (and not a cloned branch) you can run the following instead of `pip install -e .`:
 
 ```bash
 pip install matrix-synapse
