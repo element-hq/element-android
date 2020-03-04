@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachments
+import im.vector.matrix.android.internal.di.CacheDirectory
 import im.vector.matrix.android.internal.di.SessionCacheDirectory
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.extensions.foldToCallback
@@ -43,8 +44,10 @@ import javax.inject.Inject
 
 internal class DefaultFileService @Inject constructor(
         private val context: Context,
-        @SessionCacheDirectory
+        @CacheDirectory
         private val cacheDirectory: File,
+        @SessionCacheDirectory
+        private val sessionCacheDirectory: File,
         private val contentUrlResolver: ContentUrlResolver,
         @Unauthenticated
         private val okHttpClient: OkHttpClient,
@@ -63,7 +66,7 @@ internal class DefaultFileService @Inject constructor(
         return GlobalScope.launch(coroutineDispatchers.main) {
             withContext(coroutineDispatchers.io) {
                 Try {
-                    val folder = File(cacheDirectory, "MF")
+                    val folder = File(sessionCacheDirectory, "MF")
                     if (!folder.exists()) {
                         folder.mkdirs()
                     }
@@ -102,7 +105,7 @@ internal class DefaultFileService @Inject constructor(
     private fun copyFile(file: File, downloadMode: FileService.DownloadMode): File {
         return when (downloadMode) {
             FileService.DownloadMode.TO_EXPORT          -> file.copyTo(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), file.name), true)
-            FileService.DownloadMode.FOR_EXTERNAL_SHARE -> file.copyTo(File(File(context.cacheDir, "ext_share"), file.name), true)
+            FileService.DownloadMode.FOR_EXTERNAL_SHARE -> file.copyTo(File(File(cacheDirectory, "ext_share"), file.name), true)
             FileService.DownloadMode.FOR_INTERNAL_USE   -> file
         }
     }

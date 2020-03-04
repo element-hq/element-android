@@ -41,4 +41,6 @@ data class ContentAttachmentData(
         AUDIO,
         VIDEO
     }
+
+    fun getSafeMimeType() = if (mimeType == "image/jpg") "image/jpeg" else mimeType
 }

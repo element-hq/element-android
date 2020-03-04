@@ -23,6 +23,6 @@ import im.vector.matrix.android.api.session.content.ContentAttachmentData
  */
 fun ContentAttachmentData.isEditable(): Boolean {
     return type == ContentAttachmentData.Type.IMAGE
-            && mimeType?.startsWith("image/") == true
-            && mimeType != "image/gif"
+            && getSafeMimeType()?.startsWith("image/") == true
+            && getSafeMimeType() != "image/gif"
 }

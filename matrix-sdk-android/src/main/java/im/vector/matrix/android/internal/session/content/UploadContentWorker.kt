@@ -178,14 +178,14 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                 Timber.v("Encrypt file")
                 notifyTracker(params) { contentUploadStateTracker.setEncrypting(it) }
 
-                val encryptionResult = MXEncryptedAttachments.encryptAttachment(FileInputStream(attachmentFile), attachment.mimeType)
+                val encryptionResult = MXEncryptedAttachments.encryptAttachment(FileInputStream(attachmentFile), attachment.getSafeMimeType())
                 uploadedFileEncryptedFileInfo = encryptionResult.encryptedFileInfo
 
                 fileUploader
                         .uploadByteArray(encryptionResult.encryptedByteArray, attachment.name, "application/octet-stream", progressListener)
             } else {
                 fileUploader
-                        .uploadFile(attachmentFile, attachment.name, attachment.mimeType, progressListener)
+                        .uploadFile(attachmentFile, attachment.name, attachment.getSafeMimeType(), progressListener)
             }
 
             handleSuccess(params,

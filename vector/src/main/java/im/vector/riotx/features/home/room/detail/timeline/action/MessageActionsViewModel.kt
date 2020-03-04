@@ -29,7 +29,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.isTextMessage
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageEncryptedContent
+import im.vector.matrix.android.api.session.room.model.message.MessageWithAttachmentContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFormat
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
@@ -261,7 +261,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     }
 
                     if (canShare(msgType)) {
-                        if (messageContent is MessageEncryptedContent) {
+                        if (messageContent is MessageWithAttachmentContent) {
                             add(EventSharedAction.Share(timelineEvent.eventId, messageContent))
                         }
                     }
