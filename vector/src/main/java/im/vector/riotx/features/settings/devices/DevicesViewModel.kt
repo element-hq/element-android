@@ -30,9 +30,9 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.sas.VerificationService
-import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
+import im.vector.matrix.android.api.session.crypto.verification.VerificationService
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
@@ -40,7 +40,7 @@ import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.features.crypto.verification.supportedVerificationMethods
+import im.vector.riotx.features.crypto.verification.SupportedVerificationMethodsProvider
 
 data class DevicesViewState(
         val myDeviceId: String = "",
@@ -50,8 +50,10 @@ data class DevicesViewState(
         val request: Async<Unit> = Uninitialized
 ) : MvRxState
 
-class DevicesViewModel @AssistedInject constructor(@Assisted initialState: DevicesViewState,
-                                                   private val session: Session)
+class DevicesViewModel @AssistedInject constructor(
+        @Assisted initialState: DevicesViewState,
+        private val session: Session,
+        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider)
     : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvents>(initialState), VerificationService.Listener {
 
     @AssistedInject.Factory
@@ -172,7 +174,9 @@ class DevicesViewModel @AssistedInject constructor(@Assisted initialState: Devic
     }
 
     private fun handleVerify(action: DevicesAction.VerifyMyDevice) {
-        val txID = session.cryptoService().verificationService().requestKeyVerification(supportedVerificationMethods, session.myUserId, listOf(action.deviceId))
+        val txID = session.cryptoService()
+                .verificationService()
+                .requestKeyVerification(supportedVerificationMethodsProvider.provide(), session.myUserId, listOf(action.deviceId))
         _viewEvents.post(DevicesViewEvents.ShowVerifyDevice(
                 session.myUserId,
                 txID.transactionId

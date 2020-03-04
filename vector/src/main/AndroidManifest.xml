@@ -9,6 +9,15 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <!-- Adding CAMERA permission prevents Chromebooks to see the application on the PlayStore -->
+    <!-- Tell that the Camera is not mandatory to install the application -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+
     <application
         android:name=".VectorApplication"
         android:allowBackup="false"
@@ -40,6 +49,7 @@
             android:name=".features.login.LoginActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".features.media.ImageMediaViewerActivity" />
+        <activity android:name=".features.media.BigImageViewerActivity" />
         <activity
             android:name=".features.rageshake.BugReportActivity"
             android:label="@string/title_activity_bug_report" />
@@ -140,6 +150,7 @@
 
         <activity android:name=".features.qrcode.QrCodeScannerActivity" />
 
+        <activity android:name=".features.crypto.quads.SharedSecureStorageActivity" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait" />

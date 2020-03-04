@@ -27,6 +27,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.animations.AppBarStateChangeListener
@@ -164,6 +165,13 @@ class RoomProfileFragment @Inject constructor(
                 roomProfileDecorationImageView.isVisible = it.roomEncryptionTrustLevel != null
                 roomProfileDecorationImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
                 matrixProfileDecorationToolbarAvatarImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
+
+                roomProfileAvatarView.setOnClickListener { view ->
+                    onAvatarClicked(view, matrixItem)
+                }
+                matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
+                    onAvatarClicked(view, matrixItem)
+                }
             }
         }
         roomProfileController.setData(state)
@@ -210,5 +218,9 @@ class RoomProfileFragment @Inject constructor(
 
     private fun onShareRoomProfile(permalink: String) {
         startSharePlainTextIntent(fragment = this, chooserTitle = null, text = permalink)
+    }
+
+    private fun onAvatarClicked(view: View, matrixItem: MatrixItem.RoomItem) {
+        navigator.openBigImageViewer(requireActivity(), view, matrixItem)
     }
 }

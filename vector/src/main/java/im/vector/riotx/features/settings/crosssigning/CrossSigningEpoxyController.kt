@@ -36,6 +36,7 @@ class CrossSigningEpoxyController @Inject constructor(
     interface InteractionListener {
         fun onInitializeCrossSigningKeys()
         fun onResetCrossSigningKeys()
+        fun verifySession()
     }
 
     var interactionListener: InteractionListener? = null
@@ -77,21 +78,31 @@ class CrossSigningEpoxyController @Inject constructor(
                         interactionListener?.onResetCrossSigningKeys()
                     }
                 }
-            } else if (data.xSigningIsEnableInAccount) {
-                genericItem {
-                    id("enable")
-                    titleIconResourceId(R.drawable.ic_shield_black)
-                    title(stringProvider.getString(R.string.encryption_information_dg_xsigning_not_trusted))
+            }
+        } else if (data.xSigningIsEnableInAccount) {
+            genericItem {
+                id("enable")
+                titleIconResourceId(R.drawable.ic_shield_black)
+                title(stringProvider.getString(R.string.encryption_information_dg_xsigning_not_trusted))
+            }
+            bottomSheetVerificationActionItem {
+                id("verify")
+                title(stringProvider.getString(R.string.complete_security))
+                titleColor(colorProvider.getColor(R.color.riotx_positive_accent))
+                iconRes(R.drawable.ic_arrow_right)
+                iconColor(colorProvider.getColor(R.color.riotx_positive_accent))
+                listener {
+                    interactionListener?.verifySession()
                 }
-                bottomSheetVerificationActionItem {
-                    id("resetkeys")
-                    title("Reset keys")
-                    titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                    iconRes(R.drawable.ic_arrow_right)
-                    iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                    listener {
-                        interactionListener?.onResetCrossSigningKeys()
-                    }
+            }
+            bottomSheetVerificationActionItem {
+                id("resetkeys")
+                title("Reset keys")
+                titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
+                iconRes(R.drawable.ic_arrow_right)
+                iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
+                listener {
+                    interactionListener?.onResetCrossSigningKeys()
                 }
             }
         } else {

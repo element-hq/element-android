@@ -20,16 +20,16 @@ import android.content.Context
 import android.net.Uri
 import im.vector.matrix.android.api.permalinks.PermalinkData
 import im.vector.matrix.android.api.permalinks.PermalinkParser
-import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.rx.rx
+import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.features.navigation.Navigator
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class PermalinkHandler @Inject constructor(private val session: Session,
+class PermalinkHandler @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
                                            private val navigator: Navigator) {
 
     fun launch(
@@ -80,7 +80,8 @@ class PermalinkHandler @Inject constructor(private val session: Session,
     }
 
     private fun PermalinkData.RoomLink.getRoomId(): Single<Optional<String>> {
-        return if (isRoomAlias) {
+        val session = activeSessionHolder.getSafeActiveSession()
+        return if (isRoomAlias && session != null) {
             // At the moment we are not fetching on the server as we don't handle not join room
             session.rx().getRoomIdByAlias(roomIdOrAlias, false).subscribeOn(Schedulers.io())
         } else {
@@ -92,6 +93,7 @@ class PermalinkHandler @Inject constructor(private val session: Session,
      * Open room either joined, or not
      */
     private fun openRoom(context: Context, roomId: String?, eventId: String?, buildTask: Boolean) {
+        val session = activeSessionHolder.getSafeActiveSession() ?: return
         return if (roomId != null && session.getRoom(roomId) != null) {
             navigator.openRoom(context, roomId, eventId, buildTask)
         } else {

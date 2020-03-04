@@ -22,6 +22,7 @@ import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.Network
 import android.os.Build
+import timber.log.Timber
 import javax.inject.Inject
 
 internal interface NetworkCallbackStrategy {
@@ -70,7 +71,16 @@ internal class PreferredNetworkCallbackStrategy @Inject constructor(context: Con
     }
 
     override fun unregister() {
+        // It can crash after an application update, if not registered
+        val doUnregister = hasChangedCallback != null
         hasChangedCallback = null
-        conn.unregisterNetworkCallback(networkCallback)
+        if (doUnregister) {
+            // Add a try catch for safety
+            try {
+                conn.unregisterNetworkCallback(networkCallback)
+            } catch (t: Throwable) {
+                Timber.e(t, "Unable to unregister network callback")
+            }
+        }
     }
 }

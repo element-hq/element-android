@@ -28,20 +28,26 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.sas.IncomingSasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.QrCodeVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
-import im.vector.matrix.android.api.session.crypto.sas.VerificationService
-import im.vector.matrix.android.api.session.crypto.sas.VerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
+import im.vector.matrix.android.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.verification.IncomingSasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.QrCodeVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.SasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
+import im.vector.matrix.android.api.session.crypto.verification.VerificationService
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
+import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
+import im.vector.matrix.android.internal.crypto.crosssigning.isVerified
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
+import timber.log.Timber
 
 data class VerificationBottomSheetViewState(
         val otherUserMxItem: MatrixItem? = null,
@@ -52,13 +58,16 @@ data class VerificationBottomSheetViewState(
         val qrTransactionState: VerificationTxState? = null,
         val transactionId: String? = null,
         // true when we display the loading and we wait for the other (incoming request)
-        val waitForOtherUserMode: Boolean = false,
+        val selfVerificationMode: Boolean = false,
+        val verifiedFromPrivateKeys: Boolean = false,
         val isMe: Boolean = false
 ) : MvRxState
 
-class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted initialState: VerificationBottomSheetViewState,
-                                                                   @Assisted args: VerificationBottomSheet.VerificationArgs,
-                                                                   private val session: Session)
+class VerificationBottomSheetViewModel @AssistedInject constructor(
+        @Assisted initialState: VerificationBottomSheetViewState,
+        @Assisted args: VerificationBottomSheet.VerificationArgs,
+        private val session: Session,
+        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider)
     : VectorViewModel<VerificationBottomSheetViewState, VerificationAction, VerificationBottomSheetViewEvents>(initialState),
         VerificationService.Listener {
 
@@ -67,10 +76,10 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
 
         val userItem = session.getUser(args.otherUserId)
 
-        val isWaitingForOtherMode = args.waitForIncomingRequest
+        val selfVerificationMode = args.selfVerificationMode
 
         var autoReady = false
-        val pr = if (isWaitingForOtherMode) {
+        val pr = if (selfVerificationMode) {
             // See if active tx for this user and take it
 
             session.cryptoService().verificationService().getExistingVerificationRequest(args.otherUserId)
@@ -100,7 +109,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                     qrTransactionState = qrTx?.state,
                     transactionId = pr?.transactionId ?: args.verificationId,
                     pendingRequest = if (pr != null) Success(pr) else Uninitialized,
-                    waitForOtherUserMode = isWaitingForOtherMode,
+                    selfVerificationMode = selfVerificationMode,
                     roomId = args.roomId,
                     isMe = args.otherUserId == session.myUserId
             )
@@ -109,9 +118,11 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
         if (autoReady) {
             // TODO, can I be here in DM mode? in this case should test if roomID is null?
             session.cryptoService().verificationService()
-                    .readyPendingVerification(supportedVerificationMethods,
+                    .readyPendingVerification(
+                            supportedVerificationMethodsProvider.provide(),
                             pr!!.otherUserId,
-                            pr.transactionId ?: "")
+                            pr.transactionId ?: ""
+                    )
         }
     }
 
@@ -166,7 +177,12 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                                                 session
                                                         .cryptoService()
                                                         .verificationService()
-                                                        .requestKeyVerificationInDMs(supportedVerificationMethods, otherUserId, data, pendingLocalId)
+                                                        .requestKeyVerificationInDMs(
+                                                                supportedVerificationMethodsProvider.provide(),
+                                                                otherUserId,
+                                                                data,
+                                                                pendingLocalId
+                                                        )
                                         )
                                 )
                             }
@@ -184,7 +200,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                                 pendingRequest = Success(session
                                         .cryptoService()
                                         .verificationService()
-                                        .requestKeyVerificationInDMs(supportedVerificationMethods, otherUserId, roomId)
+                                        .requestKeyVerificationInDMs(supportedVerificationMethodsProvider.provide(), otherUserId, roomId)
                                 )
                         )
                     }
@@ -250,6 +266,44 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
             is VerificationAction.GotItConclusion              -> {
                 _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
             }
+            is VerificationAction.SkipVerification             -> {
+                _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
+            }
+            is VerificationAction.VerifyFromPassphrase         -> {
+                _viewEvents.post(VerificationBottomSheetViewEvents.AccessSecretStore)
+            }
+            is VerificationAction.GotResultFromSsss            -> {
+                try {
+                    action.cypherData.fromBase64().inputStream().use { ins ->
+                        val res = session.loadSecureSecret<Map<String, String>>(ins, action.alias)
+                        val trustResult = session.cryptoService().crossSigningService().checkTrustFromPrivateKeys(
+                                res?.get(MASTER_KEY_SSSS_NAME),
+                                res?.get(USER_SIGNING_KEY_SSSS_NAME),
+                                res?.get(SELF_SIGNING_KEY_SSSS_NAME)
+                        )
+                        if (trustResult.isVerified()) {
+                            // Sign this device and upload the signature
+                            session.sessionParams.credentials.deviceId?.let { deviceId ->
+                                session.cryptoService()
+                                        .crossSigningService().trustDevice(deviceId, object : MatrixCallback<Unit> {
+                                            override fun onFailure(failure: Throwable) {
+                                                Timber.w(failure, "Failed to sign my device after recovery")
+                                            }
+                                        })
+                            }
+
+                            setState {
+                                copy(verifiedFromPrivateKeys = true)
+                            }
+                        } else {
+                            // POP UP something
+                            _viewEvents.post(VerificationBottomSheetViewEvents.ModalError("Failed to import keys"))
+                        }
+                    }
+                } catch (failure: Throwable) {
+                    _viewEvents.post(VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage))
+                }
+            }
         }.exhaustive
     }
 
@@ -258,7 +312,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
     }
 
     override fun transactionUpdated(tx: VerificationTransaction) = withState { state ->
-        if (state.waitForOtherUserMode && state.transactionId == null) {
+        if (state.selfVerificationMode && state.transactionId == null) {
             // is this an incoming with that user
             if (tx.isIncoming && tx.otherUserId == state.otherUserMxItem?.id) {
                 // Also auto accept incoming if needed!
@@ -308,16 +362,18 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
 
     override fun verificationRequestUpdated(pr: PendingVerificationRequest) = withState { state ->
 
-        if (state.waitForOtherUserMode && state.pendingRequest.invoke() == null && state.transactionId == null) {
+        if (state.selfVerificationMode && state.pendingRequest.invoke() == null && state.transactionId == null) {
             // is this an incoming with that user
             if (pr.isIncoming && pr.otherUserId == state.otherUserMxItem?.id) {
                 if (!pr.isReady) {
                     // auto ready in this case, as we are waiting
                     // TODO, can I be here in DM mode? in this case should test if roomID is null?
                     session.cryptoService().verificationService()
-                            .readyPendingVerification(supportedVerificationMethods,
+                            .readyPendingVerification(
+                                    supportedVerificationMethodsProvider.provide(),
                                     pr.otherUserId,
-                                    pr.transactionId ?: "")
+                                    pr.transactionId ?: ""
+                            )
                 }
 
                 // Use this one!

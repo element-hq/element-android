@@ -18,11 +18,11 @@ package im.vector.matrix.android.internal.crypto.verification
 import android.os.Build
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
-import im.vector.matrix.android.api.session.crypto.sas.CancelCode
-import im.vector.matrix.android.api.session.crypto.sas.EmojiRepresentation
-import im.vector.matrix.android.api.session.crypto.sas.SasMode
-import im.vector.matrix.android.api.session.crypto.sas.SasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
+import im.vector.matrix.android.api.session.crypto.verification.CancelCode
+import im.vector.matrix.android.api.session.crypto.verification.EmojiRepresentation
+import im.vector.matrix.android.api.session.crypto.verification.SasMode
+import im.vector.matrix.android.api.session.crypto.verification.SasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
@@ -299,20 +299,27 @@ internal abstract class SASDefaultVerificationTransaction(
         }
 
         // If not me sign his MSK and upload the signature
-        if (otherMasterKeyIsVerified && otherUserId != userId) {
+        if (otherMasterKeyIsVerified) {
             // we should trust this master key
             // And check verification MSK -> SSK?
-            crossSigningService.trustUser(otherUserId, object : MatrixCallback<Unit> {
-                override fun onFailure(failure: Throwable) {
-                    Timber.e(failure, "## SAS Verification: Failed to trust User $otherUserId")
+            if (otherUserId != userId) {
+                crossSigningService.trustUser(otherUserId, object : MatrixCallback<Unit> {
+                    override fun onFailure(failure: Throwable) {
+                        Timber.e(failure, "## SAS Verification: Failed to trust User $otherUserId")
+                    }
+                })
+            } else {
+                // Notice other master key is mine because other is me
+                if (otherMasterKey?.trustLevel?.isVerified() == false) {
+                    crossSigningService.markMyMasterKeyAsTrusted()
                 }
-            })
+            }
         }
 
         if (otherUserId == userId) {
             // If me it's reasonable to sign and upload the device signature
             // Notice that i might not have the private keys, so may not be able to do it
-            crossSigningService.signDevice(otherDeviceId!!, object : MatrixCallback<Unit> {
+            crossSigningService.trustDevice(otherDeviceId!!, object : MatrixCallback<Unit> {
                 override fun onFailure(failure: Throwable) {
                     Timber.w(failure, "## SAS Verification: Failed to sign new device $otherDeviceId")
                 }

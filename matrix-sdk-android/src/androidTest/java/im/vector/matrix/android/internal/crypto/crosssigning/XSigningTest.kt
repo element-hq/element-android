@@ -138,7 +138,7 @@ class XSigningTest : InstrumentedTest {
 
         // Manually mark it as trusted from first session
         mTestHelper.doSync<Unit> {
-            bobSession.cryptoService().crossSigningService().signDevice(bobSecondDeviceId, it)
+            bobSession.cryptoService().crossSigningService().trustDevice(bobSecondDeviceId, it)
         }
 
         // Now alice should cross trust bob's second device

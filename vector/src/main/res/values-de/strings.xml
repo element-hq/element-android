@@ -173,8 +173,8 @@
     <string name="auth_reset_password_email_validation_message">Eine E-Mail wurde an %s gesendet. Bitte dem in der E-Mail enthaltenen Link folgen und anschließend unten klicken.</string>
     <string name="auth_reset_password_error_unauthorized">Verifizierung der E-Mail-Adresse ist fehlgeschlagen: Stelle sicher, dass du den Link in der E-Mail geöffnet hast</string>
     <string name="auth_reset_password_success_message">Dein Passwort wurde zurückgesetzt.
-
-Du wurdest auf allen Geräten abgemeldet und wirst keine Push-Benachrichtigungen mehr erhalten. Um die Push-Benachrichtigungen wieder zu aktivieren, musst du dich auf jedem Gerät erneut anmelden.</string>
+\n
+\nDu wurdest aus allen Sitzungen abgemeldet und wirst keine Push-Benachrichtigungen mehr erhalten. Um die Push-Benachrichtigungen wieder zu aktivieren, musst du dich auf jedem Gerät erneut anmelden.</string>
 
     <!-- Login Screen -->
     <string name="login_error_must_start_http">URL muss mit \'http[s]://\' beginnen</string>
@@ -194,7 +194,9 @@ Du wurdest auf allen Geräten abgemeldet und wirst keine Push-Benachrichtigungen
     <string name="login_error_login_email_not_yet">Der Link in der E-Mail wurde noch nicht geöffnet</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">Du musst dich erneut anmelden um Ende-zu-Ende-Verschlüsselungs-Schlüssel for dieses Gerät zu generieren und den öffentlichen Schlüssel an deinen Heimserver zu senden.\nDies ist einmalig.\nEntschuldige die Unannehmlichkeiten.</string>
+    <string name="e2e_need_log_in_again">Du musst dich erneut anmelden, um Ende-zu-Ende-Verschlüsselungsschlüssel für diese Sitzung zu generieren und den öffentlichen Schlüssel an deinen Heimserver zu senden.
+\nDies ist einmalig.
+\nEntschuldige die Unannehmlichkeiten.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Lesebestätigungsliste</string>
@@ -303,7 +305,7 @@ Du kannst dich mit einem anderen Konto anmelden oder diese E-Mail-Adresse zu die
     <string name="room_participants_header_admin_tools">ADMIN-WERKZEUGE</string>
     <string name="room_participants_header_call">ANRUFE</string>
     <string name="room_participants_header_direct_chats">DIREKT-CHATS</string>
-    <string name="room_participants_header_devices">GERÄTE</string>
+    <string name="room_participants_header_devices">SITZUNGEN</string>
 
     <string name="room_participants_action_invite">Einladen</string>
     <string name="room_participants_action_leave">Diesen Raum verlassen</string>
@@ -317,7 +319,7 @@ Du kannst dich mit einem anderen Konto anmelden oder diese E-Mail-Adresse zu die
     <string name="room_participants_action_unignore">Alle Nachrichten dieses Nutzers anzeigen</string>
     <string name="room_participants_invite_search_another_user">Benutzer-ID, Name oder E-Mail-Adresse</string>
     <string name="room_participants_action_mention">Erwähnen</string>
-    <string name="room_participants_action_devices_list">Geräteliste anzeigen</string>
+    <string name="room_participants_action_devices_list">Sitzungsliste anzeigen</string>
     <string name="room_participants_power_level_prompt">Du wirst diese Änderung nicht rückgängig machen können, da der Benutzer dasselbe Berechtigungslevel wie du selbst erhalten wirst.
 Bist du sicher?</string>
 
@@ -341,7 +343,7 @@ Bist du sicher?</string>
     <string name="room_message_placeholder_not_encrypted">Nachricht senden (unverschlüsselt)…</string>
     <string name="room_offline_notification">Verbindung zum Server wurde unterbrochen.</string>
     <string name="room_unsent_messages_notification">Nachrichten konnten nicht gesendet werden. %1$s oder %2$s?</string>
-    <string name="room_unknown_devices_messages_notification">Nachrichten wurden nicht gesendet, da unbekannte Geräte anwesend sind. %1$s oder %2$s?</string>
+    <string name="room_unknown_devices_messages_notification">Nachrichten wurden nicht gesendet, da unbekannte Sitzungen anwesend sind. Jetzt %1$s oder %2$s\?</string>
     <string name="room_prompt_resend">Alles erneut senden</string>
     <string name="room_prompt_cancel">alles abbrechen</string>
     <string name="room_resend_unsent_messages">Nicht gesendete Nachrichten erneut senden</string>
@@ -433,7 +435,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="settings_app_info_link_title">App-Info</string>
 
     <string name="settings_enable_all_notif">Benachrichtigungen für diesen Account aktivieren</string>
-    <string name="settings_enable_this_device">Benachrichtigungen für dieses Gerät aktivieren</string>
+    <string name="settings_enable_this_device">Benachrichtigungen für diese Sitzung aktivieren</string>
     <string name="settings_turn_screen_on">Bildschirm für 3 Sekunden aktivieren</string>
 
     <string name="settings_messages_in_one_to_one">Nachrichten in direkten Chats</string>
@@ -472,8 +474,8 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="settings_home_display">Startseite</string>
     <string name="settings_pin_missed_notifications">Räume mit ungelesenen Benachrichtigungen anheften</string>
     <string name="settings_pin_unread_messages">Räume mit ungelesenen Nachrichten anheften</string>
-    <string name="settings_devices_list">Geräte</string>
-    <string name="devices_details_dialog_title">Geräteinformationen</string>
+    <string name="settings_devices_list">Sitzungen</string>
+    <string name="devices_details_dialog_title">Sitzungsinformationen</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Öffentlicher Name</string>
     <string name="devices_details_device_name">Öffentlichen Namen aktualisieren</string>
@@ -936,12 +938,12 @@ Willst du welche hinzufügen?</string>
     <string name="download">Download</string>
     <string name="speak">Sprechen</string>
     <string name="clear">Leeren</string>
-    <string name="e2e_re_request_encryption_key">Verschlüsselungsschlüssel von deinen anderen Geräten <u>erneut anfragen</u>.</string>
+    <string name="e2e_re_request_encryption_key">Verschlüsselungsschlüssel von deinen anderen Sitzungen <u>erneut anfragen</u>.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Schlüsselanfrage gesendet.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Anfrage gesendet</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Bitte öffne Riot auf einem anderen Gerät, das die Nachricht entschlüsseln kann, damit es diesem Gerät die Schlüssel senden kann.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Bitte öffne Riot auf einem anderen Gerät, das die Nachricht entschlüsseln kann, damit es die Schlüssel an diese Sitzung senden kann.</string>
 
     <string name="lock_screen_hint">Hier tippen…</string>
 
@@ -1120,9 +1122,9 @@ Bitte überprüfe die Systemeinstellungen.</string>
 Bitte überprüfe die Kontoeinstellungen.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Aktiviere</string>
 
-    <string name="settings_troubleshoot_test_device_settings_title">Geräteeinstellungen.</string>
-    <string name="settings_troubleshoot_test_device_settings_success">Benachrichtigungen sind für dieses Gerät aktiviert.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Benachrichtigungen sind für dieses Gerät nicht erlaubt.
+    <string name="settings_troubleshoot_test_device_settings_title">Sitzungseinstellungen.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Benachrichtigungen sind für diese Sitzung aktiviert.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Benachrichtigungen sind für diese Sitzung nicht aktiviert. 
 \nBitte überprüfe die Einstellungen für Riot.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Aktiviere</string>
 

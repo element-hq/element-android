@@ -36,6 +36,10 @@ class DisplayableEventFormatter @Inject constructor(
 ) {
 
     fun format(timelineEvent: TimelineEvent, appendAuthor: Boolean): CharSequence {
+        if (timelineEvent.root.isRedacted()) {
+            return noticeEventFormatter.formatRedactedEvent(timelineEvent.root)
+        }
+
         if (timelineEvent.root.isEncrypted()
                 && timelineEvent.root.mxDecryptionResult == null) {
             return stringProvider.getString(R.string.encrypted_message)

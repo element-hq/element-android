@@ -23,7 +23,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.viewModel
 import im.vector.matrix.android.api.session.room.failure.CreateRoomFailure
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent

@@ -17,7 +17,7 @@ package im.vector.matrix.android.internal.session.room.send.pills
 
 import android.text.SpannableString
 import im.vector.matrix.android.api.session.room.send.MatrixItemSpan
-import java.util.*
+import java.util.Collections
 import javax.inject.Inject
 
 /**

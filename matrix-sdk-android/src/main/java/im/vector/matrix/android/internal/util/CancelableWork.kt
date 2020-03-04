@@ -18,7 +18,7 @@ package im.vector.matrix.android.internal.util
 
 import androidx.work.WorkManager
 import im.vector.matrix.android.api.util.Cancelable
-import java.util.*
+import java.util.UUID
 
 internal class CancelableWork(private val workManager: WorkManager,
                               private val workId: UUID) : Cancelable {

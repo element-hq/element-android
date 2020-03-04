@@ -28,7 +28,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import im.vector.matrix.android.api.session.crypto.sas.VerificationService
+import im.vector.matrix.android.api.session.crypto.verification.VerificationService
 import im.vector.matrix.android.internal.session.room.VerificationState
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.exhaustive

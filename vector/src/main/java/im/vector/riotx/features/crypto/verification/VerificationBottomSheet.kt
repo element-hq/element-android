@@ -15,26 +15,32 @@
  */
 package im.vector.riotx.features.crypto.verification
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.transition.AutoTransition
-import androidx.transition.TransitionManager
 import butterknife.BindView
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.matrix.android.api.session.crypto.sas.VerificationTxState
+import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
-import im.vector.riotx.core.extensions.commitTransactionNow
+import im.vector.riotx.core.extensions.commitTransaction
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.riotx.features.crypto.quads.SharedSecureStorageActivity
 import im.vector.riotx.features.crypto.verification.choose.VerificationChooseMethodFragment
 import im.vector.riotx.features.crypto.verification.conclusion.VerificationConclusionFragment
 import im.vector.riotx.features.crypto.verification.emoji.VerificationEmojiCodeFragment
@@ -42,7 +48,6 @@ import im.vector.riotx.features.crypto.verification.qrconfirmation.VerificationQ
 import im.vector.riotx.features.crypto.verification.request.VerificationRequestFragment
 import im.vector.riotx.features.home.AvatarRenderer
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.bottom_sheet_verification.*
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.reflect.KClass
@@ -54,9 +59,11 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
             val otherUserId: String,
             val verificationId: String? = null,
             val roomId: String? = null,
-            // Special mode where UX should show loading wheel until other user sends a request/tx
-            val waitForIncomingRequest: Boolean = false
+            // Special mode where UX should show loading wheel until other session sends a request/tx
+            val selfVerificationMode: Boolean = false
     ) : Parcelable
+
+    override val showExpanded = true
 
     @Inject
     lateinit var verificationViewModelFactory: VerificationBottomSheetViewModel.Factory
@@ -85,15 +92,44 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
         viewModel.observeViewEvents {
             when (it) {
-                is VerificationBottomSheetViewEvents.Dismiss -> dismiss()
+                is VerificationBottomSheetViewEvents.Dismiss           -> dismiss()
+                is VerificationBottomSheetViewEvents.AccessSecretStore -> {
+                    startActivityForResult(SharedSecureStorageActivity.newIntent(
+                            requireContext(),
+                            null, // use default key
+                            listOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME),
+                            SharedSecureStorageActivity.DEFAULT_RESULT_KEYSTORE_ALIAS
+                    ), SECRET_REQUEST_CODE)
+                }
+                is VerificationBottomSheetViewEvents.ModalError        -> {
+                    AlertDialog.Builder(requireContext())
+                            .setTitle(getString(R.string.dialog_title_error))
+                            .setMessage(it.errorMessage)
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.ok, null)
+                            .show()
+                    Unit
+                }
             }.exhaustive
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK && requestCode == SECRET_REQUEST_CODE) {
+            data?.getStringExtra(SharedSecureStorageActivity.EXTRA_DATA_RESULT)?.let {
+                viewModel.handle(VerificationAction.GotResultFromSsss(it, SharedSecureStorageActivity.DEFAULT_RESULT_KEYSTORE_ALIAS))
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
     override fun invalidate() = withState(viewModel) { state ->
+
         state.otherUserMxItem?.let { matrixItem ->
             if (state.isMe) {
-                if (state.sasTransactionState == VerificationTxState.Verified || state.qrTransactionState == VerificationTxState.Verified) {
+                if (state.sasTransactionState == VerificationTxState.Verified
+                        || state.qrTransactionState == VerificationTxState.Verified
+                        || state.verifiedFromPrivateKeys) {
                     otherUserAvatarImageView.setImageResource(R.drawable.ic_shield_trusted)
                 } else {
                     otherUserAvatarImageView.setImageResource(R.drawable.ic_shield_warning)
@@ -111,6 +147,13 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                     otherUserShield.isVisible = false
                 }
             }
+        }
+
+        if (state.selfVerificationMode && state.verifiedFromPrivateKeys) {
+            showFragment(VerificationConclusionFragment::class, Bundle().apply {
+                putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null, state.isMe))
+            })
+            return@withState
         }
 
         // Did the request result in a SAS transaction?
@@ -183,7 +226,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
 
         // If it's an outgoing
-        if (state.pendingRequest.invoke() == null || state.pendingRequest.invoke()?.isIncoming == false || state.waitForOtherUserMode) {
+        if (state.pendingRequest.invoke() == null || state.pendingRequest.invoke()?.isIncoming == false || state.selfVerificationMode) {
             Timber.v("## SAS show bottom sheet for outgoing request")
             if (state.pendingRequest.invoke()?.isReady == true) {
                 Timber.v("## SAS show bottom sheet for outgoing and ready request")
@@ -214,12 +257,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     private fun showFragment(fragmentClass: KClass<out Fragment>, bundle: Bundle) {
         if (childFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
-            // We want to animate the bottomsheet bound changes
-            bottomSheetFragmentContainer.getParentCoordinatorLayout()?.let { coordinatorLayout ->
-                TransitionManager.beginDelayedTransition(coordinatorLayout, AutoTransition().apply { duration = 150 })
-            }
-            // Commit now, to ensure changes occurs before next rendering frame (or bottomsheet want animate)
-            childFragmentManager.commitTransactionNow {
+            childFragmentManager.commitTransaction {
                 replace(R.id.bottomSheetFragmentContainer,
                         fragmentClass.java,
                         bundle,
@@ -230,14 +268,28 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     }
 
     companion object {
-        fun withArgs(roomId: String?, otherUserId: String, transactionId: String? = null, waitForIncomingRequest: Boolean = false): VerificationBottomSheet {
+
+        const val SECRET_REQUEST_CODE = 101
+
+        fun withArgs(roomId: String?, otherUserId: String, transactionId: String? = null): VerificationBottomSheet {
             return VerificationBottomSheet().apply {
                 arguments = Bundle().apply {
                     putParcelable(MvRx.KEY_ARG, VerificationArgs(
                             otherUserId = otherUserId,
                             roomId = roomId,
                             verificationId = transactionId,
-                            waitForIncomingRequest = waitForIncomingRequest
+                            selfVerificationMode = false
+                    ))
+                }
+            }
+        }
+
+        fun forSelfVerification(session: Session): VerificationBottomSheet {
+            return VerificationBottomSheet().apply {
+                arguments = Bundle().apply {
+                    putParcelable(MvRx.KEY_ARG, VerificationArgs(
+                            otherUserId = session.myUserId,
+                            selfVerificationMode = true
                     ))
                 }
             }

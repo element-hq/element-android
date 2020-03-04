@@ -118,6 +118,10 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                                 }
 
                                 override fun onFailure(failure: Throwable) {
+                                    if (!isAdded) {
+                                        return
+                                    }
+
                                     // revert the check box
                                     switchPref.isChecked = !switchPref.isChecked
                                     Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()

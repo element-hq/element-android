@@ -16,7 +16,11 @@
 
 package im.vector.matrix.android.internal.extensions
 
-import arrow.core.*
+import arrow.core.Failure
+import arrow.core.Success
+import arrow.core.Try
+import arrow.core.TryOf
+import arrow.core.fix
 import im.vector.matrix.android.api.MatrixCallback
 
 inline fun <A> TryOf<A>.onError(f: (Throwable) -> Unit): Try<A> = fix()

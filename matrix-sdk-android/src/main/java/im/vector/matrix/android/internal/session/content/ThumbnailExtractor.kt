@@ -46,7 +46,7 @@ internal object ThumbnailExtractor {
     }
 
     private fun extractVideoThumbnail(attachment: ContentAttachmentData): ThumbnailData? {
-        val thumbnail = ThumbnailUtils.createVideoThumbnail(attachment.path, MediaStore.Video.Thumbnails.MINI_KIND)
+        val thumbnail = ThumbnailUtils.createVideoThumbnail(attachment.path, MediaStore.Video.Thumbnails.MINI_KIND) ?: return null
         val outputStream = ByteArrayOutputStream()
         thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
         val thumbnailWidth = thumbnail.width

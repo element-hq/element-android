@@ -192,6 +192,13 @@ class RoomMemberProfileFragment @Inject constructor(
                 } else {
                     memberProfileDecorationImageView.isVisible = false
                 }
+
+                memberProfileAvatarView.setOnClickListener { view ->
+                    onAvatarClicked(view, userMatrixItem)
+                }
+                matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
+                    onAvatarClicked(view, userMatrixItem)
+                }
             }
         }
         memberProfilePowerLevelView.setTextOrHide(state.userPowerLevelString())
@@ -226,5 +233,9 @@ class RoomMemberProfileFragment @Inject constructor(
 
     private fun handleShareRoomMemberProfile(permalink: String) {
         startSharePlainTextIntent(fragment = this, chooserTitle = null, text = permalink)
+    }
+
+    private fun onAvatarClicked(view: View, userMatrixItem: MatrixItem) {
+        navigator.openBigImageViewer(requireActivity(), view, userMatrixItem)
     }
 }

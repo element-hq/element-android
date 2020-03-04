@@ -1,4 +1,30 @@
-Changes in RiotX 0.17.0 (2020-XX-XX)
+Changes in RiotX 0.18.0 (2020-XX-XX)
+===================================================
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ - Add support for `/plain` command (#12)
+ - FTUE: do not display a different color when encrypting message when not in developer mode.
+
+Bugfix 🐛:
+ - Fix crash on attachment preview screen (#1088)
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ - 
+
+Build 🧱:
+ - Upgrade ktlint to version 0.36.0
+
+Other changes:
+ - Restore availability to Chromebooks (#932)
+ - Add a [documentation](./docs/integration_tests.md) to run integration tests
+
+Changes in RiotX 0.17.0 (2020-02-27)
 ===================================================
 
 Features ✨:
@@ -11,7 +37,8 @@ Features ✨:
 Improvements 🙌:
  - Migrate to binary QR code verification (#994)
  - Share action is added to room profile and room member profile (#858)
- - FTUE: do not display a different color when encrypting message when not in developer mode.
+ - Display avatar in fullscreen (#861)
+ - Fix some performance issues with crypto
 
 Bugfix 🐛:
  - Account creation: wrongly hints that an email can be used to create an account (#941)
@@ -23,20 +50,12 @@ Bugfix 🐛:
  - Fix some invitation handling issues (#1013)
  - New direct chat: selecting a participant sometimes results in two breadcrumbs (#1022)
  - New direct chat: selecting several participants was not adding the room to the direct chats list
-
-Translations 🗣:
- -
+ - Room overview shows deleted messages as “Encrypted message” (#758)
 
 SDK API changes ⚠️:
  - Get crypto methods through Session.cryptoService()
  - ProgressListener.onProgress() function will be invoked on the background thread instead of UI thread
  - Improve CreateRoomParams API (#1070)
-
-Build 🧱:
- -
-
-Other changes:
- -
 
 Changes in RiotX 0.16.0 (2020-02-14)
 ===================================================

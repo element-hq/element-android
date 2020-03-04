@@ -49,6 +49,7 @@ import im.vector.matrix.android.internal.crypto.crosssigning.ShieldTrustUpdater
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.WorkManagerProvider
+import im.vector.matrix.android.internal.session.room.timeline.TimelineEventDecryptor
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import im.vector.matrix.android.internal.session.sync.job.SyncWorker
@@ -93,6 +94,7 @@ internal class DefaultSession @Inject constructor(
         private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>,
         private val accountDataService: Lazy<AccountDataService>,
         private val _sharedSecretStorageService: Lazy<SharedSecretStorageService>,
+        private val timelineEventDecryptor: TimelineEventDecryptor,
         private val shieldTrustUpdater: ShieldTrustUpdater)
     : Session,
         RoomService by roomService.get(),
@@ -126,6 +128,7 @@ internal class DefaultSession @Inject constructor(
         isOpen = true
         liveEntityObservers.forEach { it.start() }
         eventBus.register(this)
+        timelineEventDecryptor.start()
         shieldTrustUpdater.start()
     }
 
@@ -163,6 +166,7 @@ internal class DefaultSession @Inject constructor(
     override fun close() {
         assert(isOpen)
         stopSync()
+        timelineEventDecryptor.destroy()
         liveEntityObservers.forEach { it.dispose() }
         cryptoService.get().close()
         isOpen = false

@@ -80,7 +80,7 @@ internal class DefaultCrossSigningService @Inject constructor(
 
                 cryptoStore.getCrossSigningPrivateKeys()?.let { privateKeysInfo ->
                     privateKeysInfo.master
-                            ?.fromBase64NoPadding()
+                            ?.fromBase64()
                             ?.let { privateKeySeed ->
                                 val pkSigning = OlmPkSigning()
                                 if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.masterKey()?.unpaddedBase64PublicKey) {
@@ -88,11 +88,12 @@ internal class DefaultCrossSigningService @Inject constructor(
                                     Timber.i("## CrossSigning - Loading master key success")
                                 } else {
                                     Timber.w("## CrossSigning - Public master key does not match the private key")
-                                    // TODO untrust
+                                    pkSigning.releaseSigning()
+                                    // TODO untrust?
                                 }
                             }
                     privateKeysInfo.user
-                            ?.fromBase64NoPadding()
+                            ?.fromBase64()
                             ?.let { privateKeySeed ->
                                 val pkSigning = OlmPkSigning()
                                 if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.userKey()?.unpaddedBase64PublicKey) {
@@ -100,11 +101,12 @@ internal class DefaultCrossSigningService @Inject constructor(
                                     Timber.i("## CrossSigning - Loading User Signing key success")
                                 } else {
                                     Timber.w("## CrossSigning - Public User key does not match the private key")
-                                    // TODO untrust
+                                    pkSigning.releaseSigning()
+                                    // TODO untrust?
                                 }
                             }
                     privateKeysInfo.selfSigned
-                            ?.fromBase64NoPadding()
+                            ?.fromBase64()
                             ?.let { privateKeySeed ->
                                 val pkSigning = OlmPkSigning()
                                 if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.selfSigningKey()?.unpaddedBase64PublicKey) {
@@ -112,7 +114,8 @@ internal class DefaultCrossSigningService @Inject constructor(
                                     Timber.i("## CrossSigning - Loading Self Signing key success")
                                 } else {
                                     Timber.w("## CrossSigning - Public Self Signing key does not match the private key")
-                                    // TODO untrust
+                                    pkSigning.releaseSigning()
+                                    // TODO untrust?
                                 }
                             }
                 }
@@ -224,16 +227,18 @@ internal class DefaultCrossSigningService @Inject constructor(
                     val myDevice = myDeviceInfoHolder.get().myDevice
                     val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, myDevice.signalableJSONDictionary())
                     val signedDevice = selfSigningPkOlm.sign(canonicalJson)
-                    val updateSignatures = (myDevice.signatures?.toMutableMap() ?: HashMap()).also {
-                        it[userId] = (it[userId]
-                                ?: HashMap()) + mapOf("ed25519:$sskPublicKey" to signedDevice)
-                    }
+                    val updateSignatures = (myDevice.signatures?.toMutableMap() ?: HashMap())
+                            .also {
+                                it[userId] = (it[userId]
+                                        ?: HashMap()) + mapOf("ed25519:$sskPublicKey" to signedDevice)
+                            }
                     myDevice.copy(signatures = updateSignatures).let {
                         uploadSignatureQueryBuilder.withDeviceInfo(it)
                     }
 
                     // sign MSK with device key (migration) and upload signatures
-                    olmDevice.signMessage(JsonCanonicalizer.getCanonicalJson(Map::class.java, mskCrossSigningKeyInfo.signalableJSONDictionary()))?.let { sign ->
+                    val message = JsonCanonicalizer.getCanonicalJson(Map::class.java, mskCrossSigningKeyInfo.signalableJSONDictionary())
+                    olmDevice.signMessage(message)?.let { sign ->
                         val mskUpdatedSignatures = (mskCrossSigningKeyInfo.signatures?.toMutableMap()
                                 ?: HashMap()).also {
                             it[userId] = (it[userId]
@@ -290,6 +295,80 @@ internal class DefaultCrossSigningService @Inject constructor(
     private fun resetTrustOnKeyChange() {
         Timber.i("## CrossSigning - Clear all other user trust")
         cryptoStore.clearOtherUserTrust()
+    }
+
+    override fun checkTrustFromPrivateKeys(masterKeyPrivateKey: String?,
+                                           uskKeyPrivateKey: String?,
+                                           sskPrivateKey: String?
+    ): UserTrustResult {
+        val mxCrossSigningInfo = getMyCrossSigningKeys() ?: return UserTrustResult.CrossSigningNotConfigured(userId)
+
+        var masterKeyIsTrusted = false
+        var userKeyIsTrusted = false
+        var selfSignedKeyIsTrusted = false
+
+        masterKeyPrivateKey?.fromBase64()
+                ?.let { privateKeySeed ->
+                    val pkSigning = OlmPkSigning()
+                    try {
+                        if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.masterKey()?.unpaddedBase64PublicKey) {
+                            masterPkSigning?.releaseSigning()
+                            masterPkSigning = pkSigning
+                            masterKeyIsTrusted = true
+                            Timber.i("## CrossSigning - Loading master key success")
+                        } else {
+                            pkSigning.releaseSigning()
+                        }
+                    } catch (failure: Throwable) {
+                        pkSigning.releaseSigning()
+                    }
+                }
+
+        uskKeyPrivateKey?.fromBase64()
+                ?.let { privateKeySeed ->
+                    val pkSigning = OlmPkSigning()
+                    try {
+                        if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.userKey()?.unpaddedBase64PublicKey) {
+                            userPkSigning?.releaseSigning()
+                            userPkSigning = pkSigning
+                            userKeyIsTrusted = true
+                            Timber.i("## CrossSigning - Loading master key success")
+                        } else {
+                            pkSigning.releaseSigning()
+                        }
+                    } catch (failure: Throwable) {
+                        pkSigning.releaseSigning()
+                    }
+                }
+
+        sskPrivateKey?.fromBase64()
+                ?.let { privateKeySeed ->
+                    val pkSigning = OlmPkSigning()
+                    try {
+                        if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.selfSigningKey()?.unpaddedBase64PublicKey) {
+                            selfSigningPkSigning?.releaseSigning()
+                            selfSigningPkSigning = pkSigning
+                            selfSignedKeyIsTrusted = true
+                            Timber.i("## CrossSigning - Loading master key success")
+                        } else {
+                            pkSigning.releaseSigning()
+                        }
+                    } catch (failure: Throwable) {
+                        pkSigning.releaseSigning()
+                    }
+                }
+
+        if (!masterKeyIsTrusted || !userKeyIsTrusted || !selfSignedKeyIsTrusted) {
+            return UserTrustResult.KeysNotTrusted(mxCrossSigningInfo)
+        } else {
+            cryptoStore.markMyMasterKeyAsLocallyTrusted(true)
+            val checkSelfTrust = checkSelfTrust()
+            if (checkSelfTrust.isVerified()) {
+                cryptoStore.storePrivateKeysInfo(masterKeyPrivateKey, uskKeyPrivateKey, sskPrivateKey)
+                setUserKeysAsTrusted(userId, true)
+            }
+            return checkSelfTrust
+        }
     }
 
     /**
@@ -371,10 +450,12 @@ internal class DefaultCrossSigningService @Inject constructor(
         // 1) check if I know the private key
         val masterPrivateKey = cryptoStore.getCrossSigningPrivateKeys()
                 ?.master
-                ?.fromBase64NoPadding()
+                ?.fromBase64()
 
         var isMaterKeyTrusted = false
-        if (masterPrivateKey != null) {
+        if (myMasterKey.trustLevel?.locallyVerified == true) {
+            isMaterKeyTrusted = true
+        } else if (masterPrivateKey != null) {
             // Check if private match public
             var olmPkSigning: OlmPkSigning? = null
             try {
@@ -507,7 +588,12 @@ internal class DefaultCrossSigningService @Inject constructor(
         }.executeBy(taskExecutor)
     }
 
-    override fun signDevice(deviceId: String, callback: MatrixCallback<Unit>) {
+    override fun markMyMasterKeyAsTrusted() {
+        cryptoStore.markMyMasterKeyAsLocallyTrusted(true)
+        checkSelfTrust()
+    }
+
+    override fun trustDevice(deviceId: String, callback: MatrixCallback<Unit>) {
         // This device should be yours
         val device = cryptoStore.getUserDevice(userId, deviceId)
         if (device == null) {

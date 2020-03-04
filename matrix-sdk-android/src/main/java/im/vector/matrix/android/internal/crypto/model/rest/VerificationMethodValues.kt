@@ -16,7 +16,7 @@
 
 package im.vector.matrix.android.internal.crypto.model.rest
 
-import im.vector.matrix.android.api.session.crypto.sas.VerificationMethod
+import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
 
 internal const val VERIFICATION_METHOD_SAS = "m.sas.v1"
 

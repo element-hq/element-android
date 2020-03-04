@@ -766,7 +766,7 @@ Vous pouvez le faire maintenant ou plus tard à partir des paramètres de l’ap
     <string name="group_details_home">Accueil</string>
     <string name="group_details_people">Personnes</string>
     <string name="group_details_rooms">Salons</string>
-    <string name="no_users_placeholder">Pas d’utilisateurs</string>
+    <string name="no_users_placeholder">Pas d’utilisateur</string>
 
     <string name="rooms">Salons</string>
     <string name="joined">Rejoint</string>
@@ -1835,7 +1835,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="login_splash_submit">Démarrer</string>
 
     <string name="login_server_title">Sélectionner un serveur</string>
-    <string name="login_server_text">Comme les e-mails, les comptes ont une maison, même si vous pouvez parler à n’importe qui</string>
+    <string name="login_server_text">Comme les e-mails, les comptes ont un serveur d\'accueil, même si vous pouvez parler à tout le monde</string>
     <string name="login_server_matrix_org_text">Rejoignez des millions de personnes gratuitement sur le plus grand serveur public</string>
     <string name="login_server_modular_text">Hébergement premium pour les organisations</string>
     <string name="login_server_modular_learn_more">En savoir plus</string>

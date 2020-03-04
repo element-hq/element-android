@@ -20,6 +20,8 @@ import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.task.Task
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal interface ComputeTrustTask : Task<ComputeTrustTask.Params, RoomEncryptionTrustLevel> {
@@ -29,14 +31,15 @@ internal interface ComputeTrustTask : Task<ComputeTrustTask.Params, RoomEncrypti
 }
 
 internal class DefaultComputeTrustTask @Inject constructor(
-        val cryptoStore: IMXCryptoStore
+        private val cryptoStore: IMXCryptoStore,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) : ComputeTrustTask {
 
-    override suspend fun execute(params: ComputeTrustTask.Params): RoomEncryptionTrustLevel {
+    override suspend fun execute(params: ComputeTrustTask.Params): RoomEncryptionTrustLevel = withContext(coroutineDispatchers.crypto) {
         val allTrustedUserIds = params.userIds
                 .filter { userId -> getUserCrossSigningKeys(userId)?.isTrusted() == true }
 
-        return if (allTrustedUserIds.isEmpty()) {
+        if (allTrustedUserIds.isEmpty()) {
             RoomEncryptionTrustLevel.Default
         } else {
             // If one of the verified user as an untrusted device -> warning

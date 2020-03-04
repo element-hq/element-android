@@ -40,7 +40,6 @@ import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
-import java.lang.IllegalStateException
 import javax.inject.Inject
 
 internal class LocalEchoRepository @Inject constructor(private val monarchy: Monarchy,

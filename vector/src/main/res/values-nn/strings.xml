@@ -3,12 +3,12 @@
     <string name="resources_language">nn</string>
     <string name="resources_country_code">NO</string>
 
-    <string name="light_theme">Ljost preg</string>
-    <string name="dark_theme">Dimt preg</string>
-    <string name="black_them">Svart preg</string>
+    <string name="light_theme">Lyst tema</string>
+    <string name="dark_theme">Mørkt tema</string>
+    <string name="black_them">Svart tema</string>
 
-    <string name="notification_sync_in_progress">Samstiller</string>
-    <string name="notification_listening_for_events">Høyrer etter hendingar</string>
+    <string name="notification_sync_in_progress">Synkroniserar…</string>
+    <string name="notification_listening_for_events">Lyttar etter hendingar</string>
     <string name="notification_noisy_notifications">Bråkete varsel</string>
     <string name="notification_silent_notifications">Stille varsel</string>
 
@@ -16,118 +16,119 @@
     <string name="title_activity_room">Rom</string>
     <string name="title_activity_settings">Innstillingar</string>
     <string name="title_activity_member_details">Medlemdetaljar</string>
-    <string name="title_activity_historical">Sogalege</string>
-    <string name="title_activity_bug_report">Feil-fråmelding</string>
-    <string name="title_activity_group_details">Samfundsdetaljar</string>
+    <string name="title_activity_historical">Historiske</string>
+    <string name="title_activity_bug_report">Feilrapport</string>
+    <string name="title_activity_group_details">Felleskapsdetaljar</string>
     <string name="title_activity_choose_sticker">Send eit klistremerke</string>
 
     <string name="dialog_title_third_party_licences">Tredjepartilisensar</string>
 
     <string name="loading">Lastar…</string>
 
-    <string name="ok">Greidt</string>
-    <string name="cancel">Brjot av</string>
+    <string name="ok">Greitt</string>
+    <string name="cancel">Avbryt</string>
     <string name="save">Lagra</string>
-    <string name="leave">Far frå</string>
+    <string name="leave">Forlat</string>
     <string name="send">Send</string>
-    <string name="copy">Rit av</string>
+    <string name="copy">Kopier</string>
     <string name="resend">Send på nytt</string>
-    <string name="redact">Trekk attende</string>
-    <string name="quote">Herm</string>
+    <string name="redact">Fjern</string>
+    <string name="quote">Siter</string>
     <string name="download">Last ned</string>
-    <string name="share">Deil</string>
-    <string name="speak">Tal</string>
+    <string name="share">Del</string>
+    <string name="speak">Snakk</string>
     <string name="clear">Tøm</string>
     <string name="later">Seinare</string>
     <string name="forward">Send vidare</string>
-    <string name="permalink">Varande lenk</string>
-    <string name="view_source">Sjå kjelda</string>
-    <string name="view_decrypted_source">Sjå den avkrypterte kjelda</string>
-    <string name="delete">Strjuk</string>
+    <string name="permalink">Permanent lenkje</string>
+    <string name="view_source">Vis kjelde</string>
+    <string name="view_decrypted_source">Vis den dekrypterte kjelda</string>
+    <string name="delete">Slett</string>
     <string name="rename">Gje nytt namn</string>
-    <string name="report_content">Meld frå um innhaldet</string>
-    <string name="active_call">Pågåande samtala</string>
-    <string name="ongoing_conference_call">Pågåande gruppesamtale.\nVert med med %1$s eller %2$s.</string>
-    <string name="ongoing_conference_call_voice">røyst</string>
+    <string name="report_content">Rapporter innhaldet</string>
+    <string name="active_call">Pågåande samtale</string>
+    <string name="ongoing_conference_call">Pågåande konferanseanrop.
+\nBli med som %1$s eller %2$s.</string>
+    <string name="ongoing_conference_call_voice">Tale</string>
     <string name="ongoing_conference_call_video">Video</string>
-    <string name="cannot_start_call">Kann ikkje få i gang samtala, prøv att seinare</string>
-    <string name="missing_permissions_warning">På grunn av vantande løyve, kann nokre funksjonar mangla…</string>
-    <string name="missing_permissions_to_start_conf_call">Du treng løyve til å bjoda inn for å setja i gang ei gruppasamtala i detta romet</string>
-    <string name="missing_permissions_title_to_start_conf_call">Klarer ikkje å setja i gang samtala</string>
-    <string name="device_information">Einingsinfo</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">Gruppasamtalor er ikkje stydja i krypterte rom</string>
+    <string name="cannot_start_call">Kan ikkje starte samtalen, prøv litt seinare</string>
+    <string name="missing_permissions_warning">Grunna manglande rettigheiter, kan det hende at funksjonar manglar…</string>
+    <string name="missing_permissions_to_start_conf_call">Du treng invitasjonsrett for å starte ein konferanse i dette rommet</string>
+    <string name="missing_permissions_title_to_start_conf_call">Kunne ikkje starte samtalen</string>
+    <string name="device_information">Sesjonsinformasjon</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Konferanseanrop er ikkje støtta i krypterte rom</string>
     <string name="send_anyway">Send likevel</string>
     <string name="or">eller</string>
-    <string name="invite">Bjod inn</string>
+    <string name="invite">Inviter</string>
     <string name="offline">Fråkopla</string>
 
     <string name="action_exit">Gå ut</string>
     <string name="actions">Handlingar</string>
-    <string name="action_sign_out">Logga av</string>
-    <string name="action_voice_call">Røystsamtala</string>
-    <string name="action_video_call">Videosamtala</string>
-    <string name="action_global_search">Søk i alt</string>
+    <string name="action_sign_out">Logg av</string>
+    <string name="action_voice_call">Taleanrop</string>
+    <string name="action_video_call">Videoanrop</string>
+    <string name="action_global_search">Globalt søk</string>
     <string name="action_mark_all_as_read">Merk alle som lesne</string>
-    <string name="action_historical">Sogalege</string>
-    <string name="action_quick_reply">Snøggsvara</string>
+    <string name="action_historical">Historisk</string>
+    <string name="action_quick_reply">Hurtigsvar</string>
     <string name="action_open">Opna</string>
     <string name="action_close">Lat att</string>
-    <string name="copied_to_clipboard">Rita av til utklippstavla</string>
+    <string name="copied_to_clipboard">Kopier til utklippstavla</string>
     <string name="disable">Skru av</string>
 
     <string name="dialog_title_confirmation">Stadfesting</string>
     <string name="dialog_title_warning">Åtvaring</string>
 
     <string name="bottom_action_home">Heim</string>
-    <string name="bottom_action_favourites">Yndlingar</string>
+    <string name="bottom_action_favourites">Favorittar</string>
     <string name="bottom_action_people">Folk</string>
     <string name="bottom_action_rooms">Rom</string>
     <string name="bottom_action_groups">Samfund</string>
 
     <string name="home_filter_placeholder_home">Filtrer romnamn</string>
-    <string name="home_filter_placeholder_favorites">Filtrer yndlingar</string>
+    <string name="home_filter_placeholder_favorites">Filtrer favorittar</string>
     <string name="home_filter_placeholder_people">Filtrer folk</string>
     <string name="home_filter_placeholder_rooms">Filtrer romnamn</string>
-    <string name="home_filter_placeholder_groups">Filtrer samfund</string>
+    <string name="home_filter_placeholder_groups">Filtrer felleskap</string>
 
-    <string name="invitations_header">Innbjodingar</string>
-    <string name="low_priority_header">Lågrett</string>
+    <string name="invitations_header">Invitasjonar</string>
+    <string name="low_priority_header">Låg prioritering</string>
 
-    <string name="direct_chats_header">Samtalor</string>
+    <string name="direct_chats_header">Samtalar</string>
     <string name="local_address_book_header">Lokal adressebok</string>
-    <string name="user_directory_header">Brukarutval</string>
+    <string name="user_directory_header">Brukarkatalog</string>
     <string name="matrix_only_filter">Berre Matrix-kontaktar</string>
-    <string name="no_conversation_placeholder">Ingi samtalor</string>
-    <string name="no_contact_access_placeholder">Du gav ikkje riot tilgang til dei lokale kontaktane dine</string>
-    <string name="no_result_placeholder">Ingi treff</string>
+    <string name="no_conversation_placeholder">Ingen samtalar</string>
+    <string name="no_contact_access_placeholder">Du gav ikkje Riot tilgang til dei lokale kontaktane dine</string>
+    <string name="no_result_placeholder">Ingen treff</string>
 
     <string name="rooms_header">Rom</string>
-    <string name="rooms_directory_header">Romutval</string>
-    <string name="no_room_placeholder">Ingi rom</string>
-    <string name="no_public_room_placeholder">Ingi ålmene rom er tilgjengelege</string>
+    <string name="rooms_directory_header">Romkatalog</string>
+    <string name="no_room_placeholder">Ingen rom</string>
+    <string name="no_public_room_placeholder">Ingen offentelege rom er tilgjengelege</string>
     <plurals name="public_room_nb_users">
         <item quantity="one">Ein brukar</item>
         <item quantity="other">%d brukarar</item>
     </plurals>
 
-    <string name="groups_invite_header">Bjod inn</string>
-    <string name="groups_header">Samfund</string>
-    <string name="no_group_placeholder">Ingi gruppor</string>
+    <string name="groups_invite_header">Inviter</string>
+    <string name="groups_header">Fellesskap</string>
+    <string name="no_group_placeholder">Ingen grupper</string>
 
     <string name="send_bug_report_include_logs">Send loggar</string>
-    <string name="send_bug_report_include_crash_logs">Send kræsjloggar</string>
-    <string name="send_bug_report_include_screenshot">Send skjermbilæte</string>
-    <string name="send_bug_report">Meld frå um feil</string>
-    <string name="send_bug_report_description">Gjer vel og skildra feilen. Kva gjorde du\? Kva venta du at skulde henda\? Kva hende\?</string>
-    <string name="send_bug_report_description_in_english">Um mogeleg, ver venleg og skriv skildringi på engelsk.</string>
-    <string name="send_bug_report_placeholder">Skildra problemet ditt her</string>
-    <string name="send_bug_report_logs_description">Fyr å diagnostisera vanskar, vert loggar frå denna einingi sende saman med feilfråmeldingi. Feilfråmeldinga, saman med loggane og skjermbilætet, vil ikkje vera ålment synlege. Um du helder vil senda berre teksti yver, gjer vel og tak burt merket:</string>
-    <string name="send_bug_report_alert_message">Det verkar som om du ristar mobilen i sinne. Vil du senda inn ein feilfråmelding\?</string>
-    <string name="send_bug_report_app_crashed">Æppen kræsja fyrre gong. Vil du opna kræsjfråmeldingsvindauget\?</string>
-    <string name="send_bug_report_rage_shake">Rista i sinne fyr å melda frå um feil</string>
+    <string name="send_bug_report_include_crash_logs">Send krasjrapportar</string>
+    <string name="send_bug_report_include_screenshot">Send skjermbilde</string>
+    <string name="send_bug_report">Rapporter om feil</string>
+    <string name="send_bug_report_description">Beskriv feilen. Kva gjorde du\? Kva forventa du skulle hende\? Kva hendte\?</string>
+    <string name="send_bug_report_description_in_english">Om mogleg, skriv beskrivelsen på engelsk.</string>
+    <string name="send_bug_report_placeholder">Beskriv problemet ditt her</string>
+    <string name="send_bug_report_logs_description">For å diagnostisere feil, vil loggar frå denne klienten bli sendt med i feilrapporten. Denne feilrapporten inklusiv loggar, skjermbilete vil ikkje vere offentleg. Fjern avkryssinga om du berre vil sende teksten ovanfor:</string>
+    <string name="send_bug_report_alert_message">Det verkar som du ristar mobilen i vonbrot. Ønskjer du å opne skjerm for feilrapport \?</string>
+    <string name="send_bug_report_app_crashed">Programmet krasja sist gong. Ønskjer du å opne skjerm for feilrapport \?</string>
+    <string name="send_bug_report_rage_shake">Rist i sinne for å rapportera feil</string>
 
-    <string name="send_bug_report_sent">Feilfråmeldingi vart send</string>
-    <string name="send_bug_report_failed">Fekk ikkje til å senda feilfråmeldingi (%s)</string>
+    <string name="send_bug_report_sent">Feilrapporten vart sendt</string>
+    <string name="send_bug_report_failed">Fekk ikkje til å senda feilrapporten (%s)</string>
     <string name="send_bug_report_progress">Framgang (%s%%)</string>
 
     <string name="send_files_in">Send inn i</string>
@@ -135,121 +136,121 @@
 
     <string name="join_room">Gå inn i romet</string>
     <string name="username">Brukarnamn</string>
-    <string name="create_account">Laga ein brukar</string>
-    <string name="login">Logga inn</string>
-    <string name="logout">Logga ut</string>
+    <string name="create_account">Lag brukar</string>
+    <string name="login">Logg inn</string>
+    <string name="logout">Logg ut</string>
     <string name="hs_url">Heimtenar-URL</string>
     <string name="identity_url">Identitetstenar-URL</string>
     <string name="search">Søk</string>
 
-    <string name="start_new_chat">Byrja ei ny samtala</string>
-    <string name="start_voice_call">Byrja ei røystsamtala</string>
-    <string name="start_video_call">Byrja ei videosamtala</string>
+    <string name="start_new_chat">Start ny samtale</string>
+    <string name="start_voice_call">Start taleanrop</string>
+    <string name="start_video_call">Start videosamtale</string>
 
-    <string name="option_send_voice">Send røyst</string>
+    <string name="option_send_voice">Send tale</string>
 
-    <string name="start_new_chat_prompt_msg">Er du trygg på at du vil byrja ei ny samtala med %s\?</string>
-    <string name="start_voice_call_prompt_msg">Er du trygg på at du vil byrja ei røystsamtala\?</string>
-    <string name="start_video_call_prompt_msg">Er du trygg på at du vil byrja ei videosamtala\?</string>
+    <string name="start_new_chat_prompt_msg">Er du sikker på at du vil starta ein ny samtale med %s\?</string>
+    <string name="start_voice_call_prompt_msg">Er du sikker på at du vil starta eit nytt taleanrop\?</string>
+    <string name="start_video_call_prompt_msg">Er du sikker på at du vil starta ein ny videosamtale\?</string>
 
     <string name="option_send_files">Send filer</string>
     <string name="option_send_sticker">Send klistremerke</string>
-    <string name="option_take_photo_video">Tak eit bilæte eller ein video</string>
-    <string name="option_take_photo">Tak eit bilæte</string>
-    <string name="option_take_video">Tak ein video</string>
+    <string name="option_take_photo_video">Ta bilete eller video</string>
+    <string name="option_take_photo">Ta bilete</string>
+    <string name="option_take_video">Ta video</string>
 
-    <string name="no_sticker_application_dialog_content">Du hev fyrebils ingi klistremerkepakkar skrudde på. Legg til nokre no\?</string>
+    <string name="no_sticker_application_dialog_content">Du har enno ingen klistremerkepakker skrudde på. Legg til nokre no\?</string>
 
     <string name="go_on_with">hald fram med…</string>
-    <string name="error_no_external_application_found">Orsak, ingi ytre æppar som kunde gjera detta vart funne.</string>
+    <string name="error_no_external_application_found">Beklagar, det vart ikkje funne nokon ekstern applikasjon som kan fullføre handlinga.</string>
 
-    <string name="auth_login">Logga inn</string>
-    <string name="auth_register">Laga ein brukar</string>
+    <string name="auth_login">Logg inn</string>
+    <string name="auth_register">Lag konto</string>
     <string name="auth_submit">Send inn</string>
-    <string name="auth_skip">Hoppa yver</string>
-    <string name="auth_send_reset_email">Send attendestillingsepost</string>
-    <string name="auth_return_to_login">Gå attende til innloggingsvindauget</string>
-    <string name="auth_user_id_placeholder">Epost eller brukarnamn</string>
-    <string name="auth_password_placeholder">Åtgangsord</string>
-    <string name="auth_new_password_placeholder">Nytt åtgangsord</string>
+    <string name="auth_skip">Hopp over</string>
+    <string name="auth_send_reset_email">Send tilbakestillings-epost</string>
+    <string name="auth_return_to_login">Gå tilbake til innloggingsvindauget</string>
+    <string name="auth_user_id_placeholder">E-post eller brukarnamn</string>
+    <string name="auth_password_placeholder">Passord</string>
+    <string name="auth_new_password_placeholder">Nytt passord</string>
     <string name="auth_user_name_placeholder">Brukarnamn</string>
-    <string name="auth_email_placeholder">Epostadressa</string>
-    <string name="auth_opt_email_placeholder">Epostadressa (valfritt)</string>
+    <string name="auth_email_placeholder">E-postadresse</string>
+    <string name="auth_opt_email_placeholder">E-postadresse (valfritt)</string>
     <string name="auth_phone_number_placeholder">Telefonnummer</string>
     <string name="auth_opt_phone_number_placeholder">Telefonnummer (valfritt)</string>
-    <string name="auth_repeat_password_placeholder">Skriv upp att åtgangsordet</string>
-    <string name="auth_repeat_new_password_placeholder">Stadfest det nye åtgangsordet ditt</string>
-    <string name="auth_invalid_login_param">Gale brukarnamn og/eller åtgangsord</string>
-    <string name="auth_invalid_user_name">Brukarnamn kann berre innehalda bokstavar, tal, prikkar, bindestrek og understrek</string>
-    <string name="auth_invalid_password">Åtgangsordet er for kort (i det minste 6 teikn)</string>
-    <string name="auth_missing_password">Åtgangsordet vantar</string>
-    <string name="auth_invalid_email">Detta ser ikkje ut som ei gangbar epostadressa</string>
-    <string name="auth_invalid_phone">Detta ser ikkje ut som eit gangbart telefonnummer</string>
-    <string name="auth_email_already_defined">Denna epostadressa er allereie nytta.</string>
-    <string name="auth_missing_email">Epostadressa vantar</string>
-    <string name="auth_missing_phone">Telefonnummeret vantar</string>
-    <string name="auth_missing_email_or_phone">Epostadressa eller telefonnummer vantar</string>
+    <string name="auth_repeat_password_placeholder">Skriv om att passordet</string>
+    <string name="auth_repeat_new_password_placeholder">Stadfest det nye passordet ditt</string>
+    <string name="auth_invalid_login_param">Feil brukarnamn og/eller passord</string>
+    <string name="auth_invalid_user_name">Brukarnamn kan berre innehalda bokstavar, tal, prikkar, bindestrek og understrek</string>
+    <string name="auth_invalid_password">Passordet er for kort (i det minste 6 teikn)</string>
+    <string name="auth_missing_password">Passord manglar</string>
+    <string name="auth_invalid_email">Dette ser ikkje ut som ei gyldig e-postadresse</string>
+    <string name="auth_invalid_phone">Dette ser ikkje ut som eit gyldig telefonnummer</string>
+    <string name="auth_email_already_defined">Denne e-postadressa er allereie i bruk.</string>
+    <string name="auth_missing_email">E-postadressa manglar</string>
+    <string name="auth_missing_phone">Telefonnummeret manglar</string>
+    <string name="auth_missing_email_or_phone">E-postadressa eller telefonnummer manglar</string>
     <string name="auth_invalid_token">Ugyldig teikn</string>
-    <string name="auth_password_dont_match">Åtgangsordi er ikkje dei same</string>
-    <string name="auth_forgot_password">Gløymt åtgangsordet\?</string>
-    <string name="auth_use_server_options">Bruk eigentenarinnstillingar (umfattande)</string>
-    <string name="auth_email_validation_message">Gjer vel og sjekk eposten din for å halda fram med innmeldingi</string>
-    <string name="auth_threepid_warning_message">Innmelding med epost og telefonnummer samtidig er ikkje stydja fram til api-en finst. Berre telefonnummeret vert nytta.
-\n
-\nDu kann knyta eposten din til brukaren din i innstillingane.</string>
-    <string name="auth_recaptcha_message">Heimtenaren ynskjer å bli trygg på at du ikkje er ein robot</string>
+    <string name="auth_password_dont_match">Passorda er ulike</string>
+    <string name="auth_forgot_password">Gløymt passord\?</string>
+    <string name="auth_use_server_options">Bruk tilpassa tenarinnstillingar (avansert)</string>
+    <string name="auth_email_validation_message">Ver venleg, sjekk e-posten din for å halda fram med registreringa</string>
+    <string name="auth_threepid_warning_message">Innmelding med epost og telefonnummer samtidig er ikkje støtta før API-et er implementert. Berre telefonnummeret vil bli tatt i bruk.
+\n 
+\nDu kan koble e-posten din til brukarprofilen i innstillingane.</string>
+    <string name="auth_recaptcha_message">Heimtenaren ynskjer å stadfeste at du ikkje er ein robot</string>
     <string name="auth_username_in_use">Brukarnamnet er allereie nytta</string>
     <string name="auth_home_server">Heimtenar:</string>
     <string name="auth_identity_server">Identitetstenar:</string>
-    <string name="auth_reset_password_next_step_button">Eg hev stadfesta epostdressa mi</string>
-    <string name="auth_reset_password_message">For å attendestilla åtgangsordet, skriv inn epostadressa som er knytt til brukaren din:</string>
-    <string name="auth_reset_password_missing_email">Du må skriva inn epostadressa som er knytt til brukaren din.</string>
-    <string name="auth_reset_password_missing_password">Du må skriva inn eit nytt åtgangsord.</string>
-    <string name="auth_reset_password_email_validation_message">Ein epost vart send til %s. Når du hev fylgt lenken han inneheld, klikk under.</string>
-    <string name="auth_reset_password_error_unauthorized">Fekk ikkje til å stadfesta epostadressa: sjå til at du klikka på lenken i eposten</string>
-    <string name="auth_reset_password_success_message">Åtgangsordet ditt vart attendestilt. Du vart logga ut av alle einingar og fær ikkje push-varsel lenger. For å skru varsel på att, logg inn att på kvar eining.</string>
+    <string name="auth_reset_password_next_step_button">Eg har verifisert e-postadressa mi</string>
+    <string name="auth_reset_password_message">For å nullstille passordet, skriv inn e-postadressa som er knytt til brukaren din:</string>
+    <string name="auth_reset_password_missing_email">Du må skriva inn e-postadressa som er knytt til brukaren din.</string>
+    <string name="auth_reset_password_missing_password">Du må skriva inn eit nytt passord.</string>
+    <string name="auth_reset_password_email_validation_message">Ein e-post vart send til %s. Når du har opna linken den inneheld, klikk under.</string>
+    <string name="auth_reset_password_error_unauthorized">Fekk ikkje til å stadfesta e-postadressa: sjå til at du klikka på lenken i e-posten</string>
+    <string name="auth_reset_password_success_message">Passordet ditt vart nullstilt. Du vart logga ut av alle sesjonar og får ikkje push-varsel lenger. For å skru varsel på att, logg inn att på kvar eining.</string>
 
     <string name="login_error_must_start_http">URL-en må byrja på http[s]://</string>
-    <string name="login_error_network_error">Fekk ikkje til å logga inn: netverksfeil</string>
+    <string name="login_error_network_error">Fekk ikkje til å logga inn: Nettverksfeil</string>
     <string name="login_error_unable_login">Fekk ikkje til å logga inn</string>
-    <string name="login_error_registration_network_error">Fekk ikkje til å melda inn: Netverksfeil</string>
-    <string name="login_error_unable_register">Fekk ikkje til å melda inn</string>
-    <string name="login_error_unable_register_mail_ownership">Fekk ikkje til å melda inn: feil med eposteigarskapen</string>
-    <string name="login_error_invalid_home_server">Gjer vel og skriv inn ein gangbar URL</string>
+    <string name="login_error_registration_network_error">Fekk ikkje til å registrere: Nettverksfeil</string>
+    <string name="login_error_unable_register">Fekk ikkje til å registrere</string>
+    <string name="login_error_unable_register_mail_ownership">Fekk ikkje til å registrere: feil med e-posteigarskap</string>
+    <string name="login_error_invalid_home_server">Skriv inn ein gyldig URL</string>
     <string name="login_mobile_device">Mobil</string>
 
-    <string name="login_error_forbidden">Brukarnamnet/passordet er ikkje gangbart</string>
-    <string name="login_error_unknown_token">Det oppgjevne åtgangsteiknet vart ikkje kjent att</string>
-    <string name="login_error_bad_json">Misforma JSON</string>
-    <string name="login_error_not_json">Inneheldt ikkje ein gangbar JSON</string>
-    <string name="login_error_limit_exceeded">For mange fyrespurnader vart sende</string>
+    <string name="login_error_forbidden">Brukarnamnet/passordet er ikkje gyldig</string>
+    <string name="login_error_unknown_token">Den oppgjevne tilgangsnøkkelen vart ikkje kjent att</string>
+    <string name="login_error_bad_json">Feilformatert JSON</string>
+    <string name="login_error_not_json">Innehaldt ikkje ein gyldig JSON</string>
+    <string name="login_error_limit_exceeded">For mange førespurnader vart sendt</string>
     <string name="login_error_user_in_use">Brukarnamnet er allereie i bruk</string>
-    <string name="login_error_login_email_not_yet">Epostlenken som ikkje hev verta klikka på enno</string>
+    <string name="login_error_login_email_not_yet">E-postlenken har ikkje blitt opna endå</string>
 
-    <string name="e2e_re_request_encryption_key"><u>Spyr på nytt um krypteringsnyklar</u> frå dei andre einingane dine.</string>
+    <string name="e2e_re_request_encryption_key"><u>Etterspør på nytt krypteringsnøkklar</u> frå dei andre einingane dine.</string>
 
-    <string name="e2e_re_request_encryption_key_sent">Nykelfyrespurnaden er send.</string>
+    <string name="e2e_re_request_encryption_key_sent">Nøkkelførespurnaden er sendt.</string>
 
-    <string name="e2e_re_request_encryption_key_dialog_title">Fyrespurnaden er send</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Gjer vel og køyr Riot på ei onnor eining som kan avkryptera meldingi slik at ho kann senda nyklane til denna einingi.</string>
+    <string name="e2e_re_request_encryption_key_dialog_title">Førespurnaden er send</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Start Riot på ein annan eining som kan dekryptere meldingen, slik at den kan sende nøkklane til denne sesjonen</string>
 
-    <string name="read_receipts_list">Lesenlapp-lista</string>
+    <string name="read_receipts_list">Les kvitteringsliste</string>
 
-    <string name="groups_list">Gruppalista</string>
+    <string name="groups_list">Gruppeliste</string>
 
     <plurals name="membership_changes">
-        <item quantity="one">1 medlemskapsbrigde</item>
-        <item quantity="other">%d medlemskapsbrigde</item>
+        <item quantity="one">1 endring i medlemskap</item>
+        <item quantity="other">%d endringar i medlemskap</item>
     </plurals>
 
     <string name="compression_options">Send som</string>
-    <string name="compression_opt_list_original">Upphavleg</string>
+    <string name="compression_opt_list_original">Original</string>
     <string name="compression_opt_list_large">Stor</string>
-    <string name="compression_opt_list_medium">Millomstor</string>
+    <string name="compression_opt_list_medium">Middels</string>
     <string name="compression_opt_list_small">Liten</string>
 
-    <string name="attachment_cancel_download">Brjot av nedlastingi\?</string>
-    <string name="attachment_cancel_upload">Brjot av opplastingi\?</string>
+    <string name="attachment_cancel_download">Avbryt nedlasting\?</string>
+    <string name="attachment_cancel_upload">Avbryt opplasting\?</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
 
@@ -260,45 +261,44 @@
     <string name="room_info_room_topic">Romemne</string>
 
     <string name="call">Ring</string>
-    <string name="call_connected">Samtala er kopla upp</string>
-    <string name="call_connecting">Samtala koplar upp…</string>
-    <string name="call_ended">Samtala er enda</string>
+    <string name="call_connected">Anrop tilkopla</string>
+    <string name="call_connecting">Koplar saman anrop…</string>
+    <string name="call_ended">Anrop avslutta</string>
     <string name="call_ring">Ringjer…</string>
-    <string name="incoming_call">Du vert ringd</string>
-    <string name="incoming_video_call">Innkomande videosamtala</string>
-    <string name="incoming_voice_call">Innkomande Røystsamtala</string>
-    <string name="call_in_progress">Ei samtala er i gang…</string>
+    <string name="incoming_call">Innkommande anrop</string>
+    <string name="incoming_video_call">Innkommande videosamtale</string>
+    <string name="incoming_voice_call">Innkommande taleanrop</string>
+    <string name="call_in_progress">Anrop pågår…</string>
 
-    <string name="call_error_user_not_responding">Den onnor sida tok ikkje røyret.</string>
-    <string name="call_error_camera_init_failed">Klarer ikkje skru på kameraet</string>
-    <string name="call_error_answered_elsewhere">røyret er teke ein annan stad</string>
+    <string name="call_error_user_not_responding">Den andre parten tok ikkje samtalen.</string>
+    <string name="call_error_camera_init_failed">Klarar ikkje å skru på kameraet</string>
+    <string name="call_error_answered_elsewhere">Anropet vart teke ein annan plass</string>
 
-    <string name="media_picker_both_capture_title">Tak eit bilæte eller ein video</string>
-    <string name="media_picker_cannot_record_video">Kann ikkje spela inn video</string>
+    <string name="media_picker_both_capture_title">Ta bilete eller video</string>
+    <string name="media_picker_cannot_record_video">Kan ikkje spela inn video</string>
 
     <string name="permissions_rationale_popup_title">Info</string>
-    <string name="permissions_rationale_msg_storage">Riot treng åtgang til bilæti og videoane dine fyr å kunna senda og lagra vedlegg.
-\n
-\nGjer vel og gjev åtgang på sprettvindauget som kjem fyr å kunna senda filer frå mobilen.</string>
-    <string name="permissions_rationale_msg_camera">Riot treng åtgang til kameraet ditt fyr å taka bilæte og videosamtalor.</string>
+    <string name="permissions_rationale_msg_storage">Riot treng tilgang til bilete- og videobiblioteket for å senda og lagra vedlegg. 
+\n 
+\nGje tilgang i sprettvindauget som kjem for å senda filer frå mobilen.</string>
+    <string name="permissions_rationale_msg_camera">Riot treng tilgang til kameraet ditt for å ta bilete og videosamtalar.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
-\nVer venleg og gjev løyve på sprettvindauget som kjem fyr å kunna ringja."</string>
-    <string name="permissions_rationale_msg_record_audio">Riot treng åtgang til mikrofonen din fyr å kunna ringja.</string>
-    <string name="call_error_ice_failed">Mediesamankoplingi gjekk gale</string>
+\nVer venleg og gje tilgang på sprettvindauget som kjem for å starte anropet."</string>
+    <string name="permissions_rationale_msg_record_audio">Riot treng tilgang til mikrofonen din for å utføra taleanrop.</string>
+    <string name="call_error_ice_failed">Mediaforbindelsen feila</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
-\nGjer vel og gjev åtgang på sprettvindauget som kjem fyr å kunna ringja."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Riot treng åtgang til kameraet og mikrofonen din fyr å videosamtala. 
-\nGjer vel og gjev åtgang på sprettvindauget som kjem fyr å kunna ringja.</string>
-    <string name="permissions_rationale_msg_contacts">Riot treng åtgang til adresseboki di fyr å finna andre Matrix-brukarar utifrå epostadressone og telefonnummeri deira.
+\nGjer vel og gje tilgang på sprettvindauget som kjem for å utføra samtalen."</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot treng tilgang til kameraet og mikrofonen din for å utføra videosamtalar.
 \n
-\nGjer vel og gjev løyve på sprettvindauget som kjem fyr å finna addressebokbrukarar som du kann nå frå Riot.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot treng løyve til å gå inn i adresseboki di fyr å finna andre Matrix-brukarar ut ifrå epostadressone og telefonnummeri deira. 
+\nGjer vel og gjev tilgang på sprettvindauget som kjem for å utføra samtalen.</string>
+    <string name="permissions_rationale_msg_contacts">Riot treng tilgang til kontaktliste for å finna andre Matrix-brukarar basert på e-post og telefonnummer. Viss du samtykker til å dele kontaktlista, ver venleg å tillat tilgang på sprettvindauget som kjem på neste skjermbilete.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot treng tilgang til kontaktliste for å finna andre Matrix-brukarar basert på e-post og telefonnummer. 
 \n
-\nGje Riot løyve til å gå inn i kontaktane dine\?</string>
+\nSamtykker du til å dele adresseboka for dette føremålet \?</string>
 
-    <string name="permissions_action_not_performed_missing_permissions">Orsak. Handlingi vart ikkje gjenomført på grunn av løyve som vantar</string>
+    <string name="permissions_action_not_performed_missing_permissions">Beklagar. Grunna manglande tilgangar, vart ikkje handlinga utført</string>
 
     <string name="media_slider_saved">Lagra</string>
     <string name="media_slider_saved_message">Lagra til nedlastingar\?</string>
@@ -306,38 +306,39 @@
     <string name="no">NEI</string>
     <string name="_continue">Gå fram</string>
 
-    <string name="remove">Tak burt</string>
-    <string name="join">Vert med</string>
-    <string name="preview">Fyrehandsvising</string>
-    <string name="reject">Seg nei</string>
+    <string name="remove">Ta vekk</string>
+    <string name="join">Bli med</string>
+    <string name="preview">Førehandsvisning</string>
+    <string name="reject">Avvis</string>
 
-    <string name="list_members">Syn fram medlemer</string>
-    <string name="open_chat_header">Opna yverskriften</string>
-    <string name="room_sync_in_progress">Samstiller…</string>
-    <string name="room_jump_to_first_unread">Hoppa til den fyrste ulesne meldigni.</string>
+    <string name="list_members">Medlemsoversikt</string>
+    <string name="open_chat_header">Opne overskrift</string>
+    <string name="room_sync_in_progress">Synkroniserer…</string>
+    <string name="room_jump_to_first_unread">Hopp til første uleste melding.</string>
 
-    <string name="room_preview_invitation_format">Du vart boden inn til detta romet av %s</string>
-    <string name="room_preview_unlinked_email_warning">Innbjodingi vart send til %s, som ikkje er knytt til denna brukaren. Du byr kann henda logga inn med ein annan brukar, eller knyta eposten din til brukaren din.</string>
-    <string name="room_preview_try_join_an_unknown_room">Du freistar å gå inn i %s. Vil du verta med so du kan taka del i meiningsutvekslingi\?</string>
+    <string name="room_preview_invitation_format">Du vart invitert med i rommet av %s</string>
+    <string name="room_preview_unlinked_email_warning">Invitasjonen vart sendt til %s, som ikkje er assosiert med denne kontoen.
+\nDu kan logge inn med ein annan konto, eller legge til denne e-postadressa i din konto.</string>
+    <string name="room_preview_try_join_an_unknown_room">Du prøver å gå inn i %s. Ønskjer du å bli med for å delta i diskusjonen\?</string>
     <string name="room_preview_try_join_an_unknown_room_default">eit rom</string>
-    <string name="room_preview_room_interactions_disabled">Detta er ei fyrehandsvising av romet. Romsamhandlingar hev vorte skrudde av.</string>
+    <string name="room_preview_room_interactions_disabled">Dette er ei førehandsvisning av rommet. Interaksjonar med rommet er slått av.</string>
 
-    <string name="room_creation_title">Ny samtala</string>
-    <string name="room_creation_add_member">Legg til ein medlem</string>
+    <string name="room_creation_title">Ny samtale</string>
+    <string name="room_creation_add_member">Legg til medlem</string>
     <plurals name="room_header_active_members_count">
-        <item quantity="one">1 verksam medlem</item>
-        <item quantity="other">%d verksame medlemer</item>
+        <item quantity="one">1 aktiv medlem</item>
+        <item quantity="other">%d aktive medlem</item>
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">1 medlem</item>
-        <item quantity="other">%d medlemer</item>
+        <item quantity="other">%d medlem</item>
     </plurals>
     <string name="room_title_one_member">1 medlem</string>
 
-    <string name="room_participants_leave_prompt_title">Far frå romet</string>
-    <string name="room_participants_leave_prompt_msg">Er du trygg på at du vil fara frå romet\?</string>
-    <string name="room_participants_remove_prompt_msg">Er du trygg på at du vil taka burt %s frå denna samtala\?</string>
-    <string name="room_participants_create">Laga</string>
+    <string name="room_participants_leave_prompt_title">Forlat rom</string>
+    <string name="room_participants_leave_prompt_msg">Er du sikker på at du vil forlata rommet\?</string>
+    <string name="room_participants_remove_prompt_msg">Er du sikker på at du vil ta vekk %s frå denne samtalen\?</string>
+    <string name="room_participants_create">Lag</string>
 
     <string name="room_participants_online">Tilkopla</string>
     <string name="room_participants_offline">Fråkopla</string>
@@ -346,39 +347,39 @@
     <string name="room_participants_ago">%1$s %2$s sidan</string>
 
     <string name="room_participants_header_admin_tools">ADMINISTRATORVERKTY</string>
-    <string name="room_participants_header_call">RØYSTSAMTALA</string>
-    <string name="room_participants_header_direct_chats">BEINVEGES SAMTALOR</string>
-    <string name="room_participants_header_devices">EININGAR</string>
+    <string name="room_participants_header_call">ANROP</string>
+    <string name="room_participants_header_direct_chats">DIREKTESAMTALE</string>
+    <string name="room_participants_header_devices">SESJONAR</string>
 
-    <string name="room_participants_action_invite">Bjod inn</string>
-    <string name="room_participants_action_leave">Far frå romet</string>
-    <string name="room_participants_action_remove">Spark ut frå detta romet</string>
+    <string name="room_participants_action_invite">Inviter</string>
+    <string name="room_participants_action_leave">Forlat dette rommet</string>
+    <string name="room_participants_action_remove">Fjern frå dette romet</string>
     <string name="room_participants_action_ban">Steng ute</string>
     <string name="room_participants_action_unban">Slepp inn att</string>
     <string name="room_participants_action_set_default_power_level">Gjer til vanleg brukar</string>
     <string name="room_participants_action_set_moderator">Gjer til moderator</string>
     <string name="room_participants_action_set_admin">Gjer til administrator</string>
-    <string name="room_participants_action_ignore">Gøym alle meldingar frå denna brukaren</string>
-    <string name="room_participants_action_unignore">Syn alle meldingar frå denna brukaren</string>
+    <string name="room_participants_action_ignore">Gøym alle meldingar frå denne brukaren</string>
+    <string name="room_participants_action_unignore">Syn alle meldingar frå denne brukaren</string>
     <string name="room_participants_action_unignore_prompt">Syn alle meldingar frå denne brukaren\? 
-\n
-\nMerk deg at denna handlingi startar æppen på nytt og kann taka litt tid.</string>
-    <string name="room_participants_invite_search_another_user">Brukar-ID, namn, eller epost</string>
+\n 
+\nMerk deg at denne handlinga startar programmet på nytt og kan ta litt tid.</string>
+    <string name="room_participants_invite_search_another_user">Brukar-ID, namn, eller e-post</string>
     <string name="room_participants_action_mention">Nemn</string>
-    <string name="room_participants_action_devices_list">Syn einingslista</string>
-    <string name="room_participants_power_level_prompt">Du vil ikkje kunna gjera um på detta brigdet fyrdi du hev ein brukar si høgd upp til di eiga. 
-\nEr du trygg på detta\?</string>
+    <string name="room_participants_action_devices_list">Vis sesjonsliste</string>
+    <string name="room_participants_power_level_prompt">Du vil ikkje kunne angre denne endringa, då du promoterar brukaren til å ha same tilgangsnivå som deg sjølv.
+\nEr du sikker på dette\?</string>
 
-    <string name="room_participants_invite_prompt_msg">Er du trygg på at du vil bjoda %s inn til samtala\?</string>
+    <string name="room_participants_invite_prompt_msg">Er du sikker på at du vil invitera %s inn til samtala\?</string>
     <string name="room_participants_ban_prompt_msg">Er du trygg på at du vil stengja brukaren ute frå samtala\?</string>
 
-    <string name="people_search_invite_by_id"><u>Bjod inn gjenom ID</u></string>
+    <string name="people_search_invite_by_id"><u>Inviter med ID</u></string>
     <string name="people_search_local_contacts">LOKALE KONTAKTAR (%d)</string>
-    <string name="people_search_user_directory">BRUKARUTVAL (%s)</string>
-    <string name="people_search_filter_text">Berre Matrix-brukarar</string>
+    <string name="people_search_user_directory">BRUKARKATALOG (%s)</string>
+    <string name="people_search_filter_text">Berre for Matrix-brukarar</string>
 
-    <string name="people_search_invite_by_id_dialog_title">Byd inn brukarar gjennom ID</string>
-    <string name="people_search_invite_by_id_dialog_description">Ver venleg og skriv ei eller fleire epostladresser eller Matrix-IDar inn</string>
+    <string name="people_search_invite_by_id_dialog_title">Inviter inn brukarar med ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Ver venleg og skriv ei eller fleire e-postadresser eller Matrix-IDar inn</string>
     <string name="people_search_invite_by_id_dialog_hint">Epost eller Matrix-ID</string>
 
     <string name="room_menu_search">Søk</string>
@@ -391,29 +392,29 @@
     <string name="room_message_placeholder_reply_to_not_encrypted">Send eit svar (ikkje-kryptert)…</string>
     <string name="room_offline_notification">Tilkoplinga til tenaren gjekk tapt.</string>
     <string name="room_unsent_messages_notification">Meldingane vart ikkje sende. %1$s eller %2$s no?</string>
-    <string name="room_unknown_devices_messages_notification">Meldingane vart ikkje sende av di ukjende einingar er til stades. %1$s eller %2$s no\?</string>
+    <string name="room_unknown_devices_messages_notification">Meldingane vart ikkje sende då ukjende sesjonar er aktive. %1$s eller %2$s no\?</string>
     <string name="room_prompt_resend">Send alle på nytt</string>
-    <string name="room_prompt_cancel">bryt alle av</string>
+    <string name="room_prompt_cancel">Avbryt alle</string>
     <string name="room_resend_unsent_messages">Send usende meldingar på nytt</string>
     <string name="room_delete_unsent_messages">Slett usende meldingar</string>
     <string name="room_message_file_not_found">Fila vart ikkje funne</string>
-    <string name="room_do_not_have_permission_to_post">Du hev ikkje løyve til å senda meldingar i detta romet</string>
+    <string name="room_do_not_have_permission_to_post">Du har ikkje løyve til å senda meldingar i dette rommet</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">1 ny melding</item>
         <item quantity="other">%d nye meldingar</item>
     </plurals>
 
-    <string name="ssl_trust">Lit på</string>
-    <string name="ssl_do_not_trust">Ikkje lit på</string>
-    <string name="ssl_logout_account">Logga ut</string>
-    <string name="ssl_remain_offline">Yversjå</string>
+    <string name="ssl_trust">Stol på</string>
+    <string name="ssl_do_not_trust">Ikkje stol på</string>
+    <string name="ssl_logout_account">Logg ut</string>
+    <string name="ssl_remain_offline">Ignorer</string>
     <string name="ssl_fingerprint_hash">Fingeravtrykk (%s):</string>
-    <string name="ssl_could_not_verify">Fekk ikkje til å stadfesta identiteten på fjerrtenaren.</string>
-    <string name="ssl_cert_not_trust">Detta kann tyda at nokon tjuvlyder på koplingi di, eller at mobilen ikkje liter på sertifikatet frå fjerrtenaren.</string>
-    <string name="ssl_cert_new_account_expl">Um tenaradministratoren hev sagt at detta er å venta, pass på at fingeravtrykket under samsvarar med fingeravtrykket han gjev deg.</string>
-    <string name="ssl_unexpected_existing_expl">Sertifikatet har forandra seg frå ein som var stolt på av mobilen din. Dette er SÆRS UVANLEG. Det tilrådast å IKKJE GODKJENNA det nye sertifikatet.</string>
-    <string name="ssl_expected_existing_expl">"Sertifikatet hev brigda seg frå eit som tidlegare var lite på til eit som ikkje er det. Det kann henda at tenaren hev nya uppatt sertifikatet sitt. Snakk med tenaradministratoren fyr å få det venta  fingeravtrykket."</string>
-    <string name="ssl_only_accept">Godkjenn BERRE sertifikatet viss tenaradministratoren har gjeve ut eit fingeravtrykk som samsvarar med det over.</string>
+    <string name="ssl_could_not_verify">Fekk ikkje til å stadfesta identiteten på den eksterne serveren.</string>
+    <string name="ssl_cert_not_trust">Detta kan vere teikn på at tilkoplinga blir avlytta eller at telefonen ikkje stolar på sertifikatet den eksterne tenaren brukar.</string>
+    <string name="ssl_cert_new_account_expl">Om administratoren av serveren har informert at dette er forventa, pass på at fingeravtrykket under samsvarar med fingeravtrykket han gav deg.</string>
+    <string name="ssl_unexpected_existing_expl">Sertifikatet har forandra seg frå det som var stolt på av mobilen din. Dette er SÆRS UVANLEG. Det er tilrådd å IKKJE GODKJENNA dette nye sertifikatet.</string>
+    <string name="ssl_expected_existing_expl">Sertifikatet har endra seg frå eit som tidlegare var stole på, til eit som ikkje er det. Det kan henda at tenaren har fornya sertifikatet. Snakk med administrator for å få det forventa fingeravtrykket.</string>
+    <string name="ssl_only_accept">Godkjenn BERRE sertifikatet viss tenaradministratoren har publisert eit fingeravtrykk som samsvarar med det over.</string>
 
     <string name="room_details_title">Romdetaljar</string>
     <string name="room_details_people">Folk</string>
@@ -423,10 +424,10 @@
     <string name="room_details_people_invited_group_name">BODNE INN</string>
     <string name="room_details_people_present_group_name">KOMNE INN</string>
 
-    <string name="room_event_action_report_prompt_reason">Grunnen til at du melder innhaldet</string>
-    <string name="room_event_action_report_prompt_ignore_user">Vil du gøyma alle meldingar frå denna brukaren\?
-\n
-\nMerk at detta vil starta æppen på nytt og kann taka litt tid.</string>
+    <string name="room_event_action_report_prompt_reason">Grunnlag til at du rapporterer innhaldet</string>
+    <string name="room_event_action_report_prompt_ignore_user">Vil du gøyma alle meldingar frå denne brukaren\? 
+\n 
+\nMerk at detta vil starta applikasjonen på nytt og kan ta litt tid.</string>
     <string name="room_event_action_cancel_upload">Brjot av upplastingi</string>
     <string name="room_event_action_cancel_download">Brjot av nedlastingi</string>
 
@@ -441,7 +442,7 @@
 
     <string name="room_recents_join">VERT MED</string>
     <string name="room_recents_directory">UTVAL</string>
-    <string name="room_recents_favourites">YNDLINGAR</string>
+    <string name="room_recents_favourites">FAVORITTAR</string>
     <string name="room_recents_conversations">ROM</string>
     <string name="room_recents_low_priority">LÅGRETT</string>
     <string name="room_recents_invites">INNBJODINGAR</string>
@@ -460,41 +461,41 @@
         <item quantity="one">Fann %1$s rom fyr %2$s</item>
         <item quantity="other">Fann %1$s rom fyr %2$s</item>
     </plurals>
-    <string name="directory_searching_title">Søkjer i utvalet..</string>
+    <string name="directory_searching_title">Søkjer gjennom katalogen…</string>
 
     <string name="room_settings_all_messages_noisy">Alle meldingar (bråkete)</string>
     <string name="room_settings_all_messages">Alle meldingar</string>
     <string name="room_settings_mention_only">Berre nemningar</string>
     <string name="room_settings_mute">Stilna</string>
     <string name="room_settings_favourite">Gjer til yndling</string>
-    <string name="room_settings_de_prioritize">Tak burt høgrett</string>
-    <string name="room_settings_direct_chat">Beinveges samtala</string>
-    <string name="room_settings_leave_conversation">Far frå samtala</string>
+    <string name="room_settings_de_prioritize">Nedprioriter</string>
+    <string name="room_settings_direct_chat">Direktesamtale</string>
+    <string name="room_settings_leave_conversation">Forlat samtale</string>
     <string name="room_settings_forget">Gløym</string>
-    <string name="room_settings_add_homescreen_shortcut">Laga snarveg på heimskjermen</string>
+    <string name="room_settings_add_homescreen_shortcut">Lag snarveg på heimskjermen</string>
 
     <string name="room_sliding_menu_messages">Meldingar</string>
     <string name="room_sliding_menu_settings">Innstillingar</string>
-    <string name="room_sliding_menu_version">Utgåva</string>
-    <string name="room_sliding_menu_term_and_conditions">Vilkår og fyresetnader</string>
-    <string name="room_sliding_menu_third_party_notices">Tridjepartivarsel</string>
-    <string name="room_sliding_menu_copyright">Upphavsrett</string>
-    <string name="room_sliding_menu_privacy_policy">Personvernretningslinor</string>
+    <string name="room_sliding_menu_version">Versjon</string>
+    <string name="room_sliding_menu_term_and_conditions">Vilkår for bruk</string>
+    <string name="room_sliding_menu_third_party_notices">Informasjon frå tredjepart</string>
+    <string name="room_sliding_menu_copyright">Opphavsrett</string>
+    <string name="room_sliding_menu_privacy_policy">Personvern</string>
 
-    <string name="settings_profile_picture">Profilbilæte</string>
+    <string name="settings_profile_picture">Profilbilete</string>
     <string name="settings_display_name">Visingsnamn</string>
     <string name="settings_email_address">Epost</string>
-    <string name="settings_add_email_address">Legg til ei epostadressa</string>
+    <string name="settings_add_email_address">Legg til e-postadresse</string>
     <string name="settings_phone_number">Telefon</string>
-    <string name="settings_add_phone_number">Legg til eit telefonnummer</string>
-    <string name="settings_app_info_link_summary">Syn æppinfoen i systeminnstillingane</string>
-    <string name="settings_app_info_link_title">Æppinfo</string>
+    <string name="settings_add_phone_number">Legg til telefonnummer</string>
+    <string name="settings_app_info_link_summary">Vis informasjon om appen i systeminnstillingane</string>
+    <string name="settings_app_info_link_title">Informasjon om applikasjonen</string>
 
-    <string name="settings_notification_privacy">Varselpersonvern</string>
+    <string name="settings_notification_privacy">Personvern for varslingar</string>
     <string name="settings_notification_privacy_normal">Vanleg</string>
     <string name="settings_notification_privacy_reduced">Minska personvern</string>
-    <string name="settings_notification_privacy_need_permission">Æppen treng løyve til å køyra i bakgrunnen</string>
-    <string name="settings_notification_privacy_fcm">• Varsel vert sende gjennom Google Cloud-Meldingar</string>
+    <string name="settings_notification_privacy_need_permission">App\'en treng løyve til å køyra i bakgrunnen</string>
+    <string name="settings_notification_privacy_fcm">• Varsel blir sende via Firebase Cloud Messaging</string>
     <string name="settings_notification_privacy_metadata">• Varsel inneheld berre metadata</string>
     <string name="settings_notification_privacy_secure_message_content">• Meldingsinnhaldet i varselet er<b>trygt henta beinveges frå Matrix-heimtenaren</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Varsel inneheld <b>meta- og meldingsdata</b></string>
@@ -502,14 +503,14 @@
 
     <string name="settings_notification_ringtone">Varselljod</string>
     <string name="settings_enable_all_notif">Skru på varsel fyr denne brukaren</string>
-    <string name="settings_enable_this_device">Skru på varsel fyr denna einingi</string>
+    <string name="settings_enable_this_device">Aktiver varslingar for denne sesjonen</string>
     <string name="settings_turn_screen_on">Skru skjermen på i 3 sekund</string>
 
     <string name="settings_containing_my_display_name">Meldingar som inneheld visingsnamnet mitt</string>
     <string name="settings_containing_my_user_name">Meldingar som inneheld brukarnamnet mitt</string>
-    <string name="settings_messages_in_one_to_one">Meldingar i ein-og-ein-samtalor</string>
-    <string name="settings_messages_in_group_chat">Meldingar i gruppasamtalor</string>
-    <string name="settings_invited_to_room">Når eg vert boden inn i eit rom</string>
+    <string name="settings_messages_in_one_to_one">Meldingar i ein-og-ein-samtalar</string>
+    <string name="settings_messages_in_group_chat">Meldingar i gruppesamtalar</string>
+    <string name="settings_invited_to_room">Når eg blir invitert til eit rom</string>
     <string name="settings_call_invitations">Røystsamtalainnbjodingar</string>
     <string name="settings_messages_sent_by_bot">Meldingar frå botar</string>
 
@@ -517,60 +518,60 @@
     <string name="settings_background_sync">Bakgrunnsamstilling</string>
     <string name="settings_enable_background_sync">Skru på bakgrunnsamstilling</string>
     <string name="settings_set_sync_timeout">Samstillingsfyrespurnaden fekk tidsavbrot</string>
-    <string name="settings_set_sync_delay">Forseining mellom to samstillingsførespurnader</string>
+    <string name="settings_set_sync_delay">Forsinkelse mellom kvar synkronisering</string>
     <string name="settings_second">sekund</string>
     <string name="settings_seconds">sekund</string>
 
-    <string name="settings_version">Utgåva</string>
-    <string name="settings_olm_version">olm-utgåva</string>
-    <string name="settings_app_term_conditions">Vilkår og fyresetnader</string>
-    <string name="settings_third_party_notices">Tridjepartivarsel</string>
-    <string name="settings_copyright">Upphavsrett</string>
-    <string name="settings_privacy_policy">Personvernsretningslinor</string>
-    <string name="settings_clear_cache">Tøm buffaren</string>
-    <string name="settings_clear_media_cache">Tøm mediabuffaren</string>
-    <string name="settings_keep_media">Hald på mediet</string>
+    <string name="settings_version">Versjon</string>
+    <string name="settings_olm_version">olm-versjon</string>
+    <string name="settings_app_term_conditions">Vilkår for bruk</string>
+    <string name="settings_third_party_notices">Informasjon frå tredjepart</string>
+    <string name="settings_copyright">Opphavsrett</string>
+    <string name="settings_privacy_policy">Personvern</string>
+    <string name="settings_clear_cache">Tøm buffer</string>
+    <string name="settings_clear_media_cache">Tøm mediabuffer</string>
+    <string name="settings_keep_media">Behald mediefiler</string>
 
     <string name="settings_user_settings">Brukarinnstillingar</string>
     <string name="settings_notifications">Varsel</string>
-    <string name="settings_ignored_users">Oversedde brukarar</string>
+    <string name="settings_ignored_users">Ignorerte brukarar</string>
     <string name="settings_other">Anna</string>
-    <string name="settings_advanced">Omfattande</string>
+    <string name="settings_advanced">Avansert</string>
     <string name="settings_cryptography">Kryptografi</string>
     <string name="settings_notifications_targets">Varselmål</string>
-    <string name="settings_contact">Lokale kontakter</string>
-    <string name="settings_contacts_app_permission">Kontakttillating</string>
-    <string name="settings_contacts_phonebook_country">Kontaktar-land</string>
-    <string name="settings_home_display">Heimeside</string>
-    <string name="settings_pin_missed_notifications">Fest rom med usedde varsel</string>
+    <string name="settings_contact">Lokale kontaktar</string>
+    <string name="settings_contacts_app_permission">Kontakttilgang</string>
+    <string name="settings_contacts_phonebook_country">Land for telefonbok</string>
+    <string name="settings_home_display">Startskjerm</string>
+    <string name="settings_pin_missed_notifications">Fest rom med tapte varslingar</string>
     <string name="settings_pin_unread_messages">Fest rom med uleste meldingar</string>
-    <string name="settings_devices_list">Einingar</string>
+    <string name="settings_devices_list">Sesjonar</string>
     <string name="settings_inline_url_preview">Skru URL-førehandsvisingar i tekstfeltet på</string>
-    <string name="settings_always_show_timestamps">Vis alltid meldingstidspunkt</string>
-    <string name="settings_12_24_timestamps">Vis tidspunkt i 12-timarsform (t.d. 4:20pm)</string>
+    <string name="settings_always_show_timestamps">Vis tidsspunkt for alle meldingar</string>
+    <string name="settings_12_24_timestamps">Vis tidspunkt i 12-timarsformat</string>
     <string name="settings_vibrate_on_mention">Rist ved nemning</string>
     <string name="settings_preview_media_before_sending">Førehandsvis medium før avsending</string>
 
-    <string name="settings_deactivate_account_section">Avliv Brukar</string>
-    <string name="settings_deactivate_my_account">Avliv brukaren min</string>
+    <string name="settings_deactivate_account_section">Deaktiver konto</string>
+    <string name="settings_deactivate_my_account">Deaktiver kontoen min</string>
 
     <string name="startup_notification_privacy_title">Varselpersonvern</string>
-    <string name="startup_notification_privacy_message">Riot kan køyra i bakgrunnen for å sikkert og privat halda styr på varsla dine (dette kan påverka batteribruket).</string>
+    <string name="startup_notification_privacy_message">Riot kan køyra i bakgrunnen for å sikkert og privat halda styr på varsla dine (dette kan påverka batteribruk).</string>
     <string name="startup_notification_privacy_button_grant">Gje tillating</string>
     <string name="startup_notification_privacy_button_other">vel noko anna</string>
 
     <string name="settings_analytics">Statistikk</string>
     <string name="settings_opt_in_of_analytics">Send statistikkdata</string>
-    <string name="settings_opt_in_of_analytics_summary">Riot samlar anonym statistikk inn for å forbetra æppen.</string>
+    <string name="settings_opt_in_of_analytics_summary">Riot samlar anonym statistikk inn for å forbetra applikasjonen.</string>
     <string name="settings_opt_in_of_analytics_prompt">Ver venleg og skru statistikkinnsamling på for å hjelpa oss med å forbetra Riot.</string>
     <string name="settings_opt_in_of_analytics_ok">Ja, eg vil hjelpa til!</string>
 
     <string name="settings_data_save_mode">Datasparingsmodus</string>
 
-    <string name="devices_details_dialog_title">Einingsdetaljar</string>
+    <string name="devices_details_dialog_title">Informasjon om sesjon</string>
     <string name="devices_details_id_title">ID</string>
-    <string name="devices_details_name_title">Namn</string>
-    <string name="devices_details_device_name">Einingsnamn</string>
+    <string name="devices_details_name_title">Offentleg namn</string>
+    <string name="devices_details_device_name">Oppdater offentleg namn</string>
     <string name="devices_details_last_seen_title">Sist sedd</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_text">Denne handlinga krev vidare sjølvstadfesting.
@@ -584,25 +585,23 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="settings_identity_server">Identitetstenar</string>
 
     <string name="settings_user_interface">Brukargrensesnitt</string>
-    <string name="settings_interface_language">Grensesnitts-mål</string>
-    <string name="settings_select_language">Vel eit mål</string>
+    <string name="settings_interface_language">Språk</string>
+    <string name="settings_select_language">Vel språk</string>
 
     <string name="account_email_validation_title">Ventar på Godkjenning</string>
     <string name="account_email_validation_message">Ver venleg og sjekk eposten din og klikk på lenkja han inneheld. Når det er gjort, klikk gå fram.</string>
-    <string name="account_email_validation_error">Fekk ikkje til å stadfesta epostadressa. Ver venleg og sjekk eposten din og klikk på lenkja han inneheld. Når det er gjort, klikk gå fram</string>
-    <string name="account_email_already_used_error">Epostadressa er allereie i bruk</string>
-    <string name="account_email_not_found_error">Fekk ikkje til å senda eposten: Fann ikkje epostadressa</string>
-    <string name="account_phone_number_already_used_error">Telefonnummeret er allereie i bruk</string>
+    <string name="account_email_validation_error">Fekk ikkje til å stadfesta e-postadressa. Ver venleg og sjekk e-posten din og klikk på lenkja han inneheld. Når det er gjort, klikk gå fram</string>
+    <string name="account_email_already_used_error">E-postadressa er allereie i bruk</string>
+    <string name="account_email_not_found_error">Fann ikkje e-postadressa</string>
+    <string name="account_phone_number_already_used_error">Telefonnummeret er allereie i bruk.</string>
 
     <string name="settings_change_password">Forandr passordet</string>
-    <string name="settings_old_password">gamalt passord</string>
-    <string name="settings_new_password">nytt passord</string>
-    <string name="settings_confirm_password">stadfest passordet</string>
+    <string name="settings_old_password">Gjeldande passord</string>
+    <string name="settings_new_password">Nytt passord</string>
+    <string name="settings_confirm_password">Stadfest passordet</string>
     <string name="settings_fail_to_update_password">Fekk ikkje til å oppdatera passordet</string>
     <string name="settings_password_updated">Passordet ditt vart oppdatert</string>
-    <string name="settings_unignore_user">Vis alle meldingane frå %s?
-
-Merk at denne handlinga gjer at æppen startar på nytt og kan taka litt tid.</string>
+    <string name="settings_unignore_user">Vis alle meldingane frå %s\? Merk at denne handlinga gjer at applikasjonen startar på nytt og kan taka litt tid.</string>
 
     <string name="settings_delete_notification_targets_confirmation">Er du sikker på at du vil fjerna varselmålet?</string>
 
@@ -615,7 +614,7 @@ Merk at denne handlinga gjer at æppen startar på nytt og kan taka litt tid.</s
     <string name="settings_phone_number_label">Telefonnummer</string>
     <string name="settings_phone_number_error">Ugangbart telefonnummer for det valde landet</string>
     <string name="settings_phone_number_verification">Mobilstadfesting</string>
-    <string name="settings_phone_number_verification_instruction">Vi har send deg ein SMS med ein kode. Ver venleg og skriv han inn under.</string>
+    <string name="settings_phone_number_verification_instruction">Vi har sendt deg ein SMS med aktiveringskode. Ver venleg og skriv han inn under.</string>
     <string name="settings_phone_number_verification_error_empty_code">Skriv ein stadfestingskode inn</string>
     <string name="settings_phone_number_verification_error">Noko gjekk galt under stadfestinga av telefonummeret ditt</string>
     <string name="settings_phone_number_code">Kode</string>
@@ -654,34 +653,34 @@ Merk at denne handlinga gjer at æppen startar på nytt og kan taka litt tid.</s
 
     <string name="room_settings_room_access_warning">For å lenkja eit rom må det ha ei adresse.</string>
     <string name="room_settings_room_access_entry_only_invited">Berre folk som har vorte bodne inn</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Kven som helst som veit om romkenkja, sett vekk frå gjester</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Kven som helst som veit om romlenkja, gjester òg</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Kven som helst som veit romlenkja, sett vekk frå gjester</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Kven som helst som veit romlenkja, inkluderande gjester</string>
 
     <string name="room_settings_banned_users_title">Utestengde brukarar</string>
 
     <string name="room_settings_category_advanced_title">Omfattande</string>
-    <string name="room_settings_room_internal_id">Rommet sin indre ID</string>
+    <string name="room_settings_room_internal_id">Rommet sin interne ID</string>
     <string name="room_settings_addresses_pref_title">Adresser</string>
-    <string name="room_settings_labs_pref_title">Labbar</string>
+    <string name="room_settings_labs_pref_title">Eksperimentelle funksjonar</string>
     <string name="room_settings_labs_warning_message">Desse funksjonane er under utprøving og uventa vanskar kan dukka opp. Bruk med omhug.</string>
     <string name="room_settings_labs_end_to_end">Ende-til-Ende-Kryptering</string>
     <string name="room_settings_labs_end_to_end_is_active">Ende-til-Ende-Enrkyptering er skrudd på</string>
     <string name="room_settings_labs_end_to_end_warnings">Du må vera logga ut for å kunna skru krypteringa på.</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">Krypter berre til godkjende einingar</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">Aldri send enkryterte meldingar til ikkje-godkjende einingar i dette rommet frå denne eininga.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Krypter berre til godkjende sesjonar</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Aldri send krypterte meldingar til ikkje-godkjende sesjonar i dette rommet frå denne sesjonen.</string>
 
     <string name="room_settings_addresses_no_local_addresses">Dette rommet har ingen lokale adresser</string>
     <string name="room_settings_addresses_add_new_address">Ny adresse (t.d. #foo:matrix.org)</string>
 
     <string name="room_settings_no_flair">Dette rommet viser ikkje særpreg for nokre samfunn</string>
-    <string name="room_settings_add_new_group">Ny samfunns-ID (t.d. +foo:matrix.org)</string>
-    <string name="room_settings_invalid_group_format_dialog_title">Ugangbar samfunns-ID</string>
-    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' er ikkje ein gangbar samfunns-ID</string>
+    <string name="room_settings_add_new_group">Ny fellesskaps-ID (t.d. +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Ugyldig fellesskaps-ID</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' er ikkje ein gyldig fellesskaps-ID</string>
 
 
     <string name="room_settings_addresses_invalid_format_dialog_title">Ugangbar aliasform</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' er ikkje ei gangbar form for eit alias</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">Du har inga oppgjeven hovudadresse. Hovudadressa til rommet vert tilfeldig vald</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Du vil ikkje ha spesifisert ei hovudadresse for dette rommet.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Hovudadresse-åtvaringar</string>
 
     <string name="room_settings_set_main_address">Set som Hovudadresse</string>
@@ -697,7 +696,7 @@ Merk at denne handlinga gjer at æppen startar på nytt og kan taka litt tid.</s
     <string name="directory_title">Utval</string>
     <string name="settings_theme">Preg</string>
 
-    <string name="failed_to_load_timeline_position">%s prøvde å lasta eit gjeve punkt i rommet si tidsline men klarte ikkje å finna det.</string>
+    <string name="failed_to_load_timeline_position">%s prøvde å lasta eit spesifikt punkt i rommet si tidslinje men klarte ikkje å finna det.</string>
 
     <string name="encryption_information_title">Ende-til-ende-krypteringsinfo</string>
 
@@ -709,36 +708,34 @@ Merk at denne handlinga gjer at æppen startar på nytt og kan taka litt tid.</s
     <string name="encryption_information_session_id">Økt-ID</string>
     <string name="encryption_information_decryption_error">Noko gjekk gale med dekrypteringa</string>
 
-    <string name="encryption_information_sender_device_information">Avsendareiningsinfo</string>
-    <string name="encryption_information_device_name">Einingsnamn</string>
-    <string name="encryption_information_name">Namn</string>
-    <string name="encryption_information_device_id">Einings-ID</string>
-    <string name="encryption_information_device_key">Einings-nykel</string>
+    <string name="encryption_information_sender_device_information">Avsendar-sesjonsinformasjon</string>
+    <string name="encryption_information_device_name">Offentleg namn</string>
+    <string name="encryption_information_name">Offentleg namn</string>
+    <string name="encryption_information_device_id">ID</string>
+    <string name="encryption_information_device_key">Sesjonsnøkkel</string>
     <string name="encryption_information_verification">Godkjenning</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519-fingeravtrykk</string>
 
-    <string name="encryption_export_e2e_room_keys">Hent E2E-romnyklar ut</string>
-    <string name="encryption_export_room_keys">Hent romnyklar ut</string>
-    <string name="encryption_export_room_keys_summary">Hent nyklane ut til ei lokal fil</string>
+    <string name="encryption_export_e2e_room_keys">Eksporter E2E-romnøkklar</string>
+    <string name="encryption_export_room_keys">Eksporter romnøkklar</string>
+    <string name="encryption_export_room_keys_summary">Hent nøkklane ut til ei lokal fil</string>
     <string name="encryption_export_export">Hent ut</string>
     <string name="passphrase_enter_passphrase">Skriv passetning inn</string>
     <string name="passphrase_confirm_passphrase">Stadfest passetninga</string>
-    <string name="encryption_export_saved_as">E2E-romnyklane vart lagra til \'%s\'
+    <string name="encryption_export_saved_as">E2E-romnøkklane vart lagra til \'%s\' Åtvaring: fila kan verta sletta viss app\'en avinstallerast.</string>
 
-Åtvaring: fila kan verta sletta vis æppen avinstallerast.</string>
-
-    <string name="encryption_import_e2e_room_keys">Hent E2E-romnyklar inn</string>
-    <string name="encryption_import_room_keys">Hent romnyklar inn</string>
-    <string name="encryption_import_room_keys_summary">Hent nyklane inn frå ei lokal fil</string>
+    <string name="encryption_import_e2e_room_keys">Importer E2E-romnøkklar</string>
+    <string name="encryption_import_room_keys">Importer romnøkklar</string>
+    <string name="encryption_import_room_keys_summary">Hent nøkklane inn frå ei lokal fil</string>
     <string name="encryption_import_import">Hent inn</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Krypter berre til godkjende einingar</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Aldri send krypterte meldingar til ikkje-godkjende einingar frå denne eininga</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Krypter berre til godkjende sesjonar</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Aldri send krypterte meldingar til ikkje-godkjende sesjonar frå denne sesjonen</string>
 
     <string name="encryption_information_not_verified">IKKJE Godkjend</string>
     <string name="encryption_information_verified">Godkjend</string>
     <string name="encryption_information_blocked">Svartelista</string>
 
-    <string name="encryption_information_unknown_device">ukjend eining</string>
+    <string name="encryption_information_unknown_device">ukjend sesjon</string>
     <string name="encryption_information_none">ingen</string>
 
     <string name="encryption_information_verify">Godkjenn</string>
@@ -746,23 +743,17 @@ Merk at denne handlinga gjer at æppen startar på nytt og kan taka litt tid.</s
     <string name="encryption_information_block">Set på svartelista</string>
     <string name="encryption_information_unblock">Fjern frå svartelista</string>
 
-    <string name="encryption_information_verify_device">Godkjenn eininga</string>
-    <string name="encryption_information_verify_device_warning">For å godkjenna at denne eininga er til å stola på, ver venleg og snakk med eigaren på ei anna måte (t.d. ansikt til ansikt eller på telefon) og spør han om nykelen han ser i Brukarinnstillingane for denne eininga samsvarar med nykelen under:</string>
-    <string name="encryption_information_verify_device_warning2">Viss han samsvarer, klikk godkjennknappen under.
-Viss han ikkje gjer det, tjuvlytter nokon andre på eininga og du bør sannsynlegvis setja ho på svartelista.
-I framtida kjem denne godkjenningsprosessen til å vera betre utvikla.</string>
-    <string name="encryption_information_verify_key_match">Eg stadfestar at nyklane er den same</string>
+    <string name="encryption_information_verify_device">Verifiser sesjonen</string>
+    <string name="encryption_information_verify_device_warning">For å godkjenna at denne sesjonen er til å stola på, ver venleg og snakk med eigaren på ein anna måte (t.d. ansikt til ansikt eller på telefon) og spør han om nøkkelen han ser i Brukarinnstillingane for denne sesjonen samsvarar med nøkkelen under:</string>
+    <string name="encryption_information_verify_device_warning2">Viss det samsvarer, klikk Verifiser-knappen under. Viss det ikkje gjer det, avlyttar nokon andre denne sesjonen og du bør sannsynlegvis svarteliste den. I framtida vil denne godkjenningsprosessen bli meir forbetra.</string>
+    <string name="encryption_information_verify_key_match">Eg stadfestar at nøkklane er like</string>
 
-    <string name="e2e_enabling_on_app_update">Riot støttar no ende-til-ende-kryptering men du må logga inn att for å skru det på.
+    <string name="e2e_enabling_on_app_update">Riot støttar no ende-til-ende-kryptering men du må logga inn att for å skru det på. Du kan gjera det no eller seinare i App-innstillingane.</string>
 
-Du kan gjera det no eller seinare frå æpp-innstillingane.</string>
-
-    <string name="unknown_devices_alert_title">Rommet inneheld ukjende einingar</string>
-    <string name="unknown_devices_alert_message">Rommet inneheld ukjende einingar som ikkje har verta godkjend.
-Dette tydar at det ikkje er sikkert at einingane høyrer til dei brukarane dei hevdar.
-Vi tilråder deg å gå gjennom godkjenninga for kvar eining før du går fram, men du kan senda meldinga på nytt utan å godkjenne viss du vil.
-
-Ukjende einingar:</string>
+    <string name="unknown_devices_alert_title">Rommet inneheld ukjende sesjonar</string>
+    <string name="unknown_devices_alert_message">Rommet inneheld ukjende sesjonar som ikkje har blitt verifiserte. Det er med andre ord ingen garanti for at sesjonane høyrer til brukarane dei hevdar. Vi tilråder deg å gå gjennom verifikasjonsprosessen for kvar eining før du går vidare, men du kan sende meldingen på nytt utan å godkjenne viss du vil. 
+\n
+\nUkjende sesjonar:</string>
 
     <string name="select_room_directory">Vel eit romutval</string>
     <string name="directory_server_fail_to_retrieve_server">Tenaren er kanskje utilgjengeleg eller overlasta</string>
@@ -800,8 +791,8 @@ Ukjende einingar:</string>
     <string name="widget_creation_failure">Widget-laging mislukkast</string>
     <string name="event_formatter_widget_added">%1$s lagt til av %2$s</string>
     <string name="event_formatter_widget_removed">%1$s fjerna av %2$s</string>
-    <string name="settings_labs_create_conference_with_jitsi">Laga gruppasamtalor med jitsi</string>
-    <string name="widget_delete_message_confirmation">Er du sikker på at du vil sletta widgeten?</string>
+    <string name="settings_labs_create_conference_with_jitsi">Lag konferansesamtalar med Jitsi</string>
+    <string name="widget_delete_message_confirmation">Er du sikker på at du vil slette widgeten frå dette rommet\?</string>
     <plurals name="active_widgets">
         <item quantity="one">1 verkande widget</item>
         <item quantity="other">%d verkande widgetar</item>
@@ -817,12 +808,12 @@ Ukjende einingar:</string>
     <string name="widget_integration_room_not_visible">Rommet %s er ikkje synleg.</string>
     <string name="widget_integration_missing_parameter">Ein krevd parameter vantar.</string>
     <string name="widget_integration_invalid_parameter">Ein parameter er ikkje gangbar.</string>
-    <string name="room_add_matrix_apps">Legg Matrix-æppar til</string>
+    <string name="room_add_matrix_apps">Legg til Matrix-applikasjonar</string>
     <string name="settings_labs_keyboard_options_to_send_message">Bruk entertasten på tastaturet for å senda meldingar</string>
-    <string name="settings_labs_enable_send_voice">Send røystmelding (krever ein tredjepartisæpp for å spela inn meldinga)</string>
+    <string name="settings_labs_enable_send_voice">Send talemelding</string>
 
-    <string name="you_added_a_new_device">Du la til den nye eininga \'%s\', som bed om krypteringsnyklar.</string>
-    <string name="your_unverified_device_requesting">Den ikkje-godkjende eininga di \'%s\' bed om krypteringsnyklar.</string>
+    <string name="you_added_a_new_device">Du la til den nye sesjonen \'%s\', som etterspør krypteringsnøkklar.</string>
+    <string name="your_unverified_device_requesting">Den ikkje-verifiserte sesjonen din \'%s\' etterspør krypteringsnøkklar.</string>
     <string name="start_verification">Byrj godkjenning</string>
     <string name="share_without_verifying">Del utan godkjenning</string>
     <string name="ignore_request">Oversjå førespurnaden</string>
@@ -844,7 +835,7 @@ Ukjende einingar:</string>
     <string name="command_description_kick_user">Sparkar brukarar med gjeven ID</string>
     <string name="command_description_nick">Forandrar visingsnamnet ditt</string>
     <string name="command_description_markdown">På/Av markdown</string>
-    <string name="command_description_clear_scalar_token">For å retta opp i Matrix-Æppadministrering</string>
+    <string name="command_description_clear_scalar_token">For å ordne opp i Matrix-App-administrasjon</string>
 
     <string name="notification_off">Av</string>
     <string name="notification_noisy">Bråket</string>
@@ -852,10 +843,10 @@ Ukjende einingar:</string>
     <string name="encrypted_message">Kryptert melding</string>
 
     <string name="create">Laga</string>
-    <string name="create_community">Laga samfund</string>
-    <string name="community_name">Samfunnsnamn</string>
+    <string name="create_community">Lag fellesskap</string>
+    <string name="community_name">Fellesskapsnamn</string>
     <string name="community_name_hint">Døme</string>
-    <string name="community_id">Samfunns-ID</string>
+    <string name="community_id">Fellesskaps-ID</string>
     <string name="community_id_hint">døme</string>
 
     <string name="group_details_home">Heim</string>
@@ -869,7 +860,7 @@ Ukjende einingar:</string>
     <string name="filter_group_members">Filtrer gruppemedlemer</string>
     <string name="filter_group_rooms">Filtrer grupperom</string>
 
-    <string name="group_no_long_description">Samfunnsadministratoren har ikkje gjeve ei lang skildring for dette samfunnet.</string>
+    <string name="group_no_long_description">Fellesskapssadministratoren har ikkje satt ei lang skildring for dette fellesskapet.</string>
 
     <string name="has_been_kicked">Du vart sparka frå %1$s av %2$s</string>
     <string name="has_been_banned">Du var stengd ute frå %1$s av %2$s</string>
@@ -877,9 +868,9 @@ Ukjende einingar:</string>
     <string name="rejoin">Vert med att</string>
     <string name="forget_room">Gløym rommet</string>
 
-    <string name="e2e_need_log_in_again">Du må logga på att for å laga ende-til-ende-krypteringsnyklar til denna eininga og senda den ålmene nykelen til heimetenaren. 
-\nDetta trengst berre éin gong. 
-\nOrsak for ulempa.</string>
+    <string name="e2e_need_log_in_again">Du må logga på att for å laga ende-til-ende-krypteringsnnøkklar til denne sesjonen og senda den offentlege nøkkelen (public key) til heimetenaren. 
+\nDette trengst berre éin gong. 
+\nBeklagar ulempa.</string>
 
     <string name="directory_server_native_rooms">Alle %s-rom på Matrix</string>
 
@@ -891,15 +882,15 @@ Ukjende einingar:</string>
     <string name="dialog_user_consent_content">For å halda fram med å bruka %1$s-heimtenaren må du sjå over og seia deg einig i vilkåret og føresetnader.</string>
     <string name="dialog_user_consent_submit">Sjå over no</string>
 
-    <string name="deactivate_account_title">Avliv Brukar</string>
+    <string name="deactivate_account_title">Deaktiver konto</string>
     <string name="deactivate_account_content">Dette gjer at brukaren din vert ubrukeleg til evig tid. Du kjem ikkje til å kunna logga inn, og ingen andre kjem til å kunna melde seg inn med den gamle brukar-IDen din. Brukaren din forlét òg alle rom han er i, og brukardetaljane dine vil verta fjerna frå identitetstenaren. <b>Denne handlinga kan ikkje gjerast om.</b>
 
 Å avliva brukaren din <b>gjer i utgangspunktet ikkje at vi gløymer meldingane du har send.</b> Viss du vil at vi skal gløyma meldingane dine, ver venleg og kryss av i firkanten under.
 
 Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine tyder at meldingar du har send ikkje vil verta delt med nye, ikkje-innmeldte brukarar, men brukare som er meldt på som allereie har tilgang til desse meldingane vil fortsatt kunne sjå kopien deira.</string>
-    <string name="deactivate_account_delete_checkbox">Ver venleg og gløym alle meldingane eg har send når brukaren min vert avliven (Åtvaring: dette gjer at framtidige brukarar ikkje fær eit fullstendig oversyn av samtalene)</string>
+    <string name="deactivate_account_delete_checkbox">Ver venleg og gløym alle meldingane eg har send når brukarkontoen min vert deaktivert (Åtvaring: dette gjer at framtidige brukarar ikkje får eit fullstendig oversyn av samtalene)</string>
     <string name="deactivate_account_prompt_password">For å gå fram, ver venleg og skriv passordet ditt inn:</string>
-    <string name="deactivate_account_submit">Avliv Brukar</string>
+    <string name="deactivate_account_submit">Deaktiver konto</string>
 
     <string name="error_empty_field_your_password">Ver venleg og skriv passordet ditt inn.</string>
     <string name="room_tombstone_versioned_description">Rommet har verta erstatta og er ikkje aktivt lenger</string>
@@ -947,7 +938,7 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
 
     <string name="resource_limit_contact_admin">kontakt tenesteadministratoren din</string>
 
-    <string name="missing_permissions_error">Grunna vantande løyve er denna handlingi umogeleg.</string>
+    <string name="missing_permissions_error">Grunna manglande rettigheiter, er ikkje denne handlinga muleg.</string>
     <string name="resource_limit_exceeded_title">Ressursgrensa er Forbigått</string>
     <string name="resource_limit_soft_default">Heimtenaren har truffe ei av ressursgrensene sine so <b>nokre brukarar vil ikkje kunna logga inn</b>.</string>
     <string name="resource_limit_hard_default">Heimtenaren har forbigått ei av ressursgrensene sine.</string>
@@ -958,47 +949,47 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="resource_limit_soft_contact">Ver venleg og %s for å heva grensa.</string>
     <string name="resource_limit_hard_contact">Ver venleg og %s for å halda fram med å bruka tenesten.</string>
 
-    <string name="status_theme">Status.im-preg</string>
+    <string name="status_theme">Status.im-tema</string>
 
     <string name="call_anyway">Ring likevel</string>
-    <string name="accept">Seg ja</string>
+    <string name="accept">Aksepter</string>
 
     <string name="dialog_title_error">Feil</string>
 
-    <string name="skip">Hoppa yver</string>
-    <string name="done">Ferdug</string>
-    <string name="abort">Brjot av</string>
-    <string name="ignore">Yversjå</string>
+    <string name="skip">Hopp over</string>
+    <string name="done">Ferdig</string>
+    <string name="abort">Avbryt</string>
+    <string name="ignore">Ignorer</string>
 
-    <string name="action_sign_out_confirmation_simple">Er du trygg på at du vil logga ut\?</string>
+    <string name="action_sign_out_confirmation_simple">Sikker på at du vil logga ut\?</string>
     <string name="action_mark_room_read">Merk som lest</string>
-    <string name="auth_accept_policies">Gjer vel å sjå yver og godtak rettelinone til heimtenaren:</string>
+    <string name="auth_accept_policies">Venligast sjå over og godta retningslinjene til heimtenaren:</string>
 
     <string name="login_error_unknown_host">Det gjeng ikkje å nå URL-en, gjer vel og sjå til honom</string>
-    <string name="settings_call_category">Uppringjingar</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Nytta den upphavlege Riot-ringjetona når du vert ringd upp</string>
-    <string name="settings_call_ringtone_title">Ringjetona fyr uppringjing</string>
-    <string name="settings_call_ringtone_dialog_title">Vel ringjetona til tilrop:</string>
+    <string name="settings_call_category">Anrop</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Bruk standard Riot-ringetone for innkommande anrop</string>
+    <string name="settings_call_ringtone_title">Ringetone for innkommande anrop</string>
+    <string name="settings_call_ringtone_dialog_title">Vel ringetone for anrop:</string>
 
-    <string name="video_call_in_progress">Ei videosamtala er i gang…</string>
+    <string name="video_call_in_progress">Ein videosamtale pågår…</string>
 
     <string name="room_participants_action_kick">Spark</string>
     <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Er du trygg på at du vil sparka denna brukaren frå samtala\?</item>
-        <item quantity="other">Er du trygg på at du vil sparka dessa brukarane frå samtala\?</item>
+        <item quantity="one">Er du trygg på at du vil sparka denne brukaren frå samtala\?</item>
+        <item quantity="other">Er du trygg på at du vil sparka desse brukarane frå samtala\?</item>
     </plurals>
     <string name="reason_hint">Grunn</string>
 
-    <string name="settings_notification_advanced">Umfattande varselinnstilingar</string>
-    <string name="settings_notification_advanced_summary">Set kor viktige varsel er ut ifrå hendingar, og stilla på ljod, LED, og risting</string>
-    <string name="settings_notification_by_event">Kor viktige varsel er ut ifrå hendingar</string>
+    <string name="settings_notification_advanced">Avanserte varslingsinnstillingar</string>
+    <string name="settings_notification_advanced_summary">Sett prioritet for varslingar etter hending, konfiguer lyd, LED, vibrasjon</string>
+    <string name="settings_notification_by_event">Prioritet på varsel ut ifrå hendingar</string>
 
-    <string name="settings_notification_troubleshoot">Leit etter vanskar med varsli</string>
-    <string name="settings_troubleshoot_diagnostic">Diagnostikk fyr feilsøkjing</string>
-    <string name="settings_troubleshoot_diagnostic_run_button_title">Køyr prøvar</string>
+    <string name="settings_notification_troubleshoot">Løys problem med varslingar</string>
+    <string name="settings_troubleshoot_diagnostic">Diagnostikk for feilsøking</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Køyr testar</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Køyrer… (%1$d av %2$d)</string>
-    <string name="settings_troubleshoot_diagnostic_success_status">Det grunnleggjande er i ordning. Um du framleis ikkje fær varsel, gjer vel og send inn ei feilmelding so me kann sjå nærare på det.</string>
-    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Éin eller fleire prøvar verka ikkje. Freista dessa løysingane.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Det grunnleggjande er i orden. Om du framleis ikkje får varsel, send inn ei feilmelding så vi kan undersøke dette.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Ein eller fleire testar har feila. Prøv føreslegne løysing(ar).</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Éin eller fleire prøvar gjekk galne. Gjer vel og send inn ei feilmelding so me kann sjå nærare på det.</string>
 
     <string name="settings_troubleshoot_test_system_settings_title">Systeminnstillingar.</string>
@@ -1013,10 +1004,70 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
 \nGjer vel og sjå på brukarinnstillingane.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Skru på</string>
 
-    <string name="settings_troubleshoot_test_device_settings_title">Eininginnstillingar.</string>
-    <string name="settings_troubleshoot_test_device_settings_success">Varsel er skrudde på fyr denna einingi.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Varsel er ikkje skrudde på fyr denna einingi.
-\nGjer vel og sjå på Riot-innstillingane.</string>
+    <string name="settings_troubleshoot_test_device_settings_title">Sesjonsinnstillingar.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Varslingar er aktivert for denne sesjonen.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Varslingar er deaktivert for denne sesjonen.
+\nSjekk Riot-innstillingane.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Skru på</string>
 
+    <string name="notification_sync_init">setter opp tenesta</string>
+    <string name="title_activity_keys_backup_setup">Sikkerheitskopi av nøkkel</string>
+    <string name="title_activity_keys_backup_restore">Bruk sikkerheitskopiering av nøkkel</string>
+    <string name="title_activity_verify_device">Stadfest sesjon</string>
+
+    <string name="keys_backup_is_not_finished_please_wait">Sikkerheitskopi av nøklar er ikkje ferdig, vent litt…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Om du loggar ut no, vil dine krypterte meldingar gå tapt</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Sikkerheitskopi av nøklar pågår, viss du loggar ut no vil du miste tilgang til krypterte meldingar.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">For å hindre tap av krypterte meldingar, bør sikkerheitskopiering av nøklar (Secure Key Backup) vere aktivert i alle sesjonar der du er innlogga.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Eg ønsker ikkje dei krypterte meldingane mine</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Sikkerheitskopierar nøklar…</string>
+    <string name="keys_backup_activate">Bruk sikkerheitskopiering av nøklar</string>
+    <string name="are_you_sure">Er du sikker \?</string>
+    <string name="backup">Sikkerheitskopier</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Du vil miste tilgang til dine krypterte meldingar, med mindre nøklane dine er sikkerheitskopierte før utlogging.</string>
+
+    <string name="stay">Bli</string>
+    <string name="none">Ingen</string>
+    <string name="revoke">Trekk tilbake</string>
+    <string name="disconnect">Koble frå</string>
+    <string name="review">Sjå gjennom</string>
+    <string name="decline">Avvis</string>
+
+    <string name="people_no_identity_server">Ingen identitetsserver er konfiguert.</string>
+
+    <string name="call_failed_no_ice_title">Anrop feila fordi serveren er feilkonfiguert</string>
+    <string name="call_failed_no_ice_description">Be administratoren for din heimeserver (%1$s) om, å konfiguere ein TURN-servern for å handtere anrop på rett måte.
+\n
+\nEventuelt, kan du prøve å bruke den offentlege serveren på %2$s, men dette vil kanskje ikkje vere like stabilt og IP-adressa di vil bli delt mot den serveren. Du kan også styre dette under Innstillingar.</string>
+    <string name="call_failed_no_ice_use_alt">Prøv med %s</string>
+    <string name="call_failed_dont_ask_again">Spør meg ikkje om att</string>
+
+    <string name="auth_login_sso">Logg inn med SSO (single sign-on)</string>
+    <string name="auth_add_email_message_2">Sett e-postadresse for gjenoppretting av konto, så kan du og seinare bli synleg for folk som kjenner deg.</string>
+    <string name="auth_add_phone_message_2">Sett telefonnummer, så kan du og seinare bli synleg for folk som kjenner deg.</string>
+    <string name="auth_add_email_phone_message_2">Sett e-postadresse for gjenoppretting av konto. Bestem valfritt seinare om å vere synleg for folk som kjenner deg via e-post eller telefonnummer.</string>
+    <string name="auth_add_email_and_phone_message_2">Sett e-postadresse for gjenoppretting av konto. Bestem valfritt seinare om å vere synleg for folk som kjenner deg via e-post eller telefonnummer.</string>
+    <string name="login_error_no_homeserver_found">Dette er ikkje ei gyldig Matrix-serveradresse</string>
+    <string name="login_error_homeserver_not_found">Klarar ikkje å nå ein heimetenar på denne URL\'en, sjekk at den er korrekt</string>
+    <string name="login_error_ssl_handshake">Dingsen din brukar ein utdatert TLS-sikkerheitsprotokoll som er sårbar for angrep. For din sikkerheit vil du ikkje kunne koble til</string>
+    <string name="settings_call_ringtone_use_default_stun">Tillat assistanseserver for tilbake-ring</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Vil nytte %s for assistanse når heimetenaren din ikkje tilbyr ein (IP-adressa di vil bli delt under samtalen)</string>
+    <string name="invite_no_identity_server_error">Legg til ein identitetstenar i innstillingane for å utføre denne handlinga.</string>
+    <string name="room_sliding_menu_version_x">Versjon %s</string>
+    <string name="settings_add_3pid_confirm_password_title">Stadfest ditt passord</string>
+    <string name="settings_add_3pid_flow_not_supported">Denne handlinga kan ikkje utførast frå Riot på mobil</string>
+    <string name="settings_add_3pid_authentication_needed">Authentisering er påkrevd</string>
+
+
+    <string name="settings_integrations">Integrasjonar</string>
+    <string name="settings_integrations_summary">Bruk ein integrasjonshandterar (Integration Manager) for å handtere botar, bruker, tillegg og klistermerkepakker.
+\nIntegrasjonshandterarar hentar konfigurasjonsdata, kan endre tillegg, sende rominvitasjonar og sette tilgangsnivå på vegne av deg.</string>
+    <string name="settings_cryptography_manage_keys">Handtering av kryptografiske nøkklar</string>
+    <string name="settings_labs_enable_send_voice_summary">Dette valet krev ein tredjepartsapplikasjon for å registrere meldingane.</string>
+    <string name="settings_lazy_loading_title">Last rom-medlemmar etter behov (lazy-load)</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Heimetenaren din støttar ikkje såklalla lazy-loading av rommelemar endå. Prøv igjen seinare.</string>
+
+    <string name="sas_verified_successful_description">Sikre meldingar med denne brukaren er ende-til-ende kryptert, dei kan ikkje bli lesne av tredje partar.</string>
+    <string name="settings_other_third_party_notices">Anna informasjon frå tredjepart</string>
+    <string name="verification_conclusion_ok_notice">Meldingar med denne brukaren er ende-til-ende kryptert, dei kan ikkje bli lesne av tredje part.</string>
 </resources>
