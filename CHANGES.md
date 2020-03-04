@@ -20,7 +20,7 @@ Build 🧱:
  -
 
 Other changes:
- -
+ - Add a [documentation](./docs/integration_tests.md) to run integration tests
 
 Changes in RiotX 0.17.0 (2020-02-27)
 ===================================================
