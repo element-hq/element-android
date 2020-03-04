@@ -57,7 +57,7 @@ You should now have 3 running federated Synapse instances 🎉, at http://127.0.
 
 It's recommended to run tests using an Android Emulator and not a real device. First reason for that is that the tests will use http://10.0.2.2:8080 to connect to Synapse, which run locally on your machine.
 
-You can run all the tests in the `androidTest` folders
+You can run all the tests in the `androidTest` folders.
 
 ## Stop Synapse
 
