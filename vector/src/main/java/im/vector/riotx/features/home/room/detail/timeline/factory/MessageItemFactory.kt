@@ -222,7 +222,7 @@ class MessageItemFactory @Inject constructor(
                                 referenceId = informationData.eventId,
                                 informationData = informationData,
                                 avatarRenderer = attributes.avatarRenderer,
-                                colorProvider = attributes.colorProvider,
+                                messageColorProvider = attributes.messageColorProvider,
                                 itemLongClickListener = attributes.itemLongClickListener,
                                 itemClickListener = attributes.itemClickListener,
                                 reactionPillCallback = attributes.reactionPillCallback,

@@ -21,6 +21,7 @@
         android:layout_marginLeft="-5dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
+        tools:ignore="NegativeMargin"
         tools:src="@tools:sample/avatars" />
 
     <ImageView
@@ -31,6 +32,7 @@
         android:layout_marginLeft="-5dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
+        tools:ignore="NegativeMargin"
         tools:src="@tools:sample/avatars" />
 
     <ImageView
@@ -41,6 +43,7 @@
         android:layout_marginLeft="-5dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
+        tools:ignore="NegativeMargin"
         tools:src="@tools:sample/avatars" />
 
     <ImageView
@@ -51,6 +54,7 @@
         android:layout_marginLeft="-5dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
+        tools:ignore="NegativeMargin"
         tools:src="@tools:sample/avatars" />
 
 </LinearLayout>
