@@ -31,7 +31,7 @@ git clone -b develop https://github.com/matrix-org/synapse.git
 ```
 or
 ```bash
-git clone git@github.com:matrix-org/synapse.git
+git clone -b develop git@github.com:matrix-org/synapse.git
 ```
 
 You should have the develop branch cloned by default.
