@@ -5,10 +5,10 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Add support for `/plain` command (#12)
 
 Bugfix 🐛:
- -
+ - Fix crash on attachment preview screen (#1088)
 
 Translations 🗣:
  -
@@ -21,6 +21,7 @@ Build 🧱:
 
 Other changes:
  - Restore availability to Chromebooks (#932)
+ - Add a [documentation](./docs/integration_tests.md) to run integration tests
 
 Changes in RiotX 0.17.0 (2020-02-27)
 ===================================================

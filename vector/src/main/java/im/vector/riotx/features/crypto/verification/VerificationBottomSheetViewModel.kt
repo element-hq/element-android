@@ -42,7 +42,7 @@ import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
-import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64NoPadding
+import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
 import im.vector.matrix.android.internal.crypto.crosssigning.isVerified
 import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.core.extensions.exhaustive
@@ -274,7 +274,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             }
             is VerificationAction.GotResultFromSsss            -> {
                 try {
-                    action.cypherData.fromBase64NoPadding().inputStream().use { ins ->
+                    action.cypherData.fromBase64().inputStream().use { ins ->
                         val res = session.loadSecureSecret<Map<String, String>>(ins, action.alias)
                         val trustResult = session.cryptoService().crossSigningService().checkTrustFromPrivateKeys(
                                 res?.get(MASTER_KEY_SSSS_NAME),
