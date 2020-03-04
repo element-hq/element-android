@@ -18,7 +18,7 @@ The documentation describes what we do to have one, using [Synapse](https://gith
 
 Steps:
 
-- Install virtual env
+- Install virtualenv
 
 ```bash
 python3 -m pip install virtualenv
