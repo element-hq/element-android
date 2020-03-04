@@ -6,6 +6,7 @@ Features ✨:
 
 Improvements 🙌:
  - Add support for `/plain` command (#12)
+ - Detect spaces in password if user fail to login (#1038)
 
 Bugfix 🐛:
  - Fix crash on attachment preview screen (#1088)
