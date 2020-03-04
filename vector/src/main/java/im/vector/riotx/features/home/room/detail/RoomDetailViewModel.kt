@@ -65,7 +65,7 @@ import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.core.utils.subscribeLogError
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
-import im.vector.riotx.features.crypto.verification.supportedVerificationMethods
+import im.vector.riotx.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.riotx.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import im.vector.riotx.features.home.room.typing.TypingHelper
@@ -81,13 +81,15 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
-class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: RoomDetailViewState,
-                                                      userPreferencesProvider: UserPreferencesProvider,
-                                                      private val vectorPreferences: VectorPreferences,
-                                                      private val stringProvider: StringProvider,
-                                                      private val typingHelper: TypingHelper,
-                                                      private val rainbowGenerator: RainbowGenerator,
-                                                      private val session: Session
+class RoomDetailViewModel @AssistedInject constructor(
+        @Assisted initialState: RoomDetailViewState,
+        userPreferencesProvider: UserPreferencesProvider,
+        private val vectorPreferences: VectorPreferences,
+        private val stringProvider: StringProvider,
+        private val typingHelper: TypingHelper,
+        private val rainbowGenerator: RainbowGenerator,
+        private val session: Session,
+        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState), Timeline.Listener {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -427,7 +429,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                             session
                                     .cryptoService()
                                     .verificationService()
-                                    .requestKeyVerificationInDMs(supportedVerificationMethods, slashCommandResult.userId, room.roomId)
+                                    .requestKeyVerificationInDMs(supportedVerificationMethodsProvider.provide(), slashCommandResult.userId, room.roomId)
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
@@ -834,7 +836,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun handleAcceptVerification(action: RoomDetailAction.AcceptVerificationRequest) {
         Timber.v("## SAS handleAcceptVerification ${action.otherUserId},  roomId:${room.roomId}, txId:${action.transactionId}")
         if (session.cryptoService().verificationService().readyPendingVerificationInDMs(
-                        supportedVerificationMethods,
+                        supportedVerificationMethodsProvider.provide(),
                         action.otherUserId,
                         room.roomId,
                         action.transactionId)) {

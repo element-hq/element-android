@@ -17,9 +17,10 @@ SDK API changes ⚠️:
  - 
 
 Build 🧱:
- -
+ - Upgrade ktlint to version 0.36.0
 
 Other changes:
+ - Restore availability to Chromebooks (#932)
  - Add a [documentation](./docs/integration_tests.md) to run integration tests
 
 Changes in RiotX 0.17.0 (2020-02-27)
