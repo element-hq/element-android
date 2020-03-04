@@ -24,7 +24,7 @@ Steps:
 python3 -m pip install virtualenv
 ```
 
-- clone Synapse repository
+- Clone Synapse repository
 
 ```bash
 git clone https://github.com/matrix-org/synapse.git
