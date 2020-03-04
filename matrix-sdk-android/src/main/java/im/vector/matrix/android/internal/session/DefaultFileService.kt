@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.session
 
+import android.content.Context
 import android.os.Environment
 import arrow.core.Try
 import im.vector.matrix.android.api.MatrixCallback
@@ -25,7 +26,6 @@ import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachments
 import im.vector.matrix.android.internal.di.SessionCacheDirectory
-import im.vector.matrix.android.internal.di.SessionFilesDirectory
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
@@ -42,10 +42,9 @@ import java.io.IOException
 import javax.inject.Inject
 
 internal class DefaultFileService @Inject constructor(
+        private val context: Context,
         @SessionCacheDirectory
         private val cacheDirectory: File,
-        @SessionFilesDirectory
-        private val filesDirectory: File,
         private val contentUrlResolver: ContentUrlResolver,
         @Unauthenticated
         private val okHttpClient: OkHttpClient,
@@ -71,7 +70,7 @@ internal class DefaultFileService @Inject constructor(
                     File(folder, fileName)
                 }.flatMap { destFile ->
                     if (!destFile.exists()) {
-                        val resolvedUrl = contentUrlResolver.resolveFullSize(url) ?: throw IllegalArgumentException("url is null")
+                        val resolvedUrl = contentUrlResolver.resolveFullSize(url) ?: return@flatMap Try.Failure(IllegalArgumentException("url is null"))
 
                         val request = Request.Builder()
                                 .url(resolvedUrl)
@@ -102,9 +101,9 @@ internal class DefaultFileService @Inject constructor(
 
     private fun copyFile(file: File, downloadMode: FileService.DownloadMode): File {
         return when (downloadMode) {
-            FileService.DownloadMode.TO_EXPORT          -> file.copyTo(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), true)
-            FileService.DownloadMode.FOR_INTERNAL_USE   -> file.copyTo(File(filesDirectory, "ext_share"), true)
-            FileService.DownloadMode.FOR_EXTERNAL_SHARE -> file
+            FileService.DownloadMode.TO_EXPORT          -> file.copyTo(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), file.name), true)
+            FileService.DownloadMode.FOR_EXTERNAL_SHARE -> file.copyTo(File(File(context.cacheDir, "ext_share"), file.name), true)
+            FileService.DownloadMode.FOR_INTERNAL_USE   -> file
         }
     }
 }

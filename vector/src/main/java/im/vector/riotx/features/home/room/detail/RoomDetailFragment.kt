@@ -37,6 +37,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.text.buildSpannedString
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
@@ -95,6 +96,7 @@ import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.extensions.showKeyboard
 import im.vector.riotx.core.files.addEntryToDownloadManager
 import im.vector.riotx.core.glide.GlideApp
+import im.vector.riotx.core.intent.getMimeTypeFromUri
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.ui.views.JumpToReadMarkerView
@@ -1126,6 +1128,23 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.handle(RoomDetailAction.EnterTrackingUnreadMessagesState)
     }
 
+    private fun onShareActionClicked(action: EventSharedAction.Share) {
+        session.downloadFile(
+                FileService.DownloadMode.FOR_EXTERNAL_SHARE,
+                action.eventId,
+                action.messageContent.body,
+                action.messageContent.getFileUrl(),
+                action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
+                object : MatrixCallback<File> {
+                    override fun onSuccess(data: File) {
+                        if (isAdded) {
+                            shareMedia(requireContext(), data, getMimeTypeFromUri(requireContext(), data.toUri()))
+                        }
+                    }
+                }
+        )
+    }
+
     private fun handleActions(action: EventSharedAction) {
         when (action) {
             is EventSharedAction.OpenUserProfile            -> {
@@ -1147,20 +1166,7 @@ class RoomDetailFragment @Inject constructor(
                 promptConfirmationToRedactEvent(action)
             }
             is EventSharedAction.Share                      -> {
-                session.downloadFile(
-                        FileService.DownloadMode.FOR_EXTERNAL_SHARE,
-                        action.eventId,
-                        action.messageContent.body,
-                        action.messageContent.getFileUrl(),
-                        action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
-                        object : MatrixCallback<File> {
-                            override fun onSuccess(data: File) {
-                                if (isAdded) {
-                                    shareMedia(requireContext(), data, "image/*")
-                                }
-                            }
-                        }
-                )
+                onShareActionClicked(action)
             }
             is EventSharedAction.ViewEditHistory            -> {
                 onEditedDecorationClicked(action.messageInformationData)

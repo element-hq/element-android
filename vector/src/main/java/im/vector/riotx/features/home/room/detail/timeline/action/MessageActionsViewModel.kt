@@ -29,8 +29,8 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.isTextMessage
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageEncryptedContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFormat
-import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
@@ -261,10 +261,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     }
 
                     if (canShare(msgType)) {
-                        if (messageContent is MessageImageContent) {
+                        if (messageContent is MessageEncryptedContent) {
                             add(EventSharedAction.Share(timelineEvent.eventId, messageContent))
                         }
-                        // TODO Support other media types
                     }
 
                     if (timelineEvent.root.sendState == SendState.SENT) {
@@ -372,8 +371,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         return when (msgType) {
             MessageType.MSGTYPE_IMAGE,
             MessageType.MSGTYPE_AUDIO,
-            MessageType.MSGTYPE_VIDEO -> true
-            else                      -> false
+            MessageType.MSGTYPE_VIDEO,
+            MessageType.MSGTYPE_FILE -> true
+            else                     -> false
         }
     }
 }
