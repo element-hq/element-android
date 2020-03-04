@@ -43,7 +43,6 @@ import java.io.IOException
 import javax.inject.Inject
 
 internal class DefaultFileService @Inject constructor(
-        private val context: Context,
         @CacheDirectory
         private val cacheDirectory: File,
         @SessionCacheDirectory
