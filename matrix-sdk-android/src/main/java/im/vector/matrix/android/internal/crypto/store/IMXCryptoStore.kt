@@ -196,7 +196,8 @@ internal interface IMXCryptoStore {
      */
     fun storeUserDevices(userId: String, devices: Map<String, CryptoDeviceInfo>?)
 
-    fun storeUserCrossSigningKeys(userId: String, masterKey: CryptoCrossSigningKey?,
+    fun storeUserCrossSigningKeys(userId: String,
+                                  masterKey: CryptoCrossSigningKey?,
                                   selfSigningKey: CryptoCrossSigningKey?,
                                   userSigningKey: CryptoCrossSigningKey?)
 

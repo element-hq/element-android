@@ -41,7 +41,6 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
-import java.util.HashMap
 import java.util.concurrent.CountDownLatch
 
 class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
