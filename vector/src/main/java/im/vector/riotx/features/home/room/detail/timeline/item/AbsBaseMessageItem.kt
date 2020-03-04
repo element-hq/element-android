@@ -24,12 +24,11 @@ import androidx.annotation.IdRes
 import androidx.core.view.isVisible
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.riotx.R
-import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.reactions.widget.ReactionButton
-import im.vector.riotx.features.ui.getMessageTextColor
 
 /**
  * Base timeline item with reactions and read receipts.
@@ -105,7 +104,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
     protected open fun renderSendState(root: View, textView: TextView?, failureIndicator: ImageView? = null) {
         root.isClickable = baseAttributes.informationData.sendState.isSent()
         val state = if (baseAttributes.informationData.hasPendingEdits) SendState.UNSENT else baseAttributes.informationData.sendState
-        textView?.setTextColor(baseAttributes.colorProvider.getMessageTextColor(state))
+        textView?.setTextColor(baseAttributes.messageColorProvider.getMessageTextColor(state))
         failureIndicator?.isVisible = baseAttributes.informationData.sendState.hasFailed()
     }
 
@@ -120,7 +119,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
         //            val avatarSize: Int,
         val informationData: MessageInformationData
         val avatarRenderer: AvatarRenderer
-        val colorProvider: ColorProvider
+        val messageColorProvider: MessageColorProvider
         val itemLongClickListener: View.OnLongClickListener?
         val itemClickListener: View.OnClickListener?
         //        val memberClickListener: View.OnClickListener?

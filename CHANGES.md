@@ -6,6 +6,7 @@ Features ✨:
 
 Improvements 🙌:
  - Add support for `/plain` command (#12)
+ - FTUE: do not display a different color when encrypting message when not in developer mode.
 
 Bugfix 🐛:
  - Fix crash on attachment preview screen (#1088)
