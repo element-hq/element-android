@@ -87,6 +87,10 @@ You can try using
 ```bash
 python3 -m venv env
 ```
+or
+```bash
+python3 -m virtualenv env
+```
 instead of
 ```bash
 virtualenv -p python3 env
