@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session
 
-import android.content.Context
 import android.os.Environment
 import arrow.core.Try
 import im.vector.matrix.android.api.MatrixCallback
@@ -103,9 +102,12 @@ internal class DefaultFileService @Inject constructor(
 
     private fun copyFile(file: File, downloadMode: FileService.DownloadMode): File {
         return when (downloadMode) {
-            FileService.DownloadMode.TO_EXPORT          -> file.copyTo(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), file.name), true)
-            FileService.DownloadMode.FOR_EXTERNAL_SHARE -> file.copyTo(File(File(cacheDirectory, "ext_share"), file.name), true)
-            FileService.DownloadMode.FOR_INTERNAL_USE   -> file
+            FileService.DownloadMode.TO_EXPORT          ->
+                file.copyTo(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), file.name), true)
+            FileService.DownloadMode.FOR_EXTERNAL_SHARE ->
+                file.copyTo(File(File(cacheDirectory, "ext_share"), file.name), true)
+            FileService.DownloadMode.FOR_INTERNAL_USE   ->
+                file
         }
     }
 }
