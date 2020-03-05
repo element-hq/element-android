@@ -19,7 +19,6 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfoAccept
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfoAcceptFactory
-import timber.log.Timber
 
 /**
  * Sent by Bob to accept a verification from a previously sent m.key.verification.start message.

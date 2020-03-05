@@ -54,4 +54,3 @@ internal interface VerificationInfoReady : VerificationInfo<ValidVerificationInf
 internal interface MessageVerificationReadyFactory {
     fun create(tid: String, methods: List<String>, fromDevice: String): VerificationInfoReady
 }
-

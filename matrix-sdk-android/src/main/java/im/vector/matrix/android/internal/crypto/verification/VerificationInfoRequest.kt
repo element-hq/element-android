@@ -49,4 +49,3 @@ internal interface VerificationInfoRequest : VerificationInfo<ValidVerificationI
         )
     }
 }
-

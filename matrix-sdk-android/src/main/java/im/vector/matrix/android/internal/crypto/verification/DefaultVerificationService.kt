@@ -433,7 +433,9 @@ internal class DefaultVerificationService @Inject constructor(
     /**
      * Return a CancelCode to make the caller cancel the verification. Else return null
      */
-    private suspend fun handleStart(otherUserId: String?, startReq: ValidVerificationInfoStart, txConfigure: (DefaultVerificationTransaction) -> Unit): CancelCode? {
+    private suspend fun handleStart(otherUserId: String?,
+                                    startReq: ValidVerificationInfoStart,
+                                    txConfigure: (DefaultVerificationTransaction) -> Unit): CancelCode? {
         Timber.d("## SAS onStartRequestReceived ${startReq.transactionID}")
         if (checkKeysAreDownloaded(otherUserId!!, startReq.fromDevice) != null) {
             val tid = startReq.transactionID
