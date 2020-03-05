@@ -20,6 +20,7 @@ SDK API changes ⚠️:
 
 Build 🧱:
  - Upgrade ktlint to version 0.36.0
+ - Pipeline file for Buildkite is now hosted on another Github repository: https://github.com/matrix-org/pipelines/blob/master/riotx-android/pipeline.yml
 
 Other changes:
  - Restore availability to Chromebooks (#932)
