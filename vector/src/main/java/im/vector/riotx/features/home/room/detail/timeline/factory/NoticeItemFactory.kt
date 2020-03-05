@@ -44,7 +44,8 @@ class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEv
                 itemLongClickListener = View.OnLongClickListener { view ->
                     callback?.onEventLongClicked(informationData, null, view) ?: false
                 },
-                readReceiptsCallback = callback
+                readReceiptsCallback = callback,
+                avatarClickListener = { callback?.onAvatarClicked(informationData) }
         )
         return NoticeItem_()
                 .leftGuideline(avatarSizeProvider.leftGuideline)

@@ -8,6 +8,7 @@ Improvements 🙌:
  - Add support for `/plain` command (#12)
  - Detect spaces in password if user fail to login (#1038)
  - FTUE: do not display a different color when encrypting message when not in developer mode.
+ - Open room member profile from avatar of the room member state event (#935)
 
 Bugfix 🐛:
  - Fix crash on attachment preview screen (#1088)
