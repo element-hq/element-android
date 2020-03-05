@@ -27,7 +27,7 @@
         android:layout_marginLeft="4dp"
         app:layout_constraintStart_toEndOf="@+id/messageFilee2eIcon"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/filetype_image" />
+        tools:src="@drawable/filetype_attachment" />
 
     <!-- the media -->
     <TextView
