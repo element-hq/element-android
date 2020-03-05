@@ -76,13 +76,17 @@ internal interface VerificationInfoStart : VerificationInfo {
     }
 
     private fun isValidSas(): Boolean {
+        val myHashes = hashes
+        val myMessageAuthenticationCodes = messageAuthenticationCodes
+        val myShortAuthenticationStrings = shortAuthenticationStrings
+
         if (keyAgreementProtocols.isNullOrEmpty()
-                || hashes.isNullOrEmpty()
-                || !hashes.contains("sha256") || messageAuthenticationCodes.isNullOrEmpty()
-                || (!messageAuthenticationCodes.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256)
-                        && !messageAuthenticationCodes.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256_LONGKDF))
-                || shortAuthenticationStrings.isNullOrEmpty()
-                || !shortAuthenticationStrings.contains(SasMode.DECIMAL)) {
+                || myHashes.isNullOrEmpty()
+                || !myHashes.contains("sha256") || myMessageAuthenticationCodes.isNullOrEmpty()
+                || (!myMessageAuthenticationCodes.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256)
+                        && !myMessageAuthenticationCodes.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256_LONGKDF))
+                || myShortAuthenticationStrings.isNullOrEmpty()
+                || !myShortAuthenticationStrings.contains(SasMode.DECIMAL)) {
             return false
         }
 
