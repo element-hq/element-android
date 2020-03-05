@@ -94,7 +94,7 @@ internal abstract class SASDefaultVerificationTransaction(
     var otherKey: String? = null
     var shortCodeBytes: ByteArray? = null
 
-    var myMac: VerificationInfoMac? = null
+    var myMac: ValidVerificationInfoMac? = null
     var theirMac: ValidVerificationInfoMac? = null
 
     fun getSAS(): OlmSAS {
@@ -177,7 +177,7 @@ internal abstract class SASDefaultVerificationTransaction(
         }
 
         val macMsg = transport.createMac(transactionId, keyMap, keyStrings)
-        myMac = macMsg
+        myMac = macMsg.asValidObject()
         state = VerificationTxState.SendingMac
         sendToOther(EventType.KEY_VERIFICATION_MAC, macMsg, VerificationTxState.MacSent, CancelCode.User) {
             if (state == VerificationTxState.SendingMac) {
