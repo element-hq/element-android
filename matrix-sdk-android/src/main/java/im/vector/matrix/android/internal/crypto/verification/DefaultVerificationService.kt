@@ -20,13 +20,13 @@ import android.os.Handler
 import android.os.Looper
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.crypto.verification.PendingVerificationRequest
-import im.vector.matrix.android.api.session.crypto.verification.ValidVerificationInfoReady
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.verification.CancelCode
+import im.vector.matrix.android.api.session.crypto.verification.PendingVerificationRequest
 import im.vector.matrix.android.api.session.crypto.verification.QrCodeVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.SasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.ValidVerificationInfoReady
 import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
 import im.vector.matrix.android.api.session.crypto.verification.VerificationService
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
@@ -311,7 +311,10 @@ internal class DefaultVerificationService @Inject constructor(
     suspend fun onRoomRequestReceived(event: Event) {
         Timber.v("## SAS Verification request from ${event.senderId} in room ${event.roomId}")
         val requestInfo = event.getClearContent().toModel<MessageVerificationRequestContent>() ?: return
-        val validRequestInfo = requestInfo.asValidObject() ?: return
+        val validRequestInfo = requestInfo
+                // copy the EventId to the transactionId
+                .copy(transactionID = event.eventId)
+                .asValidObject() ?: return
 
         val senderId = event.senderId ?: return
 
@@ -562,7 +565,7 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     private fun handleOnCancel(otherUserId: String, cancelReq: ValidVerificationInfoCancel) {
-        Timber.v("## SAS onCancelReceived otherUser:$otherUserId reason:${cancelReq.reason}")
+        Timber.v("## SAS onCancelReceived otherUser: $otherUserId reason: ${cancelReq.reason}")
 
         val existingTransaction = getExistingTransaction(otherUserId, cancelReq.transactionID)
         val existingRequest = getExistingVerificationRequest(otherUserId, cancelReq.transactionID)
