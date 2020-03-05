@@ -14,6 +14,7 @@
 
     <!-- UX -->
     <issue id="ButtonOrder" severity="error" />
+    <issue id="TextFields" severity="error" />
 
     <!-- Layout -->
     <issue id="UnknownIdInLayout" severity="error" />
