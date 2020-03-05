@@ -207,7 +207,7 @@ internal abstract class SASDefaultVerificationTransaction(
 
     abstract fun onKeyVerificationKey(vKey: ValidVerificationInfoKey)
 
-    abstract fun onKeyVerificationMac(vKey: ValidVerificationInfoMac)vMac
+    abstract fun onKeyVerificationMac(vMac: ValidVerificationInfoMac)
 
     protected fun verifyMacs() {
         Timber.v("## SAS verifying macs for id:$transactionId")

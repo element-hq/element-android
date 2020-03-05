@@ -94,7 +94,7 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
                 KNOWN_MACS,
                 KNOWN_SHORT_CODES
         )
-kk
+
         startReq = startMessage.asValidObject() as? ValidVerificationInfoStart.SasVerificationInfoStart
         state = VerificationTxState.SendingStart
 
@@ -206,7 +206,7 @@ kk
         }
     }
 
-    override fun onKeyVerificationMac(vKey: ValidVerificationInfoMac) {
+    override fun onKeyVerificationMac(vMac: ValidVerificationInfoMac) {
         Timber.v("## SAS O: onKeyVerificationMac id:$transactionId")
         if (state != VerificationTxState.OnKeyReceived
                 && state != VerificationTxState.ShortCodeReady
@@ -218,7 +218,7 @@ kk
             return
         }
 
-        theirMac = vKey
+        theirMac = vMac
 
         // Do I have my Mac?
         if (myMac != null) {

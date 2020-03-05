@@ -44,7 +44,7 @@ import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
 import im.vector.matrix.android.internal.crypto.crosssigning.isVerified
-import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
+import im.vector.matrix.android.api.session.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import timber.log.Timber

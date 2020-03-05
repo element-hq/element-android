@@ -18,7 +18,6 @@ package im.vector.matrix.android.api.session.crypto.verification
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.LocalEcho
-import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
 
 /**
  * https://matrix.org/docs/spec/client_server/r0.5.0#key-verification-framework

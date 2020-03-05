@@ -15,6 +15,8 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
+import im.vector.matrix.android.api.session.crypto.verification.ValidVerificationInfoReady
+
 /**
  * A new event type is added to the key verification framework: m.key.verification.ready,
  * which may be sent by the target of the m.key.verification.request message, upon receipt of the m.key.verification.request event.
@@ -53,8 +55,3 @@ internal interface MessageVerificationReadyFactory {
     fun create(tid: String, methods: List<String>, fromDevice: String): VerificationInfoReady
 }
 
-internal data class ValidVerificationInfoReady(
-        val transactionID: String,
-        val fromDevice: String,
-        val methods: List<String>
-)

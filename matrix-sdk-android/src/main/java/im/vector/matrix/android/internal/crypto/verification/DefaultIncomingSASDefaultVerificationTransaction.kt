@@ -213,7 +213,7 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
         state = VerificationTxState.ShortCodeReady
     }
 
-    override fun onKeyVerificationMac(vKey: ValidVerificationInfoMac) {
+    override fun onKeyVerificationMac(vMac: ValidVerificationInfoMac) {
         Timber.v("## SAS I: received mac for request id:$transactionId")
         // Check for state?
         if (state != VerificationTxState.SendingKey
@@ -226,7 +226,7 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
             cancel(CancelCode.UnexpectedMessage)
             return
         }
-        theirMac = vKey
+        theirMac = vMac
 
         // Do I have my Mac?
         if (myMac != null) {

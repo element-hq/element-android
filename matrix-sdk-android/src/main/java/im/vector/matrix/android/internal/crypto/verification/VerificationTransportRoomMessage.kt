@@ -22,6 +22,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.Operation
 import androidx.work.WorkInfo
 import im.vector.matrix.android.R
+import im.vector.matrix.android.api.session.crypto.verification.ValidVerificationInfoRequest
 import im.vector.matrix.android.api.session.crypto.verification.CancelCode
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.Content

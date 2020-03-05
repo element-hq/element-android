@@ -16,6 +16,7 @@
 package im.vector.matrix.android.internal.crypto.verification
 
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.crypto.verification.ValidVerificationInfoRequest
 import im.vector.matrix.android.api.session.crypto.verification.CancelCode
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType

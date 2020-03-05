@@ -20,6 +20,8 @@ import android.os.Handler
 import android.os.Looper
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.crypto.verification.PendingVerificationRequest
+import im.vector.matrix.android.api.session.crypto.verification.ValidVerificationInfoReady
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.verification.CancelCode

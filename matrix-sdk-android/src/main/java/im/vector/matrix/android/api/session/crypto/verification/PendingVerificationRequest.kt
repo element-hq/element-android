@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.matrix.android.internal.crypto.verification
+package im.vector.matrix.android.api.session.crypto.verification
 
 import im.vector.matrix.android.api.extensions.orFalse
-import im.vector.matrix.android.api.session.crypto.verification.CancelCode
 import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SCAN
 import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SHOW
 import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
@@ -24,7 +23,6 @@ import java.util.UUID
 
 /**
  * Stores current pending verification requests
- * TODO We should not expose this whole object to the app. Create an interface
  */
 data class PendingVerificationRequest(
         val ageLocalTs: Long,

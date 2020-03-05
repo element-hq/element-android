@@ -15,6 +15,8 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
+import im.vector.matrix.android.api.session.crypto.verification.ValidVerificationInfoRequest
+
 internal interface VerificationInfoRequest : VerificationInfo<ValidVerificationInfoRequest> {
 
     /**
@@ -48,9 +50,3 @@ internal interface VerificationInfoRequest : VerificationInfo<ValidVerificationI
     }
 }
 
-internal data class ValidVerificationInfoRequest(
-        val transactionID: String,
-        val fromDevice: String,
-        val methods: List<String>,
-        val timestamp: Long?
-)
