@@ -15,6 +15,11 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
+import im.vector.matrix.android.api.session.crypto.verification.SasMode
+import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
+import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
+import timber.log.Timber
+
 internal interface VerificationInfoStart : VerificationInfo {
 
     val method: String?
@@ -58,4 +63,37 @@ internal interface VerificationInfoStart : VerificationInfo {
     val sharedSecret: String?
 
     fun toCanonicalJson(): String?
+
+    override fun isValid(): Boolean {
+        if (transactionID.isNullOrBlank()
+                || fromDevice.isNullOrBlank()
+                || (method == VERIFICATION_METHOD_SAS && !isValidSas())
+                || (method == VERIFICATION_METHOD_RECIPROCATE && !isValidReciprocate())) {
+            Timber.e("## received invalid verification request")
+            return false
+        }
+        return true
+    }
+
+    private fun isValidSas(): Boolean {
+        if (keyAgreementProtocols.isNullOrEmpty()
+                || hashes.isNullOrEmpty()
+                || !hashes.contains("sha256") || messageAuthenticationCodes.isNullOrEmpty()
+                || (!messageAuthenticationCodes.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256)
+                        && !messageAuthenticationCodes.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256_LONGKDF))
+                || shortAuthenticationStrings.isNullOrEmpty()
+                || !shortAuthenticationStrings.contains(SasMode.DECIMAL)) {
+            return false
+        }
+
+        return true
+    }
+
+    private fun isValidReciprocate(): Boolean {
+        if (sharedSecret.isNullOrBlank()) {
+            return false
+        }
+
+        return true
+    }
 }

@@ -17,11 +17,8 @@ package im.vector.matrix.android.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.session.crypto.verification.SasMode
-import im.vector.matrix.android.internal.crypto.verification.SASDefaultVerificationTransaction
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfoStart
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
-import timber.log.Timber
 
 /**
  * Sent by Alice to initiate an interactive key verification.
@@ -41,40 +38,6 @@ internal data class KeyVerificationStart(
 
     override fun toCanonicalJson(): String? {
         return JsonCanonicalizer.getCanonicalJson(KeyVerificationStart::class.java, this)
-    }
-
-    // TODO Move those method to the interface?
-    override fun isValid(): Boolean {
-        if (transactionID.isNullOrBlank()
-                || fromDevice.isNullOrBlank()
-                || (method == VERIFICATION_METHOD_SAS && !isValidSas())
-                || (method == VERIFICATION_METHOD_RECIPROCATE && !isValidReciprocate())) {
-            Timber.e("## received invalid verification request")
-            return false
-        }
-        return true
-    }
-
-    private fun isValidSas(): Boolean {
-        if (keyAgreementProtocols.isNullOrEmpty()
-                || hashes.isNullOrEmpty()
-                || !hashes.contains("sha256") || messageAuthenticationCodes.isNullOrEmpty()
-                || (!messageAuthenticationCodes.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256)
-                        && !messageAuthenticationCodes.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256_LONGKDF))
-                || shortAuthenticationStrings.isNullOrEmpty()
-                || !shortAuthenticationStrings.contains(SasMode.DECIMAL)) {
-            return false
-        }
-
-        return true
-    }
-
-    private fun isValidReciprocate(): Boolean {
-        if (sharedSecret.isNullOrBlank()) {
-            return false
-        }
-
-        return true
     }
 
     override fun toSendToDeviceObject() = this
