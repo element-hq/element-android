@@ -157,7 +157,9 @@ internal class DefaultQrCodeVerificationTransaction(
         start(otherQrCodeData.sharedSecret)
 
         // Trust the other user
-        trust(canTrustOtherUserMasterKey, toVerifyDeviceIds.distinct())
+        trust(canTrustOtherUserMasterKey,
+                toVerifyDeviceIds.distinct(),
+                eventuallyMarkMyMasterKeyAsTrusted = true)
     }
 
     private fun start(remoteSecret: String) {
@@ -213,7 +215,7 @@ internal class DefaultQrCodeVerificationTransaction(
     }
 
     override fun otherUserScannedMyQrCode() {
-        trust(true, emptyList())
+        trust(true, emptyList(), true)
     }
 
     override fun otherUserDidNotScannedMyQrCode() {

@@ -16,7 +16,6 @@
 package im.vector.matrix.android.internal.crypto.verification
 
 import android.os.Build
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.verification.CancelCode
@@ -26,7 +25,6 @@ import im.vector.matrix.android.api.session.crypto.verification.SasVerificationT
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
-import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.MXKey
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.extensions.toUnsignedInt
@@ -39,17 +37,25 @@ import timber.log.Timber
  * Represents an ongoing short code interactive key verification between two devices.
  */
 internal abstract class SASDefaultVerificationTransaction(
-        private val setDeviceVerificationAction: SetDeviceVerificationAction,
+        setDeviceVerificationAction: SetDeviceVerificationAction,
         open val userId: String,
         open val deviceId: String?,
         private val cryptoStore: IMXCryptoStore,
-        private val crossSigningService: CrossSigningService,
+        crossSigningService: CrossSigningService,
         private val deviceFingerprint: String,
         transactionId: String,
         otherUserId: String,
         otherDeviceId: String?,
         isIncoming: Boolean
-) : DefaultVerificationTransaction(transactionId, otherUserId, otherDeviceId, isIncoming), SasVerificationTransaction {
+) : DefaultVerificationTransaction(
+        setDeviceVerificationAction,
+        crossSigningService,
+        userId,
+        transactionId,
+        otherUserId,
+        otherDeviceId,
+        isIncoming),
+        SasVerificationTransaction {
 
     companion object {
         const val SAS_MAC_SHA256_LONGKDF = "hmac-sha256"
@@ -284,47 +290,9 @@ internal abstract class SASDefaultVerificationTransaction(
             return
         }
 
-        // If not me sign his MSK and upload the signature
-        if (otherMasterKeyIsVerified) {
-            // we should trust this master key
-            // And check verification MSK -> SSK?
-            if (otherUserId != userId) {
-                crossSigningService.trustUser(otherUserId, object : MatrixCallback<Unit> {
-                    override fun onFailure(failure: Throwable) {
-                        Timber.e(failure, "## SAS Verification: Failed to trust User $otherUserId")
-                    }
-                })
-            } else {
-                // Notice other master key is mine because other is me
-                if (otherMasterKey?.trustLevel?.isVerified() == false) {
-                    crossSigningService.markMyMasterKeyAsTrusted()
-                }
-            }
-        }
-
-        if (otherUserId == userId) {
-            // If me it's reasonable to sign and upload the device signature
-            // Notice that i might not have the private keys, so may not be able to do it
-            crossSigningService.trustDevice(otherDeviceId!!, object : MatrixCallback<Unit> {
-                override fun onFailure(failure: Throwable) {
-                    Timber.w(failure, "## SAS Verification: Failed to sign new device $otherDeviceId")
-                }
-            })
-        }
-
-        // TODO what if the otherDevice is not in this list? and should we
-        verifiedDevices.forEach {
-            setDeviceVerified(otherUserId, it)
-        }
-        transport.done(transactionId)
-        state = VerificationTxState.Verified
-    }
-
-    private fun setDeviceVerified(userId: String, deviceId: String) {
-        // TODO should not override cross sign status
-        setDeviceVerificationAction.handle(DeviceTrustLevel(false, true),
-                userId,
-                deviceId)
+        trust(otherMasterKeyIsVerified,
+                verifiedDevices,
+                eventuallyMarkMyMasterKeyAsTrusted = otherMasterKey?.trustLevel?.isVerified() == false)
     }
 
     override fun cancel() {

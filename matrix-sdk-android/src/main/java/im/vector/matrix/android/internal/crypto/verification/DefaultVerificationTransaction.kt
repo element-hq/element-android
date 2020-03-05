@@ -51,20 +51,25 @@ internal abstract class DefaultVerificationTransaction(
         listeners.remove(listener)
     }
 
-    protected fun trust(canTrustOtherUserMasterKey: Boolean, toVerifyDeviceIds: List<String>) {
+    protected fun trust(canTrustOtherUserMasterKey: Boolean,
+                        toVerifyDeviceIds: List<String>,
+                        eventuallyMarkMyMasterKeyAsTrusted: Boolean) {
+        // If not me sign his MSK and upload the signature
         if (canTrustOtherUserMasterKey) {
-            // If not me sign his MSK and upload the signature
+            // we should trust this master key
+            // And check verification MSK -> SSK?
             if (otherUserId != userId) {
-                // we should trust this master key
-                // And check verification MSK -> SSK?
                 crossSigningService.trustUser(otherUserId, object : MatrixCallback<Unit> {
                     override fun onFailure(failure: Throwable) {
-                        Timber.e(failure, "## QR Verification: Failed to trust User $otherUserId")
+                        Timber.e(failure, "## Verification: Failed to trust User $otherUserId")
                     }
                 })
             } else {
-                // Mark my keys as trusted locally
-                crossSigningService.markMyMasterKeyAsTrusted()
+                // Notice other master key is mine because other is me
+                if (eventuallyMarkMyMasterKeyAsTrusted) {
+                    // Mark my keys as trusted locally
+                    crossSigningService.markMyMasterKeyAsTrusted()
+                }
             }
         }
 
@@ -73,7 +78,7 @@ internal abstract class DefaultVerificationTransaction(
             // Notice that i might not have the private keys, so may not be able to do it
             crossSigningService.trustDevice(otherDeviceId!!, object : MatrixCallback<Unit> {
                 override fun onFailure(failure: Throwable) {
-                    Timber.w(failure, "## QR Verification: Failed to sign new device $otherDeviceId")
+                    Timber.w(failure, "## Verification: Failed to sign new device $otherDeviceId")
                 }
             })
         }
