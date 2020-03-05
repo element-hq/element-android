@@ -74,7 +74,7 @@ class KeysBackupRestoreFromPassphraseViewModel @Inject constructor() : ViewModel
                                         isIndeterminate = true))
                             }
                             is StepProgressListener.Step.ImportingKey -> {
-                                Timber.d("backupKeys.ImportingKey.progress: " + step.progress)
+                                Timber.d("backupKeys.ImportingKey.progress: ${step.progress}")
                                 // Progress 0 can take a while, display an indeterminate progress in this case
                                 if (step.progress == 0) {
                                     sharedViewModel.loadingEvent.postValue(WaitingViewData(context.getString(R.string.keys_backup_restoring_waiting_message)

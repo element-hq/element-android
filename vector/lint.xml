@@ -46,4 +46,7 @@
 
     <!-- Manifest -->
     <issue id="PermissionImpliesUnsupportedChromeOsHardware" severity="error" />
+
+    <!-- Timber -->
+    <issue id="BinaryOperationInTimber" severity="error" />
 </lint>

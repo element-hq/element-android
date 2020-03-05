@@ -423,7 +423,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
             uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         }
 
-        Timber.v("## getNotificationRingTone() returns " + uri!!)
+        Timber.v("## getNotificationRingTone() returns $uri")
         return uri
     }
 

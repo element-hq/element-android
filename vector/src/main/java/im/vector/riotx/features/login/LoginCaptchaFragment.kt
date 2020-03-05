@@ -89,7 +89,7 @@ class LoginCaptchaFragment @Inject constructor(
             }
 
             override fun onReceivedSslError(view: WebView, handler: SslErrorHandler, error: SslError) {
-                Timber.d("## onReceivedSslError() : " + error.certificate)
+                Timber.d("## onReceivedSslError() : ${error.certificate}")
 
                 if (!isAdded) {
                     return
