@@ -15,7 +15,7 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
-internal interface VerificationInfoMac : VerificationInfo {
+internal interface VerificationInfoMac : VerificationInfo<ValidVerificationInfoMac> {
     /**
      * A map of key ID to the MAC of the key, as an unpadded base64 string, calculated using the MAC key
      */
@@ -28,8 +28,23 @@ internal interface VerificationInfoMac : VerificationInfo {
      *  give the MAC of the string “ed25519:ABCDEFG,ed25519:HIJKLMN”.
      */
     val keys: String?
+
+    override fun asValidObject(): ValidVerificationInfoMac? {
+        if (transactionID.isNullOrBlank() || keys.isNullOrBlank() || mac.isNullOrEmpty()) {
+            return null
+        }
+        return ValidVerificationInfoMac(
+                mac!!,
+                keys!!
+        )
+    }
 }
 
 internal interface VerificationInfoMacFactory {
-    fun create(tid: String, mac: Map<String, String>, keys: String) : VerificationInfoMac
+    fun create(tid: String, mac: Map<String, String>, keys: String): VerificationInfoMac
 }
+
+internal data class ValidVerificationInfoMac(
+        val mac: Map<String, String>,
+        val keys: String
+)

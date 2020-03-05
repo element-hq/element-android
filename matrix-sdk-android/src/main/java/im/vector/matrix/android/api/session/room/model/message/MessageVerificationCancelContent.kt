@@ -28,20 +28,12 @@ data class MessageVerificationCancelContent(
         @Json(name = "code") override val code: String? = null,
         @Json(name = "reason") override val reason: String? = null,
         @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
-
 ) : VerificationInfoCancel {
 
     override val transactionID: String?
         get() = relatesTo?.eventId
 
     override fun toEventContent() = toContent()
-
-    override fun isValid(): Boolean {
-        if (transactionID.isNullOrBlank() || code.isNullOrBlank()) {
-            return false
-        }
-        return true
-    }
 
     companion object {
         fun create(transactionId: String, reason: CancelCode): MessageVerificationCancelContent {

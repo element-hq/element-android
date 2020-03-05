@@ -23,7 +23,7 @@ package im.vector.matrix.android.internal.crypto.verification
  * with a m.key.verification.start event instead.
  */
 
-interface VerificationInfoReady : VerificationInfo {
+internal interface VerificationInfoReady : VerificationInfo<ValidVerificationInfoReady> {
     /**
      * The ID of the device that sent the m.key.verification.ready message
      */
@@ -33,8 +33,26 @@ interface VerificationInfoReady : VerificationInfo {
      * An array of verification methods that the device supports
      */
     val methods: List<String>?
+
+    override fun asValidObject(): ValidVerificationInfoReady? {
+        if (transactionID.isNullOrBlank()
+                || fromDevice.isNullOrBlank()
+                || methods.isNullOrEmpty()) {
+            return null
+        }
+
+        return ValidVerificationInfoReady(
+                fromDevice!!,
+                methods!!
+        )
+    }
 }
 
 internal interface MessageVerificationReadyFactory {
     fun create(tid: String, methods: List<String>, fromDevice: String): VerificationInfoReady
 }
+
+internal data class ValidVerificationInfoReady(
+        val fromDevice: String,
+        val methods: List<String>
+)

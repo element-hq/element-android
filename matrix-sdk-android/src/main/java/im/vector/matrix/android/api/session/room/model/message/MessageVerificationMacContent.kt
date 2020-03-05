@@ -35,13 +35,6 @@ internal data class MessageVerificationMacContent(
 
     override fun toEventContent() = toContent()
 
-    override fun isValid(): Boolean {
-        if (transactionID.isNullOrBlank() || keys.isNullOrBlank() || mac.isNullOrEmpty()) {
-            return false
-        }
-        return true
-    }
-
     companion object : VerificationInfoMacFactory {
         override fun create(tid: String, mac: Map<String, String>, keys: String): VerificationInfoMac {
             return MessageVerificationMacContent(

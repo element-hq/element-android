@@ -28,11 +28,4 @@ internal data class KeyVerificationDone(
 ) : SendToDeviceObject, VerificationInfoDone {
 
     override fun toSendToDeviceObject() = this
-
-    override fun isValid(): Boolean {
-        if (transactionID.isNullOrBlank()) {
-            return false
-        }
-        return true
-    }
 }

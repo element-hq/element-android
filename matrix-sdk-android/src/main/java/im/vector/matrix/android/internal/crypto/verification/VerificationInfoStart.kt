@@ -18,9 +18,8 @@ package im.vector.matrix.android.internal.crypto.verification
 import im.vector.matrix.android.api.session.crypto.verification.SasMode
 import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
 import im.vector.matrix.android.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
-import timber.log.Timber
 
-internal interface VerificationInfoStart : VerificationInfo {
+internal interface VerificationInfoStart : VerificationInfo<ValidVerificationInfoStart> {
 
     val method: String?
 
@@ -64,40 +63,54 @@ internal interface VerificationInfoStart : VerificationInfo {
 
     fun toCanonicalJson(): String?
 
-    override fun isValid(): Boolean {
+    override fun asValidObject(): ValidVerificationInfoStart? {
         if (transactionID.isNullOrBlank()
-                || fromDevice.isNullOrBlank()
-                || (method == VERIFICATION_METHOD_SAS && !isValidSas())
-                || (method == VERIFICATION_METHOD_RECIPROCATE && !isValidReciprocate())) {
-            Timber.e("## received invalid verification request")
-            return false
-        }
-        return true
-    }
-
-    private fun isValidSas(): Boolean {
-        val myHashes = hashes
-        val myMessageAuthenticationCodes = messageAuthenticationCodes
-        val myShortAuthenticationStrings = shortAuthenticationStrings
-
-        if (keyAgreementProtocols.isNullOrEmpty()
-                || myHashes.isNullOrEmpty()
-                || !myHashes.contains("sha256") || myMessageAuthenticationCodes.isNullOrEmpty()
-                || (!myMessageAuthenticationCodes.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256)
-                        && !myMessageAuthenticationCodes.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256_LONGKDF))
-                || myShortAuthenticationStrings.isNullOrEmpty()
-                || !myShortAuthenticationStrings.contains(SasMode.DECIMAL)) {
-            return false
+                || fromDevice.isNullOrBlank()) {
+            return null
         }
 
-        return true
-    }
-
-    private fun isValidReciprocate(): Boolean {
-        if (sharedSecret.isNullOrBlank()) {
-            return false
+        return when (method) {
+            VERIFICATION_METHOD_SAS         -> {
+                if (keyAgreementProtocols.isNullOrEmpty()
+                        || hashes.isNullOrEmpty()
+                        || !hashes!!.contains("sha256") || messageAuthenticationCodes.isNullOrEmpty()
+                        || (!messageAuthenticationCodes!!.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256)
+                                && !messageAuthenticationCodes!!.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256_LONGKDF))
+                        || shortAuthenticationStrings.isNullOrEmpty()
+                        || !shortAuthenticationStrings!!.contains(SasMode.DECIMAL)) {
+                    null
+                } else {
+                    ValidVerificationInfoStart.SasVerificationInfoStart(
+                            keyAgreementProtocols!!,
+                            hashes!!,
+                            messageAuthenticationCodes!!,
+                            shortAuthenticationStrings!!
+                    )
+                }
+            }
+            VERIFICATION_METHOD_RECIPROCATE -> {
+                if (sharedSecret.isNullOrBlank()) {
+                    null
+                } else {
+                    ValidVerificationInfoStart.ReciprocateVerificationInfoStart(
+                            sharedSecret!!
+                    )
+                }
+            }
+            else                            -> null
         }
-
-        return true
     }
+}
+
+sealed class ValidVerificationInfoStart {
+    data class SasVerificationInfoStart(
+            val keyAgreementProtocols: List<String>,
+            val hashes: List<String>,
+            val messageAuthenticationCodes: List<String>,
+            val shortAuthenticationStrings: List<String>
+    ) : ValidVerificationInfoStart()
+
+    data class ReciprocateVerificationInfoStart(
+            val sharedSecret: String
+    ) : ValidVerificationInfoStart()
 }

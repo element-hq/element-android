@@ -15,7 +15,7 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
-interface VerificationInfoRequest : VerificationInfo {
+internal interface VerificationInfoRequest : VerificationInfo<ValidVerificationInfoRequest> {
 
     /**
      * Required. The device ID which is initiating the request.
@@ -33,4 +33,22 @@ interface VerificationInfoRequest : VerificationInfo {
      * the message should be ignored by the receiver.
      */
     val timestamp: Long?
+
+    override fun asValidObject(): ValidVerificationInfoRequest? {
+        // FIXME No check on Timestamp?
+        if (transactionID.isNullOrBlank() || methods.isNullOrEmpty() || fromDevice.isNullOrEmpty()) {
+            return null
+        }
+        return ValidVerificationInfoRequest(
+                fromDevice!!,
+                methods!!,
+                timestamp
+        )
+    }
 }
+
+internal data class ValidVerificationInfoRequest(
+        val fromDevice: String,
+        val methods: List<String>,
+        val timestamp: Long?
+)

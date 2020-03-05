@@ -35,13 +35,6 @@ internal data class MessageVerificationReadyContent(
 
     override fun toEventContent() = toContent()
 
-    override fun isValid(): Boolean {
-        if (transactionID.isNullOrBlank() || methods.isNullOrEmpty() || fromDevice.isNullOrEmpty()) {
-            return false
-        }
-        return true
-    }
-
     companion object : MessageVerificationReadyFactory {
         override fun create(tid: String, methods: List<String>, fromDevice: String): VerificationInfoReady {
             return MessageVerificationReadyContent(

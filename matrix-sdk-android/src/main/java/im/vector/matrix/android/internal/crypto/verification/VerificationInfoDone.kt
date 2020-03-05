@@ -15,4 +15,14 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
-interface VerificationInfoDone : VerificationInfo
+internal interface VerificationInfoDone : VerificationInfo<ValidVerificationInfoDone> {
+
+    override fun asValidObject(): ValidVerificationInfoDone? {
+        if (transactionID.isNullOrBlank()) {
+            return null
+        }
+        return ValidVerificationInfoDone
+    }
+}
+
+internal object ValidVerificationInfoDone

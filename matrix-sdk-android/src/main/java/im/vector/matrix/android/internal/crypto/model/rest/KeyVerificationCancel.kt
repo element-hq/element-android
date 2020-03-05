@@ -53,11 +53,4 @@ internal data class KeyVerificationCancel(
     }
 
     override fun toSendToDeviceObject() = this
-
-    override fun isValid(): Boolean {
-        if (transactionID.isNullOrBlank() || code.isNullOrBlank()) {
-            return false
-        }
-        return true
-    }
 }

@@ -67,19 +67,6 @@ internal data class KeyVerificationAccept(
         override var commitment: String? = null
 ) : SendToDeviceObject, VerificationInfoAccept {
 
-    override fun isValid(): Boolean {
-        if (transactionID.isNullOrBlank()
-                || keyAgreementProtocol.isNullOrBlank()
-                || hash.isNullOrBlank()
-                || commitment.isNullOrBlank()
-                || messageAuthenticationCode.isNullOrBlank()
-                || shortAuthenticationStrings.isNullOrEmpty()) {
-            Timber.e("## received invalid verification request")
-            return false
-        }
-        return true
-    }
-
     override fun toSendToDeviceObject() = this
 
     companion object : VerificationInfoAcceptFactory {

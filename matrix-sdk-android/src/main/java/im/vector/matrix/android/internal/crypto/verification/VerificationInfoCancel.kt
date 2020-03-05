@@ -15,7 +15,7 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
-internal interface VerificationInfoCancel : VerificationInfo {
+internal interface VerificationInfoCancel : VerificationInfo<ValidVerificationInfoCancel> {
     /**
      * machine-readable reason for cancelling, see [CancelCode]
      */
@@ -25,4 +25,19 @@ internal interface VerificationInfoCancel : VerificationInfo {
      * human-readable reason for cancelling.  This should only be used if the receiving client does not understand the code given.
      */
     val reason: String?
+
+    override fun asValidObject(): ValidVerificationInfoCancel? {
+        if (transactionID.isNullOrBlank() || code.isNullOrBlank()) {
+            return null
+        }
+        return ValidVerificationInfoCancel(
+                code!!,
+                reason
+        )
+    }
 }
+
+internal data class ValidVerificationInfoCancel(
+        val code: String,
+        val reason: String?
+)

@@ -15,7 +15,9 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
-internal interface VerificationInfoAccept : VerificationInfo {
+import timber.log.Timber
+
+internal interface VerificationInfoAccept : VerificationInfo<ValidVerificationInfoAccept> {
     /**
      * The key agreement protocol that Bob’s device has selected to use, out of the list proposed by Alice’s device
      */
@@ -41,6 +43,27 @@ internal interface VerificationInfoAccept : VerificationInfo {
      *  and the canonical JSON representation of the m.key.verification.start message.
      */
     var commitment: String?
+
+    override fun asValidObject(): ValidVerificationInfoAccept? {
+        if (transactionID.isNullOrBlank()
+                || keyAgreementProtocol.isNullOrBlank()
+                || hash.isNullOrBlank()
+                || commitment.isNullOrBlank()
+                || messageAuthenticationCode.isNullOrBlank()
+                || shortAuthenticationStrings.isNullOrEmpty()) {
+            Timber.e("## received invalid verification request")
+            return null
+        }
+
+        return ValidVerificationInfoAccept(
+                transactionID!!,
+                keyAgreementProtocol!!,
+                hash!!,
+                messageAuthenticationCode!!,
+                shortAuthenticationStrings!!,
+                commitment
+        )
+    }
 }
 
 internal interface VerificationInfoAcceptFactory {
@@ -52,3 +75,12 @@ internal interface VerificationInfoAcceptFactory {
                messageAuthenticationCode: String,
                shortAuthenticationStrings: List<String>): VerificationInfoAccept
 }
+
+internal data class ValidVerificationInfoAccept(
+        val transactionID: String,
+        val keyAgreementProtocol: String,
+        val hash: String,
+        val messageAuthenticationCode: String,
+        val shortAuthenticationStrings: List<String>,
+        var commitment: String?
+)

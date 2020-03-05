@@ -36,13 +36,6 @@ data class MessageVerificationRequestContent(
         @Json(name = "m.new_content") override val newContent: Content? = null
 ) : MessageContent, VerificationInfoRequest {
 
-    override fun isValid(): Boolean {
-        if (transactionID.isNullOrBlank() || methods.isNullOrEmpty() || fromDevice.isNullOrEmpty()) {
-            return false
-        }
-        return true
-    }
-
     override val transactionID: String?
         get() = relatesTo?.eventId
 

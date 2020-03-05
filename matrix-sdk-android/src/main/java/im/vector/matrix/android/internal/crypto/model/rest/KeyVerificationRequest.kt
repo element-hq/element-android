@@ -32,11 +32,4 @@ internal data class KeyVerificationRequest(
 ) : SendToDeviceObject, VerificationInfoRequest {
 
     override fun toSendToDeviceObject() = this
-
-    override fun isValid(): Boolean {
-        if (transactionID.isNullOrBlank() || methods.isNullOrEmpty() || fromDevice.isNullOrEmpty()) {
-            return false
-        }
-        return true
-    }
 }

@@ -30,8 +30,4 @@ internal data class KeyVerificationReady(
 ) : SendToDeviceObject, VerificationInfoReady {
 
     override fun toSendToDeviceObject() = this
-
-    override fun isValid(): Boolean {
-        return !transactionID.isNullOrBlank() && !fromDevice.isNullOrBlank() && !methods.isNullOrEmpty()
-    }
 }

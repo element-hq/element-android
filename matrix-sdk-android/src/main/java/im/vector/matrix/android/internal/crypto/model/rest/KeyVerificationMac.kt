@@ -31,13 +31,6 @@ internal data class KeyVerificationMac(
 
 ) : SendToDeviceObject, VerificationInfoMac {
 
-    override fun isValid(): Boolean {
-        if (transactionID.isNullOrBlank() || keys.isNullOrBlank() || mac.isNullOrEmpty()) {
-            return false
-        }
-        return true
-    }
-
     override fun toSendToDeviceObject(): SendToDeviceObject? = this
 
     companion object : VerificationInfoMacFactory {
