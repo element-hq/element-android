@@ -77,26 +77,24 @@ internal class DefaultQrCodeVerificationTransaction(
         }
 
         // check master key
+        val myMasterKey = crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey
         when (otherQrCodeData) {
             is QrCodeData.VerifyingAnotherUser             -> {
-                if (otherQrCodeData.otherUserMasterCrossSigningPublicKey
-                        != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
+                if (otherQrCodeData.otherUserMasterCrossSigningPublicKey != myMasterKey) {
                     Timber.d("## Verification QR: Invalid other master key ${otherQrCodeData.otherUserMasterCrossSigningPublicKey}")
                     cancel(CancelCode.MismatchedKeys)
                     return
                 } else Unit
             }
             is QrCodeData.SelfVerifyingMasterKeyTrusted    -> {
-                if (otherQrCodeData.userMasterCrossSigningPublicKey
-                        != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
+                if (otherQrCodeData.userMasterCrossSigningPublicKey != myMasterKey) {
                     Timber.d("## Verification QR: Invalid other master key ${otherQrCodeData.userMasterCrossSigningPublicKey}")
                     cancel(CancelCode.MismatchedKeys)
                     return
                 } else Unit
             }
             is QrCodeData.SelfVerifyingMasterKeyNotTrusted -> {
-                if (otherQrCodeData.userMasterCrossSigningPublicKey
-                        != crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey) {
+                if (otherQrCodeData.userMasterCrossSigningPublicKey != myMasterKey) {
                     Timber.d("## Verification QR: Invalid other master key ${otherQrCodeData.userMasterCrossSigningPublicKey}")
                     cancel(CancelCode.MismatchedKeys)
                     return
@@ -156,7 +154,7 @@ internal class DefaultQrCodeVerificationTransaction(
         trust(canTrustOtherUserMasterKey, toVerifyDeviceIds.distinct())
     }
 
-    fun start(remoteSecret: String) {
+    private fun start(remoteSecret: String) {
         if (state != VerificationTxState.None) {
             Timber.e("## Verification QR: start verification from invalid state")
             // should I cancel??
@@ -219,8 +217,8 @@ internal class DefaultQrCodeVerificationTransaction(
     }
 
     private fun trust(canTrustOtherUserMasterKey: Boolean, toVerifyDeviceIds: List<String>) {
-        // If not me sign his MSK and upload the signature
         if (canTrustOtherUserMasterKey) {
+            // If not me sign his MSK and upload the signature
             if (otherUserId != userId) {
                 // we should trust this master key
                 // And check verification MSK -> SSK?
