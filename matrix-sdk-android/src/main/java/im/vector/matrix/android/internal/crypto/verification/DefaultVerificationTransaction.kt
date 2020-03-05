@@ -41,6 +41,4 @@ internal abstract class DefaultVerificationTransaction(
     fun removeListener(listener: Listener) {
         listeners.remove(listener)
     }
-
-    abstract fun acceptVerificationEvent(senderId: String, info: VerificationInfo)
 }

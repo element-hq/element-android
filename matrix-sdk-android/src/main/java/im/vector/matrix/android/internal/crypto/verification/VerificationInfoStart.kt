@@ -61,7 +61,7 @@ internal interface VerificationInfoStart : VerificationInfo<ValidVerificationInf
      */
     val sharedSecret: String?
 
-    fun toCanonicalJson(): String?
+    fun toCanonicalJson(): String
 
     override fun asValidObject(): ValidVerificationInfoStart? {
         if (transactionID.isNullOrBlank()
@@ -81,10 +81,13 @@ internal interface VerificationInfoStart : VerificationInfo<ValidVerificationInf
                     null
                 } else {
                     ValidVerificationInfoStart.SasVerificationInfoStart(
+                            transactionID!!,
+                            fromDevice!!,
                             keyAgreementProtocols!!,
                             hashes!!,
                             messageAuthenticationCodes!!,
-                            shortAuthenticationStrings!!
+                            shortAuthenticationStrings!!,
+                            canonicalJson = toCanonicalJson()
                     )
                 }
             }
@@ -93,6 +96,8 @@ internal interface VerificationInfoStart : VerificationInfo<ValidVerificationInf
                     null
                 } else {
                     ValidVerificationInfoStart.ReciprocateVerificationInfoStart(
+                            transactionID!!,
+                            fromDevice!!,
                             sharedSecret!!
                     )
                 }
@@ -102,15 +107,22 @@ internal interface VerificationInfoStart : VerificationInfo<ValidVerificationInf
     }
 }
 
-sealed class ValidVerificationInfoStart {
+sealed class ValidVerificationInfoStart(
+        open val transactionID: String,
+        open val fromDevice: String) {
     data class SasVerificationInfoStart(
+            override val transactionID: String,
+            override val fromDevice: String,
             val keyAgreementProtocols: List<String>,
             val hashes: List<String>,
             val messageAuthenticationCodes: List<String>,
-            val shortAuthenticationStrings: List<String>
-    ) : ValidVerificationInfoStart()
+            val shortAuthenticationStrings: List<String>,
+            val canonicalJson: String
+    ) : ValidVerificationInfoStart(transactionID, fromDevice)
 
     data class ReciprocateVerificationInfoStart(
+            override val transactionID: String,
+            override val fromDevice: String,
             val sharedSecret: String
-    ) : ValidVerificationInfoStart()
+    ) : ValidVerificationInfoStart(transactionID, fromDevice)
 }

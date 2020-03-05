@@ -28,8 +28,7 @@ import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
 import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64Safe
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.verification.DefaultVerificationTransaction
-import im.vector.matrix.android.internal.crypto.verification.VerificationInfo
-import im.vector.matrix.android.internal.crypto.verification.VerificationInfoStart
+import im.vector.matrix.android.internal.crypto.verification.ValidVerificationInfoStart
 import im.vector.matrix.android.internal.util.exhaustive
 import timber.log.Timber
 
@@ -179,9 +178,6 @@ internal class DefaultQrCodeVerificationTransaction(
         )
     }
 
-    override fun acceptVerificationEvent(senderId: String, info: VerificationInfo) {
-    }
-
     override fun cancel() {
         cancel(CancelCode.User)
     }
@@ -194,14 +190,14 @@ internal class DefaultQrCodeVerificationTransaction(
     override fun isToDeviceTransport() = false
 
     // Other user has scanned our QR code. check that the secret matched, so we can trust him
-    fun onStartReceived(startReq: VerificationInfoStart) {
+    fun onStartReceived(startReq: ValidVerificationInfoStart.ReciprocateVerificationInfoStart) {
         if (qrCodeData == null) {
             // Should not happen
             cancel(CancelCode.UnexpectedMessage)
             return
         }
 
-        if (startReq.sharedSecret?.fromBase64Safe()?.contentEquals(qrCodeData.sharedSecret.fromBase64()) == true) {
+        if (startReq.sharedSecret.fromBase64Safe()?.contentEquals(qrCodeData.sharedSecret.fromBase64()) == true) {
             // Ok, we can trust the other user
             // We can only trust the master key in this case
             // But first, ask the user for a confirmation

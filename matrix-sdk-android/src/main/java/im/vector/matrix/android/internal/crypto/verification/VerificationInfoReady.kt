@@ -42,6 +42,7 @@ internal interface VerificationInfoReady : VerificationInfo<ValidVerificationInf
         }
 
         return ValidVerificationInfoReady(
+                transactionID!!,
                 fromDevice!!,
                 methods!!
         )
@@ -53,6 +54,7 @@ internal interface MessageVerificationReadyFactory {
 }
 
 internal data class ValidVerificationInfoReady(
+        val transactionID: String,
         val fromDevice: String,
         val methods: List<String>
 )

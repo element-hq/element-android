@@ -29,6 +29,7 @@ internal interface VerificationInfoKey : VerificationInfo<ValidVerificationInfoK
             return null
         }
         return ValidVerificationInfoKey(
+                transactionID!!,
                 key!!
         )
     }
@@ -39,5 +40,6 @@ internal interface VerificationInfoKeyFactory {
 }
 
 internal data class ValidVerificationInfoKey(
+        val transactionID: String,
         val key: String
 )

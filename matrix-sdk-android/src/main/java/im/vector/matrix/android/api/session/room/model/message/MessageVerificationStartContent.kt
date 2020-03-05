@@ -34,7 +34,7 @@ internal data class MessageVerificationStartContent(
         @Json(name = "secret") override val sharedSecret: String?
 ) : VerificationInfoStart {
 
-    override fun toCanonicalJson(): String? {
+    override fun toCanonicalJson(): String {
         return JsonCanonicalizer.getCanonicalJson(MessageVerificationStartContent::class.java, this)
     }
 

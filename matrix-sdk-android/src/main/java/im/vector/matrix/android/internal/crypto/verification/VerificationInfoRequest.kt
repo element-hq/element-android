@@ -40,6 +40,7 @@ internal interface VerificationInfoRequest : VerificationInfo<ValidVerificationI
             return null
         }
         return ValidVerificationInfoRequest(
+                transactionID!!,
                 fromDevice!!,
                 methods!!,
                 timestamp
@@ -48,6 +49,7 @@ internal interface VerificationInfoRequest : VerificationInfo<ValidVerificationI
 }
 
 internal data class ValidVerificationInfoRequest(
+        val transactionID: String,
         val fromDevice: String,
         val methods: List<String>,
         val timestamp: Long?

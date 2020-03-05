@@ -37,8 +37,12 @@ internal data class MessageVerificationDoneContent(
             return null
         }
 
-        return ValidVerificationDone
+        return ValidVerificationDone(
+                transactionID!!
+        )
     }
 }
 
-internal object ValidVerificationDone
+internal data class ValidVerificationDone(
+        val transactionID: String
+)

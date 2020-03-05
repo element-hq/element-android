@@ -76,7 +76,7 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
             }
         }
 
-    override fun onVerificationStart(startReq: VerificationInfoStart) {
+    override fun onVerificationStart(startReq: ValidVerificationInfoStart.SasVerificationInfoStart) {
         Timber.v("## SAS I: received verification request from state $state")
         if (state != VerificationTxState.None) {
             Timber.e("## SAS I: received verification request from invalid state")
@@ -100,10 +100,10 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
 
         // Select a key agreement protocol, a hash algorithm, a message authentication code,
         // and short authentication string methods out of the lists given in requester's message.
-        val agreedProtocol = startReq!!.keyAgreementProtocols?.firstOrNull { KNOWN_AGREEMENT_PROTOCOLS.contains(it) }
-        val agreedHash = startReq!!.hashes?.firstOrNull { KNOWN_HASHES.contains(it) }
-        val agreedMac = startReq!!.messageAuthenticationCodes?.firstOrNull { KNOWN_MACS.contains(it) }
-        val agreedShortCode = startReq!!.shortAuthenticationStrings?.filter { KNOWN_SHORT_CODES.contains(it) }
+        val agreedProtocol = startReq!!.keyAgreementProtocols.firstOrNull { KNOWN_AGREEMENT_PROTOCOLS.contains(it) }
+        val agreedHash = startReq!!.hashes.firstOrNull { KNOWN_HASHES.contains(it) }
+        val agreedMac = startReq!!.messageAuthenticationCodes.firstOrNull { KNOWN_MACS.contains(it) }
+        val agreedShortCode = startReq!!.shortAuthenticationStrings.filter { KNOWN_SHORT_CODES.contains(it) }
 
         // No common key sharing/hashing/hmac/SAS methods.
         // If a device is unable to complete the verification because the devices are unable to find a common key sharing,
@@ -141,12 +141,12 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
     }
 
     private fun doAccept(accept: VerificationInfoAccept) {
-        this.accepted = accept
+        this.accepted = accept.asValidObject()
         Timber.v("## SAS incoming accept request id:$transactionId")
 
         // The hash commitment is the hash (using the selected hash algorithm) of the unpadded base64 representation of QB,
         // concatenated with the canonical JSON representation of the content of the m.key.verification.start message
-        val concat = getSAS().publicKey + startReq!!.toCanonicalJson()
+        val concat = getSAS().publicKey + startReq!!.canonicalJson
         accept.commitment = hashUsingAgreedHashMethod(concat) ?: ""
         // we need to send this to other device now
         state = VerificationTxState.SendingAccept
@@ -158,12 +158,12 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
         }
     }
 
-    override fun onVerificationAccept(accept: VerificationInfoAccept) {
+    override fun onVerificationAccept(accept: ValidVerificationInfoAccept) {
         Timber.v("## SAS invalid message for incoming request id:$transactionId")
         cancel(CancelCode.UnexpectedMessage)
     }
 
-    override fun onKeyVerificationKey(vKey: VerificationInfoKey) {
+    override fun onKeyVerificationKey(vKey: ValidVerificationInfoKey) {
         Timber.v("## SAS received key for request id:$transactionId")
         if (state != VerificationTxState.SendingAccept && state != VerificationTxState.Accepted) {
             Timber.e("## SAS received key from invalid state $state")
@@ -213,7 +213,7 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
         state = VerificationTxState.ShortCodeReady
     }
 
-    override fun onKeyVerificationMac(vKey: VerificationInfoMac) {
+    override fun onKeyVerificationMac(vKey: ValidVerificationInfoMac) {
         Timber.v("## SAS I: received mac for request id:$transactionId")
         // Check for state?
         if (state != VerificationTxState.SendingKey

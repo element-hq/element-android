@@ -89,13 +89,13 @@ internal abstract class SASDefaultVerificationTransaction(
 
     private var olmSas: OlmSAS? = null
 
-    var startReq: VerificationInfoStart? = null
-    var accepted: VerificationInfoAccept? = null
+    var startReq: ValidVerificationInfoStart.SasVerificationInfoStart? = null
+    var accepted: ValidVerificationInfoAccept? = null
     var otherKey: String? = null
     var shortCodeBytes: ByteArray? = null
 
     var myMac: VerificationInfoMac? = null
-    var theirMac: VerificationInfoMac? = null
+    var theirMac: ValidVerificationInfoMac? = null
 
     fun getSAS(): OlmSAS {
         if (olmSas == null) olmSas = OlmSAS()
@@ -201,25 +201,13 @@ internal abstract class SASDefaultVerificationTransaction(
         return transport is VerificationTransportToDevice
     }
 
-    override fun acceptVerificationEvent(senderId: String, info: VerificationInfo) {
-        when (info) {
-            is VerificationInfoStart  -> onVerificationStart(info)
-            is VerificationInfoAccept -> onVerificationAccept(info)
-            is VerificationInfoKey    -> onKeyVerificationKey(info)
-            is VerificationInfoMac    -> onKeyVerificationMac(info)
-            else                      -> {
-                // nop
-            }
-        }
-    }
+    abstract fun onVerificationStart(startReq: ValidVerificationInfoStart.SasVerificationInfoStart)
 
-    abstract fun onVerificationStart(startReq: VerificationInfoStart)
+    abstract fun onVerificationAccept(accept: ValidVerificationInfoAccept)
 
-    abstract fun onVerificationAccept(accept: VerificationInfoAccept)
+    abstract fun onKeyVerificationKey(vKey: ValidVerificationInfoKey)
 
-    abstract fun onKeyVerificationKey(vKey: VerificationInfoKey)
-
-    abstract fun onKeyVerificationMac(vKey: VerificationInfoMac)
+    abstract fun onKeyVerificationMac(vKey: ValidVerificationInfoMac)vMac
 
     protected fun verifyMacs() {
         Timber.v("## SAS verifying macs for id:$transactionId")
@@ -238,7 +226,7 @@ internal abstract class SASDefaultVerificationTransaction(
                 userId + deviceId +
                 transactionId
 
-        val commaSeparatedListOfKeyIds = theirMac!!.mac!!.keys.sorted().joinToString(",")
+        val commaSeparatedListOfKeyIds = theirMac!!.mac.keys.sorted().joinToString(",")
 
         val keyStrings = macUsingAgreedMethod(commaSeparatedListOfKeyIds, baseInfo + "KEY_IDS")
         if (theirMac!!.keys != keyStrings) {
@@ -250,7 +238,7 @@ internal abstract class SASDefaultVerificationTransaction(
         val verifiedDevices = ArrayList<String>()
 
         // cannot be empty because it has been validated
-        theirMac!!.mac!!.keys.forEach {
+        theirMac!!.mac.keys.forEach {
             val keyIDNoPrefix = it.withoutPrefix("ed25519:")
             val otherDeviceKey = otherUserKnownDevices?.get(keyIDNoPrefix)?.fingerprint()
             if (otherDeviceKey == null) {
@@ -273,7 +261,7 @@ internal abstract class SASDefaultVerificationTransaction(
         val otherCrossSigningMasterKeyPublic = otherMasterKey?.unpaddedBase64PublicKey
         if (otherCrossSigningMasterKeyPublic != null) {
             // Did the user signed his master key
-            theirMac!!.mac!!.keys.forEach {
+            theirMac!!.mac.keys.forEach {
                 val keyIDNoPrefix = it.withoutPrefix("ed25519:")
                 if (keyIDNoPrefix == otherCrossSigningMasterKeyPublic) {
                     // Check the signature
@@ -350,11 +338,11 @@ internal abstract class SASDefaultVerificationTransaction(
         transport.cancelTransaction(transactionId, otherUserId, otherDeviceId ?: "", code)
     }
 
-    protected fun sendToOther(type: String,
-                              keyToDevice: VerificationInfo,
-                              nextState: VerificationTxState,
-                              onErrorReason: CancelCode,
-                              onDone: (() -> Unit)?) {
+    protected fun <T> sendToOther(type: String,
+                                  keyToDevice: VerificationInfo<T>,
+                                  nextState: VerificationTxState,
+                                  onErrorReason: CancelCode,
+                                  onDone: (() -> Unit)?) {
         transport.sendToOther(type, keyToDevice, nextState, onErrorReason, onDone)
     }
 

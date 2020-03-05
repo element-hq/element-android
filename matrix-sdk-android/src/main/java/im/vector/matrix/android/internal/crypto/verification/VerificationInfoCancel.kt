@@ -31,6 +31,7 @@ internal interface VerificationInfoCancel : VerificationInfo<ValidVerificationIn
             return null
         }
         return ValidVerificationInfoCancel(
+                transactionID!!,
                 code!!,
                 reason
         )
@@ -38,6 +39,7 @@ internal interface VerificationInfoCancel : VerificationInfo<ValidVerificationIn
 }
 
 internal data class ValidVerificationInfoCancel(
+        val transactionID: String,
         val code: String,
         val reason: String?
 )

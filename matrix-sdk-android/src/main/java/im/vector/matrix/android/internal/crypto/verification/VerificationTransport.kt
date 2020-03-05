@@ -27,18 +27,18 @@ internal interface VerificationTransport {
     /**
      * Sends a message
      */
-    fun sendToOther(type: String,
-                    verificationInfo: VerificationInfo,
-                    nextState: VerificationTxState,
-                    onErrorReason: CancelCode,
-                    onDone: (() -> Unit)?)
+    fun <T> sendToOther(type: String,
+                        verificationInfo: VerificationInfo<T>,
+                        nextState: VerificationTxState,
+                        onErrorReason: CancelCode,
+                        onDone: (() -> Unit)?)
 
     fun sendVerificationRequest(supportedMethods: List<String>,
                                 localID: String,
                                 otherUserId: String,
                                 roomId: String?,
                                 toDevices: List<String>?,
-                                callback: (String?, VerificationInfoRequest?) -> Unit)
+                                callback: (String?, ValidVerificationInfoRequest?) -> Unit)
 
     fun cancelTransaction(transactionId: String,
                           otherUserId: String,

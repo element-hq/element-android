@@ -74,7 +74,7 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
             }
         }
 
-    override fun onVerificationStart(startReq: VerificationInfoStart) {
+    override fun onVerificationStart(startReq: ValidVerificationInfoStart.SasVerificationInfoStart) {
         Timber.e("## SAS O: onVerificationStart - unexpected id:$transactionId")
         cancel(CancelCode.UnexpectedMessage)
     }
@@ -94,8 +94,8 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
                 KNOWN_MACS,
                 KNOWN_SHORT_CODES
         )
-
-        startReq = startMessage
+kk
+        startReq = startMessage.asValidObject() as? ValidVerificationInfoStart.SasVerificationInfoStart
         state = VerificationTxState.SendingStart
 
         sendToOther(
@@ -130,7 +130,7 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
 //        )
 //    }
 
-    override fun onVerificationAccept(accept: VerificationInfoAccept) {
+    override fun onVerificationAccept(accept: ValidVerificationInfoAccept) {
         Timber.v("## SAS O: onVerificationAccept id:$transactionId")
         if (state != VerificationTxState.Started) {
             Timber.e("## SAS O: received accept request from invalid state $state")
@@ -141,7 +141,7 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
         if (!KNOWN_AGREEMENT_PROTOCOLS.contains(accept.keyAgreementProtocol)
                 || !KNOWN_HASHES.contains(accept.hash)
                 || !KNOWN_MACS.contains(accept.messageAuthenticationCode)
-                || accept.shortAuthenticationStrings!!.intersect(KNOWN_SHORT_CODES).isEmpty()) {
+                || accept.shortAuthenticationStrings.intersect(KNOWN_SHORT_CODES).isEmpty()) {
             Timber.e("## SAS O: received accept request from invalid state")
             cancel(CancelCode.UnknownMethod)
             return
@@ -167,7 +167,7 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
         }
     }
 
-    override fun onKeyVerificationKey(vKey: VerificationInfoKey) {
+    override fun onKeyVerificationKey(vKey: ValidVerificationInfoKey) {
         Timber.v("## SAS O: onKeyVerificationKey id:$transactionId")
         if (state != VerificationTxState.SendingKey && state != VerificationTxState.KeySent) {
             Timber.e("## received key from invalid state $state")
@@ -182,7 +182,7 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
         // in Bob’s m.key.verification.key and the content of Alice’s m.key.verification.start message.
 
         // check commitment
-        val concat = vKey.key + startReq!!.toCanonicalJson()
+        val concat = vKey.key + startReq!!.canonicalJson
         val otherCommitment = hashUsingAgreedHashMethod(concat) ?: ""
 
         if (accepted!!.commitment.equals(otherCommitment)) {
@@ -206,7 +206,7 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
         }
     }
 
-    override fun onKeyVerificationMac(vKey: VerificationInfoMac) {
+    override fun onKeyVerificationMac(vKey: ValidVerificationInfoMac) {
         Timber.v("## SAS O: onKeyVerificationMac id:$transactionId")
         if (state != VerificationTxState.OnKeyReceived
                 && state != VerificationTxState.ShortCodeReady

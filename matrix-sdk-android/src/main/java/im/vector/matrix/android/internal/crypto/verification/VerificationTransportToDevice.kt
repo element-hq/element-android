@@ -50,14 +50,20 @@ internal class VerificationTransportToDevice(
                                          otherUserId: String,
                                          roomId: String?,
                                          toDevices: List<String>?,
-                                         callback: (String?, VerificationInfoRequest?) -> Unit) {
+                                         callback: (String?, ValidVerificationInfoRequest?) -> Unit) {
         Timber.d("## SAS sending verification request with supported methods: $supportedMethods")
         val contentMap = MXUsersDevicesMap<Any>()
-        val keyReq = KeyVerificationRequest(
-                fromDevice = myDeviceId,
+        val validKeyReq = ValidVerificationInfoRequest(
+                transactionID = localID,
+                fromDevice = myDeviceId ?: "",
                 methods = supportedMethods,
-                timestamp = System.currentTimeMillis(),
-                transactionID = localID
+                timestamp = System.currentTimeMillis()
+        )
+        val keyReq = KeyVerificationRequest(
+                fromDevice = validKeyReq.fromDevice,
+                methods = validKeyReq.methods,
+                timestamp = validKeyReq.timestamp,
+                transactionID = validKeyReq.transactionID
         )
         toDevices?.forEach {
             contentMap.setObject(otherUserId, it, keyReq)
@@ -67,7 +73,7 @@ internal class VerificationTransportToDevice(
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             Timber.v("## verification [$tx.transactionId] send toDevice request success")
-                            callback.invoke(localID, keyReq)
+                            callback.invoke(localID, validKeyReq)
                         }
 
                         override fun onFailure(failure: Throwable) {
@@ -103,11 +109,11 @@ internal class VerificationTransportToDevice(
                 .executeBy(taskExecutor)
     }
 
-    override fun sendToOther(type: String,
-                             verificationInfo: VerificationInfo,
-                             nextState: VerificationTxState,
-                             onErrorReason: CancelCode,
-                             onDone: (() -> Unit)?) {
+    override fun <T> sendToOther(type: String,
+                                 verificationInfo: VerificationInfo<T>,
+                                 nextState: VerificationTxState,
+                                 onErrorReason: CancelCode,
+                                 onDone: (() -> Unit)?) {
         Timber.d("## SAS sending msg type $type")
         Timber.v("## SAS sending msg info $verificationInfo")
         val tx = tx ?: return

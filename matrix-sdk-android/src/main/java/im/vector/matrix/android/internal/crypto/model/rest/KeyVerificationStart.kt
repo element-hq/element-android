@@ -36,7 +36,7 @@ internal data class KeyVerificationStart(
         @Json(name = "secret") override val sharedSecret: String? = null
 ) : SendToDeviceObject, VerificationInfoStart {
 
-    override fun toCanonicalJson(): String? {
+    override fun toCanonicalJson(): String {
         return JsonCanonicalizer.getCanonicalJson(KeyVerificationStart::class.java, this)
     }
 
