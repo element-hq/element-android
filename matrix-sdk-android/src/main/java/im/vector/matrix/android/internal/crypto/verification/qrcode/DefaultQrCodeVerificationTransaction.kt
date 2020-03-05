@@ -16,14 +16,12 @@
 
 package im.vector.matrix.android.internal.crypto.verification.qrcode
 
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.verification.CancelCode
 import im.vector.matrix.android.api.session.crypto.verification.QrCodeVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
-import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
 import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64Safe
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
@@ -33,7 +31,7 @@ import im.vector.matrix.android.internal.util.exhaustive
 import timber.log.Timber
 
 internal class DefaultQrCodeVerificationTransaction(
-        private val setDeviceVerificationAction: SetDeviceVerificationAction,
+        setDeviceVerificationAction: SetDeviceVerificationAction,
         override val transactionId: String,
         override val otherUserId: String,
         override var otherDeviceId: String?,
@@ -44,7 +42,15 @@ internal class DefaultQrCodeVerificationTransaction(
         val userId: String,
         val deviceId: String,
         override val isIncoming: Boolean
-) : DefaultVerificationTransaction(transactionId, otherUserId, otherDeviceId, isIncoming), QrCodeVerificationTransaction {
+) : DefaultVerificationTransaction(
+        setDeviceVerificationAction,
+        crossSigningService,
+        userId,
+        transactionId,
+        otherUserId,
+        otherDeviceId,
+        isIncoming),
+        QrCodeVerificationTransaction {
 
     override val qrCodeText: String?
         get() = qrCodeData?.toEncodedString()
@@ -214,47 +220,5 @@ internal class DefaultQrCodeVerificationTransaction(
         // What can I do then?
         // At least remove the transaction...
         state = VerificationTxState.Cancelled(CancelCode.MismatchedKeys, true)
-    }
-
-    private fun trust(canTrustOtherUserMasterKey: Boolean, toVerifyDeviceIds: List<String>) {
-        if (canTrustOtherUserMasterKey) {
-            // If not me sign his MSK and upload the signature
-            if (otherUserId != userId) {
-                // we should trust this master key
-                // And check verification MSK -> SSK?
-                crossSigningService.trustUser(otherUserId, object : MatrixCallback<Unit> {
-                    override fun onFailure(failure: Throwable) {
-                        Timber.e(failure, "## QR Verification: Failed to trust User $otherUserId")
-                    }
-                })
-            } else {
-                // Mark my keys as trusted locally
-                crossSigningService.markMyMasterKeyAsTrusted()
-            }
-        }
-
-        if (otherUserId == userId) {
-            // If me it's reasonable to sign and upload the device signature
-            // Notice that i might not have the private keys, so may not be able to do it
-            crossSigningService.trustDevice(otherDeviceId!!, object : MatrixCallback<Unit> {
-                override fun onFailure(failure: Throwable) {
-                    Timber.w(failure, "## QR Verification: Failed to sign new device $otherDeviceId")
-                }
-            })
-        }
-
-        // TODO what if the otherDevice is not in this list? and should we
-        toVerifyDeviceIds.forEach {
-            setDeviceVerified(otherUserId, it)
-        }
-        transport.done(transactionId)
-        state = VerificationTxState.Verified
-    }
-
-    private fun setDeviceVerified(userId: String, deviceId: String) {
-        // TODO should not override cross sign status
-        setDeviceVerificationAction.handle(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
-                userId,
-                deviceId)
     }
 }
