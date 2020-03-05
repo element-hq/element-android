@@ -223,7 +223,7 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
         // Do I have my Mac?
         if (myMac != null) {
             // I can check
-            verifyMacs()
+            verifyMacs(vMac)
         }
         // Wait for ShortCode Accepted
     }

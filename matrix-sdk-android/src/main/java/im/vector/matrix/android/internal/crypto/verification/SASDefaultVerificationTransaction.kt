@@ -17,6 +17,7 @@ package im.vector.matrix.android.internal.crypto.verification
 
 import android.os.Build
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.verification.CancelCode
 import im.vector.matrix.android.api.session.crypto.verification.EmojiRepresentation
@@ -89,15 +90,15 @@ internal abstract class SASDefaultVerificationTransaction(
 
     private var olmSas: OlmSAS? = null
 
-    var startReq: ValidVerificationInfoStart.SasVerificationInfoStart? = null
-    var accepted: ValidVerificationInfoAccept? = null
-    var otherKey: String? = null
-    var shortCodeBytes: ByteArray? = null
+    protected var startReq: ValidVerificationInfoStart.SasVerificationInfoStart? = null
+    protected var accepted: ValidVerificationInfoAccept? = null
+    protected var otherKey: String? = null
+    protected var shortCodeBytes: ByteArray? = null
 
-    var myMac: ValidVerificationInfoMac? = null
-    var theirMac: ValidVerificationInfoMac? = null
+    protected var myMac: ValidVerificationInfoMac? = null
+    protected var theirMac: ValidVerificationInfoMac? = null
 
-    fun getSAS(): OlmSAS {
+    protected fun getSAS(): OlmSAS {
         if (olmSas == null) olmSas = OlmSAS()
         return olmSas!!
     }
@@ -187,9 +188,8 @@ internal abstract class SASDefaultVerificationTransaction(
         }
 
         // Do I already have their Mac?
-        if (theirMac != null) {
-            verifyMacs()
-        } // if not wait for it
+        theirMac?.let { verifyMacs(it) }
+        // if not wait for it
     }
 
     override fun shortCodeDoesNotMatch() {
@@ -209,7 +209,7 @@ internal abstract class SASDefaultVerificationTransaction(
 
     abstract fun onKeyVerificationMac(vMac: ValidVerificationInfoMac)
 
-    protected fun verifyMacs() {
+    protected fun verifyMacs(theirMacSafe: ValidVerificationInfoMac) {
         Timber.v("## SAS verifying macs for id:$transactionId")
         state = VerificationTxState.Verifying
 
@@ -220,16 +220,12 @@ internal abstract class SASDefaultVerificationTransaction(
         // as well as the HMAC of the comma-separated, sorted list of the key IDs given in the message.
         // Bob’s device compares these with the HMAC values given in the m.key.verification.mac message.
         // If everything matches, then consider Alice’s device keys as verified.
+        val baseInfo = "MATRIX_KEY_VERIFICATION_MAC$otherUserId$otherDeviceId$userId$deviceId$transactionId"
 
-        val baseInfo = "MATRIX_KEY_VERIFICATION_MAC" +
-                otherUserId + otherDeviceId +
-                userId + deviceId +
-                transactionId
-
-        val commaSeparatedListOfKeyIds = theirMac!!.mac.keys.sorted().joinToString(",")
+        val commaSeparatedListOfKeyIds = theirMacSafe.mac.keys.sorted().joinToString(",")
 
         val keyStrings = macUsingAgreedMethod(commaSeparatedListOfKeyIds, baseInfo + "KEY_IDS")
-        if (theirMac!!.keys != keyStrings) {
+        if (theirMacSafe.keys != keyStrings) {
             // WRONG!
             cancel(CancelCode.MismatchedKeys)
             return
@@ -238,7 +234,7 @@ internal abstract class SASDefaultVerificationTransaction(
         val verifiedDevices = ArrayList<String>()
 
         // cannot be empty because it has been validated
-        theirMac!!.mac.keys.forEach {
+        theirMacSafe.mac.keys.forEach {
             val keyIDNoPrefix = it.withoutPrefix("ed25519:")
             val otherDeviceKey = otherUserKnownDevices?.get(keyIDNoPrefix)?.fingerprint()
             if (otherDeviceKey == null) {
@@ -247,7 +243,7 @@ internal abstract class SASDefaultVerificationTransaction(
                 return@forEach
             }
             val mac = macUsingAgreedMethod(otherDeviceKey, baseInfo + it)
-            if (mac != theirMac?.mac?.get(it)) {
+            if (mac != theirMacSafe.mac[it]) {
                 // WRONG!
                 Timber.e("## SAS Verification: mac mismatch for $otherDeviceKey with id $keyIDNoPrefix")
                 cancel(CancelCode.MismatchedKeys)
@@ -261,12 +257,12 @@ internal abstract class SASDefaultVerificationTransaction(
         val otherCrossSigningMasterKeyPublic = otherMasterKey?.unpaddedBase64PublicKey
         if (otherCrossSigningMasterKeyPublic != null) {
             // Did the user signed his master key
-            theirMac!!.mac.keys.forEach {
+            theirMacSafe.mac.keys.forEach {
                 val keyIDNoPrefix = it.withoutPrefix("ed25519:")
                 if (keyIDNoPrefix == otherCrossSigningMasterKeyPublic) {
                     // Check the signature
                     val mac = macUsingAgreedMethod(otherCrossSigningMasterKeyPublic, baseInfo + it)
-                    if (mac != theirMac?.mac?.get(it)) {
+                    if (mac != theirMacSafe.mac.get(it)) {
                         // WRONG!
                         Timber.e("## SAS Verification: mac mismatch for MasterKey with id $keyIDNoPrefix")
                         cancel(CancelCode.MismatchedKeys)
@@ -364,11 +360,11 @@ internal abstract class SASDefaultVerificationTransaction(
     }
 
     override fun supportsEmoji(): Boolean {
-        return accepted?.shortAuthenticationStrings?.contains(SasMode.EMOJI) == true
+        return accepted?.shortAuthenticationStrings?.contains(SasMode.EMOJI).orFalse()
     }
 
     override fun supportsDecimal(): Boolean {
-        return accepted?.shortAuthenticationStrings?.contains(SasMode.DECIMAL) == true
+        return accepted?.shortAuthenticationStrings?.contains(SasMode.DECIMAL).orFalse()
     }
 
     protected fun hashUsingAgreedHashMethod(toHash: String): String? {
@@ -381,7 +377,7 @@ internal abstract class SASDefaultVerificationTransaction(
         return null
     }
 
-    protected fun macUsingAgreedMethod(message: String, info: String): String? {
+    private fun macUsingAgreedMethod(message: String, info: String): String? {
         if (SAS_MAC_SHA256_LONGKDF.toLowerCase() == accepted?.messageAuthenticationCode?.toLowerCase()) {
             return getSAS().calculateMacLongKdf(message, info)
         } else if (SAS_MAC_SHA256.toLowerCase() == accepted?.messageAuthenticationCode?.toLowerCase()) {
@@ -431,7 +427,7 @@ internal abstract class SASDefaultVerificationTransaction(
      * For each group of 6 bits, look up the emoji from Appendix A corresponding
      * to that number 7 emoji are selected from a list of 64 emoji (see Appendix A)
      */
-    fun getEmojiCodeRepresentation(byteArray: ByteArray): List<EmojiRepresentation> {
+    private fun getEmojiCodeRepresentation(byteArray: ByteArray): List<EmojiRepresentation> {
         val b0 = byteArray[0].toUnsignedInt()
         val b1 = byteArray[1].toUnsignedInt()
         val b2 = byteArray[2].toUnsignedInt()
