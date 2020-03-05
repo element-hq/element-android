@@ -90,8 +90,10 @@ internal abstract class SASDefaultVerificationTransaction(
 
     private var olmSas: OlmSAS? = null
 
-    protected var startReq: ValidVerificationInfoStart.SasVerificationInfoStart? = null
-    protected var accepted: ValidVerificationInfoAccept? = null
+    // Visible for test
+    var startReq: ValidVerificationInfoStart.SasVerificationInfoStart? = null
+    // Visible for test
+    var accepted: ValidVerificationInfoAccept? = null
     protected var otherKey: String? = null
     protected var shortCodeBytes: ByteArray? = null
 

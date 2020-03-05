@@ -33,7 +33,6 @@ import im.vector.matrix.android.common.CommonTestHelper
 import im.vector.matrix.android.common.CryptoTestHelper
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
-import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationCancel
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationStart
 import im.vector.matrix.android.internal.crypto.model.rest.toValue
@@ -350,16 +349,16 @@ class SASTest : InstrumentedTest {
         val aliceVerificationService = aliceSession.cryptoService().verificationService()
         val bobVerificationService = bobSession!!.cryptoService().verificationService()
 
-        var accepted: KeyVerificationAccept? = null
-        var startReq: KeyVerificationStart? = null
+        var accepted: ValidVerificationInfoAccept? = null
+        var startReq: ValidVerificationInfoStart.SasVerificationInfoStart? = null
 
         val aliceAcceptedLatch = CountDownLatch(1)
         val aliceListener = object : VerificationService.Listener {
             override fun transactionUpdated(tx: VerificationTransaction) {
                 if ((tx as SASDefaultVerificationTransaction).state === VerificationTxState.OnAccepted) {
                     val at = tx as SASDefaultVerificationTransaction
-                    accepted = at.accepted as? KeyVerificationAccept
-                    startReq = at.startReq as? KeyVerificationStart
+                    accepted = at.accepted
+                    startReq = at.startReq
                     aliceAcceptedLatch.countDown()
                 }
             }
@@ -384,13 +383,13 @@ class SASTest : InstrumentedTest {
         assertTrue("Should have receive a commitment", accepted!!.commitment?.trim()?.isEmpty() == false)
 
         // check that agreement is valid
-        assertTrue("Agreed Protocol should be Valid", accepted!!.isValid())
-        assertTrue("Agreed Protocol should be known by alice", startReq!!.keyAgreementProtocols!!.contains(accepted!!.keyAgreementProtocol))
-        assertTrue("Hash should be known by alice", startReq!!.hashes!!.contains(accepted!!.hash))
-        assertTrue("Hash should be known by alice", startReq!!.messageAuthenticationCodes!!.contains(accepted!!.messageAuthenticationCode))
+        assertTrue("Agreed Protocol should be Valid", accepted != null)
+        assertTrue("Agreed Protocol should be known by alice", startReq!!.keyAgreementProtocols.contains(accepted!!.keyAgreementProtocol))
+        assertTrue("Hash should be known by alice", startReq!!.hashes.contains(accepted!!.hash))
+        assertTrue("Hash should be known by alice", startReq!!.messageAuthenticationCodes.contains(accepted!!.messageAuthenticationCode))
 
-        accepted!!.shortAuthenticationStrings?.forEach {
-            assertTrue("all agreed Short Code should be known by alice", startReq!!.shortAuthenticationStrings!!.contains(it))
+        accepted!!.shortAuthenticationStrings.forEach {
+            assertTrue("all agreed Short Code should be known by alice", startReq!!.shortAuthenticationStrings.contains(it))
         }
 
         cryptoTestData.cleanUp(mTestHelper)
