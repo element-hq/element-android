@@ -161,9 +161,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         val switchPref = preference as SwitchPreference
         if (switchPref.isChecked) {
             FcmHelper.getFcmToken(requireContext())?.let {
-                if (vectorPreferences.areNotificationEnabledForDevice()) {
-                    pushManager.registerPusherWithFcmKey(it)
-                }
+                pushManager.registerPusherWithFcmKey(it)
             }
         } else {
             FcmHelper.getFcmToken(requireContext())?.let {
