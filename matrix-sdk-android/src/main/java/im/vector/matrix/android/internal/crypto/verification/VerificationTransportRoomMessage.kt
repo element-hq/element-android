@@ -198,10 +198,13 @@ internal class VerificationTransportRoomMessage(
                         ?.let { wInfo ->
                             if (SendVerificationMessageWorker.hasFailed(wInfo.outputData)) {
                                 callback(null, null)
-                            } else if (wInfo.outputData.getString(localId) != null) {
-                                callback(wInfo.outputData.getString(localId), validInfo)
                             } else {
-                                callback(null, null)
+                                val eventId = wInfo.outputData.getString(localId)
+                                if (eventId != null) {
+                                    callback(eventId, validInfo)
+                                } else {
+                                    callback(null, null)
+                                }
                             }
                             workLiveData.removeObserver(this)
                         }
