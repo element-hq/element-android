@@ -29,7 +29,7 @@ internal data class KeyVerificationCancel(
          * the transaction ID of the verification to cancel
          */
         @Json(name = "transaction_id")
-        override val transactionID: String? = null,
+        override val transactionId: String? = null,
 
         /**
          * machine-readable reason for cancelling, see #CancelCode

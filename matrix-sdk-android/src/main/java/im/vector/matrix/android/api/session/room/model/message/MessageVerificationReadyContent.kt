@@ -30,7 +30,7 @@ internal data class MessageVerificationReadyContent(
         @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
 ) : VerificationInfoReady {
 
-    override val transactionID: String?
+    override val transactionId: String?
         get() = relatesTo?.eventId
 
     override fun toEventContent() = toContent()

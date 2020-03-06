@@ -35,7 +35,7 @@ data class MessageVerificationRequestContent(
         @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
         @Json(name = "m.new_content") override val newContent: Content? = null,
         // Not parsed, but set after, using the eventId
-        override val transactionID: String? = null
+        override val transactionId: String? = null
 ) : MessageContent, VerificationInfoRequest {
 
     override fun toEventContent() = toContent()

@@ -30,7 +30,7 @@ data class MessageVerificationCancelContent(
         @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
 ) : VerificationInfoCancel {
 
-    override val transactionID: String?
+    override val transactionId: String?
         get() = relatesTo?.eventId
 
     override fun toEventContent() = toContent()

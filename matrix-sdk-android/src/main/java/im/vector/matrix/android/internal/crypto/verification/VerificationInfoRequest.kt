@@ -38,7 +38,7 @@ internal interface VerificationInfoRequest : VerificationInfo<ValidVerificationI
 
     override fun asValidObject(): ValidVerificationInfoRequest? {
         // FIXME No check on Timestamp?
-        val validTransactionId = transactionID?.takeIf { it.isNotEmpty() } ?: return null
+        val validTransactionId = transactionId?.takeIf { it.isNotEmpty() } ?: return null
         val validFromDevice = fromDevice?.takeIf { it.isNotEmpty() } ?: return null
         val validMethods = methods?.takeIf { it.isNotEmpty() } ?: return null
 

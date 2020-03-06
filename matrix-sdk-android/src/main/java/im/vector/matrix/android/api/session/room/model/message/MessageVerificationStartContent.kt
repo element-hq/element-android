@@ -38,7 +38,7 @@ internal data class MessageVerificationStartContent(
         return JsonCanonicalizer.getCanonicalJson(MessageVerificationStartContent::class.java, this)
     }
 
-    override val transactionID: String?
+    override val transactionId: String?
         get() = relatesTo?.eventId
 
     override fun toEventContent() = toContent()

@@ -278,7 +278,7 @@ class SASTest : InstrumentedTest {
         val startMessage = KeyVerificationStart(
                 fromDevice = bobSession.cryptoService().getMyDevice().deviceId,
                 method = VerificationMethod.SAS.toValue(),
-                transactionID = tid,
+                transactionId = tid,
                 keyAgreementProtocols = protocols,
                 hashes = hashes,
                 messageAuthenticationCodes = mac,

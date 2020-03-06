@@ -64,7 +64,7 @@ internal interface VerificationInfoStart : VerificationInfo<ValidVerificationInf
     fun toCanonicalJson(): String
 
     override fun asValidObject(): ValidVerificationInfoStart? {
-        val validTransactionId = transactionID?.takeIf { it.isNotEmpty() } ?: return null
+        val validTransactionId = transactionId?.takeIf { it.isNotEmpty() } ?: return null
         val validFromDevice = fromDevice?.takeIf { it.isNotEmpty() } ?: return null
 
         return when (method) {

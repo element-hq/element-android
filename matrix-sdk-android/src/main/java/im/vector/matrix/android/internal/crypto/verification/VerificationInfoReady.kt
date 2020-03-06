@@ -37,7 +37,7 @@ internal interface VerificationInfoReady : VerificationInfo<ValidVerificationInf
     val methods: List<String>?
 
     override fun asValidObject(): ValidVerificationInfoReady? {
-        val validTransactionId = transactionID?.takeIf { it.isNotEmpty() } ?: return null
+        val validTransactionId = transactionId?.takeIf { it.isNotEmpty() } ?: return null
         val validFromDevice = fromDevice?.takeIf { it.isNotEmpty() } ?: return null
         val validMethods = methods?.takeIf { it.isNotEmpty() } ?: return null
 

@@ -27,7 +27,7 @@ import im.vector.matrix.android.internal.util.JsonCanonicalizer
 internal data class KeyVerificationStart(
         @Json(name = "from_device") override val fromDevice: String? = null,
         @Json(name = "method") override val method: String? = null,
-        @Json(name = "transaction_id") override val transactionID: String? = null,
+        @Json(name = "transaction_id") override val transactionId: String? = null,
         @Json(name = "key_agreement_protocols") override val keyAgreementProtocols: List<String>? = null,
         @Json(name = "hashes") override val hashes: List<String>? = null,
         @Json(name = "message_authentication_codes") override val messageAuthenticationCodes: List<String>? = null,

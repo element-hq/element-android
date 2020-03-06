@@ -30,7 +30,7 @@ internal interface VerificationInfoMac : VerificationInfo<ValidVerificationInfoM
     val keys: String?
 
     override fun asValidObject(): ValidVerificationInfoMac? {
-        val validTransactionId = transactionID?.takeIf { it.isNotEmpty() } ?: return null
+        val validTransactionId = transactionId?.takeIf { it.isNotEmpty() } ?: return null
         val validMac = mac?.takeIf { it.isNotEmpty() } ?: return null
         val validKeys = keys?.takeIf { it.isNotEmpty() } ?: return null
 

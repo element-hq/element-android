@@ -27,13 +27,13 @@ internal data class MessageVerificationDoneContent(
         @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
 ) : VerificationInfo<ValidVerificationDone> {
 
-    override val transactionID: String?
+    override val transactionId: String?
         get() = relatesTo?.eventId
 
     override fun toEventContent(): Content? = toContent()
 
     override fun asValidObject(): ValidVerificationDone? {
-        val validTransactionId = transactionID?.takeIf { it.isNotEmpty() } ?: return null
+        val validTransactionId = transactionId?.takeIf { it.isNotEmpty() } ?: return null
 
         return ValidVerificationDone(
                 validTransactionId

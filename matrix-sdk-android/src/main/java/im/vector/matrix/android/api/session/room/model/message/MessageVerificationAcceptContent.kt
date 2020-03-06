@@ -33,7 +33,7 @@ internal data class MessageVerificationAcceptContent(
         @Json(name = "commitment") override var commitment: String? = null
 ) : VerificationInfoAccept {
 
-    override val transactionID: String?
+    override val transactionId: String?
         get() = relatesTo?.eventId
 
     override fun toEventContent() = toContent()

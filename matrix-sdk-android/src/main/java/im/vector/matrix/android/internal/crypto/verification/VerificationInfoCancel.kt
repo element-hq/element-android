@@ -27,7 +27,7 @@ internal interface VerificationInfoCancel : VerificationInfo<ValidVerificationIn
     val reason: String?
 
     override fun asValidObject(): ValidVerificationInfoCancel? {
-        val validTransactionId = transactionID?.takeIf { it.isNotEmpty() } ?: return null
+        val validTransactionId = transactionId?.takeIf { it.isNotEmpty() } ?: return null
         val validCode = code?.takeIf { it.isNotEmpty() } ?: return null
 
         return ValidVerificationInfoCancel(

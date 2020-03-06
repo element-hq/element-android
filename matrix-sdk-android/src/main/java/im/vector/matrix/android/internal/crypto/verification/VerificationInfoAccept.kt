@@ -43,7 +43,7 @@ internal interface VerificationInfoAccept : VerificationInfo<ValidVerificationIn
     var commitment: String?
 
     override fun asValidObject(): ValidVerificationInfoAccept? {
-        val validTransactionId = transactionID?.takeIf { it.isNotEmpty() } ?: return null
+        val validTransactionId = transactionId?.takeIf { it.isNotEmpty() } ?: return null
         val validKeyAgreementProtocol = keyAgreementProtocol?.takeIf { it.isNotEmpty() } ?: return null
         val validHash = hash?.takeIf { it.isNotEmpty() } ?: return null
         val validMessageAuthenticationCode = messageAuthenticationCode?.takeIf { it.isNotEmpty() } ?: return null

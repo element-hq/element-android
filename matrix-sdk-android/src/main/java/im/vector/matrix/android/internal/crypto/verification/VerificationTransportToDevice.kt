@@ -64,7 +64,7 @@ internal class VerificationTransportToDevice(
                 fromDevice = validKeyReq.fromDevice,
                 methods = validKeyReq.methods,
                 timestamp = validKeyReq.timestamp,
-                transactionID = validKeyReq.transactionID
+                transactionId = validKeyReq.transactionID
         )
         toDevices?.forEach {
             contentMap.setObject(otherUserId, it, keyReq)
@@ -236,7 +236,7 @@ internal class VerificationTransportToDevice(
 
     override fun createReady(tid: String, fromDevice: String, methods: List<String>): VerificationInfoReady {
         return KeyVerificationReady(
-                transactionID = tid,
+                transactionId = tid,
                 fromDevice = fromDevice,
                 methods = methods
         )

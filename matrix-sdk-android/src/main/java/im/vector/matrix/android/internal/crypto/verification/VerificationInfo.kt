@@ -29,5 +29,5 @@ interface VerificationInfo<ValidObjectType> {
      * This string must be unique for the pair of users performing verification for the duration that the transaction is valid.
      * Alice’s device should record this ID and use it in future messages in this transaction.
      */
-    val transactionID: String?
+    val transactionId: String?
 }

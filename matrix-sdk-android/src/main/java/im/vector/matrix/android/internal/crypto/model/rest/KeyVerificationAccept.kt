@@ -25,14 +25,13 @@ import im.vector.matrix.android.internal.crypto.verification.VerificationInfoAcc
  */
 @JsonClass(generateAdapter = true)
 internal data class KeyVerificationAccept(
-
         /**
          * string to identify the transaction.
          * This string must be unique for the pair of users performing verification for the duration that the transaction is valid.
          * Alice’s device should record this ID and use it in future messages in this transaction.
          */
         @Json(name = "transaction_id")
-        override val transactionID: String? = null,
+        override val transactionId: String? = null,
 
         /**
          * The key agreement protocol that Bob’s device has selected to use, out of the list proposed by Alice’s device
@@ -76,7 +75,7 @@ internal data class KeyVerificationAccept(
                             messageAuthenticationCode: String,
                             shortAuthenticationStrings: List<String>): VerificationInfoAccept {
             return KeyVerificationAccept(
-                    transactionID = tid,
+                    transactionId = tid,
                     keyAgreementProtocol = keyAgreementProtocol,
                     hash = hash,
                     commitment = commitment,
