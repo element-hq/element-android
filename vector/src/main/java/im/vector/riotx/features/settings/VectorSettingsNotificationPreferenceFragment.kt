@@ -168,11 +168,14 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                 pushManager.unregisterPusher(it, object : MatrixCallback<Unit> {
                     override fun onSuccess(data: Unit) {
                         session.refreshPushers()
-                        super.onSuccess(data)
                     }
 
                     override fun onFailure(failure: Throwable) {
-                        session.refreshPushers()
+                        if (!isAdded) {
+                            return
+                        }
+                        // revert the check box
+                        switchPref.isChecked = !switchPref.isChecked
                         Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
                     }
                 })
