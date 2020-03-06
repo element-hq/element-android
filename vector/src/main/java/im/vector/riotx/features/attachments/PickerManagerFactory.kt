@@ -51,12 +51,16 @@ class ActivityPickerManagerFactory(private val activity: Activity, callback: Att
         return ImagePicker(activity).also {
             it.setImagePickerCallback(attachmentsPickerCallback)
             it.allowMultiple()
+            it.shouldGenerateMetadata(true)
+            it.shouldGenerateThumbnails(false)
         }
     }
 
     override fun createCameraImagePicker(): CameraImagePicker {
         return CameraImagePicker(activity).also {
             it.setImagePickerCallback(attachmentsPickerCallback)
+            it.shouldGenerateMetadata(true)
+            it.shouldGenerateThumbnails(false)
         }
     }
 
@@ -64,6 +68,8 @@ class ActivityPickerManagerFactory(private val activity: Activity, callback: Att
         return VideoPicker(activity).also {
             it.setVideoPickerCallback(attachmentsPickerCallback)
             it.allowMultiple()
+            it.shouldGenerateMetadata(true)
+            it.shouldGeneratePreviewImages(false)
         }
     }
 
@@ -96,12 +102,16 @@ class FragmentPickerManagerFactory(private val fragment: Fragment, callback: Att
         return ImagePicker(fragment).also {
             it.setImagePickerCallback(attachmentsPickerCallback)
             it.allowMultiple()
+            it.shouldGenerateMetadata(true)
+            it.shouldGenerateThumbnails(false)
         }
     }
 
     override fun createCameraImagePicker(): CameraImagePicker {
         return CameraImagePicker(fragment).also {
             it.setImagePickerCallback(attachmentsPickerCallback)
+            it.shouldGenerateMetadata(true)
+            it.shouldGenerateThumbnails(false)
         }
     }
 
@@ -109,6 +119,8 @@ class FragmentPickerManagerFactory(private val fragment: Fragment, callback: Att
         return VideoPicker(fragment).also {
             it.setVideoPickerCallback(attachmentsPickerCallback)
             it.allowMultiple()
+            it.shouldGenerateMetadata(true)
+            it.shouldGeneratePreviewImages(false)
         }
     }
 
