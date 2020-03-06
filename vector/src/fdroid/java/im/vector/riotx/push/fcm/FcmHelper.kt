@@ -57,7 +57,7 @@ object FcmHelper {
      *
      * @param activity the first launch Activity
      */
-    fun ensureFcmTokenIsRetrieved(activity: Activity, pushersManager: PushersManager) {
+    fun ensureFcmTokenIsRetrieved(activity: Activity, pushersManager: PushersManager, registerPusher: Boolean) {
         // No op
     }
 
