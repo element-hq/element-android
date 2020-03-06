@@ -22,8 +22,8 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.Operation
 import androidx.work.WorkInfo
 import im.vector.matrix.android.R
-import im.vector.matrix.android.api.session.crypto.verification.ValidVerificationInfoRequest
 import im.vector.matrix.android.api.session.crypto.verification.CancelCode
+import im.vector.matrix.android.api.session.crypto.verification.ValidVerificationInfoRequest
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
@@ -115,7 +115,7 @@ internal class VerificationTransportRoomMessage(
                         ?.filter { it.state == WorkInfo.State.SUCCEEDED }
                         ?.firstOrNull { it.id == enqueueInfo.second }
                         ?.let { wInfo ->
-                            if (wInfo.outputData.getBoolean("failed", false)) {
+                            if (SendVerificationMessageWorker.hasFailed(wInfo.outputData)) {
                                 Timber.e("## SAS verification [${tx?.transactionId}] failed to send verification message in state : ${tx?.state}")
                                 tx?.cancel(onErrorReason)
                             } else {
@@ -196,7 +196,7 @@ internal class VerificationTransportRoomMessage(
                         ?.filter { it.state == WorkInfo.State.SUCCEEDED }
                         ?.firstOrNull { it.id == workRequest.id }
                         ?.let { wInfo ->
-                            if (wInfo.outputData.getBoolean("failed", false)) {
+                            if (SendVerificationMessageWorker.hasFailed(wInfo.outputData)) {
                                 callback(null, null)
                             } else if (wInfo.outputData.getString(localId) != null) {
                                 callback(wInfo.outputData.getString(localId), validInfo)
