@@ -107,9 +107,6 @@ class AttachmentsHelper private constructor(private val context: Context,
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         capturePath = savedInstanceState?.getString(CAPTURE_PATH_KEY)
-        if (capturePath != null) {
-            cameraImagePicker.reinitialize(capturePath)
-        }
         pendingType = savedInstanceState?.getSerializable(PENDING_TYPE_KEY) as? AttachmentTypeSelectorView.Type
     }
 
