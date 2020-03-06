@@ -137,7 +137,7 @@ internal class VerificationTransportRoomMessage(
     }
 
     override fun sendVerificationRequest(supportedMethods: List<String>,
-                                         localID: String,
+                                         localId: String,
                                          otherUserId: String,
                                          roomId: String?,
                                          toDevices: List<String>?,
@@ -163,7 +163,7 @@ internal class VerificationTransportRoomMessage(
         val content = info.toContent()
 
         val event = createEventAndLocalEcho(
-                localID,
+                localId,
                 EventType.MESSAGE,
                 roomId,
                 content
@@ -198,8 +198,8 @@ internal class VerificationTransportRoomMessage(
                         ?.let { wInfo ->
                             if (wInfo.outputData.getBoolean("failed", false)) {
                                 callback(null, null)
-                            } else if (wInfo.outputData.getString(localID) != null) {
-                                callback(wInfo.outputData.getString(localID), validInfo)
+                            } else if (wInfo.outputData.getString(localId) != null) {
+                                callback(wInfo.outputData.getString(localId), validInfo)
                             } else {
                                 callback(null, null)
                             }
@@ -327,15 +327,15 @@ internal class VerificationTransportRoomMessage(
         )
     }
 
-    private fun createEventAndLocalEcho(localID: String = LocalEcho.createLocalEchoId(), type: String, roomId: String, content: Content): Event {
+    private fun createEventAndLocalEcho(localId: String = LocalEcho.createLocalEchoId(), type: String, roomId: String, content: Content): Event {
         return Event(
                 roomId = roomId,
                 originServerTs = System.currentTimeMillis(),
                 senderId = userId,
-                eventId = localID,
+                eventId = localId,
                 type = type,
                 content = content,
-                unsignedData = UnsignedData(age = null, transactionId = localID)
+                unsignedData = UnsignedData(age = null, transactionId = localId)
         ).also {
             localEchoEventFactory.createLocalEcho(it)
         }

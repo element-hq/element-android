@@ -335,25 +335,25 @@ internal class LocalEchoEventFactory @Inject constructor(
     }
 
     private fun createEvent(roomId: String, content: Any? = null): Event {
-        val localID = LocalEcho.createLocalEchoId()
+        val localId = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
                 senderId = userId,
-                eventId = localID,
+                eventId = localId,
                 type = EventType.MESSAGE,
                 content = content.toContent(),
-                unsignedData = UnsignedData(age = null, transactionId = localID)
+                unsignedData = UnsignedData(age = null, transactionId = localId)
         )
     }
 
     fun createVerificationRequest(roomId: String, fromDevice: String, toUserId: String, methods: List<String>): Event {
-        val localID = LocalEcho.createLocalEchoId()
+        val localId = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
                 senderId = userId,
-                eventId = localID,
+                eventId = localId,
                 type = EventType.MESSAGE,
                 content = MessageVerificationRequestContent(
                         body = stringProvider.getString(R.string.key_verification_request_fallback_message, userId),
@@ -362,7 +362,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         timestamp = System.currentTimeMillis(),
                         methods = methods
                 ).toContent(),
-                unsignedData = UnsignedData(age = null, transactionId = localID)
+                unsignedData = UnsignedData(age = null, transactionId = localId)
         )
     }
 
@@ -469,16 +469,16 @@ internal class LocalEchoEventFactory @Inject constructor(
     }
      */
     fun createRedactEvent(roomId: String, eventId: String, reason: String?): Event {
-        val localID = LocalEcho.createLocalEchoId()
+        val localId = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
                 senderId = userId,
-                eventId = localID,
+                eventId = localId,
                 type = EventType.REDACTION,
                 redacts = eventId,
                 content = reason?.let { mapOf("reason" to it).toContent() },
-                unsignedData = UnsignedData(age = null, transactionId = localID)
+                unsignedData = UnsignedData(age = null, transactionId = localId)
         )
     }
 

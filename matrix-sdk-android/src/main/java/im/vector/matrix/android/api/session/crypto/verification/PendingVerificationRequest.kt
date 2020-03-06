@@ -27,7 +27,7 @@ import java.util.UUID
 data class PendingVerificationRequest(
         val ageLocalTs: Long,
         val isIncoming: Boolean = false,
-        val localID: String = UUID.randomUUID().toString(),
+        val localId: String = UUID.randomUUID().toString(),
         val otherUserId: String,
         val roomId: String?,
         val transactionId: String? = null,

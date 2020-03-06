@@ -155,10 +155,10 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         when (action) {
             is VerificationAction.RequestVerificationByDM      -> {
                 if (roomId == null) {
-                    val localID = LocalEcho.createLocalEchoId()
+                    val localId = LocalEcho.createLocalEchoId()
                     setState {
                         copy(
-                                pendingLocalId = localID,
+                                pendingLocalId = localId,
                                 pendingRequest = Loading()
                         )
                     }
@@ -387,8 +387,8 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             }
         }
 
-        if (pr.localID == state.pendingLocalId
-                || pr.localID == state.pendingRequest.invoke()?.localID
+        if (pr.localId == state.pendingLocalId
+                || pr.localId == state.pendingRequest.invoke()?.localId
                 || state.pendingRequest.invoke()?.transactionId == pr.transactionId) {
             setState {
                 copy(pendingRequest = Success(pr))

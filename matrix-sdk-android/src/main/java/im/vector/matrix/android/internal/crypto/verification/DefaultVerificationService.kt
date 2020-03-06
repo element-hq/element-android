@@ -301,7 +301,7 @@ internal class DefaultVerificationService @Inject constructor(
                 otherUserId = senderId, // requestInfo.toUserId,
                 roomId = null,
                 transactionId = validRequestInfo.transactionId,
-                localID = validRequestInfo.transactionId,
+                localId = validRequestInfo.transactionId,
                 requestInfo = validRequestInfo
         )
         requestsForUser.add(pendingVerificationRequest)
@@ -343,7 +343,7 @@ internal class DefaultVerificationService @Inject constructor(
                 otherUserId = senderId, // requestInfo.toUserId,
                 roomId = event.roomId,
                 transactionId = event.eventId,
-                localID = event.eventId!!,
+                localId = event.eventId!!,
                 requestInfo = validRequestInfo
         )
         requestsForUser.add(pendingVerificationRequest)
@@ -1005,13 +1005,13 @@ internal class DefaultVerificationService @Inject constructor(
             }
         }
 
-        val localID = localId ?: LocalEcho.createLocalEchoId()
+        val validLocalId = localId ?: LocalEcho.createLocalEchoId()
 
         val verificationRequest = PendingVerificationRequest(
                 ageLocalTs = System.currentTimeMillis(),
                 isIncoming = false,
                 roomId = roomId,
-                localID = localID,
+                localId = validLocalId,
                 otherUserId = otherUserId
         )
 
@@ -1031,7 +1031,7 @@ internal class DefaultVerificationService @Inject constructor(
         }
                 .distinct()
 
-        transport.sendVerificationRequest(methodValues, localID, otherUserId, roomId, null) { syncedId, info ->
+        transport.sendVerificationRequest(methodValues, validLocalId, otherUserId, roomId, null) { syncedId, info ->
             // We need to update with the syncedID
             updatePendingRequest(verificationRequest.copy(
                     transactionId = syncedId,
@@ -1071,14 +1071,14 @@ internal class DefaultVerificationService @Inject constructor(
             }
         }
 
-        val localID = LocalEcho.createLocalEchoId()
+        val localId = LocalEcho.createLocalEchoId()
 
         val verificationRequest = PendingVerificationRequest(
-                transactionId = localID,
+                transactionId = localId,
                 ageLocalTs = System.currentTimeMillis(),
                 isIncoming = false,
                 roomId = null,
-                localID = localID,
+                localId = localId,
                 otherUserId = otherUserId,
                 targetDevices = targetDevices
         )
@@ -1099,7 +1099,7 @@ internal class DefaultVerificationService @Inject constructor(
         }
                 .distinct()
 
-        transport.sendVerificationRequest(methodValues, localID, otherUserId, null, targetDevices) { _, info ->
+        transport.sendVerificationRequest(methodValues, localId, otherUserId, null, targetDevices) { _, info ->
             // Nothing special to do in to device mode
             updatePendingRequest(verificationRequest.copy(
                     // localId stays different
@@ -1131,7 +1131,7 @@ internal class DefaultVerificationService @Inject constructor(
                 }
         val index = requestsForUser.indexOfFirst {
             it.transactionId == updated.transactionId
-                    || it.transactionId == null && it.localID == updated.localID
+                    || it.transactionId == null && it.localId == updated.localId
         }
         if (index != -1) {
             requestsForUser.removeAt(index)

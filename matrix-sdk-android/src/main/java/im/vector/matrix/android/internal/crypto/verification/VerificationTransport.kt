@@ -35,7 +35,7 @@ internal interface VerificationTransport {
                         onDone: (() -> Unit)?)
 
     fun sendVerificationRequest(supportedMethods: List<String>,
-                                localID: String,
+                                localId: String,
                                 otherUserId: String,
                                 roomId: String?,
                                 toDevices: List<String>?,

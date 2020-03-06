@@ -178,7 +178,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                         putParcelable(MvRx.KEY_ARG, VerificationArgs(
                                 state.otherUserMxItem?.id ?: "",
                                 // If it was outgoing it.transaction id would be null, but the pending request
-                                // would be updated (from localID to txId)
+                                // would be updated (from localId to txId)
                                 state.pendingRequest.invoke()?.transactionId ?: state.transactionId))
                     })
                 }

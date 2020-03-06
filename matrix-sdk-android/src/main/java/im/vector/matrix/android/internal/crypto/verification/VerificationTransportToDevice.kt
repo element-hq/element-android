@@ -47,7 +47,7 @@ internal class VerificationTransportToDevice(
 ) : VerificationTransport {
 
     override fun sendVerificationRequest(supportedMethods: List<String>,
-                                         localID: String,
+                                         localId: String,
                                          otherUserId: String,
                                          roomId: String?,
                                          toDevices: List<String>?,
@@ -55,7 +55,7 @@ internal class VerificationTransportToDevice(
         Timber.d("## SAS sending verification request with supported methods: $supportedMethods")
         val contentMap = MXUsersDevicesMap<Any>()
         val validKeyReq = ValidVerificationInfoRequest(
-                transactionId = localID,
+                transactionId = localId,
                 fromDevice = myDeviceId ?: "",
                 methods = supportedMethods,
                 timestamp = System.currentTimeMillis()
@@ -70,11 +70,11 @@ internal class VerificationTransportToDevice(
             contentMap.setObject(otherUserId, it, keyReq)
         }
         sendToDeviceTask
-                .configureWith(SendToDeviceTask.Params(MessageType.MSGTYPE_VERIFICATION_REQUEST, contentMap, localID)) {
+                .configureWith(SendToDeviceTask.Params(MessageType.MSGTYPE_VERIFICATION_REQUEST, contentMap, localId)) {
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             Timber.v("## verification [$tx.transactionId] send toDevice request success")
-                            callback.invoke(localID, validKeyReq)
+                            callback.invoke(localId, validKeyReq)
                         }
 
                         override fun onFailure(failure: Throwable) {
