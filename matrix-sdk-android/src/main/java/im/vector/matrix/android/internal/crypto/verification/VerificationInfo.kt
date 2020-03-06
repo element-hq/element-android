@@ -30,7 +30,4 @@ interface VerificationInfo<ValidObjectType> {
      * Alice’s device should record this ID and use it in future messages in this transaction.
      */
     val transactionID: String?
-
-    // TODO Refacto Put the relatesTo here or at least in Message sent in Room parent?
-    // val relatesTo: RelationDefaultContent?
 }
