@@ -233,7 +233,7 @@ internal class DefaultSendService @AssistedInject constructor(
                         val dispatcherWork = createMultipleEventDispatcherWork(isRoomEncrypted)
 
                         workManagerProvider.workManager
-                                .beginWith(uploadWork)
+                                .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.APPEND, uploadWork)
                                 .then(dispatcherWork)
                                 .enqueue()
                                 .also { operation ->

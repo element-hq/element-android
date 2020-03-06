@@ -20,6 +20,7 @@ import android.os.Handler
 import android.os.Looper
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.internal.session.SessionScope
+import timber.log.Timber
 import javax.inject.Inject
 
 @SessionScope
@@ -33,7 +34,13 @@ internal class DefaultContentUploadStateTracker @Inject constructor() : ContentU
         val listeners = listeners.getOrPut(key) { ArrayList() }
         listeners.add(updateListener)
         val currentState = states[key] ?: ContentUploadStateTracker.State.Idle
-        mainHandler.post { updateListener.onUpdate(currentState) }
+        mainHandler.post {
+            try {
+                updateListener.onUpdate(currentState)
+            } catch (e: Exception) {
+                Timber.e(e, "## ContentUploadStateTracker.onUpdate() failed")
+            }
+        }
     }
 
     override fun untrack(key: String, updateListener: ContentUploadStateTracker.UpdateListener) {
@@ -79,7 +86,13 @@ internal class DefaultContentUploadStateTracker @Inject constructor() : ContentU
     private fun updateState(key: String, state: ContentUploadStateTracker.State) {
         states[key] = state
         mainHandler.post {
-            listeners[key]?.forEach { it.onUpdate(state) }
+            listeners[key]?.forEach {
+                try {
+                    it.onUpdate(state)
+                } catch (e: Exception) {
+                    Timber.e(e, "## ContentUploadStateTracker.onUpdate() failed")
+                }
+            }
         }
     }
 }

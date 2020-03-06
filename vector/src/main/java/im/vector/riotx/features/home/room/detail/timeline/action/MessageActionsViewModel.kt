@@ -260,10 +260,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                         add(EventSharedAction.ViewEditHistory(informationData))
                     }
 
-                    if (canShare(msgType)) {
-                        if (messageContent is MessageWithAttachmentContent) {
-                            add(EventSharedAction.Share(timelineEvent.eventId, messageContent))
-                        }
+                    if (canShare(msgType) && messageContent is MessageWithAttachmentContent) {
+                        add(EventSharedAction.Share(timelineEvent.eventId, messageContent))
                     }
 
                     if (timelineEvent.root.sendState == SendState.SENT) {
