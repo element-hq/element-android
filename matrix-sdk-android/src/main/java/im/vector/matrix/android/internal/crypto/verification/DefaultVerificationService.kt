@@ -108,7 +108,7 @@ internal class DefaultVerificationService @Inject constructor(
      * Map [sender: [PendingVerificationRequest]]
      * For now we keep all requests (even terminated ones) during the lifetime of the app.
      */
-    private val pendingRequests = HashMap<String, ArrayList<PendingVerificationRequest>>()
+    private val pendingRequests = HashMap<String, MutableList<PendingVerificationRequest>>()
 
     // Event received from the sync
     fun onToDeviceEvent(event: Event) {
@@ -290,10 +290,7 @@ internal class DefaultVerificationService @Inject constructor(
         }
 
         // Remember this request
-        val requestsForUser = pendingRequests[senderId]
-                ?: ArrayList<PendingVerificationRequest>().also {
-                    pendingRequests[event.senderId] = it
-                }
+        val requestsForUser = pendingRequests.getOrPut(senderId) { mutableListOf() }
 
         val pendingVerificationRequest = PendingVerificationRequest(
                 ageLocalTs = event.ageLocalTs ?: System.currentTimeMillis(),
@@ -332,10 +329,7 @@ internal class DefaultVerificationService @Inject constructor(
         }
 
         // Remember this request
-        val requestsForUser = pendingRequests[senderId]
-                ?: ArrayList<PendingVerificationRequest>().also {
-                    pendingRequests[event.senderId] = it
-                }
+        val requestsForUser = pendingRequests.getOrPut(senderId) { mutableListOf() }
 
         val pendingVerificationRequest = PendingVerificationRequest(
                 ageLocalTs = event.ageLocalTs ?: System.currentTimeMillis(),
@@ -987,10 +981,7 @@ internal class DefaultVerificationService @Inject constructor(
             : PendingVerificationRequest {
         Timber.i("## SAS Requesting verification to user: $otherUserId in room $roomId")
 
-        val requestsForUser = pendingRequests[otherUserId]
-                ?: ArrayList<PendingVerificationRequest>().also {
-                    pendingRequests[otherUserId] = it
-                }
+        val requestsForUser = pendingRequests.getOrPut(otherUserId) { mutableListOf() }
 
         val transport = verificationTransportRoomMessageFactory.createTransport(roomId, null)
 
@@ -1051,10 +1042,7 @@ internal class DefaultVerificationService @Inject constructor(
         Timber.i("## Requesting verification to user: $otherUserId with device list $otherDevices")
 
         val targetDevices = otherDevices ?: cryptoService.getUserDevices(otherUserId).map { it.deviceId }
-        val requestsForUser = pendingRequests[otherUserId]
-                ?: ArrayList<PendingVerificationRequest>().also {
-                    pendingRequests[otherUserId] = it
-                }
+        val requestsForUser = pendingRequests.getOrPut(otherUserId) { mutableListOf() }
 
         val transport = verificationTransportToDeviceFactory.createTransport(null)
 
@@ -1125,10 +1113,7 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     private fun updatePendingRequest(updated: PendingVerificationRequest) {
-        val requestsForUser = pendingRequests[updated.otherUserId]
-                ?: ArrayList<PendingVerificationRequest>().also {
-                    pendingRequests[updated.otherUserId] = it
-                }
+        val requestsForUser = pendingRequests.getOrPut(updated.otherUserId) { mutableListOf() }
         val index = requestsForUser.indexOfFirst {
             it.transactionId == updated.transactionId
                     || it.transactionId == null && it.localId == updated.localId
