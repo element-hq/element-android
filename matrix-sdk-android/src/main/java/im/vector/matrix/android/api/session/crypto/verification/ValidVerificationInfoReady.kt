@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.matrix.android.internal.crypto.model.rest
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.internal.crypto.verification.VerificationInfoDone
+package im.vector.matrix.android.api.session.crypto.verification
 
-/**
- * Requests a key verification with another user's devices.
- */
-@JsonClass(generateAdapter = true)
-internal data class KeyVerificationDone(
-        @Json(name = "transaction_id") override val transactionId: String? = null
-) : SendToDeviceObject, VerificationInfoDone {
-
-    override fun toSendToDeviceObject() = this
-}
+data class ValidVerificationInfoReady(
+        val transactionId: String,
+        val fromDevice: String,
+        val methods: List<String>
+)

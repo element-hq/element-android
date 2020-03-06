@@ -18,18 +18,16 @@ package im.vector.matrix.android.internal.crypto.verification
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.internal.crypto.model.rest.SendToDeviceObject
 
-interface VerificationInfo {
+interface VerificationInfo<ValidObjectType> {
     fun toEventContent(): Content? = null
     fun toSendToDeviceObject(): SendToDeviceObject? = null
-    fun isValid(): Boolean
+
+    fun asValidObject(): ValidObjectType?
 
     /**
      * String to identify the transaction.
      * This string must be unique for the pair of users performing verification for the duration that the transaction is valid.
      * Alice’s device should record this ID and use it in future messages in this transaction.
      */
-    val transactionID: String?
-
-    // TODO Refacto Put the relatesTo here or at least in Message sent in Room parent?
-    // val relatesTo: RelationDefaultContent?
+    val transactionId: String?
 }

@@ -27,16 +27,8 @@ internal data class KeyVerificationRequest(
         @Json(name = "from_device") override val fromDevice: String?,
         @Json(name = "methods") override val methods: List<String>,
         @Json(name = "timestamp") override val timestamp: Long?,
-        @Json(name = "transaction_id") override val transactionID: String? = null
-
+        @Json(name = "transaction_id") override val transactionId: String? = null
 ) : SendToDeviceObject, VerificationInfoRequest {
 
     override fun toSendToDeviceObject() = this
-
-    override fun isValid(): Boolean {
-        if (transactionID.isNullOrBlank() || methods.isNullOrEmpty() || fromDevice.isNullOrEmpty()) {
-            return false
-        }
-        return true
-    }
 }

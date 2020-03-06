@@ -44,7 +44,7 @@ import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
 import im.vector.matrix.android.internal.crypto.crosssigning.isVerified
-import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
+import im.vector.matrix.android.api.session.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import timber.log.Timber
@@ -155,10 +155,10 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         when (action) {
             is VerificationAction.RequestVerificationByDM      -> {
                 if (roomId == null) {
-                    val localID = LocalEcho.createLocalEchoId()
+                    val localId = LocalEcho.createLocalEchoId()
                     setState {
                         copy(
-                                pendingLocalId = localID,
+                                pendingLocalId = localId,
                                 pendingRequest = Loading()
                         )
                     }
@@ -387,8 +387,8 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             }
         }
 
-        if (pr.localID == state.pendingLocalId
-                || pr.localID == state.pendingRequest.invoke()?.localID
+        if (pr.localId == state.pendingLocalId
+                || pr.localId == state.pendingRequest.invoke()?.localId
                 || state.pendingRequest.invoke()?.transactionId == pr.transactionId) {
             setState {
                 copy(pendingRequest = Success(pr))

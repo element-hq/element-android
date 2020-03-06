@@ -15,7 +15,7 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
-internal interface VerificationInfoAccept : VerificationInfo {
+internal interface VerificationInfoAccept : VerificationInfo<ValidVerificationInfoAccept> {
     /**
      * The key agreement protocol that Bob’s device has selected to use, out of the list proposed by Alice’s device
      */
@@ -41,6 +41,24 @@ internal interface VerificationInfoAccept : VerificationInfo {
      *  and the canonical JSON representation of the m.key.verification.start message.
      */
     var commitment: String?
+
+    override fun asValidObject(): ValidVerificationInfoAccept? {
+        val validTransactionId = transactionId?.takeIf { it.isNotEmpty() } ?: return null
+        val validKeyAgreementProtocol = keyAgreementProtocol?.takeIf { it.isNotEmpty() } ?: return null
+        val validHash = hash?.takeIf { it.isNotEmpty() } ?: return null
+        val validMessageAuthenticationCode = messageAuthenticationCode?.takeIf { it.isNotEmpty() } ?: return null
+        val validShortAuthenticationStrings = shortAuthenticationStrings?.takeIf { it.isNotEmpty() } ?: return null
+        val validCommitment = commitment?.takeIf { it.isNotEmpty() } ?: return null
+
+        return ValidVerificationInfoAccept(
+                validTransactionId,
+                validKeyAgreementProtocol,
+                validHash,
+                validMessageAuthenticationCode,
+                validShortAuthenticationStrings,
+                validCommitment
+        )
+    }
 }
 
 internal interface VerificationInfoAcceptFactory {
@@ -52,3 +70,12 @@ internal interface VerificationInfoAcceptFactory {
                messageAuthenticationCode: String,
                shortAuthenticationStrings: List<String>): VerificationInfoAccept
 }
+
+internal data class ValidVerificationInfoAccept(
+        val transactionId: String,
+        val keyAgreementProtocol: String,
+        val hash: String,
+        val messageAuthenticationCode: String,
+        val shortAuthenticationStrings: List<String>,
+        var commitment: String?
+)

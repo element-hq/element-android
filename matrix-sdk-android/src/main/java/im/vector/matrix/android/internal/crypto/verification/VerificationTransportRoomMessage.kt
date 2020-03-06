@@ -21,8 +21,8 @@ import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.Operation
 import androidx.work.WorkInfo
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
+import im.vector.matrix.android.api.session.crypto.verification.ValidVerificationInfoRequest
 import im.vector.matrix.android.api.session.crypto.verification.CancelCode
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.Content
@@ -65,16 +65,15 @@ internal class VerificationTransportRoomMessage(
         private val userId: String,
         private val userDeviceId: String?,
         private val roomId: String,
-        private val monarchy: Monarchy,
         private val localEchoEventFactory: LocalEchoEventFactory,
         private val tx: DefaultVerificationTransaction?
 ) : VerificationTransport {
 
-    override fun sendToOther(type: String,
-                             verificationInfo: VerificationInfo,
-                             nextState: VerificationTxState,
-                             onErrorReason: CancelCode,
-                             onDone: (() -> Unit)?) {
+    override fun <T> sendToOther(type: String,
+                                 verificationInfo: VerificationInfo<T>,
+                                 nextState: VerificationTxState,
+                                 onErrorReason: CancelCode,
+                                 onDone: (() -> Unit)?) {
         Timber.d("## SAS sending msg type $type")
         Timber.v("## SAS sending msg info $verificationInfo")
         val event = createEventAndLocalEcho(
@@ -138,26 +137,33 @@ internal class VerificationTransportRoomMessage(
     }
 
     override fun sendVerificationRequest(supportedMethods: List<String>,
-                                         localID: String,
+                                         localId: String,
                                          otherUserId: String,
                                          roomId: String?,
                                          toDevices: List<String>?,
-                                         callback: (String?, VerificationInfoRequest?) -> Unit) {
+                                         callback: (String?, ValidVerificationInfoRequest?) -> Unit) {
         Timber.d("## SAS sending verification request with supported methods: $supportedMethods")
         // This transport requires a room
         requireNotNull(roomId)
 
+        val validInfo = ValidVerificationInfoRequest(
+                transactionId = "",
+                fromDevice = userDeviceId ?: "",
+                methods = supportedMethods,
+                timestamp = System.currentTimeMillis()
+        )
+
         val info = MessageVerificationRequestContent(
                 body = stringProvider.getString(R.string.key_verification_request_fallback_message, userId),
-                fromDevice = userDeviceId ?: "",
+                fromDevice = validInfo.fromDevice,
                 toUserId = otherUserId,
-                timestamp = System.currentTimeMillis(),
-                methods = supportedMethods
+                timestamp = validInfo.timestamp,
+                methods = validInfo.methods
         )
         val content = info.toContent()
 
         val event = createEventAndLocalEcho(
-                localID,
+                localId,
                 EventType.MESSAGE,
                 roomId,
                 content
@@ -192,8 +198,8 @@ internal class VerificationTransportRoomMessage(
                         ?.let { wInfo ->
                             if (wInfo.outputData.getBoolean("failed", false)) {
                                 callback(null, null)
-                            } else if (wInfo.outputData.getString(localID) != null) {
-                                callback(wInfo.outputData.getString(localID), info)
+                            } else if (wInfo.outputData.getString(localId) != null) {
+                                callback(wInfo.outputData.getString(localId), validInfo)
                             } else {
                                 callback(null, null)
                             }
@@ -272,7 +278,7 @@ internal class VerificationTransportRoomMessage(
     override fun createMac(tid: String, mac: Map<String, String>, keys: String) = MessageVerificationMacContent.create(tid, mac, keys)
 
     override fun createStartForSas(fromDevice: String,
-                                   transactionID: String,
+                                   transactionId: String,
                                    keyAgreementProtocols: List<String>,
                                    hashes: List<String>,
                                    messageAuthenticationCodes: List<String>,
@@ -286,14 +292,14 @@ internal class VerificationTransportRoomMessage(
                 VERIFICATION_METHOD_SAS,
                 RelationDefaultContent(
                         type = RelationType.REFERENCE,
-                        eventId = transactionID
+                        eventId = transactionId
                 ),
                 null
         )
     }
 
     override fun createStartForQrCode(fromDevice: String,
-                                      transactionID: String,
+                                      transactionId: String,
                                       sharedSecret: String): VerificationInfoStart {
         return MessageVerificationStartContent(
                 fromDevice,
@@ -304,7 +310,7 @@ internal class VerificationTransportRoomMessage(
                 VERIFICATION_METHOD_RECIPROCATE,
                 RelationDefaultContent(
                         type = RelationType.REFERENCE,
-                        eventId = transactionID
+                        eventId = transactionId
                 ),
                 sharedSecret
         )
@@ -321,15 +327,15 @@ internal class VerificationTransportRoomMessage(
         )
     }
 
-    private fun createEventAndLocalEcho(localID: String = LocalEcho.createLocalEchoId(), type: String, roomId: String, content: Content): Event {
+    private fun createEventAndLocalEcho(localId: String = LocalEcho.createLocalEchoId(), type: String, roomId: String, content: Content): Event {
         return Event(
                 roomId = roomId,
                 originServerTs = System.currentTimeMillis(),
                 senderId = userId,
-                eventId = localID,
+                eventId = localId,
                 type = type,
                 content = content,
-                unsignedData = UnsignedData(age = null, transactionId = localID)
+                unsignedData = UnsignedData(age = null, transactionId = localId)
         ).also {
             localEchoEventFactory.createLocalEcho(it)
         }
@@ -347,7 +353,6 @@ internal class VerificationTransportRoomMessage(
 internal class VerificationTransportRoomMessageFactory @Inject constructor(
         private val workManagerProvider: WorkManagerProvider,
         private val stringProvider: StringProvider,
-        private val monarchy: Monarchy,
         @SessionId
         private val sessionId: String,
         @UserId
@@ -357,6 +362,6 @@ internal class VerificationTransportRoomMessageFactory @Inject constructor(
         private val localEchoEventFactory: LocalEchoEventFactory) {
 
     fun createTransport(roomId: String, tx: DefaultVerificationTransaction?): VerificationTransportRoomMessage {
-        return VerificationTransportRoomMessage(workManagerProvider, stringProvider, sessionId, userId, deviceId, roomId, monarchy, localEchoEventFactory, tx)
+        return VerificationTransportRoomMessage(workManagerProvider, stringProvider, sessionId, userId, deviceId, roomId, localEchoEventFactory, tx)
     }
 }

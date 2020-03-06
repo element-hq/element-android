@@ -24,7 +24,7 @@ import im.vector.matrix.android.common.CommonTestHelper
 import im.vector.matrix.android.common.CryptoTestHelper
 import im.vector.matrix.android.common.TestConstants
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
-import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
+import im.vector.matrix.android.api.session.crypto.verification.PendingVerificationRequest
 import org.amshove.kluent.shouldBe
 import org.junit.FixMethodOrder
 import org.junit.Test

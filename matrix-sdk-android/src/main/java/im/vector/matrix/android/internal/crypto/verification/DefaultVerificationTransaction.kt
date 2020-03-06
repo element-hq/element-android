@@ -15,12 +15,21 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
+import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
+import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
+import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
+import timber.log.Timber
 
 /**
  * Generic interactive key verification transaction
  */
 internal abstract class DefaultVerificationTransaction(
+        private val setDeviceVerificationAction: SetDeviceVerificationAction,
+        private val crossSigningService: CrossSigningService,
+        private val userId: String,
         override val transactionId: String,
         override val otherUserId: String,
         override var otherDeviceId: String? = null,
@@ -42,5 +51,50 @@ internal abstract class DefaultVerificationTransaction(
         listeners.remove(listener)
     }
 
-    abstract fun acceptVerificationEvent(senderId: String, info: VerificationInfo)
+    protected fun trust(canTrustOtherUserMasterKey: Boolean,
+                        toVerifyDeviceIds: List<String>,
+                        eventuallyMarkMyMasterKeyAsTrusted: Boolean) {
+        // If not me sign his MSK and upload the signature
+        if (canTrustOtherUserMasterKey) {
+            // we should trust this master key
+            // And check verification MSK -> SSK?
+            if (otherUserId != userId) {
+                crossSigningService.trustUser(otherUserId, object : MatrixCallback<Unit> {
+                    override fun onFailure(failure: Throwable) {
+                        Timber.e(failure, "## Verification: Failed to trust User $otherUserId")
+                    }
+                })
+            } else {
+                // Notice other master key is mine because other is me
+                if (eventuallyMarkMyMasterKeyAsTrusted) {
+                    // Mark my keys as trusted locally
+                    crossSigningService.markMyMasterKeyAsTrusted()
+                }
+            }
+        }
+
+        if (otherUserId == userId) {
+            // If me it's reasonable to sign and upload the device signature
+            // Notice that i might not have the private keys, so may not be able to do it
+            crossSigningService.trustDevice(otherDeviceId!!, object : MatrixCallback<Unit> {
+                override fun onFailure(failure: Throwable) {
+                    Timber.w(failure, "## Verification: Failed to sign new device $otherDeviceId")
+                }
+            })
+        }
+
+        // TODO what if the otherDevice is not in this list? and should we
+        toVerifyDeviceIds.forEach {
+            setDeviceVerified(otherUserId, it)
+        }
+        transport.done(transactionId)
+        state = VerificationTxState.Verified
+    }
+
+    private fun setDeviceVerified(userId: String, deviceId: String) {
+        // TODO should not override cross sign status
+        setDeviceVerificationAction.handle(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
+                userId,
+                deviceId)
+    }
 }
