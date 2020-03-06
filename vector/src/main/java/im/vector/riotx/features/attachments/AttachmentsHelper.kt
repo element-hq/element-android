@@ -97,10 +97,10 @@ class AttachmentsHelper private constructor(private val context: Context,
     // Restorable
 
     override fun onSaveInstanceState(outState: Bundle) {
-        capturePath?.also {
+        capturePath?.let {
             outState.putString(CAPTURE_PATH_KEY, it)
         }
-        pendingType?.also {
+        pendingType?.let {
             outState.putSerializable(PENDING_TYPE_KEY, it)
         }
     }
