@@ -63,9 +63,11 @@ data class VerificationBottomSheetViewState(
         val isMe: Boolean = false
 ) : MvRxState
 
-class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted initialState: VerificationBottomSheetViewState,
-                                                                   @Assisted args: VerificationBottomSheet.VerificationArgs,
-                                                                   private val session: Session)
+class VerificationBottomSheetViewModel @AssistedInject constructor(
+        @Assisted initialState: VerificationBottomSheetViewState,
+        @Assisted args: VerificationBottomSheet.VerificationArgs,
+        private val session: Session,
+        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider)
     : VectorViewModel<VerificationBottomSheetViewState, VerificationAction, VerificationBottomSheetViewEvents>(initialState),
         VerificationService.Listener {
 
@@ -116,9 +118,11 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
         if (autoReady) {
             // TODO, can I be here in DM mode? in this case should test if roomID is null?
             session.cryptoService().verificationService()
-                    .readyPendingVerification(supportedVerificationMethods,
+                    .readyPendingVerification(
+                            supportedVerificationMethodsProvider.provide(),
                             pr!!.otherUserId,
-                            pr.transactionId ?: "")
+                            pr.transactionId ?: ""
+                    )
         }
     }
 
@@ -173,7 +177,12 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                                                 session
                                                         .cryptoService()
                                                         .verificationService()
-                                                        .requestKeyVerificationInDMs(supportedVerificationMethods, otherUserId, data, pendingLocalId)
+                                                        .requestKeyVerificationInDMs(
+                                                                supportedVerificationMethodsProvider.provide(),
+                                                                otherUserId,
+                                                                data,
+                                                                pendingLocalId
+                                                        )
                                         )
                                 )
                             }
@@ -191,7 +200,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                                 pendingRequest = Success(session
                                         .cryptoService()
                                         .verificationService()
-                                        .requestKeyVerificationInDMs(supportedVerificationMethods, otherUserId, roomId)
+                                        .requestKeyVerificationInDMs(supportedVerificationMethodsProvider.provide(), otherUserId, roomId)
                                 )
                         )
                     }
@@ -294,8 +303,6 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                 } catch (failure: Throwable) {
                     _viewEvents.post(VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage))
                 }
-
-                Unit
             }
         }.exhaustive
     }
@@ -362,9 +369,11 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                     // auto ready in this case, as we are waiting
                     // TODO, can I be here in DM mode? in this case should test if roomID is null?
                     session.cryptoService().verificationService()
-                            .readyPendingVerification(supportedVerificationMethods,
+                            .readyPendingVerification(
+                                    supportedVerificationMethodsProvider.provide(),
                                     pr.otherUserId,
-                                    pr.transactionId ?: "")
+                                    pr.transactionId ?: ""
+                            )
                 }
 
                 // Use this one!

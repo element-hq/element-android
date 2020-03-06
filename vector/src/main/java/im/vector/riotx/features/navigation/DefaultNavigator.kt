@@ -24,7 +24,6 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.view.ViewCompat
 import im.vector.matrix.android.api.session.crypto.verification.IncomingSasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
@@ -35,6 +34,7 @@ import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.createdirect.CreateDirectRoomActivity
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupActivity
+import im.vector.riotx.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.debug.DebugMenuActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
@@ -56,7 +56,8 @@ import javax.inject.Singleton
 @Singleton
 class DefaultNavigator @Inject constructor(
         private val sessionHolder: ActiveSessionHolder,
-        private val vectorPreferences: VectorPreferences
+        private val vectorPreferences: VectorPreferences,
+        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider
 ) : Navigator {
 
     override fun openRoom(context: Context, roomId: String, eventId: String?, buildTask: Boolean) {
@@ -85,9 +86,10 @@ class DefaultNavigator @Inject constructor(
     override fun requestSessionVerification(context: Context) {
         val session = sessionHolder.getSafeActiveSession() ?: return
         val pr = session.cryptoService().verificationService().requestKeyVerification(
-                listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SCAN, VerificationMethod.QR_CODE_SHOW),
+                supportedVerificationMethodsProvider.provide(),
                 session.myUserId,
-                session.cryptoService().getUserDevices(session.myUserId).map { it.deviceId })
+                session.cryptoService().getUserDevices(session.myUserId).map { it.deviceId }
+        )
         if (context is VectorBaseActivity) {
             VerificationBottomSheet.withArgs(
                     roomId = null,

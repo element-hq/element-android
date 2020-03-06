@@ -57,7 +57,7 @@ data class MessageFileContent(
          * Required if the file is encrypted. Information on the encrypted file, as specified in End-to-end encryption.
          */
         @Json(name = "file") override val encryptedFileInfo: EncryptedFileInfo? = null
-) : MessageEncryptedContent {
+) : MessageWithAttachmentContent {
 
     fun getMimeType(): String {
         // Mimetype default to plain text, should not be used

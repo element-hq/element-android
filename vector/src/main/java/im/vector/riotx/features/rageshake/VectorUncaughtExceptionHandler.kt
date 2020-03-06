@@ -99,9 +99,9 @@ class VectorUncaughtExceptionHandler @Inject constructor(private val bugReporter
         val pw = PrintWriter(sw, true)
         throwable.printStackTrace(pw)
         b.append(sw.buffer.toString())
-        Timber.e("FATAL EXCEPTION " + b.toString())
 
         val bugDescription = b.toString()
+        Timber.e("FATAL EXCEPTION $bugDescription")
 
         bugReporter.saveCrashReport(context, bugDescription)
 

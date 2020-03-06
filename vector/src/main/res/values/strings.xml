@@ -645,7 +645,7 @@
     <string name="settings_troubleshoot_diagnostic">Troubleshooting diagnostics</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Run Tests</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Running… (%1$d of %2$d)</string>
-    <string name="settings_troubleshoot_diagnostic_success_status">Basic diagnostic is ok. If you still do not receive notifications, please submit a bug report to help us investigate.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Basic diagnostic is OK. If you still do not receive notifications, please submit a bug report to help us investigate.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">One or more tests have failed, try suggested fix(es).</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">One or more tests have failed, please submit a bug report to help us investigate.</string>
 

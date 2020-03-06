@@ -36,8 +36,8 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
     // TODO Import mLanguageReceiver From Riot?
     fun onConfigurationChanged() {
         if (Locale.getDefault().toString() != VectorLocale.applicationLocale.toString()) {
-            Timber.v("## onConfigurationChanged() : the locale has been updated to " + Locale.getDefault().toString()
-                     + ", restore the expected value " + VectorLocale.applicationLocale.toString())
+            Timber.v("## onConfigurationChanged(): the locale has been updated to ${Locale.getDefault()}")
+            Timber.v("## onConfigurationChanged(): restore the expected value ${VectorLocale.applicationLocale}")
             updateApplicationSettings(VectorLocale.applicationLocale,
                                       FontScale.getFontScalePrefValue(context),
                                       ThemeUtils.getApplicationTheme(context))
