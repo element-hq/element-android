@@ -261,7 +261,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 msgType = MessageType.MSGTYPE_IMAGE,
                 body = attachment.name ?: "image",
                 info = ImageInfo(
-                        mimeType = attachment.mimeType,
+                        mimeType = attachment.getSafeMimeType(),
                         width = width?.toInt() ?: 0,
                         height = height?.toInt() ?: 0,
                         size = attachment.size.toInt()
@@ -293,7 +293,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 msgType = MessageType.MSGTYPE_VIDEO,
                 body = attachment.name ?: "video",
                 videoInfo = VideoInfo(
-                        mimeType = attachment.mimeType,
+                        mimeType = attachment.getSafeMimeType(),
                         width = width,
                         height = height,
                         size = attachment.size,
@@ -312,7 +312,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 msgType = MessageType.MSGTYPE_AUDIO,
                 body = attachment.name ?: "audio",
                 audioInfo = AudioInfo(
-                        mimeType = attachment.mimeType?.takeIf { it.isNotBlank() } ?: "audio/mpeg",
+                        mimeType = attachment.getSafeMimeType()?.takeIf { it.isNotBlank() } ?: "audio/mpeg",
                         size = attachment.size
                 ),
                 url = attachment.path
@@ -325,7 +325,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 msgType = MessageType.MSGTYPE_FILE,
                 body = attachment.name ?: "file",
                 info = FileInfo(
-                        mimeType = attachment.mimeType?.takeIf { it.isNotBlank() }
+                        mimeType = attachment.getSafeMimeType()?.takeIf { it.isNotBlank() }
                                 ?: "application/octet-stream",
                         size = attachment.size
                 ),

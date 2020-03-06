@@ -27,6 +27,7 @@ import com.kbeanie.multipicker.api.Picker.PICK_IMAGE_CAMERA
 import com.kbeanie.multipicker.api.Picker.PICK_IMAGE_DEVICE
 import com.kbeanie.multipicker.core.ImagePickerImpl
 import com.kbeanie.multipicker.core.PickerManager
+import com.kbeanie.multipicker.utils.IntentUtils
 import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.riotx.core.platform.Restorable
@@ -176,13 +177,13 @@ class AttachmentsHelper private constructor(private val context: Context,
     fun handleShareIntent(intent: Intent): Boolean {
         val type = intent.resolveType(context) ?: return false
         if (type.startsWith("image")) {
-            imagePicker.submit(intent)
+            imagePicker.submit(IntentUtils.getPickerIntentForSharing(intent))
         } else if (type.startsWith("video")) {
-            videoPicker.submit(intent)
+            videoPicker.submit(IntentUtils.getPickerIntentForSharing(intent))
         } else if (type.startsWith("audio")) {
-            videoPicker.submit(intent)
+            videoPicker.submit(IntentUtils.getPickerIntentForSharing(intent))
         } else if (type.startsWith("application") || type.startsWith("file") || type.startsWith("*")) {
-            filePicker.submit(intent)
+            filePicker.submit(IntentUtils.getPickerIntentForSharing(intent))
         } else {
             return false
         }
