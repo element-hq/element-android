@@ -236,9 +236,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         return defaultPrefs.getBoolean(SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY, true)
     }
 
-    fun setNotificationEnabledForDevice(enabled: Boolean?) {
+    fun setNotificationEnabledForDevice(enabled: Boolean) {
         defaultPrefs.edit {
-            putBoolean(SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY, enabled!!)
+            putBoolean(SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY, enabled)
         }
     }
 
