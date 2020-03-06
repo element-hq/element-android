@@ -25,12 +25,12 @@ internal interface VerificationInfoKey : VerificationInfo<ValidVerificationInfoK
     val key: String?
 
     override fun asValidObject(): ValidVerificationInfoKey? {
-        if (transactionID.isNullOrBlank() || key.isNullOrBlank()) {
-            return null
-        }
+        val validTransactionId = transactionID?.takeIf { it.isNotEmpty() } ?: return null
+        val validKey = key?.takeIf { it.isNotEmpty() } ?: return null
+
         return ValidVerificationInfoKey(
-                transactionID!!,
-                key!!
+                validTransactionId,
+                validKey
         )
     }
 }

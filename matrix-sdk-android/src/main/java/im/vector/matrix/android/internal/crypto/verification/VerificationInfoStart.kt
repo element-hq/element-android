@@ -64,43 +64,39 @@ internal interface VerificationInfoStart : VerificationInfo<ValidVerificationInf
     fun toCanonicalJson(): String
 
     override fun asValidObject(): ValidVerificationInfoStart? {
-        if (transactionID.isNullOrBlank()
-                || fromDevice.isNullOrBlank()) {
-            return null
-        }
+        val validTransactionId = transactionID?.takeIf { it.isNotEmpty() } ?: return null
+        val validFromDevice = fromDevice?.takeIf { it.isNotEmpty() } ?: return null
 
         return when (method) {
             VERIFICATION_METHOD_SAS         -> {
-                if (keyAgreementProtocols.isNullOrEmpty()
-                        || hashes.isNullOrEmpty()
-                        || !hashes!!.contains("sha256") || messageAuthenticationCodes.isNullOrEmpty()
-                        || (!messageAuthenticationCodes!!.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256)
-                                && !messageAuthenticationCodes!!.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256_LONGKDF))
-                        || shortAuthenticationStrings.isNullOrEmpty()
-                        || !shortAuthenticationStrings!!.contains(SasMode.DECIMAL)) {
-                    null
-                } else {
-                    ValidVerificationInfoStart.SasVerificationInfoStart(
-                            transactionID!!,
-                            fromDevice!!,
-                            keyAgreementProtocols!!,
-                            hashes!!,
-                            messageAuthenticationCodes!!,
-                            shortAuthenticationStrings!!,
-                            canonicalJson = toCanonicalJson()
-                    )
-                }
+                val validKeyAgreementProtocols = keyAgreementProtocols?.takeIf { it.isNotEmpty() } ?: return null
+                val validHashes = hashes?.takeIf { it.contains("sha256") } ?: return null
+                val validMessageAuthenticationCodes = messageAuthenticationCodes
+                        ?.takeIf {
+                            it.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256)
+                                    || it.contains(SASDefaultVerificationTransaction.SAS_MAC_SHA256_LONGKDF)
+                        }
+                        ?: return null
+                val validShortAuthenticationStrings = shortAuthenticationStrings?.takeIf { it.contains(SasMode.DECIMAL) } ?: return null
+
+                ValidVerificationInfoStart.SasVerificationInfoStart(
+                        validTransactionId,
+                        validFromDevice,
+                        validKeyAgreementProtocols,
+                        validHashes,
+                        validMessageAuthenticationCodes,
+                        validShortAuthenticationStrings,
+                        canonicalJson = toCanonicalJson()
+                )
             }
             VERIFICATION_METHOD_RECIPROCATE -> {
-                if (sharedSecret.isNullOrBlank()) {
-                    null
-                } else {
-                    ValidVerificationInfoStart.ReciprocateVerificationInfoStart(
-                            transactionID!!,
-                            fromDevice!!,
-                            sharedSecret!!
-                    )
-                }
+                val validSharedSecret = sharedSecret?.takeIf { it.isNotEmpty() } ?: return null
+
+                ValidVerificationInfoStart.ReciprocateVerificationInfoStart(
+                        validTransactionId,
+                        validFromDevice,
+                        validSharedSecret
+                )
             }
             else                            -> null
         }

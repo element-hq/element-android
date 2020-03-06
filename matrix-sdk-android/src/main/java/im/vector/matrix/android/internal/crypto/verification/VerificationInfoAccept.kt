@@ -15,8 +15,6 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
-import timber.log.Timber
-
 internal interface VerificationInfoAccept : VerificationInfo<ValidVerificationInfoAccept> {
     /**
      * The key agreement protocol that Bob’s device has selected to use, out of the list proposed by Alice’s device
@@ -45,23 +43,20 @@ internal interface VerificationInfoAccept : VerificationInfo<ValidVerificationIn
     var commitment: String?
 
     override fun asValidObject(): ValidVerificationInfoAccept? {
-        if (transactionID.isNullOrBlank()
-                || keyAgreementProtocol.isNullOrBlank()
-                || hash.isNullOrBlank()
-                || commitment.isNullOrBlank()
-                || messageAuthenticationCode.isNullOrBlank()
-                || shortAuthenticationStrings.isNullOrEmpty()) {
-            Timber.e("## received invalid verification request")
-            return null
-        }
+        val validTransactionId = transactionID?.takeIf { it.isNotEmpty() } ?: return null
+        val validKeyAgreementProtocol = keyAgreementProtocol?.takeIf { it.isNotEmpty() } ?: return null
+        val validHash = hash?.takeIf { it.isNotEmpty() } ?: return null
+        val validMessageAuthenticationCode = messageAuthenticationCode?.takeIf { it.isNotEmpty() } ?: return null
+        val validShortAuthenticationStrings = shortAuthenticationStrings?.takeIf { it.isNotEmpty() } ?: return null
+        val validCommitment = commitment?.takeIf { it.isNotEmpty() } ?: return null
 
         return ValidVerificationInfoAccept(
-                transactionID!!,
-                keyAgreementProtocol!!,
-                hash!!,
-                messageAuthenticationCode!!,
-                shortAuthenticationStrings!!,
-                commitment
+                validTransactionId,
+                validKeyAgreementProtocol,
+                validHash,
+                validMessageAuthenticationCode,
+                validShortAuthenticationStrings,
+                validCommitment
         )
     }
 }

@@ -33,12 +33,10 @@ internal data class MessageVerificationDoneContent(
     override fun toEventContent(): Content? = toContent()
 
     override fun asValidObject(): ValidVerificationDone? {
-        if (transactionID.isNullOrEmpty()) {
-            return null
-        }
+        val validTransactionId = transactionID?.takeIf { it.isNotEmpty() } ?: return null
 
         return ValidVerificationDone(
-                transactionID!!
+                validTransactionId
         )
     }
 }
