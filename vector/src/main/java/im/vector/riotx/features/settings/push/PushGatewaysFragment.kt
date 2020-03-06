@@ -17,6 +17,7 @@
 package im.vector.riotx.features.settings.push
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -37,6 +38,19 @@ class PushGatewaysFragment @Inject constructor(
     override fun getLayoutResId() = R.layout.fragment_generic_recycler
 
     private val viewModel: PushGatewaysViewModel by fragmentViewModel(PushGatewaysViewModel::class)
+
+    override fun getMenuRes() = R.menu.menu_push_gateways
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.refresh -> {
+                viewModel.handle(PushGatewayAction.Refresh)
+                true
+            }
+            else         ->
+                super.onOptionsItemSelected(item)
+        }
+    }
 
     override fun onResume() {
         super.onResume()
