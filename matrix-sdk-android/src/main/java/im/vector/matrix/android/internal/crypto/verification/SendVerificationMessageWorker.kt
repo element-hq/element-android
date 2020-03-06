@@ -30,6 +30,10 @@ import im.vector.matrix.android.internal.worker.getSessionComponent
 import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * Possible previous worker: None
+ * Possible next worker    : None
+ */
 internal class SendVerificationMessageWorker(context: Context,
                                              params: WorkerParameters)
     : CoroutineWorker(context, params) {

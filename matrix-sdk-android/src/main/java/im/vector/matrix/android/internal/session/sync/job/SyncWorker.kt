@@ -35,6 +35,10 @@ import javax.inject.Inject
 
 private const val DEFAULT_LONG_POOL_TIMEOUT = 0L
 
+/**
+ * Possible previous worker: None
+ * Possible next worker    : None
+ */
 internal class SyncWorker(context: Context,
                           workerParameters: WorkerParameters
 ) : CoroutineWorker(context, workerParameters) {

@@ -24,6 +24,7 @@ import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.di.WorkManagerProvider
+import im.vector.matrix.android.internal.session.content.UploadContentWorker
 import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEventWorkCommon
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
@@ -35,6 +36,9 @@ import javax.inject.Inject
 
 /**
  * This worker creates a new work for each events passed in parameter
+ *
+ * Possible previous worker: Always [UploadContentWorker]
+ * Possible next worker    : None, but it will post new work to send events, encrypted or not
  */
 internal class MultipleEventSendingDispatcherWorker(context: Context, params: WorkerParameters)
     : CoroutineWorker(context, params) {

@@ -32,6 +32,10 @@ import im.vector.matrix.android.internal.worker.getSessionComponent
 import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * Possible previous worker: None
+ * Possible next worker    : Always [SendEventWorker]
+ */
 internal class EncryptEventWorker(context: Context, params: WorkerParameters)
     : CoroutineWorker(context, params) {
 

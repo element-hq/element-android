@@ -51,6 +51,10 @@ private data class NewImageAttributes(
         val newFileSize: Int
 )
 
+/**
+ * Possible previous worker: None
+ * Possible next worker    : Always [MultipleEventSendingDispatcherWorker]
+ */
 internal class UploadContentWorker(val context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
 
     @JsonClass(generateAdapter = true)

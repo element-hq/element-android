@@ -29,6 +29,10 @@ import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * Possible previous worker: None
+ * Possible next worker    : None
+ */
 internal class RedactEventWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
 
     @JsonClass(generateAdapter = true)

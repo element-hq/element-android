@@ -32,6 +32,10 @@ import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * Possible previous worker: [EncryptEventWorker] or first worker
+ * Possible next worker    : None
+ */
 internal class SendEventWorker(context: Context,
                                params: WorkerParameters)
     : CoroutineWorker(context, params) {
