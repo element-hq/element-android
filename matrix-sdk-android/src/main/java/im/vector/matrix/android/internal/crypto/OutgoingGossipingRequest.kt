@@ -16,10 +16,10 @@
 
 package im.vector.matrix.android.internal.crypto
 
-interface OutgoingShareRequest {
-    var recipients: List<Map<String, String>>
+interface OutgoingGossipingRequest {
+    var recipients: Map<String, List<String>>
     var requestId: String
-    var state: ShareRequestState
+    var state: OutgoingGossipingRequestState
     // transaction id for the cancellation, if any
-    var cancellationTxnId: String?
+    //var cancellationTxnId: String?
 }

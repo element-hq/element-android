@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * Class representing a room key request content
  */
 @JsonClass(generateAdapter = true)
-internal data class RoomKeyShareRequest(
+data class RoomKeyShareRequest(
         @Json(name = "action")
         override val action: String? = GossipingToDeviceObject.ACTION_SHARE_REQUEST,
 

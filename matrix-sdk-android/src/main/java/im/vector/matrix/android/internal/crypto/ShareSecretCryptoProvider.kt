@@ -16,8 +16,10 @@
 
 package im.vector.matrix.android.internal.crypto
 
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
+import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmDecryptionFactory
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.event.SecretSendEventContent
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
@@ -25,6 +27,7 @@ import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -32,6 +35,7 @@ internal class ShareSecretCryptoProvider @Inject constructor(
         val messageEncrypter: MessageEncrypter,
         val sendToDeviceTask: SendToDeviceTask,
         val deviceListManager: DeviceListManager,
+        private val olmDecryptionFactory: MXOlmDecryptionFactory,
         val cryptoCoroutineScope: CoroutineScope,
         val cryptoStore: IMXCryptoStore,
         val coroutineDispatchers: MatrixCoroutineDispatchers
@@ -59,6 +63,12 @@ internal class ShareSecretCryptoProvider @Inject constructor(
                         val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
                         sendToDeviceTask.execute(sendToDeviceParams)
                     }
+        }
+    }
+
+    fun decryptEvent(event: Event): MXEventDecryptionResult {
+        return runBlocking(coroutineDispatchers.crypto) {
+            olmDecryptionFactory.create().decryptEvent(event, ShareSecretCryptoProvider::class.java.name ?: "")
         }
     }
 }

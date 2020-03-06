@@ -46,6 +46,8 @@ data class IncomingRoomKeyRequest(
          */
         val requestBody: RoomKeyRequestBody? = null,
 
+        val state: GossipingRequestState = GossipingRequestState.NONE,
+
         /**
          * The runnable to call to accept to share the keys
          */
@@ -56,7 +58,8 @@ data class IncomingRoomKeyRequest(
          * The runnable to call to ignore the key share request.
          */
         @Transient
-        var ignore: Runnable? = null
+        var ignore: Runnable? = null,
+        override val localCreationTimestamp: Long?
 ) : IncomingShareRequestCommon {
     companion object {
         /**
@@ -72,7 +75,8 @@ data class IncomingRoomKeyRequest(
                                 userId = event.senderId,
                                 deviceId = it.requestingDeviceId,
                                 requestId = it.requestId,
-                                requestBody = it.body ?: RoomKeyRequestBody()
+                                requestBody = it.body ?: RoomKeyRequestBody(),
+                                localCreationTimestamp = event.ageLocalTs ?: System.currentTimeMillis()
                         )
                     }
         }

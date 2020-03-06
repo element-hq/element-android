@@ -33,7 +33,7 @@ data class CryptoDeviceInfo(
 ) : CryptoInfo {
 
     val isVerified: Boolean
-        get() = trustLevel?.isVerified() ?: false
+        get() = trustLevel?.isVerified() == true
 
     val isUnknown: Boolean
         get() = trustLevel == null

@@ -25,6 +25,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.core.ui.list.genericFooterItem
 import im.vector.riotx.core.ui.list.genericItem
 import im.vector.riotx.core.ui.list.genericItemHeader
 import me.gujun.android.span.span
@@ -38,9 +39,75 @@ class KeyRequestEpoxyController @Inject constructor(
         // fun didTap(data: UserAccountData)
     }
 
+    var outgoing = true
+
     var interactionListener: InteractionListener? = null
 
     override fun buildModels(data: KeyRequestListViewState?) {
+        if (outgoing) {
+            buildOutgoing(data)
+        } else {
+            buildIncoming(data)
+        }
+    }
+
+    private fun buildIncoming(data: KeyRequestListViewState?) {
+        data?.incomingRequests?.let { async ->
+            when (async) {
+                is Uninitialized,
+                is Loading -> {
+                    loadingItem {
+                        id("loadingOutgoing")
+                        loadingText(stringProvider.getString(R.string.loading))
+                    }
+                }
+                is Fail    -> {
+                    genericItem {
+                        id("failOutgoing")
+                        title(async.error.localizedMessage)
+                    }
+                }
+                is Success -> {
+
+                    if (async.invoke().isEmpty()) {
+                        genericFooterItem {
+                            id("empty")
+                            text(stringProvider.getString(R.string.no_result_placeholder))
+                        }
+                        return
+                    }
+                    val requestList = async.invoke().groupBy { it.userId }
+
+                    requestList.forEach {
+                        genericItemHeader {
+                            id(it.key)
+                            text("From user: ${it.key}")
+                        }
+                        it.value.forEach { roomKeyRequest ->
+                            genericItem {
+                                id(roomKeyRequest.requestId)
+                                title(roomKeyRequest.requestId)
+                                description(
+                                        span {
+                                            span("sessionId:") {
+                                                textStyle = "bold"
+                                            }
+                                            span("\nFrom device:") {
+                                                textStyle = "bold"
+                                            }
+                                            +"${roomKeyRequest.deviceId}"
+                                            +"\n${roomKeyRequest.state.name}"
+                                        }
+                                )
+                            }
+                        }
+                    }
+                }
+            }.exhaustive
+        }
+    }
+
+    private fun buildOutgoing(data: KeyRequestListViewState?) {
         data?.outgoingRoomKeyRequest?.let { async ->
             when (async) {
                 is Uninitialized,
@@ -57,6 +124,15 @@ class KeyRequestEpoxyController @Inject constructor(
                     }
                 }
                 is Success -> {
+
+                    if (async.invoke().isEmpty()) {
+                        genericFooterItem {
+                            id("empty")
+                            text(stringProvider.getString(R.string.no_result_placeholder))
+                        }
+                        return
+                    }
+
                     val requestList = async.invoke().groupBy { it.roomId }
 
                     requestList.forEach {
@@ -70,7 +146,7 @@ class KeyRequestEpoxyController @Inject constructor(
                                 title(roomKeyRequest.requestId)
                                 description(
                                         span {
-                                            span("sessionId:") {
+                                            span("sessionId:\n") {
                                                 textStyle = "bold"
                                             }
                                             +"${roomKeyRequest.sessionId}"

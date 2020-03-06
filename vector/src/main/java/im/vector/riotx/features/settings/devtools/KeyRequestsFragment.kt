@@ -16,11 +16,14 @@
 
 package im.vector.riotx.features.settings.devtools
 
+import android.content.Context
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_IDLE
 import com.google.android.material.tabs.TabLayoutMediator
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseActivity
@@ -31,26 +34,79 @@ import javax.inject.Inject
 class KeyRequestsFragment @Inject constructor() : VectorBaseFragment() {
 
     override fun getLayoutResId(): Int = R.layout.fragment_devtool_keyrequests
+    override fun getMenuRes(): Int = R.menu.menu_common_gossiping
 
     override fun onResume() {
         super.onResume()
         (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.key_share_request)
     }
 
+    private var mPagerAdapter: KeyReqPagerAdapter? = null
+
+    private val pageAdapterListener = object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+
+            invalidateOptionsMenu()
+        }
+
+        override fun onPageScrollStateChanged(state: Int) {
+            childFragmentManager.fragments.forEach {
+                setHasOptionsMenu(state == SCROLL_STATE_IDLE)
+            }
+            invalidateOptionsMenu()
+        }
+    }
+
+    override fun onDestroy() {
+        invalidateOptionsMenu()
+        super.onDestroy()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        devToolKeyRequestPager.adapter = KeyReqPagerAdapter(requireActivity())
+        mPagerAdapter = KeyReqPagerAdapter(this)
+        devToolKeyRequestPager.adapter = mPagerAdapter
+        devToolKeyRequestPager.registerOnPageChangeCallback(pageAdapterListener)
 
-        TabLayoutMediator(devToolKeyRequestTabs, devToolKeyRequestPager) { tab, _ ->
-            tab.text = "Outgoing"
+        TabLayoutMediator(devToolKeyRequestTabs, devToolKeyRequestPager) { tab, position ->
+            when (position) {
+                0 -> {
+                    tab.text = "Outgoing"
+                }
+                1 -> {
+                    tab.text = "Incoming"
+                }
+                2 -> {
+                    tab.text = "Audit Trail"
+                }
+            }
         }.attach()
     }
 
-    private inner class KeyReqPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
-        override fun getItemCount(): Int = 1
+    override fun onDestroyView() {
+        devToolKeyRequestPager.unregisterOnPageChangeCallback(pageAdapterListener)
+        mPagerAdapter = null
+        super.onDestroyView()
+    }
+
+    private inner class KeyReqPagerAdapter(fa: Fragment) : FragmentStateAdapter(fa) {
+        override fun getItemCount(): Int = 3
+
+
 
         override fun createFragment(position: Int): Fragment {
-            return childFragmentManager.fragmentFactory.instantiate(requireContext().classLoader, KeyRequestListFragment::class.java.name)
+            return when (position) {
+                0    -> {
+                    childFragmentManager.fragmentFactory.instantiate(requireContext().classLoader, OutgoingKeyRequestListFragment::class.java.name)
+                }
+                1    -> {
+                    childFragmentManager.fragmentFactory.instantiate(requireContext().classLoader, IncomingKeyRequestListFragment::class.java.name)
+                }
+                else -> {
+                    childFragmentManager.fragmentFactory.instantiate(requireContext().classLoader, GossipingEventsPaperTrailFragment::class.java.name)
+                }
+            }
         }
     }
+
 }

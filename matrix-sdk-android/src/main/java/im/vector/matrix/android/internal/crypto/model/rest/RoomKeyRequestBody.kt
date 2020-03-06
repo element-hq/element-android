@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.internal.di.MoshiProvider
 
 /**
  * Class representing an room key request body content
@@ -35,4 +36,16 @@ data class RoomKeyRequestBody(
 
         @Json(name = "session_id")
         val sessionId: String? = null
-)
+) {
+    fun toJson(): String {
+        return MoshiProvider.providesMoshi().adapter(RoomKeyRequestBody::class.java).toJson(this)
+    }
+
+    companion object {
+        fun fromJson(json: String?): RoomKeyRequestBody? {
+            return json?.let { MoshiProvider.providesMoshi().adapter(RoomKeyRequestBody::class.java).fromJson(it) }
+        }
+    }
+}
+
+

@@ -31,6 +31,8 @@ import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
 import im.vector.riotx.core.platform.EmptyAction
 import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 data class KeyRequestListViewState(
         val incomingRequests: Async<List<IncomingRoomKeyRequest>> = Uninitialized,
@@ -42,11 +44,24 @@ class KeyRequestListViewModel @AssistedInject constructor(@Assisted initialState
     : VectorViewModel<KeyRequestListViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     init {
-        session.cryptoService().getOutgoingRoomKeyRequest().let {
-            setState {
-                copy(
-                        outgoingRoomKeyRequest = Success(it)
-                )
+        refresh()
+    }
+
+    fun refresh() {
+        GlobalScope.launch {
+            session.cryptoService().getOutgoingRoomKeyRequest().let {
+                setState {
+                    copy(
+                            outgoingRoomKeyRequest = Success(it)
+                    )
+                }
+            }
+            session.cryptoService().getIncomingRoomKeyRequest().let {
+                setState {
+                    copy(
+                            incomingRequests = Success(it)
+                    )
+                }
             }
         }
     }
@@ -58,12 +73,16 @@ class KeyRequestListViewModel @AssistedInject constructor(@Assisted initialState
         fun create(initialState: KeyRequestListViewState): KeyRequestListViewModel
     }
 
+
     companion object : MvRxViewModelFactory<KeyRequestListViewModel, KeyRequestListViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: KeyRequestListViewState): KeyRequestListViewModel? {
-            val fragment: KeyRequestListFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewModelFactory.create(state)
+            val context = viewModelContext as FragmentViewModelContext
+            val factory = (context.fragment as? IncomingKeyRequestListFragment)?.viewModelFactory
+                    ?: (context.fragment as? OutgoingKeyRequestListFragment)?.viewModelFactory
+
+            return factory?.create(state)
         }
     }
 }

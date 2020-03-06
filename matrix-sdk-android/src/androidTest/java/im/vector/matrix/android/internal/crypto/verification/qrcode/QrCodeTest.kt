@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.crypto.verification.qrcode
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import im.vector.matrix.android.InstrumentedTest
+import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64NoPadding
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldEqual
 import org.amshove.kluent.shouldEqualTo

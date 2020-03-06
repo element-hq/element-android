@@ -16,21 +16,28 @@
 
 package im.vector.matrix.android.internal.crypto
 
-interface IncomingShareRequestCommon {
-    /**
-     * The user id
-     */
-    val userId: String?
+enum class GossipRequestType {
+    KEY,
+    SECRET
+}
 
-    /**
-     * The device id
-     */
-    val deviceId: String?
+enum class GossipingRequestState {
+    NONE,
+    PENDING,
+    REJECTED,
+    ACCEPTED,
+   // USER_REJECTED,
+    UNABLE_TO_PROCESS,
+    CANCELLED_BY_REQUESTER,
+    RE_REQUESTED
+}
 
-    /**
-     * The request id
-     */
-    val requestId: String?
-
-    val localCreationTimestamp: Long?
+enum class OutgoingGossipingRequestState {
+    UNSENT,
+    SENDING,
+    SENT,
+    CANCELLING,
+    CANCELLED,
+    FAILED_TO_SEND,
+    FAILED_TO_CANCEL
 }

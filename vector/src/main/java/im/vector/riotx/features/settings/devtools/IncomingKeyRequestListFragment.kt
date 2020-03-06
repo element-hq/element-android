@@ -28,7 +28,7 @@ import im.vector.riotx.core.resources.ColorProvider
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import javax.inject.Inject
 
-class KeyRequestListFragment @Inject constructor(
+class IncomingKeyRequestListFragment @Inject constructor(
         val viewModelFactory: KeyRequestListViewModel.Factory,
         private val epoxyController: KeyRequestEpoxyController,
         private val colorProvider: ColorProvider
@@ -39,6 +39,7 @@ class KeyRequestListFragment @Inject constructor(
     private val viewModel: KeyRequestListViewModel by fragmentViewModel(KeyRequestListViewModel::class)
 
     override fun invalidate() = withState(viewModel) { state ->
+        epoxyController.outgoing = false
         epoxyController.setData(state)
     }
 

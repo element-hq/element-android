@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
  * Interface representing an room key action request
  * Note: this class cannot be abstract because of [org.matrix.androidsdk.core.JsonUtils.toRoomKeyShare]
  */
-internal interface GossipingToDeviceObject : SendToDeviceObject {
+interface GossipingToDeviceObject : SendToDeviceObject {
 
     val action: String?
 

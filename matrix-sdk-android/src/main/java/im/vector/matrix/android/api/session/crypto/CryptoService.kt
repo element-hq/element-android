@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.session.crypto.keyshare.GossipingRequestList
 import im.vector.matrix.android.api.session.crypto.verification.VerificationService
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.crypto.NewSessionListener
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
@@ -87,6 +88,8 @@ interface CryptoService {
 
     fun getDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo?
 
+    fun requestRoomKeyForEvent(event: Event)
+
     fun reRequestRoomKeyForEvent(event: Event)
 
     fun cancelRoomKeyRequest(requestBody: RoomKeyRequestBody)
@@ -132,4 +135,6 @@ interface CryptoService {
     fun removeSessionListener(listener: NewSessionListener)
 
     fun getOutgoingRoomKeyRequest(): List<OutgoingRoomKeyRequest>
+    fun getIncomingRoomKeyRequest(): List<IncomingRoomKeyRequest>
+    fun getGossipingEventsTrail(): List<Event>
 }

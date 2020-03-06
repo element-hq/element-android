@@ -59,7 +59,12 @@ fun <T : RealmObject> doRealmQueryAndCopyList(realmConfiguration: RealmConfigura
  */
 fun doRealmTransaction(realmConfiguration: RealmConfiguration, action: (Realm) -> Unit) {
     Realm.getInstance(realmConfiguration).use { realm ->
-        realm.executeTransaction { action.invoke(realm) }
+        realm.executeTransaction { action.invoke(it) }
+    }
+}
+fun doRealmTransactionAsync(realmConfiguration: RealmConfiguration, action: (Realm) -> Unit) {
+    Realm.getInstance(realmConfiguration).use { realm ->
+        realm.executeTransactionAsync { action.invoke(it) }
     }
 }
 

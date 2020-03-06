@@ -37,7 +37,8 @@ data class IncomingRequestCancellation(
         /**
          * The request id
          */
-        override val requestId: String? = null
+        override val requestId: String? = null,
+        override val localCreationTimestamp: Long?
 ) : IncomingShareRequestCommon {
     companion object {
         /**
@@ -52,7 +53,8 @@ data class IncomingRequestCancellation(
                         IncomingRequestCancellation(
                                 userId = event.senderId,
                                 deviceId = it.requestingDeviceId,
-                                requestId = it.requestId
+                                requestId = it.requestId,
+                                localCreationTimestamp = event.ageLocalTs ?: System.currentTimeMillis()
                         )
                     }
         }

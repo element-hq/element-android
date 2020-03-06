@@ -54,7 +54,9 @@ data class IncomingSecretShareRequest(
          * The runnable to call to ignore the key share request.
          */
         @Transient
-        var ignore: Runnable? = null
+        var ignore: Runnable? = null,
+
+        override val localCreationTimestamp: Long?
 
 ) : IncomingShareRequestCommon {
     companion object {
@@ -71,7 +73,8 @@ data class IncomingSecretShareRequest(
                                 userId = event.senderId,
                                 deviceId = it.requestingDeviceId,
                                 requestId = it.requestId,
-                                secretName = it.secretName
+                                secretName = it.secretName,
+                                localCreationTimestamp = event.ageLocalTs ?: System.currentTimeMillis()
                         )
                     }
         }

@@ -23,5 +23,14 @@ data class MXCryptoConfig(
         // Tell whether the encryption of the event content is enabled for the invited members.
         // SDK clients can disable this by settings it to false.
         // Note that the encryption for the invited members will be blocked if the history visibility is "joined".
-        var enableEncryptionForInvitedMembers: Boolean = true
+        var enableEncryptionForInvitedMembers: Boolean = true,
+
+        /**
+         * If set to true, the SDK will automatically ignore room key request (gossiping)
+         * coming from your other untrusted sessions (or blocked).
+         * If set to false, the request will be forwarded to the application layer; in this
+         * case the application can decide to prompt the user.
+         */
+        var discardRoomKeyRequestsFromUntrustedDevices : Boolean = true
+
 )

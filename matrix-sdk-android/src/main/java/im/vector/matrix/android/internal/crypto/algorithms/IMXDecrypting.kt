@@ -68,4 +68,6 @@ internal interface IMXDecrypting {
     fun shareKeysWithDevice(request: IncomingRoomKeyRequest) {}
 
     fun shareSecretWithDevice(request: IncomingSecretShareRequest, secretValue : String) {}
+
+    fun requestKeysForEvent(event: Event)
 }

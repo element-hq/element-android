@@ -33,6 +33,7 @@ import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageSer
 import im.vector.matrix.android.api.session.securestorage.SsssKeyCreationInfo
 import im.vector.matrix.android.api.session.securestorage.SsssKeySpec
 import im.vector.matrix.android.api.session.securestorage.SsssPassphrase
+import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestManager
 import im.vector.matrix.android.internal.crypto.SSSS_ALGORITHM_AES_HMAC_SHA2
 import im.vector.matrix.android.internal.crypto.SSSS_ALGORITHM_CURVE25519_AES_SHA2
 import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
@@ -41,6 +42,7 @@ import im.vector.matrix.android.internal.crypto.keysbackup.generatePrivateKeyWit
 import im.vector.matrix.android.internal.crypto.keysbackup.util.computeRecoveryKey
 import im.vector.matrix.android.internal.crypto.tools.HkdfSha256
 import im.vector.matrix.android.internal.crypto.tools.withOlmDecryption
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
@@ -55,7 +57,9 @@ import javax.inject.Inject
 import kotlin.experimental.and
 
 internal class DefaultSharedSecretStorageService @Inject constructor(
+        @UserId private val userId: String,
         private val accountDataService: AccountDataService,
+        private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope
 ) : SharedSecretStorageService {
@@ -428,5 +432,12 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         }
 
         return IntegrityResult.Success(keyInfo.content.passphrase != null)
+    }
+
+    override fun requestSecret(name: String, myOtherDeviceId: String) {
+        outgoingGossipingRequestManager.sendSecretShareRequest(
+                name,
+                mapOf(userId to listOf(myOtherDeviceId))
+        )
     }
 }

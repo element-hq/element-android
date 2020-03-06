@@ -26,7 +26,7 @@ import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.NewSessionListener
-import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequestManager
+import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestManager
 import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.algorithms.IMXDecrypting
@@ -46,7 +46,7 @@ import timber.log.Timber
 internal class MXMegolmDecryption(private val userId: String,
                                   private val olmDevice: MXOlmDevice,
                                   private val deviceListManager: DeviceListManager,
-                                  private val outgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
+                                  private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
                                   private val messageEncrypter: MessageEncrypter,
                                   private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
                                   private val cryptoStore: IMXCryptoStore,
@@ -144,24 +144,25 @@ internal class MXMegolmDecryption(private val userId: String,
      *
      * @param event the event
      */
-    private fun requestKeysForEvent(event: Event) {
-        val sender = event.senderId!!
-        val encryptedEventContent = event.content.toModel<EncryptedEventContent>()!!
+    override fun requestKeysForEvent(event: Event) {
+        val sender = event.senderId ?: return
+        val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
+        val senderDevice = encryptedEventContent?.deviceId ?: return
 
-        val recipients = ArrayList<Map<String, String>>()
-
-        val selfMap = HashMap<String, String>()
-        // TODO Replace this hard coded keys (see OutgoingRoomKeyRequestManager)
-        selfMap["userId"] = userId
-        selfMap["deviceId"] = "*"
-        recipients.add(selfMap)
-
-        if (sender != userId) {
-            val senderMap = HashMap<String, String>()
-            senderMap["userId"] = sender
-            senderMap["deviceId"] = encryptedEventContent.deviceId!!
-            recipients.add(senderMap)
+        val recipients = if (event.senderId != userId) {
+            mapOf(
+                    userId to listOf("*")
+            )
+        } else {
+            // for the case where you share the key with a device that has a broken olm session
+            // The other user might Re-shares a megolm session key with devices if the key has already been
+            // sent to them.
+            mapOf(
+                    userId to listOf("*"),
+                    sender to listOf(senderDevice)
+            )
         }
+
 
         val requestBody = RoomKeyRequestBody(
                 roomId = event.roomId,
@@ -170,7 +171,7 @@ internal class MXMegolmDecryption(private val userId: String,
                 sessionId = encryptedEventContent.sessionId
         )
 
-        outgoingRoomKeyRequestManager.sendRoomKeyRequest(requestBody, recipients)
+        outgoingGossipingRequestManager.sendRoomKeyRequest(requestBody, recipients)
     }
 
     /**
@@ -271,7 +272,7 @@ internal class MXMegolmDecryption(private val userId: String,
                     senderKey = senderKey
             )
 
-            outgoingRoomKeyRequestManager.cancelRoomKeyRequest(content)
+            outgoingGossipingRequestManager.cancelRoomKeyRequest(content)
 
             onNewSession(senderKey, roomKeyContent.sessionId)
         }

@@ -23,9 +23,10 @@ import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.store.db.model.CrossSigningInfoEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.CryptoMetadataEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.DeviceInfoEntityFields
-import im.vector.matrix.android.internal.crypto.store.db.model.IncomingSecretRequestEntityFields
+import im.vector.matrix.android.internal.crypto.store.db.model.GossipingEventEntityFields
+import im.vector.matrix.android.internal.crypto.store.db.model.IncomingGossipingRequestEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.KeyInfoEntityFields
-import im.vector.matrix.android.internal.crypto.store.db.model.OutgoingSecretRequestEntityFields
+import im.vector.matrix.android.internal.crypto.store.db.model.OutgoingGossipingRequestEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.TrustLevelEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.UserEntityFields
 import im.vector.matrix.android.internal.di.SerializeNulls
@@ -140,21 +141,38 @@ internal object RealmCryptoStoreMigration : RealmMigration {
 
     private fun migrateTo2(realm: DynamicRealm) {
         Timber.d("Step 1 -> 2")
+        realm.schema.remove("OutgoingRoomKeyRequestEntity")
+        realm.schema.remove("IncomingRoomKeyRequestEntity")
 
-        realm.schema.create("IncomingSecretRequestEntity")
-                .addField(IncomingSecretRequestEntityFields.DEVICE_ID, String::class.java)
-                .addField(IncomingSecretRequestEntityFields.SECRET_NAME, String::class.java)
-                .addField(IncomingSecretRequestEntityFields.REQUEST_ID, String::class.java)
-                .addField(IncomingSecretRequestEntityFields.USER_ID, String::class.java)
+        //Not need to migrate existing request, just start fresh?
+
+        realm.schema.create("GossipingEventEntity")
+                .addField(GossipingEventEntityFields.TYPE, String::class.java)
+                .addIndex(GossipingEventEntityFields.TYPE)
+                .addField(GossipingEventEntityFields.CONTENT, String::class.java)
+                .addField(GossipingEventEntityFields.SENDER, String::class.java)
+                .addField(GossipingEventEntityFields.DECRYPTION_RESULT_JSON, String::class.java)
+                .addField(GossipingEventEntityFields.DECRYPTION_ERROR_CODE, String::class.java)
+                .addField(GossipingEventEntityFields.AGE_LOCAL_TS, Long::class.java)
+                .addField(GossipingEventEntityFields.SEND_STATE_STR, Long::class.java)
 
 
-        realm.schema.create("OutgoingSecretRequestEntity")
-                .addField(OutgoingSecretRequestEntityFields.REQUEST_ID, String::class.java)
-                .addPrimaryKey(OutgoingSecretRequestEntityFields.REQUEST_ID)
-                .addField(OutgoingSecretRequestEntityFields.SECRET_NAME, String::class.java)
-                .addField(OutgoingSecretRequestEntityFields.CANCELLATION_TXN_ID, String::class.java)
-                .addField(OutgoingSecretRequestEntityFields.RECIPIENTS_DATA, String::class.java)
-                .addField(OutgoingSecretRequestEntityFields.STATE, Int::class.java)
+        realm.schema.create("IncomingGossipingRequestEntity")
+                .addField(IncomingGossipingRequestEntityFields.REQUEST_ID, String::class.java)
+                .addField(IncomingGossipingRequestEntityFields.TYPE_STR, String::class.java)
+                .addField(IncomingGossipingRequestEntityFields.OTHER_USER_ID, String::class.java)
+                .addField(IncomingGossipingRequestEntityFields.REQUESTED_INFO_STR, String::class.java)
+                .addField(IncomingGossipingRequestEntityFields.OTHER_DEVICE_ID, String::class.java)
+                .addField(IncomingGossipingRequestEntityFields.REQUEST_STATE_STR, String::class.java)
+                .addField(IncomingGossipingRequestEntityFields.LOCAL_CREATION_TIMESTAMP, Long::class.java)
+                .setNullable(IncomingGossipingRequestEntityFields.LOCAL_CREATION_TIMESTAMP, true)
 
+
+        realm.schema.create("OutgoingGossipingRequestEntity")
+                .addField(OutgoingGossipingRequestEntityFields.REQUEST_ID, String::class.java)
+                .addField(OutgoingGossipingRequestEntityFields.TYPE_STR, String::class.java)
+                .addField(OutgoingGossipingRequestEntityFields.REQUESTED_INFO_STR, String::class.java)
+                .addField(OutgoingGossipingRequestEntityFields.REQUEST_STATE_STR, String::class.java)
+                .addField(OutgoingGossipingRequestEntityFields.RECIPIENTS_DATA, String::class.java)
     }
 }

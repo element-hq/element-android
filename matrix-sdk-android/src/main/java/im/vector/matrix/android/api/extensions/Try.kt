@@ -14,23 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.crypto
+package im.vector.matrix.android.api.extensions
 
-interface IncomingShareRequestCommon {
-    /**
-     * The user id
-     */
-    val userId: String?
-
-    /**
-     * The device id
-     */
-    val deviceId: String?
-
-    /**
-     * The request id
-     */
-    val requestId: String?
-
-    val localCreationTimestamp: Long?
+inline fun <A> tryThis(operation: () -> A): A? {
+    return try {
+        operation()
+    } catch (any: Throwable) {
+        null
+    }
 }

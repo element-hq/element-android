@@ -74,7 +74,9 @@ import im.vector.riotx.features.settings.VectorSettingsSecurityPrivacyFragment
 import im.vector.riotx.features.settings.crosssigning.CrossSigningSettingsFragment
 import im.vector.riotx.features.settings.devices.VectorSettingsDevicesFragment
 import im.vector.riotx.features.settings.devtools.AccountDataFragment
-import im.vector.riotx.features.settings.devtools.KeyRequestListFragment
+import im.vector.riotx.features.settings.devtools.GossipingEventsPaperTrailFragment
+import im.vector.riotx.features.settings.devtools.IncomingKeyRequestListFragment
+import im.vector.riotx.features.settings.devtools.OutgoingKeyRequestListFragment
 import im.vector.riotx.features.settings.devtools.KeyRequestsFragment
 import im.vector.riotx.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
@@ -371,11 +373,24 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(KeyRequestListFragment::class)
-    fun bindKeyRequestListFragment(fragment: KeyRequestListFragment): Fragment
+    @FragmentKey(OutgoingKeyRequestListFragment::class)
+    fun bindOutgoingKeyRequestListFragment(fragment: OutgoingKeyRequestListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(IncomingKeyRequestListFragment::class)
+    fun bindIncomingKeyRequestListFragment(fragment: IncomingKeyRequestListFragment): Fragment
 
     @Binds
     @IntoMap
     @FragmentKey(KeyRequestsFragment::class)
     fun bindKeyRequestsFragment(fragment: KeyRequestsFragment): Fragment
+
+
+    @Binds
+    @IntoMap
+    @FragmentKey(GossipingEventsPaperTrailFragment::class)
+    fun bindGossipingEventsPaperTrailFragment(fragment: GossipingEventsPaperTrailFragment): Fragment
+
+
 }

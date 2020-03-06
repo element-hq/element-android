@@ -25,7 +25,7 @@ import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.crypto.DeviceListManager
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.MyDeviceInfoHolder
-import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequestManager
+import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestManager
 import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.KeyUsage
 import im.vector.matrix.android.internal.crypto.model.rest.UploadSignatureQueryBuilder
@@ -43,6 +43,7 @@ import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.withoutPrefix
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.greenrobot.eventbus.EventBus
 import org.matrix.olm.OlmPkSigning
 import org.matrix.olm.OlmUtility
@@ -62,7 +63,7 @@ internal class DefaultCrossSigningService @Inject constructor(
         private val taskExecutor: TaskExecutor,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope,
-        private val outgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
+        private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
         private val eventBus: EventBus) : CrossSigningService, DeviceListManager.UserDevicesUpdateListener {
 
     private var olmUtility: OlmUtility? = null
@@ -297,6 +298,58 @@ internal class DefaultCrossSigningService @Inject constructor(
     private fun resetTrustOnKeyChange() {
         Timber.i("## CrossSigning - Clear all other user trust")
         cryptoStore.clearOtherUserTrust()
+    }
+
+    override fun onSecretSSKGossip(sskPrivateKey: String): Boolean {
+        Timber.i("## CrossSigning - onSecretSSKGossip")
+        return runBlocking(coroutineDispatchers.crypto) {
+            val mxCrossSigningInfo = getMyCrossSigningKeys() ?: return@runBlocking false
+
+            sskPrivateKey.fromBase64NoPadding()
+                    .let { privateKeySeed ->
+                        val pkSigning = OlmPkSigning()
+                        try {
+                            if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.selfSigningKey()?.unpaddedBase64PublicKey) {
+                                selfSigningPkSigning?.releaseSigning()
+                                selfSigningPkSigning = pkSigning
+                                Timber.i("## CrossSigning - Loading SSK success")
+                                cryptoStore.storePrivateKeysInfo(null, null, sskPrivateKey)
+                                return@runBlocking true
+                            } else {
+                                pkSigning.releaseSigning()
+                            }
+                        } catch (failure: Throwable) {
+                            pkSigning.releaseSigning()
+                        }
+                    }
+            return@runBlocking false
+        }
+    }
+
+    override fun onSecretUSKGossip(uskPrivateKey: String): Boolean {
+        Timber.i("## CrossSigning - onSecretUSKGossip")
+        return runBlocking(coroutineDispatchers.crypto) {
+            val mxCrossSigningInfo = getMyCrossSigningKeys() ?: return@runBlocking false
+
+            uskPrivateKey.fromBase64NoPadding()
+                    .let { privateKeySeed ->
+                        val pkSigning = OlmPkSigning()
+                        try {
+                            if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.selfSigningKey()?.unpaddedBase64PublicKey) {
+                                userPkSigning?.releaseSigning()
+                                userPkSigning = pkSigning
+                                Timber.i("## CrossSigning - Loading USK success")
+                                cryptoStore.storePrivateKeysInfo(null, uskPrivateKey, null)
+                                return@runBlocking true
+                            } else {
+                                pkSigning.releaseSigning()
+                            }
+                        } catch (failure: Throwable) {
+                            pkSigning.releaseSigning()
+                        }
+                    }
+            return@runBlocking false
+        }
     }
 
     override fun checkTrustFromPrivateKeys(masterKeyPrivateKey: String?,
@@ -549,97 +602,103 @@ internal class DefaultCrossSigningService @Inject constructor(
     }
 
     override fun trustUser(otherUserId: String, callback: MatrixCallback<Unit>) {
-        Timber.d("## CrossSigning - Mark user $userId as trusted ")
-        // We should have this user keys
-        val otherMasterKeys = getUserCrossSigningKeys(otherUserId)?.masterKey()
-        if (otherMasterKeys == null) {
-            callback.onFailure(Throwable("## CrossSigning - Other master signing key is not known"))
-            return
-        }
-        val myKeys = getUserCrossSigningKeys(userId)
-        if (myKeys == null) {
-            callback.onFailure(Throwable("## CrossSigning - CrossSigning is not setup for this account"))
-            return
-        }
-        val userPubKey = myKeys.userKey()?.unpaddedBase64PublicKey
-        if (userPubKey == null || userPkSigning == null) {
-            callback.onFailure(Throwable("## CrossSigning - Cannot sign from this account, privateKeyUnknown $userPubKey"))
-            return
-        }
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            Timber.d("## CrossSigning - Mark user $userId as trusted ")
+            // We should have this user keys
+            val otherMasterKeys = getUserCrossSigningKeys(otherUserId)?.masterKey()
+            if (otherMasterKeys == null) {
+                callback.onFailure(Throwable("## CrossSigning - Other master signing key is not known"))
+                return@launch
+            }
+            val myKeys = getUserCrossSigningKeys(userId)
+            if (myKeys == null) {
+                callback.onFailure(Throwable("## CrossSigning - CrossSigning is not setup for this account"))
+                return@launch
+            }
+            val userPubKey = myKeys.userKey()?.unpaddedBase64PublicKey
+            if (userPubKey == null || userPkSigning == null) {
+                callback.onFailure(Throwable("## CrossSigning - Cannot sign from this account, privateKeyUnknown $userPubKey"))
+                return@launch
+            }
 
-        // Sign the other MasterKey with our UserSigning key
-        val newSignature = JsonCanonicalizer.getCanonicalJson(Map::class.java,
-                otherMasterKeys.signalableJSONDictionary()).let { userPkSigning?.sign(it) }
+            // Sign the other MasterKey with our UserSigning key
+            val newSignature = JsonCanonicalizer.getCanonicalJson(Map::class.java,
+                    otherMasterKeys.signalableJSONDictionary()).let { userPkSigning?.sign(it) }
 
-        if (newSignature == null) {
-            // race??
-            callback.onFailure(Throwable("## CrossSigning - Failed to sign"))
-            return
+            if (newSignature == null) {
+                // race??
+                callback.onFailure(Throwable("## CrossSigning - Failed to sign"))
+                return@launch
+            }
+
+            cryptoStore.setUserKeysAsTrusted(otherUserId, true)
+            // TODO update local copy with new signature directly here? kind of local echo of trust?
+
+            Timber.d("## CrossSigning - Upload signature of $userId MSK signed by USK")
+            val uploadQuery = UploadSignatureQueryBuilder()
+                    .withSigningKeyInfo(otherMasterKeys.copyForSignature(userId, userPubKey, newSignature))
+                    .build()
+            uploadSignaturesTask.configureWith(UploadSignaturesTask.Params(uploadQuery)) {
+                this.executionThread = TaskThread.CRYPTO
+                this.callback = callback
+            }.executeBy(taskExecutor)
         }
-
-        cryptoStore.setUserKeysAsTrusted(otherUserId, true)
-        // TODO update local copy with new signature directly here? kind of local echo of trust?
-
-        Timber.d("## CrossSigning - Upload signature of $userId MSK signed by USK")
-        val uploadQuery = UploadSignatureQueryBuilder()
-                .withSigningKeyInfo(otherMasterKeys.copyForSignature(userId, userPubKey, newSignature))
-                .build()
-        uploadSignaturesTask.configureWith(UploadSignaturesTask.Params(uploadQuery)) {
-            this.executionThread = TaskThread.CRYPTO
-            this.callback = callback
-        }.executeBy(taskExecutor)
     }
 
     override fun markMyMasterKeyAsTrusted() {
-        cryptoStore.markMyMasterKeyAsLocallyTrusted(true)
-        checkSelfTrust()
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            cryptoStore.markMyMasterKeyAsLocallyTrusted(true)
+            checkSelfTrust()
+        }
     }
 
     override fun trustDevice(deviceId: String, callback: MatrixCallback<Unit>) {
-        // This device should be yours
-        val device = cryptoStore.getUserDevice(userId, deviceId)
-        if (device == null) {
-            callback.onFailure(IllegalArgumentException("This device [$deviceId] is not known, or not yours"))
-            return
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            // This device should be yours
+            val device = cryptoStore.getUserDevice(userId, deviceId)
+            if (device == null) {
+                callback.onFailure(IllegalArgumentException("This device [$deviceId] is not known, or not yours"))
+                return@launch
+            }
+
+            val myKeys = getUserCrossSigningKeys(userId)
+            if (myKeys == null) {
+                callback.onFailure(Throwable("CrossSigning is not setup for this account"))
+                return@launch
+            }
+
+            val ssPubKey = myKeys.selfSigningKey()?.unpaddedBase64PublicKey
+            if (ssPubKey == null || selfSigningPkSigning == null) {
+                callback.onFailure(Throwable("Cannot sign from this account, public and/or privateKey Unknown $ssPubKey"))
+                return@launch
+            }
+
+            // Sign with self signing
+            val newSignature = selfSigningPkSigning?.sign(device.canonicalSignable())
+
+            if (newSignature == null) {
+                // race??
+                callback.onFailure(Throwable("Failed to sign"))
+                return@launch
+            }
+            val toUpload = device.copy(
+                    signatures = mapOf(
+                            userId
+                                    to
+                                    mapOf(
+                                            "ed25519:$ssPubKey" to newSignature
+                                    )
+                    )
+            )
+
+            val uploadQuery = UploadSignatureQueryBuilder()
+                    .withDeviceInfo(toUpload)
+                    .build()
+            uploadSignaturesTask.configureWith(UploadSignaturesTask.Params(uploadQuery)) {
+                this.executionThread = TaskThread.CRYPTO
+                this.callback = callback
+            }.executeBy(taskExecutor)
         }
-
-        val myKeys = getUserCrossSigningKeys(userId)
-        if (myKeys == null) {
-            callback.onFailure(Throwable("CrossSigning is not setup for this account"))
-            return
-        }
-
-        val ssPubKey = myKeys.selfSigningKey()?.unpaddedBase64PublicKey
-        if (ssPubKey == null || selfSigningPkSigning == null) {
-            callback.onFailure(Throwable("Cannot sign from this account, public and/or privateKey Unknown $ssPubKey"))
-            return
-        }
-
-        // Sign with self signing
-        val newSignature = selfSigningPkSigning?.sign(device.canonicalSignable())
-
-        if (newSignature == null) {
-            // race??
-            callback.onFailure(Throwable("Failed to sign"))
-            return
-        }
-        val toUpload = device.copy(
-                signatures = mapOf(
-                        userId
-                                to
-                                mapOf(
-                                        "ed25519:$ssPubKey" to newSignature
-                                )
-                )
-        )
-
-        val uploadQuery = UploadSignatureQueryBuilder()
-                .withDeviceInfo(toUpload)
-                .build()
-        uploadSignaturesTask.configureWith(UploadSignaturesTask.Params(uploadQuery)) {
-            this.executionThread = TaskThread.CRYPTO
-            this.callback = callback
-        }.executeBy(taskExecutor)
     }
 
     override fun checkDeviceTrust(otherUserId: String, otherDeviceId: String, locallyTrusted: Boolean?): DeviceTrustResult {
@@ -738,7 +797,7 @@ internal class DefaultCrossSigningService @Inject constructor(
             // If it's me, recheck trust of all users and devices?
             val users = ArrayList<String>()
             if (otherUserId == userId && currentTrust != trusted) {
-                reRequestAllPendingRoomKeyRequest()
+//                reRequestAllPendingRoomKeyRequest()
                 cryptoStore.updateUsersTrust {
                     users.add(it)
                     checkUserTrust(it).isVerified()
@@ -755,16 +814,18 @@ internal class DefaultCrossSigningService @Inject constructor(
         }
     }
 
-    private fun reRequestAllPendingRoomKeyRequest() {
-        Timber.d("## CrossSigning - reRequest pending outgoing room key requests")
-        cryptoStore.getOutgoingRoomKeyRequests().forEach {
-            it.requestBody?.let { requestBody ->
-                if (cryptoStore.getInboundGroupSession(requestBody.sessionId ?: "", requestBody.senderKey ?: "") == null) {
-                    outgoingRoomKeyRequestManager.resendRoomKeyRequest(requestBody)
-                } else {
-                    outgoingRoomKeyRequestManager.cancelRoomKeyRequest(requestBody)
-                }
-            }
-        }
-    }
+//    private fun reRequestAllPendingRoomKeyRequest() {
+//        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+//            Timber.d("## CrossSigning - reRequest pending outgoing room key requests")
+//            cryptoStore.getOutgoingRoomKeyRequests().forEach {
+//                it.requestBody?.let { requestBody ->
+//                    if (cryptoStore.getInboundGroupSession(requestBody.sessionId ?: "", requestBody.senderKey ?: "") == null) {
+//                        outgoingRoomKeyRequestManager.resendRoomKeyRequest(requestBody)
+//                    } else {
+//                        outgoingRoomKeyRequestManager.cancelRoomKeyRequest(requestBody)
+//                    }
+//                }
+//            }
+//        }
+//    }
 }
