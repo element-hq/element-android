@@ -118,7 +118,7 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
 //                fromDevice = session.sessionParams.credentials.deviceId ?: "",
 //                methods = listOf(KeyVerificationStart.VERIF_METHOD_SAS),
 //                timestamp = System.currentTimeMillis().toInt(),
-//                transactionID = transactionId
+//                transactionId = transactionId
 //        )
 //
 //        sendToOther(

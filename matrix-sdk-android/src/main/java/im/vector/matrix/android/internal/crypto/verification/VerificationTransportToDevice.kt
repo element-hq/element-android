@@ -55,7 +55,7 @@ internal class VerificationTransportToDevice(
         Timber.d("## SAS sending verification request with supported methods: $supportedMethods")
         val contentMap = MXUsersDevicesMap<Any>()
         val validKeyReq = ValidVerificationInfoRequest(
-                transactionID = localID,
+                transactionId = localID,
                 fromDevice = myDeviceId ?: "",
                 methods = supportedMethods,
                 timestamp = System.currentTimeMillis()
@@ -64,7 +64,7 @@ internal class VerificationTransportToDevice(
                 fromDevice = validKeyReq.fromDevice,
                 methods = validKeyReq.methods,
                 timestamp = validKeyReq.timestamp,
-                transactionId = validKeyReq.transactionID
+                transactionId = validKeyReq.transactionId
         )
         toDevices?.forEach {
             contentMap.setObject(otherUserId, it, keyReq)
@@ -204,7 +204,7 @@ internal class VerificationTransportToDevice(
     override fun createMac(tid: String, mac: Map<String, String>, keys: String) = KeyVerificationMac.create(tid, mac, keys)
 
     override fun createStartForSas(fromDevice: String,
-                                   transactionID: String,
+                                   transactionId: String,
                                    keyAgreementProtocols: List<String>,
                                    hashes: List<String>,
                                    messageAuthenticationCodes: List<String>,
@@ -212,7 +212,7 @@ internal class VerificationTransportToDevice(
         return KeyVerificationStart(
                 fromDevice,
                 VERIFICATION_METHOD_SAS,
-                transactionID,
+                transactionId,
                 keyAgreementProtocols,
                 hashes,
                 messageAuthenticationCodes,
@@ -221,12 +221,12 @@ internal class VerificationTransportToDevice(
     }
 
     override fun createStartForQrCode(fromDevice: String,
-                                      transactionID: String,
+                                      transactionId: String,
                                       sharedSecret: String): VerificationInfoStart {
         return KeyVerificationStart(
                 fromDevice,
                 VERIFICATION_METHOD_RECIPROCATE,
-                transactionID,
+                transactionId,
                 null,
                 null,
                 null,

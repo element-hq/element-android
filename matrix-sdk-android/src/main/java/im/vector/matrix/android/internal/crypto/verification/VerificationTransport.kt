@@ -65,7 +65,7 @@ internal interface VerificationTransport {
      * Create start for SAS verification
      */
     fun createStartForSas(fromDevice: String,
-                          transactionID: String,
+                          transactionId: String,
                           keyAgreementProtocols: List<String>,
                           hashes: List<String>,
                           messageAuthenticationCodes: List<String>,
@@ -75,7 +75,7 @@ internal interface VerificationTransport {
      * Create start for QR code verification
      */
     fun createStartForQrCode(fromDevice: String,
-                             transactionID: String,
+                             transactionId: String,
                              sharedSecret: String): VerificationInfoStart
 
     fun createMac(tid: String, mac: Map<String, String>, keys: String): VerificationInfoMac

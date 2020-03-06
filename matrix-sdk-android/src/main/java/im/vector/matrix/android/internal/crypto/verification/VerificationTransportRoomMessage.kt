@@ -147,7 +147,7 @@ internal class VerificationTransportRoomMessage(
         requireNotNull(roomId)
 
         val validInfo = ValidVerificationInfoRequest(
-                transactionID = "",
+                transactionId = "",
                 fromDevice = userDeviceId ?: "",
                 methods = supportedMethods,
                 timestamp = System.currentTimeMillis()
@@ -278,7 +278,7 @@ internal class VerificationTransportRoomMessage(
     override fun createMac(tid: String, mac: Map<String, String>, keys: String) = MessageVerificationMacContent.create(tid, mac, keys)
 
     override fun createStartForSas(fromDevice: String,
-                                   transactionID: String,
+                                   transactionId: String,
                                    keyAgreementProtocols: List<String>,
                                    hashes: List<String>,
                                    messageAuthenticationCodes: List<String>,
@@ -292,14 +292,14 @@ internal class VerificationTransportRoomMessage(
                 VERIFICATION_METHOD_SAS,
                 RelationDefaultContent(
                         type = RelationType.REFERENCE,
-                        eventId = transactionID
+                        eventId = transactionId
                 ),
                 null
         )
     }
 
     override fun createStartForQrCode(fromDevice: String,
-                                      transactionID: String,
+                                      transactionId: String,
                                       sharedSecret: String): VerificationInfoStart {
         return MessageVerificationStartContent(
                 fromDevice,
@@ -310,7 +310,7 @@ internal class VerificationTransportRoomMessage(
                 VERIFICATION_METHOD_RECIPROCATE,
                 RelationDefaultContent(
                         type = RelationType.REFERENCE,
-                        eventId = transactionID
+                        eventId = transactionId
                 ),
                 sharedSecret
         )

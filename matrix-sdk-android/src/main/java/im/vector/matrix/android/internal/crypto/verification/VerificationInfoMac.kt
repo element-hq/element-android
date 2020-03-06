@@ -47,7 +47,7 @@ internal interface VerificationInfoMacFactory {
 }
 
 internal data class ValidVerificationInfoMac(
-        val transactionID: String,
+        val transactionId: String,
         val mac: Map<String, String>,
         val keys: String
 )

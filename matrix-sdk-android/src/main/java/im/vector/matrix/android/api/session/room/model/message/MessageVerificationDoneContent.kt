@@ -42,5 +42,5 @@ internal data class MessageVerificationDoneContent(
 }
 
 internal data class ValidVerificationDone(
-        val transactionID: String
+        val transactionId: String
 )

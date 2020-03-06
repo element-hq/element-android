@@ -104,21 +104,21 @@ internal interface VerificationInfoStart : VerificationInfo<ValidVerificationInf
 }
 
 sealed class ValidVerificationInfoStart(
-        open val transactionID: String,
+        open val transactionId: String,
         open val fromDevice: String) {
     data class SasVerificationInfoStart(
-            override val transactionID: String,
+            override val transactionId: String,
             override val fromDevice: String,
             val keyAgreementProtocols: List<String>,
             val hashes: List<String>,
             val messageAuthenticationCodes: List<String>,
             val shortAuthenticationStrings: List<String>,
             val canonicalJson: String
-    ) : ValidVerificationInfoStart(transactionID, fromDevice)
+    ) : ValidVerificationInfoStart(transactionId, fromDevice)
 
     data class ReciprocateVerificationInfoStart(
-            override val transactionID: String,
+            override val transactionId: String,
             override val fromDevice: String,
             val sharedSecret: String
-    ) : ValidVerificationInfoStart(transactionID, fromDevice)
+    ) : ValidVerificationInfoStart(transactionId, fromDevice)
 }

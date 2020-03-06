@@ -72,7 +72,7 @@ internal interface VerificationInfoAcceptFactory {
 }
 
 internal data class ValidVerificationInfoAccept(
-        val transactionID: String,
+        val transactionId: String,
         val keyAgreementProtocol: String,
         val hash: String,
         val messageAuthenticationCode: String,

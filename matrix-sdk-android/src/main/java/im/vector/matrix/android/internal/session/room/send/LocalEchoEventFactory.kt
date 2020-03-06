@@ -71,7 +71,7 @@ import javax.inject.Inject
  * (the transaction ID), this id is used when receiving an event from a sync to check if this event
  * is matching an existing local echo.
  *
- * The transactionID is used as loc
+ * The transactionId is used as loc
  */
 internal class LocalEchoEventFactory @Inject constructor(
         @UserId private val userId: String,

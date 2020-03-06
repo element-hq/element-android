@@ -17,7 +17,7 @@
 package im.vector.matrix.android.api.session.crypto.verification
 
 data class ValidVerificationInfoRequest(
-        val transactionID: String,
+        val transactionId: String,
         val fromDevice: String,
         val methods: List<String>,
         val timestamp: Long?

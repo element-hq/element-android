@@ -40,6 +40,6 @@ internal interface VerificationInfoKeyFactory {
 }
 
 internal data class ValidVerificationInfoKey(
-        val transactionID: String,
+        val transactionId: String,
         val key: String
 )

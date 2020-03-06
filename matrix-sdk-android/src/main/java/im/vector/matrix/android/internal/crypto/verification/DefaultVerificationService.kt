@@ -300,8 +300,8 @@ internal class DefaultVerificationService @Inject constructor(
                 isIncoming = true,
                 otherUserId = senderId, // requestInfo.toUserId,
                 roomId = null,
-                transactionId = validRequestInfo.transactionID,
-                localID = validRequestInfo.transactionID,
+                transactionId = validRequestInfo.transactionId,
+                localID = validRequestInfo.transactionId,
                 requestInfo = validRequestInfo
         )
         requestsForUser.add(pendingVerificationRequest)
@@ -313,7 +313,7 @@ internal class DefaultVerificationService @Inject constructor(
         val requestInfo = event.getClearContent().toModel<MessageVerificationRequestContent>() ?: return
         val validRequestInfo = requestInfo
                 // copy the EventId to the transactionId
-                .copy(transactionID = event.eventId)
+                .copy(transactionId = event.eventId)
                 .asValidObject() ?: return
 
         val senderId = event.senderId ?: return
@@ -373,10 +373,10 @@ internal class DefaultVerificationService @Inject constructor(
         val otherUserId = event.senderId
         if (validStartReq == null) {
             Timber.e("## received invalid verification request")
-            if (startReq?.transactionID != null) {
+            if (startReq?.transactionId != null) {
                 verificationTransportRoomMessageFactory.createTransport(event.roomId ?: "", null)
                         .cancelTransaction(
-                                startReq.transactionID ?: "",
+                                startReq.transactionId ?: "",
                                 otherUserId!!,
                                 startReq.fromDevice ?: event.getSenderKey()!!,
                                 CancelCode.UnknownMethod
@@ -390,7 +390,7 @@ internal class DefaultVerificationService @Inject constructor(
         }?.let {
             verificationTransportRoomMessageFactory.createTransport(event.roomId ?: "", null)
                     .cancelTransaction(
-                            validStartReq.transactionID,
+                            validStartReq.transactionId,
                             otherUserId!!,
                             validStartReq.fromDevice,
                             it
@@ -407,9 +407,9 @@ internal class DefaultVerificationService @Inject constructor(
         val otherUserId = event.senderId!!
         if (validStartReq == null) {
             Timber.e("## SAS received invalid verification request")
-            if (startReq?.transactionID != null) {
+            if (startReq?.transactionId != null) {
                 verificationTransportToDeviceFactory.createTransport(null).cancelTransaction(
-                        startReq.transactionID,
+                        startReq.transactionId,
                         otherUserId,
                         startReq.fromDevice ?: event.getSenderKey()!!,
                         CancelCode.UnknownMethod
@@ -422,7 +422,7 @@ internal class DefaultVerificationService @Inject constructor(
             it.transport = verificationTransportToDeviceFactory.createTransport(it)
         }?.let {
             verificationTransportToDeviceFactory.createTransport(null).cancelTransaction(
-                    validStartReq.transactionID,
+                    validStartReq.transactionId,
                     otherUserId,
                     validStartReq.fromDevice,
                     it
@@ -436,9 +436,9 @@ internal class DefaultVerificationService @Inject constructor(
     private suspend fun handleStart(otherUserId: String?,
                                     startReq: ValidVerificationInfoStart,
                                     txConfigure: (DefaultVerificationTransaction) -> Unit): CancelCode? {
-        Timber.d("## SAS onStartRequestReceived ${startReq.transactionID}")
+        Timber.d("## SAS onStartRequestReceived ${startReq.transactionId}")
         if (checkKeysAreDownloaded(otherUserId!!, startReq.fromDevice) != null) {
-            val tid = startReq.transactionID
+            val tid = startReq.transactionId
             val existing = getExistingTransaction(otherUserId, tid)
 
             when (startReq) {
@@ -446,7 +446,7 @@ internal class DefaultVerificationService @Inject constructor(
                     when (existing) {
                         is SasVerificationTransaction    -> {
                             // should cancel both!
-                            Timber.v("## SAS onStartRequestReceived - Request exist with same id ${startReq.transactionID}")
+                            Timber.v("## SAS onStartRequestReceived - Request exist with same id ${startReq.transactionId}")
                             existing.cancel(CancelCode.UnexpectedMessage)
                             // Already cancelled, so return null
                             return null
@@ -461,7 +461,7 @@ internal class DefaultVerificationService @Inject constructor(
                                     ?.also {
                                         // Multiple keyshares between two devices:
                                         // any two devices may only have at most one key verification in flight at a time.
-                                        Timber.v("## SAS onStartRequestReceived - Already a transaction with this user ${startReq.transactionID}")
+                                        Timber.v("## SAS onStartRequestReceived - Already a transaction with this user ${startReq.transactionId}")
                                     }
                                     ?.forEach {
                                         it.cancel(CancelCode.UnexpectedMessage)
@@ -473,12 +473,12 @@ internal class DefaultVerificationService @Inject constructor(
                     }
 
                     // Ok we can create a SAS transaction
-                    Timber.v("## SAS onStartRequestReceived - request accepted ${startReq.transactionID}")
+                    Timber.v("## SAS onStartRequestReceived - request accepted ${startReq.transactionId}")
                     // If there is a corresponding request, we can auto accept
                     // as we are the one requesting in first place (or we accepted the request)
                     // I need to check if the pending request was related to this device also
                     val autoAccept = getExistingVerificationRequest(otherUserId)?.any {
-                        it.transactionId == startReq.transactionID
+                        it.transactionId == startReq.transactionId
                                 && (it.requestInfo?.fromDevice == this.deviceId || it.readyInfo?.fromDevice == this.deviceId)
                     }
                             ?: false
@@ -490,7 +490,7 @@ internal class DefaultVerificationService @Inject constructor(
                             cryptoStore,
                             crossSigningService,
                             myDeviceInfoHolder.get().myDevice.fingerprint()!!,
-                            startReq.transactionID,
+                            startReq.transactionId,
                             otherUserId,
                             autoAccept).also { txConfigure(it) }
                     addTransaction(tx)
@@ -503,7 +503,7 @@ internal class DefaultVerificationService @Inject constructor(
                         existing.onStartReceived(startReq)
                         return null
                     } else {
-                        Timber.w("## SAS onStartRequestReceived - unexpected message ${startReq.transactionID}")
+                        Timber.w("## SAS onStartRequestReceived - unexpected message ${startReq.transactionId}")
                         return CancelCode.UnexpectedMessage
                     }
                 }
@@ -545,7 +545,7 @@ internal class DefaultVerificationService @Inject constructor(
             // TODO should we cancel?
             return
         }
-        getExistingVerificationRequest(event.senderId ?: "", validCancelReq.transactionID)?.let {
+        getExistingVerificationRequest(event.senderId ?: "", validCancelReq.transactionId)?.let {
             updatePendingRequest(it.copy(cancelConclusion = safeValueOf(validCancelReq.code)))
             // Should we remove it from the list?
         }
@@ -569,8 +569,8 @@ internal class DefaultVerificationService @Inject constructor(
     private fun handleOnCancel(otherUserId: String, cancelReq: ValidVerificationInfoCancel) {
         Timber.v("## SAS onCancelReceived otherUser: $otherUserId reason: ${cancelReq.reason}")
 
-        val existingTransaction = getExistingTransaction(otherUserId, cancelReq.transactionID)
-        val existingRequest = getExistingVerificationRequest(otherUserId, cancelReq.transactionID)
+        val existingTransaction = getExistingTransaction(otherUserId, cancelReq.transactionId)
+        val existingRequest = getExistingVerificationRequest(otherUserId, cancelReq.transactionId)
 
         if (existingRequest != null) {
             // Mark this request as cancelled
@@ -606,7 +606,7 @@ internal class DefaultVerificationService @Inject constructor(
 
     private fun handleAccept(acceptReq: ValidVerificationInfoAccept, senderId: String) {
         val otherUserId = senderId
-        val existing = getExistingTransaction(otherUserId, acceptReq.transactionID)
+        val existing = getExistingTransaction(otherUserId, acceptReq.transactionId)
         if (existing == null) {
             Timber.e("## SAS Received invalid accept request")
             return
@@ -649,7 +649,7 @@ internal class DefaultVerificationService @Inject constructor(
     private fun handleKeyReceived(event: Event, keyReq: ValidVerificationInfoKey) {
         Timber.d("##  SAS Received Key from ${event.senderId} with info $keyReq")
         val otherUserId = event.senderId!!
-        val existing = getExistingTransaction(otherUserId, keyReq.transactionID)
+        val existing = getExistingTransaction(otherUserId, keyReq.transactionId)
         if (existing == null) {
             Timber.e("##  SAS Received invalid key request")
             return
@@ -752,7 +752,7 @@ internal class DefaultVerificationService @Inject constructor(
 
     private fun handleMacReceived(senderId: String, macReq: ValidVerificationInfoMac) {
         Timber.v("## SAS Received $macReq")
-        val existing = getExistingTransaction(senderId, macReq.transactionID)
+        val existing = getExistingTransaction(senderId, macReq.transactionId)
         if (existing == null) {
             Timber.e("## SAS Received invalid Mac request")
             return
@@ -767,9 +767,9 @@ internal class DefaultVerificationService @Inject constructor(
     private fun handleReadyReceived(senderId: String,
                                     readyReq: ValidVerificationInfoReady,
                                     transportCreator: (DefaultVerificationTransaction) -> VerificationTransport) {
-        val existingRequest = getExistingVerificationRequest(senderId)?.find { it.transactionId == readyReq.transactionID }
+        val existingRequest = getExistingVerificationRequest(senderId)?.find { it.transactionId == readyReq.transactionId }
         if (existingRequest == null) {
-            Timber.e("## SAS Received Ready for unknown request txId:${readyReq.transactionID} fromDevice ${readyReq.fromDevice}")
+            Timber.e("## SAS Received Ready for unknown request txId:${readyReq.transactionId} fromDevice ${readyReq.fromDevice}")
             return
         }
 
@@ -784,7 +784,7 @@ internal class DefaultVerificationService @Inject constructor(
             // Create the pending transaction
             val tx = DefaultQrCodeVerificationTransaction(
                     setDeviceVerificationAction,
-                    readyReq.transactionID,
+                    readyReq.transactionId,
                     senderId,
                     readyReq.fromDevice,
                     crossSigningService,
@@ -899,9 +899,9 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     private fun handleDoneReceived(senderId: String, doneInfo: ValidVerificationDone) {
-        val existingRequest = getExistingVerificationRequest(senderId)?.find { it.transactionId == doneInfo.transactionID }
+        val existingRequest = getExistingVerificationRequest(senderId)?.find { it.transactionId == doneInfo.transactionId }
         if (existingRequest == null) {
-            Timber.e("## SAS Received Done for unknown request txId:${doneInfo.transactionID}")
+            Timber.e("## SAS Received Done for unknown request txId:${doneInfo.transactionId}")
             return
         }
         updatePendingRequest(existingRequest.copy(isSuccessful = true))
