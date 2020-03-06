@@ -50,14 +50,14 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
     override suspend fun doWork(): Result {
         Timber.v("Start Encrypt work")
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.success().also {
-                    Timber.e("Work cancelled due to input error from parent")
-                }
+                ?: return Result.success()
+                        .also { Timber.e("Unable to parse work parameters") }
 
         Timber.v("Start Encrypt work for event ${params.event.eventId}")
         if (params.lastFailureMessage != null) {
             // Transmit the error
             return Result.success(inputData)
+                    .also { Timber.e("Work cancelled due to input error from parent") }
         }
 
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()

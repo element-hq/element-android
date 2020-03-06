@@ -53,13 +53,13 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
     override suspend fun doWork(): Result {
         Timber.v("Start dispatch sending multiple event work")
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.success().also {
-                    Timber.e("Work cancelled due to input error from parent")
-                }
+                ?: return Result.success()
+                        .also { Timber.e("Unable to parse work parameters") }
 
         if (params.lastFailureMessage != null) {
             // Transmit the error
             return Result.success(inputData)
+                    .also { Timber.e("Work cancelled due to input error from parent") }
         }
 
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()

@@ -69,12 +69,14 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success()
+                        .also { Timber.e("Unable to parse work parameters") }
+
         Timber.v("Starting upload media work with params $params")
 
         if (params.lastFailureMessage != null) {
             // Transmit the error
-            Timber.v("Stop upload media work due to input failure")
             return Result.success(inputData)
+                    .also { Timber.e("Work cancelled due to input error from parent") }
         }
 
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
