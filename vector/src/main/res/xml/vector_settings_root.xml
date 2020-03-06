@@ -15,7 +15,6 @@
 
     <im.vector.riotx.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_notification"
-        android:key="SETTINGS_NOTIFICATIONS_KEY"
         android:title="@string/settings_notifications"
         app:fragment="im.vector.riotx.features.settings.VectorSettingsNotificationPreferenceFragment" />
 

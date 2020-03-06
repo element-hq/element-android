@@ -32,7 +32,7 @@ class TestAccountSettings @Inject constructor(private val stringProvider: String
 
     override fun perform() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
-        val defaultRule = session.getPushRules()
+        val defaultRule = session.getPushRules().getAllRules()
                 .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
 
         if (defaultRule != null) {

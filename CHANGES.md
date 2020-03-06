@@ -10,6 +10,7 @@ Improvements 🙌:
  - Detect spaces in password if user fail to login (#1038)
  - FTUE: do not display a different color when encrypting message when not in developer mode.
  - Open room member profile from avatar of the room member state event (#935)
+ - Restore the push rules configuration in the settings
 
 Bugfix 🐛:
  - Fix crash on attachment preview screen (#1088)
@@ -20,7 +21,7 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
- - 
+ - PushRuleService.getPushRules() now returns a RuleSet. Use getAllRules() on this object to get all the rules.
 
 Build 🧱:
  - Upgrade ktlint to version 0.36.0

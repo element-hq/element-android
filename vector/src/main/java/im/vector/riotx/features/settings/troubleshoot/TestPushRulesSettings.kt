@@ -23,7 +23,7 @@ import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.notifications.toNotificationAction
 import javax.inject.Inject
 
-class TestBingRulesSettings @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
+class TestPushRulesSettings @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
                                                 private val stringProvider: StringProvider)
     : TroubleshootTest(R.string.settings_troubleshoot_test_bing_settings_title) {
 
@@ -40,7 +40,7 @@ class TestBingRulesSettings @Inject constructor(private val activeSessionHolder:
 
     override fun perform() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
-        val pushRules = session.getPushRules()
+        val pushRules = session.getPushRules().getAllRules()
         var oneOrMoreRuleIsOff = false
         var oneOrMoreRuleAreSilent = false
         testedRules.forEach { ruleId ->

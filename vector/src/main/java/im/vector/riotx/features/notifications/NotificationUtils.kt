@@ -423,9 +423,9 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 // 'importance' which is set in the NotificationChannel. The integers representing
                 // 'priority' are different from 'importance', so make sure you don't mix them.
                 .apply {
-                    priority = NotificationCompat.PRIORITY_DEFAULT
                     if (roomInfo.shouldBing) {
                         // Compat
+                        priority = NotificationCompat.PRIORITY_DEFAULT
                         vectorPreferences.getNotificationRingTone()?.let {
                             setSound(it)
                         }
