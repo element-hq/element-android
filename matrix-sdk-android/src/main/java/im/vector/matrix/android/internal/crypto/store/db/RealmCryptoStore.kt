@@ -824,14 +824,14 @@ internal class RealmCryptoStore @Inject constructor(
 
     override fun getOutgoingSecretRequest(secretName: String): OutgoingSecretRequest? {
 //        return monarchy.fetchAllCopiedSync { realm ->
-////            realm.where<OutgoingGossipingRequestEntity>()
-////                    .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.SECRET.name)
-////                    .equalTo(GossipingEventEntityFields.SENDER, credentials.userId)
-////        }.mapNotNull {
-////            ContentMapper.map(it.content)?.toModel<OutgoingSecretRequest>()
-////        }.firstOrNull {
-////            it.secretName == secretName
-////        }
+// //            realm.where<OutgoingGossipingRequestEntity>()
+// //                    .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.SECRET.name)
+// //                    .equalTo(GossipingEventEntityFields.SENDER, credentials.userId)
+// //        }.mapNotNull {
+// //            ContentMapper.map(it.content)?.toModel<OutgoingSecretRequest>()
+// //        }.firstOrNull {
+// //            it.secretName == secretName
+// //        }
         TODO("not implemented")
     }
 
@@ -880,13 +880,11 @@ internal class RealmCryptoStore @Inject constructor(
             } else {
                 request = existing
             }
-
         }
         return request
     }
 
     override fun getOrAddOutgoingSecretShareRequest(secretName: String, recipients: Map<String, List<String>>): OutgoingSecretRequest? {
-
         var request: OutgoingSecretRequest? = null
 
         // Insert the request and return the one passed in parameter
@@ -1015,11 +1013,11 @@ internal class RealmCryptoStore @Inject constructor(
 //
 //                        }
 //                    }
-////                    .equalTo(IncomingRoomKeyRequestEntityFields.USER_ID, incomingRoomKeyRequest.userId)
-////                    .equalTo(IncomingRoomKeyRequestEntityFields.DEVICE_ID, incomingRoomKeyRequest.deviceId)
-////                    .equalTo(IncomingRoomKeyRequestEntityFields.REQUEST_ID, incomingRoomKeyRequest.requestId)
-////                    .findAll()
-////                    .deleteAllFromRealm()
+// //                    .equalTo(IncomingRoomKeyRequestEntityFields.USER_ID, incomingRoomKeyRequest.userId)
+// //                    .equalTo(IncomingRoomKeyRequestEntityFields.DEVICE_ID, incomingRoomKeyRequest.deviceId)
+// //                    .equalTo(IncomingRoomKeyRequestEntityFields.REQUEST_ID, incomingRoomKeyRequest.requestId)
+// //                    .findAll()
+// //                    .deleteAllFromRealm()
 //        }
 //    }
 
@@ -1102,7 +1100,6 @@ internal class RealmCryptoStore @Inject constructor(
                             )
                         }
                     }
-
                 }
     }
 

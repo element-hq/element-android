@@ -73,7 +73,6 @@ class KeyRequestListViewModel @AssistedInject constructor(@Assisted initialState
         fun create(initialState: KeyRequestListViewState): KeyRequestListViewModel
     }
 
-
     companion object : MvRxViewModelFactory<KeyRequestListViewModel, KeyRequestListViewState> {
 
         @JvmStatic

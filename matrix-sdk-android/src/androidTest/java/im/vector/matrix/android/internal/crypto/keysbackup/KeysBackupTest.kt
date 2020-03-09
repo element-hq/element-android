@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.keysbackup
 
-import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import im.vector.matrix.android.InstrumentedTest
 import im.vector.matrix.android.api.listeners.ProgressListener
@@ -35,7 +34,6 @@ import im.vector.matrix.android.common.assertDictEquals
 import im.vector.matrix.android.common.assertListEquals
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import im.vector.matrix.android.internal.crypto.MegolmSessionData
-import im.vector.matrix.android.internal.crypto.ShareRequestState
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.keysbackup.model.KeysBackupVersionTrust
 import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
@@ -43,15 +41,12 @@ import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersio
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
-import io.mockk.every
-import io.mockk.mockkStatic
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
-import org.junit.BeforeClass
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith

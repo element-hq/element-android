@@ -38,7 +38,6 @@ data class OutgoingRoomKeyRequest(
         // override var cancellationTxnId: String? = null
 ) : OutgoingGossipingRequest {
 
-
     /**
      * Used only for log.
      *

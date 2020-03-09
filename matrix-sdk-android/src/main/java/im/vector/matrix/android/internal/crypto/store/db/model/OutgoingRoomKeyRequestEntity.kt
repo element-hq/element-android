@@ -1,4 +1,4 @@
-///*
+// /*
 // * Copyright 2018 New Vector Ltd
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +14,17 @@
 // * limitations under the License.
 // */
 //
-//package im.vector.matrix.android.internal.crypto.store.db.model
+// package im.vector.matrix.android.internal.crypto.store.db.model
 //
-//import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
-//import im.vector.matrix.android.internal.crypto.ShareRequestState
-//import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
-//import im.vector.matrix.android.internal.crypto.store.db.deserializeFromRealm
-//import im.vector.matrix.android.internal.crypto.store.db.serializeForRealm
-//import io.realm.RealmObject
-//import io.realm.annotations.PrimaryKey
+// import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
+// import im.vector.matrix.android.internal.crypto.ShareRequestState
+// import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
+// import im.vector.matrix.android.internal.crypto.store.db.deserializeFromRealm
+// import im.vector.matrix.android.internal.crypto.store.db.serializeForRealm
+// import io.realm.RealmObject
+// import io.realm.annotations.PrimaryKey
 //
-//internal open class OutgoingRoomKeyRequestEntity(
+// internal open class OutgoingRoomKeyRequestEntity(
 //        @PrimaryKey var requestId: String? = null,
 //        var cancellationTxnId: String? = null,
 //        // Serialized Json
@@ -36,7 +36,7 @@
 //        var requestBodySessionId: String? = null,
 //        // State
 //        var state: Int = 0
-//) : RealmObject() {
+// ) : RealmObject() {
 //
 //    /**
 //     * Convert to OutgoingRoomKeyRequest
@@ -74,4 +74,4 @@
 //            requestBodySessionId = it.sessionId
 //        }
 //    }
-//}
+// }

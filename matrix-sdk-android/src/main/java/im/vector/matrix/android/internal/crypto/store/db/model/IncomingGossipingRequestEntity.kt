@@ -23,7 +23,6 @@ import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.IncomingSecretShareRequest
 import im.vector.matrix.android.internal.crypto.IncomingShareRequestCommon
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
-import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.Index
 

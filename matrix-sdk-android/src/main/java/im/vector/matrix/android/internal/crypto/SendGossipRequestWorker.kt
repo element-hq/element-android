@@ -33,7 +33,6 @@ import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShareRequest
 import im.vector.matrix.android.internal.crypto.model.rest.SecretShareRequest
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
-import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
 import org.greenrobot.eventbus.EventBus
@@ -57,7 +56,6 @@ internal class SendGossipRequestWorker(context: Context,
     @Inject lateinit var credentials: Credentials
 
     override suspend fun doWork(): Result {
-
         val errorOutputData = Data.Builder().putBoolean("failed", true).build()
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success(errorOutputData)
@@ -123,7 +121,7 @@ internal class SendGossipRequestWorker(context: Context,
             }
             else                              -> {
                 return Result.success(errorOutputData).also {
-                    Timber.e("Unknown empty gossiping request: ${params}")
+                    Timber.e("Unknown empty gossiping request: $params")
                 }
             }
         }

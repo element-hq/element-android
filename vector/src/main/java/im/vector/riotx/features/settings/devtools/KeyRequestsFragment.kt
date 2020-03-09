@@ -16,9 +16,7 @@
 
 package im.vector.riotx.features.settings.devtools
 
-import android.content.Context
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -45,7 +43,6 @@ class KeyRequestsFragment @Inject constructor() : VectorBaseFragment() {
 
     private val pageAdapterListener = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
-
             invalidateOptionsMenu()
         }
 
@@ -92,8 +89,6 @@ class KeyRequestsFragment @Inject constructor() : VectorBaseFragment() {
     private inner class KeyReqPagerAdapter(fa: Fragment) : FragmentStateAdapter(fa) {
         override fun getItemCount(): Int = 3
 
-
-
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 0    -> {
@@ -108,5 +103,4 @@ class KeyRequestsFragment @Inject constructor() : VectorBaseFragment() {
             }
         }
     }
-
 }

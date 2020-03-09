@@ -21,5 +21,5 @@ interface OutgoingGossipingRequest {
     var requestId: String
     var state: OutgoingGossipingRequestState
     // transaction id for the cancellation, if any
-    //var cancellationTxnId: String?
+    // var cancellationTxnId: String?
 }

@@ -17,7 +17,6 @@
 package im.vector.riotx.features.settings.devtools
 
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -53,5 +52,4 @@ class OutgoingKeyRequestListFragment @Inject constructor(
         recyclerView.cleanup()
 //        epoxyController.interactionListener = null
     }
-
 }

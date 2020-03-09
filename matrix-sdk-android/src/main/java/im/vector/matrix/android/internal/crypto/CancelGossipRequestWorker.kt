@@ -64,7 +64,6 @@ internal class CancelGossipRequestWorker(context: Context,
     @Inject lateinit var credentials: Credentials
 
     override suspend fun doWork(): Result {
-
         val errorOutputData = Data.Builder().putBoolean("failed", true).build()
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success(errorOutputData)

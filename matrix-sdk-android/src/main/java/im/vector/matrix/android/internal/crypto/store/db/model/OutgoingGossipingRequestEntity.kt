@@ -19,10 +19,7 @@ package im.vector.matrix.android.internal.crypto.store.db.model
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Types
 import im.vector.matrix.android.api.extensions.tryThis
-import im.vector.matrix.android.api.session.events.model.toContent
-import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.internal.crypto.GossipRequestType
-import im.vector.matrix.android.internal.crypto.GossipingRequestState
 import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequest
 import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestState
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest

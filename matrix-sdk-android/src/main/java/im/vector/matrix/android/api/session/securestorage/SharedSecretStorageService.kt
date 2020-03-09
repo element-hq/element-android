@@ -111,7 +111,6 @@ interface SharedSecretStorageService {
 
     fun checkShouldBeAbleToAccessSecrets(secretNames: List<String>, keyId: String?) : IntegrityResult
 
-
     fun requestSecret(name: String, myOtherDeviceId: String)
 
     data class KeyRef(

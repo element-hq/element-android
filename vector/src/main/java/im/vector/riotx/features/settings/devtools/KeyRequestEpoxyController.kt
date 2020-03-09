@@ -68,7 +68,6 @@ class KeyRequestEpoxyController @Inject constructor(
                     }
                 }
                 is Success -> {
-
                     if (async.invoke().isEmpty()) {
                         genericFooterItem {
                             id("empty")
@@ -124,7 +123,6 @@ class KeyRequestEpoxyController @Inject constructor(
                     }
                 }
                 is Success -> {
-
                     if (async.invoke().isEmpty()) {
                         genericFooterItem {
                             id("empty")

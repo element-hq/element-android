@@ -25,7 +25,6 @@ import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.core.resources.ColorProvider
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import javax.inject.Inject
 
@@ -64,5 +63,4 @@ class GossipingEventsPaperTrailFragment @Inject constructor(
             return super.onOptionsItemSelected(item)
         }
     }
-
 }

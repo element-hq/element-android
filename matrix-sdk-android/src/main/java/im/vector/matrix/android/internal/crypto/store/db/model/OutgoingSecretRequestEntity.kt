@@ -1,4 +1,4 @@
-///*
+// /*
 // * Copyright (c) 2020 New Vector Ltd
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +14,16 @@
 // * limitations under the License.
 // */
 //
-//package im.vector.matrix.android.internal.crypto.store.db.model
+// package im.vector.matrix.android.internal.crypto.store.db.model
 //
-//import im.vector.matrix.android.internal.crypto.OutgoingSecretRequest
-//import im.vector.matrix.android.internal.crypto.ShareRequestState
-//import im.vector.matrix.android.internal.crypto.store.db.deserializeFromRealm
-//import im.vector.matrix.android.internal.crypto.store.db.serializeForRealm
-//import io.realm.RealmObject
-//import io.realm.annotations.PrimaryKey
+// import im.vector.matrix.android.internal.crypto.OutgoingSecretRequest
+// import im.vector.matrix.android.internal.crypto.ShareRequestState
+// import im.vector.matrix.android.internal.crypto.store.db.deserializeFromRealm
+// import im.vector.matrix.android.internal.crypto.store.db.serializeForRealm
+// import io.realm.RealmObject
+// import io.realm.annotations.PrimaryKey
 //
-//internal open class OutgoingSecretRequestEntity(
+// internal open class OutgoingSecretRequestEntity(
 //        @PrimaryKey var requestId: String? = null,
 //        var cancellationTxnId: String? = null,
 //        // Serialized Json
@@ -32,7 +32,7 @@
 //        var secretName: String? = null,
 //        // State
 //        var state: Int = 0
-//) : RealmObject() {
+// ) : RealmObject() {
 //
 //    /**
 //     * Convert to OutgoingRoomKeyRequest
@@ -60,4 +60,4 @@
 //    fun putRecipients(recipients: List<Map<String, String>>?) {
 //        recipientsData = serializeForRealm(recipients)
 //    }
-//}
+// }

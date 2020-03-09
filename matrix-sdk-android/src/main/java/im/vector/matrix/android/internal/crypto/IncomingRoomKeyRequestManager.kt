@@ -244,7 +244,7 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
 
         val isDeviceLocallyVerified = cryptoStore.getUserDevice(userId, deviceId)?.trustLevel?.isLocallyVerified()
 
-        //Should SDK always Silently reject any request for the master key?
+        // Should SDK always Silently reject any request for the master key?
         when (secretName) {
             SELF_SIGNING_KEY_SSSS_NAME -> cryptoStore.getCrossSigningPrivateKeys()?.selfSigned
             USER_SIGNING_KEY_SSSS_NAME -> cryptoStore.getCrossSigningPrivateKeys()?.user

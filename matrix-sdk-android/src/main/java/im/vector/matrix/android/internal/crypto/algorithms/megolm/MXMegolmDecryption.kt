@@ -163,7 +163,6 @@ internal class MXMegolmDecryption(private val userId: String,
             )
         }
 
-
         val requestBody = RoomKeyRequestBody(
                 roomId = event.roomId,
                 algorithm = encryptedEventContent.algorithm,

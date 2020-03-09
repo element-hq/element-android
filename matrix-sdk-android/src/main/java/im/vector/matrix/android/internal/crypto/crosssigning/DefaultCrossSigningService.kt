@@ -305,7 +305,7 @@ internal class DefaultCrossSigningService @Inject constructor(
         return runBlocking(coroutineDispatchers.crypto) {
             val mxCrossSigningInfo = getMyCrossSigningKeys() ?: return@runBlocking false
 
-            sskPrivateKey.fromBase64NoPadding()
+            sskPrivateKey.fromBase64()
                     .let { privateKeySeed ->
                         val pkSigning = OlmPkSigning()
                         try {
@@ -331,7 +331,7 @@ internal class DefaultCrossSigningService @Inject constructor(
         return runBlocking(coroutineDispatchers.crypto) {
             val mxCrossSigningInfo = getMyCrossSigningKeys() ?: return@runBlocking false
 
-            uskPrivateKey.fromBase64NoPadding()
+            uskPrivateKey.fromBase64()
                     .let { privateKeySeed ->
                         val pkSigning = OlmPkSigning()
                         try {

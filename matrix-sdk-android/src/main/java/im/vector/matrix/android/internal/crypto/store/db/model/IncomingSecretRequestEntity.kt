@@ -1,4 +1,4 @@
-///*
+// /*
 // * Copyright (c) 2020 New Vector Ltd
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +14,17 @@
 // * limitations under the License.
 // */
 //
-//package im.vector.matrix.android.internal.crypto.store.db.model
+// package im.vector.matrix.android.internal.crypto.store.db.model
 //
-//import im.vector.matrix.android.internal.crypto.IncomingSecretShareRequest
-//import io.realm.RealmObject
+// import im.vector.matrix.android.internal.crypto.IncomingSecretShareRequest
+// import io.realm.RealmObject
 //
-//internal open class IncomingSecretRequestEntity(
+// internal open class IncomingSecretRequestEntity(
 //        var requestId: String? = null,
 //        var userId: String? = null,
 //        var deviceId: String? = null,
 //        var secretName: String? = null
-//) : RealmObject() {
+// ) : RealmObject() {
 //
 //    fun toIncomingSecretShareRequest(): IncomingSecretShareRequest {
 //        return IncomingSecretShareRequest(
@@ -34,4 +34,4 @@
 //                secretName = secretName
 //        )
 //    }
-//}
+// }

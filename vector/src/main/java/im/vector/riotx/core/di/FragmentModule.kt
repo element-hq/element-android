@@ -386,11 +386,8 @@ interface FragmentModule {
     @FragmentKey(KeyRequestsFragment::class)
     fun bindKeyRequestsFragment(fragment: KeyRequestsFragment): Fragment
 
-
     @Binds
     @IntoMap
     @FragmentKey(GossipingEventsPaperTrailFragment::class)
     fun bindGossipingEventsPaperTrailFragment(fragment: GossipingEventsPaperTrailFragment): Fragment
-
-
 }

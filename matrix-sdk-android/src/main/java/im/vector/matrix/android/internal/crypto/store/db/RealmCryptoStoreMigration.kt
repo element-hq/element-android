@@ -144,7 +144,7 @@ internal object RealmCryptoStoreMigration : RealmMigration {
         realm.schema.remove("OutgoingRoomKeyRequestEntity")
         realm.schema.remove("IncomingRoomKeyRequestEntity")
 
-        //Not need to migrate existing request, just start fresh?
+        // Not need to migrate existing request, just start fresh?
 
         realm.schema.create("GossipingEventEntity")
                 .addField(GossipingEventEntityFields.TYPE, String::class.java)
@@ -156,7 +156,6 @@ internal object RealmCryptoStoreMigration : RealmMigration {
                 .addField(GossipingEventEntityFields.AGE_LOCAL_TS, Long::class.java)
                 .addField(GossipingEventEntityFields.SEND_STATE_STR, Long::class.java)
 
-
         realm.schema.create("IncomingGossipingRequestEntity")
                 .addField(IncomingGossipingRequestEntityFields.REQUEST_ID, String::class.java)
                 .addField(IncomingGossipingRequestEntityFields.TYPE_STR, String::class.java)
@@ -166,7 +165,6 @@ internal object RealmCryptoStoreMigration : RealmMigration {
                 .addField(IncomingGossipingRequestEntityFields.REQUEST_STATE_STR, String::class.java)
                 .addField(IncomingGossipingRequestEntityFields.LOCAL_CREATION_TIMESTAMP, Long::class.java)
                 .setNullable(IncomingGossipingRequestEntityFields.LOCAL_CREATION_TIMESTAMP, true)
-
 
         realm.schema.create("OutgoingGossipingRequestEntity")
                 .addField(OutgoingGossipingRequestEntityFields.REQUEST_ID, String::class.java)

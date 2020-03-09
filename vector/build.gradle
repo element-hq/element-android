@@ -249,7 +249,7 @@ dependencies {
     def moshi_version = '1.8.0'
     def daggerVersion = '2.25.4'
     def autofill_version = "1.0.0"
-    def work_version = '2.3.2'
+    def work_version = '2.3.3'
 
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-rx")

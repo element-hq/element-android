@@ -1,4 +1,4 @@
-///*
+// /*
 // * Copyright 2018 New Vector Ltd
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +14,13 @@
 // * limitations under the License.
 // */
 //
-//package im.vector.matrix.android.internal.crypto.store.db.model
+// package im.vector.matrix.android.internal.crypto.store.db.model
 //
-//import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
-//import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
-//import io.realm.RealmObject
+// import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
+// import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
+// import io.realm.RealmObject
 //
-//internal open class IncomingRoomKeyRequestEntity(
+// internal open class IncomingRoomKeyRequestEntity(
 //        var requestId: String? = null,
 //        var userId: String? = null,
 //        var deviceId: String? = null,
@@ -29,7 +29,7 @@
 //        var requestBodyRoomId: String? = null,
 //        var requestBodySenderKey: String? = null,
 //        var requestBodySessionId: String? = null
-//) : RealmObject() {
+// ) : RealmObject() {
 //
 //    fun toIncomingRoomKeyRequest(): IncomingRoomKeyRequest {
 //        return IncomingRoomKeyRequest(
@@ -53,4 +53,4 @@
 //            requestBodySessionId = it.sessionId
 //        }
 //    }
-//}
+// }

@@ -55,8 +55,8 @@ class KeyShareTests : InstrumentedTest {
 //        every { Log.d(any(), any()) } returns 0
 //        every { Log.i(any(), any()) } returns 0
 //        every { Log.e(any(), any()) } returns 0
-////        every { Log.println(any(), any(), any()) } returns 0
-////        every { Log.wtf(any(), any(), any()) } returns 0
+// //        every { Log.println(any(), any(), any()) } returns 0
+// //        every { Log.wtf(any(), any(), any()) } returns 0
 //    }
 
     @Test
@@ -119,7 +119,7 @@ class KeyShareTests : InstrumentedTest {
 
         val outgoingRequestAfter = aliceSession2.cryptoService().getOutgoingRoomKeyRequest()
 
-        //We should have a new request
+        // We should have a new request
         Assert.assertTrue(outgoingRequestAfter.size > outgoingRequestBefore.size)
         Assert.assertNotNull(outgoingRequestAfter.first { it.sessionId == eventMegolmSessionId })
 
@@ -164,7 +164,6 @@ class KeyShareTests : InstrumentedTest {
                         Log.v("TEST", "requestId ${it.requestId}, for sessionId ${it.requestBody?.sessionId} is ${it.state}")
                     }
                     Log.v("TEST", "=========================")
-
 
                     it.any { it.requestBody?.sessionId == eventMegolmSessionId && it.state == GossipingRequestState.ACCEPTED }
                 }

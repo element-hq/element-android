@@ -765,7 +765,7 @@ internal class DefaultCryptoService @Inject constructor(
 
         val device = senderDevice?.let { cryptoStore.getUserDevice(event.senderId, it) }
                 ?: return Unit.also {
-                    Timber.e("## processIncomingSecretShareRequest() : Received secret share request from unknown device ${senderDevice}")
+                    Timber.e("## processIncomingSecretShareRequest() : Received secret share request from unknown device $senderDevice")
                 }
 
         try {
@@ -793,7 +793,7 @@ internal class DefaultCryptoService @Inject constructor(
 
         if (device.isBlocked || !device.isVerified) {
             // Ignore secrets from this
-            Timber.i("## onSecretSend() :Received secret from untrusted/blocked device: ${device}")
+            Timber.i("## onSecretSend() :Received secret from untrusted/blocked device: $device")
             return
         }
 

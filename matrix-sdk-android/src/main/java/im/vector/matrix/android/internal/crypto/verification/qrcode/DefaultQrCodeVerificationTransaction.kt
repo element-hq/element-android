@@ -22,7 +22,6 @@ import im.vector.matrix.android.api.session.crypto.verification.QrCodeVerificati
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
-import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
 import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64Safe
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore

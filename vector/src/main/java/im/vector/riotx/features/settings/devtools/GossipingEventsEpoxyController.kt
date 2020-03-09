@@ -24,7 +24,6 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.crypto.model.event.OlmEventContent
 import im.vector.matrix.android.internal.crypto.model.rest.ForwardedRoomKeyContent
 import im.vector.matrix.android.internal.crypto.model.rest.GossipingToDeviceObject
@@ -161,7 +160,6 @@ class GossipingEventsEpoxyController @Inject constructor(
                     }
                 }
                 is Success -> {
-
                     if (async.invoke().isEmpty()) {
                         genericFooterItem {
                             id("empty")
