@@ -69,6 +69,6 @@ interface CrossSigningService {
                          otherDeviceId: String,
                          locallyTrusted: Boolean?): DeviceTrustResult
 
-    fun onSecretSSKGossip(sskPrivateKey: String): Boolean
-    fun onSecretUSKGossip(uskPrivateKey: String): Boolean
+    fun onSecretSSKGossip(sskPrivateKey: String)
+    fun onSecretUSKGossip(uskPrivateKey: String)
 }

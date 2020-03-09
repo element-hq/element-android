@@ -65,9 +65,14 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
             GossipingToDeviceObject.ACTION_SHARE_REQUEST      -> {
                 if (event.getClearType() == EventType.REQUEST_SECRET) {
                     IncomingSecretShareRequest.fromEvent(event)?.let {
-                        // save in DB
-                        cryptoStore.storeIncomingGossipingRequest(it, ageLocalTs)
-                        receiveGossipingRequests.add(it)
+                        if (event.senderId == credentials.userId && it.deviceId == credentials.deviceId) {
+                            // ignore, it was sent by me as *
+                            Timber.v("## onGossipingRequestEvent type ${event.type} ignore remote echo")
+                        } else {
+                            // save in DB
+                            cryptoStore.storeIncomingGossipingRequest(it, ageLocalTs)
+                            receiveGossipingRequests.add(it)
+                        }
                     }
                 } else if (event.getClearType() == EventType.ROOM_KEY_REQUEST) {
                     IncomingRoomKeyRequest.fromEvent(event)?.let {

@@ -17,8 +17,11 @@ package im.vector.matrix.android.internal.crypto.verification
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
+import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
+import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestManager
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import timber.log.Timber
@@ -29,6 +32,7 @@ import timber.log.Timber
 internal abstract class DefaultVerificationTransaction(
         private val setDeviceVerificationAction: SetDeviceVerificationAction,
         private val crossSigningService: CrossSigningService,
+        private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
         private val userId: String,
         override val transactionId: String,
         override val otherUserId: String,
@@ -70,6 +74,11 @@ internal abstract class DefaultVerificationTransaction(
                     // Mark my keys as trusted locally
                     crossSigningService.markMyMasterKeyAsTrusted()
                 }
+
+                outgoingGossipingRequestManager.sendSecretShareRequest(SELF_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId ?: "*")))
+                outgoingGossipingRequestManager.sendSecretShareRequest(USER_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId ?: "*")))
+//                outgoingGossipingRequestManager.sendSecretShareRequest("m.key.self_signing", mapOf(userId to listOf(otherDeviceId ?: "*")))
+//                outgoingGossipingRequestManager.sendSecretShareRequest("m.key.user_signing", mapOf(userId to listOf(otherDeviceId ?: "*")))
             }
         }
 

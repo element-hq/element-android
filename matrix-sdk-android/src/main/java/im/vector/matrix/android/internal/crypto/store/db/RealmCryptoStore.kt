@@ -823,16 +823,13 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun getOutgoingSecretRequest(secretName: String): OutgoingSecretRequest? {
-//        return monarchy.fetchAllCopiedSync { realm ->
-// //            realm.where<OutgoingGossipingRequestEntity>()
-// //                    .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.SECRET.name)
-// //                    .equalTo(GossipingEventEntityFields.SENDER, credentials.userId)
-// //        }.mapNotNull {
-// //            ContentMapper.map(it.content)?.toModel<OutgoingSecretRequest>()
-// //        }.firstOrNull {
-// //            it.secretName == secretName
-// //        }
-        TODO("not implemented")
+        return monarchy.fetchAllCopiedSync { realm ->
+            realm.where<OutgoingGossipingRequestEntity>()
+                    .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.SECRET.name)
+                    .equalTo(OutgoingGossipingRequestEntityFields.REQUESTED_INFO_STR, secretName)
+        }.mapNotNull {
+            it.toOutgoingGossipingRequest() as? OutgoingSecretRequest
+        }.firstOrNull()
     }
 
     override fun getIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest> {
@@ -1243,6 +1240,16 @@ internal class RealmCryptoStore @Inject constructor(
                     .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
         }, { entity ->
             entity.toOutgoingGossipingRequest() as? OutgoingRoomKeyRequest
+        }).filterNotNull()
+    }
+
+    override fun getOutgoingSecretKeyRequests(): List<OutgoingSecretRequest> {
+        return monarchy.fetchAllMappedSync({ realm ->
+            realm
+                    .where(OutgoingGossipingRequestEntity::class.java)
+                    .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.SECRET.name)
+        }, { entity ->
+            entity.toOutgoingGossipingRequest() as? OutgoingSecretRequest
         }).filterNotNull()
     }
 

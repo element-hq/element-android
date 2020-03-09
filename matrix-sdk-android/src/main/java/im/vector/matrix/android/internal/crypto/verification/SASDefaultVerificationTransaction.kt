@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.session.crypto.verification.SasMode
 import im.vector.matrix.android.api.session.crypto.verification.SasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestManager
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.model.MXKey
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
@@ -42,6 +43,7 @@ internal abstract class SASDefaultVerificationTransaction(
         open val deviceId: String?,
         private val cryptoStore: IMXCryptoStore,
         crossSigningService: CrossSigningService,
+        outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
         private val deviceFingerprint: String,
         transactionId: String,
         otherUserId: String,
@@ -50,6 +52,7 @@ internal abstract class SASDefaultVerificationTransaction(
 ) : DefaultVerificationTransaction(
         setDeviceVerificationAction,
         crossSigningService,
+        outgoingGossipingRequestManager,
         userId,
         transactionId,
         otherUserId,

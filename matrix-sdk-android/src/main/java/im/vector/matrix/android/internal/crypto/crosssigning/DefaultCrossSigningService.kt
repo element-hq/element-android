@@ -43,7 +43,6 @@ import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.withoutPrefix
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.greenrobot.eventbus.EventBus
 import org.matrix.olm.OlmPkSigning
 import org.matrix.olm.OlmUtility
@@ -300,56 +299,50 @@ internal class DefaultCrossSigningService @Inject constructor(
         cryptoStore.clearOtherUserTrust()
     }
 
-    override fun onSecretSSKGossip(sskPrivateKey: String): Boolean {
+    override fun onSecretSSKGossip(sskPrivateKey: String) {
         Timber.i("## CrossSigning - onSecretSSKGossip")
-        return runBlocking(coroutineDispatchers.crypto) {
-            val mxCrossSigningInfo = getMyCrossSigningKeys() ?: return@runBlocking false
+        val mxCrossSigningInfo = getMyCrossSigningKeys() ?: return
 
-            sskPrivateKey.fromBase64()
-                    .let { privateKeySeed ->
-                        val pkSigning = OlmPkSigning()
-                        try {
-                            if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.selfSigningKey()?.unpaddedBase64PublicKey) {
-                                selfSigningPkSigning?.releaseSigning()
-                                selfSigningPkSigning = pkSigning
-                                Timber.i("## CrossSigning - Loading SSK success")
-                                cryptoStore.storePrivateKeysInfo(null, null, sskPrivateKey)
-                                return@runBlocking true
-                            } else {
-                                pkSigning.releaseSigning()
-                            }
-                        } catch (failure: Throwable) {
+        sskPrivateKey.fromBase64()
+                .let { privateKeySeed ->
+                    val pkSigning = OlmPkSigning()
+                    try {
+                        if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.selfSigningKey()?.unpaddedBase64PublicKey) {
+                            selfSigningPkSigning?.releaseSigning()
+                            selfSigningPkSigning = pkSigning
+                            Timber.i("## CrossSigning - Loading SSK success")
+                            cryptoStore.storePrivateKeysInfo(null, null, sskPrivateKey)
+                            return
+                        } else {
                             pkSigning.releaseSigning()
                         }
+                    } catch (failure: Throwable) {
+                        Timber.e("## CrossSigning - onSecretSSKGossip() ${failure.localizedMessage}")
+                        pkSigning.releaseSigning()
                     }
-            return@runBlocking false
-        }
+                }
     }
 
-    override fun onSecretUSKGossip(uskPrivateKey: String): Boolean {
-        Timber.i("## CrossSigning - onSecretUSKGossip")
-        return runBlocking(coroutineDispatchers.crypto) {
-            val mxCrossSigningInfo = getMyCrossSigningKeys() ?: return@runBlocking false
+    override fun onSecretUSKGossip(uskPrivateKey: String) {
+        val mxCrossSigningInfo = getMyCrossSigningKeys() ?: return
 
-            uskPrivateKey.fromBase64()
-                    .let { privateKeySeed ->
-                        val pkSigning = OlmPkSigning()
-                        try {
-                            if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.selfSigningKey()?.unpaddedBase64PublicKey) {
-                                userPkSigning?.releaseSigning()
-                                userPkSigning = pkSigning
-                                Timber.i("## CrossSigning - Loading USK success")
-                                cryptoStore.storePrivateKeysInfo(null, uskPrivateKey, null)
-                                return@runBlocking true
-                            } else {
-                                pkSigning.releaseSigning()
-                            }
-                        } catch (failure: Throwable) {
+        uskPrivateKey.fromBase64()
+                .let { privateKeySeed ->
+                    val pkSigning = OlmPkSigning()
+                    try {
+                        if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.selfSigningKey()?.unpaddedBase64PublicKey) {
+                            userPkSigning?.releaseSigning()
+                            userPkSigning = pkSigning
+                            Timber.i("## CrossSigning - Loading USK success")
+                            cryptoStore.storePrivateKeysInfo(null, uskPrivateKey, null)
+                            return
+                        } else {
                             pkSigning.releaseSigning()
                         }
+                    } catch (failure: Throwable) {
+                        pkSigning.releaseSigning()
                     }
-            return@runBlocking false
-        }
+                }
     }
 
     override fun checkTrustFromPrivateKeys(masterKeyPrivateKey: String?,
@@ -767,7 +760,7 @@ internal class DefaultCrossSigningService @Inject constructor(
             Timber.d("## CrossSigning - onUsersDeviceUpdate for ${userIds.size} users")
             userIds.forEach { otherUserId ->
                 checkUserTrust(otherUserId).let {
-                    Timber.d("## CrossSigning - update trust for $otherUserId , verified=${it.isVerified()}")
+                    Timber.v("## CrossSigning - update trust for $otherUserId , verified=${it.isVerified()}")
                     setUserKeysAsTrusted(otherUserId, it.isVerified())
                 }
 
@@ -775,7 +768,7 @@ internal class DefaultCrossSigningService @Inject constructor(
                 val devices = cryptoStore.getUserDeviceList(otherUserId)
                 devices?.forEach { device ->
                     val updatedTrust = checkDeviceTrust(otherUserId, device.deviceId, device.trustLevel?.isLocallyVerified() ?: false)
-                    Timber.d("## CrossSigning - update trust for device ${device.deviceId} of user $otherUserId , verified=$updatedTrust")
+                    Timber.v("## CrossSigning - update trust for device ${device.deviceId} of user $otherUserId , verified=$updatedTrust")
                     cryptoStore.setDeviceTrust(otherUserId, device.deviceId, updatedTrust.isCrossSignedVerified(), updatedTrust.isLocallyVerified())
                 }
 

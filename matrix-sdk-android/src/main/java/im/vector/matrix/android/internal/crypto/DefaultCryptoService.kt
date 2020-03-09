@@ -49,7 +49,6 @@ import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAct
 import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
 import im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmEncryptionFactory
 import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmEncryptionFactory
-import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.crypto.crosssigning.DefaultCrossSigningService
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.keysbackup.DefaultKeysBackupService
@@ -756,54 +755,35 @@ internal class DefaultCryptoService @Inject constructor(
             return
         }
 
-        val encryptedEventContent = event.getClearContent().toModel<EncryptedEventContent>()
-                ?: return Unit.also {
-                    Timber.e("## onSecretSend() :Received malformed secret send event")
-                }
-
-        val senderDevice = encryptedEventContent.senderKey
-
-        val device = senderDevice?.let { cryptoStore.getUserDevice(event.senderId, it) }
-                ?: return Unit.also {
-                    Timber.e("## processIncomingSecretShareRequest() : Received secret share request from unknown device $senderDevice")
-                }
-
-        try {
-            val result = decryptEvent(event, "gossip")
-            event.mxDecryptionResult = OlmDecryptionResult(
-                    payload = result.clearEvent,
-                    senderKey = result.senderCurve25519Key,
-                    keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
-                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
-            )
-        } catch (failure: Throwable) {
-            Timber.i("## onSecretSend() :Failed to decrypt secret share: $device")
-        }
-
         val secretContent = event.getClearContent().toModel<SecretSendEventContent>() ?: return
 
         val existingRequest = cryptoStore
-                .getPendingIncomingGossipingRequests()
-                .firstOrNull { it.requestId == secretContent.requestId } as? IncomingSecretShareRequest
+                .getOutgoingSecretKeyRequests().firstOrNull { it.requestId == secretContent.requestId }
 
         if (existingRequest == null) {
-            Timber.i("## onSecretSend() :Received secret from unknown request id: ${secretContent.requestId} from device ")
+            Timber.i("## onSecretSend() : Ignore secret that was not requested: ${secretContent.requestId}")
             return
         }
 
-        if (device.isBlocked || !device.isVerified) {
-            // Ignore secrets from this
-            Timber.i("## onSecretSend() :Received secret from untrusted/blocked device: $device")
+        val deviceId = event.mxDecryptionResult?.payload?.get("sender_device") as? String
+
+        val device = deviceId?.let { cryptoStore.getUserDevice(event.senderId, it) }
+
+        if (device == null || !device.isVerified || device.isBlocked) {
+            // Ignore secret from untrusted session?
+            Timber.i("## onSecretSend() :Received secret from untrusted device $deviceId ")
             return
         }
 
         when (existingRequest.secretName) {
+//            "m.key.self_signing",
             SELF_SIGNING_KEY_SSSS_NAME -> {
                 if (device.trustLevel?.isLocallyVerified() == true) {
                     crossSigningService.onSecretSSKGossip(secretContent.secretValue)
                     return
                 }
             }
+//            "m.key.user_signing",
             USER_SIGNING_KEY_SSSS_NAME -> {
                 if (device.trustLevel?.isLocallyVerified() == true) {
                     cryptoStore.storePrivateKeysInfo(null, null, secretContent.secretValue)

@@ -20,6 +20,7 @@ import im.vector.matrix.android.api.session.crypto.verification.CancelCode
 import im.vector.matrix.android.api.session.crypto.verification.OutgoingSasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestManager
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
@@ -30,6 +31,7 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
         deviceId: String?,
         cryptoStore: IMXCryptoStore,
         crossSigningService: CrossSigningService,
+        outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
         deviceFingerprint: String,
         transactionId: String,
         otherUserId: String,
@@ -40,6 +42,7 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
         deviceId,
         cryptoStore,
         crossSigningService,
+        outgoingGossipingRequestManager,
         deviceFingerprint,
         transactionId,
         otherUserId,

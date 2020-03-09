@@ -446,6 +446,7 @@ internal interface IMXCryptoStore {
     // Dev tools
 
     fun getOutgoingRoomKeyRequests(): List<OutgoingRoomKeyRequest>
+    fun getOutgoingSecretKeyRequests(): List<OutgoingSecretRequest>
     fun getOutgoingSecretRequest(secretName: String): OutgoingSecretRequest?
     fun getIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest>
     fun getGossipingEventsTrail(): List<Event>
