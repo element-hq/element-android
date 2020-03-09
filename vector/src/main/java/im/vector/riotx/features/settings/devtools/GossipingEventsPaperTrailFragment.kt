@@ -21,17 +21,22 @@ import android.view.MenuItem
 import android.view.View
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.resources.ColorProvider
+import im.vector.riotx.core.utils.jsonViewerStyler
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
+import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import javax.inject.Inject
 
 class GossipingEventsPaperTrailFragment @Inject constructor(
         val viewModelFactory: GossipingEventsPaperTrailViewModel.Factory,
-        private val epoxyController: GossipingEventsEpoxyController
-) : VectorBaseFragment() {
+        private val epoxyController: GossipingEventsEpoxyController,
+        private val colorProvider: ColorProvider
+) : VectorBaseFragment(), GossipingEventsEpoxyController.InteractionListener {
 
     override fun getLayoutResId() = R.layout.fragment_generic_recycler
 
@@ -46,13 +51,13 @@ class GossipingEventsPaperTrailFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView.configureWith(epoxyController, showDivider = true)
-//        epoxyController.interactionListener = this
+        epoxyController.interactionListener = this
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         recyclerView.cleanup()
-//        epoxyController.interactionListener = null
+        epoxyController.interactionListener = null
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -61,6 +66,20 @@ class GossipingEventsPaperTrailFragment @Inject constructor(
             return true
         } else {
             return super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun didTap(event: Event) {
+        if (event.isEncrypted()) {
+            event.toClearContentStringWithIndent()
+        } else {
+            event.toContentStringWithIndent()
+        }?.let {
+            JSonViewerDialog.newInstance(
+                    it,
+                    -1,
+                    jsonViewerStyler(colorProvider)
+            ).show(childFragmentManager, "JSON_VIEWER")
         }
     }
 }

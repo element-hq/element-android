@@ -74,11 +74,10 @@ internal abstract class DefaultVerificationTransaction(
                     // Mark my keys as trusted locally
                     crossSigningService.markMyMasterKeyAsTrusted()
                 }
-
-                outgoingGossipingRequestManager.sendSecretShareRequest(SELF_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId ?: "*")))
-                outgoingGossipingRequestManager.sendSecretShareRequest(USER_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId ?: "*")))
-//                outgoingGossipingRequestManager.sendSecretShareRequest("m.key.self_signing", mapOf(userId to listOf(otherDeviceId ?: "*")))
-//                outgoingGossipingRequestManager.sendSecretShareRequest("m.key.user_signing", mapOf(userId to listOf(otherDeviceId ?: "*")))
+                if (!crossSigningService.canCrossSign()) {
+                    outgoingGossipingRequestManager.sendSecretShareRequest(SELF_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId ?: "*")))
+                    outgoingGossipingRequestManager.sendSecretShareRequest(USER_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId ?: "*")))
+                }
             }
         }
 

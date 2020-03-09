@@ -776,14 +776,12 @@ internal class DefaultCryptoService @Inject constructor(
         }
 
         when (existingRequest.secretName) {
-//            "m.key.self_signing",
             SELF_SIGNING_KEY_SSSS_NAME -> {
                 if (device.trustLevel?.isLocallyVerified() == true) {
                     crossSigningService.onSecretSSKGossip(secretContent.secretValue)
                     return
                 }
             }
-//            "m.key.user_signing",
             USER_SIGNING_KEY_SSSS_NAME -> {
                 if (device.trustLevel?.isLocallyVerified() == true) {
                     cryptoStore.storePrivateKeysInfo(null, null, secretContent.secretValue)

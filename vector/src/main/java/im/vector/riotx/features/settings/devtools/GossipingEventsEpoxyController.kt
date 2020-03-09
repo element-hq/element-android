@@ -25,9 +25,11 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.internal.crypto.model.event.OlmEventContent
+import im.vector.matrix.android.internal.crypto.model.event.SecretSendEventContent
 import im.vector.matrix.android.internal.crypto.model.rest.ForwardedRoomKeyContent
 import im.vector.matrix.android.internal.crypto.model.rest.GossipingToDeviceObject
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyShareRequest
+import im.vector.matrix.android.internal.crypto.model.rest.SecretShareRequest
 import im.vector.riotx.R
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.epoxy.loadingItem
@@ -35,6 +37,7 @@ import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.DateProvider
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.core.ui.list.GenericItem
 import im.vector.riotx.core.ui.list.genericFooterItem
 import im.vector.riotx.core.ui.list.genericItem
 import im.vector.riotx.core.ui.list.genericItemHeader
@@ -81,6 +84,7 @@ class GossipingEventsEpoxyController @Inject constructor(
                 eventList.forEachIndexed { _, event ->
                     genericItem {
                         id(event.hashCode())
+                        itemClickAction(GenericItem.Action("view").apply { perform = Runnable { interactionListener?.didTap(event) } })
                         title(
                                 if (event.isEncrypted()) {
                                     "${event.getClearType()} [encrypted]"
@@ -133,6 +137,37 @@ class GossipingEventsEpoxyController @Inject constructor(
                                                 textStyle = "bold"
                                             }
                                             +" ${encryptedContent?.senderKey}"
+                                        } else if (event.getClearType() == EventType.SEND_SECRET) {
+                                            val content = event.getClearContent().toModel<SecretSendEventContent>()
+
+                                            span("\nrequestId:") {
+                                                textStyle = "bold"
+                                            }
+                                            +" ${content?.requestId}"
+                                            span("\nFrom Device:") {
+                                                textStyle = "bold"
+                                            }
+                                            +" ${event.mxDecryptionResult?.payload?.get("sender_device")}"
+                                        } else if (event.getClearType() == EventType.REQUEST_SECRET) {
+                                            val content = event.getClearContent().toModel<SecretShareRequest>()
+                                            span("\nreqId:") {
+                                                textStyle = "bold"
+                                            }
+                                            +" ${content?.requestId}"
+                                            span("\naction:") {
+                                                textStyle = "bold"
+                                            }
+                                            +" ${content?.action}"
+                                            if (content?.action == GossipingToDeviceObject.ACTION_SHARE_REQUEST) {
+                                                span("\nsecretName:") {
+                                                    textStyle = "bold"
+                                                }
+                                                +" ${content.secretName}"
+                                            }
+                                            span("\nrequestedBy: ") {
+                                                textStyle = "bold"
+                                            }
+                                            +"${content?.requestingDeviceId}"
                                         }
                                     }
                                 }
