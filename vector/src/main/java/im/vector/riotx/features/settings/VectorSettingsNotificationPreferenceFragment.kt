@@ -161,20 +161,21 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         val switchPref = preference as SwitchPreference
         if (switchPref.isChecked) {
             FcmHelper.getFcmToken(requireContext())?.let {
-                if (vectorPreferences.areNotificationEnabledForDevice()) {
-                    pushManager.registerPusherWithFcmKey(it)
-                }
+                pushManager.registerPusherWithFcmKey(it)
             }
         } else {
             FcmHelper.getFcmToken(requireContext())?.let {
                 pushManager.unregisterPusher(it, object : MatrixCallback<Unit> {
                     override fun onSuccess(data: Unit) {
                         session.refreshPushers()
-                        super.onSuccess(data)
                     }
 
                     override fun onFailure(failure: Throwable) {
-                        session.refreshPushers()
+                        if (!isAdded) {
+                            return
+                        }
+                        // revert the check box
+                        switchPref.isChecked = !switchPref.isChecked
                         Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
                     }
                 })

@@ -40,24 +40,35 @@ import im.vector.matrix.android.internal.di.SerializeNulls
  *  }
  * </code>
  */
-
 @JsonClass(generateAdapter = true)
 internal data class JsonPusher(
         /**
-         * Required. This is a unique identifier for this pusher. See /set for more detail. Max length, 512 bytes.
+         * Required. This is a unique identifier for this pusher. The value you should use for this is the routing or
+         * destination address information for the notification, for example, the APNS token for APNS or the
+         * Registration ID for GCM. If your notification client has no such concept, use any unique identifier.
+         * Max length, 512 bytes.
+         *
+         * If the kind is "email", this is the email address to send notifications to.
          */
         @Json(name = "pushkey")
         val pushKey: String,
 
         /**
-         * Required. The kind of pusher. "http" is a pusher that sends HTTP pokes.
+         * Required. The kind of pusher to configure.
+         * "http" makes a pusher that sends HTTP pokes.
+         * "email" makes a pusher that emails the user with unread notifications.
+         * null deletes the pusher.
          */
         @SerializeNulls
         @Json(name = "kind")
         val kind: String?,
 
         /**
-         * Required. This is a reverse-DNS style identifier for the application. Max length, 64 chars.
+         * Required. This is a reverse-DNS style identifier for the application. It is recommended that this end
+         * with the platform, such that different platform versions get different app identifiers.
+         * Max length, 64 chars.
+         *
+         * If the kind is "email", this is "m.email".
          */
         @Json(name = "app_id")
         val appId: String,
@@ -88,15 +99,17 @@ internal data class JsonPusher(
 
         /**
          * Required. A dictionary of information for the pusher implementation itself.
+         * If kind is http, this should contain url which is the URL to use to send notifications to.
          */
         @Json(name = "data")
         val data: JsonPusherData? = null,
 
-        // Only used to update add Pusher (body of api request)
-        // Used If true, the homeserver should add another pusher with the given pushkey and App ID in addition
-        // to any others with different user IDs.
-        // Otherwise, the homeserver must remove any other pushers with the same App ID and pushkey for different users.
-        // The default is false.
+        /**
+         * If true, the homeserver should add another pusher with the given pushkey and App ID in addition to any others
+         * with different user IDs. Otherwise, the homeserver must remove any other pushers with the same App ID and pushkey
+         * for different users.
+         * The default is false.
+         */
         @Json(name = "append")
         val append: Boolean? = false
 )
