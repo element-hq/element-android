@@ -87,6 +87,26 @@ class UnwedgingTest : InstrumentedTest {
         val bobTimeline = roomFromBobPOV.createTimeline(null, TimelineSettings(20))
         bobTimeline.start()
 
+        val bobFinalLatch = CountDownLatch(1)
+        val bobHasThreeDecryptedEventsListener = object : Timeline.Listener {
+            override fun onTimelineFailure(throwable: Throwable) {
+                // noop
+            }
+
+            override fun onNewTimelineEvents(eventIds: List<String>) {
+                // noop
+            }
+
+            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
+                val decryptedEventReceivedByBob = snapshot.filter { it.root.getClearType() == EventType.MESSAGE }
+                if (decryptedEventReceivedByBob.size == 3) {
+                    bobFinalLatch.countDown()
+                }
+            }
+        }
+        bobTimeline.addListener(bobHasThreeDecryptedEventsListener)
+        
+
         var latch = CountDownLatch(1)
         var bobEventsListener = createEventListener(latch, 1)
         bobTimeline.addListener(bobEventsListener)
@@ -145,6 +165,10 @@ class UnwedgingTest : InstrumentedTest {
         messagesReceivedByBob[0].root.getClearType() shouldBeEqualTo EventType.ENCRYPTED
         messagesReceivedByBob[1].root.getClearType() shouldBeEqualTo EventType.MESSAGE
         messagesReceivedByBob[2].root.getClearType() shouldBeEqualTo EventType.MESSAGE
+
+        // Wait for all the message to be decrypted by bob
+        mTestHelper.await(bobFinalLatch)
+        bobTimeline.removeListener(bobHasThreeDecryptedEventsListener)
 
         bobTimeline.dispose()
 
