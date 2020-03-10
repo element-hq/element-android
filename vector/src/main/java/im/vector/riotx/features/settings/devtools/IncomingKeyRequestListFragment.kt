@@ -46,12 +46,10 @@ class IncomingKeyRequestListFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView.configureWith(epoxyController, showDivider = true)
-//        epoxyController.interactionListener = this
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         recyclerView.cleanup()
-//        epoxyController.interactionListener = null
     }
 }

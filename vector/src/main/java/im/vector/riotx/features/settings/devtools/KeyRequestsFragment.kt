@@ -32,7 +32,6 @@ import javax.inject.Inject
 class KeyRequestsFragment @Inject constructor() : VectorBaseFragment() {
 
     override fun getLayoutResId(): Int = R.layout.fragment_devtool_keyrequests
-    override fun getMenuRes(): Int = R.menu.menu_common_gossiping
 
     override fun onResume() {
         super.onResume()

@@ -17,7 +17,6 @@
 package im.vector.riotx.features.settings.devtools
 
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -40,8 +39,6 @@ class GossipingEventsPaperTrailFragment @Inject constructor(
 
     override fun getLayoutResId() = R.layout.fragment_generic_recycler
 
-    override fun getMenuRes(): Int = R.menu.menu_common_gossiping
-
     private val viewModel: GossipingEventsPaperTrailViewModel by fragmentViewModel(GossipingEventsPaperTrailViewModel::class)
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -58,15 +55,6 @@ class GossipingEventsPaperTrailFragment @Inject constructor(
         super.onDestroyView()
         recyclerView.cleanup()
         epoxyController.interactionListener = null
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.refresh) {
-            viewModel.refresh()
-            return true
-        } else {
-            return super.onOptionsItemSelected(item)
-        }
     }
 
     override fun didTap(event: Event) {
