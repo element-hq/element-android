@@ -31,3 +31,8 @@ fun Throwable.shouldBeRetried(): Boolean {
     return this is Failure.NetworkConnection
             || (this is Failure.ServerError && error.code == MatrixError.M_LIMIT_EXCEEDED)
 }
+
+fun Throwable.isInvalidPassword(): Boolean {
+    return this is Failure.ServerError
+            && error.message == "Invalid password"
+}

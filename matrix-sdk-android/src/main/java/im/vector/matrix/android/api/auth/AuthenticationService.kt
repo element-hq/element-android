@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.LoginFlowResult
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.auth.login.LoginWizard
+import im.vector.matrix.android.api.auth.password.PasswordWizard
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
@@ -89,4 +90,9 @@ interface AuthenticationService {
     fun createSessionFromSso(homeServerConnectionConfig: HomeServerConnectionConfig,
                              credentials: Credentials,
                              callback: MatrixCallback<Session>): Cancelable
+
+    /**
+     * Return a PasswordWizard, to update password.
+     */
+    fun getPasswordWizard(): PasswordWizard
 }

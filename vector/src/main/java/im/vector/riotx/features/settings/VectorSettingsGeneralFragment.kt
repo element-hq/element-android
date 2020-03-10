@@ -35,6 +35,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.cache.DiskCache
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.auth.AuthenticationService
+import im.vector.matrix.android.api.failure.isInvalidPassword
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.showPassword
@@ -56,8 +59,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import javax.inject.Inject
 
-class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
+class VectorSettingsGeneralFragment @Inject constructor(
+        private val authenticationService: AuthenticationService
+) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_general_title
     override val preferenceXmlRes = R.xml.vector_settings_general
@@ -109,8 +115,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
         // Password
         mPasswordPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            notImplemented()
-            // onPasswordUpdateClick()
+            onPasswordUpdateClick()
             false
         }
 
@@ -771,7 +776,26 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                     val oldPwd = oldPasswordText.text.toString().trim()
                     val newPwd = newPasswordText.text.toString().trim()
 
-                    notImplemented()
+                    authenticationService.getLastAuthenticatedSession()?.let {
+                        showPasswordLoadingView(true)
+                        authenticationService.getPasswordWizard().updatePassword(it.sessionId, it.myUserId, oldPwd, newPwd, object : MatrixCallback<Unit> {
+                            override fun onSuccess(data: Unit) {
+                                showPasswordLoadingView(false)
+                                dialog.dismiss()
+                                activity.toast(R.string.settings_password_updated)
+                            }
+
+                            override fun onFailure(failure: Throwable) {
+                                showPasswordLoadingView(false)
+                                if (failure.isInvalidPassword()) {
+                                    activity.toast(R.string.settings_fail_to_update_password_invalid_current_password)
+                                } else {
+                                    activity.toast(R.string.settings_fail_to_update_password)
+                                }
+                            }
+                        })
+                    }
+
                     /* TODO
                     showPasswordLoadingView(true)
 

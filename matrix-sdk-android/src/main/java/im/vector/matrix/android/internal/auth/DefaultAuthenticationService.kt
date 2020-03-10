@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.auth.data.Versions
 import im.vector.matrix.android.api.auth.data.isLoginAndRegistrationSupportedBySdk
 import im.vector.matrix.android.api.auth.data.isSupportedBySdk
 import im.vector.matrix.android.api.auth.login.LoginWizard
+import im.vector.matrix.android.api.auth.password.PasswordWizard
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
@@ -37,6 +38,7 @@ import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 import im.vector.matrix.android.internal.auth.data.RiotConfig
 import im.vector.matrix.android.internal.auth.db.PendingSessionData
 import im.vector.matrix.android.internal.auth.login.DefaultLoginWizard
+import im.vector.matrix.android.internal.auth.password.DefaultPasswordWizard
 import im.vector.matrix.android.internal.auth.registration.DefaultRegistrationWizard
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.network.RetrofitFactory
@@ -66,6 +68,7 @@ internal class DefaultAuthenticationService @Inject constructor(
 
     private var currentLoginWizard: LoginWizard? = null
     private var currentRegistrationWizard: RegistrationWizard? = null
+    private var currentPasswordWizard: PasswordWizard? = null
 
     override fun hasAuthenticatedSessions(): Boolean {
         return sessionParamsStore.getLast() != null
@@ -218,6 +221,22 @@ internal class DefaultAuthenticationService @Inject constructor(
                             currentLoginWizard = it
                         }
                     } ?: error("Please call getLoginFlow() with success first")
+                }
+    }
+
+    override fun getPasswordWizard(): PasswordWizard {
+        return currentPasswordWizard
+                ?: let {
+                    sessionParamsStore.getLast()?.homeServerConnectionConfig?.let {
+                        DefaultPasswordWizard(
+                                okHttpClient,
+                                retrofitFactory,
+                                coroutineDispatchers,
+                                it
+                        ).also {
+                            currentPasswordWizard = it
+                        }
+                    } ?: error("HomeServerConnectionConfig is null")
                 }
     }
 
