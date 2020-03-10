@@ -16,19 +16,24 @@
 
 package im.vector.matrix.android.internal.crypto.actions
 
-import im.vector.matrix.android.api.auth.data.Credentials
+import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_OLM
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.EncryptedMessage
+import im.vector.matrix.android.internal.di.DeviceId
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.convertToUTF8
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class MessageEncrypter @Inject constructor(private val credentials: Credentials,
-                                                    private val olmDevice: MXOlmDevice) {
-
+internal class MessageEncrypter @Inject constructor(
+        @UserId
+        private val userId: String,
+        @DeviceId
+        private val deviceId: String?,
+        private val olmDevice: MXOlmDevice) {
     /**
      * Encrypt an event payload for a list of devices.
      * This method must be called from the getCryptoHandler() thread.
@@ -37,13 +42,13 @@ internal class MessageEncrypter @Inject constructor(private val credentials: Cre
      * @param deviceInfos   list of device infos to encrypt for.
      * @return the content for an m.room.encrypted event.
      */
-    fun encryptMessage(payloadFields: Map<String, Any>, deviceInfos: List<CryptoDeviceInfo>): EncryptedMessage {
+    fun encryptMessage(payloadFields: Content, deviceInfos: List<CryptoDeviceInfo>): EncryptedMessage {
         val deviceInfoParticipantKey = deviceInfos.associateBy { it.identityKey()!! }
 
         val payloadJson = payloadFields.toMutableMap()
 
-        payloadJson["sender"] = credentials.userId
-        payloadJson["sender_device"] = credentials.deviceId!!
+        payloadJson["sender"] = userId
+        payloadJson["sender_device"] = deviceId!!
 
         // Include the Ed25519 key so that the recipient knows what
         // device this message came from.
