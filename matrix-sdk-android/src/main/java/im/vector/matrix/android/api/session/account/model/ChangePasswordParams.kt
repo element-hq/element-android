@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.auth.data
+package im.vector.matrix.android.api.session.account.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -24,7 +24,7 @@ import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
  * Class to pass request parameters to update the password.
  */
 @JsonClass(generateAdapter = true)
-internal data class UpdatePasswordParams(
+internal data class ChangePasswordParams(
         @Json(name = "auth")
         val auth: UserPasswordAuth? = null,
 
@@ -32,9 +32,9 @@ internal data class UpdatePasswordParams(
         val newPassword: String? = null
 ) {
     companion object {
-        fun create(sessionId: String, userId: String, oldPassword: String, newPassword: String): UpdatePasswordParams {
-            return UpdatePasswordParams(
-                    auth = UserPasswordAuth(session = sessionId, user = userId, password = oldPassword),
+        fun create(userId: String, oldPassword: String, newPassword: String): ChangePasswordParams {
+            return ChangePasswordParams(
+                    auth = UserPasswordAuth(user = userId, password = oldPassword),
                     newPassword = newPassword
             )
         }

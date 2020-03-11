@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.auth.password
+package im.vector.matrix.android.api.session.account
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
 
-interface PasswordWizard {
+/**
+ * This interface defines methods to manage the account. It's implemented at the session level.
+ */
+interface AccountService {
 
     /**
-     * Ask the homeserver to update the password with the provided new password.
+     * Ask the homeserver to change the password.
+     * @param password Current password.
+     * @param newPassword New password
      */
-    fun updatePassword(sessionId: String, userId: String, oldPassword: String, newPassword: String, callback: MatrixCallback<Unit>): Cancelable
+    fun changePassword(password: String, newPassword: String, callback: MatrixCallback<Unit>): Cancelable
 }

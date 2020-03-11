@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.failure.GlobalError
 import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.session.InitialSyncProgressService
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.account.AccountService
 import im.vector.matrix.android.api.session.accountdata.AccountDataService
 import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
@@ -94,6 +95,7 @@ internal class DefaultSession @Inject constructor(
         private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>,
         private val accountDataService: Lazy<AccountDataService>,
         private val _sharedSecretStorageService: Lazy<SharedSecretStorageService>,
+        private val accountService: Lazy<AccountService>,
         private val timelineEventDecryptor: TimelineEventDecryptor,
         private val shieldTrustUpdater: ShieldTrustUpdater)
     : Session,
@@ -110,7 +112,8 @@ internal class DefaultSession @Inject constructor(
         SecureStorageService by secureStorageService.get(),
         HomeServerCapabilitiesService by homeServerCapabilitiesService.get(),
         ProfileService by profileService.get(),
-        AccountDataService by accountDataService.get() {
+        AccountDataService by accountDataService.get(),
+        AccountService by accountService.get() {
 
     override val sharedSecretStorageService: SharedSecretStorageService
         get() = _sharedSecretStorageService.get()

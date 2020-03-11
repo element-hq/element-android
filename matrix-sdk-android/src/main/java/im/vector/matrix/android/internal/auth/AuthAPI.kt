@@ -22,7 +22,6 @@ import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.internal.auth.data.RiotConfig
 import im.vector.matrix.android.internal.auth.login.ResetPasswordMailConfirmed
-import im.vector.matrix.android.internal.auth.data.UpdatePasswordParams
 import im.vector.matrix.android.internal.auth.registration.AddThreePidRegistrationParams
 import im.vector.matrix.android.internal.auth.registration.AddThreePidRegistrationResponse
 import im.vector.matrix.android.internal.auth.registration.RegistrationParams
@@ -103,10 +102,4 @@ internal interface AuthAPI {
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/password")
     fun resetPasswordMailConfirmed(@Body params: ResetPasswordMailConfirmed): Call<Unit>
-
-    /**
-     * Ask the homeserver to update the password with the provided new password.
-     */
-    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/password")
-    fun updatePassword(@Body params: UpdatePasswordParams): Call<Unit>
 }
