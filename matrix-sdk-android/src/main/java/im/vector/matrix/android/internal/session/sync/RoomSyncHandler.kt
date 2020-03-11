@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.session.room.model.RoomMemberContent
 import im.vector.matrix.android.api.session.room.model.tag.RoomTagContent
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
+import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.database.helper.addOrUpdate
 import im.vector.matrix.android.internal.database.helper.addTimelineEvent
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
@@ -260,6 +261,22 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 if (sendingEventEntity != null) {
                     Timber.v("Remove local echo for tx:$it")
                     roomEntity.sendingTimelineEvents.remove(sendingEventEntity)
+                    if (event.isEncrypted()) {
+                        // Maybe just a temp work around?
+                        // Decrypt the remote echo right now, to avoid seeing it decrypt again
+                        try {
+                            val result = cryptoService.decryptEvent(event.copy(roomId = roomId), event.roomId ?: "")
+                            event.mxDecryptionResult = OlmDecryptionResult(
+                                    payload = result.clearEvent,
+                                    senderKey = result.senderCurve25519Key,
+                                    keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
+                                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                            )
+                            eventEntity.setDecryptionResult(result)
+                        } catch (failure: Throwable) {
+                            Timber.v("Failed to decrypt remote echo: ${failure.localizedMessage}")
+                        }
+                    }
                 } else {
                     Timber.v("Can't find corresponding local echo for tx:$it")
                 }
