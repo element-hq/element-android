@@ -129,7 +129,7 @@ class BadgeFloatingActionButton @JvmOverloads constructor(
         attrs?.let { initAttrs(attrs) }
     }
 
-    @SuppressWarnings("ResourceType", "Recycle")
+    @SuppressWarnings("Recycle")
     private fun initAttrs(attrs: AttributeSet) {
         context.obtainStyledAttributes(attrs, R.styleable.BadgeFloatingActionButton).use {
             counterBackgroundColor = it.getColor(R.styleable.BadgeFloatingActionButton_badgeBackgroundColor, 0)

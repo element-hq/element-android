@@ -22,6 +22,8 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
+import im.vector.riotx.core.epoxy.ClickListener
+import im.vector.riotx.core.epoxy.onClick
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
@@ -42,6 +44,7 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
         attributes.avatarRenderer.render(attributes.informationData.matrixItem, holder.avatarImageView)
         holder.view.setOnLongClickListener(attributes.itemLongClickListener)
         holder.readReceiptsView.render(attributes.informationData.readReceipts, attributes.avatarRenderer, _readReceiptsClickListener)
+        holder.avatarImageView.onClick(attributes.avatarClickListener)
     }
 
     override fun getEventIds(): List<String> {
@@ -60,7 +63,8 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
             val informationData: MessageInformationData,
             val noticeText: CharSequence,
             val itemLongClickListener: View.OnLongClickListener? = null,
-            val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
+            val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
+            val avatarClickListener: ClickListener? = null
     )
 
     companion object {

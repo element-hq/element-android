@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.detail.timeline.action
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import im.vector.matrix.android.api.session.room.model.message.MessageWithAttachmentContent
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorSharedAction
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
@@ -46,7 +47,7 @@ sealed class EventSharedAction(@StringRes val titleRes: Int,
     data class Reply(val eventId: String) :
             EventSharedAction(R.string.reply, R.drawable.ic_reply)
 
-    data class Share(val imageUrl: String) :
+    data class Share(val eventId: String, val messageContent: MessageWithAttachmentContent) :
             EventSharedAction(R.string.share, R.drawable.ic_share)
 
     data class Resend(val eventId: String) :

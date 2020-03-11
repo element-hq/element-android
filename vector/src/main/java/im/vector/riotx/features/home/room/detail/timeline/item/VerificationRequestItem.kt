@@ -32,10 +32,10 @@ import im.vector.matrix.android.api.session.crypto.verification.VerificationServ
 import im.vector.matrix.android.internal.session.room.VerificationState
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.exhaustive
-import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.RoomDetailAction
+import im.vector.riotx.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_state)
@@ -166,7 +166,7 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
 //            val avatarSize: Int,
             override val informationData: MessageInformationData,
             override val avatarRenderer: AvatarRenderer,
-            override val colorProvider: ColorProvider,
+            override val messageColorProvider: MessageColorProvider,
             override val itemLongClickListener: View.OnLongClickListener? = null,
             override val itemClickListener: View.OnClickListener? = null,
 //            val memberClickListener: View.OnClickListener? = null,

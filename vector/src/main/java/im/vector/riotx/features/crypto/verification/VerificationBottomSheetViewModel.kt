@@ -42,9 +42,9 @@ import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
-import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64NoPadding
+import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
 import im.vector.matrix.android.internal.crypto.crosssigning.isVerified
-import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
+import im.vector.matrix.android.api.session.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import timber.log.Timber
@@ -63,9 +63,11 @@ data class VerificationBottomSheetViewState(
         val isMe: Boolean = false
 ) : MvRxState
 
-class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted initialState: VerificationBottomSheetViewState,
-                                                                   @Assisted args: VerificationBottomSheet.VerificationArgs,
-                                                                   private val session: Session)
+class VerificationBottomSheetViewModel @AssistedInject constructor(
+        @Assisted initialState: VerificationBottomSheetViewState,
+        @Assisted args: VerificationBottomSheet.VerificationArgs,
+        private val session: Session,
+        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider)
     : VectorViewModel<VerificationBottomSheetViewState, VerificationAction, VerificationBottomSheetViewEvents>(initialState),
         VerificationService.Listener {
 
@@ -116,9 +118,11 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
         if (autoReady) {
             // TODO, can I be here in DM mode? in this case should test if roomID is null?
             session.cryptoService().verificationService()
-                    .readyPendingVerification(supportedVerificationMethods,
+                    .readyPendingVerification(
+                            supportedVerificationMethodsProvider.provide(),
                             pr!!.otherUserId,
-                            pr.transactionId ?: "")
+                            pr.transactionId ?: ""
+                    )
         }
     }
 
@@ -151,10 +155,10 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
         when (action) {
             is VerificationAction.RequestVerificationByDM      -> {
                 if (roomId == null) {
-                    val localID = LocalEcho.createLocalEchoId()
+                    val localId = LocalEcho.createLocalEchoId()
                     setState {
                         copy(
-                                pendingLocalId = localID,
+                                pendingLocalId = localId,
                                 pendingRequest = Loading()
                         )
                     }
@@ -173,7 +177,12 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                                                 session
                                                         .cryptoService()
                                                         .verificationService()
-                                                        .requestKeyVerificationInDMs(supportedVerificationMethods, otherUserId, data, pendingLocalId)
+                                                        .requestKeyVerificationInDMs(
+                                                                supportedVerificationMethodsProvider.provide(),
+                                                                otherUserId,
+                                                                data,
+                                                                pendingLocalId
+                                                        )
                                         )
                                 )
                             }
@@ -191,7 +200,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                                 pendingRequest = Success(session
                                         .cryptoService()
                                         .verificationService()
-                                        .requestKeyVerificationInDMs(supportedVerificationMethods, otherUserId, roomId)
+                                        .requestKeyVerificationInDMs(supportedVerificationMethodsProvider.provide(), otherUserId, roomId)
                                 )
                         )
                     }
@@ -265,7 +274,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
             }
             is VerificationAction.GotResultFromSsss            -> {
                 try {
-                    action.cypherData.fromBase64NoPadding().inputStream().use { ins ->
+                    action.cypherData.fromBase64().inputStream().use { ins ->
                         val res = session.loadSecureSecret<Map<String, String>>(ins, action.alias)
                         val trustResult = session.cryptoService().crossSigningService().checkTrustFromPrivateKeys(
                                 res?.get(MASTER_KEY_SSSS_NAME),
@@ -294,8 +303,6 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                 } catch (failure: Throwable) {
                     _viewEvents.post(VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage))
                 }
-
-                Unit
             }
         }.exhaustive
     }
@@ -362,9 +369,11 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
                     // auto ready in this case, as we are waiting
                     // TODO, can I be here in DM mode? in this case should test if roomID is null?
                     session.cryptoService().verificationService()
-                            .readyPendingVerification(supportedVerificationMethods,
+                            .readyPendingVerification(
+                                    supportedVerificationMethodsProvider.provide(),
                                     pr.otherUserId,
-                                    pr.transactionId ?: "")
+                                    pr.transactionId ?: ""
+                            )
                 }
 
                 // Use this one!
@@ -378,8 +387,8 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(@Assisted ini
             }
         }
 
-        if (pr.localID == state.pendingLocalId
-                || pr.localID == state.pendingRequest.invoke()?.localID
+        if (pr.localId == state.pendingLocalId
+                || pr.localId == state.pendingRequest.invoke()?.localId
                 || state.pendingRequest.invoke()?.transactionId == pr.transactionId) {
             setState {
                 copy(pendingRequest = Success(pr))

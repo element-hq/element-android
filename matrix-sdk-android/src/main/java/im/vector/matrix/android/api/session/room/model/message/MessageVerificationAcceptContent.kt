@@ -22,7 +22,6 @@ import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultContent
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfoAccept
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfoAcceptFactory
-import timber.log.Timber
 
 @JsonClass(generateAdapter = true)
 internal data class MessageVerificationAcceptContent(
@@ -34,21 +33,8 @@ internal data class MessageVerificationAcceptContent(
         @Json(name = "commitment") override var commitment: String? = null
 ) : VerificationInfoAccept {
 
-    override val transactionID: String?
+    override val transactionId: String?
         get() = relatesTo?.eventId
-
-    override fun isValid(): Boolean {
-        if (transactionID.isNullOrBlank()
-                || keyAgreementProtocol.isNullOrBlank()
-                || hash.isNullOrBlank()
-                || commitment.isNullOrBlank()
-                || messageAuthenticationCode.isNullOrBlank()
-                || shortAuthenticationStrings.isNullOrEmpty()) {
-            Timber.e("## received invalid verification request")
-            return false
-        }
-        return true
-    }
 
     override fun toEventContent() = toContent()
 

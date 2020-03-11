@@ -24,11 +24,11 @@ import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachments
+import im.vector.matrix.android.internal.di.CacheDirectory
 import im.vector.matrix.android.internal.di.SessionCacheDirectory
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-import im.vector.matrix.android.internal.util.md5
 import im.vector.matrix.android.internal.util.toCancelable
 import im.vector.matrix.android.internal.util.writeToFile
 import kotlinx.coroutines.GlobalScope
@@ -42,8 +42,10 @@ import java.io.IOException
 import javax.inject.Inject
 
 internal class DefaultFileService @Inject constructor(
-        @SessionCacheDirectory
+        @CacheDirectory
         private val cacheDirectory: File,
+        @SessionCacheDirectory
+        private val sessionCacheDirectory: File,
         private val contentUrlResolver: ContentUrlResolver,
         @Unauthenticated
         private val okHttpClient: OkHttpClient,
@@ -62,60 +64,50 @@ internal class DefaultFileService @Inject constructor(
         return GlobalScope.launch(coroutineDispatchers.main) {
             withContext(coroutineDispatchers.io) {
                 Try {
-                    val folder = getFolder(downloadMode, id)
-
+                    val folder = File(sessionCacheDirectory, "MF")
+                    if (!folder.exists()) {
+                        folder.mkdirs()
+                    }
                     File(folder, fileName)
                 }.flatMap { destFile ->
-                    if (!destFile.exists() || downloadMode == FileService.DownloadMode.TO_EXPORT) {
-                        Try {
-                            val resolvedUrl = contentUrlResolver.resolveFullSize(url) ?: throw IllegalArgumentException("url is null")
+                    if (!destFile.exists()) {
+                        val resolvedUrl = contentUrlResolver.resolveFullSize(url) ?: return@flatMap Try.Failure(IllegalArgumentException("url is null"))
 
-                            val request = Request.Builder()
-                                    .url(resolvedUrl)
-                                    .build()
+                        val request = Request.Builder()
+                                .url(resolvedUrl)
+                                .build()
 
-                            val response = okHttpClient.newCall(request).execute()
-                            var inputStream = response.body?.byteStream()
-                            Timber.v("Response size ${response.body?.contentLength()} - Stream available: ${inputStream?.available()}")
-                            if (!response.isSuccessful
-                                    || inputStream == null) {
-                                throw IOException()
-                            }
-
-                            if (elementToDecrypt != null) {
-                                Timber.v("## decrypt file")
-                                inputStream = MXEncryptedAttachments.decryptAttachment(inputStream, elementToDecrypt)
-                                        ?: throw IllegalStateException("Decryption error")
-                            }
-
-                            writeToFile(inputStream, destFile)
-                            destFile
+                        val response = okHttpClient.newCall(request).execute()
+                        var inputStream = response.body?.byteStream()
+                        Timber.v("Response size ${response.body?.contentLength()} - Stream available: ${inputStream?.available()}")
+                        if (!response.isSuccessful || inputStream == null) {
+                            return@flatMap Try.Failure(IOException())
                         }
-                    } else {
-                        Try.just(destFile)
+
+                        if (elementToDecrypt != null) {
+                            Timber.v("## decrypt file")
+                            inputStream = MXEncryptedAttachments.decryptAttachment(inputStream, elementToDecrypt)
+                                    ?: return@flatMap Try.Failure(IllegalStateException("Decryption error"))
+                        }
+
+                        writeToFile(inputStream, destFile)
                     }
+
+                    Try.just(copyFile(destFile, downloadMode))
                 }
             }
                     .foldToCallback(callback)
         }.toCancelable()
     }
 
-    private fun getFolder(downloadMode: FileService.DownloadMode, id: String): File {
+    private fun copyFile(file: File, downloadMode: FileService.DownloadMode): File {
         return when (downloadMode) {
-            FileService.DownloadMode.FOR_INTERNAL_USE -> {
-                // Create dir tree (MF stands for Matrix File):
-                // <cache>/<sessionId>/MF/<md5(id)>/
-                val tmpFolderSession = File(cacheDirectory, "MF")
-                File(tmpFolderSession, id.md5())
-            }
-            FileService.DownloadMode.TO_EXPORT        -> {
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            }
+            FileService.DownloadMode.TO_EXPORT          ->
+                file.copyTo(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), file.name), true)
+            FileService.DownloadMode.FOR_EXTERNAL_SHARE ->
+                file.copyTo(File(File(cacheDirectory, "ext_share"), file.name), true)
+            FileService.DownloadMode.FOR_INTERNAL_USE   ->
+                file
         }
-                .also { folder ->
-                    if (!folder.exists()) {
-                        folder.mkdirs()
-                    }
-                }
     }
 }

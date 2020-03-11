@@ -20,7 +20,7 @@ import im.vector.riotx.fdroid.features.settings.troubleshoot.TestAutoStartBoot
 import im.vector.riotx.fdroid.features.settings.troubleshoot.TestBackgroundRestrictions
 import im.vector.riotx.features.settings.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.riotx.features.settings.troubleshoot.TestAccountSettings
-import im.vector.riotx.features.settings.troubleshoot.TestBingRulesSettings
+import im.vector.riotx.features.settings.troubleshoot.TestPushRulesSettings
 import im.vector.riotx.features.settings.troubleshoot.TestDeviceSettings
 import im.vector.riotx.features.settings.troubleshoot.TestSystemSettings
 import javax.inject.Inject
@@ -28,7 +28,7 @@ import javax.inject.Inject
 class NotificationTroubleshootTestManagerFactory @Inject constructor(private val testSystemSettings: TestSystemSettings,
                                                                      private val testAccountSettings: TestAccountSettings,
                                                                      private val testDeviceSettings: TestDeviceSettings,
-                                                                     private val testBingRulesSettings: TestBingRulesSettings,
+                                                                     private val testPushRulesSettings: TestPushRulesSettings,
                                                                      private val testAutoStartBoot: TestAutoStartBoot,
                                                                      private val testBackgroundRestrictions: TestBackgroundRestrictions) {
 
@@ -37,7 +37,7 @@ class NotificationTroubleshootTestManagerFactory @Inject constructor(private val
         mgr.addTest(testSystemSettings)
         mgr.addTest(testAccountSettings)
         mgr.addTest(testDeviceSettings)
-        mgr.addTest(testBingRulesSettings)
+        mgr.addTest(testPushRulesSettings)
         mgr.addTest(testAutoStartBoot)
         mgr.addTest(testBackgroundRestrictions)
         return mgr

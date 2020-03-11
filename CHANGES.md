@@ -1,3 +1,31 @@
+Changes in RiotX 0.18.0 (2020-03-11)
+===================================================
+
+Improvements 🙌:
+ - Share image and other media from e2e rooms (#677)
+ - Add support for `/plain` command (#12)
+ - Detect spaces in password if user fail to login (#1038)
+ - FTUE: do not display a different color when encrypting message when not in developer mode.
+ - Open room member profile from avatar of the room member state event (#935)
+ - Restore the push rules configuration in the settings
+
+Bugfix 🐛:
+ - Fix crash on attachment preview screen (#1088)
+ - "Share" option is not appearing in encrypted rooms for images (#1031)
+ - Set "image/jpeg" as MIME type of images instead of "image/jpg" (#1075)
+ - Self verification via QR code is failing (#1130)
+
+SDK API changes ⚠️:
+ - PushRuleService.getPushRules() now returns a RuleSet. Use getAllRules() on this object to get all the rules.
+
+Build 🧱:
+ - Upgrade ktlint to version 0.36.0
+ - Pipeline file for Buildkite is now hosted on another Github repository: https://github.com/matrix-org/pipelines/blob/master/riotx-android/pipeline.yml
+
+Other changes:
+ - Restore availability to Chromebooks (#932)
+ - Add a [documentation](./docs/integration_tests.md) to run integration tests
+
 Changes in RiotX 0.17.0 (2020-02-27)
 ===================================================
 

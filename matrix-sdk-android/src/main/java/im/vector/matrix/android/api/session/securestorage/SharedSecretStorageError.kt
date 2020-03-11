@@ -28,5 +28,7 @@ sealed class SharedSecretStorageError(message: String?) : Throwable(message) {
     object BadKeyFormat : SharedSecretStorageError("Bad Key Format")
     object ParsingError : SharedSecretStorageError("parsing Error")
     object BadMac : SharedSecretStorageError("Bad mac")
+    object BadCipherText : SharedSecretStorageError("Bad cipher text")
+
     data class OtherError(val reason: Throwable) : SharedSecretStorageError(reason.localizedMessage)
 }

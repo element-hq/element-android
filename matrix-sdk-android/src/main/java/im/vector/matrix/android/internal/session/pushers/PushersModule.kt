@@ -73,6 +73,9 @@ internal abstract class PushersModule {
     abstract fun bindAddPushRuleTask(task: DefaultAddPushRuleTask): AddPushRuleTask
 
     @Binds
+    abstract fun bindUpdatePushRuleActionTask(task: DefaultUpdatePushRuleActionsTask): UpdatePushRuleActionsTask
+
+    @Binds
     abstract fun bindRemovePushRuleTask(task: DefaultRemovePushRuleTask): RemovePushRuleTask
 
     @Binds

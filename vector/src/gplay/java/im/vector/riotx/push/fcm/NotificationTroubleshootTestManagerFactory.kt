@@ -18,8 +18,8 @@ package im.vector.riotx.push.fcm
 import androidx.fragment.app.Fragment
 import im.vector.riotx.features.settings.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.riotx.features.settings.troubleshoot.TestAccountSettings
-import im.vector.riotx.features.settings.troubleshoot.TestBingRulesSettings
 import im.vector.riotx.features.settings.troubleshoot.TestDeviceSettings
+import im.vector.riotx.features.settings.troubleshoot.TestPushRulesSettings
 import im.vector.riotx.features.settings.troubleshoot.TestSystemSettings
 import im.vector.riotx.gplay.features.settings.troubleshoot.TestFirebaseToken
 import im.vector.riotx.gplay.features.settings.troubleshoot.TestPlayServices
@@ -29,7 +29,7 @@ import javax.inject.Inject
 class NotificationTroubleshootTestManagerFactory @Inject constructor(private val testSystemSettings: TestSystemSettings,
                                                                      private val testAccountSettings: TestAccountSettings,
                                                                      private val testDeviceSettings: TestDeviceSettings,
-                                                                     private val testBingRulesSettings: TestBingRulesSettings,
+                                                                     private val testBingRulesSettings: TestPushRulesSettings,
                                                                      private val testPlayServices: TestPlayServices,
                                                                      private val testFirebaseToken: TestFirebaseToken,
                                                                      private val testTokenRegistration: TestTokenRegistration) {

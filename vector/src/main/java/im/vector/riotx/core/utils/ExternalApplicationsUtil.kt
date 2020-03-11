@@ -144,10 +144,10 @@ fun openCamera(activity: Activity, titlePrefix: String, requestCode: Int): Strin
             Timber.e("Cannot use the external storage media to save image")
         }
     } catch (uoe: UnsupportedOperationException) {
-        Timber.e(uoe, "Unable to insert camera URI into MediaStore.Images.Media.EXTERNAL_CONTENT_URI " +
-                "no SD card? Attempting to insert into device storage.")
+        Timber.e(uoe, "Unable to insert camera URI into MediaStore.Images.Media.EXTERNAL_CONTENT_URI.")
+        Timber.e("no SD card? Attempting to insert into device storage.")
     } catch (e: Exception) {
-        Timber.e(e, "Unable to insert camera URI into MediaStore.Images.Media.EXTERNAL_CONTENT_URI. $e")
+        Timber.e(e, "Unable to insert camera URI into MediaStore.Images.Media.EXTERNAL_CONTENT_URI.")
     }
 
     if (null == dummyUri) {
@@ -157,13 +157,13 @@ fun openCamera(activity: Activity, titlePrefix: String, requestCode: Int): Strin
                 Timber.e("Cannot use the internal storage to save media to save image")
             }
         } catch (e: Exception) {
-            Timber.e(e, "Unable to insert camera URI into internal storage. Giving up. $e")
+            Timber.e(e, "Unable to insert camera URI into internal storage. Giving up.")
         }
     }
 
     if (dummyUri != null) {
         captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, dummyUri)
-        Timber.v("trying to take a photo on " + dummyUri.toString())
+        Timber.v("trying to take a photo on $dummyUri")
     } else {
         Timber.v("trying to take a photo with no predefined uri")
     }

@@ -20,7 +20,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.verification.VerificationService
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
-import im.vector.matrix.android.internal.crypto.verification.PendingVerificationRequest
+import im.vector.matrix.android.api.session.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity

@@ -41,22 +41,22 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
 
     override suspend fun execute(params: SendVerificationMessageTask.Params): String {
         val event = handleEncryption(params)
-        val localID = event.eventId!!
+        val localId = event.eventId!!
 
         try {
-            localEchoUpdater.updateSendState(localID, SendState.SENDING)
+            localEchoUpdater.updateSendState(localId, SendState.SENDING)
             val executeRequest = executeRequest<SendResponse>(eventBus) {
                 apiCall = roomAPI.send(
-                        localID,
+                        localId,
                         roomId = event.roomId ?: "",
                         content = event.content,
                         eventType = event.type
                 )
             }
-            localEchoUpdater.updateSendState(localID, SendState.SENT)
+            localEchoUpdater.updateSendState(localId, SendState.SENT)
             return executeRequest.eventId
         } catch (e: Throwable) {
-            localEchoUpdater.updateSendState(localID, SendState.UNDELIVERED)
+            localEchoUpdater.updateSendState(localId, SendState.UNDELIVERED)
             throw e
         }
     }

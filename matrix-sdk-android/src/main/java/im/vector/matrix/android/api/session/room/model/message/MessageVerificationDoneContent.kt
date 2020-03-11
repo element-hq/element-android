@@ -25,12 +25,22 @@ import im.vector.matrix.android.internal.crypto.verification.VerificationInfo
 @JsonClass(generateAdapter = true)
 internal data class MessageVerificationDoneContent(
         @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
-) : VerificationInfo {
+) : VerificationInfo<ValidVerificationDone> {
 
-    override val transactionID: String?
+    override val transactionId: String?
         get() = relatesTo?.eventId
 
-    override fun isValid() = transactionID?.isNotEmpty() == true
-
     override fun toEventContent(): Content? = toContent()
+
+    override fun asValidObject(): ValidVerificationDone? {
+        val validTransactionId = transactionId?.takeIf { it.isNotEmpty() } ?: return null
+
+        return ValidVerificationDone(
+                validTransactionId
+        )
+    }
 }
+
+internal data class ValidVerificationDone(
+        val transactionId: String
+)

@@ -58,7 +58,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
             override val sessionId: String,
             val events: List<Event>,
             val attachment: ContentAttachmentData,
-            val isRoomEncrypted: Boolean,
+            val isEncrypted: Boolean,
             val compressBeforeSending: Boolean,
             override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
@@ -90,9 +90,11 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
             Timber.e(e)
             notifyTracker(params) { contentUploadStateTracker.setFailure(it, e) }
             return Result.success(
-                    WorkerParamsFactory.toData(params.copy(
-                            lastFailureMessage = e.localizedMessage
-                    ))
+                    WorkerParamsFactory.toData(
+                            params.copy(
+                                    lastFailureMessage = e.localizedMessage
+                            )
+                    )
             )
         }
                 .let { originalFile ->
@@ -136,7 +138,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
             }
 
             try {
-                val contentUploadResponse = if (params.isRoomEncrypted) {
+                val contentUploadResponse = if (params.isEncrypted) {
                     Timber.v("Encrypt thumbnail")
                     notifyTracker(params) { contentUploadStateTracker.setEncryptingThumbnail(it) }
                     val encryptionResult = MXEncryptedAttachments.encryptAttachment(ByteArrayInputStream(thumbnailData.bytes), thumbnailData.mimeType)
@@ -174,18 +176,18 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
         var uploadedFileEncryptedFileInfo: EncryptedFileInfo? = null
 
         return try {
-            val contentUploadResponse = if (params.isRoomEncrypted) {
+            val contentUploadResponse = if (params.isEncrypted) {
                 Timber.v("Encrypt file")
                 notifyTracker(params) { contentUploadStateTracker.setEncrypting(it) }
 
-                val encryptionResult = MXEncryptedAttachments.encryptAttachment(FileInputStream(attachmentFile), attachment.mimeType)
+                val encryptionResult = MXEncryptedAttachments.encryptAttachment(FileInputStream(attachmentFile), attachment.getSafeMimeType())
                 uploadedFileEncryptedFileInfo = encryptionResult.encryptedFileInfo
 
                 fileUploader
                         .uploadByteArray(encryptionResult.encryptedByteArray, attachment.name, "application/octet-stream", progressListener)
             } else {
                 fileUploader
-                        .uploadFile(attachmentFile, attachment.name, attachment.mimeType, progressListener)
+                        .uploadFile(attachmentFile, attachment.name, attachment.getSafeMimeType(), progressListener)
             }
 
             handleSuccess(params,
@@ -226,7 +228,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     updateEvent(it, attachmentUrl, encryptedFileInfo, thumbnailUrl, thumbnailEncryptedFileInfo, newImageAttributes)
                 }
 
-        val sendParams = MultipleEventSendingDispatcherWorker.Params(params.sessionId, updatedEvents, params.isRoomEncrypted)
+        val sendParams = MultipleEventSendingDispatcherWorker.Params(params.sessionId, updatedEvents, params.isEncrypted)
         return Result.success(WorkerParamsFactory.toData(sendParams))
     }
 

@@ -26,6 +26,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.asCoroutineDispatcher
 import org.matrix.olm.OlmManager
+import java.io.File
 import java.util.concurrent.Executors
 
 @Module
@@ -47,6 +48,13 @@ internal object MatrixModule {
     @Provides
     fun providesResources(context: Context): Resources {
         return context.resources
+    }
+
+    @JvmStatic
+    @Provides
+    @CacheDirectory
+    fun providesCacheDir(context: Context): File {
+        return context.cacheDir
     }
 
     @JvmStatic

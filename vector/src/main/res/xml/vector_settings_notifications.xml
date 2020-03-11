@@ -2,9 +2,7 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <im.vector.riotx.core.preference.VectorPreferenceCategory
-        android:key="SETTINGS_NOTIFICATIONS_KEY"
-        android:title="@string/settings_notifications">
+    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_notifications">
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:defaultValue="true"
@@ -24,13 +22,47 @@
 
         <im.vector.riotx.core.preference.VectorPreference
             android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
-            android:enabled="false"
             android:key="SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY"
             android:persistent="false"
-            android:summary="@string/settings_notification_advanced_summary"
+            android:summary="@string/settings_notification_advanced_summary_riotx"
             android:title="@string/settings_notification_advanced"
-            android:visibility="gone"
-            app:fragment="im.vector.fragments.VectorSettingsNotificationsAdvancedFragment" />
+            app:fragment="im.vector.riotx.features.settings.VectorSettingsAdvancedNotificationPreferenceFragment" />
+
+    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+
+    <im.vector.riotx.core.preference.VectorPreferenceCategory
+        android:persistent="false"
+        android:title="@string/settings_notification_configuration">
+
+        <!-- For API < 26 -->
+        <im.vector.riotx.core.preference.VectorPreference
+            android:dialogTitle="@string/settings_notification_ringtone"
+            android:key="SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY"
+            android:persistent="false"
+            android:title="@string/settings_notification_ringtone" />
+
+        <!-- For API >= 26 -->
+        <im.vector.riotx.core.preference.VectorPreference
+            android:key="SETTINGS_SYSTEM_NOISY_NOTIFICATION_PREFERENCE_KEY"
+            android:persistent="false"
+            android:summary="@string/settings_system_preferences_summary"
+            android:title="@string/settings_noisy_notifications_preferences" />
+
+        <im.vector.riotx.core.preference.VectorPreference
+            android:key="SETTINGS_SYSTEM_SILENT_NOTIFICATION_PREFERENCE_KEY"
+            android:persistent="false"
+            android:summary="@string/settings_system_preferences_summary"
+            android:title="@string/settings_silent_notifications_preferences" />
+
+        <im.vector.riotx.core.preference.VectorPreference
+            android:key="SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY"
+            android:persistent="false"
+            android:summary="@string/settings_system_preferences_summary"
+            android:title="@string/settings_call_notifications_preferences" />
+
+    </im.vector.riotx.core.preference.VectorPreferenceCategory>
+
+    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_troubleshoot_title">
 
         <im.vector.riotx.core.preference.VectorPreference
             android:key="SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
@@ -38,7 +70,6 @@
             app:fragment="im.vector.riotx.features.settings.VectorSettingsNotificationsTroubleshootFragment" />
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
-
 
     <!--im.vector.riotx.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"

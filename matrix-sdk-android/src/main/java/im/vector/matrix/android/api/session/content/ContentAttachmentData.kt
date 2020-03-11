@@ -31,7 +31,7 @@ data class ContentAttachmentData(
         val name: String? = null,
         val queryUri: String,
         val path: String,
-        val mimeType: String?,
+        private val mimeType: String?,
         val type: Type
 ) : Parcelable {
 
@@ -41,4 +41,6 @@ data class ContentAttachmentData(
         AUDIO,
         VIDEO
     }
+
+    fun getSafeMimeType() = if (mimeType == "image/jpg") "image/jpeg" else mimeType
 }

@@ -27,14 +27,13 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenScope
 import im.vector.riotx.core.error.ErrorFormatter
-import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.TextUtils
-import im.vector.riotx.features.ui.getMessageTextColor
+import im.vector.riotx.features.home.room.detail.timeline.MessageColorProvider
 import javax.inject.Inject
 
 @ScreenScope
 class ContentUploadStateTrackerBinder @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
-                                                          private val colorProvider: ColorProvider,
+                                                          private val messageColorProvider: MessageColorProvider,
                                                           private val errorFormatter: ErrorFormatter) {
 
     private val updateListeners = mutableMapOf<String, ContentUploadStateTracker.UpdateListener>()
@@ -44,7 +43,7 @@ class ContentUploadStateTrackerBinder @Inject constructor(private val activeSess
              progressLayout: ViewGroup) {
         activeSessionHolder.getSafeActiveSession()?.also { session ->
             val uploadStateTracker = session.contentUploadProgressTracker()
-            val updateListener = ContentMediaProgressUpdater(progressLayout, isLocalFile, colorProvider, errorFormatter)
+            val updateListener = ContentMediaProgressUpdater(progressLayout, isLocalFile, messageColorProvider, errorFormatter)
             updateListeners[eventId] = updateListener
             uploadStateTracker.track(eventId, updateListener)
         }
@@ -68,7 +67,7 @@ class ContentUploadStateTrackerBinder @Inject constructor(private val activeSess
 
 private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
                                           private val isLocalFile: Boolean,
-                                          private val colorProvider: ColorProvider,
+                                          private val messageColorProvider: MessageColorProvider,
                                           private val errorFormatter: ErrorFormatter) : ContentUploadStateTracker.UpdateListener {
 
     override fun onUpdate(state: ContentUploadStateTracker.State) {
@@ -92,7 +91,7 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
             progressBar?.isIndeterminate = true
             progressBar?.progress = 0
             progressTextView?.text = progressLayout.context.getString(R.string.send_file_step_idle)
-            progressTextView?.setTextColor(colorProvider.getMessageTextColor(SendState.UNSENT))
+            progressTextView?.setTextColor(messageColorProvider.getMessageTextColor(SendState.UNSENT))
         } else {
             progressLayout.isVisible = false
         }
@@ -120,7 +119,7 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
         val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
         progressBar?.isIndeterminate = true
         progressTextView?.text = progressLayout.context.getString(resId)
-        progressTextView?.setTextColor(colorProvider.getMessageTextColor(SendState.ENCRYPTING))
+        progressTextView?.setTextColor(messageColorProvider.getMessageTextColor(SendState.ENCRYPTING))
     }
 
     private fun doHandleProgress(resId: Int, current: Long, total: Long) {
@@ -134,7 +133,7 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
         progressTextView?.text = progressLayout.context.getString(resId,
                 TextUtils.formatFileSize(progressLayout.context, current, true),
                 TextUtils.formatFileSize(progressLayout.context, total, true))
-        progressTextView?.setTextColor(colorProvider.getMessageTextColor(SendState.SENDING))
+        progressTextView?.setTextColor(messageColorProvider.getMessageTextColor(SendState.SENDING))
     }
 
     private fun handleFailure(state: ContentUploadStateTracker.State.Failure) {
@@ -143,7 +142,7 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
         val progressTextView = progressLayout.findViewById<TextView>(R.id.mediaProgressTextView)
         progressBar?.isVisible = false
         progressTextView?.text = errorFormatter.toHumanReadable(state.throwable)
-        progressTextView?.setTextColor(colorProvider.getMessageTextColor(SendState.UNDELIVERED))
+        progressTextView?.setTextColor(messageColorProvider.getMessageTextColor(SendState.UNDELIVERED))
     }
 
     private fun handleSuccess() {

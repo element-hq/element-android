@@ -82,6 +82,8 @@ Make sure the following commands execute without any error:
 RiotX is currently supported on Android KitKat (API 19+): please test your change on an Android device (or Android emulator) running with API 19. Many issues can happen (including crashes) on older devices.
 Also, if possible, please test your change on a real device. Testing on Android emulator may not be sufficient.
 
+You should consider adding Unit tests with your PR, and also integration tests (AndroidTest). Please refer to [this document](./docs/integration_tests.md) to install and run the integration test environment.
+
 ### Internationalisation
 
 When adding new string resources, please only add new entries in file `value/strings.xml`. Translations will be added later by the community of translators with a specific tool named [Weblate](https://translate.riot.im/projects/riot-android/).
