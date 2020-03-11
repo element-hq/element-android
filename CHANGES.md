@@ -1,8 +1,5 @@
-Changes in RiotX 0.18.0 (2020-XX-XX)
+Changes in RiotX 0.18.0 (2020-03-11)
 ===================================================
-
-Features ✨:
- -
 
 Improvements 🙌:
  - Share image and other media from e2e rooms (#677)
@@ -17,9 +14,6 @@ Bugfix 🐛:
  - "Share" option is not appearing in encrypted rooms for images (#1031)
  - Set "image/jpeg" as MIME type of images instead of "image/jpg" (#1075)
  - Self verification via QR code is failing (#1130)
-
-Translations 🗣:
- -
 
 SDK API changes ⚠️:
  - PushRuleService.getPushRules() now returns a RuleSet. Use getAllRules() on this object to get all the rules.
