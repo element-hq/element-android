@@ -49,7 +49,8 @@
     <issue id="PermissionImpliesUnsupportedChromeOsHardware" severity="error" />
 
     <!-- Timber -->
-    <issue id="BinaryOperationInTimber" severity="error" />
+    <!--    This rule is failing on CI because it's marked as unknwown rule id :/-->
+    <!--    <issue id="BinaryOperationInTimber" severity="error" />-->
 
     <!-- Wording -->
     <!-- TODO When strings are imported from Weblate, move this to error -->
