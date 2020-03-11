@@ -16,6 +16,7 @@ Bugfix 🐛:
  - Fix crash on attachment preview screen (#1088)
  - "Share" option is not appearing in encrypted rooms for images (#1031)
  - Set "image/jpeg" as MIME type of images instead of "image/jpg" (#1075)
+ - Self verification via QR code is failing (#1130)
 
 Translations 🗣:
  -
