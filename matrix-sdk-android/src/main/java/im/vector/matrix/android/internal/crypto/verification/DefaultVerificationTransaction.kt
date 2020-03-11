@@ -78,7 +78,7 @@ internal abstract class DefaultVerificationTransaction(
             // Notice that i might not have the private keys, so may not be able to do it
             crossSigningService.trustDevice(otherDeviceId!!, object : MatrixCallback<Unit> {
                 override fun onFailure(failure: Throwable) {
-                    Timber.w(failure, "## Verification: Failed to sign new device $otherDeviceId")
+                    Timber.w("## Verification: Failed to sign new device $otherDeviceId, ${failure.localizedMessage}")
                 }
             })
         }

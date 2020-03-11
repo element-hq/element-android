@@ -84,8 +84,14 @@ internal class DefaultQrCodeVerificationTransaction(
 
         // check master key
         val myMasterKey = crossSigningService.getUserCrossSigningKeys(userId)?.masterKey()?.unpaddedBase64PublicKey
+        var canTrustOtherUserMasterKey = false
+
+        // Check the other device view of my MSK
         when (otherQrCodeData) {
             is QrCodeData.VerifyingAnotherUser             -> {
+                // key2 (aka otherUserMasterCrossSigningPublicKey) is what the one displaying the QR code (other user) think my MSK is.
+                // Let's check that it's correct
+                // If not -> Cancel
                 if (otherQrCodeData.otherUserMasterCrossSigningPublicKey != myMasterKey) {
                     Timber.d("## Verification QR: Invalid other master key ${otherQrCodeData.otherUserMasterCrossSigningPublicKey}")
                     cancel(CancelCode.MismatchedKeys)
@@ -93,60 +99,79 @@ internal class DefaultQrCodeVerificationTransaction(
                 } else Unit
             }
             is QrCodeData.SelfVerifyingMasterKeyTrusted    -> {
+                // key1 (aka userMasterCrossSigningPublicKey) is the session displaying the QR code view of our MSK.
+                // Let's check that I see the same MSK
+                // If not -> Cancel
                 if (otherQrCodeData.userMasterCrossSigningPublicKey != myMasterKey) {
                     Timber.d("## Verification QR: Invalid other master key ${otherQrCodeData.userMasterCrossSigningPublicKey}")
                     cancel(CancelCode.MismatchedKeys)
                     return
-                } else Unit
+                } else {
+                    // I can trust the MSK then (i see the same one, and other session tell me it's trusted by him)
+                    canTrustOtherUserMasterKey = true
+                }
             }
             is QrCodeData.SelfVerifyingMasterKeyNotTrusted -> {
+                // key2 (aka userMasterCrossSigningPublicKey) is the session displaying the QR code view of our MSK.
+                // Let's check that it's the good one
+                // If not -> Cancel
                 if (otherQrCodeData.userMasterCrossSigningPublicKey != myMasterKey) {
                     Timber.d("## Verification QR: Invalid other master key ${otherQrCodeData.userMasterCrossSigningPublicKey}")
                     cancel(CancelCode.MismatchedKeys)
                     return
-                } else Unit
+                } else {
+                    // Nothing special here, we will send a reciprocate start event, and then the other session will trust it's view of the MSK
+                }
             }
         }.exhaustive
 
         val toVerifyDeviceIds = mutableListOf<String>()
-        var canTrustOtherUserMasterKey = false
 
-        // Check device key if available
+        // Let's now check the other user/device key material
         when (otherQrCodeData) {
             is QrCodeData.VerifyingAnotherUser             -> {
+                // key1(aka userMasterCrossSigningPublicKey) is the MSK of the one displaying the QR code (i.e other user)
+                // Let's check that it matches what I think it should be
                 if (otherQrCodeData.userMasterCrossSigningPublicKey
                         != crossSigningService.getUserCrossSigningKeys(otherUserId)?.masterKey()?.unpaddedBase64PublicKey) {
                     Timber.d("## Verification QR: Invalid user master key ${otherQrCodeData.userMasterCrossSigningPublicKey}")
                     cancel(CancelCode.MismatchedKeys)
                     return
                 } else {
+                    // It does so i should mark it as trusted
                     canTrustOtherUserMasterKey = true
                     Unit
                 }
             }
             is QrCodeData.SelfVerifyingMasterKeyTrusted    -> {
+                // key2 (aka otherDeviceKey) is my current device key in POV of the one displaying the QR code (i.e other device)
+                // Let's check that it's correct
                 if (otherQrCodeData.otherDeviceKey
                         != cryptoStore.getUserDevice(userId, deviceId)?.fingerprint()) {
                     Timber.d("## Verification QR: Invalid other device key ${otherQrCodeData.otherDeviceKey}")
                     cancel(CancelCode.MismatchedKeys)
                     return
-                } else Unit
+                } else Unit // Nothing special here, we will send a reciprocate start event, and then the other session will trust my device
+                // and thus allow me to request SSSS secret
             }
             is QrCodeData.SelfVerifyingMasterKeyNotTrusted -> {
+                // key1 (aka otherDeviceKey) is the device key of the one displaying the QR code (i.e other device)
+                // Let's check that it matches what I have locally
                 if (otherQrCodeData.deviceKey
                         != cryptoStore.getUserDevice(otherUserId, otherDeviceId ?: "")?.fingerprint()) {
                     Timber.d("## Verification QR: Invalid device key ${otherQrCodeData.deviceKey}")
                     cancel(CancelCode.MismatchedKeys)
                     return
                 } else {
-                    toVerifyDeviceIds.add(otherQrCodeData.deviceKey)
+                    // Yes it does -> i should trust it and sign then upload the signature
+                    toVerifyDeviceIds.add(otherDeviceId ?: "")
                     Unit
                 }
             }
         }.exhaustive
 
         if (!canTrustOtherUserMasterKey && toVerifyDeviceIds.isEmpty()) {
-            // Nothing to verify
+            //            // Nothing to verify
             cancel(CancelCode.MismatchedKeys)
             return
         }
@@ -215,7 +240,21 @@ internal class DefaultQrCodeVerificationTransaction(
     }
 
     override fun otherUserScannedMyQrCode() {
-        trust(true, emptyList(), true)
+        when (qrCodeData) {
+            is QrCodeData.VerifyingAnotherUser             -> {
+                // Alice telling Bob that the code was scanned successfully is sufficient for Bob to trust Alice's key,
+                trust(true, emptyList(), false)
+            }
+            is QrCodeData.SelfVerifyingMasterKeyTrusted    -> {
+                // I now know that I have the correct device key for other session,
+                // and can sign it with the self-signing key and upload the signature
+                trust(false, listOf(otherDeviceId ?: ""), false)
+            }
+            is QrCodeData.SelfVerifyingMasterKeyNotTrusted -> {
+                // I now know that i can trust my MSK
+                trust(true, emptyList(), true)
+            }
+        }
     }
 
     override fun otherUserDidNotScannedMyQrCode() {
