@@ -23,7 +23,10 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.room.send.SendState
+import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
 import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
@@ -96,6 +99,22 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
                     type = safeResult.eventType,
                     content = safeResult.eventContent
             )
+            // Better handling of local echo, to avoid decrypting transition on remote echo
+            // Should I only do it for text messages?
+            if (result.eventContent["algorithm"] == MXCRYPTO_ALGORITHM_MEGOLM) {
+                val decryptionLocalEcho = MXEventDecryptionResult(
+                        clearEvent = Event(
+                                type = localEvent.type,
+                                content = localEvent.content,
+                                roomId = localEvent.roomId
+                        ).toContent(),
+                        forwardingCurve25519KeyChain = emptyList(),
+                        senderCurve25519Key = result.eventContent["sender_key"] as? String,
+                        claimedEd25519Key = crypto.getMyDevice().fingerprint()
+                )
+                localEchoUpdater.updateEncryptedEcho(localEvent.eventId, result.eventContent, decryptionLocalEcho)
+            }
+
             val nextWorkerParams = SendEventWorker.Params(params.sessionId, encryptedEvent)
             return Result.success(WorkerParamsFactory.toData(nextWorkerParams))
         } else {

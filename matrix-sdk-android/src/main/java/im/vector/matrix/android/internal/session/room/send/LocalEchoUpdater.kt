@@ -17,7 +17,11 @@
 package im.vector.matrix.android.internal.session.room.send
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.session.events.model.Content
+import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.send.SendState
+import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
+import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.query.where
 import timber.log.Timber
@@ -35,6 +39,17 @@ internal class LocalEchoUpdater @Inject constructor(private val monarchy: Monarc
                 } else {
                     sendingEventEntity.sendState = sendState
                 }
+            }
+        }
+    }
+
+    fun updateEncryptedEcho(eventId: String, encryptedContent: Content, mxEventDecryptionResult: MXEventDecryptionResult) {
+        monarchy.writeAsync { realm ->
+            val sendingEventEntity = EventEntity.where(realm, eventId).findFirst()
+            if (sendingEventEntity != null) {
+                sendingEventEntity.type = EventType.ENCRYPTED
+                sendingEventEntity.content = ContentMapper.map(encryptedContent)
+                sendingEventEntity.setDecryptionResult(mxEventDecryptionResult)
             }
         }
     }
