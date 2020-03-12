@@ -297,20 +297,20 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     }
                 }
 
-                if (timelineEvent.isEncrypted() && timelineEvent.root.mCryptoError != null) {
-                    val keysBackupService = session.cryptoService().keysBackupService()
-                    if (keysBackupService.state == KeysBackupState.NotTrusted
-                            || (keysBackupService.state == KeysBackupState.ReadyToBackUp
-                                    && keysBackupService.canRestoreKeys())
-                    ) {
-                        add(EventSharedAction.UseKeyBackup)
-                    }
-                    if (session.cryptoService().getCryptoDeviceInfo(session.myUserId).size > 1) {
-                        add(EventSharedAction.ReRequestKey(timelineEvent.eventId))
-                    }
-                }
-
                 if (vectorPreferences.developerMode()) {
+                    if (timelineEvent.isEncrypted() && timelineEvent.root.mCryptoError != null) {
+                        val keysBackupService = session.cryptoService().keysBackupService()
+                        if (keysBackupService.state == KeysBackupState.NotTrusted
+                                || (keysBackupService.state == KeysBackupState.ReadyToBackUp
+                                        && keysBackupService.canRestoreKeys())
+                        ) {
+                            add(EventSharedAction.UseKeyBackup)
+                        }
+                        if (session.cryptoService().getCryptoDeviceInfo(session.myUserId).size > 1) {
+                            add(EventSharedAction.ReRequestKey(timelineEvent.eventId))
+                        }
+                    }
+
                     add(EventSharedAction.ViewSource(timelineEvent.root.toContentStringWithIndent()))
                     if (timelineEvent.isEncrypted() && timelineEvent.root.mxDecryptionResult != null) {
                         val decryptedContent = timelineEvent.root.toClearContentStringWithIndent()
