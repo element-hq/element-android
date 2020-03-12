@@ -361,42 +361,6 @@ internal interface IMXCryptoStore {
     fun getOrAddOutgoingSecretShareRequest(secretName: String, recipients: Map<String, List<String>>): OutgoingSecretRequest?
 
     fun saveGossipingEvent(event: Event)
-    /**
-     * Look for room key requests by state.
-     *
-     * @param states the states
-     * @return an OutgoingRoomKeyRequest or null
-     */
-//    fun getOutgoingRoomKeyRequestByState(states: Set<ShareRequestState>): OutgoingRoomKeyRequest?
-//    fun getOutgoingSecretShareRequestByState(states: Set<ShareRequestState>): OutgoingSecretRequest?
-
-    /**
-     * Update an existing outgoing request.
-     *
-     * @param request the request
-     */
-//    fun updateOutgoingRoomKeyRequest(request: OutgoingRoomKeyRequest)
-
-    /**
-     * Delete an outgoing room key request.
-     *
-     * @param transactionId the transaction id.
-     */
-//    fun deleteOutgoingRoomKeyRequest(transactionId: String)
-
-    /**
-     * Store an incomingRoomKeyRequest instance
-     *
-     * @param incomingRoomKeyRequest the incoming key request
-     */
-//    fun storeIncomingRoomKeyRequest(incomingRoomKeyRequest: IncomingRoomKeyRequest?)
-
-    /**
-     * Delete an incomingRoomKeyRequest instance
-     *
-     * @param incomingRoomKeyRequest the incoming key request
-     */
-//    fun deleteIncomingRoomKeyRequest(incomingRoomKeyRequest: IncomingShareRequestCommon)
 
     fun updateGossipingRequestState(request: IncomingShareRequestCommon, state: GossipingRequestState)
 

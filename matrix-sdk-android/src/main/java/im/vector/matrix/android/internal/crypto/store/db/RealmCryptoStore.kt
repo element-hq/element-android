@@ -1240,7 +1240,8 @@ internal class RealmCryptoStore @Inject constructor(
                     .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
         }, { entity ->
             entity.toOutgoingGossipingRequest() as? OutgoingRoomKeyRequest
-        }).filterNotNull()
+        })
+                .filterNotNull()
     }
 
     override fun getOutgoingSecretKeyRequests(): List<OutgoingSecretRequest> {
@@ -1250,7 +1251,8 @@ internal class RealmCryptoStore @Inject constructor(
                     .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.SECRET.name)
         }, { entity ->
             entity.toOutgoingGossipingRequest() as? OutgoingSecretRequest
-        }).filterNotNull()
+        })
+                .filterNotNull()
     }
 
     override fun getCrossSigningInfo(userId: String): MXCrossSigningInfo? {

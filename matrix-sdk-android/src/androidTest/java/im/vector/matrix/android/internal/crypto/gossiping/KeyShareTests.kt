@@ -48,17 +48,6 @@ class KeyShareTests : InstrumentedTest {
 
     private val mTestHelper = CommonTestHelper(context())
 
-//    @Before
-//    fun setup() {
-//        mockkStatic(Log::class)
-//        every { Log.v(any(), any()) } returns 0
-//        every { Log.d(any(), any()) } returns 0
-//        every { Log.i(any(), any()) } returns 0
-//        every { Log.e(any(), any()) } returns 0
-// //        every { Log.println(any(), any(), any()) } returns 0
-// //        every { Log.wtf(any(), any(), any()) } returns 0
-//    }
-
     @Test
     fun test_DoNotSelfShareIfNotTrusted() {
         val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))

@@ -41,14 +41,14 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
 
     // list of IncomingRoomKeyRequests/IncomingRoomKeyRequestCancellations
     // we received in the current sync.
-    private val receiveGossipingRequests = ArrayList<IncomingShareRequestCommon>()
+    private val receivedGossipingRequests = ArrayList<IncomingShareRequestCommon>()
     private val receivedRequestCancellations = ArrayList<IncomingRequestCancellation>()
 
     // the listeners
     private val gossipingRequestListeners: MutableSet<GossipingRequestListener> = HashSet()
 
     init {
-        receiveGossipingRequests.addAll(cryptoStore.getPendingIncomingGossipingRequests())
+        receivedGossipingRequests.addAll(cryptoStore.getPendingIncomingGossipingRequests())
     }
 
     /**
@@ -71,7 +71,7 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
                         } else {
                             // save in DB
                             cryptoStore.storeIncomingGossipingRequest(it, ageLocalTs)
-                            receiveGossipingRequests.add(it)
+                            receivedGossipingRequests.add(it)
                         }
                     }
                 } else if (event.getClearType() == EventType.ROOM_KEY_REQUEST) {
@@ -81,7 +81,7 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
                             Timber.v("## onGossipingRequestEvent type ${event.type} ignore remote echo")
                         } else {
                             cryptoStore.storeIncomingGossipingRequest(it, ageLocalTs)
-                            receiveGossipingRequests.add(it)
+                            receivedGossipingRequests.add(it)
                         }
                     }
                 }
@@ -105,8 +105,8 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
     fun processReceivedGossipingRequests() {
         Timber.v("## processReceivedGossipingRequests()")
 
-        val roomKeyRequestsToProcess = receiveGossipingRequests.toList()
-        receiveGossipingRequests.clear()
+        val roomKeyRequestsToProcess = receivedGossipingRequests.toList()
+        receivedGossipingRequests.clear()
         for (request in roomKeyRequestsToProcess) {
             if (request is IncomingRoomKeyRequest) {
                 processIncomingRoomKeyRequest(request)

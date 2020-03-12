@@ -66,7 +66,11 @@ internal open class OutgoingGossipingRequestEntity(
     companion object {
 
         private val recipientsDataMapper: JsonAdapter<Map<String, List<String>>> =
-                MoshiProvider.providesMoshi().adapter<Map<String, List<String>>>(Types.newParameterizedType(Map::class.java, String::class.java, List::class.java))
+                MoshiProvider
+                        .providesMoshi()
+                        .adapter<Map<String, List<String>>>(
+                                Types.newParameterizedType(Map::class.java, String::class.java, List::class.java)
+                        )
     }
 
     fun toOutgoingGossipingRequest(): OutgoingGossipingRequest {
