@@ -26,18 +26,14 @@ import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.OutgoingSecretRequest
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.di.MoshiProvider
-import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.Index
 
 internal open class OutgoingGossipingRequestEntity(
         @Index var requestId: String? = null,
-//        var cancellationTxnId: String? = null,
-        // Serialized Json
         var recipientsData: String? = null,
         var requestedInfoStr: String? = null,
-        @Index var typeStr: String? = null,
-        var sourceEvents: RealmList<String> = RealmList()
+        @Index var typeStr: String? = null
 ) : RealmObject() {
 
     fun getRequestedSecretName(): String? = if (type == GossipRequestType.SECRET) {

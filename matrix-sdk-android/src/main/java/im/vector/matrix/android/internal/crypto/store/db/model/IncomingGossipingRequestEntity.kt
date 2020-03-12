@@ -26,7 +26,7 @@ import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import io.realm.RealmObject
 import io.realm.annotations.Index
 
-internal open class IncomingGossipingRequestEntity(@Index var requestId: String = "",
+internal open class IncomingGossipingRequestEntity(@Index var requestId: String? = "",
                                                    @Index var typeStr: String? = null,
                                                    var otherUserId: String? = null,
                                                    var requestedInfoStr: String? = null,

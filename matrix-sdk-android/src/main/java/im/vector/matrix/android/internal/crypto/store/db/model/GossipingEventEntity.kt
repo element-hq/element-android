@@ -33,7 +33,7 @@ import timber.log.Timber
  * (room key request, or sss secret sharing, as well as cancellations)
  *
  */
-internal open class GossipingEventEntity(@Index var type: String = "",
+internal open class GossipingEventEntity(@Index var type: String? = "",
                                          var content: String? = null,
                                          @Index var sender: String? = null,
                                          var decryptionResultJson: String? = null,
@@ -66,7 +66,7 @@ internal open class GossipingEventEntity(@Index var type: String = "",
 
     fun toModel(): Event {
         return Event(
-                type = this.type,
+                type = this.type ?: "",
                 content = ContentMapper.map(this.content),
                 senderId = this.sender
         ).also {
