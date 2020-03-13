@@ -184,13 +184,12 @@ internal class DefaultQrCodeVerificationTransaction(
         // qrCodeData.sharedSecret will be used to send the start request
         start(otherQrCodeData.sharedSecret)
 
-        // Trust the other user
         trust(canTrustOtherUserMasterKey,
                 toVerifyDeviceIds.distinct(),
                 eventuallyMarkMyMasterKeyAsTrusted = true)
     }
 
-    private fun start(remoteSecret: String) {
+    private fun start(remoteSecret: String, onDone: (() -> Unit)? = null) {
         if (state != VerificationTxState.None) {
             Timber.e("## Verification QR: start verification from invalid state")
             // should I cancel??
@@ -208,7 +207,7 @@ internal class DefaultQrCodeVerificationTransaction(
                 startMessage,
                 VerificationTxState.Started,
                 CancelCode.User,
-                null
+                onDone
         )
     }
 

@@ -58,6 +58,13 @@ internal abstract class DefaultVerificationTransaction(
     protected fun trust(canTrustOtherUserMasterKey: Boolean,
                         toVerifyDeviceIds: List<String>,
                         eventuallyMarkMyMasterKeyAsTrusted: Boolean) {
+        Timber.d("## Verification: trust ($otherUserId,$otherDeviceId) , verifiedDevices:$toVerifyDeviceIds, Mark myMSK trusted $eventuallyMarkMyMasterKeyAsTrusted")
+
+        // TODO what if the otherDevice is not in this list? and should we
+        toVerifyDeviceIds.forEach {
+            setDeviceVerified(otherUserId, it)
+        }
+
         // If not me sign his MSK and upload the signature
         if (canTrustOtherUserMasterKey) {
             // we should trust this master key
@@ -74,10 +81,6 @@ internal abstract class DefaultVerificationTransaction(
                     // Mark my keys as trusted locally
                     crossSigningService.markMyMasterKeyAsTrusted()
                 }
-                if (!crossSigningService.canCrossSign()) {
-                    outgoingGossipingRequestManager.sendSecretShareRequest(SELF_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId ?: "*")))
-                    outgoingGossipingRequestManager.sendSecretShareRequest(USER_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId ?: "*")))
-                }
             }
         }
 
@@ -91,11 +94,13 @@ internal abstract class DefaultVerificationTransaction(
             })
         }
 
-        // TODO what if the otherDevice is not in this list? and should we
-        toVerifyDeviceIds.forEach {
-            setDeviceVerified(otherUserId, it)
+        transport.done(transactionId) {
+            if (otherUserId == userId) {
+                outgoingGossipingRequestManager.sendSecretShareRequest(SELF_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId ?: "*")))
+                outgoingGossipingRequestManager.sendSecretShareRequest(USER_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId ?: "*")))
+            }
         }
-        transport.done(transactionId)
+
         state = VerificationTxState.Verified
     }
 

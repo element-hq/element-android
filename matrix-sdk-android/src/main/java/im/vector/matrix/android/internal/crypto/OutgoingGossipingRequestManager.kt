@@ -34,6 +34,7 @@ import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.startChain
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -75,6 +76,9 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
 
     fun sendSecretShareRequest(secretName: String, recipients: Map<String, List<String>>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            // A bit dirty, but for better stability give other party some time to mark
+            // devices trusted :/
+            delay(1500)
             cryptoStore.getOrAddOutgoingSecretShareRequest(secretName, recipients)?.let {
                 // TODO check if there is already one that is being sent?
                 if (it.state == OutgoingGossipingRequestState.SENDING || it.state == OutgoingGossipingRequestState.SENT) {

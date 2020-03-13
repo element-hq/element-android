@@ -301,7 +301,9 @@ internal class DefaultCrossSigningService @Inject constructor(
 
     override fun onSecretSSKGossip(sskPrivateKey: String) {
         Timber.i("## CrossSigning - onSecretSSKGossip")
-        val mxCrossSigningInfo = getMyCrossSigningKeys() ?: return
+        val mxCrossSigningInfo = getMyCrossSigningKeys() ?: return Unit.also {
+            Timber.e("## CrossSigning - onSecretSSKGossip() received secret but public key is not known")
+        }
 
         sskPrivateKey.fromBase64()
                 .let { privateKeySeed ->
@@ -311,9 +313,10 @@ internal class DefaultCrossSigningService @Inject constructor(
                             selfSigningPkSigning?.releaseSigning()
                             selfSigningPkSigning = pkSigning
                             Timber.i("## CrossSigning - Loading SSK success")
-                            cryptoStore.storePrivateKeysInfo(null, null, sskPrivateKey)
+                            cryptoStore.storeSSKPrivateKey(sskPrivateKey)
                             return
                         } else {
+                            Timber.e("## CrossSigning - onSecretSSKGossip() private key do not match public key")
                             pkSigning.releaseSigning()
                         }
                     } catch (failure: Throwable) {
@@ -324,19 +327,23 @@ internal class DefaultCrossSigningService @Inject constructor(
     }
 
     override fun onSecretUSKGossip(uskPrivateKey: String) {
-        val mxCrossSigningInfo = getMyCrossSigningKeys() ?: return
+        Timber.i("## CrossSigning - onSecretUSKGossip")
+        val mxCrossSigningInfo = getMyCrossSigningKeys() ?: return Unit.also {
+            Timber.e("## CrossSigning - onSecretUSKGossip() received secret but public key is not knwow ")
+        }
 
         uskPrivateKey.fromBase64()
                 .let { privateKeySeed ->
                     val pkSigning = OlmPkSigning()
                     try {
-                        if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.selfSigningKey()?.unpaddedBase64PublicKey) {
+                        if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.userKey()?.unpaddedBase64PublicKey) {
                             userPkSigning?.releaseSigning()
                             userPkSigning = pkSigning
                             Timber.i("## CrossSigning - Loading USK success")
-                            cryptoStore.storePrivateKeysInfo(null, uskPrivateKey, null)
+                            cryptoStore.storeUSKPrivateKey(uskPrivateKey)
                             return
                         } else {
+                            Timber.e("## CrossSigning - onSecretUSKGossip() private key do not match public key")
                             pkSigning.releaseSigning()
                         }
                     } catch (failure: Throwable) {
@@ -444,7 +451,7 @@ internal class DefaultCrossSigningService @Inject constructor(
      * Will not force a download of the key, but will verify signatures trust chain
      */
     override fun checkUserTrust(otherUserId: String): UserTrustResult {
-        Timber.d("## CrossSigning  checkUserTrust for $otherUserId")
+        Timber.v("## CrossSigning  checkUserTrust for $otherUserId")
         if (otherUserId == userId) {
             return checkSelfTrust()
         }
@@ -799,7 +806,7 @@ internal class DefaultCrossSigningService @Inject constructor(
                 users.forEach {
                     cryptoStore.getUserDeviceList(it)?.forEach { device ->
                         val updatedTrust = checkDeviceTrust(it, device.deviceId, device.trustLevel?.isLocallyVerified() ?: false)
-                        Timber.d("## CrossSigning - update trust for device ${device.deviceId} of user $otherUserId , verified=$updatedTrust")
+                        Timber.v("## CrossSigning - update trust for device ${device.deviceId} of user $otherUserId , verified=$updatedTrust")
                         cryptoStore.setDeviceTrust(it, device.deviceId, updatedTrust.isCrossSignedVerified(), updatedTrust.isLocallyVerified())
                     }
                 }

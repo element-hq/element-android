@@ -371,7 +371,23 @@ internal class RealmCryptoStore @Inject constructor(
         doRealmTransaction(realmConfiguration) { realm ->
             realm.where<CryptoMetadataEntity>().findFirst()?.apply {
                 xSignMasterPrivateKey = msk
+                xSignUserPrivateKey = usk
                 xSignSelfSignedPrivateKey = ssk
+            }
+        }
+    }
+
+    override fun storeSSKPrivateKey(ssk: String?) {
+        doRealmTransaction(realmConfiguration) { realm ->
+            realm.where<CryptoMetadataEntity>().findFirst()?.apply {
+                xSignSelfSignedPrivateKey = ssk
+            }
+        }
+    }
+
+    override fun storeUSKPrivateKey(usk: String?) {
+        doRealmTransaction(realmConfiguration) { realm ->
+            realm.where<CryptoMetadataEntity>().findFirst()?.apply {
                 xSignUserPrivateKey = usk
             }
         }

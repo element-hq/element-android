@@ -60,7 +60,7 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
         // TODO ignore initial sync or back pagination?
 
         params.events.forEach { event ->
-            Timber.d("## SAS Verification live observer: received msgId: ${event.eventId} msgtype: ${event.type} from ${event.senderId}")
+            Timber.v("## SAS Verification live observer: received msgId: ${event.eventId} msgtype: ${event.type} from ${event.senderId}")
 
             // If the request is in the future by more than 5 minutes or more than 10 minutes in the past,
             // the message should be ignored by the receiver.

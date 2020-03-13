@@ -743,6 +743,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     private fun onSecretSendReceived(event: Event) {
+        Timber.i("## onSecretSend() : onSecretSendReceived ${event.content?.get("sender_key")}")
         if (!event.isEncrypted()) {
             // secret send messages must be encrypted
             Timber.e("## onSecretSend() :Received unencrypted secret send event")
@@ -765,30 +766,18 @@ internal class DefaultCryptoService @Inject constructor(
             return
         }
 
-        val deviceId = event.mxDecryptionResult?.payload?.get("sender_device") as? String
-
-        val device = deviceId?.let { cryptoStore.getUserDevice(event.senderId, it) }
-
-        if (device == null || !device.isVerified || device.isBlocked) {
-            // Ignore secret from untrusted session?
-            Timber.i("## onSecretSend() :Received secret from untrusted device $deviceId ")
-            return
-        }
-
         when (existingRequest.secretName) {
             SELF_SIGNING_KEY_SSSS_NAME -> {
-                if (device.trustLevel?.isLocallyVerified() == true) {
                     crossSigningService.onSecretSSKGossip(secretContent.secretValue)
                     return
-                }
             }
             USER_SIGNING_KEY_SSSS_NAME -> {
-                if (device.trustLevel?.isLocallyVerified() == true) {
-                    cryptoStore.storePrivateKeysInfo(null, null, secretContent.secretValue)
-                }
+                    crossSigningService.onSecretUSKGossip(secretContent.secretValue)
+                    return
             }
             else                       -> {
                 // Ask to application layer?
+                Timber.v("## onSecretSend() : secret not handled by SDK")
             }
         }
     }

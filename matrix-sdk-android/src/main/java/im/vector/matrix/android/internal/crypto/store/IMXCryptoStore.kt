@@ -398,6 +398,9 @@ internal interface IMXCryptoStore {
     fun markMyMasterKeyAsLocallyTrusted(trusted: Boolean)
 
     fun storePrivateKeysInfo(msk: String?, usk: String?, ssk: String?)
+    fun storeSSKPrivateKey(ssk: String?)
+    fun storeUSKPrivateKey(usk: String?)
+
     fun getCrossSigningPrivateKeys(): PrivateKeysInfo?
 
     fun setUserKeysAsTrusted(userId: String, trusted: Boolean = true)
