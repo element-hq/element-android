@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ -  Message transitions in encrypted rooms are jarring #518
 
 Translations 🗣:
  -
