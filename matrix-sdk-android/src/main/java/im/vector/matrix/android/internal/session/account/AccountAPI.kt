@@ -29,7 +29,6 @@ internal interface AccountAPI {
      * Ask the homeserver to change the password with the provided new password.
      * @param params parameters to change password.
      */
-    @Headers("CONNECT_TIMEOUT:60000", "READ_TIMEOUT:60000", "WRITE_TIMEOUT:60000")
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/password")
     fun changePassword(@Body params: ChangePasswordParams): Call<Unit>
 }
