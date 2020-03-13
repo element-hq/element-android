@@ -297,9 +297,16 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.NavigateToEvent     -> navigateToEvent(it)
                 is RoomDetailViewEvents.FileTooBigError     -> displayFileTooBigError(it)
                 is RoomDetailViewEvents.DownloadFileState   -> handleDownloadFileState(it)
+                is RoomDetailViewEvents.JoinedToAnotherRoom -> handleJoinedToAnotherRoom(it)
                 is RoomDetailViewEvents.SendMessageResult   -> renderSendMessageResult(it)
             }.exhaustive
         }
+    }
+
+    private fun handleJoinedToAnotherRoom(action: RoomDetailViewEvents.JoinedToAnotherRoom) {
+        updateComposerText("")
+        lockSendButton = false
+        navigator.openRoom(vectorBaseActivity, action.roomId)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

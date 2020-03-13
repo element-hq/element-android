@@ -50,6 +50,7 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     abstract class SendMessageResult : RoomDetailViewEvents()
 
     object MessageSent : SendMessageResult()
+    data class JoinedToAnotherRoom(val roomId: String) : SendMessageResult()
     class SlashCommandError(val command: Command) : SendMessageResult()
     class SlashCommandUnknown(val command: String) : SendMessageResult()
     data class SlashCommandHandled(@StringRes val messageRes: Int? = null) : SendMessageResult()
