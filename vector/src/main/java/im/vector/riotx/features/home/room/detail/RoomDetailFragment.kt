@@ -292,18 +292,18 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.Failure             -> showErrorInSnackbar(it.throwable)
                 is RoomDetailViewEvents.OnNewTimelineEvents -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
                 is RoomDetailViewEvents.ActionSuccess       -> displayRoomDetailActionSuccess(it)
-                is RoomDetailViewEvents.ActionFailure       -> displayRoomDetailActionFailure(it)
-                is RoomDetailViewEvents.ShowMessage         -> showSnackWithMessage(it.message, Snackbar.LENGTH_LONG)
-                is RoomDetailViewEvents.NavigateToEvent     -> navigateToEvent(it)
-                is RoomDetailViewEvents.FileTooBigError     -> displayFileTooBigError(it)
-                is RoomDetailViewEvents.DownloadFileState   -> handleDownloadFileState(it)
-                is RoomDetailViewEvents.JoinedToAnotherRoom -> handleJoinedToAnotherRoom(it)
-                is RoomDetailViewEvents.SendMessageResult   -> renderSendMessageResult(it)
+                is RoomDetailViewEvents.ActionFailure         -> displayRoomDetailActionFailure(it)
+                is RoomDetailViewEvents.ShowMessage           -> showSnackWithMessage(it.message, Snackbar.LENGTH_LONG)
+                is RoomDetailViewEvents.NavigateToEvent       -> navigateToEvent(it)
+                is RoomDetailViewEvents.FileTooBigError       -> displayFileTooBigError(it)
+                is RoomDetailViewEvents.DownloadFileState     -> handleDownloadFileState(it)
+                is RoomDetailViewEvents.JoinRoomCommandSucces -> handleJoinedToAnotherRoom(it)
+                is RoomDetailViewEvents.SendMessageResult     -> renderSendMessageResult(it)
             }.exhaustive
         }
     }
 
-    private fun handleJoinedToAnotherRoom(action: RoomDetailViewEvents.JoinedToAnotherRoom) {
+    private fun handleJoinedToAnotherRoom(action: RoomDetailViewEvents.JoinRoomCommandSucces) {
         updateComposerText("")
         lockSendButton = false
         navigator.openRoom(vectorBaseActivity, action.roomId)
