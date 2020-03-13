@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- - /join command implemented
+ - Implementation of /join command
 
 Bugfix 🐛:
  -
