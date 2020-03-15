@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Use read marker instead of read receipts to handle notifications visibility
 
 Bugfix 🐛:
  -  Message transitions in encrypted rooms are jarring #518
