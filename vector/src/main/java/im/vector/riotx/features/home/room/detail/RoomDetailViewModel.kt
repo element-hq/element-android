@@ -518,7 +518,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                 session.getRoomSummary(command.roomAlias)
                         ?.roomId
                         ?.let {
-                            _viewEvents.post(RoomDetailViewEvents.JoinRoomCommandSucces(it))
+                            _viewEvents.post(RoomDetailViewEvents.JoinRoomCommandSuccess(it))
                         }
             }
 
