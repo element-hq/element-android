@@ -21,6 +21,7 @@ import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.BuildConfig
+import im.vector.matrix.android.api.MatrixConfiguration
 import im.vector.matrix.android.internal.network.TimeOutInterceptor
 import im.vector.matrix.android.internal.network.UserAgentInterceptor
 import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
@@ -28,6 +29,8 @@ import im.vector.matrix.android.internal.network.interceptors.FormattedJsonHttpL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okreplay.OkReplayInterceptor
+import java.net.InetSocketAddress
+import java.net.Proxy
 import java.util.concurrent.TimeUnit
 
 @Module
@@ -64,7 +67,8 @@ internal object NetworkModule {
     @Provides
     @JvmStatic
     @Unauthenticated
-    fun providesOkHttpClient(stethoInterceptor: StethoInterceptor,
+    fun providesOkHttpClient(matrixConfiguration: MatrixConfiguration,
+                             stethoInterceptor: StethoInterceptor,
                              timeoutInterceptor: TimeOutInterceptor,
                              userAgentInterceptor: UserAgentInterceptor,
                              httpLoggingInterceptor: HttpLoggingInterceptor,
@@ -81,6 +85,9 @@ internal object NetworkModule {
                 .apply {
                     if (BuildConfig.LOG_PRIVATE_DATA) {
                         addInterceptor(curlLoggingInterceptor)
+                    }
+                    matrixConfiguration.proxyConfig?.let {
+                        proxy(Proxy(it.proxyType, InetSocketAddress(it.hostname, it.port)))
                     }
                 }
                 .addInterceptor(okReplayInterceptor)

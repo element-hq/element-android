@@ -14,7 +14,7 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
- -
+ - initialize with proxy configuration
 
 Build 🧱:
  -

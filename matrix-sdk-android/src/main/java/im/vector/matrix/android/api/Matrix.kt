@@ -23,6 +23,7 @@ import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.auth.AuthenticationService
+import im.vector.matrix.android.api.config.ProxyConfiguration
 import im.vector.matrix.android.api.crypto.MXCryptoConfig
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
@@ -37,7 +38,8 @@ import javax.inject.Inject
 
 data class MatrixConfiguration(
         val applicationFlavor: String = "Default-application-flavor",
-        val cryptoConfig: MXCryptoConfig = MXCryptoConfig()
+        val cryptoConfig: MXCryptoConfig = MXCryptoConfig(),
+        val proxyConfig: ProxyConfiguration? = null
 ) {
 
     interface Provider {
