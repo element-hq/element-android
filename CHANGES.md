@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Implementation of /join command
 
 Bugfix 🐛:
  -  Message transitions in encrypted rooms are jarring #518

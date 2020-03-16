@@ -379,8 +379,8 @@ class RoomDetailViewModel @AssistedInject constructor(
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.JoinRoom                 -> {
-                            // TODO
-                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
+                            handleJoinToAnotherRoomSlashCommand(slashCommandResult)
+                            popDraft()
                         }
                         is ParsedCommand.PartRoom                 -> {
                             // TODO
@@ -510,6 +510,22 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun popDraft() {
         room.deleteDraft(NoOpMatrixCallback())
+    }
+
+    private fun handleJoinToAnotherRoomSlashCommand(command: ParsedCommand.JoinRoom) {
+        session.joinRoom(command.roomAlias, command.reason, object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                session.getRoomSummary(command.roomAlias)
+                        ?.roomId
+                        ?.let {
+                            _viewEvents.post(RoomDetailViewEvents.JoinRoomCommandSucces(it))
+                        }
+            }
+
+            override fun onFailure(failure: Throwable) {
+                _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
+            }
+        })
     }
 
     private fun legacyRiotQuoteText(quotedText: String?, myText: String): String {
