@@ -177,17 +177,26 @@ class AttachmentsHelper private constructor(private val context: Context,
     fun handleShareIntent(intent: Intent): Boolean {
         val type = intent.resolveType(context) ?: return false
         if (type.startsWith("image")) {
-            imagePicker.submit(IntentUtils.getPickerIntentForSharing(intent))
+            imagePicker.submit(safeShareIntent(intent))
         } else if (type.startsWith("video")) {
-            videoPicker.submit(IntentUtils.getPickerIntentForSharing(intent))
+            videoPicker.submit(safeShareIntent(intent))
         } else if (type.startsWith("audio")) {
-            videoPicker.submit(IntentUtils.getPickerIntentForSharing(intent))
+            videoPicker.submit(safeShareIntent(intent))
         } else if (type.startsWith("application") || type.startsWith("file") || type.startsWith("*")) {
-            filePicker.submit(IntentUtils.getPickerIntentForSharing(intent))
+            filePicker.submit(safeShareIntent(intent))
         } else {
             return false
         }
         return true
+    }
+
+    private fun safeShareIntent(intent: Intent): Intent {
+        // Work around for getPickerIntentForSharing doing NPE in android 10
+        return try {
+            IntentUtils.getPickerIntentForSharing(intent)
+        } catch (failure: Throwable) {
+            intent
+        }
     }
 
     private fun getPickerManagerForRequestCode(requestCode: Int): PickerManager? {
