@@ -1,8 +1,5 @@
-Changes in RiotX 0.19.0 (2020-XX-XX)
+Changes in RiotX 0.18.1 (2020-03-17)
 ===================================================
-
-Features ✨:
- -
 
 Improvements 🙌:
  - Implementation of /join command
@@ -13,17 +10,6 @@ Bugfix 🐛:
  - Fix / Crashed when trying to send a gif from the Gboard #1136
  - Fix / Cannot click on key backup banner when new keys are available
 
-Translations 🗣:
- -
-
-SDK API changes ⚠️:
- -
-
-Build 🧱:
- -
-
-Other changes:
- -
 
 Changes in RiotX 0.18.0 (2020-03-11)
 ===================================================
