@@ -123,6 +123,7 @@ class KeysBackupBanner @JvmOverloads constructor(
             is State.Setup   -> {
                 delegate?.setupKeysBackup()
             }
+            is State.Update,
             is State.Recover -> {
                 delegate?.recoverKeysBackup()
             }
