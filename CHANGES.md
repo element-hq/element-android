@@ -2,7 +2,7 @@ Changes in RiotX 0.19.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Cross-Signing | Support SSSS secret sharing (#944)
 
 Improvements 🙌:
  -

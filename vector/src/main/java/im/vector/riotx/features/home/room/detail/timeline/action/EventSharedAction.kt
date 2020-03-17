@@ -102,4 +102,10 @@ sealed class EventSharedAction(@StringRes val titleRes: Int,
     // An url in the event preview has been long clicked
     data class OnUrlLongClicked(val url: String) :
             EventSharedAction(0, 0)
+
+    data class ReRequestKey(val eventId: String) :
+            EventSharedAction(R.string.e2e_re_request_encryption_key, R.drawable.key_small)
+
+    object UseKeyBackup :
+            EventSharedAction(R.string.e2e_use_keybackup, R.drawable.shield)
 }

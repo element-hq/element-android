@@ -16,19 +16,10 @@
 
 package im.vector.matrix.android.internal.crypto
 
-interface IncomingRoomKeyRequestCommon {
-    /**
-     * The user id
-     */
-    val userId: String?
-
-    /**
-     * The device id
-     */
-    val deviceId: String?
-
-    /**
-     * The request id
-     */
-    val requestId: String?
+interface OutgoingGossipingRequest {
+    var recipients: Map<String, List<String>>
+    var requestId: String
+    var state: OutgoingGossipingRequestState
+    // transaction id for the cancellation, if any
+    // var cancellationTxnId: String?
 }

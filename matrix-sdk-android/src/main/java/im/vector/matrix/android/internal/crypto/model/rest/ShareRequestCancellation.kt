@@ -15,20 +15,21 @@
  */
 package im.vector.matrix.android.internal.crypto.model.rest
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.internal.crypto.model.rest.GossipingToDeviceObject.Companion.ACTION_SHARE_CANCELLATION
+
 /**
- * Interface representing an room key action request
- * Note: this class cannot be abstract because of [org.matrix.androidsdk.core.JsonUtils.toRoomKeyShare]
+ * Class representing a room key request cancellation content
  */
-internal interface RoomKeyShare : SendToDeviceObject {
+@JsonClass(generateAdapter = true)
+internal data class ShareRequestCancellation(
+        @Json(name = "action")
+        override val action: String? = ACTION_SHARE_CANCELLATION,
 
-    val action: String?
+        @Json(name = "requesting_device_id")
+        override val requestingDeviceId: String? = null,
 
-    val requestingDeviceId: String?
-
-    val requestId: String?
-
-    companion object {
-        const val ACTION_SHARE_REQUEST = "request"
-        const val ACTION_SHARE_CANCELLATION = "request_cancellation"
-    }
-}
+        @Json(name = "request_id")
+        override val requestId: String? = null
+) : GossipingToDeviceObject

@@ -124,6 +124,7 @@ import im.vector.riotx.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.riotx.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.riotx.features.attachments.toGroupedContentAttachmentData
 import im.vector.riotx.features.command.Command
+import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.riotx.features.crypto.util.toImageRes
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.home.AvatarRenderer
@@ -1235,6 +1236,14 @@ class RoomDetailFragment @Inject constructor(
             }
             is EventSharedAction.OnUrlLongClicked           -> {
                 onUrlLongClicked(action.url)
+            }
+            is EventSharedAction.ReRequestKey               -> {
+                roomDetailViewModel.handle(RoomDetailAction.ReRequestKeys(action.eventId))
+            }
+            is EventSharedAction.UseKeyBackup               -> {
+                context?.let {
+                    startActivity(KeysBackupRestoreActivity.intent(it))
+                }
             }
             else                                            -> {
                 Toast.makeText(context, "Action $action is not implemented yet", Toast.LENGTH_LONG).show()

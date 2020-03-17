@@ -171,7 +171,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
 
     override fun invalidate() {
         // no-ops by default
-        Timber.w("invalidate() method has not been implemented")
+        Timber.v("invalidate() method has not been implemented")
     }
 
     protected fun setArguments(args: Parcelable? = null) {

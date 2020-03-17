@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.matrix.android.internal.crypto.model.rest
+package im.vector.matrix.android.internal.crypto.model.event
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Class representing a room key request cancellation content
+ * Class representing an encrypted event content
  */
 @JsonClass(generateAdapter = true)
-internal data class RoomKeyShareCancellation(
-        @Json(name = "action")
-        override val action: String? = RoomKeyShare.ACTION_SHARE_CANCELLATION,
-
-        @Json(name = "requesting_device_id")
-        override val requestingDeviceId: String? = null,
-
-        @Json(name = "request_id")
-        override val requestId: String? = null
-) : RoomKeyShare
+data class SecretSendEventContent(
+        @Json(name = "request_id") val requestId: String,
+        @Json(name = "secret") val secretValue: String
+)

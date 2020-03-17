@@ -65,12 +65,19 @@
             app:fragment="im.vector.riotx.features.settings.push.PushRulesFragment" />
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
-    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_dev_tools">
+    <im.vector.riotx.core.preference.VectorPreferenceCategory
+        android:dependency="SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
+        android:title="@string/settings_dev_tools">
 
         <im.vector.riotx.core.preference.VectorPreference
             android:persistent="false"
             android:title="@string/settings_account_data"
             app:fragment="im.vector.riotx.features.settings.devtools.AccountDataFragment" />
+
+        <im.vector.riotx.core.preference.VectorPreference
+            android:persistent="false"
+            android:title="@string/settings_key_requests"
+            app:fragment="im.vector.riotx.features.settings.devtools.KeyRequestsFragment" />
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 

@@ -19,11 +19,15 @@ package im.vector.matrix.android.internal.crypto.store
 
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.util.Optional
+import im.vector.matrix.android.internal.crypto.GossipingRequestState
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
-import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequestCommon
+import im.vector.matrix.android.internal.crypto.IncomingShareRequestCommon
 import im.vector.matrix.android.internal.crypto.NewSessionListener
+import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestState
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
+import im.vector.matrix.android.internal.crypto.OutgoingSecretRequest
 import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
@@ -117,6 +121,10 @@ internal interface IMXCryptoStore {
      */
     fun getPendingIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest>
 
+    fun getPendingIncomingGossipingRequests(): List<IncomingShareRequestCommon>
+    fun storeIncomingGossipingRequest(request: IncomingShareRequestCommon, ageLocalTS: Long?)
+//    fun getPendingIncomingSecretShareRequests(): List<IncomingSecretShareRequest>
+
     /**
      * Indicate if the store contains data for the passed account.
      *
@@ -187,8 +195,8 @@ internal interface IMXCryptoStore {
     fun storeUserDevices(userId: String, devices: Map<String, CryptoDeviceInfo>?)
 
     fun storeUserCrossSigningKeys(userId: String, masterKey: CryptoCrossSigningKey?,
-                                 selfSigningKey: CryptoCrossSigningKey?,
-                                 userSigningKey: CryptoCrossSigningKey?)
+                                  selfSigningKey: CryptoCrossSigningKey?,
+                                  userSigningKey: CryptoCrossSigningKey?)
 
     /**
      * Retrieve the known devices for a user.
@@ -206,6 +214,7 @@ internal interface IMXCryptoStore {
 
     // TODO temp
     fun getLiveDeviceList(): LiveData<List<CryptoDeviceInfo>>
+
     /**
      * Store the crypto algorithm for a room.
      *
@@ -347,43 +356,13 @@ internal interface IMXCryptoStore {
      * @param request the request
      * @return either the same instance as passed in, or the existing one.
      */
-    fun getOrAddOutgoingRoomKeyRequest(request: OutgoingRoomKeyRequest): OutgoingRoomKeyRequest?
+    fun getOrAddOutgoingRoomKeyRequest(requestBody: RoomKeyRequestBody, recipients: Map<String, List<String>>): OutgoingRoomKeyRequest?
 
-    /**
-     * Look for room key requests by state.
-     *
-     * @param states the states
-     * @return an OutgoingRoomKeyRequest or null
-     */
-    fun getOutgoingRoomKeyRequestByState(states: Set<OutgoingRoomKeyRequest.RequestState>): OutgoingRoomKeyRequest?
+    fun getOrAddOutgoingSecretShareRequest(secretName: String, recipients: Map<String, List<String>>): OutgoingSecretRequest?
 
-    /**
-     * Update an existing outgoing request.
-     *
-     * @param request the request
-     */
-    fun updateOutgoingRoomKeyRequest(request: OutgoingRoomKeyRequest)
+    fun saveGossipingEvent(event: Event)
 
-    /**
-     * Delete an outgoing room key request.
-     *
-     * @param transactionId the transaction id.
-     */
-    fun deleteOutgoingRoomKeyRequest(transactionId: String)
-
-    /**
-     * Store an incomingRoomKeyRequest instance
-     *
-     * @param incomingRoomKeyRequest the incoming key request
-     */
-    fun storeIncomingRoomKeyRequest(incomingRoomKeyRequest: IncomingRoomKeyRequest?)
-
-    /**
-     * Delete an incomingRoomKeyRequest instance
-     *
-     * @param incomingRoomKeyRequest the incoming key request
-     */
-    fun deleteIncomingRoomKeyRequest(incomingRoomKeyRequest: IncomingRoomKeyRequestCommon)
+    fun updateGossipingRequestState(request: IncomingShareRequestCommon, state: GossipingRequestState)
 
     /**
      * Search an IncomingRoomKeyRequest
@@ -394,6 +373,8 @@ internal interface IMXCryptoStore {
      * @return an IncomingRoomKeyRequest if it exists, else null
      */
     fun getIncomingRoomKeyRequest(userId: String, deviceId: String, requestId: String): IncomingRoomKeyRequest?
+
+    fun updateOutgoingGossipingRequestState(requestId: String, state: OutgoingGossipingRequestState)
 
     fun addNewSessionListener(listener: NewSessionListener)
 
@@ -406,22 +387,34 @@ internal interface IMXCryptoStore {
     /**
      * Gets the current crosssigning info
      */
-    fun getMyCrossSigningInfo() : MXCrossSigningInfo?
+    fun getMyCrossSigningInfo(): MXCrossSigningInfo?
+
     fun setMyCrossSigningInfo(info: MXCrossSigningInfo?)
 
-    fun getCrossSigningInfo(userId: String) : MXCrossSigningInfo?
-    fun getLiveCrossSigningInfo(userId: String) : LiveData<Optional<MXCrossSigningInfo>>
+    fun getCrossSigningInfo(userId: String): MXCrossSigningInfo?
+    fun getLiveCrossSigningInfo(userId: String): LiveData<Optional<MXCrossSigningInfo>>
     fun setCrossSigningInfo(userId: String, info: MXCrossSigningInfo?)
 
     fun markMyMasterKeyAsLocallyTrusted(trusted: Boolean)
 
     fun storePrivateKeysInfo(msk: String?, usk: String?, ssk: String?)
-    fun getCrossSigningPrivateKeys() : PrivateKeysInfo?
+    fun storeSSKPrivateKey(ssk: String?)
+    fun storeUSKPrivateKey(usk: String?)
+
+    fun getCrossSigningPrivateKeys(): PrivateKeysInfo?
 
     fun setUserKeysAsTrusted(userId: String, trusted: Boolean = true)
-    fun setDeviceTrust(userId: String, deviceId: String, crossSignedVerified: Boolean, locallyVerified : Boolean)
+    fun setDeviceTrust(userId: String, deviceId: String, crossSignedVerified: Boolean, locallyVerified: Boolean)
 
     fun clearOtherUserTrust()
 
     fun updateUsersTrust(check: (String) -> Boolean)
+
+    // Dev tools
+
+    fun getOutgoingRoomKeyRequests(): List<OutgoingRoomKeyRequest>
+    fun getOutgoingSecretKeyRequests(): List<OutgoingSecretRequest>
+    fun getOutgoingSecretRequest(secretName: String): OutgoingSecretRequest?
+    fun getIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest>
+    fun getGossipingEventsTrail(): List<Event>
 }

@@ -145,7 +145,7 @@ internal class VerificationTransportToDevice(
                 .executeBy(taskExecutor)
     }
 
-    override fun done(transactionId: String) {
+    override fun done(transactionId: String, onDone: (() -> Unit)?) {
         val otherUserId = tx?.otherUserId ?: return
         val otherUserDeviceId = tx?.otherDeviceId ?: return
         val cancelMessage = KeyVerificationDone(transactionId)
@@ -155,6 +155,7 @@ internal class VerificationTransportToDevice(
                 .configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_DONE, contentMap, transactionId)) {
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
+                            onDone?.invoke()
                             Timber.v("## SAS verification [$transactionId] done")
                         }
 

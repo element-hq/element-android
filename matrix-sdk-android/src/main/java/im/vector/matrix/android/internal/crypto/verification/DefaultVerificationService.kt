@@ -35,6 +35,7 @@ import im.vector.matrix.android.api.session.crypto.verification.safeValueOf
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.LocalEcho
+import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageRelationContent
@@ -50,10 +51,12 @@ import im.vector.matrix.android.api.session.room.model.message.MessageVerificati
 import im.vector.matrix.android.api.session.room.model.message.ValidVerificationDone
 import im.vector.matrix.android.internal.crypto.DeviceListManager
 import im.vector.matrix.android.internal.crypto.MyDeviceInfoHolder
+import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestManager
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
+import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationCancel
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationKey
@@ -86,6 +89,7 @@ internal class DefaultVerificationService @Inject constructor(
         @UserId private val userId: String,
         @DeviceId private val deviceId: String?,
         private val cryptoStore: IMXCryptoStore,
+        private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
         private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
         private val deviceListManager: DeviceListManager,
         private val setDeviceVerificationAction: SetDeviceVerificationAction,
@@ -354,6 +358,27 @@ internal class DefaultVerificationService @Inject constructor(
          */
     }
 
+    override fun onPotentiallyInterestingEventRoomFailToDecrypt(event: Event) {
+        // When Should/Can we cancel??
+        val relationContent = event.content.toModel<EncryptedEventContent>()?.relatesTo
+        if (relationContent?.type == RelationType.REFERENCE) {
+            val relatedId = relationContent.eventId ?: return
+            // at least if request was sent by me, I can safely cancel without interfering
+            pendingRequests[event.senderId]?.firstOrNull {
+                it.transactionId == relatedId && !it.isIncoming
+            }?.let { pr ->
+                verificationTransportRoomMessageFactory.createTransport(event.roomId ?: "", null)
+                        .cancelTransaction(
+                                relatedId,
+                                event.senderId ?: "",
+                                event.getSenderKey() ?: "",
+                                CancelCode.InvalidMessage
+                        )
+                updatePendingRequest(pr.copy(cancelConclusion = CancelCode.InvalidMessage))
+            }
+        }
+    }
+
     private suspend fun onRoomStartRequestReceived(event: Event) {
         val startReq = event.getClearContent().toModel<MessageVerificationStartContent>()
                 ?.copy(
@@ -482,6 +507,7 @@ internal class DefaultVerificationService @Inject constructor(
                             deviceId,
                             cryptoStore,
                             crossSigningService,
+                            outgoingGossipingRequestManager,
                             myDeviceInfoHolder.get().myDevice.fingerprint()!!,
                             startReq.transactionId,
                             otherUserId,
@@ -781,6 +807,7 @@ internal class DefaultVerificationService @Inject constructor(
                     senderId,
                     readyReq.fromDevice,
                     crossSigningService,
+                    outgoingGossipingRequestManager,
                     cryptoStore,
                     qrCodeData,
                     userId,
@@ -962,6 +989,7 @@ internal class DefaultVerificationService @Inject constructor(
                     deviceId,
                     cryptoStore,
                     crossSigningService,
+                    outgoingGossipingRequestManager,
                     myDeviceInfoHolder.get().myDevice.fingerprint()!!,
                     txID,
                     otherUserId,
@@ -1137,6 +1165,7 @@ internal class DefaultVerificationService @Inject constructor(
                     deviceId,
                     cryptoStore,
                     crossSigningService,
+                    outgoingGossipingRequestManager,
                     myDeviceInfoHolder.get().myDevice.fingerprint()!!,
                     transactionId,
                     otherUserId,
@@ -1273,6 +1302,7 @@ internal class DefaultVerificationService @Inject constructor(
                         otherUserId,
                         otherDeviceId,
                         crossSigningService,
+                        outgoingGossipingRequestManager,
                         cryptoStore,
                         qrCodeData,
                         userId,

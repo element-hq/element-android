@@ -301,7 +301,7 @@
     <string name="e2e_need_log_in_again">You need to log back in to generate end-to-end encryption keys for this session and submit the public key to your homeserver.\nThis is a once off.\nSorry for the inconvenience.</string>
 
     <!-- request again e2e key -->
-    <string name="e2e_re_request_encryption_key"><u>Re-request encryption keys</u> from your other sessions.</string>
+    <string name="e2e_re_request_encryption_key">Re-request encryption keys from your other sessions.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Key request sent.</string>
 

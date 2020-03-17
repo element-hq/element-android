@@ -142,12 +142,12 @@ data class Event(
     }
 
     fun toContentStringWithIndent(): String {
-        val contentMap = toContent().toMutableMap()
+        val contentMap = toContent()
         return JSONObject(contentMap).toString(4)
     }
 
     fun toClearContentStringWithIndent(): String? {
-        val contentMap = this.mxDecryptionResult?.payload?.toMutableMap()
+        val contentMap = this.mxDecryptionResult?.payload
         val adapter = MoshiProvider.providesMoshi().adapter(Map::class.java)
         return contentMap?.let { JSONObject(adapter.toJson(it)).toString(4) }
     }

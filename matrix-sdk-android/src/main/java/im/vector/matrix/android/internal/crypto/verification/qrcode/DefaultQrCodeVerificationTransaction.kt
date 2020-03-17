@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.session.crypto.verification.CancelCode
 import im.vector.matrix.android.api.session.crypto.verification.QrCodeVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestManager
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
 import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64Safe
@@ -36,6 +37,7 @@ internal class DefaultQrCodeVerificationTransaction(
         override val otherUserId: String,
         override var otherDeviceId: String?,
         private val crossSigningService: CrossSigningService,
+        outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
         private val cryptoStore: IMXCryptoStore,
         // Not null only if other user is able to scan QR code
         private val qrCodeData: QrCodeData?,
@@ -45,6 +47,7 @@ internal class DefaultQrCodeVerificationTransaction(
 ) : DefaultVerificationTransaction(
         setDeviceVerificationAction,
         crossSigningService,
+        outgoingGossipingRequestManager,
         userId,
         transactionId,
         otherUserId,
@@ -181,13 +184,12 @@ internal class DefaultQrCodeVerificationTransaction(
         // qrCodeData.sharedSecret will be used to send the start request
         start(otherQrCodeData.sharedSecret)
 
-        // Trust the other user
         trust(canTrustOtherUserMasterKey,
                 toVerifyDeviceIds.distinct(),
                 eventuallyMarkMyMasterKeyAsTrusted = true)
     }
 
-    private fun start(remoteSecret: String) {
+    private fun start(remoteSecret: String, onDone: (() -> Unit)? = null) {
         if (state != VerificationTxState.None) {
             Timber.e("## Verification QR: start verification from invalid state")
             // should I cancel??
@@ -205,7 +207,7 @@ internal class DefaultQrCodeVerificationTransaction(
                 startMessage,
                 VerificationTxState.Started,
                 CancelCode.User,
-                null
+                onDone
         )
     }
 

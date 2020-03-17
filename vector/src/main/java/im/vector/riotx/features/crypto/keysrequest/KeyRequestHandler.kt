@@ -22,13 +22,14 @@ package im.vector.riotx.features.crypto.keysrequest
 import android.content.Context
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListener
+import im.vector.matrix.android.api.session.crypto.keyshare.GossipingRequestListener
 import im.vector.matrix.android.api.session.crypto.verification.SasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.VerificationService
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
-import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequestCancellation
+import im.vector.matrix.android.internal.crypto.IncomingRequestCancellation
+import im.vector.matrix.android.internal.crypto.IncomingSecretShareRequest
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
@@ -54,7 +55,7 @@ import javax.inject.Singleton
 
 @Singleton
 class KeyRequestHandler @Inject constructor(private val context: Context)
-    : RoomKeysRequestListener,
+    : GossipingRequestListener,
         VerificationService.Listener {
 
     private val alertsToRequests = HashMap<String, ArrayList<IncomingRoomKeyRequest>>()
@@ -71,6 +72,13 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
         session?.cryptoService()?.verificationService()?.removeListener(this)
         session?.cryptoService()?.removeRoomKeysRequestListener(this)
         session = null
+    }
+
+    override fun onSecretShareRequest(request: IncomingSecretShareRequest) : Boolean {
+        // By default riotX will not prompt if the SDK has decided that the request should not be fulfilled
+        Timber.v("## onSecretShareRequest() : Ignoring $request")
+        request.ignore?.run()
+        return true
     }
 
     /**
@@ -194,20 +202,6 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
             denyAllRequests(mappingKey)
         }
 
-        // TODO send to the new profile page
-//        alert.addButton(
-//                context.getString(R.string.start_verification_short_label),
-//                Runnable {
-//                    alert.weakCurrentActivity?.get()?.let {
-//                        val intent = SASVerificationActivity.outgoingIntent(it,
-//                                session?.myUserId ?: "",
-//                                userId, deviceId)
-//                        it.startActivity(intent)
-//                    }
-//                },
-//                false
-//        )
-
         alert.addButton(context.getString(R.string.share_without_verifying_short_label), Runnable {
             shareAllSessions(mappingKey)
         })
@@ -238,7 +232,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
      *
      * @param request the cancellation request.
      */
-    override fun onRoomKeyRequestCancellation(request: IncomingRoomKeyRequestCancellation) {
+    override fun onRoomKeyRequestCancellation(request: IncomingRequestCancellation) {
         // see if we can find the request in the queue
         val userId = request.userId
         val deviceId = request.deviceId
