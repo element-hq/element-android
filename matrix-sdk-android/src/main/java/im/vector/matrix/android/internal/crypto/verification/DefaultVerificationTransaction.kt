@@ -58,7 +58,8 @@ internal abstract class DefaultVerificationTransaction(
     protected fun trust(canTrustOtherUserMasterKey: Boolean,
                         toVerifyDeviceIds: List<String>,
                         eventuallyMarkMyMasterKeyAsTrusted: Boolean) {
-        Timber.d("## Verification: trust ($otherUserId,$otherDeviceId) , verifiedDevices:$toVerifyDeviceIds, Mark myMSK trusted $eventuallyMarkMyMasterKeyAsTrusted")
+        Timber.d("## Verification: trust ($otherUserId,$otherDeviceId) , verifiedDevices:$toVerifyDeviceIds")
+        Timber.d("## Verification: trust Mark myMSK trusted $eventuallyMarkMyMasterKeyAsTrusted")
 
         // TODO what if the otherDevice is not in this list? and should we
         toVerifyDeviceIds.forEach {
