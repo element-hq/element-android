@@ -1,3 +1,16 @@
+Changes in RiotX 0.18.1 (2020-03-17)
+===================================================
+
+Improvements 🙌:
+ - Implementation of /join command
+
+Bugfix 🐛:
+ - Message transitions in encrypted rooms are jarring #518
+ - Images that failed to send are waiting to be sent forever #1145
+ - Fix / Crashed when trying to send a gif from the Gboard #1136
+ - Fix / Cannot click on key backup banner when new keys are available
+
+
 Changes in RiotX 0.18.0 (2020-03-11)
 ===================================================
 

@@ -1461,7 +1461,7 @@ Why choose Riot.im?
     <string name="keys_backup_banner_recover_line1">Never lose encrypted messages</string>
     <string name="keys_backup_banner_recover_line2">Use Key Backup</string>
 
-    <string name="keys_backup_banner_update_line1">New encrypted messages keys</string>
+    <string name="keys_backup_banner_update_line1">New secure message keys</string>
     <string name="keys_backup_banner_update_line2">Manage in Key Backup</string>
 
     <string name="keys_backup_banner_in_progress">Backing up keys…</string>

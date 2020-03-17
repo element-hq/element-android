@@ -77,6 +77,16 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
             return Result.success(inputData)
         }
 
+        // Just defensive code to ensure that we never have an uncaught exception that could break the queue
+        return try {
+            internalDoWork(params)
+        } catch (failure: Throwable) {
+            Timber.e(failure)
+            handleFailure(params, failure)
+        }
+    }
+
+    private suspend fun internalDoWork(params: Params): Result {
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
 
