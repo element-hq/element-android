@@ -22,7 +22,9 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.ReferencesAggregatedContent
+import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.session.room.timeline.hasBeenEdited
 import im.vector.matrix.android.internal.session.room.VerificationState
 import im.vector.riotx.core.date.VectorDateFormatter
@@ -61,6 +63,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                         || event.getDisambiguatedDisplayName() != nextEvent?.getDisambiguatedDisplayName()
                         || (nextEvent.root.getClearType() != EventType.MESSAGE && nextEvent.root.getClearType() != EventType.ENCRYPTED)
                         || isNextMessageReceivedMoreThanOneHourAgo
+                        || isTileTypeMessage(nextEvent)
 
         val time = dateFormatter.formatMessageHour(date)
         val avatarUrl = event.senderAvatar
@@ -88,7 +91,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                             myVote = it.aggregatedContent?.myVote,
                             isClosed = it.closedTime ?: Long.MAX_VALUE > System.currentTimeMillis(),
                             votes = it.aggregatedContent?.votes
-                                    ?.groupBy({ it.optionIndex }, { it.userId  })
+                                    ?.groupBy({ it.optionIndex }, { it.userId })
                                     ?.mapValues { it.value.size }
                     )
                 },
@@ -110,5 +113,20 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 },
                 sentByMe = event.root.senderId == session.myUserId
         )
+    }
+
+    /**
+     * Tiles type message never show the sender information (like verification request), so we should repeat it for next message
+     * even if same sender
+     */
+    private fun isTileTypeMessage(event: TimelineEvent?): Boolean {
+        return when (event?.root?.getClearType()) {
+            EventType.KEY_VERIFICATION_DONE,
+            EventType.KEY_VERIFICATION_CANCEL -> true
+            EventType.MESSAGE                 -> {
+                event.getLastMessageContent() is MessageVerificationRequestContent
+            }
+            else                              -> false
+        }
     }
 }
