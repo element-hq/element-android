@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Missing avatar/displayname after verification request message (#841)
 
 Translations 🗣:
  -
