@@ -457,7 +457,29 @@ internal class DefaultVerificationService @Inject constructor(
         Timber.d("## SAS onStartRequestReceived ${startReq.transactionId}")
         if (checkKeysAreDownloaded(otherUserId!!, startReq.fromDevice) != null) {
             val tid = startReq.transactionId
-            val existing = getExistingTransaction(otherUserId, tid)
+            var existing = getExistingTransaction(otherUserId, tid)
+
+            // After the m.key.verification.ready event is sent, either party can send an
+            // m.key.verification.start event to begin the verification. If both parties
+            // send an m.key.verification.start event, and they both specify the same
+            // verification method, then the event sent by the user whose user ID is the
+            // smallest is used, and the other m.key.verification.start event is ignored.
+            // In the case of a single user verifying two of their devices, the device ID is
+            // compared instead .
+            if (existing != null && !existing.isIncoming) {
+                val readyRequest = getExistingVerificationRequest(otherUserId, tid)
+                if (readyRequest?.isReady == true) {
+                   if (isOtherPrioritary(otherUserId, existing.otherDeviceId ?: "")) {
+                       // The other is prioritary!
+                       // I should replace my outgoing with an incoming
+                       removeTransaction(otherUserId, tid)
+                       existing = null
+                   } else {
+                       // i am prioritary, ignore this start event!
+                       return null
+                   }
+                }
+            }
 
             when (startReq) {
                 is ValidVerificationInfoStart.SasVerificationInfoStart         -> {
@@ -529,6 +551,16 @@ internal class DefaultVerificationService @Inject constructor(
             }
         } else {
             return CancelCode.UnexpectedMessage
+        }
+    }
+
+    private fun isOtherPrioritary(otherUserId: String, otherDeviceId: String) : Boolean {
+        if (userId < otherUserId) {
+            return false
+        } else if (userId > otherUserId) {
+            return true
+        } else {
+            return otherDeviceId < deviceId ?: ""
         }
     }
 

@@ -5,7 +5,7 @@ Features ✨:
  - Cross-Signing | Support SSSS secret sharing (#944)
 
 Improvements 🙌:
- -
+ - Verification DM / Handle concurrent .start after .ready (#794)
 
 Bugfix 🐛:
  -

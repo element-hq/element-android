@@ -32,9 +32,6 @@ import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventConten
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
 import junit.framework.TestCase.fail
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.junit.Assert
 import org.junit.FixMethodOrder
 import org.junit.Test
@@ -90,10 +87,10 @@ class KeyShareTests : InstrumentedTest {
 
         var outGoingRequestId: String? = null
 
-        retryPeriodicallyWithLatch(waitLatch) {
+        mTestHelper.retryPeriodicallyWithLatch(waitLatch) {
             aliceSession2.cryptoService().getOutgoingRoomKeyRequest()
                     .filter { req ->
-                        // filter out request that was known before
+                        // filter out request thwat was known before
                         !outgoingRequestBefore.any { req.requestId == it.requestId }
                     }
                     .let {
@@ -114,8 +111,8 @@ class KeyShareTests : InstrumentedTest {
 
         // The first session should see an incoming request
         // the request should be refused, because the device is not trusted
-        waitWithLatch { latch ->
-            retryPeriodicallyWithLatch(latch) {
+        mTestHelper.waitWithLatch { latch ->
+            mTestHelper.retryPeriodicallyWithLatch(latch) {
                 // DEBUG LOGS
                 aliceSession.cryptoService().getIncomingRoomKeyRequest().let {
                     Log.v("TEST", "Incoming request Session 1 (looking for $outGoingRequestId)")
@@ -144,8 +141,8 @@ class KeyShareTests : InstrumentedTest {
         // Re request
         aliceSession2.cryptoService().reRequestRoomKeyForEvent(receivedEvent.root)
 
-        waitWithLatch { latch ->
-            retryPeriodicallyWithLatch(latch) {
+        mTestHelper.waitWithLatch { latch ->
+            mTestHelper.retryPeriodicallyWithLatch(latch) {
                 aliceSession.cryptoService().getIncomingRoomKeyRequest().let {
                     Log.v("TEST", "Incoming request Session 1")
                     Log.v("TEST", "=========================")
@@ -160,8 +157,8 @@ class KeyShareTests : InstrumentedTest {
         }
 
         Thread.sleep(6_000)
-        waitWithLatch { latch ->
-            retryPeriodicallyWithLatch(latch) {
+        mTestHelper.waitWithLatch { latch ->
+            mTestHelper.retryPeriodicallyWithLatch(latch) {
                 aliceSession2.cryptoService().getOutgoingRoomKeyRequest().let {
                     it.any { it.requestBody?.sessionId == eventMegolmSessionId && it.state == OutgoingGossipingRequestState.CANCELLED }
                 }
@@ -176,23 +173,5 @@ class KeyShareTests : InstrumentedTest {
 
         mTestHelper.signOutAndClose(aliceSession)
         mTestHelper.signOutAndClose(aliceSession2)
-    }
-
-    fun retryPeriodicallyWithLatch(latch: CountDownLatch, condition: (() -> Boolean)) {
-        GlobalScope.launch {
-            while (true) {
-                delay(1000)
-                if (condition()) {
-                    latch.countDown()
-                    return@launch
-                }
-            }
-        }
-    }
-
-    fun waitWithLatch(block: (CountDownLatch) -> Unit) {
-        val latch = CountDownLatch(1)
-        block(latch)
-        mTestHelper.await(latch)
     }
 }
