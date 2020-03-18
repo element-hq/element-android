@@ -90,7 +90,7 @@ class KeyShareTests : InstrumentedTest {
         mTestHelper.retryPeriodicallyWithLatch(waitLatch) {
             aliceSession2.cryptoService().getOutgoingRoomKeyRequest()
                     .filter { req ->
-                        // filter out request thwat was known before
+                        // filter out request that was known before
                         !outgoingRequestBefore.any { req.requestId == it.requestId }
                     }
                     .let {

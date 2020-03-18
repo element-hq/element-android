@@ -455,7 +455,7 @@ internal class DefaultVerificationService @Inject constructor(
                                     startReq: ValidVerificationInfoStart,
                                     txConfigure: (DefaultVerificationTransaction) -> Unit): CancelCode? {
         Timber.d("## SAS onStartRequestReceived ${startReq.transactionId}")
-        if (checkKeysAreDownloaded(otherUserId!!, startReq.fromDevice) != null) {
+        if (otherUserId?.let { checkKeysAreDownloaded(it, startReq.fromDevice) } != null) {
             val tid = startReq.transactionId
             var existing = getExistingTransaction(otherUserId, tid)
 
@@ -469,15 +469,15 @@ internal class DefaultVerificationService @Inject constructor(
             if (existing != null && !existing.isIncoming) {
                 val readyRequest = getExistingVerificationRequest(otherUserId, tid)
                 if (readyRequest?.isReady == true) {
-                   if (isOtherPrioritary(otherUserId, existing.otherDeviceId ?: "")) {
-                       // The other is prioritary!
-                       // I should replace my outgoing with an incoming
-                       removeTransaction(otherUserId, tid)
-                       existing = null
-                   } else {
-                       // i am prioritary, ignore this start event!
-                       return null
-                   }
+                    if (isOtherPrioritary(otherUserId, existing.otherDeviceId ?: "")) {
+                        // The other is prioritary!
+                        // I should replace my outgoing with an incoming
+                        removeTransaction(otherUserId, tid)
+                        existing = null
+                    } else {
+                        // i am prioritary, ignore this start event!
+                        return null
+                    }
                 }
             }
 
@@ -554,7 +554,7 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-    private fun isOtherPrioritary(otherUserId: String, otherDeviceId: String) : Boolean {
+    private fun isOtherPrioritary(otherUserId: String, otherDeviceId: String): Boolean {
         if (userId < otherUserId) {
             return false
         } else if (userId > otherUserId) {
