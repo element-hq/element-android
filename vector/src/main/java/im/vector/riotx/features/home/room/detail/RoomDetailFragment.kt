@@ -156,6 +156,7 @@ import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.share.SharedData
 import im.vector.riotx.features.themes.ThemeUtils
+import im.vector.riotx.multipicker.MultiPicker
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.parcel.Parcelize
@@ -290,9 +291,9 @@ class RoomDetailFragment @Inject constructor(
 
         roomDetailViewModel.observeViewEvents {
             when (it) {
-                is RoomDetailViewEvents.Failure             -> showErrorInSnackbar(it.throwable)
-                is RoomDetailViewEvents.OnNewTimelineEvents -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
-                is RoomDetailViewEvents.ActionSuccess       -> displayRoomDetailActionSuccess(it)
+                is RoomDetailViewEvents.Failure                -> showErrorInSnackbar(it.throwable)
+                is RoomDetailViewEvents.OnNewTimelineEvents    -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
+                is RoomDetailViewEvents.ActionSuccess          -> displayRoomDetailActionSuccess(it)
                 is RoomDetailViewEvents.ActionFailure          -> displayRoomDetailActionFailure(it)
                 is RoomDetailViewEvents.ShowMessage            -> showSnackWithMessage(it.message, Snackbar.LENGTH_LONG)
                 is RoomDetailViewEvents.NavigateToEvent        -> navigateToEvent(it)
@@ -516,6 +517,24 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            MultiPicker.REQUEST_CODE_PICK_IMAGE -> {
+                MultiPicker.get(MultiPicker.IMAGE).getSelectedFiles(requireContext(), requestCode, resultCode, data)
+            }
+            MultiPicker.REQUEST_CODE_PICK_VIDEO -> {
+                MultiPicker.get(MultiPicker.VIDEO).getSelectedFiles(requireContext(), requestCode, resultCode, data)
+            }
+            MultiPicker.REQUEST_CODE_PICK_FILE  -> {
+                MultiPicker.get(MultiPicker.FILE).getSelectedFiles(requireContext(), requestCode, resultCode, data)
+            }
+            MultiPicker.REQUEST_CODE_PICK_AUDIO  -> {
+                MultiPicker.get(MultiPicker.AUDIO).getSelectedFiles(requireContext(), requestCode, resultCode, data)
+            }
+            MultiPicker.REQUEST_CODE_PICK_CONTACT  -> {
+                MultiPicker.get(MultiPicker.CONTACT).getSelectedFiles(requireContext(), requestCode, resultCode, data)
+            }
+        }
+
         val hasBeenHandled = attachmentsHelper.onActivityResult(requestCode, resultCode, data)
         if (!hasBeenHandled && resultCode == RESULT_OK && data != null) {
             when (requestCode) {
@@ -1351,10 +1370,10 @@ class RoomDetailFragment @Inject constructor(
     private fun launchAttachmentProcess(type: AttachmentTypeSelectorView.Type) {
         when (type) {
             AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera()
-            AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile()
-            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery()
-            AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio()
-            AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact()
+            AttachmentTypeSelectorView.Type.FILE    -> MultiPicker.get(MultiPicker.FILE).startWith(this)
+            AttachmentTypeSelectorView.Type.GALLERY -> MultiPicker.get(MultiPicker.IMAGE).startWith(this)
+            AttachmentTypeSelectorView.Type.AUDIO   -> MultiPicker.get(MultiPicker.AUDIO).startWith(this)
+            AttachmentTypeSelectorView.Type.CONTACT -> MultiPicker.get(MultiPicker.CONTACT).startWith(this)
             AttachmentTypeSelectorView.Type.STICKER -> vectorBaseActivity.notImplemented("Adding stickers")
         }.exhaustive
     }
