@@ -533,6 +533,11 @@ class RoomDetailFragment @Inject constructor(
             MultiPicker.REQUEST_CODE_PICK_CONTACT  -> {
                 MultiPicker.get(MultiPicker.CONTACT).getSelectedFiles(requireContext(), requestCode, resultCode, data)
             }
+            MultiPicker.REQUEST_CODE_TAKE_PHOTO  -> {
+                cameraPhotoUri?.let {
+                    MultiPicker.get(MultiPicker.CAMERA).getTakenPhoto(requireContext(), requestCode, resultCode, it)
+                }
+            }
         }
 
         val hasBeenHandled = attachmentsHelper.onActivityResult(requestCode, resultCode, data)
@@ -1367,9 +1372,12 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
+    private var cameraPhotoUri: Uri? = null
     private fun launchAttachmentProcess(type: AttachmentTypeSelectorView.Type) {
         when (type) {
-            AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera()
+            AttachmentTypeSelectorView.Type.CAMERA  -> {
+                cameraPhotoUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
+            }
             AttachmentTypeSelectorView.Type.FILE    -> MultiPicker.get(MultiPicker.FILE).startWith(this)
             AttachmentTypeSelectorView.Type.GALLERY -> MultiPicker.get(MultiPicker.IMAGE).startWith(this)
             AttachmentTypeSelectorView.Type.AUDIO   -> MultiPicker.get(MultiPicker.AUDIO).startWith(this)

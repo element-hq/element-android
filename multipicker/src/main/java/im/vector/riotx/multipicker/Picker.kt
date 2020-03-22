@@ -19,6 +19,7 @@ package im.vector.riotx.multipicker
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.fragment.app.Fragment
 
 abstract class Picker<T>(open val requestCode: Int) {
@@ -29,7 +30,15 @@ abstract class Picker<T>(open val requestCode: Int) {
 
     abstract fun startWith(fragment: Fragment)
 
+    open fun startWithExpectingFile(activity: Activity): Uri? = null
+
+    open fun startWithExpectingFile(fragment: Fragment): Uri? = null
+
     abstract fun getSelectedFiles(context: Context, requestCode: Int, resultCode: Int, data: Intent?): List<T>
+
+    fun getIncomingFiles(context: Context, data: Intent?): List<T> {
+        return getSelectedFiles(context, requestCode, Activity.RESULT_OK, data)
+    }
 
     fun single(): Picker<T> {
         single = true

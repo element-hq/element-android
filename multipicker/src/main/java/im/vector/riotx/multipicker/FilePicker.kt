@@ -51,6 +51,13 @@ class FilePicker(override val requestCode: Int) : Picker<MultiPickerFileType>(re
             }
         } else if (dataUri != null) {
             selectedUriList.add(dataUri)
+        } else {
+            data?.extras?.get(Intent.EXTRA_STREAM)?.let {
+                when (it) {
+                    is List<*> -> selectedUriList.addAll(it as List<Uri>)
+                    else     -> selectedUriList.add(it as Uri)
+                }
+            }
         }
 
         selectedUriList.forEach { selectedUri ->

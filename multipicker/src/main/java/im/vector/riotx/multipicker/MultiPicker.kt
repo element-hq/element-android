@@ -24,12 +24,14 @@ class MultiPicker<T> {
         val VIDEO by lazy { MultiPicker<VideoPicker>() }
         val AUDIO by lazy { MultiPicker<AudioPicker>() }
         val CONTACT by lazy { MultiPicker<ContactPicker>() }
+        val CAMERA by lazy { MultiPicker<CameraPicker>() }
 
         const val REQUEST_CODE_PICK_IMAGE = 5000
         const val REQUEST_CODE_PICK_VIDEO = 5001
         const val REQUEST_CODE_PICK_FILE = 5002
         const val REQUEST_CODE_PICK_AUDIO = 5003
         const val REQUEST_CODE_PICK_CONTACT = 5004
+        const val REQUEST_CODE_TAKE_PHOTO = 5005
 
         @Suppress("UNCHECKED_CAST")
         fun <T> get(type: MultiPicker<T>): T {
@@ -39,6 +41,7 @@ class MultiPicker<T> {
                 FILE  -> FilePicker(REQUEST_CODE_PICK_FILE) as T
                 AUDIO  -> AudioPicker(REQUEST_CODE_PICK_AUDIO) as T
                 CONTACT  -> ContactPicker(REQUEST_CODE_PICK_CONTACT) as T
+                CAMERA  -> CameraPicker(REQUEST_CODE_TAKE_PHOTO) as T
                 else  -> throw IllegalArgumentException("Unsupported type $type")
             }
         }

@@ -23,55 +23,46 @@ import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.provider.MediaStore
+import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import im.vector.riotx.multipicker.entity.MultiPickerImageType
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
-class ImagePicker(override val requestCode: Int) : Picker<MultiPickerImageType>(requestCode) {
+class CameraPicker(val requestCode: Int) {
 
-    override fun startWith(activity: Activity) {
-        activity.startActivityForResult(createIntent(), requestCode)
+    fun startWithExpectingFile(activity: Activity): Uri? {
+        val photoUri = createPhotoUri(activity)
+        val intent = createIntent().apply {
+            putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+        }
+        activity.startActivityForResult(intent, requestCode)
+        return photoUri
     }
 
-    override fun startWith(fragment: Fragment) {
-        fragment.startActivityForResult(createIntent(), requestCode)
+    fun startWithExpectingFile(fragment: Fragment): Uri? {
+        val photoUri = createPhotoUri(fragment.requireContext())
+        val intent = createIntent().apply {
+            putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+        }
+        fragment.startActivityForResult(intent, requestCode)
+        return photoUri
     }
 
-    override fun getSelectedFiles(context: Context, requestCode: Int, resultCode: Int, data: Intent?): List<MultiPickerImageType> {
-        if (requestCode != this.requestCode && resultCode != Activity.RESULT_OK) {
-            return emptyList()
-        }
-
-        val imageList = mutableListOf<MultiPickerImageType>()
-
-        val selectedUriList = mutableListOf<Uri>()
-        val dataUri = data?.data
-        val clipData = data?.clipData
-
-        if (clipData != null) {
-            for (i in 0 until clipData.itemCount) {
-                selectedUriList.add(clipData.getItemAt(i).uri)
-            }
-        } else if (dataUri != null) {
-            selectedUriList.add(dataUri)
-        } else {
-            data?.extras?.get(Intent.EXTRA_STREAM)?.let {
-                when (it) {
-                    is List<*> -> selectedUriList.addAll(it as List<Uri>)
-                    else     -> selectedUriList.add(it as Uri)
-                }
-            }
-        }
-
-        selectedUriList.forEach { selectedUri ->
+    fun getTakenPhoto(context: Context, requestCode: Int, resultCode: Int, photoUri: Uri): MultiPickerImageType? {
+        if (requestCode == this.requestCode && resultCode == Activity.RESULT_OK) {
             val projection = arrayOf(
                     MediaStore.Images.Media.DISPLAY_NAME,
                     MediaStore.Images.Media.SIZE
             )
 
             context.contentResolver.query(
-                    selectedUri,
+                    photoUri,
                     projection,
                     null,
                     null,
@@ -87,14 +78,14 @@ class ImagePicker(override val requestCode: Int) : Picker<MultiPickerImageType>(
                     var orientation = 0
 
                     val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, selectedUri))
+                        ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, photoUri))
                     } else {
-                        context.contentResolver.openInputStream(selectedUri)?.use { inputStream ->
+                        context.contentResolver.openInputStream(photoUri)?.use { inputStream ->
                             BitmapFactory.decodeStream(inputStream)
                         }
                     }
 
-                    context.contentResolver.openInputStream(selectedUri)?.use { inputStream ->
+                    context.contentResolver.openInputStream(photoUri)?.use { inputStream ->
                         try {
                             ExifInterface(inputStream).let {
                                 orientation = it.rotationDegrees
@@ -104,28 +95,38 @@ class ImagePicker(override val requestCode: Int) : Picker<MultiPickerImageType>(
                         }
                     }
 
-                    imageList.add(
-                            MultiPickerImageType(
-                                    name,
-                                    size,
-                                    context.contentResolver.getType(selectedUri),
-                                    selectedUri,
-                                    bitmap?.width ?: 0,
-                                    bitmap?.height ?: 0,
-                                    orientation
-                            )
+                    return MultiPickerImageType(
+                            name,
+                            size,
+                            context.contentResolver.getType(photoUri),
+                            photoUri,
+                            bitmap?.width ?: 0,
+                            bitmap?.height ?: 0,
+                            orientation
                     )
                 }
             }
         }
-        return imageList
+        return null
     }
 
     private fun createIntent(): Intent {
-        return Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, !single)
-            type = "image/*"
-        }
+        return Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+    }
+
+    private fun createPhotoUri(context: Context): Uri {
+        val file = createImageFile(context)
+        val authority = context.packageName + ".multipicker.fileprovider"
+        return FileProvider.getUriForFile(context, authority, file)
+    }
+
+    private fun createImageFile(context: Context): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val storageDir: File = context.filesDir
+        return File.createTempFile(
+                "JPEG_${timeStamp}_", /* prefix */
+                ".jpg", /* suffix */
+                storageDir /* directory */
+        )
     }
 }
