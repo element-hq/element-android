@@ -18,16 +18,17 @@ package im.vector.matrix.android.internal.crypto
 
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmDecryptionFactory
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.event.SecretSendEventContent
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -35,6 +36,7 @@ internal class ShareSecretCryptoProvider @Inject constructor(
         val messageEncrypter: MessageEncrypter,
         val sendToDeviceTask: SendToDeviceTask,
         val deviceListManager: DeviceListManager,
+        @UserId val myUserId: String,
         private val olmDecryptionFactory: MXOlmDecryptionFactory,
         val cryptoCoroutineScope: CoroutineScope,
         val cryptoStore: IMXCryptoStore,
@@ -43,32 +45,38 @@ internal class ShareSecretCryptoProvider @Inject constructor(
     fun shareSecretWithDevice(request: IncomingSecretShareRequest, secretValue: String) {
         val userId = request.userId ?: return
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            runCatching { deviceListManager.downloadKeys(listOf(userId), false) }
-                    .mapCatching {
-                        val deviceId = request.deviceId
-                        val deviceInfo = cryptoStore.getUserDevice(userId, deviceId ?: "") ?: throw RuntimeException()
+            //            runCatching { deviceListManager.downloadKeys(listOf(userId), false) }
+//                    .mapCatching {
+            val deviceId = request.deviceId
+            val deviceInfo = cryptoStore.getUserDevice(userId, deviceId ?: "") ?: return@launch
 
-                        Timber.i("## shareSecretWithDevice() : sharing secret ${request.secretName} with device $userId:$deviceId")
 
-                        val payloadJson = mutableMapOf<String, Any>("type" to EventType.SEND_SECRET)
-                        payloadJson["content"] = SecretSendEventContent(
-                                requestId = request.requestId ?: "",
-                                secretValue = secretValue
-                        )
+            Timber.i("## shareSecretWithDevice() : sharing secret ${request.secretName} with device $userId:$deviceId")
 
-                        val encodedPayload = messageEncrypter.encryptMessage(payloadJson, listOf(deviceInfo))
-                        val sendToDeviceMap = MXUsersDevicesMap<Any>()
-                        sendToDeviceMap.setObject(userId, deviceId, encodedPayload)
-                        Timber.i("## shareSecretWithDevice() : sending to $userId:$deviceId")
-                        val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
-                        sendToDeviceTask.execute(sendToDeviceParams)
-                    }
+            val payloadJson = mutableMapOf<String, Any>("type" to EventType.SEND_SECRET)
+            val secretContent = SecretSendEventContent(
+                    requestId = request.requestId ?: "",
+                    secretValue = secretValue
+            )
+            payloadJson["content"] = secretContent.toContent()
+
+            cryptoStore.saveGossipingEvent(Event(
+                    type = EventType.SEND_SECRET,
+                    content = secretContent.toContent(),
+                    senderId = myUserId
+            ))
+
+            val encodedPayload = messageEncrypter.encryptMessage(payloadJson, listOf(deviceInfo))
+            val sendToDeviceMap = MXUsersDevicesMap<Any>()
+            sendToDeviceMap.setObject(userId, deviceId, encodedPayload)
+            Timber.i("## shareSecretWithDevice() : sending to $userId:$deviceId")
+            val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
+            sendToDeviceTask.execute(sendToDeviceParams)
+//                    }
         }
     }
 
     fun decryptEvent(event: Event): MXEventDecryptionResult {
-        return runBlocking(coroutineDispatchers.crypto) {
-            olmDecryptionFactory.create().decryptEvent(event, ShareSecretCryptoProvider::class.java.name ?: "")
-        }
+        return olmDecryptionFactory.create().decryptEvent(event, ShareSecretCryptoProvider::class.java.name ?: "")
     }
 }

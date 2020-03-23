@@ -32,7 +32,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @SessionScope
-internal class IncomingRoomKeyRequestManager @Inject constructor(
+internal class IncomingGossipingRequestManager @Inject constructor(
         private val credentials: Credentials,
         private val cryptoStore: IMXCryptoStore,
         private val cryptoConfig: MXCryptoConfig,
@@ -49,6 +49,32 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
 
     init {
         receivedGossipingRequests.addAll(cryptoStore.getPendingIncomingGossipingRequests())
+    }
+
+    // Recently verified devices (map of deviceId and timestamp)
+    private val recentlyVerifiedDevices = HashMap<String, Long>()
+
+    /**
+     * Called when a session has been verified.
+     * This information can be used by the manager to decide whether or not to fullfil gossiping requests
+     */
+    fun onVerificationCompleteForDevice(deviceId: String) {
+        // For now we just keep an in memory cache
+        synchronized(recentlyVerifiedDevices) {
+            recentlyVerifiedDevices[deviceId] = System.currentTimeMillis()
+        }
+    }
+
+    private fun hasBeenVerifiedLessThanFiveMinutesFromNow(deviceId: String): Boolean {
+        val verifTimestamp: Long?
+        synchronized(recentlyVerifiedDevices) {
+            verifTimestamp = recentlyVerifiedDevices[deviceId]
+        }
+        if (verifTimestamp == null) return false
+
+        val age = System.currentTimeMillis() - verifTimestamp
+
+        return age < FIVE_MINUTES_IN_MILLIS
     }
 
     /**
@@ -257,9 +283,12 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
         }?.let { secretValue ->
             // TODO check if locally trusted and not outdated
             Timber.i("## processIncomingSecretShareRequest() : Sharing secret $secretName with $device locally trusted")
-            if (isDeviceLocallyVerified == true) {
+            if (isDeviceLocallyVerified == true && hasBeenVerifiedLessThanFiveMinutesFromNow(deviceId)) {
                 secretSecretCryptoProvider.shareSecretWithDevice(request, secretValue)
                 cryptoStore.updateGossipingRequestState(request, GossipingRequestState.ACCEPTED)
+            } else {
+                Timber.v("## processIncomingSecretShareRequest() : Can't share secret $secretName with $device, verification too old")
+                cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED)
             }
             return
         }
@@ -339,5 +368,9 @@ internal class IncomingRoomKeyRequestManager @Inject constructor(
         synchronized(gossipingRequestListeners) {
             gossipingRequestListeners.remove(listener)
         }
+    }
+
+    companion object {
+        private const val FIVE_MINUTES_IN_MILLIS = 5 * 60 * 1000
     }
 }

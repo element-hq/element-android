@@ -25,7 +25,6 @@ import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.crypto.DeviceListManager
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.MyDeviceInfoHolder
-import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestManager
 import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.KeyUsage
 import im.vector.matrix.android.internal.crypto.model.rest.UploadSignatureQueryBuilder
@@ -62,7 +61,6 @@ internal class DefaultCrossSigningService @Inject constructor(
         private val taskExecutor: TaskExecutor,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope,
-        private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
         private val eventBus: EventBus) : CrossSigningService, DeviceListManager.UserDevicesUpdateListener {
 
     private var olmUtility: OlmUtility? = null
@@ -598,7 +596,7 @@ internal class DefaultCrossSigningService @Inject constructor(
     }
 
     override fun canCrossSign(): Boolean {
-        return checkSelfTrust().isVerified() && cryptoStore.getCrossSigningPrivateKeys()?.selfSigned != null
+        return cryptoStore.getCrossSigningPrivateKeys()?.selfSigned != null
     }
 
     override fun trustUser(otherUserId: String, callback: MatrixCallback<Unit>) {

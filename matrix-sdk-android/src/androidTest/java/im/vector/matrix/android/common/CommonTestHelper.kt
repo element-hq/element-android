@@ -266,8 +266,8 @@ class CommonTestHelper(context: Context) {
      * @param latch
      * @throws InterruptedException
      */
-    fun await(latch: CountDownLatch) {
-        assertTrue(latch.await(TestConstants.timeOutMillis, TimeUnit.MILLISECONDS))
+    fun await(latch: CountDownLatch, timout: Long? = TestConstants.timeOutMillis) {
+        assertTrue(latch.await(timout ?: TestConstants.timeOutMillis, TimeUnit.MILLISECONDS))
     }
 
     fun retryPeriodicallyWithLatch(latch: CountDownLatch, condition: (() -> Boolean)) {
