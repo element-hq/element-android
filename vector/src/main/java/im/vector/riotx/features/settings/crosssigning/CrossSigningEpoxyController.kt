@@ -78,6 +78,17 @@ class CrossSigningEpoxyController @Inject constructor(
                         interactionListener?.onResetCrossSigningKeys()
                     }
                 }
+
+                bottomSheetVerificationActionItem {
+                    id("verify")
+                    title(stringProvider.getString(R.string.complete_security))
+                    titleColor(colorProvider.getColor(R.color.riotx_positive_accent))
+                    iconRes(R.drawable.ic_arrow_right)
+                    iconColor(colorProvider.getColor(R.color.riotx_positive_accent))
+                    listener {
+                        interactionListener?.verifySession()
+                    }
+                }
             }
         } else if (data.xSigningIsEnableInAccount) {
             genericItem {

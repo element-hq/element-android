@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.features.crypto.verification.request
+
+package im.vector.riotx.features.crypto.verification.cancel
 
 import android.os.Bundle
 import android.view.View
@@ -23,14 +24,13 @@ import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.crypto.verification.VerificationAction
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheetViewModel
 import kotlinx.android.synthetic.main.bottom_sheet_verification_child_fragment.*
 import javax.inject.Inject
 
-class VerificationRequestFragment @Inject constructor(
-        val controller: VerificationRequestController
-) : VectorBaseFragment(), VerificationRequestController.Listener {
+class VerificationNotMeFragment @Inject constructor(
+        val controller: VerificationNotMeController
+) : VectorBaseFragment(), VerificationNotMeController.Listener {
 
     private val viewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)
 
@@ -56,21 +56,11 @@ class VerificationRequestFragment @Inject constructor(
         controller.update(state)
     }
 
-    override fun onClickOnVerificationStart(): Unit = withState(viewModel) { state ->
-        state.otherUserMxItem?.id?.let { otherUserId ->
-            viewModel.handle(VerificationAction.RequestVerificationByDM(otherUserId, state.roomId))
-        }
+    override fun onTapSkip() {
+        viewModel.continueFromWasNotMe()
     }
 
-    override fun onClickRecoverFromPassphrase() {
-        viewModel.handle(VerificationAction.VerifyFromPassphrase)
-    }
-
-    override fun onClickDismiss() {
-        viewModel.handle(VerificationAction.SkipVerification)
-    }
-
-    override fun onClickOnWasNotMe() {
-        viewModel.itWasNotMe()
+    override fun onTapSettings() {
+        viewModel.goToSettings()
     }
 }

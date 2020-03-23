@@ -757,6 +757,7 @@ internal class DefaultVerificationService @Inject constructor(
 
     private suspend fun onReadyReceived(event: Event) {
         val readyReq = event.getClearContent().toModel<KeyVerificationReady>()?.asValidObject()
+        Timber.v("## SAS onReadyReceived $readyReq")
 
         if (readyReq == null || event.senderId == null) {
             // ignore

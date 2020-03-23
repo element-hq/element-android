@@ -31,7 +31,9 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.verification.CancelCode
 import im.vector.matrix.android.api.session.crypto.verification.IncomingSasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.PendingVerificationRequest
 import im.vector.matrix.android.api.session.crypto.verification.QrCodeVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.SasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
@@ -44,7 +46,6 @@ import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
 import im.vector.matrix.android.internal.crypto.crosssigning.isVerified
-import im.vector.matrix.android.api.session.crypto.verification.PendingVerificationRequest
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import timber.log.Timber
@@ -60,7 +61,10 @@ data class VerificationBottomSheetViewState(
         // true when we display the loading and we wait for the other (incoming request)
         val selfVerificationMode: Boolean = false,
         val verifiedFromPrivateKeys: Boolean = false,
-        val isMe: Boolean = false
+        val isMe: Boolean = false,
+        val currentDeviceCanCrossSign: Boolean = false,
+        val userWantsToCancel: Boolean = false,
+        val userThinkItsNotHim: Boolean = false
 ) : MvRxState
 
 class VerificationBottomSheetViewModel @AssistedInject constructor(
@@ -111,7 +115,8 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     pendingRequest = if (pr != null) Success(pr) else Uninitialized,
                     selfVerificationMode = selfVerificationMode,
                     roomId = args.roomId,
-                    isMe = args.otherUserId == session.myUserId
+                    isMe = args.otherUserId == session.myUserId,
+                    currentDeviceCanCrossSign = session.cryptoService().crossSigningService().canCrossSign()
             )
         }
 
@@ -135,6 +140,46 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     interface Factory {
         fun create(initialState: VerificationBottomSheetViewState,
                    args: VerificationBottomSheet.VerificationArgs): VerificationBottomSheetViewModel
+    }
+
+    fun queryCancel() {
+        setState {
+            copy(userWantsToCancel = true)
+        }
+    }
+
+    fun confirmCancel() = withState { state ->
+        session.cryptoService()
+                .verificationService()
+                .getExistingTransaction(state.otherUserMxItem?.id ?: "", state.transactionId ?: "")
+                ?.cancel(CancelCode.User)
+        _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
+    }
+
+    fun continueFromCancel() {
+        setState {
+            copy(userWantsToCancel = false)
+        }
+    }
+
+    fun continueFromWasNotMe() {
+        setState {
+            copy(userThinkItsNotHim = false)
+        }
+    }
+
+    fun itWasNotMe() {
+        setState {
+            copy(userThinkItsNotHim = true)
+        }
+    }
+
+    fun goToSettings() = withState { state ->
+        session.cryptoService()
+                .verificationService()
+                .getExistingTransaction(state.otherUserMxItem?.id ?: "", state.transactionId ?: "")
+                ?.cancel(CancelCode.User)
+        _viewEvents.post(VerificationBottomSheetViewEvents.GoToSettings)
     }
 
     companion object : MvRxViewModelFactory<VerificationBottomSheetViewModel, VerificationBottomSheetViewState> {

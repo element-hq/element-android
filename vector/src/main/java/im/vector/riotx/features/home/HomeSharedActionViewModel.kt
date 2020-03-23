@@ -16,7 +16,15 @@
 
 package im.vector.riotx.features.home
 
+import androidx.lifecycle.MutableLiveData
+import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.util.NoOpCancellable
+import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
+import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
+import im.vector.matrix.rx.rx
+import im.vector.matrix.rx.singleBuilder
 import im.vector.riotx.core.platform.VectorSharedActionViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
 class HomeSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<HomeActivitySharedAction>() {
