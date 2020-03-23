@@ -216,7 +216,7 @@ class KeyShareTests : InstrumentedTest {
 
         aliceVerificationService1.addListener(object : VerificationService.Listener {
             override fun transactionUpdated(tx: VerificationTransaction) {
-                Log.d("TEST", "AA: tx incoming?:${tx.isIncoming} state ${tx.state}")
+                Log.d("#TEST", "AA: tx incoming?:${tx.isIncoming} state ${tx.state}")
                 if (tx is SasVerificationTransaction) {
                     if (tx.state == VerificationTxState.OnStarted) {
                         (tx as IncomingSasVerificationTransaction).performAccept()
@@ -231,7 +231,7 @@ class KeyShareTests : InstrumentedTest {
 
         aliceVerificationService2.addListener(object : VerificationService.Listener {
             override fun transactionUpdated(tx: VerificationTransaction) {
-                Log.d("TEST", "BB: tx incoming?:${tx.isIncoming} state ${tx.state}")
+                Log.d("#TEST", "BB: tx incoming?:${tx.isIncoming} state ${tx.state}")
                 if (tx is SasVerificationTransaction) {
                     if (tx.state == VerificationTxState.ShortCodeReady) {
                         session2ShortCode = tx.getDecimalCodeRepresentation()
@@ -246,42 +246,26 @@ class KeyShareTests : InstrumentedTest {
                 ?: "", txId)
 
 
-        waitWithLatch { latch ->
-            retryPeriodicallyWithLatch(latch) {
+        mTestHelper.waitWithLatch { latch ->
+            mTestHelper.retryPeriodicallyWithLatch(latch) {
                 aliceSession1.cryptoService().getDeviceInfo(aliceSession1.myUserId, aliceSession2.sessionParams.credentials.deviceId ?: "")?.isVerified == true
             }
         }
 
         assertNotNull(session1ShortCode)
-        Log.d("TEST", "session1ShortCode: $session1ShortCode")
+        Log.d("#TEST", "session1ShortCode: $session1ShortCode")
         assertNotNull(session2ShortCode)
-        Log.d("TEST", "session2ShortCode: $session2ShortCode")
+        Log.d("#TEST", "session2ShortCode: $session2ShortCode")
         assertEquals(session1ShortCode, session2ShortCode)
 
         // SSK and USK private keys should have been shared
 
-        waitWithLatch(300_000) { latch ->
-            retryPeriodicallyWithLatch(latch) {
+        mTestHelper.waitWithLatch(60_000) { latch ->
+            mTestHelper.retryPeriodicallyWithLatch(latch) {
+                Log.d("#TEST", "CAN XS :${ aliceSession2.cryptoService().crossSigningService().getMyCrossSigningKeys()}")
                 aliceSession2.cryptoService().crossSigningService().canCrossSign()
             }
         }
     }
 
-    fun retryPeriodicallyWithLatch(latch: CountDownLatch, condition: (() -> Boolean)) {
-        GlobalScope.launch {
-            while (true) {
-                delay(1000)
-                if (condition()) {
-                    latch.countDown()
-                    return@launch
-                }
-            }
-        }
-    }
-
-    fun waitWithLatch(timeout: Long? = null, block: (CountDownLatch) -> Unit) {
-        val latch = CountDownLatch(1)
-        block(latch)
-        mTestHelper.await(latch, timeout)
-    }
 }

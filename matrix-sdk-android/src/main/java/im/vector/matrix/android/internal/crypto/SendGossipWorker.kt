@@ -27,6 +27,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.events.model.toContent
+import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.event.SecretSendEventContent
@@ -53,8 +54,8 @@ internal class SendGossipWorker(context: Context,
     @Inject lateinit var cryptoStore: IMXCryptoStore
     @Inject lateinit var eventBus: EventBus
     @Inject lateinit var credentials: Credentials
-//    @Inject lateinit var secretSecretCryptoProvider: ShareSecretCryptoProvider
     @Inject lateinit var messageEncrypter: MessageEncrypter
+    @Inject lateinit var ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction
 
     override suspend fun doWork(): Result {
         val errorOutputData = Data.Builder().putBoolean("failed", true).build()
@@ -84,10 +85,25 @@ internal class SendGossipWorker(context: Context,
                     Timber.e("Unknown deviceInfo, cannot send message, sessionId: ${params.request.deviceId}")
                 }
 
-        val payloadJson = mutableMapOf<String, Any>("type" to EventType.SEND_SECRET)
-        payloadJson["content"] = toDeviceContent.toContent()
-
         val sendToDeviceMap = MXUsersDevicesMap<Any>()
+
+        val devicesByUser = mapOf(requestingUserId to listOf(deviceInfo))
+        val usersDeviceMap = ensureOlmSessionsForDevicesAction.handle(devicesByUser)
+        val olmSessionResult = usersDeviceMap.getObject(requestingUserId, requestingDeviceId)
+        if (olmSessionResult?.sessionId == null) {
+            // no session with this device, probably because there
+            // were no one-time keys.
+            return Result.success(errorOutputData).also {
+                cryptoStore.updateGossipingRequestState(params.request, GossipingRequestState.FAILED_TO_ACCEPTED)
+                Timber.e("no session with this device, probably because there were no one-time keys.")
+            }
+        }
+
+
+        val payloadJson = mapOf(
+                "type" to EventType.SEND_SECRET,
+                "content" to toDeviceContent.toContent()
+        )
 
         try {
             val encodedPayload = messageEncrypter.encryptMessage(payloadJson, listOf(deviceInfo))
@@ -108,7 +124,7 @@ internal class SendGossipWorker(context: Context,
         try {
             sendToDeviceTask.execute(
                     SendToDeviceTask.Params(
-                            eventType = eventType,
+                            eventType = EventType.ENCRYPTED,
                             contentMap = sendToDeviceMap,
                             transactionId = localId
                     )

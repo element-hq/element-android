@@ -282,10 +282,10 @@ class CommonTestHelper(context: Context) {
         }
     }
 
-    fun waitWithLatch(block: (CountDownLatch) -> Unit) {
+    fun waitWithLatch(timout: Long? = TestConstants.timeOutMillis, block: (CountDownLatch) -> Unit) {
         val latch = CountDownLatch(1)
         block(latch)
-        await(latch)
+        await(latch, timout)
     }
 
     // Transform a method with a MatrixCallback to a synchronous method

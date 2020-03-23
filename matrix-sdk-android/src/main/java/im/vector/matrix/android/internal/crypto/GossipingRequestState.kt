@@ -25,6 +25,7 @@ enum class GossipingRequestState {
     NONE,
     PENDING,
     REJECTED,
+    ACCEPTING,
     ACCEPTED,
     FAILED_TO_ACCEPTED,
    // USER_REJECTED,

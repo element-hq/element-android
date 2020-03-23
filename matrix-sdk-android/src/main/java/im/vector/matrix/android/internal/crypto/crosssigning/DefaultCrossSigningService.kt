@@ -596,7 +596,8 @@ internal class DefaultCrossSigningService @Inject constructor(
     }
 
     override fun canCrossSign(): Boolean {
-        return cryptoStore.getCrossSigningPrivateKeys()?.selfSigned != null
+        return checkSelfTrust().isVerified() && cryptoStore.getCrossSigningPrivateKeys()?.selfSigned != null
+                && cryptoStore.getCrossSigningPrivateKeys()?.user != null
     }
 
     override fun trustUser(otherUserId: String, callback: MatrixCallback<Unit>) {
