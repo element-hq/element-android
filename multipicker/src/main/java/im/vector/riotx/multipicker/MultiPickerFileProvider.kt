@@ -18,5 +18,4 @@ package im.vector.riotx.multipicker
 
 import androidx.core.content.FileProvider
 
-class MultiPickerFileProvider : FileProvider() {
-}
+class MultiPickerFileProvider : FileProvider()

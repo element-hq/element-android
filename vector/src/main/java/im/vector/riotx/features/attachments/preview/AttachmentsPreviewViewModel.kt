@@ -62,7 +62,7 @@ class AttachmentsPreviewViewModel @AssistedInject constructor(@Assisted initialS
     private fun handleUpdatePathOfCurrentAttachment(action: AttachmentsPreviewAction.UpdatePathOfCurrentAttachment) = withState {
         val attachments = it.attachments.mapIndexed { index, contentAttachmentData ->
             if (index == it.currentAttachmentIndex) {
-                contentAttachmentData.copy(path = action.newPath)
+                contentAttachmentData.copy(queryUri = action.newUri)
             } else {
                 contentAttachmentData
             }

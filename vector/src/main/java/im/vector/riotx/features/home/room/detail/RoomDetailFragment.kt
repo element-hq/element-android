@@ -251,7 +251,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
-        attachmentsHelper = AttachmentsHelper.create(this, this).register()
+        attachmentsHelper = AttachmentsHelper(requireContext(), this).register()
         keyboardStateUtils = KeyboardStateUtils(requireActivity())
         setupToolbar(roomToolbar)
         setupRecyclerView()
@@ -517,29 +517,6 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (requestCode) {
-            MultiPicker.REQUEST_CODE_PICK_IMAGE -> {
-                MultiPicker.get(MultiPicker.IMAGE).getSelectedFiles(requireContext(), requestCode, resultCode, data)
-            }
-            MultiPicker.REQUEST_CODE_PICK_VIDEO -> {
-                MultiPicker.get(MultiPicker.VIDEO).getSelectedFiles(requireContext(), requestCode, resultCode, data)
-            }
-            MultiPicker.REQUEST_CODE_PICK_FILE  -> {
-                MultiPicker.get(MultiPicker.FILE).getSelectedFiles(requireContext(), requestCode, resultCode, data)
-            }
-            MultiPicker.REQUEST_CODE_PICK_AUDIO  -> {
-                MultiPicker.get(MultiPicker.AUDIO).getSelectedFiles(requireContext(), requestCode, resultCode, data)
-            }
-            MultiPicker.REQUEST_CODE_PICK_CONTACT  -> {
-                MultiPicker.get(MultiPicker.CONTACT).getSelectedFiles(requireContext(), requestCode, resultCode, data)
-            }
-            MultiPicker.REQUEST_CODE_TAKE_PHOTO  -> {
-                cameraPhotoUri?.let {
-                    MultiPicker.get(MultiPicker.CAMERA).getTakenPhoto(requireContext(), requestCode, resultCode, it)
-                }
-            }
-        }
-
         val hasBeenHandled = attachmentsHelper.onActivityResult(requestCode, resultCode, data)
         if (!hasBeenHandled && resultCode == RESULT_OK && data != null) {
             when (requestCode) {
@@ -689,7 +666,7 @@ class RoomDetailFragment @Inject constructor(
     private fun sendUri(uri: Uri): Boolean {
         roomDetailViewModel.preventAttachmentPreview = true
         val shareIntent = Intent(Intent.ACTION_SEND, uri)
-        val isHandled = attachmentsHelper.handleShareIntent(shareIntent)
+        val isHandled = attachmentsHelper.handleShareIntent(requireContext(), shareIntent)
         if (!isHandled) {
             roomDetailViewModel.preventAttachmentPreview = false
             Toast.makeText(requireContext(), R.string.error_handling_incoming_share, Toast.LENGTH_SHORT).show()
@@ -1372,16 +1349,13 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private var cameraPhotoUri: Uri? = null
     private fun launchAttachmentProcess(type: AttachmentTypeSelectorView.Type) {
         when (type) {
-            AttachmentTypeSelectorView.Type.CAMERA  -> {
-                cameraPhotoUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
-            }
-            AttachmentTypeSelectorView.Type.FILE    -> MultiPicker.get(MultiPicker.FILE).startWith(this)
-            AttachmentTypeSelectorView.Type.GALLERY -> MultiPicker.get(MultiPicker.IMAGE).startWith(this)
-            AttachmentTypeSelectorView.Type.AUDIO   -> MultiPicker.get(MultiPicker.AUDIO).startWith(this)
-            AttachmentTypeSelectorView.Type.CONTACT -> MultiPicker.get(MultiPicker.CONTACT).startWith(this)
+            AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera(this)
+            AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile(this)
+            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(this)
+            AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio(this)
+            AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(this)
             AttachmentTypeSelectorView.Type.STICKER -> vectorBaseActivity.notImplemented("Adding stickers")
         }.exhaustive
     }

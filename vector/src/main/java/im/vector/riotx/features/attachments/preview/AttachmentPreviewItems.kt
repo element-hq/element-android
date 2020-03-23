@@ -33,11 +33,10 @@ abstract class AttachmentPreviewItem<H : AttachmentPreviewItem.Holder> : VectorE
     abstract val attachment: ContentAttachmentData
 
     override fun bind(holder: H) {
-        val path = attachment.path
         if (attachment.type == ContentAttachmentData.Type.VIDEO || attachment.type == ContentAttachmentData.Type.IMAGE) {
             Glide.with(holder.view.context)
                     .asBitmap()
-                    .load(path)
+                    .load(attachment.queryUri)
                     .apply(RequestOptions().frame(0))
                     .into(holder.imageView)
         } else {
