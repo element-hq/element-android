@@ -23,8 +23,17 @@ import android.media.MediaMetadataRetriever
 import android.provider.MediaStore
 import im.vector.riotx.multipicker.entity.MultiPickerAudioType
 
+/**
+ * Audio file picker implementation
+ */
 class AudioPicker(override val requestCode: Int) : Picker<MultiPickerAudioType>(requestCode) {
 
+    /**
+     * Call this function from onActivityResult(int, int, Intent).
+     * Returns selected audio files or empty list if request code is wrong
+     * or result code is not Activity.RESULT_OK
+     * or user did not select any files.
+     */
     override fun getSelectedFiles(context: Context, requestCode: Int, resultCode: Int, data: Intent?): List<MultiPickerAudioType> {
         if (requestCode != this.requestCode && resultCode != Activity.RESULT_OK) {
             return emptyList()
