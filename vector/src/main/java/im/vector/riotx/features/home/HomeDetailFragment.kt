@@ -43,6 +43,7 @@ import im.vector.riotx.features.home.room.list.RoomListParams
 import im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
 import im.vector.riotx.features.popup.PopupAlertManager
 import im.vector.riotx.features.popup.VectorAlert
+import im.vector.riotx.features.popup.VerificationVectorAlert
 import im.vector.riotx.features.workers.signout.SignOutViewModel
 import kotlinx.android.synthetic.main.fragment_home_detail.*
 import timber.log.Timber
@@ -93,13 +94,13 @@ class HomeDetailFragment @Inject constructor(
                 unknownDevices.forEachIndexed { index, deviceInfo ->
                     Timber.v("## Detector - #$index deviceId:${deviceInfo.second.deviceId} lastSeenTs:${deviceInfo.second.lastSeenTs}")
                 }
+                val uid = "Newest_Device"
+                alertManager.cancelAlert(uid)
                 if (it.canCrossSign && unknownDevices.isNotEmpty()) {
                     val newest = unknownDevices.first().second
                     val user = unknownDevices.first().first
-                    val uid = "ND_${newest.deviceId}"
-                    alertManager.cancelAlert(uid)
                     alertManager.postVectorAlert(
-                            VectorAlert(
+                            VerificationVectorAlert(
                                     uid = uid,
                                     title = getString(R.string.new_session),
                                     description = getString(R.string.new_session_review),

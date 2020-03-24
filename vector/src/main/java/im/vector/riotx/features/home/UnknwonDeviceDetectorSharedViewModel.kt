@@ -36,8 +36,7 @@ import im.vector.riotx.core.platform.VectorViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 
 data class UnknownDevicesState(
-        val unknownSessions: Async<List<Pair<MatrixItem?, DeviceInfo>>?> = Uninitialized,
-        val verifiedSessions: Async<List<Pair<MatrixItem?, DeviceInfo>>?> = Uninitialized,
+        val unknownSessions: Async<List<Pair<MatrixItem?, DeviceInfo>>> = Uninitialized,
         val canCrossSign: Boolean = false
 ) : MvRxState
 
@@ -47,16 +46,21 @@ class UnknownDeviceDetectorSharedViewModel(session: Session, initialState: Unkno
         session.rx().liveUserCryptoDevices(session.myUserId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .switchMap { deviceList ->
+                    //                    Timber.v("## Detector - ============================")
+//                    Timber.v("## Detector - Crypto device update  ${deviceList.map { "${it.deviceId} : ${it.isVerified}" }}")
                     singleBuilder<DevicesListResponse> {
                         session.cryptoService().getDevicesList(it)
                         NoOpCancellable
                     }.map { resp ->
+                        //                        Timber.v("## Detector - Device Infos  ${resp.devices?.map { "${it.deviceId} : lastSeen:${it.lastSeenTs}" }}")
                         resp.devices?.filter { info ->
-                            deviceList.firstOrNull { info.deviceId == it.deviceId }?.isVerified?.not() ?: false
+                            deviceList.firstOrNull { info.deviceId == it.deviceId }?.let {
+                                !it.isVerified
+                            } ?: false
                         }?.sortedByDescending { it.lastSeenTs }
                                 ?.map {
                                     session.getUser(it.user_id ?: "")?.toMatrixItem() to it
-                                }
+                                } ?: emptyList()
                     }
                             .toObservable()
                 }

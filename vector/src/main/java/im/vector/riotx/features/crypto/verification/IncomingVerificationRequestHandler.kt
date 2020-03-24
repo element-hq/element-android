@@ -78,7 +78,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                             } else true
                         })
                         .apply {
-                            matrixItem = session?.getUser(tx.otherUserId ?: "")?.toMatrixItem()
+                            matrixItem = session?.getUser(tx.otherUserId)?.toMatrixItem()
 
                             contentAction = Runnable {
                                 (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
