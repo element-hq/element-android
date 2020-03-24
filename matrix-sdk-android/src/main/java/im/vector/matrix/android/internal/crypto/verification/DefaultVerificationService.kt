@@ -1102,6 +1102,18 @@ internal class DefaultVerificationService @Inject constructor(
         return verificationRequest
     }
 
+    override fun cancelVerificationRequest(request: PendingVerificationRequest) {
+        if (request.roomId != null) {
+            val transport = verificationTransportRoomMessageFactory.createTransport(request.roomId, null)
+            transport.cancelTransaction(request.transactionId ?: "", request.otherUserId, null, CancelCode.User)
+        } else {
+            val transport = verificationTransportToDeviceFactory.createTransport(null)
+            request.targetDevices?.forEach { deviceId ->
+                transport.cancelTransaction(request.transactionId ?: "", request.otherUserId, deviceId, CancelCode.User)
+            }
+        }
+    }
+
     override fun requestKeyVerification(methods: List<VerificationMethod>, otherUserId: String, otherDevices: List<String>?): PendingVerificationRequest {
         // TODO refactor this with the DM one
         Timber.i("## Requesting verification to user: $otherUserId with device list $otherDevices")

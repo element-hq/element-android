@@ -150,6 +150,10 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
 
     fun confirmCancel() = withState { state ->
         session.cryptoService()
+                .verificationService().getExistingVerificationRequest(state.otherUserMxItem?.id ?: "", state.transactionId)?.let {
+                    session.cryptoService().verificationService().cancelVerificationRequest(it)
+                }
+        session.cryptoService()
                 .verificationService()
                 .getExistingTransaction(state.otherUserMxItem?.id ?: "", state.transactionId ?: "")
                 ?.cancel(CancelCode.User)
