@@ -22,8 +22,17 @@ import android.content.Intent
 import android.provider.OpenableColumns
 import im.vector.riotx.multipicker.entity.MultiPickerFileType
 
+/**
+ * Implementation of selecting any type of files
+ */
 class FilePicker(override val requestCode: Int) : Picker<MultiPickerFileType>(requestCode) {
 
+    /**
+     * Call this function from onActivityResult(int, int, Intent).
+     * Returns selected files or empty list if request code is wrong
+     * or result code is not Activity.RESULT_OK
+     * or user did not select any files.
+     */
     override fun getSelectedFiles(context: Context, requestCode: Int, resultCode: Int, data: Intent?): List<MultiPickerFileType> {
         if (requestCode != this.requestCode && resultCode != Activity.RESULT_OK) {
             return emptyList()

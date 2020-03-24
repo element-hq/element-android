@@ -19,18 +19,21 @@ package im.vector.riotx.multipicker
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
-import android.net.Uri
-import android.os.Build
 import android.provider.MediaStore
-import androidx.exifinterface.media.ExifInterface
-import androidx.fragment.app.Fragment
 import im.vector.riotx.multipicker.entity.MultiPickerImageType
 import im.vector.riotx.multipicker.utils.ImageUtils
 
+/**
+ * Image Picker implementation
+ */
 class ImagePicker(override val requestCode: Int) : Picker<MultiPickerImageType>(requestCode) {
 
+    /**
+     * Call this function from onActivityResult(int, int, Intent).
+     * Returns selected image files or empty list if request code is wrong
+     * or result code is not Activity.RESULT_OK
+     * or user did not select any files.
+     */
     override fun getSelectedFiles(context: Context, requestCode: Int, resultCode: Int, data: Intent?): List<MultiPickerImageType> {
         if (requestCode != this.requestCode && resultCode != Activity.RESULT_OK) {
             return emptyList()

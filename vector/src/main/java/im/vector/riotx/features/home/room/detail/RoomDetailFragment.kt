@@ -156,7 +156,6 @@ import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.share.SharedData
 import im.vector.riotx.features.themes.ThemeUtils
-import im.vector.riotx.multipicker.MultiPicker
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.parcel.Parcelize

@@ -19,13 +19,9 @@ package im.vector.riotx.multipicker
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
-import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import im.vector.riotx.multipicker.entity.MultiPickerImageType
 import im.vector.riotx.multipicker.utils.ImageUtils
@@ -34,8 +30,16 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+/**
+ * Implementation of taking a photo with Camera
+ */
 class CameraPicker(val requestCode: Int) {
 
+    /**
+     * Start camera by using an Activity
+     * @param activity Activity to handle onActivityResult().
+     * @return Uri of taken photo or null if the operation is cancelled.
+     */
     fun startWithExpectingFile(activity: Activity): Uri? {
         val photoUri = createPhotoUri(activity)
         val intent = createIntent().apply {
@@ -45,6 +49,11 @@ class CameraPicker(val requestCode: Int) {
         return photoUri
     }
 
+    /**
+     * Start camera by using a Fragment
+     * @param fragment Fragment to handle onActivityResult().
+     * @return Uri of taken photo or null if the operation is cancelled.
+     */
     fun startWithExpectingFile(fragment: Fragment): Uri? {
         val photoUri = createPhotoUri(fragment.requireContext())
         val intent = createIntent().apply {
@@ -54,6 +63,12 @@ class CameraPicker(val requestCode: Int) {
         return photoUri
     }
 
+    /**
+     * Call this function from onActivityResult(int, int, Intent).
+     * @return Taken photo or null if request code is wrong
+     * or result code is not Activity.RESULT_OK
+     * or user cancelled the operation.
+     */
     fun getTakenPhoto(context: Context, requestCode: Int, resultCode: Int, photoUri: Uri): MultiPickerImageType? {
         if (requestCode == this.requestCode && resultCode == Activity.RESULT_OK) {
             val projection = arrayOf(

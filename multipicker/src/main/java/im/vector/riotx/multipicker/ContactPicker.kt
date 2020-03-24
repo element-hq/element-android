@@ -21,11 +21,19 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.provider.ContactsContract
-import androidx.fragment.app.Fragment
 import im.vector.riotx.multipicker.entity.MultiPickerContactType
 
+/**
+ * Contact Picker implementation
+ */
 class ContactPicker(override val requestCode: Int) : Picker<MultiPickerContactType>(requestCode) {
 
+    /**
+     * Call this function from onActivityResult(int, int, Intent).
+     * Returns selected contact or empty list if request code is wrong
+     * or result code is not Activity.RESULT_OK
+     * or user did not select any files.
+     */
     override fun getSelectedFiles(context: Context, requestCode: Int, resultCode: Int, data: Intent?): List<MultiPickerContactType> {
         if (requestCode != this.requestCode && resultCode != Activity.RESULT_OK) {
             return emptyList()

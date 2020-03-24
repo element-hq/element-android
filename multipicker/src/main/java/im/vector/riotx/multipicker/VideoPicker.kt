@@ -20,13 +20,20 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.media.MediaMetadataRetriever
-import android.net.Uri
 import android.provider.MediaStore
-import androidx.fragment.app.Fragment
 import im.vector.riotx.multipicker.entity.MultiPickerVideoType
 
+/**
+ * Video Picker implementation
+ */
 class VideoPicker(override val requestCode: Int) : Picker<MultiPickerVideoType>(requestCode) {
 
+    /**
+     * Call this function from onActivityResult(int, int, Intent).
+     * Returns selected video files or empty list if request code is wrong
+     * or result code is not Activity.RESULT_OK
+     * or user did not select any files.
+     */
     override fun getSelectedFiles(context: Context, requestCode: Int, resultCode: Int, data: Intent?): List<MultiPickerVideoType> {
         if (requestCode != this.requestCode && resultCode != Activity.RESULT_OK) {
             return emptyList()

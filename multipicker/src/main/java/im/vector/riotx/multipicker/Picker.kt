@@ -22,20 +22,32 @@ import android.content.Intent
 import android.net.Uri
 import androidx.fragment.app.Fragment
 
+/**
+ * Abstract class to provide all types of Pickers
+ */
 abstract class Picker<T>(open val requestCode: Int) {
 
     protected var single = false
 
-    open fun startWithExpectingFile(activity: Activity): Uri? = null
-
-    open fun startWithExpectingFile(fragment: Fragment): Uri? = null
-
+    /**
+     * Call this function from onActivityResult(int, int, Intent).
+     * @return selected files or empty list if request code is wrong
+     * or result code is not Activity.RESULT_OK
+     * or user did not select any files.
+     */
     abstract fun getSelectedFiles(context: Context, requestCode: Int, resultCode: Int, data: Intent?): List<T>
 
+    /**
+     * Use this function to retrieve files which are shared from another application or internally
+     * by using android.intent.action.SEND or android.intent.action.SEND_MULTIPLE actions.
+     */
     fun getIncomingFiles(context: Context, data: Intent?): List<T> {
         return getSelectedFiles(context, requestCode, Activity.RESULT_OK, data)
     }
 
+    /**
+     * Call this function to disable multiple selection of files.
+     */
     fun single(): Picker<T> {
         single = true
         return this
@@ -43,10 +55,18 @@ abstract class Picker<T>(open val requestCode: Int) {
 
     abstract fun createIntent(): Intent
 
+    /**
+     * Start Storage Access Framework UI by using an Activity.
+     * @param activity Activity to handle onActivityResult().
+     */
     fun startWith(activity: Activity) {
         activity.startActivityForResult(createIntent(), requestCode)
     }
 
+    /**
+     * Start Storage Access Framework UI by using a Fragment.
+     * @param fragment Fragment to handle onActivityResult().
+     */
     fun startWith(fragment: Fragment) {
         fragment.startActivityForResult(createIntent(), requestCode)
     }
