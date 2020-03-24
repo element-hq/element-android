@@ -78,7 +78,6 @@ class IncomingVerificationRequestHandler @Inject constructor(
                             } else true
                         })
                         .apply {
-
                             matrixItem = session?.getUser(tx.otherUserId ?: "")?.toMatrixItem()
 
                             contentAction = Runnable {
@@ -135,7 +134,6 @@ class IncomingVerificationRequestHandler @Inject constructor(
                         } else true
                     })
                     .apply {
-
                         matrixItem = session?.getUser(pr.otherUserId)?.toMatrixItem()
 
                         contentAction = Runnable {

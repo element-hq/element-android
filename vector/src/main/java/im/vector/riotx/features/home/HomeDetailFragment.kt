@@ -91,7 +91,7 @@ class HomeDetailFragment @Inject constructor(
             it.unknownSessions.invoke()?.let { unknownDevices ->
                 Timber.v("## Detector - ${unknownDevices.size} Unknown sessions")
                 unknownDevices.forEachIndexed { index, deviceInfo ->
-                    Timber.v("## Detector - #${index} deviceId:${deviceInfo.second.deviceId} lastSeenTs:${deviceInfo.second.lastSeenTs}")
+                    Timber.v("## Detector - #$index deviceId:${deviceInfo.second.deviceId} lastSeenTs:${deviceInfo.second.lastSeenTs}")
                 }
                 if (it.canCrossSign && unknownDevices.isNotEmpty()) {
                     val newest = unknownDevices.first().second

@@ -95,7 +95,6 @@ class VerificationRequestController @Inject constructor(
                         }
                     }
 
-
             bottomSheetVerificationNoticeItem {
                 id("notice")
                 notice(styledText)
@@ -142,7 +141,6 @@ class VerificationRequestController @Inject constructor(
         }
 
         if (state.isMe && state.currentDeviceCanCrossSign) {
-
             dividerItem {
                 id("sep_notMe")
             }

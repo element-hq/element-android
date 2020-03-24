@@ -38,7 +38,6 @@ import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.riotx.R
 import im.vector.riotx.features.popup.DefaultVectorAlert
 import im.vector.riotx.features.popup.PopupAlertManager
-import im.vector.riotx.features.popup.VectorAlert
 import timber.log.Timber
 import java.text.DateFormat
 import java.text.SimpleDateFormat

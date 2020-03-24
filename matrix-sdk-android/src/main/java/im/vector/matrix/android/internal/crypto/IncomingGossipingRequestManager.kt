@@ -287,7 +287,6 @@ internal class IncomingGossipingRequestManager @Inject constructor(
         }?.let { secretValue ->
             Timber.i("## GOSSIP processIncomingSecretShareRequest() : Sharing secret $secretName with $device locally trusted")
             if (isDeviceLocallyVerified == true && hasBeenVerifiedLessThanFiveMinutesFromNow(deviceId)) {
-
                 val params = SendGossipWorker.Params(
                         sessionId = sessionId,
                         secretValue = secretValue,

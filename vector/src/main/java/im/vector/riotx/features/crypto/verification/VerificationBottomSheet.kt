@@ -155,7 +155,6 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
         state.otherUserMxItem?.let { matrixItem ->
             if (state.isMe) {
-
                 avatarRenderer.render(matrixItem, otherUserAvatarImageView)
                 if (state.sasTransactionState == VerificationTxState.Verified
                         || state.qrTransactionState == VerificationTxState.Verified

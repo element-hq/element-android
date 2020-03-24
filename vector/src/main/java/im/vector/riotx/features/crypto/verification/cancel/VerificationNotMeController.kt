@@ -43,7 +43,6 @@ class VerificationNotMeController @Inject constructor(
     }
 
     override fun buildModels() {
-
         bottomSheetVerificationNoticeItem {
             id("notice")
             notice(eventHtmlRenderer.render(stringProvider.getString(R.string.verify_not_me_self_verification)))

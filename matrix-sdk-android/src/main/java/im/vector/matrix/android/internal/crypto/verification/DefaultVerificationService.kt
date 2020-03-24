@@ -456,7 +456,7 @@ internal class DefaultVerificationService @Inject constructor(
     private suspend fun handleStart(otherUserId: String?,
                                     startReq: ValidVerificationInfoStart,
                                     txConfigure: (DefaultVerificationTransaction) -> Unit): CancelCode? {
-        Timber.d("## SAS onStartRequestReceived ${startReq}")
+        Timber.d("## SAS onStartRequestReceived $startReq")
         if (otherUserId?.let { checkKeysAreDownloaded(it, startReq.fromDevice) } != null) {
             val tid = startReq.transactionId
             var existing = getExistingTransaction(otherUserId, tid)
@@ -549,7 +549,7 @@ internal class DefaultVerificationService @Inject constructor(
                         existing.onStartReceived(startReq)
                         return null
                     } else {
-                        Timber.w("## SAS onStartRequestReceived - unexpected message ${startReq.transactionId} / ${existing}")
+                        Timber.w("## SAS onStartRequestReceived - unexpected message ${startReq.transactionId} / $existing")
                         return CancelCode.UnexpectedMessage
                     }
                 }

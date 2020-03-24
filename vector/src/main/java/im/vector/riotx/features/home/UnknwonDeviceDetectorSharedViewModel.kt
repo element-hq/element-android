@@ -36,8 +36,8 @@ import im.vector.riotx.core.platform.VectorViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 
 data class UnknownDevicesState(
-        val unknownSessions: Async<List<Pair<MatrixItem?,DeviceInfo>>?> = Uninitialized,
-        val verifiedSessions: Async<List<Pair<MatrixItem?,DeviceInfo>>?> = Uninitialized,
+        val unknownSessions: Async<List<Pair<MatrixItem?, DeviceInfo>>?> = Uninitialized,
+        val verifiedSessions: Async<List<Pair<MatrixItem?, DeviceInfo>>?> = Uninitialized,
         val canCrossSign: Boolean = false
 ) : MvRxState
 

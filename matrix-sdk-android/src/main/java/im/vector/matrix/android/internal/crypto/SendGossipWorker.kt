@@ -99,7 +99,6 @@ internal class SendGossipWorker(context: Context,
             }
         }
 
-
         val payloadJson = mapOf(
                 "type" to EventType.SEND_SECRET,
                 "content" to toDeviceContent.toContent()
@@ -111,7 +110,6 @@ internal class SendGossipWorker(context: Context,
         } catch (failure: Throwable) {
             Timber.e("## Fail to encrypt gossip + ${failure.localizedMessage}")
         }
-
 
         cryptoStore.saveGossipingEvent(Event(
                 type = eventType,

@@ -187,7 +187,6 @@ class KeyShareTests : InstrumentedTest {
 
     @Test
     fun test_ShareSSSSSecret() {
-
         val aliceSession1 = mTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
 
         mTestHelper.doSync<Unit> {
@@ -203,7 +202,7 @@ class KeyShareTests : InstrumentedTest {
         val aliceVerificationService1 = aliceSession1.cryptoService().verificationService()
         val aliceVerificationService2 = aliceSession2.cryptoService().verificationService()
 
-        //force keys download
+        // force keys download
         mTestHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> {
             aliceSession1.cryptoService().downloadKeys(listOf(aliceSession1.myUserId), true, it)
         }
@@ -245,7 +244,6 @@ class KeyShareTests : InstrumentedTest {
         aliceVerificationService2.beginKeyVerification(VerificationMethod.SAS, aliceSession1.myUserId, aliceSession1.sessionParams.credentials.deviceId
                 ?: "", txId)
 
-
         mTestHelper.waitWithLatch { latch ->
             mTestHelper.retryPeriodicallyWithLatch(latch) {
                 aliceSession1.cryptoService().getDeviceInfo(aliceSession1.myUserId, aliceSession2.sessionParams.credentials.deviceId ?: "")?.isVerified == true
@@ -267,5 +265,4 @@ class KeyShareTests : InstrumentedTest {
             }
         }
     }
-
 }
