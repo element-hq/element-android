@@ -133,7 +133,6 @@ internal class IncomingGossipingRequestManager @Inject constructor(
      * It must be called on CryptoThread
      */
     fun processReceivedGossipingRequests() {
-        Timber.v("## GOSSIP processReceivedGossipingRequests()")
 
         val roomKeyRequestsToProcess = receivedGossipingRequests.toList()
         receivedGossipingRequests.clear()

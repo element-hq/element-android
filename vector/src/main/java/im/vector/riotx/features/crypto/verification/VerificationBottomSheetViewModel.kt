@@ -142,9 +142,15 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                    args: VerificationBottomSheet.VerificationArgs): VerificationBottomSheetViewModel
     }
 
-    fun queryCancel() {
-        setState {
-            copy(userWantsToCancel = true)
+    fun queryCancel() = withState {
+        if (it.userThinkItsNotHim) {
+            setState {
+                copy(userThinkItsNotHim = false)
+            }
+        } else {
+            setState {
+                copy(userWantsToCancel = true)
+            }
         }
     }
 
