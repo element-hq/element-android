@@ -40,7 +40,8 @@ data class UnknownDevicesState(
         val canCrossSign: Boolean = false
 ) : MvRxState
 
-class UnknownDeviceDetectorSharedViewModel(session: Session, initialState: UnknownDevicesState) : VectorViewModel<UnknownDevicesState, EmptyAction, EmptyViewEvents>(initialState) {
+class UnknownDeviceDetectorSharedViewModel(session: Session, initialState: UnknownDevicesState)
+    : VectorViewModel<UnknownDevicesState, EmptyAction, EmptyViewEvents>(initialState) {
 
     init {
         session.rx().liveUserCryptoDevices(session.myUserId)

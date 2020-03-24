@@ -43,7 +43,6 @@ import im.vector.riotx.features.disclaimer.showDisclaimerDialog
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.popup.DefaultVectorAlert
 import im.vector.riotx.features.popup.PopupAlertManager
-import im.vector.riotx.features.popup.VerificationVectorAlert
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.workers.signout.SignOutViewModel

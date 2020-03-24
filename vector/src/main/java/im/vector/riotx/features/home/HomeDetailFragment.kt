@@ -42,7 +42,6 @@ import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.home.room.list.RoomListParams
 import im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
 import im.vector.riotx.features.popup.PopupAlertManager
-import im.vector.riotx.features.popup.VectorAlert
 import im.vector.riotx.features.popup.VerificationVectorAlert
 import im.vector.riotx.features.workers.signout.SignOutViewModel
 import kotlinx.android.synthetic.main.fragment_home_detail.*
