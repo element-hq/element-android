@@ -3,7 +3,7 @@
 
     <application>
         <provider
-            android:name=".MultiPickerFileProvider"
+            android:name=".provider.MultiPickerFileProvider"
             android:authorities="${applicationId}.multipicker.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">

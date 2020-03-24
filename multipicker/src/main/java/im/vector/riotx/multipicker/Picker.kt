@@ -26,10 +26,6 @@ abstract class Picker<T>(open val requestCode: Int) {
 
     protected var single = false
 
-    abstract fun startWith(activity: Activity)
-
-    abstract fun startWith(fragment: Fragment)
-
     open fun startWithExpectingFile(activity: Activity): Uri? = null
 
     open fun startWithExpectingFile(fragment: Fragment): Uri? = null
@@ -43,6 +39,16 @@ abstract class Picker<T>(open val requestCode: Int) {
     fun single(): Picker<T> {
         single = true
         return this
+    }
+
+    abstract fun createIntent(): Intent
+
+    fun startWith(activity: Activity) {
+        activity.startActivityForResult(createIntent(), requestCode)
+    }
+
+    fun startWith(fragment: Fragment) {
+        fragment.startActivityForResult(createIntent(), requestCode)
     }
 
     protected fun getSelectedUriList(data: Intent?): List<Uri> {

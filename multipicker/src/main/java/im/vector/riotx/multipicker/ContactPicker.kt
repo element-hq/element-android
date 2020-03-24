@@ -26,14 +26,6 @@ import im.vector.riotx.multipicker.entity.MultiPickerContactType
 
 class ContactPicker(override val requestCode: Int) : Picker<MultiPickerContactType>(requestCode) {
 
-    override fun startWith(activity: Activity) {
-        activity.startActivityForResult(createIntent(), requestCode)
-    }
-
-    override fun startWith(fragment: Fragment) {
-        fragment.startActivityForResult(createIntent(), requestCode)
-    }
-
     override fun getSelectedFiles(context: Context, requestCode: Int, resultCode: Int, data: Intent?): List<MultiPickerContactType> {
         if (requestCode != this.requestCode && resultCode != Activity.RESULT_OK) {
             return emptyList()
@@ -126,7 +118,7 @@ class ContactPicker(override val requestCode: Int) : Picker<MultiPickerContactTy
         }
     }
 
-    private fun createIntent(): Intent {
+    override fun createIntent(): Intent {
         return Intent(Intent.ACTION_PICK).apply {
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, !single)
             type = ContactsContract.Contacts.CONTENT_TYPE

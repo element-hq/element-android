@@ -19,20 +19,10 @@ package im.vector.riotx.multipicker
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.provider.OpenableColumns
-import androidx.fragment.app.Fragment
 import im.vector.riotx.multipicker.entity.MultiPickerFileType
 
 class FilePicker(override val requestCode: Int) : Picker<MultiPickerFileType>(requestCode) {
-
-    override fun startWith(activity: Activity) {
-        activity.startActivityForResult(createIntent(), requestCode)
-    }
-
-    override fun startWith(fragment: Fragment) {
-        fragment.startActivityForResult(createIntent(), requestCode)
-    }
 
     override fun getSelectedFiles(context: Context, requestCode: Int, resultCode: Int, data: Intent?): List<MultiPickerFileType> {
         if (requestCode != this.requestCode && resultCode != Activity.RESULT_OK) {
@@ -64,7 +54,7 @@ class FilePicker(override val requestCode: Int) : Picker<MultiPickerFileType>(re
         return fileList
     }
 
-    private fun createIntent(): Intent {
+    override fun createIntent(): Intent {
         return Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, !single)

@@ -27,14 +27,6 @@ import im.vector.riotx.multipicker.entity.MultiPickerAudioType
 
 class AudioPicker(override val requestCode: Int) : Picker<MultiPickerAudioType>(requestCode) {
 
-    override fun startWith(activity: Activity) {
-        activity.startActivityForResult(createIntent(), requestCode)
-    }
-
-    override fun startWith(fragment: Fragment) {
-        fragment.startActivityForResult(createIntent(), requestCode)
-    }
-
     override fun getSelectedFiles(context: Context, requestCode: Int, resultCode: Int, data: Intent?): List<MultiPickerAudioType> {
         if (requestCode != this.requestCode && resultCode != Activity.RESULT_OK) {
             return emptyList()
@@ -84,7 +76,7 @@ class AudioPicker(override val requestCode: Int) : Picker<MultiPickerAudioType>(
         return audioList
     }
 
-    private fun createIntent(): Intent {
+    override fun createIntent(): Intent {
         return Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, !single)

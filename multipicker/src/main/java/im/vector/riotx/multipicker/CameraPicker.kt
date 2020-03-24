@@ -28,6 +28,7 @@ import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import im.vector.riotx.multipicker.entity.MultiPickerImageType
+import im.vector.riotx.multipicker.utils.ImageUtils
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -74,25 +75,8 @@ class CameraPicker(val requestCode: Int) {
                     val name = cursor.getString(nameColumn)
                     val size = cursor.getLong(sizeColumn)
 
-                    var orientation = 0
-
-                    val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, photoUri))
-                    } else {
-                        context.contentResolver.openInputStream(photoUri)?.use { inputStream ->
-                            BitmapFactory.decodeStream(inputStream)
-                        }
-                    }
-
-                    context.contentResolver.openInputStream(photoUri)?.use { inputStream ->
-                        try {
-                            ExifInterface(inputStream).let {
-                                orientation = it.rotationDegrees
-                            }
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                    }
+                    val bitmap = ImageUtils.getBitmap(context, photoUri)
+                    val orientation = ImageUtils.getOrientation(context, photoUri)
 
                     return MultiPickerImageType(
                             name,

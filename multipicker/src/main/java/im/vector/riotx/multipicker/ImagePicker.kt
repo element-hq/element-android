@@ -27,16 +27,9 @@ import android.provider.MediaStore
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import im.vector.riotx.multipicker.entity.MultiPickerImageType
+import im.vector.riotx.multipicker.utils.ImageUtils
 
 class ImagePicker(override val requestCode: Int) : Picker<MultiPickerImageType>(requestCode) {
-
-    override fun startWith(activity: Activity) {
-        activity.startActivityForResult(createIntent(), requestCode)
-    }
-
-    override fun startWith(fragment: Fragment) {
-        fragment.startActivityForResult(createIntent(), requestCode)
-    }
 
     override fun getSelectedFiles(context: Context, requestCode: Int, resultCode: Int, data: Intent?): List<MultiPickerImageType> {
         if (requestCode != this.requestCode && resultCode != Activity.RESULT_OK) {
@@ -65,25 +58,8 @@ class ImagePicker(override val requestCode: Int) : Picker<MultiPickerImageType>(
                     val name = cursor.getString(nameColumn)
                     val size = cursor.getLong(sizeColumn)
 
-                    var orientation = 0
-
-                    val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, selectedUri))
-                    } else {
-                        context.contentResolver.openInputStream(selectedUri)?.use { inputStream ->
-                            BitmapFactory.decodeStream(inputStream)
-                        }
-                    }
-
-                    context.contentResolver.openInputStream(selectedUri)?.use { inputStream ->
-                        try {
-                            ExifInterface(inputStream).let {
-                                orientation = it.rotationDegrees
-                            }
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                    }
+                    val bitmap = ImageUtils.getBitmap(context, selectedUri)
+                    val orientation = ImageUtils.getOrientation(context, selectedUri)
 
                     imageList.add(
                             MultiPickerImageType(
@@ -102,7 +78,7 @@ class ImagePicker(override val requestCode: Int) : Picker<MultiPickerImageType>(
         return imageList
     }
 
-    private fun createIntent(): Intent {
+    override fun createIntent(): Intent {
         return Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, !single)
