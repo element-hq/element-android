@@ -36,6 +36,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.verification.CancelCode
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
@@ -263,7 +264,14 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         // Transaction has not yet started
         if (state.pendingRequest.invoke()?.cancelConclusion != null) {
             // The request has been declined, we should dismiss
-            dismiss()
+            otherUserNameText.text = getString(R.string.verification_cancelled)
+            showFragment(VerificationConclusionFragment::class, Bundle().apply {
+                putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(
+                        false,
+                        state.pendingRequest.invoke()?.cancelConclusion?.value ?: CancelCode.User.value,
+                        state.isMe))
+            })
+            return@withState
         }
 
         // If it's an outgoing
@@ -306,6 +314,10 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 )
             }
         }
+    }
+
+    override fun dismiss() {
+        super.dismiss()
     }
 
     companion object {

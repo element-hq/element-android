@@ -66,12 +66,7 @@ class VerificationConclusionFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        if (state.conclusionState == ConclusionState.CANCELLED) {
-            // Just dismiss in this case
-            sharedViewModel.handle(VerificationAction.GotItConclusion)
-        } else {
-            controller.update(state)
-        }
+        controller.update(state)
     }
 
     override fun onButtonTapped() {

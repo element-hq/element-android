@@ -28,6 +28,9 @@
         One of the following may be compromised:\n\n- Your password\n- Your homeserver\n- This device, or the other device\n- The internet connection either device is using\n\nWe recommend you change your password &amp; recovery key in Settings immediately.
     </string>
 
+    <string name="verify_cancelled_notice">Verify your devices from Settings.</string>
+    <string name="verification_cancelled">Verification Cancelled</string>
+
     <!-- END Strings added by Valere -->
 
 
