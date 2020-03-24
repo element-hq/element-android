@@ -41,6 +41,7 @@ import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.pushers.PushersManager
 import im.vector.riotx.features.disclaimer.showDisclaimerDialog
 import im.vector.riotx.features.notifications.NotificationDrawerManager
+import im.vector.riotx.features.popup.DefaultVectorAlert
 import im.vector.riotx.features.popup.PopupAlertManager
 import im.vector.riotx.features.popup.VerificationVectorAlert
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
@@ -152,7 +153,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             // We need to ask
             sharedActionViewModel.hasDisplayedCompleteSecurityPrompt = true
             popupAlertManager.postVectorAlert(
-                    VerificationVectorAlert(
+                    DefaultVectorAlert(
                             uid = "completeSecurity",
                             title = getString(R.string.new_signin),
                             description = getString(R.string.complete_security),
