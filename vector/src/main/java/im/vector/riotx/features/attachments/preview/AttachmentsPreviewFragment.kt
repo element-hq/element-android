@@ -202,7 +202,6 @@ class AttachmentsPreviewFragment @Inject constructor(
     private fun doHandleEditAction() = withState(viewModel) {
         val currentAttachment = it.attachments.getOrNull(it.currentAttachmentIndex) ?: return@withState
         val destinationFile = File(requireContext().cacheDir, "${currentAttachment.name}_edited_image_${System.currentTimeMillis()}")
-        // Note: using currentAttachment.queryUri.toUri() make the app crash when sharing from Google Photos
         val uri = currentAttachment.queryUri
         UCrop.of(uri, destinationFile.toUri())
                 .withOptions(

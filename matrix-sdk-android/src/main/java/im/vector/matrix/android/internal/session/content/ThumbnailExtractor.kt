@@ -44,6 +44,7 @@ internal object ThumbnailExtractor {
     }
 
     private fun extractVideoThumbnail(context: Context, attachment: ContentAttachmentData): ThumbnailData? {
+        var thumbnailData: ThumbnailData? = null
         val mediaMetadataRetriever = MediaMetadataRetriever()
         try {
             mediaMetadataRetriever.setDataSource(context, attachment.queryUri)
@@ -64,7 +65,7 @@ internal object ThumbnailExtractor {
             val thumbnailWidth = thumbnail.width
             val thumbnailHeight = thumbnail.height
             val thumbnailSize = outputStream.size()
-            val thumbnailData = ThumbnailData(
+            thumbnailData = ThumbnailData(
                     width = thumbnailWidth,
                     height = thumbnailHeight,
                     size = thumbnailSize.toLong(),
@@ -73,10 +74,11 @@ internal object ThumbnailExtractor {
             )
             thumbnail.recycle()
             outputStream.reset()
-            return thumbnailData
         } catch (e: Exception) {
             Timber.e(e, "Cannot extract video thumbnail")
-            return null
+        } finally {
+            mediaMetadataRetriever.release()
         }
+        return thumbnailData
     }
 }
