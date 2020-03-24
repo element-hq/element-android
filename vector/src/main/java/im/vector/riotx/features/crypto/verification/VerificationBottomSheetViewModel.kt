@@ -155,6 +155,11 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     }
 
     fun confirmCancel() = withState { state ->
+        cancelAllPendingVerifications(state)
+        _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
+    }
+
+    private fun cancelAllPendingVerifications(state: VerificationBottomSheetViewState) {
         session.cryptoService()
                 .verificationService().getExistingVerificationRequest(state.otherUserMxItem?.id ?: "", state.transactionId)?.let {
                     session.cryptoService().verificationService().cancelVerificationRequest(it)
@@ -163,7 +168,6 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 .verificationService()
                 .getExistingTransaction(state.otherUserMxItem?.id ?: "", state.transactionId ?: "")
                 ?.cancel(CancelCode.User)
-        _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
     }
 
     fun continueFromCancel() {
@@ -185,10 +189,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     }
 
     fun goToSettings() = withState { state ->
-        session.cryptoService()
-                .verificationService()
-                .getExistingTransaction(state.otherUserMxItem?.id ?: "", state.transactionId ?: "")
-                ?.cancel(CancelCode.User)
+        cancelAllPendingVerifications(state)
         _viewEvents.post(VerificationBottomSheetViewEvents.GoToSettings)
     }
 
