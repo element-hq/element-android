@@ -42,6 +42,7 @@ import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.home.room.list.RoomListParams
 import im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
 import im.vector.riotx.features.popup.PopupAlertManager
+import im.vector.riotx.features.popup.VectorAlert
 import im.vector.riotx.features.workers.signout.SignOutViewModel
 import kotlinx.android.synthetic.main.fragment_home_detail.*
 import timber.log.Timber
@@ -53,7 +54,8 @@ private const val INDEX_ROOMS = 2
 
 class HomeDetailFragment @Inject constructor(
         val homeDetailViewModelFactory: HomeDetailViewModel.Factory,
-        private val avatarRenderer: AvatarRenderer
+        private val avatarRenderer: AvatarRenderer,
+        private val alertManager: PopupAlertManager
 ) : VectorBaseFragment(), KeysBackupBanner.Delegate {
 
     private val unreadCounterBadgeViews = arrayListOf<UnreadCounterBadgeView>()
@@ -89,19 +91,21 @@ class HomeDetailFragment @Inject constructor(
             it.unknownSessions.invoke()?.let { unknownDevices ->
                 Timber.v("## Detector - ${unknownDevices.size} Unknown sessions")
                 unknownDevices.forEachIndexed { index, deviceInfo ->
-                    Timber.v("## Detector - #${index} deviceId:${deviceInfo.deviceId} lastSeenTs:${deviceInfo.lastSeenTs}")
+                    Timber.v("## Detector - #${index} deviceId:${deviceInfo.second.deviceId} lastSeenTs:${deviceInfo.second.lastSeenTs}")
                 }
                 if (it.canCrossSign && unknownDevices.isNotEmpty()) {
-                    val newest = unknownDevices.first()
+                    val newest = unknownDevices.first().second
+                    val user = unknownDevices.first().first
                     val uid = "ND_${newest.deviceId}"
-                    PopupAlertManager.cancelAlert(uid)
-                    PopupAlertManager.postVectorAlert(
-                            PopupAlertManager.VectorAlert(
+                    alertManager.cancelAlert(uid)
+                    alertManager.postVectorAlert(
+                            VectorAlert(
                                     uid = uid,
                                     title = getString(R.string.new_session),
                                     description = getString(R.string.new_session_review),
                                     iconId = R.drawable.ic_shield_warning
                             ).apply {
+                                matrixItem = user
                                 colorInt = ContextCompat.getColor(requireActivity(), R.color.riotx_accent)
                                 contentAction = Runnable {
                                     (weakCurrentActivity?.get() as? VectorBaseActivity)

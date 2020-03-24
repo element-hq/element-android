@@ -22,12 +22,12 @@ import android.os.Bundle
 import im.vector.riotx.features.popup.PopupAlertManager
 import javax.inject.Inject
 
-class VectorActivityLifecycleCallbacks @Inject constructor() : Application.ActivityLifecycleCallbacks {
+class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager: PopupAlertManager) : Application.ActivityLifecycleCallbacks {
     override fun onActivityPaused(activity: Activity) {
     }
 
     override fun onActivityResumed(activity: Activity) {
-        PopupAlertManager.onNewActivityDisplayed(activity)
+        popupAlertManager.onNewActivityDisplayed(activity)
     }
 
     override fun onActivityStarted(activity: Activity) {

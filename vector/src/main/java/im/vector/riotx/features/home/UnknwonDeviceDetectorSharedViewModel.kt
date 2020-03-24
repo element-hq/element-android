@@ -22,7 +22,9 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.NoOpCancellable
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.matrix.rx.rx
@@ -34,7 +36,8 @@ import im.vector.riotx.core.platform.VectorViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 
 data class UnknownDevicesState(
-        val unknownSessions: Async<List<DeviceInfo>?> = Uninitialized,
+        val unknownSessions: Async<List<Pair<MatrixItem?,DeviceInfo>>?> = Uninitialized,
+        val verifiedSessions: Async<List<Pair<MatrixItem?,DeviceInfo>>?> = Uninitialized,
         val canCrossSign: Boolean = false
 ) : MvRxState
 
@@ -51,6 +54,9 @@ class UnknownDeviceDetectorSharedViewModel(session: Session, initialState: Unkno
                         resp.devices?.filter { info ->
                             deviceList.firstOrNull { info.deviceId == it.deviceId }?.isVerified?.not() ?: false
                         }?.sortedByDescending { it.lastSeenTs }
+                                ?.map {
+                                    session.getUser(it.user_id ?: "")?.toMatrixItem() to it
+                                }
                     }
                             .toObservable()
                 }

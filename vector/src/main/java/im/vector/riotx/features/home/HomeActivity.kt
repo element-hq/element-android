@@ -42,6 +42,8 @@ import im.vector.riotx.core.pushers.PushersManager
 import im.vector.riotx.features.disclaimer.showDisclaimerDialog
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.popup.PopupAlertManager
+import im.vector.riotx.features.popup.VectorAlert
+import im.vector.riotx.features.popup.VerificationVectorAlert
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.workers.signout.SignOutViewModel
@@ -60,6 +62,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     @Inject lateinit var pushManager: PushersManager
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var popupAlertManager: PopupAlertManager
 
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
         override fun onDrawerStateChanged(newState: Int) {
@@ -149,8 +152,8 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         if (crossSigningEnabledOnAccount && myCrossSigningKeys?.isTrusted() == false) {
             // We need to ask
             sharedActionViewModel.hasDisplayedCompleteSecurityPrompt = true
-            PopupAlertManager.postVectorAlert(
-                    PopupAlertManager.VectorAlert(
+            popupAlertManager.postVectorAlert(
+                    VerificationVectorAlert(
                             uid = "completeSecurity",
                             title = getString(R.string.new_signin),
                             description = getString(R.string.complete_security),
