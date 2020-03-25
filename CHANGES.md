@@ -10,6 +10,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Missing avatar/displayname after verification request message (#841)
+ - Crypto | RiotX sometimes rotate the current device keys (#1170)
 
 Translations 🗣:
  -
