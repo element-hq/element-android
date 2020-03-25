@@ -96,11 +96,9 @@ class VerificationConclusionController @Inject constructor(
                     iconRes(R.drawable.ic_arrow_right)
                     iconColor(colorProvider.getColor(R.color.riotx_accent))
                     listener { listener?.onButtonTapped() }
-
                 }
             }
         }
-
     }
 
     private fun bottomDone() {
