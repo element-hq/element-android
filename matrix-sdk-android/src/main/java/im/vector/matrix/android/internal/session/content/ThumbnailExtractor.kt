@@ -22,8 +22,6 @@ import android.media.MediaMetadataRetriever
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
-import kotlin.math.max
-import kotlin.math.roundToInt
 
 internal object ThumbnailExtractor {
 
@@ -48,17 +46,7 @@ internal object ThumbnailExtractor {
         val mediaMetadataRetriever = MediaMetadataRetriever()
         try {
             mediaMetadataRetriever.setDataSource(context, attachment.queryUri)
-            var thumbnail = mediaMetadataRetriever.frameAtTime
-            // Scale down the bitmap if it's too large.
-            val width: Int = thumbnail.width
-            val height: Int = thumbnail.height
-            val max = max(width, height)
-            if (max > 512) {
-                val scale = 512f / max
-                val w = (scale * width).roundToInt()
-                val h = (scale * height).roundToInt()
-                thumbnail = Bitmap.createScaledBitmap(thumbnail, w, h, true)
-            }
+            val thumbnail = mediaMetadataRetriever.frameAtTime
 
             val outputStream = ByteArrayOutputStream()
             thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
