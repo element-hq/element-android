@@ -23,6 +23,7 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import androidx.exifinterface.media.ExifInterface
+import timber.log.Timber
 
 object ImageUtils {
 
@@ -36,7 +37,7 @@ object ImageUtils {
                 }
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Timber.e(e, "Cannot decode Bitmap: %s", uri.toString())
             null
         }
     }
@@ -49,7 +50,7 @@ object ImageUtils {
                     orientation = it.rotationDegrees
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                Timber.e(e, "Cannot read orientation: %s", uri.toString())
             }
         }
         return orientation
