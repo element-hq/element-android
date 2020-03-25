@@ -90,7 +90,14 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
         var newImageAttributes: NewImageAttributes? = null
 
         try {
-            val inputStream = context.contentResolver.openInputStream(attachment.queryUri) ?: return Result.success()
+            val inputStream = context.contentResolver.openInputStream(attachment.queryUri)
+                    ?: return Result.success(
+                            WorkerParamsFactory.toData(
+                                    params.copy(
+                                            lastFailureMessage = "Cannot openInputStream for file: " + attachment.queryUri.toString()
+                                    )
+                            )
+                    )
 
             inputStream.use {
                 var uploadedThumbnailUrl: String? = null
@@ -122,8 +129,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
 
                         uploadedThumbnailUrl = contentUploadResponse.contentUri
                     } catch (t: Throwable) {
-                        Timber.e(t)
-                        return handleFailure(params, t)
+                        Timber.e(t, "Thumbnail update failed")
                     }
                 }
 
