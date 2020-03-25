@@ -19,6 +19,8 @@ package im.vector.riotx.multipicker
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.net.Uri
 import androidx.fragment.app.Fragment
 
@@ -42,6 +44,23 @@ abstract class Picker<T>(open val requestCode: Int) {
      * by using android.intent.action.SEND or android.intent.action.SEND_MULTIPLE actions.
      */
     fun getIncomingFiles(context: Context, data: Intent?): List<T> {
+        if (data == null) return emptyList()
+
+        val uriList = mutableListOf<Uri>()
+        if (data.action == Intent.ACTION_SEND) {
+            (data.getParcelableExtra(Intent.EXTRA_STREAM) as? Uri)?.let { uriList.add(it) }
+        } else if (data.action == Intent.ACTION_SEND_MULTIPLE) {
+            val extraUriList: List<Uri>? = data.getParcelableArrayListExtra(Intent.EXTRA_STREAM)
+            extraUriList?.let { uriList.addAll(it) }
+        }
+
+        val resInfoList: List<ResolveInfo> = context.packageManager.queryIntentActivities(data, PackageManager.MATCH_DEFAULT_ONLY)
+        uriList.forEach {
+            for (resolveInfo in resInfoList) {
+                val packageName: String = resolveInfo.activityInfo.packageName
+                context.grantUriPermission(packageName, it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+        }
         return getSelectedFiles(context, requestCode, Activity.RESULT_OK, data)
     }
 
@@ -60,7 +79,7 @@ abstract class Picker<T>(open val requestCode: Int) {
      * @param activity Activity to handle onActivityResult().
      */
     fun startWith(activity: Activity) {
-        activity.startActivityForResult(createIntent(), requestCode)
+        activity.startActivityForResult(createIntent().apply { addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) }, requestCode)
     }
 
     /**
@@ -68,7 +87,7 @@ abstract class Picker<T>(open val requestCode: Int) {
      * @param fragment Fragment to handle onActivityResult().
      */
     fun startWith(fragment: Fragment) {
-        fragment.startActivityForResult(createIntent(), requestCode)
+        fragment.startActivityForResult(createIntent().apply { addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) }, requestCode)
     }
 
     protected fun getSelectedUriList(data: Intent?): List<Uri> {
