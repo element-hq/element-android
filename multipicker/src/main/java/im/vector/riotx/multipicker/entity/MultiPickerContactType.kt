@@ -21,12 +21,4 @@ data class MultiPickerContactType(
         val photoUri: String?,
         val phoneNumberList: List<String>,
         val emailList: List<String>
-) {
-    private val CONTACT_FORMAT = "Name: %s, Photo: %s, Phones: %s, Emails: %s"
-
-    override fun toString(): String {
-        val phoneNumberString = phoneNumberList.joinToString(separator = ", ", prefix = "[", postfix = "]")
-        val emailString = emailList.joinToString(separator = ", ", prefix = "[", postfix = "]")
-        return String.format(CONTACT_FORMAT, displayName, photoUri, phoneNumberString, emailString)
-    }
-}
+)
