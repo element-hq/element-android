@@ -122,27 +122,8 @@ internal class RealmCryptoStore @Inject constructor(
             .setRealmConfiguration(realmConfiguration)
             .build()
 
-    /* ==========================================================================================
-     * Other data
-     * ========================================================================================== */
 
-    override fun hasData(): Boolean {
-        return doWithRealm(realmConfiguration) {
-            !it.isEmpty
-                    // Check if there is a MetaData object
-                    && it.where<CryptoMetadataEntity>().count() > 0
-        }
-    }
-
-    override fun deleteStore() {
-        doRealmTransaction(realmConfiguration) {
-            it.deleteAll()
-        }
-    }
-
-    override fun open() {
-        realmLocker = Realm.getInstance(realmConfiguration)
-
+    init {
         // Ensure CryptoMetadataEntity is inserted in DB
         doRealmTransaction(realmConfiguration) { realm ->
             var currentMetadata = realm.where<CryptoMetadataEntity>().findFirst()
@@ -172,6 +153,27 @@ internal class RealmCryptoStore @Inject constructor(
                 }
             }
         }
+    }
+    /* ==========================================================================================
+     * Other data
+     * ========================================================================================== */
+
+    override fun hasData(): Boolean {
+        return doWithRealm(realmConfiguration) {
+            !it.isEmpty
+                    // Check if there is a MetaData object
+                    && it.where<CryptoMetadataEntity>().count() > 0
+        }
+    }
+
+    override fun deleteStore() {
+        doRealmTransaction(realmConfiguration) {
+            it.deleteAll()
+        }
+    }
+
+    override fun open() {
+        realmLocker = Realm.getInstance(realmConfiguration)
     }
 
     override fun close() {
@@ -203,21 +205,33 @@ internal class RealmCryptoStore @Inject constructor(
         }?.deviceId ?: ""
     }
 
-    override fun storeAccount(account: OlmAccount) {
-        olmAccount = account
-
+    override fun saveAccount() {
         doRealmTransaction(realmConfiguration) {
-            it.where<CryptoMetadataEntity>().findFirst()?.putOlmAccount(account)
+            it.where<CryptoMetadataEntity>().findFirst()?.putOlmAccount(olmAccount)
         }
     }
 
-    override fun getAccount(): OlmAccount? {
-        if (olmAccount == null) {
-            olmAccount = doRealmQueryAndCopy(realmConfiguration) { it.where<CryptoMetadataEntity>().findFirst() }?.getOlmAccount()
-        }
-
-        return olmAccount
+    override fun getAccount(): OlmAccount {
+        return olmAccount!!
     }
+
+    override fun getOrCreateOlmAccount(): OlmAccount {
+        doRealmTransaction(realmConfiguration) {
+           val metaData = it.where<CryptoMetadataEntity>().findFirst()
+            val existing =  metaData!!.getOlmAccount()
+            if (existing == null) {
+                Timber.d("## Crypto Creating olm account")
+                val created = OlmAccount()
+                metaData.putOlmAccount(created)
+                olmAccount = created
+            } else {
+                Timber.d("## Crypto Access existing account")
+                olmAccount = existing
+            }
+        }
+        return olmAccount!!
+    }
+
 
     override fun storeUserDevice(userId: String?, deviceInfo: CryptoDeviceInfo?) {
         if (userId == null || deviceInfo == null) {

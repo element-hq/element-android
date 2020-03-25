@@ -49,7 +49,10 @@ internal interface IMXCryptoStore {
     /**
      * @return the olm account
      */
-    fun getAccount(): OlmAccount?
+    fun getAccount(): OlmAccount
+
+
+    fun getOrCreateOlmAccount(): OlmAccount
 
     /**
      * Retrieve the known inbound group sessions.
@@ -159,7 +162,7 @@ internal interface IMXCryptoStore {
      *
      * @param account the account to save
      */
-    fun storeAccount(account: OlmAccount)
+    fun saveAccount()
 
     /**
      * Store a device for a user.
