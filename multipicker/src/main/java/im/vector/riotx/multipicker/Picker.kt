@@ -103,10 +103,11 @@ abstract class Picker<T>(open val requestCode: Int) {
             selectedUriList.add(dataUri)
         } else {
             data?.extras?.get(Intent.EXTRA_STREAM)?.let {
-                @Suppress("UNCHECKED_CAST")
-                when (it) {
-                    is List<*> -> selectedUriList.addAll(it as List<Uri>)
-                    else     -> selectedUriList.add(it as Uri)
+                (it as? List<*>)?.filterIsInstance<Uri>()?.let { uriList ->
+                    selectedUriList.addAll(uriList)
+                }
+                if (it is Uri) {
+                    selectedUriList.add(it)
                 }
             }
         }
