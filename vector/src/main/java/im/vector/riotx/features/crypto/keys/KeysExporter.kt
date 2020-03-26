@@ -40,7 +40,7 @@ class KeysExporter(private val session: Session) {
             runCatching {
                 val data = awaitCallback<ByteArray> { session.cryptoService().exportRoomKeys(password, it) }
                 withContext(Dispatchers.IO) {
-                    val parentDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                    val parentDir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
                     val file = File(parentDir, "riotx-keys-" + System.currentTimeMillis() + ".txt")
 
                     writeToFile(data, file)
