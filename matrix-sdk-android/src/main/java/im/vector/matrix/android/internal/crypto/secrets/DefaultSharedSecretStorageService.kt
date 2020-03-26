@@ -272,7 +272,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         val ivParameterSpec = IvParameterSpec(iv)
         cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec)
         // secret are not that big, just do Final
-        val cipherBytes = cipher.doFinal(clearDataBase64.fromBase64())
+        val cipherBytes = cipher.doFinal(clearDataBase64.toByteArray())
         require(cipherBytes.isNotEmpty())
 
         val macKeySpec = SecretKeySpec(macKey, "HmacSHA256")
@@ -303,6 +303,15 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
 
         val cipherRawBytes = cipherContent.ciphertext?.fromBase64() ?: throw SharedSecretStorageError.BadCipherText
 
+        // Check Signature
+        val macKeySpec = SecretKeySpec(macKey, "HmacSHA256")
+        val mac = Mac.getInstance("HmacSHA256").apply { init(macKeySpec) }
+        val digest = mac.doFinal(cipherRawBytes)
+
+        if (!cipherContent.mac?.fromBase64()?.contentEquals(digest).orFalse()) {
+            throw SharedSecretStorageError.BadMac
+        }
+
         val cipher = Cipher.getInstance("AES/CTR/NoPadding")
 
         val secretKeySpec = SecretKeySpec(aesKey, "AES")
@@ -313,17 +322,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
 
         require(decryptedSecret.isNotEmpty())
 
-        // Check Signature
-        val macKeySpec = SecretKeySpec(macKey, "HmacSHA256")
-        val mac = Mac.getInstance("HmacSHA256").apply { init(macKeySpec) }
-        val digest = mac.doFinal(cipherRawBytes)
-
-        if (!cipherContent.mac?.fromBase64()?.contentEquals(digest).orFalse()) {
-            throw SharedSecretStorageError.BadMac
-        } else {
-            // we are good
-            return decryptedSecret.toBase64NoPadding()
-        }
+        return String(decryptedSecret, Charsets.UTF_8)
     }
 
     override fun getAlgorithmsForSecret(name: String): List<KeyInfoResult> {
