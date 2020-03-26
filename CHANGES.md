@@ -7,6 +7,7 @@ Features ✨:
 
 Improvements 🙌:
  - Verification DM / Handle concurrent .start after .ready (#794)
+ - CrossSigning / Update Shield Logic for DM (#963)
 
 Bugfix 🐛:
  - Missing avatar/displayname after verification request message (#841)
