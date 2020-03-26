@@ -9,6 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Missing avatar/displayname after verification request message (#841)
+ - RiotX can't restore cross signing keys saved by web in SSSS (#1174)
 
 Translations 🗣:
  -
