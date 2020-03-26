@@ -7,6 +7,7 @@ Features ✨:
 
 Improvements 🙌:
  - Verification DM / Handle concurrent .start after .ready (#794)
+ - CrossSigning / Update Shield Logic for DM (#963)
  - Xsigning | Complete security new session design update (#1135)
 
 Bugfix 🐛:
