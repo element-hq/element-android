@@ -68,7 +68,7 @@ internal class ShareSecretCryptoProvider @Inject constructor(
 
     fun decryptEvent(event: Event): MXEventDecryptionResult {
         return runBlocking(coroutineDispatchers.crypto) {
-            olmDecryptionFactory.create().decryptEvent(event, ShareSecretCryptoProvider::class.java.name ?: "")
+            olmDecryptionFactory.create().decryptEvent(event, ShareSecretCryptoProvider::class.java.name)
         }
     }
 }

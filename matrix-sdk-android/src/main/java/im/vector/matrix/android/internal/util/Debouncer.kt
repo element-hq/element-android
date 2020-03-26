@@ -25,8 +25,9 @@ internal class Debouncer(private val handler: Handler) {
     fun debounce(identifier: String, r: Runnable, millis: Long): Boolean {
         if (runnables.containsKey(identifier)) {
             // debounce
-            val old = runnables[identifier]
-            handler.removeCallbacks(old)
+            runnables[identifier]?.let {
+                handler.removeCallbacks(it)
+            }
         }
         insertRunnable(identifier, r, millis)
         return true

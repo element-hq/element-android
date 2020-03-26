@@ -84,7 +84,7 @@ fun requestDisablingBatteryOptimization(activity: Activity, fragment: Fragment?,
  */
 fun copyToClipboard(context: Context, text: CharSequence, showToast: Boolean = true, @StringRes toastMessage: Int = R.string.copied_to_clipboard) {
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    clipboard.primaryClip = ClipData.newPlainText("", text)
+    clipboard.setPrimaryClip(ClipData.newPlainText("", text))
     if (showToast) {
         context.toast(toastMessage)
     }
