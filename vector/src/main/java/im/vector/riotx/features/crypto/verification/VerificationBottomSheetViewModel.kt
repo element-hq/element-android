@@ -69,7 +69,7 @@ data class VerificationBottomSheetViewState(
 
 class VerificationBottomSheetViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationBottomSheetViewState,
-        @Assisted args: VerificationBottomSheet.VerificationArgs,
+        @Assisted val args: VerificationBottomSheet.VerificationArgs,
         private val session: Session,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider)
     : VectorViewModel<VerificationBottomSheetViewState, VerificationAction, VerificationBottomSheetViewEvents>(initialState),
@@ -447,7 +447,10 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 || pr.localId == state.pendingRequest.invoke()?.localId
                 || state.pendingRequest.invoke()?.transactionId == pr.transactionId) {
             setState {
-                copy(pendingRequest = Success(pr))
+                copy(
+                        transactionId = args.verificationId ?: pr.transactionId,
+                        pendingRequest = Success(pr)
+                )
             }
         }
     }
