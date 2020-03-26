@@ -58,7 +58,7 @@ class VerificationCancelController @Inject constructor(
         } else {
             bottomSheetVerificationNoticeItem {
                 id("notice")
-                notice(stringProvider.getString(R.string.verify_cancel_self_verification_from_untrusted))
+                notice(stringProvider.getString(R.string.verify_cancel_other))
             }
         }
 
