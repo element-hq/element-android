@@ -122,7 +122,6 @@ internal class RealmCryptoStore @Inject constructor(
             .setRealmConfiguration(realmConfiguration)
             .build()
 
-
     init {
         // Ensure CryptoMetadataEntity is inserted in DB
         doRealmTransaction(realmConfiguration) { realm ->
@@ -205,13 +204,13 @@ internal class RealmCryptoStore @Inject constructor(
         }?.deviceId ?: ""
     }
 
-    override fun saveAccount() {
+    override fun saveOlmAccount() {
         doRealmTransaction(realmConfiguration) {
             it.where<CryptoMetadataEntity>().findFirst()?.putOlmAccount(olmAccount)
         }
     }
 
-    override fun getAccount(): OlmAccount {
+    override fun getOlmAccount(): OlmAccount {
         return olmAccount!!
     }
 
@@ -231,7 +230,6 @@ internal class RealmCryptoStore @Inject constructor(
         }
         return olmAccount!!
     }
-
 
     override fun storeUserDevice(userId: String?, deviceInfo: CryptoDeviceInfo?) {
         if (userId == null || deviceInfo == null) {

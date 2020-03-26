@@ -51,7 +51,7 @@ internal class DefaultUploadKeysTask @Inject constructor(
                 oneTimeKeys = params.oneTimeKeys
         )
 
-        Timber.i("## Uploading device keys -> ${body}")
+        Timber.i("## Uploading device keys -> $body")
 
         return executeRequest(eventBus) {
             apiCall = if (encodedDeviceId.isBlank()) {

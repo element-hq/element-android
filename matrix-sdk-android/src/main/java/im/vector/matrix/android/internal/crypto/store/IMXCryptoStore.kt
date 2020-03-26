@@ -49,8 +49,7 @@ internal interface IMXCryptoStore {
     /**
      * @return the olm account
      */
-    fun getAccount(): OlmAccount
-
+    fun getOlmAccount(): OlmAccount
 
     fun getOrCreateOlmAccount(): OlmAccount
 
@@ -162,7 +161,7 @@ internal interface IMXCryptoStore {
      *
      * @param account the account to save
      */
-    fun saveAccount()
+    fun saveOlmAccount()
 
     /**
      * Store a device for a user.
