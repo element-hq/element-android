@@ -119,7 +119,7 @@ dependencies {
     implementation "ru.noties.markwon:core:$markwon_version"
 
     // Image
-    implementation 'androidx.exifinterface:exifinterface:1.1.0'
+    implementation 'androidx.exifinterface:exifinterface:1.3.0-alpha01'
     implementation 'id.zelory:compressor:3.0.0'
 
     // Database
