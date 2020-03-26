@@ -25,6 +25,7 @@ import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.convertToUTF8
 import org.greenrobot.eventbus.EventBus
+import timber.log.Timber
 import javax.inject.Inject
 
 internal interface UploadKeysTask : Task<UploadKeysTask.Params, KeysUploadResponse> {
@@ -49,6 +50,8 @@ internal class DefaultUploadKeysTask @Inject constructor(
                 deviceKeys = params.deviceKeys,
                 oneTimeKeys = params.oneTimeKeys
         )
+
+        Timber.i("## Uploading device keys -> $body")
 
         return executeRequest(eventBus) {
             apiCall = if (encodedDeviceId.isBlank()) {
