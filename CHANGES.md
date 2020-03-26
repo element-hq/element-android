@@ -18,7 +18,7 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
- -
+ - Increase targetSdkVersion to 29
 
 Build 🧱:
  -

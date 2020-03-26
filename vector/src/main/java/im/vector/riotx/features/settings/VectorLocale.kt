@@ -19,7 +19,7 @@ package im.vector.riotx.features.settings
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import androidx.core.content.edit
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
