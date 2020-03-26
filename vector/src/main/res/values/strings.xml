@@ -2126,7 +2126,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="crosssigning_other_user_not_trust">Other users may not trust it</string>
     <string name="complete_security">Complete Security</string>
 
-    <string name="verification_open_other_to_verify">Open an existing session &amp; use it to verify this one, granting it access to encrypted messages.</string>
+    <string name="verification_open_other_to_verify">Use an existing session to verify this one, granting it access to encrypted messages.</string>
 
 
     <string name="verification_profile_verify">Verify</string>
@@ -2166,8 +2166,8 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     </plurals>
     <string name="poll_item_selected_aria">Selected Option</string>
     <string name="command_description_poll">Creates a simple poll</string>
-    <string name="verification_cannot_access_other_session">Can‘t access an existing session?</string>
-    <string name="verification_use_passphrase">Use your recovery key or passphrase</string>
+    <string name="verification_cannot_access_other_session">Use a recovery method</string>
+    <string name="verification_use_passphrase">If you can’t access an existing session</string>
 
     <string name="new_signin">New Sign In</string>
 

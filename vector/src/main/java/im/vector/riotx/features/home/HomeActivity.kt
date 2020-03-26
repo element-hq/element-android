@@ -29,6 +29,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.riotx.R
@@ -41,8 +42,8 @@ import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.pushers.PushersManager
 import im.vector.riotx.features.disclaimer.showDisclaimerDialog
 import im.vector.riotx.features.notifications.NotificationDrawerManager
-import im.vector.riotx.features.popup.DefaultVectorAlert
 import im.vector.riotx.features.popup.PopupAlertManager
+import im.vector.riotx.features.popup.VerificationVectorAlert
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.workers.signout.SignOutViewModel
@@ -126,6 +127,12 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                 waiting_view.isVisible = true
             }
         })
+
+        // Ask again if the app is relaunched
+        if (!sharedActionViewModel.hasDisplayedCompleteSecurityPrompt
+                && activeSessionHolder.getSafeActiveSession()?.hasAlreadySynced() == true) {
+            promptCompleteSecurityIfNeeded()
+        }
     }
 
     private fun promptCompleteSecurityIfNeeded() {
@@ -152,13 +159,14 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             // We need to ask
             sharedActionViewModel.hasDisplayedCompleteSecurityPrompt = true
             popupAlertManager.postVectorAlert(
-                    DefaultVectorAlert(
+                    VerificationVectorAlert(
                             uid = "completeSecurity",
-                            title = getString(R.string.new_signin),
-                            description = getString(R.string.complete_security),
+                            title = getString(R.string.complete_security),
+                            description = getString(R.string.crosssigning_verify_this_session),
                             iconId = R.drawable.ic_shield_warning
                     ).apply {
-                        colorInt = ContextCompat.getColor(this@HomeActivity, R.color.riotx_destructive_accent)
+                        matrixItem = session.getUser(session.myUserId)?.toMatrixItem()
+                        colorInt = ContextCompat.getColor(this@HomeActivity, R.color.riotx_positive_accent)
                         contentAction = Runnable {
                             (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
                                 it.navigator.waitSessionVerification(it)
