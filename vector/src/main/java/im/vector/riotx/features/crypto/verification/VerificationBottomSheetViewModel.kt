@@ -357,7 +357,9 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                         }
                     }
                 } catch (failure: Throwable) {
-                    _viewEvents.post(VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage))
+                    failure.localizedMessage?.let {
+                        _viewEvents.post(VerificationBottomSheetViewEvents.ModalError(it))
+                    }
                 }
             }
         }.exhaustive

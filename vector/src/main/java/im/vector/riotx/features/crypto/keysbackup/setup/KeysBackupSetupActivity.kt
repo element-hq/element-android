@@ -153,7 +153,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                                         }
 
                                         override fun onFailure(failure: Throwable) {
-                                            toast(failure.localizedMessage)
+                                            failure.localizedMessage?.let { toast(it) }
                                             hideWaitingView()
                                         }
                                     })

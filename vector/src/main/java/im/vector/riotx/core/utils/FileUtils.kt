@@ -73,7 +73,7 @@ private fun logAction(file: File): Boolean {
  */
 private fun recursiveActionOnFile(file: File, action: ActionOnFile): Boolean {
     if (file.isDirectory) {
-        file.list().forEach {
+        file.list()?.forEach {
             val result = recursiveActionOnFile(File(file, it), action)
 
             if (!result) {

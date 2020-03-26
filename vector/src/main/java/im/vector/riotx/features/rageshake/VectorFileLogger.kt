@@ -65,7 +65,7 @@ class VectorFileLogger @Inject constructor(val context: Context, private val vec
                 sFileHandler?.formatter = LogFormatter()
                 sLogger.useParentHandlers = false
                 sLogger.level = Level.ALL
-                sLogger.addHandler(sFileHandler)
+                sFileHandler?.let { sLogger.addHandler(it) }
             }
         } catch (e: Throwable) {
             Timber.e(e, "Failed to initialize FileLogger")

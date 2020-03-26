@@ -29,7 +29,6 @@ import im.vector.riotx.R
 import im.vector.riotx.features.homeserver.ServerUrlsRepository
 import im.vector.riotx.features.themes.ThemeUtils
 import timber.log.Timber
-import java.io.File
 import javax.inject.Inject
 
 class VectorPreferences @Inject constructor(private val context: Context) {
@@ -68,7 +67,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         const val SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY"
         const val SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY"
         const val SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY"
-        const val SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY =  "SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY"
+        const val SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY = "SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY"
 
         const val SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY = "SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY"
 
@@ -427,11 +426,11 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         val toneUri = getNotificationRingTone() ?: return null
 
         try {
-            val proj = arrayOf(MediaStore.Audio.Media.DATA)
+            val proj = arrayOf(MediaStore.Audio.Media.DISPLAY_NAME)
             return context.contentResolver.query(toneUri, proj, null, null, null)?.use {
-                val columnIndex = it.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
+                val columnIndex = it.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
                 it.moveToFirst()
-                File(it.getString(columnIndex)).nameWithoutExtension
+                it.getString(columnIndex)
             }
         } catch (e: Exception) {
             Timber.e(e, "## getNotificationRingToneName() failed")

@@ -16,10 +16,8 @@
 
 package im.vector.riotx.core.files
 
-import android.app.DownloadManager
 import android.content.ContentValues
 import android.content.Context
-import android.os.Build
 import android.provider.MediaStore
 import androidx.annotation.WorkerThread
 import arrow.core.Try
@@ -57,23 +55,17 @@ fun addEntryToDownloadManager(context: Context,
                               mimeType: String,
                               title: String = file.name,
                               description: String = file.name) {
-    val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager?
-
     try {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val contentValues = ContentValues().apply {
-                put(MediaStore.Downloads.TITLE, title)
-                put(MediaStore.Downloads.DISPLAY_NAME, description)
-                put(MediaStore.Downloads.MIME_TYPE, mimeType)
-                put(MediaStore.Downloads.SIZE, file.length())
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Downloads.TITLE, title)
+            put(MediaStore.Downloads.DISPLAY_NAME, description)
+            put(MediaStore.Downloads.MIME_TYPE, mimeType)
+            put(MediaStore.Downloads.SIZE, file.length())
+        }
+        context.contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)?.let { uri ->
+            context.contentResolver.openOutputStream(uri)?.use { outputStream ->
+                outputStream.sink().buffer().write(file.inputStream().use { it.readBytes() })
             }
-             context.contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)?.let { uri ->
-                 context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                     outputStream.sink().buffer().write(file.inputStream().use { it.readBytes() })
-                 }
-             }
-        } else {
-            downloadManager?.addCompletedDownload(title, description, true, mimeType, file.absolutePath, file.length(), true)
         }
     } catch (e: Exception) {
         Timber.e(e, "## addEntryToDownloadManager(): Exception")

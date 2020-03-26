@@ -37,11 +37,14 @@ class VideoMediaViewerActivity : VectorBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(im.vector.riotx.R.layout.activity_video_media_viewer)
-        val mediaData = intent.getParcelableExtra<VideoContentRenderer.Data>(EXTRA_MEDIA_DATA)
 
-        configureToolbar(videoMediaViewerToolbar, mediaData)
-        imageContentRenderer.render(mediaData.thumbnailMediaData, ImageContentRenderer.Mode.FULL_SIZE, videoMediaViewerThumbnailView)
-        videoContentRenderer.render(mediaData, videoMediaViewerThumbnailView, videoMediaViewerLoading, videoMediaViewerVideoView, videoMediaViewerErrorView)
+        if (intent.hasExtra(EXTRA_MEDIA_DATA)) {
+            val mediaData = intent.getParcelableExtra<VideoContentRenderer.Data>(EXTRA_MEDIA_DATA)!!
+
+            configureToolbar(videoMediaViewerToolbar, mediaData)
+            imageContentRenderer.render(mediaData.thumbnailMediaData, ImageContentRenderer.Mode.FULL_SIZE, videoMediaViewerThumbnailView)
+            videoContentRenderer.render(mediaData, videoMediaViewerThumbnailView, videoMediaViewerLoading, videoMediaViewerVideoView, videoMediaViewerErrorView)
+        }
     }
 
     private fun configureToolbar(toolbar: Toolbar, mediaData: VideoContentRenderer.Data) {
