@@ -16,11 +16,13 @@
 
 package im.vector.riotx.features.crypto.verification.cancel
 
+import androidx.core.text.toSpannable
 import com.airbnb.epoxy.EpoxyController
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.dividerItem
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.core.utils.colorizeMatchingText
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheetViewState
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
@@ -56,9 +58,15 @@ class VerificationCancelController @Inject constructor(
                 }
             }
         } else {
+            val otherUserID = state.otherUserMxItem?.id ?: ""
+            val otherDisplayName = state.otherUserMxItem?.displayName ?: ""
             bottomSheetVerificationNoticeItem {
                 id("notice")
-                notice(stringProvider.getString(R.string.verify_cancel_self_verification_from_untrusted))
+                notice(
+                        stringProvider.getString(R.string.verify_cancel_other, otherDisplayName, otherUserID)
+                                .toSpannable()
+                                .colorizeMatchingText(otherUserID, colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color))
+                )
             }
         }
 

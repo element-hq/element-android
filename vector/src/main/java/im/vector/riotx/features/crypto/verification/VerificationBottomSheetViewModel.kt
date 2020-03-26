@@ -69,7 +69,7 @@ data class VerificationBottomSheetViewState(
 
 class VerificationBottomSheetViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationBottomSheetViewState,
-        @Assisted args: VerificationBottomSheet.VerificationArgs,
+        @Assisted val args: VerificationBottomSheet.VerificationArgs,
         private val session: Session,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider)
     : VectorViewModel<VerificationBottomSheetViewState, VerificationAction, VerificationBottomSheetViewEvents>(initialState),
@@ -142,14 +142,19 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                    args: VerificationBottomSheet.VerificationArgs): VerificationBottomSheetViewModel
     }
 
-    fun queryCancel() = withState {
-        if (it.userThinkItsNotHim) {
+    fun queryCancel() = withState { state ->
+        if (state.userThinkItsNotHim) {
             setState {
                 copy(userThinkItsNotHim = false)
             }
         } else {
-            setState {
-                copy(userWantsToCancel = true)
+            // if the verification is already done you can't cancel anymore
+            if (state.pendingRequest.invoke()?.cancelConclusion != null || state.sasTransactionState is VerificationTxState.TerminalTxState) {
+                // you cannot cancel anymore
+            } else {
+                setState {
+                    copy(userWantsToCancel = true)
+                }
             }
         }
     }
@@ -447,7 +452,10 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 || pr.localId == state.pendingRequest.invoke()?.localId
                 || state.pendingRequest.invoke()?.transactionId == pr.transactionId) {
             setState {
-                copy(pendingRequest = Success(pr))
+                copy(
+                        transactionId = args.verificationId ?: pr.transactionId,
+                        pendingRequest = Success(pr)
+                )
             }
         }
     }
