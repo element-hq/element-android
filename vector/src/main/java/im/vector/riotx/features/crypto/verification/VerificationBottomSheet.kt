@@ -16,9 +16,11 @@
 package im.vector.riotx.features.crypto.verification
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.KeyEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -34,19 +36,24 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.verification.CancelCode
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.commitTransaction
 import im.vector.riotx.core.extensions.exhaustive
+import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.features.crypto.quads.SharedSecureStorageActivity
+import im.vector.riotx.features.crypto.verification.cancel.VerificationCancelFragment
+import im.vector.riotx.features.crypto.verification.cancel.VerificationNotMeFragment
 import im.vector.riotx.features.crypto.verification.choose.VerificationChooseMethodFragment
 import im.vector.riotx.features.crypto.verification.conclusion.VerificationConclusionFragment
 import im.vector.riotx.features.crypto.verification.emoji.VerificationEmojiCodeFragment
 import im.vector.riotx.features.crypto.verification.qrconfirmation.VerificationQrScannedByOtherFragment
 import im.vector.riotx.features.crypto.verification.request.VerificationRequestFragment
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.settings.VectorSettingsActivity
 import kotlinx.android.parcel.Parcelize
 import timber.log.Timber
 import javax.inject.Inject
@@ -58,6 +65,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     data class VerificationArgs(
             val otherUserId: String,
             val verificationId: String? = null,
+            val verificationLocalId: String? = null,
             val roomId: String? = null,
             // Special mode where UX should show loading wheel until other session sends a request/tx
             val selfVerificationMode: Boolean = false
@@ -80,12 +88,16 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     lateinit var otherUserNameText: TextView
 
     @BindView(R.id.verificationRequestShield)
-    lateinit var otherUserShield: View
+    lateinit var otherUserShield: ImageView
 
     @BindView(R.id.verificationRequestAvatar)
     lateinit var otherUserAvatarImageView: ImageView
 
     override fun getLayoutResId() = R.layout.bottom_sheet_verification
+
+    init {
+        isCancelable = false
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -110,7 +122,24 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                             .show()
                     Unit
                 }
+                VerificationBottomSheetViewEvents.GoToSettings         -> {
+                    dismiss()
+                    (activity as? VectorBaseActivity)?.navigator?.openSettings(requireContext(), VectorSettingsActivity.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY)
+                }
             }.exhaustive
+        }
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return super.onCreateDialog(savedInstanceState).apply {
+            setOnKeyListener { _, keyCode, keyEvent ->
+                if (keyCode == KeyEvent.KEYCODE_BACK && keyEvent.action == KeyEvent.ACTION_UP) {
+                    viewModel.queryCancel()
+                    true
+                } else {
+                    false
+                }
+            }
         }
     }
 
@@ -127,15 +156,16 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
         state.otherUserMxItem?.let { matrixItem ->
             if (state.isMe) {
+                avatarRenderer.render(matrixItem, otherUserAvatarImageView)
                 if (state.sasTransactionState == VerificationTxState.Verified
                         || state.qrTransactionState == VerificationTxState.Verified
                         || state.verifiedFromPrivateKeys) {
-                    otherUserAvatarImageView.setImageResource(R.drawable.ic_shield_trusted)
+                    otherUserShield.setImageResource(R.drawable.ic_shield_trusted)
                 } else {
-                    otherUserAvatarImageView.setImageResource(R.drawable.ic_shield_warning)
+                    otherUserShield.setImageResource(R.drawable.ic_shield_warning)
                 }
                 otherUserNameText.text = getString(R.string.complete_security)
-                otherUserShield.isVisible = false
+                otherUserShield.isVisible = true
             } else {
                 avatarRenderer.render(matrixItem, otherUserAvatarImageView)
 
@@ -147,6 +177,18 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                     otherUserShield.isVisible = false
                 }
             }
+        }
+
+        if (state.userThinkItsNotHim) {
+            otherUserNameText.text = getString(R.string.dialog_title_warning)
+            showFragment(VerificationNotMeFragment::class, Bundle())
+            return@withState
+        }
+
+        if (state.userWantsToCancel) {
+            otherUserNameText.text = getString(R.string.are_you_sure)
+            showFragment(VerificationCancelFragment::class, Bundle())
+            return@withState
         }
 
         if (state.selfVerificationMode && state.verifiedFromPrivateKeys) {
@@ -222,7 +264,14 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         // Transaction has not yet started
         if (state.pendingRequest.invoke()?.cancelConclusion != null) {
             // The request has been declined, we should dismiss
-            dismiss()
+            otherUserNameText.text = getString(R.string.verification_cancelled)
+            showFragment(VerificationConclusionFragment::class, Bundle().apply {
+                putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(
+                        false,
+                        state.pendingRequest.invoke()?.cancelConclusion?.value ?: CancelCode.User.value,
+                        state.isMe))
+            })
+            return@withState
         }
 
         // If it's an outgoing
@@ -265,6 +314,10 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 )
             }
         }
+    }
+
+    override fun dismiss() {
+        super.dismiss()
     }
 
     companion object {

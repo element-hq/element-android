@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.crypto.CancelGossipRequestWorker
 import im.vector.matrix.android.internal.crypto.CryptoModule
 import im.vector.matrix.android.internal.crypto.SendGossipRequestWorker
+import im.vector.matrix.android.internal.crypto.SendGossipWorker
 import im.vector.matrix.android.internal.crypto.verification.SendVerificationMessageWorker
 import im.vector.matrix.android.internal.di.MatrixComponent
 import im.vector.matrix.android.internal.di.SessionAssistedInjectModule
@@ -109,7 +110,10 @@ internal interface SessionComponent {
     fun inject(worker: SendVerificationMessageWorker)
 
     fun inject(worker: SendGossipRequestWorker)
+
     fun inject(worker: CancelGossipRequestWorker)
+
+    fun inject(worker: SendGossipWorker)
 
     @Component.Factory
     interface Factory {

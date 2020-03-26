@@ -149,7 +149,7 @@ internal class MXMegolmDecryption(private val userId: String,
         val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
         val senderDevice = encryptedEventContent?.deviceId ?: return
 
-        val recipients = if (event.senderId != userId) {
+        val recipients = if (event.senderId == userId) {
             mapOf(
                     userId to listOf("*")
             )

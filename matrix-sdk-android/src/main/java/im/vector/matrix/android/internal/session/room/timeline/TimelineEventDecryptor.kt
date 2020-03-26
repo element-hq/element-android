@@ -128,7 +128,7 @@ internal class TimelineEventDecryptor @Inject constructor(
                 }
             }
         } catch (t: Throwable) {
-            Timber.e(t, "Failed to decrypt event $eventId")
+            Timber.e("Failed to decrypt event $eventId, ${t.localizedMessage}")
         } finally {
             synchronized(existingRequests) {
                 existingRequests.remove(request)

@@ -95,10 +95,27 @@ class VerificationChooseMethodController @Inject constructor(
                 listener { listener?.doVerifyBySas() }
             }
         }
+
+        if (state.isMe && state.canCrossSign) {
+            dividerItem {
+                id("sep_notMe")
+            }
+
+            bottomSheetVerificationActionItem {
+                id("wasnote")
+                title(stringProvider.getString(R.string.verify_new_session_was_not_me))
+                titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
+                subTitle(stringProvider.getString(R.string.verify_new_session_compromized))
+                iconRes(R.drawable.ic_arrow_right)
+                iconColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                listener { listener?.onClickOnWasNotMe() }
+            }
+        }
     }
 
     interface Listener {
         fun openCamera()
         fun doVerifyBySas()
+        fun onClickOnWasNotMe()
     }
 }

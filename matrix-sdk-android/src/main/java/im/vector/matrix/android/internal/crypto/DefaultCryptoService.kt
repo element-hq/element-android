@@ -140,7 +140,7 @@ internal class DefaultCryptoService @Inject constructor(
 
         private val crossSigningService: DefaultCrossSigningService,
         //
-        private val incomingRoomKeyRequestManager: IncomingRoomKeyRequestManager,
+        private val incomingGossipingRequestManager: IncomingGossipingRequestManager,
         //
         private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
         // Actions
@@ -239,7 +239,7 @@ internal class DefaultCryptoService @Inject constructor(
     override fun getDevicesList(callback: MatrixCallback<DevicesListResponse>) {
         getDevicesTask
                 .configureWith {
-                    this.executionThread = TaskThread.CRYPTO
+//                    this.executionThread = TaskThread.CRYPTO
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
@@ -317,7 +317,7 @@ internal class DefaultCryptoService @Inject constructor(
                 deviceListManager.invalidateAllDeviceLists()
                 deviceListManager.refreshOutdatedDeviceLists()
             } else {
-                incomingRoomKeyRequestManager.processReceivedGossipingRequests()
+                incomingGossipingRequestManager.processReceivedGossipingRequests()
             }
         }.fold(
                 {
@@ -376,7 +376,7 @@ internal class DefaultCryptoService @Inject constructor(
                     // Make sure we process to-device messages before generating new one-time-keys #2782
                     deviceListManager.refreshOutdatedDeviceLists()
                     oneTimeKeysUploader.maybeUploadOneTimeKeys()
-                    incomingRoomKeyRequestManager.processReceivedGossipingRequests()
+                    incomingGossipingRequestManager.processReceivedGossipingRequests()
                 }
             }
         }
@@ -709,7 +709,7 @@ internal class DefaultCryptoService @Inject constructor(
                     // save audit trail
                     cryptoStore.saveGossipingEvent(event)
                     // Requests are stacked, and will be handled one by one at the end of the sync (onSyncComplete)
-                    incomingRoomKeyRequestManager.onGossipingRequestEvent(event)
+                    incomingGossipingRequestManager.onGossipingRequestEvent(event)
                 }
                 EventType.SEND_SECRET                            -> {
                     cryptoStore.saveGossipingEvent(event)
@@ -729,30 +729,30 @@ internal class DefaultCryptoService @Inject constructor(
      */
     private fun onRoomKeyEvent(event: Event) {
         val roomKeyContent = event.getClearContent().toModel<RoomKeyContent>() ?: return
-        Timber.v("## onRoomKeyEvent() : type<${event.type}> , sessionId<${roomKeyContent.sessionId}>")
+        Timber.v("## GOSSIP onRoomKeyEvent() : type<${event.type}> , sessionId<${roomKeyContent.sessionId}>")
         if (roomKeyContent.roomId.isNullOrEmpty() || roomKeyContent.algorithm.isNullOrEmpty()) {
-            Timber.e("## onRoomKeyEvent() : missing fields")
+            Timber.e("## GOSSIP onRoomKeyEvent() : missing fields")
             return
         }
         val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(roomKeyContent.roomId, roomKeyContent.algorithm)
         if (alg == null) {
-            Timber.e("## onRoomKeyEvent() : Unable to handle keys for ${roomKeyContent.algorithm}")
+            Timber.e("## GOSSIP onRoomKeyEvent() : Unable to handle keys for ${roomKeyContent.algorithm}")
             return
         }
         alg.onRoomKeyEvent(event, keysBackupService)
     }
 
     private fun onSecretSendReceived(event: Event) {
-        Timber.i("## onSecretSend() : onSecretSendReceived ${event.content?.get("sender_key")}")
+        Timber.i("## GOSSIP onSecretSend() : onSecretSendReceived ${event.content?.get("sender_key")}")
         if (!event.isEncrypted()) {
             // secret send messages must be encrypted
-            Timber.e("## onSecretSend() :Received unencrypted secret send event")
+            Timber.e("## GOSSIP onSecretSend() :Received unencrypted secret send event")
             return
         }
 
         // Was that sent by us?
         if (event.senderId != credentials.userId) {
-            Timber.e("## onSecretSend() : Ignore secret from other user ${event.senderId}")
+            Timber.e("## GOSSIP onSecretSend() : Ignore secret from other user ${event.senderId}")
             return
         }
 
@@ -762,7 +762,7 @@ internal class DefaultCryptoService @Inject constructor(
                 .getOutgoingSecretKeyRequests().firstOrNull { it.requestId == secretContent.requestId }
 
         if (existingRequest == null) {
-            Timber.i("## onSecretSend() : Ignore secret that was not requested: ${secretContent.requestId}")
+            Timber.i("## GOSSIP onSecretSend() : Ignore secret that was not requested: ${secretContent.requestId}")
             return
         }
 
@@ -1111,7 +1111,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @param listener listener
      */
     override fun addRoomKeysRequestListener(listener: GossipingRequestListener) {
-        incomingRoomKeyRequestManager.addRoomKeysRequestListener(listener)
+        incomingGossipingRequestManager.addRoomKeysRequestListener(listener)
     }
 
     /**
@@ -1120,7 +1120,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @param listener listener
      */
     override fun removeRoomKeysRequestListener(listener: GossipingRequestListener) {
-        incomingRoomKeyRequestManager.removeRoomKeysRequestListener(listener)
+        incomingGossipingRequestManager.removeRoomKeysRequestListener(listener)
     }
 
     /**

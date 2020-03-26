@@ -36,6 +36,7 @@ import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.riotx.R
+import im.vector.riotx.features.popup.DefaultVectorAlert
 import im.vector.riotx.features.popup.PopupAlertManager
 import timber.log.Timber
 import java.text.DateFormat
@@ -54,7 +55,7 @@ import javax.inject.Singleton
  */
 
 @Singleton
-class KeyRequestHandler @Inject constructor(private val context: Context)
+class KeyRequestHandler @Inject constructor(private val context: Context, private val popupAlertManager: PopupAlertManager)
     : GossipingRequestListener,
         VerificationService.Listener {
 
@@ -118,9 +119,9 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
                 }
 
                 if (deviceInfo.isUnknown) {
-                    session?.cryptoService()?.setDeviceVerification(DeviceTrustLevel(false, false), userId, deviceId)
+                    session?.cryptoService()?.setDeviceVerification(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false), userId, deviceId)
 
-                    deviceInfo.trustLevel = DeviceTrustLevel(false, false)
+                    deviceInfo.trustLevel = DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false)
 
                     // can we get more info on this device?
                     session?.cryptoService()?.getDevicesList(object : MatrixCallback<DevicesListResponse> {
@@ -188,7 +189,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
             }
         }
 
-        val alert = PopupAlertManager.VectorAlert(
+        val alert = DefaultVectorAlert(
                 alertManagerId(userId, deviceId),
                 context.getString(R.string.key_share_request),
                 dialogText,
@@ -210,7 +211,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
             denyAllRequests(mappingKey)
         })
 
-        PopupAlertManager.postVectorAlert(alert)
+        popupAlertManager.postVectorAlert(alert)
     }
 
     private fun denyAllRequests(mappingKey: String) {
@@ -250,7 +251,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
                     && it.requestId == request.requestId
         }
         if (alertsToRequests[alertMgrUniqueKey]?.isEmpty() == true) {
-            PopupAlertManager.cancelAlert(alertMgrUniqueKey)
+            popupAlertManager.cancelAlert(alertMgrUniqueKey)
             alertsToRequests.remove(keyForMap(userId, deviceId))
         }
     }
@@ -261,7 +262,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
             if (state == VerificationTxState.Verified) {
                 // ok it's verified, see if we have key request for that
                 shareAllSessions("${tx.otherDeviceId}${tx.otherUserId}")
-                PopupAlertManager.cancelAlert("ikr_${tx.otherDeviceId}${tx.otherUserId}")
+                popupAlertManager.cancelAlert("ikr_${tx.otherDeviceId}${tx.otherUserId}")
             }
         }
         // should do it with QR tx also
@@ -271,7 +272,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context)
     override fun markedAsManuallyVerified(userId: String, deviceId: String) {
         // accept related requests
         shareAllSessions(keyForMap(userId, deviceId))
-        PopupAlertManager.cancelAlert(alertManagerId(userId, deviceId))
+        popupAlertManager.cancelAlert(alertManagerId(userId, deviceId))
     }
 
     private fun keyForMap(userId: String, deviceId: String) = "$deviceId$userId"

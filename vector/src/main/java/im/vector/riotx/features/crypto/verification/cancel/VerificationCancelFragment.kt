@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,44 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.features.crypto.verification.conclusion
+
+package im.vector.riotx.features.crypto.verification.cancel
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.View
-import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.crypto.verification.VerificationAction
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheetViewModel
-import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.bottom_sheet_verification_child_fragment.*
 import javax.inject.Inject
 
-class VerificationConclusionFragment @Inject constructor(
-        val controller: VerificationConclusionController
-) : VectorBaseFragment(), VerificationConclusionController.Listener {
+class VerificationCancelFragment @Inject constructor(
+        val controller: VerificationCancelController
+) : VectorBaseFragment(), VerificationCancelController.Listener {
 
-    @Parcelize
-    data class Args(
-            val isSuccessFull: Boolean,
-            val cancelReason: String?,
-            val isMe: Boolean
-    ) : Parcelable
-
-    private val sharedViewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)
-
-    private val viewModel by fragmentViewModel(VerificationConclusionViewModel::class)
+    private val viewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)
 
     override fun getLayoutResId() = R.layout.bottom_sheet_verification_child_fragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupRecyclerView()
     }
 
@@ -69,7 +56,11 @@ class VerificationConclusionFragment @Inject constructor(
         controller.update(state)
     }
 
-    override fun onButtonTapped() {
-        sharedViewModel.handle(VerificationAction.GotItConclusion)
+    override fun onTapCancel() {
+        viewModel.confirmCancel()
+    }
+
+    override fun onTapContinue() {
+        viewModel.continueFromCancel()
     }
 }

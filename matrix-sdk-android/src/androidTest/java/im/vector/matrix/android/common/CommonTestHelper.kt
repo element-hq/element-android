@@ -266,8 +266,8 @@ class CommonTestHelper(context: Context) {
      * @param latch
      * @throws InterruptedException
      */
-    fun await(latch: CountDownLatch) {
-        assertTrue(latch.await(TestConstants.timeOutMillis, TimeUnit.MILLISECONDS))
+    fun await(latch: CountDownLatch, timout: Long? = TestConstants.timeOutMillis) {
+        assertTrue(latch.await(timout ?: TestConstants.timeOutMillis, TimeUnit.MILLISECONDS))
     }
 
     fun retryPeriodicallyWithLatch(latch: CountDownLatch, condition: (() -> Boolean)) {
@@ -282,10 +282,10 @@ class CommonTestHelper(context: Context) {
         }
     }
 
-    fun waitWithLatch(block: (CountDownLatch) -> Unit) {
+    fun waitWithLatch(timout: Long? = TestConstants.timeOutMillis, block: (CountDownLatch) -> Unit) {
         val latch = CountDownLatch(1)
         block(latch)
-        await(latch)
+        await(latch, timout)
     }
 
     // Transform a method with a MatrixCallback to a synchronous method

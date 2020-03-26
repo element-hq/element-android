@@ -45,6 +45,7 @@ import im.vector.riotx.features.notifications.NotificationBroadcastReceiver
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.notifications.NotificationUtils
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
+import im.vector.riotx.features.popup.PopupAlertManager
 import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.VectorFileLogger
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
@@ -127,6 +128,8 @@ interface VectorComponent {
     fun uiStateRepository(): UiStateRepository
 
     fun emojiDataSource(): EmojiDataSource
+
+    fun alertManager() : PopupAlertManager
 
     @Component.Factory
     interface Factory {

@@ -58,7 +58,7 @@ class ViewReactionsBottomSheet : VectorBaseBottomSheetDialogFragment(), ViewReac
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
-        recyclerView.configureWith(epoxyController, hasFixedSize = false)
+        recyclerView.configureWith(epoxyController, hasFixedSize = false, showDivider = true)
         bottomSheetTitle.text = context?.getString(R.string.reactions)
         epoxyController.listener = this
     }

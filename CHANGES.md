@@ -3,6 +3,7 @@ Changes in RiotX 0.19.0 (2020-XX-XX)
 
 Features ✨:
  - Cross-Signing | Support SSSS secret sharing (#944)
+ - Cross-Signing | Verify new session from existing session (#1134)
 
 Improvements 🙌:
  - Verification DM / Handle concurrent .start after .ready (#794)
