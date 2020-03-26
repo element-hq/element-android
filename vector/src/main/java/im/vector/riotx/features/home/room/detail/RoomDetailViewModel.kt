@@ -610,7 +610,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             when (val tooBigFile = attachments.find { it.size > maxUploadFileSize }) {
                 null -> room.sendMedias(attachments, action.compressBeforeSending, emptySet())
                 else -> _viewEvents.post(RoomDetailViewEvents.FileTooBigError(
-                        tooBigFile.name ?: tooBigFile.path,
+                        tooBigFile.name ?: tooBigFile.queryUri.toString(),
                         tooBigFile.size,
                         maxUploadFileSize
                 ))

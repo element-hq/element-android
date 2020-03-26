@@ -19,6 +19,12 @@ package im.vector.matrix.android.internal.crypto.gossiping
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import im.vector.matrix.android.InstrumentedTest
+import im.vector.matrix.android.api.session.crypto.verification.IncomingSasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.SasVerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
+import im.vector.matrix.android.api.session.crypto.verification.VerificationService
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
+import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomDirectoryVisibility
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
@@ -28,7 +34,11 @@ import im.vector.matrix.android.common.TestConstants
 import im.vector.matrix.android.internal.crypto.GossipingRequestState
 import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestState
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
+import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
+import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
 import junit.framework.TestCase.fail
@@ -173,5 +183,86 @@ class KeyShareTests : InstrumentedTest {
 
         mTestHelper.signOutAndClose(aliceSession)
         mTestHelper.signOutAndClose(aliceSession2)
+    }
+
+    @Test
+    fun test_ShareSSSSSecret() {
+        val aliceSession1 = mTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
+
+        mTestHelper.doSync<Unit> {
+            aliceSession1.cryptoService().crossSigningService()
+                    .initializeCrossSigning(UserPasswordAuth(
+                            user = aliceSession1.myUserId,
+                            password = TestConstants.PASSWORD
+                    ), it)
+        }
+
+        val aliceSession2 = mTestHelper.logIntoAccount(aliceSession1.myUserId, SessionTestParams(true))
+
+        val aliceVerificationService1 = aliceSession1.cryptoService().verificationService()
+        val aliceVerificationService2 = aliceSession2.cryptoService().verificationService()
+
+        // force keys download
+        mTestHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> {
+            aliceSession1.cryptoService().downloadKeys(listOf(aliceSession1.myUserId), true, it)
+        }
+        mTestHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> {
+            aliceSession2.cryptoService().downloadKeys(listOf(aliceSession2.myUserId), true, it)
+        }
+
+        var session1ShortCode: String? = null
+        var session2ShortCode: String? = null
+
+        aliceVerificationService1.addListener(object : VerificationService.Listener {
+            override fun transactionUpdated(tx: VerificationTransaction) {
+                Log.d("#TEST", "AA: tx incoming?:${tx.isIncoming} state ${tx.state}")
+                if (tx is SasVerificationTransaction) {
+                    if (tx.state == VerificationTxState.OnStarted) {
+                        (tx as IncomingSasVerificationTransaction).performAccept()
+                    }
+                    if (tx.state == VerificationTxState.ShortCodeReady) {
+                        session1ShortCode = tx.getDecimalCodeRepresentation()
+                        tx.userHasVerifiedShortCode()
+                    }
+                }
+            }
+        })
+
+        aliceVerificationService2.addListener(object : VerificationService.Listener {
+            override fun transactionUpdated(tx: VerificationTransaction) {
+                Log.d("#TEST", "BB: tx incoming?:${tx.isIncoming} state ${tx.state}")
+                if (tx is SasVerificationTransaction) {
+                    if (tx.state == VerificationTxState.ShortCodeReady) {
+                        session2ShortCode = tx.getDecimalCodeRepresentation()
+                        tx.userHasVerifiedShortCode()
+                    }
+                }
+            }
+        })
+
+        val txId: String = "m.testVerif12"
+        aliceVerificationService2.beginKeyVerification(VerificationMethod.SAS, aliceSession1.myUserId, aliceSession1.sessionParams.credentials.deviceId
+                ?: "", txId)
+
+        mTestHelper.waitWithLatch { latch ->
+            mTestHelper.retryPeriodicallyWithLatch(latch) {
+                aliceSession1.cryptoService().getDeviceInfo(aliceSession1.myUserId, aliceSession2.sessionParams.credentials.deviceId ?: "")?.isVerified == true
+            }
+        }
+
+        assertNotNull(session1ShortCode)
+        Log.d("#TEST", "session1ShortCode: $session1ShortCode")
+        assertNotNull(session2ShortCode)
+        Log.d("#TEST", "session2ShortCode: $session2ShortCode")
+        assertEquals(session1ShortCode, session2ShortCode)
+
+        // SSK and USK private keys should have been shared
+
+        mTestHelper.waitWithLatch(60_000) { latch ->
+            mTestHelper.retryPeriodicallyWithLatch(latch) {
+                Log.d("#TEST", "CAN XS :${ aliceSession2.cryptoService().crossSigningService().getMyCrossSigningKeys()}")
+                aliceSession2.cryptoService().crossSigningService().canCrossSign()
+            }
+        }
     }
 }

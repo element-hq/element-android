@@ -60,6 +60,8 @@ interface VerificationService {
                                     roomId: String,
                                     localId: String? = LocalEcho.createLocalEchoId()): PendingVerificationRequest
 
+    fun cancelVerificationRequest(request: PendingVerificationRequest)
+
     /**
      * Request a key verification from another user using toDevice events.
      */

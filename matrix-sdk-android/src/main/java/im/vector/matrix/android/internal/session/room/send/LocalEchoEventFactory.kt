@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.session.room.send
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import androidx.exifinterface.media.ExifInterface
@@ -74,6 +75,7 @@ import javax.inject.Inject
  * The transactionId is used as loc
  */
 internal class LocalEchoEventFactory @Inject constructor(
+        private val context: Context,
         @UserId private val userId: String,
         private val stringProvider: StringProvider,
         private val textPillsUtils: TextPillsUtils,
@@ -266,14 +268,14 @@ internal class LocalEchoEventFactory @Inject constructor(
                         height = height?.toInt() ?: 0,
                         size = attachment.size.toInt()
                 ),
-                url = attachment.path
+                url = attachment.queryUri.toString()
         )
         return createEvent(roomId, content)
     }
 
     private fun createVideoEvent(roomId: String, attachment: ContentAttachmentData): Event {
         val mediaDataRetriever = MediaMetadataRetriever()
-        mediaDataRetriever.setDataSource(attachment.path)
+        mediaDataRetriever.setDataSource(context, attachment.queryUri)
 
         // Use frame to calculate height and width as we are sure to get the right ones
         val firstFrame: Bitmap? = mediaDataRetriever.frameAtTime
@@ -281,7 +283,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         val width = firstFrame?.width ?: 0
         mediaDataRetriever.release()
 
-        val thumbnailInfo = ThumbnailExtractor.extractThumbnail(attachment)?.let {
+        val thumbnailInfo = ThumbnailExtractor.extractThumbnail(context, attachment)?.let {
             ThumbnailInfo(
                     width = it.width,
                     height = it.height,
@@ -299,10 +301,10 @@ internal class LocalEchoEventFactory @Inject constructor(
                         size = attachment.size,
                         duration = attachment.duration?.toInt() ?: 0,
                         // Glide will be able to use the local path and extract a thumbnail.
-                        thumbnailUrl = attachment.path,
+                        thumbnailUrl = attachment.queryUri.toString(),
                         thumbnailInfo = thumbnailInfo
                 ),
-                url = attachment.path
+                url = attachment.queryUri.toString()
         )
         return createEvent(roomId, content)
     }
@@ -315,7 +317,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         mimeType = attachment.getSafeMimeType()?.takeIf { it.isNotBlank() } ?: "audio/mpeg",
                         size = attachment.size
                 ),
-                url = attachment.path
+                url = attachment.queryUri.toString()
         )
         return createEvent(roomId, content)
     }
@@ -329,7 +331,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                                 ?: "application/octet-stream",
                         size = attachment.size
                 ),
-                url = attachment.path
+                url = attachment.queryUri.toString()
         )
         return createEvent(roomId, content)
     }

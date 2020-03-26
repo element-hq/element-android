@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2019 New Vector Ltd
  *
@@ -19,8 +20,10 @@ package im.vector.riotx.features.home
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.view.forEachIndexed
 import androidx.lifecycle.Observer
+import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
@@ -32,11 +35,14 @@ import im.vector.riotx.R
 import im.vector.riotx.core.extensions.commitTransactionNow
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.platform.ToolbarConfigurable
+import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.ui.views.KeysBackupBanner
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.home.room.list.RoomListParams
 import im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
+import im.vector.riotx.features.popup.PopupAlertManager
+import im.vector.riotx.features.popup.VerificationVectorAlert
 import im.vector.riotx.features.workers.signout.SignOutViewModel
 import kotlinx.android.synthetic.main.fragment_home_detail.*
 import timber.log.Timber
@@ -48,12 +54,15 @@ private const val INDEX_ROOMS = 2
 
 class HomeDetailFragment @Inject constructor(
         val homeDetailViewModelFactory: HomeDetailViewModel.Factory,
-        private val avatarRenderer: AvatarRenderer
+        private val avatarRenderer: AvatarRenderer,
+        private val alertManager: PopupAlertManager
 ) : VectorBaseFragment(), KeysBackupBanner.Delegate {
 
     private val unreadCounterBadgeViews = arrayListOf<UnreadCounterBadgeView>()
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
+    private val unknownDeviceDetectorSharedViewModel : UnknownDeviceDetectorSharedViewModel by activityViewModel()
+
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
     override fun getLayoutResId() = R.layout.fragment_home_detail
@@ -76,6 +85,38 @@ class HomeDetailFragment @Inject constructor(
         }
         viewModel.selectSubscribe(this, HomeDetailViewState::displayMode) { displayMode ->
             switchDisplayMode(displayMode)
+        }
+
+        unknownDeviceDetectorSharedViewModel.subscribe {
+            it.unknownSessions.invoke()?.let { unknownDevices ->
+                Timber.v("## Detector - ${unknownDevices.size} Unknown sessions")
+                unknownDevices.forEachIndexed { index, deviceInfo ->
+                    Timber.v("## Detector - #$index deviceId:${deviceInfo.second.deviceId} lastSeenTs:${deviceInfo.second.lastSeenTs}")
+                }
+                val uid = "Newest_Device"
+                alertManager.cancelAlert(uid)
+                if (it.canCrossSign && unknownDevices.isNotEmpty()) {
+                    val newest = unknownDevices.first().second
+                    val user = unknownDevices.first().first
+                    alertManager.postVectorAlert(
+                            VerificationVectorAlert(
+                                    uid = uid,
+                                    title = getString(R.string.new_session),
+                                    description = getString(R.string.new_session_review),
+                                    iconId = R.drawable.ic_shield_warning
+                            ).apply {
+                                matrixItem = user
+                                colorInt = ContextCompat.getColor(requireActivity(), R.color.riotx_accent)
+                                contentAction = Runnable {
+                                    (weakCurrentActivity?.get() as? VectorBaseActivity)
+                                            ?.navigator
+                                            ?.requestSessionVerification(requireContext(), newest.deviceId ?: "")
+                                }
+                                dismissedAction = Runnable {}
+                            }
+                    )
+                }
+            }
         }
     }
 

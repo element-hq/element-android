@@ -26,6 +26,8 @@ import im.vector.riotx.features.attachments.preview.AttachmentsPreviewFragment
 import im.vector.riotx.features.createdirect.CreateDirectRoomDirectoryUsersFragment
 import im.vector.riotx.features.createdirect.CreateDirectRoomKnownUsersFragment
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
+import im.vector.riotx.features.crypto.verification.cancel.VerificationCancelFragment
+import im.vector.riotx.features.crypto.verification.cancel.VerificationNotMeFragment
 import im.vector.riotx.features.crypto.verification.choose.VerificationChooseMethodFragment
 import im.vector.riotx.features.crypto.verification.conclusion.VerificationConclusionFragment
 import im.vector.riotx.features.crypto.verification.emoji.VerificationEmojiCodeFragment
@@ -335,6 +337,16 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(VerificationConclusionFragment::class)
     fun bindVerificationConclusionFragment(fragment: VerificationConclusionFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(VerificationCancelFragment::class)
+    fun bindVerificationCancelFragment(fragment: VerificationCancelFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(VerificationNotMeFragment::class)
+    fun bindVerificationNotMeFragment(fragment: VerificationNotMeFragment): Fragment
 
     @Binds
     @IntoMap

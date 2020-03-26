@@ -16,51 +16,48 @@
 
 package im.vector.riotx.features.attachments
 
-import com.kbeanie.multipicker.api.entity.ChosenAudio
-import com.kbeanie.multipicker.api.entity.ChosenContact
-import com.kbeanie.multipicker.api.entity.ChosenFile
-import com.kbeanie.multipicker.api.entity.ChosenImage
-import com.kbeanie.multipicker.api.entity.ChosenVideo
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import im.vector.riotx.multipicker.entity.MultiPickerAudioType
+import im.vector.riotx.multipicker.entity.MultiPickerBaseType
+import im.vector.riotx.multipicker.entity.MultiPickerContactType
+import im.vector.riotx.multipicker.entity.MultiPickerFileType
+import im.vector.riotx.multipicker.entity.MultiPickerImageType
+import im.vector.riotx.multipicker.entity.MultiPickerVideoType
 import timber.log.Timber
 
-fun ChosenContact.toContactAttachment(): ContactAttachment {
+fun MultiPickerContactType.toContactAttachment(): ContactAttachment {
     return ContactAttachment(
             displayName = displayName,
             photoUri = photoUri,
-            emails = emails.toList(),
-            phones = phones.toList()
+            emails = emailList.toList(),
+            phones = phoneNumberList.toList()
     )
 }
 
-fun ChosenFile.toContentAttachmentData(): ContentAttachmentData {
+fun MultiPickerFileType.toContentAttachmentData(): ContentAttachmentData {
     if (mimeType == null) Timber.w("No mimeType")
     return ContentAttachmentData(
-            path = originalPath,
             mimeType = mimeType,
             type = mapType(),
             size = size,
-            date = createdAt?.time ?: System.currentTimeMillis(),
             name = displayName,
-            queryUri = queryUri
+            queryUri = contentUri
     )
 }
 
-fun ChosenAudio.toContentAttachmentData(): ContentAttachmentData {
+fun MultiPickerAudioType.toContentAttachmentData(): ContentAttachmentData {
     if (mimeType == null) Timber.w("No mimeType")
     return ContentAttachmentData(
-            path = originalPath,
             mimeType = mimeType,
             type = mapType(),
             size = size,
-            date = createdAt?.time ?: System.currentTimeMillis(),
             name = displayName,
             duration = duration,
-            queryUri = queryUri
+            queryUri = contentUri
     )
 }
 
-private fun ChosenFile.mapType(): ContentAttachmentData.Type {
+private fun MultiPickerBaseType.mapType(): ContentAttachmentData.Type {
     return when {
         mimeType?.startsWith("image/") == true -> ContentAttachmentData.Type.IMAGE
         mimeType?.startsWith("video/") == true -> ContentAttachmentData.Type.VIDEO
@@ -69,10 +66,9 @@ private fun ChosenFile.mapType(): ContentAttachmentData.Type {
     }
 }
 
-fun ChosenImage.toContentAttachmentData(): ContentAttachmentData {
+fun MultiPickerImageType.toContentAttachmentData(): ContentAttachmentData {
     if (mimeType == null) Timber.w("No mimeType")
     return ContentAttachmentData(
-            path = originalPath,
             mimeType = mimeType,
             type = mapType(),
             name = displayName,
@@ -80,23 +76,20 @@ fun ChosenImage.toContentAttachmentData(): ContentAttachmentData {
             height = height.toLong(),
             width = width.toLong(),
             exifOrientation = orientation,
-            date = createdAt?.time ?: System.currentTimeMillis(),
-            queryUri = queryUri
+            queryUri = contentUri
     )
 }
 
-fun ChosenVideo.toContentAttachmentData(): ContentAttachmentData {
+fun MultiPickerVideoType.toContentAttachmentData(): ContentAttachmentData {
     if (mimeType == null) Timber.w("No mimeType")
     return ContentAttachmentData(
-            path = originalPath,
             mimeType = mimeType,
             type = ContentAttachmentData.Type.VIDEO,
             size = size,
-            date = createdAt?.time ?: System.currentTimeMillis(),
             height = height.toLong(),
             width = width.toLong(),
             duration = duration,
             name = displayName,
-            queryUri = queryUri
+            queryUri = contentUri
     )
 }

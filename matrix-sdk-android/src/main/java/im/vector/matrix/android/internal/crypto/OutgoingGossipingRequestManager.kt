@@ -17,27 +17,17 @@
 
 package im.vector.matrix.android.internal.crypto
 
-import androidx.work.BackoffPolicy
-import androidx.work.Data
-import androidx.work.ExistingWorkPolicy
-import androidx.work.ListenableWorker
-import androidx.work.OneTimeWorkRequest
 import im.vector.matrix.android.api.session.events.model.LocalEcho
-import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.di.SessionId
-import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.util.CancelableWork
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
-import im.vector.matrix.android.internal.worker.startChain
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @SessionScope
@@ -46,7 +36,7 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
         private val cryptoStore: IMXCryptoStore,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope,
-        private val workManagerProvider: WorkManagerProvider) {
+        private val gossipingWorkManager: GossipingWorkManager) {
 
     /**
      * Send off a room key request, if we haven't already done so.
@@ -65,7 +55,7 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
             cryptoStore.getOrAddOutgoingRoomKeyRequest(requestBody, recipients)?.let {
                 // Don't resend if it's already done, you need to cancel first (reRequest)
                 if (it.state == OutgoingGossipingRequestState.SENDING || it.state == OutgoingGossipingRequestState.SENT) {
-                    Timber.v("## sendOutgoingRoomKeyRequest() : we already request for that session: $it")
+                    Timber.v("## GOSSIP sendOutgoingRoomKeyRequest() : we already request for that session: $it")
                     return@launch
                 }
 
@@ -82,7 +72,7 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
             cryptoStore.getOrAddOutgoingSecretShareRequest(secretName, recipients)?.let {
                 // TODO check if there is already one that is being sent?
                 if (it.state == OutgoingGossipingRequestState.SENDING || it.state == OutgoingGossipingRequestState.SENT) {
-                    Timber.v("## sendOutgoingRoomKeyRequest() : we already request for that session: $it")
+                    Timber.v("## GOSSIP sendSecretShareRequest() : we already request for that session: $it")
                     return@launch
                 }
 
@@ -123,7 +113,7 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
         val req = cryptoStore.getOutgoingRoomKeyRequest(requestBody)
                 ?: // no request was made for this key
                 return Unit.also {
-                    Timber.v("## cancelRoomKeyRequest() Unknown request")
+                    Timber.v("## GOSSIP cancelRoomKeyRequest() Unknown request")
                 }
 
         sendOutgoingRoomKeyRequestCancellation(req, andResend)
@@ -135,7 +125,7 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
      * @param request the request
      */
     private fun sendOutgoingGossipingRequest(request: OutgoingGossipingRequest) {
-        Timber.v("## sendOutgoingRoomKeyRequest() : Requesting keys $request")
+        Timber.v("## GOSSIP sendOutgoingRoomKeyRequest() : Requesting keys $request")
 
         val params = SendGossipRequestWorker.Params(
                 sessionId = sessionId,
@@ -143,8 +133,8 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
                 secretShareRequest = request as? OutgoingSecretRequest
         )
         cryptoStore.updateOutgoingGossipingRequestState(request.requestId, OutgoingGossipingRequestState.SENDING)
-        val workRequest = createWork<SendGossipRequestWorker>(WorkerParamsFactory.toData(params), true)
-        postWork(workRequest)
+        val workRequest = gossipingWorkManager.createWork<SendGossipRequestWorker>(WorkerParamsFactory.toData(params), true)
+        gossipingWorkManager.postWork(workRequest)
     }
 
     /**
@@ -157,33 +147,16 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
         val params = CancelGossipRequestWorker.Params.fromRequest(sessionId, request)
         cryptoStore.updateOutgoingGossipingRequestState(request.requestId, OutgoingGossipingRequestState.CANCELLING)
 
-        val workRequest = createWork<CancelGossipRequestWorker>(WorkerParamsFactory.toData(params), true)
-        postWork(workRequest)
+        val workRequest = gossipingWorkManager.createWork<CancelGossipRequestWorker>(WorkerParamsFactory.toData(params), true)
+        gossipingWorkManager.postWork(workRequest)
 
         if (resend) {
             val reSendParams = SendGossipRequestWorker.Params(
                     sessionId = sessionId,
                     keyShareRequest = request.copy(requestId = LocalEcho.createLocalEchoId())
             )
-            val reSendWorkRequest = createWork<SendGossipRequestWorker>(WorkerParamsFactory.toData(reSendParams), true)
-            postWork(reSendWorkRequest)
+            val reSendWorkRequest = gossipingWorkManager.createWork<SendGossipRequestWorker>(WorkerParamsFactory.toData(reSendParams), true)
+            gossipingWorkManager.postWork(reSendWorkRequest)
         }
-    }
-
-    private inline fun <reified W : ListenableWorker> createWork(data: Data, startChain: Boolean): OneTimeWorkRequest {
-        return workManagerProvider.matrixOneTimeWorkRequestBuilder<W>()
-                .setConstraints(WorkManagerProvider.workConstraints)
-                .startChain(startChain)
-                .setInputData(data)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, 10_000L, TimeUnit.MILLISECONDS)
-                .build()
-    }
-
-    private fun postWork(workRequest: OneTimeWorkRequest, policy: ExistingWorkPolicy = ExistingWorkPolicy.APPEND): Cancelable {
-        workManagerProvider.workManager
-                .beginUniqueWork(this::class.java.name, policy, workRequest)
-                .enqueue()
-
-        return CancelableWork(workManagerProvider.workManager, workRequest.id)
     }
 }

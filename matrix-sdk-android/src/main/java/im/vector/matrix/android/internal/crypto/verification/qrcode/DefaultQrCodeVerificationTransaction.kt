@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.session.crypto.verification.CancelCode
 import im.vector.matrix.android.api.session.crypto.verification.QrCodeVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.internal.crypto.IncomingGossipingRequestManager
 import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestManager
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
@@ -38,6 +39,7 @@ internal class DefaultQrCodeVerificationTransaction(
         override var otherDeviceId: String?,
         private val crossSigningService: CrossSigningService,
         outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
+        incomingGossipingRequestManager: IncomingGossipingRequestManager,
         private val cryptoStore: IMXCryptoStore,
         // Not null only if other user is able to scan QR code
         private val qrCodeData: QrCodeData?,
@@ -48,6 +50,7 @@ internal class DefaultQrCodeVerificationTransaction(
         setDeviceVerificationAction,
         crossSigningService,
         outgoingGossipingRequestManager,
+        incomingGossipingRequestManager,
         userId,
         transactionId,
         otherUserId,

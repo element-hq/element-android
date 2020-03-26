@@ -250,7 +250,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
-        attachmentsHelper = AttachmentsHelper.create(this, this).register()
+        attachmentsHelper = AttachmentsHelper(requireContext(), this).register()
         keyboardStateUtils = KeyboardStateUtils(requireActivity())
         setupToolbar(roomToolbar)
         setupRecyclerView()
@@ -290,9 +290,9 @@ class RoomDetailFragment @Inject constructor(
 
         roomDetailViewModel.observeViewEvents {
             when (it) {
-                is RoomDetailViewEvents.Failure             -> showErrorInSnackbar(it.throwable)
-                is RoomDetailViewEvents.OnNewTimelineEvents -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
-                is RoomDetailViewEvents.ActionSuccess       -> displayRoomDetailActionSuccess(it)
+                is RoomDetailViewEvents.Failure                -> showErrorInSnackbar(it.throwable)
+                is RoomDetailViewEvents.OnNewTimelineEvents    -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
+                is RoomDetailViewEvents.ActionSuccess          -> displayRoomDetailActionSuccess(it)
                 is RoomDetailViewEvents.ActionFailure          -> displayRoomDetailActionFailure(it)
                 is RoomDetailViewEvents.ShowMessage            -> showSnackWithMessage(it.message, Snackbar.LENGTH_LONG)
                 is RoomDetailViewEvents.NavigateToEvent        -> navigateToEvent(it)
@@ -665,7 +665,7 @@ class RoomDetailFragment @Inject constructor(
     private fun sendUri(uri: Uri): Boolean {
         roomDetailViewModel.preventAttachmentPreview = true
         val shareIntent = Intent(Intent.ACTION_SEND, uri)
-        val isHandled = attachmentsHelper.handleShareIntent(shareIntent)
+        val isHandled = attachmentsHelper.handleShareIntent(requireContext(), shareIntent)
         if (!isHandled) {
             roomDetailViewModel.preventAttachmentPreview = false
             Toast.makeText(requireContext(), R.string.error_handling_incoming_share, Toast.LENGTH_SHORT).show()
@@ -1350,11 +1350,11 @@ class RoomDetailFragment @Inject constructor(
 
     private fun launchAttachmentProcess(type: AttachmentTypeSelectorView.Type) {
         when (type) {
-            AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera()
-            AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile()
-            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery()
-            AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio()
-            AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact()
+            AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera(this)
+            AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile(this)
+            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(this)
+            AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio(this)
+            AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(this)
             AttachmentTypeSelectorView.Type.STICKER -> vectorBaseActivity.notImplemented("Adding stickers")
         }.exhaustive
     }

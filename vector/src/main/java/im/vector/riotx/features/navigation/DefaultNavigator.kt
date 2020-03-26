@@ -83,12 +83,12 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun requestSessionVerification(context: Context) {
+    override fun requestSessionVerification(context: Context, otherSessionId: String) {
         val session = sessionHolder.getSafeActiveSession() ?: return
         val pr = session.cryptoService().verificationService().requestKeyVerification(
                 supportedVerificationMethodsProvider.provide(),
                 session.myUserId,
-                session.cryptoService().getUserDevices(session.myUserId).map { it.deviceId }
+                listOf(otherSessionId)
         )
         if (context is VectorBaseActivity) {
             VerificationBottomSheet.withArgs(

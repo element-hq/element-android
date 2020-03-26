@@ -254,6 +254,7 @@ dependencies {
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-rx")
     implementation project(":diff-match-patch")
+    implementation project(":multipicker")
     implementation 'com.android.support:multidex:1.0.3'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -323,7 +324,7 @@ dependencies {
     implementation 'com.nulab-inc:zxcvbn:1.2.7'
 
     //Alerter
-    implementation 'com.tapadoo.android:alerter:4.0.3'
+    implementation 'com.tapadoo.android:alerter:5.1.2'
 
     implementation 'com.otaliastudios:autocomplete:1.1.0'
 
@@ -346,9 +347,6 @@ dependencies {
 
     // Badge for compatibility
     implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
-
-    // File picker
-    implementation 'com.kbeanie:multipicker:1.6@aar'
 
     // DI
     implementation "com.google.dagger:dagger:$daggerVersion"
