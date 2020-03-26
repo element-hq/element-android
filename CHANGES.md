@@ -7,6 +7,7 @@ Features ✨:
 
 Improvements 🙌:
  - Verification DM / Handle concurrent .start after .ready (#794)
+ - Xsigning | Complete security new session design update (#1135)
 
 Bugfix 🐛:
  - Missing avatar/displayname after verification request message (#841)
