@@ -74,15 +74,6 @@ class VerificationRequestController @Inject constructor(
                 iconColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
                 listener { listener?.onClickRecoverFromPassphrase() }
             }
-            bottomSheetVerificationActionItem {
-                id("skip")
-                title(stringProvider.getString(R.string.skip))
-                titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-//                subTitle(stringProvider.getString(R.string.verification_use_passphrase))
-                iconRes(R.drawable.ic_arrow_right)
-                iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                listener { listener?.onClickDismiss() }
-            }
         } else {
             val styledText =
                     if (state.isMe) {
