@@ -142,14 +142,19 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                    args: VerificationBottomSheet.VerificationArgs): VerificationBottomSheetViewModel
     }
 
-    fun queryCancel() = withState {
-        if (it.userThinkItsNotHim) {
+    fun queryCancel() = withState { state ->
+        if (state.userThinkItsNotHim) {
             setState {
                 copy(userThinkItsNotHim = false)
             }
         } else {
-            setState {
-                copy(userWantsToCancel = true)
+            // if the verification is already done you can't cancel anymore
+            if (state.pendingRequest.invoke()?.cancelConclusion != null || state.sasTransactionState is VerificationTxState.TerminalTxState) {
+                // you cannot cancel anymore
+            } else {
+                setState {
+                    copy(userWantsToCancel = true)
+                }
             }
         }
     }
