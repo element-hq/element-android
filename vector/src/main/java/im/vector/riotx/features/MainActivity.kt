@@ -195,7 +195,8 @@ class MainActivity : VectorBaseActivity() {
                 // We have a session.
                 // Check it can be opened
                 if (sessionHolder.getActiveSession().isOpenable) {
-                    HomeActivity.newIntent(this)
+                    // DO NOT COMMIT
+                    HomeActivity.newIntent(this, accountCreation = true)
                 } else {
                     // The token is still invalid
                     SoftLogoutActivity.newIntent(this)

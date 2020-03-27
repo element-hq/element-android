@@ -26,6 +26,8 @@ import im.vector.riotx.features.attachments.preview.AttachmentsPreviewFragment
 import im.vector.riotx.features.createdirect.CreateDirectRoomDirectoryUsersFragment
 import im.vector.riotx.features.createdirect.CreateDirectRoomKnownUsersFragment
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
+import im.vector.riotx.features.crypto.recover.BootstrapConfirmPassphraseFragment
+import im.vector.riotx.features.crypto.recover.BootstrapEnterPassphraseFragment
 import im.vector.riotx.features.crypto.verification.cancel.VerificationCancelFragment
 import im.vector.riotx.features.crypto.verification.cancel.VerificationNotMeFragment
 import im.vector.riotx.features.crypto.verification.choose.VerificationChooseMethodFragment
@@ -78,8 +80,8 @@ import im.vector.riotx.features.settings.devices.VectorSettingsDevicesFragment
 import im.vector.riotx.features.settings.devtools.AccountDataFragment
 import im.vector.riotx.features.settings.devtools.GossipingEventsPaperTrailFragment
 import im.vector.riotx.features.settings.devtools.IncomingKeyRequestListFragment
-import im.vector.riotx.features.settings.devtools.OutgoingKeyRequestListFragment
 import im.vector.riotx.features.settings.devtools.KeyRequestsFragment
+import im.vector.riotx.features.settings.devtools.OutgoingKeyRequestListFragment
 import im.vector.riotx.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
 import im.vector.riotx.features.share.IncomingShareFragment
@@ -402,4 +404,14 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(GossipingEventsPaperTrailFragment::class)
     fun bindGossipingEventsPaperTrailFragment(fragment: GossipingEventsPaperTrailFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(BootstrapEnterPassphraseFragment::class)
+    fun bindBootstrapEnterPassphraseFragment(fragment: BootstrapEnterPassphraseFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(BootstrapConfirmPassphraseFragment::class)
+    fun bindBootstrapConfirmPassphraseFragment(fragment: BootstrapConfirmPassphraseFragment): Fragment
 }

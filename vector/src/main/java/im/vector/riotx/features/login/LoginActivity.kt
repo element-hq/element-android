@@ -217,7 +217,10 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     private fun updateWithState(loginViewState: LoginViewState) {
         if (loginViewState.isUserLogged()) {
-            val intent = HomeActivity.newIntent(this)
+            val intent = HomeActivity.newIntent(
+                    this,
+                    accountCreation = true //loginViewState.signMode == SignMode.SignUp
+            )
             startActivity(intent)
             finish()
             return

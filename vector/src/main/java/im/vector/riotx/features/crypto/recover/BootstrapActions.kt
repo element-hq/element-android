@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.home
+package im.vector.riotx.features.crypto.recover
 
-import im.vector.riotx.core.platform.VectorSharedAction
+import im.vector.riotx.core.platform.VectorViewModelAction
 
-/**
- * Supported navigation actions for [HomeActivity]
- */
-sealed class HomeActivitySharedAction : VectorSharedAction {
-    object OpenDrawer : HomeActivitySharedAction()
-    object OpenGroup : HomeActivitySharedAction()
-    object PromptForSecurityBootstrap : HomeActivitySharedAction()
+sealed class BootstrapActions : VectorViewModelAction {
+
+    object GoBack : BootstrapActions()
+    data class GoToConfirmPassphrase(val passphrase: String) : BootstrapActions()
+    object TogglePasswordVisibility : BootstrapActions()
+    data class UpdateCandidatePassphrase(val pass: String) : BootstrapActions()
+    data class UpdateConfirmCandidatePassphrase(val pass: String) : BootstrapActions()
+
 }

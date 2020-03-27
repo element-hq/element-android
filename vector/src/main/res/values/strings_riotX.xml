@@ -32,6 +32,13 @@
     <string name="verify_cancelled_notice">Verify your devices from Settings.</string>
     <string name="verification_cancelled">Verification Cancelled</string>
 
+    <string name="recovery_passphrase">Recovery Passphrase</string>
+
+    <!-- %s will be replaced by recovery_passphrase -->
+    <string name="bootstrap_info_text">Secure &amp; unlock information with a %s so only you can access encrypted messages and secure information.</string>
+    <!-- %s will be replaced by recovery_passphrase -->
+    <string name="bootstrap_info_confirm_text">Enter your %s again to confirm it.</string>
+    <string name="bootstrap_dont_reuse_pwd">Don’t re-use your account password.</string>
     <!-- END Strings added by Valere -->
 
 
