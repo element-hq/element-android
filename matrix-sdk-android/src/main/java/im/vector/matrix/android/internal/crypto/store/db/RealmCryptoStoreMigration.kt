@@ -102,38 +102,44 @@ internal object RealmCryptoStoreMigration : RealmMigration {
                 ?.addRealmObjectField(DeviceInfoEntityFields.TRUST_LEVEL_ENTITY.`$`, trustLevelentityEntitySchema)
                 ?.transform { obj ->
 
-                    val oldSerializedData = obj.getString("deviceInfoData")
-                    deserializeFromRealm<MXDeviceInfo>(oldSerializedData)?.let { oldDevice ->
+                    try {
+                        val oldSerializedData = obj.getString("deviceInfoData")
+                        deserializeFromRealm<MXDeviceInfo>(oldSerializedData)?.let { oldDevice ->
 
-                        val trustLevel = realm.createObject("TrustLevelEntity")
-                        when (oldDevice.verified) {
-                            MXDeviceInfo.DEVICE_VERIFICATION_UNKNOWN    -> {
-                                obj.setNull(DeviceInfoEntityFields.TRUST_LEVEL_ENTITY.`$`)
+                            val trustLevel = realm.createObject("TrustLevelEntity")
+                            when (oldDevice.verified) {
+                                MXDeviceInfo.DEVICE_VERIFICATION_UNKNOWN    -> {
+                                    obj.setNull(DeviceInfoEntityFields.TRUST_LEVEL_ENTITY.`$`)
+                                }
+                                MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED    -> {
+                                    trustLevel.setNull(TrustLevelEntityFields.LOCALLY_VERIFIED)
+                                    trustLevel.setNull(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED)
+                                    obj.setBoolean(DeviceInfoEntityFields.IS_BLOCKED, oldDevice.isBlocked)
+                                    obj.setObject(DeviceInfoEntityFields.TRUST_LEVEL_ENTITY.`$`, trustLevel)
+                                }
+                                MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED -> {
+                                    trustLevel.setBoolean(TrustLevelEntityFields.LOCALLY_VERIFIED, false)
+                                    trustLevel.setBoolean(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED, false)
+                                    obj.setObject(DeviceInfoEntityFields.TRUST_LEVEL_ENTITY.`$`, trustLevel)
+                                }
+                                MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED   -> {
+                                    trustLevel.setBoolean(TrustLevelEntityFields.LOCALLY_VERIFIED, true)
+                                    trustLevel.setBoolean(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED, false)
+                                    obj.setObject(DeviceInfoEntityFields.TRUST_LEVEL_ENTITY.`$`, trustLevel)
+                                }
                             }
-                            MXDeviceInfo.DEVICE_VERIFICATION_BLOCKED    -> {
-                                trustLevel.setNull(TrustLevelEntityFields.LOCALLY_VERIFIED)
-                                trustLevel.setNull(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED)
-                                obj.setBoolean(DeviceInfoEntityFields.IS_BLOCKED, oldDevice.isBlocked)
-                                obj.setObject(DeviceInfoEntityFields.TRUST_LEVEL_ENTITY.`$`, trustLevel)
-                            }
-                            MXDeviceInfo.DEVICE_VERIFICATION_UNVERIFIED -> {
-                                trustLevel.setBoolean(TrustLevelEntityFields.LOCALLY_VERIFIED, false)
-                                trustLevel.setBoolean(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED, false)
-                                obj.setObject(DeviceInfoEntityFields.TRUST_LEVEL_ENTITY.`$`, trustLevel)
-                            }
-                            MXDeviceInfo.DEVICE_VERIFICATION_VERIFIED   -> {
-                                trustLevel.setBoolean(TrustLevelEntityFields.LOCALLY_VERIFIED, true)
-                                trustLevel.setBoolean(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED, false)
-                                obj.setObject(DeviceInfoEntityFields.TRUST_LEVEL_ENTITY.`$`, trustLevel)
-                            }
+
+                            obj.setString(DeviceInfoEntityFields.USER_ID, oldDevice.userId)
+                            obj.setString(DeviceInfoEntityFields.IDENTITY_KEY, oldDevice.identityKey())
+                            obj.setString(DeviceInfoEntityFields.ALGORITHM_LIST_JSON, listMigrationAdapter.toJson(oldDevice.algorithms))
+                            obj.setString(DeviceInfoEntityFields.KEYS_MAP_JSON, mapMigrationAdapter.toJson(oldDevice.keys))
+                            obj.setString(DeviceInfoEntityFields.SIGNATURE_MAP_JSON, mapMigrationAdapter.toJson(oldDevice.signatures))
+                            obj.setString(DeviceInfoEntityFields.UNSIGNED_MAP_JSON, mapMigrationAdapter.toJson(oldDevice.unsigned))
                         }
-
-                        obj.setString(DeviceInfoEntityFields.USER_ID, oldDevice.userId)
-                        obj.setString(DeviceInfoEntityFields.IDENTITY_KEY, oldDevice.identityKey())
-                        obj.setString(DeviceInfoEntityFields.ALGORITHM_LIST_JSON, listMigrationAdapter.toJson(oldDevice.algorithms))
-                        obj.setString(DeviceInfoEntityFields.KEYS_MAP_JSON, mapMigrationAdapter.toJson(oldDevice.keys))
-                        obj.setString(DeviceInfoEntityFields.SIGNATURE_MAP_JSON, mapMigrationAdapter.toJson(oldDevice.signatures))
-                        obj.setString(DeviceInfoEntityFields.UNSIGNED_MAP_JSON, mapMigrationAdapter.toJson(oldDevice.unsigned))
+                    } catch (failure: Throwable) {
+                        Timber.w(failure, "Crypto Data base migration error")
+                        // an unfortunate refactor did modify that class, making deserialization failing
+                        // so we just skip and ignore..
                     }
                 }
                 ?.removeField("deviceInfoData")

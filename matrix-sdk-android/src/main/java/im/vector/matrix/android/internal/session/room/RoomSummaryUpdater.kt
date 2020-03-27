@@ -161,7 +161,15 @@ internal class RoomSummaryUpdater @Inject constructor(
             roomSummaryEntity.otherMemberIds.clear()
             roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers)
             if (roomSummaryEntity.isEncrypted) {
-                eventBus.post(SessionToCryptoRoomMembersUpdate(roomId, roomSummaryEntity.otherMemberIds.toList() + userId))
+                // The set of “all users” depends on the type of room:
+                // For regular / topic rooms, all users including yourself, are considered when decorating a room
+                // For 1:1 and group DM rooms, all other users (i.e. excluding yourself) are considered when decorating a room
+                val listToCheck = if (roomSummaryEntity.isDirect) {
+                    roomSummaryEntity.otherMemberIds.toList()
+                } else {
+                    roomSummaryEntity.otherMemberIds.toList() + userId
+                }
+                eventBus.post(SessionToCryptoRoomMembersUpdate(roomId, listToCheck))
             }
         }
     }
