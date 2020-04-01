@@ -50,7 +50,7 @@
     <string name="notice_room_third_party_registered_invite">%1$s accepted the invitation for %2$s</string>
 
     <string name="notice_crypto_unable_to_decrypt">** Unable to decrypt: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">The sender\'s device has not sent us the keys for this message.</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">The sender has disabled encrypting to unverified devices.</string>
 
     <!-- Messages -->
     <string name="message_reply_to_prefix">In reply to</string>
