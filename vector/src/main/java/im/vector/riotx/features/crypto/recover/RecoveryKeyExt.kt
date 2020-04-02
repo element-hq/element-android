@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.securestorage
+package im.vector.riotx.features.crypto.recover
 
-interface KeySigner {
-    fun sign(canonicalJson: String): Map<String, Map<String, String>>?
-}
-
-class EmptyKeySigner : KeySigner {
-    override fun sign(canonicalJson: String): Map<String, Map<String, String>>? = null
+fun String.formatRecoveryKey(): String {
+    return this.replace(" ", "")
+            .chunked(16)
+            .joinToString("\n") {
+                it
+                        .chunked(4)
+                        .joinToString(" ")
+            }
 }

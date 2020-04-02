@@ -31,17 +31,18 @@ class ReAuthHelper @Inject constructor() {
 
     private var rememberedInfo: UserPasswordAuth? = null
 
-    private var clearTask = object : TimerTask() {
-        override fun run() {
-            rememberedInfo = null
+    fun rememberAuth(password: UserPasswordAuth?) {
+        timer?.cancel()
+        timer = null
+        rememberedInfo = password
+        timer = Timer().apply {
+            schedule(object : TimerTask() {
+                override fun run() {
+                    rememberedInfo = null
+                }
+            }, THREE_MINUTES)
         }
     }
 
-    fun rememberAuth(password: UserPasswordAuth?) {
-        timer?.cancel()
-        rememberedInfo = password
-        timer = Timer().also {
-            it.schedule(clearTask, THREE_MINUTES)
-        }
-    }
+    fun rememberedAuth() = rememberedInfo
 }

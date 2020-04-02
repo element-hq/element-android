@@ -26,38 +26,37 @@ import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.editorActionEvents
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.colorizeMatchingText
-import im.vector.riotx.features.settings.VectorLocale
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.fragment_bootstrap_enter_passphrase.*
+import kotlinx.android.synthetic.main.fragment_bootstrap_enter_account_password.*
+import kotlinx.android.synthetic.main.fragment_bootstrap_enter_passphrase.bootstrapDescriptionText
+import kotlinx.android.synthetic.main.fragment_bootstrap_enter_passphrase.ssss_view_show_password
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class BootstrapEnterPassphraseFragment @Inject constructor(
+class BootstrapAccountPasswordFragment @Inject constructor(
         private val colorProvider: ColorProvider
 ) : VectorBaseFragment() {
 
-    override fun getLayoutResId() = R.layout.fragment_bootstrap_enter_passphrase
+    override fun getLayoutResId() = R.layout.fragment_bootstrap_enter_account_password
 
     val sharedViewModel: BootstrapSharedViewModel by parentFragmentViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recPassPhrase = getString(R.string.recovery_passphrase)
-        bootstrapDescriptionText.text = getString(R.string.bootstrap_info_text, recPassPhrase)
+        val recPassPhrase = getString(R.string.account_password)
+        bootstrapDescriptionText.text = getString(R.string.enter_account_password, recPassPhrase)
                 .toSpannable()
                 .colorizeMatchingText(recPassPhrase, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
 
-        ssss_passphrase_enter_edittext.hint = getString(R.string.passphrase_enter_passphrase)
-        withState(sharedViewModel) {
-            // set initial value (usefull when coming back)
-            ssss_passphrase_enter_edittext.setText(it.passphrase ?: "")
-        }
-        ssss_passphrase_enter_edittext.editorActionEvents()
+        bootstrapAccountPasswordEditText.hint = getString(R.string.account_password)
+
+        bootstrapAccountPasswordEditText.editorActionEvents()
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -67,21 +66,14 @@ class BootstrapEnterPassphraseFragment @Inject constructor(
                 }
                 .disposeOnDestroyView()
 
-        ssss_passphrase_enter_edittext.textChanges()
+        bootstrapAccountPasswordEditText.textChanges()
+                .distinct()
                 .subscribe {
-                    // ssss_passphrase_enter_til.error = null
-                    sharedViewModel.handle(BootstrapActions.UpdateCandidatePassphrase(it?.toString() ?: ""))
-//                    ssss_passphrase_submit.isEnabled = it.isNotBlank()
+                    if (!it.isNullOrBlank()) {
+                        bootstrapAccountPasswordTil.error = null
+                    }
                 }
                 .disposeOnDestroyView()
-
-        sharedViewModel.observeViewEvents {
-            //            when (it) {
-//                is SharedSecureStorageViewEvent.InlineError -> {
-//                    ssss_passphrase_enter_til.error = it.message
-//                }
-//            }
-        }
 
         ssss_view_show_password.clicks()
                 .debounce(300, TimeUnit.MILLISECONDS)
@@ -90,45 +82,34 @@ class BootstrapEnterPassphraseFragment @Inject constructor(
                     sharedViewModel.handle(BootstrapActions.TogglePasswordVisibility)
                 }
                 .disposeOnDestroyView()
+
+        withState(sharedViewModel) {state ->
+            (state.step as? BootstrapStep.AccountPassword)?.failure?.let {
+                bootstrapAccountPasswordTil.error = it
+            }
+        }
     }
 
     private fun submit() = withState(sharedViewModel) { state ->
-        if (state.step !is BootstrapStep.SetupPassphrase) {
+        if (state.step !is BootstrapStep.AccountPassword) {
             return@withState
         }
-        val score = state.passphraseStrength.invoke()?.score
-        val passphrase = ssss_passphrase_enter_edittext.text?.toString()
-        if (passphrase.isNullOrBlank()) {
-            ssss_passphrase_enter_til.error = getString(R.string.passphrase_empty_error_message)
-        } else if (score != 4) {
-            ssss_passphrase_enter_til.error = getString(R.string.passphrase_passphrase_too_weak)
+        val accountPassword = bootstrapAccountPasswordEditText.text?.toString()
+        if (accountPassword.isNullOrBlank()) {
+            bootstrapAccountPasswordTil.error = getString(R.string.error_empty_field_your_password)
         } else {
-            sharedViewModel.handle(BootstrapActions.GoToConfirmPassphrase(passphrase))
+            view?.hideKeyboard()
+            sharedViewModel.handle(BootstrapActions.ReAuth(accountPassword))
         }
     }
 
     override fun invalidate() = withState(sharedViewModel) { state ->
         super.invalidate()
 
-        if (state.step is BootstrapStep.SetupPassphrase) {
+        if (state.step is BootstrapStep.AccountPassword) {
             val isPasswordVisible = state.step.isPasswordVisible
-            ssss_passphrase_enter_edittext.showPassword(isPasswordVisible, updateCursor = false)
+            bootstrapAccountPasswordEditText.showPassword(isPasswordVisible, updateCursor = false)
             ssss_view_show_password.setImageResource(if (isPasswordVisible) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
-
-            state.passphraseStrength.invoke()?.let { strength ->
-                val score = strength.score
-                ssss_passphrase_security_progress.strength = score
-                if (score in 1..3) {
-                    val hint =
-                            strength.feedback?.getWarning(VectorLocale.applicationLocale)?.takeIf { it.isNotBlank() }
-                                    ?: strength.feedback?.getSuggestions(VectorLocale.applicationLocale)?.firstOrNull()
-                    if (hint != null && hint != ssss_passphrase_enter_til.error.toString()) {
-                        ssss_passphrase_enter_til.error = hint
-                    }
-                } else {
-                    ssss_passphrase_enter_til.error = null
-                }
-            }
         }
 
     }

@@ -25,7 +25,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import butterknife.BindView
@@ -130,7 +129,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
     }
 
-       override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return super.onCreateDialog(savedInstanceState).apply {
             setOnKeyListener { _, keyCode, keyEvent ->
                 if (keyCode == KeyEvent.KEYCODE_BACK && keyEvent.action == KeyEvent.ACTION_UP) {
@@ -352,11 +351,11 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     }
 }
 
-fun View.getParentCoordinatorLayout(): CoordinatorLayout? {
-    var current = this as? View
-    while (current != null) {
-        if (current is CoordinatorLayout) return current
-        current = current.parent as? View
-    }
-    return null
-}
+//fun View.getParentCoordinatorLayout(): CoordinatorLayout? {
+//    var current = this as? View
+//    while (current != null) {
+//        if (current is CoordinatorLayout) return current
+//        current = current.parent as? View
+//    }
+//    return null
+//}

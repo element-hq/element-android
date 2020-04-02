@@ -12,17 +12,19 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
+
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/bootstrapIcon"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:adjustViewBounds="true"
+            android:layout_marginStart="16dp"
             android:contentDescription="@string/avatar"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_shield_black"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_message_password"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,6 +34,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="2"
@@ -51,64 +54,6 @@
             android:layout_marginTop="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/bootstrapTitleText" />
-
-        <!--        <TextView-->
-        <!--            android:id="@+id/bootstrapDescriptionText"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginTop="24dp"-->
-        <!--            android:text="@string/bootstrap_info_text"-->
-        <!--            android:textColor="?riotx_text_primary"-->
-        <!--            android:textSize="14sp"-->
-        <!--            app:layout_constraintTop_toBottomOf="@+id/bootstrapTitleText" />-->
-
-        <!--        <com.google.android.material.textfield.TextInputLayout-->
-        <!--            android:id="@+id/ssss_passphrase_enter_til"-->
-        <!--            style="@style/VectorTextInputLayout"-->
-        <!--            android:layout_width="0dp"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginTop="16dp"-->
-        <!--            app:errorEnabled="true"-->
-        <!--            app:layout_constraintEnd_toStartOf="@id/ssss_view_show_password"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/bootstrapDescriptionText">-->
-
-        <!--            <com.google.android.material.textfield.TextInputEditText-->
-        <!--                android:id="@+id/ssss_passphrase_enter_edittext"-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:hint="@string/passphrase_enter_passphrase"-->
-        <!--                android:imeOptions="actionDone"-->
-        <!--                android:maxLines="3"-->
-        <!--                android:singleLine="false"-->
-        <!--                android:textColor="?android:textColorPrimary"-->
-        <!--                tools:inputType="textPassword" />-->
-
-        <!--        </com.google.android.material.textfield.TextInputLayout>-->
-
-        <!--        <ImageView-->
-        <!--            android:id="@+id/ssss_view_show_password"-->
-        <!--            android:layout_width="@dimen/layout_touch_size"-->
-        <!--            android:layout_height="@dimen/layout_touch_size"-->
-        <!--            android:layout_marginTop="8dp"-->
-        <!--            android:background="?attr/selectableItemBackground"-->
-        <!--            android:scaleType="center"-->
-        <!--            android:src="@drawable/ic_eye_black"-->
-        <!--            android:tint="?colorAccent"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toEndOf="@+id/ssss_passphrase_enter_til"-->
-        <!--            app:layout_constraintTop_toTopOf="@+id/ssss_passphrase_enter_til" />-->
-
-
-        <!--        <TextView-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginTop="8dp"-->
-        <!--            android:drawableStart="@drawable/e2e_warning"-->
-        <!--            android:drawablePadding="4dp"-->
-        <!--            android:text="@string/bootstrap_dont_reuse_pwd"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/ssss_passphrase_enter_til" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

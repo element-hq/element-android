@@ -641,7 +641,7 @@ internal class MXOlmDevice @Inject constructor(
                 throw MXCryptoError.OlmError(e)
             }
 
-            if (null != timeline) {
+            if (timeline?.isNotBlank() == true) {
                 val timelineSet = inboundGroupSessionMessageIndexes.getOrPut(timeline) { mutableSetOf() }
 
                 val messageIndexKey = senderKey + "|" + sessionId + "|" + decryptResult.mIndex

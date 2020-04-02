@@ -27,6 +27,7 @@ import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.editorActionEvents
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
@@ -56,6 +57,12 @@ class BootstrapConfirmPassphraseFragment @Inject constructor(
 
         ssss_passphrase_enter_edittext.hint = getString(R.string.passphrase_confirm_passphrase)
 
+        withState(sharedViewModel) {
+            // set initial value (useful when coming back)
+            ssss_passphrase_enter_edittext.setText(it.passphraseRepeat ?: "")
+            ssss_passphrase_enter_edittext.requestFocus()
+        }
+
         ssss_passphrase_enter_edittext.editorActionEvents()
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -68,9 +75,8 @@ class BootstrapConfirmPassphraseFragment @Inject constructor(
 
         ssss_passphrase_enter_edittext.textChanges()
                 .subscribe {
-                    // ssss_passphrase_enter_til.error = null
+                    ssss_passphrase_enter_til.error = null
                     sharedViewModel.handle(BootstrapActions.UpdateConfirmCandidatePassphrase(it?.toString() ?: ""))
-//                    ssss_passphrase_submit.isEnabled = it.isNotBlank()
                 }
                 .disposeOnDestroyView()
 
@@ -95,16 +101,15 @@ class BootstrapConfirmPassphraseFragment @Inject constructor(
         if (state.step !is BootstrapStep.ConfirmPassphrase) {
             return@withState
         }
-
-//        val score = state.passphraseStrength.invoke()?.score
-//        val passphrase = ssss_passphrase_enter_edittext.text?.toString()
-//        if (passphrase.isNullOrBlank()) {
-//            ssss_passphrase_enter_til.error = getString(R.string.passphrase_empty_error_message)
-//        } else if (score != 4) {
-//            ssss_passphrase_enter_til.error = getString(R.string.passphrase_passphrase_too_weak)
-//        } else {
-//            sharedViewModel.handle(BootstrapActions.GoToConfirmPassphrase(passphrase))
-//        }
+        val passphrase = ssss_passphrase_enter_edittext.text?.toString()
+        if (passphrase.isNullOrBlank()) {
+            ssss_passphrase_enter_til.error = getString(R.string.passphrase_empty_error_message)
+        } else if (passphrase != state.passphrase) {
+            ssss_passphrase_enter_til.error = getString(R.string.passphrase_passphrase_does_not_match)
+        } else {
+            view?.hideKeyboard()
+            sharedViewModel.handle(BootstrapActions.DoInitialize(passphrase))
+        }
     }
 
     override fun invalidate() = withState(sharedViewModel) { state ->
@@ -112,7 +117,7 @@ class BootstrapConfirmPassphraseFragment @Inject constructor(
 
         if (state.step is BootstrapStep.ConfirmPassphrase) {
             val isPasswordVisible = state.step.isPasswordVisible
-            ssss_passphrase_enter_edittext.showPassword(isPasswordVisible)
+            ssss_passphrase_enter_edittext.showPassword(isPasswordVisible, updateCursor = false)
             ssss_view_show_password.setImageResource(if (isPasswordVisible) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
         }
 

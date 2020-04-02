@@ -26,8 +26,12 @@ import im.vector.riotx.features.attachments.preview.AttachmentsPreviewFragment
 import im.vector.riotx.features.createdirect.CreateDirectRoomDirectoryUsersFragment
 import im.vector.riotx.features.createdirect.CreateDirectRoomKnownUsersFragment
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
+import im.vector.riotx.features.crypto.recover.BootstrapAccountPasswordFragment
+import im.vector.riotx.features.crypto.recover.BootstrapConclusionFragment
 import im.vector.riotx.features.crypto.recover.BootstrapConfirmPassphraseFragment
 import im.vector.riotx.features.crypto.recover.BootstrapEnterPassphraseFragment
+import im.vector.riotx.features.crypto.recover.BootstrapSaveRecoveryKeyFragment
+import im.vector.riotx.features.crypto.recover.BootstrapWaitingFragment
 import im.vector.riotx.features.crypto.verification.cancel.VerificationCancelFragment
 import im.vector.riotx.features.crypto.verification.cancel.VerificationNotMeFragment
 import im.vector.riotx.features.crypto.verification.choose.VerificationChooseMethodFragment
@@ -414,4 +418,24 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(BootstrapConfirmPassphraseFragment::class)
     fun bindBootstrapConfirmPassphraseFragment(fragment: BootstrapConfirmPassphraseFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(BootstrapWaitingFragment::class)
+    fun bindBootstrapWaitingFragment(fragment: BootstrapWaitingFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(BootstrapSaveRecoveryKeyFragment::class)
+    fun bindBootstrapSaveRecoveryKeyFragment(fragment: BootstrapSaveRecoveryKeyFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(BootstrapConclusionFragment::class)
+    fun bindBootstrapConclusionFragment(fragment: BootstrapConclusionFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(BootstrapAccountPasswordFragment::class)
+    fun bindBootstrapAccountPasswordFragment(fragment: BootstrapAccountPasswordFragment): Fragment
 }

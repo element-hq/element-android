@@ -16,14 +16,28 @@
 
 package im.vector.riotx.features.crypto.recover
 
+import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import im.vector.riotx.core.platform.VectorViewModelAction
+import java.io.OutputStream
 
 sealed class BootstrapActions : VectorViewModelAction {
 
+    // Navigation
+
     object GoBack : BootstrapActions()
     data class GoToConfirmPassphrase(val passphrase: String) : BootstrapActions()
+    object GoToCompleted : BootstrapActions()
+    object GoToEnterAccountPassword : BootstrapActions()
+
+
+    data class DoInitialize(val passphrase: String, val auth: UserPasswordAuth? = null) : BootstrapActions()
     object TogglePasswordVisibility : BootstrapActions()
     data class UpdateCandidatePassphrase(val pass: String) : BootstrapActions()
     data class UpdateConfirmCandidatePassphrase(val pass: String) : BootstrapActions()
-
+    data class ReAuth(val pass: String) : BootstrapActions()
+    object RecoveryKeySaved : BootstrapActions()
+    object Completed : BootstrapActions()
+    object SaveReqQueryStarted : BootstrapActions()
+    data class SaveKeyToUri(val os: OutputStream) : BootstrapActions()
+    object SaveReqFailed : BootstrapActions()
 }

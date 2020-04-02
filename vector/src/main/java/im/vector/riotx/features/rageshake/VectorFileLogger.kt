@@ -162,7 +162,9 @@ class VectorFileLogger @Inject constructor(val context: Context, private val vec
 
         companion object {
             private val LINE_SEPARATOR = System.getProperty("line.separator") ?: "\n"
-            private val DATE_FORMAT = SimpleDateFormat("MM-dd HH:mm:ss.SSS", Locale.US)
+//            private val DATE_FORMAT = SimpleDateFormat("MM-dd HH:mm:ss.SSS", Locale.US)
+            private val DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss*SSSZZZZ", Locale.US)
+
             private var mIsTimeZoneSet = false
         }
     }
