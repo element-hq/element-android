@@ -30,6 +30,7 @@ sealed class BootstrapActions : VectorViewModelAction {
     object GoToEnterAccountPassword : BootstrapActions()
 
     data class DoInitialize(val passphrase: String, val auth: UserPasswordAuth? = null) : BootstrapActions()
+    data class DoInitializeGeneratedKey(val auth: UserPasswordAuth? = null) : BootstrapActions()
     object TogglePasswordVisibility : BootstrapActions()
     data class UpdateCandidatePassphrase(val pass: String) : BootstrapActions()
     data class UpdateConfirmCandidatePassphrase(val pass: String) : BootstrapActions()

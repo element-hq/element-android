@@ -55,30 +55,35 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.observeViewEvents { event ->
             when (event) {
-                is BootstrapViewEvents.Dismiss         -> dismiss()
-                is BootstrapViewEvents.ModalError      -> {
+                is BootstrapViewEvents.Dismiss       -> dismiss()
+                is BootstrapViewEvents.ModalError    -> {
                     AlertDialog.Builder(requireActivity())
                             .setTitle(R.string.dialog_title_error)
                             .setMessage(event.error)
                             .setPositiveButton(R.string.ok, null)
                             .show()
                 }
-                BootstrapViewEvents.RecoveryKeySaved   -> {
+                BootstrapViewEvents.RecoveryKeySaved -> {
                     KeepItSafeDialog().show(requireActivity())
                 }
-                BootstrapViewEvents.SkipBootstrap -> {
-                    promptSkip()
+                is BootstrapViewEvents.SkipBootstrap -> {
+                    promptSkip(event.genKeyOption)
                 }
             }
         }
     }
 
-    private fun promptSkip() {
-        AlertDialog.Builder(requireActivity())
+    private fun promptSkip(genKeyOption: Boolean) {
+        AlertDialog.Builder(requireContext())
                 .setTitle(R.string.are_you_sure)
-                .setMessage(R.string.bootstrap_skip_text)
+                .setMessage(if (genKeyOption) R.string.bootstrap_skip_text else R.string.bootstrap_skip_text_no_gen_key)
                 .setPositiveButton(R.string._continue, null)
-                .setNeutralButton(R.string.generate_message_key) { _, _ ->
+                .apply {
+                    if (genKeyOption) {
+                        setNeutralButton(R.string.generate_message_key) { _, _ ->
+                            viewModel.handle(BootstrapActions.DoInitializeGeneratedKey())
+                        }
+                    }
                 }
                 .setNegativeButton(R.string.skip) { _, _ ->
                     dismiss()
@@ -118,7 +123,7 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 bootstrapTitleText.text = getString(R.string.confirm_recovery_passphrase, getString(R.string.recovery_passphrase))
                 showFragment(BootstrapConfirmPassphraseFragment::class, Bundle())
             }
-            is BootstrapStep.AccountPassword -> {
+            is BootstrapStep.AccountPassword   -> {
                 bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_user))
                 bootstrapTitleText.text = getString(R.string.account_password)
                 showFragment(BootstrapAccountPasswordFragment::class, Bundle())

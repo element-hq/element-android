@@ -64,7 +64,7 @@ interface BootstrapProgressListener {
 data class Params(
         val userPasswordAuth: UserPasswordAuth? = null,
         val progressListener: BootstrapProgressListener? = null,
-        val passphrase: String
+        val passphrase: String?
 )
 
 class BootstrapCrossSigningTask @Inject constructor(
@@ -100,14 +100,23 @@ class BootstrapCrossSigningTask @Inject constructor(
         params.progressListener?.onProgress(WaitingViewData(stringProvider.getString(R.string.bootstrap_crosssigning_progress_pbkdf2), isIndeterminate = true))
         try {
             keyInfo = awaitCallback {
-                ssssService.generateKeyWithPassphrase(
-                        UUID.randomUUID().toString(),
-                        "ssss_key",
-                        params.passphrase,
-                        EmptyKeySigner(),
-                        null,
-                        it
-                )
+                params.passphrase?.let { passphrase ->
+                    ssssService.generateKeyWithPassphrase(
+                            UUID.randomUUID().toString(),
+                            "ssss_key",
+                            passphrase,
+                            EmptyKeySigner(),
+                            null,
+                            it
+                    )
+                } ?: kotlin.run {
+                    ssssService.generateKey(
+                            UUID.randomUUID().toString(),
+                            "ssss_key",
+                            EmptyKeySigner(),
+                            it
+                    )
+                }
             }
         } catch (failure: Failure) {
             return BootstrapResult.FailedToCreateSSSSKey(failure)

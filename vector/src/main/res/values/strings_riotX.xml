@@ -84,6 +84,8 @@
     <string name="auth_flow_not_supported">You cannot do that from mobile</string>
 
     <string name="bootstrap_skip_text">Setting a Message Password lets you secure &amp; unlock encrypted messages and trust.\n\nIf you don’t want to set a Message Password, generate a Message Key instead.</string>
+    <string name="bootstrap_skip_text_no_gen_key">Setting a Message Password lets you secure &amp; unlock encrypted messages and trust.</string>
+
     <!-- END Strings added by Valere -->
 
 

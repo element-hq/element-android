@@ -22,5 +22,5 @@ sealed class BootstrapViewEvents : VectorViewEvents {
     object Dismiss : BootstrapViewEvents()
     data class ModalError(val error: String) : BootstrapViewEvents()
     object RecoveryKeySaved: BootstrapViewEvents()
-    object SkipBootstrap: BootstrapViewEvents()
+    data class SkipBootstrap(val genKeyOption: Boolean = true): BootstrapViewEvents()
 }

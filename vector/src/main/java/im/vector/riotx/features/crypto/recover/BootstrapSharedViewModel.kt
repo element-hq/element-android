@@ -151,6 +151,20 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     }
                 }
             }
+            is BootstrapActions.DoInitializeGeneratedKey         -> {
+                val auth = action.auth ?: reAuthHelper.rememberedAuth()
+                if (auth == null) {
+                    setState {
+                        copy(
+                                passphrase = null,
+                                passphraseRepeat = null,
+                                step = BootstrapStep.AccountPassword(false)
+                        )
+                    }
+                } else {
+                    startInitializeFlow(action.auth)
+                }
+            }
             BootstrapActions.RecoveryKeySaved                    -> {
                 _viewEvents.post(BootstrapViewEvents.RecoveryKeySaved)
                 setState {
@@ -237,7 +251,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 bootstrapTask.invoke(this, Params(
                         userPasswordAuth = auth ?: reAuthHelper.rememberedAuth(),
                         progressListener = progressListener,
-                        passphrase = state.passphrase!!
+                        passphrase = state.passphrase
                 )) {
                     when (it) {
                         is BootstrapResult.Success                 -> {
@@ -297,7 +311,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
         when (state.step) {
             is BootstrapStep.SetupPassphrase   -> {
                 // do we let you cancel from here?
-                _viewEvents.post(BootstrapViewEvents.SkipBootstrap)
+                _viewEvents.post(BootstrapViewEvents.SkipBootstrap())
             }
             is BootstrapStep.ConfirmPassphrase -> {
                 setState {
@@ -309,11 +323,11 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 }
             }
             is BootstrapStep.AccountPassword   -> {
-                _viewEvents.post(BootstrapViewEvents.SkipBootstrap)
+                _viewEvents.post(BootstrapViewEvents.SkipBootstrap(state.passphrase != null))
             }
             BootstrapStep.Initializing         -> {
                 // do we let you cancel from here?
-                _viewEvents.post(BootstrapViewEvents.SkipBootstrap)
+                _viewEvents.post(BootstrapViewEvents.SkipBootstrap(state.passphrase != null))
             }
             is BootstrapStep.SaveRecoveryKey,
             BootstrapStep.DoneSuccess          -> {
