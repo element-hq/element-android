@@ -57,7 +57,7 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
                 .colorizeMatchingText(getString(R.string.message_key), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
 
         recoverySave.clickableView.clicks()
-                .debounce(300, TimeUnit.MILLISECONDS)
+                .debounce(600, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     downloadRecoveryKey()
@@ -65,7 +65,7 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
                 .disposeOnDestroyView()
 
         recoveryCopy.clickableView.clicks()
-                .debounce(300, TimeUnit.MILLISECONDS)
+                .debounce(600, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     shareRecoveryKey()

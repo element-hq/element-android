@@ -66,8 +66,24 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 BootstrapViewEvents.RecoveryKeySaved   -> {
                     KeepItSafeDialog().show(requireActivity())
                 }
+                BootstrapViewEvents.SkipBootstrap -> {
+                    promptSkip()
+                }
             }
         }
+    }
+
+    private fun promptSkip() {
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.are_you_sure)
+                .setMessage(R.string.bootstrap_skip_text)
+                .setPositiveButton(R.string._continue, null)
+                .setNeutralButton(R.string.generate_message_key) { _, _ ->
+                }
+                .setNegativeButton(R.string.skip) { _, _ ->
+                    dismiss()
+                }
+                .show()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

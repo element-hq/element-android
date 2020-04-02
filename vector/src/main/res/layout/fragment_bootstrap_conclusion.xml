@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="50dp"
-        app:actionTitle="@string/_continue"
+        app:actionTitle="@string/finish"
         app:forceStartPadding="false"
         app:rightIcon="@drawable/ic_arrow_right"
         app:tint="?colorAccent" />

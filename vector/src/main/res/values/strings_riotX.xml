@@ -39,6 +39,7 @@
 
     <!-- %s will be replaced by recovery_passphrase -->
     <string name="set_recovery_passphrase">Set a %s</string>
+    <string name="generate_message_key">Generate a Message Key</string>
 
     <!-- %s will be replaced by recovery_passphrase -->
     <string name="confirm_recovery_passphrase">Confirm %s</string>
@@ -59,6 +60,7 @@
     <string name="your_recovery_key">Your recovery key</string>
     <string name="bootstrap_finish_title">You‘re done!</string>
     <string name="keep_it_safe">Keep it safe</string>
+    <string name="finish">Finish</string>
 
     <!-- %1$s is replaced by message_key and %2$s by recovery_passphrase -->
     <string name="bootstrap_save_key_description">Use this %1$s as a safety net in case you forget your %2$s.</string>
@@ -81,7 +83,7 @@
 
     <string name="auth_flow_not_supported">You cannot do that from mobile</string>
 
-
+    <string name="bootstrap_skip_text">Setting a Message Password lets you secure &amp; unlock encrypted messages and trust.\n\nIf you don’t want to set a Message Password, generate a Message Key instead.</string>
     <!-- END Strings added by Valere -->
 
 

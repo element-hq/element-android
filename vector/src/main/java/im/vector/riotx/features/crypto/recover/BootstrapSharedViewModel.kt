@@ -296,6 +296,8 @@ class BootstrapSharedViewModel @AssistedInject constructor(
     private fun queryBack() = withState { state ->
         when (state.step) {
             is BootstrapStep.SetupPassphrase   -> {
+                // do we let you cancel from here?
+                _viewEvents.post(BootstrapViewEvents.SkipBootstrap)
             }
             is BootstrapStep.ConfirmPassphrase -> {
                 setState {
@@ -305,6 +307,17 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                             )
                     )
                 }
+            }
+            is BootstrapStep.AccountPassword   -> {
+                _viewEvents.post(BootstrapViewEvents.SkipBootstrap)
+            }
+            BootstrapStep.Initializing         -> {
+                // do we let you cancel from here?
+                _viewEvents.post(BootstrapViewEvents.SkipBootstrap)
+            }
+            is BootstrapStep.SaveRecoveryKey,
+            BootstrapStep.DoneSuccess          -> {
+                // nop
             }
         }
     }

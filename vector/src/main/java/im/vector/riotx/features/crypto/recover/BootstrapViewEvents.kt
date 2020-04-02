@@ -20,17 +20,7 @@ import im.vector.riotx.core.platform.VectorViewEvents
 
 sealed class BootstrapViewEvents : VectorViewEvents {
     object Dismiss : BootstrapViewEvents()
-//    data class RequestPassword(val sessionId: String, val userId: String) : BootstrapViewEvents()
     data class ModalError(val error: String) : BootstrapViewEvents()
     object RecoveryKeySaved: BootstrapViewEvents()
-//    data class Failure(val throwable: Throwable) : DevicesViewEvents()
-//
-//    object RequestPassword : DevicesViewEvents()
-//
-//    data class PromptRenameDevice(val deviceInfo: DeviceInfo) : DevicesViewEvents()
-//
-//    data class ShowVerifyDevice(
-//            val userId: String,
-//            val transactionId: String?
-//    ) : DevicesViewEvents()
+    object SkipBootstrap: BootstrapViewEvents()
 }
