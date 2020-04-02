@@ -83,7 +83,7 @@ class BootstrapAccountPasswordFragment @Inject constructor(
                 }
                 .disposeOnDestroyView()
 
-        withState(sharedViewModel) {state ->
+        withState(sharedViewModel) { state ->
             (state.step as? BootstrapStep.AccountPassword)?.failure?.let {
                 bootstrapAccountPasswordTil.error = it
             }
@@ -111,6 +111,5 @@ class BootstrapAccountPasswordFragment @Inject constructor(
             bootstrapAccountPasswordEditText.showPassword(isPasswordVisible, updateCursor = false)
             ssss_view_show_password.setImageResource(if (isPasswordVisible) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
         }
-
     }
 }

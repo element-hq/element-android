@@ -28,10 +28,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
-import im.vector.riotx.core.dialogs.PromptPasswordDialog
 import im.vector.riotx.core.extensions.commitTransaction
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import kotlinx.android.synthetic.main.bottom_sheet_bootstrap.*

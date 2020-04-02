@@ -95,7 +95,6 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
             requireActivity().toast(R.string.error_no_external_application_found)
             sharedViewModel.handle(BootstrapActions.SaveReqFailed)
         }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -127,9 +126,7 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
         startSharePlainTextIntent(this,
                 context?.getString(R.string.keys_backup_setup_step3_share_intent_chooser_title),
                 recoveryKey,
-                context?.getString(R.string.recovery_key)
-                , REQUEST_CODE_COPY)
-
+                context?.getString(R.string.recovery_key), REQUEST_CODE_COPY)
     }
 
     override fun invalidate() = withState(sharedViewModel) { state ->

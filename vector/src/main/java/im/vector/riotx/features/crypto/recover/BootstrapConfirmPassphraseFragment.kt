@@ -120,6 +120,5 @@ class BootstrapConfirmPassphraseFragment @Inject constructor(
             ssss_passphrase_enter_edittext.showPassword(isPasswordVisible, updateCursor = false)
             ssss_view_show_password.setImageResource(if (isPasswordVisible) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
         }
-
     }
 }

@@ -351,11 +351,11 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     }
 }
 
-//fun View.getParentCoordinatorLayout(): CoordinatorLayout? {
+// fun View.getParentCoordinatorLayout(): CoordinatorLayout? {
 //    var current = this as? View
 //    while (current != null) {
 //        if (current is CoordinatorLayout) return current
 //        current = current.parent as? View
 //    }
 //    return null
-//}
+// }

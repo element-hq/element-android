@@ -214,12 +214,10 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     copy(recoverySaveFileProcess = Fail(it))
                 }
             })
-
         }
     }
 
     private fun startInitializeFlow(auth: UserPasswordAuth?) {
-
         setState {
             copy(step = BootstrapStep.Initializing)
         }
@@ -233,7 +231,6 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 }
             }
         }
-
 
         withState { state ->
             viewModelScope.launch {
@@ -277,7 +274,6 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                             if (it is BootstrapResult.GenericError
                                     && it.failure is im.vector.matrix.android.api.failure.Failure.OtherServerError
                                     && it.failure.httpCode == 401) {
-
                             } else {
                                 _viewEvents.post(BootstrapViewEvents.ModalError(it.error ?: stringProvider.getString(R.string.matrix_error)))
                                 setState {
@@ -300,7 +296,6 @@ class BootstrapSharedViewModel @AssistedInject constructor(
     private fun queryBack() = withState { state ->
         when (state.step) {
             is BootstrapStep.SetupPassphrase   -> {
-
             }
             is BootstrapStep.ConfirmPassphrase -> {
                 setState {
@@ -311,7 +306,6 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     )
                 }
             }
-
         }
     }
 

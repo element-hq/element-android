@@ -23,7 +23,6 @@ import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageRelationContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationCancelContent
-import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.session.room.VerificationState
 import im.vector.riotx.core.epoxy.VectorEpoxyModel

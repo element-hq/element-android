@@ -54,7 +54,6 @@ class BottomSheetActionButton @JvmOverloads constructor(
 
     @BindView(R.id.itemVerificationClickableZone)
     lateinit var clickableView: View
-    
 
     var title: String? = null
         set(value) {

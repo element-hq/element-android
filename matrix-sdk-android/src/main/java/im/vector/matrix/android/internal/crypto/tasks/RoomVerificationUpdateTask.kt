@@ -35,7 +35,6 @@ import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.task.Task
 import timber.log.Timber
 import java.util.ArrayList
-import java.util.UUID
 import javax.inject.Inject
 
 internal interface RoomVerificationUpdateTask : Task<RoomVerificationUpdateTask.Params, Unit> {

@@ -34,4 +34,3 @@ sealed class BootstrapViewEvents : VectorViewEvents {
 //            val transactionId: String?
 //    ) : DevicesViewEvents()
 }
-

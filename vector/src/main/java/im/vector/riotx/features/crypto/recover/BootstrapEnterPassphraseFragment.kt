@@ -130,6 +130,5 @@ class BootstrapEnterPassphraseFragment @Inject constructor(
                 }
             }
         }
-
     }
 }

@@ -58,6 +58,5 @@ class BootstrapConclusionFragment @Inject constructor(
                 .toSpannable()
                 .colorizeMatchingText(getString(R.string.recovery_passphrase), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
                 .colorizeMatchingText(getString(R.string.message_key), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
-
     }
 }

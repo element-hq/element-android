@@ -82,7 +82,6 @@ class BootstrapCrossSigningTask @Inject constructor(
     }
 
     suspend fun execute(params: Params): BootstrapResult {
-
         params.progressListener?.onProgress(WaitingViewData(stringProvider.getString(R.string.bootstrap_crosssigning_progress_initializing), isIndeterminate = true))
         val crossSigningService = session.cryptoService().crossSigningService()
 
@@ -97,7 +96,6 @@ class BootstrapCrossSigningTask @Inject constructor(
         val keyInfo: SsssKeyCreationInfo
 
         val ssssService = session.sharedSecretStorageService
-
 
         params.progressListener?.onProgress(WaitingViewData(stringProvider.getString(R.string.bootstrap_crosssigning_progress_pbkdf2), isIndeterminate = true))
         try {
@@ -115,7 +113,6 @@ class BootstrapCrossSigningTask @Inject constructor(
             return BootstrapResult.FailedToCreateSSSSKey(failure)
         }
 
-
         params.progressListener?.onProgress(WaitingViewData(stringProvider.getString(R.string.bootstrap_crosssigning_progress_default_key), isIndeterminate = true))
         try {
             awaitCallback<Unit> {
@@ -132,7 +129,6 @@ class BootstrapCrossSigningTask @Inject constructor(
         val uskPrivateKey = xKeys.user ?: return BootstrapResult.MissingPrivateKey
 
         try {
-
             params.progressListener?.onProgress(WaitingViewData(stringProvider.getString(R.string.bootstrap_crosssigning_progress_save_msk), isIndeterminate = true))
             awaitCallback<Unit> {
                 ssssService.storeSecret(MASTER_KEY_SSSS_NAME, mskPrivateKey, listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec)), it)
