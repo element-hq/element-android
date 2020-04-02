@@ -83,6 +83,14 @@ class BootstrapAccountPasswordFragment @Inject constructor(
                 }
                 .disposeOnDestroyView()
 
+        bootstrapPasswordButton.clicks()
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    submit()
+                }
+                .disposeOnDestroyView()
+
         withState(sharedViewModel) { state ->
             (state.step as? BootstrapStep.AccountPassword)?.failure?.let {
                 bootstrapAccountPasswordTil.error = it
