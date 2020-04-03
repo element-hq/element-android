@@ -4,16 +4,18 @@ Changes in RiotX 0.19.0 (2020-XX-XX)
 Features ✨:
  - Cross-Signing | Support SSSS secret sharing (#944)
  - Cross-Signing | Verify new session from existing session (#1134)
+ - Cross-Signing | Bootstraping cross signing with 4S from mobile (#985)
 
 Improvements 🙌:
  - Verification DM / Handle concurrent .start after .ready (#794)
- - CrossSigning / Update Shield Logic for DM (#963)
- - Xsigning | Complete security new session design update (#1135)
+ - Cross-Signing | Update Shield Logic for DM (#963)
+ - Cross-Signing | Complete security new session design update (#1135)
 
 Bugfix 🐛:
  - Missing avatar/displayname after verification request message (#841)
  - Crypto | RiotX sometimes rotate the current device keys (#1170)
  - RiotX can't restore cross signing keys saved by web in SSSS (#1174)
+ - Cross- Signing | After signin in new session, verification paper trail in DM is off (#1191)
 
 Translations 🗣:
  -

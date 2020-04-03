@@ -54,7 +54,11 @@ class BootstrapConclusionFragment @Inject constructor(
     override fun invalidate() = withState(sharedViewModel) { state ->
         if (state.step !is BootstrapStep.DoneSuccess) return@withState
 
-        bootstrapConclusionText.text = getString(R.string.bootstrap_cross_signing_success, getString(R.string.recovery_passphrase), getString(R.string.message_key))
+        bootstrapConclusionText.text = getString(
+                R.string.bootstrap_cross_signing_success,
+                getString(R.string.recovery_passphrase),
+                getString(R.string.message_key)
+        )
                 .toSpannable()
                 .colorizeMatchingText(getString(R.string.recovery_passphrase), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
                 .colorizeMatchingText(getString(R.string.message_key), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
