@@ -187,7 +187,6 @@ internal object RealmCryptoStoreMigration : RealmMigration {
                 .addField(OutgoingGossipingRequestEntityFields.REQUEST_STATE_STR, String::class.java)
     }
 
-
     private fun migrateTo3(realm: DynamicRealm) {
         Timber.d("Updating CryptoMetadataEntity table")
         realm.schema.get("CryptoMetadataEntity")

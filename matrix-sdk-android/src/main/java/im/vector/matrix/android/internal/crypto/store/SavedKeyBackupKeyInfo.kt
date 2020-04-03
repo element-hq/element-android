@@ -16,7 +16,7 @@
 
 package im.vector.matrix.android.internal.crypto.store
 
-data class SavedKeyBackupKeyInfo (
+data class SavedKeyBackupKeyInfo(
         val recoveryKey : String,
         val version: String
 )

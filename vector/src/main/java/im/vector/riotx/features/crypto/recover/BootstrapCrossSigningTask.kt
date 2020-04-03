@@ -39,7 +39,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.Timer
 import java.util.UUID
 import javax.inject.Inject
 
@@ -209,11 +208,9 @@ class BootstrapCrossSigningTask @Inject constructor(
             }
             // Save it for gossiping
             session.cryptoService().keysBackupService().saveBackupRecoveryKey(creationInfo.recoveryKey, version = version.version)
-
         } catch (failure: Throwable) {
             Timber.e("## BootstrapCrossSigningTask: Failed to init keybackup")
         }
-
 
         return BootstrapResult.Success(keyInfo)
     }

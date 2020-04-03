@@ -173,7 +173,6 @@ interface KeysBackupService {
                                              password: String,
                                              callback: MatrixCallback<Unit>)
 
-
     fun onSecretKeyGossip(secret: String)
 
     /**
@@ -214,7 +213,6 @@ interface KeysBackupService {
     val isEnabled: Boolean
     val isStucked: Boolean
     val state: KeysBackupState
-
 
     // For gossiping
     fun saveBackupRecoveryKey(recoveryKey: String?, version: String?)
