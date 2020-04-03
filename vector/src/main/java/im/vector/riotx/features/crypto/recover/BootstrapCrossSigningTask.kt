@@ -82,7 +82,12 @@ class BootstrapCrossSigningTask @Inject constructor(
     }
 
     suspend fun execute(params: Params): BootstrapResult {
-        params.progressListener?.onProgress(WaitingViewData(stringProvider.getString(R.string.bootstrap_crosssigning_progress_initializing), isIndeterminate = true))
+        params.progressListener?.onProgress(
+                WaitingViewData(
+                        stringProvider.getString(R.string.bootstrap_crosssigning_progress_initializing),
+                        isIndeterminate = true
+                )
+        )
         val crossSigningService = session.cryptoService().crossSigningService()
 
         try {
@@ -97,7 +102,11 @@ class BootstrapCrossSigningTask @Inject constructor(
 
         val ssssService = session.sharedSecretStorageService
 
-        params.progressListener?.onProgress(WaitingViewData(stringProvider.getString(R.string.bootstrap_crosssigning_progress_pbkdf2), isIndeterminate = true))
+        params.progressListener?.onProgress(
+                WaitingViewData(
+                        stringProvider.getString(R.string.bootstrap_crosssigning_progress_pbkdf2),
+                        isIndeterminate = true)
+        )
         try {
             keyInfo = awaitCallback {
                 params.passphrase?.let { passphrase ->
@@ -122,7 +131,11 @@ class BootstrapCrossSigningTask @Inject constructor(
             return BootstrapResult.FailedToCreateSSSSKey(failure)
         }
 
-        params.progressListener?.onProgress(WaitingViewData(stringProvider.getString(R.string.bootstrap_crosssigning_progress_default_key), isIndeterminate = true))
+        params.progressListener?.onProgress(
+                WaitingViewData(
+                        stringProvider.getString(R.string.bootstrap_crosssigning_progress_default_key),
+                        isIndeterminate = true)
+        )
         try {
             awaitCallback<Unit> {
                 ssssService.setDefaultKey(keyInfo.keyId, it)
@@ -138,17 +151,47 @@ class BootstrapCrossSigningTask @Inject constructor(
         val uskPrivateKey = xKeys.user ?: return BootstrapResult.MissingPrivateKey
 
         try {
-            params.progressListener?.onProgress(WaitingViewData(stringProvider.getString(R.string.bootstrap_crosssigning_progress_save_msk), isIndeterminate = true))
+            params.progressListener?.onProgress(
+                    WaitingViewData(
+                            stringProvider.getString(R.string.bootstrap_crosssigning_progress_save_msk),
+                            isIndeterminate = true
+                    )
+            )
             awaitCallback<Unit> {
-                ssssService.storeSecret(MASTER_KEY_SSSS_NAME, mskPrivateKey, listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec)), it)
+                ssssService.storeSecret(
+                        MASTER_KEY_SSSS_NAME,
+                        mskPrivateKey,
+                        listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+                        , it
+                )
             }
-            params.progressListener?.onProgress(WaitingViewData(stringProvider.getString(R.string.bootstrap_crosssigning_progress_save_usk), isIndeterminate = true))
+            params.progressListener?.onProgress(
+                    WaitingViewData(
+                            stringProvider.getString(R.string.bootstrap_crosssigning_progress_save_usk),
+                            isIndeterminate = true
+                    )
+            )
             awaitCallback<Unit> {
-                ssssService.storeSecret(USER_SIGNING_KEY_SSSS_NAME, uskPrivateKey, listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec)), it)
+                ssssService.storeSecret(
+                        USER_SIGNING_KEY_SSSS_NAME,
+                        uskPrivateKey,
+                        listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec)),
+                        it
+                )
             }
-            params.progressListener?.onProgress(WaitingViewData(stringProvider.getString(R.string.bootstrap_crosssigning_progress_save_ssk), isIndeterminate = true))
+            params.progressListener?.onProgress(
+                    WaitingViewData(
+                            stringProvider.getString(R.string.bootstrap_crosssigning_progress_save_ssk)
+                            , isIndeterminate = true
+                    )
+            )
             awaitCallback<Unit> {
-                ssssService.storeSecret(SELF_SIGNING_KEY_SSSS_NAME, sskPrivateKey, listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec)), it)
+                ssssService.storeSecret(
+                        SELF_SIGNING_KEY_SSSS_NAME,
+                        sskPrivateKey,
+                        listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+                        , it
+                )
             }
         } catch (failure: Failure) {
             // Maybe we could just ignore this error?
