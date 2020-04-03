@@ -25,7 +25,7 @@ Build 🧱:
  -
 
 Other changes:
- -
+ - Increase File Logger capacities ( + use dev log preferences)
 
 Changes in RiotX 0.18.1 (2020-03-17)
 ===================================================
