@@ -26,6 +26,8 @@ import im.vector.matrix.android.api.session.crypto.keyshare.GossipingRequestList
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.internal.crypto.crosssigning.toBase64NoPadding
+import im.vector.matrix.android.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 import im.vector.matrix.android.internal.crypto.model.rest.GossipingDefaultContent
 import im.vector.matrix.android.internal.crypto.model.rest.GossipingToDeviceObject
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
@@ -282,7 +284,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
         when (secretName) {
             SELF_SIGNING_KEY_SSSS_NAME -> cryptoStore.getCrossSigningPrivateKeys()?.selfSigned
             USER_SIGNING_KEY_SSSS_NAME -> cryptoStore.getCrossSigningPrivateKeys()?.user
-            KEYBACKUP_SECRET_SSSS_NAME -> cryptoStore.getKeyBackupRecoveryKeyInfo()?.recoveryKey
+            KEYBACKUP_SECRET_SSSS_NAME -> cryptoStore.getKeyBackupRecoveryKeyInfo()?.recoveryKey?.let { extractCurveKeyFromRecoveryKey(it)?.toBase64NoPadding() }
             else                       -> null
         }?.let { secretValue ->
             Timber.i("## GOSSIP processIncomingSecretShareRequest() : Sharing secret $secretName with $device locally trusted")

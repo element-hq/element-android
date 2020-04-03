@@ -36,6 +36,7 @@ import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.MegolmSessionData
 import im.vector.matrix.android.internal.crypto.ObjectSigner
 import im.vector.matrix.android.internal.crypto.actions.MegolmSessionDataImporter
+import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
 import im.vector.matrix.android.internal.crypto.keysbackup.model.KeysBackupVersionTrust
 import im.vector.matrix.android.internal.crypto.keysbackup.model.KeysBackupVersionTrustSignature
 import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupAuthData
@@ -581,13 +582,13 @@ internal class DefaultKeysBackupService @Inject constructor(
         }
     }
 
-    override fun onSecretKeyGossip(recoveryKey: String) {
-
-        Timber.v("onSecretKeyGossip: version ${keysBackupVersion?.version}")
+    override fun onSecretKeyGossip(secret: String) {
+        Timber.i("## CrossSigning - onSecretKeyGossip")
 
         cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             try {
                 val keysBackupVersion = getKeysBackupLastVersionTask.execute(Unit)
+                val recoveryKey = computeRecoveryKey(secret.fromBase64())
                 if (isValidRecoveryKeyForKeysBackupVersion(recoveryKey, keysBackupVersion)) {
                     awaitCallback<Unit> {
                         trustKeysBackupVersion(keysBackupVersion, true, it)
@@ -595,7 +596,10 @@ internal class DefaultKeysBackupService @Inject constructor(
                     val importResult = awaitCallback<ImportRoomKeysResult> {
                         restoreKeysWithRecoveryKey(keysBackupVersion, recoveryKey, null, null, null, it)
                     }
+                    cryptoStore.saveBackupRecoveryKey(recoveryKey, keysBackupVersion.version)
                     Timber.i("onSecretKeyGossip: Recovered keys ${importResult.successfullyNumberOfImportedKeys} out of ${importResult.totalNumberOfKeys}")
+                } else {
+                    Timber.e("onSecretKeyGossip: Recovery key is not valid ${keysBackupVersion.version}")
                 }
             } catch (failure: Throwable) {
                 Timber.e("onSecretKeyGossip: failed to trust key backup version ${keysBackupVersion?.version}")
