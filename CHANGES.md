@@ -14,6 +14,7 @@ Bugfix 🐛:
  - Missing avatar/displayname after verification request message (#841)
  - Crypto | RiotX sometimes rotate the current device keys (#1170)
  - RiotX can't restore cross signing keys saved by web in SSSS (#1174)
+ - Failed to encrypt message in room (message stays in red), [thanks to pwr22] (#925)
 
 Translations 🗣:
  -
