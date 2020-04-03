@@ -35,14 +35,24 @@ import java.util.logging.Logger
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private const val size20MB = 20 * 1024 * 1024
-private const val size50MB = 50 * 1024 * 1024
+private const val SIZE_20MB = 20 * 1024 * 1024
+private const val SIZE_50MB = 50 * 1024 * 1024
 
 @Singleton
 class VectorFileLogger @Inject constructor(val context: Context, private val vectorPreferences: VectorPreferences) : Timber.DebugTree() {
 
-    private val maxLogSizeByte = if (vectorPreferences.labAllowedExtendedLogging()) size20MB else size50MB   // 20MB
-    private val logRotationCount = if (vectorPreferences.labAllowedExtendedLogging()) 15 else 7
+    private val maxLogSizeByte: Int
+    private val logRotationCount: Int
+
+    init {
+        if (vectorPreferences.labAllowedExtendedLogging()) {
+            maxLogSizeByte = SIZE_50MB
+            logRotationCount = 15
+        } else {
+            maxLogSizeByte = SIZE_20MB
+            logRotationCount = 7
+        }
+    }
 
     private val sLogger = Logger.getLogger("im.vector.riotx")
     private var sFileHandler: FileHandler? = null
