@@ -33,6 +33,7 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
+import im.vector.matrix.android.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.keyshare.GossipingRequestListener
@@ -774,6 +775,10 @@ internal class DefaultCryptoService @Inject constructor(
             USER_SIGNING_KEY_SSSS_NAME -> {
                     crossSigningService.onSecretUSKGossip(secretContent.secretValue)
                     return
+            }
+            KEYBACKUP_SECRET_SSSS_NAME -> {
+                keysBackupService.onSecretKeyGossip(secretContent.secretValue)
+                return
             }
             else                       -> {
                 // Ask to application layer?

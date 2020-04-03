@@ -71,6 +71,7 @@
     <string name="bootstrap_crosssigning_progress_save_msk">Synchronizing Master key</string>
     <string name="bootstrap_crosssigning_progress_save_usk">Synchronizing User key</string>
     <string name="bootstrap_crosssigning_progress_save_ssk">Synchronizing Self Signing key</string>
+    <string name="bootstrap_crosssigning_progress_key_backup">Setting Up Key Backup</string>
 
 
     <!-- %1$s is replaced by message_key and %2$s by recovery_passphrase -->

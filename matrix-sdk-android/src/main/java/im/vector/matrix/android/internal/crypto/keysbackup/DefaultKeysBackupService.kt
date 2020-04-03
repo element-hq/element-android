@@ -67,6 +67,7 @@ import im.vector.matrix.android.internal.crypto.keysbackup.util.extractCurveKeyF
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
+import im.vector.matrix.android.internal.crypto.store.SavedKeyBackupKeyInfo
 import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.di.UserId
@@ -576,6 +577,28 @@ internal class DefaultKeysBackupService @Inject constructor(
             } else {
                 // Check trust using the recovery key
                 trustKeysBackupVersionWithRecoveryKey(keysBackupVersion, recoveryKey, callback)
+            }
+        }
+    }
+
+    override fun onSecretKeyGossip(recoveryKey: String) {
+
+        Timber.v("onSecretKeyGossip: version ${keysBackupVersion?.version}")
+
+        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
+            try {
+                val keysBackupVersion = getKeysBackupLastVersionTask.execute(Unit)
+                if (isValidRecoveryKeyForKeysBackupVersion(recoveryKey, keysBackupVersion)) {
+                    awaitCallback<Unit> {
+                        trustKeysBackupVersion(keysBackupVersion, true, it)
+                    }
+                    val importResult = awaitCallback<ImportRoomKeysResult> {
+                        restoreKeysWithRecoveryKey(keysBackupVersion, recoveryKey, null, null, null, it)
+                    }
+                    Timber.i("onSecretKeyGossip: Recovered keys ${importResult.successfullyNumberOfImportedKeys} out of ${importResult.totalNumberOfKeys}")
+                }
+            } catch (failure: Throwable) {
+                Timber.e("onSecretKeyGossip: failed to trust key backup version ${keysBackupVersion?.version}")
             }
         }
     }
@@ -1389,6 +1412,14 @@ internal class DefaultKeysBackupService @Inject constructor(
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
+    }
+
+    override fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo? {
+        return cryptoStore.getKeyBackupRecoveryKeyInfo()
+    }
+
+    override fun saveBackupRecoveryKey(recoveryKey: String?, version: String?) {
+        cryptoStore.saveBackupRecoveryKey(recoveryKey, version)
     }
 
     companion object {

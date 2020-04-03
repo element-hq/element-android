@@ -37,13 +37,14 @@ import timber.log.Timber
 internal object RealmCryptoStoreMigration : RealmMigration {
 
     // Version 1L added Cross Signing info persistence
-    const val CRYPTO_STORE_SCHEMA_VERSION = 2L
+    const val CRYPTO_STORE_SCHEMA_VERSION = 3L
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.v("Migrating Realm Crypto from $oldVersion to $newVersion")
 
         if (oldVersion <= 0) migrateTo1(realm)
         if (oldVersion <= 1) migrateTo2(realm)
+        if (oldVersion <= 2) migrateTo3(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -184,5 +185,13 @@ internal object RealmCryptoStoreMigration : RealmMigration {
                 .addField(OutgoingGossipingRequestEntityFields.TYPE_STR, String::class.java)
                 .addIndex(OutgoingGossipingRequestEntityFields.TYPE_STR)
                 .addField(OutgoingGossipingRequestEntityFields.REQUEST_STATE_STR, String::class.java)
+    }
+
+
+    private fun migrateTo3(realm: DynamicRealm) {
+        Timber.d("Updating CryptoMetadataEntity table")
+        realm.schema.get("CryptoMetadataEntity")
+                ?.addField(CryptoMetadataEntityFields.KEY_BACKUP_RECOVERY_KEY, String::class.java)
+                ?.addField(CryptoMetadataEntityFields.KEY_BACKUP_RECOVERY_KEY_VERSION, String::class.java)
     }
 }
