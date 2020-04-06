@@ -34,6 +34,8 @@ import im.vector.matrix.android.common.TestConstants
 import im.vector.matrix.android.internal.crypto.GossipingRequestState
 import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestState
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
+import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
+import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersion
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
@@ -197,6 +199,16 @@ class KeyShareTests : InstrumentedTest {
                     ), it)
         }
 
+        // Also bootstrap keybackup on first session
+        val creationInfo = mTestHelper.doSync<MegolmBackupCreationInfo> {
+            aliceSession1.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)
+        }
+        val version = mTestHelper.doSync<KeysVersion> {
+            aliceSession1.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo, it)
+        }
+        // Save it for gossiping
+        aliceSession1.cryptoService().keysBackupService().saveBackupRecoveryKey(creationInfo.recoveryKey, version = version.version)
+
         val aliceSession2 = mTestHelper.logIntoAccount(aliceSession1.myUserId, SessionTestParams(true))
 
         val aliceVerificationService1 = aliceSession1.cryptoService().verificationService()
@@ -260,8 +272,17 @@ class KeyShareTests : InstrumentedTest {
 
         mTestHelper.waitWithLatch(60_000) { latch ->
             mTestHelper.retryPeriodicallyWithLatch(latch) {
-                Log.d("#TEST", "CAN XS :${ aliceSession2.cryptoService().crossSigningService().getMyCrossSigningKeys()}")
+                Log.d("#TEST", "CAN XS :${aliceSession2.cryptoService().crossSigningService().getMyCrossSigningKeys()}")
                 aliceSession2.cryptoService().crossSigningService().canCrossSign()
+            }
+        }
+
+        // Test that key backup key has been shared to
+        mTestHelper.waitWithLatch(60_000) { latch ->
+            val keysBackupService = aliceSession2.cryptoService().keysBackupService()
+            mTestHelper.retryPeriodicallyWithLatch(latch) {
+                Log.d("#TEST", "Recovery :${ keysBackupService.getKeyBackupRecoveryKeyInfo()?.recoveryKey}")
+                keysBackupService.getKeyBackupRecoveryKeyInfo()?.recoveryKey != creationInfo.recoveryKey
             }
         }
     }
