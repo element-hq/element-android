@@ -161,8 +161,7 @@ class BootstrapCrossSigningTask @Inject constructor(
                 ssssService.storeSecret(
                         MASTER_KEY_SSSS_NAME,
                         mskPrivateKey,
-                        listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
-                        , it
+                        listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec)), it
                 )
             }
             params.progressListener?.onProgress(
@@ -181,16 +180,14 @@ class BootstrapCrossSigningTask @Inject constructor(
             }
             params.progressListener?.onProgress(
                     WaitingViewData(
-                            stringProvider.getString(R.string.bootstrap_crosssigning_progress_save_ssk)
-                            , isIndeterminate = true
+                            stringProvider.getString(R.string.bootstrap_crosssigning_progress_save_ssk), isIndeterminate = true
                     )
             )
             awaitCallback<Unit> {
                 ssssService.storeSecret(
                         SELF_SIGNING_KEY_SSSS_NAME,
                         sskPrivateKey,
-                        listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
-                        , it
+                        listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec)), it
                 )
             }
         } catch (failure: Failure) {
