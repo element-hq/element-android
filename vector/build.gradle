@@ -368,7 +368,7 @@ dependencies {
 
     implementation "androidx.emoji:emoji-appcompat:1.0.0"
 
-    implementation 'com.github.BillCarsonFr:JsonViewer:0.4'
+    implementation 'com.github.BillCarsonFr:JsonViewer:0.5'
 
     // QR-code
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170

@@ -35,7 +35,6 @@ import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.task.Task
 import timber.log.Timber
 import java.util.ArrayList
-import java.util.UUID
 import javax.inject.Inject
 
 internal interface RoomVerificationUpdateTask : Task<RoomVerificationUpdateTask.Params, Unit> {
@@ -75,7 +74,7 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
                 // TODO use a global event decryptor? attache to session and that listen to new sessionId?
                 // for now decrypt sync
                 try {
-                    val result = cryptoService.decryptEvent(event, event.roomId + UUID.randomUUID().toString())
+                    val result = cryptoService.decryptEvent(event, "")
                     event.mxDecryptionResult = OlmDecryptionResult(
                             payload = result.clearEvent,
                             senderKey = result.senderCurve25519Key,

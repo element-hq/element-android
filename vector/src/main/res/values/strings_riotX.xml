@@ -32,6 +32,60 @@
     <string name="verify_cancelled_notice">Verify your devices from Settings.</string>
     <string name="verification_cancelled">Verification Cancelled</string>
 
+    <string name="recovery_passphrase">Message Password</string>
+    <string name="message_key">Message Key</string>
+    <string name="account_password">Account Password</string>
+
+
+    <!-- %s will be replaced by recovery_passphrase -->
+    <string name="set_recovery_passphrase">Set a %s</string>
+    <string name="generate_message_key">Generate a Message Key</string>
+
+    <!-- %s will be replaced by recovery_passphrase -->
+    <string name="confirm_recovery_passphrase">Confirm %s</string>
+
+
+    <!-- %s will be replaced by account_password -->
+    <string name="enter_account_password">Enter your %s to continue.</string>
+
+    <!-- %s will be replaced by recovery_passphrase -->
+    <string name="bootstrap_info_text">Secure &amp; unlock encrypted messages and trust with a %s.</string>
+    <!-- %s will be replaced by recovery_passphrase -->
+    <string name="bootstrap_info_confirm_text">Enter your %s again to confirm it.</string>
+    <string name="bootstrap_dont_reuse_pwd">Don’t re-use your account password.</string>
+
+
+    <string name="bootstrap_loading_text">This might take several seconds, please be patient.</string>
+    <string name="bootstrap_loading_title">Setting up recovery.</string>
+    <string name="your_recovery_key">Your recovery key</string>
+    <string name="bootstrap_finish_title">You‘re done!</string>
+    <string name="keep_it_safe">Keep it safe</string>
+    <string name="finish">Finish</string>
+
+    <!-- %1$s is replaced by message_key and %2$s by recovery_passphrase -->
+    <string name="bootstrap_save_key_description">Use this %1$s as a safety net in case you forget your %2$s.</string>
+
+    <string name="bootstrap_crosssigning_progress_initializing">Publishing created identity keys</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">Generating secure key from passphrase</string>
+    <string name="bootstrap_crosssigning_progress_default_key">Defining SSSS default Key</string>
+    <string name="bootstrap_crosssigning_progress_save_msk">Synchronizing Master key</string>
+    <string name="bootstrap_crosssigning_progress_save_usk">Synchronizing User key</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">Synchronizing Self Signing key</string>
+
+
+    <!-- %1$s is replaced by message_key and %2$s by recovery_passphrase -->
+    <string name="bootstrap_cross_signing_success">Your %2$s &amp; %1$s are now set.\n\nKeep them safe! You’ll need them to unlock encrypted messages and secure information if you lose all of your active sessions.</string>
+
+    <!-- the %s will be replaced by a check mark on screen-->
+    <string name="bootstrap_crosssigning_print_it">Print it and store it somewhere safe</string>
+    <string name="bootstrap_crosssigning_save_usb">Save it on a USB key or backup drive</string>
+    <string name="bootstrap_crosssigning_save_cloud">Copy it to your personal cloud storage</string>
+
+    <string name="auth_flow_not_supported">You cannot do that from mobile</string>
+
+    <string name="bootstrap_skip_text">Setting a Message Password lets you secure &amp; unlock encrypted messages and trust.\n\nIf you don’t want to set a Message Password, generate a Message Key instead.</string>
+    <string name="bootstrap_skip_text_no_gen_key">Setting a Message Password lets you secure &amp; unlock encrypted messages and trust.</string>
+
     <!-- END Strings added by Valere -->
 
 

@@ -102,7 +102,8 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                             callback.onSuccess(SsssKeyCreationInfo(
                                     keyId = keyId,
                                     content = storageKeyContent,
-                                    recoveryKey = computeRecoveryKey(key)
+                                    recoveryKey = computeRecoveryKey(key),
+                                    keySpec = RawBytesKeySpec(key)
                             ))
                         }
                     }
@@ -142,7 +143,8 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                             callback.onSuccess(SsssKeyCreationInfo(
                                     keyId = keyId,
                                     content = storageKeyContent,
-                                    recoveryKey = computeRecoveryKey(privatePart.privateKey)
+                                    recoveryKey = computeRecoveryKey(privatePart.privateKey),
+                                    keySpec = RawBytesKeySpec(privatePart.privateKey)
                             ))
                         }
                     }

@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustResult
 import im.vector.matrix.android.internal.crypto.crosssigning.UserTrustResult
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
+import im.vector.matrix.android.internal.crypto.store.PrivateKeysInfo
 
 interface CrossSigningService {
 
@@ -51,6 +52,8 @@ interface CrossSigningService {
     fun getLiveCrossSigningKeys(userId: String): LiveData<Optional<MXCrossSigningInfo>>
 
     fun getMyCrossSigningKeys(): MXCrossSigningInfo?
+
+    fun getCrossSigningPrivateKeys(): PrivateKeysInfo?
 
     fun canCrossSign(): Boolean
 

@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.securestorage
+package im.vector.riotx.features.crypto.recover
 
-interface KeySigner {
-    fun sign(canonicalJson: String): Map<String, Map<String, String>>?
-}
+import im.vector.riotx.core.platform.VectorViewEvents
 
-class EmptyKeySigner : KeySigner {
-    override fun sign(canonicalJson: String): Map<String, Map<String, String>>? = null
+sealed class BootstrapViewEvents : VectorViewEvents {
+    object Dismiss : BootstrapViewEvents()
+    data class ModalError(val error: String) : BootstrapViewEvents()
+    object RecoveryKeySaved: BootstrapViewEvents()
+    data class SkipBootstrap(val genKeyOption: Boolean = true): BootstrapViewEvents()
 }

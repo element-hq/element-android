@@ -792,10 +792,11 @@ internal class DefaultCryptoService @Inject constructor(
             val params = LoadRoomMembersTask.Params(roomId)
             try {
                 loadRoomMembersTask.execute(params)
-                val userIds = getRoomUserIds(roomId)
-                setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), true, userIds)
             } catch (throwable: Throwable) {
                 Timber.e(throwable, "## onRoomEncryptionEvent ERROR FAILED TO SETUP CRYPTO ")
+            } finally {
+                val userIds = getRoomUserIds(roomId)
+                setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), true, userIds)
             }
         }
     }
