@@ -16,6 +16,7 @@ Bugfix 🐛:
  - Crypto | RiotX sometimes rotate the current device keys (#1170)
  - RiotX can't restore cross signing keys saved by web in SSSS (#1174)
  - Cross- Signing | After signin in new session, verification paper trail in DM is off (#1191)
+ - Failed to encrypt message in room (message stays in red), [thanks to pwr22] (#925)
 
 Translations 🗣:
  -
@@ -27,7 +28,7 @@ Build 🧱:
  -
 
 Other changes:
- -
+ - Increase File Logger capacities ( + use dev log preferences)
 
 Changes in RiotX 0.18.1 (2020-03-17)
 ===================================================
