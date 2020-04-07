@@ -38,7 +38,9 @@ internal open class CryptoMetadataEntity(
 
         var xSignMasterPrivateKey: String? = null,
         var xSignUserPrivateKey: String? = null,
-        var xSignSelfSignedPrivateKey: String? = null
+        var xSignSelfSignedPrivateKey: String? = null,
+        var keyBackupRecoveryKey: String? = null,
+        var keyBackupRecoveryKeyVersion: String? = null
 
 //        var crossSigningInfoEntity: CrossSigningInfoEntity? = null
 ) : RealmObject() {

@@ -27,6 +27,8 @@ import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageSer
 import im.vector.matrix.android.api.session.securestorage.SsssKeyCreationInfo
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.auth.registration.RegistrationFlowResponse
+import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
+import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersion
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.util.awaitCallback
@@ -36,6 +38,7 @@ import im.vector.riotx.core.resources.StringProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 
@@ -195,7 +198,24 @@ class BootstrapCrossSigningTask @Inject constructor(
             return BootstrapResult.FailedToStorePrivateKeyInSSSS(failure)
         }
 
-        // TODO configure key backup?
+        params.progressListener?.onProgress(
+                WaitingViewData(
+                        stringProvider.getString(R.string.bootstrap_crosssigning_progress_key_backup),
+                        isIndeterminate = true
+                )
+        )
+        try {
+            val creationInfo = awaitCallback<MegolmBackupCreationInfo> {
+                session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)
+            }
+            val version = awaitCallback<KeysVersion> {
+                session.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo, it)
+            }
+            // Save it for gossiping
+            session.cryptoService().keysBackupService().saveBackupRecoveryKey(creationInfo.recoveryKey, version = version.version)
+        } catch (failure: Throwable) {
+            Timber.e("## BootstrapCrossSigningTask: Failed to init keybackup")
+        }
 
         return BootstrapResult.Success(keyInfo)
     }

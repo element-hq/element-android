@@ -405,6 +405,9 @@ internal interface IMXCryptoStore {
 
     fun getCrossSigningPrivateKeys(): PrivateKeysInfo?
 
+    fun saveBackupRecoveryKey(recoveryKey: String?, version: String?)
+    fun getKeyBackupRecoveryKeyInfo() : SavedKeyBackupKeyInfo?
+
     fun setUserKeysAsTrusted(userId: String, trusted: Boolean = true)
     fun setDeviceTrust(userId: String, deviceId: String, crossSignedVerified: Boolean, locallyVerified: Boolean)
 
