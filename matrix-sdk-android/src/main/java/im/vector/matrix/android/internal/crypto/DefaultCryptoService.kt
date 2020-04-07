@@ -240,7 +240,7 @@ internal class DefaultCryptoService @Inject constructor(
     override fun getDevicesList(callback: MatrixCallback<DevicesListResponse>) {
         getDevicesTask
                 .configureWith {
-//                    this.executionThread = TaskThread.CRYPTO
+                    //                    this.executionThread = TaskThread.CRYPTO
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
@@ -636,7 +636,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     @Throws(MXCryptoError::class)
     override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
-       return internalDecryptEvent(event, timeline)
+        return internalDecryptEvent(event, timeline)
     }
 
     /**
@@ -767,23 +767,30 @@ internal class DefaultCryptoService @Inject constructor(
             return
         }
 
-        when (existingRequest.secretName) {
+        if (!handleSDKLevelGossip(existingRequest.secretName, secretContent.secretValue)) {
+            // TODO Ask to application layer?
+            Timber.v("## onSecretSend() : secret not handled by SDK")
+        }
+    }
+
+    /**
+     * Returns true if handled by SDK, otherwise should be sent to application layer
+     */
+    private fun handleSDKLevelGossip(secretName: String?, secretValue: String): Boolean {
+        return when (secretName) {
             SELF_SIGNING_KEY_SSSS_NAME -> {
-                    crossSigningService.onSecretSSKGossip(secretContent.secretValue)
-                    return
+                crossSigningService.onSecretSSKGossip(secretValue)
+                true
             }
             USER_SIGNING_KEY_SSSS_NAME -> {
-                    crossSigningService.onSecretUSKGossip(secretContent.secretValue)
-                    return
+                crossSigningService.onSecretUSKGossip(secretValue)
+                true
             }
             KEYBACKUP_SECRET_SSSS_NAME -> {
-                keysBackupService.onSecretKeyGossip(secretContent.secretValue)
-                return
+                keysBackupService.onSecretKeyGossip(secretValue)
+                true
             }
-            else                       -> {
-                // Ask to application layer?
-                Timber.v("## onSecretSend() : secret not handled by SDK")
-            }
+            else                       -> false
         }
     }
 
