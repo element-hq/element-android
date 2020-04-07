@@ -4,18 +4,24 @@
     android:viewportWidth="24"
     android:viewportHeight="24">
   <path
-      android:pathData="M20,21V19C20,16.7909 18.2091,15 16,15H8C5.7909,15 4,16.7909 4,19V21"
+      android:pathData="M3,17V20C3,21.1046 3.8954,22 5,22H19C20.1046,22 21,21.1046 21,20V17"
       android:strokeLineJoin="round"
       android:strokeWidth="2"
       android:fillColor="#00000000"
       android:strokeColor="#2E2F32"
       android:strokeLineCap="round"/>
   <path
-      android:pathData="M12,11C14.2091,11 16,9.2091 16,7C16,4.7909 14.2091,3 12,3C9.7909,3 8,4.7909 8,7C8,9.2091 9.7909,11 12,11Z"
+      android:pathData="M8,12L12,16L16,12"
       android:strokeLineJoin="round"
       android:strokeWidth="2"
       android:fillColor="#00000000"
-      android:fillType="evenOdd"
+      android:strokeColor="#2E2F32"
+      android:strokeLineCap="round"/>
+  <path
+      android:pathData="M12,2V16"
+      android:strokeLineJoin="round"
+      android:strokeWidth="2"
+      android:fillColor="#00000000"
       android:strokeColor="#2E2F32"
       android:strokeLineCap="round"/>
 </vector>

@@ -39,6 +39,7 @@ import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.HomeRoomListDataSource
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.VectorHtmlCompressor
+import im.vector.riotx.features.login.ReAuthHelper
 import im.vector.riotx.features.navigation.Navigator
 import im.vector.riotx.features.notifications.NotifiableEventResolver
 import im.vector.riotx.features.notifications.NotificationBroadcastReceiver
@@ -130,6 +131,8 @@ interface VectorComponent {
     fun emojiDataSource(): EmojiDataSource
 
     fun alertManager() : PopupAlertManager
+
+    fun reAuthHelper() : ReAuthHelper
 
     @Component.Factory
     interface Factory {
