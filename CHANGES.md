@@ -9,7 +9,7 @@ Features ✨:
 Improvements 🙌:
  - Verification DM / Handle concurrent .start after .ready (#794)
  - Cross-Signing | Update Shield Logic for DM (#963)
- - Cross-signing | Complete security new session design update (#1135)
+ - Cross-Signing | Complete security new session design update (#1135)
  - UX/UI | Add indicator to home tab on invite (#957)
 
 
