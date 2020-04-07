@@ -22,6 +22,9 @@ import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
+import im.vector.matrix.android.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.verification.CancelCode
 import im.vector.matrix.android.api.session.crypto.verification.PendingVerificationRequest
 import im.vector.matrix.android.api.session.crypto.verification.QrCodeVerificationTransaction
@@ -60,6 +63,7 @@ import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationCancel
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationDone
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationKey
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationMac
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationReady
@@ -109,6 +113,10 @@ internal class DefaultVerificationService @Inject constructor(
     // map [sender : [transaction]]
     private val txMap = HashMap<String, HashMap<String, DefaultVerificationTransaction>>()
 
+    // we need to keep track of finished transaction
+    // It will be used for gossiping (to send request after request is completed and 'done' by other)
+    private val pastTransactions = HashMap<String, HashMap<String, DefaultVerificationTransaction>>()
+
     /**
      * Map [sender: [PendingVerificationRequest]]
      * For now we keep all requests (even terminated ones) during the lifetime of the app.
@@ -136,6 +144,9 @@ internal class DefaultVerificationService @Inject constructor(
                 }
                 EventType.KEY_VERIFICATION_READY         -> {
                     onReadyReceived(event)
+                }
+                EventType.KEY_VERIFICATION_DONE          -> {
+                    onDoneReceived(event)
                 }
                 MessageType.MSGTYPE_VERIFICATION_REQUEST -> {
                     onRequestReceived(event)
@@ -778,6 +789,31 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
+    private fun onDoneReceived(event: Event) {
+        Timber.v("## onDoneReceived")
+        val doneReq = event.getClearContent().toModel<KeyVerificationDone>()?.asValidObject()
+        if (doneReq == null || event.senderId != userId) {
+            // ignore
+            Timber.e("## SAS Received invalid done request")
+            return
+        }
+
+        // We only send gossiping request when the other sent us a done
+        // We can ask without checking too much thinks (like trust), because we will check validity of secret on reception
+        getExistingTransaction(userId, doneReq.transactionId)
+                ?: getOldTransaction(userId, doneReq.transactionId)
+                        ?.let { vt ->
+                            val otherDeviceId = vt.otherDeviceId
+                            if (!crossSigningService.canCrossSign()) {
+                                outgoingGossipingRequestManager.sendSecretShareRequest(SELF_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId
+                                        ?: "*")))
+                                outgoingGossipingRequestManager.sendSecretShareRequest(USER_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId
+                                        ?: "*")))
+                            }
+                            outgoingGossipingRequestManager.sendSecretShareRequest(KEYBACKUP_SECRET_SSSS_NAME, mapOf(userId to listOf(otherDeviceId ?: "*")))
+                        }
+    }
+
     private fun onRoomDoneReceived(event: Event) {
         val doneReq = event.getClearContent().toModel<MessageVerificationDoneContent>()
                 ?.copy(
@@ -1003,7 +1039,11 @@ internal class DefaultVerificationService @Inject constructor(
 
     private fun removeTransaction(otherUser: String, tid: String) {
         synchronized(txMap) {
-            txMap[otherUser]?.remove(tid)?.removeListener(this)
+            txMap[otherUser]?.remove(tid)?.also {
+                it.removeListener(this)
+            }
+        }?.let {
+            rememberOldTransaction(it)
         }
     }
 
@@ -1013,6 +1053,20 @@ internal class DefaultVerificationService @Inject constructor(
             txInnerMap[tx.transactionId] = tx
             dispatchTxAdded(tx)
             tx.addListener(this)
+        }
+    }
+
+    private fun rememberOldTransaction(tx: DefaultVerificationTransaction) {
+        synchronized(pastTransactions) {
+            pastTransactions.getOrPut(tx.otherUserId) { HashMap() }[tx.transactionId] = tx
+        }
+    }
+
+    private fun getOldTransaction(userId: String, tid: String?): DefaultVerificationTransaction? {
+        return tid?.let {
+            synchronized(pastTransactions) {
+                pastTransactions[userId]?.get(it)
+            }
         }
     }
 

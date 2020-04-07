@@ -17,9 +17,6 @@ package im.vector.matrix.android.internal.crypto.verification
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
-import im.vector.matrix.android.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
-import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
-import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.internal.crypto.IncomingGossipingRequestManager
@@ -100,15 +97,15 @@ internal abstract class DefaultVerificationTransaction(
             })
         }
 
-        transport.done(transactionId) {
-            if (otherUserId == userId && !crossSigningService.canCrossSign()) {
-                outgoingGossipingRequestManager.sendSecretShareRequest(SELF_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId ?: "*")))
-                outgoingGossipingRequestManager.sendSecretShareRequest(USER_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId ?: "*")))
-                outgoingGossipingRequestManager.sendSecretShareRequest(KEYBACKUP_SECRET_SSSS_NAME, mapOf(userId to listOf(otherDeviceId ?: "*")))
-            }
-        }
-
         state = VerificationTxState.Verified
+
+        transport.done(transactionId) {
+//            if (otherUserId == userId && !crossSigningService.canCrossSign()) {
+//                outgoingGossipingRequestManager.sendSecretShareRequest(SELF_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId ?: "*")))
+//                outgoingGossipingRequestManager.sendSecretShareRequest(USER_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId ?: "*")))
+//                outgoingGossipingRequestManager.sendSecretShareRequest(KEYBACKUP_SECRET_SSSS_NAME, mapOf(userId to listOf(otherDeviceId ?: "*")))
+//            }
+        }
     }
 
     private fun setDeviceVerified(userId: String, deviceId: String) {
