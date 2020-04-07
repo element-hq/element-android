@@ -22,22 +22,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.children
 import androidx.core.view.isVisible
-import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
-import im.vector.riotx.features.home.AvatarRenderer
-import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
-abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
-
-    @EpoxyAttribute
-    lateinit var attributes: Attributes
-
-    private val distinctMergeData by lazy {
-        attributes.mergeData.distinctBy { it.userId }
-    }
+abstract class MergedHeaderItem : BasedMergedItem<MergedHeaderItem.Holder>() {
 
     override fun getViewType() = STUB_ID
 
@@ -72,33 +61,7 @@ abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
         holder.readReceiptsView.isVisible = false
     }
 
-    override fun getEventIds(): List<String> {
-        return if (attributes.isCollapsed) {
-            attributes.mergeData.map { it.eventId }
-        } else {
-            emptyList()
-        }
-    }
-
-    data class Data(
-            val localId: Long,
-            val eventId: String,
-            val userId: String,
-            val memberName: String,
-            val avatarUrl: String?
-    )
-
-    fun Data.toMatrixItem() = MatrixItem.UserItem(userId, memberName, avatarUrl)
-
-    data class Attributes(
-            val isCollapsed: Boolean,
-            val mergeData: List<Data>,
-            val avatarRenderer: AvatarRenderer,
-            val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
-            val onCollapsedStateChanged: (Boolean) -> Unit
-    )
-
-    class Holder : BaseHolder(STUB_ID) {
+    class Holder : BasedMergedItem.Holder(STUB_ID) {
         val expandView by bind<TextView>(R.id.itemMergedExpandTextView)
         val summaryView by bind<TextView>(R.id.itemMergedSummaryTextView)
         val separatorView by bind<View>(R.id.itemMergedSeparatorView)

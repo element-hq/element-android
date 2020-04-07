@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.factory
 
+import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.features.home.AvatarRenderer
@@ -23,7 +24,10 @@ import im.vector.riotx.features.home.room.detail.timeline.TimelineEventControlle
 import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.riotx.features.home.room.detail.timeline.helper.MergedTimelineEventVisibilityStateChangedListener
 import im.vector.riotx.features.home.room.detail.timeline.helper.canBeMerged
+import im.vector.riotx.features.home.room.detail.timeline.helper.isRoomConfiguration
 import im.vector.riotx.features.home.room.detail.timeline.helper.prevSameTypeEvents
+import im.vector.riotx.features.home.room.detail.timeline.item.BaseEventItem
+import im.vector.riotx.features.home.room.detail.timeline.item.BasedMergedItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MergedHeaderItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MergedHeaderItem_
 import javax.inject.Inject
@@ -43,8 +47,72 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
                eventIdToHighlight: String?,
                callback: TimelineEventController.Callback?,
                requestModelBuild: () -> Unit)
-            : MergedHeaderItem? {
-        return if (!event.canBeMerged() || (nextEvent?.root?.getClearType() == event.root.getClearType() && !addDaySeparator)) {
+            : BasedMergedItem<*>? {
+        return if (nextEvent?.root?.getClearType() == EventType.STATE_ROOM_CREATE && event.isRoomConfiguration()) {
+            // It's the first item before room.create
+            // Collapse all room configuration events
+            var prevEvent = if (currentPosition > 0) items[currentPosition -1] else null
+            var tmpPos = currentPosition -1
+            val mergedEvents = ArrayList<TimelineEvent>().also { it.add(event) }
+            while(prevEvent != null && prevEvent.isRoomConfiguration()) {
+                mergedEvents.add(prevEvent)
+                tmpPos--
+                prevEvent = if (tmpPos >= 0) items[tmpPos] else null
+            }
+            if (mergedEvents.size > 2) {
+                var highlighted = false
+                val mergedData = ArrayList<BasedMergedItem.Data>(mergedEvents.size)
+                mergedEvents.reversed()
+                        .forEach { mergedEvent ->
+                            if (!highlighted && mergedEvent.root.eventId == eventIdToHighlight) {
+                                highlighted = true
+                            }
+                            val senderAvatar = mergedEvent.senderAvatar
+                            val senderName = mergedEvent.getDisambiguatedDisplayName()
+                            val data = BasedMergedItem.Data(
+                                    userId = mergedEvent.root.senderId ?: "",
+                                    avatarUrl = senderAvatar,
+                                    memberName = senderName,
+                                    localId = mergedEvent.localId,
+                                    eventId = mergedEvent.root.eventId ?: ""
+                            )
+                            mergedData.add(data)
+                        }
+                val mergedEventIds = mergedEvents.map { it.localId }
+                // We try to find if one of the item id were used as mergeItemCollapseStates key
+                // => handle case where paginating from mergeable events and we get more
+                val previousCollapseStateKey = mergedEventIds.intersect(mergeItemCollapseStates.keys).firstOrNull()
+                val initialCollapseState = mergeItemCollapseStates.remove(previousCollapseStateKey)
+                        ?: true
+                val isCollapsed = mergeItemCollapseStates.getOrPut(event.localId) { initialCollapseState }
+                if (isCollapsed) {
+                    collapsedEventIds.addAll(mergedEventIds)
+                } else {
+                    collapsedEventIds.removeAll(mergedEventIds)
+                }
+                val mergeId = mergedEventIds.joinToString(separator = "_") { it.toString() }
+                val attributes = BasedMergedItem.Attributes(
+                        isCollapsed = isCollapsed,
+                        mergeData = mergedData,
+                        avatarRenderer = avatarRenderer,
+                        onCollapsedStateChanged = {
+                            mergeItemCollapseStates[event.localId] = it
+                            requestModelBuild()
+                        },
+                        readReceiptsCallback = callback
+                )
+                MergedHeaderItem_()
+                        .id(mergeId)
+                        .leftGuideline(avatarSizeProvider.leftGuideline)
+                        .highlighted(isCollapsed && highlighted)
+                        .attributes(attributes)
+                        .also {
+                            it.setOnVisibilityStateChanged(MergedTimelineEventVisibilityStateChangedListener(callback, mergedEvents))
+                        }
+
+            } else null
+        }
+        else if (!event.canBeMerged() || (nextEvent?.root?.getClearType() == event.root.getClearType() && !addDaySeparator)) {
             null
         } else {
             val prevSameTypeEvents = items.prevSameTypeEvents(currentPosition, 2)
@@ -53,14 +121,14 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
             } else {
                 var highlighted = false
                 val mergedEvents = (prevSameTypeEvents + listOf(event)).asReversed()
-                val mergedData = ArrayList<MergedHeaderItem.Data>(mergedEvents.size)
+                val mergedData = ArrayList<BasedMergedItem.Data>(mergedEvents.size)
                 mergedEvents.forEach { mergedEvent ->
                     if (!highlighted && mergedEvent.root.eventId == eventIdToHighlight) {
                         highlighted = true
                     }
                     val senderAvatar = mergedEvent.senderAvatar
                     val senderName = mergedEvent.getDisambiguatedDisplayName()
-                    val data = MergedHeaderItem.Data(
+                    val data = BasedMergedItem.Data(
                             userId = mergedEvent.root.senderId ?: "",
                             avatarUrl = senderAvatar,
                             memberName = senderName,
@@ -82,7 +150,7 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
                     collapsedEventIds.removeAll(mergedEventIds)
                 }
                 val mergeId = mergedEventIds.joinToString(separator = "_") { it.toString() }
-                val attributes = MergedHeaderItem.Attributes(
+                val attributes = BasedMergedItem.Attributes(
                         isCollapsed = isCollapsed,
                         mergeData = mergedData,
                         avatarRenderer = avatarRenderer,
