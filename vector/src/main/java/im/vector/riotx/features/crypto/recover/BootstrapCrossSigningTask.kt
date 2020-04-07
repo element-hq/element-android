@@ -198,7 +198,12 @@ class BootstrapCrossSigningTask @Inject constructor(
             return BootstrapResult.FailedToStorePrivateKeyInSSSS(failure)
         }
 
-        params.progressListener?.onProgress(WaitingViewData(stringProvider.getString(R.string.bootstrap_crosssigning_progress_key_backup), isIndeterminate = true))
+        params.progressListener?.onProgress(
+                WaitingViewData(
+                        stringProvider.getString(R.string.bootstrap_crosssigning_progress_key_backup),
+                        isIndeterminate = true
+                )
+        )
         try {
             val creationInfo = awaitCallback<MegolmBackupCreationInfo> {
                 session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)

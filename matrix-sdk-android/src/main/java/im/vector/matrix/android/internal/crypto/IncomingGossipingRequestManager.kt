@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.crypto
 
 import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.matrix.android.api.auth.data.sessionId
 import im.vector.matrix.android.api.crypto.MXCryptoConfig
 import im.vector.matrix.android.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
@@ -284,7 +283,10 @@ internal class IncomingGossipingRequestManager @Inject constructor(
         when (secretName) {
             SELF_SIGNING_KEY_SSSS_NAME -> cryptoStore.getCrossSigningPrivateKeys()?.selfSigned
             USER_SIGNING_KEY_SSSS_NAME -> cryptoStore.getCrossSigningPrivateKeys()?.user
-            KEYBACKUP_SECRET_SSSS_NAME -> cryptoStore.getKeyBackupRecoveryKeyInfo()?.recoveryKey?.let { extractCurveKeyFromRecoveryKey(it)?.toBase64NoPadding() }
+            KEYBACKUP_SECRET_SSSS_NAME -> cryptoStore.getKeyBackupRecoveryKeyInfo()?.recoveryKey
+                    ?.let {
+                        extractCurveKeyFromRecoveryKey(it)?.toBase64NoPadding()
+                    }
             else                       -> null
         }?.let { secretValue ->
             Timber.i("## GOSSIP processIncomingSecretShareRequest() : Sharing secret $secretName with $device locally trusted")
@@ -304,6 +306,8 @@ internal class IncomingGossipingRequestManager @Inject constructor(
             }
             return
         }
+
+        Timber.v("## GOSSIP processIncomingSecretShareRequest() : $secretName unknown at SDK level, asking to app layer")
 
         request.ignore = Runnable {
             cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED)
