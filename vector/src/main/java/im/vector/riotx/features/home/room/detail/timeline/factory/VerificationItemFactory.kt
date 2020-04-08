@@ -25,15 +25,17 @@ import im.vector.matrix.android.api.session.room.model.message.MessageRelationCo
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationCancelContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.session.room.VerificationState
+import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.riotx.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
-import im.vector.riotx.features.home.room.detail.timeline.item.VerificationRequestConclusionItem
-import im.vector.riotx.features.home.room.detail.timeline.item.VerificationRequestConclusionItem_
+import im.vector.riotx.features.home.room.detail.timeline.item.StatusTileTimelineItem
+import im.vector.riotx.features.home.room.detail.timeline.item.StatusTileTimelineItem_
 import javax.inject.Inject
 
 /**
@@ -48,6 +50,7 @@ class VerificationItemFactory @Inject constructor(
         private val avatarSizeProvider: AvatarSizeProvider,
         private val noticeItemFactory: NoticeItemFactory,
         private val userPreferencesProvider: UserPreferencesProvider,
+        private val stringProvider: StringProvider,
         private val session: Session
 ) {
 
@@ -88,12 +91,12 @@ class VerificationItemFactory @Inject constructor(
                     CancelCode.MismatchedKeys,
                     CancelCode.MismatchedSas -> {
                         // We should display these bad conclusions
-                        return VerificationRequestConclusionItem_()
+                        return StatusTileTimelineItem_()
                                 .attributes(
-                                        VerificationRequestConclusionItem.Attributes(
-                                                toUserId = informationData.senderId,
-                                                toUserName = informationData.memberName.toString(),
-                                                isPositive = false,
+                                        StatusTileTimelineItem.Attributes(
+                                                title = stringProvider.getString(R.string.verification_conclusion_warning),
+                                                description = "${informationData.memberName.toString()} (${informationData.senderId})",
+                                                shieldUIState = StatusTileTimelineItem.ShieldUIState.RED,
                                                 informationData = informationData,
                                                 avatarRenderer = attributes.avatarRenderer,
                                                 messageColorProvider = messageColorProvider,
@@ -121,12 +124,12 @@ class VerificationItemFactory @Inject constructor(
                     // We only display the done sent by the other user, the done send by me is ignored
                     return ignoredConclusion(event, highlight, callback)
                 }
-                return VerificationRequestConclusionItem_()
+                return StatusTileTimelineItem_()
                         .attributes(
-                                VerificationRequestConclusionItem.Attributes(
-                                        toUserId = informationData.senderId,
-                                        toUserName = informationData.memberName.toString(),
-                                        isPositive = true,
+                                StatusTileTimelineItem.Attributes(
+                                        title = stringProvider.getString(R.string.sas_verified),
+                                        description = "${informationData.memberName.toString()} (${informationData.senderId})",
+                                        shieldUIState = StatusTileTimelineItem.ShieldUIState.GREEN,
                                         informationData = informationData,
                                         avatarRenderer = attributes.avatarRenderer,
                                         messageColorProvider = messageColorProvider,
