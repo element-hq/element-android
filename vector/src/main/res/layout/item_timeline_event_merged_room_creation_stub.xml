@@ -17,7 +17,7 @@
         android:background="@drawable/rounded_rect_shape_8"
         android:padding="8dp">
 
-        <include layout="@layout/item_timeline_event_verification_done_stub" />
+        <include layout="@layout/item_timeline_event_status_tile_stub" />
 
     </FrameLayout>
 

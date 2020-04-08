@@ -49,7 +49,7 @@
         <ViewStub
             android:id="@+id/messageVerificationDoneStub"
             style="@style/TimelineContentStubBaseParams"
-            android:layout="@layout/item_timeline_event_verification_done_stub"
+            android:layout="@layout/item_timeline_event_status_tile_stub"
             tools:visibility="visible" />
 
     </FrameLayout>
