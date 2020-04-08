@@ -1,2 +1,3 @@
 include ':vector', ':matrix-sdk-android', ':matrix-sdk-android-rx', ':diff-match-patch'
 include ':multipicker'
+include ':matrix-sdk-sqldelight'

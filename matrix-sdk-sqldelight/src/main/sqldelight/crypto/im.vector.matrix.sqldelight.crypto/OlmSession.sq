@@ -1,0 +1,34 @@
+import java.lang.Long;
+
+CREATE TABLE olmSessionEntity (
+    session_id TEXT NOT NULL,
+    device_key TEXT NOT NULL,
+    olm_session_data TEXT,
+    last_received_message_ts INTEGER AS Long DEFAULT 0 NOT NULL,
+    PRIMARY KEY(session_id, device_key)
+);
+
+CREATE INDEX olm_session_device_key ON olmSessionEntity(device_key);
+
+insertOrUpdate:
+INSERT OR REPLACE INTO olmSessionEntity VALUES ?;
+
+getAll:
+SELECT * FROM olmSessionEntity;
+
+getBySessionIdAndDeviceKey:
+SELECT * FROM olmSessionEntity
+WHERE session_id = :sessionId
+AND device_key = :deviceKey;
+
+getByDeviceKey:
+SELECT * FROM olmSessionEntity
+WHERE device_key = :deviceKey;
+
+getByDeviceKeyDescending:
+SELECT * FROM olmSessionEntity
+WHERE device_key = :deviceKey
+ORDER BY last_received_message_ts DESC;
+
+deleteAll:
+DELETE FROM olmSessionEntity;

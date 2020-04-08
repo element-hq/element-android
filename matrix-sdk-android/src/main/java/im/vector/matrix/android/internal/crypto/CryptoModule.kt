@@ -16,6 +16,9 @@
 
 package im.vector.matrix.android.internal.crypto
 
+import android.content.Context
+import com.squareup.sqldelight.ColumnAdapter
+import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -85,12 +88,13 @@ import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadSignaturesTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadSigningKeysTask
 import im.vector.matrix.android.internal.database.RealmKeysUtils
-import im.vector.matrix.android.internal.di.CryptoDatabase
 import im.vector.matrix.android.internal.di.SessionFilesDirectory
 import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.cache.ClearCacheTask
 import im.vector.matrix.android.internal.session.cache.RealmClearCacheTask
+import im.vector.matrix.sqldelight.crypto.CrossSigningInfoEntity
+import im.vector.matrix.sqldelight.crypto.CryptoDatabase
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -106,7 +110,7 @@ internal abstract class CryptoModule {
 
         @JvmStatic
         @Provides
-        @CryptoDatabase
+        @im.vector.matrix.android.internal.di.CryptoDatabase
         @SessionScope
         fun providesRealmConfiguration(@SessionFilesDirectory directory: File,
                                        @UserMd5 userMd5: String,
@@ -126,14 +130,32 @@ internal abstract class CryptoModule {
         @JvmStatic
         @Provides
         @SessionScope
+        fun providesCryptoDatabase(context: Context, @SessionFilesDirectory directory: File): CryptoDatabase {
+            val name = "${directory.name}-matrix-sdk-crypto.db"
+            val driver = AndroidSqliteDriver(CryptoDatabase.Schema, context, name)
+            val listOfStringAdapter = object : ColumnAdapter<List<String>, String> {
+                override fun decode(databaseValue: String) = databaseValue.split(",")
+                override fun encode(value: List<String>) = value.joinToString(separator = ",")
+            }
+            return CryptoDatabase(
+                    driver = driver,
+                    crossSigningInfoEntityAdapter = CrossSigningInfoEntity.Adapter(
+                            usagesAdapter = listOfStringAdapter
+                    )
+            )
+        }
+
+        @JvmStatic
+        @Provides
+        @SessionScope
         fun providesCryptoCoroutineScope(): CoroutineScope {
             return CoroutineScope(SupervisorJob())
         }
 
         @JvmStatic
         @Provides
-        @CryptoDatabase
-        fun providesClearCacheTask(@CryptoDatabase
+        @im.vector.matrix.android.internal.di.CryptoDatabase
+        fun providesClearCacheTask(@im.vector.matrix.android.internal.di.CryptoDatabase
                                    realmConfiguration: RealmConfiguration): ClearCacheTask {
             return RealmClearCacheTask(realmConfiguration)
         }

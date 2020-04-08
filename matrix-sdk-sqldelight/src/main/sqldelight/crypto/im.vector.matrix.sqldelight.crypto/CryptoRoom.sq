@@ -1,0 +1,50 @@
+import java.lang.Boolean;
+
+CREATE TABLE cryptoRoomEntity (
+    room_id TEXT NOT NULL PRIMARY KEY,
+    algorithm TEXT,
+    should_encrypt_for_invited_members INTEGER AS Boolean DEFAULT 0 NOT NULL,
+    blacklist_unverified_devices INTEGER AS Boolean DEFAULT 0 NOT NULL
+);
+
+insertOrUpdate:
+INSERT OR REPLACE INTO cryptoRoomEntity VALUES ?;
+
+getAll:
+SELECT * FROM cryptoRoomEntity;
+
+getById:
+SELECT * FROM cryptoRoomEntity
+WHERE room_id = :roomId;
+
+getBlacklistUnverifiedDevices:
+SELECT * FROM cryptoRoomEntity
+WHERE blacklist_unverified_devices = :blacklistUnverifiedDevices;
+
+getRoomAlgorithm:
+SELECT algorithm
+FROM cryptoRoomEntity
+WHERE room_id = :roomId;
+
+shouldEncryptForInvitedMembers:
+SELECT should_encrypt_for_invited_members
+FROM cryptoRoomEntity
+WHERE room_id = :roomId;
+
+updateShouldEncryptForInvitedMembers:
+UPDATE cryptoRoomEntity
+SET should_encrypt_for_invited_members = :shouldEncryptForInvitedMembers
+WHERE room_id = :roomId;
+
+updateBlacklistUnverifiedDevices:
+UPDATE cryptoRoomEntity
+SET blacklist_unverified_devices = :blacklistUnverifiedDevices
+WHERE room_id = :roomId;
+
+updateRoomAlgorithm:
+UPDATE cryptoRoomEntity
+SET algorithm = :algorithm
+WHERE room_id = :roomId;
+
+deleteAll:
+DELETE FROM cryptoRoomEntity;

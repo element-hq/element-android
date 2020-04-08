@@ -1,0 +1,52 @@
+import java.lang.Boolean;
+
+CREATE TABLE olmInboundGroupSessionEntity (
+    session_id TEXT NOT NULL,
+    sender_key TEXT NOT NULL,
+    olm_inbound_group_session_data TEXT,
+    backed_up INTEGER AS Boolean DEFAULT 0 NOT NULL,
+    PRIMARY KEY(session_id, sender_key)
+);
+
+insertOrUpdate:
+INSERT OR REPLACE INTO olmInboundGroupSessionEntity VALUES ?;
+
+getAll:
+SELECT * FROM olmInboundGroupSessionEntity;
+
+getBySessionIdAndSenderKey:
+SELECT * FROM olmInboundGroupSessionEntity
+WHERE session_id = :sessionId
+AND sender_key = :senderKey;
+
+getAllBackedUp:
+SELECT * FROM olmInboundGroupSessionEntity
+WHERE backed_up = :isbackedUp
+LIMIT :limit;
+
+countAll:
+SELECT COUNT(*)
+FROM olmInboundGroupSessionEntity;
+
+countBackedUp:
+SELECT COUNT(*)
+FROM olmInboundGroupSessionEntity
+WHERE backed_up = :backedUp;
+
+deleteBySessionIdAndSenderKey:
+DELETE FROM olmInboundGroupSessionEntity
+WHERE session_id = :sessionId
+AND sender_key = :senderKey;
+
+setAllBackedUp:
+UPDATE olmInboundGroupSessionEntity
+SET backed_up = :isBackedUp;
+
+setBackedUp:
+UPDATE olmInboundGroupSessionEntity
+SET backed_up = :isBackedUp
+WHERE session_id = :sessionId
+AND sender_key = :senderKey;
+
+deleteAll:
+DELETE FROM olmInboundGroupSessionEntity;

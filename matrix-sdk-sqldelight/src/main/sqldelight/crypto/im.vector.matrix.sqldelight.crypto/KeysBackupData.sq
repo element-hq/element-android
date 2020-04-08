@@ -1,0 +1,14 @@
+CREATE TABLE keysBackupDataEntity (
+    static_id INTEGER PRIMARY KEY CHECK (static_id = 0),
+    backup_last_server_hash TEXT,
+    backup_last_server_number_of_keys INTEGER DEFAULT 0 NOT NULL
+);
+
+insertOrUpdate:
+INSERT OR REPLACE INTO keysBackupDataEntity VALUES ?;
+
+getAll:
+SELECT * FROM keysBackupDataEntity;
+
+deleteAll:
+DELETE FROM keysBackupDataEntity;

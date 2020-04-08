@@ -1,0 +1,37 @@
+CREATE TABLE outgoingGossipingRequestEntity (
+    request_id TEXT NOT NULL,
+    type TEXT NOT NULL,
+    recipients_data TEXT,
+    requested_info TEXT,
+    request_state TEXT
+);
+
+CREATE INDEX outgoing_gossiping_request_request_id ON outgoingGossipingRequestEntity(request_id);
+CREATE INDEX outgoing_gossiping_request_type ON outgoingGossipingRequestEntity(type);
+
+insertOrUpdate:
+INSERT OR REPLACE INTO outgoingGossipingRequestEntity VALUES ?;
+
+getAll:
+SELECT * FROM outgoingGossipingRequestEntity;
+
+getByRequestId:
+SELECT * FROM outgoingGossipingRequestEntity
+WHERE request_id = :requestId;
+
+getByType:
+SELECT * FROM outgoingGossipingRequestEntity
+WHERE type = :type;
+
+getByTypeAndRequestedInfo:
+SELECT * FROM outgoingGossipingRequestEntity
+WHERE type = :type
+AND requested_info = :requestedInfo;
+
+updateRequestState:
+UPDATE outgoingGossipingRequestEntity
+SET request_state = :requestState
+WHERE request_id = :requestId;
+
+deleteAll:
+DELETE FROM outgoingGossipingRequestEntity;
