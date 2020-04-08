@@ -944,10 +944,21 @@ internal class SqlCryptoStore @Inject constructor(private val cryptoDatabase: Cr
     }
 
     override fun saveBackupRecoveryKey(recoveryKey: String?, version: String?) {
-        TODO("Not implemented yet")
+        metadataQueries.updateKeyBackupRecoveryKey(recoveryKey, version)
     }
 
     override fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo? {
-        TODO("Not implemented yet")
+        return metadataQueries
+                .getAll()
+                .executeAsOneOrNull()
+                ?.let { metadataEntity ->
+                    val key = metadataEntity.key_backup_recovery_key
+                    val version = metadataEntity.key_backup_recovery_key_version
+                    if (!key.isNullOrBlank() && !version.isNullOrBlank()) {
+                        SavedKeyBackupKeyInfo(recoveryKey = key, version = version)
+                    } else {
+                        null
+                    }
+                }
     }
 }

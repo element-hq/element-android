@@ -9,7 +9,9 @@ CREATE TABLE cryptoMetadataEntity (
     backup_version TEXT,
     x_sign_master_private_key TEXT,
     x_sign_user_private_key TEXT,
-    x_sign_self_signed_private_key TEXT
+    x_sign_self_signed_private_key TEXT,
+    key_backup_recovery_key TEXT,
+    key_backup_recovery_key_version TEXT
 );
 
 insertOrUpdate:
@@ -54,6 +56,11 @@ SET x_sign_self_signed_private_key = :xSignSelfSignedPrivateKey;
 updateUserPrivateKey:
 UPDATE cryptoMetadataEntity
 SET x_sign_user_private_key = :xSignUserPrivateKey;
+
+updateKeyBackupRecoveryKey:
+UPDATE cryptoMetadataEntity
+SET key_backup_recovery_key = :keyBackupRecoveryKey,
+key_backup_recovery_key_version = :keyBackupRecoveryKeyVersion;
 
 deleteAll:
 DELETE FROM cryptoMetadataEntity;
