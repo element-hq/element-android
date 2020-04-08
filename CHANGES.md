@@ -14,6 +14,7 @@ Improvements 🙌:
  - Cross-Signing | Setup key backup as part of SSSS bootstrapping (#1201)
  - Cross-Signing | Gossip key backup recovery key (#1200)
  - Show room encryption status as a bubble tile (#1078)
+ - Cross-Signing | Restore history after recover from passphrase (#1214)
 
 Bugfix 🐛:
  - Missing avatar/displayname after verification request message (#841)

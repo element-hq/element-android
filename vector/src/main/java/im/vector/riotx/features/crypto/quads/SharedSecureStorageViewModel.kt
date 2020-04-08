@@ -37,6 +37,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.io.ByteArrayOutputStream
 
 data class SharedSecureStorageViewState(
@@ -117,11 +118,15 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 withContext(Dispatchers.IO) {
                     args.requestedSecrets.forEach {
                         val res = awaitCallback<String> { callback ->
-                            session.sharedSecretStorageService.getSecret(
-                                    name = it,
-                                    keyId = keyInfo.id,
-                                    secretKey = keySpec,
-                                    callback = callback)
+                            if (session.getAccountDataEvent(it) != null) {
+                                session.sharedSecretStorageService.getSecret(
+                                        name = it,
+                                        keyId = keyInfo.id,
+                                        secretKey = keySpec,
+                                        callback = callback)
+                            } else {
+                                Timber.w("## Cannot find secret $it in SSSS, skip")
+                            }
                         }
                         decryptedSecretMap[it] = res
                     }
