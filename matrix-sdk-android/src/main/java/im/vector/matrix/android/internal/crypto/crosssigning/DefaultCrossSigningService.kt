@@ -30,6 +30,7 @@ import im.vector.matrix.android.internal.crypto.model.KeyUsage
 import im.vector.matrix.android.internal.crypto.model.rest.UploadSignatureQueryBuilder
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
+import im.vector.matrix.android.internal.crypto.store.PrivateKeysInfo
 import im.vector.matrix.android.internal.crypto.tasks.UploadSignaturesTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadSigningKeysTask
 import im.vector.matrix.android.internal.di.UserId
@@ -593,6 +594,10 @@ internal class DefaultCrossSigningService @Inject constructor(
 
     override fun getMyCrossSigningKeys(): MXCrossSigningInfo? {
         return cryptoStore.getMyCrossSigningInfo()
+    }
+
+    override fun getCrossSigningPrivateKeys(): PrivateKeysInfo? {
+        return cryptoStore.getCrossSigningPrivateKeys()
     }
 
     override fun canCrossSign(): Boolean {

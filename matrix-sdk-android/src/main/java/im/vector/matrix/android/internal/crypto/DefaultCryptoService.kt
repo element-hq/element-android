@@ -33,6 +33,7 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
+import im.vector.matrix.android.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.keyshare.GossipingRequestListener
@@ -239,7 +240,7 @@ internal class DefaultCryptoService @Inject constructor(
     override fun getDevicesList(callback: MatrixCallback<DevicesListResponse>) {
         getDevicesTask
                 .configureWith {
-//                    this.executionThread = TaskThread.CRYPTO
+                    //                    this.executionThread = TaskThread.CRYPTO
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
@@ -635,7 +636,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     @Throws(MXCryptoError::class)
     override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
-       return internalDecryptEvent(event, timeline)
+        return internalDecryptEvent(event, timeline)
     }
 
     /**
@@ -766,19 +767,30 @@ internal class DefaultCryptoService @Inject constructor(
             return
         }
 
-        when (existingRequest.secretName) {
+        if (!handleSDKLevelGossip(existingRequest.secretName, secretContent.secretValue)) {
+            // TODO Ask to application layer?
+            Timber.v("## onSecretSend() : secret not handled by SDK")
+        }
+    }
+
+    /**
+     * Returns true if handled by SDK, otherwise should be sent to application layer
+     */
+    private fun handleSDKLevelGossip(secretName: String?, secretValue: String): Boolean {
+        return when (secretName) {
             SELF_SIGNING_KEY_SSSS_NAME -> {
-                    crossSigningService.onSecretSSKGossip(secretContent.secretValue)
-                    return
+                crossSigningService.onSecretSSKGossip(secretValue)
+                true
             }
             USER_SIGNING_KEY_SSSS_NAME -> {
-                    crossSigningService.onSecretUSKGossip(secretContent.secretValue)
-                    return
+                crossSigningService.onSecretUSKGossip(secretValue)
+                true
             }
-            else                       -> {
-                // Ask to application layer?
-                Timber.v("## onSecretSend() : secret not handled by SDK")
+            KEYBACKUP_SECRET_SSSS_NAME -> {
+                keysBackupService.onSecretKeyGossip(secretValue)
+                true
             }
+            else                       -> false
         }
     }
 
@@ -792,10 +804,11 @@ internal class DefaultCryptoService @Inject constructor(
             val params = LoadRoomMembersTask.Params(roomId)
             try {
                 loadRoomMembersTask.execute(params)
-                val userIds = getRoomUserIds(roomId)
-                setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), true, userIds)
             } catch (throwable: Throwable) {
                 Timber.e(throwable, "## onRoomEncryptionEvent ERROR FAILED TO SETUP CRYPTO ")
+            } finally {
+                val userIds = getRoomUserIds(roomId)
+                setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), true, userIds)
             }
         }
     }

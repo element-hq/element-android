@@ -45,6 +45,7 @@ import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.model.toEntity
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.store.PrivateKeysInfo
+import im.vector.matrix.android.internal.crypto.store.SavedKeyBackupKeyInfo
 import im.vector.matrix.android.internal.crypto.store.db.model.CrossSigningInfoEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.CrossSigningInfoEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.CryptoMapper
@@ -216,8 +217,8 @@ internal class RealmCryptoStore @Inject constructor(
 
     override fun getOrCreateOlmAccount(): OlmAccount {
         doRealmTransaction(realmConfiguration) {
-           val metaData = it.where<CryptoMetadataEntity>().findFirst()
-            val existing =  metaData!!.getOlmAccount()
+            val metaData = it.where<CryptoMetadataEntity>().findFirst()
+            val existing = metaData!!.getOlmAccount()
             if (existing == null) {
                 Timber.d("## Crypto Creating olm account")
                 val created = OlmAccount()
@@ -385,6 +386,29 @@ internal class RealmCryptoStore @Inject constructor(
                 xSignMasterPrivateKey = msk
                 xSignUserPrivateKey = usk
                 xSignSelfSignedPrivateKey = ssk
+            }
+        }
+    }
+
+    override fun saveBackupRecoveryKey(recoveryKey: String?, version: String?) {
+        doRealmTransaction(realmConfiguration) { realm ->
+            realm.where<CryptoMetadataEntity>().findFirst()?.apply {
+                keyBackupRecoveryKey = recoveryKey
+                keyBackupRecoveryKeyVersion = version
+            }
+        }
+    }
+
+    override fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo? {
+        return doRealmQueryAndCopy(realmConfiguration) { realm ->
+            realm.where<CryptoMetadataEntity>().findFirst()
+        }?.let {
+            val key = it.keyBackupRecoveryKey
+            val version = it.keyBackupRecoveryKeyVersion
+            if (!key.isNullOrBlank() && !version.isNullOrBlank()) {
+                SavedKeyBackupKeyInfo(recoveryKey = key, version = version)
+            } else {
+                null
             }
         }
     }

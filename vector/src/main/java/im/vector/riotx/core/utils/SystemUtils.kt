@@ -153,7 +153,7 @@ fun startAddGoogleAccountIntent(context: AppCompatActivity, requestCode: Int) {
     }
 }
 
-fun startSharePlainTextIntent(fragment: Fragment, chooserTitle: String?, text: String, subject: String? = null) {
+fun startSharePlainTextIntent(fragment: Fragment, chooserTitle: String?, text: String, subject: String? = null, requestCode: Int? = null) {
     val share = Intent(Intent.ACTION_SEND)
     share.type = "text/plain"
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -165,7 +165,11 @@ fun startSharePlainTextIntent(fragment: Fragment, chooserTitle: String?, text: S
     share.putExtra(Intent.EXTRA_SUBJECT, subject)
     share.putExtra(Intent.EXTRA_TEXT, text)
     try {
-        fragment.startActivity(Intent.createChooser(share, chooserTitle))
+        if (requestCode != null) {
+            fragment.startActivityForResult(Intent.createChooser(share, chooserTitle), requestCode)
+        } else {
+            fragment.startActivity(Intent.createChooser(share, chooserTitle))
+        }
     } catch (activityNotFoundException: ActivityNotFoundException) {
         fragment.activity?.toast(R.string.error_no_external_application_found)
     }

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottomSheetScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:fadeScrollbars="false"
+    android:scrollbars="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/bootstrapIcon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="16dp"
+            android:contentDescription="@string/avatar"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_message_password"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/bootstrapTitleText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="?riotx_text_primary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/bootstrapIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/bootstrapIcon"
+            app:layout_constraintTop_toTopOf="@+id/bootstrapIcon"
+            tools:text="@string/recovery_passphrase" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/bottomSheetFragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bootstrapTitleText" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

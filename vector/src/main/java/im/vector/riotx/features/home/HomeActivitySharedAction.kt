@@ -24,4 +24,5 @@ import im.vector.riotx.core.platform.VectorSharedAction
 sealed class HomeActivitySharedAction : VectorSharedAction {
     object OpenDrawer : HomeActivitySharedAction()
     object OpenGroup : HomeActivitySharedAction()
+    object PromptForSecurityBootstrap : HomeActivitySharedAction()
 }

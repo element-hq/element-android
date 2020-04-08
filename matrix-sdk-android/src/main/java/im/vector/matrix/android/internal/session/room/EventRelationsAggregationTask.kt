@@ -230,7 +230,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
     private fun decryptIfNeeded(event: Event) {
         if (event.mxDecryptionResult == null) {
             try {
-                val result = cryptoService.decryptEvent(event, event.roomId ?: "")
+                val result = cryptoService.decryptEvent(event, "")
                 event.mxDecryptionResult = OlmDecryptionResult(
                         payload = result.clearEvent,
                         senderKey = result.senderCurve25519Key,
