@@ -6,12 +6,14 @@ Features ✨:
  - Cross-Signing | Verify new session from existing session (#1134)
  - Cross-Signing | Bootstraping cross signing with 4S from mobile (#985)
 
+
 Improvements 🙌:
  - Verification DM / Handle concurrent .start after .ready (#794)
  - Cross-Signing | Update Shield Logic for DM (#963)
  - Cross-Signing | Complete security new session design update (#1135)
  - Cross-Signing | Setup key backup as part of SSSS bootstrapping (#1201)
  - Cross-Signing | Gossip key backup recovery key (#1200)
+ - Show room encryption status as a bubble tile (#1078)
 
 Bugfix 🐛:
  - Missing avatar/displayname after verification request message (#841)

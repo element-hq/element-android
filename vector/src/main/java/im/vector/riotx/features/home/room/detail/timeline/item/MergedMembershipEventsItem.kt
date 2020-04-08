@@ -24,28 +24,20 @@ import androidx.core.view.children
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
-abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
-
-    @EpoxyAttribute
-    lateinit var attributes: Attributes
-
-    private val distinctMergeData by lazy {
-        attributes.mergeData.distinctBy { it.userId }
-    }
+abstract class MergedMembershipEventsItem : BasedMergedItem<MergedMembershipEventsItem.Holder>() {
 
     override fun getViewType() = STUB_ID
 
+    @EpoxyAttribute
+    override lateinit var attributes: Attributes
+
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.expandView.setOnClickListener {
-            attributes.onCollapsedStateChanged(!attributes.isCollapsed)
-        }
         if (attributes.isCollapsed) {
             val summary = holder.expandView.resources.getQuantityString(R.plurals.membership_changes, attributes.mergeData.size, attributes.mergeData.size)
             holder.summaryView.text = summary
@@ -60,52 +52,28 @@ abstract class MergedHeaderItem : BaseEventItem<MergedHeaderItem.Holder>() {
                     view.visibility = View.GONE
                 }
             }
-            holder.separatorView.visibility = View.GONE
-            holder.expandView.setText(R.string.merged_events_expand)
         } else {
             holder.avatarListView.visibility = View.INVISIBLE
             holder.summaryView.visibility = View.GONE
-            holder.separatorView.visibility = View.VISIBLE
-            holder.expandView.setText(R.string.merged_events_collapse)
         }
         // No read receipt for this item
         holder.readReceiptsView.isVisible = false
     }
 
-    override fun getEventIds(): List<String> {
-        return if (attributes.isCollapsed) {
-            attributes.mergeData.map { it.eventId }
-        } else {
-            emptyList()
-        }
-    }
-
-    data class Data(
-            val localId: Long,
-            val eventId: String,
-            val userId: String,
-            val memberName: String,
-            val avatarUrl: String?
-    )
-
-    fun Data.toMatrixItem() = MatrixItem.UserItem(userId, memberName, avatarUrl)
-
-    data class Attributes(
-            val isCollapsed: Boolean,
-            val mergeData: List<Data>,
-            val avatarRenderer: AvatarRenderer,
-            val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
-            val onCollapsedStateChanged: (Boolean) -> Unit
-    )
-
-    class Holder : BaseHolder(STUB_ID) {
-        val expandView by bind<TextView>(R.id.itemMergedExpandTextView)
+    class Holder : BasedMergedItem.Holder(STUB_ID) {
         val summaryView by bind<TextView>(R.id.itemMergedSummaryTextView)
-        val separatorView by bind<View>(R.id.itemMergedSeparatorView)
         val avatarListView by bind<ViewGroup>(R.id.itemMergedAvatarListView)
     }
 
     companion object {
         private const val STUB_ID = R.id.messageContentMergedHeaderStub
     }
+
+    data class Attributes(
+            override val isCollapsed: Boolean,
+            override val mergeData: List<Data>,
+            override val avatarRenderer: AvatarRenderer,
+            override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
+            override val onCollapsedStateChanged: (Boolean) -> Unit
+    ) : BasedMergedItem.Attributes
 }
