@@ -48,6 +48,26 @@ SET locally_verified = :locallyVerified,
 cross_signed_verified = :crossSignedVerified
 WHERE user_id = :userId;
 
+updateSignatures:
+UPDATE crossSigningInfoEntity
+SET signatures = :signatures
+WHERE user_id = :userId;
+
+updateSignaturesWithRowId:
+UPDATE crossSigningInfoEntity
+SET signatures = :signatures
+WHERE rowid = :rowId;
+
+updateUsages:
+UPDATE crossSigningInfoEntity
+SET usages = :usages
+WHERE user_id = :userId;
+
+updateUsagesWithRowId:
+UPDATE crossSigningInfoEntity
+SET usages = :usages
+WHERE rowid = :rowId;
+
 clearOtherUserTrust:
 UPDATE crossSigningInfoEntity
 SET locally_verified = 0,

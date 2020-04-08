@@ -229,7 +229,75 @@ internal class SqlCryptoStore @Inject constructor(private val cryptoDatabase: Cr
             userQueries.deleteByUserId(userId)
             crossSigningInfoQueries.deleteByUserId(userId)
         } else {
+            // What should we do if we detect a change of the keys?
+            val existingMaster = crossSigningInfoQueries
+                    .getByUserId(userId)
+                    .executeAsList()
+                    .firstOrNull { it.usages.contains(KeyUsage.MASTER.value) }
+            if (existingMaster != null && existingMaster.public_key_base64 == masterKey.unpaddedBase64PublicKey) {
+                // update signatures?
+                crossSigningInfoQueries.updateSignaturesWithRowId(serializeForSqlite(masterKey.signatures), existingMaster._id)
+                crossSigningInfoQueries.updateUsagesWithRowId(masterKey.usages ?: emptyList(), existingMaster._id)
+            } else {
+                crossSigningInfoQueries
+                        .insertOrUpdate(
+                                CrossSigningInfoEntity.Impl(
+                                        user_id = userId,
+                                        cross_signed_verified = false,
+                                        locally_verified = false,
+                                        signatures = serializeForSqlite(masterKey.signatures),
+                                        public_key_base64 = masterKey.unpaddedBase64PublicKey,
+                                        usages = masterKey.usages ?: emptyList()
+                                )
+                        )
+            }
 
+            val existingSelfSigned = crossSigningInfoQueries
+                    .getByUserId(userId)
+                    .executeAsList()
+                    .firstOrNull { it.usages.contains(KeyUsage.SELF_SIGNING.value) }
+            if (existingSelfSigned != null && existingSelfSigned.public_key_base64 == selfSigningKey.unpaddedBase64PublicKey) {
+                // update signatures?
+                crossSigningInfoQueries.updateSignaturesWithRowId(serializeForSqlite(existingSelfSigned.signatures), existingSelfSigned._id)
+                crossSigningInfoQueries.updateUsagesWithRowId(existingSelfSigned.usages, existingSelfSigned._id)
+            } else {
+                crossSigningInfoQueries
+                        .insertOrUpdate(
+                                CrossSigningInfoEntity.Impl(
+                                        user_id = userId,
+                                        cross_signed_verified = false,
+                                        locally_verified = false,
+                                        signatures = serializeForSqlite(selfSigningKey.signatures),
+                                        public_key_base64 = selfSigningKey.unpaddedBase64PublicKey,
+                                        usages = selfSigningKey.usages ?: emptyList()
+                                )
+                        )
+            }
+
+            // Only for me
+            if (userSigningKey != null) {
+                val existingUSK = crossSigningInfoQueries
+                        .getByUserId(userId)
+                        .executeAsList()
+                        .firstOrNull { it.usages.contains(KeyUsage.USER_SIGNING.value) }
+                if (existingUSK != null && existingUSK.public_key_base64 == userSigningKey.unpaddedBase64PublicKey) {
+                    // update signatures?
+                    crossSigningInfoQueries.updateSignaturesWithRowId(serializeForSqlite(userSigningKey.signatures), existingUSK._id)
+                    crossSigningInfoQueries.updateUsagesWithRowId(userSigningKey.usages ?: emptyList(), existingUSK._id)
+                } else {
+                    crossSigningInfoQueries
+                            .insertOrUpdate(
+                                    CrossSigningInfoEntity.Impl(
+                                            user_id = userId,
+                                            cross_signed_verified = false,
+                                            locally_verified = false,
+                                            signatures = serializeForSqlite(userSigningKey.signatures),
+                                            public_key_base64 = userSigningKey.unpaddedBase64PublicKey,
+                                            usages = userSigningKey.usages ?: emptyList()
+                                    )
+                            )
+                }
+            }
         }
     }
 
