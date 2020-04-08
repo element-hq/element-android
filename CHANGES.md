@@ -19,6 +19,7 @@ Bugfix 🐛:
  - RiotX can't restore cross signing keys saved by web in SSSS (#1174)
  - Cross- Signing | After signin in new session, verification paper trail in DM is off (#1191)
  - Failed to encrypt message in room (message stays in red), [thanks to pwr22] (#925)
+ - Cross-Signing | web <-> riotX After QR code scan, gossiping fails (#1210)
 
 Translations 🗣:
  -
