@@ -95,7 +95,7 @@ class VerificationItemFactory @Inject constructor(
                                 .attributes(
                                         StatusTileTimelineItem.Attributes(
                                                 title = stringProvider.getString(R.string.verification_conclusion_warning),
-                                                description = "${informationData.memberName.toString()} (${informationData.senderId})",
+                                                description = "${informationData.memberName} (${informationData.senderId})",
                                                 shieldUIState = StatusTileTimelineItem.ShieldUIState.RED,
                                                 informationData = informationData,
                                                 avatarRenderer = attributes.avatarRenderer,
@@ -128,7 +128,7 @@ class VerificationItemFactory @Inject constructor(
                         .attributes(
                                 StatusTileTimelineItem.Attributes(
                                         title = stringProvider.getString(R.string.sas_verified),
-                                        description = "${informationData.memberName.toString()} (${informationData.senderId})",
+                                        description = "${informationData.memberName} (${informationData.senderId})",
                                         shieldUIState = StatusTileTimelineItem.ShieldUIState.GREEN,
                                         informationData = informationData,
                                         avatarRenderer = attributes.avatarRenderer,

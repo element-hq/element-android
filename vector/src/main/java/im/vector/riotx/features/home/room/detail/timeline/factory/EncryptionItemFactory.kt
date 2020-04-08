@@ -41,7 +41,6 @@ class EncryptionItemFactory @Inject constructor(
     fun create(event: TimelineEvent,
                highlight: Boolean,
                callback: TimelineEventController.Callback?): StatusTileTimelineItem? {
-
         val algorithm = event.root.getClearContent().toModel<EncryptionEventContent>()?.algorithm
         val informationData = informationDataFactory.create(event, null)
         val attributes = messageItemAttributesFactory.create(null, informationData, callback)

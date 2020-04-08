@@ -56,7 +56,7 @@ abstract class StatusTileTimelineItem : AbsBaseMessageItem<StatusTileTimelineIte
             ShieldUIState.BLACK -> R.drawable.ic_shield_black
             ShieldUIState.RED   -> R.drawable.ic_shield_warning
         }
-        
+
         holder.titleView.setCompoundDrawablesWithIntrinsicBounds(
                 ContextCompat.getDrawable(holder.view.context, startDrawable),
                 null, null, null

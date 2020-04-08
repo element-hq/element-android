@@ -24,14 +24,12 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import androidx.core.view.marginLeft
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
-import org.w3c.dom.Text
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
 abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.Holder>() {
@@ -45,7 +43,6 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
         super.bind(holder)
 
         if (attributes.isCollapsed) {
-
             val data = distinctMergeData.firstOrNull()
 
             val summary = holder.expandView.resources.getString(R.string.room_created_summary_item,
