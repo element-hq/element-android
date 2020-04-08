@@ -69,7 +69,6 @@ import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.store.SavedKeyBackupKeyInfo
-import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.extensions.foldToCallback

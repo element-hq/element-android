@@ -58,7 +58,6 @@ import im.vector.matrix.android.internal.crypto.keysbackup.tasks.StoreRoomSessio
 import im.vector.matrix.android.internal.crypto.keysbackup.tasks.StoreSessionsDataTask
 import im.vector.matrix.android.internal.crypto.keysbackup.tasks.UpdateKeysBackupVersionTask
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
-import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreMigration
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreModule
 import im.vector.matrix.android.internal.crypto.store.db.SqlCryptoStore

@@ -34,7 +34,6 @@ import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrap
 import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
 import im.vector.matrix.android.internal.crypto.model.rest.KeysBackupData
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
-import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
 import org.matrix.olm.OlmAccount
 
 /**

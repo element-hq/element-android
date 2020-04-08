@@ -8,7 +8,6 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.util.zip.GZIPInputStream
 
-
 /**
  * Serialize any Serializable object, zip it and convert to Base64 String
  */

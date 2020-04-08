@@ -21,7 +21,15 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.util.JsonDict
-import im.vector.matrix.android.internal.crypto.*
+import im.vector.matrix.android.internal.crypto.GossipRequestType
+import im.vector.matrix.android.internal.crypto.GossipingRequestState
+import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
+import im.vector.matrix.android.internal.crypto.IncomingSecretShareRequest
+import im.vector.matrix.android.internal.crypto.IncomingShareRequestCommon
+import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequest
+import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestState
+import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
+import im.vector.matrix.android.internal.crypto.OutgoingSecretRequest
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
@@ -119,7 +127,7 @@ object SqliteCryptoMapper {
 
     fun toOutgoingGossipingRequest(entity: OutgoingGossipingRequestEntity): OutgoingGossipingRequest {
         return when (entity.type) {
-            GossipRequestType.KEY.name -> {
+            GossipRequestType.KEY.name    -> {
                 OutgoingRoomKeyRequest(
                         requestBody = getRequestedKeyInfo(entity.type, entity.requested_info),
                         recipients = getRecipientsMap(entity) ?: emptyMap(),
