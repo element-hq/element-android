@@ -30,8 +30,8 @@ import im.vector.riotx.features.home.room.detail.timeline.helper.canBeMerged
 import im.vector.riotx.features.home.room.detail.timeline.helper.isRoomConfiguration
 import im.vector.riotx.features.home.room.detail.timeline.helper.prevSameTypeEvents
 import im.vector.riotx.features.home.room.detail.timeline.item.BasedMergedItem
-import im.vector.riotx.features.home.room.detail.timeline.item.MergedHeaderItem
-import im.vector.riotx.features.home.room.detail.timeline.item.MergedHeaderItem_
+import im.vector.riotx.features.home.room.detail.timeline.item.MergedMembershipEventsItem
+import im.vector.riotx.features.home.room.detail.timeline.item.MergedMembershipEventsItem_
 import im.vector.riotx.features.home.room.detail.timeline.item.MergedRoomCreationItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MergedRoomCreationItem_
 import javax.inject.Inject
@@ -94,7 +94,7 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
                     collapsedEventIds.removeAll(mergedEventIds)
                 }
                 val mergeId = mergedEventIds.joinToString(separator = "_") { it.toString() }
-                val attributes = MergedHeaderItem.Attributes(
+                val attributes = MergedMembershipEventsItem.Attributes(
                         isCollapsed = isCollapsed,
                         mergeData = mergedData,
                         avatarRenderer = avatarRenderer,
@@ -104,7 +104,7 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
                         },
                         readReceiptsCallback = callback
                 )
-                MergedHeaderItem_()
+                MergedMembershipEventsItem_()
                         .id(mergeId)
                         .leftGuideline(avatarSizeProvider.leftGuideline)
                         .highlighted(isCollapsed && highlighted)

@@ -29,7 +29,7 @@ import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
-abstract class MergedHeaderItem : BasedMergedItem<MergedHeaderItem.Holder>() {
+abstract class MergedMembershipEventsItem : BasedMergedItem<MergedMembershipEventsItem.Holder>() {
 
     override fun getViewType() = STUB_ID
 
