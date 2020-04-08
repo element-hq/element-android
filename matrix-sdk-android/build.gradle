@@ -71,6 +71,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    packagingOptions {
+        pickFirst 'META-INF/kotlinx-coroutines-core.kotlin_module'
+    }
 }
 
 static def gitRevision() {

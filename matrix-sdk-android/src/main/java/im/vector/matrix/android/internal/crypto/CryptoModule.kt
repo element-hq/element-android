@@ -61,6 +61,7 @@ import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreMigration
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreModule
+import im.vector.matrix.android.internal.crypto.store.db.SqlCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
 import im.vector.matrix.android.internal.crypto.tasks.DefaultClaimOneTimeKeysForUsersDevice
 import im.vector.matrix.android.internal.crypto.tasks.DefaultDeleteDeviceTask
@@ -263,7 +264,7 @@ internal abstract class CryptoModule {
     abstract fun bindCrossSigningService(service: DefaultCrossSigningService): CrossSigningService
 
     @Binds
-    abstract fun bindCryptoStore(store: RealmCryptoStore): IMXCryptoStore
+    abstract fun bindCryptoStore(store: SqlCryptoStore): IMXCryptoStore
 
     @Binds
     abstract fun bindComputeShieldTrustTask(task: DefaultComputeTrustTask): ComputeTrustTask
