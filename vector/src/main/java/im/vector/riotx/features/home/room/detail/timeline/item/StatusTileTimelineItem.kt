@@ -50,6 +50,7 @@ abstract class StatusTileTimelineItem : AbsBaseMessageItem<StatusTileTimelineIte
 
         holder.titleView.text = attributes.title
         holder.descriptionView.text = attributes.description
+        holder.descriptionView.textAlignment = View.TEXT_ALIGNMENT_CENTER
 
         val startDrawable = when (attributes.shieldUIState) {
             ShieldUIState.GREEN -> R.drawable.ic_shield_trusted
