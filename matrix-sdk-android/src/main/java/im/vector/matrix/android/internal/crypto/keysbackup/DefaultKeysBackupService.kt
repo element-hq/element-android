@@ -1143,11 +1143,11 @@ internal class DefaultKeysBackupService @Inject constructor(
      * Update the DB with data fetch from the server
      */
     private fun onServerDataRetrieved(count: Int?, hash: String?) {
-        cryptoStore.setKeysBackupData(KeysBackupDataEntity()
-                .apply {
-                    backupLastServerNumberOfKeys = count
-                    backupLastServerHash = hash
-                }
+        cryptoStore.setKeysBackupData(
+                im.vector.matrix.android.internal.crypto.model.rest.KeysBackupData(
+                        backupLastServerNumberOfKeys = count,
+                        backupLastServerHash = hash
+                )
         )
     }
 

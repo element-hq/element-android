@@ -32,6 +32,7 @@ import im.vector.matrix.android.internal.crypto.*
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.*
+import im.vector.matrix.android.internal.crypto.model.rest.KeysBackupData
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.store.PrivateKeysInfo
@@ -43,7 +44,6 @@ import im.vector.matrix.android.internal.crypto.store.db.SqliteCryptoMapper.mapT
 import im.vector.matrix.android.internal.crypto.store.db.SqliteCryptoMapper.mapToModel
 import im.vector.matrix.android.internal.crypto.store.db.SqliteCryptoMapper.toIncomingGossipingRequest
 import im.vector.matrix.android.internal.crypto.store.db.SqliteCryptoMapper.toOutgoingGossipingRequest
-import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.session.SessionScope
@@ -360,12 +360,27 @@ internal class SqlCryptoStore @Inject constructor(private val cryptoDatabase: Cr
                 .updateKeyBackupVersion(keyBackupVersion)
     }
 
-    override fun getKeysBackupData(): KeysBackupDataEntity? {
-        return null // TODO. Why are we using Realm entity?
+    override fun getKeysBackupData(): KeysBackupData? {
+        return keysBackupDataQueries
+                .getAll()
+                .executeAsOneOrNull()
+                ?.let { entity ->
+                    KeysBackupData(
+                            backupLastServerHash = entity.backup_last_server_hash,
+                            backupLastServerNumberOfKeys = entity.backup_last_server_number_of_keys.toInt()
+                    )
+                }
     }
 
-    override fun setKeysBackupData(keysBackupData: KeysBackupDataEntity?) {
-        // TODO. Why are we using Realm entity?
+    override fun setKeysBackupData(keysBackupData: KeysBackupData?) {
+        keysBackupDataQueries
+                .insertOrUpdate(
+                        KeysBackupDataEntity.Impl(
+                                static_id = 0,
+                                backup_last_server_hash = keysBackupData?.backupLastServerHash,
+                                backup_last_server_number_of_keys = keysBackupData?.backupLastServerNumberOfKeys?.toLong() ?: 0
+                        )
+                )
     }
 
     override fun getDeviceTrackingStatuses(): Map<String, Int> {
