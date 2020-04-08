@@ -24,7 +24,7 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
- -
+ - Implementation of SqlCryptoStore on top of SQLDelight
 
 Build 🧱:
  -
