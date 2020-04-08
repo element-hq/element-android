@@ -782,7 +782,7 @@ class RoomDetailFragment @Inject constructor(
                 updateComposerText("")
             }
             is RoomDetailViewEvents.SlashCommandResultError    -> {
-                sendMessageResult.throwable.localizedMessage?.let { displayCommandError(it) }
+                displayCommandError(sendMessageResult.throwable.localizedMessage ?: getString(R.string.unexpected_error))
             }
             is RoomDetailViewEvents.SlashCommandNotImplemented -> {
                 displayCommandError(getString(R.string.not_implemented))

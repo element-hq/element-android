@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+// This BroadcastReceiver is used only if the build code is below 24.
 @file:Suppress("DEPRECATION")
 
 package im.vector.matrix.android.internal.network

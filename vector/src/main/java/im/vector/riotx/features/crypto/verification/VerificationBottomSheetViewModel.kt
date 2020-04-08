@@ -46,8 +46,10 @@ import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
 import im.vector.matrix.android.internal.crypto.crosssigning.isVerified
+import im.vector.riotx.R
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.core.resources.StringProvider
 import timber.log.Timber
 
 data class VerificationBottomSheetViewState(
@@ -71,7 +73,8 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationBottomSheetViewState,
         @Assisted val args: VerificationBottomSheet.VerificationArgs,
         private val session: Session,
-        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider)
+        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
+        private val stringProvider: StringProvider)
     : VectorViewModel<VerificationBottomSheetViewState, VerificationAction, VerificationBottomSheetViewEvents>(initialState),
         VerificationService.Listener {
 
@@ -362,9 +365,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                         }
                     }
                 } catch (failure: Throwable) {
-                    failure.localizedMessage?.let {
-                        _viewEvents.post(VerificationBottomSheetViewEvents.ModalError(it))
-                    }
+                    _viewEvents.post(VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage ?: stringProvider.getString(R.string.unexpected_error)))
                 }
             }
         }.exhaustive
