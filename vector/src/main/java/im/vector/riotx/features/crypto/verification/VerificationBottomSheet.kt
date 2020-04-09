@@ -50,6 +50,7 @@ import im.vector.riotx.features.crypto.verification.cancel.VerificationNotMeFrag
 import im.vector.riotx.features.crypto.verification.choose.VerificationChooseMethodFragment
 import im.vector.riotx.features.crypto.verification.conclusion.VerificationConclusionFragment
 import im.vector.riotx.features.crypto.verification.emoji.VerificationEmojiCodeFragment
+import im.vector.riotx.features.crypto.verification.qrconfirmation.VerificationQRWaitingFragment
 import im.vector.riotx.features.crypto.verification.qrconfirmation.VerificationQrScannedByOtherFragment
 import im.vector.riotx.features.crypto.verification.request.VerificationRequestFragment
 import im.vector.riotx.features.home.AvatarRenderer
@@ -242,6 +243,13 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         when (state.qrTransactionState) {
             is VerificationTxState.QrScannedByOther -> {
                 showFragment(VerificationQrScannedByOtherFragment::class, Bundle())
+                return@withState
+            }
+            is VerificationTxState.Started,
+            is VerificationTxState.WaitingOtherReciprocateConfirm -> {
+                showFragment(VerificationQRWaitingFragment::class, Bundle().apply {
+                    putParcelable(MvRx.KEY_ARG, VerificationQRWaitingFragment.Args(state.isMe, state.otherUserMxItem?.getBestName() ?: ""))
+                })
                 return@withState
             }
             is VerificationTxState.Verified         -> {

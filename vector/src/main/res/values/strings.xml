@@ -2148,7 +2148,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="a11y_qr_code_for_verification">QR code</string>
 
-    <string name="qr_code_scanned_by_other_notice">Did the other user successfully scan the QR code?</string>
+    <string name="qr_code_scanned_by_other_notice">Almost there! Is %s showing the same shield?</string>
     <string name="qr_code_scanned_by_other_yes">Yes</string>
     <string name="qr_code_scanned_by_other_no">No</string>
 

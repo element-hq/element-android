@@ -21,6 +21,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.dividerItem
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.features.crypto.verification.VerificationBottomSheetViewState
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import javax.inject.Inject
@@ -32,14 +33,26 @@ class VerificationQrScannedByOtherController @Inject constructor(
 
     var listener: Listener? = null
 
-    init {
+    private var viewState: VerificationBottomSheetViewState? = null
+
+    fun update(viewState: VerificationBottomSheetViewState) {
+        this.viewState = viewState
         requestModelBuild()
     }
 
     override fun buildModels() {
+        val state = viewState ?: return
+
         bottomSheetVerificationNoticeItem {
             id("notice")
-            notice(stringProvider.getString(R.string.qr_code_scanned_by_other_notice))
+            apply {
+                if (state.isMe) {
+                    val name = state.otherUserMxItem?.getBestName() ?: ""
+                    notice(stringProvider.getString(R.string.qr_code_scanned_self_verif_notice, name))
+                } else {
+                    notice(stringProvider.getString(R.string.qr_code_scanned_by_other_notice))
+                }
+            }
         }
 
         dividerItem {
