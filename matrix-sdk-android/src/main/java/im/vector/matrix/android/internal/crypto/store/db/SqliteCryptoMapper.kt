@@ -31,11 +31,14 @@ import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestState
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.OutgoingSecretRequest
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
+import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.di.SerializeNulls
+import im.vector.matrix.sqldelight.crypto.CrossSigningInfoEntity
 import im.vector.matrix.sqldelight.crypto.DeviceInfoEntity
+import im.vector.matrix.sqldelight.crypto.GetByUserId
 import im.vector.matrix.sqldelight.crypto.IncomingGossipingRequestEntity
 import im.vector.matrix.sqldelight.crypto.OutgoingGossipingRequestEntity
 import timber.log.Timber
@@ -122,6 +125,38 @@ object SqliteCryptoMapper {
                 },
                 trustLevel = DeviceTrustLevel(deviceInfoEntity.cross_signed_verified, deviceInfoEntity.locally_verified),
                 isBlocked = deviceInfoEntity.is_blocked
+        )
+    }
+
+    internal fun mapToModel(crossSigningInfoEntity: GetByUserId): CryptoCrossSigningKey {
+        val pubKey = crossSigningInfoEntity.public_key_base64 ?: ""
+        return CryptoCrossSigningKey(
+                userId = crossSigningInfoEntity.user_id,
+                signatures = crossSigningInfoEntity.signatures?.let {
+                    try {
+                        mapOfStringMigrationAdapter.fromJson(it)
+                    } catch (failure: Throwable) {
+                        Timber.e(failure)
+                        null
+                    }
+                },
+                trustLevel = DeviceTrustLevel(
+                        crossSigningInfoEntity.cross_signed_verified,
+                        crossSigningInfoEntity.locally_verified
+                ),
+                keys = mapOf("ed25519:$pubKey" to pubKey),
+                usages = crossSigningInfoEntity.usages
+        )
+    }
+
+    internal fun mapToEntity(cryptoCrossSigningKey: CryptoCrossSigningKey): CrossSigningInfoEntity {
+        return CrossSigningInfoEntity.Impl(
+                user_id = cryptoCrossSigningKey.userId,
+                signatures = mapMigrationAdapter.toJson(cryptoCrossSigningKey.signatures),
+                public_key_base64 = cryptoCrossSigningKey.unpaddedBase64PublicKey,
+                usages = cryptoCrossSigningKey.usages ?: emptyList(),
+                locally_verified = false,
+                cross_signed_verified = false
         )
     }
 

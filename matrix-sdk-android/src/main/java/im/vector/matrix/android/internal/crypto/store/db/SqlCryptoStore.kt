@@ -38,7 +38,6 @@ import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestState
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.OutgoingSecretRequest
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
-import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.KeyUsage
@@ -869,18 +868,10 @@ internal class SqlCryptoStore @Inject constructor(private val cryptoDatabase: Cr
         val crossSigningInfoEntityList = crossSigningInfoQueries.getByUserId(userId).executeAsList()
 
         crossSigningInfoEntityList.forEach { crossSigningInfoEntity ->
-            val pubKey = crossSigningInfoEntity.public_key_base64 ?: return@forEach
-
-            crossSigningKeyList.add(CryptoCrossSigningKey(
-                    userId = crossSigningInfoEntity.user_id,
-                    signatures = deserializeFromSqlite(crossSigningInfoEntity.signatures),
-                    trustLevel = DeviceTrustLevel(
-                            crossSigningInfoEntity.cross_signed_verified,
-                            crossSigningInfoEntity.locally_verified
-                    ),
-                    keys = mapOf("ed25519:$pubKey" to pubKey),
-                    usages = crossSigningInfoEntity.usages
-            ))
+            if (crossSigningInfoEntity.public_key_base64.isNullOrBlank()) {
+                return@forEach
+            }
+            crossSigningKeyList.add(mapToModel(crossSigningInfoEntity))
         }
         return crossSigningInfo
     }
@@ -905,17 +896,7 @@ internal class SqlCryptoStore @Inject constructor(private val cryptoDatabase: Cr
                 // TODO notify, we might need to untrust things?
             } else {
                 info.crossSigningKeys.forEach { cryptoCrossSigningKey ->
-                    crossSigningInfoQueries
-                            .insertOrUpdate(
-                                    CrossSigningInfoEntity.Impl(
-                                            user_id = info.userId,
-                                            signatures = serializeForSqlite(cryptoCrossSigningKey.signatures),
-                                            public_key_base64 = cryptoCrossSigningKey.unpaddedBase64PublicKey,
-                                            usages = cryptoCrossSigningKey.usages ?: emptyList(),
-                                            locally_verified = false,
-                                            cross_signed_verified = false
-                                    )
-                            )
+                    crossSigningInfoQueries.insertOrUpdate(mapToEntity(cryptoCrossSigningKey))
                 }
             }
         }
