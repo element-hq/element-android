@@ -23,6 +23,7 @@ import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheetViewState
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
+import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationBigImageItem
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import javax.inject.Inject
 
@@ -55,21 +56,13 @@ class VerificationQrScannedByOtherController @Inject constructor(
             }
         }
 
+        bottomSheetVerificationBigImageItem {
+            id("image")
+            imageRes(R.drawable.ic_shield_trusted)
+        }
+
         dividerItem {
             id("sep0")
-        }
-
-        bottomSheetVerificationActionItem {
-            id("confirm")
-            title(stringProvider.getString(R.string.qr_code_scanned_by_other_yes))
-            titleColor(colorProvider.getColor(R.color.riotx_accent))
-            iconRes(R.drawable.ic_check_on)
-            iconColor(colorProvider.getColor(R.color.riotx_accent))
-            listener { listener?.onUserConfirmsQrCodeScanned() }
-        }
-
-        dividerItem {
-            id("sep1")
         }
 
         bottomSheetVerificationActionItem {
@@ -79,6 +72,19 @@ class VerificationQrScannedByOtherController @Inject constructor(
             iconRes(R.drawable.ic_check_off)
             iconColor(colorProvider.getColor(R.color.vector_error_color))
             listener { listener?.onUserDeniesQrCodeScanned() }
+        }
+
+        dividerItem {
+            id("sep1")
+        }
+
+        bottomSheetVerificationActionItem {
+            id("confirm")
+            title(stringProvider.getString(R.string.qr_code_scanned_by_other_yes))
+            titleColor(colorProvider.getColor(R.color.riotx_accent))
+            iconRes(R.drawable.ic_check_on)
+            iconColor(colorProvider.getColor(R.color.riotx_accent))
+            listener { listener?.onUserConfirmsQrCodeScanned() }
         }
     }
 
