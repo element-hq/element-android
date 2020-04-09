@@ -6,12 +6,14 @@ Features ✨:
  - Cross-Signing | Verify new session from existing session (#1134)
  - Cross-Signing | Bootstraping cross signing with 4S from mobile (#985)
 
+
 Improvements 🙌:
  - Verification DM / Handle concurrent .start after .ready (#794)
  - Cross-Signing | Update Shield Logic for DM (#963)
  - Cross-Signing | Complete security new session design update (#1135)
  - Cross-Signing | Setup key backup as part of SSSS bootstrapping (#1201)
  - Cross-Signing | Gossip key backup recovery key (#1200)
+ - Show room encryption status as a bubble tile (#1078)
  - UX/UI | Add indicator to home tab on invite (#957)
 
 Bugfix 🐛:
@@ -20,6 +22,7 @@ Bugfix 🐛:
  - RiotX can't restore cross signing keys saved by web in SSSS (#1174)
  - Cross- Signing | After signin in new session, verification paper trail in DM is off (#1191)
  - Failed to encrypt message in room (message stays in red), [thanks to pwr22] (#925)
+ - Cross-Signing | web <-> riotX After QR code scan, gossiping fails (#1210)
 
 Translations 🗣:
  -
