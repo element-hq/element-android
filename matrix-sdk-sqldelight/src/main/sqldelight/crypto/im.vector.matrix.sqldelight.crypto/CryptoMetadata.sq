@@ -2,7 +2,7 @@ import java.lang.Boolean;
 
 CREATE TABLE cryptoMetadataEntity (
     user_id TEXT PRIMARY KEY NOT NULL,
-    device_id TEXT NOT NULL,
+    device_id TEXT,
     olm_account_data TEXT,
     device_sync_token TEXT,
     global_blacklist_unverified_devices INTEGER AS Boolean DEFAULT 0 NOT NULL,
