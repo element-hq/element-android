@@ -61,6 +61,7 @@ import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.sqldelight.crypto.CrossSigningInfoEntity
 import im.vector.matrix.sqldelight.crypto.CrossSigningInfoQueries
 import im.vector.matrix.sqldelight.crypto.CryptoDatabase
+import im.vector.matrix.sqldelight.crypto.CryptoMetadataEntity
 import im.vector.matrix.sqldelight.crypto.CryptoMetadataQueries
 import im.vector.matrix.sqldelight.crypto.CryptoRoomEntity
 import im.vector.matrix.sqldelight.crypto.CryptoRoomQueries
@@ -110,6 +111,37 @@ internal class SqlCryptoStore @Inject constructor(private val cryptoDatabase: Cr
     private val inboundGroupSessionToRelease = HashMap<String, OlmInboundGroupSessionWrapper>()
 
     private val newSessionListeners = ArrayList<NewSessionListener>()
+
+    init {
+        metadataQueries.transaction {
+            val currentMetadata = metadataQueries.getAll().executeAsOneOrNull()
+
+            if (currentMetadata == null) {
+                metadataQueries.insertOrUpdate(createMetadataEntity(credentials.userId, credentials.deviceId))
+            } else if (currentMetadata.user_id != credentials.userId
+                    || (credentials.deviceId != null && credentials.deviceId != currentMetadata.device_id)) {
+                Timber.w("## open() : Credentials do not match, close this store and delete data")
+                metadataQueries.deleteAll()
+                metadataQueries.insertOrUpdate(createMetadataEntity(credentials.userId, credentials.deviceId))
+            }
+        }
+    }
+
+    private fun createMetadataEntity(userId: String, deviceId: String?): CryptoMetadataEntity {
+        return CryptoMetadataEntity.Impl(
+                user_id = userId,
+                device_id = deviceId,
+                global_blacklist_unverified_devices = false,
+                backup_version = null,
+                device_sync_token = null,
+                key_backup_recovery_key = null,
+                key_backup_recovery_key_version = null,
+                olm_account_data = null,
+                x_sign_master_private_key = null,
+                x_sign_self_signed_private_key = null,
+                x_sign_user_private_key = null
+        )
+    }
 
     override fun hasData(): Boolean {
         return metadataQueries.count().executeAsOne() > 0
@@ -863,7 +895,6 @@ internal class SqlCryptoStore @Inject constructor(private val cryptoDatabase: Cr
 
     private fun mapCrossSigningInfoEntity(userId: String): MXCrossSigningInfo {
         val crossSigningKeyList = mutableListOf<CryptoCrossSigningKey>()
-        val crossSigningInfo = MXCrossSigningInfo(userId, crossSigningKeyList)
 
         val crossSigningInfoEntityList = crossSigningInfoQueries.getByUserId(userId).executeAsList()
 
@@ -873,7 +904,7 @@ internal class SqlCryptoStore @Inject constructor(private val cryptoDatabase: Cr
             }
             crossSigningKeyList.add(mapToModel(crossSigningInfoEntity))
         }
-        return crossSigningInfo
+        return MXCrossSigningInfo(userId, crossSigningKeyList)
     }
 
     override fun getLiveCrossSigningInfo(userId: String): LiveData<Optional<MXCrossSigningInfo>> {
