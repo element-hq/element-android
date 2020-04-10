@@ -94,6 +94,8 @@
     <string name="encryption_unknown_algorithm_tile_description">The encryption used by this room is not supported</string>
 
     <string name="room_created_summary_item">%s created and configured the room.</string>
+    <string name="error_failed_to_import_keys">Failed to import keys</string>
+
     <!-- END Strings added by Valere -->
 
 

@@ -52,8 +52,10 @@ import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersio
 import im.vector.matrix.android.internal.crypto.keysbackup.util.computeRecoveryKey
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.util.awaitCallback
+import im.vector.riotx.R
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.core.resources.StringProvider
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -78,7 +80,8 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         @Assisted initialState: VerificationBottomSheetViewState,
         @Assisted val args: VerificationBottomSheet.VerificationArgs,
         private val session: Session,
-        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider)
+        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
+        private val stringProvider: StringProvider)
     : VectorViewModel<VerificationBottomSheetViewState, VerificationAction, VerificationBottomSheetViewEvents>(initialState),
         VerificationService.Listener {
 
@@ -373,7 +376,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     // try to get keybackup key
                 } else {
                     // POP UP something
-                    _viewEvents.post(VerificationBottomSheetViewEvents.ModalError("Failed to import keys"))
+                    _viewEvents.post(VerificationBottomSheetViewEvents.ModalError(stringProvider.getString(R.string.error_failed_to_import_keys)))
                 }
 
                 // try the keybackup
