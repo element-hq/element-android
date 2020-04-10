@@ -25,7 +25,7 @@
         android:layout_margin="2dp"
         android:layout_height="54dp"
         android:layout_gravity="center"
-        android:src="@drawable/ic_lion"
+        android:src="@drawable/ic_verification_cactus"
         tools:visibility="visible"
         android:visibility="gone"
         tools:ignore="SpUsage"
