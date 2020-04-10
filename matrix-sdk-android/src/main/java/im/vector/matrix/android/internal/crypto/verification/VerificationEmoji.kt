@@ -50,7 +50,7 @@ internal fun getEmojiForCode(code: Int): EmojiRepresentation {
         27            -> EmojiRepresentation("🍕", R.string.verification_emoji_pizza, R.drawable.ic_pizza)
         28            -> EmojiRepresentation("🎂", R.string.verification_emoji_cake, R.drawable.ic_cake)
         29            -> EmojiRepresentation("❤️", R.string.verification_emoji_heart, R.drawable.ic_heart)
-        30            -> EmojiRepresentation("😀", R.string.verification_emoji_smiley, R.drawable.ic_smiley)
+        30            -> EmojiRepresentation("🙂", R.string.verification_emoji_smiley, R.drawable.ic_smiley)
         31            -> EmojiRepresentation("🤖", R.string.verification_emoji_robot, R.drawable.ic_robot)
         32            -> EmojiRepresentation("🎩", R.string.verification_emoji_hat, R.drawable.ic_hat)
         33            -> EmojiRepresentation("👓", R.string.verification_emoji_glasses, R.drawable.ic_glasses)
