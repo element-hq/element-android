@@ -381,7 +381,8 @@ class NotificationUtils @Inject constructor(private val context: Context,
                                       roomInfo: RoomEventGroupInfo,
                                       largeIcon: Bitmap?,
                                       lastMessageTimestamp: Long,
-                                      senderDisplayNameForReplyCompat: String?): Notification {
+                                      senderDisplayNameForReplyCompat: String?,
+                                      tickerText: String): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
         val openRoomIntent = buildOpenRoomIntent(roomInfo.roomId)
@@ -478,6 +479,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                             System.currentTimeMillis().toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
                     setDeleteIntent(pendingIntent)
                 }
+                .setTicker(tickerText)
                 .build()
     }
 
