@@ -17,22 +17,17 @@
 package im.vector.matrix.android.internal.crypto.crosssigning
 
 import androidx.lifecycle.LiveData
-import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.crypto.DeviceListManager
-import im.vector.matrix.android.internal.crypto.MXOlmDevice
-import im.vector.matrix.android.internal.crypto.MyDeviceInfoHolder
-import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
-import im.vector.matrix.android.internal.crypto.model.KeyUsage
 import im.vector.matrix.android.internal.crypto.model.rest.UploadSignatureQueryBuilder
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.store.PrivateKeysInfo
+import im.vector.matrix.android.internal.crypto.tasks.InitializeCrossSigningTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadSignaturesTask
-import im.vector.matrix.android.internal.crypto.tasks.UploadSigningKeysTask
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -53,12 +48,9 @@ import javax.inject.Inject
 internal class DefaultCrossSigningService @Inject constructor(
         @UserId private val userId: String,
         private val cryptoStore: IMXCryptoStore,
-        private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
-        private val olmDevice: MXOlmDevice,
         private val deviceListManager: DeviceListManager,
-        private val uploadSigningKeysTask: UploadSigningKeysTask,
+        private val initializeCrossSigningTask: InitializeCrossSigningTask,
         private val uploadSignaturesTask: UploadSignaturesTask,
-        private val computeTrustTask: ComputeTrustTask,
         private val taskExecutor: TaskExecutor,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope,
@@ -151,151 +143,29 @@ internal class DefaultCrossSigningService @Inject constructor(
     override fun initializeCrossSigning(authParams: UserPasswordAuth?, callback: MatrixCallback<Unit>?) {
         Timber.d("## CrossSigning  initializeCrossSigning")
 
-        // =================
-        // MASTER KEY
-        // =================
-        val masterPkOlm = OlmPkSigning()
-        val masterKeyPrivateKey = OlmPkSigning.generateSeed()
-        val masterPublicKey = masterPkOlm.initWithSeed(masterKeyPrivateKey)
-
-        Timber.v("## CrossSigning - masterPublicKey:$masterPublicKey")
-
-        // =================
-        // USER KEY
-        // =================
-        val userSigningPkOlm = OlmPkSigning()
-        val uskPrivateKey = OlmPkSigning.generateSeed()
-        val uskPublicKey = userSigningPkOlm.initWithSeed(uskPrivateKey)
-
-        Timber.v("## CrossSigning - uskPublicKey:$uskPublicKey")
-
-        // Sign userSigningKey with master
-        val signedUSK = CryptoCrossSigningKey.Builder(userId, KeyUsage.USER_SIGNING)
-                .key(uskPublicKey)
-                .build()
-                .canonicalSignable()
-                .let { masterPkOlm.sign(it) }
-
-        // =================
-        // SELF SIGNING KEY
-        // =================
-        val selfSigningPkOlm = OlmPkSigning()
-        val sskPrivateKey = OlmPkSigning.generateSeed()
-        val sskPublicKey = selfSigningPkOlm.initWithSeed(sskPrivateKey)
-
-        Timber.v("## CrossSigning - sskPublicKey:$sskPublicKey")
-
-        // Sign userSigningKey with master
-        val signedSSK = JsonCanonicalizer.getCanonicalJson(Map::class.java, CryptoCrossSigningKey.Builder(userId, KeyUsage.SELF_SIGNING)
-                .key(sskPublicKey)
-                .build().signalableJSONDictionary()).let { masterPkOlm.sign(it) }
-
-        // I need to upload the keys
-        val mskCrossSigningKeyInfo = CryptoCrossSigningKey.Builder(userId, KeyUsage.MASTER)
-                .key(masterPublicKey)
-                .build()
-        val params = UploadSigningKeysTask.Params(
-                masterKey = mskCrossSigningKeyInfo,
-                userKey = CryptoCrossSigningKey.Builder(userId, KeyUsage.USER_SIGNING)
-                        .key(uskPublicKey)
-                        .signature(userId, masterPublicKey, signedUSK)
-                        .build(),
-                selfSignedKey = CryptoCrossSigningKey.Builder(userId, KeyUsage.SELF_SIGNING)
-                        .key(sskPublicKey)
-                        .signature(userId, masterPublicKey, signedSSK)
-                        .build(),
-                userPasswordAuth = authParams
+        val params = InitializeCrossSigningTask.Params(
+                authParams = authParams
         )
-
-        this.masterPkSigning = masterPkOlm
-        this.userPkSigning = userSigningPkOlm
-        this.selfSigningPkSigning = selfSigningPkOlm
-
-        val crossSigningInfo = MXCrossSigningInfo(userId, listOf(params.masterKey, params.userKey, params.selfSignedKey))
-        cryptoStore.setMyCrossSigningInfo(crossSigningInfo)
-        setUserKeysAsTrusted(userId, true)
-        cryptoStore.storePrivateKeysInfo(masterKeyPrivateKey?.toBase64NoPadding(), uskPrivateKey?.toBase64NoPadding(), sskPrivateKey?.toBase64NoPadding())
-
-        uploadSigningKeysTask.configureWith(params) {
-            this.executionThread = TaskThread.CRYPTO
-            this.callback = object : MatrixCallback<Unit> {
-                override fun onSuccess(data: Unit) {
-                    Timber.i("## CrossSigning - Keys successfully uploaded")
-
-                    //  Sign the current device with SSK
-                    val uploadSignatureQueryBuilder = UploadSignatureQueryBuilder()
-
-                    val myDevice = myDeviceInfoHolder.get().myDevice
-                    val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, myDevice.signalableJSONDictionary())
-                    val signedDevice = selfSigningPkOlm.sign(canonicalJson)
-                    val updateSignatures = (myDevice.signatures?.toMutableMap() ?: HashMap())
-                            .also {
-                                it[userId] = (it[userId]
-                                        ?: HashMap()) + mapOf("ed25519:$sskPublicKey" to signedDevice)
-                            }
-                    myDevice.copy(signatures = updateSignatures).let {
-                        uploadSignatureQueryBuilder.withDeviceInfo(it)
-                    }
-
-                    // sign MSK with device key (migration) and upload signatures
-                    val message = JsonCanonicalizer.getCanonicalJson(Map::class.java, mskCrossSigningKeyInfo.signalableJSONDictionary())
-                    olmDevice.signMessage(message)?.let { sign ->
-                        val mskUpdatedSignatures = (mskCrossSigningKeyInfo.signatures?.toMutableMap()
-                                ?: HashMap()).also {
-                            it[userId] = (it[userId]
-                                    ?: HashMap()) + mapOf("ed25519:${myDevice.deviceId}" to sign)
-                        }
-                        mskCrossSigningKeyInfo.copy(
-                                signatures = mskUpdatedSignatures
-                        ).let {
-                            uploadSignatureQueryBuilder.withSigningKeyInfo(it)
-                        }
-                    }
-
-                    resetTrustOnKeyChange()
-                    uploadSignaturesTask.configureWith(UploadSignaturesTask.Params(uploadSignatureQueryBuilder.build())) {
-                        // this.retryCount = 3
-                        this.executionThread = TaskThread.CRYPTO
-                        this.callback = object : MatrixCallback<Unit> {
-                            override fun onSuccess(data: Unit) {
-                                Timber.i("## CrossSigning - signatures successfully uploaded")
-                                callback?.onSuccess(Unit)
-                            }
-
-                            override fun onFailure(failure: Throwable) {
-                                // Clear
-                                Timber.e(failure, "## CrossSigning - Failed to upload signatures")
-                                clearSigningKeys()
-                            }
-                        }
-                    }.executeBy(taskExecutor)
+        initializeCrossSigningTask.configureWith(params) {
+            this.callbackThread = TaskThread.CRYPTO
+            this.callback = object : MatrixCallback<InitializeCrossSigningTask.Result> {
+                override fun onFailure(failure: Throwable) {
+                    callback?.onFailure(failure)
                 }
 
-                override fun onFailure(failure: Throwable) {
-                    Timber.e(failure, "## CrossSigning - Failed to upload signing keys")
-                    clearSigningKeys()
-                    callback?.onFailure(failure)
+                override fun onSuccess(data: InitializeCrossSigningTask.Result) {
+                    val crossSigningInfo = MXCrossSigningInfo(userId, listOf(data.masterKeyInfo, data.userKeyInfo, data.selfSignedKeyInfo))
+                    cryptoStore.setMyCrossSigningInfo(crossSigningInfo)
+                    setUserKeysAsTrusted(userId, true)
+                    cryptoStore.storePrivateKeysInfo(data.masterKeyPK, data.userKeyPK, data.selfSigningKeyPK)
+                    masterPkSigning = OlmPkSigning().apply { initWithSeed(data.masterKeyPK.fromBase64()) }
+                    userPkSigning = OlmPkSigning().apply { initWithSeed(data.masterKeyPK.fromBase64()) }
+                    selfSigningPkSigning = OlmPkSigning().apply { initWithSeed(data.masterKeyPK.fromBase64()) }
+
+                    callback?.onSuccess(Unit)
                 }
             }
         }.executeBy(taskExecutor)
-    }
-
-    private fun clearSigningKeys() {
-        masterPkSigning?.releaseSigning()
-        userPkSigning?.releaseSigning()
-        selfSigningPkSigning?.releaseSigning()
-
-        masterPkSigning = null
-        userPkSigning = null
-        selfSigningPkSigning = null
-
-        cryptoStore.setMyCrossSigningInfo(null)
-        cryptoStore.storePrivateKeysInfo(null, null, null)
-    }
-
-    private fun resetTrustOnKeyChange() {
-        Timber.i("## CrossSigning - Clear all other user trust")
-        cryptoStore.clearOtherUserTrust()
     }
 
     override fun onSecretSSKGossip(sskPrivateKey: String) {
