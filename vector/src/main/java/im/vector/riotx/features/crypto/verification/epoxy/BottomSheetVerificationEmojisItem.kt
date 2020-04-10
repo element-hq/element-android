@@ -16,14 +16,21 @@
  */
 package im.vector.riotx.features.crypto.verification.epoxy
 
+import android.content.Context
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.matrix.android.api.session.crypto.verification.EmojiRepresentation
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import me.gujun.android.span.Span
+import me.gujun.android.span.image
+import me.gujun.android.span.span
 
 /**
  * A emoji list for bottom sheet.
@@ -40,26 +47,36 @@ abstract class BottomSheetVerificationEmojisItem : VectorEpoxyModel<BottomSheetV
     @EpoxyAttribute lateinit var emojiRepresentation6: EmojiRepresentation
 
     override fun bind(holder: Holder) {
-        holder.emoji0View.findViewById<TextView>(R.id.item_emoji_tv).text = emojiRepresentation0.emoji
-        holder.emoji0View.findViewById<TextView>(R.id.item_emoji_name_tv).setText(emojiRepresentation0.nameResId)
+        bindEmojiView(holder.emoji0View, emojiRepresentation0)
+        bindEmojiView(holder.emoji1View, emojiRepresentation1)
+        bindEmojiView(holder.emoji2View, emojiRepresentation2)
+        bindEmojiView(holder.emoji3View, emojiRepresentation3)
+        bindEmojiView(holder.emoji4View, emojiRepresentation4)
+        bindEmojiView(holder.emoji5View, emojiRepresentation5)
+        bindEmojiView(holder.emoji6View, emojiRepresentation6)
+    }
 
-        holder.emoji1View.findViewById<TextView>(R.id.item_emoji_tv).text = emojiRepresentation1.emoji
-        holder.emoji1View.findViewById<TextView>(R.id.item_emoji_name_tv).setText(emojiRepresentation1.nameResId)
+    private fun spanForRepresentation(context: Context, rep: EmojiRepresentation): Span {
+        return span {
+            if (rep.drawableRes != null) {
+                ContextCompat.getDrawable(context, rep.drawableRes!!)?.let { image(it) }
+            } else {
+                +rep.emoji
+            }
+        }
+    }
 
-        holder.emoji2View.findViewById<TextView>(R.id.item_emoji_tv).text = emojiRepresentation2.emoji
-        holder.emoji2View.findViewById<TextView>(R.id.item_emoji_name_tv).setText(emojiRepresentation2.nameResId)
-
-        holder.emoji3View.findViewById<TextView>(R.id.item_emoji_tv).text = emojiRepresentation3.emoji
-        holder.emoji3View.findViewById<TextView>(R.id.item_emoji_name_tv)?.setText(emojiRepresentation3.nameResId)
-
-        holder.emoji4View.findViewById<TextView>(R.id.item_emoji_tv).text = emojiRepresentation4.emoji
-        holder.emoji4View.findViewById<TextView>(R.id.item_emoji_name_tv).setText(emojiRepresentation4.nameResId)
-
-        holder.emoji5View.findViewById<TextView>(R.id.item_emoji_tv).text = emojiRepresentation5.emoji
-        holder.emoji5View.findViewById<TextView>(R.id.item_emoji_name_tv).setText(emojiRepresentation5.nameResId)
-
-        holder.emoji6View.findViewById<TextView>(R.id.item_emoji_tv).text = emojiRepresentation6.emoji
-        holder.emoji6View.findViewById<TextView>(R.id.item_emoji_name_tv).setText(emojiRepresentation6.nameResId)
+    private fun bindEmojiView(view: ViewGroup, rep: EmojiRepresentation) {
+        rep.drawableRes?.let {
+            view.findViewById<TextView>(R.id.item_emoji_tv).isVisible = false
+            view.findViewById<ImageView>(R.id.item_emoji_image).isVisible = true
+            view.findViewById<ImageView>(R.id.item_emoji_image).setImageDrawable(ContextCompat.getDrawable(view.context, it))
+        } ?: kotlin.run {
+            view.findViewById<TextView>(R.id.item_emoji_tv).isVisible = true
+            view.findViewById<ImageView>(R.id.item_emoji_image).isVisible = false
+            view.findViewById<TextView>(R.id.item_emoji_tv).text = rep.emoji
+        }
+        view.findViewById<TextView>(R.id.item_emoji_name_tv).setText(rep.nameResId)
     }
 
     class Holder : VectorEpoxyHolder() {
