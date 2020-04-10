@@ -57,7 +57,7 @@ internal abstract class DefaultVerificationTransaction(
 
     protected fun trust(canTrustOtherUserMasterKey: Boolean,
                         toVerifyDeviceIds: List<String>,
-                        eventuallyMarkMyMasterKeyAsTrusted: Boolean) {
+                        eventuallyMarkMyMasterKeyAsTrusted: Boolean, autoDone : Boolean = true) {
         Timber.d("## Verification: trust ($otherUserId,$otherDeviceId) , verifiedDevices:$toVerifyDeviceIds")
         Timber.d("## Verification: trust Mark myMSK trusted $eventuallyMarkMyMasterKeyAsTrusted")
 
@@ -97,14 +97,9 @@ internal abstract class DefaultVerificationTransaction(
             })
         }
 
-        state = VerificationTxState.Verified
-
-        transport.done(transactionId) {
-//            if (otherUserId == userId && !crossSigningService.canCrossSign()) {
-//                outgoingGossipingRequestManager.sendSecretShareRequest(SELF_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId ?: "*")))
-//                outgoingGossipingRequestManager.sendSecretShareRequest(USER_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId ?: "*")))
-//                outgoingGossipingRequestManager.sendSecretShareRequest(KEYBACKUP_SECRET_SSSS_NAME, mapOf(userId to listOf(otherDeviceId ?: "*")))
-//            }
+        if (autoDone) {
+            state = VerificationTxState.Verified
+            transport.done(transactionId) {}
         }
     }
 
