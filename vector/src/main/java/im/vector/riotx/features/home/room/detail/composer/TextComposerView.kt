@@ -26,12 +26,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.content.ContextCompat
 import androidx.core.text.toSpannable
+import androidx.core.view.isVisible
 import androidx.transition.AutoTransition
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.ButterKnife
+import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
 import im.vector.riotx.R
 import kotlinx.android.synthetic.main.merge_composer_layout.view.*
 
@@ -64,6 +67,8 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
     lateinit var composerEditText: ComposerEditText
     @BindView(R.id.composer_avatar_view)
     lateinit var composerAvatarImageView: ImageView
+    @BindView(R.id.composer_shield)
+    lateinit var composerShieldImageView: ImageView
 
     private var currentConstraintSetId: Int = -1
 
@@ -158,12 +163,23 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
         }
     }
 
-    fun setRoomEncrypted(isEncrypted: Boolean) {
-        composerEditText.setHint(
-                if (isEncrypted) {
-                    R.string.room_message_placeholder_encrypted
-                } else {
-                    R.string.room_message_placeholder_not_encrypted
-                })
+    fun setRoomEncrypted(isEncrypted: Boolean, roomEncryptionTrustLevel: RoomEncryptionTrustLevel?) {
+        if (isEncrypted) {
+            composerEditText.setHint(R.string.room_message_placeholder_encrypted)
+            composerShieldImageView.isVisible = true
+            val shield = when (roomEncryptionTrustLevel) {
+                RoomEncryptionTrustLevel.Trusted -> {
+                    ContextCompat.getDrawable(context, R.drawable.ic_shield_trusted)
+                }
+                RoomEncryptionTrustLevel.Warning -> {
+                    ContextCompat.getDrawable(context, R.drawable.ic_shield_warning)
+                }
+                else -> ContextCompat.getDrawable(context, R.drawable.ic_shield_black)
+            }
+            composerShieldImageView.setImageDrawable(shield)
+        } else {
+            composerEditText.setHint(R.string.room_message_placeholder_not_encrypted)
+            composerShieldImageView.isVisible = false
+        }
     }
 }
