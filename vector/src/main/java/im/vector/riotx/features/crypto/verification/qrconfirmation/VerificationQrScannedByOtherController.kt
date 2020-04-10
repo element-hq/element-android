@@ -48,10 +48,10 @@ class VerificationQrScannedByOtherController @Inject constructor(
             id("notice")
             apply {
                 if (state.isMe) {
-                    val name = state.otherUserMxItem?.getBestName() ?: ""
-                    notice(stringProvider.getString(R.string.qr_code_scanned_self_verif_notice, name))
+                    notice(stringProvider.getString(R.string.qr_code_scanned_self_verif_notice))
                 } else {
-                    notice(stringProvider.getString(R.string.qr_code_scanned_by_other_notice))
+                    val name = state.otherUserMxItem?.getBestName() ?: ""
+                    notice(stringProvider.getString(R.string.qr_code_scanned_by_other_notice, name))
                 }
             }
         }
