@@ -35,7 +35,6 @@ import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-import im.vector.matrix.android.internal.util.withoutPrefix
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
@@ -393,7 +392,7 @@ internal class DefaultCrossSigningService @Inject constructor(
         } else {
             // Maybe it's signed by a locally trusted device?
             myMasterKey.signatures?.get(userId)?.forEach { (key, value) ->
-                val potentialDeviceId = key.withoutPrefix("ed25519:")
+                val potentialDeviceId = key.removePrefix("ed25519:")
                 val potentialDevice = cryptoStore.getUserDevice(userId, potentialDeviceId)
                 if (potentialDevice != null && potentialDevice.isVerified) {
                     // Check signature validity?

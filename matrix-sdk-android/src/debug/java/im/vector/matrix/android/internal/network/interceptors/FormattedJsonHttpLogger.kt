@@ -66,7 +66,7 @@ class FormattedJsonHttpLogger : HttpLoggingInterceptor.Logger {
     }
 
     private fun logJson(formattedJson: String) {
-        val arr = formattedJson.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val arr = formattedJson.lines().dropLastWhile { it.isEmpty() }
         for (s in arr) {
             Timber.v(s)
         }

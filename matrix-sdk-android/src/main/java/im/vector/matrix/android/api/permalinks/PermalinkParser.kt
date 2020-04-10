@@ -45,12 +45,11 @@ object PermalinkParser {
             return PermalinkData.FallbackLink(uri)
         }
 
-        val indexOfQuery = fragment.indexOf("?")
-        val safeFragment = if (indexOfQuery != -1) fragment.substring(0, indexOfQuery) else fragment
+        val safeFragment = fragment.substringBefore('?')
 
         // we are limiting to 2 params
         val params = safeFragment
-                .split(MatrixPatterns.SEP_REGEX.toRegex())
+                .split(MatrixPatterns.SEP_REGEX)
                 .filter { it.isNotEmpty() }
                 .take(2)
 
