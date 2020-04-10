@@ -32,6 +32,7 @@ import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
@@ -49,6 +50,7 @@ import im.vector.riotx.features.crypto.verification.cancel.VerificationNotMeFrag
 import im.vector.riotx.features.crypto.verification.choose.VerificationChooseMethodFragment
 import im.vector.riotx.features.crypto.verification.conclusion.VerificationConclusionFragment
 import im.vector.riotx.features.crypto.verification.emoji.VerificationEmojiCodeFragment
+import im.vector.riotx.features.crypto.verification.qrconfirmation.VerificationQRWaitingFragment
 import im.vector.riotx.features.crypto.verification.qrconfirmation.VerificationQrScannedByOtherFragment
 import im.vector.riotx.features.crypto.verification.request.VerificationRequestFragment
 import im.vector.riotx.features.home.AvatarRenderer
@@ -108,7 +110,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                     startActivityForResult(SharedSecureStorageActivity.newIntent(
                             requireContext(),
                             null, // use default key
-                            listOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME),
+                            listOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME),
                             SharedSecureStorageActivity.DEFAULT_RESULT_KEYSTORE_ALIAS
                     ), SECRET_REQUEST_CODE)
                 }
@@ -241,6 +243,13 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         when (state.qrTransactionState) {
             is VerificationTxState.QrScannedByOther -> {
                 showFragment(VerificationQrScannedByOtherFragment::class, Bundle())
+                return@withState
+            }
+            is VerificationTxState.Started,
+            is VerificationTxState.WaitingOtherReciprocateConfirm -> {
+                showFragment(VerificationQRWaitingFragment::class, Bundle().apply {
+                    putParcelable(MvRx.KEY_ARG, VerificationQRWaitingFragment.Args(state.isMe, state.otherUserMxItem?.getBestName() ?: ""))
+                })
                 return@withState
             }
             is VerificationTxState.Verified         -> {

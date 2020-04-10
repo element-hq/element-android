@@ -43,6 +43,7 @@ sealed class VerificationTxState {
 
     // Will be used to ask the user if the other user has correctly scanned
     object QrScannedByOther : VerificationQrTxState()
+    object WaitingOtherReciprocateConfirm : VerificationQrTxState()
 
     // Terminal states
     abstract class TerminalTxState : VerificationTxState()
