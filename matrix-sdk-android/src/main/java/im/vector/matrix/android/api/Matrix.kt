@@ -80,10 +80,12 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
                     val matrixConfiguration = (appContext as MatrixConfiguration.Provider).providesMatrixConfiguration()
                     instance = Matrix(appContext, matrixConfiguration)
                 } else {
+                    // TODO: Should set isInit back to false ?
                     throw IllegalStateException("Matrix is not initialized properly." +
                             " You should call Matrix.initialize or let your application implements MatrixConfiguration.Provider.")
                 }
             }
+            // FIXME Race condition. This will throw null pointer if two threads call this method at the same time.
             return instance
         }
 
