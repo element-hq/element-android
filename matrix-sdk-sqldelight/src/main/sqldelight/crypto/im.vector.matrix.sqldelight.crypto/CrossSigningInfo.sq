@@ -72,7 +72,7 @@ clearOtherUserTrust:
 UPDATE crossSigningInfoEntity
 SET locally_verified = 0,
 cross_signed_verified = 0
-WHERE user_id = :userId;
+WHERE user_id != :userId;
 
 deleteByUserId:
 DELETE FROM crossSigningInfoEntity

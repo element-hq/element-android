@@ -132,14 +132,7 @@ object SqliteCryptoMapper {
         val pubKey = crossSigningInfoEntity.public_key_base64 ?: ""
         return CryptoCrossSigningKey(
                 userId = crossSigningInfoEntity.user_id,
-                signatures = crossSigningInfoEntity.signatures?.let {
-                    try {
-                        mapOfStringMigrationAdapter.fromJson(it)
-                    } catch (failure: Throwable) {
-                        Timber.e(failure)
-                        null
-                    }
-                },
+                signatures = crossSigningInfoEntity.signatures?.let { deserializeSignaturesFromSqlite(it) },
                 trustLevel = DeviceTrustLevel(
                         crossSigningInfoEntity.cross_signed_verified,
                         crossSigningInfoEntity.locally_verified
@@ -152,12 +145,25 @@ object SqliteCryptoMapper {
     internal fun mapToEntity(cryptoCrossSigningKey: CryptoCrossSigningKey): CrossSigningInfoEntity {
         return CrossSigningInfoEntity.Impl(
                 user_id = cryptoCrossSigningKey.userId,
-                signatures = mapMigrationAdapter.toJson(cryptoCrossSigningKey.signatures),
+                signatures = serializeSignaturesForSqlite(cryptoCrossSigningKey.signatures),
                 public_key_base64 = cryptoCrossSigningKey.unpaddedBase64PublicKey,
                 usages = cryptoCrossSigningKey.usages ?: emptyList(),
                 locally_verified = false,
                 cross_signed_verified = false
         )
+    }
+
+    fun serializeSignaturesForSqlite(signatures: Map<String, Map<String, String>>?): String {
+        return mapMigrationAdapter.toJson(signatures)
+    }
+
+    fun deserializeSignaturesFromSqlite(signatures: String):Map<String, Map<String, String>>? {
+        return try {
+            mapOfStringMigrationAdapter.fromJson(signatures)
+        } catch (failure: Throwable) {
+            Timber.e(failure)
+            null
+        }
     }
 
     fun toOutgoingGossipingRequest(entity: OutgoingGossipingRequestEntity): OutgoingGossipingRequest {

@@ -17,11 +17,14 @@
 package im.vector.matrix.android.internal.crypto
 
 import android.content.Context
+import android.util.Log
 import com.squareup.sqldelight.ColumnAdapter
 import com.squareup.sqldelight.android.AndroidSqliteDriver
+import com.squareup.sqldelight.logs.LogSqliteDriver
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
@@ -132,7 +135,14 @@ internal abstract class CryptoModule {
         @SessionScope
         fun providesCryptoDatabase(context: Context, @SessionFilesDirectory directory: File): CryptoDatabase {
             val name = "${directory.name}-matrix-sdk-crypto.db"
-            val driver = AndroidSqliteDriver(CryptoDatabase.Schema, context, name)
+            val driver = if (BuildConfig.DEBUG) {
+                LogSqliteDriver(AndroidSqliteDriver(CryptoDatabase.Schema, context, name)) { log ->
+                    Log.d("SQLite", log)
+                }
+            } else {
+                AndroidSqliteDriver(CryptoDatabase.Schema, context, name)
+            }
+
             val listOfStringAdapter = object : ColumnAdapter<List<String>, String> {
                 override fun decode(databaseValue: String) = databaseValue.split(",")
                 override fun encode(value: List<String>) = value.joinToString(separator = ",")

@@ -53,6 +53,7 @@ import im.vector.matrix.android.internal.crypto.store.db.SqliteCryptoMapper.getR
 import im.vector.matrix.android.internal.crypto.store.db.SqliteCryptoMapper.getRequestedSecretName
 import im.vector.matrix.android.internal.crypto.store.db.SqliteCryptoMapper.mapToEntity
 import im.vector.matrix.android.internal.crypto.store.db.SqliteCryptoMapper.mapToModel
+import im.vector.matrix.android.internal.crypto.store.db.SqliteCryptoMapper.serializeSignaturesForSqlite
 import im.vector.matrix.android.internal.crypto.store.db.SqliteCryptoMapper.toIncomingGossipingRequest
 import im.vector.matrix.android.internal.crypto.store.db.SqliteCryptoMapper.toOutgoingGossipingRequest
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
@@ -144,7 +145,7 @@ internal class SqlCryptoStore @Inject constructor(private val cryptoDatabase: Cr
     }
 
     override fun hasData(): Boolean {
-        return metadataQueries.count().executeAsOne() > 0
+        return metadataQueries.count().executeAsList().isNotEmpty()
     }
 
     override fun deleteStore() {
@@ -162,11 +163,11 @@ internal class SqlCryptoStore @Inject constructor(private val cryptoDatabase: Cr
     }
 
     override fun open() {
-        // NOP
+        // NOOP
     }
 
     override fun close() {
-        // NOP
+        // NOOP
     }
 
     override fun getDeviceId(): String {
@@ -298,7 +299,7 @@ internal class SqlCryptoStore @Inject constructor(private val cryptoDatabase: Cr
                     .firstOrNull { it.usages.contains(KeyUsage.MASTER.value) }
             if (existingMaster != null && existingMaster.public_key_base64 == masterKey.unpaddedBase64PublicKey) {
                 // update signatures?
-                crossSigningInfoQueries.updateSignaturesWithRowId(serializeForSqlite(masterKey.signatures), existingMaster._id)
+                crossSigningInfoQueries.updateSignaturesWithRowId(serializeSignaturesForSqlite(masterKey.signatures), existingMaster._id)
                 crossSigningInfoQueries.updateUsagesWithRowId(masterKey.usages ?: emptyList(), existingMaster._id)
             } else {
                 crossSigningInfoQueries
@@ -307,7 +308,7 @@ internal class SqlCryptoStore @Inject constructor(private val cryptoDatabase: Cr
                                         user_id = userId,
                                         cross_signed_verified = false,
                                         locally_verified = false,
-                                        signatures = serializeForSqlite(masterKey.signatures),
+                                        signatures = serializeSignaturesForSqlite(masterKey.signatures),
                                         public_key_base64 = masterKey.unpaddedBase64PublicKey,
                                         usages = masterKey.usages ?: emptyList()
                                 )
@@ -320,7 +321,7 @@ internal class SqlCryptoStore @Inject constructor(private val cryptoDatabase: Cr
                     .firstOrNull { it.usages.contains(KeyUsage.SELF_SIGNING.value) }
             if (existingSelfSigned != null && existingSelfSigned.public_key_base64 == selfSigningKey.unpaddedBase64PublicKey) {
                 // update signatures?
-                crossSigningInfoQueries.updateSignaturesWithRowId(serializeForSqlite(existingSelfSigned.signatures), existingSelfSigned._id)
+                crossSigningInfoQueries.updateSignaturesWithRowId(serializeSignaturesForSqlite(selfSigningKey.signatures), existingSelfSigned._id)
                 crossSigningInfoQueries.updateUsagesWithRowId(existingSelfSigned.usages, existingSelfSigned._id)
             } else {
                 crossSigningInfoQueries
@@ -329,7 +330,7 @@ internal class SqlCryptoStore @Inject constructor(private val cryptoDatabase: Cr
                                         user_id = userId,
                                         cross_signed_verified = false,
                                         locally_verified = false,
-                                        signatures = serializeForSqlite(selfSigningKey.signatures),
+                                        signatures = serializeSignaturesForSqlite(selfSigningKey.signatures),
                                         public_key_base64 = selfSigningKey.unpaddedBase64PublicKey,
                                         usages = selfSigningKey.usages ?: emptyList()
                                 )
@@ -344,7 +345,7 @@ internal class SqlCryptoStore @Inject constructor(private val cryptoDatabase: Cr
                         .firstOrNull { it.usages.contains(KeyUsage.USER_SIGNING.value) }
                 if (existingUSK != null && existingUSK.public_key_base64 == userSigningKey.unpaddedBase64PublicKey) {
                     // update signatures?
-                    crossSigningInfoQueries.updateSignaturesWithRowId(serializeForSqlite(userSigningKey.signatures), existingUSK._id)
+                    crossSigningInfoQueries.updateSignaturesWithRowId(serializeSignaturesForSqlite(userSigningKey.signatures), existingUSK._id)
                     crossSigningInfoQueries.updateUsagesWithRowId(userSigningKey.usages ?: emptyList(), existingUSK._id)
                 } else {
                     crossSigningInfoQueries
@@ -353,7 +354,7 @@ internal class SqlCryptoStore @Inject constructor(private val cryptoDatabase: Cr
                                             user_id = userId,
                                             cross_signed_verified = false,
                                             locally_verified = false,
-                                            signatures = serializeForSqlite(userSigningKey.signatures),
+                                            signatures = serializeSignaturesForSqlite(userSigningKey.signatures),
                                             public_key_base64 = userSigningKey.unpaddedBase64PublicKey,
                                             usages = userSigningKey.usages ?: emptyList()
                                     )
@@ -877,7 +878,7 @@ internal class SqlCryptoStore @Inject constructor(private val cryptoDatabase: Cr
                             .insertOrUpdate(
                                     CrossSigningInfoEntity.Impl(
                                             user_id = info.userId,
-                                            signatures = serializeForSqlite(cryptoCrossSigningKey.signatures),
+                                            signatures = serializeSignaturesForSqlite(cryptoCrossSigningKey.signatures),
                                             public_key_base64 = cryptoCrossSigningKey.unpaddedBase64PublicKey,
                                             usages = cryptoCrossSigningKey.usages ?: emptyList(),
                                             locally_verified = false,
