@@ -202,4 +202,12 @@
     <string name="notice_room_canonical_alias_set">%1$s erabiltzaileak %2$s ezarri du gela honen helbide nagusi gisa.</string>
     <string name="notice_room_canonical_alias_unset">%1$s erabiltzaileak gela honen helbide nagusia kendu du.</string>
 
+    <string name="notice_room_guest_access_can_join">%1$k gonbidatuak gelara sartzea onartu du.</string>
+    <string name="notice_room_guest_access_forbidden">%1%k gonbidatuak gelara sartzea galerazi du.</string>
+
+    <string name="notice_end_to_end_ok">%1$s erabiltzaileak muturretik muturrerako zifratzea gaitu du.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s erabiltzaileak muturretik muturrerako zifratzea gaitu du. (%2$s algoritmo ezezaguna).</string>
+
+    <string name="key_verification_request_fallback_message">%s(e)k zure gakoa egiaztatzea eskatu du, baina zure bezeroak ez du txatean gakoa egiaztatzea onartzen. Gako egiaztaketa zaharra erabili beharko duzu.</string>
+
 </resources>

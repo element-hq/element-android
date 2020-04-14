@@ -2103,8 +2103,8 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="verification_request_alert_description">Për siguri ekstra, verifikojeni %s duke parë kontrolluar në të dy pajisjet tuaja një kod njëpërdorimsh.
 \n
 \nPër sigurinë maksimale, bëjeni këtë ju vetë.</string>
-    <string name="rendering_event_error_type_of_event_not_handled">RiotX (ende) nuk trajton akte të llojit \'%1$s\'</string>
-    <string name="rendering_event_error_type_of_message_not_handled">RiotX (ende) nuk trajton mesazhe të llojit \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_event_not_handled">RiotX nuk trajton akte të llojit \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">RiotX nuk trajton mesazhe të llojit \'%1$s\'</string>
     <string name="rendering_event_error_exception">RiotX ndeshi një problem kur vizatohej lëndë e aktit me ID \'%1$s\'</string>
 
     <string name="verify_cannot_cross_sign">Ky sesion s’është në gjendje të ndajë këtë verifikim me sesionet tuaj të tjerë.
@@ -2120,7 +2120,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 \nKyçet privatë nuk njihen</string>
     <string name="settings_active_sessions_unverified_device_desc">Verifikojeni këtë sesion që t’i vihet shenjë si i besuar &amp; dhe t’i akordohet hyrje te mesazhe të fshehtëzuar. Nëse s’keni bërë hyrjen në këtë sesion, llogaria juaj mund të jetë komprometuar:</string>
 
-    <string name="verification_open_other_to_verify">Hapni një sesion ekzistues &amp; përdoreni për të verifikuar këtë, duke i akorduar hyrje te mesazhe të fshehtëzuar. Nëse s’hyni dot te një, përdorni kyçin ose fjalëkalimin tuaj për rimarrje.</string>
+    <string name="verification_open_other_to_verify">Hapni një sesion ekzistues &amp; përdoreni për të verifikuar këtë, duke i akorduar hyrje te mesazhe të fshehtëzuar.</string>
 
 
     <string name="not_trusted">Jo i Besuar</string>
@@ -2129,7 +2129,50 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="initialize_cross_signing">Gatit <em>CrossSigning</em></string>
     <string name="reset_cross_signing">Zeroji Kyçet</string>
 
+    <string name="qr_code_scanned_by_other_notice">A e skanoi me sukses përdoruesi tjetër kodin QR\?</string>
     <string name="qr_code_scanned_by_other_no">Jo</string>
 
     <string name="no_connectivity_to_the_server_indicator">Humbi lidhja me shërbyesin</string>
+    <string name="login_signup_username_hint">Emër përdoruesi</string>
+    <string name="verification_verified_user">%s i verifikuar</string>
+    <string name="settings_dev_tools">Mjete Zhvilluesi</string>
+    <string name="settings_account_data">Të dhëna Llogarie</string>
+    <plurals name="poll_info">
+        <item quantity="one">%d votë</item>
+        <item quantity="other">%d vota</item>
+    </plurals>
+    <plurals name="poll_info_final">
+        <item quantity="one">%d votë - Përfundimet finale</item>
+        <item quantity="other">%d vota - Përfundimet finale</item>
+    </plurals>
+    <string name="poll_item_selected_aria">Mundësi e Përzgjedhur</string>
+    <string name="command_description_poll">Krijoni një pyetësor të thjeshtë</string>
+    <string name="verification_cannot_access_other_session">S’hyni dot në një sesion ekzistues\?</string>
+    <string name="verification_use_passphrase">Përdorni kyçin ose frazëkalimin tuaj të rimarrjes</string>
+
+    <string name="new_signin">Hyrje e Re</string>
+
+    <string name="enter_secret_storage_invalid">S’gjenden dot të fshehta në depozitim</string>
+    <string name="enter_secret_storage_passphrase">Jepni frazëkalimin e fshehtë për në depozitim</string>
+    <string name="enter_secret_storage_passphrase_warning">Kujdes:</string>
+    <string name="enter_secret_storage_passphrase_warning_text">Duhet të hyni në depozitim të fshehtë vetëm nga një pajisje e besuar</string>
+    <string name="enter_secret_storage_passphrase_reason_verify">Për verifikim sesionesh të tjerë përmes dhënies së frazëkalimit tuaj, hyni te historiku i mesazheve tuaj të sigurt dhe identiteti juaj për <em>cross-signing</em></string>
+
+    <string name="message_action_item_redact">Hiqni…</string>
+    <string name="share_confirm_room">Doni të dërgohet kjo bashkëngjitje te %1$s\?</string>
+    <plurals name="send_images_with_original_size">
+        <item quantity="one">Dërgoje figurën në madhësinë origjinale</item>
+        <item quantity="other">Dërgoji figurat në madhësinë origjinale</item>
+    </plurals>
+
+    <string name="delete_event_dialog_title">Ripohoni Heqjen</string>
+    <string name="delete_event_dialog_content">Jeni i sigurt se doni të hiqet (fshihet) kjo veprimtari\? Kini parasysh se, nëse fshini emrin ose ndryshimin e temës së një dhome, ndryshimi mund të zhbëhet.</string>
+    <string name="delete_event_dialog_reason_checkbox">Përfshini një arsye</string>
+    <string name="delete_event_dialog_reason_hint">Arsye për redaktimin</string>
+
+    <string name="event_redacted_by_user_reason_with_reason">Veprimtari e fshirë nga përdorues, arsye: %1$s</string>
+    <string name="event_redacted_by_admin_reason_with_reason">Veprimtari e moderuar nga përgjegjësi i dhomës, arsye: %1$s</string>
+
+    <string name="keys_backup_restore_success_title_already_up_to_date">Kyçet janë tashmë të përditësuar!</string>
+
 </resources>
