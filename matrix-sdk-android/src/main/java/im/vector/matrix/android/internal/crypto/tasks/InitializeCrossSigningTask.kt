@@ -97,9 +97,11 @@ internal class DefaultInitializeCrossSigningTask @Inject constructor(
             Timber.v("## CrossSigning - sskPublicKey:$sskPublicKey")
 
             // Sign userSigningKey with master
-            val signedSSK = JsonCanonicalizer.getCanonicalJson(Map::class.java, CryptoCrossSigningKey.Builder(userId, KeyUsage.SELF_SIGNING)
+            val signedSSK = CryptoCrossSigningKey.Builder(userId, KeyUsage.SELF_SIGNING)
                     .key(sskPublicKey)
-                    .build().signalableJSONDictionary()).let { masterPkOlm.sign(it) }
+                    .build()
+                    .canonicalSignable()
+                    .let { masterPkOlm.sign(it) }
 
             // I need to upload the keys
             val mskCrossSigningKeyInfo = CryptoCrossSigningKey.Builder(userId, KeyUsage.MASTER)

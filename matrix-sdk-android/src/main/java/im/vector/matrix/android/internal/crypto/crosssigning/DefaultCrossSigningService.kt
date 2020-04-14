@@ -159,8 +159,8 @@ internal class DefaultCrossSigningService @Inject constructor(
                     setUserKeysAsTrusted(userId, true)
                     cryptoStore.storePrivateKeysInfo(data.masterKeyPK, data.userKeyPK, data.selfSigningKeyPK)
                     masterPkSigning = OlmPkSigning().apply { initWithSeed(data.masterKeyPK.fromBase64()) }
-                    userPkSigning = OlmPkSigning().apply { initWithSeed(data.masterKeyPK.fromBase64()) }
-                    selfSigningPkSigning = OlmPkSigning().apply { initWithSeed(data.masterKeyPK.fromBase64()) }
+                    userPkSigning = OlmPkSigning().apply { initWithSeed(data.userKeyPK.fromBase64()) }
+                    selfSigningPkSigning = OlmPkSigning().apply { initWithSeed(data.selfSigningKeyPK.fromBase64()) }
 
                     callback?.onSuccess(Unit)
                 }
