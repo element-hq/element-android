@@ -2174,7 +2174,6 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="a11y_qr_code_for_verification">Code QR</string>
 
-    <string name="qr_code_scanned_by_other_notice">L’autre utilisateur a-t-il bien scanné le code QR \?</string>
     <string name="qr_code_scanned_by_other_yes">Oui</string>
     <string name="qr_code_scanned_by_other_no">Non</string>
 

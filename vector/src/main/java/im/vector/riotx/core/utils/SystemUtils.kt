@@ -192,6 +192,6 @@ fun Context.toast(resId: Int) {
 }
 
 // Not in KTX anymore
-fun Context.toast(message: String?) {
-    Toast.makeText(this, message ?: getString(R.string.generic_exception_error), Toast.LENGTH_SHORT).show()
+fun Context.toast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }

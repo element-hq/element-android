@@ -187,9 +187,12 @@ internal class DefaultQrCodeVerificationTransaction(
         // qrCodeData.sharedSecret will be used to send the start request
         start(otherQrCodeData.sharedSecret)
 
-        trust(canTrustOtherUserMasterKey,
-                toVerifyDeviceIds.distinct(),
-                eventuallyMarkMyMasterKeyAsTrusted = true)
+        trust(
+                canTrustOtherUserMasterKey = canTrustOtherUserMasterKey,
+                toVerifyDeviceIds = toVerifyDeviceIds.distinct(),
+                eventuallyMarkMyMasterKeyAsTrusted = true,
+                autoDone = false
+        )
     }
 
     private fun start(remoteSecret: String, onDone: (() -> Unit)? = null) {
@@ -199,6 +202,7 @@ internal class DefaultQrCodeVerificationTransaction(
             throw IllegalStateException("Interactive Key verification already started")
         }
 
+        state = VerificationTxState.Started
         val startMessage = transport.createStartForQrCode(
                 deviceId,
                 transactionId,
@@ -208,7 +212,7 @@ internal class DefaultQrCodeVerificationTransaction(
         transport.sendToOther(
                 EventType.KEY_VERIFICATION_START,
                 startMessage,
-                VerificationTxState.Started,
+                VerificationTxState.WaitingOtherReciprocateConfirm,
                 CancelCode.User,
                 onDone
         )
@@ -244,6 +248,15 @@ internal class DefaultQrCodeVerificationTransaction(
         }
     }
 
+    fun onDoneReceived() {
+        if (state != VerificationTxState.WaitingOtherReciprocateConfirm) {
+            cancel(CancelCode.UnexpectedMessage)
+            return
+        }
+        state = VerificationTxState.Verified
+        transport.done(transactionId) {}
+    }
+
     override fun otherUserScannedMyQrCode() {
         when (qrCodeData) {
             is QrCodeData.VerifyingAnotherUser             -> {
@@ -265,6 +278,6 @@ internal class DefaultQrCodeVerificationTransaction(
     override fun otherUserDidNotScannedMyQrCode() {
         // What can I do then?
         // At least remove the transaction...
-        state = VerificationTxState.Cancelled(CancelCode.MismatchedKeys, true)
+        cancel(CancelCode.MismatchedKeys)
     }
 }

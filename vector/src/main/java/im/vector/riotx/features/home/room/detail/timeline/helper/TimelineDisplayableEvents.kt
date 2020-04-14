@@ -50,6 +50,18 @@ fun TimelineEvent.canBeMerged(): Boolean {
     return root.getClearType() == EventType.STATE_ROOM_MEMBER
 }
 
+fun TimelineEvent.isRoomConfiguration(): Boolean {
+    return when (root.getClearType()) {
+        EventType.STATE_ROOM_GUEST_ACCESS,
+        EventType.STATE_ROOM_HISTORY_VISIBILITY,
+        EventType.STATE_ROOM_JOIN_RULES,
+        EventType.STATE_ROOM_MEMBER,
+        EventType.STATE_ROOM_NAME,
+        EventType.STATE_ROOM_ENCRYPTION -> true
+        else                            -> false
+    }
+}
+
 fun List<TimelineEvent>.nextSameTypeEvents(index: Int, minSize: Int): List<TimelineEvent> {
     if (index >= size - 1) {
         return emptyList()

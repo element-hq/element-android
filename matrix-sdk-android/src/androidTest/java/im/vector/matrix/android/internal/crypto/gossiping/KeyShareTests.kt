@@ -282,7 +282,7 @@ class KeyShareTests : InstrumentedTest {
             val keysBackupService = aliceSession2.cryptoService().keysBackupService()
             mTestHelper.retryPeriodicallyWithLatch(latch) {
                 Log.d("#TEST", "Recovery :${ keysBackupService.getKeyBackupRecoveryKeyInfo()?.recoveryKey}")
-                keysBackupService.getKeyBackupRecoveryKeyInfo()?.recoveryKey != creationInfo.recoveryKey
+                keysBackupService.getKeyBackupRecoveryKeyInfo()?.recoveryKey == creationInfo.recoveryKey
             }
         }
     }

@@ -31,7 +31,7 @@ import im.vector.riotx.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_state)
-abstract class VerificationRequestConclusionItem : AbsBaseMessageItem<VerificationRequestConclusionItem.Holder>() {
+abstract class StatusTileTimelineItem : AbsBaseMessageItem<StatusTileTimelineItem.Holder>() {
 
     override val baseAttributes: AbsBaseMessageItem.Attributes
         get() = attributes
@@ -47,11 +47,17 @@ abstract class VerificationRequestConclusionItem : AbsBaseMessageItem<Verificati
         holder.endGuideline.updateLayoutParams<RelativeLayout.LayoutParams> {
             this.marginEnd = leftGuideline
         }
-        val title = if (attributes.isPositive) R.string.sas_verified else R.string.verification_conclusion_warning
-        holder.titleView.text = holder.view.context.getString(title)
-        holder.descriptionView.text = "${attributes.informationData.memberName} (${attributes.informationData.senderId})"
 
-        val startDrawable = if (attributes.isPositive) R.drawable.ic_shield_trusted else R.drawable.ic_shield_warning
+        holder.titleView.text = attributes.title
+        holder.descriptionView.text = attributes.description
+        holder.descriptionView.textAlignment = View.TEXT_ALIGNMENT_CENTER
+
+        val startDrawable = when (attributes.shieldUIState) {
+            ShieldUIState.GREEN -> R.drawable.ic_shield_trusted
+            ShieldUIState.BLACK -> R.drawable.ic_shield_black
+            ShieldUIState.RED   -> R.drawable.ic_shield_warning
+        }
+
         holder.titleView.setCompoundDrawablesWithIntrinsicBounds(
                 ContextCompat.getDrawable(holder.view.context, startDrawable),
                 null, null, null
@@ -75,9 +81,9 @@ abstract class VerificationRequestConclusionItem : AbsBaseMessageItem<Verificati
      * This class holds all the common attributes for timeline items.
      */
     data class Attributes(
-            val toUserId: String,
-            val toUserName: String,
-            val isPositive: Boolean,
+            val shieldUIState: ShieldUIState,
+            val title: CharSequence,
+            val description: CharSequence,
             override val informationData: MessageInformationData,
             override val avatarRenderer: AvatarRenderer,
             override val messageColorProvider: MessageColorProvider,
@@ -87,4 +93,10 @@ abstract class VerificationRequestConclusionItem : AbsBaseMessageItem<Verificati
             override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
             val emojiTypeFace: Typeface? = null
     ) : AbsBaseMessageItem.Attributes
+
+    enum class ShieldUIState {
+        BLACK,
+        RED,
+        GREEN
+    }
 }

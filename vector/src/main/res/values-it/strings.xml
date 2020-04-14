@@ -2219,7 +2219,6 @@
 
     <string name="a11y_qr_code_for_verification">Codice QR</string>
 
-    <string name="qr_code_scanned_by_other_notice">L\'altro utente ha scansionato correttamente il codice QR\?</string>
     <string name="qr_code_scanned_by_other_yes">Sì</string>
     <string name="qr_code_scanned_by_other_no">No</string>
 

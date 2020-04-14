@@ -15,6 +15,7 @@
  */
 package im.vector.riotx.features.crypto.verification
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -28,6 +29,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
@@ -46,10 +48,15 @@ import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
 import im.vector.matrix.android.internal.crypto.crosssigning.isVerified
+import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersionResult
+import im.vector.matrix.android.internal.crypto.keysbackup.util.computeRecoveryKey
+import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
+import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 data class VerificationBottomSheetViewState(
@@ -337,38 +344,81 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 _viewEvents.post(VerificationBottomSheetViewEvents.AccessSecretStore)
             }
             is VerificationAction.GotResultFromSsss            -> {
-                try {
-                    action.cypherData.fromBase64().inputStream().use { ins ->
-                        val res = session.loadSecureSecret<Map<String, String>>(ins, action.alias)
-                        val trustResult = session.cryptoService().crossSigningService().checkTrustFromPrivateKeys(
-                                res?.get(MASTER_KEY_SSSS_NAME),
-                                res?.get(USER_SIGNING_KEY_SSSS_NAME),
-                                res?.get(SELF_SIGNING_KEY_SSSS_NAME)
-                        )
-                        if (trustResult.isVerified()) {
-                            // Sign this device and upload the signature
-                            session.sessionParams.credentials.deviceId?.let { deviceId ->
-                                session.cryptoService()
-                                        .crossSigningService().trustDevice(deviceId, object : MatrixCallback<Unit> {
-                                            override fun onFailure(failure: Throwable) {
-                                                Timber.w(failure, "Failed to sign my device after recovery")
-                                            }
-                                        })
-                            }
-
-                            setState {
-                                copy(verifiedFromPrivateKeys = true)
-                            }
-                        } else {
-                            // POP UP something
-                            _viewEvents.post(VerificationBottomSheetViewEvents.ModalError("Failed to import keys"))
-                        }
-                    }
-                } catch (failure: Throwable) {
-                    _viewEvents.post(VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage ?: stringProvider.getString(R.string.unexpected_error)))
-                }
+                handleSecretBackFromSSSS(action)
             }
         }.exhaustive
+    }
+
+    private fun handleSecretBackFromSSSS(action: VerificationAction.GotResultFromSsss) {
+        try {
+            action.cypherData.fromBase64().inputStream().use { ins ->
+                val res = session.loadSecureSecret<Map<String, String>>(ins, action.alias)
+                val trustResult = session.cryptoService().crossSigningService().checkTrustFromPrivateKeys(
+                        res?.get(MASTER_KEY_SSSS_NAME),
+                        res?.get(USER_SIGNING_KEY_SSSS_NAME),
+                        res?.get(SELF_SIGNING_KEY_SSSS_NAME)
+                )
+                if (trustResult.isVerified()) {
+                    // Sign this device and upload the signature
+                    session.sessionParams.credentials.deviceId?.let { deviceId ->
+                        session.cryptoService()
+                                .crossSigningService().trustDevice(deviceId, object : MatrixCallback<Unit> {
+                                    override fun onFailure(failure: Throwable) {
+                                        Timber.w(failure, "Failed to sign my device after recovery")
+                                    }
+                                })
+                    }
+
+                    setState {
+                        copy(verifiedFromPrivateKeys = true)
+                    }
+
+                    // try to get keybackup key
+                } else {
+                    // POP UP something
+                    _viewEvents.post(VerificationBottomSheetViewEvents.ModalError(stringProvider.getString(R.string.error_failed_to_import_keys)))
+                }
+
+                // try the keybackup
+                tentativeRestoreBackup(res)
+                Unit
+            }
+        } catch (failure: Throwable) {
+            _viewEvents.post(
+                    VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage ?: stringProvider.getString(R.string.unexpected_error)))
+        }
+    }
+
+    private fun tentativeRestoreBackup(res: Map<String, String>?) {
+        viewModelScope.launch {
+            try {
+                val secret = res?.get(KEYBACKUP_SECRET_SSSS_NAME) ?: return@launch Unit.also {
+                    Timber.v("## Keybackup secret not restored from SSSS")
+                }
+
+                val version = awaitCallback<KeysVersionResult?> {
+                    session.cryptoService().keysBackupService().getCurrentVersion(it)
+                } ?: return@launch
+
+                awaitCallback<ImportRoomKeysResult> {
+                    session.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(
+                            version,
+                            computeRecoveryKey(secret.fromBase64()),
+                            null,
+                            null,
+                            null,
+                            it
+                    )
+                }
+
+                awaitCallback<Unit> {
+                    session.cryptoService().keysBackupService().trustKeysBackupVersion(version, true, it)
+                }
+            } catch (failure: Throwable) {
+                // Just ignore for now
+                Timber.v("## Failed to restore backup after SSSS recovery")
+            }
+        }
     }
 
     override fun transactionCreated(tx: VerificationTransaction) {
