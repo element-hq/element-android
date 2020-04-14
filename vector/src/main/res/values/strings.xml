@@ -287,7 +287,7 @@
     <string name="login_error_no_homeserver_found">This is not a valid Matrix server address</string>
     <string name="login_error_homeserver_not_found">Cannot reach a homeserver at this URL, please check it</string>
     <string name="login_error_ssl_handshake">Your device is using an outdated TLS security protocol, vulnerable to attack, for your security you will not be able to connect</string>
-    <string name="login_mobile_device">RiotX Android</string>
+    <string name="login_mobile_device">Mobile</string>
 
     <string name="login_error_forbidden">Invalid username/password</string>
     <string name="login_error_unknown_token">The access token specified was not recognised</string>
