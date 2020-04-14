@@ -167,16 +167,12 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
         if (isEncrypted) {
             composerEditText.setHint(R.string.room_message_placeholder_encrypted)
             composerShieldImageView.isVisible = true
-            val shield = when (roomEncryptionTrustLevel) {
-                RoomEncryptionTrustLevel.Trusted -> {
-                    ContextCompat.getDrawable(context, R.drawable.ic_shield_trusted)
-                }
-                RoomEncryptionTrustLevel.Warning -> {
-                    ContextCompat.getDrawable(context, R.drawable.ic_shield_warning)
-                }
-                else -> ContextCompat.getDrawable(context, R.drawable.ic_shield_black)
+            val shieldRes = when (roomEncryptionTrustLevel) {
+                RoomEncryptionTrustLevel.Trusted -> R.drawable.ic_shield_trusted
+                RoomEncryptionTrustLevel.Warning -> R.drawable.ic_shield_warning
+                else                             -> R.drawable.ic_shield_black
             }
-            composerShieldImageView.setImageDrawable(shield)
+            composerShieldImageView.setImageDrawable(ContextCompat.getDrawable(context, shieldRes))
         } else {
             composerEditText.setHint(R.string.room_message_placeholder_not_encrypted)
             composerShieldImageView.isVisible = false
