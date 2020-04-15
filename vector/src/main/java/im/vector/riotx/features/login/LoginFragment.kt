@@ -81,7 +81,7 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
         val login = loginField.text.toString()
         val password = passwordField.text.toString()
 
-        loginViewModel.handle(LoginAction.LoginOrRegister(login, password, getString(R.string.login_mobile_device)))
+        loginViewModel.handle(LoginAction.LoginOrRegister(login, password, getString(R.string.login_mobile_device_riotx)))
     }
 
     private fun cleanupUi() {

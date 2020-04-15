@@ -1071,4 +1071,10 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="keys_backup_info_title_algorithm">アルゴリズム</string>
     <string name="keys_backup_info_title_signature">署名</string>
 
+    <string name="settings_notification_troubleshoot">通知に関する問題の解決</string>
+    <string name="settings_troubleshoot_test_system_settings_title">システム設定</string>
+    <string name="settings_troubleshoot_test_account_settings_title">アカウント設定</string>
+    <string name="settings_troubleshoot_test_bing_settings_title">カスタム設定</string>
+    <string name="settings_troubleshoot_test_service_boot_title">起動時の実行</string>
+    <string name="settings_troubleshoot_test_bg_restricted_title">バックグラウンド制限の確認</string>
 </resources>

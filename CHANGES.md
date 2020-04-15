@@ -9,14 +9,17 @@ Features ✨:
 
 Improvements 🙌:
  - Verification DM / Handle concurrent .start after .ready (#794)
+ - Reimplementation of multiple attachment picker
  - Cross-Signing | Update Shield Logic for DM (#963)
  - Cross-Signing | Complete security new session design update (#1135)
  - Cross-Signing | Setup key backup as part of SSSS bootstrapping (#1201)
  - Cross-Signing | Gossip key backup recovery key (#1200)
  - Show room encryption status as a bubble tile (#1078)
+ - UX/UI | Add indicator to home tab on invite (#957)
  - Cross-Signing | Restore history after recover from passphrase (#1214)
  - Cross-Sign | QR code scan confirmation screens design update (#1187)
  - Emoji Verification | It's not the same butterfly! (#1220)
+ - Cross-Signing | Composer decoration: shields (#1077)
 
 Bugfix 🐛:
  - Missing avatar/displayname after verification request message (#841)
@@ -26,15 +29,16 @@ Bugfix 🐛:
  - Failed to encrypt message in room (message stays in red), [thanks to pwr22] (#925)
  - Cross-Signing | web <-> riotX After QR code scan, gossiping fails (#1210)
  - Fix crash when trying to download file without internet connection (#1229)
+ - Local echo are not updated in timeline (for failed & encrypted states)
 
 Translations 🗣:
  -
 
 SDK API changes ⚠️:
- -
+ - Increase targetSdkVersion to 29
 
 Build 🧱:
- -
+ - Compile with Android SDK 29 (Android Q)
 
 Other changes:
  - Increase File Logger capacities ( + use dev log preferences)

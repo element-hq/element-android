@@ -37,6 +37,7 @@ cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-en-rGB/strings.xml ./mat
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-es/strings.xml     ./matrix-sdk-android/src/main/res/values-es/strings.xml
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-es-rMX/strings.xml ./matrix-sdk-android/src/main/res/values-es-rMX/strings.xml
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-eu/strings.xml     ./matrix-sdk-android/src/main/res/values-eu/strings.xml
+cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-fa/strings.xml     ./matrix-sdk-android/src/main/res/values-fa/strings.xml
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-fi/strings.xml     ./matrix-sdk-android/src/main/res/values-fi/strings.xml
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-fr/strings.xml     ./matrix-sdk-android/src/main/res/values-fr/strings.xml
 cp ../matrix-android-sdk/matrix-sdk/src/main/res/values-gl/strings.xml     ./matrix-sdk-android/src/main/res/values-gl/strings.xml
@@ -75,6 +76,7 @@ cp ../riot-android/vector/src/main/res/values-bn-rIN/strings.xml    ./vector/src
 cp ../riot-android/vector/src/main/res/values-bs/strings.xml        ./vector/src/main/res/values-bs/strings.xml
 cp ../riot-android/vector/src/main/res/values-ca/strings.xml        ./vector/src/main/res/values-ca/strings.xml
 cp ../riot-android/vector/src/main/res/values-cs/strings.xml        ./vector/src/main/res/values-cs/strings.xml
+cp ../riot-android/vector/src/main/res/values-cy/strings.xml        ./vector/src/main/res/values-cy/strings.xml
 cp ../riot-android/vector/src/main/res/values-da/strings.xml        ./vector/src/main/res/values-da/strings.xml
 cp ../riot-android/vector/src/main/res/values-de/strings.xml        ./vector/src/main/res/values-de/strings.xml
 cp ../riot-android/vector/src/main/res/values-el/strings.xml        ./vector/src/main/res/values-el/strings.xml
@@ -96,6 +98,7 @@ cp ../riot-android/vector/src/main/res/values-it/strings.xml        ./vector/src
 cp ../riot-android/vector/src/main/res/values-ja/strings.xml        ./vector/src/main/res/values-ja/strings.xml
 cp ../riot-android/vector/src/main/res/values-ko/strings.xml        ./vector/src/main/res/values-ko/strings.xml
 cp ../riot-android/vector/src/main/res/values-lv/strings.xml        ./vector/src/main/res/values-lv/strings.xml
+cp ../riot-android/vector/src/main/res/values-nb-rNO/strings.xml    ./vector/src/main/res/values-nb-rNO/strings.xml
 cp ../riot-android/vector/src/main/res/values-nl/strings.xml        ./vector/src/main/res/values-nl/strings.xml
 cp ../riot-android/vector/src/main/res/values-nn/strings.xml        ./vector/src/main/res/values-nn/strings.xml
 cp ../riot-android/vector/src/main/res/values-pl/strings.xml        ./vector/src/main/res/values-pl/strings.xml

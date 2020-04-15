@@ -167,7 +167,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
         GlobalScope.launch(Dispatchers.Main) {
             Try {
                 withContext(Dispatchers.IO) {
-                    val parentDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                    val parentDir = context?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
                     val file = File(parentDir, "recovery-key-" + System.currentTimeMillis() + ".txt")
 
                     writeToFile(data, file)

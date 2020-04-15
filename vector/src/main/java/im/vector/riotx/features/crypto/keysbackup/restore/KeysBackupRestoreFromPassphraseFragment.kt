@@ -95,7 +95,7 @@ class KeysBackupRestoreFromPassphraseFragment @Inject constructor(): VectorBaseF
 
         // used just to have default link representation
         val clickableSpan = object : ClickableSpan() {
-            override fun onClick(widget: View?) {}
+            override fun onClick(widget: View) {}
         }
         val start = helperText.indexOf(clickableText)
         val end = start + clickableText.length

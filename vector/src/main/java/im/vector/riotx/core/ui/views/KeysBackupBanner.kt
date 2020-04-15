@@ -17,7 +17,7 @@
 package im.vector.riotx.core.ui.views
 
 import android.content.Context
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup

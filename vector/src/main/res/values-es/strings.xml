@@ -1482,7 +1482,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="sas_got_it">Ok</string>
 
     <string name="sas_verifying_keys">¿No aparece nada\? No todas las aplicaciones cliente soportan verificación interactiva. Usa la verificación clásica.</string>
-    <string name="sas_legacy_verification_button_title">Usar verificación clásica</string>
+    <string name="sas_legacy_verification_button_title">Usar verificación clásica.</string>
 
     <string name="sas_verification_request_notification_channel_title">Verificación de clave</string>
     <string name="sas_cancelled_dialog_title">Solicitud cancelada</string>
@@ -1597,7 +1597,7 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="call_failed_no_ice_description">Por favor, pídele al administrador de tu servidor doméstico (%1$s) que configure un servidor TURN para que las llamadas funcionen de forma fiable.
 \n
 \nAlternativamente, puedes intentar usar el servidor público en %2$s, pero no será tan confiable, y compartirá tu dirección IP con ese servidor. También puedes cambiar esto en Configuración.</string>
-    <string name="auth_add_email_message_2">Configura un correo electrónico para la recuperación de la cuenta, y más tarde configúralo ser descubierto opcionalmente por personas que te conozcan</string>
+    <string name="auth_add_email_message_2">Configura un correo electrónico para la recuperación de la cuenta, y opcionalmente para encontrar personas conocidas</string>
     <string name="auth_add_email_phone_message_2">Configura un correo electrónico para la recuperación de la cuenta. Usa el correo electrónico o el teléfono más tarde para ser descubierto opcionalmente por personas que te conozcan.</string>
     <string name="auth_add_email_and_phone_message_2">Configura un correo electrónico para la recuperación de la cuenta. Usa el correo electrónico o el teléfono más tarde para ser descubierto opcionalmente por personas que te conozcan.</string>
     <string name="login_error_no_homeserver_found">Esta no es una dirección de servidor Matrix válida</string>
@@ -1878,4 +1878,36 @@ Ten en cuenta que esta acción reiniciará la aplicación y puede tardar algo de
     <string name="login_splash_submit">Empieza</string>
 
     <string name="login_server_title">Selecciona un servidor</string>
+    <string name="login_server_text">Como el correo electrónico, las cuantas tienen un hogar, aunque se puede hablar con cualquiera</string>
+    <string name="login_server_modular_text">Alojamiento de pago para organizaciones</string>
+    <string name="login_server_modular_learn_more">Saber más</string>
+    <string name="login_server_other_title">Otro</string>
+    <string name="login_server_other_text">Ajustes avanzados y de personalización</string>
+
+    <string name="login_continue">Continuar</string>
+    <string name="login_connect_to">Conectarse a %1$s</string>
+    <string name="login_connect_to_modular">Conectarse a Modular</string>
+    <string name="login_connect_to_a_custom_server">Conectarse a un servidor externo</string>
+    <string name="login_signin_to">Iniciar sesión en %1$s</string>
+    <string name="login_signup">Registrarse</string>
+    <string name="login_signin">Iniciar sesión</string>
+    <string name="login_server_url_form_other_hint">Dirección</string>
+    <string name="login_server_url_form_modular_text">Alojamiento de pago para organizaciones</string>
+    <string name="login_server_url_form_modular_notice">Introduzca la dirección de Modular Riot o servidor que quieres usar</string>
+    <string name="login_server_url_form_other_notice">Introduzca la dirección del servidor Riot al que quieres conectarte</string>
+
+    <string name="login_sso_error_message">Se produjo un error al cargar la pagina: %1$s (%2$d)</string>
+    <string name="login_mode_not_supported">"La aplicación no es capaz de iniciar sesión en este servidor. Este solo soporta el acceso mediante:  %1$s.
+\n
+\n¿Quieres acceder usando un cliente web\?"</string>
+    <string name="login_registration_disabled">Lo sentimos, este servidor no acepta nuevas cuentas.</string>
+    <string name="login_registration_not_supported">La aplicación no fue capaz de crear una cuenta en este servidor.
+\n
+\n¿Quieres registrarte usando un cliente web\?</string>
+
+    <string name="login_login_with_email_error">La dirección de coreo electrónico no está asociada a ninguna cuenta.</string>
+
+    <string name="login_reset_password_on">Reiniciar contraseña en %1$s</string>
+    <string name="keys_backup_restore_success_title_already_up_to_date">¡Las claves ya están al día!</string>
+
 </resources>
