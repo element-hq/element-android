@@ -34,7 +34,7 @@ SDK API changes ⚠️:
  - Increase targetSdkVersion to 29
 
 Build 🧱:
- -
+ - Compile with Android SDK 29 (Android Q)
 
 Other changes:
  - Increase File Logger capacities ( + use dev log preferences)
