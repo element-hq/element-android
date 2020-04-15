@@ -704,7 +704,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
             val dialog = AlertDialog.Builder(activity)
                     .setView(view)
-                    .setPositiveButton(R.string.settings_change_password_submit, null)
+                    .setPositiveButton(R.string.settings_change_password, null)
                     .setNegativeButton(R.string.cancel, null)
                     .setOnDismissListener {
                         view.hideKeyboard()
