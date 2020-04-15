@@ -22,6 +22,9 @@ import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
+import im.vector.matrix.android.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.verification.CancelCode
 import im.vector.matrix.android.api.session.crypto.verification.PendingVerificationRequest
 import im.vector.matrix.android.api.session.crypto.verification.QrCodeVerificationTransaction
@@ -60,6 +63,7 @@ import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationAccept
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationCancel
+import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationDone
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationKey
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationMac
 import im.vector.matrix.android.internal.crypto.model.rest.KeyVerificationReady
@@ -109,6 +113,10 @@ internal class DefaultVerificationService @Inject constructor(
     // map [sender : [transaction]]
     private val txMap = HashMap<String, HashMap<String, DefaultVerificationTransaction>>()
 
+    // we need to keep track of finished transaction
+    // It will be used for gossiping (to send request after request is completed and 'done' by other)
+    private val pastTransactions = HashMap<String, HashMap<String, DefaultVerificationTransaction>>()
+
     /**
      * Map [sender: [PendingVerificationRequest]]
      * For now we keep all requests (even terminated ones) during the lifetime of the app.
@@ -136,6 +144,9 @@ internal class DefaultVerificationService @Inject constructor(
                 }
                 EventType.KEY_VERIFICATION_READY         -> {
                     onReadyReceived(event)
+                }
+                EventType.KEY_VERIFICATION_DONE          -> {
+                    onDoneReceived(event)
                 }
                 MessageType.MSGTYPE_VERIFICATION_REQUEST -> {
                     onRequestReceived(event)
@@ -635,9 +646,7 @@ internal class DefaultVerificationService @Inject constructor(
             ))
         }
 
-        if (existingTransaction is SASDefaultVerificationTransaction) {
-            existingTransaction.state = VerificationTxState.Cancelled(safeValueOf(cancelReq.code), false)
-        }
+        existingTransaction?.state = VerificationTxState.Cancelled(safeValueOf(cancelReq.code), false)
     }
 
     private fun onRoomAcceptReceived(event: Event) {
@@ -776,6 +785,58 @@ internal class DefaultVerificationService @Inject constructor(
         handleReadyReceived(event.senderId, readyReq) {
             verificationTransportToDeviceFactory.createTransport(it)
         }
+    }
+
+    private fun onDoneReceived(event: Event) {
+        Timber.v("## onDoneReceived")
+        val doneReq = event.getClearContent().toModel<KeyVerificationDone>()?.asValidObject()
+        if (doneReq == null || event.senderId == null) {
+            // ignore
+            Timber.e("## SAS Received invalid done request")
+            return
+        }
+
+        handleDoneReceived(event.senderId, doneReq)
+
+        if (event.senderId == userId) {
+            // We only send gossiping request when the other sent us a done
+            // We can ask without checking too much thinks (like trust), because we will check validity of secret on reception
+            getExistingTransaction(userId, doneReq.transactionId)
+                    ?: getOldTransaction(userId, doneReq.transactionId)
+                            ?.let { vt ->
+                                val otherDeviceId = vt.otherDeviceId
+                                if (!crossSigningService.canCrossSign()) {
+                                    outgoingGossipingRequestManager.sendSecretShareRequest(SELF_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId
+                                            ?: "*")))
+                                    outgoingGossipingRequestManager.sendSecretShareRequest(USER_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId
+                                            ?: "*")))
+                                }
+                                outgoingGossipingRequestManager.sendSecretShareRequest(KEYBACKUP_SECRET_SSSS_NAME, mapOf(userId to listOf(otherDeviceId
+                                        ?: "*")))
+                            }
+        }
+    }
+
+    private fun handleDoneReceived(senderId: String, doneReq: ValidVerificationDone) {
+        Timber.v("## SAS Done receieved $doneReq")
+        val existing = getExistingTransaction(senderId, doneReq.transactionId)
+        if (existing == null) {
+            Timber.e("## SAS Received invalid Done request")
+            return
+        }
+        if (existing is DefaultQrCodeVerificationTransaction) {
+            existing.onDoneReceived()
+        } else {
+            // SAS do not care for now?
+        }
+
+        // Now transactions are udated, let's also update Requests
+        val existingRequest = getExistingVerificationRequest(senderId)?.find { it.transactionId == doneReq.transactionId }
+        if (existingRequest == null) {
+            Timber.e("## SAS Received Done for unknown request txId:${doneReq.transactionId}")
+            return
+        }
+        updatePendingRequest(existingRequest.copy(isSuccessful = true))
     }
 
     private fun onRoomDoneReceived(event: Event) {
@@ -957,14 +1018,14 @@ internal class DefaultVerificationService @Inject constructor(
         )
     }
 
-    private fun handleDoneReceived(senderId: String, doneInfo: ValidVerificationDone) {
-        val existingRequest = getExistingVerificationRequest(senderId)?.find { it.transactionId == doneInfo.transactionId }
-        if (existingRequest == null) {
-            Timber.e("## SAS Received Done for unknown request txId:${doneInfo.transactionId}")
-            return
-        }
-        updatePendingRequest(existingRequest.copy(isSuccessful = true))
-    }
+//    private fun handleDoneReceived(senderId: String, doneInfo: ValidVerificationDone) {
+//        val existingRequest = getExistingVerificationRequest(senderId)?.find { it.transactionId == doneInfo.transactionId }
+//        if (existingRequest == null) {
+//            Timber.e("## SAS Received Done for unknown request txId:${doneInfo.transactionId}")
+//            return
+//        }
+//        updatePendingRequest(existingRequest.copy(isSuccessful = true))
+//    }
 
     // TODO All this methods should be delegated to a TransactionStore
     override fun getExistingTransaction(otherUserId: String, tid: String): VerificationTransaction? {
@@ -1003,7 +1064,11 @@ internal class DefaultVerificationService @Inject constructor(
 
     private fun removeTransaction(otherUser: String, tid: String) {
         synchronized(txMap) {
-            txMap[otherUser]?.remove(tid)?.removeListener(this)
+            txMap[otherUser]?.remove(tid)?.also {
+                it.removeListener(this)
+            }
+        }?.let {
+            rememberOldTransaction(it)
         }
     }
 
@@ -1013,6 +1078,20 @@ internal class DefaultVerificationService @Inject constructor(
             txInnerMap[tx.transactionId] = tx
             dispatchTxAdded(tx)
             tx.addListener(this)
+        }
+    }
+
+    private fun rememberOldTransaction(tx: DefaultVerificationTransaction) {
+        synchronized(pastTransactions) {
+            pastTransactions.getOrPut(tx.otherUserId) { HashMap() }[tx.transactionId] = tx
+        }
+    }
+
+    private fun getOldTransaction(userId: String, tid: String?): DefaultVerificationTransaction? {
+        return tid?.let {
+            synchronized(pastTransactions) {
+                pastTransactions[userId]?.get(it)
+            }
         }
     }
 

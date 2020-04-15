@@ -31,9 +31,6 @@ class XSigningTest : InstrumentedTest {
     fun test_InitializeAndStoreKeys() {
         val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
 
-        // Race condition: it is deleting the stored keys by trying to download keys before uploading keys operation is not completed.
-        Thread.sleep(500)
-
         mTestHelper.doSync<Unit> {
             aliceSession.cryptoService().crossSigningService()
                     .initializeCrossSigning(UserPasswordAuth(

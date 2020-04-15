@@ -87,6 +87,20 @@
     <string name="bootstrap_skip_text">Setting a Message Password lets you secure &amp; unlock encrypted messages and trust.\n\nIf you don’t want to set a Message Password, generate a Message Key instead.</string>
     <string name="bootstrap_skip_text_no_gen_key">Setting a Message Password lets you secure &amp; unlock encrypted messages and trust.</string>
 
+
+    <string name="encryption_enabled">Encryption enabled</string>
+    <string name="encryption_enabled_tile_description">Messages in this room are end-to-end encrypted. Learn more &amp; verify users in their profile.</string>
+    <string name="encryption_not_enabled">Encryption not enabled</string>
+    <string name="encryption_unknown_algorithm_tile_description">The encryption used by this room is not supported</string>
+
+    <string name="room_created_summary_item">%s created and configured the room.</string>
+
+    <string name="qr_code_scanned_self_verif_notice">Almost there! Is the other device showing the same shield?</string>
+    <string name="qr_code_scanned_verif_waiting_notice">Almost there! Waiting for confirmation…</string>
+    <string name="qr_code_scanned_verif_waiting">Waiting for %s…</string>
+
+    <string name="error_failed_to_import_keys">Failed to import keys</string>
+
     <!-- END Strings added by Valere -->
 
 

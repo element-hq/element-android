@@ -18,6 +18,7 @@ package im.vector.riotx.features.crypto.verification.qrconfirmation
 import android.os.Bundle
 import android.view.View
 import com.airbnb.mvrx.parentFragmentViewModel
+import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
@@ -37,8 +38,11 @@ class VerificationQrScannedByOtherFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupRecyclerView()
+    }
+
+    override fun invalidate() = withState(sharedViewModel) { state ->
+        controller.update(state)
     }
 
     override fun onDestroyView() {

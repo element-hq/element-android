@@ -37,6 +37,7 @@ import im.vector.riotx.features.crypto.verification.cancel.VerificationNotMeFrag
 import im.vector.riotx.features.crypto.verification.choose.VerificationChooseMethodFragment
 import im.vector.riotx.features.crypto.verification.conclusion.VerificationConclusionFragment
 import im.vector.riotx.features.crypto.verification.emoji.VerificationEmojiCodeFragment
+import im.vector.riotx.features.crypto.verification.qrconfirmation.VerificationQRWaitingFragment
 import im.vector.riotx.features.crypto.verification.qrconfirmation.VerificationQrScannedByOtherFragment
 import im.vector.riotx.features.crypto.verification.request.VerificationRequestFragment
 import im.vector.riotx.features.grouplist.GroupListFragment
@@ -338,6 +339,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(VerificationQrScannedByOtherFragment::class)
     fun bindVerificationQrScannedByOtherFragment(fragment: VerificationQrScannedByOtherFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(VerificationQRWaitingFragment::class)
+    fun bindVerificationQRWaitingFragment(fragment: VerificationQRWaitingFragment): Fragment
 
     @Binds
     @IntoMap
