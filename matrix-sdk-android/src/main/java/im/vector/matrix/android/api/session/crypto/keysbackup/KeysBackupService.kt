@@ -217,4 +217,6 @@ interface KeysBackupService {
     // For gossiping
     fun saveBackupRecoveryKey(recoveryKey: String?, version: String?)
     fun getKeyBackupRecoveryKeyInfo() : SavedKeyBackupKeyInfo?
+
+    fun isValidRecoveryKeyForCurrentVersion(recoveryKey: String, callback: MatrixCallback<Boolean>)
 }

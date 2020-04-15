@@ -40,4 +40,8 @@ sealed class BootstrapActions : VectorViewModelAction {
     object SaveReqQueryStarted : BootstrapActions()
     data class SaveKeyToUri(val os: OutputStream) : BootstrapActions()
     object SaveReqFailed : BootstrapActions()
+
+    object HandleForgotBackupPassphrase : BootstrapActions()
+    data class DoMigrateWithPassphrase(val passphrase: String) : BootstrapActions()
+    data class DoMigrateWithRecoveryKey(val recoveryKey: String) : BootstrapActions()
 }

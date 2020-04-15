@@ -18,6 +18,7 @@ package im.vector.riotx.features.crypto.recover
 
 import android.app.Dialog
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -26,17 +27,25 @@ import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.commitTransaction
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.bottom_sheet_bootstrap.*
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
 class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
+
+    @Parcelize
+    data class Args(
+            val isNewAccount: Boolean
+    ) : Parcelable
 
     override val showExpanded = true
 
@@ -113,38 +122,60 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
     override fun invalidate() = withState(viewModel) { state ->
 
         when (state.step) {
-            is BootstrapStep.SetupPassphrase   -> {
+            is BootstrapStep.CheckingMigration              -> {
+                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_message_password))
+                bootstrapTitleText.text = getString(R.string.upgrade_security)
+                showFragment(BootstrapWaitingFragment::class, Bundle())
+            }
+            is BootstrapStep.SetupPassphrase                -> {
                 bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_message_password))
                 bootstrapTitleText.text = getString(R.string.set_recovery_passphrase, getString(R.string.recovery_passphrase))
                 showFragment(BootstrapEnterPassphraseFragment::class, Bundle())
             }
-            is BootstrapStep.ConfirmPassphrase -> {
+            is BootstrapStep.ConfirmPassphrase              -> {
                 bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_message_password))
                 bootstrapTitleText.text = getString(R.string.confirm_recovery_passphrase, getString(R.string.recovery_passphrase))
                 showFragment(BootstrapConfirmPassphraseFragment::class, Bundle())
             }
-            is BootstrapStep.AccountPassword   -> {
+            is BootstrapStep.AccountPassword                -> {
                 bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_user))
                 bootstrapTitleText.text = getString(R.string.account_password)
                 showFragment(BootstrapAccountPasswordFragment::class, Bundle())
             }
-            is BootstrapStep.Initializing      -> {
+            is BootstrapStep.Initializing                   -> {
                 bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_message_key))
                 bootstrapTitleText.text = getString(R.string.bootstrap_loading_title)
                 showFragment(BootstrapWaitingFragment::class, Bundle())
             }
-            is BootstrapStep.SaveRecoveryKey   -> {
+            is BootstrapStep.SaveRecoveryKey                -> {
                 bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_message_key))
                 bootstrapTitleText.text = getString(R.string.keys_backup_setup_step3_please_make_copy)
                 showFragment(BootstrapSaveRecoveryKeyFragment::class, Bundle())
             }
-            is BootstrapStep.DoneSuccess       -> {
+            is BootstrapStep.DoneSuccess                    -> {
                 bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_message_key))
                 bootstrapTitleText.text = getString(R.string.bootstrap_finish_title)
                 showFragment(BootstrapConclusionFragment::class, Bundle())
             }
-        }
+            is BootstrapStep.GetBackupSecretForMigration -> {
+                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.key_small))
+                bootstrapTitleText.text = getString(R.string.upgrade_security)
+                showFragment(BootstrapMigrateBackupFragment::class, Bundle())
+            }
+        }.exhaustive
         super.invalidate()
+    }
+
+    companion object {
+
+        const val EXTRA_ARGS = "EXTRA_ARGS"
+
+        fun show(fragmentManager: FragmentManager, isAccountCreation: Boolean) {
+            BootstrapBottomSheet().apply {
+                isCancelable = false
+                arguments = Bundle().apply { this.putParcelable(EXTRA_ARGS, Args(isAccountCreation)) }
+            }.show(fragmentManager, "BootstrapBottomSheet")
+        }
     }
 
     private fun showFragment(fragmentClass: KClass<out Fragment>, bundle: Bundle) {

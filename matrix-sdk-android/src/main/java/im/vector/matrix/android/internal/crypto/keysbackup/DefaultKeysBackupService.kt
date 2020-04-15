@@ -1100,6 +1100,16 @@ internal class DefaultKeysBackupService @Inject constructor(
         return true
     }
 
+    override fun isValidRecoveryKeyForCurrentVersion(recoveryKey: String, callback: MatrixCallback<Boolean>) {
+        val keysBackupVersion = keysBackupVersion ?: return Unit.also { callback.onSuccess(false) }
+
+        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
+            isValidRecoveryKeyForKeysBackupVersion(recoveryKey, keysBackupVersion).let {
+                callback.onSuccess(it)
+            }
+        }
+    }
+
     /**
      * Enable backing up of keys.
      * This method will update the state and will start sending keys in nominal case
