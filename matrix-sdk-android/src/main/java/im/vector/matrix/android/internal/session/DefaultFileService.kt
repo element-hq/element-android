@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.session
 import android.os.Environment
 import arrow.core.Try
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.util.Cancelable
@@ -78,7 +77,12 @@ internal class DefaultFileService @Inject constructor(
                                 .url(resolvedUrl)
                                 .build()
 
-                        val response = tryThis { okHttpClient.newCall(request).execute() } ?: return@flatMap Try.Failure(IOException())
+                        val response = try {
+                            okHttpClient.newCall(request).execute()
+                        } catch (e: Throwable) {
+                            return@flatMap Try.Failure(e)
+                        }
+
                         var inputStream = response.body?.byteStream()
                         Timber.v("Response size ${response.body?.contentLength()} - Stream available: ${inputStream?.available()}")
 
