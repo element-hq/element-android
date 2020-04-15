@@ -7,111 +7,11 @@
 
     <!-- BEGIN Strings added by Valere -->
 
-
-    <string name="settings_key_requests">Key Requests</string>
-
-    <string name="e2e_use_keybackup">Unlock encrypted messages history</string>
-
-    <string name="refresh">Refresh</string>
-
-
-    <string name="new_session">New Session</string>
-    <string name="new_session_review">Tap to review &amp; verify</string>
-    <string name="verify_new_session_notice">Use this session to verify your new one, granting it access to encrypted messages.</string>
-    <string name="verify_new_session_was_not_me">This wasn’t me</string>
-    <string name="verify_new_session_compromized">Your account may be compromised</string>
-
-    <string name="verify_cancel_self_verification_from_untrusted">If you cancel, you won’t be able to read encrypted messages on this device, and other users won’t trust it</string>
-    <string name="verify_cancel_self_verification_from_trusted">If you cancel, you won’t be able to read encrypted messages on your new device, and other users won’t trust it</string>
-    <string name="verify_cancel_other">You won’t verify %1$s (%2$s) if you cancel now. Start again in their user profile.</string>
-
-    <string name="verify_not_me_self_verification">
-        One of the following may be compromised:\n\n- Your password\n- Your homeserver\n- This device, or the other device\n- The internet connection either device is using\n\nWe recommend you change your password &amp; recovery key in Settings immediately.
-    </string>
-
-    <string name="verify_cancelled_notice">Verify your devices from Settings.</string>
-    <string name="verification_cancelled">Verification Cancelled</string>
-
-    <string name="recovery_passphrase">Message Password</string>
-    <string name="message_key">Message Key</string>
-    <string name="account_password">Account Password</string>
-
-
-    <!-- %s will be replaced by recovery_passphrase -->
-    <string name="set_recovery_passphrase">Set a %s</string>
-    <string name="generate_message_key">Generate a Message Key</string>
-
-    <!-- %s will be replaced by recovery_passphrase -->
-    <string name="confirm_recovery_passphrase">Confirm %s</string>
-
-
-    <!-- %s will be replaced by account_password -->
-    <string name="enter_account_password">Enter your %s to continue.</string>
-
-    <!-- %s will be replaced by recovery_passphrase -->
-    <string name="bootstrap_info_text">Secure &amp; unlock encrypted messages and trust with a %s.</string>
-    <!-- %s will be replaced by recovery_passphrase -->
-    <string name="bootstrap_info_confirm_text">Enter your %s again to confirm it.</string>
-    <string name="bootstrap_dont_reuse_pwd">Don’t re-use your account password.</string>
-
-
-    <string name="bootstrap_loading_text">This might take several seconds, please be patient.</string>
-    <string name="bootstrap_loading_title">Setting up recovery.</string>
-    <string name="your_recovery_key">Your recovery key</string>
-    <string name="bootstrap_finish_title">You‘re done!</string>
-    <string name="keep_it_safe">Keep it safe</string>
-    <string name="finish">Finish</string>
-
-    <!-- %1$s is replaced by message_key and %2$s by recovery_passphrase -->
-    <string name="bootstrap_save_key_description">Use this %1$s as a safety net in case you forget your %2$s.</string>
-
-    <string name="bootstrap_crosssigning_progress_initializing">Publishing created identity keys</string>
-    <string name="bootstrap_crosssigning_progress_pbkdf2">Generating secure key from passphrase</string>
-    <string name="bootstrap_crosssigning_progress_default_key">Defining SSSS default Key</string>
-    <string name="bootstrap_crosssigning_progress_save_msk">Synchronizing Master key</string>
-    <string name="bootstrap_crosssigning_progress_save_usk">Synchronizing User key</string>
-    <string name="bootstrap_crosssigning_progress_save_ssk">Synchronizing Self Signing key</string>
-    <string name="bootstrap_crosssigning_progress_key_backup">Setting Up Key Backup</string>
-
-
-    <!-- %1$s is replaced by message_key and %2$s by recovery_passphrase -->
-    <string name="bootstrap_cross_signing_success">Your %2$s &amp; %1$s are now set.\n\nKeep them safe! You’ll need them to unlock encrypted messages and secure information if you lose all of your active sessions.</string>
-
-    <!-- the %s will be replaced by a check mark on screen-->
-    <string name="bootstrap_crosssigning_print_it">Print it and store it somewhere safe</string>
-    <string name="bootstrap_crosssigning_save_usb">Save it on a USB key or backup drive</string>
-    <string name="bootstrap_crosssigning_save_cloud">Copy it to your personal cloud storage</string>
-
-    <string name="auth_flow_not_supported">You cannot do that from mobile</string>
-
-    <string name="bootstrap_skip_text">Setting a Message Password lets you secure &amp; unlock encrypted messages and trust.\n\nIf you don’t want to set a Message Password, generate a Message Key instead.</string>
-    <string name="bootstrap_skip_text_no_gen_key">Setting a Message Password lets you secure &amp; unlock encrypted messages and trust.</string>
-
-
-    <string name="encryption_enabled">Encryption enabled</string>
-    <string name="encryption_enabled_tile_description">Messages in this room are end-to-end encrypted. Learn more &amp; verify users in their profile.</string>
-    <string name="encryption_not_enabled">Encryption not enabled</string>
-    <string name="encryption_unknown_algorithm_tile_description">The encryption used by this room is not supported</string>
-
-    <string name="room_created_summary_item">%s created and configured the room.</string>
-
-    <string name="qr_code_scanned_self_verif_notice">Almost there! Is the other device showing the same shield?</string>
-    <string name="qr_code_scanned_verif_waiting_notice">Almost there! Waiting for confirmation…</string>
-    <string name="qr_code_scanned_verif_waiting">Waiting for %s…</string>
-
-    <string name="error_failed_to_import_keys">Failed to import keys</string>
-
     <!-- END Strings added by Valere -->
 
 
     <!-- BEGIN Strings added by Benoit -->
-    <string name="settings_notification_configuration">Notifications configuration</string>
-    <string name="settings_messages_at_room">Messages containing @room</string>
-    <string name="settings_messages_in_e2e_one_to_one">Encrypted messages in one-to-one chats</string>
-    <string name="settings_messages_in_e2e_group_chat">Encrypted messages in group chats</string>
-    <string name="settings_when_rooms_are_upgraded">When rooms are upgraded</string>
-    <string name="settings_troubleshoot_title">Troubleshoot</string>
-    <string name="settings_notification_advanced_summary_riotx">Set notification importance by event</string>
+
     <!-- END Strings added by Benoit -->
 
 
@@ -126,8 +26,7 @@
 
 
     <!-- BEGIN Strings added by Others -->
-    <string name="command_description_plain">Sends a message as plain text, without interpreting it as markdown</string>
+
     <!-- END Strings added by Others -->
 
-    <string name="auth_invalid_login_param_space_in_password">Incorrect username and/or password. The entered password starts or ends with spaces, please check it.</string>
 </resources>

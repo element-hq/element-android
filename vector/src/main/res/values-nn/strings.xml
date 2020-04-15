@@ -210,7 +210,7 @@
     <string name="auth_reset_password_error_unauthorized">Fekk ikkje til å stadfesta e-postadressa: sjå til at du klikka på lenken i e-posten</string>
     <string name="auth_reset_password_success_message">Passordet ditt vart nullstilt. Du vart logga ut av alle sesjonar og får ikkje push-varsel lenger. For å skru varsel på att, logg inn att på kvar eining.</string>
 
-    <string name="login_error_must_start_http">URL-en må byrja på http[s]://</string>
+    <string name="login_error_must_start_http">URL-en må starta på http[s]://</string>
     <string name="login_error_network_error">Fekk ikkje til å logga inn: Nettverksfeil</string>
     <string name="login_error_unable_login">Fekk ikkje til å logga inn</string>
     <string name="login_error_registration_network_error">Fekk ikkje til å registrere: Nettverksfeil</string>
@@ -433,7 +433,7 @@
 
 
     <string name="search_hint">Søk</string>
-    <string name="search_members_hint">Filtrer rommedlemer</string>
+    <string name="search_members_hint">Filtrer rommedlemmar</string>
     <string name="search_no_results">Ingi treff</string>
     <string name="tab_title_search_rooms">ROM</string>
     <string name="tab_title_search_messages">MELDINGAR</string>
@@ -446,13 +446,13 @@
     <string name="room_recents_conversations">ROM</string>
     <string name="room_recents_low_priority">LÅGRETT</string>
     <string name="room_recents_invites">INNBJODINGAR</string>
-    <string name="room_recents_start_chat">Byrja samtala</string>
+    <string name="room_recents_start_chat">Start samtale</string>
     <string name="room_recents_create_room">Laga eit rom</string>
     <string name="room_recents_join_room">Vert med i romet</string>
     <string name="room_recents_join_room_title">Vert med i eit rom</string>
     <string name="room_recents_join_room_prompt">Skriv inn ein rom-ID eller eit romalias</string>
 
-    <string name="directory_search_results_title">Sjå gjenom utvalet</string>
+    <string name="directory_search_results_title">Bla gjennom katalog</string>
     <plurals name="directory_search_rooms">
         <item quantity="one">1 rom</item>
         <item quantity="other">%d rom</item>
@@ -511,10 +511,10 @@
     <string name="settings_messages_in_one_to_one">Meldingar i ein-og-ein-samtalar</string>
     <string name="settings_messages_in_group_chat">Meldingar i gruppesamtalar</string>
     <string name="settings_invited_to_room">Når eg blir invitert til eit rom</string>
-    <string name="settings_call_invitations">Røystsamtalainnbjodingar</string>
+    <string name="settings_call_invitations">Invitasjon til anrop</string>
     <string name="settings_messages_sent_by_bot">Meldingar frå botar</string>
 
-    <string name="settings_start_on_boot">Byrja ved uppstarten</string>
+    <string name="settings_start_on_boot">Køyr ved oppstart</string>
     <string name="settings_background_sync">Bakgrunnsamstilling</string>
     <string name="settings_enable_background_sync">Skru på bakgrunnsamstilling</string>
     <string name="settings_set_sync_timeout">Samstillingsfyrespurnaden fekk tidsavbrot</string>
@@ -523,7 +523,7 @@
     <string name="settings_seconds">sekund</string>
 
     <string name="settings_version">Versjon</string>
-    <string name="settings_olm_version">olm-versjon</string>
+    <string name="settings_olm_version">olm versjon</string>
     <string name="settings_app_term_conditions">Vilkår for bruk</string>
     <string name="settings_third_party_notices">Informasjon frå tredjepart</string>
     <string name="settings_copyright">Opphavsrett</string>
@@ -588,7 +588,7 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="settings_interface_language">Språk</string>
     <string name="settings_select_language">Vel språk</string>
 
-    <string name="account_email_validation_title">Ventar på Godkjenning</string>
+    <string name="account_email_validation_title">Ventar på verifikasjon</string>
     <string name="account_email_validation_message">Ver venleg og sjekk eposten din og klikk på lenkja han inneheld. Når det er gjort, klikk gå fram.</string>
     <string name="account_email_validation_error">Fekk ikkje til å stadfesta e-postadressa. Ver venleg og sjekk e-posten din og klikk på lenkja han inneheld. Når det er gjort, klikk gå fram</string>
     <string name="account_email_already_used_error">E-postadressa er allereie i bruk</string>
@@ -620,8 +620,8 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="settings_phone_number_code">Kode</string>
 
 
-    <string name="settings_flair">Særpreg</string>
-    <string name="settings_without_flair">Du er førebels ikkje med i nokre samfunn.</string>
+    <string name="settings_flair">Etikett</string>
+    <string name="settings_without_flair">Du er førebels ikkje med i nokre fellesskap.</string>
 
     <string name="media_saving_period_3_days">3 dagar</string>
     <string name="media_saving_period_1_week">1 veke</string>
@@ -639,7 +639,7 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="room_settings_tag_pref_entry_none">Ingen</string>
 
     <string name="room_settings_category_access_visibility_title">Tilgang og synlegheit</string>
-    <string name="room_settings_directory_visibility">Vis rommet i romutvalet</string>
+    <string name="room_settings_directory_visibility">Vis dette rommet i romkatalogen</string>
     <string name="room_settings_room_notifications_title">Varsel</string>
     <string name="room_settings_room_access_rules_pref_title">Romtilgang</string>
     <string name="room_settings_room_read_history_rules_pref_title">Romhistoria si lesbarheit</string>
@@ -647,9 +647,9 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Kven kan koma inn i rommet?</string>
 
     <string name="room_settings_read_history_entry_anyone">Kven som helst</string>
-    <string name="room_settings_read_history_entry_members_only_option_time_shared">Berre medlemer (frå då innstillinga er vald)</string>
-    <string name="room_settings_read_history_entry_members_only_invited">Berre medlemer (frå då dei vart bodne inn)</string>
-    <string name="room_settings_read_history_entry_members_only_joined">Berre medlemer (frå då dei kom inn)</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Berre medlemmar (frå då innstillinga er vald)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Berre medlemmar (frå då dei vart bodne inn)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Berre medlemmar (frå då dei kom inn)</string>
 
     <string name="room_settings_room_access_warning">For å lenkja eit rom må det ha ei adresse.</string>
     <string name="room_settings_room_access_entry_only_invited">Berre folk som har vorte bodne inn</string>
@@ -658,7 +658,7 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
 
     <string name="room_settings_banned_users_title">Utestengde brukarar</string>
 
-    <string name="room_settings_category_advanced_title">Omfattande</string>
+    <string name="room_settings_category_advanced_title">Avansert</string>
     <string name="room_settings_room_internal_id">Rommet sin interne ID</string>
     <string name="room_settings_addresses_pref_title">Adresser</string>
     <string name="room_settings_labs_pref_title">Eksperimentelle funksjonar</string>
@@ -672,7 +672,7 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="room_settings_addresses_no_local_addresses">Dette rommet har ingen lokale adresser</string>
     <string name="room_settings_addresses_add_new_address">Ny adresse (t.d. #foo:matrix.org)</string>
 
-    <string name="room_settings_no_flair">Dette rommet viser ikkje særpreg for nokre samfunn</string>
+    <string name="room_settings_no_flair">Dette rommet viser ikkje etikettar for nokre fellesskap</string>
     <string name="room_settings_add_new_group">Ny fellesskaps-ID (t.d. +foo:matrix.org)</string>
     <string name="room_settings_invalid_group_format_dialog_title">Ugyldig fellesskaps-ID</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' er ikkje ein gyldig fellesskaps-ID</string>
@@ -696,7 +696,7 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="directory_title">Utval</string>
     <string name="settings_theme">Preg</string>
 
-    <string name="failed_to_load_timeline_position">%s prøvde å lasta eit spesifikt punkt i rommet si tidslinje men klarte ikkje å finna det.</string>
+    <string name="failed_to_load_timeline_position">%s prøvde å lasta eit spesifikt punkt i rommet sin historikk men klarte ikkje å finna det.</string>
 
     <string name="encryption_information_title">Ende-til-ende-krypteringsinfo</string>
 
@@ -713,7 +713,7 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="encryption_information_name">Offentleg namn</string>
     <string name="encryption_information_device_id">ID</string>
     <string name="encryption_information_device_key">Sesjonsnøkkel</string>
-    <string name="encryption_information_verification">Godkjenning</string>
+    <string name="encryption_information_verification">Verifikasjon</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519-fingeravtrykk</string>
 
     <string name="encryption_export_e2e_room_keys">Eksporter E2E-romnøkklar</string>
@@ -739,13 +739,13 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="encryption_information_none">ingen</string>
 
     <string name="encryption_information_verify">Godkjenn</string>
-    <string name="encryption_information_unverify">Fjern godkjenning</string>
+    <string name="encryption_information_unverify">Fjern verifikasjon</string>
     <string name="encryption_information_block">Set på svartelista</string>
     <string name="encryption_information_unblock">Fjern frå svartelista</string>
 
     <string name="encryption_information_verify_device">Verifiser sesjonen</string>
     <string name="encryption_information_verify_device_warning">For å godkjenna at denne sesjonen er til å stola på, ver venleg og snakk med eigaren på ein anna måte (t.d. ansikt til ansikt eller på telefon) og spør han om nøkkelen han ser i Brukarinnstillingane for denne sesjonen samsvarar med nøkkelen under:</string>
-    <string name="encryption_information_verify_device_warning2">Viss det samsvarer, klikk Verifiser-knappen under. Viss det ikkje gjer det, avlyttar nokon andre denne sesjonen og du bør sannsynlegvis svarteliste den. I framtida vil denne godkjenningsprosessen bli meir forbetra.</string>
+    <string name="encryption_information_verify_device_warning2">Viss det samsvarer, klikk Verifiser-knappen under. Viss det ikkje gjer det, avlyttar nokon andre denne sesjonen og du bør sannsynlegvis svarteliste den. I framtida vil denne verifikasjonsprosessen bli meir forbetra.</string>
     <string name="encryption_information_verify_key_match">Eg stadfestar at nøkklane er like</string>
 
     <string name="e2e_enabling_on_app_update">Riot støttar no ende-til-ende-kryptering men du må logga inn att for å skru det på. Du kan gjera det no eller seinare i App-innstillingane.</string>
@@ -755,7 +755,7 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
 \n
 \nUkjende sesjonar:</string>
 
-    <string name="select_room_directory">Vel eit romutval</string>
+    <string name="select_room_directory">Vel ein romkatalog</string>
     <string name="directory_server_fail_to_retrieve_server">Tenaren er kanskje utilgjengeleg eller overlasta</string>
     <string name="directory_server_type_homeserver">Skriv ein heimtenar inn for å få henta opp offentlege rom frå</string>
     <string name="directory_server_placeholder">Heimtenar-URL</string>
@@ -800,7 +800,7 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
 
     <string name="widget_integration_unable_to_create">Klarte ikkje å laga widget.</string>
     <string name="widget_integration_failed_to_send_request">Fekk ikkje til å senda førespurnad.</string>
-    <string name="widget_integration_positive_power_level">Makthøgda må vere eit positivt heiltal.</string>
+    <string name="widget_integration_positive_power_level">Tilgangsnivået må vere eit positivt heiltal.</string>
     <string name="widget_integration_must_be_in_room">Du er ikkje i dette rommet.</string>
     <string name="widget_integration_no_permission_in_room">Du har ikkje tillating til å gjera det i dette rommet.</string>
     <string name="widget_integration_missing_room_id">Vantande room_id i førespurnaden.</string>
@@ -814,8 +814,8 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
 
     <string name="you_added_a_new_device">Du la til den nye sesjonen \'%s\', som etterspør krypteringsnøkklar.</string>
     <string name="your_unverified_device_requesting">Den ikkje-verifiserte sesjonen din \'%s\' etterspør krypteringsnøkklar.</string>
-    <string name="start_verification">Byrj godkjenning</string>
-    <string name="share_without_verifying">Del utan godkjenning</string>
+    <string name="start_verification">Start verifikasjon</string>
+    <string name="share_without_verifying">Del utan verifikasjon</string>
     <string name="ignore_request">Oversjå førespurnaden</string>
 
     <string name="conference_call_warning_title">Åtvaring!</string>
@@ -826,11 +826,11 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="command_description_emote">Viser handling</string>
     <string name="command_description_ban_user">Stengjer brukarar med den gjevne IDen ute</string>
     <string name="command_description_unban_user">Slepp utestengde brukarar med den gjevne IDen inn at</string>
-    <string name="command_description_op_user">Set makthøgda på ein brukar</string>
+    <string name="command_description_op_user">Definer tilgangsnivå for ein brukar</string>
     <string name="command_description_deop_user">AvOPar brukarar med den gjevne IDen</string>
     <string name="command_description_invite_user">Byd brukarar med den gjevne IDen inn til det noverande rommet</string>
     <string name="command_description_join_room">Vert med i rommet med det gjevne aliaset</string>
-    <string name="command_description_part_room">Fer frå rommet</string>
+    <string name="command_description_part_room">Forlat rom</string>
     <string name="command_description_topic">Set romemnet</string>
     <string name="command_description_kick_user">Sparkar brukarar med gjeven ID</string>
     <string name="command_description_nick">Forandrar visingsnamnet ditt</string>
@@ -857,7 +857,7 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="rooms">Rom</string>
     <string name="joined">Komne inn</string>
     <string name="invited">Bodne inn</string>
-    <string name="filter_group_members">Filtrer gruppemedlemer</string>
+    <string name="filter_group_members">Filtrer gruppemedlemmar</string>
     <string name="filter_group_rooms">Filtrer grupperom</string>
 
     <string name="group_no_long_description">Fellesskapssadministratoren har ikkje satt ei lang skildring for dette fellesskapet.</string>
@@ -1063,11 +1063,79 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="settings_integrations_summary">Bruk ein integrasjonshandterar (Integration Manager) for å handtere botar, bruker, tillegg og klistermerkepakker.
 \nIntegrasjonshandterarar hentar konfigurasjonsdata, kan endre tillegg, sende rominvitasjonar og sette tilgangsnivå på vegne av deg.</string>
     <string name="settings_cryptography_manage_keys">Handtering av kryptografiske nøkklar</string>
-    <string name="settings_labs_enable_send_voice_summary">Dette valet krev ein tredjepartsapplikasjon for å registrere meldingane.</string>
+    <string name="settings_labs_enable_send_voice_summary">Dette valet krev eit tredjepartsprogram for å registrere meldingane.</string>
     <string name="settings_lazy_loading_title">Last rom-medlemmar etter behov (lazy-load)</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Heimetenaren din støttar ikkje såklalla lazy-loading av rommelemar endå. Prøv igjen seinare.</string>
 
     <string name="sas_verified_successful_description">Sikre meldingar med denne brukaren er ende-til-ende kryptert, dei kan ikkje bli lesne av tredje partar.</string>
     <string name="settings_other_third_party_notices">Anna informasjon frå tredjepart</string>
     <string name="verification_conclusion_ok_notice">Meldingar med denne brukaren er ende-til-ende kryptert, dei kan ikkje bli lesne av tredje part.</string>
+    <string name="settings_noisy_notifications_preferences">Konfiguer bråkete-varsel</string>
+    <string name="settings_call_notifications_preferences">Konfiguer anrops-varsel</string>
+    <string name="settings_silent_notifications_preferences">Konfiguer stille-varsel</string>
+    <string name="settings_system_preferences_summary">Konfiguer LED-farge, vibrasjon eller lyd…</string>
+
+
+    <string name="settings_show_join_leave_messages">Vis bli-med/forlat hendelsar</string>
+    <string name="settings_show_join_leave_messages_summary">Invitasjonar, utkastingar og utestengingar gjeld ikkje dette.</string>
+    <string name="room_widget_open_in_browser">Opna i nettlesar</string>
+    <string name="store_full_description">Program for nettprat, under din kontroll og med full fleksibilitet. Riot lar deg kommunisere på den måten du vil. Implementert for [matrix] - protokollen for open, desentralisert kommunikasjon.
+\n
+\nOpprett ein gratis matrix.org-konto, sett opp eigen server på https://modular.im, eller ta i bruk ein annan Matrix-server.
+\n
+\nKvifor velje Riot.im\?
+\n
+\n• KOMPLETT KOMMUNIKASJON: Bygg rom rund teamet, venner, fellesskapet - du bestemmer! Send direktemeldingar, del filer, legg til tillegg, start taleanrop og videokonferansar! Alt saman er tilgjengeleg utan kostnad.
+\n
+\n• KRAFTIGE INTEGRASJONAR: Bruk Riot.im saman med verktøya du brukar frå før. Med Riot.Im kan du kommunisere med brukarar på andre plattformar.
+\n
+\n• PRIVAT OG SIKKER: Hald dine samtalar hemmelege. Industristandard ende-til-ende-kryptering sørgjer for at private samtalar forblir private.
+\n
+\n• OPEN, IKKJE LUKKA: Open kjeldekode, på toppen av Matrix-protokollen. Eig dine eigne data ved å drifte eigen server eller hjå nokon du stolar på.
+\n
+\n• OVERALT DER DU ER: Hald kontakten uansett kvar du er; fullstendig synkronisert meldingshistorikk på alle klientar, samt online på https://riot.im.</string>
+
+    <string name="keys_backup_restore_is_getting_backup_version">Hentar sikkerheitskopiversjon…</string>
+    <string name="keys_backup_info_title_version">Versjon</string>
+    <string name="settings_sdk_version">Matrix SDK versjon</string>
+    <string name="settings_preferences">Innstillingar</string>
+    <string name="settings_security_and_privacy">Sikkerheit og personvern</string>
+    <string name="preference_voice_and_video">Tale &amp; Video</string>
+    <string name="preference_root_help_about">Hjelp &amp; Om</string>
+
+
+    <string name="settings_labs_show_hidden_events_in_timeline">Vis skjulte hendelsar i historikken</string>
+
+    <string name="labs_swipe_to_reply_in_timeline">Aktiver swipe-for-å-svare i historikken</string>
+
+    <string name="room_list_quick_actions_leave">Forlat rommet</string>
+    <string name="timeline_unread_messages">Uleste meldingar</string>
+
+    <string name="login_error_outdated_homeserver_content">Denne heime-tenaren køyrer ein gammal versjon, du kan derfor ikkje kopla til. Be administrator om å oppgradere.</string>
+
+    <string name="create_room_encryption_description">Etter aktivering, så kan ikkje kryptering bli deaktivert.</string>
+
+    <string name="room_profile_section_security">Sikkerheit</string>
+    <string name="room_profile_section_security_learn_more">Få meir info</string>
+    <string name="room_profile_section_more_settings">Rominnstillingar</string>
+    <string name="room_profile_section_more_leave">Forlat rom</string>
+    <string name="room_member_power_level_admins">Administratorar</string>
+    <string name="room_member_power_level_moderators">Moderatorar</string>
+    <string name="room_member_power_level_custom">Tilpassa</string>
+    <string name="room_member_power_level_invites">Invitasjonar</string>
+    <string name="room_member_power_level_users">Brukarar</string>
+
+    <string name="room_member_power_level_admin_in">Administrator i %1$s</string>
+    <string name="room_member_power_level_moderator_in">Moderator i %1$s</string>
+    <string name="room_member_power_level_custom_in">Tilpassa (%1$d) i %2$s</string>
+
+    <string name="verify_cannot_cross_sign">Denne økta klarde ikkje å dele denne verifikasjonen med dine andre økter.
+\nVerifikasjonsdata er lagra lokalt, og vil bli delt i ein framtidig versjon av programmet.</string>
+
+    <string name="settings_category_timeline">Historikk</string>
+
+    <string name="room_settings_enable_encryption_warning">Etter aktivering, så kan ikkje kryptering bli deaktivert.</string>
+
+    <string name="complete_security">Fullstendig sikkerheit</string>
+
 </resources>

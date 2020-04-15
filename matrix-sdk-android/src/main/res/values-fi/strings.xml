@@ -12,11 +12,11 @@
     <string name="notice_room_unban">%1$s poisti porttikiellon käyttäjältä %2$s</string>
     <string name="notice_room_ban">%1$s antoi porttikiellon käyttäjälle %2$s</string>
     <string name="notice_room_withdraw">%1$s veti takaisin kutsun käyttäjälle %2$s</string>
-    <string name="notice_avatar_url_changed">%1$s vaihtoi profiilikuvaa</string>
+    <string name="notice_avatar_url_changed">%1$s vaihtoi profiilikuvaansa</string>
     <string name="notice_display_name_set">%1$s asetti näyttönimekseen %2$s</string>
     <string name="notice_display_name_changed_from">%1$s muutti näyttönimensä nimestä %2$s nimeen %3$s</string>
     <string name="notice_display_name_removed">%1$s poisti näyttönimensä (%2$s)</string>
-    <string name="notice_room_topic_changed">%1$s vaihtoi aiheeksi %2$s</string>
+    <string name="notice_room_topic_changed">%1$s vaihtoi aiheeksi: %2$s</string>
     <string name="notice_room_name_changed">%1$s vaihtoi huoneen nimeksi %2$s</string>
     <string name="notice_placed_video_call">%s soitti videopuhelun.</string>
     <string name="notice_placed_voice_call">%s soitti äänipuhelun.</string>
@@ -38,7 +38,7 @@
     <string name="notice_room_name_removed">%1$s poisti huoneen nimen</string>
     <string name="notice_room_topic_removed">%1$s poisti huoneen aiheen</string>
     <string name="notice_profile_change_redacted">%1$s päivitti profiilinsa %2$s</string>
-    <string name="notice_room_third_party_invite">%1$s lähetti liittymiskutsun käyttäjälle %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s lähetti liittymiskutsun huoneeseen käyttäjälle %2$s</string>
     <string name="notice_room_third_party_registered_invite">%1$s hyväksyi kutsun käyttäjän %2$s puolesta</string>
     <string name="notice_crypto_unable_to_decrypt">** Salauksen purku epäonnistui: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">Lähettäjän laite ei ole lähettänyt avaimia tähän viestiin.</string>
@@ -180,12 +180,30 @@
     <string name="notice_room_join_with_reason">%1$s liittyi. Syy: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s poistui. Syy: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s hylkäsi kutsun. Syy: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s potkaisi käyttäjän %2$s pois. Syy: %3$s</string>
-    <string name="notice_room_unban_with_reason">%1$s poisti eston käyttäjältä %2$s. Syy: %3$s</string>
-    <string name="notice_room_ban_with_reason">%1$s esti käyttäjän %2$s. Syy: %3$s</string>
-    <string name="notice_room_third_party_invite_with_reason">%1$s lähetti kutsun käyttäjälle %2$s huoneeseen liittymiseksi. Syy: %3$s</string>
-    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s kumosi kutsun käyttäjälle %2$s huoneeseen liittymiseksi. Syy: %3$s</string>
+    <string name="notice_room_kick_with_reason">%1$s poisti käyttäjän %2$s huoneesta. Syy: %3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s poisti porttikiellon käyttäjältä %2$s. Syy: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s antoi porttikiellon käyttäjälle %2$s. Syy: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s lähetti kutsun liittyä huoneeseen käyttäjälle %2$s. Syy: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s kumosi kutsun liittyä huoneeseen käyttäjälle %2$s. Syy: %3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s hyväksyi kutsun liityäkseen huoneeseen %2$s. Syy: %3$s</string>
-    <string name="notice_room_withdraw_with_reason">%1$s poisti käyttäjän %2$s kutsun. Syy: %3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s veti takaisin käyttäjän %2$s kutsun. Syy: %3$s</string>
+
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s lisäsi tälle huoneelle osoitteen %2$s.</item>
+        <item quantity="other">%1$s lisäsi tälle huoneelle osoitteet %2$s.</item>
+    </plurals>
+
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s poisti tältä huoneelta osoitteen %2$s.</item>
+        <item quantity="other">%1$s poisti tältä huoneelta osoitteet %3$s.</item>
+    </plurals>
+
+    <string name="notice_room_aliases_added_and_removed">%1$s lisäsi tälle huoneelle osoitteen %2$s ja poisti osoitteen %3$s.</string>
+
+    <string name="notice_room_canonical_alias_set">%1$s asetti tämän huoneen pääosoitteeksi %2$s.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s poisti tämän huoneen pääosoitteen.</string>
+
+    <string name="notice_room_guest_access_can_join">%1$s salli vieraiden liittyä huoneeseen.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s esti vieraita liittymästä huoneeseen.</string>
 
 </resources>

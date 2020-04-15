@@ -1373,7 +1373,7 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
 
     <string name="error_jitsi_not_supported_on_old_device">抱歉，旧设备 （Android 系统版本低于 5.0）不支持使用 Jitsi 创建电话会议</string>
 
-    <string name="title_activity_verify_device">验证设备</string>
+    <string name="title_activity_verify_device">验证会话</string>
 
     <string name="encryption_information_unknown_ip">未知 IP</string>
     <string name="you_added_a_new_device_with_info">一个新设备正在请求加密密钥。
