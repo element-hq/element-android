@@ -18,10 +18,10 @@ package im.vector.matrix.android.internal.session.content
 
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
+import im.vector.matrix.android.internal.network.NetworkConstants
 import javax.inject.Inject
 
 private const val MATRIX_CONTENT_URI_SCHEME = "mxc://"
-private const val URI_PREFIX_CONTENT_API = "_matrix/media/v1/"
 
 internal class DefaultContentUrlResolver @Inject constructor(private val homeServerConnectionConfig: HomeServerConnectionConfig) : ContentUrlResolver {
 
@@ -30,14 +30,14 @@ internal class DefaultContentUrlResolver @Inject constructor(private val homeSer
             val baseUrl = homeServerConnectionConfig.homeServerUri.toString()
             val sep = if (baseUrl.endsWith("/")) "" else "/"
 
-            return baseUrl + sep + URI_PREFIX_CONTENT_API + "upload"
+            return baseUrl + sep + NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "upload"
         }
     }
 
     override fun resolveFullSize(contentUrl: String?): String? {
         if (contentUrl?.isValidMatrixContentUrl() == true) {
             val baseUrl = homeServerConnectionConfig.homeServerUri.toString()
-            val prefix = URI_PREFIX_CONTENT_API + "download/"
+            val prefix = NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "download/"
             return resolve(baseUrl, contentUrl, prefix)
         }
         return null
@@ -46,7 +46,7 @@ internal class DefaultContentUrlResolver @Inject constructor(private val homeSer
     override fun resolveThumbnail(contentUrl: String?, width: Int, height: Int, method: ContentUrlResolver.ThumbnailMethod): String? {
         if (contentUrl?.isValidMatrixContentUrl() == true) {
             val baseUrl = homeServerConnectionConfig.homeServerUri.toString()
-            val prefix = URI_PREFIX_CONTENT_API + "thumbnail/"
+            val prefix = NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "thumbnail/"
             val params = "?width=$width&height=$height&method=${method.value}"
             return resolve(baseUrl, contentUrl, prefix, params)
         }
