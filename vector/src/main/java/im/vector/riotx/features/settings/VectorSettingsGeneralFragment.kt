@@ -714,9 +714,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                 updateButton.isEnabled = false
 
                 fun updateUi() {
-                    val oldPwd = oldPasswordText.text.toString().trim()
-                    val newPwd = newPasswordText.text.toString().trim()
-                    val newConfirmPwd = confirmNewPasswordText.text.toString().trim()
+                    val oldPwd = oldPasswordText.text.toString()
+                    val newPwd = newPasswordText.text.toString()
+                    val newConfirmPwd = confirmNewPasswordText.text.toString()
 
                     updateButton.isEnabled = oldPwd.isNotEmpty() && newPwd.isNotEmpty() && newPwd == newConfirmPwd
 
@@ -772,8 +772,8 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
                     view.hideKeyboard()
 
-                    val oldPwd = oldPasswordText.text.toString().trim()
-                    val newPwd = newPasswordText.text.toString().trim()
+                    val oldPwd = oldPasswordText.text.toString()
+                    val newPwd = newPasswordText.text.toString()
 
                     showPasswordLoadingView(true)
                     session.changePassword(oldPwd, newPwd, object : MatrixCallback<Unit> {
