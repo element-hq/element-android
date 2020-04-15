@@ -789,9 +789,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                             }
                             showPasswordLoadingView(false)
                             if (failure.isInvalidPassword()) {
-                                activity.toast(R.string.settings_fail_to_update_password_invalid_current_password)
+                                oldPasswordTil.error = getString(R.string.settings_fail_to_update_password_invalid_current_password)
                             } else {
-                                activity.toast(R.string.settings_fail_to_update_password)
+                                oldPasswordTil.error = getString(R.string.settings_fail_to_update_password)
                             }
                         }
                     })
