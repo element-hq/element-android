@@ -6,7 +6,7 @@
     <!-- Sections has been created to avoid merge conflict. Let's see if it's better -->
 
     <!-- BEGIN Strings added by Valere -->
-
+    <string name="room_message_placeholder">Message…</string>
     <!-- END Strings added by Valere -->
 
 

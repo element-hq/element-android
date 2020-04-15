@@ -700,7 +700,7 @@ class RoomDetailFragment @Inject constructor(
         val isRoomEncrypted = summary?.isEncrypted ?: false
         if (state.tombstoneEvent == null) {
             composerLayout.visibility = View.VISIBLE
-            composerLayout.setRoomEncrypted(isRoomEncrypted)
+            composerLayout.setRoomEncrypted(isRoomEncrypted, state.asyncRoomSummary.invoke()?.roomEncryptionTrustLevel)
             notificationAreaView.render(NotificationAreaView.State.Hidden)
         } else {
             composerLayout.visibility = View.GONE

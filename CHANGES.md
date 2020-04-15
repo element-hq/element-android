@@ -19,6 +19,7 @@ Improvements 🙌:
  - Cross-Signing | Restore history after recover from passphrase (#1214)
  - Cross-Sign | QR code scan confirmation screens design update (#1187)
  - Emoji Verification | It's not the same butterfly! (#1220)
+ - Cross-Signing | Composer decoration: shields (#1077)
 
 Bugfix 🐛:
  - Missing avatar/displayname after verification request message (#841)
