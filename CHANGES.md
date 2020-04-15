@@ -10,8 +10,6 @@ Features ✨:
 Improvements 🙌:
  - Verification DM / Handle concurrent .start after .ready (#794)
  - Reimplementation of multiple attachment picker
- - CrossSigning / Update Shield Logic for DM (#963)
- - Xsigning | Complete security new session design update (#1135)
  - Cross-Signing | Update Shield Logic for DM (#963)
  - Cross-Signing | Complete security new session design update (#1135)
  - Cross-Signing | Setup key backup as part of SSSS bootstrapping (#1201)
