@@ -2129,7 +2129,6 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="initialize_cross_signing">Gatit <em>CrossSigning</em></string>
     <string name="reset_cross_signing">Zeroji Kyçet</string>
 
-    <string name="qr_code_scanned_by_other_notice">A e skanoi me sukses përdoruesi tjetër kodin QR\?</string>
     <string name="qr_code_scanned_by_other_no">Jo</string>
 
     <string name="no_connectivity_to_the_server_indicator">Humbi lidhja me shërbyesin</string>

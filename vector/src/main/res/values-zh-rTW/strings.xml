@@ -2119,7 +2119,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="a11y_qr_code_for_verification">QR code</string>
 
-    <string name="qr_code_scanned_by_other_notice">其他使用者是否掃苗 QR code 成功？</string>
     <string name="qr_code_scanned_by_other_yes">是</string>
     <string name="qr_code_scanned_by_other_no">否</string>
 

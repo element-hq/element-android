@@ -2224,7 +2224,6 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="a11y_qr_code_for_verification">QR-Code</string>
 
-    <string name="qr_code_scanned_by_other_notice">Hat dein Gegenüber den QR-Code erfolgreich gescannt\?</string>
     <string name="qr_code_scanned_by_other_yes">Ja</string>
     <string name="qr_code_scanned_by_other_no">Nein</string>
 

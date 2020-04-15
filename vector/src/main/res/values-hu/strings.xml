@@ -2169,7 +2169,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="a11y_qr_code_for_verification">QR kód</string>
 
-    <string name="qr_code_scanned_by_other_notice">A másik felhasználó sikeresen beolvasta a QR kódot\?</string>
     <string name="qr_code_scanned_by_other_yes">Igen</string>
     <string name="qr_code_scanned_by_other_no">Nem</string>
 
