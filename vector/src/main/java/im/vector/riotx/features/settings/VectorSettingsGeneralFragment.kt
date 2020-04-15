@@ -690,17 +690,15 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
             var passwordShown = false
 
-            showPassword.setOnClickListener(object : View.OnClickListener {
-                override fun onClick(v: View?) {
-                    passwordShown = !passwordShown
+            showPassword.setOnClickListener {
+                passwordShown = !passwordShown
 
-                    oldPasswordText.showPassword(passwordShown)
-                    newPasswordText.showPassword(passwordShown)
-                    confirmNewPasswordText.showPassword(passwordShown)
+                oldPasswordText.showPassword(passwordShown)
+                newPasswordText.showPassword(passwordShown)
+                confirmNewPasswordText.showPassword(passwordShown)
 
-                    showPassword.setImageResource(if (passwordShown) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
-                }
-            })
+                showPassword.setImageResource(if (passwordShown) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
+            }
 
             val dialog = AlertDialog.Builder(activity)
                     .setView(view)
