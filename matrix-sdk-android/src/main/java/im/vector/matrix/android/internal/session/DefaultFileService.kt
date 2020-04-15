@@ -79,9 +79,15 @@ internal class DefaultFileService @Inject constructor(
                                 .url(resolvedUrl)
                                 .build()
 
-                        val response = okHttpClient.newCall(request).execute()
+                        val response = try {
+                            okHttpClient.newCall(request).execute()
+                        } catch (e: Throwable) {
+                            return@flatMap Try.Failure(e)
+                        }
+
                         var inputStream = response.body?.byteStream()
                         Timber.v("Response size ${response.body?.contentLength()} - Stream available: ${inputStream?.available()}")
+
                         if (!response.isSuccessful || inputStream == null) {
                             return@flatMap Try.Failure(IOException())
                         }
