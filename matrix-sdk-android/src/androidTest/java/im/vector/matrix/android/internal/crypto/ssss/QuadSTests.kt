@@ -71,7 +71,7 @@ class QuadSTests : InstrumentedTest {
         val TEST_KEY_ID = "my.test.Key"
 
         mTestHelper.doSync<SsssKeyCreationInfo> {
-            quadS.generateKey(TEST_KEY_ID, "Test Key", emptyKeySigner, it)
+            quadS.generateKey(TEST_KEY_ID, null, "Test Key", emptyKeySigner, it)
         }
 
         // Assert Account data is updated
@@ -177,7 +177,7 @@ class QuadSTests : InstrumentedTest {
         val TEST_KEY_ID = "my.test.Key"
 
         mTestHelper.doSync<SsssKeyCreationInfo> {
-            quadS.generateKey(TEST_KEY_ID, "Test Key", emptyKeySigner, it)
+            quadS.generateKey(TEST_KEY_ID, null, "Test Key", emptyKeySigner, it)
         }
 
         // Test that we don't need to wait for an account data sync to access directly the keyid from DB
@@ -322,7 +322,7 @@ class QuadSTests : InstrumentedTest {
         val quadS = session.sharedSecretStorageService
 
         val creationInfo = mTestHelper.doSync<SsssKeyCreationInfo> {
-            quadS.generateKey(keyId, keyId, emptyKeySigner, it)
+            quadS.generateKey(keyId, null, keyId, emptyKeySigner, it)
         }
 
         assertAccountData(session, "${DefaultSharedSecretStorageService.KEY_ID_BASE}.$keyId")
