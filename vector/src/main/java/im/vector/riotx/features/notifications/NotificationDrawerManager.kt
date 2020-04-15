@@ -157,7 +157,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                     e is NotifiableMessageEvent && e.roomId == roomId
                 }
             }
-            notificationUtils.cancelNotificationMessage(roomId, ROOM_MESSAGES_NOTIFICATION_ID)
+            refreshNotificationDrawer()
         }
     }
 

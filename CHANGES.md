@@ -22,6 +22,7 @@ Improvements 🙌:
  - Cross-Signing | Composer decoration: shields (#1077)
 
 Bugfix 🐛:
+ - Fix summary notification staying after "mark as read"
  - Missing avatar/displayname after verification request message (#841)
  - Crypto | RiotX sometimes rotate the current device keys (#1170)
  - RiotX can't restore cross signing keys saved by web in SSSS (#1174)
