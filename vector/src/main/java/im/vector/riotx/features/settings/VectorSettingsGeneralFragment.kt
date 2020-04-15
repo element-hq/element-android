@@ -702,6 +702,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
             val dialog = AlertDialog.Builder(activity)
                     .setView(view)
+                    .setCancelable(false)
                     .setPositiveButton(R.string.settings_change_password, null)
                     .setNegativeButton(R.string.cancel, null)
                     .setOnDismissListener {
@@ -711,6 +712,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
             dialog.setOnShowListener {
                 val updateButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                val cancelButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
                 updateButton.isEnabled = false
 
                 fun updateUi() {
@@ -754,6 +756,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                         confirmNewPasswordText.isEnabled = false
                         changePasswordLoader.isVisible = true
                         updateButton.isEnabled = false
+                        cancelButton.isEnabled = false
                     } else {
                         showPassword.isEnabled = true
                         oldPasswordText.isEnabled = true
@@ -761,6 +764,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                         confirmNewPasswordText.isEnabled = true
                         changePasswordLoader.isVisible = false
                         updateButton.isEnabled = true
+                        cancelButton.isEnabled = true
                     }
                 }
 
