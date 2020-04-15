@@ -9,6 +9,7 @@ Features ✨:
 
 Improvements 🙌:
  - Verification DM / Handle concurrent .start after .ready (#794)
+ - Reimplementation of multiple attachment picker
  - Cross-Signing | Update Shield Logic for DM (#963)
  - Cross-Signing | Complete security new session design update (#1135)
  - Cross-Signing | Setup key backup as part of SSSS bootstrapping (#1201)
@@ -30,10 +31,10 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
- -
+ - Increase targetSdkVersion to 29
 
 Build 🧱:
- -
+ - Compile with Android SDK 29 (Android Q)
 
 Other changes:
  - Increase File Logger capacities ( + use dev log preferences)

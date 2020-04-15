@@ -134,7 +134,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         restorables.forEach { it.onSaveInstanceState(outState) }
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         restorables.forEach { it.onRestoreInstanceState(savedInstanceState) }
         super.onRestoreInstanceState(savedInstanceState)
     }

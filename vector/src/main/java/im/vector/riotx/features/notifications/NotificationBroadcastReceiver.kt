@@ -97,7 +97,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         val message = getReplyMessage(intent)
         val roomId = intent.getStringExtra(KEY_ROOM_ID)
 
-        if (message.isNullOrBlank() || roomId.isBlank()) {
+        if (message.isNullOrBlank() || roomId.isNullOrBlank()) {
             // ignore this event
             // Can this happen? should we update notification?
             return

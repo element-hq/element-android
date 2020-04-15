@@ -384,7 +384,8 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 Unit
             }
         } catch (failure: Throwable) {
-            _viewEvents.post(VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage))
+            _viewEvents.post(
+                    VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage ?: stringProvider.getString(R.string.unexpected_error)))
         }
     }
 
