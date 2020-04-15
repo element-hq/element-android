@@ -34,5 +34,6 @@ fun Throwable.shouldBeRetried(): Boolean {
 
 fun Throwable.isInvalidPassword(): Boolean {
     return this is Failure.ServerError
+            && error.code == MatrixError.M_FORBIDDEN
             && error.message == "Invalid password"
 }

@@ -775,12 +775,18 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                     showPasswordLoadingView(true)
                     session.changePassword(oldPwd, newPwd, object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
+                            if (!isAdded) {
+                                return
+                            }
                             showPasswordLoadingView(false)
                             dialog.dismiss()
                             activity.toast(R.string.settings_password_updated)
                         }
 
                         override fun onFailure(failure: Throwable) {
+                            if (!isAdded) {
+                                return
+                            }
                             showPasswordLoadingView(false)
                             if (failure.isInvalidPassword()) {
                                 activity.toast(R.string.settings_fail_to_update_password_invalid_current_password)
