@@ -110,9 +110,14 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         }
 
         // Password
-        mPasswordPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            onPasswordUpdateClick()
-            false
+        // Hide the preference if password can not be updated
+        if (session.getHomeServerCapabilities().canChangePassword) {
+            mPasswordPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                onPasswordUpdateClick()
+                false
+            }
+        } else {
+            mPasswordPreference.isVisible = false
         }
 
         // Add Email
