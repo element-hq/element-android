@@ -56,10 +56,17 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(im.vector.riotx.R.layout.activity_image_media_viewer)
-        mediaData = intent.getParcelableExtra(EXTRA_MEDIA_DATA)
+
+        if (intent.hasExtra(EXTRA_MEDIA_DATA)) {
+            mediaData = intent.getParcelableExtra(EXTRA_MEDIA_DATA)!!
+        } else {
+            finish()
+        }
+
         intent.extras?.getString(EXTRA_SHARED_TRANSITION_NAME)?.let {
             ViewCompat.setTransitionName(imageTransitionView, it)
         }
+
         if (mediaData.url.isNullOrEmpty()) {
             supportFinishAfterTransition()
             return

@@ -2,26 +2,60 @@ Changes in RiotX 0.19.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Cross-Signing | Support SSSS secret sharing (#944)
+ - Cross-Signing | Verify new session from existing session (#1134)
+ - Cross-Signing | Bootstraping cross signing with 4S from mobile (#985)
+
 
 Improvements 🙌:
- -
+ - Verification DM / Handle concurrent .start after .ready (#794)
+ - Reimplementation of multiple attachment picker
+ - Cross-Signing | Update Shield Logic for DM (#963)
+ - Cross-Signing | Complete security new session design update (#1135)
+ - Cross-Signing | Setup key backup as part of SSSS bootstrapping (#1201)
+ - Cross-Signing | Gossip key backup recovery key (#1200)
+ - Show room encryption status as a bubble tile (#1078)
+ - UX/UI | Add indicator to home tab on invite (#957)
+ - Cross-Signing | Restore history after recover from passphrase (#1214)
+ - Cross-Sign | QR code scan confirmation screens design update (#1187)
+ - Emoji Verification | It's not the same butterfly! (#1220)
+ - Cross-Signing | Composer decoration: shields (#1077)
 
 Bugfix 🐛:
- -  Message transitions in encrypted rooms are jarring #518
  - Fix summary notification staying after "mark as read"
+ - Missing avatar/displayname after verification request message (#841)
+ - Crypto | RiotX sometimes rotate the current device keys (#1170)
+ - RiotX can't restore cross signing keys saved by web in SSSS (#1174)
+ - Cross- Signing | After signin in new session, verification paper trail in DM is off (#1191)
+ - Failed to encrypt message in room (message stays in red), [thanks to pwr22] (#925)
+ - Cross-Signing | web <-> riotX After QR code scan, gossiping fails (#1210)
+ - Fix crash when trying to download file without internet connection (#1229)
+ - Local echo are not updated in timeline (for failed & encrypted states)
 
 Translations 🗣:
  -
 
 SDK API changes ⚠️:
- -
+ - Increase targetSdkVersion to 29
 
 Build 🧱:
- -
+ - Compile with Android SDK 29 (Android Q)
 
 Other changes:
- -
+ - Increase File Logger capacities ( + use dev log preferences)
+
+Changes in RiotX 0.18.1 (2020-03-17)
+===================================================
+
+Improvements 🙌:
+ - Implementation of /join command
+
+Bugfix 🐛:
+ - Message transitions in encrypted rooms are jarring #518
+ - Images that failed to send are waiting to be sent forever #1145
+ - Fix / Crashed when trying to send a gif from the Gboard #1136
+ - Fix / Cannot click on key backup banner when new keys are available
+
 
 Changes in RiotX 0.18.0 (2020-03-11)
 ===================================================

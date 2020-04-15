@@ -37,9 +37,10 @@ class Debouncer(private val handler: Handler) {
 
     fun cancel(identifier: String) {
         if (runnables.containsKey(identifier)) {
-            val old = runnables[identifier]
-            handler.removeCallbacks(old)
-            runnables.remove(identifier)
+            runnables[identifier]?.let {
+                handler.removeCallbacks(it)
+                runnables.remove(identifier)
+            }
         }
     }
 

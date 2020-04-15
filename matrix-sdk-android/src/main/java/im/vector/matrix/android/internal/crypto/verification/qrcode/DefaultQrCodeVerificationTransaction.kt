@@ -21,6 +21,8 @@ import im.vector.matrix.android.api.session.crypto.verification.CancelCode
 import im.vector.matrix.android.api.session.crypto.verification.QrCodeVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.internal.crypto.IncomingGossipingRequestManager
+import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestManager
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
 import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64Safe
@@ -36,6 +38,8 @@ internal class DefaultQrCodeVerificationTransaction(
         override val otherUserId: String,
         override var otherDeviceId: String?,
         private val crossSigningService: CrossSigningService,
+        outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
+        incomingGossipingRequestManager: IncomingGossipingRequestManager,
         private val cryptoStore: IMXCryptoStore,
         // Not null only if other user is able to scan QR code
         private val qrCodeData: QrCodeData?,
@@ -45,6 +49,8 @@ internal class DefaultQrCodeVerificationTransaction(
 ) : DefaultVerificationTransaction(
         setDeviceVerificationAction,
         crossSigningService,
+        outgoingGossipingRequestManager,
+        incomingGossipingRequestManager,
         userId,
         transactionId,
         otherUserId,
@@ -181,19 +187,22 @@ internal class DefaultQrCodeVerificationTransaction(
         // qrCodeData.sharedSecret will be used to send the start request
         start(otherQrCodeData.sharedSecret)
 
-        // Trust the other user
-        trust(canTrustOtherUserMasterKey,
-                toVerifyDeviceIds.distinct(),
-                eventuallyMarkMyMasterKeyAsTrusted = true)
+        trust(
+                canTrustOtherUserMasterKey = canTrustOtherUserMasterKey,
+                toVerifyDeviceIds = toVerifyDeviceIds.distinct(),
+                eventuallyMarkMyMasterKeyAsTrusted = true,
+                autoDone = false
+        )
     }
 
-    private fun start(remoteSecret: String) {
+    private fun start(remoteSecret: String, onDone: (() -> Unit)? = null) {
         if (state != VerificationTxState.None) {
             Timber.e("## Verification QR: start verification from invalid state")
             // should I cancel??
             throw IllegalStateException("Interactive Key verification already started")
         }
 
+        state = VerificationTxState.Started
         val startMessage = transport.createStartForQrCode(
                 deviceId,
                 transactionId,
@@ -203,9 +212,9 @@ internal class DefaultQrCodeVerificationTransaction(
         transport.sendToOther(
                 EventType.KEY_VERIFICATION_START,
                 startMessage,
-                VerificationTxState.Started,
+                VerificationTxState.WaitingOtherReciprocateConfirm,
                 CancelCode.User,
-                null
+                onDone
         )
     }
 
@@ -239,6 +248,15 @@ internal class DefaultQrCodeVerificationTransaction(
         }
     }
 
+    fun onDoneReceived() {
+        if (state != VerificationTxState.WaitingOtherReciprocateConfirm) {
+            cancel(CancelCode.UnexpectedMessage)
+            return
+        }
+        state = VerificationTxState.Verified
+        transport.done(transactionId) {}
+    }
+
     override fun otherUserScannedMyQrCode() {
         when (qrCodeData) {
             is QrCodeData.VerifyingAnotherUser             -> {
@@ -260,6 +278,6 @@ internal class DefaultQrCodeVerificationTransaction(
     override fun otherUserDidNotScannedMyQrCode() {
         // What can I do then?
         // At least remove the transaction...
-        state = VerificationTxState.Cancelled(CancelCode.MismatchedKeys, true)
+        cancel(CancelCode.MismatchedKeys)
     }
 }

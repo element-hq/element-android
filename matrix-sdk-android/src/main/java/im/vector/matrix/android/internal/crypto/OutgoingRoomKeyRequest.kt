@@ -17,22 +17,26 @@
 
 package im.vector.matrix.android.internal.crypto
 
+import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 
 /**
  * Represents an outgoing room key request
  */
-class OutgoingRoomKeyRequest(
+@JsonClass(generateAdapter = true)
+data class OutgoingRoomKeyRequest(
         // RequestBody
-        var requestBody: RoomKeyRequestBody?, // list of recipients for the request
-        var recipients: List<Map<String, String>>, // Unique id for this request. Used for both
+        var requestBody: RoomKeyRequestBody?,
+        // list of recipients for the request
+        override var recipients: Map<String, List<String>>,
+        // Unique id for this request. Used for both
         // an id within the request for later pairing with a cancellation, and for
         // the transaction id when sending the to_device messages to our local
-        var requestId: String, // current state of this request
-        var state: RequestState) {
-
-    // transaction id for the cancellation, if any
-    var cancellationTxnId: String? = null
+        override var requestId: String, // current state of this request
+        override var state: OutgoingGossipingRequestState
+        // transaction id for the cancellation, if any
+        // override var cancellationTxnId: String? = null
+) : OutgoingGossipingRequest {
 
     /**
      * Used only for log.
@@ -53,66 +57,4 @@ class OutgoingRoomKeyRequest(
         get() = if (null != requestBody) {
             requestBody!!.sessionId
         } else null
-
-    /**
-     * possible states for a room key request
-     *
-     *
-     * The state machine looks like:
-     * <pre>
-     *
-     *      |
-     *      V
-     *    UNSENT  -----------------------------+
-     *      |                                  |
-     *      | (send successful)                | (cancellation requested)
-     *      V                                  |
-     *     SENT                                |
-     *      |--------------------------------  |  --------------+
-     *      |                                  |                |
-     *      |                                  |                | (cancellation requested with intent
-     *      |                                  |                | to resend a new request)
-     *      | (cancellation requested)         |                |
-     *      V                                  |                V
-     *  CANCELLATION_PENDING                   | CANCELLATION_PENDING_AND_WILL_RESEND
-     *      |                                  |                |
-     *      | (cancellation sent)              |                | (cancellation sent. Create new request
-     *      |                                  |                |  in the UNSENT state)
-     *      V                                  |                |
-     *  (deleted)  <---------------------------+----------------+
-     *  </pre>
-     */
-
-    enum class RequestState {
-        /**
-         * request not yet sent
-         */
-        UNSENT,
-        /**
-         * request sent, awaiting reply
-         */
-        SENT,
-        /**
-         * reply received, cancellation not yet sent
-         */
-        CANCELLATION_PENDING,
-        /**
-         * Cancellation not yet sent, once sent, a new request will be done
-         */
-        CANCELLATION_PENDING_AND_WILL_RESEND,
-        /**
-         * sending failed
-         */
-        FAILED;
-
-        companion object {
-            fun from(state: Int) = when (state) {
-                0 -> UNSENT
-                1 -> SENT
-                2 -> CANCELLATION_PENDING
-                3 -> CANCELLATION_PENDING_AND_WILL_RESEND
-                else /*4*/ -> FAILED
-            }
-        }
-    }
 }

@@ -72,18 +72,18 @@ class IncomingShareFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         setupToolbar(incomingShareToolbar)
-        attachmentsHelper = AttachmentsHelper.create(this, this).register()
+        attachmentsHelper = AttachmentsHelper(requireContext(), this).register()
 
         val intent = vectorBaseActivity.intent
         val isShareManaged = when (intent?.action) {
             Intent.ACTION_SEND          -> {
-                var isShareManaged = attachmentsHelper.handleShareIntent(intent)
+                var isShareManaged = attachmentsHelper.handleShareIntent(requireContext(), intent)
                 if (!isShareManaged) {
                     isShareManaged = handleTextShare(intent)
                 }
                 isShareManaged
             }
-            Intent.ACTION_SEND_MULTIPLE -> attachmentsHelper.handleShareIntent(intent)
+            Intent.ACTION_SEND_MULTIPLE -> attachmentsHelper.handleShareIntent(requireContext(), intent)
             else                        -> false
         }
 

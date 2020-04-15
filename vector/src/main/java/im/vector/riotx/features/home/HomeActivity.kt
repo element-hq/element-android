@@ -29,6 +29,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.riotx.R
@@ -39,9 +40,11 @@ import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.pushers.PushersManager
+import im.vector.riotx.features.crypto.recover.BootstrapBottomSheet
 import im.vector.riotx.features.disclaimer.showDisclaimerDialog
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.popup.PopupAlertManager
+import im.vector.riotx.features.popup.VerificationVectorAlert
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.workers.signout.SignOutViewModel
@@ -60,6 +63,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     @Inject lateinit var pushManager: PushersManager
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var popupAlertManager: PopupAlertManager
 
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
         override fun onDrawerStateChanged(newState: Int) {
@@ -92,6 +96,9 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                             drawerLayout.closeDrawer(GravityCompat.START)
                             replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java)
                         }
+                        is HomeActivitySharedAction.PromptForSecurityBootstrap -> {
+                            BootstrapBottomSheet().apply { isCancelable = false }.show(supportFragmentManager, "BootstrapBottomSheet")
+                        }
                     }
                 }
                 .disposeOnDestroy()
@@ -99,6 +106,10 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         if (intent.getBooleanExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION, false)) {
             notificationDrawerManager.clearAllEvents()
             intent.removeExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)
+        }
+        if (intent.getBooleanExtra(EXTRA_ACCOUNT_CREATION, false)) {
+            sharedActionViewModel.post(HomeActivitySharedAction.PromptForSecurityBootstrap)
+            intent.removeExtra(EXTRA_ACCOUNT_CREATION)
         }
 
         activeSessionHolder.getSafeActiveSession()?.getInitialSyncProgressStatus()?.observe(this, Observer { status ->
@@ -124,6 +135,12 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                 waiting_view.isVisible = true
             }
         })
+
+        // Ask again if the app is relaunched
+        if (!sharedActionViewModel.hasDisplayedCompleteSecurityPrompt
+                && activeSessionHolder.getSafeActiveSession()?.hasAlreadySynced() == true) {
+            promptCompleteSecurityIfNeeded()
+        }
     }
 
     private fun promptCompleteSecurityIfNeeded() {
@@ -149,14 +166,15 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         if (crossSigningEnabledOnAccount && myCrossSigningKeys?.isTrusted() == false) {
             // We need to ask
             sharedActionViewModel.hasDisplayedCompleteSecurityPrompt = true
-            PopupAlertManager.postVectorAlert(
-                    PopupAlertManager.VectorAlert(
+            popupAlertManager.postVectorAlert(
+                    VerificationVectorAlert(
                             uid = "completeSecurity",
-                            title = getString(R.string.new_signin),
-                            description = getString(R.string.complete_security),
+                            title = getString(R.string.complete_security),
+                            description = getString(R.string.crosssigning_verify_this_session),
                             iconId = R.drawable.ic_shield_warning
                     ).apply {
-                        colorInt = ContextCompat.getColor(this@HomeActivity, R.color.riotx_destructive_accent)
+                        matrixItem = session.getUser(session.myUserId)?.toMatrixItem()
+                        colorInt = ContextCompat.getColor(this@HomeActivity, R.color.riotx_positive_accent)
                         contentAction = Runnable {
                             (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
                                 it.navigator.waitSessionVerification(it)
@@ -236,11 +254,13 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     companion object {
         private const val EXTRA_CLEAR_EXISTING_NOTIFICATION = "EXTRA_CLEAR_EXISTING_NOTIFICATION"
+        private const val EXTRA_ACCOUNT_CREATION = "EXTRA_ACCOUNT_CREATION"
 
-        fun newIntent(context: Context, clearNotification: Boolean = false): Intent {
+        fun newIntent(context: Context, clearNotification: Boolean = false, accountCreation: Boolean = false): Intent {
             return Intent(context, HomeActivity::class.java)
                     .apply {
                         putExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION, clearNotification)
+                        putExtra(EXTRA_ACCOUNT_CREATION, accountCreation)
                     }
         }
     }

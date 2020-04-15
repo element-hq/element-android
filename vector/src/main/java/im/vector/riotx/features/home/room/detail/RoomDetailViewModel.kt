@@ -209,6 +209,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.DeclineVerificationRequest       -> handleDeclineVerification(action)
             is RoomDetailAction.RequestVerification              -> handleRequestVerification(action)
             is RoomDetailAction.ResumeVerification               -> handleResumeRequestVerification(action)
+            is RoomDetailAction.ReRequestKeys                    -> handleReRequestKeys(action)
         }
     }
 
@@ -379,8 +380,8 @@ class RoomDetailViewModel @AssistedInject constructor(
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.JoinRoom                 -> {
-                            // TODO
-                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
+                            handleJoinToAnotherRoomSlashCommand(slashCommandResult)
+                            popDraft()
                         }
                         is ParsedCommand.PartRoom                 -> {
                             // TODO
@@ -512,6 +513,22 @@ class RoomDetailViewModel @AssistedInject constructor(
         room.deleteDraft(NoOpMatrixCallback())
     }
 
+    private fun handleJoinToAnotherRoomSlashCommand(command: ParsedCommand.JoinRoom) {
+        session.joinRoom(command.roomAlias, command.reason, object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                session.getRoomSummary(command.roomAlias)
+                        ?.roomId
+                        ?.let {
+                            _viewEvents.post(RoomDetailViewEvents.JoinRoomCommandSuccess(it))
+                        }
+            }
+
+            override fun onFailure(failure: Throwable) {
+                _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
+            }
+        })
+    }
+
     private fun legacyRiotQuoteText(quotedText: String?, myText: String): String {
         val messageParagraphs = quotedText?.split("\n\n".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()
         return buildString {
@@ -593,7 +610,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             when (val tooBigFile = attachments.find { it.size > maxUploadFileSize }) {
                 null -> room.sendMedias(attachments, action.compressBeforeSending, emptySet())
                 else -> _viewEvents.post(RoomDetailViewEvents.FileTooBigError(
-                        tooBigFile.name ?: tooBigFile.path,
+                        tooBigFile.name ?: tooBigFile.queryUri.toString(),
                         tooBigFile.size,
                         maxUploadFileSize
                 ))
@@ -867,6 +884,14 @@ class RoomDetailViewModel @AssistedInject constructor(
                         otherUserId = it.otherUserId
                 )))
             }
+        }
+    }
+
+    private fun handleReRequestKeys(action: RoomDetailAction.ReRequestKeys) {
+        // Check if this request is still active and handled by me
+        room.getTimeLineEvent(action.eventId)?.let {
+            session.cryptoService().reRequestRoomKeyForEvent(it.root)
+            _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.e2e_re_request_encryption_key_dialog_content)))
         }
     }
 

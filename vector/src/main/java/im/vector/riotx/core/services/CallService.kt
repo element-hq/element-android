@@ -128,13 +128,13 @@ class CallService : VectorService() {
      * Display a call in progress notification.
      */
     private fun displayCallInProgressNotification(intent: Intent) {
-        val callId = intent.getStringExtra(EXTRA_CALL_ID)
+        val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: ""
 
         val notification = notificationUtils.buildPendingCallNotification(
                 intent.getBooleanExtra(EXTRA_IS_VIDEO, false),
-                intent.getStringExtra(EXTRA_ROOM_NAME),
-                intent.getStringExtra(EXTRA_ROOM_ID),
-                intent.getStringExtra(EXTRA_MATRIX_ID),
+                intent.getStringExtra(EXTRA_ROOM_NAME) ?: "",
+                intent.getStringExtra(EXTRA_ROOM_ID) ?: "",
+                intent.getStringExtra(EXTRA_MATRIX_ID) ?: "",
                 callId)
 
         startForeground(NOTIFICATION_ID, notification)

@@ -33,7 +33,10 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
-import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListener
+import im.vector.matrix.android.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.keyshare.GossipingRequestListener
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -55,7 +58,9 @@ import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
+import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.crypto.model.event.RoomKeyContent
+import im.vector.matrix.android.internal.crypto.model.event.SecretSendEventContent
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
@@ -80,6 +85,7 @@ import im.vector.matrix.android.internal.session.room.membership.LoadRoomMembers
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
@@ -115,6 +121,7 @@ internal class DefaultCryptoService @Inject constructor(
         private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
         // the crypto store
         private val cryptoStore: IMXCryptoStore,
+
         // Olm device
         private val olmDevice: MXOlmDevice,
         // Set of parameters used to configure/customize the end-to-end crypto.
@@ -134,9 +141,9 @@ internal class DefaultCryptoService @Inject constructor(
 
         private val crossSigningService: DefaultCrossSigningService,
         //
-        private val incomingRoomKeyRequestManager: IncomingRoomKeyRequestManager,
+        private val incomingGossipingRequestManager: IncomingGossipingRequestManager,
         //
-        private val outgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
+        private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
         // Actions
         private val setDeviceVerificationAction: SetDeviceVerificationAction,
         private val megolmSessionDataImporter: MegolmSessionDataImporter,
@@ -188,6 +195,7 @@ internal class DefaultCryptoService @Inject constructor(
     override fun setDeviceName(deviceId: String, deviceName: String, callback: MatrixCallback<Unit>) {
         setDeviceNameTask
                 .configureWith(SetDeviceNameTask.Params(deviceId, deviceName)) {
+                    this.executionThread = TaskThread.CRYPTO
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             // bg refresh of crypto device
@@ -206,6 +214,7 @@ internal class DefaultCryptoService @Inject constructor(
     override fun deleteDevice(deviceId: String, callback: MatrixCallback<Unit>) {
         deleteDeviceTask
                 .configureWith(DeleteDeviceTask.Params(deviceId)) {
+                    this.executionThread = TaskThread.CRYPTO
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
@@ -214,6 +223,7 @@ internal class DefaultCryptoService @Inject constructor(
     override fun deleteDeviceWithUserPassword(deviceId: String, authSession: String?, password: String, callback: MatrixCallback<Unit>) {
         deleteDeviceWithUserPasswordTask
                 .configureWith(DeleteDeviceWithUserPasswordTask.Params(deviceId, authSession, password)) {
+                    this.executionThread = TaskThread.CRYPTO
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
@@ -230,6 +240,7 @@ internal class DefaultCryptoService @Inject constructor(
     override fun getDevicesList(callback: MatrixCallback<DevicesListResponse>) {
         getDevicesTask
                 .configureWith {
+                    //                    this.executionThread = TaskThread.CRYPTO
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
@@ -238,6 +249,7 @@ internal class DefaultCryptoService @Inject constructor(
     override fun getDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>) {
         getDeviceInfoTask
                 .configureWith(GetDeviceInfoTask.Params(deviceId)) {
+                    this.executionThread = TaskThread.CRYPTO
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
@@ -300,14 +312,13 @@ internal class DefaultCryptoService @Inject constructor(
         runCatching {
             uploadDeviceKeys()
             oneTimeKeysUploader.maybeUploadOneTimeKeys()
-            outgoingRoomKeyRequestManager.start()
             keysBackupService.checkAndStartKeysBackup()
             if (isInitialSync) {
                 // refresh the devices list for each known room members
                 deviceListManager.invalidateAllDeviceLists()
                 deviceListManager.refreshOutdatedDeviceLists()
             } else {
-                incomingRoomKeyRequestManager.processReceivedRoomKeyRequests()
+                incomingGossipingRequestManager.processReceivedGossipingRequests()
             }
         }.fold(
                 {
@@ -327,8 +338,6 @@ internal class DefaultCryptoService @Inject constructor(
      */
     fun close() = runBlocking(coroutineDispatchers.crypto) {
         cryptoCoroutineScope.coroutineContext.cancelChildren(CancellationException("Closing crypto module"))
-
-        outgoingRoomKeyRequestManager.stop()
 
         olmDevice.release()
         cryptoStore.close()
@@ -368,7 +377,7 @@ internal class DefaultCryptoService @Inject constructor(
                     // Make sure we process to-device messages before generating new one-time-keys #2782
                     deviceListManager.refreshOutdatedDeviceLists()
                     oneTimeKeysUploader.maybeUploadOneTimeKeys()
-                    incomingRoomKeyRequestManager.processReceivedRoomKeyRequests()
+                    incomingGossipingRequestManager.processReceivedGossipingRequests()
                 }
             }
         }
@@ -627,7 +636,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     @Throws(MXCryptoError::class)
     override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
-       return internalDecryptEvent(event, timeline)
+        return internalDecryptEvent(event, timeline)
     }
 
     /**
@@ -688,13 +697,24 @@ internal class DefaultCryptoService @Inject constructor(
      * @param event the event
      */
     fun onToDeviceEvent(event: Event) {
+        // event have already been decrypted
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             when (event.getClearType()) {
                 EventType.ROOM_KEY, EventType.FORWARDED_ROOM_KEY -> {
+                    cryptoStore.saveGossipingEvent(event)
+                    // Keys are imported directly, not waiting for end of sync
                     onRoomKeyEvent(event)
                 }
+                EventType.REQUEST_SECRET,
                 EventType.ROOM_KEY_REQUEST                       -> {
-                    incomingRoomKeyRequestManager.onRoomKeyRequestEvent(event)
+                    // save audit trail
+                    cryptoStore.saveGossipingEvent(event)
+                    // Requests are stacked, and will be handled one by one at the end of the sync (onSyncComplete)
+                    incomingGossipingRequestManager.onGossipingRequestEvent(event)
+                }
+                EventType.SEND_SECRET                            -> {
+                    cryptoStore.saveGossipingEvent(event)
+                    onSecretSendReceived(event)
                 }
                 else                                             -> {
                     // ignore
@@ -710,16 +730,68 @@ internal class DefaultCryptoService @Inject constructor(
      */
     private fun onRoomKeyEvent(event: Event) {
         val roomKeyContent = event.getClearContent().toModel<RoomKeyContent>() ?: return
+        Timber.v("## GOSSIP onRoomKeyEvent() : type<${event.type}> , sessionId<${roomKeyContent.sessionId}>")
         if (roomKeyContent.roomId.isNullOrEmpty() || roomKeyContent.algorithm.isNullOrEmpty()) {
-            Timber.e("## onRoomKeyEvent() : missing fields")
+            Timber.e("## GOSSIP onRoomKeyEvent() : missing fields")
             return
         }
         val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(roomKeyContent.roomId, roomKeyContent.algorithm)
         if (alg == null) {
-            Timber.e("## onRoomKeyEvent() : Unable to handle keys for ${roomKeyContent.algorithm}")
+            Timber.e("## GOSSIP onRoomKeyEvent() : Unable to handle keys for ${roomKeyContent.algorithm}")
             return
         }
         alg.onRoomKeyEvent(event, keysBackupService)
+    }
+
+    private fun onSecretSendReceived(event: Event) {
+        Timber.i("## GOSSIP onSecretSend() : onSecretSendReceived ${event.content?.get("sender_key")}")
+        if (!event.isEncrypted()) {
+            // secret send messages must be encrypted
+            Timber.e("## GOSSIP onSecretSend() :Received unencrypted secret send event")
+            return
+        }
+
+        // Was that sent by us?
+        if (event.senderId != credentials.userId) {
+            Timber.e("## GOSSIP onSecretSend() : Ignore secret from other user ${event.senderId}")
+            return
+        }
+
+        val secretContent = event.getClearContent().toModel<SecretSendEventContent>() ?: return
+
+        val existingRequest = cryptoStore
+                .getOutgoingSecretKeyRequests().firstOrNull { it.requestId == secretContent.requestId }
+
+        if (existingRequest == null) {
+            Timber.i("## GOSSIP onSecretSend() : Ignore secret that was not requested: ${secretContent.requestId}")
+            return
+        }
+
+        if (!handleSDKLevelGossip(existingRequest.secretName, secretContent.secretValue)) {
+            // TODO Ask to application layer?
+            Timber.v("## onSecretSend() : secret not handled by SDK")
+        }
+    }
+
+    /**
+     * Returns true if handled by SDK, otherwise should be sent to application layer
+     */
+    private fun handleSDKLevelGossip(secretName: String?, secretValue: String): Boolean {
+        return when (secretName) {
+            SELF_SIGNING_KEY_SSSS_NAME -> {
+                crossSigningService.onSecretSSKGossip(secretValue)
+                true
+            }
+            USER_SIGNING_KEY_SSSS_NAME -> {
+                crossSigningService.onSecretUSKGossip(secretValue)
+                true
+            }
+            KEYBACKUP_SECRET_SSSS_NAME -> {
+                keysBackupService.onSecretKeyGossip(secretValue)
+                true
+            }
+            else                       -> false
+        }
     }
 
     /**
@@ -732,10 +804,11 @@ internal class DefaultCryptoService @Inject constructor(
             val params = LoadRoomMembersTask.Params(roomId)
             try {
                 loadRoomMembersTask.execute(params)
+            } catch (throwable: Throwable) {
+                Timber.e(throwable, "## onRoomEncryptionEvent ERROR FAILED TO SETUP CRYPTO ")
+            } finally {
                 val userIds = getRoomUserIds(roomId)
                 setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), true, userIds)
-            } catch (throwable: Throwable) {
-                Timber.e(throwable)
             }
         }
     }
@@ -997,14 +1070,14 @@ internal class DefaultCryptoService @Inject constructor(
         setRoomBlacklistUnverifiedDevices(roomId, false)
     }
 
-    // TODO Check if this method is still necessary
+// TODO Check if this method is still necessary
     /**
      * Cancel any earlier room key request
      *
      * @param requestBody requestBody
      */
     override fun cancelRoomKeyRequest(requestBody: RoomKeyRequestBody) {
-        outgoingRoomKeyRequestManager.cancelRoomKeyRequest(requestBody)
+        outgoingGossipingRequestManager.cancelRoomKeyRequest(requestBody)
     }
 
     /**
@@ -1013,38 +1086,54 @@ internal class DefaultCryptoService @Inject constructor(
      * @param event the event to decrypt again.
      */
     override fun reRequestRoomKeyForEvent(event: Event) {
-        val wireContent = event.content
-        if (wireContent == null) {
+        val wireContent = event.content.toModel<EncryptedEventContent>() ?: return Unit.also {
             Timber.e("## reRequestRoomKeyForEvent Failed to re-request key, null content")
-            return
         }
 
         val requestBody = RoomKeyRequestBody(
-                algorithm = wireContent["algorithm"]?.toString(),
+                algorithm = wireContent.algorithm,
                 roomId = event.roomId,
-                senderKey = wireContent["sender_key"]?.toString(),
-                sessionId = wireContent["session_id"]?.toString()
+                senderKey = wireContent.senderKey,
+                sessionId = wireContent.sessionId
         )
 
-        outgoingRoomKeyRequestManager.resendRoomKeyRequest(requestBody)
+        outgoingGossipingRequestManager.resendRoomKeyRequest(requestBody)
+    }
+
+    override fun requestRoomKeyForEvent(event: Event) {
+        val wireContent = event.content.toModel<EncryptedEventContent>() ?: return Unit.also {
+            Timber.e("## requestRoomKeyForEvent Failed to request key, null content eventId: ${event.eventId}")
+        }
+
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            if (!isStarted()) {
+                Timber.v("## requestRoomKeyForEvent() : wait after e2e init")
+                internalStart(false)
+            }
+            roomDecryptorProvider
+                    .getOrCreateRoomDecryptor(event.roomId, wireContent.algorithm)
+                    ?.requestKeysForEvent(event) ?: run {
+                Timber.v("## requestRoomKeyForEvent() : No room decryptor for roomId:${event.roomId} algorithm:${wireContent.algorithm}")
+            }
+        }
     }
 
     /**
-     * Add a RoomKeysRequestListener listener.
+     * Add a GossipingRequestListener listener.
      *
      * @param listener listener
      */
-    override fun addRoomKeysRequestListener(listener: RoomKeysRequestListener) {
-        incomingRoomKeyRequestManager.addRoomKeysRequestListener(listener)
+    override fun addRoomKeysRequestListener(listener: GossipingRequestListener) {
+        incomingGossipingRequestManager.addRoomKeysRequestListener(listener)
     }
 
     /**
-     * Add a RoomKeysRequestListener listener.
+     * Add a GossipingRequestListener listener.
      *
      * @param listener listener
      */
-    override fun removeRoomKeysRequestListener(listener: RoomKeysRequestListener) {
-        incomingRoomKeyRequestManager.removeRoomKeysRequestListener(listener)
+    override fun removeRoomKeysRequestListener(listener: GossipingRequestListener) {
+        incomingGossipingRequestManager.removeRoomKeysRequestListener(listener)
     }
 
     /**
@@ -1084,11 +1173,23 @@ internal class DefaultCryptoService @Inject constructor(
     override fun removeSessionListener(listener: NewSessionListener) {
         roomDecryptorProvider.removeSessionListener(listener)
     }
-    /* ==========================================================================================
-     * DEBUG INFO
-     * ========================================================================================== */
+/* ==========================================================================================
+ * DEBUG INFO
+ * ========================================================================================== */
 
     override fun toString(): String {
         return "DefaultCryptoService of " + credentials.userId + " (" + credentials.deviceId + ")"
+    }
+
+    override fun getOutgoingRoomKeyRequest(): List<OutgoingRoomKeyRequest> {
+        return cryptoStore.getOutgoingRoomKeyRequests()
+    }
+
+    override fun getIncomingRoomKeyRequest(): List<IncomingRoomKeyRequest> {
+        return cryptoStore.getIncomingRoomKeyRequests()
+    }
+
+    override fun getGossipingEventsTrail(): List<Event> {
+        return cryptoStore.getGossipingEventsTrail()
     }
 }

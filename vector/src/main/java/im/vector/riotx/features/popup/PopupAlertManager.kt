@@ -20,20 +20,23 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
+import android.widget.ImageView
 import com.tapadoo.alerter.Alerter
 import com.tapadoo.alerter.OnHideAlertListener
+import dagger.Lazy
 import im.vector.riotx.R
+import im.vector.riotx.features.home.AvatarRenderer
 import timber.log.Timber
 import java.lang.ref.WeakReference
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Responsible of displaying important popup alerts on top of the screen.
  * Alerts are stacked and will be displayed sequentially
  */
-object PopupAlertManager {
+@Singleton
+class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<AvatarRenderer>) {
 
     private var weakCurrentActivity: WeakReference<Activity>? = null
     private var currentAlerter: VectorAlert? = null
@@ -160,9 +163,19 @@ object PopupAlertManager {
         clearLightStatusBar()
 
         alert.weakCurrentActivity = WeakReference(activity)
-        Alerter.create(activity)
-                .setTitle(alert.title)
+        val alerter = if (alert is VerificationVectorAlert) Alerter.create(activity, R.layout.alerter_verification_layout)
+        else Alerter.create(activity)
+
+        alerter.setTitle(alert.title)
                 .setText(alert.description)
+                .also { al ->
+                    if (alert is VerificationVectorAlert) {
+                        val tvCustomView = al.getLayoutContainer()
+                        tvCustomView?.findViewById<ImageView>(R.id.ivUserAvatar)?.let { imageView ->
+                            alert.matrixItem?.let { avatarRenderer.get().render(it, imageView) }
+                        }
+                    }
+                }
                 .apply {
                     if (!animate) {
                         setEnterAnimation(R.anim.anim_alerter_no_anim)
@@ -225,38 +238,5 @@ object PopupAlertManager {
         Handler(Looper.getMainLooper()).postDelayed({
             displayNextIfPossible()
         }, 500)
-    }
-
-    /**
-     * Dataclass to describe an important alert with actions.
-     */
-    data class VectorAlert(val uid: String,
-                           val title: String,
-                           val description: String,
-                           @DrawableRes val iconId: Int?,
-                           val shouldBeDisplayedIn: ((Activity) -> Boolean)? = null) {
-
-        data class Button(val title: String, val action: Runnable, val autoClose: Boolean)
-
-        // will be set by manager, and accessible by actions at runtime
-        var weakCurrentActivity: WeakReference<Activity>? = null
-
-        val actions = ArrayList<Button>()
-
-        var contentAction: Runnable? = null
-        var dismissedAction: Runnable? = null
-
-        /** If this timestamp is after current time, this alert will be skipped */
-        var expirationTimestamp: Long? = null
-
-        fun addButton(title: String, action: Runnable, autoClose: Boolean = true) {
-            actions.add(Button(title, action, autoClose))
-        }
-
-        @ColorRes
-        var colorRes: Int? = null
-
-        @ColorInt
-        var colorInt: Int? = null
     }
 }

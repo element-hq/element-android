@@ -17,15 +17,17 @@ package im.vector.riotx.features.crypto.verification
 
 import android.content.Context
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.verification.PendingVerificationRequest
 import im.vector.matrix.android.api.session.crypto.verification.VerificationService
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
-import im.vector.matrix.android.api.session.crypto.verification.PendingVerificationRequest
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailArgs
 import im.vector.riotx.features.popup.PopupAlertManager
+import im.vector.riotx.features.popup.VerificationVectorAlert
 import im.vector.riotx.features.themes.ThemeUtils
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -34,7 +36,9 @@ import javax.inject.Singleton
  * Listens to the VerificationManager and add a new notification when an incoming request is detected.
  */
 @Singleton
-class IncomingVerificationRequestHandler @Inject constructor(private val context: Context) : VerificationService.Listener {
+class IncomingVerificationRequestHandler @Inject constructor(
+        private val context: Context,
+        private val popupAlertManager: PopupAlertManager) : VerificationService.Listener {
 
     private var session: Session? = null
 
@@ -58,7 +62,7 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
                 val name = session?.getUser(tx.otherUserId)?.displayName
                         ?: tx.otherUserId
 
-                val alert = PopupAlertManager.VectorAlert(
+                val alert = VerificationVectorAlert(
                         uid,
                         context.getString(R.string.sas_incoming_request_notif_title),
                         context.getString(R.string.sas_incoming_request_notif_content, name),
@@ -68,12 +72,14 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
                                 // TODO a bit too hugly :/
                                 activity.supportFragmentManager.findFragmentByTag(VerificationBottomSheet.WAITING_SELF_VERIF_TAG)?.let {
                                     false.also {
-                                        PopupAlertManager.cancelAlert(uid)
+                                        popupAlertManager.cancelAlert(uid)
                                     }
                                 } ?: true
                             } else true
                         })
                         .apply {
+                            matrixItem = session?.getUser(tx.otherUserId)?.toMatrixItem()
+
                             contentAction = Runnable {
                                 (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
                                     it.navigator.performDeviceVerification(it, tx.otherUserId, tx.transactionId)
@@ -99,11 +105,11 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
                             // 10mn expiration
                             expirationTimestamp = System.currentTimeMillis() + (10 * 60 * 1000L)
                         }
-                PopupAlertManager.postVectorAlert(alert)
+                popupAlertManager.postVectorAlert(alert)
             }
             is VerificationTxState.TerminalTxState -> {
                 // cancel related notification
-                PopupAlertManager.cancelAlert(uid)
+                popupAlertManager.cancelAlert(uid)
             }
             else                                   -> Unit
         }
@@ -115,7 +121,7 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
             val name = session?.getUser(pr.otherUserId)?.displayName
                     ?: pr.otherUserId
 
-            val alert = PopupAlertManager.VectorAlert(
+            val alert = VerificationVectorAlert(
                     uniqueIdForVerificationRequest(pr),
                     context.getString(R.string.sas_incoming_request_notif_title),
                     "$name(${pr.otherUserId})",
@@ -128,6 +134,8 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
                         } else true
                     })
                     .apply {
+                        matrixItem = session?.getUser(pr.otherUserId)?.toMatrixItem()
+
                         contentAction = Runnable {
                             (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
                                 val roomId = pr.roomId
@@ -148,14 +156,14 @@ class IncomingVerificationRequestHandler @Inject constructor(private val context
                         // 5mn expiration
                         expirationTimestamp = System.currentTimeMillis() + (5 * 60 * 1000L)
                     }
-            PopupAlertManager.postVectorAlert(alert)
+            popupAlertManager.postVectorAlert(alert)
         }
     }
 
     override fun verificationRequestUpdated(pr: PendingVerificationRequest) {
         // If an incoming request is readied (by another device?) we should discard the alert
         if (pr.isIncoming && (pr.isReady || pr.handledByOtherSession)) {
-            PopupAlertManager.cancelAlert(uniqueIdForVerificationRequest(pr))
+            popupAlertManager.cancelAlert(uniqueIdForVerificationRequest(pr))
         }
     }
 

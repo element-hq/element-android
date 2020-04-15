@@ -361,13 +361,13 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
 
             // Handle cross signing keys update
             val masterKey = response.masterKeys?.get(userId)?.toCryptoModel().also {
-                Timber.d("## CrossSigning : Got keys for $userId : MSK ${it?.unpaddedBase64PublicKey}")
+                Timber.v("## CrossSigning : Got keys for $userId : MSK ${it?.unpaddedBase64PublicKey}")
             }
             val selfSigningKey = response.selfSigningKeys?.get(userId)?.toCryptoModel()?.also {
-                Timber.d("## CrossSigning : Got keys for $userId : SSK ${it.unpaddedBase64PublicKey}")
+                Timber.v("## CrossSigning : Got keys for $userId : SSK ${it.unpaddedBase64PublicKey}")
             }
             val userSigningKey = response.userSigningKeys?.get(userId)?.toCryptoModel()?.also {
-                Timber.d("## CrossSigning : Got keys for $userId : USK ${it.unpaddedBase64PublicKey}")
+                Timber.v("## CrossSigning : Got keys for $userId : USK ${it.unpaddedBase64PublicKey}")
             }
             cryptoStore.storeUserCrossSigningKeys(
                     userId,

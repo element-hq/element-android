@@ -39,7 +39,9 @@ data class VerificationChooseMethodViewState(
         val otherCanShowQrCode: Boolean = false,
         val otherCanScanQrCode: Boolean = false,
         val qrCodeText: String? = null,
-        val SASModeAvailable: Boolean = false
+        val SASModeAvailable: Boolean = false,
+        val isMe: Boolean = false,
+        val canCrossSign: Boolean = false
 ) : MvRxState
 
 class VerificationChooseMethodViewModel @AssistedInject constructor(
@@ -59,6 +61,10 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
                 )
             }
         }
+    }
+
+    override fun verificationRequestCreated(pr: PendingVerificationRequest) {
+        verificationRequestUpdated(pr)
     }
 
     override fun verificationRequestUpdated(pr: PendingVerificationRequest) = withState { state ->
@@ -103,6 +109,8 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
             val qrCodeVerificationTransaction = verificationService.getExistingTransaction(args.otherUserId, args.verificationId ?: "")
 
             return VerificationChooseMethodViewState(otherUserId = args.otherUserId,
+                    isMe = session.myUserId == pvr?.otherUserId,
+                    canCrossSign = session.cryptoService().crossSigningService().canCrossSign(),
                     transactionId = args.verificationId ?: "",
                     otherCanShowQrCode = pvr?.otherCanShowQrCode().orFalse(),
                     otherCanScanQrCode = pvr?.otherCanScanQrCode().orFalse(),

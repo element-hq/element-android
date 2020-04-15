@@ -38,6 +38,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.api.session.sync.SyncState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -265,8 +266,26 @@ class CommonTestHelper(context: Context) {
      * @param latch
      * @throws InterruptedException
      */
-    fun await(latch: CountDownLatch) {
-        assertTrue(latch.await(TestConstants.timeOutMillis, TimeUnit.MILLISECONDS))
+    fun await(latch: CountDownLatch, timout: Long? = TestConstants.timeOutMillis) {
+        assertTrue(latch.await(timout ?: TestConstants.timeOutMillis, TimeUnit.MILLISECONDS))
+    }
+
+    fun retryPeriodicallyWithLatch(latch: CountDownLatch, condition: (() -> Boolean)) {
+        GlobalScope.launch {
+            while (true) {
+                delay(1000)
+                if (condition()) {
+                    latch.countDown()
+                    return@launch
+                }
+            }
+        }
+    }
+
+    fun waitWithLatch(timout: Long? = TestConstants.timeOutMillis, block: (CountDownLatch) -> Unit) {
+        val latch = CountDownLatch(1)
+        block(latch)
+        await(latch, timout)
     }
 
     // Transform a method with a MatrixCallback to a synchronous method

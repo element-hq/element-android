@@ -34,7 +34,6 @@ import im.vector.matrix.android.common.assertDictEquals
 import im.vector.matrix.android.common.assertListEquals
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import im.vector.matrix.android.internal.crypto.MegolmSessionData
-import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.keysbackup.model.KeysBackupVersionTrust
 import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
@@ -326,46 +325,46 @@ class KeysBackupTest : InstrumentedTest {
      * - Restore must be successful
      * - *** There must be no more pending key share requests
      */
-    @Test
-    fun restoreKeysBackupAndKeyShareRequestTest() {
-        fail("Check with Valere for this test. I think we do not send key share request")
-
-        val testData = createKeysBackupScenarioWithPassword(null)
-
-        // - Check the SDK sent key share requests
-        val cryptoStore2 = (testData.aliceSession2.cryptoService().keysBackupService() as DefaultKeysBackupService).store
-        val unsentRequest = cryptoStore2
-                .getOutgoingRoomKeyRequestByState(setOf(OutgoingRoomKeyRequest.RequestState.UNSENT))
-        val sentRequest = cryptoStore2
-                .getOutgoingRoomKeyRequestByState(setOf(OutgoingRoomKeyRequest.RequestState.SENT))
-
-        // Request is either sent or unsent
-        assertTrue(unsentRequest != null || sentRequest != null)
-
-        // - Restore the e2e backup from the homeserver
-        val importRoomKeysResult = mTestHelper.doSync<ImportRoomKeysResult> {
-            testData.aliceSession2.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
-                    testData.prepareKeysBackupDataResult.megolmBackupCreationInfo.recoveryKey,
-                    null,
-                    null,
-                    null,
-                    it
-            )
-        }
-
-        checkRestoreSuccess(testData, importRoomKeysResult.totalNumberOfKeys, importRoomKeysResult.successfullyNumberOfImportedKeys)
-
-        // - There must be no more pending key share requests
-        val unsentRequestAfterRestoration = cryptoStore2
-                .getOutgoingRoomKeyRequestByState(setOf(OutgoingRoomKeyRequest.RequestState.UNSENT))
-        val sentRequestAfterRestoration = cryptoStore2
-                .getOutgoingRoomKeyRequestByState(setOf(OutgoingRoomKeyRequest.RequestState.SENT))
-
-        // Request is either sent or unsent
-        assertTrue(unsentRequestAfterRestoration == null && sentRequestAfterRestoration == null)
-
-        testData.cleanUp(mTestHelper)
-    }
+//    @Test
+//    fun restoreKeysBackupAndKeyShareRequestTest() {
+//        fail("Check with Valere for this test. I think we do not send key share request")
+//
+//        val testData = createKeysBackupScenarioWithPassword(null)
+//
+//        // - Check the SDK sent key share requests
+//        val cryptoStore2 = (testData.aliceSession2.cryptoService().keysBackupService() as DefaultKeysBackupService).store
+//        val unsentRequest = cryptoStore2
+//                .getOutgoingRoomKeyRequestByState(setOf(ShareRequestState.UNSENT))
+//        val sentRequest = cryptoStore2
+//                .getOutgoingRoomKeyRequestByState(setOf(ShareRequestState.SENT))
+//
+//        // Request is either sent or unsent
+//        assertTrue(unsentRequest != null || sentRequest != null)
+//
+//        // - Restore the e2e backup from the homeserver
+//        val importRoomKeysResult = mTestHelper.doSync<ImportRoomKeysResult> {
+//            testData.aliceSession2.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
+//                    testData.prepareKeysBackupDataResult.megolmBackupCreationInfo.recoveryKey,
+//                    null,
+//                    null,
+//                    null,
+//                    it
+//            )
+//        }
+//
+//        checkRestoreSuccess(testData, importRoomKeysResult.totalNumberOfKeys, importRoomKeysResult.successfullyNumberOfImportedKeys)
+//
+//        // - There must be no more pending key share requests
+//        val unsentRequestAfterRestoration = cryptoStore2
+//                .getOutgoingRoomKeyRequestByState(setOf(ShareRequestState.UNSENT))
+//        val sentRequestAfterRestoration = cryptoStore2
+//                .getOutgoingRoomKeyRequestByState(setOf(ShareRequestState.SENT))
+//
+//        // Request is either sent or unsent
+//        assertTrue(unsentRequestAfterRestoration == null && sentRequestAfterRestoration == null)
+//
+//        testData.cleanUp(mTestHelper)
+//    }
 
     /**
      * - Do an e2e backup to the homeserver with a recovery key

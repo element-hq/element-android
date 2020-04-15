@@ -202,4 +202,12 @@
     <string name="notice_room_canonical_alias_set">%1$s a défini %2$s comme adresse principale pour ce salon.</string>
     <string name="notice_room_canonical_alias_unset">%1$s a supprimé l’adresse principale de ce salon.</string>
 
+    <string name="notice_room_guest_access_can_join">%1$s a autorisé les visiteurs à rejoindre le salon.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s a empêché les visiteurs de rejoindre le salon.</string>
+
+    <string name="notice_end_to_end_ok">%1$s a activé le chiffrement de bout en bout.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s a activé le chiffrement de bout en bout (algorithme %2$s inconnu).</string>
+
+    <string name="key_verification_request_fallback_message">%s demande à vérifier votre clé, mais votre client ne supporte pas la vérification de clés dans les discussions. Vous devrez utiliser l’ancienne vérification de clés pour vérifier les clés.</string>
+
 </resources>

@@ -193,6 +193,7 @@ internal class DefaultSession @Inject constructor(
         stopAnyBackgroundSync()
         liveEntityObservers.forEach { it.cancelProcess() }
         cacheService.get().clearCache(callback)
+        workManagerProvider.cancelAllWorks()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -230,7 +230,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
     private fun decryptIfNeeded(event: Event) {
         if (event.mxDecryptionResult == null) {
             try {
-                val result = cryptoService.decryptEvent(event, event.roomId ?: "")
+                val result = cryptoService.decryptEvent(event, "")
                 event.mxDecryptionResult = OlmDecryptionResult(
                         payload = result.clearEvent,
                         senderKey = result.senderCurve25519Key,
@@ -238,7 +238,7 @@ internal class DefaultEventRelationsAggregationTask @Inject constructor(
                         forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
                 )
             } catch (e: MXCryptoError) {
-                Timber.w("Failed to decrypt e2e replace")
+                Timber.v("Failed to decrypt e2e replace")
                 // TODO -> we should keep track of this and retry, or aggregation will be broken
             }
         }

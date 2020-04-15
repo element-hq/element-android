@@ -30,7 +30,7 @@ interface Navigator {
 
     fun performDeviceVerification(context: Context, otherUserId: String, sasTransactionId: String)
 
-    fun requestSessionVerification(context: Context)
+    fun requestSessionVerification(context: Context, otherSessionId: String)
 
     fun waitSessionVerification(context: Context)
 

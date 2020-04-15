@@ -89,6 +89,10 @@ class VerificationChooseMethodFragment @Inject constructor(
         }
     }
 
+    override fun onClickOnWasNotMe() {
+        sharedViewModel.itWasNotMe()
+    }
+
     private fun doOpenQRCodeScanner() {
         QrCodeScannerActivity.startForResult(this)
     }

@@ -18,7 +18,7 @@ package im.vector.matrix.android.internal.crypto.algorithms.megolm
 
 import im.vector.matrix.android.internal.crypto.DeviceListManager
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
-import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequestManager
+import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestManager
 import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
@@ -32,7 +32,7 @@ internal class MXMegolmDecryptionFactory @Inject constructor(
         @UserId private val userId: String,
         private val olmDevice: MXOlmDevice,
         private val deviceListManager: DeviceListManager,
-        private val outgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
+        private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
         private val messageEncrypter: MessageEncrypter,
         private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
         private val cryptoStore: IMXCryptoStore,
@@ -46,7 +46,7 @@ internal class MXMegolmDecryptionFactory @Inject constructor(
                 userId,
                 olmDevice,
                 deviceListManager,
-                outgoingRoomKeyRequestManager,
+                outgoingGossipingRequestManager,
                 messageEncrypter,
                 ensureOlmSessionsForDevicesAction,
                 cryptoStore,

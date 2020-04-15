@@ -15,7 +15,6 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
-import android.os.Build
 import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.verification.CancelCode
@@ -24,6 +23,8 @@ import im.vector.matrix.android.api.session.crypto.verification.SasMode
 import im.vector.matrix.android.api.session.crypto.verification.SasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.internal.crypto.IncomingGossipingRequestManager
+import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestManager
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.model.MXKey
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
@@ -42,6 +43,8 @@ internal abstract class SASDefaultVerificationTransaction(
         open val deviceId: String?,
         private val cryptoStore: IMXCryptoStore,
         crossSigningService: CrossSigningService,
+        outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
+        incomingGossipingRequestManager: IncomingGossipingRequestManager,
         private val deviceFingerprint: String,
         transactionId: String,
         otherUserId: String,
@@ -50,6 +53,8 @@ internal abstract class SASDefaultVerificationTransaction(
 ) : DefaultVerificationTransaction(
         setDeviceVerificationAction,
         crossSigningService,
+        outgoingGossipingRequestManager,
+        incomingGossipingRequestManager,
         userId,
         transactionId,
         otherUserId,
@@ -68,13 +73,9 @@ internal abstract class SASDefaultVerificationTransaction(
         // ordered by preferred order
         val KNOWN_MACS = listOf(SAS_MAC_SHA256, SAS_MAC_SHA256_LONGKDF)
 
-        // older devices have limited support of emoji, so reply with decimal
-        val KNOWN_SHORT_CODES =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    listOf(SasMode.EMOJI, SasMode.DECIMAL)
-                } else {
-                    listOf(SasMode.DECIMAL)
-                }
+        // older devices have limited support of emoji but SDK offers images for the 64 verification emojis
+        // so always send that we support EMOJI
+        val KNOWN_SHORT_CODES = listOf(SasMode.EMOJI, SasMode.DECIMAL)
     }
 
     override var state: VerificationTxState = VerificationTxState.None

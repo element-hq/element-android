@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session.crypto.verification
 
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.LocalEcho
 
 /**
@@ -58,6 +59,8 @@ interface VerificationService {
                                     otherUserId: String,
                                     roomId: String,
                                     localId: String? = LocalEcho.createLocalEchoId()): PendingVerificationRequest
+
+    fun cancelVerificationRequest(request: PendingVerificationRequest)
 
     /**
      * Request a key verification from another user using toDevice events.
@@ -136,4 +139,6 @@ interface VerificationService {
             return age in tooInThePast..tooInTheFuture
         }
     }
+
+    fun onPotentiallyInterestingEventRoomFailToDecrypt(event: Event)
 }

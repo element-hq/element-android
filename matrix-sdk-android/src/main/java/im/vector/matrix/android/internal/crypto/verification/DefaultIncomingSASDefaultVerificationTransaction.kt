@@ -23,6 +23,8 @@ import im.vector.matrix.android.api.session.crypto.verification.IncomingSasVerif
 import im.vector.matrix.android.api.session.crypto.verification.SasMode
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.internal.crypto.IncomingGossipingRequestManager
+import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestManager
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
@@ -33,6 +35,8 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
         override val deviceId: String?,
         private val cryptoStore: IMXCryptoStore,
         crossSigningService: CrossSigningService,
+        outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
+        incomingGossipingRequestManager: IncomingGossipingRequestManager,
         deviceFingerprint: String,
         transactionId: String,
         otherUserID: String,
@@ -43,6 +47,8 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
         deviceId,
         cryptoStore,
         crossSigningService,
+        outgoingGossipingRequestManager,
+        incomingGossipingRequestManager,
         deviceFingerprint,
         transactionId,
         otherUserID,

@@ -35,12 +35,24 @@ import java.util.logging.Logger
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private const val LOG_SIZE_BYTES = 20 * 1024 * 1024 // 20MB
-
-private const val LOG_ROTATION_COUNT = 3
+private const val SIZE_20MB = 20 * 1024 * 1024
+private const val SIZE_50MB = 50 * 1024 * 1024
 
 @Singleton
 class VectorFileLogger @Inject constructor(val context: Context, private val vectorPreferences: VectorPreferences) : Timber.DebugTree() {
+
+    private val maxLogSizeByte: Int
+    private val logRotationCount: Int
+
+    init {
+        if (vectorPreferences.labAllowedExtendedLogging()) {
+            maxLogSizeByte = SIZE_50MB
+            logRotationCount = 15
+        } else {
+            maxLogSizeByte = SIZE_20MB
+            logRotationCount = 7
+        }
+    }
 
     private val sLogger = Logger.getLogger("im.vector.riotx")
     private var sFileHandler: FileHandler? = null
@@ -61,11 +73,11 @@ class VectorFileLogger @Inject constructor(val context: Context, private val vec
         setLogDirectory(File(logsDirectoryFile))
         try {
             if (sCacheDirectory != null) {
-                sFileHandler = FileHandler(sCacheDirectory!!.absolutePath + "/" + sFileName + ".%g.txt", LOG_SIZE_BYTES, LOG_ROTATION_COUNT)
+                sFileHandler = FileHandler(sCacheDirectory!!.absolutePath + "/" + sFileName + ".%g.txt", maxLogSizeByte, logRotationCount)
                 sFileHandler?.formatter = LogFormatter()
                 sLogger.useParentHandlers = false
                 sLogger.level = Level.ALL
-                sLogger.addHandler(sFileHandler)
+                sFileHandler?.let { sLogger.addHandler(it) }
             }
         } catch (e: Throwable) {
             Timber.e(e, "Failed to initialize FileLogger")
@@ -117,7 +129,7 @@ class VectorFileLogger @Inject constructor(val context: Context, private val vec
                 sFileHandler!!.flush()
                 val absPath = sCacheDirectory?.absolutePath ?: return emptyList()
 
-                for (i in 0..LOG_ROTATION_COUNT) {
+                for (i in 0..logRotationCount) {
                     val filepath = "$absPath/$sFileName.$i.txt"
                     val file = File(filepath)
                     if (file.exists()) {
@@ -162,7 +174,9 @@ class VectorFileLogger @Inject constructor(val context: Context, private val vec
 
         companion object {
             private val LINE_SEPARATOR = System.getProperty("line.separator") ?: "\n"
-            private val DATE_FORMAT = SimpleDateFormat("MM-dd HH:mm:ss.SSS", Locale.US)
+//            private val DATE_FORMAT = SimpleDateFormat("MM-dd HH:mm:ss.SSS", Locale.US)
+            private val DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss*SSSZZZZ", Locale.US)
+
             private var mIsTimeZoneSet = false
         }
     }

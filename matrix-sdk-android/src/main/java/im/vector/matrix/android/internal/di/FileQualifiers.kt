@@ -29,3 +29,7 @@ annotation class SessionCacheDirectory
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 annotation class CacheDirectory
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ExternalFilesDirectory

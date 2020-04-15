@@ -6,19 +6,12 @@
     <!-- Sections has been created to avoid merge conflict. Let's see if it's better -->
 
     <!-- BEGIN Strings added by Valere -->
-
+    <string name="room_message_placeholder">Message…</string>
     <!-- END Strings added by Valere -->
 
 
     <!-- BEGIN Strings added by Benoit -->
-    <string name="settings_notification_configuration">Notifications configuration</string>
-    <string name="settings_messages_at_room">Messages containing @room</string>
-    <string name="settings_messages_in_e2e_one_to_one">Encrypted messages in one-to-one chats</string>
-    <string name="settings_messages_in_e2e_group_chat">Encrypted messages in group chats</string>
-    <string name="settings_when_rooms_are_upgraded">When rooms are upgraded</string>
-    <string name="settings_troubleshoot_title">Troubleshoot</string>
-    <string name="settings_notification_advanced_summary_riotx">Set notification importance by event</string>
-    <string name="refresh">Refresh</string>
+
     <!-- END Strings added by Benoit -->
 
 
@@ -33,8 +26,7 @@
 
 
     <!-- BEGIN Strings added by Others -->
-    <string name="command_description_plain">Sends a message as plain text, without interpreting it as markdown</string>
+
     <!-- END Strings added by Others -->
 
-    <string name="auth_invalid_login_param_space_in_password">Incorrect username and/or password. The entered password starts or ends with spaces, please check it.</string>
 </resources>

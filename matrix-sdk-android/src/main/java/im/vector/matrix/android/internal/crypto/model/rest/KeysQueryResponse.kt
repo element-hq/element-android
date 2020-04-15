@@ -28,7 +28,7 @@ import com.squareup.moshi.JsonClass
  * The user_signing_keys property will only be included when a user requests their own keys.
  */
 @JsonClass(generateAdapter = true)
-internal data class KeysQueryResponse(
+internal data class     KeysQueryResponse(
         /**
          * The device keys per devices per users.
          * Map from userId to map from deviceId to MXDeviceInfo

@@ -26,9 +26,18 @@ import im.vector.riotx.features.attachments.preview.AttachmentsPreviewFragment
 import im.vector.riotx.features.createdirect.CreateDirectRoomDirectoryUsersFragment
 import im.vector.riotx.features.createdirect.CreateDirectRoomKnownUsersFragment
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
+import im.vector.riotx.features.crypto.recover.BootstrapAccountPasswordFragment
+import im.vector.riotx.features.crypto.recover.BootstrapConclusionFragment
+import im.vector.riotx.features.crypto.recover.BootstrapConfirmPassphraseFragment
+import im.vector.riotx.features.crypto.recover.BootstrapEnterPassphraseFragment
+import im.vector.riotx.features.crypto.recover.BootstrapSaveRecoveryKeyFragment
+import im.vector.riotx.features.crypto.recover.BootstrapWaitingFragment
+import im.vector.riotx.features.crypto.verification.cancel.VerificationCancelFragment
+import im.vector.riotx.features.crypto.verification.cancel.VerificationNotMeFragment
 import im.vector.riotx.features.crypto.verification.choose.VerificationChooseMethodFragment
 import im.vector.riotx.features.crypto.verification.conclusion.VerificationConclusionFragment
 import im.vector.riotx.features.crypto.verification.emoji.VerificationEmojiCodeFragment
+import im.vector.riotx.features.crypto.verification.qrconfirmation.VerificationQRWaitingFragment
 import im.vector.riotx.features.crypto.verification.qrconfirmation.VerificationQrScannedByOtherFragment
 import im.vector.riotx.features.crypto.verification.request.VerificationRequestFragment
 import im.vector.riotx.features.grouplist.GroupListFragment
@@ -74,6 +83,10 @@ import im.vector.riotx.features.settings.VectorSettingsSecurityPrivacyFragment
 import im.vector.riotx.features.settings.crosssigning.CrossSigningSettingsFragment
 import im.vector.riotx.features.settings.devices.VectorSettingsDevicesFragment
 import im.vector.riotx.features.settings.devtools.AccountDataFragment
+import im.vector.riotx.features.settings.devtools.GossipingEventsPaperTrailFragment
+import im.vector.riotx.features.settings.devtools.IncomingKeyRequestListFragment
+import im.vector.riotx.features.settings.devtools.KeyRequestsFragment
+import im.vector.riotx.features.settings.devtools.OutgoingKeyRequestListFragment
 import im.vector.riotx.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
 import im.vector.riotx.features.share.IncomingShareFragment
@@ -329,8 +342,23 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
+    @FragmentKey(VerificationQRWaitingFragment::class)
+    fun bindVerificationQRWaitingFragment(fragment: VerificationQRWaitingFragment): Fragment
+
+    @Binds
+    @IntoMap
     @FragmentKey(VerificationConclusionFragment::class)
     fun bindVerificationConclusionFragment(fragment: VerificationConclusionFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(VerificationCancelFragment::class)
+    fun bindVerificationCancelFragment(fragment: VerificationCancelFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(VerificationNotMeFragment::class)
+    fun bindVerificationNotMeFragment(fragment: VerificationNotMeFragment): Fragment
 
     @Binds
     @IntoMap
@@ -366,4 +394,54 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(AccountDataFragment::class)
     fun bindAccountDataFragment(fragment: AccountDataFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(OutgoingKeyRequestListFragment::class)
+    fun bindOutgoingKeyRequestListFragment(fragment: OutgoingKeyRequestListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(IncomingKeyRequestListFragment::class)
+    fun bindIncomingKeyRequestListFragment(fragment: IncomingKeyRequestListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(KeyRequestsFragment::class)
+    fun bindKeyRequestsFragment(fragment: KeyRequestsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(GossipingEventsPaperTrailFragment::class)
+    fun bindGossipingEventsPaperTrailFragment(fragment: GossipingEventsPaperTrailFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(BootstrapEnterPassphraseFragment::class)
+    fun bindBootstrapEnterPassphraseFragment(fragment: BootstrapEnterPassphraseFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(BootstrapConfirmPassphraseFragment::class)
+    fun bindBootstrapConfirmPassphraseFragment(fragment: BootstrapConfirmPassphraseFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(BootstrapWaitingFragment::class)
+    fun bindBootstrapWaitingFragment(fragment: BootstrapWaitingFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(BootstrapSaveRecoveryKeyFragment::class)
+    fun bindBootstrapSaveRecoveryKeyFragment(fragment: BootstrapSaveRecoveryKeyFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(BootstrapConclusionFragment::class)
+    fun bindBootstrapConclusionFragment(fragment: BootstrapConclusionFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(BootstrapAccountPasswordFragment::class)
+    fun bindBootstrapAccountPasswordFragment(fragment: BootstrapAccountPasswordFragment): Fragment
 }

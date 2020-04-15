@@ -20,7 +20,7 @@ import androidx.annotation.WorkerThread
 import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.MegolmSessionData
-import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequestManager
+import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestManager
 import im.vector.matrix.android.internal.crypto.RoomDecryptorProvider
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
@@ -30,7 +30,7 @@ import javax.inject.Inject
 
 internal class MegolmSessionDataImporter @Inject constructor(private val olmDevice: MXOlmDevice,
                                                              private val roomDecryptorProvider: RoomDecryptorProvider,
-                                                             private val outgoingRoomKeyRequestManager: OutgoingRoomKeyRequestManager,
+                                                             private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
                                                              private val cryptoStore: IMXCryptoStore) {
 
     /**
@@ -73,7 +73,7 @@ internal class MegolmSessionDataImporter @Inject constructor(private val olmDevi
                             sessionId = megolmSessionData.sessionId
                     )
 
-                    outgoingRoomKeyRequestManager.cancelRoomKeyRequest(roomKeyRequestBody)
+                    outgoingGossipingRequestManager.cancelRoomKeyRequest(roomKeyRequestBody)
 
                     // Have another go at decrypting events sent with this session
                     decrypting.onNewSession(megolmSessionData.senderKey!!, sessionId!!)

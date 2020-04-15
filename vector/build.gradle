@@ -104,13 +104,13 @@ ext.abiVersionCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86": 3, "x86_64": 4].
 def buildNumber = System.env.BUILDKITE_BUILD_NUMBER as Integer ?: 0
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "im.vector.riotx"
         // Set to API 19 because motionLayout is min API 18.
         // In the future we may consider using an alternative of MotionLayout to support API 16. But for security reason, maybe not.
         minSdkVersion 19
-        targetSdkVersion 28
+        targetSdkVersion 29
         multiDexEnabled true
 
         // `develop` branch will have version code from timestamp, to ensure each build from CI has a incremented versionCode.
@@ -249,10 +249,12 @@ dependencies {
     def moshi_version = '1.8.0'
     def daggerVersion = '2.25.4'
     def autofill_version = "1.0.0"
+    def work_version = '2.3.3'
 
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-rx")
     implementation project(":diff-match-patch")
+    implementation project(":multipicker")
     implementation 'com.android.support:multidex:1.0.3'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -296,7 +298,7 @@ dependencies {
     implementation 'com.airbnb.android:mvrx:1.3.0'
 
     // Work
-    implementation "androidx.work:work-runtime-ktx:2.3.3"
+    implementation "androidx.work:work-runtime-ktx:$work_version"
 
     // Paging
     implementation "androidx.paging:paging-runtime-ktx:2.1.1"
@@ -322,7 +324,7 @@ dependencies {
     implementation 'com.nulab-inc:zxcvbn:1.2.7'
 
     //Alerter
-    implementation 'com.tapadoo.android:alerter:4.0.3'
+    implementation 'com.tapadoo.android:alerter:5.1.2'
 
     implementation 'com.otaliastudios:autocomplete:1.1.0'
 
@@ -346,9 +348,6 @@ dependencies {
     // Badge for compatibility
     implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
 
-    // File picker
-    implementation 'com.kbeanie:multipicker:1.6@aar'
-
     // DI
     implementation "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
@@ -369,7 +368,7 @@ dependencies {
 
     implementation "androidx.emoji:emoji-appcompat:1.0.0"
 
-    implementation 'com.github.BillCarsonFr:JsonViewer:0.4'
+    implementation 'com.github.BillCarsonFr:JsonViewer:0.5'
 
     // QR-code
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170

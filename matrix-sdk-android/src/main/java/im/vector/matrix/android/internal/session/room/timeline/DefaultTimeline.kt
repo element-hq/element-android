@@ -171,10 +171,13 @@ internal class DefaultTimeline(
                 val realm = Realm.getInstance(realmConfiguration)
                 backgroundRealm.set(realm)
 
-                roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()?.also {
-                    it.sendingTimelineEvents.addChangeListener { _ ->
-                        postSnapshot()
+                roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
+                roomEntity?.sendingTimelineEvents?.addChangeListener { events ->
+                    // Remove in memory as soon as they are known by database
+                    events.forEach { te ->
+                        inMemorySendingEvents.removeAll { te.eventId == it.eventId }
                     }
+                    postSnapshot()
                 }
 
                 nonFilteredEvents = buildEventQuery(realm).sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findAll()

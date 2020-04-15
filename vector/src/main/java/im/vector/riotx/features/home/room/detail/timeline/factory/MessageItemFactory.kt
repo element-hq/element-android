@@ -440,11 +440,11 @@ class MessageItemFactory @Inject constructor(
                 Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
 
         spannable.setSpan(object : ClickableSpan() {
-            override fun onClick(widget: View?) {
+            override fun onClick(widget: View) {
                 callback?.onEditedDecorationClicked(informationData)
             }
 
-            override fun updateDrawState(ds: TextPaint?) {
+            override fun updateDrawState(ds: TextPaint) {
                 // nop
             }
         },

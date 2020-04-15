@@ -62,7 +62,7 @@ class DeviceVerificationInfoBottomSheet : VectorBaseBottomSheetDialogFragment(),
         super.onActivityCreated(savedInstanceState)
         recyclerView.configureWith(
                 epoxyController,
-                showDivider = true,
+                showDivider = false,
                 hasFixedSize = false)
         epoxyController.callback = this
         bottomSheetTitle.isVisible = false

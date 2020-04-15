@@ -20,12 +20,13 @@ import im.vector.matrix.android.internal.crypto.store.db.model.CrossSigningInfoE
 import im.vector.matrix.android.internal.crypto.store.db.model.CryptoMetadataEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.CryptoRoomEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.DeviceInfoEntity
-import im.vector.matrix.android.internal.crypto.store.db.model.IncomingRoomKeyRequestEntity
+import im.vector.matrix.android.internal.crypto.store.db.model.GossipingEventEntity
+import im.vector.matrix.android.internal.crypto.store.db.model.IncomingGossipingRequestEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.KeyInfoEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.OlmSessionEntity
-import im.vector.matrix.android.internal.crypto.store.db.model.OutgoingRoomKeyRequestEntity
+import im.vector.matrix.android.internal.crypto.store.db.model.OutgoingGossipingRequestEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.TrustLevelEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.UserEntity
 import io.realm.annotations.RealmModule
@@ -38,14 +39,15 @@ import io.realm.annotations.RealmModule
             CryptoMetadataEntity::class,
             CryptoRoomEntity::class,
             DeviceInfoEntity::class,
-            IncomingRoomKeyRequestEntity::class,
             KeysBackupDataEntity::class,
             OlmInboundGroupSessionEntity::class,
             OlmSessionEntity::class,
-            OutgoingRoomKeyRequestEntity::class,
             UserEntity::class,
             KeyInfoEntity::class,
             CrossSigningInfoEntity::class,
-            TrustLevelEntity::class
+            TrustLevelEntity::class,
+            GossipingEventEntity::class,
+            IncomingGossipingRequestEntity::class,
+            OutgoingGossipingRequestEntity::class
         ])
 internal class RealmCryptoStoreModule

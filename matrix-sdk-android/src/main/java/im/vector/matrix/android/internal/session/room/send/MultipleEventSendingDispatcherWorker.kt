@@ -23,6 +23,7 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEventWorkCommon
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
@@ -49,6 +50,7 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
 
     @Inject lateinit var workManagerProvider: WorkManagerProvider
     @Inject lateinit var timelineSendEventWorkCommon: TimelineSendEventWorkCommon
+    @Inject lateinit var localEchoUpdater: LocalEchoUpdater
 
     override suspend fun doWork(): Result {
         Timber.v("Start dispatch sending multiple event work")
@@ -57,13 +59,16 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
                     Timber.e("Work cancelled due to input error from parent")
                 }
 
-        if (params.lastFailureMessage != null) {
-            // Transmit the error
-            return Result.success(inputData)
-        }
-
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
+
+        if (params.lastFailureMessage != null) {
+            params.events.forEach { event ->
+                event.eventId?.let { localEchoUpdater.updateSendState(it, SendState.UNDELIVERED) }
+            }
+            // Transmit the error if needed?
+            return Result.success(inputData)
+        }
 
         // Create a work for every event
         params.events.forEach { event ->

@@ -114,7 +114,7 @@ internal class TimelineEventDecryptor @Inject constructor(
             Timber.v("Successfully decrypted event $eventId")
             eventEntity.setDecryptionResult(result)
         } catch (e: MXCryptoError) {
-            Timber.w(e, "Failed to decrypt event $eventId")
+            Timber.v(e, "Failed to decrypt event $eventId")
             if (e is MXCryptoError.Base && e.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
                 // Keep track of unknown sessions to automatically try to decrypt on new session
                 eventEntity.decryptionErrorCode = e.errorType.name
@@ -128,7 +128,7 @@ internal class TimelineEventDecryptor @Inject constructor(
                 }
             }
         } catch (t: Throwable) {
-            Timber.e(t, "Failed to decrypt event $eventId")
+            Timber.e("Failed to decrypt event $eventId, ${t.localizedMessage}")
         } finally {
             synchronized(existingRequests) {
                 existingRequests.remove(request)
