@@ -333,7 +333,7 @@ class EllipsizingTextView @JvmOverloads constructor(context: Context, attrs: Att
          * @param workingText text to strip end punctuation from
          * @return Text without end punctuation.
          */
-        fun stripEndPunctuation(workingText: CharSequence?): String {
+        fun stripEndPunctuation(workingText: CharSequence): String {
             return mEndPunctPattern!!.matcher(workingText).replaceFirst("")
         }
     }

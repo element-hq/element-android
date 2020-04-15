@@ -171,7 +171,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
         MultiDex.install(this)
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration?) {
+    override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         vectorConfiguration.onConfigurationChanged()
     }

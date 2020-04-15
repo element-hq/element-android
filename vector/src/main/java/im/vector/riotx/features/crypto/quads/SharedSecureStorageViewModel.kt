@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.crypto.quads
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
@@ -34,9 +35,9 @@ import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.platform.WaitingViewData
 import im.vector.riotx.core.resources.StringProvider
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.io.ByteArrayOutputStream
 
 data class SharedSecureStorageViewState(
@@ -77,7 +78,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
 
     private fun handleSubmitPassphrase(action: SharedSecureStorageAction.SubmitPassphrase) {
         val decryptedSecretMap = HashMap<String, String>()
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             runCatching {
                 _viewEvents.post(SharedSecureStorageViewEvent.ShowModalLoading)
                 val passphrase = action.passphrase
@@ -116,14 +117,18 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
 
                 withContext(Dispatchers.IO) {
                     args.requestedSecrets.forEach {
-                        val res = awaitCallback<String> { callback ->
-                            session.sharedSecretStorageService.getSecret(
-                                    name = it,
-                                    keyId = keyInfo.id,
-                                    secretKey = keySpec,
-                                    callback = callback)
+                        if (session.getAccountDataEvent(it) != null) {
+                            val res = awaitCallback<String> { callback ->
+                                session.sharedSecretStorageService.getSecret(
+                                        name = it,
+                                        keyId = keyInfo.id,
+                                        secretKey = keySpec,
+                                        callback = callback)
+                            }
+                            decryptedSecretMap[it] = res
+                        } else {
+                            Timber.w("## Cannot find secret $it in SSSS, skip")
                         }
-                        decryptedSecretMap[it] = res
                     }
                 }
             }.fold({
@@ -158,8 +163,8 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: SharedSecureStorageViewState): SharedSecureStorageViewModel? {
             val activity: SharedSecureStorageActivity = viewModelContext.activity()
-            val args: SharedSecureStorageActivity.Args = activity.intent.getParcelableExtra(MvRx.KEY_ARG)
-            return activity.viewModelFactory.create(state, args)
+            val args: SharedSecureStorageActivity.Args? = activity.intent.getParcelableExtra(MvRx.KEY_ARG)
+            return args?.let { activity.viewModelFactory.create(state, it) }
         }
     }
 }

@@ -201,4 +201,12 @@
     <string name="notice_room_canonical_alias_set">%1$s a szoba elsődleges címét erre állította be: %2$s.</string>
     <string name="notice_room_canonical_alias_unset">%1$s eltávolította a szoba elsődleges címét.</string>
 
+    <string name="notice_room_guest_access_can_join">%1$s megengedte a vendégeknek, hogy belépjenek ebbe a szobába.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s megtiltotta a vendégeknek, hogy belépjenek ebbe a szobába.</string>
+
+    <string name="notice_end_to_end_ok">%1$s bekapcsolta a végpontok közötti titkosítást.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s bekapcsolta a végpontok közötti titkosítást (ismeretlen algoritmus %2$s).</string>
+
+    <string name="key_verification_request_fallback_message">%s kéri a kulcsok ellenőrzését de a kliens nem támogatja a szobán belüli kulcs ellenőrzést. A hagyományos módon kell ellenőrizned a kulcsokat.</string>
+
 </resources>

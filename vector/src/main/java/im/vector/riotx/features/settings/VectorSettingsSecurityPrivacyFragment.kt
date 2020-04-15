@@ -332,7 +332,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                                     }
 
                                     override fun onFailure(failure: Throwable) {
-                                        appContext.toast(failure.localizedMessage)
+                                        appContext.toast(failure.localizedMessage ?: getString(R.string.unexpected_error))
                                         hideLoadingView()
                                     }
                                 })

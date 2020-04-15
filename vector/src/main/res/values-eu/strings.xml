@@ -285,7 +285,7 @@ Baimendu sarbidea hurrengo laster-leihoan zure telefonotik fitxategiak bidali ah
     <string name="room_participants_action_unban">Debekua kendu</string>
     <string name="room_participants_action_set_default_power_level">Berrezarri erabiltzaile arrunt gisa</string>
     <string name="room_participants_action_set_moderator">Bihurtu moderatzaile</string>
-    <string name="room_participants_action_set_admin">Bihurtu kudeatzaile</string>
+    <string name="room_participants_action_set_admin">Bihurtu administratzaile</string>
     <string name="room_participants_action_ignore">Ezkutatu kide honen mezu guztiak</string>
     <string name="room_participants_action_unignore">Erakutsi kide honen mezu guztiak</string>
     <string name="room_participants_invite_search_another_user">Erabiltzailearen IDa, izena edo e-maila</string>
@@ -635,7 +635,7 @@ Orain egin dezakezu edo gero aplikazioaren ezarpenetatik.</string>
     <string name="people_search_user_directory">ERABILTZAILE DIREKTORIOA (%s)</string>
     <string name="settings_data_save_mode">Datuak gordetzeko modua</string>
 
-    <string name="settings_theme">Itxura</string>
+    <string name="settings_theme">Azala</string>
 
     <string name="font_size">Letra-tamaina</string>
     <string name="tiny">Oso txikia</string>
@@ -645,9 +645,9 @@ Orain egin dezakezu edo gero aplikazioaren ezarpenetatik.</string>
     <string name="larger">Oso handia</string>
     <string name="largest">Handiena</string>
     <string name="huge">Erraldoia</string>
-    <string name="light_theme">Itxura argia</string>
-    <string name="dark_theme">Itxura iluna</string>
-    <string name="black_them">Itxura beltza</string>
+    <string name="light_theme">Azal argia</string>
+    <string name="dark_theme">Azal iluna</string>
+    <string name="black_them">Azal beltza</string>
 
     <string name="notification_sync_in_progress">Sinkronizatzen…</string>
     <string name="notification_listening_for_events">Entzun gertaerak</string>
@@ -991,7 +991,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
 
     <string name="unknown_error">Errore bat gertatu da</string>
 
-    <string name="status_theme">Status.im itxura</string>
+    <string name="status_theme">Status.im azala</string>
 
     <string name="room_sliding_menu_version_x">%s bertsioa</string>
     <string name="encryption_export_notice">Sortu esportatutako gakoak zifratzeko pasaesaldi bat. Pasaesaldi hori gakoak inportatzeko sartu beharko duzu.</string>
@@ -1291,7 +1291,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="ignore">Ezikusi</string>
 
     <string name="action_sign_out_confirmation_simple">Ziur saioa amaitu nahi duzula\?</string>
-    <string name="auth_login_sso">Hasi saioa urrats batean</string>
+    <string name="auth_login_sso">Hasi saioa Single sign-on bidez</string>
     <string name="login_error_unknown_host">URL-a ez dago eskuragarri, egiaztatu mesedez</string>
     <string name="login_error_ssl_handshake">Zure gailuak zaharkitutako TLS segurtasun protokolo bat darabil, erasotu daitekeena, zure segurtasunerako ezin izango zara konektatu</string>
     <string name="settings_send_message_with_enter">Bidali mezua Sartu tekla sakatuta</string>
@@ -1553,12 +1553,12 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="store_riotx_title">RiotX - Hurrengo belaunaldiko Matrix bezeroa</string>
     <string name="store_riotx_short_description">Matrix-erako bezero azkarrago eta arinago bat azken Android tresnak erabiliz eginak</string>
-    <string name="store_riotx_full_description">RiotX bezero berri bat da Matrix protokoloarentzako (Matrix.org): komunikazioa seguru eta deszentralizatuarentzako sare libre bat. RiotX Android plataformarako Riot bezeroaren berridazketa oso bat da, erabat berridatzitako Android SDK-n oinarritua.
-\n
-\nAbisua: hau beta bertsio bat da. RiotX garapen aktiboan dago eta baditu mugak zein akatsak (gehiegi ez espero dugu). Iruzkin guztiak ongi etorriak dira!
-\n
-\nRiotX bezeroak honakoa ahalbidetzen du: • Badagoen kontu batean saioa hasi • Gelak sortu eta gela publikoetara elkartu • Gonbidapenak onartu edo ukatu • Erabiltzailearen gelak zerrendatu • Gelaren xehetasunak ikusi • Testuzko mezuak bidali • Eranskinak bidali • Zifratutako geletan mezuak irakurri eta idatzi • Zifratzea: E2Egakoen babeskopia, gailuaren egiaztaketa aurreratua, gakoa partekatzeko eskaria eta erantzuna • Push jakinarazpena • Gai argia, iluna eta beltza
-\n
+    <string name="store_riotx_full_description">RiotX bezero berri bat da Matrix protokoloarentzako (Matrix.org): komunikazioa seguru eta deszentralizatuarentzako sare libre bat. RiotX Android plataformarako Riot bezeroaren berridazketa oso bat da, erabat berridatzitako Android SDK-n oinarritua. 
+\n 
+\nAbisua: hau beta bertsio bat da. RiotX garapen aktiboan dago eta baditu mugak zein akatsak (gehiegi ez espero dugu). Iruzkin guztiak ongi etorriak dira! 
+\n 
+\nRiotX bezeroak honakoa ahalbidetzen du: • Badagoen kontu batean saioa hasi • Gelak sortu eta gela publikoetara elkartu • Gonbidapenak onartu edo ukatu • Erabiltzailearen gelak zerrendatu • Gelaren xehetasunak ikusi • Testuzko mezuak bidali • Eranskinak bidali • Zifratutako geletan mezuak irakurri eta idatzi • Zifratzea: E2Egakoen babeskopia, gailuaren egiaztaketa aurreratua, gakoa partekatzeko eskaria eta erantzuna • Push jakinarazpena • Azal argia, iluna eta beltza 
+\n 
 \nEz dira oraindik Riot bezeroaren ezaugarri guztiak ezarri RiotX bezeroan. Falta diren (eta laster etorriko direnen) artean nabarmenak dira: • Gelaren ezarpenak (gelako kideak zerrendatzea, eta abar.) • Deiak • Trepetak • …</string>
 
     <string name="push_gateway_item_app_display_name">aplikazio_pantaila_izena:</string>
@@ -1784,7 +1784,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="room_widget_permission_display_name">Zure pantaila-izena</string>
     <string name="room_widget_permission_avatar_url">Zure abatarraren URL-a</string>
     <string name="room_widget_permission_user_id">Zure erabiltzaile ID-a</string>
-    <string name="room_widget_permission_theme">Zure gaia</string>
+    <string name="room_widget_permission_theme">Zure azala</string>
     <string name="room_widget_permission_widget_id">Trepetaren ID-a</string>
     <string name="room_widget_permission_room_id">Gelaren ID-a</string>
 
@@ -2079,8 +2079,8 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="room_member_jump_to_read_receipt">Saltatu irakurragirira</string>
 
-    <string name="rendering_event_error_type_of_event_not_handled">RiotX aplikazioak oraindik ez ditu \'%1$s\' motako gertaerak kudeatzen</string>
-    <string name="rendering_event_error_type_of_message_not_handled">RiotX aplikazioak oraindik ez ditu \'%1$s\' motako mezuak kudeatzen</string>
+    <string name="rendering_event_error_type_of_event_not_handled">RiotX aplikazioak ez ditu \'%1$s\' motako gertaerak kudeatzen</string>
+    <string name="rendering_event_error_type_of_message_not_handled">RiotX aplikazioak ez ditu \'%1$s\' motako mezuak kudeatzen</string>
     <string name="rendering_event_error_exception">RiotX aplikazioak arazo bat izan du \'%1$s\' id-a duen edukia erakusteko</string>
 
     <string name="unignore">Utzi ezikusteari</string>
@@ -2144,7 +2144,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="crosssigning_other_user_not_trust">Beste erabiltzaile batzuk ez fidagarritzat jo lezakete</string>
     <string name="complete_security">Bete segurtasuna</string>
 
-    <string name="verification_open_other_to_verify">Ireki aurreko saio bat eta erabili hori saio hau egiaztatzeko, mezu zifratuetara sarbidea emanez. Ez baduzu bat erabiltzerik, erabili berreskuratze gakoa edo pasa-esaldia.</string>
+    <string name="verification_open_other_to_verify">Ireki aurreko saio bat eta erabili hori saio hau egiaztatzeko, mezu zifratuetara sarbidea emanez.</string>
 
 
     <string name="verification_profile_verify">Egiaztatu</string>
@@ -2166,9 +2166,49 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="a11y_qr_code_for_verification">QR kodea</string>
 
-    <string name="qr_code_scanned_by_other_notice">Beste erabiltzaileak QR kodea ongi eskaneatu du\?</string>
     <string name="qr_code_scanned_by_other_yes">Bai</string>
     <string name="qr_code_scanned_by_other_no">Ez</string>
 
     <string name="no_connectivity_to_the_server_indicator">Zerbitzariarekin konexioa galdu da</string>
+    <string name="login_signup_username_hint">Erabiltzaile-izena</string>
+    <string name="settings_dev_tools">Garapen tresnak</string>
+    <string name="settings_account_data">Kontuaren datuak</string>
+    <plurals name="poll_info">
+        <item quantity="one">boto %d</item>
+        <item quantity="other">%d boto</item>
+    </plurals>
+    <plurals name="poll_info_final">
+        <item quantity="one">boto %d - Azken emaitza</item>
+        <item quantity="other">%d boto - Azken emaitza</item>
+    </plurals>
+    <string name="poll_item_selected_aria">Hautatutako aukera</string>
+    <string name="command_description_poll">Inkesta sinplea sortzen du</string>
+    <string name="verification_cannot_access_other_session">Ezin zara badagoen saio batera sartu\?</string>
+    <string name="verification_use_passphrase">Erabili berreskuratze gakoa edo pasa-esaldia</string>
+
+    <string name="new_signin">Saio berria</string>
+
+    <string name="enter_secret_storage_invalid">Ezin izan da sekreturik aurkitu biltegian</string>
+    <string name="enter_secret_storage_passphrase">Sartu biltegi sekretuko pasa-esaldia</string>
+    <string name="enter_secret_storage_passphrase_warning">Abisua:</string>
+    <string name="enter_secret_storage_passphrase_warning_text">Biltegi sekretura gailu fidagarri batetik konektatu beharko zinateke beti</string>
+    <string name="enter_secret_storage_passphrase_reason_verify">Atzitu zure mezu seguruen historiala eta zeharkako sinatzerako identitatea beste saioak egiaztatzeko zure pasa-esaldia sartuz</string>
+
+    <string name="message_action_item_redact">Kendu…</string>
+    <string name="share_confirm_room">Eranskin hau %1$s gelara bidali nahi duzu\?</string>
+    <plurals name="send_images_with_original_size">
+        <item quantity="one">Bidali irudia jatorrizko tamainan</item>
+        <item quantity="other">Bidali irudiak jatorrizko tamainan</item>
+    </plurals>
+
+    <string name="delete_event_dialog_title">Berretsi kentzea</string>
+    <string name="delete_event_dialog_content">Ziur gertaera hau kendu (ezabatu) nahi duzula\? Jakin gelaren izenaren edo mintzagaiaren aldaketa ezabatzen baduzu, aldaketa desegin daitekeela.</string>
+    <string name="delete_event_dialog_reason_checkbox">Eman arrazoi bat</string>
+    <string name="delete_event_dialog_reason_hint">Kentzeko arrazoia</string>
+
+    <string name="event_redacted_by_user_reason_with_reason">Erabiltzaileak kendu du gertaera, arrazoia: %1$s</string>
+    <string name="event_redacted_by_admin_reason_with_reason">Gelako moderatzaile batek kendu du gertaera, arrazoia: %1$s</string>
+
+    <string name="keys_backup_restore_success_title_already_up_to_date">Gakoak egunean daude jada!</string>
+
 </resources>

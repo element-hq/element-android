@@ -11,7 +11,7 @@
     <string name="notice_room_leave">%1$s hat den Raum verlassen</string>
     <string name="notice_room_reject">%1$s hat die Einladung abgelehnt</string>
     <string name="notice_room_kick">%1$s hat %2$s gekickt</string>
-    <string name="notice_room_unban">%1$s hat die Verbannung von %2$s aufgehoben</string>
+    <string name="notice_room_unban">%1$s hat die Sperre von %2$s aufgehoben</string>
     <string name="notice_room_ban">%1$s hat %2$s verbannt</string>
     <string name="notice_room_withdraw">%1$s hat die Einladung für %2$s zurückgezogen</string>
     <string name="notice_avatar_url_changed">%1$s hat das Profilbild geändert</string>
@@ -41,7 +41,7 @@
     <string name="notice_room_topic_removed">%1$s hat das Raum-Thema entfernt</string>
     <string name="notice_profile_change_redacted">%1$s hat das Benutzerprofil aktualisiert %2$s</string>
     <string name="notice_room_third_party_invite">%1$s hat eine Einladung an %2$s gesendet</string>
-    <string name="notice_room_third_party_registered_invite">%1$s hat die Einladung für %2$s akzeptiert</string>
+    <string name="notice_room_third_party_registered_invite">%1$s hat die Einladung in %2$s akzeptiert</string>
 
     <string name="notice_crypto_unable_to_decrypt">** Nicht entschlüsselbar: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">Das absendende Gerät hat uns keine Schlüssel für diese Nachricht übermittelt.</string>
@@ -76,7 +76,7 @@
     <string name="message_reply_to_prefix">Als Antwort auf</string>
 
     <string name="reply_to_an_image">hat ein Bild gesendet.</string>
-    <string name="reply_to_a_video">sandte ein Video.</string>
+    <string name="reply_to_a_video">hat ein Video gesendet.</string>
     <string name="reply_to_an_audio_file">hat eine Audio-Datei gesendet.</string>
     <string name="reply_to_a_file">sandte eine Datei.</string>
 
@@ -112,7 +112,7 @@
     <string name="verification_emoji_penguin">Pinguin</string>
     <string name="verification_emoji_turtle">Schildkröte</string>
     <string name="verification_emoji_fish">Fisch</string>
-    <string name="verification_emoji_octopus">Tintenfisch</string>
+    <string name="verification_emoji_octopus">Oktopus</string>
     <string name="verification_emoji_butterfly">Schmetterling</string>
     <string name="verification_emoji_flower">Blume</string>
     <string name="verification_emoji_tree">Baum</string>
@@ -128,12 +128,12 @@
     <string name="verification_emoji_corn">Mais</string>
     <string name="verification_emoji_cake">Kuchen</string>
     <string name="verification_emoji_heart">Herz</string>
-    <string name="verification_emoji_smiley">Lächeln</string>
+    <string name="verification_emoji_smiley">Smiley</string>
     <string name="verification_emoji_robot">Roboter</string>
     <string name="verification_emoji_hat">Hut</string>
     <string name="verification_emoji_glasses">Brille</string>
     <string name="verification_emoji_wrench">Schraubenschlüssel</string>
-    <string name="verification_emoji_santa">Nikolaus</string>
+    <string name="verification_emoji_santa">Weihnachtsmann</string>
     <string name="verification_emoji_thumbsup">Daumen hoch</string>
     <string name="verification_emoji_umbrella">Regenschirm</string>
     <string name="verification_emoji_hourglass">Sanduhr</string>
@@ -141,10 +141,10 @@
     <string name="verification_emoji_gift">Geschenk</string>
     <string name="verification_emoji_lightbulb">Glühbirne</string>
     <string name="verification_emoji_book">Buch</string>
-    <string name="verification_emoji_pencil">Stift</string>
+    <string name="verification_emoji_pencil">Bleistift</string>
     <string name="verification_emoji_paperclip">Büroklammer</string>
-    <string name="verification_emoji_scissors">Scheren</string>
-    <string name="verification_emoji_lock">sperren</string>
+    <string name="verification_emoji_scissors">Schere</string>
+    <string name="verification_emoji_lock">Schloss</string>
     <string name="verification_emoji_key">Schlüssel</string>
     <string name="verification_emoji_hammer">Hammer</string>
     <string name="verification_emoji_telephone">Telefon</string>
@@ -183,11 +183,34 @@
     <string name="notice_room_leave_with_reason">%1$s ging. Grund: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s hat die Einladung abgelehnt. Grund: %2$s</string>
     <string name="notice_room_kick_with_reason">%1$s hat %2$s gekickt. Grund: %3$s</string>
-    <string name="notice_room_unban_with_reason">%1$s hat Verbannung für %2$s aufgehoben. Grund: %3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s hat Sperre von %2$s aufgehoben. Grund: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s hat %2$s verbannt. Grund: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s hat eine Einladung an %2$s gesandt um diesem Raum beizutreten. Grund: %3$s</string>
     <string name="notice_room_third_party_revoked_invite_with_reason">%1$s hat Einladung an %2$s zu Betreten dieses Raumes zurückgezogen. Grund: %3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s hat die Einladung für %2$s angenommen. Grund: %3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s hat Einladung für %2$s verworfen. Grund: %3$s</string>
+
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s fügt %2$s als eine Adresse für diesen Raum hinzu.</item>
+        <item quantity="other">%1$s fügt %2$s als Adressen für diesen Raum hinzu.</item>
+    </plurals>
+
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s entfernt %2$s als eine Adresse für diesen Raum.</item>
+        <item quantity="other">%1$s entfernt %2$s als Adressen für diesen Raum.</item>
+    </plurals>
+
+    <string name="notice_room_aliases_added_and_removed">%1$s fügt %2$s als Adresse für diesen Raum hinzu und entfernt %3$s.</string>
+
+    <string name="notice_room_canonical_alias_set">%1$s legt die Hauptadresse fest für diesen Raum als %2$s fest.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s entfernt die Hauptadresse für diesen Raum.</string>
+
+    <string name="notice_room_guest_access_can_join">%1$s hat Gästen erlaubt den Raum zu betreten.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s hat Gäste unterbunden den Raum zu betreten.</string>
+
+    <string name="notice_end_to_end_ok">%1$s aktivierte Ende-zu-Ende-Verschlüsselung.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s aktivierte Ende-zu-Ende-Verschlüsselung (unbekannter Algorithmus %2$s).</string>
+
+    <string name="key_verification_request_fallback_message">%s fordert zur Überprüfung Ihres Schlüssels auf, jedoch unterstützt Ihr Client nicht die Schlüsselüberprüfung im Chat. Sie müssen die herkömmliche Schlüsselüberprüfung verwenden, um die Schlüssel zu überprüfen.</string>
 
 </resources>

@@ -40,7 +40,7 @@
     <string name="missing_permissions_warning">Sommige functies zijn misschien afwezig wegens ontbrekende rechten…</string>
     <string name="missing_permissions_to_start_conf_call">Om een vergadering in dit groepsgesprek te starten heeft u uitnodigingsrechten nodig</string>
     <string name="missing_permissions_title_to_start_conf_call">Kan de oproep niet starten</string>
-    <string name="device_information">Apparaatinformatie</string>
+    <string name="device_information">Sessie-informatie</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Vergadergesprekken worden niet ondersteund in versleutelde gesprekken</string>
     <string name="send_anyway">Toch sturen</string>
     <string name="or">of</string>
@@ -174,9 +174,9 @@
     <string name="auth_reset_password_missing_password">Er moet een nieuw wachtwoord ingevoerd worden.</string>
     <string name="auth_reset_password_email_validation_message">Er is een e-mail verstuurd naar %s. Klik hieronder zodra u de koppeling in de e-mail hebt bezocht.</string>
     <string name="auth_reset_password_error_unauthorized">Verifiëren van het e-mailadres is mislukt: zorg dat u op de koppeling in de e-mail hebt geklikt</string>
-    <string name="auth_reset_password_success_message">Uw wachtwoord is opnieuw ingesteld.
-\n
-\nU bent op alle apparaten afgemeld en zult niet langer pushmeldingen ontvangen. Om meldingen opnieuw in te schakelen, meldt u zich op elk apparaat opnieuw aan.</string>
+    <string name="auth_reset_password_success_message">Uw wachtwoord is opnieuw ingesteld. 
+\n 
+\nU bent op alle sessies afgemeld en zult niet langer pushmeldingen ontvangen. Om meldingen opnieuw in te schakelen, meldt u zich op elk apparaat opnieuw aan.</string>
 
     <!-- Login Screen -->
     <string name="login_error_must_start_http">URL moet met http[s]:// beginnen</string>
@@ -196,8 +196,8 @@
     <string name="login_error_login_email_not_yet">Er is nog niet op de koppeling in de e-mail geklikt</string>
 
     <!-- crypto warnings -->
-    <string name="e2e_need_log_in_again">U moet zich opnieuw aanmelden om de sleutels voor eind-tot-eind-versleuteling voor dit apparaat te genereren, en om de publieke sleutel naar uw thuisserver te sturen.
-\nDit is eenmalig.
+    <string name="e2e_need_log_in_again">U moet zich opnieuw aanmelden om de sleutels voor eind-tot-eind-versleuteling voor deze sessie te genereren, en om de publieke sleutel naar uw thuisserver te sturen. 
+\nDit is eenmalig. 
 \nExcuses voor het ongemak.</string>
 
     <!-- read receipts list Screen -->
@@ -261,12 +261,11 @@
     <string name="permissions_rationale_msg_camera_and_audio">Riot heeft toegang nodig tot uw camera en microfoon om video-oproepen te maken.
 \n
 \nVerleen toegang op de volgende pop-ups om de oproep te maken.</string>
-    <string name="permissions_rationale_msg_contacts">Riot heeft toegang nodig tot uw adresboek om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers.
-\n
-\nVerleen toegang op de volgende pop-up om gebruikers op Riot te ontdekken via uw adresboek.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot heeft toegang nodig tot uw adresboek om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers.
-\n
-\nRiot toegang verlenen tot uw contacten\?</string>
+    <string name="permissions_rationale_msg_contacts">Riot kan uw adresboek benaderen om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers. 
+\nAls u het goed vindt om uw adresboek hiervoor te delen, verleen dan toegang op de volgende pop-up.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot kan uw adresboek gebruiken om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers. 
+\n 
+\nWilt u uw adresboek hiervoor delen\?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Sorry. De actie is niet toegepast vanwege ontbrekende rechten</string>
 
@@ -312,7 +311,7 @@
     <string name="room_participants_header_admin_tools">BEHEERDERSGEREEDSCHAPPEN</string>
     <string name="room_participants_header_call">BELLEN</string>
     <string name="room_participants_header_direct_chats">TWEEGESPREKKEN</string>
-    <string name="room_participants_header_devices">APPARATEN</string>
+    <string name="room_participants_header_devices">SESSIES</string>
 
     <string name="room_participants_action_invite">Uitnodigen</string>
     <string name="room_participants_action_leave">Dit gesprek verlaten</string>
@@ -326,7 +325,7 @@
     <string name="room_participants_action_unignore">Alle berichten van deze gebruiker tonen</string>
     <string name="room_participants_invite_search_another_user">Gebruikers-ID, naam of e-mailadres</string>
     <string name="room_participants_action_mention">Vermelden</string>
-    <string name="room_participants_action_devices_list">Lijst met apparaten weergeven</string>
+    <string name="room_participants_action_devices_list">Sessielijst weergeven</string>
     <string name="room_participants_power_level_prompt">U kunt deze veranderingen niet ongedaan maken aangezien u de gebruiker tot hetzelfde niveau als uzelf promoveert.
 \nWeet u het zeker\?</string>
 
@@ -350,7 +349,7 @@
     <string name="room_message_placeholder_encrypted">Verstuur een versleuteld bericht…</string>
     <string name="room_message_placeholder_not_encrypted">Verstuur een bericht (niet versleuteld)…</string>
     <string name="room_unsent_messages_notification">Berichten zijn niet verstuurd. Nu %1$s of %2$s\?</string>
-    <string name="room_unknown_devices_messages_notification">Berichten zijn niet verstuurd omdat er onbekende apparaten aanwezig zijn. Nu %1$s of %2$s?</string>
+    <string name="room_unknown_devices_messages_notification">Berichten zijn niet verstuurd omdat er onbekende sessies aanwezig zijn. Nu %1$s of %2$s\?</string>
     <string name="room_prompt_resend">alles opnieuw versturen</string>
     <string name="room_prompt_cancel">alles annuleren</string>
     <string name="room_resend_unsent_messages">Onverstuurde berichten opnieuw versturen</string>
@@ -442,7 +441,7 @@
     <string name="settings_app_info_link_title">App-informatie</string>
 
     <string name="settings_enable_all_notif">Meldingen voor deze account inschakelen</string>
-    <string name="settings_enable_this_device">Meldingen voor dit apparaat inschakelen</string>
+    <string name="settings_enable_this_device">Meldingen voor deze sessie inschakelen</string>
     <string name="settings_turn_screen_on">Het scherm voor 3 seconden aanzetten</string>
 
     <string name="settings_messages_in_one_to_one">Berichten in één-op-één-gesprekken</string>
@@ -454,7 +453,7 @@
     <string name="settings_background_sync">Synchronisatie in de achtergrond</string>
     <string name="settings_enable_background_sync">Achtergrondssynchronisatie inschakelen</string>
     <string name="settings_set_sync_timeout">Synchronisatieverzoek is verlopen</string>
-    <string name="settings_set_sync_delay">Pauze tussen elk verzoek</string>
+    <string name="settings_set_sync_delay">Pauze tussen elk synchronisatie</string>
     <string name="settings_second">seconde</string>
     <string name="settings_seconds">seconden</string>
 
@@ -481,11 +480,11 @@
     <string name="settings_home_display">Startscherm</string>
     <string name="settings_pin_missed_notifications">Gesprekken met gemiste meldingen vastprikken</string>
     <string name="settings_pin_unread_messages">Gesprekken met ongelezen berichten vastprikken</string>
-    <string name="settings_devices_list">Apparaten</string>
-    <string name="devices_details_dialog_title">Apparaatinformatie</string>
+    <string name="settings_devices_list">Sessies</string>
+    <string name="devices_details_dialog_title">Sessie-informatie</string>
     <string name="devices_details_id_title">ID</string>
-    <string name="devices_details_name_title">Naam</string>
-    <string name="devices_details_device_name">Apparaatnaam</string>
+    <string name="devices_details_name_title">Publieke naam</string>
+    <string name="devices_details_device_name">Publieke naam bijwerken</string>
 
     <string name="devices_details_last_seen_title">Laatst gezien</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
@@ -579,8 +578,8 @@
     <string name="room_settings_labs_end_to_end">Eind-tot-eind-versleuteling</string>
     <string name="room_settings_labs_end_to_end_warnings">Om de versleuteling in te schakelen dient u zich eerst af te melden.</string>
     <string name="room_settings_labs_end_to_end_is_active">Eind-tot-eind-versleuteling is actief</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">Alleen naar geverifieerde apparaten versleutelen</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">Ongeverifieerde apparaten in dit gesprek nooit berichten sturen vanaf dit apparaat.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Alleen naar geverifieerde sessies versleutelen</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Ongeverifieerde sessies in dit gesprek nooit berichten sturen vanaf deze sessie.</string>
 
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">Dit gesprek heeft geen lokale adressen</string>
@@ -618,11 +617,11 @@
     <string name="encryption_information_session_id">Sessie-ID</string>
     <string name="encryption_information_decryption_error">Ontsleutelingsfout</string>
 
-    <string name="encryption_information_sender_device_information">Informatie over apparaat van afzender</string>
-    <string name="encryption_information_device_name">Apparaatnaam</string>
-    <string name="encryption_information_name">Naam</string>
-    <string name="encryption_information_device_id">Apparaats-ID</string>
-    <string name="encryption_information_device_key">Apparaatssleutel</string>
+    <string name="encryption_information_sender_device_information">Informatie over sessie van afzender</string>
+    <string name="encryption_information_device_name">Publieke naam</string>
+    <string name="encryption_information_name">Publieke naam</string>
+    <string name="encryption_information_device_id">ID</string>
+    <string name="encryption_information_device_key">Sessiesleutel</string>
     <string name="encryption_information_verification">Verificatie</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519-vingerafdruk</string>
 
@@ -640,14 +639,14 @@
     <string name="encryption_import_room_keys">Gesprekssleutels importeren</string>
     <string name="encryption_import_room_keys_summary">Importeer de sleutels uit een lokaal bestand</string>
     <string name="encryption_import_import">Importeren</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Enkel naar geverifieerde apparaten versleutelen</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Versleutelde berichten nooit naar ongeverifieerde apparaten sturen vanaf dit apparaat.</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Enkel naar geverifieerde sessies versleutelen</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Versleutelde berichten nooit naar ongeverifieerde sessies sturen vanaf deze sessie.</string>
 
     <string name="encryption_information_not_verified">NIET geverifieerd</string>
     <string name="encryption_information_verified">Geverifieerd</string>
     <string name="encryption_information_blocked">Geblokkeerd</string>
 
-    <string name="encryption_information_unknown_device">onbekend apparaat</string>
+    <string name="encryption_information_unknown_device">onbekende sessie</string>
     <string name="encryption_information_none">geen</string>
 
     <string name="encryption_information_verify">Verifiëren</string>
@@ -655,9 +654,9 @@
     <string name="encryption_information_block">Blokkeringslijst</string>
     <string name="encryption_information_unblock">Deblokkeringslijst</string>
 
-    <string name="encryption_information_verify_device">Apparaat verifiëren</string>
-    <string name="encryption_information_verify_device_warning">Om te verifiëren dat dit apparaat vertrouwd kan worden, contacteert u de eigenaar via een andere methode (bv. persoonlijk of via een telefoontje) en vraagt u hem/haar of de sleutel die hij/zij ziet in zijn/haar Gebruikersinstellingen van dit apparaat overeenkomt met de sleutel hieronder:</string>
-    <string name="encryption_information_verify_device_warning2">Als het overeenkomt, drukt u op de knop ‘Verifiëren’ hieronder. Als het niet overeenkomt, dan onderschept iemand anders het apparaat en zou u het beter blokkeren. In de toekomst zal dit verificatieproces verbeterd worden.</string>
+    <string name="encryption_information_verify_device">Sessie verifiëren</string>
+    <string name="encryption_information_verify_device_warning">Om te verifiëren dat deze sessie vertrouwd kan worden, contacteert u de eigenaar via een andere methode (bv. persoonlijk of via een telefoontje) en vraagt u hem/haar of de sleutel die hij/zij ziet in zijn/haar Gebruikersinstellingen van deze sessie overeenkomt met de sleutel hieronder:</string>
+    <string name="encryption_information_verify_device_warning2">Als het overeenkomt, drukt u op de knop ‘Verifiëren’ hieronder. Als het niet overeenkomt, dan onderschept iemand anders deze sessie en zou u het beter blokkeren. In de toekomst zal dit verificatieproces verbeterd worden.</string>
     <string name="encryption_information_verify_key_match">Ik verifieer dat de sleutels overeenkomen</string>
 
     <string name="e2e_enabling_on_app_update">Riot ondersteunt nu eind-tot-eind-versleuteling, maar u moet zich opnieuw aanmelden om het in te schakelen.
@@ -665,12 +664,12 @@
 \nU kunt dit nu of later doen vanuit de app-instellingen.</string>
 
     <!-- unknown devices management -->
-    <string name="unknown_devices_alert_title">Dit gesprek bevat onbekende apparaten</string>
-    <string name="unknown_devices_alert_message">Dit gesprek bevat onbekende apparaten die niet geverifieerd zijn. 
-\nDit betekent dat er geen garantie is dat de apparaten bij de gebruikers horen waartoe ze beweren te horen. 
-\nWe raden u aan om bij elk apparaat door het verificatieprocces heen te gaan voordat u verdergaat, maar u kunt het bericht ook zonder te verifiëren opnieuw versturen. 
+    <string name="unknown_devices_alert_title">Dit gesprek bevat onbekende sessies</string>
+    <string name="unknown_devices_alert_message">Dit gesprek bevat onbekende sessies die niet geverifieerd zijn. 
+\nDit betekent dat er geen garantie is dat de sessies bij de gebruikers horen waartoe ze beweren te horen. 
+\nWe raden u aan om bij elke sessie door het verificatieprocces heen te gaan voordat u verdergaat, maar u kunt het bericht ook zonder te verifiëren opnieuw versturen. 
 \n 
-\nOnbekende apparaten:</string>
+\nOnbekende sessies:</string>
 
     <!-- directory activity  -->
     <string name="select_room_directory">Kies een gesprekscatalogus</string>
@@ -757,8 +756,8 @@
     <string name="settings_labs_native_camera">Systeemcamera gebruiken</string>
 
     <!-- share keys -->
-    <string name="you_added_a_new_device">U heeft een nieuw apparaat ‘%s’ toegevoegd, dat versleutelingssleutels aanvraagt.</string>
-    <string name="your_unverified_device_requesting">Uw ongeverifieerde apparaat ‘%s’ vraagt versleutelingssleutels aan.</string>
+    <string name="you_added_a_new_device">U heeft een nieuwe sessie ‘%s’ toegevoegd, die versleutelingssleutels aanvraagt.</string>
+    <string name="your_unverified_device_requesting">Uw ongeverifieerde sessie ‘%s’ vraagt versleutelingssleutels aan.</string>
     <string name="start_verification">Verificatie starten</string>
     <string name="share_without_verifying">Delen zonder te verifiëren</string>
     <string name="ignore_request">Verzoek negeren</string>
@@ -920,7 +919,7 @@
     <string name="settings_deactivate_my_account">Mijn account deactiveren</string>
 
     <string name="startup_notification_privacy_title">Meldingsprivacy</string>
-    <string name="startup_notification_privacy_message">Riot kan in de achtergrond werken om uw meldingen veilig en privé te beheren. Dit beïnvloedt mogelijk het accuverbruik.</string>
+    <string name="startup_notification_privacy_message">Riot kan op de achtergrond werken om uw meldingen veilig en privé te beheren. Dit beïnvloedt mogelijk het accuverbruik.</string>
     <string name="startup_notification_privacy_button_grant">Toestemming verlenen</string>
     <string name="startup_notification_privacy_button_other">Kies een andere optie</string>
 
@@ -948,12 +947,12 @@
 
     <string name="download">Downloaden</string>
     <string name="speak">Inspreken</string>
-    <string name="e2e_re_request_encryption_key">Beveiligingssleutels van uw apparaten <u>opnieuw aanvragen</u>.</string>
+    <string name="e2e_re_request_encryption_key">Beveiligingssleutels van uw sessies <u>opnieuw aanvragen</u>.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Sleutelaanvraag verstuurd.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Aanvraag verstuurd</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Start Riot op een ander apparaat dat het bericht kan ontsleutelen, zodat het de sleutels naar dit apparaat kan sturen.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Start Riot op een ander apparaat dat het bericht kan ontsleutelen, zodat het de sleutels naar deze sessie kan sturen.</string>
 
     <string name="lock_screen_hint">Typ hier…</string>
 
@@ -1091,7 +1090,7 @@
     <string name="keys_backup_is_not_finished_please_wait">Sleutelback-up is nog niet klaar, even geduld…</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Indien u zich nu afmeldt, zult u uw versleutelde berichten verliezen</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Sleutelback-up is bezig. Indien u zich nu afmeldt, zult u de toegang tot uw versleutelde berichten verliezen.</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">Veilige sleutelback-up dient actief te zijn op al uw apparaten om de toegang tot uw versleutelde berichten niet te verliezen.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Veilige sleutelback-up dient actief te zijn op al uw sessies om de toegang tot uw versleutelde berichten niet te verliezen.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Ik wil mijn versleutelde berichten niet</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Sleutels worden geback-upt…</string>
     <string name="keys_backup_activate">Sleutelback-up gebruiken</string>
@@ -1136,9 +1135,9 @@
 \nGelieve de accountinstellingen te controleren.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Inschakelen</string>
 
-    <string name="settings_troubleshoot_test_device_settings_title">Apparaatinstellingen.</string>
-    <string name="settings_troubleshoot_test_device_settings_success">Meldingen zijn ingeschakeld voor dit apparaat.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Meldingen zijn niet toegestaan voor dit apparaat.
+    <string name="settings_troubleshoot_test_device_settings_title">Sessie-instellingen.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Meldingen zijn ingeschakeld voor deze sessie.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Meldingen zijn niet ingeschakeld voor deze sessie. 
 \nGelieve de Riot-instellingen te controleren.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Inschakelen</string>
 
@@ -1378,14 +1377,14 @@
     <string name="keys_backup_recovery_code_error_decrypt">De back-up kan met deze herstelsleutel niet ontsleuteld worden: controleer of u de juiste herstelsleutel heeft ingevoerd.</string>
 
     <string name="keys_backup_restore_success_title">Back-up hersteld %s!</string>
-    <string name="keys_backup_restore_success_description">%1$d sessiesleutels hersteld, en %2$d nieuwe sleutel(s) die dit apparaat nog niet kende toegevoegd</string>
+    <string name="keys_backup_restore_success_description">%1$d sessiesleutels hersteld, en %2$d nieuwe sleutel(s) die deze sessie nog niet kende toegevoegd</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Back-up met %d sleutel hersteld.</item>
         <item quantity="other">Back-up met %d sleutels hersteld.</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-        <item quantity="one">Er is %d nieuwe sleutel toegevoegd aan dit apparaat.</item>
-        <item quantity="other">Er zijn %d nieuwe sleutels toegevoegd aan dit apparaat.</item>
+        <item quantity="one">Er is %d nieuwe sleutel toegevoegd aan deze sessie.</item>
+        <item quantity="other">Er zijn %d nieuwe sleutels toegevoegd aan deze sessie.</item>
     </plurals>
 
     <string name="keys_backup_get_version_error">Verkrijgen van laatste herstelsleutelversie (%s) mislukt.</string>
@@ -1395,19 +1394,19 @@
     <string name="keys_backup_settings_restore_backup_button">Herstellen uit back-up</string>
     <string name="keys_backup_settings_delete_backup_button">Back-up verwijderen</string>
 
-    <string name="keys_backup_settings_status_ok">Sleutelback-up is correct ingesteld voor dit apparaat.</string>
-    <string name="keys_backup_settings_status_ko">Sleutelback-up is niet actief op dit apparaat.</string>
-    <string name="keys_backup_settings_status_not_setup">Uw sleutels worden niet geback-upt vanaf dit apparaat.</string>
+    <string name="keys_backup_settings_status_ok">Sleutelback-up is correct ingesteld voor deze sessie.</string>
+    <string name="keys_backup_settings_status_ko">Sleutelback-up is niet actief op deze sessie.</string>
+    <string name="keys_backup_settings_status_not_setup">Uw sleutels worden niet geback-upt vanaf deze sessie.</string>
 
-    <string name="keys_backup_settings_signature_from_unknown_device">De back-up heeft een ondertekening van een onbekend apparaat met ID %s.</string>
-    <string name="keys_backup_settings_valid_signature_from_this_device">De back-up heeft een geldige ondertekening van dit apparaat.</string>
-    <string name="keys_backup_settings_valid_signature_from_verified_device">De back-up heeft een geldige ondertekening van het geverifieerde apparaat %s.</string>
-    <string name="keys_backup_settings_valid_signature_from_unverified_device">De back-up heeft een geldige ondertekening van het ongeverifieerde apparaat %s</string>
-    <string name="keys_backup_settings_invalid_signature_from_verified_device">De back-up heeft een ongeldige ondertekening van het geverifieerde apparaat %s</string>
-    <string name="keys_backup_settings_invalid_signature_from_unverified_device">De back-up heeft een ongeldige ondertekening van het ongeverifieerde apparaat %s</string>
+    <string name="keys_backup_settings_signature_from_unknown_device">De back-up heeft een ondertekening van een onbekende sessie met ID %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_this_device">De back-up heeft een geldige ondertekening van deze sessie.</string>
+    <string name="keys_backup_settings_valid_signature_from_verified_device">De back-up heeft een geldige ondertekening van de geverifieerde sessie %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">De back-up heeft een geldige ondertekening van de ongeverifieerde sessie %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_verified_device">De back-up heeft een ongeldige ondertekening van de geverifieerde sessie %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_unverified_device">De back-up heeft een ongeldige ondertekening van de ongeverifieerde sessie %s</string>
     <string name="keys_backup_get_trust_error">Verkrijgen van vertrouwensinformatie voor back-up mislukt (%s).</string>
 
-    <string name="keys_backup_settings_untrusted_backup">Herstel nu met uw wachtwoord of herstelsleutel om sleutelback-up op dit apparaat te gebruiken.</string>
+    <string name="keys_backup_settings_untrusted_backup">Herstel nu met uw wachtwoord of herstelsleutel om sleutelback-up op deze sessie te gebruiken.</string>
     <string name="keys_backup_settings_deleting_backup">Back-up wordt verwijderd…</string>
     <string name="keys_backup_settings_delete_backup_error">Verwijderen van back-up is mislukt (%s)</string>
 
@@ -1448,17 +1447,17 @@
 
     <string name="error_jitsi_not_supported_on_old_device">Sorry, vergadergesprekken met Jitsi worden nog niet ondersteund op oudere apparaten (met een Android-versie lager dan 5.0)</string>
 
-    <string name="title_activity_verify_device">Apparaat verifiëren</string>
+    <string name="title_activity_verify_device">Sessie verifiëren</string>
 
     <string name="encryption_information_unknown_ip">onbekend IP-adres</string>
-    <string name="you_added_a_new_device_with_info">Een nieuw apparaat vraagt versleutelingssleutels aan.
-\nApparaatnaam: %1$s
-\nLaatst gezien: %2$s
-\nAls u zich niet heeft aangemeld op een ander apparaat, negeer dan dit verzoek.</string>
-    <string name="your_unverified_device_requesting_with_info">Een ongeverifieerd apparaat vraagt versleutelingssleutels aan.
-\nApparaatnaam: %1$s
-\nLaatst gezien: %2$s
-\nAls u zich niet heeft aangemeld op een ander apparaat, negeer dan dit verzoek.</string>
+    <string name="you_added_a_new_device_with_info">Een nieuwe sessie vraagt versleutelingssleutels aan. 
+\nSessienaam: %1$s 
+\nLaatst gezien: %2$s 
+\nAls u zich niet heeft aangemeld op een andere sessie, negeer dan dit verzoek.</string>
+    <string name="your_unverified_device_requesting_with_info">Een ongeverifieerde sessie vraagt versleutelingssleutels aan. 
+\nSessienaam: %1$s 
+\nLaatst gezien: %2$s 
+\nAls u zich niet heeft aangemeld op een andere sessie, negeer dan dit verzoek.</string>
 
     <string name="start_verification_short_label">Verifiëren</string>
     <string name="share_without_verifying_short_label">Delen</string>
@@ -1469,18 +1468,18 @@
     <string name="sas_security_advise">Voor een maximale beveiliging bevelen we aan om dit onder vier ogen te doen, of via een ander vertrouwd communicatiekanaal.</string>
     <string name="sas_verify_start_button_title">Verificatie beginnen</string>
     <string name="sas_incoming_request_title">Inkomend verificatieverzoek</string>
-    <string name="sas_incoming_request_description">Verifieer dit apparaat door het als vertrouwd te markeren. Door de apparaten van uw gesprekspartners te vertrouwen, hoeft u zich nog minder zorgen te maken over het gebruik van eind-tot-eind-versleutelde berichten.</string>
-    <string name="sas_incoming_request_description_2">Dit apparaat verifiëren zal het als vertrouwd markeren, en het ook aan uw gesprekspartner als vertrouwd markeren.</string>
+    <string name="sas_incoming_request_description">Verifieer de sessie door deze als vertrouwd te markeren. Door de sessie van uw gesprekspartners te vertrouwen, hoeft u zich nog minder zorgen te maken over het gebruik van eind-tot-eind-versleutelde berichten.</string>
+    <string name="sas_incoming_request_description_2">De sessie verifiëren zal deze als vertrouwd markeren, en deze ook aan uw gesprekspartner als vertrouwd markeren.</string>
 
-    <string name="sas_emoji_description">Verifieer dit apparaat door te bevestigen dat de volgende emoticons op het scherm van uw gesprekspartner verschijnen</string>
-    <string name="sas_decimal_description">Verifieer dit apparaat door te bevestigen dat de volgende cijfers op het scherm van uw gesprekspartner verschijnen</string>
+    <string name="sas_emoji_description">Verifieer deze sessie door te bevestigen dat de volgende emoticons op het scherm van uw gesprekspartner verschijnen</string>
+    <string name="sas_decimal_description">Verifieer deze sessie door te bevestigen dat de volgende cijfers op het scherm van uw gesprekspartner verschijnen</string>
 
     <string name="sas_incoming_verification_request_dialog">U heeft een inkomend verificatieverzoek ontvangen.</string>
     <string name="sas_view_request_action">Verzoek bekijken</string>
     <string name="sas_waiting_for_partner">Wachten op bevestiging van gesprekspartner…</string>
 
     <string name="sas_verified">Geverifieerd!</string>
-    <string name="sas_verified_successful">U heeft het apparaat geverifieerd.</string>
+    <string name="sas_verified_successful">U heeft de sessie geverifieerd.</string>
     <string name="sas_verified_successful_description">Beveiligde berichten met deze gebruiker worden eind-tot-eind-versleuteld en kunnen niet door derde partijen gelezen worden.</string>
     <string name="sas_got_it">Ik snap het</string>
 
@@ -1494,17 +1493,17 @@
     <string name="sas_cancelled_by_me">De verificatie is geannuleerd.
 \nReden: %s</string>
 
-    <string name="sas_verification_request_notification_channel">Interactieve apparaatsverificatie</string>
+    <string name="sas_verification_request_notification_channel">Interactieve sessieverificatie</string>
     <string name="sas_incoming_request_notif_title">Verificatieverzoek</string>
-    <string name="sas_incoming_request_notif_content">%s wil uw apparaat verifiëren</string>
+    <string name="sas_incoming_request_notif_content">%s wil uw sessie verifiëren</string>
 
     <string name="sas_error_m_user">De gebruiker heeft de verificatie geannuleerd</string>
     <string name="sas_error_m_timeout">Het verificatieproces is verlopen</string>
-    <string name="sas_error_m_unknown_transaction">Het apparaat heeft geen weet van die transactie</string>
-    <string name="sas_error_m_unknown_method">Het apparaat kan geen sleutelovereenkomst-, hash-, MAC- of SAS-methode kiezen</string>
+    <string name="sas_error_m_unknown_transaction">De sessie heeft geen weet van die transactie</string>
+    <string name="sas_error_m_unknown_method">De sessie kan geen sleutelovereenkomst-, hash-, MAC- of SAS-methode kiezen</string>
     <string name="sas_error_m_mismatched_commitment">De hashovereenkomst kwam niet overeen</string>
     <string name="sas_error_m_mismatched_sas">De SAS kwam niet overeen</string>
-    <string name="sas_error_m_unexpected_message">Het apparaat heeft een onverwacht bericht ontvangen</string>
+    <string name="sas_error_m_unexpected_message">De sessie heeft een onverwacht bericht ontvangen</string>
     <string name="sas_error_m_invalid_message">Er is een ongeldig bericht ontvangen</string>
     <string name="sas_error_m_key_mismatch">Sleutels komen niet overeen</string>
     <string name="sas_error_m_user_error">Gebruikers komen niet overeen</string>
@@ -1519,4 +1518,91 @@
     <string name="people_no_identity_server">Geen identiteitsserver geconfigureerd.</string>
 
     <string name="call_failed_no_ice_title">Oproep mislukt door verkeerd geconfigureerde server</string>
+    <string name="call_failed_no_ice_description">Vraag de beheerder van uw thuisserver (%1$s) om een TURN-server te configureren om oproepen betrouwbaar te doen werken.
+\n
+\nAls alternatief kunt u de publieke server op %2$s gebruiken. Dit is minder betrouwbaar en zal tevens uw IP-addres delen met die server. U kunt dit ook configureren in de Instellingen.</string>
+    <string name="call_failed_no_ice_use_alt">Probeer %s te gebruiken</string>
+    <string name="call_failed_dont_ask_again">Vraag het niet opnieuw</string>
+
+    <string name="auth_add_email_message_2">Kies een e-mailadres om te gebruiken voor accountherstel. Later kunt u ervoor kiezen om mensen u te laten vinden via uw e-mailadres.</string>
+    <string name="auth_add_phone_message_2">Kies een telefoonnummer. Later kunt u ervoor kiezen om mensen u te laten vinden via dit nummer.</string>
+    <string name="auth_add_email_phone_message_2">Kies een e-mailadres om te gebruiken voor accountherstel. Later kunt u ervoor kiezen om mensen u te laten vinden via uw e-mailadres of telefoonnummer.</string>
+    <string name="auth_add_email_and_phone_message_2">Kies een e-mailadres om te gebruiken voor accountherstel. Later kunt u ervoor kiezen om mensen u te laten vinden via uw e-mailadres of telefoonnummer.</string>
+    <string name="login_error_no_homeserver_found">Dit is geen geldig Matrix-serveradres</string>
+    <string name="login_error_homeserver_not_found">Kan geen verbinding maken met een thuisserver op deze URL, controleer de URL</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Zal %s gebruiken om te assisteren in het geval dat uw thuisserver er niet over beschikt (uw IP-adres zal tijdens een oproep gedeeld worden)</string>
+    <string name="invite_no_identity_server_error">Voeg een identiteitsserver toe in de instellingen om dit te doen.</string>
+    <string name="settings_add_3pid_confirm_password_title">Bevestig uw wachtwoord</string>
+    <string name="settings_add_3pid_flow_not_supported">U kunt dit niet doen vanaf de mobiele Riot</string>
+    <string name="settings_background_fdroid_sync_mode">Synchroniseren op de achtergrond (experimenteel)</string>
+    <string name="settings_background_fdroid_sync_mode_battery">Geoptimaliseerd voor batterij</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">Riot zal op een batterijzuinige manier synchroniseren op de achtergrond.
+\nAfhankelijk van de staat van uw apparaat kan het besturingssysteem de synchronisatie uitstellen.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">Geoptimaliseerd voor snelheid</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Riot zal periodiek op de achtergrond synchroniseren (configureerbaar).
+\nDit heeft een negatieve impact op uw batterij- en datagebruik. Er zal een melding getoond worden ter informatie.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">Geen achtergrondssynchronisatie</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">U zal geen melding van berichten ontvangen als de app zich in de achtergrond bevindt.</string>
+    <string name="settings_background_sync_update_error">Kon de instellingen niet bijwerken.</string>
+
+
+    <string name="settings_set_workmanager_delay">Voorkeur voor synchronisatie-interval</string>
+    <string name="settings_set_workmanager_delay_summary">%s
+\nDe synchronisatie is mogelijk uitgesteld als gevolg van de batterij of staat van uw apparaat (slaapmodus).</string>
+    <string name="settings_integrations">Integraties</string>
+    <string name="resources_script">Latn</string>
+
+    <string name="settings_call_ringtone_use_default_stun">Terugvaloproepassistentieserver toestaan</string>
+    <string name="settings_add_3pid_authentication_needed">Authenticatie vereist</string>
+
+
+    <string name="settings_integrations_summary">Gebruik een integratiebeheerder om bots, bruggen, widgets en stickerpakketten te beheren.
+\nIntegratiebeheerders ontvangen configuratiedata en kunnen widgets aanpassen, gespreksuitnodigingen versturen en bestuursniveaus instellen namens u.</string>
+    <string name="settings_discovery_category">Ontdekken</string>
+    <string name="settings_discovery_manage">Beheer uw ontdekinstellingen.</string>
+    <string name="settings_integration_allow">Integraties toestaan</string>
+    <string name="settings_integration_manager">Integratiebeheerder</string>
+
+    <string name="encryption_information_device_name_with_warning">Publieke naam (zichtbaar voor mensen met wie u communiceert)</string>
+    <string name="device_name_warning">De publieke naam van een sessie is zichtbaar voor mensen met wie u communiceert</string>
+    <string name="room_widget_activity_title">Widget</string>
+    <string name="room_widget_permission_title">Widget laden</string>
+    <string name="room_widget_permission_added_by">Deze widget is toegevoegd door:</string>
+    <string name="room_widget_permission_webview_shared_info_title">Dit gebruiken kan cookies toevoegen en gegevens delen met %s:</string>
+    <string name="room_widget_permission_shared_info_title">Dit gebruiken kan gegevens delen met %s:</string>
+    <string name="room_widget_failed_to_load">Kon widget niet laden.
+\n%s</string>
+    <string name="room_widget_reload">Widget herladen</string>
+    <string name="room_widget_open_in_browser">Openen in browser</string>
+    <string name="room_widget_revoke_access">Toegang intrekken voor mij</string>
+
+    <string name="room_widget_permission_display_name">Uw weergavenaam</string>
+    <string name="room_widget_permission_avatar_url">Uw profielfoto-URL</string>
+    <string name="room_widget_permission_user_id">Uw gebruikers-ID</string>
+    <string name="room_widget_permission_theme">Uw thema</string>
+    <string name="room_widget_permission_widget_id">Widget-ID</string>
+    <string name="room_widget_permission_room_id">Gespreks-ID</string>
+
+
+    <string name="room_widget_resource_permission_title">Deze widget wil gebruik maken van de volgende bronnen:</string>
+    <string name="room_widget_resource_grant_permission">Toestaan</string>
+    <string name="room_widget_resource_decline_permission">Alles blokkeren</string>
+    <string name="room_widget_webview_access_camera">Camera gebruiken</string>
+    <string name="room_widget_webview_access_microphone">Microfoon gebruiken</string>
+    <string name="room_widget_webview_read_protected_media">DRM-beschermde media lezen</string>
+
+    <string name="integration_manager_not_configured">Geen integratiebeheerder ingesteld.</string>
+    <string name="widget_integration_review_terms">Om verder te gaan dient u de dienstvoorwaarden te aanvaarden.</string>
+
+    <string name="keys_backup_setup_override_backup_prompt_tile">Er bestaat al een back-up op uw thuisserver</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Het lijkt erop dat u al een back-up van uw herstelsleutel heeft uit een andere sessie. Wilt u deze vervangen door degene die u nu aanmaakt\?</string>
+    <string name="keys_backup_setup_override_replace">Vervangen</string>
+    <string name="keys_backup_setup_override_stop">Stoppen</string>
+
+    <string name="keys_backup_settings_checking_backup_state">Back-upstatus wordt gecontroleerd</string>
+    <string name="invalid_or_expired_credentials">U bent afgemeld vanwege onjuiste of verlopen gebruikersreferenties.</string>
+
+    <string name="identity_server_not_defined">U gebruikt geen identiteitsserver</string>
+    <string name="identity_server_not_defined_for_password_reset">Er is geen identiteitsserver geconfigureerd. Dit is vereist om uw wachtwoord opnieuw in te stellen.</string>
+
 </resources>

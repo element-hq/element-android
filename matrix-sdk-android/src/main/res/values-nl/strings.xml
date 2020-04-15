@@ -182,4 +182,41 @@
     <string name="clear_timeline_send_queue">Uitgaande wachtrij legen</string>
 
     <string name="notice_room_third_party_revoked_invite">%1$s heeft de uitnodiging voor %2$s om het gesprek toe te treden ingetrokken</string>
+    <string name="notice_room_invite_no_invitee_with_reason">Uitnodiging van %1$s. Reden: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s heeft %2$s uitgenodigd. Reden: %3$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s heeft u uitgenodigd. Reden: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s neemt nu deel. Reden: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s is weggegaan. Reden: %2$s</string>
+    <string name="notice_room_reject_with_reason">%1$s heeft de uitnodiging geweigerd. Reden: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s heeft %2$s verwijderd. Reden: %3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s heeft %2$s ontbannen. Reden: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s heeft %2$s verbannen. Reden: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s heeft %2$s een uitnodiging voor het gesprek gestuurd. Reden: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s heeft de uitnodiging voor %2$s ingetrokken. Reden: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s heeft de uitnodiging voor %2$s aanvaard. Reden: %3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s heeft de uitnodiging van %2$s ingetrokken. Reden: %3$s</string>
+
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s heeft %2$s als gespreksadres toegevoegd.</item>
+        <item quantity="other">%1$s heeft %2$s als gespreksadressen toegevoegd.</item>
+    </plurals>
+
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s heeft %2$s als gespreksadres verwijderd.</item>
+        <item quantity="other">%1$s heeft %3$s als gespreksadressen verwijderd.</item>
+    </plurals>
+
+    <string name="notice_room_aliases_added_and_removed">%1$s heeft %2$s als gespreksadres toegevoegd en %3$s verwijderd.</string>
+
+    <string name="notice_room_canonical_alias_set">%1$s heeft het hoofdadres voor dit gesprek ingesteld op %2$s.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s heeft het hoofdadres voor dit gesprek verwijderd.</string>
+
+    <string name="notice_room_guest_access_can_join">%1$s heeft gasten de toegang tot het gesprek verleend.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s heeft gasten de toegang tot het gesprek verhinderd.</string>
+
+    <string name="notice_end_to_end_ok">%1$s heeft eind-tot-eind-versleuteling ingeschakeld.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s heeft eind-tot-eind-versleuteling ingeschakeld (onbekend algoritme %2$s).</string>
+
+    <string name="key_verification_request_fallback_message">%s vraagt om uw sleutel te verifiëren, maar uw cliënt biedt geen ondersteuning voor verificatie in het gesprek. U zult de verouderde sleutelverificatie moeten gebruiken om de sleutels te verifiëren.</string>
+
 </resources>
