@@ -115,7 +115,7 @@ internal class VerificationTransportRoomMessage(
                         ?.filter { it.state == WorkInfo.State.SUCCEEDED }
                         ?.firstOrNull { it.id == enqueueInfo.second }
                         ?.let { wInfo ->
-                            if (wInfo.outputData.getBoolean("failed", false)) {
+                            if (SendVerificationMessageWorker.hasFailed(wInfo.outputData)) {
                                 Timber.e("## SAS verification [${tx?.transactionId}] failed to send verification message in state : ${tx?.state}")
                                 tx?.cancel(onErrorReason)
                             } else {
@@ -196,12 +196,15 @@ internal class VerificationTransportRoomMessage(
                         ?.filter { it.state == WorkInfo.State.SUCCEEDED }
                         ?.firstOrNull { it.id == workRequest.id }
                         ?.let { wInfo ->
-                            if (wInfo.outputData.getBoolean("failed", false)) {
+                            if (SendVerificationMessageWorker.hasFailed(wInfo.outputData)) {
                                 callback(null, null)
-                            } else if (wInfo.outputData.getString(localId) != null) {
-                                callback(wInfo.outputData.getString(localId), validInfo)
                             } else {
-                                callback(null, null)
+                                val eventId = wInfo.outputData.getString(localId)
+                                if (eventId != null) {
+                                    callback(eventId, validInfo)
+                                } else {
+                                    callback(null, null)
+                                }
                             }
                             workLiveData.removeObserver(this)
                         }

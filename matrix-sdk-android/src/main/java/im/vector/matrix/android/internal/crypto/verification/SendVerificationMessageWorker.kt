@@ -30,6 +30,10 @@ import im.vector.matrix.android.internal.worker.getSessionComponent
 import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * Possible previous worker: None
+ * Possible next worker    : None
+ */
 internal class SendVerificationMessageWorker(context: Context,
                                              params: WorkerParameters)
     : CoroutineWorker(context, params) {
@@ -48,7 +52,7 @@ internal class SendVerificationMessageWorker(context: Context,
     lateinit var cryptoService: CryptoService
 
     override suspend fun doWork(): Result {
-        val errorOutputData = Data.Builder().putBoolean("failed", true).build()
+        val errorOutputData = Data.Builder().putBoolean(OUTPUT_KEY_FAILED, true).build()
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success(errorOutputData)
 
@@ -74,6 +78,14 @@ internal class SendVerificationMessageWorker(context: Context,
             } else {
                 Result.success(errorOutputData)
             }
+        }
+    }
+
+    companion object {
+        private const val OUTPUT_KEY_FAILED = "failed"
+
+        fun hasFailed(outputData: Data): Boolean {
+            return outputData.getBoolean(SendVerificationMessageWorker.OUTPUT_KEY_FAILED, false)
         }
     }
 }

@@ -26,8 +26,13 @@ import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
 import org.greenrobot.eventbus.EventBus
+import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * Possible previous worker: None
+ * Possible next worker    : None
+ */
 internal class RedactEventWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
 
     @JsonClass(generateAdapter = true)
@@ -46,10 +51,12 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters) : C
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.failure()
+                        .also { Timber.e("Unable to parse work parameters") }
 
         if (params.lastFailureMessage != null) {
             // Transmit the error
             return Result.success(inputData)
+                    .also { Timber.e("Work cancelled due to input error from parent") }
         }
 
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
