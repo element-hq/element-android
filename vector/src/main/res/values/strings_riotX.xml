@@ -35,7 +35,7 @@
     <!-- %s will be replaced by account_password -->
     <string name="bootstrap_migration_enter_backup_password">Enter your Key Backup Passphrase to continue.</string>
     <string name="bootstrap_migration_use_recovery_key">use your Key Backup recovery key</string>
-    <!-- %s will be replaced by the bootstrap_migration_use_recovery_key key  -->
+    <!-- %s will be replaced by the value of bootstrap_migration_use_recovery_key  -->
     <string name="bootstrap_migration_with_passphrase_helper_with_link">Don’t know your Key Backup Passphrase, you can %s.</string>
     <string name="bootstrap_migration_backup_recovery_key">Key Backup recovery key</string>
 
