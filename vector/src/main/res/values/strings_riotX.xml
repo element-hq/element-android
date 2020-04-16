@@ -20,6 +20,7 @@
     <string name="enter_backup_passphrase">Enter %s</string>
     <string name="backup_recovery_passphrase">Recovery Passphrase</string>
     <string name="bootstrap_invalid_recovery_key">"It's not a valid recovery key"</string>
+    <string name="recovery_key_empty_error_message">Please enter a recovery key</string>
 
     <string name="bootstrap_progress_checking_backup">Checking backup Key</string>
     <string name="bootstrap_progress_checking_backup_with_info">Checking backup Key (%s)</string>
@@ -30,6 +31,14 @@
     <string name="bootstrap_progress_storing_in_sss">Storing keybackup secret in SSSS</string>
     <!-- To produce things like 'RiotX Android (IQDHUVJTTV)' -->
     <string name="new_session_review_with_info">%1$s (%2$s)</string>
+
+    <!-- %s will be replaced by account_password -->
+    <string name="bootstrap_migration_enter_backup_password">Enter your Key Backup Passphrase to continue.</string>
+    <string name="bootstrap_migration_use_recovery_key">use your Key Backup recovery key</string>
+    <!-- %s will be replaced by the bootstrap_migration_use_recovery_key key  -->
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">Don’t know your Key Backup Passphrase, you can %s.</string>
+    <string name="bootstrap_migration_backup_recovery_key">Key Backup recovery key</string>
+
     <!-- END Strings added by Valere -->
 
 
