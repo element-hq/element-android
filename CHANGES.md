@@ -31,6 +31,7 @@ Bugfix 🐛:
  - Cross-Signing | web <-> riotX After QR code scan, gossiping fails (#1210)
  - Fix crash when trying to download file without internet connection (#1229)
  - Local echo are not updated in timeline (for failed & encrypted states)
+ - RiotX now uses as many threads as it needs to do work and send messages (#1221)
 
 Translations 🗣:
  -
