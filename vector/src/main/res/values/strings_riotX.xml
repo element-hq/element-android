@@ -28,6 +28,8 @@
     <string name="bootstrap_progress_generating_ssss_with_info">Generating SSSS key from passphrase (%s)</string>
     <string name="bootstrap_progress_generating_ssss_recovery">Generating SSSS key from recovery key</string>
     <string name="bootstrap_progress_storing_in_sss">Storing keybackup secret in SSSS</string>
+    <!-- To produce things like 'RiotX Android (IQDHUVJTTV)' -->
+    <string name="new_session_review_with_info">%1$s (%2$s)</string>
     <!-- END Strings added by Valere -->
 
 
