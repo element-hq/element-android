@@ -29,4 +29,7 @@
 
     <!-- END Strings added by Others -->
 
+    <!-- BEGIN Strings added by Benoit -->
+    <string name="change_password_summary">Set a new account password…</string>
+    <!---->
 </resources>

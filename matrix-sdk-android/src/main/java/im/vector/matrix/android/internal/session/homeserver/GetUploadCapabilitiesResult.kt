@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class GetUploadCapabilitiesResult(
+internal data class GetUploadCapabilitiesResult(
         /**
          * The maximum size an upload can be in bytes. Clients SHOULD use this as a guide when uploading content.
          * If not listed or null, the size limit should be treated as unknown.
