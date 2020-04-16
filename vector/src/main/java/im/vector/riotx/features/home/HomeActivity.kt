@@ -109,6 +109,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         }
         if (intent.getBooleanExtra(EXTRA_ACCOUNT_CREATION, false)) {
             sharedActionViewModel.post(HomeActivitySharedAction.PromptForSecurityBootstrap)
+            sharedActionViewModel.isAccountCreation = true
             intent.removeExtra(EXTRA_ACCOUNT_CREATION)
         }
 
@@ -163,7 +164,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                 .getMyCrossSigningKeys()
         val crossSigningEnabledOnAccount = myCrossSigningKeys != null
 
-        if (!crossSigningEnabledOnAccount) {
+        if (!crossSigningEnabledOnAccount && !sharedActionViewModel.isAccountCreation) {
             // We need to ask
             promptSecurityEvent(
                     session,
