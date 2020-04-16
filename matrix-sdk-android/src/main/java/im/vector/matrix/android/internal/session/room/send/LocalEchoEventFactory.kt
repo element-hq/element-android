@@ -314,7 +314,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 msgType = MessageType.MSGTYPE_AUDIO,
                 body = attachment.name ?: "audio",
                 audioInfo = AudioInfo(
-                        mimeType = attachment.getSafeMimeType()?.takeIf { it.isNotBlank() } ?: "audio/mpeg",
+                        mimeType = attachment.getSafeMimeType()?.takeIf { it.isNotBlank() },
                         size = attachment.size
                 ),
                 url = attachment.queryUri.toString()
@@ -327,8 +327,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 msgType = MessageType.MSGTYPE_FILE,
                 body = attachment.name ?: "file",
                 info = FileInfo(
-                        mimeType = attachment.getSafeMimeType()?.takeIf { it.isNotBlank() }
-                                ?: "application/octet-stream",
+                        mimeType = attachment.getSafeMimeType()?.takeIf { it.isNotBlank() },
                         size = attachment.size
                 ),
                 url = attachment.queryUri.toString()
