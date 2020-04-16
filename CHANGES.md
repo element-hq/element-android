@@ -44,6 +44,7 @@ Build 🧱:
  - Compile with Android SDK 29 (Android Q)
 
 Other changes:
+ - Add a setting to prevent screenshots of the application, disabled by default (#1027)
  - Increase File Logger capacities ( + use dev log preferences)
 
 Changes in RiotX 0.18.1 (2020-03-17)
