@@ -7,7 +7,6 @@ Features ✨:
  - Cross-Signing | Verify new session from existing session (#1134)
  - Cross-Signing | Bootstraping cross signing with 4S from mobile (#985)
 
-
 Improvements 🙌:
  - Verification DM / Handle concurrent .start after .ready (#794)
  - Reimplementation of multiple attachment picker
@@ -34,6 +33,7 @@ Bugfix 🐛:
  - Fix crash when trying to download file without internet connection (#1229)
  - Local echo are not updated in timeline (for failed & encrypted states)
  - Render image event even if thumbnail_info does not have mimetype defined (#1209)
+ - Fix issue with media path (#1227)
 
 Translations 🗣:
  -
