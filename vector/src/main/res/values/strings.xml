@@ -2243,7 +2243,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="bootstrap_loading_text">This might take several seconds, please be patient.</string>
     <string name="bootstrap_loading_title">Setting up recovery.</string>
     <string name="your_recovery_key">Your recovery key</string>
-    <string name="bootstrap_finish_title">You‘re done!</string>
+    <string name="bootstrap_finish_title">"You're done!"</string>
     <string name="keep_it_safe">Keep it safe</string>
     <string name="finish">Finish</string>
 

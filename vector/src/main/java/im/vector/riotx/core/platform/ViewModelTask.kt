@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.account
+package im.vector.riotx.core.platform
 
-import im.vector.matrix.android.api.session.account.model.ChangePasswordParams
-import im.vector.matrix.android.internal.network.NetworkConstants
-import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.POST
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
-internal interface AccountAPI {
+interface ViewModelTask<Params, Result> {
+    operator fun invoke(
+            scope: CoroutineScope,
+            params: Params,
+            onResult: (Result) -> Unit = {}
+    ) {
+        val backgroundJob = scope.async { execute(params) }
+        scope.launch { onResult(backgroundJob.await()) }
+    }
 
-    /**
-     * Ask the homeserver to change the password with the provided new password.
-     * @param params parameters to change password.
-     */
-    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/password")
-    fun changePassword(@Body params: ChangePasswordParams): Call<Unit>
+    suspend fun execute(params: Params): Result
 }
