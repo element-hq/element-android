@@ -73,6 +73,7 @@ package im.vector.riotx.features.crypto.recover
  *                                       ┌────────────────────────────────────────┐
  *                                       │       BootstrapStep.DoneSuccess        │
  *                                       └────────────────────────────────────────┘
+ *
  */
 
 sealed class BootstrapStep {
