@@ -122,43 +122,51 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
     override fun invalidate() = withState(viewModel) { state ->
 
         when (state.step) {
-            is BootstrapStep.CheckingMigration              -> {
+            is BootstrapStep.CheckingMigration           -> {
                 bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_message_password))
                 bootstrapTitleText.text = getString(R.string.upgrade_security)
                 showFragment(BootstrapWaitingFragment::class, Bundle())
             }
-            is BootstrapStep.SetupPassphrase                -> {
+            is BootstrapStep.SetupPassphrase             -> {
                 bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_message_password))
                 bootstrapTitleText.text = getString(R.string.set_recovery_passphrase, getString(R.string.recovery_passphrase))
                 showFragment(BootstrapEnterPassphraseFragment::class, Bundle())
             }
-            is BootstrapStep.ConfirmPassphrase              -> {
+            is BootstrapStep.ConfirmPassphrase           -> {
                 bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_message_password))
                 bootstrapTitleText.text = getString(R.string.confirm_recovery_passphrase, getString(R.string.recovery_passphrase))
                 showFragment(BootstrapConfirmPassphraseFragment::class, Bundle())
             }
-            is BootstrapStep.AccountPassword                -> {
+            is BootstrapStep.AccountPassword             -> {
                 bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_user))
                 bootstrapTitleText.text = getString(R.string.account_password)
                 showFragment(BootstrapAccountPasswordFragment::class, Bundle())
             }
-            is BootstrapStep.Initializing                   -> {
+            is BootstrapStep.Initializing                -> {
                 bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_message_key))
                 bootstrapTitleText.text = getString(R.string.bootstrap_loading_title)
                 showFragment(BootstrapWaitingFragment::class, Bundle())
             }
-            is BootstrapStep.SaveRecoveryKey                -> {
+            is BootstrapStep.SaveRecoveryKey             -> {
                 bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_message_key))
                 bootstrapTitleText.text = getString(R.string.keys_backup_setup_step3_please_make_copy)
                 showFragment(BootstrapSaveRecoveryKeyFragment::class, Bundle())
             }
-            is BootstrapStep.DoneSuccess                    -> {
+            is BootstrapStep.DoneSuccess                 -> {
                 bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_message_key))
                 bootstrapTitleText.text = getString(R.string.bootstrap_finish_title)
                 showFragment(BootstrapConclusionFragment::class, Bundle())
             }
             is BootstrapStep.GetBackupSecretForMigration -> {
-                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.key_small))
+                val isKey = when (state.step) {
+                    is BootstrapStep.GetBackupSecretPassForMigration -> state.step.useKey
+                    else                                             -> true
+                }
+                val drawableRes = if (isKey) R.drawable.ic_message_key else R.drawable.ic_message_password
+                bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(
+                        requireContext(),
+                        drawableRes)
+                )
                 bootstrapTitleText.text = getString(R.string.upgrade_security)
                 showFragment(BootstrapMigrateBackupFragment::class, Bundle())
             }

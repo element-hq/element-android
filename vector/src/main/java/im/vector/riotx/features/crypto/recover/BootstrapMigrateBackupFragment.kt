@@ -125,7 +125,8 @@ class BootstrapMigrateBackupFragment @Inject constructor(
 
         val secret = bootstrapMigrateEditText.text?.toString()
         if (secret.isNullOrBlank()) {
-            bootstrapRecoveryKeyEnterTil.error = getString(R.string.passphrase_empty_error_message)
+            val errRes = if (isEnteringKey) R.string.recovery_key_empty_error_message else R.string.passphrase_empty_error_message
+            bootstrapRecoveryKeyEnterTil.error = getString(errRes)
         } else if (isEnteringKey && !isValidRecoveryKey(secret)) {
             bootstrapRecoveryKeyEnterTil.error = getString(R.string.bootstrap_invalid_recovery_key)
         } else {
@@ -153,14 +154,14 @@ class BootstrapMigrateBackupFragment @Inject constructor(
             bootstrapMigrateShowPassword.isVisible = false
             bootstrapMigrateEditText.inputType = TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_VISIBLE_PASSWORD or TYPE_TEXT_FLAG_MULTI_LINE
 
-            val recKey = getString(R.string.recovery_key)
+            val recKey = getString(R.string.bootstrap_migration_backup_recovery_key)
             bootstrapDescriptionText.text = getString(R.string.enter_account_password, recKey)
                     .toSpannable()
                     .colorizeMatchingText(recKey, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
 
             bootstrapMigrateEditText.hint = recKey
 
-            bootstrapMigrateEditText.hint = getString(R.string.keys_backup_restore_key_enter_hint)
+            bootstrapMigrateEditText.hint = recKey
             bootstrapMigrateForgotPassphrase.isVisible = false
             bootstrapMigrateUseFile.isVisible = true
         } else {
@@ -172,19 +173,16 @@ class BootstrapMigrateBackupFragment @Inject constructor(
                 bootstrapMigrateShowPassword.setImageResource(if (isPasswordVisible) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
             }
 
-            val recPassPhrase = getString(R.string.backup_recovery_passphrase)
-            bootstrapDescriptionText.text = getString(R.string.enter_account_password, recPassPhrase)
-                    .toSpannable()
-                    .colorizeMatchingText(recPassPhrase, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
+            bootstrapDescriptionText.text = getString(R.string.bootstrap_migration_enter_backup_password)
 
             bootstrapMigrateEditText.hint = getString(R.string.passphrase_enter_passphrase)
 
             bootstrapMigrateForgotPassphrase.isVisible = true
 
-            val recKeye = getString(R.string.keys_backup_restore_use_recovery_key)
-            bootstrapMigrateForgotPassphrase.text = getString(R.string.keys_backup_restore_with_passphrase_helper_with_link, recKeye)
+            val recKey = getString(R.string.bootstrap_migration_use_recovery_key)
+            bootstrapMigrateForgotPassphrase.text = getString(R.string.bootstrap_migration_with_passphrase_helper_with_link, recKey)
                     .toSpannable()
-                    .colorizeMatchingText(recKeye, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
+                    .colorizeMatchingText(recKey, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
 
             bootstrapMigrateUseFile.isVisible = false
         }
