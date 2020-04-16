@@ -20,7 +20,6 @@ import im.vector.matrix.android.api.session.account.model.ChangePasswordParams
 import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.Headers
 import retrofit2.http.POST
 
 internal interface AccountAPI {
