@@ -438,6 +438,10 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     _viewEvents.post(BootstrapViewEvents.SkipBootstrap())
                 }
             }
+            is BootstrapStep.GetBackupSecretKeyForMigration -> {
+                // do we let you cancel from here?
+                _viewEvents.post(BootstrapViewEvents.SkipBootstrap())
+            }
             is BootstrapStep.SetupPassphrase                 -> {
                 // do we let you cancel from here?
                 _viewEvents.post(BootstrapViewEvents.SkipBootstrap())
