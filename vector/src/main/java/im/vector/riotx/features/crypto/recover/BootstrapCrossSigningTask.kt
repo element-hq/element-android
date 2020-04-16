@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY
 import im.vector.matrix.android.api.session.securestorage.EmptyKeySigner
 import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageService
 import im.vector.matrix.android.api.session.securestorage.SsssKeyCreationInfo
+import im.vector.matrix.android.api.session.securestorage.SsssKeySpec
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.auth.registration.RegistrationFlowResponse
 import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
@@ -33,11 +34,9 @@ import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.riotx.R
+import im.vector.riotx.core.platform.ViewModelTask
 import im.vector.riotx.core.platform.WaitingViewData
 import im.vector.riotx.core.resources.StringProvider
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
@@ -67,24 +66,16 @@ interface BootstrapProgressListener {
 data class Params(
         val userPasswordAuth: UserPasswordAuth? = null,
         val progressListener: BootstrapProgressListener? = null,
-        val passphrase: String?
+        val passphrase: String?,
+        val keySpec: SsssKeySpec? = null
 )
 
 class BootstrapCrossSigningTask @Inject constructor(
         private val session: Session,
         private val stringProvider: StringProvider
-) {
+) : ViewModelTask<Params, BootstrapResult> {
 
-    operator fun invoke(
-            scope: CoroutineScope,
-            params: Params,
-            onResult: (BootstrapResult) -> Unit = {}
-    ) {
-        val backgroundJob = scope.async { execute(params) }
-        scope.launch { onResult(backgroundJob.await()) }
-    }
-
-    suspend fun execute(params: Params): BootstrapResult {
+    override suspend fun execute(params: Params): BootstrapResult {
         params.progressListener?.onProgress(
                 WaitingViewData(
                         stringProvider.getString(R.string.bootstrap_crosssigning_progress_initializing),
@@ -124,6 +115,7 @@ class BootstrapCrossSigningTask @Inject constructor(
                 } ?: kotlin.run {
                     ssssService.generateKey(
                             UUID.randomUUID().toString(),
+                            params.keySpec,
                             "ssss_key",
                             EmptyKeySigner(),
                             it
@@ -205,14 +197,16 @@ class BootstrapCrossSigningTask @Inject constructor(
                 )
         )
         try {
-            val creationInfo = awaitCallback<MegolmBackupCreationInfo> {
-                session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)
+            if (session.cryptoService().keysBackupService().keysBackupVersion == null) {
+                val creationInfo = awaitCallback<MegolmBackupCreationInfo> {
+                    session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)
+                }
+                val version = awaitCallback<KeysVersion> {
+                    session.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo, it)
+                }
+                // Save it for gossiping
+                session.cryptoService().keysBackupService().saveBackupRecoveryKey(creationInfo.recoveryKey, version = version.version)
             }
-            val version = awaitCallback<KeysVersion> {
-                session.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo, it)
-            }
-            // Save it for gossiping
-            session.cryptoService().keysBackupService().saveBackupRecoveryKey(creationInfo.recoveryKey, version = version.version)
         } catch (failure: Throwable) {
             Timber.e("## BootstrapCrossSigningTask: Failed to init keybackup")
         }

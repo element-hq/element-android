@@ -91,13 +91,13 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                 .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
-                        is HomeActivitySharedAction.OpenDrawer -> drawerLayout.openDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.OpenGroup  -> {
+                        is HomeActivitySharedAction.OpenDrawer                 -> drawerLayout.openDrawer(GravityCompat.START)
+                        is HomeActivitySharedAction.OpenGroup                  -> {
                             drawerLayout.closeDrawer(GravityCompat.START)
                             replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java)
                         }
                         is HomeActivitySharedAction.PromptForSecurityBootstrap -> {
-                            BootstrapBottomSheet().apply { isCancelable = false }.show(supportFragmentManager, "BootstrapBottomSheet")
+                            BootstrapBottomSheet.show(supportFragmentManager, true)
                         }
                     }
                 }
@@ -109,6 +109,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         }
         if (intent.getBooleanExtra(EXTRA_ACCOUNT_CREATION, false)) {
             sharedActionViewModel.post(HomeActivitySharedAction.PromptForSecurityBootstrap)
+            sharedActionViewModel.isAccountCreation = true
             intent.removeExtra(EXTRA_ACCOUNT_CREATION)
         }
 
@@ -163,27 +164,46 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                 .getMyCrossSigningKeys()
         val crossSigningEnabledOnAccount = myCrossSigningKeys != null
 
-        if (crossSigningEnabledOnAccount && myCrossSigningKeys?.isTrusted() == false) {
+        if (!crossSigningEnabledOnAccount && !sharedActionViewModel.isAccountCreation) {
             // We need to ask
-            sharedActionViewModel.hasDisplayedCompleteSecurityPrompt = true
-            popupAlertManager.postVectorAlert(
-                    VerificationVectorAlert(
-                            uid = "completeSecurity",
-                            title = getString(R.string.complete_security),
-                            description = getString(R.string.crosssigning_verify_this_session),
-                            iconId = R.drawable.ic_shield_warning
-                    ).apply {
-                        matrixItem = session.getUser(session.myUserId)?.toMatrixItem()
-                        colorInt = ContextCompat.getColor(this@HomeActivity, R.color.riotx_positive_accent)
-                        contentAction = Runnable {
-                            (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
-                                it.navigator.waitSessionVerification(it)
-                            }
-                        }
-                        dismissedAction = Runnable {}
-                    }
-            )
+            promptSecurityEvent(
+                    session,
+                    R.string.upgrade_security,
+                    R.string.security_prompt_text
+            ) {
+                it.navigator.upgradeSessionSecurity(it)
+            }
+        } else if (myCrossSigningKeys?.isTrusted() == false) {
+            // We need to ask
+            promptSecurityEvent(
+                    session,
+                    R.string.complete_security,
+                    R.string.crosssigning_verify_this_session
+            ) {
+                it.navigator.waitSessionVerification(it)
+            }
         }
+    }
+
+    private fun promptSecurityEvent(session: Session, titleRes: Int, descRes: Int, action: ((VectorBaseActivity) -> Unit)) {
+        sharedActionViewModel.hasDisplayedCompleteSecurityPrompt = true
+        popupAlertManager.postVectorAlert(
+                VerificationVectorAlert(
+                        uid = "upgradeSecurity",
+                        title = getString(titleRes),
+                        description = getString(descRes),
+                        iconId = R.drawable.ic_shield_warning
+                ).apply {
+                    matrixItem = session.getUser(session.myUserId)?.toMatrixItem()
+                    colorInt = ContextCompat.getColor(this@HomeActivity, R.color.riotx_positive_accent)
+                    contentAction = Runnable {
+                        (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
+                            action(it)
+                        }
+                    }
+                    dismissedAction = Runnable {}
+                }
+        )
     }
 
     override fun onNewIntent(intent: Intent?) {

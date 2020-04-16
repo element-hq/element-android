@@ -7,7 +7,6 @@ Features ✨:
  - Cross-Signing | Verify new session from existing session (#1134)
  - Cross-Signing | Bootstraping cross signing with 4S from mobile (#985)
 
-
 Improvements 🙌:
  - Verification DM / Handle concurrent .start after .ready (#794)
  - Reimplementation of multiple attachment picker
@@ -21,6 +20,7 @@ Improvements 🙌:
  - Cross-Sign | QR code scan confirmation screens design update (#1187)
  - Emoji Verification | It's not the same butterfly! (#1220)
  - Cross-Signing | Composer decoration: shields (#1077)
+ - Cross-Signing | Migrate existing keybackup to cross signing with 4S from mobile (#1197)
 
 Bugfix 🐛:
  - Fix summary notification staying after "mark as read"
@@ -34,6 +34,7 @@ Bugfix 🐛:
  - Local echo are not updated in timeline (for failed & encrypted states)
  - Render image event even if thumbnail_info does not have mimetype defined (#1209)
  - RiotX now uses as many threads as it needs to do work and send messages (#1221)
+ - Fix issue with media path (#1227)
 
 Translations 🗣:
  -

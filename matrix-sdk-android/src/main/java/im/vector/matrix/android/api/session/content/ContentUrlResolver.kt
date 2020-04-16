@@ -27,6 +27,11 @@ interface ContentUrlResolver {
     }
 
     /**
+     * URL to use to upload content
+     */
+    val uploadUrl: String
+
+    /**
      * Get the actual URL for accessing the full-size image of a Matrix media content URI.
      *
      * @param contentUrl  the Matrix media content URI (in the form of "mxc://...").

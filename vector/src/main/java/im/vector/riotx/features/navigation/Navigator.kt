@@ -34,6 +34,8 @@ interface Navigator {
 
     fun waitSessionVerification(context: Context)
 
+    fun upgradeSessionSecurity(context: Context)
+
     fun openRoomForSharingAndFinish(activity: Activity, roomId: String, sharedData: SharedData)
 
     fun openNotJoinedRoom(context: Context, roomIdOrAlias: String?, eventId: String? = null, buildTask: Boolean = false)

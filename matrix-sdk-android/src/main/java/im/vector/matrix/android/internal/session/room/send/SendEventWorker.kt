@@ -32,6 +32,10 @@ import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * Possible previous worker: [EncryptEventWorker] or first worker
+ * Possible next worker    : None
+ */
 internal class SendEventWorker(context: Context,
                                params: WorkerParameters)
     : CoroutineWorker(context, params) {
@@ -49,9 +53,8 @@ internal class SendEventWorker(context: Context,
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.success().also {
-                    Timber.e("Work cancelled due to input error from parent")
-                }
+                ?: return Result.success()
+                        .also { Timber.e("Unable to parse work parameters") }
 
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
@@ -65,6 +68,7 @@ internal class SendEventWorker(context: Context,
             localEchoUpdater.updateSendState(event.eventId, SendState.UNDELIVERED)
             // Transmit the error
             return Result.success(inputData)
+                    .also { Timber.e("Work cancelled due to input error from parent") }
         }
         return try {
             sendEvent(event)
