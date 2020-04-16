@@ -19,7 +19,7 @@
     <!--    <string name="upgrade_account_desc">Upgrade this session to allow it to verify other sessions, granting them access to encrypted messages and marking them as trusted for other users.</string>-->
     <string name="enter_backup_passphrase">Enter %s</string>
     <string name="backup_recovery_passphrase">Recovery Passphrase</string>
-    <string name="bootstrap_invalid_recovery_key">It‘s not a valid recovery key</string>
+    <string name="bootstrap_invalid_recovery_key">"It's not a valid recovery key"</string>
 
     <string name="bootstrap_progress_checking_backup">Checking backup Key</string>
     <string name="bootstrap_progress_checking_backup_with_info">Checking backup Key (%s)</string>
