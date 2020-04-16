@@ -35,6 +35,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.cache.DiskCache
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.failure.isInvalidPassword
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.showPassword
@@ -108,10 +110,14 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         }
 
         // Password
-        mPasswordPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            notImplemented()
-            // onPasswordUpdateClick()
-            false
+        // Hide the preference if password can not be updated
+        if (session.getHomeServerCapabilities().canChangePassword) {
+            mPasswordPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                onPasswordUpdateClick()
+                false
+            }
+        } else {
+            mPasswordPreference.isVisible = false
         }
 
         // Add Email
@@ -684,21 +690,20 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
             var passwordShown = false
 
-            showPassword.setOnClickListener(object : View.OnClickListener {
-                override fun onClick(v: View?) {
-                    passwordShown = !passwordShown
+            showPassword.setOnClickListener {
+                passwordShown = !passwordShown
 
-                    oldPasswordText.showPassword(passwordShown)
-                    newPasswordText.showPassword(passwordShown)
-                    confirmNewPasswordText.showPassword(passwordShown)
+                oldPasswordText.showPassword(passwordShown)
+                newPasswordText.showPassword(passwordShown)
+                confirmNewPasswordText.showPassword(passwordShown)
 
-                    showPassword.setImageResource(if (passwordShown) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
-                }
-            })
+                showPassword.setImageResource(if (passwordShown) R.drawable.ic_eye_closed_black else R.drawable.ic_eye_black)
+            }
 
             val dialog = AlertDialog.Builder(activity)
                     .setView(view)
-                    .setPositiveButton(R.string.settings_change_password_submit, null)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.settings_change_password, null)
                     .setNegativeButton(R.string.cancel, null)
                     .setOnDismissListener {
                         view.hideKeyboard()
@@ -707,12 +712,13 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
             dialog.setOnShowListener {
                 val updateButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                val cancelButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
                 updateButton.isEnabled = false
 
                 fun updateUi() {
-                    val oldPwd = oldPasswordText.text.toString().trim()
-                    val newPwd = newPasswordText.text.toString().trim()
-                    val newConfirmPwd = confirmNewPasswordText.text.toString().trim()
+                    val oldPwd = oldPasswordText.text.toString()
+                    val newPwd = newPasswordText.text.toString()
+                    val newConfirmPwd = confirmNewPasswordText.text.toString()
 
                     updateButton.isEnabled = oldPwd.isNotEmpty() && newPwd.isNotEmpty() && newPwd == newConfirmPwd
 
@@ -750,6 +756,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                         confirmNewPasswordText.isEnabled = false
                         changePasswordLoader.isVisible = true
                         updateButton.isEnabled = false
+                        cancelButton.isEnabled = false
                     } else {
                         showPassword.isEnabled = true
                         oldPasswordText.isEnabled = true
@@ -757,6 +764,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                         confirmNewPasswordText.isEnabled = true
                         changePasswordLoader.isVisible = false
                         updateButton.isEnabled = true
+                        cancelButton.isEnabled = true
                     }
                 }
 
@@ -768,47 +776,32 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
                     view.hideKeyboard()
 
-                    val oldPwd = oldPasswordText.text.toString().trim()
-                    val newPwd = newPasswordText.text.toString().trim()
+                    val oldPwd = oldPasswordText.text.toString()
+                    val newPwd = newPasswordText.text.toString()
 
-                    notImplemented()
-                    /* TODO
                     showPasswordLoadingView(true)
-
-                    session.updatePassword(oldPwd, newPwd, object : MatrixCallback<Unit> {
-                        private fun onDone(@StringRes textResId: Int) {
+                    session.changePassword(oldPwd, newPwd, object : MatrixCallback<Unit> {
+                        override fun onSuccess(data: Unit) {
+                            if (!isAdded) {
+                                return
+                            }
                             showPasswordLoadingView(false)
+                            dialog.dismiss()
+                            activity.toast(R.string.settings_password_updated)
+                        }
 
-                            if (textResId == R.string.settings_fail_to_update_password_invalid_current_password) {
-                                oldPasswordTil.error = getString(textResId)
-                            } else {
-                                dialog.dismiss()
-                                activity.toast(textResId, Toast.LENGTH_LONG)
+                        override fun onFailure(failure: Throwable) {
+                            if (!isAdded) {
+                                return
                             }
-                        }
-
-                        override fun onSuccess(info: Void?) {
-                            onDone(R.string.settings_password_updated)
-                        }
-
-                        override fun onNetworkError(e: Exception) {
-                            onDone(R.string.settings_fail_to_update_password)
-                        }
-
-                        override fun onMatrixError(e: MatrixError) {
-                            if (e.error == "Invalid password") {
-                                onDone(R.string.settings_fail_to_update_password_invalid_current_password)
+                            showPasswordLoadingView(false)
+                            if (failure.isInvalidPassword()) {
+                                oldPasswordTil.error = getString(R.string.settings_fail_to_update_password_invalid_current_password)
                             } else {
-                                dialog.dismiss()
-                                onDone(R.string.settings_fail_to_update_password)
+                                oldPasswordTil.error = getString(R.string.settings_fail_to_update_password)
                             }
-                        }
-
-                        override fun onUnexpectedError(e: Exception) {
-                            onDone(R.string.settings_fail_to_update_password)
                         }
                     })
-                    */
                 }
             }
             dialog.show()

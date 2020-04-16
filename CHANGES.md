@@ -2,6 +2,7 @@ Changes in RiotX 0.19.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:
+ - Change password (#528)
  - Cross-Signing | Support SSSS secret sharing (#944)
  - Cross-Signing | Verify new session from existing session (#1134)
  - Cross-Signing | Bootstraping cross signing with 4S from mobile (#985)
@@ -31,6 +32,7 @@ Bugfix 🐛:
  - Cross-Signing | web <-> riotX After QR code scan, gossiping fails (#1210)
  - Fix crash when trying to download file without internet connection (#1229)
  - Local echo are not updated in timeline (for failed & encrypted states)
+ - Render image event even if thumbnail_info does not have mimetype defined (#1209)
  - RiotX now uses as many threads as it needs to do work and send messages (#1221)
 
 Translations 🗣:
@@ -43,6 +45,7 @@ Build 🧱:
  - Compile with Android SDK 29 (Android Q)
 
 Other changes:
+ - Add a setting to prevent screenshots of the application, disabled by default (#1027)
  - Increase File Logger capacities ( + use dev log preferences)
 
 Changes in RiotX 0.18.1 (2020-03-17)

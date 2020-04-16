@@ -24,7 +24,7 @@ data class AudioInfo(
         /**
          * The mimetype of the audio e.g. "audio/aac".
          */
-        @Json(name = "mimetype") val mimeType: String,
+        @Json(name = "mimetype") val mimeType: String?,
 
         /**
          * The size of the audio clip in bytes.

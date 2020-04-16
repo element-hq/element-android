@@ -14,6 +14,12 @@
 
     <!-- END Strings added by Benoit -->
 
+    <!-- BEGIN Strings added by Benoit2 -->
+    <string name="settings_security_prevent_screenshots_title">Prevent screenshots of the application</string>
+    <string name="settings_security_prevent_screenshots_summary">Enabling this setting adds the FLAG_SECURE to all Activities. Restart the application for the change to take effect.</string>
+
+    <!-- END Strings added by Benoit2 -->
+
 
     <!-- BEGIN Strings added by Ganfra -->
 
@@ -29,4 +35,7 @@
 
     <!-- END Strings added by Others -->
 
+    <!-- BEGIN Strings added by Benoit -->
+    <string name="change_password_summary">Set a new account password…</string>
+    <!---->
 </resources>

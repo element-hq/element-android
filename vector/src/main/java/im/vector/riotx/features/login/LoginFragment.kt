@@ -28,6 +28,7 @@ import com.airbnb.mvrx.Success
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
+import im.vector.matrix.android.api.failure.isInvalidPassword
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.showPassword
@@ -209,10 +210,7 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
                 } else {
                     // Trick to display the error without text.
                     loginFieldTil.error = " "
-                    if (error is Failure.ServerError
-                            && error.error.code == MatrixError.M_FORBIDDEN
-                            && error.error.message == "Invalid password"
-                            && spaceInPassword()) {
+                    if (error.isInvalidPassword() && spaceInPassword()) {
                         passwordFieldTil.error = getString(R.string.auth_invalid_login_param_space_in_password)
                     } else {
                         passwordFieldTil.error = errorFormatter.toHumanReadable(error)

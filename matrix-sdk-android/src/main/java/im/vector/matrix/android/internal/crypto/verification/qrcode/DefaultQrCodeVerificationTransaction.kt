@@ -177,7 +177,7 @@ internal class DefaultQrCodeVerificationTransaction(
         }.exhaustive
 
         if (!canTrustOtherUserMasterKey && toVerifyDeviceIds.isEmpty()) {
-            //            // Nothing to verify
+            // Nothing to verify
             cancel(CancelCode.MismatchedKeys)
             return
         }
