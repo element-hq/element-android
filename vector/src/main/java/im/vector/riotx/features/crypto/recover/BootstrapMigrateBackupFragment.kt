@@ -125,8 +125,8 @@ class BootstrapMigrateBackupFragment @Inject constructor(
 
         val secret = bootstrapMigrateEditText.text?.toString()
         if (secret.isNullOrBlank()) {
-            bootstrapRecoveryKeyEnterTil.error = getString(R.string.recovery_key_empty_error_message).takeIf { isEnteringKey }
-                    ?: getString(R.string.passphrase_empty_error_message)
+            val errRes = if (isEnteringKey) R.string.recovery_key_empty_error_message else R.string.passphrase_empty_error_message
+            bootstrapRecoveryKeyEnterTil.error = getString(errRes)
         } else if (isEnteringKey && !isValidRecoveryKey(secret)) {
             bootstrapRecoveryKeyEnterTil.error = getString(R.string.bootstrap_invalid_recovery_key)
         } else {
