@@ -1101,10 +1101,10 @@ internal class DefaultKeysBackupService @Inject constructor(
     }
 
     override fun isValidRecoveryKeyForCurrentVersion(recoveryKey: String, callback: MatrixCallback<Boolean>) {
-        val keysBackupVersion = keysBackupVersion ?: return Unit.also { callback.onSuccess(false) }
+        val safeKeysBackupVersion = keysBackupVersion ?: return Unit.also { callback.onSuccess(false) }
 
         cryptoCoroutineScope.launch(coroutineDispatchers.main) {
-            isValidRecoveryKeyForKeysBackupVersion(recoveryKey, keysBackupVersion).let {
+            isValidRecoveryKeyForKeysBackupVersion(recoveryKey, safeKeysBackupVersion).let {
                 callback.onSuccess(it)
             }
         }
