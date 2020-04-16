@@ -122,7 +122,8 @@ internal class DefaultCryptoService @Inject constructor(
         private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
         // the crypto store
         private val cryptoStore: IMXCryptoStore,
-
+        // Room encryptors store
+        private val roomEncryptorsStore: RoomEncryptorsStore,
         // Olm device
         private val olmDevice: MXOlmDevice,
         // Set of parameters used to configure/customize the end-to-end crypto.
@@ -172,8 +173,6 @@ internal class DefaultCryptoService @Inject constructor(
 
     private val uiHandler = Handler(Looper.getMainLooper())
 
-    // MXEncrypting instance for each room.
-    private val roomEncryptors: MutableMap<String, IMXEncrypting> = HashMap()
     private val isStarting = AtomicBoolean(false)
     private val isStarted = AtomicBoolean(false)
 
@@ -512,9 +511,7 @@ internal class DefaultCryptoService @Inject constructor(
             else                      -> olmEncryptionFactory.create(roomId)
         }
 
-        synchronized(roomEncryptors) {
-            roomEncryptors.put(roomId, alg)
-        }
+        roomEncryptorsStore.put(roomId, alg)
 
         // if encryption was not previously enabled in this room, we will have been
         // ignoring new device events for these users so far. We may well have
@@ -596,16 +593,12 @@ internal class DefaultCryptoService @Inject constructor(
                 internalStart(false)
             }
             val userIds = getRoomUserIds(roomId)
-            var alg = synchronized(roomEncryptors) {
-                roomEncryptors[roomId]
-            }
+            var alg = roomEncryptorsStore.get(roomId)
             if (alg == null) {
                 val algorithm = getEncryptionAlgorithm(roomId)
                 if (algorithm != null) {
                     if (setEncryptionInRoom(roomId, algorithm, false, userIds)) {
-                        synchronized(roomEncryptors) {
-                            alg = roomEncryptors[roomId]
-                        }
+                        alg = roomEncryptorsStore.get(roomId)
                     }
                 }
             }
@@ -836,16 +829,8 @@ internal class DefaultCryptoService @Inject constructor(
      * @param event the membership event causing the change
      */
     private fun onRoomMembershipEvent(roomId: String, event: Event) {
-        val alg: IMXEncrypting?
+        roomEncryptorsStore.get(roomId) ?: /* No encrypting in this room */ return
 
-        synchronized(roomEncryptors) {
-            alg = roomEncryptors[roomId]
-        }
-
-        if (null == alg) {
-            // No encrypting in this room
-            return
-        }
         event.stateKey?.let { userId ->
             val roomMember: RoomMemberSummary? = event.content.toModel()
             val membership = roomMember?.membership

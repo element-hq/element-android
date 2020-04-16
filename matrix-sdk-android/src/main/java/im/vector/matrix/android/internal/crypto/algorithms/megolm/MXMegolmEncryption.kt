@@ -40,7 +40,7 @@ import timber.log.Timber
 
 internal class MXMegolmEncryption(
         // The id of the room we will be sending to.
-        private var roomId: String,
+        private val roomId: String,
         private val olmDevice: MXOlmDevice,
         private val defaultKeysBackupService: DefaultKeysBackupService,
         private val cryptoStore: IMXCryptoStore,
