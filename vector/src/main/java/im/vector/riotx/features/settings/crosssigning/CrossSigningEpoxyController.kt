@@ -24,13 +24,15 @@ import im.vector.riotx.core.ui.list.genericItem
 import im.vector.riotx.core.ui.list.genericItemWithValue
 import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
+import im.vector.riotx.features.settings.VectorPreferences
 import me.gujun.android.span.span
 import javax.inject.Inject
 
 class CrossSigningEpoxyController @Inject constructor(
         private val stringProvider: StringProvider,
         private val colorProvider: ColorProvider,
-        private val dimensionConverter: DimensionConverter
+        private val dimensionConverter: DimensionConverter,
+        private val vectorPreferences: VectorPreferences
 ) : TypedEpoxyController<CrossSigningSettingsViewState>() {
 
     interface InteractionListener {
@@ -49,7 +51,7 @@ class CrossSigningEpoxyController @Inject constructor(
                 titleIconResourceId(R.drawable.ic_shield_trusted)
                 title(stringProvider.getString(R.string.encryption_information_dg_xsigning_complete))
             }
-            if (!data.isUploadingKeys) {
+            if (vectorPreferences.developerMode() && !data.isUploadingKeys) {
                 bottomSheetVerificationActionItem {
                     id("resetkeys")
                     title("Reset keys")
@@ -68,14 +70,16 @@ class CrossSigningEpoxyController @Inject constructor(
                 title(stringProvider.getString(R.string.encryption_information_dg_xsigning_trusted))
             }
             if (!data.isUploadingKeys) {
-                bottomSheetVerificationActionItem {
-                    id("resetkeys")
-                    title("Reset keys")
-                    titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                    iconRes(R.drawable.ic_arrow_right)
-                    iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                    listener {
-                        interactionListener?.onResetCrossSigningKeys()
+                if (vectorPreferences.developerMode()) {
+                    bottomSheetVerificationActionItem {
+                        id("resetkeys")
+                        title("Reset keys")
+                        titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
+                        iconRes(R.drawable.ic_arrow_right)
+                        iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
+                        listener {
+                            interactionListener?.onResetCrossSigningKeys()
+                        }
                     }
                 }
 
@@ -106,14 +110,16 @@ class CrossSigningEpoxyController @Inject constructor(
                     interactionListener?.verifySession()
                 }
             }
-            bottomSheetVerificationActionItem {
-                id("resetkeys")
-                title("Reset keys")
-                titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                iconRes(R.drawable.ic_arrow_right)
-                iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                listener {
-                    interactionListener?.onResetCrossSigningKeys()
+            if (vectorPreferences.developerMode()) {
+                bottomSheetVerificationActionItem {
+                    id("resetkeys")
+                    title("Reset keys")
+                    titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
+                    iconRes(R.drawable.ic_arrow_right)
+                    iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
+                    listener {
+                        interactionListener?.onResetCrossSigningKeys()
+                    }
                 }
             }
         } else {
@@ -121,7 +127,7 @@ class CrossSigningEpoxyController @Inject constructor(
                 id("not")
                 title(stringProvider.getString(R.string.encryption_information_dg_xsigning_disabled))
             }
-            if (!data.isUploadingKeys) {
+            if (vectorPreferences.developerMode() && !data.isUploadingKeys) {
                 bottomSheetVerificationActionItem {
                     id("initKeys")
                     title("Initialize keys")

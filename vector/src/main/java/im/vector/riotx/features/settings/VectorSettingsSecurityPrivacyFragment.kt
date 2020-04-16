@@ -58,22 +58,9 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     override var titleRes = R.string.settings_security_and_privacy
     override val preferenceXmlRes = R.xml.vector_settings_security_privacy
 
-    // devices: device IDs and device names
-    private val mDevicesNameList: MutableList<DeviceInfo> = mutableListOf()
-
-    private var mMyDeviceInfo: DeviceInfo? = null
-
     // cryptography
     private val mCryptographyCategory by lazy {
         findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_PREFERENCE_KEY)!!
-    }
-    // cryptography manage
-    private val mCryptographyManageCategory by lazy {
-        findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_MANAGE_PREFERENCE_KEY)!!
-    }
-    // displayed pushers
-    private val mPushersSettingsCategory by lazy {
-        findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY)!!
     }
 
     private val mCrossSigningStatePreference by lazy {
@@ -106,7 +93,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         // My device name may have been updated
         refreshMyDevice()
         refreshXSigningStatus()
-        mCryptographyCategory.isVisible = vectorPreferences.developerMode()
     }
 
     override fun bindPref() {
@@ -133,7 +119,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     }
 
     private fun refreshXSigningStatus() {
-        if (vectorPreferences.developerMode()) {
             val crossSigningKeys = session.cryptoService().crossSigningService().getMyCrossSigningKeys()
             val xSigningIsEnableInAccount = crossSigningKeys != null
             val xSigningKeysAreTrusted = session.cryptoService().crossSigningService().checkUserTrust(session.myUserId).isVerified()
@@ -154,9 +139,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             }
 
             mCrossSigningStatePreference.isVisible = true
-        } else {
-            mCrossSigningStatePreference.isVisible = false
-        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -348,15 +330,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     // ==============================================================================================================
     // Cryptography
     // ==============================================================================================================
-
-    private fun removeCryptographyPreference() {
-        preferenceScreen.let {
-            it.removePreference(mCryptographyCategory)
-
-            // Also remove keys management section
-            it.removePreference(mCryptographyManageCategory)
-        }
-    }
 
     /**
      * Build the cryptography preference section.
