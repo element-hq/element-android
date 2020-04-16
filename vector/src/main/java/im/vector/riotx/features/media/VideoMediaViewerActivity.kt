@@ -43,7 +43,11 @@ class VideoMediaViewerActivity : VectorBaseActivity() {
 
             configureToolbar(videoMediaViewerToolbar, mediaData)
             imageContentRenderer.render(mediaData.thumbnailMediaData, ImageContentRenderer.Mode.FULL_SIZE, videoMediaViewerThumbnailView)
-            videoContentRenderer.render(mediaData, videoMediaViewerThumbnailView, videoMediaViewerLoading, videoMediaViewerVideoView, videoMediaViewerErrorView)
+            videoContentRenderer.render(mediaData,
+                    videoMediaViewerThumbnailView,
+                    videoMediaViewerLoading,
+                    videoMediaViewerVideoView,
+                    videoMediaViewerErrorView)
         }
     }
 

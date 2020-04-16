@@ -29,7 +29,8 @@ data class MessageLocationContent(
         @Json(name = "msgtype") override val msgType: String,
 
         /**
-         * Required. A description of the location e.g. 'Big Ben, London, UK', or some kind of content description for accessibility e.g. 'location attachment'.
+         * Required. A description of the location e.g. 'Big Ben, London, UK', or some kind
+         * of content description for accessibility e.g. 'location attachment'.
          */
         @Json(name = "body") override val body: String,
 
