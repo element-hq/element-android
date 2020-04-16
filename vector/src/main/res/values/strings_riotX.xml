@@ -21,6 +21,13 @@
     <string name="backup_recovery_passphrase">Recovery Passphrase</string>
     <string name="bootstrap_invalid_recovery_key">It‘s not a valid recovery key</string>
 
+    <string name="bootstrap_progress_checking_backup">Checking backup Key</string>
+    <string name="bootstrap_progress_checking_backup_with_info">Checking backup Key (%s)</string>
+    <string name="bootstrap_progress_compute_curve_key">Getting curve key</string>
+    <string name="bootstrap_progress_generating_ssss">Generating SSSS key from passphrase</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">Generating SSSS key from passphrase (%s)</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">Generating SSSS key from recovery key</string>
+    <string name="bootstrap_progress_storing_in_sss">Storing keybackup secret in SSSS</string>
     <!-- END Strings added by Valere -->
 
 

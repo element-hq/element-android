@@ -29,14 +29,17 @@ import im.vector.matrix.android.internal.crypto.keysbackup.deriveKey
 import im.vector.matrix.android.internal.crypto.keysbackup.util.computeRecoveryKey
 import im.vector.matrix.android.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 import im.vector.matrix.android.internal.util.awaitCallback
+import im.vector.riotx.R
 import im.vector.riotx.core.platform.ViewModelTask
 import im.vector.riotx.core.platform.WaitingViewData
+import im.vector.riotx.core.resources.StringProvider
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 
 class BackupToQuadSMigrationTask @Inject constructor(
-        val session: Session
+        val session: Session,
+        val stringProvider: StringProvider
 ) : ViewModelTask<BackupToQuadSMigrationTask.Params, BackupToQuadSMigrationTask.Result> {
 
     sealed class Result {
@@ -63,22 +66,25 @@ class BackupToQuadSMigrationTask @Inject constructor(
 
             val version = keysBackupService.keysBackupVersion ?: return Result.NoKeyBackupVersion
 
-            params.progressListener?.onProgress(WaitingViewData("Checking backup Key"))
+            reportProgress(params, R.string.bootstrap_progress_checking_backup)
             val curveKey =
                     (if (params.recoveryKey != null) {
                         extractCurveKeyFromRecoveryKey(params.recoveryKey)
                     } else if (!params.passphrase.isNullOrEmpty() && version.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null) {
                         version.getAuthDataAsMegolmBackupAuthData()?.let { authData ->
-                            deriveKey(params.passphrase, authData.privateKeySalt!!, authData.privateKeyIterations!!, object: ProgressListener {
+                            deriveKey(params.passphrase, authData.privateKeySalt!!, authData.privateKeyIterations!!, object : ProgressListener {
                                 override fun onProgress(progress: Int, total: Int) {
-                                    params.progressListener?.onProgress(WaitingViewData("Checking backup Key $progress/$total"))
+                                    params.progressListener?.onProgress(WaitingViewData(
+                                            stringProvider.getString(R.string.bootstrap_progress_checking_backup_with_info,
+                                                    "$progress/$total")
+                                    ))
                                 }
                             })
                         }
                     } else null)
                             ?: return Result.IllegalParams
 
-            params.progressListener?.onProgress(WaitingViewData("Getting curvekey"))
+            reportProgress(params, R.string.bootstrap_progress_compute_curve_key)
             val recoveryKey = computeRecoveryKey(curveKey)
 
             val isValid = awaitCallback<Boolean> {
@@ -87,27 +93,32 @@ class BackupToQuadSMigrationTask @Inject constructor(
 
             if (!isValid) return Result.InvalidRecoverySecret
 
-            val info : SsssKeyCreationInfo =
+            val info: SsssKeyCreationInfo =
                     when {
                         params.passphrase?.isNotEmpty() == true -> {
-                            params.progressListener?.onProgress(WaitingViewData("Generating SSSS key from passphrase"))
+                            reportProgress(params, R.string.bootstrap_progress_generating_ssss)
                             awaitCallback {
                                 quadS.generateKeyWithPassphrase(
                                         UUID.randomUUID().toString(),
                                         "ssss_key",
                                         params.passphrase,
                                         EmptyKeySigner(),
-                                        object: ProgressListener {
+                                        object : ProgressListener {
                                             override fun onProgress(progress: Int, total: Int) {
-                                                params.progressListener?.onProgress(WaitingViewData("Generating SSSS key from passphrase $progress/$total"))
+                                                params.progressListener?.onProgress(
+                                                        WaitingViewData(
+                                                                stringProvider.getString(
+                                                                        R.string.bootstrap_progress_generating_ssss_with_info,
+                                                                        "$progress/$total")
+                                                        ))
                                             }
                                         },
                                         it
                                 )
                             }
                         }
-                        params.recoveryKey != null -> {
-                            params.progressListener?.onProgress(WaitingViewData("Generating SSSS key from recovery key"))
+                        params.recoveryKey != null              -> {
+                            reportProgress(params, R.string.bootstrap_progress_generating_ssss_recovery)
                             awaitCallback {
                                 quadS.generateKey(
                                         UUID.randomUUID().toString(),
@@ -118,14 +129,14 @@ class BackupToQuadSMigrationTask @Inject constructor(
                                 )
                             }
                         }
-                        else                       -> {
+                        else                                    -> {
                             return Result.IllegalParams
                         }
                     }
 
             // Ok, so now we have migrated the old keybackup secret as the quadS key
             // Now we need to store the keybackup key in SSSS in a compatible way
-            params.progressListener?.onProgress(WaitingViewData("Storing keybackup secret in SSSS"))
+            reportProgress(params, R.string.bootstrap_progress_storing_in_sss)
             awaitCallback<Unit> {
                 quadS.storeSecret(
                         KEYBACKUP_SECRET_SSSS_NAME,
@@ -153,5 +164,9 @@ class BackupToQuadSMigrationTask @Inject constructor(
             Timber.e(failure, "## BackupToQuadSMigrationTask - Failed to migrate backup")
             return Result.ErrorFailure(failure)
         }
+    }
+
+    private fun reportProgress(params: Params, stringRes: Int) {
+        params.progressListener?.onProgress(WaitingViewData(stringProvider.getString(stringRes)))
     }
 }
