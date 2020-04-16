@@ -111,7 +111,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                         val isBackupCreatedFromPassphrase = keyVersion.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null
                         if (isBackupCreatedFromPassphrase) {
                             setState {
-                                copy(step = BootstrapStep.GetBackupSecretPassForMigration(isBackupCreatedFromPassphrase, false))
+                                copy(step = BootstrapStep.GetBackupSecretPassForMigration(isPasswordVisible = false, useKey = false))
                             }
                         } else {
                             setState {
