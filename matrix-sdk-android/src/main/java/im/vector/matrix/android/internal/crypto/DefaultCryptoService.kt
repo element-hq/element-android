@@ -28,7 +28,6 @@ import com.zhuinden.monarchy.Monarchy
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.NoOpMatrixCallback
-import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.crypto.MXCryptoConfig
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.listeners.ProgressListener
@@ -79,7 +78,9 @@ import im.vector.matrix.android.internal.crypto.verification.DefaultVerification
 import im.vector.matrix.android.internal.database.model.EventEntity
 import im.vector.matrix.android.internal.database.model.EventEntityFields
 import im.vector.matrix.android.internal.database.query.whereType
+import im.vector.matrix.android.internal.di.DeviceId
 import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.membership.LoadRoomMembersTask
@@ -117,8 +118,10 @@ import kotlin.math.max
 internal class DefaultCryptoService @Inject constructor(
         // Olm Manager
         private val olmManager: OlmManager,
-        // The credentials,
-        private val credentials: Credentials,
+        @UserId
+        private val userId: String,
+        @DeviceId
+        private val deviceId: String?,
         private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
         // the crypto store
         private val cryptoStore: IMXCryptoStore,
@@ -199,7 +202,7 @@ internal class DefaultCryptoService @Inject constructor(
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             // bg refresh of crypto device
-                            downloadKeys(listOf(credentials.userId), true, NoOpMatrixCallback())
+                            downloadKeys(listOf(userId), true, NoOpMatrixCallback())
                             callback.onSuccess(data)
                         }
 
@@ -398,7 +401,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     /**
-     * Provides the device information for a device id and a user Id
+     * Provides the device information for a user id and a device Id
      *
      * @param userId   the user id
      * @param deviceId the device id
@@ -746,7 +749,7 @@ internal class DefaultCryptoService @Inject constructor(
         }
 
         // Was that sent by us?
-        if (event.senderId != credentials.userId) {
+        if (event.senderId != userId) {
             Timber.e("## GOSSIP onSecretSend() : Ignore secret from other user ${event.senderId}")
             return
         }
@@ -1164,7 +1167,7 @@ internal class DefaultCryptoService @Inject constructor(
  * ========================================================================================== */
 
     override fun toString(): String {
-        return "DefaultCryptoService of " + credentials.userId + " (" + credentials.deviceId + ")"
+        return "DefaultCryptoService of $userId ($deviceId)"
     }
 
     override fun getOutgoingRoomKeyRequest(): List<OutgoingRoomKeyRequest> {
