@@ -260,7 +260,7 @@ fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
     }
 }
 
-fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String?) {
+fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String?): Boolean {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         val externalContentUri: Uri
         val values = ContentValues()
@@ -301,6 +301,7 @@ fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String
         context.contentResolver.insert(externalContentUri, values)?.let { uri ->
             context.contentResolver.openOutputStream(uri)?.use { outputStream ->
                 outputStream.sink().buffer().write(file.inputStream().use { it.readBytes() })
+                return true
             }
         }
     } else {
@@ -309,7 +310,9 @@ fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String
             mediaScanIntent.data = Uri.fromFile(file)
             context.sendBroadcast(mediaScanIntent)
         }
+        return true
     }
+    return false
 }
 
 /**
