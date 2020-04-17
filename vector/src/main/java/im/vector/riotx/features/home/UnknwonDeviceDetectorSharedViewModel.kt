@@ -34,6 +34,7 @@ import im.vector.riotx.core.platform.EmptyAction
 import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
+import java.util.concurrent.TimeUnit
 
 data class UnknownDevicesState(
         val unknownSessions: Async<List<Pair<MatrixItem?, DeviceInfo>>> = Uninitialized,
@@ -46,6 +47,8 @@ class UnknownDeviceDetectorSharedViewModel(session: Session, initialState: Unkno
     init {
         session.rx().liveUserCryptoDevices(session.myUserId)
                 .observeOn(AndroidSchedulers.mainThread())
+                .debounce(600, TimeUnit.MILLISECONDS)
+                .distinct()
                 .switchMap { deviceList ->
                     //                    Timber.v("## Detector - ============================")
 //                    Timber.v("## Detector - Crypto device update  ${deviceList.map { "${it.deviceId} : ${it.isVerified}" }}")

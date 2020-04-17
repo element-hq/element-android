@@ -412,7 +412,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
-        return cryptoStore.getUserDevices(userId)?.map { it.value } ?: emptyList()
+        return cryptoStore.getUserDevices(userId)?.map { it.value }?.sortedBy { it.deviceId } ?: emptyList()
     }
 
     override fun getLiveCryptoDeviceInfo(): LiveData<List<CryptoDeviceInfo>> {
