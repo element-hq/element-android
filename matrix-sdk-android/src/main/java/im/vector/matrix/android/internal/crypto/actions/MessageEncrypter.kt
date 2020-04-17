@@ -58,11 +58,9 @@ internal class MessageEncrypter @Inject constructor(
         // homeserver signed by the ed25519 key this proves that
         // the curve25519 key and the ed25519 key are owned by
         // the same device.
-        val keysMap = HashMap<String, String>()
-        keysMap["ed25519"] = olmDevice.deviceEd25519Key!!
-        payloadJson["keys"] = keysMap
+        payloadJson["keys"] = mapOf("ed25519" to olmDevice.deviceEd25519Key!!)
 
-        val ciphertext = HashMap<String, Any>()
+        val ciphertext = mutableMapOf<String, Any>()
 
         for ((deviceKey, deviceInfo) in deviceInfoParticipantKey) {
             val sessionId = olmDevice.getSessionId(deviceKey)
