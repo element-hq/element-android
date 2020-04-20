@@ -2166,6 +2166,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="a11y_qr_code_for_verification">QR kodea</string>
 
+    <string name="qr_code_scanned_by_other_notice">Beste erabiltzaileak QR kodea ongi eskaneatu du\?</string>
     <string name="qr_code_scanned_by_other_yes">Bai</string>
     <string name="qr_code_scanned_by_other_no">Ez</string>
 

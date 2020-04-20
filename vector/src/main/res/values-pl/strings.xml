@@ -2146,6 +2146,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
 
     <string name="a11y_qr_code_for_verification">Kod QR</string>
 
+    <string name="qr_code_scanned_by_other_notice">Czy inny użytkownik pomyślnie zeskanował kod QR\?</string>
     <string name="qr_code_scanned_by_other_yes">Tak</string>
     <string name="qr_code_scanned_by_other_no">Nie</string>
 

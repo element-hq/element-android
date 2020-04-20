@@ -264,7 +264,7 @@
 \nএটাই হলো একবার। 
 \nক্ষমা করবেন এটাই হলো অসুবিধা।</string>
 
-    <string name="e2e_re_request_encryption_key"><ও>পুনরায় অনুরোধ এনক্রিপশন চাবিগুলি</ও>আপনার অন্য সেশানগুলি থেকে।</string>
+    <string name="e2e_re_request_encryption_key"><u>পুনরায় অনুরোধ এনক্রিপশন চাবিগুলি</u>আপনার অন্য সেশানগুলি থেকে।</string>
 
     <string name="e2e_re_request_encryption_key_sent">চাবির অনুরোধ পাঠানো।</string>
 

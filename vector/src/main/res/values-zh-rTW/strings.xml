@@ -398,7 +398,7 @@
     <string name="go_on_with">使用…打開</string>
     <string name="error_no_external_application_found">對不起，沒有應用程式可以完成此操作。</string>
 
-    <string name="e2e_re_request_encryption_key">從其他工作階段<u>重新請求金鑰</u>。</string>
+    <string name="e2e_re_request_encryption_key">從其他工作階段重新請求金鑰。<u>重新請求金鑰</u>。</string>
 
     <string name="e2e_re_request_encryption_key_sent">已發送金鑰分享請求。</string>
 
@@ -1276,7 +1276,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="keys_backup_banner_recover_line1">永遠不失去加密訊息</string>
     <string name="keys_backup_banner_recover_line2">使用金鑰備份</string>
 
-    <string name="keys_backup_banner_update_line1">新加密訊息金鑰</string>
+    <string name="keys_backup_banner_update_line1">新安全訊息金鑰</string>
     <string name="keys_backup_banner_update_line2">管理金鑰備份</string>
 
     <string name="keys_backup_banner_in_progress">正在備份金鑰……</string>
@@ -2097,7 +2097,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="crosssigning_other_user_not_trust">其他使用者可能不會信任它</string>
     <string name="complete_security">全面的安全性</string>
 
-    <string name="verification_open_other_to_verify">開啟既有的工作階段並使用它來驗證這個，讓它可以存取已加密的訊息。</string>
+    <string name="verification_open_other_to_verify">使用既有的工作階段來驗證這個，讓它可以存取已加密的訊息。</string>
 
 
     <string name="verification_profile_verify">驗證</string>
@@ -2119,6 +2119,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="a11y_qr_code_for_verification">QR code</string>
 
+    <string name="qr_code_scanned_by_other_notice">就快完成了！%s 有顯示相同的盾牌嗎？</string>
     <string name="qr_code_scanned_by_other_yes">是</string>
     <string name="qr_code_scanned_by_other_no">否</string>
 
@@ -2134,8 +2135,8 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     </plurals>
     <string name="poll_item_selected_aria">已選取的選項</string>
     <string name="command_description_poll">建立簡易投票</string>
-    <string name="verification_cannot_access_other_session">無法存取既有的工作階段？</string>
-    <string name="verification_use_passphrase">使用您的復原金鑰或通關密語</string>
+    <string name="verification_cannot_access_other_session">使用復原方法</string>
+    <string name="verification_use_passphrase">如果您無法存取既有的工作階段的話</string>
 
     <string name="new_signin">新登入</string>
 
@@ -2160,5 +2161,110 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="event_redacted_by_admin_reason_with_reason">由聊天室管理員管理的活動，理由：%1$s</string>
 
     <string name="keys_backup_restore_success_title_already_up_to_date">金鑰已為最新！</string>
+
+    <string name="login_mobile_device_riotx">RiotX Android</string>
+
+    <string name="settings_key_requests">金鑰請求</string>
+
+    <string name="e2e_use_keybackup">解鎖已加密的訊息歷史</string>
+
+    <string name="refresh">重新整理</string>
+
+    <string name="new_session">新工作階段</string>
+    <string name="new_session_review">輕觸即可以審閱並驗證</string>
+    <string name="verify_new_session_notice">使用此工作階段來驗證新的，讓它可以存取已加密的訊息。</string>
+    <string name="verify_new_session_was_not_me">這不是我</string>
+    <string name="verify_new_session_compromized">您的帳號可能已被盜用</string>
+
+    <string name="verify_cancel_self_verification_from_untrusted">如果您取消，您可能無法在此裝置上讀取已加密的訊息，而其他使用者也不會信任它</string>
+    <string name="verify_cancel_self_verification_from_trusted">如果您取消，您可能無法在您新的裝置上讀取已加密的訊息，而其他使用者也不會信任它</string>
+    <string name="verify_cancel_other">如果您現在取消，您將無法驗證 %1$s (%2$s)。在他們的使用者檔案中重新開始。</string>
+
+    <string name="verify_not_me_self_verification">下列其中一項可能已被盜用：
+\n
+\n- 您的密碼
+\n- 您的家伺服器
+\n- 此裝置或其他裝置
+\n- 任一裝置正在使用的網際網路連線
+\n
+\n我們建議您立刻在設定中變更您的密碼與復原金鑰。</string>
+
+    <string name="verify_cancelled_notice">透過設定驗證您的裝置。</string>
+    <string name="verification_cancelled">驗證已取消</string>
+
+    <string name="recovery_passphrase">訊息密碼</string>
+    <string name="message_key">訊息金鑰</string>
+    <string name="account_password">帳號密碼</string>
+
+    <string name="set_recovery_passphrase">設定 %s</string>
+    <string name="generate_message_key">生成訊息金鑰</string>
+
+    <string name="confirm_recovery_passphrase">確認 %s</string>
+
+    <string name="enter_account_password">輸入您的 %s 以繼續。</string>
+
+    <string name="bootstrap_info_text">保護與解鎖已加密的訊息並信任 %s。</string>
+    <string name="bootstrap_info_confirm_text">再次輸入您的 %s 以確認。</string>
+    <string name="bootstrap_dont_reuse_pwd">不要重用您的帳號密碼。</string>
+
+
+    <string name="bootstrap_loading_text">這可能需要數秒，請稍候。</string>
+    <string name="bootstrap_loading_title">設定復原。</string>
+    <string name="your_recovery_key">您的復原金鑰</string>
+    <string name="bootstrap_finish_title">已完成！</string>
+    <string name="keep_it_safe">把它放在安全的地方</string>
+    <string name="finish">完成</string>
+
+    <string name="bootstrap_save_key_description">使用這個 %1$s 做為安全網以避免您忘記您的 %2$s。</string>
+
+    <string name="bootstrap_crosssigning_progress_initializing">正在發佈已建立的識別金鑰</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">正在從通關密語生成安全金鑰</string>
+    <string name="bootstrap_crosssigning_progress_default_key">正在定義 SSSS 預設金鑰</string>
+    <string name="bootstrap_crosssigning_progress_save_msk">正在同步主控金鑰</string>
+    <string name="bootstrap_crosssigning_progress_save_usk">正在同步使用者金鑰</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">正在同步自行簽署金鑰</string>
+    <string name="bootstrap_crosssigning_progress_key_backup">設定金鑰備份</string>
+
+
+    <string name="bootstrap_cross_signing_success">您的 %2$s 與 %1$s 設定好了。
+\n
+\n請保護它們的安全！如果您遺失所有作用中的工作階段，您將會需要它們來解鎖已加密的訊息並保護資訊。</string>
+
+    <string name="bootstrap_crosssigning_print_it">列印並將其存放在安全的地方</string>
+    <string name="bootstrap_crosssigning_save_usb">將其儲存在 USB 隨身碟或備份磁碟上</string>
+    <string name="bootstrap_crosssigning_save_cloud">將其複製到您的私人雲端儲存空間</string>
+
+    <string name="auth_flow_not_supported">您不能從行動裝置上做這件事</string>
+
+    <string name="bootstrap_skip_text">設定訊息密碼可讓您保護並解鎖已加密的訊息並信任。
+\n
+\n如果您不想要設定訊息密碼，請生成訊息金鑰來代替。</string>
+    <string name="bootstrap_skip_text_no_gen_key">設定訊息密碼可讓您保護並解鎖已加密的訊息並信任。</string>
+
+
+    <string name="encryption_enabled">加密已啟用</string>
+    <string name="encryption_enabled_tile_description">在此聊天室中的訊息已端到端加密。取得更多資訊並在使用者的個人檔案中驗證他們。</string>
+    <string name="encryption_not_enabled">加密未啟用</string>
+    <string name="encryption_unknown_algorithm_tile_description">用於此聊天室的加密未受支援</string>
+
+    <string name="room_created_summary_item">%s 建立並設定聊天室。</string>
+
+    <string name="qr_code_scanned_self_verif_notice">就快完成了！其他裝置有顯示相同的盾牌嗎？</string>
+    <string name="qr_code_scanned_verif_waiting_notice">就快完成了！正在等待確認……</string>
+    <string name="qr_code_scanned_verif_waiting">正在等待 %s……</string>
+
+    <string name="error_failed_to_import_keys">匯入金鑰失敗</string>
+
+    <string name="settings_notification_configuration">通知設定</string>
+    <string name="settings_messages_at_room">訊息包含 @room</string>
+    <string name="settings_messages_in_e2e_one_to_one">在一對一的聊天中已加密的訊息</string>
+    <string name="settings_messages_in_e2e_group_chat">群組聊天中的已加密訊息</string>
+    <string name="settings_when_rooms_are_upgraded">當聊天室升級時</string>
+    <string name="settings_troubleshoot_title">疑難排解</string>
+    <string name="settings_notification_advanced_summary_riotx">按事件設定通知重要性</string>
+
+    <string name="command_description_plain">傳送純文字訊息，不將它們解譯為 markdown</string>
+
+    <string name="auth_invalid_login_param_space_in_password">不正確的使用者名稱及／或密碼。輸入的密碼以空格開頭或結尾，請檢查。</string>
 
 </resources>
