@@ -48,6 +48,7 @@ import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.internal.crypto.actions.MegolmSessionDataImporter
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
+import im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmDecryption
 import im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmEncryptionFactory
 import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmEncryptionFactory
 import im.vector.matrix.android.internal.crypto.crosssigning.DefaultCrossSigningService
@@ -178,6 +179,10 @@ internal class DefaultCryptoService @Inject constructor(
 
     private val isStarting = AtomicBoolean(false)
     private val isStarted = AtomicBoolean(false)
+
+    // The date of the last time we forced establishment
+    // of a new session for each user:device.
+    private val lastNewSessionForcedDates = MXUsersDevicesMap<Long>()
 
     fun onStateEvent(roomId: String, event: Event) {
         when {
@@ -675,9 +680,50 @@ internal class DefaultCryptoService @Inject constructor(
                 Timber.e("## decryptEvent() : $reason")
                 throw MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT, reason)
             } else {
-                return alg.decryptEvent(event, timeline)
+                try {
+                    return alg.decryptEvent(event, timeline)
+                } catch (mxCryptoError: MXCryptoError) {
+                    if (mxCryptoError is MXCryptoError.Base
+                            && mxCryptoError.errorType == MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE
+                            && alg is MXMegolmDecryption) {
+                        // TODO Do it on decryption thread like on iOS?
+                        markOlmSessionForUnwedging(event, alg)
+                    }
+                    throw mxCryptoError
+                }
             }
         }
+    }
+
+    private fun markOlmSessionForUnwedging(event: Event, mxMegolmDecryption: MXMegolmDecryption) {
+        val senderId = event.senderId ?: return
+        val encryptedMessage = event.content.toModel<EncryptedEventContent>() ?: return
+        val deviceKey = encryptedMessage.senderKey ?: return
+        encryptedMessage.algorithm?.takeIf { it == MXCRYPTO_ALGORITHM_MEGOLM } ?: return
+
+        if (senderId == userId
+                && deviceKey == olmDevice.deviceCurve25519Key) {
+            Timber.d("[MXCrypto] markOlmSessionForUnwedging: Do not unwedge ourselves")
+            return
+        }
+
+        val lastForcedDate = lastNewSessionForcedDates.getObject(senderId, deviceKey) ?: 0
+        val now = System.currentTimeMillis()
+        if (now - lastForcedDate < CRYPTO_MIN_FORCE_SESSION_PERIOD_MILLIS) {
+            Timber.d("[MXCrypto] markOlmSessionForUnwedging: New session already forced with device at $lastForcedDate. Not forcing another")
+            return
+        }
+
+        // Establish a new olm session with this device since we're failing to decrypt messages
+        // on a current session.
+        val deviceInfo = getDeviceInfo(senderId, deviceKey) ?: return Unit.also {
+            Timber.d("[MXCrypto] markOlmSessionForUnwedging: Couldn't find device for identity key $deviceKey: not re-establishing session")
+        }
+
+        Timber.d("[MXCrypto] markOlmSessionForUnwedging from $senderId:${deviceInfo.deviceId}")
+        lastNewSessionForcedDates.setObject(senderId, deviceKey, now)
+
+        mxMegolmDecryption.markOlmSessionForUnwedging(senderId, deviceInfo)
     }
 
     /**
@@ -1189,4 +1235,8 @@ internal class DefaultCryptoService @Inject constructor(
 
     @VisibleForTesting
     val cryptoStoreForTesting = cryptoStore
+
+    companion object {
+        const val CRYPTO_MIN_FORCE_SESSION_PERIOD_MILLIS = 3_600_000 // one hour
+    }
 }

@@ -27,10 +27,12 @@ import im.vector.matrix.android.common.CryptoTestHelper
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
+import timber.log.Timber
 import java.util.concurrent.CountDownLatch
 
 /**
@@ -99,13 +101,13 @@ class UnwedgingTest : InstrumentedTest {
 
             override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
                 val decryptedEventReceivedByBob = snapshot.filter { it.root.getClearType() == EventType.MESSAGE }
+                Timber.d("Bob can now decrypt ${decryptedEventReceivedByBob.size} messages")
                 if (decryptedEventReceivedByBob.size == 3) {
                     bobFinalLatch.countDown()
                 }
             }
         }
         bobTimeline.addListener(bobHasThreeDecryptedEventsListener)
-        
 
         var latch = CountDownLatch(1)
         var bobEventsListener = createEventListener(latch, 1)
@@ -128,7 +130,7 @@ class UnwedgingTest : InstrumentedTest {
         sessionIdsForBob!!.size shouldBe 1
         val olmSession = aliceCryptoStore.getDeviceSession(sessionIdsForBob.first(), bobSession.cryptoService().getMyDevice().identityKey()!!)!!
 
-        // Sam join the room
+        // Sam join the room, so it will force a new session creation
         val samSession = mCryptoTestHelper.createSamAccountAndInviteToTheRoom(roomFromAlicePOV)
 
         latch = CountDownLatch(1)

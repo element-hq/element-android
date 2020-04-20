@@ -32,7 +32,10 @@ import im.vector.matrix.android.internal.crypto.model.rest.GossipingToDeviceObje
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -43,7 +46,10 @@ internal class IncomingGossipingRequestManager @Inject constructor(
         private val cryptoStore: IMXCryptoStore,
         private val cryptoConfig: MXCryptoConfig,
         private val gossipingWorkManager: GossipingWorkManager,
-        private val roomDecryptorProvider: RoomDecryptorProvider) {
+        private val roomEncryptorsStore: RoomEncryptorsStore,
+        private val roomDecryptorProvider: RoomDecryptorProvider,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val cryptoCoroutineScope: CoroutineScope) {
 
     // list of IncomingRoomKeyRequests/IncomingRoomKeyRequestCancellations
     // we received in the current sync.
@@ -178,17 +184,42 @@ internal class IncomingGossipingRequestManager @Inject constructor(
     }
 
     private fun processIncomingRoomKeyRequest(request: IncomingRoomKeyRequest) {
-        val userId = request.userId
-        val deviceId = request.deviceId
-        val body = request.requestBody
-        val roomId = body!!.roomId
-        val alg = body.algorithm
+        val userId = request.userId ?: return
+        val deviceId = request.deviceId ?: return
+        val body = request.requestBody ?: return
+        val roomId = body.roomId ?: return
+        val alg = body.algorithm ?: return
 
         Timber.v("## GOSSIP processIncomingRoomKeyRequest from $userId:$deviceId for $roomId / ${body.sessionId} id ${request.requestId}")
-        if (userId == null || credentials.userId != userId) {
-            // TODO: determine if we sent this device the keys already: in
-            Timber.w("## GOSSIP processReceivedGossipingRequests() : Ignoring room key request from other user for now")
-            cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED)
+        if (credentials.userId != userId) {
+            Timber.w("## GOSSIP processReceivedGossipingRequests() : room key request from other user")
+            val senderKey = body.senderKey ?: return Unit
+                    .also { Timber.w("missing senderKey") }
+                    .also { cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED) }
+            val sessionId = body.sessionId ?: return Unit
+                    .also { Timber.w("missing sessionId") }
+                    .also { cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED) }
+
+            if (alg != MXCRYPTO_ALGORITHM_MEGOLM) {
+                return Unit
+                        .also { Timber.w("Only megolm is accepted here") }
+                        .also { cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED) }
+            }
+
+            val roomEncryptor = roomEncryptorsStore.get(roomId) ?: return Unit
+                    .also { Timber.w("no room Encryptor") }
+                    .also { cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED) }
+
+            cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+                val isSuccess = roomEncryptor.reshareKey(sessionId, userId, deviceId, senderKey)
+
+                if (isSuccess) {
+                    cryptoStore.updateGossipingRequestState(request, GossipingRequestState.ACCEPTED)
+                } else {
+                    cryptoStore.updateGossipingRequestState(request, GossipingRequestState.UNABLE_TO_PROCESS)
+                }
+            }
+            cryptoStore.updateGossipingRequestState(request, GossipingRequestState.RE_REQUESTED)
             return
         }
         // TODO: should we queue up requests we don't yet have keys for, in case they turn up later?
@@ -219,7 +250,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
             cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED)
         }
         // if the device is verified already, share the keys
-        val device = cryptoStore.getUserDevice(userId, deviceId!!)
+        val device = cryptoStore.getUserDevice(userId, deviceId)
         if (device != null) {
             if (device.isVerified) {
                 Timber.v("## GOSSIP processReceivedGossipingRequests() : device is already verified: sharing keys")

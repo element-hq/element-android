@@ -25,10 +25,11 @@ import im.vector.matrix.android.internal.crypto.tasks.ClaimOneTimeKeysForUsersDe
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val olmDevice: MXOlmDevice,
-                                                                     private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask) {
+internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
+        private val olmDevice: MXOlmDevice,
+        private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask) {
 
-    suspend fun handle(devicesByUser: Map<String, List<CryptoDeviceInfo>>): MXUsersDevicesMap<MXOlmSessionResult> {
+    suspend fun handle(devicesByUser: Map<String, List<CryptoDeviceInfo>>, force: Boolean = false): MXUsersDevicesMap<MXOlmSessionResult> {
         val devicesWithoutSession = ArrayList<CryptoDeviceInfo>()
 
         val results = MXUsersDevicesMap<MXOlmSessionResult>()
@@ -40,7 +41,7 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val
 
                 val sessionId = olmDevice.getSessionId(key!!)
 
-                if (sessionId.isNullOrEmpty()) {
+                if (sessionId.isNullOrEmpty() || force) {
                     devicesWithoutSession.add(deviceInfo)
                 }
 
@@ -80,7 +81,7 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(private val
                 if (null != deviceIds) {
                     for (deviceId in deviceIds) {
                         val olmSessionResult = results.getObject(userId, deviceId)
-                        if (olmSessionResult!!.sessionId != null) {
+                        if (olmSessionResult!!.sessionId != null && !force) {
                             // We already have a result for this device
                             continue
                         }

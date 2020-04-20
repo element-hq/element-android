@@ -17,8 +17,10 @@
 package im.vector.matrix.android.internal.crypto
 
 import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
+import im.vector.matrix.android.internal.session.SessionScope
 import javax.inject.Inject
 
+@SessionScope
 internal class RoomEncryptorsStore @Inject constructor() {
 
     // MXEncrypting instance for each room.

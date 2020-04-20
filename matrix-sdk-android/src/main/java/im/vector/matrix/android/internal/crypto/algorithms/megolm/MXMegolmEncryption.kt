@@ -305,4 +305,49 @@ internal class MXMegolmEncryption(
             throw MXCryptoError.UnknownDevice(unknownDevices)
         }
     }
+
+    override suspend fun reshareKey(sessionId: String,
+                                    userId: String,
+                                    deviceId: String,
+                                    senderKey: String): Boolean {
+        Timber.d("[MXMegolmEncryption] reshareKey: $sessionId to $userId:$deviceId")
+        val deviceInfo = cryptoStore.getUserDevice(userId, deviceId) ?: return false
+                .also { Timber.w("Device not found") }
+
+        // Get the chain index of the key we previously sent this device
+        val chainIndex = outboundSession?.sharedWithDevices?.getObject(userId, deviceId)?.toLong() ?: return false
+                .also { Timber.w("[MXMegolmEncryption] reshareKey : ERROR : Never share megolm with this device") }
+
+        val devicesByUser = mapOf(userId to listOf(deviceInfo))
+        val usersDeviceMap = ensureOlmSessionsForDevicesAction.handle(devicesByUser)
+        val olmSessionResult = usersDeviceMap.getObject(userId, deviceId)
+        olmSessionResult?.sessionId
+                ?: // no session with this device, probably because there were no one-time keys.
+                // ensureOlmSessionsForDevicesAction has already done the logging, so just skip it.
+                return false
+
+        Timber.d("[MXMegolmEncryption] reshareKey: sharing keys for session $senderKey|$sessionId:$chainIndex with device $userId:$deviceId")
+
+        val payloadJson = mutableMapOf<String, Any>("type" to EventType.FORWARDED_ROOM_KEY)
+
+        runCatching { olmDevice.getInboundGroupSession(sessionId, senderKey, roomId) }
+                .fold(
+                        {
+                            // TODO
+                            payloadJson["content"] = it.exportKeys(chainIndex) ?: ""
+                        },
+                        {
+                            // TODO
+                        }
+
+                )
+
+        val encodedPayload = messageEncrypter.encryptMessage(payloadJson, listOf(deviceInfo))
+        val sendToDeviceMap = MXUsersDevicesMap<Any>()
+        sendToDeviceMap.setObject(userId, deviceId, encodedPayload)
+        Timber.v("## shareKeysWithDevice() : sending to $userId:$deviceId")
+        val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
+        sendToDeviceTask.execute(sendToDeviceParams)
+        return true
+    }
 }

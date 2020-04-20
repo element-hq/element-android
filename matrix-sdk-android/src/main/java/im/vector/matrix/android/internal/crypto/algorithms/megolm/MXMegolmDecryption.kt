@@ -31,6 +31,7 @@ import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForDevi
 import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.algorithms.IMXDecrypting
 import im.vector.matrix.android.internal.crypto.keysbackup.DefaultKeysBackupService
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.crypto.model.event.RoomKeyContent
@@ -344,6 +345,27 @@ internal class MXMegolmDecryption(private val userId: String,
                             sendToDeviceTask.execute(sendToDeviceParams)
                         }
                     }
+        }
+    }
+
+    fun markOlmSessionForUnwedging(senderId: String, deviceInfo: CryptoDeviceInfo) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            ensureOlmSessionsForDevicesAction.handle(mapOf(senderId to listOf(deviceInfo)), force = true)
+
+            // Now send a blank message on that session so the other side knows about it.
+            // (The keyshare request is sent in the clear so that won't do)
+            // We send this first such that, as long as the toDevice messages arrive in the
+            // same order we sent them, the other end will get this first, set up the new session,
+            // then get the keyshare request and send the key over this new session (because it
+            // is the session it has most recently received a message on).
+            val payloadJson = mapOf<String, Any>("type" to EventType.DUMMY)
+
+            val encodedPayload = messageEncrypter.encryptMessage(payloadJson, listOf(deviceInfo))
+            val sendToDeviceMap = MXUsersDevicesMap<Any>()
+            sendToDeviceMap.setObject(senderId, deviceInfo.deviceId, encodedPayload)
+            Timber.v("## markOlmSessionForUnwedging() : sending to $senderId:${deviceInfo.deviceId}")
+            val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
+            sendToDeviceTask.execute(sendToDeviceParams)
         }
     }
 }
