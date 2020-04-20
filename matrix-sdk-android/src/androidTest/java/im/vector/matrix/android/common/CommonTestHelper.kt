@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.MatrixConfiguration
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.LoginFlowResult
 import im.vector.matrix.android.api.auth.registration.RegistrationResult
+import im.vector.matrix.android.api.failure.isInvalidPassword
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.LocalEcho
@@ -41,6 +42,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.amshove.kluent.shouldBeTrue
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -183,9 +185,9 @@ class CommonTestHelper(context: Context) {
      * @param testParams test params about the session
      * @return the session associated with the existing account
      */
-    private fun logIntoAccount(userId: String,
-                               password: String,
-                               testParams: SessionTestParams): Session {
+    fun logIntoAccount(userId: String,
+                       password: String,
+                       testParams: SessionTestParams): Session {
         val session = logAccountAndSync(userId, password, testParams)
         assertNotNull(session)
         return session
@@ -258,6 +260,36 @@ class CommonTestHelper(context: Context) {
         }
 
         return session
+    }
+
+    /**
+     * Log into the account using a wrong password
+     *
+     * @param userName    the account username
+     * @param badPassword an incorrect password
+     */
+    fun logAccountBadPassword(userName: String,
+                              badPassword: String) {
+        val hs = createHomeServerConfig()
+
+        doSync<LoginFlowResult> {
+            matrix.authenticationService
+                    .getLoginFlow(hs, it)
+        }
+
+        var requestFailure: Throwable? = null
+        val latch = CountDownLatch(1)
+        matrix.authenticationService
+                .getLoginWizard()
+                .login(userName, badPassword, "myDevice", object : TestMatrixCallback<Session>(latch, onlySuccessful = false) {
+                    override fun onFailure(failure: Throwable) {
+                        requestFailure = failure
+                        super.onFailure(failure)
+                    }
+                })
+        await(latch)
+
+        requestFailure!!.isInvalidPassword().shouldBeTrue()
     }
 
     /**
