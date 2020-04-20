@@ -38,6 +38,7 @@ internal class MXOlmDecryption(
         private val userId: String)
     : IMXDecrypting {
 
+    @Throws(MXCryptoError::class)
     override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         val olmEventContent = event.content.toModel<OlmEventContent>() ?: run {
             Timber.e("## decryptEvent() : bad event format")

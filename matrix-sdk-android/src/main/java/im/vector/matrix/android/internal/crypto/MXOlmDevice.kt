@@ -625,6 +625,7 @@ internal class MXOlmDevice @Inject constructor(
      * @param senderKey the base64-encoded curve25519 key of the sender.
      * @return the decrypting result. Nil if the sessionId is unknown.
      */
+    @Throws(MXCryptoError::class)
     fun decryptGroupMessage(body: String,
                             roomId: String,
                             timeline: String?,
@@ -662,8 +663,7 @@ internal class MXOlmDevice @Inject constructor(
                 adapter.fromJson(payloadString)
             } catch (e: Exception) {
                 Timber.e("## decryptGroupMessage() : fails to parse the payload")
-                throw
-                MXCryptoError.Base(MXCryptoError.ErrorType.BAD_DECRYPTED_FORMAT, MXCryptoError.BAD_DECRYPTED_FORMAT_TEXT_REASON)
+                throw MXCryptoError.Base(MXCryptoError.ErrorType.BAD_DECRYPTED_FORMAT, MXCryptoError.BAD_DECRYPTED_FORMAT_TEXT_REASON)
             }
 
             return OlmDecryptionResult(
