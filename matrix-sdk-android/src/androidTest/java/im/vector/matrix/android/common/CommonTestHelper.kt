@@ -278,16 +278,16 @@ class CommonTestHelper(context: Context) {
         }
 
         var requestFailure: Throwable? = null
-        val latch = CountDownLatch(1)
-        matrix.authenticationService
-                .getLoginWizard()
-                .login(userName, badPassword, "myDevice", object : TestMatrixCallback<Session>(latch, onlySuccessful = false) {
-                    override fun onFailure(failure: Throwable) {
-                        requestFailure = failure
-                        super.onFailure(failure)
-                    }
-                })
-        await(latch)
+        waitWithLatch { latch ->
+            matrix.authenticationService
+                    .getLoginWizard()
+                    .login(userName, badPassword, "myDevice", object : TestMatrixCallback<Session>(latch, onlySuccessful = false) {
+                        override fun onFailure(failure: Throwable) {
+                            requestFailure = failure
+                            super.onFailure(failure)
+                        }
+                    })
+        }
 
         requestFailure!!.isInvalidPassword().shouldBeTrue()
     }
@@ -298,8 +298,8 @@ class CommonTestHelper(context: Context) {
      * @param latch
      * @throws InterruptedException
      */
-    fun await(latch: CountDownLatch, timout: Long? = TestConstants.timeOutMillis) {
-        assertTrue(latch.await(timout ?: TestConstants.timeOutMillis, TimeUnit.MILLISECONDS))
+    fun await(latch: CountDownLatch, timeout: Long? = TestConstants.timeOutMillis) {
+        assertTrue(latch.await(timeout ?: TestConstants.timeOutMillis, TimeUnit.MILLISECONDS))
     }
 
     fun retryPeriodicallyWithLatch(latch: CountDownLatch, condition: (() -> Boolean)) {
@@ -314,10 +314,10 @@ class CommonTestHelper(context: Context) {
         }
     }
 
-    fun waitWithLatch(timout: Long? = TestConstants.timeOutMillis, block: (CountDownLatch) -> Unit) {
+    fun waitWithLatch(timeout: Long? = TestConstants.timeOutMillis, block: (CountDownLatch) -> Unit) {
         val latch = CountDownLatch(1)
         block(latch)
-        await(latch, timout)
+        await(latch, timeout)
     }
 
     // Transform a method with a MatrixCallback to a synchronous method
