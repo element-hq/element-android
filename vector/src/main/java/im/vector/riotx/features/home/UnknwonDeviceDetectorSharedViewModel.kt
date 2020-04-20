@@ -46,7 +46,6 @@ class UnknownDeviceDetectorSharedViewModel(session: Session, initialState: Unkno
 
     init {
         session.rx().liveUserCryptoDevices(session.myUserId)
-                .observeOn(AndroidSchedulers.mainThread())
                 .debounce(600, TimeUnit.MILLISECONDS)
                 .distinct()
                 .switchMap { deviceList ->
