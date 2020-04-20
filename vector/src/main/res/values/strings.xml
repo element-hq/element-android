@@ -2202,7 +2202,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="refresh">Refresh</string>
 
-    <string name="new_session">New Session</string>
+    <string name="new_session">Unverified login. Was this you?</string>
     <string name="new_session_review">Tap to review &amp; verify</string>
     <string name="verify_new_session_notice">Use this session to verify your new one, granting it access to encrypted messages.</string>
     <string name="verify_new_session_was_not_me">This wasn’t me</string>
@@ -2219,7 +2219,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="verify_cancelled_notice">Verify your devices from Settings.</string>
     <string name="verification_cancelled">Verification Cancelled</string>
 
-    <string name="recovery_passphrase">Message Password</string>
+    <string name="recovery_passphrase">Recovery Passphrase</string>
     <string name="message_key">Message Key</string>
     <string name="account_password">Account Password</string>
 
@@ -2243,7 +2243,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="bootstrap_loading_text">This might take several seconds, please be patient.</string>
     <string name="bootstrap_loading_title">Setting up recovery.</string>
     <string name="your_recovery_key">Your recovery key</string>
-    <string name="bootstrap_finish_title">You‘re done!</string>
+    <string name="bootstrap_finish_title">"You're done!"</string>
     <string name="keep_it_safe">Keep it safe</string>
     <string name="finish">Finish</string>
 
@@ -2269,8 +2269,8 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="auth_flow_not_supported">You cannot do that from mobile</string>
 
-    <string name="bootstrap_skip_text">Setting a Message Password lets you secure &amp; unlock encrypted messages and trust.\n\nIf you don’t want to set a Message Password, generate a Message Key instead.</string>
-    <string name="bootstrap_skip_text_no_gen_key">Setting a Message Password lets you secure &amp; unlock encrypted messages and trust.</string>
+    <string name="bootstrap_skip_text">Setting a Recovery Passphrase lets you secure &amp; unlock encrypted messages and trust.\n\nIf you don’t want to set a Message Password, generate a Message Key instead.</string>
+    <string name="bootstrap_skip_text_no_gen_key">Setting a Recovery Passphrase lets you secure &amp; unlock encrypted messages and trust.</string>
 
 
     <string name="encryption_enabled">Encryption enabled</string>

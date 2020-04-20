@@ -31,6 +31,7 @@ import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
 import org.greenrobot.eventbus.EventBus
+import timber.log.Timber
 import javax.inject.Inject
 
 internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
@@ -50,6 +51,7 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.failure()
+                        .also { Timber.e("Unable to parse work parameters") }
 
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)

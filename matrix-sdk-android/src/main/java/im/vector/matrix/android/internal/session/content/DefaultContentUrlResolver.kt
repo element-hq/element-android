@@ -18,46 +18,46 @@ package im.vector.matrix.android.internal.session.content
 
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
+import im.vector.matrix.android.internal.network.NetworkConstants
 import javax.inject.Inject
 
 private const val MATRIX_CONTENT_URI_SCHEME = "mxc://"
-private const val URI_PREFIX_CONTENT_API = "_matrix/media/v1/"
 
-internal class DefaultContentUrlResolver @Inject constructor(private val homeServerConnectionConfig: HomeServerConnectionConfig) : ContentUrlResolver {
+internal class DefaultContentUrlResolver @Inject constructor(homeServerConnectionConfig: HomeServerConnectionConfig) : ContentUrlResolver {
 
-    companion object {
-        fun getUploadUrl(homeServerConnectionConfig: HomeServerConnectionConfig): String {
-            val baseUrl = homeServerConnectionConfig.homeServerUri.toString()
-            val sep = if (baseUrl.endsWith("/")) "" else "/"
+    private val baseUrl = homeServerConnectionConfig.homeServerUri.toString()
+    private val sep = if (baseUrl.endsWith("/")) "" else "/"
 
-            return baseUrl + sep + URI_PREFIX_CONTENT_API + "upload"
-        }
-    }
+    override val uploadUrl = baseUrl + sep + NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "upload"
 
     override fun resolveFullSize(contentUrl: String?): String? {
-        if (contentUrl?.isValidMatrixContentUrl() == true) {
-            val baseUrl = homeServerConnectionConfig.homeServerUri.toString()
-            val prefix = URI_PREFIX_CONTENT_API + "download/"
-            return resolve(baseUrl, contentUrl, prefix)
-        }
-        return null
+        return contentUrl
+                // do not allow non-mxc content URLs
+                ?.takeIf { it.isValidMatrixContentUrl() }
+                ?.let {
+                    resolve(
+                            contentUrl = it,
+                            prefix = NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "download/"
+                    )
+                }
     }
 
     override fun resolveThumbnail(contentUrl: String?, width: Int, height: Int, method: ContentUrlResolver.ThumbnailMethod): String? {
-        if (contentUrl?.isValidMatrixContentUrl() == true) {
-            val baseUrl = homeServerConnectionConfig.homeServerUri.toString()
-            val prefix = URI_PREFIX_CONTENT_API + "thumbnail/"
-            val params = "?width=$width&height=$height&method=${method.value}"
-            return resolve(baseUrl, contentUrl, prefix, params)
-        }
-        // do not allow non-mxc content URLs
-        return null
+        return contentUrl
+                // do not allow non-mxc content URLs
+                ?.takeIf { it.isValidMatrixContentUrl() }
+                ?.let {
+                    resolve(
+                            contentUrl = it,
+                            prefix = NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "thumbnail/",
+                            params = "?width=$width&height=$height&method=${method.value}"
+                    )
+                }
     }
 
-    private fun resolve(baseUrl: String,
-                        contentUrl: String,
+    private fun resolve(contentUrl: String,
                         prefix: String,
-                        params: String? = null): String? {
+                        params: String = ""): String? {
         var serverAndMediaId = contentUrl.removePrefix(MATRIX_CONTENT_URI_SCHEME)
         val fragmentOffset = serverAndMediaId.indexOf("#")
         var fragment = ""
@@ -66,9 +66,7 @@ internal class DefaultContentUrlResolver @Inject constructor(private val homeSer
             serverAndMediaId = serverAndMediaId.substring(0, fragmentOffset)
         }
 
-        val sep = if (baseUrl.endsWith("/")) "" else "/"
-
-        return baseUrl + sep + prefix + serverAndMediaId + (params ?: "") + fragment
+        return baseUrl + sep + prefix + serverAndMediaId + params + fragment
     }
 
     private fun String.isValidMatrixContentUrl(): Boolean {

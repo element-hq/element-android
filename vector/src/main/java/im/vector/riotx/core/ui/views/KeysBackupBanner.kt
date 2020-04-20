@@ -159,7 +159,7 @@ class KeysBackupBanner @JvmOverloads constructor(
         render(state, true)
     }
 
-    // PRIVATE METHODS *****************************************************************************************************************************************
+    // PRIVATE METHODS ****************************************************************************************************************************************
 
     private fun setupView() {
         inflate(context, R.layout.view_keys_backup_banner, this)

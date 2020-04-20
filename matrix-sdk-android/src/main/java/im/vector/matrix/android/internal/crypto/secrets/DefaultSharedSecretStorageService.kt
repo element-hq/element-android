@@ -65,14 +65,16 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
 ) : SharedSecretStorageService {
 
     override fun generateKey(keyId: String,
+                             key: SsssKeySpec?,
                              keyName: String,
                              keySigner: KeySigner?,
                              callback: MatrixCallback<SsssKeyCreationInfo>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.main) {
-            val key = try {
-                ByteArray(32).also {
-                    SecureRandom().nextBytes(it)
-                }
+            val bytes = try {
+                (key as? RawBytesKeySpec)?.privateKey
+                        ?: ByteArray(32).also {
+                            SecureRandom().nextBytes(it)
+                        }
             } catch (failure: Throwable) {
                 callback.onFailure(failure)
                 return@launch
@@ -102,8 +104,8 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                             callback.onSuccess(SsssKeyCreationInfo(
                                     keyId = keyId,
                                     content = storageKeyContent,
-                                    recoveryKey = computeRecoveryKey(key),
-                                    keySpec = RawBytesKeySpec(key)
+                                    recoveryKey = computeRecoveryKey(bytes),
+                                    keySpec = RawBytesKeySpec(bytes)
                             ))
                         }
                     }

@@ -46,6 +46,10 @@ private data class NewImageAttributes(
         val newFileSize: Int
 )
 
+/**
+ * Possible previous worker: None
+ * Possible next worker    : Always [MultipleEventSendingDispatcherWorker]
+ */
 internal class UploadContentWorker(val context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
 
     @JsonClass(generateAdapter = true)
@@ -64,12 +68,14 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.success()
+                        .also { Timber.e("Unable to parse work parameters") }
+
         Timber.v("Starting upload media work with params $params")
 
         if (params.lastFailureMessage != null) {
             // Transmit the error
-            Timber.v("Stop upload media work due to input failure")
             return Result.success(inputData)
+                    .also { Timber.e("Work cancelled due to input error from parent") }
         }
 
         // Just defensive code to ensure that we never have an uncaught exception that could break the queue

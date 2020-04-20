@@ -82,6 +82,7 @@ import im.vector.matrix.android.internal.di.DeviceId
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -102,7 +103,8 @@ internal class DefaultVerificationService @Inject constructor(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val verificationTransportRoomMessageFactory: VerificationTransportRoomMessageFactory,
         private val verificationTransportToDeviceFactory: VerificationTransportToDeviceFactory,
-        private val crossSigningService: CrossSigningService
+        private val crossSigningService: CrossSigningService,
+        private val cryptoCoroutineScope: CoroutineScope
 ) : DefaultVerificationTransaction.Listener, VerificationService {
 
     private val uiHandler = Handler(Looper.getMainLooper())
@@ -125,7 +127,7 @@ internal class DefaultVerificationService @Inject constructor(
 
     // Event received from the sync
     fun onToDeviceEvent(event: Event) {
-        GlobalScope.launch(coroutineDispatchers.crypto) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             when (event.getClearType()) {
                 EventType.KEY_VERIFICATION_START         -> {
                     onStartRequestReceived(event)

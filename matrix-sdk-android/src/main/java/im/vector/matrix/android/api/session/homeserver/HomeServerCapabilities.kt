@@ -18,6 +18,10 @@ package im.vector.matrix.android.api.session.homeserver
 
 data class HomeServerCapabilities(
         /**
+         * True if it is possible to change the password of the account.
+         */
+        val canChangePassword: Boolean = true,
+        /**
          * Max size of file which can be uploaded to the homeserver in bytes. [MAX_UPLOAD_FILE_SIZE_UNKNOWN] if unknown or not retrieved yet
          */
         val maxUploadFileSize: Long = MAX_UPLOAD_FILE_SIZE_UNKNOWN

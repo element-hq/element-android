@@ -16,9 +16,16 @@
 
 package im.vector.matrix.android.internal.worker
 
+/**
+ * Note about the Worker usage:
+ * The workers we chain, or when using the append strategy, should never return Result.Failure(), else the chain will be broken forever
+ */
 interface SessionWorkerParams {
     val sessionId: String
 
-    // Null is no error occurs. When chaining Workers, first step is to check that there is no lastFailureMessage from the previous workers
+    /**
+     * Null when no error occurs. When chaining Workers, first step is to check that there is no lastFailureMessage from the previous workers
+     * If it is the case, the worker should just transmit the error and shouldn't do anything else
+     */
     val lastFailureMessage: String?
 }

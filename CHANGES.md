@@ -2,6 +2,7 @@ Changes in RiotX 0.19.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:
+ - Change password (#528)
  - Cross-Signing | Support SSSS secret sharing (#944)
  - Cross-Signing | Verify new session from existing session (#1134)
  - Cross-Signing | Bootstraping cross signing with 4S from mobile (#985)
@@ -20,6 +21,7 @@ Improvements 🙌:
  - Cross-Sign | QR code scan confirmation screens design update (#1187)
  - Emoji Verification | It's not the same butterfly! (#1220)
  - Cross-Signing | Composer decoration: shields (#1077)
+ - Cross-Signing | Migrate existing keybackup to cross signing with 4S from mobile (#1197)
 
 Bugfix 🐛:
  - Fix summary notification staying after "mark as read"
@@ -32,6 +34,7 @@ Bugfix 🐛:
  - Fix crash when trying to download file without internet connection (#1229)
  - Local echo are not updated in timeline (for failed & encrypted states)
  - Render image event even if thumbnail_info does not have mimetype defined (#1209)
+ - Fix issue with media path (#1227)
 
 Translations 🗣:
  -
@@ -43,6 +46,7 @@ Build 🧱:
  - Compile with Android SDK 29 (Android Q)
 
 Other changes:
+ - Add a setting to prevent screenshots of the application, disabled by default (#1027)
  - Increase File Logger capacities ( + use dev log preferences)
 
 Changes in RiotX 0.18.1 (2020-03-17)

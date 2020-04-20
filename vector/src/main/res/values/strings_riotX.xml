@@ -7,12 +7,49 @@
 
     <!-- BEGIN Strings added by Valere -->
     <string name="room_message_placeholder">Message…</string>
+
+    <string name="upgrade_security">Encryption upgrade available</string>
+    <string name="security_prompt_text">Verify yourself &amp; others to keep your chats safe</string>
+
+    <!-- %s will be replaced by recovery_key -->
+    <string name="bootstrap_enter_recovery">Enter your %s to continue</string>
+    <string name="use_file">Use File</string>
+
+    <!-- %s will be replaced by recovery_passphrase -->
+    <!--    <string name="upgrade_account_desc">Upgrade this session to allow it to verify other sessions, granting them access to encrypted messages and marking them as trusted for other users.</string>-->
+    <string name="enter_backup_passphrase">Enter %s</string>
+    <string name="backup_recovery_passphrase">Recovery Passphrase</string>
+    <string name="bootstrap_invalid_recovery_key">"It's not a valid recovery key"</string>
+    <string name="recovery_key_empty_error_message">Please enter a recovery key</string>
+
+    <string name="bootstrap_progress_checking_backup">Checking backup Key</string>
+    <string name="bootstrap_progress_checking_backup_with_info">Checking backup Key (%s)</string>
+    <string name="bootstrap_progress_compute_curve_key">Getting curve key</string>
+    <string name="bootstrap_progress_generating_ssss">Generating SSSS key from passphrase</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">Generating SSSS key from passphrase (%s)</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">Generating SSSS key from recovery key</string>
+    <string name="bootstrap_progress_storing_in_sss">Storing keybackup secret in SSSS</string>
+    <!-- To produce things like 'RiotX Android (IQDHUVJTTV)' -->
+    <string name="new_session_review_with_info">%1$s (%2$s)</string>
+
+    <string name="bootstrap_migration_enter_backup_password">Enter your Key Backup Passphrase to continue.</string>
+    <string name="bootstrap_migration_use_recovery_key">use your Key Backup recovery key</string>
+    <!-- %s will be replaced by the value of bootstrap_migration_use_recovery_key  -->
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">Don’t know your Key Backup Passphrase, you can %s.</string>
+    <string name="bootstrap_migration_backup_recovery_key">Key Backup recovery key</string>
+
     <!-- END Strings added by Valere -->
 
 
     <!-- BEGIN Strings added by Benoit -->
 
     <!-- END Strings added by Benoit -->
+
+    <!-- BEGIN Strings added by Benoit2 -->
+    <string name="settings_security_prevent_screenshots_title">Prevent screenshots of the application</string>
+    <string name="settings_security_prevent_screenshots_summary">Enabling this setting adds the FLAG_SECURE to all Activities. Restart the application for the change to take effect.</string>
+
+    <!-- END Strings added by Benoit2 -->
 
 
     <!-- BEGIN Strings added by Ganfra -->
@@ -30,4 +67,7 @@
 
     <!-- END Strings added by Others -->
 
+    <!-- BEGIN Strings added by Benoit -->
+    <string name="change_password_summary">Set a new account password…</string>
+    <!---->
 </resources>

@@ -23,6 +23,12 @@ import retrofit2.http.GET
 internal interface CapabilitiesAPI {
 
     /**
+     * Request the homeserver capabilities
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "capabilities")
+    fun getCapabilities(): Call<GetCapabilitiesResult>
+
+    /**
      * Request the upload capabilities
      */
     @GET(NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "config")

@@ -16,8 +16,7 @@
 
 package im.vector.riotx.features.crypto.recover
 
-import android.os.Bundle
-import android.view.View
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
@@ -31,12 +30,22 @@ class BootstrapWaitingFragment @Inject constructor() : VectorBaseFragment() {
 
     val sharedViewModel: BootstrapSharedViewModel by parentFragmentViewModel()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     override fun invalidate() = withState(sharedViewModel) { state ->
-        if (state.step !is BootstrapStep.Initializing) return@withState
-        bootstrapLoadingStatusText.text = state.initializationWaitingViewData?.message
+        when (state.step) {
+            is BootstrapStep.Initializing -> {
+                bootstrapLoadingStatusText.isVisible = true
+                bootstrapDescriptionText.isVisible = true
+                bootstrapLoadingStatusText.text = state.initializationWaitingViewData?.message
+            }
+//            is BootstrapStep.CheckingMigration -> {
+//                bootstrapLoadingStatusText.isVisible = false
+//                bootstrapDescriptionText.isVisible = false
+//            }
+            else                          -> {
+                // just show the spinner
+                bootstrapLoadingStatusText.isVisible = false
+                bootstrapDescriptionText.isVisible = false
+            }
+        }
     }
 }

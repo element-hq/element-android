@@ -21,6 +21,7 @@ import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.failure.GlobalError
 import im.vector.matrix.android.api.pushrules.PushRuleService
+import im.vector.matrix.android.api.session.account.AccountService
 import im.vector.matrix.android.api.session.accountdata.AccountDataService
 import im.vector.matrix.android.api.session.cache.CacheService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
@@ -59,7 +60,8 @@ interface Session :
         InitialSyncProgressService,
         HomeServerCapabilitiesService,
         SecureStorageService,
-        AccountDataService {
+        AccountDataService,
+        AccountService {
 
     /**
      * The params associated to the session
