@@ -455,6 +455,7 @@ Bugfix:
  - Fix messages with empty `in_reply_to` not rendering (#447)
  - Fix clear cache (#408) and Logout (#205)
  - Fix `(edited)` link can be copied to clipboard (#402)
+ - KeyBackup / SSSS | Should get the key from SSSS instead of asking recovery Key (#1163)
 
 Build:
  - Split APK: generate one APK per arch, to reduce APK size of about 30%

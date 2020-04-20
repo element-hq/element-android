@@ -15,21 +15,18 @@
  */
 package im.vector.riotx.features.crypto.keysbackup.restore
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.listeners.StepProgressListener
-import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
-import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersionResult
-import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
+import androidx.lifecycle.viewModelScope
 import im.vector.riotx.R
-import im.vector.riotx.core.platform.WaitingViewData
-import im.vector.riotx.core.ui.views.KeysBackupBanner
-import timber.log.Timber
+import im.vector.riotx.core.resources.StringProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class KeysBackupRestoreFromPassphraseViewModel @Inject constructor() : ViewModel() {
+class KeysBackupRestoreFromPassphraseViewModel @Inject constructor(
+        private val stringProvider: StringProvider
+) : ViewModel() {
 
     var passphrase: MutableLiveData<String> = MutableLiveData()
     var passphraseErrorText: MutableLiveData<String> = MutableLiveData()
@@ -48,71 +45,14 @@ class KeysBackupRestoreFromPassphraseViewModel @Inject constructor() : ViewModel
         passphraseErrorText.value = null
     }
 
-    fun recoverKeys(context: Context, sharedViewModel: KeysBackupRestoreSharedViewModel) {
-        val keysBackup = sharedViewModel.session.cryptoService().keysBackupService()
-
+    fun recoverKeys(sharedViewModel: KeysBackupRestoreSharedViewModel) {
         passphraseErrorText.value = null
-
-        val keysVersionResult = sharedViewModel.keyVersionResult.value!!
-
-        keysBackup.restoreKeyBackupWithPassword(keysVersionResult,
-                passphrase.value!!,
-                null,
-                sharedViewModel.session.myUserId,
-                object : StepProgressListener {
-                    override fun onStepProgress(step: StepProgressListener.Step) {
-                        when (step) {
-                            is StepProgressListener.Step.ComputingKey -> {
-                                sharedViewModel.loadingEvent.postValue(WaitingViewData(context.getString(R.string.keys_backup_restoring_waiting_message)
-                                        + "\n" + context.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
-                                        step.progress,
-                                        step.total))
-                            }
-                            is StepProgressListener.Step.DownloadingKey -> {
-                                sharedViewModel.loadingEvent.postValue(WaitingViewData(context.getString(R.string.keys_backup_restoring_waiting_message)
-                                        + "\n" + context.getString(R.string.keys_backup_restoring_downloading_backup_waiting_message),
-                                        isIndeterminate = true))
-                            }
-                            is StepProgressListener.Step.ImportingKey -> {
-                                Timber.d("backupKeys.ImportingKey.progress: ${step.progress}")
-                                // Progress 0 can take a while, display an indeterminate progress in this case
-                                if (step.progress == 0) {
-                                    sharedViewModel.loadingEvent.postValue(WaitingViewData(context.getString(R.string.keys_backup_restoring_waiting_message)
-                                            + "\n" + context.getString(R.string.keys_backup_restoring_importing_keys_waiting_message),
-                                            isIndeterminate = true))
-                                } else {
-                                    sharedViewModel.loadingEvent.postValue(WaitingViewData(context.getString(R.string.keys_backup_restoring_waiting_message)
-                                            + "\n" + context.getString(R.string.keys_backup_restoring_importing_keys_waiting_message),
-                                            step.progress,
-                                            step.total))
-                                }
-                            }
-                        }
-                    }
-                },
-                object : MatrixCallback<ImportRoomKeysResult> {
-                    override fun onSuccess(data: ImportRoomKeysResult) {
-                        sharedViewModel.loadingEvent.value = null
-                        sharedViewModel.didRecoverSucceed(data)
-
-                        KeysBackupBanner.onRecoverDoneForVersion(context, keysVersionResult.version!!)
-                        trustOnDecrypt(keysBackup, keysVersionResult)
-                    }
-
-                    override fun onFailure(failure: Throwable) {
-                        sharedViewModel.loadingEvent.value = null
-                        passphraseErrorText.value = context.getString(R.string.keys_backup_passphrase_error_decrypt)
-                        Timber.e(failure, "## onUnexpectedError")
-                    }
-                })
-    }
-
-    private fun trustOnDecrypt(keysBackup: KeysBackupService, keysVersionResult: KeysVersionResult) {
-        keysBackup.trustKeysBackupVersion(keysVersionResult, true,
-                object : MatrixCallback<Unit> {
-                    override fun onSuccess(data: Unit) {
-                        Timber.v("##### trustKeysBackupVersion onSuccess")
-                    }
-                })
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                sharedViewModel.recoverUsingBackupPass(passphrase.value!!)
+            } catch (failure: Throwable) {
+                passphraseErrorText.value = stringProvider.getString(R.string.keys_backup_passphrase_error_decrypt)
+            }
+        }
     }
 }
