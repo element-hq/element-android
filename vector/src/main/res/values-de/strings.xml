@@ -9,7 +9,7 @@
     <string name="title_activity_home">Nachrichten</string>
     <string name="title_activity_room">"Raum</string>
     <string name="title_activity_settings">Einstellungen</string>
-    <string name="title_activity_member_details">Nutzerdetails</string>
+    <string name="title_activity_member_details">Benutzerdetails</string>
     <string name="title_activity_historical">Historisch</string>
 
     <!-- button names -->
@@ -934,7 +934,7 @@ Willst du welche hinzufügen?</string>
     <string name="download">Download</string>
     <string name="speak">Sprechen</string>
     <string name="clear">Leeren</string>
-    <string name="e2e_re_request_encryption_key">Verschlüsselungsschlüssel von deinen anderen Sitzungen <u>erneut anfragen</u>.</string>
+    <string name="e2e_re_request_encryption_key">Verschlüsselungsschlüssel von deinen anderen Sitzungen erneut anfragen.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Schlüsselanfrage gesendet.</string>
 
@@ -1165,7 +1165,7 @@ Versuche die Anwendung neuzustarten.</string>
     <string name="settings_troubleshoot_test_battery_success">Riot wird nicht von Batterieoptimierungen beeinflusst.</string>
     <string name="settings_notification_troubleshoot">Fehler bei Benachrichtigungen finden</string>
     <string name="settings_troubleshoot_diagnostic">Diagnose von Fehlern</string>
-    <string name="settings_troubleshoot_diagnostic_success_status">Basisdiagnose ist OK. Wenn du immer noch keine Benachrichtigungen bekommst, sende bitte einen Fehlerbericht, damit dies untersucht werden kann.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Basisdiagnose ist OK. Wenn du immer noch keine Benachrichtigungen bekommst, sende bitte einen Fehlerbericht, um uns beim nachforschen zu helfen.</string>
     <string name="settings_troubleshoot_test_play_services_title">Prüfung der Play-Dienste</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play-Dienste-APK ist verfügbar und aktuell.</string>
     <string name="settings_troubleshoot_test_token_registration_title">Token-Registrierung</string>
@@ -1378,7 +1378,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="keys_backup_banner_recover_line1">Verliere nie wieder verschlüsselte Nachrichten</string>
     <string name="keys_backup_banner_recover_line2">Benutze Schlüsselsicherung</string>
 
-    <string name="keys_backup_banner_update_line1">Neue Schlüssel für verschlüsselte Nachrichten</string>
+    <string name="keys_backup_banner_update_line1">Neue sichere Schlüssel für Nachrichten</string>
     <string name="keys_backup_banner_update_line2">Verwalte Schlüsselsicherung</string>
 
     <string name="keys_backup_banner_in_progress">Sichere Schlüssel…</string>
@@ -2202,7 +2202,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="crosssigning_other_user_not_trust">Andere Benutzer!nnen vertrauen ihr möglicherweise nicht</string>
     <string name="complete_security">Vollständige Sicherheit</string>
 
-    <string name="verification_open_other_to_verify">Öffne eine vorhandene Sitzung und verwende sie, um diese zu überprüfen und ihr Zugriff auf verschlüsselte Nachrichten zu gewähren.</string>
+    <string name="verification_open_other_to_verify">Nutze eine vorhandene Sitzung um diese Sitzung zu verifizieren und ihr Zugriff auf verschlüsselte Nachrichten zu gewähren.</string>
 
 
     <string name="verification_profile_verify">Verifizieren</string>
@@ -2224,6 +2224,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="a11y_qr_code_for_verification">QR-Code</string>
 
+    <string name="qr_code_scanned_by_other_notice">Fast geschaft! Zeigt %s dasselbe Schild an\?</string>
     <string name="qr_code_scanned_by_other_yes">Ja</string>
     <string name="qr_code_scanned_by_other_no">Nein</string>
 
@@ -2241,8 +2242,8 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     </plurals>
     <string name="poll_item_selected_aria">Ausgewählte Option</string>
     <string name="command_description_poll">Erstellt eine einfache Umfrage</string>
-    <string name="verification_cannot_access_other_session">Kann nicht auf eine vorhandene Sitzung zugegriffen werden\?</string>
-    <string name="verification_use_passphrase">Verwende deinen Wiederherstellungsschlüssel oder deine Passphrase</string>
+    <string name="verification_cannot_access_other_session">Nutze eine Wiederherstellungsmethode</string>
+    <string name="verification_use_passphrase">Wenn du auf keine existierende Sitzung zugreifen kannst</string>
 
     <string name="new_signin">Neue Anmeldung</string>
 
@@ -2271,5 +2272,79 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="spoiler">Spoiler</string>
     <string name="room_member_power_level_custom_in">Benutzerdefiniert (%1$d) in %2$s</string>
+
+    <string name="login_mobile_device_riotx">RiotX Android</string>
+
+    <string name="settings_key_requests">Schlüsselanforderungen</string>
+
+    <string name="e2e_use_keybackup">Schalte den verschlüsselten Nachrichtenverlauf frei</string>
+
+    <string name="refresh">Neu laden</string>
+
+    <string name="new_session">Neue Sitzung</string>
+    <string name="new_session_review">Tippe für eine Überprüfung &amp; Verifikation</string>
+    <string name="verify_new_session_notice">Benutze diese Sitzung um deine neue zu verfizieren, damit sie auf verschlüsselte Nachrichten zugreifen kann.</string>
+    <string name="verify_new_session_was_not_me">Das war ich nicht</string>
+    <string name="verify_new_session_compromized">Dein Account ist möglicherweise komprimittiert</string>
+
+    <string name="verify_cancel_self_verification_from_untrusted">Wenn du abbrichst, wirst du auf diesem Gerät keine verschlüsselten Nachrichten lesen können, und andere Benutzer werden ihm nicht vertrauen</string>
+    <string name="verify_cancel_self_verification_from_trusted">Wenn du abbrichst, wirst du auf deinem neuen Gerät keine verschlüsselten Nachrichten lesen können, und andere Benutzer werden ihm nicht vertrauen</string>
+    <string name="verify_cancel_other">Du wirst %1$s (%2$s) nicht verifizieren, wenn du jetzt abbrichst. Beginne in deren Nutzerprofil erneut.</string>
+
+    <string name="verify_not_me_self_verification">Eines der folgenden könnte kom­pro­mit­tie­rt sein:
+\n
+\n- Dein Passwort
+\n- Dein Home-Server
+\n- Dieses Gerät, oder das andere Gerät
+\n- Die Internetverbindung, die von den Geräten genutzt wird
+\n
+\nWir empfehlen dir dein Passwort &amp; Wiederherstellungsschlüssel in den Einstellungen sofort zu ändern.</string>
+
+    <string name="verify_cancelled_notice">Verifiziere deine Geräte in den Einstellungen.</string>
+    <string name="verification_cancelled">Verifizierung abgebrochen</string>
+
+    <string name="generate_message_key">Generiere einen Nachrichtenschlüssel</string>
+
+    <string name="confirm_recovery_passphrase">Bestätige %s</string>
+
+    <string name="enter_account_password">Gibe dein %s ein um fortzufahren.</string>
+
+    <string name="bootstrap_info_confirm_text">Gebe deine %s für eine Bestätigung erneut ein.</string>
+    <string name="bootstrap_dont_reuse_pwd">Benutze dein Accountpasswort nicht mehrfach.</string>
+
+
+    <string name="bootstrap_loading_text">Dies könnte einige Sekunden dauern, gedulde dich bitte.</string>
+    <string name="bootstrap_loading_title">Wiederherstellung einrichten.</string>
+    <string name="your_recovery_key">Dein Wiederherstellungsschlüssel</string>
+    <string name="bootstrap_finish_title">Du bist fertig!</string>
+    <string name="keep_it_safe">Bewahre es sicher auf</string>
+    <string name="finish">Abschließen</string>
+
+    <string name="bootstrap_save_key_description">Benutze diesen %1$s als Sicherheit für den Fall, dass du deine %2$s vergisst.</string>
+
+    <string name="bootstrap_crosssigning_progress_initializing">Veröffentliche erstellte Identitätsschlüssel</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">Generiere sicheren Schlüssel von der Passphrase</string>
+    <string name="bootstrap_crosssigning_progress_default_key">Definiere SSSS Standardschlüssel</string>
+    <string name="bootstrap_crosssigning_progress_save_msk">Synchronisiere Hauptschlüssel</string>
+    <string name="bootstrap_crosssigning_progress_save_usk">Synchronisiere Benutzerschlüssel</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">Synchronisiere selbstsignierenden Schlüssel</string>
+    <string name="bootstrap_crosssigning_progress_key_backup">Richte Schlüsselbackup ein</string>
+
+
+    <string name="bootstrap_cross_signing_success">Deine %2$s &amp; %1$s sind nun eingerichtet.
+\n
+\nBewahre sie sicher auf! Du wirst sie benötigen, um verschlüsselte Nachrichten und sichere Informationen freizuschalten, wenn du alle deine aktive Sitzungen verlierst.</string>
+
+    <string name="bootstrap_crosssigning_save_usb">Speichere ihn auf einem USB-Stick oder auf einem Sicherungslaufwerk</string>
+    <string name="error_failed_to_import_keys">Import der Schlüssel fehlgeschlagen</string>
+
+    <string name="settings_notification_configuration">Benachrichtigungskonfiguration</string>
+    <string name="settings_messages_at_room">\@raum enthaltende Nachrichten</string>
+    <string name="settings_messages_in_e2e_group_chat">Verschlüsselte Nachrichten in Gruppenchats</string>
+    <string name="settings_notification_advanced_summary_riotx">Setze die Benachrichtigungswichtigkeit abhängig vom Ereignistyp</string>
+
+    <string name="command_description_plain">Sendet eine Nachricht als einfachen Text, ohne sie als Markdown zu interpretieren</string>
+
+    <string name="auth_invalid_login_param_space_in_password">Inkorrekter Benutzername und/oder Passwort. Das eingegebene Passwort beginnt oder endet mit Leerzeichen, bitte kontrolliere es.</string>
 
 </resources>

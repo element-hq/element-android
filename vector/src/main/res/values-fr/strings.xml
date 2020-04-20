@@ -889,7 +889,7 @@ La visibilité des messages dans Matrix est identique à celle des e-mails. Si n
     <string name="download">Télécharger</string>
     <string name="speak">Parler</string>
     <string name="clear">Effacer</string>
-    <string name="e2e_re_request_encryption_key"><u>Redemander les clés de chiffrement</u> à vos autres sessions.</string>
+    <string name="e2e_re_request_encryption_key">Redemander les clés de chiffrement à vos autres sessions.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Demande de clé envoyée.</string>
 
@@ -1060,7 +1060,7 @@ Veuillez noter que cette action redémarrera l’application et pourra prendre u
     <string name="settings_troubleshoot_diagnostic">Diagnostics de résolution de problème</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Lancer les tests</string>
     <string name="settings_troubleshoot_diagnostic_running_status">"Exécution…  (%1$d sur %2$d)"</string>
-    <string name="settings_troubleshoot_diagnostic_success_status">Le diagnostic de base est passé. Si vous ne recevez toujours pas de notifications, veuillez envoyer un rapport d’anomalie pour nous aider à résoudre le problème.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Le diagnostic de base est passé. Si vous ne recevez toujours pas de notifications, envoyez un rapport d’anomalie pour nous aider à résoudre le problème.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Au moins un test a échoué, essayez les solutions suggérées.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Au moins un test a échoué, veuillez envoyer un rapport d’anomalie pour nous aider à résoudre le problème.</string>
 
@@ -1325,7 +1325,7 @@ Conservez votre clé de récupération en lieu sûr, comme un gestionnaire de mo
     <string name="keys_backup_banner_recover_line1">Ne perdez jamais vos messages chiffrés</string>
     <string name="keys_backup_banner_recover_line2">Utiliser la sauvegarde de clés</string>
 
-    <string name="keys_backup_banner_update_line1">Nouvelles clés de messages chiffrés</string>
+    <string name="keys_backup_banner_update_line1">Nouvelles clés de message sécurisé</string>
     <string name="keys_backup_banner_update_line2">Gérer la sauvegarde de clés</string>
 
     <string name="keys_backup_banner_in_progress">Sauvegarde de clés…</string>
@@ -2152,7 +2152,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="crosssigning_other_user_not_trust">Les autres utilisateurs ne lui font peut-être pas confiance</string>
     <string name="complete_security">Compléter la sécurité</string>
 
-    <string name="verification_open_other_to_verify">Ouvrez une session existante et utilisez-la pour vérifier celle-ci, pour lui permettre d’accéder aux messages chiffrés.</string>
+    <string name="verification_open_other_to_verify">Utilisez une session existante pour vérifier celle-ci, ce qui lui permettra d’avoir accès aux messages chiffrés.</string>
 
 
     <string name="verification_profile_verify">Vérifier</string>
@@ -2174,6 +2174,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="a11y_qr_code_for_verification">Code QR</string>
 
+    <string name="qr_code_scanned_by_other_notice">On y est presque ! Est-ce que %s affiche le même bouclier \?</string>
     <string name="qr_code_scanned_by_other_yes">Oui</string>
     <string name="qr_code_scanned_by_other_no">Non</string>
 
@@ -2191,16 +2192,16 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     </plurals>
     <string name="poll_item_selected_aria">Option sélectionnée</string>
     <string name="command_description_poll">Crée un sondage simple</string>
-    <string name="verification_cannot_access_other_session">Vous n’avez pas accès à une session existante \?</string>
-    <string name="verification_use_passphrase">Utilisez votre clé de récupération ou votre phrase de passe</string>
+    <string name="verification_cannot_access_other_session">Utiliser une méthode de récupération</string>
+    <string name="verification_use_passphrase">Si vous n’avez pas accès à une session existante</string>
 
     <string name="new_signin">Nouvelle connexion</string>
 
     <string name="enter_secret_storage_invalid">Impossible de trouver les secrets dans le stockage</string>
-    <string name="enter_secret_storage_passphrase">Saisir la phrase de passe du coffre secret</string>
+    <string name="enter_secret_storage_passphrase">Saisir la phrase secrète du coffre secret</string>
     <string name="enter_secret_storage_passphrase_warning">Attention :</string>
     <string name="enter_secret_storage_passphrase_warning_text">Vous devriez accéder à votre coffre secret uniquement depuis un appareil de confiance</string>
-    <string name="enter_secret_storage_passphrase_reason_verify">Accédez à l’historique de vos messages sécurisés et à votre identité de signature croisée pour vérifier d’autres sessions en saisissant votre phrase de passe</string>
+    <string name="enter_secret_storage_passphrase_reason_verify">Accédez à l’historique de vos messages sécurisés et à votre identité de signature croisée pour vérifier d’autres sessions en saisissant votre phrase secrète</string>
 
     <string name="message_action_item_redact">Supprimer…</string>
     <string name="share_confirm_room">Voulez-vous envoyer cette pièce jointe à %1$s \?</string>
@@ -2218,5 +2219,110 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="event_redacted_by_admin_reason_with_reason">Évènement modéré par l’administrateur du salon, motif : %1$s</string>
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Les clés sont déjà à jour !</string>
+
+    <string name="login_mobile_device_riotx">RiotX Android</string>
+
+    <string name="settings_key_requests">Demandes de clé</string>
+
+    <string name="e2e_use_keybackup">Déverrouiller l’historique des messages chiffrés</string>
+
+    <string name="refresh">Actualiser</string>
+
+    <string name="new_session">Nouvelle session</string>
+    <string name="new_session_review">Appuyer pour examiner et vérifier</string>
+    <string name="verify_new_session_notice">Utilisez cette session pour vérifiez la nouvelle, ce qui lui permettra d’avoir accès aux messages chiffrés.</string>
+    <string name="verify_new_session_was_not_me">Ce n’était pas moi</string>
+    <string name="verify_new_session_compromized">Votre compte est peut-être compromis</string>
+
+    <string name="verify_cancel_self_verification_from_untrusted">Si vous annulez, vous ne pourrez pas lire les messages chiffrés sur cet appareil, et les autres utilisateurs ne lui feront pas confiance</string>
+    <string name="verify_cancel_self_verification_from_trusted">Si vous annulez, vous ne pourrez pas lire les messages chiffrés sur votre nouvel appareil, et les autres utilisateurs ne lui feront pas confiance</string>
+    <string name="verify_cancel_other">Vous ne vérifierez pas %1$s (%2$s) si vous annulez maintenant. Recommencez sur son profil utilisateur.</string>
+
+    <string name="verify_not_me_self_verification">Un des éléments suivants est peut-être compromis :
+\n
+\n- Votre mot de passe
+\n- Votre serveur d’accueil
+\n- Cet appareil ou l’autre appareil
+\n- La connexion internet utilisée par un des deux appareils
+\n
+\nNous vous recommandons de modifier immédiatement votre mot de passe et votre clé de récupération dans les paramètres.</string>
+
+    <string name="verify_cancelled_notice">Vérifiez vos appareils depuis les paramètres.</string>
+    <string name="verification_cancelled">Vérification annulée</string>
+
+    <string name="recovery_passphrase">mot de passe des messages</string>
+    <string name="message_key">clé des messages</string>
+    <string name="account_password">Mot de passe du compte</string>
+
+    <string name="set_recovery_passphrase">Définissez un %s</string>
+    <string name="generate_message_key">Générez une clé de messages</string>
+
+    <string name="confirm_recovery_passphrase">Confirmez le %s</string>
+
+    <string name="enter_account_password">Saisissez votre %s pour continuer.</string>
+
+    <string name="bootstrap_info_text">Sécurisez et débloquez vos messages chiffrés et vos vérifications avec un %s.</string>
+    <string name="bootstrap_info_confirm_text">Saisissez à nouveau votre %s pour le confirmer.</string>
+    <string name="bootstrap_dont_reuse_pwd">Ne réutilisez pas votre mot de passe de compte.</string>
+
+
+    <string name="bootstrap_loading_text">Cela peut prendre plusieurs secondes, veuillez patienter.</string>
+    <string name="bootstrap_loading_title">Configuration de la récupération.</string>
+    <string name="your_recovery_key">Votre clé de récupération</string>
+    <string name="bootstrap_finish_title">Vous avez terminé !</string>
+    <string name="keep_it_safe">Conservez-le en lieu sûr</string>
+    <string name="finish">Terminer</string>
+
+    <string name="bootstrap_save_key_description">Utilisez cette %1$s comme filet de sécurité au cas où vous oublieriez votre %2$s.</string>
+
+    <string name="bootstrap_crosssigning_progress_initializing">Publication des clés d’identité créées</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">Génération d’une clé sécurisée depuis la phrase secrète</string>
+    <string name="bootstrap_crosssigning_progress_default_key">Définition de la clé par défaut du SSSS</string>
+    <string name="bootstrap_crosssigning_progress_save_msk">Synchronisation de la clé maîtresse</string>
+    <string name="bootstrap_crosssigning_progress_save_usk">Synchronisation de la clé de l’utilisateur</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">Synchronisation de la clé d’auto-signature</string>
+    <string name="bootstrap_crosssigning_progress_key_backup">Configuration de la sauvegarde de clés</string>
+
+
+    <string name="bootstrap_cross_signing_success">Votre %2$s et votre %1$s sont bien réglés.
+\n
+\nConservez-les en lieu sûr ! Vous en aurez besoin pour débloquer les messages chiffrés et vos informations sécurisées si vous perdez toutes vos sessions actives.</string>
+
+    <string name="bootstrap_crosssigning_print_it">Imprimez-le et conservez-le en lieu sûr</string>
+    <string name="bootstrap_crosssigning_save_usb">Sauvegardez-le sur une clé USB ou un disque de sauvegarde</string>
+    <string name="bootstrap_crosssigning_save_cloud">Copiez-le sur votre stockage dans le cloud personnel</string>
+
+    <string name="auth_flow_not_supported">Vous ne pouvez pas faire ça depuis votre portable</string>
+
+    <string name="bootstrap_skip_text">La configuration d’un mot de passe de messages vous permet des sécuriser et déverrouiller les messages chiffrés et les vérifications.
+\n
+\nSi vous ne voulez pas définir un mot de passe de messages, générez plutôt une clé de messages.</string>
+    <string name="bootstrap_skip_text_no_gen_key">La configuration d’un mot de passe de messages vous permet des sécuriser et déverrouiller les messages chiffrés et les vérifications.</string>
+
+
+    <string name="encryption_enabled">Chiffrement activé</string>
+    <string name="encryption_enabled_tile_description">Les messages de ce salon sont chiffrés de bout en bout. Apprenez-en plus et vérifiez les utilisateurs sur leur profil.</string>
+    <string name="encryption_not_enabled">Chiffrement pas activé</string>
+    <string name="encryption_unknown_algorithm_tile_description">Le chiffrement utilisé par ce salon n’est pas pris en charge</string>
+
+    <string name="room_created_summary_item">%s a créé et configuré ce salon.</string>
+
+    <string name="qr_code_scanned_self_verif_notice">On y est presque ! L’autre appareil affiche-t-il le même bouclier \?</string>
+    <string name="qr_code_scanned_verif_waiting_notice">On y est presque ! En attente de la confirmation…</string>
+    <string name="qr_code_scanned_verif_waiting">En attente de %s…</string>
+
+    <string name="error_failed_to_import_keys">Échec de l’importation des clés</string>
+
+    <string name="settings_notification_configuration">Configuration des notifications</string>
+    <string name="settings_messages_at_room">Messages contenant @room</string>
+    <string name="settings_messages_in_e2e_one_to_one">Messages chiffrés dans les discussions individuelles</string>
+    <string name="settings_messages_in_e2e_group_chat">Messages chiffrés dans les discussions de groupe</string>
+    <string name="settings_when_rooms_are_upgraded">Quand les salons sont mis à niveau</string>
+    <string name="settings_troubleshoot_title">Résolution de problèmes</string>
+    <string name="settings_notification_advanced_summary_riotx">Définir l’importance des notifications par évènement</string>
+
+    <string name="command_description_plain">Envoie un message en texte simple, sans l’interpréter comme du Markdown</string>
+
+    <string name="auth_invalid_login_param_space_in_password">Nom et/ou mot de passe incorrect(s). Le mot de passe saisi commence ou se termine par des espaces, veuillez le vérifier.</string>
 
 </resources>
