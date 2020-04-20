@@ -19,16 +19,28 @@ package im.vector.riotx.features.media
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
+import androidx.core.net.toUri
+import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.file.FileService
+import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.intent.getMimeTypeFromUri
 import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.core.utils.shareMedia
 import kotlinx.android.synthetic.main.activity_video_media_viewer.*
+import java.io.File
 import javax.inject.Inject
 
 class VideoMediaViewerActivity : VectorBaseActivity() {
 
+    @Inject lateinit var session: Session
     @Inject lateinit var imageContentRenderer: ImageContentRenderer
     @Inject lateinit var videoContentRenderer: VideoContentRenderer
+
+    private lateinit var mediaData: VideoContentRenderer.Data
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -39,7 +51,7 @@ class VideoMediaViewerActivity : VectorBaseActivity() {
         setContentView(im.vector.riotx.R.layout.activity_video_media_viewer)
 
         if (intent.hasExtra(EXTRA_MEDIA_DATA)) {
-            val mediaData = intent.getParcelableExtra<VideoContentRenderer.Data>(EXTRA_MEDIA_DATA)!!
+            mediaData = intent.getParcelableExtra<VideoContentRenderer.Data>(EXTRA_MEDIA_DATA)!!
 
             configureToolbar(videoMediaViewerToolbar, mediaData)
             imageContentRenderer.render(mediaData.thumbnailMediaData, ImageContentRenderer.Mode.FULL_SIZE, videoMediaViewerThumbnailView)
@@ -48,7 +60,36 @@ class VideoMediaViewerActivity : VectorBaseActivity() {
                     videoMediaViewerLoading,
                     videoMediaViewerVideoView,
                     videoMediaViewerErrorView)
+        } else {
+            finish()
         }
+    }
+
+    override fun getMenuRes() = R.menu.vector_media_viewer
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.mediaViewerShareAction -> {
+                onShareActionClicked()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun onShareActionClicked() {
+        session.downloadFile(
+                FileService.DownloadMode.FOR_EXTERNAL_SHARE,
+                mediaData.eventId,
+                mediaData.filename,
+                mediaData.url,
+                mediaData.elementToDecrypt,
+                object : MatrixCallback<File> {
+                    override fun onSuccess(data: File) {
+                        shareMedia(this@VideoMediaViewerActivity, data, getMimeTypeFromUri(this@VideoMediaViewerActivity, data.toUri()))
+                    }
+                }
+        )
     }
 
     private fun configureToolbar(toolbar: Toolbar, mediaData: VideoContentRenderer.Data) {

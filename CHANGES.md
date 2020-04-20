@@ -6,6 +6,7 @@ Features ✨:
  - Cross-Signing | Support SSSS secret sharing (#944)
  - Cross-Signing | Verify new session from existing session (#1134)
  - Cross-Signing | Bootstraping cross signing with 4S from mobile (#985)
+ - Save media files to Gallery (#973)
 
 Improvements 🙌:
  - Verification DM / Handle concurrent .start after .ready (#794)

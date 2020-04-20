@@ -58,7 +58,8 @@
 
 
     <!-- BEGIN Strings added by Onuray -->
-
+    <string name="media_file_added_to_gallery">Media file added to the Gallery</string>
+    <string name="error_adding_media_file_to_gallery">Could not add media file to the Gallery</string>
     <!-- END Strings added by Onuray -->
 
 

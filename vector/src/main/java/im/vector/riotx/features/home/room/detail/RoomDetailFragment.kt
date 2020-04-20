@@ -115,6 +115,7 @@ import im.vector.riotx.core.utils.createUIHandler
 import im.vector.riotx.core.utils.getColorFromUserId
 import im.vector.riotx.core.utils.jsonViewerStyler
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
+import im.vector.riotx.core.utils.saveMedia
 import im.vector.riotx.core.utils.shareMedia
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.attachments.AttachmentTypeSelectorView
@@ -1153,6 +1154,33 @@ class RoomDetailFragment @Inject constructor(
         )
     }
 
+    private fun onSaveActionClicked(action: EventSharedAction.Save) {
+        session.downloadFile(
+                FileService.DownloadMode.FOR_EXTERNAL_SHARE,
+                action.eventId,
+                action.messageContent.body,
+                action.messageContent.getFileUrl(),
+                action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
+                object : MatrixCallback<File> {
+                    override fun onSuccess(data: File) {
+                        if (isAdded) {
+                            val saved = saveMedia(
+                                    context = requireContext(),
+                                    file = data,
+                                    title = action.messageContent.body,
+                                    mediaMimeType = getMimeTypeFromUri(requireContext(), data.toUri())
+                            )
+                            if (saved) {
+                                Toast.makeText(requireContext(), R.string.media_file_added_to_gallery, Toast.LENGTH_LONG).show()
+                            } else {
+                                Toast.makeText(requireContext(), R.string.error_adding_media_file_to_gallery, Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }
+                }
+        )
+    }
+
     private fun handleActions(action: EventSharedAction) {
         when (action) {
             is EventSharedAction.OpenUserProfile            -> {
@@ -1175,6 +1203,9 @@ class RoomDetailFragment @Inject constructor(
             }
             is EventSharedAction.Share                      -> {
                 onShareActionClicked(action)
+            }
+            is EventSharedAction.Save                       -> {
+                onSaveActionClicked(action)
             }
             is EventSharedAction.ViewEditHistory            -> {
                 onEditedDecorationClicked(action.messageInformationData)
