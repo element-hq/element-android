@@ -29,7 +29,7 @@ import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 
 internal class MXOlmEncryption(
-        private var roomId: String,
+        private val roomId: String,
         private val olmDevice: MXOlmDevice,
         private val cryptoStore: IMXCryptoStore,
         private val messageEncrypter: MessageEncrypter,
