@@ -54,7 +54,7 @@ class VideoMediaViewerActivity : VectorBaseActivity() {
             mediaData = intent.getParcelableExtra<VideoContentRenderer.Data>(EXTRA_MEDIA_DATA)!!
 
             configureToolbar(videoMediaViewerToolbar, mediaData)
-            imageContentRenderer.render(mediaData.thumbnailMediaData, ImageContentRenderer.Mode.FULL_SIZE, videoMediaViewerThumbnailView)           
+            imageContentRenderer.render(mediaData.thumbnailMediaData, ImageContentRenderer.Mode.FULL_SIZE, videoMediaViewerThumbnailView)
             videoContentRenderer.render(mediaData,
                     videoMediaViewerThumbnailView,
                     videoMediaViewerLoading,
