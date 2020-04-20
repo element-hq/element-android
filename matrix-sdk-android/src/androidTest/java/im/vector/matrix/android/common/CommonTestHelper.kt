@@ -44,6 +44,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
+import timber.log.Timber
 import java.util.ArrayList
 import java.util.UUID
 import java.util.concurrent.CountDownLatch
@@ -58,6 +59,8 @@ class CommonTestHelper(context: Context) {
     val matrix: Matrix
 
     init {
+        Timber.plant(Timber.DebugTree())
+
         Matrix.initialize(context, MatrixConfiguration("TestFlavor"))
 
         matrix = Matrix.getInstance(context)
