@@ -195,6 +195,9 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
                 }
             }
         } catch (failure: Throwable) {
+            _navigateEvent.postValue(
+                    LiveEvent(NAVIGATE_FAILED_TO_LOAD_4S)
+            )
         }
     }
 
@@ -218,6 +221,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
             didRecoverSucceed(result)
             trustOnDecrypt(keysBackup, keyVersion)
         } catch (failure: Throwable) {
+            loadingEvent.postValue(null)
             throw failure
         }
     }
@@ -242,6 +246,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
             didRecoverSucceed(result)
             trustOnDecrypt(keysBackup, keyVersion)
         } catch (failure: Throwable) {
+            loadingEvent.postValue(null)
             throw failure
         }
     }
