@@ -23,6 +23,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
+import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.api.util.toMatrixItem
@@ -56,13 +57,23 @@ class DirectoryUsersController @Inject constructor(private val session: Session,
     override fun buildModels() {
         val currentState = state ?: return
         val hasSearch = currentState.directorySearchTerm.isNotBlank()
-        val asyncUsers = currentState.directoryUsers
-        when (asyncUsers) {
+        when (val asyncUsers = currentState.directoryUsers) {
             is Uninitialized -> renderEmptyState(false)
             is Loading       -> renderLoading()
-            is Success       -> renderSuccess(asyncUsers(), currentState.selectedUsers.map { it.userId }, hasSearch)
+            is Success       -> renderSuccess(getAsyncUsers(currentState), currentState.selectedUsers.map { it.userId }, hasSearch)
             is Fail          -> renderFailure(asyncUsers.error)
         }
+    }
+
+    private fun getAsyncUsers(currentState: CreateDirectRoomViewState): List<User> {
+        return currentState
+                .directoryUsers()
+                ?.toMutableList()
+                ?.apply {
+                    currentState.directorySearchTerm
+                            .takeIf { MatrixPatterns.isUserId(it) }
+                            ?.let { add(User(it)) }
+                } ?: emptyList()
     }
 
     private fun renderLoading() {

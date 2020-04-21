@@ -35,6 +35,7 @@ Bugfix 🐛:
  - Local echo are not updated in timeline (for failed & encrypted states)
  - Render image event even if thumbnail_info does not have mimetype defined (#1209)
  - Fix issue with media path (#1227)
+ - Add user to direct chat by user id (#1065)
 
 Translations 🗣:
  -
