@@ -21,6 +21,7 @@ import im.vector.matrix.android.internal.auth.registration.RegistrationFlowRespo
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.cleanup.CleanupSession
 import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
@@ -35,7 +36,8 @@ internal interface DeactivateAccountTask : Task<DeactivateAccountTask.Params, Un
 internal class DefaultDeactivateAccountTask @Inject constructor(
         private val accountAPI: AccountAPI,
         private val eventBus: EventBus,
-        @UserId private val userId: String
+        @UserId private val userId: String,
+        private val cleanupSession: CleanupSession
 ) : DeactivateAccountTask {
 
     override suspend fun execute(params: DeactivateAccountTask.Params) {
@@ -72,6 +74,6 @@ internal class DefaultDeactivateAccountTask @Inject constructor(
             throw throwable
         }
 
-        // TODO This task should also do the cleanup
+        cleanupSession.handle()
     }
 }

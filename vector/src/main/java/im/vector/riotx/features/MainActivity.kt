@@ -123,8 +123,15 @@ class MainActivity : VectorBaseActivity() {
             return
         }
         when {
-            args.clearCredentials -> session.signOut(
-                    !args.isUserLoggedOut && !args.isAccountDeactivated,
+            args.isAccountDeactivated -> {
+                // Just do the local cleanup
+                Timber.w("Account deactivated, start app")
+                sessionHolder.clearActiveSession()
+                doLocalCleanup()
+                startNextActivityAndFinish()
+            }
+            args.clearCredentials     -> session.signOut(
+                    !args.isUserLoggedOut,
                     object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             Timber.w("SIGN_OUT: success, start app")
@@ -137,7 +144,7 @@ class MainActivity : VectorBaseActivity() {
                             displayError(failure)
                         }
                     })
-            args.clearCache       -> session.clearCache(
+            args.clearCache           -> session.clearCache(
                     object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             doLocalCleanup()
