@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.account
 
-import im.vector.matrix.android.api.session.account.model.ChangePasswordParams
 import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
 import retrofit2.http.Body
