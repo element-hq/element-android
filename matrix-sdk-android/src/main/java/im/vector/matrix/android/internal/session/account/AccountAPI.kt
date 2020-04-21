@@ -30,4 +30,12 @@ internal interface AccountAPI {
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/password")
     fun changePassword(@Body params: ChangePasswordParams): Call<Unit>
+
+    /**
+     * Deactivate the user account
+     *
+     * @param params the deactivate account params
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/deactivate")
+    fun deactivate(@Body params: DeactivateAccountParams): Call<Unit>
 }

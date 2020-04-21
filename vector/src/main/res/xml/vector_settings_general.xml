@@ -97,14 +97,13 @@
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
-    <im.vector.riotx.core.preference.VectorPreferenceCategory
-        android:key="SETTINGS_DEACTIVATE_ACCOUNT_CATEGORY_KEY"
-        android:title="@string/settings_deactivate_account_section"
-        app:isPreferenceVisible="@bool/false_not_implemented">
+    <im.vector.riotx.core.preference.VectorPreferenceCategory android:title="@string/settings_deactivate_account_section">
 
         <im.vector.riotx.core.preference.VectorPreference
             android:key="SETTINGS_DEACTIVATE_ACCOUNT_KEY"
-            android:title="@string/settings_deactivate_my_account" />
+            android:persistent="false"
+            android:title="@string/settings_deactivate_my_account"
+            app:fragment="im.vector.riotx.features.settings.account.deactivation.DeactivateAccountFragment" />
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 

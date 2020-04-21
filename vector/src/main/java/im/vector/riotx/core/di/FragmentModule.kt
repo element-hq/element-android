@@ -81,6 +81,7 @@ import im.vector.riotx.features.settings.VectorSettingsNotificationPreferenceFra
 import im.vector.riotx.features.settings.VectorSettingsNotificationsTroubleshootFragment
 import im.vector.riotx.features.settings.VectorSettingsPreferencesFragment
 import im.vector.riotx.features.settings.VectorSettingsSecurityPrivacyFragment
+import im.vector.riotx.features.settings.account.deactivation.DeactivateAccountFragment
 import im.vector.riotx.features.settings.crosssigning.CrossSigningSettingsFragment
 import im.vector.riotx.features.settings.devices.VectorSettingsDevicesFragment
 import im.vector.riotx.features.settings.devtools.AccountDataFragment
@@ -445,8 +446,14 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(BootstrapAccountPasswordFragment::class)
     fun bindBootstrapAccountPasswordFragment(fragment: BootstrapAccountPasswordFragment): Fragment
+
     @Binds
     @IntoMap
     @FragmentKey(BootstrapMigrateBackupFragment::class)
     fun bindBootstrapMigrateBackupFragment(fragment: BootstrapMigrateBackupFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(DeactivateAccountFragment::class)
+    fun bindDeactivateAccountFragment(fragment: DeactivateAccountFragment): Fragment
 }
