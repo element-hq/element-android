@@ -44,7 +44,7 @@ import javax.inject.Inject
 
 internal interface SignOutTask : Task<SignOutTask.Params, Unit> {
     data class Params(
-            val sigOutFromHomeserver: Boolean
+            val signOutFromHomeserver: Boolean
     )
 }
 
@@ -67,7 +67,7 @@ internal class DefaultSignOutTask @Inject constructor(
 
     override suspend fun execute(params: SignOutTask.Params) {
         // It should be done even after a soft logout, to be sure the deviceId is deleted on the
-        if (params.sigOutFromHomeserver) {
+        if (params.signOutFromHomeserver) {
             Timber.d("SignOut: send request...")
             try {
                 executeRequest<Unit>(eventBus) {
