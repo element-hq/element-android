@@ -88,8 +88,8 @@ class UnwedgingTest : InstrumentedTest {
 
         val aliceCryptoStore = (aliceSession.cryptoService() as DefaultCryptoService).cryptoStoreForTesting
 
-        //bobSession.cryptoService().setWarnOnUnknownDevices(false)
-        //aliceSession.cryptoService().setWarnOnUnknownDevices(false)
+        // bobSession.cryptoService().setWarnOnUnknownDevices(false)
+        // aliceSession.cryptoService().setWarnOnUnknownDevices(false)
 
         val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
@@ -143,7 +143,7 @@ class UnwedgingTest : InstrumentedTest {
 
         val oldSession = serializeForRealm(olmSession.olmSession)
 
-        aliceSession.cryptoService().discardOutbundSession(roomFromAlicePOV.roomId)
+        aliceSession.cryptoService().discardOutboundSession(roomFromAlicePOV.roomId)
         Thread.sleep(6_000)
 
         latch = CountDownLatch(1)
@@ -171,7 +171,7 @@ class UnwedgingTest : InstrumentedTest {
         Thread.sleep(6_000)
 
         // Force new session, and key share
-        aliceSession.cryptoService().discardOutbundSession(roomFromAlicePOV.roomId)
+        aliceSession.cryptoService().discardOutboundSession(roomFromAlicePOV.roomId)
 
         // Wait for the message to be received by Bob
         mTestHelper.waitWithLatch {
@@ -219,7 +219,6 @@ class UnwedgingTest : InstrumentedTest {
                 result != null
             }
         }
-
 
         bobTimeline.dispose()
 

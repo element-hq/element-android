@@ -635,7 +635,7 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-    override fun discardOutbundSession(roomId: String) {
+    override fun discardOutboundSession(roomId: String) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             roomEncryptorsStore.get(roomId)?.discardSessionKey()
         }
@@ -717,38 +717,6 @@ internal class DefaultCryptoService @Inject constructor(
             }
         }
     }
-
-//    private fun markOlmSessionForUnwedging(event: Event, mxMegolmDecryption: MXMegolmDecryption) {
-//        Timber.d("## CRYPTO |  markOlmSessionForUnwedging: ${event.eventId}")
-//        val senderId = event.senderId ?: return
-//        val encryptedMessage = event.content.toModel<EncryptedEventContent>() ?: return
-//        val deviceKey = encryptedMessage.senderKey ?: return
-//        encryptedMessage.algorithm?.takeIf { it == MXCRYPTO_ALGORITHM_MEGOLM } ?: return
-//
-//        if (senderId == userId
-//                && deviceKey == olmDevice.deviceCurve25519Key) {
-//            Timber.d("## CRYPTO |  markOlmSessionForUnwedging: Do not unwedge ourselves")
-//            return
-//        }
-//
-//        val lastForcedDate = lastNewSessionForcedDates.getObject(senderId, deviceKey) ?: 0
-//        val now = System.currentTimeMillis()
-//        if (now - lastForcedDate < CRYPTO_MIN_FORCE_SESSION_PERIOD_MILLIS) {
-//            Timber.d("## CRYPTO | markOlmSessionForUnwedging: New session already forced with device at $lastForcedDate. Not forcing another")
-//            return
-//        }
-//
-//        // Establish a new olm session with this device since we're failing to decrypt messages
-//        // on a current session.
-//        val deviceInfo = getDeviceInfo(senderId, deviceKey) ?: return Unit.also {
-//            Timber.d("## CRYPTO | markOlmSessionForUnwedging: Couldn't find device for identity key $deviceKey: not re-establishing session")
-//        }
-//
-//        Timber.d("## CRYPTO | markOlmSessionForUnwedging from $senderId:${deviceInfo.deviceId}")
-//        lastNewSessionForcedDates.setObject(senderId, deviceKey, now)
-//
-//        mxMegolmDecryption.markOlmSessionForUnwedging(senderId, deviceInfo)
-//    }
 
     /**
      * Reset replay attack data for the given timeline.
@@ -1197,6 +1165,18 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     private fun markOlmSessionForUnwedging(senderId: String, deviceInfo: CryptoDeviceInfo) {
+        val deviceKey = deviceInfo.identityKey()
+
+        val lastForcedDate = lastNewSessionForcedDates.getObject(senderId, deviceKey) ?: 0
+        val now = System.currentTimeMillis()
+        if (now - lastForcedDate < CRYPTO_MIN_FORCE_SESSION_PERIOD_MILLIS) {
+            Timber.d("## CRYPTO | markOlmSessionForUnwedging: New session already forced with device at $lastForcedDate. Not forcing another")
+            return
+        }
+
+        Timber.d("## CRYPTO | markOlmSessionForUnwedging from $senderId:${deviceInfo.deviceId}")
+        lastNewSessionForcedDates.setObject(senderId, deviceKey, now)
+
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             ensureOlmSessionsForDevicesAction.handle(mapOf(senderId to listOf(deviceInfo)), force = true)
 

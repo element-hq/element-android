@@ -449,7 +449,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                         }
                         is ParsedCommand.DiscardSession           -> {
                             if (room.isEncrypted()) {
-                                session.cryptoService().discardOutbundSession(room.roomId)
+                                session.cryptoService().discardOutboundSession(room.roomId)
                                 _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                                 popDraft()
                             } else {
