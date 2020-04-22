@@ -16,9 +16,6 @@
 
 package im.vector.matrix.android.internal.session.account
 
-import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.internal.auth.registration.RegistrationFlowResponse
-import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.cleanup.CleanupSession
@@ -42,36 +39,9 @@ internal class DefaultDeactivateAccountTask @Inject constructor(
 
     override suspend fun execute(params: DeactivateAccountTask.Params) {
         val deactivateAccountParams = DeactivateAccountParams.create(userId, params.password, params.eraseAllData)
-        try {
-            executeRequest<Unit>(eventBus) {
-                apiCall = accountAPI.deactivate(deactivateAccountParams)
-            }
-        } catch (throwable: Throwable) {
-            if (throwable is Failure.OtherServerError
-                    && throwable.httpCode == 401
-                    /* Avoid infinite loop */
-                    && deactivateAccountParams.auth?.session == null) {
-                try {
-                    MoshiProvider.providesMoshi()
-                            .adapter(RegistrationFlowResponse::class.java)
-                            .fromJson(throwable.errorBody)
-                } catch (e: Exception) {
-                    null
-                }?.let {
-                    // Retry with authentication
-                    try {
-                        executeRequest<Unit>(eventBus) {
-                            apiCall = accountAPI.deactivate(
-                                    deactivateAccountParams.copy(auth = deactivateAccountParams.auth?.copy(session = it.session))
-                            )
-                        }
-                        return
-                    } catch (failure: Throwable) {
-                        throw failure
-                    }
-                }
-            }
-            throw throwable
+
+        executeRequest<Unit>(eventBus) {
+            apiCall = accountAPI.deactivate(deactivateAccountParams)
         }
 
         cleanupSession.handle()

@@ -26,7 +26,6 @@ import im.vector.matrix.android.api.MatrixConfiguration
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.LoginFlowResult
 import im.vector.matrix.android.api.auth.registration.RegistrationResult
-import im.vector.matrix.android.api.failure.isInvalidPassword
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.LocalEcho
@@ -42,7 +41,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.amshove.kluent.shouldBeTrue
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -263,13 +261,13 @@ class CommonTestHelper(context: Context) {
     }
 
     /**
-     * Log into the account using a wrong password
+     * Log into the account and expect an error
      *
-     * @param userName    the account username
-     * @param badPassword an incorrect password
+     * @param userName the account username
+     * @param password the password
      */
-    fun logAccountBadPassword(userName: String,
-                              badPassword: String) {
+    fun logAccountWithError(userName: String,
+                            password: String): Throwable {
         val hs = createHomeServerConfig()
 
         doSync<LoginFlowResult> {
@@ -281,7 +279,7 @@ class CommonTestHelper(context: Context) {
         waitWithLatch { latch ->
             matrix.authenticationService
                     .getLoginWizard()
-                    .login(userName, badPassword, "myDevice", object : TestMatrixCallback<Session>(latch, onlySuccessful = false) {
+                    .login(userName, password, "myDevice", object : TestMatrixCallback<Session>(latch, onlySuccessful = false) {
                         override fun onFailure(failure: Throwable) {
                             requestFailure = failure
                             super.onFailure(failure)
@@ -289,7 +287,8 @@ class CommonTestHelper(context: Context) {
                     })
         }
 
-        requestFailure!!.isInvalidPassword().shouldBeTrue()
+        assertNotNull(requestFailure)
+        return requestFailure!!
     }
 
     /**

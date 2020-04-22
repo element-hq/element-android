@@ -17,9 +17,11 @@
 package im.vector.matrix.android.account
 
 import im.vector.matrix.android.InstrumentedTest
+import im.vector.matrix.android.api.failure.isInvalidPassword
 import im.vector.matrix.android.common.CommonTestHelper
 import im.vector.matrix.android.common.SessionTestParams
 import im.vector.matrix.android.common.TestConstants
+import org.amshove.kluent.shouldBeTrue
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -46,11 +48,11 @@ class ChangePasswordTest : InstrumentedTest {
         }
 
         // Try to login with the previous password, it will fail
-        commonTestHelper.logAccountBadPassword(session.myUserId, TestConstants.PASSWORD)
+        val throwable = commonTestHelper.logAccountWithError(session.myUserId, TestConstants.PASSWORD)
+        throwable.isInvalidPassword().shouldBeTrue()
 
         // Try to login with the new password, should work
         val session2 = commonTestHelper.logIntoAccount(session.myUserId, NEW_PASSWORD, SessionTestParams(withInitialSync = false))
-
 
         commonTestHelper.signOutAndClose(session)
         commonTestHelper.signOutAndClose(session2)
