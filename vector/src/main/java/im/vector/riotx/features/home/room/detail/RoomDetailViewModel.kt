@@ -448,7 +448,17 @@ class RoomDetailViewModel @AssistedInject constructor(
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.DiscardSession           -> {
-                            session.cryptoService().discardOutbundSession(room.roomId)
+                            if (room.isEncrypted()) {
+                                session.cryptoService().discardOutbundSession(room.roomId)
+                                _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+                                popDraft()
+                            } else {
+                                _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+                                _viewEvents.post(
+                                        RoomDetailViewEvents
+                                                .ShowMessage(stringProvider.getString(R.string.command_description_discard_session_not_handled))
+                                )
+                            }
                         }
                     }.exhaustive
                 }
