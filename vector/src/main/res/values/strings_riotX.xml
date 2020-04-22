@@ -29,4 +29,5 @@
 
     <!-- END Strings added by Others -->
 
+    <string name="create_room_dm_failure">"We couldn't create your DM. Please check the users you want to invite and try again."</string>
 </resources>
