@@ -2201,7 +2201,6 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="enter_secret_storage_passphrase">Saisir la phrase secrète du coffre secret</string>
     <string name="enter_secret_storage_passphrase_warning">Attention :</string>
     <string name="enter_secret_storage_passphrase_warning_text">Vous devriez accéder à votre coffre secret uniquement depuis un appareil de confiance</string>
-    <string name="enter_secret_storage_passphrase_reason_verify">Accédez à l’historique de vos messages sécurisés et à votre identité de signature croisée pour vérifier d’autres sessions en saisissant votre phrase secrète</string>
 
     <string name="message_action_item_redact">Supprimer…</string>
     <string name="share_confirm_room">Voulez-vous envoyer cette pièce jointe à %1$s \?</string>

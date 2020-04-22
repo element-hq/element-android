@@ -2175,7 +2175,6 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="enter_secret_storage_passphrase">Enter secret storage passphrase</string>
     <string name="enter_secret_storage_passphrase_warning">Warning:</string>
     <string name="enter_secret_storage_passphrase_warning_text">You should only access secret storage from a trusted device</string>
-    <string name="enter_secret_storage_passphrase_reason_verify">Access your secure message history and your cross-signing identity for verifying other sessions by entering your passphrase</string>
 
     <string name="message_action_item_redact">Remove…</string>
     <string name="share_confirm_room">Do you want to send this attachment to %1$s?</string>

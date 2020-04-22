@@ -2156,7 +2156,6 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="enter_secret_storage_passphrase">Jepni frazëkalimin e fshehtë për në depozitim</string>
     <string name="enter_secret_storage_passphrase_warning">Kujdes:</string>
     <string name="enter_secret_storage_passphrase_warning_text">Duhet të hyni në depozitim të fshehtë vetëm nga një pajisje e besuar</string>
-    <string name="enter_secret_storage_passphrase_reason_verify">Për verifikim sesionesh të tjerë përmes dhënies së frazëkalimit tuaj, hyni te historiku i mesazheve tuaj të sigurt dhe identiteti juaj për <em>cross-signing</em></string>
 
     <string name="message_action_item_redact">Hiqni…</string>
     <string name="share_confirm_room">Doni të dërgohet kjo bashkëngjitje te %1$s\?</string>

@@ -26,6 +26,8 @@ import im.vector.riotx.features.attachments.preview.AttachmentsPreviewFragment
 import im.vector.riotx.features.createdirect.CreateDirectRoomDirectoryUsersFragment
 import im.vector.riotx.features.createdirect.CreateDirectRoomKnownUsersFragment
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
+import im.vector.riotx.features.crypto.quads.SharedSecuredStorageKeyFragment
+import im.vector.riotx.features.crypto.quads.SharedSecuredStoragePassphraseFragment
 import im.vector.riotx.features.crypto.recover.BootstrapAccountPasswordFragment
 import im.vector.riotx.features.crypto.recover.BootstrapConclusionFragment
 import im.vector.riotx.features.crypto.recover.BootstrapConfirmPassphraseFragment
@@ -456,4 +458,16 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(DeactivateAccountFragment::class)
     fun bindDeactivateAccountFragment(fragment: DeactivateAccountFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SharedSecuredStoragePassphraseFragment::class)
+    fun bindSharedSecuredStoragePassphraseFragment(fragment: SharedSecuredStoragePassphraseFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SharedSecuredStorageKeyFragment::class)
+    fun bindSharedSecuredStorageKeyFragment(fragment: SharedSecuredStorageKeyFragment): Fragment
+
+
 }
