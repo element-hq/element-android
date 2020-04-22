@@ -20,12 +20,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <CheckBox
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/deactivateAccountEraseCheckbox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:gravity="top"
             android:text="@string/deactivate_account_delete_checkbox"
             android:textColor="?riotx_text_primary"
             app:layout_constraintEnd_toEndOf="parent"
