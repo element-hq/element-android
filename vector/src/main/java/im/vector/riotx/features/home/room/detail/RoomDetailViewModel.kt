@@ -447,6 +447,9 @@ class RoomDetailViewModel @AssistedInject constructor(
                             // TODO
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
+                        is ParsedCommand.DiscardSession           -> {
+                            session.cryptoService().discardOutbundSession(room.roomId)
+                        }
                     }.exhaustive
                 }
                 is SendMode.EDIT    -> {

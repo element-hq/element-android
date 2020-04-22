@@ -18,20 +18,29 @@ package im.vector.matrix.android.internal.crypto
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import im.vector.matrix.android.InstrumentedTest
+import im.vector.matrix.android.api.extensions.tryThis
+import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.common.CommonTestHelper
 import im.vector.matrix.android.common.CryptoTestHelper
+import im.vector.matrix.android.common.TestConstants
+import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
+import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
+import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
+import im.vector.matrix.android.internal.crypto.store.db.deserializeFromRealm
+import im.vector.matrix.android.internal.crypto.store.db.serializeForRealm
 import org.amshove.kluent.shouldBe
-import org.amshove.kluent.shouldBeEqualTo
+import org.junit.Assert
 import org.junit.Before
-import org.junit.BeforeClass
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
+import org.matrix.olm.OlmSession
 import timber.log.Timber
 import java.util.concurrent.CountDownLatch
 
@@ -79,9 +88,8 @@ class UnwedgingTest : InstrumentedTest {
 
         val aliceCryptoStore = (aliceSession.cryptoService() as DefaultCryptoService).cryptoStoreForTesting
 
-        bobSession.cryptoService().setWarnOnUnknownDevices(false)
-
-        aliceSession.cryptoService().setWarnOnUnknownDevices(false)
+        //bobSession.cryptoService().setWarnOnUnknownDevices(false)
+        //aliceSession.cryptoService().setWarnOnUnknownDevices(false)
 
         val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
@@ -100,10 +108,12 @@ class UnwedgingTest : InstrumentedTest {
             }
 
             override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
-                val decryptedEventReceivedByBob = snapshot.filter { it.root.getClearType() == EventType.MESSAGE }
+                val decryptedEventReceivedByBob = snapshot.filter { it.root.type == EventType.ENCRYPTED }
                 Timber.d("Bob can now decrypt ${decryptedEventReceivedByBob.size} messages")
                 if (decryptedEventReceivedByBob.size == 3) {
-                    bobFinalLatch.countDown()
+                    if (decryptedEventReceivedByBob[0].root.mCryptoError == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
+                        bobFinalLatch.countDown()
+                    }
                 }
             }
         }
@@ -122,6 +132,7 @@ class UnwedgingTest : InstrumentedTest {
         bobTimeline.removeListener(bobEventsListener)
 
         messagesReceivedByBob.size shouldBe 1
+        val firstMessageSession = messagesReceivedByBob[0].root.content.toModel<EncryptedEventContent>()!!.sessionId!!
 
         //  - Store the olm session between A&B devices
         // Let us pickle our session with bob here so we can later unpickle it
@@ -130,14 +141,17 @@ class UnwedgingTest : InstrumentedTest {
         sessionIdsForBob!!.size shouldBe 1
         val olmSession = aliceCryptoStore.getDeviceSession(sessionIdsForBob.first(), bobSession.cryptoService().getMyDevice().identityKey()!!)!!
 
-        // Sam join the room, so it will force a new session creation
-        val samSession = mCryptoTestHelper.createSamAccountAndInviteToTheRoom(roomFromAlicePOV)
+        val oldSession = serializeForRealm(olmSession.olmSession)
+
+        aliceSession.cryptoService().discardOutbundSession(roomFromAlicePOV.roomId)
+        Thread.sleep(6_000)
 
         latch = CountDownLatch(1)
         bobEventsListener = createEventListener(latch, 2)
         bobTimeline.addListener(bobEventsListener)
         messagesReceivedByBob = emptyList()
 
+        Timber.i("## CRYPTO | testUnwedging:  Alice sends a 2nd message with a 2nd megolm session")
         // - Alice sends a 2nd message with a 2nd megolm session
         roomFromAlicePOV.sendTextMessage("Second message")
 
@@ -146,36 +160,70 @@ class UnwedgingTest : InstrumentedTest {
         bobTimeline.removeListener(bobEventsListener)
 
         messagesReceivedByBob.size shouldBe 2
+        // Session should have changed
+        val secondMessageSession = messagesReceivedByBob[0].root.content.toModel<EncryptedEventContent>()!!.sessionId!!
+        Assert.assertNotEquals(firstMessageSession, secondMessageSession)
 
         // Let us wedge the session now. Set crypto state like after the first message
-        aliceCryptoStore.storeSession(olmSession, bobSession.cryptoService().getMyDevice().identityKey()!!)
+        Timber.i("## CRYPTO | testUnwedging: wedge the session now. Set crypto state like after the first message")
 
-        latch = CountDownLatch(1)
-        bobEventsListener = createEventListener(latch, 3)
-        bobTimeline.addListener(bobEventsListener)
-        messagesReceivedByBob = emptyList()
+        aliceCryptoStore.storeSession(OlmSessionWrapper(deserializeFromRealm<OlmSession>(oldSession)!!), bobSession.cryptoService().getMyDevice().identityKey()!!)
+        Thread.sleep(6_000)
 
-        // - Alice sends a 3rd message with a 3rd megolm session but a wedged olm session
-        roomFromAlicePOV.sendTextMessage("Third message")
+        // Force new session, and key share
+        aliceSession.cryptoService().discardOutbundSession(roomFromAlicePOV.roomId)
 
         // Wait for the message to be received by Bob
-        mTestHelper.await(latch)
+        mTestHelper.waitWithLatch {
+            bobEventsListener = createEventListener(it, 3)
+            bobTimeline.addListener(bobEventsListener)
+            messagesReceivedByBob = emptyList()
+
+            Timber.i("## CRYPTO | testUnwedging: Alice sends a 3rd message with a 3rd megolm session but a wedged olm session")
+            // - Alice sends a 3rd message with a 3rd megolm session but a wedged olm session
+            roomFromAlicePOV.sendTextMessage("Third message")
+            // Bob should not be able to decrypt, because the session key could not be sent
+        }
         bobTimeline.removeListener(bobEventsListener)
 
         messagesReceivedByBob.size shouldBe 3
 
-        messagesReceivedByBob[0].root.getClearType() shouldBeEqualTo EventType.ENCRYPTED
-        messagesReceivedByBob[1].root.getClearType() shouldBeEqualTo EventType.MESSAGE
-        messagesReceivedByBob[2].root.getClearType() shouldBeEqualTo EventType.MESSAGE
+        val thirdMessageSession = messagesReceivedByBob[0].root.content.toModel<EncryptedEventContent>()!!.sessionId!!
+        Timber.i("## CRYPTO | testUnwedging: third message session ID $thirdMessageSession")
+        Assert.assertNotEquals(secondMessageSession, thirdMessageSession)
 
-        // Wait for all the message to be decrypted by bob
+        Assert.assertEquals(EventType.ENCRYPTED, messagesReceivedByBob[0].root.getClearType())
+        Assert.assertEquals(EventType.MESSAGE, messagesReceivedByBob[1].root.getClearType())
+        Assert.assertEquals(EventType.MESSAGE, messagesReceivedByBob[2].root.getClearType())
+        // Bob Should not be able to decrypt last message, because session could not be sent as the olm channel was wedged
         mTestHelper.await(bobFinalLatch)
         bobTimeline.removeListener(bobHasThreeDecryptedEventsListener)
+
+        // It's a trick to force key request on fail to decrypt
+        mTestHelper.doSync<Unit> {
+            bobSession.cryptoService().crossSigningService()
+                    .initializeCrossSigning(UserPasswordAuth(
+                            user = bobSession.myUserId,
+                            password = TestConstants.PASSWORD
+                    ), it)
+        }
+
+        // Wait until we received back the key
+        mTestHelper.waitWithLatch {
+            mTestHelper.retryPeriodicallyWithLatch(it) {
+                // we should get back the key and be able to decrypt
+                val result = tryThis {
+                    bobSession.cryptoService().decryptEvent(messagesReceivedByBob[0].root, "")
+                }
+                Timber.i("## CRYPTO | testUnwedging: decrypt result  ${result?.clearEvent}")
+                result != null
+            }
+        }
+
 
         bobTimeline.dispose()
 
         cryptoTestData.cleanUp(mTestHelper)
-        mTestHelper.signOutAndClose(samSession)
     }
 
     private fun createEventListener(latch: CountDownLatch, expectedNumberOfMessages: Int): Timeline.Listener {

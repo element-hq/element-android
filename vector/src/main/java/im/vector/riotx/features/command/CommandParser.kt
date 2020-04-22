@@ -281,6 +281,9 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.POLL)
                     }
                 }
+                Command.DISCARD_SESSION.command        -> {
+                    ParsedCommand.DiscardSession
+                }
                 else                                   -> {
                     // Unknown command
                     ParsedCommand.ErrorUnknownSlashCommand(slashCommand)

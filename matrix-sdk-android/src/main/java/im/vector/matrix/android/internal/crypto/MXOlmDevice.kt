@@ -342,6 +342,8 @@ internal class MXOlmDevice @Inject constructor(
             } catch (e: Exception) {
                 Timber.e(e, "## encryptMessage() : failed")
             }
+        } else {
+            Timber.e("## encryptMessage() : Failed to encrypt unknown session $sessionId")
         }
 
         return res

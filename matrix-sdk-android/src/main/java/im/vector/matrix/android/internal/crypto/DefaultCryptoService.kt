@@ -45,10 +45,11 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
 import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibilityContent
 import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
+import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import im.vector.matrix.android.internal.crypto.actions.MegolmSessionDataImporter
+import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
 import im.vector.matrix.android.internal.crypto.algorithms.IMXEncrypting
-import im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmDecryption
 import im.vector.matrix.android.internal.crypto.algorithms.megolm.MXMegolmEncryptionFactory
 import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmEncryptionFactory
 import im.vector.matrix.android.internal.crypto.crosssigning.DefaultCrossSigningService
@@ -60,6 +61,7 @@ import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
+import im.vector.matrix.android.internal.crypto.model.event.OlmEventContent
 import im.vector.matrix.android.internal.crypto.model.event.RoomKeyContent
 import im.vector.matrix.android.internal.crypto.model.event.SecretSendEventContent
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
@@ -73,6 +75,7 @@ import im.vector.matrix.android.internal.crypto.tasks.DeleteDeviceTask
 import im.vector.matrix.android.internal.crypto.tasks.DeleteDeviceWithUserPasswordTask
 import im.vector.matrix.android.internal.crypto.tasks.GetDeviceInfoTask
 import im.vector.matrix.android.internal.crypto.tasks.GetDevicesTask
+import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.crypto.tasks.SetDeviceNameTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
 import im.vector.matrix.android.internal.crypto.verification.DefaultVerificationService
@@ -168,7 +171,10 @@ internal class DefaultCryptoService @Inject constructor(
         private val monarchy: Monarchy,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor,
-        private val cryptoCoroutineScope: CoroutineScope
+        private val cryptoCoroutineScope: CoroutineScope,
+        private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
+        private val sendToDeviceTask: SendToDeviceTask,
+        private val messageEncrypter: MessageEncrypter
 ) : CryptoService {
 
     init {
@@ -501,14 +507,14 @@ internal class DefaultCryptoService @Inject constructor(
         val existingAlgorithm = cryptoStore.getRoomAlgorithm(roomId)
 
         if (!existingAlgorithm.isNullOrEmpty() && existingAlgorithm != algorithm) {
-            Timber.e("## setEncryptionInRoom() : Ignoring m.room.encryption event which requests a change of config in $roomId")
+            Timber.e("## CRYPTO | setEncryptionInRoom() : Ignoring m.room.encryption event which requests a change of config in $roomId")
             return false
         }
 
         val encryptingClass = MXCryptoAlgorithms.hasEncryptorClassForAlgorithm(algorithm)
 
         if (!encryptingClass) {
-            Timber.e("## setEncryptionInRoom() : Unable to encrypt room $roomId with $algorithm")
+            Timber.e("## CRYPTO | setEncryptionInRoom() : Unable to encrypt room $roomId with $algorithm")
             return false
         }
 
@@ -597,7 +603,7 @@ internal class DefaultCryptoService @Inject constructor(
                                      callback: MatrixCallback<MXEncryptEventContentResult>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             if (!isStarted()) {
-                Timber.v("## encryptEventContent() : wait after e2e init")
+                Timber.v("## CRYPTO | encryptEventContent() : wait after e2e init")
                 internalStart(false)
             }
             val userIds = getRoomUserIds(roomId)
@@ -613,19 +619,25 @@ internal class DefaultCryptoService @Inject constructor(
             val safeAlgorithm = alg
             if (safeAlgorithm != null) {
                 val t0 = System.currentTimeMillis()
-                Timber.v("## encryptEventContent() starts")
+                Timber.v("## CRYPTO | encryptEventContent() starts")
                 runCatching {
                     val content = safeAlgorithm.encryptEventContent(eventContent, eventType, userIds)
-                    Timber.v("## encryptEventContent() : succeeds after ${System.currentTimeMillis() - t0} ms")
+                    Timber.v("## CRYPTO | encryptEventContent() : succeeds after ${System.currentTimeMillis() - t0} ms")
                     MXEncryptEventContentResult(content, EventType.ENCRYPTED)
                 }.foldToCallback(callback)
             } else {
                 val algorithm = getEncryptionAlgorithm(roomId)
                 val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON,
                         algorithm ?: MXCryptoError.NO_MORE_ALGORITHM_REASON)
-                Timber.e("## encryptEventContent() : $reason")
+                Timber.e("## CRYPTO | encryptEventContent() : $reason")
                 callback.onFailure(Failure.CryptoError(MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_ENCRYPT, reason)))
             }
+        }
+    }
+
+    override fun discardOutbundSession(roomId: String) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            roomEncryptorsStore.get(roomId)?.discardSessionKey()
         }
     }
 
@@ -670,24 +682,35 @@ internal class DefaultCryptoService @Inject constructor(
     private fun internalDecryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         val eventContent = event.content
         if (eventContent == null) {
-            Timber.e("## decryptEvent : empty event content")
+            Timber.e("## CRYPTO | decryptEvent : empty event content")
             throw MXCryptoError.Base(MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE, MXCryptoError.BAD_ENCRYPTED_MESSAGE_REASON)
         } else {
             val algorithm = eventContent["algorithm"]?.toString()
             val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(event.roomId, algorithm)
             if (alg == null) {
                 val reason = String.format(MXCryptoError.UNABLE_TO_DECRYPT_REASON, event.eventId, algorithm)
-                Timber.e("## decryptEvent() : $reason")
+                Timber.e("## CRYPTO | decryptEvent() : $reason")
                 throw MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT, reason)
             } else {
                 try {
                     return alg.decryptEvent(event, timeline)
                 } catch (mxCryptoError: MXCryptoError) {
-                    if (mxCryptoError is MXCryptoError.Base
-                            && mxCryptoError.errorType == MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE
-                            && alg is MXMegolmDecryption) {
-                        // TODO Do it on decryption thread like on iOS?
-                        markOlmSessionForUnwedging(event, alg)
+                    Timber.d("## CRYPTO | internalDecryptEvent : Failed to decrypt ${event.eventId} reason: $mxCryptoError")
+                    if (algorithm == MXCRYPTO_ALGORITHM_OLM) {
+                        if (mxCryptoError is MXCryptoError.Base
+                                && mxCryptoError.errorType == MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE) {
+                            // need to find sending device
+                            val olmContent = event.content.toModel<OlmEventContent>()
+                            cryptoStore.getUserDevices(event.senderId ?: "")
+                                    ?.values
+                                    ?.firstOrNull { it.identityKey() == olmContent?.senderKey }
+                                    ?.let {
+                                        markOlmSessionForUnwedging(event.senderId ?: "", it)
+                                    }
+                                    ?: run {
+                                        Timber.v("## CRYPTO | markOlmSessionForUnwedging() : Failed to find sender crypto device")
+                                    }
+                        }
                     }
                     throw mxCryptoError
                 }
@@ -695,36 +718,37 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-    private fun markOlmSessionForUnwedging(event: Event, mxMegolmDecryption: MXMegolmDecryption) {
-        val senderId = event.senderId ?: return
-        val encryptedMessage = event.content.toModel<EncryptedEventContent>() ?: return
-        val deviceKey = encryptedMessage.senderKey ?: return
-        encryptedMessage.algorithm?.takeIf { it == MXCRYPTO_ALGORITHM_MEGOLM } ?: return
-
-        if (senderId == userId
-                && deviceKey == olmDevice.deviceCurve25519Key) {
-            Timber.d("[MXCrypto] markOlmSessionForUnwedging: Do not unwedge ourselves")
-            return
-        }
-
-        val lastForcedDate = lastNewSessionForcedDates.getObject(senderId, deviceKey) ?: 0
-        val now = System.currentTimeMillis()
-        if (now - lastForcedDate < CRYPTO_MIN_FORCE_SESSION_PERIOD_MILLIS) {
-            Timber.d("[MXCrypto] markOlmSessionForUnwedging: New session already forced with device at $lastForcedDate. Not forcing another")
-            return
-        }
-
-        // Establish a new olm session with this device since we're failing to decrypt messages
-        // on a current session.
-        val deviceInfo = getDeviceInfo(senderId, deviceKey) ?: return Unit.also {
-            Timber.d("[MXCrypto] markOlmSessionForUnwedging: Couldn't find device for identity key $deviceKey: not re-establishing session")
-        }
-
-        Timber.d("[MXCrypto] markOlmSessionForUnwedging from $senderId:${deviceInfo.deviceId}")
-        lastNewSessionForcedDates.setObject(senderId, deviceKey, now)
-
-        mxMegolmDecryption.markOlmSessionForUnwedging(senderId, deviceInfo)
-    }
+//    private fun markOlmSessionForUnwedging(event: Event, mxMegolmDecryption: MXMegolmDecryption) {
+//        Timber.d("## CRYPTO |  markOlmSessionForUnwedging: ${event.eventId}")
+//        val senderId = event.senderId ?: return
+//        val encryptedMessage = event.content.toModel<EncryptedEventContent>() ?: return
+//        val deviceKey = encryptedMessage.senderKey ?: return
+//        encryptedMessage.algorithm?.takeIf { it == MXCRYPTO_ALGORITHM_MEGOLM } ?: return
+//
+//        if (senderId == userId
+//                && deviceKey == olmDevice.deviceCurve25519Key) {
+//            Timber.d("## CRYPTO |  markOlmSessionForUnwedging: Do not unwedge ourselves")
+//            return
+//        }
+//
+//        val lastForcedDate = lastNewSessionForcedDates.getObject(senderId, deviceKey) ?: 0
+//        val now = System.currentTimeMillis()
+//        if (now - lastForcedDate < CRYPTO_MIN_FORCE_SESSION_PERIOD_MILLIS) {
+//            Timber.d("## CRYPTO | markOlmSessionForUnwedging: New session already forced with device at $lastForcedDate. Not forcing another")
+//            return
+//        }
+//
+//        // Establish a new olm session with this device since we're failing to decrypt messages
+//        // on a current session.
+//        val deviceInfo = getDeviceInfo(senderId, deviceKey) ?: return Unit.also {
+//            Timber.d("## CRYPTO | markOlmSessionForUnwedging: Couldn't find device for identity key $deviceKey: not re-establishing session")
+//        }
+//
+//        Timber.d("## CRYPTO | markOlmSessionForUnwedging from $senderId:${deviceInfo.deviceId}")
+//        lastNewSessionForcedDates.setObject(senderId, deviceKey, now)
+//
+//        mxMegolmDecryption.markOlmSessionForUnwedging(senderId, deviceInfo)
+//    }
 
     /**
      * Reset replay attack data for the given timeline.
@@ -774,30 +798,30 @@ internal class DefaultCryptoService @Inject constructor(
      */
     private fun onRoomKeyEvent(event: Event) {
         val roomKeyContent = event.getClearContent().toModel<RoomKeyContent>() ?: return
-        Timber.v("## GOSSIP onRoomKeyEvent() : type<${event.type}> , sessionId<${roomKeyContent.sessionId}>")
+        Timber.v("## CRYPTO | GOSSIP onRoomKeyEvent() : type<${event.type}> , sessionId<${roomKeyContent.sessionId}>")
         if (roomKeyContent.roomId.isNullOrEmpty() || roomKeyContent.algorithm.isNullOrEmpty()) {
-            Timber.e("## GOSSIP onRoomKeyEvent() : missing fields")
+            Timber.e("## CRYPTO | GOSSIP onRoomKeyEvent() : missing fields")
             return
         }
         val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(roomKeyContent.roomId, roomKeyContent.algorithm)
         if (alg == null) {
-            Timber.e("## GOSSIP onRoomKeyEvent() : Unable to handle keys for ${roomKeyContent.algorithm}")
+            Timber.e("## CRYPTO | GOSSIP onRoomKeyEvent() : Unable to handle keys for ${roomKeyContent.algorithm}")
             return
         }
         alg.onRoomKeyEvent(event, keysBackupService)
     }
 
     private fun onSecretSendReceived(event: Event) {
-        Timber.i("## GOSSIP onSecretSend() : onSecretSendReceived ${event.content?.get("sender_key")}")
+        Timber.i("## CRYPTO | GOSSIP onSecretSend() : onSecretSendReceived ${event.content?.get("sender_key")}")
         if (!event.isEncrypted()) {
             // secret send messages must be encrypted
-            Timber.e("## GOSSIP onSecretSend() :Received unencrypted secret send event")
+            Timber.e("## CRYPTO | GOSSIP onSecretSend() :Received unencrypted secret send event")
             return
         }
 
         // Was that sent by us?
         if (event.senderId != userId) {
-            Timber.e("## GOSSIP onSecretSend() : Ignore secret from other user ${event.senderId}")
+            Timber.e("## CRYPTO | GOSSIP onSecretSend() : Ignore secret from other user ${event.senderId}")
             return
         }
 
@@ -807,13 +831,13 @@ internal class DefaultCryptoService @Inject constructor(
                 .getOutgoingSecretKeyRequests().firstOrNull { it.requestId == secretContent.requestId }
 
         if (existingRequest == null) {
-            Timber.i("## GOSSIP onSecretSend() : Ignore secret that was not requested: ${secretContent.requestId}")
+            Timber.i("## CRYPTO | GOSSIP onSecretSend() : Ignore secret that was not requested: ${secretContent.requestId}")
             return
         }
 
         if (!handleSDKLevelGossip(existingRequest.secretName, secretContent.secretValue)) {
             // TODO Ask to application layer?
-            Timber.v("## onSecretSend() : secret not handled by SDK")
+            Timber.v("## CRYPTO | onSecretSend() : secret not handled by SDK")
         }
     }
 
@@ -849,7 +873,7 @@ internal class DefaultCryptoService @Inject constructor(
             try {
                 loadRoomMembersTask.execute(params)
             } catch (throwable: Throwable) {
-                Timber.e(throwable, "## onRoomEncryptionEvent ERROR FAILED TO SETUP CRYPTO ")
+                Timber.e(throwable, "## CRYPTO | onRoomEncryptionEvent ERROR FAILED TO SETUP CRYPTO ")
             } finally {
                 val userIds = getRoomUserIds(roomId)
                 setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), true, userIds)
@@ -974,13 +998,13 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             runCatching {
                 withContext(coroutineDispatchers.crypto) {
-                    Timber.v("## importRoomKeys starts")
+                    Timber.v("## CRYPTO | importRoomKeys starts")
 
                     val t0 = System.currentTimeMillis()
                     val roomKeys = MXMegolmExportEncryption.decryptMegolmKeyFile(roomKeysAsArray, password)
                     val t1 = System.currentTimeMillis()
 
-                    Timber.v("## importRoomKeys : decryptMegolmKeyFile done in ${t1 - t0} ms")
+                    Timber.v("## CRYPTO | importRoomKeys : decryptMegolmKeyFile done in ${t1 - t0} ms")
 
                     val importedSessions = MoshiProvider.providesMoshi()
                             .adapter<List<MegolmSessionData>>(Types.newParameterizedType(List::class.java, MegolmSessionData::class.java))
@@ -988,7 +1012,7 @@ internal class DefaultCryptoService @Inject constructor(
 
                     val t2 = System.currentTimeMillis()
 
-                    Timber.v("## importRoomKeys : JSON parsing ${t2 - t1} ms")
+                    Timber.v("## CRYPTO | importRoomKeys : JSON parsing ${t2 - t1} ms")
 
                     if (importedSessions == null) {
                         throw Exception("Error")
@@ -1123,7 +1147,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     override fun reRequestRoomKeyForEvent(event: Event) {
         val wireContent = event.content.toModel<EncryptedEventContent>() ?: return Unit.also {
-            Timber.e("## reRequestRoomKeyForEvent Failed to re-request key, null content")
+            Timber.e("## CRYPTO | reRequestRoomKeyForEvent Failed to re-request key, null content")
         }
 
         val requestBody = RoomKeyRequestBody(
@@ -1138,18 +1162,18 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun requestRoomKeyForEvent(event: Event) {
         val wireContent = event.content.toModel<EncryptedEventContent>() ?: return Unit.also {
-            Timber.e("## requestRoomKeyForEvent Failed to request key, null content eventId: ${event.eventId}")
+            Timber.e("## CRYPTO | requestRoomKeyForEvent Failed to request key, null content eventId: ${event.eventId}")
         }
 
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             if (!isStarted()) {
-                Timber.v("## requestRoomKeyForEvent() : wait after e2e init")
+                Timber.v("## CRYPTO | requestRoomKeyForEvent() : wait after e2e init")
                 internalStart(false)
             }
             roomDecryptorProvider
                     .getOrCreateRoomDecryptor(event.roomId, wireContent.algorithm)
                     ?.requestKeysForEvent(event) ?: run {
-                Timber.v("## requestRoomKeyForEvent() : No room decryptor for roomId:${event.roomId} algorithm:${wireContent.algorithm}")
+                Timber.v("## CRYPTO | requestRoomKeyForEvent() : No room decryptor for roomId:${event.roomId} algorithm:${wireContent.algorithm}")
             }
         }
     }
@@ -1170,6 +1194,27 @@ internal class DefaultCryptoService @Inject constructor(
      */
     override fun removeRoomKeysRequestListener(listener: GossipingRequestListener) {
         incomingGossipingRequestManager.removeRoomKeysRequestListener(listener)
+    }
+
+    private fun markOlmSessionForUnwedging(senderId: String, deviceInfo: CryptoDeviceInfo) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            ensureOlmSessionsForDevicesAction.handle(mapOf(senderId to listOf(deviceInfo)), force = true)
+
+            // Now send a blank message on that session so the other side knows about it.
+            // (The keyshare request is sent in the clear so that won't do)
+            // We send this first such that, as long as the toDevice messages arrive in the
+            // same order we sent them, the other end will get this first, set up the new session,
+            // then get the keyshare request and send the key over this new session (because it
+            // is the session it has most recently received a message on).
+            val payloadJson = mapOf<String, Any>("type" to EventType.DUMMY)
+
+            val encodedPayload = messageEncrypter.encryptMessage(payloadJson, listOf(deviceInfo))
+            val sendToDeviceMap = MXUsersDevicesMap<Any>()
+            sendToDeviceMap.setObject(senderId, deviceInfo.deviceId, encodedPayload)
+            Timber.v("## CRYPTO | markOlmSessionForUnwedging() : sending to $senderId:${deviceInfo.deviceId}")
+            val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
+            sendToDeviceTask.execute(sendToDeviceParams)
+        }
     }
 
     /**
