@@ -122,7 +122,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
     }
 
     private fun handleBack() = withState { state ->
-        if (state.checkingSSSSAction is Loading) return@withState //ignore
+        if (state.checkingSSSSAction is Loading) return@withState // ignore
         if (state.hasPassphrase && state.useKey) {
             setState {
                 copy(

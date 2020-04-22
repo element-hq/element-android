@@ -21,7 +21,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import androidx.core.text.toSpannable
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.view.clicks
@@ -31,7 +30,6 @@ import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
-import im.vector.riotx.core.utils.colorizeMatchingText
 import im.vector.riotx.core.utils.startImportTextFromFileIntent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_ssss_access_from_key.*
@@ -119,7 +117,6 @@ class SharedSecuredStorageKeyFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(sharedViewModel) { _ ->
-
     }
 
     companion object {

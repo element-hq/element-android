@@ -468,6 +468,4 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(SharedSecuredStorageKeyFragment::class)
     fun bindSharedSecuredStorageKeyFragment(fragment: SharedSecuredStorageKeyFragment): Fragment
-
-
 }
