@@ -33,10 +33,15 @@ class HomeDrawerFragment @Inject constructor(
         private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment() {
 
+    private lateinit var sharedActionViewModel: HomeSharedActionViewModel
+
     override fun getLayoutResId() = R.layout.fragment_home_drawer
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
+
         if (savedInstanceState == null) {
             replaceChildFragment(R.id.homeDrawerGroupListContainer, GroupListFragment::class.java)
         }
@@ -49,11 +54,13 @@ class HomeDrawerFragment @Inject constructor(
             }
         }
         homeDrawerHeaderSettingsView.setOnClickListener {
+            sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
             navigator.openSettings(requireActivity())
         }
 
         // Debug menu
         homeDrawerHeaderDebugView.setOnClickListener {
+            sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
             navigator.openDebug(requireActivity())
         }
     }
