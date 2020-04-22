@@ -60,20 +60,24 @@ class DirectoryUsersController @Inject constructor(private val session: Session,
         when (val asyncUsers = currentState.directoryUsers) {
             is Uninitialized -> renderEmptyState(false)
             is Loading       -> renderLoading()
-            is Success       -> renderSuccess(getAsyncUsers(currentState), currentState.selectedUsers.map { it.userId }, hasSearch)
+            is Success       -> renderSuccess(
+                    computeUsersList(asyncUsers(), currentState.directorySearchTerm),
+                    currentState.selectedUsers.map { it.userId },
+                    hasSearch
+            )
             is Fail          -> renderFailure(asyncUsers.error)
         }
     }
 
-    private fun getAsyncUsers(currentState: CreateDirectRoomViewState): List<User> {
-        return currentState
-                .directoryUsers()
-                ?.toMutableList()
-                ?.apply {
-                    currentState.directorySearchTerm
-                            .takeIf { MatrixPatterns.isUserId(it) }
-                            ?.let { add(User(it)) }
-                } ?: emptyList()
+    /**
+     * Eventually add the searched terms, if it is a userId, and if not already present in the result
+     */
+    private fun computeUsersList(directoryUsers: List<User>, searchTerms: String): List<User> {
+        return directoryUsers +
+                searchTerms
+                        .takeIf { terms -> MatrixPatterns.isUserId(terms) && !directoryUsers.any { it.userId == terms } }
+                        ?.let { listOf(User(it)) }
+                        .orEmpty()
     }
 
     private fun renderLoading() {
