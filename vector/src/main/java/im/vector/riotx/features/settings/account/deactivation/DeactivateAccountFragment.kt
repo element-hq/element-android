@@ -80,10 +80,6 @@ class DeactivateAccountFragment @Inject constructor(
             viewModel.handle(DeactivateAccountAction.TogglePassword)
         }
 
-        deactivateAccountCancel.setOnClickListener {
-            (activity as? VectorBaseActivity)?.onBackPressed()
-        }
-
         deactivateAccountSubmit.setOnClickListener {
             viewModel.handle(DeactivateAccountAction.DeactivateAccount(
                     deactivateAccountPassword.text.toString(),

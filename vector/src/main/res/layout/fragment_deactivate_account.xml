@@ -102,15 +102,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/deactivateAccountPasswordContainer" />
 
-        <Button
-            android:id="@+id/deactivateAccountCancel"
-            style="@style/VectorButtonStyle"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:text="@string/cancel"
-            app:layout_constraintEnd_toStartOf="@+id/deactivateAccountSubmit"
-            app:layout_constraintTop_toTopOf="@+id/deactivateAccountSubmit" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>
