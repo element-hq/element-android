@@ -70,7 +70,7 @@ class DeactivateAccountFragment @Inject constructor(
         deactivateAccountPassword.textChanges()
                 .subscribe {
                     deactivateAccountPasswordTil.error = null
-                    deactivateAccountSubmit.isEnabled = it.isNotBlank()
+                    deactivateAccountSubmit.isEnabled = it.isNotEmpty()
                 }
                 .disposeOnDestroyView()
     }
