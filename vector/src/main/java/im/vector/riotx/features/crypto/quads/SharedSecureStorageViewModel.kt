@@ -144,7 +144,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 val keyInfoResult = session.sharedSecretStorageService.getDefaultKey()
                 if (!keyInfoResult.isSuccess()) {
                     _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
-                    _viewEvents.post(SharedSecureStorageViewEvent.Error("Cannot find ssss key"))
+                    _viewEvents.post(SharedSecureStorageViewEvent.Error(stringProvider.getString(R.string.failed_to_access_secure_storage)))
                     return@launch
                 }
                 val keyInfo = (keyInfoResult as KeyInfoResult.Success).keyInfo
