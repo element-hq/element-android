@@ -419,7 +419,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                 ?: return IntegrityResult.Error(SharedSecretStorageError.UnknownKey(keyId ?: ""))
 
         if (keyInfo.content.algorithm != SSSS_ALGORITHM_AES_HMAC_SHA2
-                || keyInfo.content.algorithm != SSSS_ALGORITHM_CURVE25519_AES_SHA2) {
+                && keyInfo.content.algorithm != SSSS_ALGORITHM_CURVE25519_AES_SHA2) {
             // Unsupported algorithm
             return IntegrityResult.Error(
                     SharedSecretStorageError.UnsupportedAlgorithm(keyInfo.content.algorithm ?: "")

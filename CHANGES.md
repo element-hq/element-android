@@ -23,6 +23,7 @@ Improvements 🙌:
  - Emoji Verification | It's not the same butterfly! (#1220)
  - Cross-Signing | Composer decoration: shields (#1077)
  - Cross-Signing | Migrate existing keybackup to cross signing with 4S from mobile (#1197)
+ - Cross-Signing | Hide Use recovery key when 4S is not setup (#1007)
 
 Bugfix 🐛:
  - Fix summary notification staying after "mark as read"
