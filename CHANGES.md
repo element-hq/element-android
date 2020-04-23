@@ -7,6 +7,7 @@ Features ✨:
  - Cross-Signing | Verify new session from existing session (#1134)
  - Cross-Signing | Bootstraping cross signing with 4S from mobile (#985)
  - Save media files to Gallery (#973)
+ - Account deactivation (with password only) (#35)
 
 Improvements 🙌:
  - Verification DM / Handle concurrent .start after .ready (#794)
@@ -23,6 +24,7 @@ Improvements 🙌:
  - Cross-Signing | Composer decoration: shields (#1077)
  - Cross-Signing | Migrate existing keybackup to cross signing with 4S from mobile (#1197)
  - Restart broken Olm sessions ([MSC1719](https://github.com/matrix-org/matrix-doc/pull/1719))
+ - Cross-Signing | Hide Use recovery key when 4S is not setup (#1007)
 
 Bugfix 🐛:
  - Fix summary notification staying after "mark as read"
@@ -35,7 +37,9 @@ Bugfix 🐛:
  - Fix crash when trying to download file without internet connection (#1229)
  - Local echo are not updated in timeline (for failed & encrypted states)
  - Render image event even if thumbnail_info does not have mimetype defined (#1209)
+ - RiotX now uses as many threads as it needs to do work and send messages (#1221)
  - Fix issue with media path (#1227)
+ - Add user to direct chat by user id (#1065)
 
 Translations 🗣:
  -
@@ -456,6 +460,7 @@ Bugfix:
  - Fix messages with empty `in_reply_to` not rendering (#447)
  - Fix clear cache (#408) and Logout (#205)
  - Fix `(edited)` link can be copied to clipboard (#402)
+ - KeyBackup / SSSS | Should get the key from SSSS instead of asking recovery Key (#1163)
 
 Build:
  - Split APK: generate one APK per arch, to reduce APK size of about 30%

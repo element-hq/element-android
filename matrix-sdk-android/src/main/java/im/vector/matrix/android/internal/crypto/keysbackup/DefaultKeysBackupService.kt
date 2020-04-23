@@ -728,7 +728,8 @@ internal class DefaultKeysBackupService @Inject constructor(
                     if (backUp) {
                         maybeBackupKeys()
                     }
-
+                    // Save for next time and for gossiping
+                    saveBackupRecoveryKey(recoveryKey, keysVersionResult.version)
                     result
                 }
             }.foldToCallback(callback)
