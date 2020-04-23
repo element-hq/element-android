@@ -99,7 +99,7 @@ sealed class EventSharedAction(@StringRes val titleRes: Int,
             EventSharedAction(R.string.message_view_edit_history, R.drawable.ic_view_edit_history)
 
     // An url in the event preview has been clicked
-    data class OnUrlClicked(val url: String) :
+    data class OnUrlClicked(val url: String, val title: String) :
             EventSharedAction(0, 0)
 
     // An url in the event preview has been long clicked

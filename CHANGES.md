@@ -10,7 +10,7 @@ Features ✨:
 
 Improvements 🙌:
  - Verification DM / Handle concurrent .start after .ready (#794)
- - Reimplementation of multiple attachment picker
+ - Reimplementation of multiple attachment picker@
  - Cross-Signing | Update Shield Logic for DM (#963)
  - Cross-Signing | Complete security new session design update (#1135)
  - Cross-Signing | Setup key backup as part of SSSS bootstrapping (#1201)
@@ -22,6 +22,7 @@ Improvements 🙌:
  - Emoji Verification | It's not the same butterfly! (#1220)
  - Cross-Signing | Composer decoration: shields (#1077)
  - Cross-Signing | Migrate existing keybackup to cross signing with 4S from mobile (#1197)
+ - Show a warning dialog if the text of the clicked link does not match the link target (#922)
 
 Bugfix 🐛:
  - Fix summary notification staying after "mark as read"

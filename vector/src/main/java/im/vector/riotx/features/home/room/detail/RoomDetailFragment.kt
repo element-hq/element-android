@@ -113,6 +113,7 @@ import im.vector.riotx.core.utils.checkPermissions
 import im.vector.riotx.core.utils.copyToClipboard
 import im.vector.riotx.core.utils.createUIHandler
 import im.vector.riotx.core.utils.getColorFromUserId
+import im.vector.riotx.core.utils.isValidUrl
 import im.vector.riotx.core.utils.jsonViewerStyler
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import im.vector.riotx.core.utils.saveMedia
@@ -919,7 +920,7 @@ class RoomDetailFragment @Inject constructor(
 
     // TimelineEventController.Callback ************************************************************
 
-    override fun onUrlClicked(url: String): Boolean {
+    override fun onUrlClicked(url: String, title: String): Boolean {
         permalinkHandler
                 .launch(requireActivity(), url, object : NavigationInterceptor {
                     override fun navToRoom(roomId: String?, eventId: String?): Boolean {
@@ -947,8 +948,20 @@ class RoomDetailFragment @Inject constructor(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { managed ->
                     if (!managed) {
-                        // Open in external browser, in a new Tab
-                        openUrlInExternalBrowser(requireContext(), url)
+                        if (title.isValidUrl() && title != url) {
+                            AlertDialog.Builder(requireActivity())
+                                    .setTitle(R.string.external_link_confirmation_title)
+                                    .setMessage(getString(R.string.external_link_confirmation_message, title, url))
+                                    .setPositiveButton(R.string.external_link_confirmation_negative_button) { _, _ ->
+                                        openUrlInExternalBrowser(requireContext(), url)
+                                    }
+                                    .setNegativeButton(R.string.external_link_confirmation_positive_button, null)
+                                    .show()
+                                    .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
+                        } else {
+                            // Open in external browser, in a new Tab
+                            openUrlInExternalBrowser(requireContext(), url)
+                        }
                     }
                 }
                 .disposeOnDestroyView()
@@ -1263,7 +1276,7 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.IgnoreUser(action.senderId))
             }
             is EventSharedAction.OnUrlClicked               -> {
-                onUrlClicked(action.url)
+                onUrlClicked(action.url, action.title)
             }
             is EventSharedAction.OnUrlLongClicked           -> {
                 onUrlLongClicked(action.url)
