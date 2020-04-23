@@ -30,41 +30,33 @@ import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
 import io.reactivex.Observable
 import io.reactivex.Single
+import kotlinx.coroutines.rx2.asObservable
+import timber.log.Timber
 
 class RxRoom(private val room: Room) {
 
     fun liveRoomSummary(): Observable<Optional<RoomSummary>> {
-        return room.getRoomSummaryLive()
-                .asObservable()
-                .startWithCallable { room.roomSummary().toOptional() }
+        return room.getRoomSummaryLive().asObservable()
     }
 
     fun liveRoomMembers(queryParams: RoomMemberQueryParams): Observable<List<RoomMemberSummary>> {
         return room.getRoomMembersLive(queryParams).asObservable()
-                .startWithCallable {
-                    room.getRoomMembers(queryParams)
-                }
     }
 
-    fun liveAnnotationSummary(eventId: String): Observable<Optional<EventAnnotationsSummary>> {
+    fun liveRoomMember(userId: String): Observable<Optional<RoomMemberSummary>> {
+        return room.getRoomMemberLive(userId).asObservable()
+    }
+
+    fun liveAnnotationSummary(eventId: String): Observable<EventAnnotationsSummary> {
         return room.getEventAnnotationsSummaryLive(eventId).asObservable()
-                .startWithCallable {
-                    room.getEventAnnotationsSummary(eventId).toOptional()
-                }
     }
 
     fun liveTimelineEvent(eventId: String): Observable<Optional<TimelineEvent>> {
         return room.getTimeLineEventLive(eventId).asObservable()
-                .startWithCallable {
-                    room.getTimeLineEvent(eventId).toOptional()
-                }
     }
 
     fun liveStateEvent(eventType: String, stateKey: String): Observable<Optional<Event>> {
         return room.getStateEventLive(eventType, stateKey).asObservable()
-                .startWithCallable {
-                    room.getStateEvent(eventType, stateKey).toOptional()
-                }
     }
 
     fun liveReadMarker(): Observable<Optional<String>> {
@@ -93,7 +85,7 @@ class RxRoom(private val room: Room) {
     }
 
     fun liveNotificationState(): Observable<RoomNotificationState> {
-        return room.getLiveRoomNotificationState().asObservable()
+        return room.getRoomNotificationStateLive().asObservable()
     }
 }
 

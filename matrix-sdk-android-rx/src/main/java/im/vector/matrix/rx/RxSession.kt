@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.session.group.GroupSummaryQueryParams
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.session.pushers.Pusher
 import im.vector.matrix.android.api.session.room.RoomSummaryQueryParams
+import im.vector.matrix.android.api.session.room.model.Breadcrumb
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.sync.SyncState
@@ -34,28 +35,20 @@ import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 import io.reactivex.Observable
 import io.reactivex.Single
+import kotlinx.coroutines.rx2.asObservable
 
 class RxSession(private val session: Session) {
 
     fun liveRoomSummaries(queryParams: RoomSummaryQueryParams): Observable<List<RoomSummary>> {
         return session.getRoomSummariesLive(queryParams).asObservable()
-                .startWithCallable {
-                    session.getRoomSummaries(queryParams)
-                }
     }
 
     fun liveGroupSummaries(queryParams: GroupSummaryQueryParams): Observable<List<GroupSummary>> {
         return session.getGroupSummariesLive(queryParams).asObservable()
-                .startWithCallable {
-                    session.getGroupSummaries(queryParams)
-                }
     }
 
-    fun liveBreadcrumbs(): Observable<List<RoomSummary>> {
+    fun liveBreadcrumbs(): Observable<List<Breadcrumb>> {
         return session.getBreadcrumbsLive().asObservable()
-                .startWithCallable {
-                    session.getBreadcrumbs()
-                }
     }
 
     fun liveSyncState(): Observable<SyncState> {
@@ -68,9 +61,6 @@ class RxSession(private val session: Session) {
 
     fun liveUser(userId: String): Observable<Optional<User>> {
         return session.getUserLive(userId).asObservable()
-                .startWithCallable {
-                    session.getUser(userId).toOptional()
-                }
     }
 
     fun liveUsers(): Observable<List<User>> {
@@ -125,9 +115,6 @@ class RxSession(private val session: Session) {
 
     fun liveAccountData(types: Set<String>): Observable<List<UserAccountDataEvent>> {
         return session.getLiveAccountDataEvents(types).asObservable()
-                .startWithCallable {
-                    session.getAccountDataEvents(types)
-                }
     }
 }
 
