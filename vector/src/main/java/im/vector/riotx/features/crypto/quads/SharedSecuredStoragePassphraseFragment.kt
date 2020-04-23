@@ -48,7 +48,7 @@ class SharedSecuredStoragePassphraseFragment @Inject constructor(
 
         // If has passphrase
         val pass = getString(R.string.recovery_passphrase)
-        val key = getString(R.string.recovery_passphrase)
+        val key = getString(R.string.recovery_key)
         ssss_restore_with_passphrase_warning_text.text = getString(
                 R.string.enter_secret_storage_passphrase_or_key,
                 pass,
