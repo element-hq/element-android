@@ -1,0 +1,17 @@
+import java.lang.Boolean;
+
+CREATE TABLE syncEntity (
+  unique_id INTEGER PRIMARY KEY CHECK (unique_id = 0),
+  next_batch TEXT
+);
+
+update:
+INSERT OR REPLACE INTO syncEntity(unique_id, next_batch)
+VALUES (0, ?);
+
+get:
+SELECT next_batch FROM syncEntity
+WHERE unique_id = 0;
+
+deleteAll:
+DELETE FROM syncEntity;

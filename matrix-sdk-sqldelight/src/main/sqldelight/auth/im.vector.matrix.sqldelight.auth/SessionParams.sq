@@ -1,0 +1,42 @@
+import java.lang.Boolean;
+
+CREATE TABLE sessionParamsEntity (
+  session_id TEXT NOT NULL PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  credentials_json TEXT NOT NULL,
+  home_server_connection_config_json TEXT NOT NULL,
+  is_token_valid INTEGER AS Boolean DEFAULT 1 NOT NULL
+);
+
+CREATE INDEX sessionParams_user_id ON sessionParamsEntity(user_id);
+
+getAllSessionParams:
+SELECT credentials_json, home_server_connection_config_json,is_token_valid
+FROM sessionParamsEntity;
+
+getSessionParamsWithId:
+SELECT credentials_json, home_server_connection_config_json,is_token_valid
+FROM sessionParamsEntity
+WHERE session_id = ?;
+
+insert:
+INSERT INTO sessionParamsEntity(session_id,user_id,credentials_json,home_server_connection_config_json,is_token_valid)
+VALUES ?;
+
+deleteAll:
+DELETE FROM sessionParamsEntity;
+
+delete:
+DELETE FROM sessionParamsEntity
+WHERE session_id = ?;
+
+setTokenInvalid:
+UPDATE sessionParamsEntity
+SET is_token_valid = 0
+WHERE session_id = ?;
+
+updateCredentials:
+UPDATE sessionParamsEntity
+SET credentials_json = ?,
+       is_token_valid = 1
+WHERE session_id = ?;

@@ -1,0 +1,28 @@
+import java.lang.Boolean;
+
+CREATE TABLE roomTagEntity (
+  tag_name TEXT NOT NULL,
+  tag_order REAL,
+  room_id TEXT NOT NULL,
+
+  FOREIGN KEY (room_id) REFERENCES roomSummaryEntity(room_id)
+      ON DELETE CASCADE
+);
+
+deleteAllForRoom:
+DELETE FROM roomTagEntity
+WHERE room_id = :roomId;
+
+insert:
+INSERT INTO roomTagEntity
+VALUES ?;
+
+getAllForRoom:
+SELECT tag_name, tag_order FROM roomTagEntity
+WHERE room_id = :roomId;
+
+getAll:
+SELECT * FROM roomTagEntity;
+
+deleteAll:
+DELETE FROM roomTagEntity;

@@ -1,0 +1,26 @@
+import java.lang.Boolean;
+
+CREATE TABLE pendingSessionEntity (
+  home_server_connection_config_json TEXT NOT NULL,
+  client_secret TEXT NOT NULL,
+  send_attempts INTEGER AS Int DEFAULT 0 NOT NULL,
+  reset_password_data_json TEXT,
+  current_session TEXT,
+  is_registration_started INTEGER AS Boolean DEFAULT 0 NOT NULL,
+  current_three_pid_data_json TEXT
+);
+
+insertOrUpdate:
+INSERT OR REPLACE INTO pendingSessionEntity (home_server_connection_config_json, client_secret,current_session,current_three_pid_data_json,is_registration_started,reset_password_data_json,send_attempts)
+VALUES ?;
+
+delete:
+DELETE FROM pendingSessionEntity;
+
+get:
+SELECT *
+FROM pendingSessionEntity;
+
+getAll:
+SELECT *
+FROM pending_session.sessionParamsEntity;

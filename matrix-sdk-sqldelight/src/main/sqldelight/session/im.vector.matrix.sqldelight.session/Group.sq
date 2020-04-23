@@ -1,0 +1,19 @@
+import im.vector.matrix.sqldelight.session.Memberships;
+
+CREATE TABLE groupEntity (
+  group_id TEXT NOT NULL PRIMARY KEY,
+  membership TEXT AS Memberships NOT NULL
+);
+
+insertOrReplaceGroup:
+INSERT OR REPLACE INTO groupEntity(group_id, membership)
+VALUES (?,?);
+
+getAllGroupIdsWithinIdsAndMemberships:
+SELECT group_id FROM groupEntity
+WHERE group_id IN :groupIds
+AND membership IN :memberships;
+
+
+deleteAllGroups:
+DELETE FROM groupEntity;

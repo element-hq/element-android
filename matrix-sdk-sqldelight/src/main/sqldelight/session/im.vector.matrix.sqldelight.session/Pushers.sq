@@ -1,0 +1,39 @@
+import java.lang.Boolean;
+import im.vector.matrix.sqldelight.session.Memberships;
+
+CREATE TABLE pusherEntity (
+  push_key TEXT NOT NULL PRIMARY KEY,
+  kind TEXT,
+  app_id TEXT NOT NULL,
+  app_display_name TEXT,
+  device_display_name TEXT,
+  profile_tag TEXT,
+  lang TEXT,
+  data_url TEXT,
+  data_format TEXT,
+  state TEXT NOT NULL
+);
+
+updateState:
+UPDATE pusherEntity
+SET state=:state
+WHERE push_key = :pushKey;
+
+getWithPushKey:
+SELECT * FROM pusherEntity
+WHERE push_key = :pushKey;
+
+deleteWithPushKey:
+DELETE FROM pusherEntity
+WHERE push_key = :pushKey;
+
+getAll:
+SELECT * FROM pusherEntity;
+
+deleteAll:
+DELETE FROM pusherEntity;
+
+insertOrReplace:
+INSERT OR REPLACE INTO pusherEntity
+VALUES ?;
+

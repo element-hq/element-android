@@ -1,0 +1,66 @@
+import java.lang.Boolean;
+import java.lang.Double;
+import java.lang.Integer;
+
+CREATE TABLE groupNotifications(
+    group_id TEXT NOT NULL
+);
+
+CREATE TRIGGER log_group_entity_insert
+   AFTER INSERT ON groupEntity
+BEGIN
+INSERT INTO groupNotifications(group_id)
+VALUES(new.group_id);
+END;
+
+getAllGroupNotifications:
+SELECT group_id FROM groupNotifications;
+
+deleteAllGroupNotifications:
+DELETE FROM groupNotifications;
+
+deleteGroupNotifications:
+DELETE FROM groupNotifications
+WHERE group_id IN :groupIds;
+
+
+CREATE TABLE eventInsertNotification(
+    event_id TEXT NOT NULL,
+    room_id TEXT NOT NULL,
+    type TEXT NOT NULL
+);
+
+CREATE TRIGGER log_event_insert
+   AFTER INSERT ON eventEntity
+    WHEN new.type = "m.room.create" OR
+         new.type = "m.room.tombstone" OR
+         new.type = "m.room.redaction" OR
+         new.type = "m.room.message" OR
+         new.type = "m.reaction" OR
+         new.type = "m.key.verification.done" OR
+         new.type = "m.key.verification.cancel" OR
+         new.type = "m.key.verification.accept" OR
+         new.type = "m.key.verification.start" OR
+         new.type = "m.key.verification.mac" OR
+         new.type = "m.key.verification.key" OR
+         new.type = "m.room.encrypted"
+BEGIN
+INSERT INTO eventInsertNotification(event_id, room_id, type)
+VALUES(new.event_id, new.room_id, new.type);
+END;
+
+CREATE INDEX event_insert_event_id ON eventInsertNotification(event_id);
+CREATE INDEX event_insert_type ON eventInsertNotification(type);
+
+getAllEventInsertNotifications:
+SELECT * FROM eventInsertNotification
+WHERE type IN :types;
+
+deleteAllEventInsertNotifications:
+DELETE FROM eventInsertNotification;
+
+deleteEventInsertNotifications:
+DELETE FROM eventInsertNotification
+WHERE event_id IN :eventIds;
+
+

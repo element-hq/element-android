@@ -1,0 +1,235 @@
+import java.lang.Boolean;
+import java.lang.Integer;
+
+CREATE TABLE timelineEventEntity (
+  local_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  event_id TEXT NOT NULL UNIQUE,
+  room_id TEXT NOT NULL,
+  chunk_id INTEGER NOT NULL,
+  display_index INTEGER AS Integer DEFAULT 0 NOT NULL,
+  sender_name TEXT,
+  sender_avatar TEXT,
+  is_unique_display_name INTEGER AS Boolean DEFAULT 0 NOT NULL,
+
+  FOREIGN KEY (chunk_id) REFERENCES chunkEntity(chunk_id)
+    ON DELETE CASCADE
+);
+
+CREATE INDEX timeline_event_id ON timelineEventEntity(event_id);
+CREATE INDEX timeline_room_id ON timelineEventEntity(room_id);
+CREATE INDEX timeline_display_index ON timelineEventEntity(display_index);
+CREATE INDEX timeline_chunk_id ON timelineEventEntity(chunk_id);
+
+CREATE TABLE timelineEventInsert (
+    room_id TEXT NOT NULL,
+    event_id TEXT NOT NULL,
+    PRIMARY KEY (room_id)
+);
+
+getTimelineEventInsert:
+SELECT event_id FROM timelineEventInsert
+WHERE room_id = :roomId;
+
+deleteAllTimelineEventInsert:
+DELETE FROM timelineEventInsert;
+
+deleteTimelineEventInsert:
+DELETE FROM timelineEventInsert
+WHERE event_id IN :eventIds;
+
+CREATE TABLE timelineEventUpdate (
+    room_id TEXT NOT NULL,
+    event_id TEXT NOT NULL,
+
+    PRIMARY KEY (event_id)
+);
+
+CREATE INDEX timeline_event_update_room_id ON timelineEventUpdate(room_id);
+
+getTimelineEventUpdates:
+SELECT event_id FROM timelineEventUpdate
+WHERE room_id = :roomId;
+
+deleteAllTimelineEventUpdates:
+DELETE FROM timelineEventUpdate;
+
+deleteTimelineEventUpdates:
+DELETE FROM timelineEventUpdate
+WHERE event_id IN :eventIds;
+
+CREATE TRIGGER delete_timeline_when_event_deleted
+   AFTER DELETE ON eventEntity
+BEGIN
+    DELETE FROM timelineEventEntity
+    WHERE event_id = old.event_id;
+END;
+
+
+CREATE TRIGGER log_timeline_insert
+   AFTER INSERT ON timelineEventEntity
+BEGIN
+    INSERT OR IGNORE INTO timelineEventInsert (
+        room_id,
+        event_id
+    )
+VALUES(
+      new.room_id,
+      new.event_id
+);
+END;
+
+CREATE TRIGGER log_timeline_updates
+   AFTER UPDATE ON timelineEventEntity
+BEGIN
+    INSERT OR IGNORE INTO timelineEventUpdate (
+        room_id,
+        event_id
+    )
+VALUES(
+      new.room_id,
+      new.event_id
+);
+END;
+
+insert:
+INSERT OR REPLACE INTO timelineEventEntity(event_id, room_id, chunk_id, display_index, sender_avatar, sender_name, is_unique_display_name)
+VALUES (?,?,?,?,?,?,?);
+
+CREATE VIEW timelineWithRoot AS
+SELECT
+    timelineEvent.local_id,
+    timelineEvent.chunk_id,
+    timelineEvent.display_index,
+    timelineEvent.sender_name,
+    timelineEvent.sender_avatar,
+    timelineEvent.is_unique_display_name,
+    root.*
+FROM
+    timelineEventEntity AS timelineEvent
+    INNER JOIN eventEntity AS root USING(event_id);
+
+getForReadQueries:
+SELECT timelineWithRoot.chunk_id, timelineWithRoot.display_index, timelineWithRoot.sender_id FROM timelineWithRoot
+WHERE event_id = :eventId;
+
+getAllFromRoom:
+SELECT * FROM timelineWithRoot
+WHERE room_id = :roomId
+ORDER BY display_index DESC;
+
+getAllFromChunk:
+SELECT * FROM timelineWithRoot
+WHERE chunk_id= :chunk_id
+ORDER BY display_index DESC;
+
+getPagedFromChunkForwards:
+SELECT timelineWithRoot.* FROM timelineWithRoot
+WHERE timelineWithRoot.chunk_id = :chunkId
+AND timelineWithRoot.display_index >= :startDisplayIndex
+ORDER BY display_index ASC
+LIMIT :limit;
+
+getPagedFromChunkBackwards:
+SELECT timelineWithRoot.* FROM timelineWithRoot
+WHERE timelineWithRoot.chunk_id = :chunkId
+AND timelineWithRoot.display_index <= :startDisplayIndex
+ORDER BY display_index DESC
+LIMIT :limit;
+
+getLastBackwardsFromChunk:
+SELECT timelineWithRoot.* FROM timelineWithRoot
+WHERE timelineWithRoot.chunk_id = :chunkId
+ORDER BY display_index ASC
+LIMIT 1;
+
+getLastForwardsFromChunk:
+SELECT timelineWithRoot.* FROM timelineWithRoot
+WHERE timelineWithRoot.chunk_id = :chunkId
+ORDER BY display_index DESC
+LIMIT 1;
+
+getPagedFromLiveChunk:
+SELECT timelineWithRoot.* FROM timelineWithRoot
+ WHERE timelineWithRoot.chunk_id = (
+    SELECT chunk_id FROM chunkEntity
+    WHERE is_last_forward = 1
+)
+AND timelineWithRoot.room_id = :roomId
+ORDER BY display_index DESC
+LIMIT :limit
+OFFSET :offset;
+
+getPagedFromChunkWithEvent:
+SELECT timelineWithRoot.* FROM timelineWithRoot
+WHERE chunk_id IN (
+    SELECT chunkEntity.chunk_id
+    FROM chunkEntity
+        LEFT JOIN timelineEventEntity USING(chunk_id)
+    WHERE timelineEventEntity.event_id= :eventId
+)
+AND timelineWithRoot.room_id = :roomId
+ORDER BY display_index DESC
+LIMIT :limit
+OFFSET :offset;
+
+get:
+SELECT timelineWithRoot.* FROM timelineWithRoot
+WHERE event_id = :eventId;
+
+getLatestKnownEventId:
+SELECT coalesce(
+    (SELECT timelineWithRoot.event_id FROM timelineWithRoot
+    WHERE timelineWithRoot.chunk_id = (
+         SELECT chunkEntity.chunk_id FROM chunkEntity
+         WHERE chunkEntity.is_local_echo = 1
+         AND chunkEntity.room_id = :roomId
+    )
+    AND timelineWithRoot.type IN :types
+    ORDER BY display_index DESC
+    LIMIT 1
+    ),
+    (SELECT timelineWithRoot.event_id FROM timelineWithRoot
+     WHERE timelineWithRoot.chunk_id = (
+        SELECT chunkEntity.chunk_id FROM chunkEntity
+        WHERE chunkEntity.is_last_forward = 1
+        AND chunkEntity.room_id = :roomId
+     )
+     AND timelineWithRoot.type IN :types
+     ORDER BY display_index DESC
+     LIMIT 1
+     ),
+     ""
+);
+
+
+getLatestSyncedEventId:
+SELECT event_id FROM timelineEventEntity
+WHERE chunk_id =  (
+    SELECT chunkEntity.chunk_id
+    FROM chunkEntity
+    WHERE chunkEntity.is_last_forward = 1
+    AND chunkEntity.room_id = :roomId
+)
+ORDER BY display_index DESC
+LIMIT 1;
+
+getMaxDisplayIndex:
+SELECT max(display_index) AS max_display_index FROM timelineEventEntity
+WHERE chunk_id = :chunkId;
+
+getMinDisplayIndex:
+SELECT min(display_index) AS min_display_index FROM timelineEventEntity
+WHERE chunk_id = :chunkId;
+
+countForwardEvents:
+SELECT count(*) FROM timelineEventEntity
+WHERE chunk_id = :chunkId AND
+display_index >= :displayIndex;
+
+countEventsInChunk:
+SELECT count(*) FROM timelineWithRoot
+WHERE chunk_id = :chunkId
+AND timelineWithRoot.send_state IN :sendStates;
+
+deleteAll:
+DELETE FROM timelineEventEntity;

@@ -1,0 +1,175 @@
+import java.lang.Boolean;
+import im.vector.matrix.sqldelight.session.Memberships;
+
+CREATE TABLE roomSummaryEntity (
+  room_id TEXT NOT NULL PRIMARY KEY,
+  display_name TEXT,
+  avatar_url TEXT,
+  topic TEXT,
+  membership TEXT AS Memberships DEFAULT "NONE" NOT NULL ,
+  latest_previewable_event TEXT,
+  joined_members_count INTEGER AS Int DEFAULT 0 NOT NULL,
+  invited_members_count INTEGER AS Int DEFAULT 0 NOT NULL,
+  is_direct INTEGER AS Boolean DEFAULT 0 NOT NULL,
+  inviter_id TEXT,
+  direct_user_id TEXT,
+  is_encrypted INTEGER AS Boolean DEFAULT 0 NOT NULL,
+  has_unread INTEGER AS Boolean DEFAULT 0 NOT NULL,
+  highlight_count INTEGER AS Int DEFAULT 0 NOT NULL,
+  notification_count INTEGER AS Int DEFAULT 0 NOT NULL,
+  canonical_alias TEXT,
+  versioning_state TEXT DEFAULT "NONE" NOT NULL,
+  room_encryption_trust_level TEXT
+);
+
+
+CREATE TABLE roomSummaryHeroes (
+    user_id TEXT NOT NULL,
+    room_id TEXT NOT NULL
+);
+
+CREATE INDEX room_summary_room_id ON roomSummaryEntity(room_id);
+
+CREATE VIEW roomSummaryWithTimeline AS
+SELECT
+    roomSummary.room_id AS summary_room_id,
+    roomSummary.membership,
+    roomSummary.topic,
+    roomSummary.display_name,
+    roomSummary.avatar_url,
+    roomSummary.highlight_count,
+    roomSummary.is_direct,
+    roomSummary.is_encrypted,
+    roomSummary.notification_count,
+    roomSummary.joined_members_count,
+    roomSummary.invited_members_count,
+    roomSummary.canonical_alias,
+    roomSummary.has_unread,
+    roomSummary.direct_user_id,
+    roomSummary.versioning_state,
+    roomSummary.room_encryption_trust_level,
+    roomSummary.inviter_id,
+    breadcrumbs.breadcrumb_index,
+    readMarker.event_id AS read_marker_id,
+    timelineEvent.*
+FROM
+    roomSummaryEntity AS roomSummary
+    LEFT JOIN timelineWithRoot AS timelineEvent ON roomSummary.latest_previewable_event = timelineEvent.event_id
+    LEFT JOIN readMarkerEntity AS readMarker ON roomSummary.room_id = readMarker.room_id
+    LEFT JOIN breadcrumbs ON roomSummary.room_id = breadcrumbs.room_id;
+
+insertOrIgnore:
+INSERT OR IGNORE INTO roomSummaryEntity(room_id)
+VALUES (?);
+
+insertOrUpdate:
+INSERT OR REPLACE INTO roomSummaryEntity
+VALUES ?;
+
+getAllDirectUserIds:
+SELECT room_id, direct_user_id FROM roomSummaryEntity
+WHERE is_direct = 1 AND direct_user_id IS NOT NULL;
+
+getAll:
+SELECT * FROM roomSummaryWithTimeline;
+
+selectWithParams:
+SELECT * FROM roomSummaryWithTimeline
+WHERE membership IN :memberships
+AND versioning_state != "UPGRADED_ROOM_JOINED"
+AND (:fromGroupIdFlag = 0
+            OR
+            summary_room_id IN (
+                SELECT room_id FROM groupRoom
+                WHERE group_id = :groupId
+            )
+            OR (is_direct AND summary_room_id IN (
+                SELECT room_id FROM roomMemberSummaryEntity
+                WHERE user_id IN (
+                          SELECT user_id FROM groupUser
+                          WHERE group_id = :groupId
+                )
+                AND membership = "JOIN"
+            ))
+)
+ORDER BY origin_server_ts DESC;
+
+get:
+SELECT * FROM roomSummaryWithTimeline
+WHERE summary_room_id = :roomId;
+
+getRoomIdWithAlias:
+SELECT DISTINCT summary_room_id FROM roomSummaryWithTimeline
+WHERE canonical_alias = :alias
+OR summary_room_id IN (
+    SELECT room_id FROM roomAliases
+    WHERE room_alias = :alias
+);
+
+getMembership:
+SELECT membership FROM roomSummaryEntity
+WHERE room_id = :roomId;
+
+getHeroesIds:
+SELECT user_id FROM roomSummaryHeroes
+WHERE room_id = :roomId;
+
+deleteHeroes:
+DELETE FROM roomSummaryHeroes
+WHERE room_id = :roomId;
+
+setHeroes:
+INSERT INTO roomSummaryHeroes
+VALUES ?;
+
+heroesCount:
+SELECT COUNT(*) FROM roomSummaryHeroes
+WHERE room_id = :roomId;
+
+getHeroes:
+SELECT * FROM simpleRoomMemberSummary
+WHERE user_id IN (
+    SELECT user_id FROM roomSummaryHeroes
+    WHERE room_id = :roomId
+);
+
+unsetDirectForAllRooms:
+UPDATE roomSummaryEntity
+SET is_direct = 0
+WHERE is_direct = 1;
+
+setDirectForRoom:
+UPDATE roomSummaryEntity
+SET is_direct = 1,
+direct_user_id = :directUserId
+WHERE room_id = :roomId;
+
+setAsRead:
+UPDATE roomSummaryEntity
+SET notification_count = 0,
+has_unread = 0,
+highlight_count = 0
+WHERE room_id = :roomId;
+
+setRoomEncryptionTrustLevel:
+UPDATE roomSummaryEntity
+SET room_encryption_trust_level = :encryptionTrustLevel
+WHERE room_id = :roomId
+AND is_encrypted = 1;
+
+setVersioningState:
+UPDATE roomSummaryEntity
+SET versioning_state = :versioningState
+WHERE room_id = :roomId;
+
+getVersioningState:
+SELECT versioning_state FROM roomSummaryEntity
+WHERE room_id = :roomId;
+
+deleteAllHeroes:
+DELETE FROM roomSummaryHeroes;
+
+deleteAllRooms:
+DELETE FROM roomSummaryEntity;
+
+

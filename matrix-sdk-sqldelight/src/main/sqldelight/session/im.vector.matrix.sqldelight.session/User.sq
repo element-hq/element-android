@@ -1,0 +1,70 @@
+import java.lang.Boolean;
+
+CREATE TABLE userEntity (
+  user_id TEXT NOT NULL PRIMARY KEY,
+  display_name TEXT,
+  avatar_url TEXT
+);
+
+CREATE TABLE typingUsers(
+    user_id TEXT NOT NULL,
+    room_id TEXT NOT NULL
+);
+
+CREATE INDEX typing_room_id ON typingUsers(room_id);
+
+deleteAllTypingUsers:
+DELETE FROM typingUsers;
+
+insertTyping:
+INSERT INTO typingUsers(room_id,user_id)
+VALUES (?,?);
+
+CREATE TABLE ignoredUsers (
+  user_id TEXT NOT NULL UNIQUE
+);
+
+CREATE INDEX ignored_user_id ON ignoredUsers(user_id);
+
+deleteAllIgnoredUsers:
+DELETE FROM ignoredUsers;
+
+insertIgnored:
+INSERT INTO ignoredUsers(user_id)
+VALUES (?);
+
+getAllIgnoredIds:
+SELECT * FROM ignoredUsers;
+
+countUsers:
+SELECT count(*) FROM userEntity;
+
+getAllUsers:
+SELECT * FROM userEntity
+ORDER BY display_name DESC;
+
+getAllUsersPaged:
+SELECT * FROM userEntity
+ORDER BY display_name DESC
+LIMIT :limit
+OFFSET :offset;
+
+getAllIgnored:
+SELECT ignoredUsers.user_id,
+       user.avatar_url,
+       user.display_name
+FROM ignoredUsers
+LEFT JOIN userEntity AS user USING(user_id);
+
+insertOrUpdate:
+INSERT OR REPLACE INTO userEntity
+VALUES ?;
+
+get:
+SELECT * FROM userEntity
+WHERE user_id = :userId;
+
+deleteAllUsers:
+DELETE FROM userEntity;
+
+

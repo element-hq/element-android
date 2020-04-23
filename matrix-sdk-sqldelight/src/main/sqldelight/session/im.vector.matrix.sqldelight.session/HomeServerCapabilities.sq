@@ -1,0 +1,21 @@
+CREATE TABLE homeServerCapabilitiesEntity (
+  unique_id INTEGER PRIMARY KEY CHECK (unique_id = 0),
+  max_upload_file_size INTEGER DEFAULT 0 NOT NULL,
+  last_updated_timestamp INTEGER DEFAULT 0 NOT NULL
+);
+
+insert:
+INSERT OR REPLACE INTO homeServerCapabilitiesEntity(unique_id, max_upload_file_size, last_updated_timestamp)
+VALUES (0,?,?);
+
+selectMaxUploadFileSize:
+SELECT max_upload_file_size FROM homeServerCapabilitiesEntity
+WHERE unique_id = 0;
+
+selectLastUpdatedTimetamp:
+SELECT last_updated_timestamp FROM homeServerCapabilitiesEntity
+WHERE unique_id = 0;
+
+deleteAll:
+DELETE FROM homeServerCapabilitiesEntity;
+

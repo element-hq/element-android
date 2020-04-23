@@ -1,0 +1,229 @@
+import java.lang.Boolean;
+import java.lang.Double;
+import java.lang.Integer;
+import kotlin.collections.List;
+
+CREATE TABLE reactionAggregatedSummary(
+  event_id TEXT NOT NULL,
+  room_id TEXT NOT NULL,
+  key TEXT NOT NULL,
+  count INTEGER DEFAULT 0 NOT NULL,
+  added_by_me INTEGER AS Boolean DEFAULT 0 NOT NULL,
+  first_timestamp INTEGER DEFAULT 0 NOT NULL,
+  source_event_ids TEXT AS List<String> NOT NULL DEFAULT "",
+  source_local_echo_ids TEXT AS List<String> NOT NULL DEFAULT "",
+  PRIMARY KEY(event_id, key)
+);
+
+CREATE TRIGGER log_reaction_insert
+   AFTER INSERT ON reactionAggregatedSummary
+BEGIN
+INSERT OR IGNORE INTO timelineEventUpdate(room_id, event_id)
+VALUES(new.room_id ,new.event_id);
+END;
+
+CREATE TRIGGER log_reaction_update
+   AFTER UPDATE ON reactionAggregatedSummary
+BEGIN
+INSERT OR IGNORE INTO timelineEventUpdate(room_id, event_id)
+VALUES(new.room_id ,new.event_id);
+END;
+
+CREATE TRIGGER log_reaction_delete
+   AFTER DELETE ON reactionAggregatedSummary
+BEGIN
+INSERT OR IGNORE INTO timelineEventUpdate(room_id, event_id)
+VALUES(old.room_id ,old.event_id);
+END;
+
+insertNewReaction:
+INSERT INTO reactionAggregatedSummary
+VALUES ?;
+
+selectReaction:
+SELECT key, count, added_by_me, first_timestamp, source_event_ids, source_local_echo_ids FROM reactionAggregatedSummary
+WHERE event_id = :eventId
+AND key=:key;
+
+updateLocalReaction:
+UPDATE reactionAggregatedSummary
+SET source_event_ids = :sourceEventIds,
+    source_local_echo_ids= :sourceLocalEchoIds
+WHERE event_id = :eventId
+AND key=:key;
+
+updateReaction:
+UPDATE reactionAggregatedSummary
+SET count = :count,
+    added_by_me = :addedByMe,
+    source_event_ids = :sourceEventIds,
+    source_local_echo_ids= :sourceLocalEchoIds
+WHERE event_id = :eventId
+AND key=:key;
+
+selectReactionsForEvent:
+SELECT key, count, added_by_me, first_timestamp, source_event_ids, source_local_echo_ids FROM reactionAggregatedSummary
+WHERE event_id = :eventId;
+
+deleteReaction:
+DELETE FROM reactionAggregatedSummary
+WHERE event_id = :eventId
+AND room_id = :roomId
+AND key=:key;
+
+deleteAllReactions:
+DELETE FROM reactionAggregatedSummary;
+
+CREATE TABLE editAggregatedSummary(
+  event_id TEXT NOT NULL,
+  room_id TEXT NOT NULL,
+  aggregated_content TEXT,
+  last_edit_ts INTEGER DEFAULT 0 NOT NULL,
+  source_event_ids TEXT AS List<String> NOT NULL,
+  source_local_echo_ids TEXT AS List<String> NOT NULL,
+
+  PRIMARY KEY(event_id)
+);
+
+CREATE TRIGGER log_edit_insert
+   AFTER INSERT ON editAggregatedSummary
+BEGIN
+INSERT OR IGNORE INTO timelineEventUpdate(room_id, event_id)
+VALUES(new.room_id ,new.event_id);
+END;
+
+CREATE TRIGGER log_edit_update
+   AFTER UPDATE ON editAggregatedSummary
+BEGIN
+INSERT OR IGNORE INTO timelineEventUpdate(room_id, event_id)
+VALUES(new.room_id ,new.event_id);
+END;
+
+
+insertNewEdit:
+INSERT INTO editAggregatedSummary
+VALUES ?;
+
+selectEditForEvent:
+SELECT aggregated_content, last_edit_ts, source_event_ids, source_local_echo_ids FROM editAggregatedSummary
+WHERE event_id = :eventId;
+
+updateEditSources:
+UPDATE editAggregatedSummary
+SET source_event_ids = :sourceEventIds,
+    source_local_echo_ids= :sourceLocalEchoIds
+WHERE event_id = :eventId;
+
+updateEditContent:
+UPDATE editAggregatedSummary
+SET aggregated_content = :content
+WHERE event_id = :eventId;
+
+updateEditLastTs:
+UPDATE editAggregatedSummary
+SET last_edit_ts = :lastTs
+WHERE event_id = :eventId;
+
+deleteEdit:
+DELETE FROM editAggregatedSummary
+WHERE event_id = :eventId
+AND room_id = :roomId;
+
+deleteAllEdits:
+DELETE FROM editAggregatedSummary;
+
+CREATE TABLE referencesAggregatedSummary(
+  event_id TEXT NOT NULL,
+  room_id TEXT NOT NULL,
+  content TEXT,
+  source_event_ids TEXT AS List<String> NOT NULL,
+  source_local_echo_ids TEXT AS List<String> NOT NULL,
+
+  PRIMARY KEY(event_id)
+);
+
+CREATE TRIGGER log_references_insert
+   AFTER INSERT ON referencesAggregatedSummary
+BEGIN
+INSERT OR IGNORE INTO timelineEventUpdate(room_id, event_id)
+VALUES(new.room_id ,new.event_id);
+END;
+
+CREATE TRIGGER log_references_update
+   AFTER UPDATE ON referencesAggregatedSummary
+BEGIN
+INSERT OR IGNORE INTO timelineEventUpdate(room_id, event_id)
+VALUES(new.room_id ,new.event_id);
+END;
+
+insertNewReference:
+INSERT INTO referencesAggregatedSummary
+VALUES ?;
+
+selectReferenceForEvent:
+SELECT event_id, content, source_event_ids, source_local_echo_ids FROM referencesAggregatedSummary
+WHERE event_id = :eventId;
+
+updateReferenceSources:
+UPDATE referencesAggregatedSummary
+SET source_event_ids = :sourceEventIds,
+    source_local_echo_ids= :sourceLocalEchoIds
+WHERE event_id = :eventId;
+
+updateReferenceContent:
+UPDATE referencesAggregatedSummary
+SET content = :content
+WHERE event_id = :eventId;
+
+deleteAllReferences:
+DELETE FROM referencesAggregatedSummary;
+
+CREATE TABLE pollAggregatedSummary(
+  event_id TEXT NOT NULL,
+  room_id TEXT NOT NULL,
+  content TEXT,
+  --If set the poll is closed (Clients SHOULD NOT consider responses after the close event)
+  closed_time INTEGER,
+  -- Clients SHOULD validate that the option in the relationship is a valid option, and ignore the response if invalid
+  nb_options INTEGER AS Integer NOT NULL DEFAULT 0,
+  source_event_ids TEXT AS List<String> NOT NULL,
+  source_local_echo_ids TEXT AS List<String> NOT NULL,
+
+  PRIMARY KEY(event_id)
+);
+
+CREATE TRIGGER log_poll_insert
+   AFTER INSERT ON pollAggregatedSummary
+BEGIN
+INSERT OR IGNORE INTO timelineEventUpdate(room_id, event_id)
+VALUES(new.room_id ,new.event_id);
+END;
+
+CREATE TRIGGER log_poll_update
+   AFTER UPDATE ON pollAggregatedSummary
+BEGIN
+INSERT OR IGNORE INTO timelineEventUpdate(room_id, event_id)
+VALUES(new.room_id ,new.event_id);
+END;
+
+insertNewPoll:
+INSERT INTO pollAggregatedSummary
+VALUES ?;
+
+selectPollForEvent:
+SELECT content, closed_time, nb_options, source_event_ids, source_local_echo_ids FROM pollAggregatedSummary
+WHERE event_id = :eventId;
+
+updatePollSources:
+UPDATE pollAggregatedSummary
+SET source_event_ids = :sourceEventIds,
+    source_local_echo_ids= :sourceLocalEchoIds
+WHERE event_id = :eventId;
+
+updatePollContent:
+UPDATE pollAggregatedSummary
+SET content = :content
+WHERE event_id = :eventId;
+
+deleteAllPoll:
+DELETE FROM pollAggregatedSummary;

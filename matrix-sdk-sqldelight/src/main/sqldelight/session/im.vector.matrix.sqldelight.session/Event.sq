@@ -1,0 +1,146 @@
+import java.lang.Long;
+
+CREATE TABLE eventEntity (
+  event_id TEXT NOT NULL UNIQUE,
+  room_id TEXT NOT NULL,
+  content TEXT,
+  prev_content TEXT,
+  state_key TEXT,
+  send_state TEXT NOT NULL,
+  type TEXT NOT NULL,
+  origin_server_ts INTEGER AS Long,
+  sender_id TEXT,
+  unsigned_data TEXT,
+  redacts TEXT,
+  age INTEGER AS Long,
+  age_local_ts INTEGER AS Long,
+  decryption_result_json TEXT,
+  decryption_error_code TEXT
+);
+
+CREATE INDEX event_event_id ON eventEntity(event_id);
+CREATE INDEX event_sender_id ON eventEntity(sender_id);
+CREATE INDEX event_state_key ON eventEntity(state_key);
+CREATE INDEX event_type ON eventEntity(type);
+CREATE INDEX event_content ON eventEntity(content);
+
+insert:
+INSERT OR IGNORE INTO eventEntity
+VALUES ?;
+
+delete:
+DELETE FROM eventEntity
+WHERE event_id = :eventId;
+
+select:
+SELECT * FROM eventEntity
+WHERE event_id = :eventId;
+
+selectType:
+SELECT type FROM eventEntity
+WHERE event_id = :eventId;
+
+selectContent:
+SELECT content FROM eventEntity
+WHERE event_id = :eventId;
+
+selectPrevContent:
+SELECT prev_content FROM eventEntity
+WHERE event_id = :eventId;
+
+selectDecryptionError:
+SELECT decryption_error_code FROM eventEntity
+WHERE event_id = :eventId;
+
+selectDecryptionResult:
+SELECT decryption_result_json FROM eventEntity
+WHERE event_id = :eventId;
+
+selectUnsignedData:
+SELECT unsigned_data FROM eventEntity
+WHERE event_id = :eventId;
+
+findWithContent:
+SELECT event_id FROM eventEntity
+WHERE content LIKE ('%' || :content || '%') AND
+room_id = :roomId;
+
+updateSendState:
+UPDATE eventEntity
+SET send_state = :sendState
+WHERE event_id IN :eventIds
+AND send_state NOT IN :ignoreSendStates;
+
+setDecryptionResult:
+UPDATE eventEntity
+SET decryption_result_json = :decryptionResult,
+    decryption_error_code = NULL
+WHERE event_id = :eventId;
+
+setDecryptionError:
+UPDATE eventEntity
+SET decryption_error_code = :decryptionError
+WHERE event_id = :eventId;
+
+
+updateSendStateFromLocalEchoChunk:
+UPDATE eventEntity
+SET send_state = :sendState
+WHERE event_id IN (
+    SELECT event_id FROM timelineEventEntity
+    WHERE chunk_id = (
+        SELECT chunk_id FROM chunkEntity
+        WHERE room_id = :roomId
+        AND is_local_echo = 1
+    )
+);
+
+updateContent:
+UPDATE eventEntity
+SET content = :content
+WHERE event_id = :eventId;
+
+pruneEvent:
+UPDATE eventEntity
+SET content = :content,
+    unsigned_data = :unsignedData,
+    decryption_result_json = NULL,
+    decryption_error_code = NULL
+WHERE event_id = :eventId;
+
+getEventsWithSendStatesFromLocalEchoChunk:
+SELECT root.* FROM eventEntity AS root
+INNER JOIN timelineEventEntity AS timelineEvent USING(event_id)
+WHERE timelineEvent.chunk_id = (
+        SELECT chunk_id FROM chunkEntity
+        WHERE room_id = :roomId
+        AND is_local_echo = 1
+)
+AND send_state IN :sendStates
+ORDER BY timelineEvent.display_index DESC;
+
+findWithSender:
+SELECT event_id FROM eventEntity
+WHERE sender_id = :senderId
+AND event_id IN :eventIds;
+
+exist:
+SELECT 1 FROM eventEntity
+WHERE event_id=:eventId AND
+room_id = :roomId;
+
+deleteAll:
+DELETE FROM eventEntity;
+
+CREATE TRIGGER log_event_updates
+   AFTER UPDATE ON eventEntity
+BEGIN
+    INSERT OR IGNORE INTO timelineEventUpdate (
+        room_id,
+        event_id
+    )
+VALUES(
+      new.room_id,
+      new.event_id
+);
+END;

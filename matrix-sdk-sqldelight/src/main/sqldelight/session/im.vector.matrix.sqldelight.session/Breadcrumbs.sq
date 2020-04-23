@@ -1,0 +1,36 @@
+import java.lang.Boolean;
+import java.lang.Double;
+import java.lang.Integer;
+
+CREATE TABLE breadcrumbs (
+  room_id TEXT NOT NULL,
+  breadcrumb_index INTEGER AS Integer DEFAULT 0 NOT NULL
+);
+
+insert:
+INSERT INTO breadcrumbs
+VALUES ?;
+
+getAllBreadcrumbsIds:
+SELECT room_id FROM breadcrumbs
+WHERE breadcrumb_index IS NOT NULL
+ORDER BY breadcrumb_index ASC;
+
+getAllBreadcrumbs:
+SELECT
+    roomSummary.room_id,
+    roomSummary.display_name,
+    roomSummary.avatar_url,
+    roomSummary.highlight_count,
+    roomSummary.is_encrypted,
+    roomSummary.notification_count,
+    roomSummary.has_unread
+FROM roomSummaryEntity AS roomSummary
+LEFT JOIN breadcrumbs ON roomSummary.room_id = breadcrumbs.room_id
+WHERE breadcrumb_index IS NOT NULL
+ORDER BY breadcrumb_index ASC;
+
+
+deleteAll:
+DELETE FROM breadcrumbs;
+

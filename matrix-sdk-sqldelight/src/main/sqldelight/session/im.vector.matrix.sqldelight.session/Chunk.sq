@@ -1,0 +1,132 @@
+CREATE TABLE chunkEntity (
+  chunk_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  room_id TEXT NOT NULL,
+  prev_token TEXT,
+  next_token TEXT,
+  is_local_echo INTEGER AS Boolean DEFAULT 0 NOT NULL,
+  is_last_forward INTEGER AS Boolean DEFAULT 0 NOT NULL,
+  is_last_backward INTEGER AS Boolean DEFAULT 0 NOT NULL,
+
+  UNIQUE(room_id, prev_token),
+  UNIQUE(room_id, next_token)
+
+);
+
+CREATE INDEX chunk_id_index ON chunkEntity(chunk_id);
+CREATE INDEX chunk_prev_token ON chunkEntity(prev_token);
+CREATE INDEX chunk_next_token ON chunkEntity(next_token);
+CREATE INDEX chunk_last_backward ON chunkEntity(is_last_backward);
+CREATE INDEX chunk_last_forward ON chunkEntity(is_last_forward);
+
+createNew:
+INSERT OR IGNORE INTO chunkEntity(room_id, next_token, prev_token)
+VALUES (?, NULL, NULL);
+
+lastInsertId:
+SELECT LAST_INSERT_ROWID();
+
+insert:
+INSERT OR IGNORE INTO chunkEntity(room_id, next_token, prev_token, is_last_backward, is_last_forward)
+VALUES (?,?,?,?,?);
+
+setIsLastForwards:
+UPDATE chunkEntity
+SET is_last_forward = :isLastForwards
+WHERE chunk_id = :chunkId;
+
+setIsLastBackwards:
+UPDATE chunkEntity
+SET is_last_backward= :isLastBackwards
+WHERE chunk_id = :chunkId;
+
+setPrevToken:
+UPDATE OR IGNORE chunkEntity
+SET prev_token= :prevToken
+WHERE chunk_id = :chunkId;
+
+setNextToken:
+UPDATE OR IGNORE chunkEntity
+SET next_token= :nextToken
+WHERE chunk_id = :chunkId;
+
+getLastLive:
+SELECT *
+FROM chunkEntity
+WHERE is_last_forward = 1 AND
+room_id = :roomId;
+
+getChunkIdOfLive:
+SELECT chunk_id
+FROM chunkEntity
+WHERE is_last_forward = 1 AND
+room_id = :roomId;
+
+getChunkIdContainingEvent:
+SELECT chunkEntity.chunk_id
+FROM chunkEntity
+    LEFT JOIN timelineEventEntity USING(chunk_id)
+WHERE timelineEventEntity.event_id= :eventId
+AND chunkEntity.room_id= :roomId;
+
+isLastForward:
+SELECT is_last_forward FROM chunkEntity
+WHERE chunk_id = :chunkId;
+
+isLastBackward:
+SELECT EXISTS (
+    SELECT 1 FROM chunkEntity
+    WHERE chunk_id = :chunkId
+    AND is_last_backward = 1
+    UNION
+    SELECT 1 FROM timelineWithRoot
+    WHERE chunk_id = :chunkId
+    AND type = 'm.room.create'
+);
+
+getWithNextToken:
+SELECT *
+FROM chunkEntity
+WHERE room_id = :roomId
+AND next_token = :nextToken;
+
+getWithPrevToken:
+SELECT *
+FROM chunkEntity
+WHERE room_id = :roomId
+AND prev_token = :prevToken;
+
+getChunkIdWithNextAndPrevToken:
+SELECT chunk_id
+FROM chunkEntity
+WHERE room_id = :roomId
+AND next_token = :nextToken
+AND prev_token = :prevToken;
+
+getWithChunkId:
+SELECT *
+FROM chunkEntity
+WHERE chunk_id = :chunkId;
+
+getLocalEchoChunkId:
+SELECT chunk_id
+FROM chunkEntity
+WHERE room_id = :roomId
+AND is_local_echo = 1;
+
+getContainingEvent:
+SELECT chunkEntity.*
+FROM chunkEntity
+    LEFT JOIN timelineEventEntity USING(chunk_id)
+WHERE timelineEventEntity.event_id= :eventId
+AND chunkEntity.room_id = :roomId;
+
+deleteWithId:
+DELETE FROM chunkEntity
+WHERE chunk_id=:chunkId;
+
+deleteAllFromRoom:
+DELETE FROM chunkEntity
+WHERE room_id=:roomId;
+
+deleteAll:
+DELETE FROM chunkEntity;

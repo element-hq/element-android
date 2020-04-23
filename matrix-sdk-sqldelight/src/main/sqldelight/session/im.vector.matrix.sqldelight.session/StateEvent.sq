@@ -1,0 +1,34 @@
+import java.lang.Long;
+
+CREATE TABLE currentStateEventEntity (
+  event_id TEXT NOT NULL,
+  room_id TEXT NOT NULL,
+  state_key TEXT NOT NULL,
+  type TEXT NOT NULL,
+  PRIMARY KEY (room_id,state_key,type),
+
+  FOREIGN KEY (event_id) REFERENCES eventEntity(event_id)
+      ON DELETE CASCADE
+);
+
+CREATE INDEX state_event_state_key ON currentStateEventEntity(state_key);
+CREATE INDEX state_event_room_id ON currentStateEventEntity(room_id);
+CREATE INDEX state_event_type ON currentStateEventEntity(type);
+
+insertOrUpdate:
+INSERT OR REPLACE INTO currentStateEventEntity
+VALUES ?;
+
+getCurrentStateEvent:
+SELECT * FROM eventEntity
+WHERE event_id = (
+    SELECT currentStateEventEntity.event_id
+    FROM currentStateEventEntity
+    WHERE       room_id =:roomId AND
+                type = :type AND
+                state_key = :stateKey
+);
+
+
+deleteAll:
+DELETE FROM currentStateEventEntity;

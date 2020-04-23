@@ -1,0 +1,36 @@
+import java.lang.Boolean;
+import java.lang.Double;
+
+CREATE TABLE filterEntity (
+  unique_id INTEGER PRIMARY KEY CHECK (unique_id = 0),
+  filter_body_json TEXT NOT NULL,
+  room_event_filter_json TEXT NOT NULL,
+  filter_id TEXT DEFAULT NULL
+);
+
+deleteAll:
+DELETE FROM filterEntity;
+
+insertFilters:
+INSERT OR REPLACE INTO filterEntity(unique_id, filter_body_json, room_event_filter_json)
+VALUES (0, ?,?);
+
+get:
+SELECT * FROM filterEntity
+WHERE unique_id = 0;
+
+updateFilterId:
+UPDATE filterEntity
+SET filter_id = :filterId
+WHERE filter_body_json = :filterBody;
+
+getRoomFilterJson:
+SELECT room_event_filter_json
+FROM filterEntity;
+
+getFilterBodyOrId:
+SELECT CASE
+    WHEN filter_id IS NOT NULL THEN filter_id
+    ELSE filter_body_json
+END
+FROM filterEntity;

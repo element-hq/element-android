@@ -1,0 +1,51 @@
+import java.lang.Boolean;
+import im.vector.matrix.sqldelight.session.Memberships;
+
+CREATE TABLE pushRuleEntity (
+  action_str TEXT,
+  kind TEXT NOT NULL,
+  scope TEXT NOT NULL,
+  rule_id TEXT NOT NULL,
+  is_default INTEGER AS Boolean DEFAULT 0 NOT NULL,
+  is_enabled INTEGER AS Boolean DEFAULT 0 NOT NULL,
+  pattern TEXT
+);
+
+CREATE INDEX push_rule_kind ON pushRuleEntity(kind);
+CREATE INDEX push_rule_scope ON pushRuleEntity(scope);
+
+CREATE TABLE pushConditionEntity (
+  kind TEXT NOT NULL,
+  key TEXT,
+  iz TEXT,
+  pattern TEXT,
+  rule_id TEXT NOT NULL
+);
+
+insertPushRule:
+INSERT INTO pushRuleEntity
+VALUES ?;
+
+insertPushCondition:
+INSERT INTO pushConditionEntity
+VALUES ?;
+
+getPushConditions:
+SELECT kind, key, iz, pattern FROM pushConditionEntity
+WHERE rule_id = :ruleId;
+
+getPushRuleWithKind:
+SELECT * FROM pushRuleEntity
+WHERE scope = :scope AND kind = :kind;
+
+getPushRuleWithId:
+SELECT * FROM pushRuleEntity
+WHERE scope = :scope AND rule_id = :ruleId;
+
+deleteAllPushConditions:
+DELETE FROM pushConditionEntity;
+
+deleteAllPushRules:
+DELETE FROM pushRuleEntity;
+
+

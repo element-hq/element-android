@@ -1,0 +1,71 @@
+import im.vector.matrix.sqldelight.session.Memberships;
+import java.lang.Long;
+
+CREATE TABLE groupSummaryEntity (
+  group_id TEXT NOT NULL PRIMARY KEY,
+  display_name TEXT,
+  short_description TEXT,
+  avatar_url TEXT,
+  membership TEXT AS Memberships NOT NULL
+);
+
+CREATE INDEX group_summary_id ON groupSummaryEntity(group_id);
+
+CREATE TABLE groupRoom(
+    group_id TEXT NOT NULL,
+    room_id TEXT,
+    PRIMARY KEY (group_id,room_id),
+    FOREIGN KEY (group_id) REFERENCES groupSummaryEntity(group_id)
+);
+
+CREATE TABLE groupUser(
+    group_id TEXT NOT NULL,
+    user_id TEXT,
+    PRIMARY KEY (group_id,user_id),
+    FOREIGN KEY (group_id) REFERENCES groupSummaryEntity(group_id)
+);
+
+insertOrReplaceGroupSummary:
+INSERT OR REPLACE INTO groupSummaryEntity
+VALUES ?;
+
+insertGroupRoom:
+INSERT INTO groupRoom(group_id, room_id)
+VALUES (?,?);
+
+insertGroupUser:
+INSERT INTO groupUser(group_id, user_id)
+VALUES (?,?);
+
+getGroupSummary:
+SELECT * FROM groupSummaryEntity
+WHERE groupSummaryEntity.group_id=:group_id;
+
+getAllWithMemberships:
+SELECT * FROM groupSummaryEntity
+WHERE membership IN :memberships;
+
+getAllWithDisplayNames:
+SELECT * FROM groupSummaryEntity
+WHERE display_name LIKE ('%' || :displayName || '%');
+
+deleteAllGroupSummary:
+DELETE FROM groupSummaryEntity;
+
+deleteAllGroupUser:
+DELETE FROM groupUser;
+
+deleteAllGroupRoom:
+DELETE FROM groupRoom;
+
+deleteGroupSummaries:
+DELETE FROM groupSummaryEntity
+WHERE group_id IN :groupIds;
+
+deleteGroupRooms:
+DELETE FROM groupRoom
+WHERE group_id IN :groupIds;
+
+deleteGroupUser:
+DELETE FROM groupUser
+WHERE group_id IN :groupIds;

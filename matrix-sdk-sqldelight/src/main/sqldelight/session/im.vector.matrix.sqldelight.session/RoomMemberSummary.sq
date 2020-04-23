@@ -1,0 +1,70 @@
+import java.lang.Boolean;
+import im.vector.matrix.sqldelight.session.Memberships;
+
+CREATE TABLE roomMemberSummaryEntity (
+  user_id TEXT NOT NULL,
+  room_id TEXT NOT NULL,
+  display_name TEXT,
+  avatar_url TEXT,
+  membership TEXT AS Memberships NOT NULL,
+  reason TEXT,
+  is_direct INTEGER AS Boolean DEFAULT 0 NOT NULL,
+  PRIMARY KEY (room_id, user_id)
+);
+
+insertOrUpdate:
+INSERT OR REPLACE INTO roomMemberSummaryEntity
+VALUES ?;
+
+CREATE VIEW simpleRoomMemberSummary AS
+SELECT room_id, user_id, display_name, avatar_url, membership
+FROM roomMemberSummaryEntity;
+
+get:
+SELECT * FROM simpleRoomMemberSummary
+WHERE user_id = :userId
+AND room_id = :roomId;
+
+getDisplayName:
+SELECT display_name FROM simpleRoomMemberSummary
+WHERE user_id = :userId
+AND room_id = :roomId;
+
+getAllFromRoom:
+SELECT * FROM simpleRoomMemberSummary
+WHERE membership IN :memberships
+AND user_id NOT IN :excludedIds
+AND room_id = :roomId;
+
+getAllUserIdFromRoom:
+SELECT user_id FROM simpleRoomMemberSummary
+WHERE  membership IN :memberships
+AND user_id NOT IN :excludedIds
+AND room_id = :roomId;
+
+getAllRoomIdsFromUsers:
+SELECT DISTINCT room_id FROM roomMemberSummaryEntity
+WHERE user_id IN :userIds;
+
+getPagedFromRoom:
+SELECT * FROM simpleRoomMemberSummary
+WHERE membership IN :memberships
+AND user_id NOT IN :excludedIds
+AND room_id = :roomId
+LIMIT :limit
+OFFSET :offset;
+
+getNumberOfMembersInRoom:
+SELECT COUNT(*) FROM simpleRoomMemberSummary
+WHERE membership IN :memberships
+AND room_id = :roomId;
+
+countMembersWithNameInRoom:
+SELECT COUNT(*) FROM simpleRoomMemberSummary
+WHERE display_name = :displayName
+AND room_id = :roomId;
+
+deleteAll:
+DELETE FROM roomMemberSummaryEntity;
+
+

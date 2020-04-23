@@ -1,0 +1,47 @@
+CREATE TABLE roomEntity (
+  room_id TEXT NOT NULL PRIMARY KEY,
+  are_members_loaded INTEGER AS Boolean DEFAULT 0 NOT NULL
+);
+
+insertOrUpdateRoom:
+INSERT OR IGNORE INTO roomEntity (room_id)
+VALUES (?);
+
+CREATE TRIGGER create_chunks_on_insert
+   AFTER INSERT ON roomEntity
+BEGIN
+INSERT INTO chunkEntity(room_id,  prev_token , next_token, is_local_echo)
+VALUES(new.room_id , NULL, NULL, 1);
+INSERT INTO chunkEntity(room_id,  prev_token , next_token, is_last_forward)
+VALUES(new.room_id , NULL, NULL, 1);
+END;
+
+exists:
+SELECT EXISTS (
+    SELECT 1 FROM roomEntity
+    WHERE room_id= :roomId
+);
+
+getDirectRoomsWith:
+SELECT room_id FROM roomEntity
+WHERE room_id IN (
+    SELECT DISTINCT roomSummary.room_id FROM roomSummaryEntity AS roomSummary
+    LEFT JOIN roomMemberSummaryEntity AS roomMember ON roomMember.room_id = roomSummary.room_id
+    WHERE roomSummary.is_direct = 1
+    AND roomSummary.membership = "JOIN"
+    AND roomMember.user_id = :userId
+    AND roomMember.membership IN :userMemberships
+);
+
+
+setMembersAsLoaded:
+UPDATE roomEntity
+SET are_members_loaded = 1
+WHERE room_id = :roomId;
+
+deleteAll:
+DELETE FROM roomEntity;
+
+areMembersLoaded:
+SELECT are_members_loaded FROM roomEntity
+WHERE room_id = :roomId;

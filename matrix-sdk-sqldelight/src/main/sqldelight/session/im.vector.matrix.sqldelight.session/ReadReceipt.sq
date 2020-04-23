@@ -1,0 +1,60 @@
+import java.lang.Boolean;
+import java.lang.Double;
+
+CREATE TABLE readReceiptEntity (
+  room_id TEXT NOT NULL,
+  event_id TEXT NOT NULL,
+  user_id TEXT NOT NULL,
+  origin_server_ts REAL AS Double NOT NULL,
+
+  PRIMARY KEY (room_id, user_id)
+);
+
+CREATE INDEX read_receipt_event_id ON readReceiptEntity(event_id);
+
+CREATE TRIGGER log_read_receipt_update
+   AFTER UPDATE ON readReceiptEntity
+BEGIN
+INSERT OR REPLACE INTO timelineEventUpdate(room_id, event_id)
+VALUES(new.room_id ,new.event_id);
+INSERT OR REPLACE INTO timelineEventUpdate(room_id, event_id)
+VALUES(old.room_id ,old.event_id);
+END;
+
+CREATE TRIGGER log_read_receipt_insert
+   AFTER INSERT ON readReceiptEntity
+BEGIN
+INSERT OR REPLACE INTO timelineEventUpdate(room_id, event_id)
+VALUES(new.room_id ,new.event_id);
+END;
+
+
+insert:
+INSERT INTO readReceiptEntity(room_id, event_id, user_id, origin_server_ts)
+VALUES (?,?,?,?);
+
+updateReadReceipt:
+UPDATE readReceiptEntity
+SET event_id = :eventId, origin_server_ts = :originiServerTs
+WHERE room_id = :roomId AND
+      user_id = :userId;
+
+getEventIdForUser:
+SELECT event_id FROM readReceiptEntity
+WHERE room_id = :roomId AND
+      user_id = :userId;
+
+getTimestampForUser:
+SELECT origin_server_ts FROM readReceiptEntity
+WHERE room_id = :roomId AND
+      user_id = :userId;
+
+getAllForEvent:
+SELECT user.user_id, user.display_name, user.avatar_url , origin_server_ts
+FROM readReceiptEntity
+JOIN userEntity AS user USING(user_id)
+WHERE event_id = :eventId;
+
+
+deleteAll:
+DELETE FROM readReceiptEntity;

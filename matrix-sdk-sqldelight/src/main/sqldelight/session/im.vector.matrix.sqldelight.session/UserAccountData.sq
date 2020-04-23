@@ -1,0 +1,29 @@
+import im.vector.matrix.sqldelight.session.Memberships;
+import java.lang.Long;
+
+CREATE TABLE userAccountDataEntity (
+  type TEXT NOT NULL PRIMARY KEY,
+  content TEXT
+);
+
+CREATE INDEX user_account_type ON userAccountDataEntity(type);
+
+insert:
+INSERT OR REPLACE INTO userAccountDataEntity(type, content)
+VALUES (?,?);
+
+getAll:
+SELECT * FROM userAccountDataEntity;
+
+getAllWithType:
+SELECT * FROM userAccountDataEntity
+WHERE type IN :type;
+
+updateContent:
+UPDATE userAccountDataEntity
+SET content = :content
+WHERE type = :type;
+
+deleteAll:
+DELETE FROM userAccountDataEntity;
+

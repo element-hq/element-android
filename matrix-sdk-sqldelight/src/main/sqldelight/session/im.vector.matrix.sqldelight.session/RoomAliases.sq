@@ -1,0 +1,18 @@
+import java.lang.Boolean;
+
+CREATE TABLE roomAliases(
+    room_alias TEXT NOT NULL,
+    room_id TEXT NOT NULL,
+    UNIQUE (room_alias)
+);
+
+insert:
+INSERT INTO roomAliases(room_id, room_alias)
+VALUES (?,?);
+
+deleteAllForRoom:
+DELETE FROM roomAliases
+WHERE room_id = :roomId;
+
+deleteAll:
+DELETE FROM roomAliases;
