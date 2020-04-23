@@ -951,7 +951,7 @@ class RoomDetailFragment @Inject constructor(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { managed ->
                     if (!managed) {
-                        if (title.isValidUrl() && URL(title).host != URL(url).host) {
+                        if (title.isValidUrl() && url.isValidUrl() && URL(title).host != URL(url).host) {
                             AlertDialog.Builder(requireActivity())
                                     .setTitle(R.string.external_link_confirmation_title)
                                     .setMessage(
@@ -978,7 +978,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onUrlLongClicked(url: String): Boolean {
-        if (url != getString(R.string.edited_suffix)) {
+        if (url != getString(R.string.edited_suffix) && url.isValidUrl()) {
             // Copy the url to the clipboard
             copyToClipboard(requireContext(), url, true, R.string.link_copied_to_clipboard)
         }
