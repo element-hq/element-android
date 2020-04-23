@@ -196,7 +196,8 @@ internal interface IMXCryptoStore {
      */
     fun storeUserDevices(userId: String, devices: Map<String, CryptoDeviceInfo>?)
 
-    fun storeUserCrossSigningKeys(userId: String, masterKey: CryptoCrossSigningKey?,
+    fun storeUserCrossSigningKeys(userId: String,
+                                  masterKey: CryptoCrossSigningKey?,
                                   selfSigningKey: CryptoCrossSigningKey?,
                                   userSigningKey: CryptoCrossSigningKey?)
 
@@ -262,7 +263,7 @@ internal interface IMXCryptoStore {
      * @param deviceKey the public key of the other device.
      * @return The Base64 end-to-end session, or null if not found
      */
-    fun getDeviceSession(sessionId: String?, deviceKey: String?): OlmSessionWrapper?
+    fun getDeviceSession(sessionId: String, deviceKey: String): OlmSessionWrapper?
 
     /**
      * Retrieve the last used sessionId, regarding `lastReceivedMessageTs`, or null if no session exist

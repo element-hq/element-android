@@ -32,7 +32,10 @@ import im.vector.matrix.android.internal.crypto.model.rest.GossipingToDeviceObje
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -43,7 +46,10 @@ internal class IncomingGossipingRequestManager @Inject constructor(
         private val cryptoStore: IMXCryptoStore,
         private val cryptoConfig: MXCryptoConfig,
         private val gossipingWorkManager: GossipingWorkManager,
-        private val roomDecryptorProvider: RoomDecryptorProvider) {
+        private val roomEncryptorsStore: RoomEncryptorsStore,
+        private val roomDecryptorProvider: RoomDecryptorProvider,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val cryptoCoroutineScope: CoroutineScope) {
 
     // list of IncomingRoomKeyRequests/IncomingRoomKeyRequestCancellations
     // we received in the current sync.
@@ -90,7 +96,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
      * @param event the announcement event.
      */
     fun onGossipingRequestEvent(event: Event) {
-        Timber.v("## GOSSIP onGossipingRequestEvent type ${event.type} from user ${event.senderId}")
+        Timber.v("## CRYPTO | GOSSIP onGossipingRequestEvent type ${event.type} from user ${event.senderId}")
         val roomKeyShare = event.getClearContent().toModel<GossipingDefaultContent>()
         val ageLocalTs = event.unsignedData?.age?.let { System.currentTimeMillis() - it }
         when (roomKeyShare?.action) {
@@ -155,7 +161,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
         }
 
         receivedRequestCancellations?.forEach { request ->
-            Timber.v("## GOSSIP processReceivedGossipingRequests() : m.room_key_request cancellation $request")
+            Timber.v("## CRYPTO | GOSSIP processReceivedGossipingRequests() : m.room_key_request cancellation $request")
             // we should probably only notify the app of cancellations we told it
             // about, but we don't currently have a record of that, so we just pass
             // everything through.
@@ -178,17 +184,42 @@ internal class IncomingGossipingRequestManager @Inject constructor(
     }
 
     private fun processIncomingRoomKeyRequest(request: IncomingRoomKeyRequest) {
-        val userId = request.userId
-        val deviceId = request.deviceId
-        val body = request.requestBody
-        val roomId = body!!.roomId
-        val alg = body.algorithm
+        val userId = request.userId ?: return
+        val deviceId = request.deviceId ?: return
+        val body = request.requestBody ?: return
+        val roomId = body.roomId ?: return
+        val alg = body.algorithm ?: return
 
-        Timber.v("## GOSSIP processIncomingRoomKeyRequest from $userId:$deviceId for $roomId / ${body.sessionId} id ${request.requestId}")
-        if (userId == null || credentials.userId != userId) {
-            // TODO: determine if we sent this device the keys already: in
-            Timber.w("## GOSSIP processReceivedGossipingRequests() : Ignoring room key request from other user for now")
-            cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED)
+        Timber.v("## CRYPTO | GOSSIP processIncomingRoomKeyRequest from $userId:$deviceId for $roomId / ${body.sessionId} id ${request.requestId}")
+        if (credentials.userId != userId) {
+            Timber.w("## CRYPTO | GOSSIP processReceivedGossipingRequests() : room key request from other user")
+            val senderKey = body.senderKey ?: return Unit
+                    .also { Timber.w("missing senderKey") }
+                    .also { cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED) }
+            val sessionId = body.sessionId ?: return Unit
+                    .also { Timber.w("missing sessionId") }
+                    .also { cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED) }
+
+            if (alg != MXCRYPTO_ALGORITHM_MEGOLM) {
+                return Unit
+                        .also { Timber.w("Only megolm is accepted here") }
+                        .also { cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED) }
+            }
+
+            val roomEncryptor = roomEncryptorsStore.get(roomId) ?: return Unit
+                    .also { Timber.w("no room Encryptor") }
+                    .also { cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED) }
+
+            cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+                val isSuccess = roomEncryptor.reshareKey(sessionId, userId, deviceId, senderKey)
+
+                if (isSuccess) {
+                    cryptoStore.updateGossipingRequestState(request, GossipingRequestState.ACCEPTED)
+                } else {
+                    cryptoStore.updateGossipingRequestState(request, GossipingRequestState.UNABLE_TO_PROCESS)
+                }
+            }
+            cryptoStore.updateGossipingRequestState(request, GossipingRequestState.RE_REQUESTED)
             return
         }
         // TODO: should we queue up requests we don't yet have keys for, in case they turn up later?
@@ -196,18 +227,18 @@ internal class IncomingGossipingRequestManager @Inject constructor(
         // the keys for the requested events, and can drop the requests.
         val decryptor = roomDecryptorProvider.getRoomDecryptor(roomId, alg)
         if (null == decryptor) {
-            Timber.w("## GOSSIP processReceivedGossipingRequests() : room key request for unknown $alg in room $roomId")
+            Timber.w("## CRYPTO | GOSSIP processReceivedGossipingRequests() : room key request for unknown $alg in room $roomId")
             cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED)
             return
         }
         if (!decryptor.hasKeysForKeyRequest(request)) {
-            Timber.w("## GOSSIP processReceivedGossipingRequests() : room key request for unknown session ${body.sessionId!!}")
+            Timber.w("## CRYPTO | GOSSIP processReceivedGossipingRequests() : room key request for unknown session ${body.sessionId!!}")
             cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED)
             return
         }
 
         if (credentials.deviceId == deviceId && credentials.userId == userId) {
-            Timber.v("## GOSSIP processReceivedGossipingRequests() : oneself device - ignored")
+            Timber.v("## CRYPTO | GOSSIP processReceivedGossipingRequests() : oneself device - ignored")
             cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED)
             return
         }
@@ -219,16 +250,16 @@ internal class IncomingGossipingRequestManager @Inject constructor(
             cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED)
         }
         // if the device is verified already, share the keys
-        val device = cryptoStore.getUserDevice(userId, deviceId!!)
+        val device = cryptoStore.getUserDevice(userId, deviceId)
         if (device != null) {
             if (device.isVerified) {
-                Timber.v("## GOSSIP processReceivedGossipingRequests() : device is already verified: sharing keys")
+                Timber.v("## CRYPTO | GOSSIP processReceivedGossipingRequests() : device is already verified: sharing keys")
                 request.share?.run()
                 return
             }
 
             if (device.isBlocked) {
-                Timber.v("## GOSSIP processReceivedGossipingRequests() : device is blocked -> ignored")
+                Timber.v("## CRYPTO | GOSSIP processReceivedGossipingRequests() : device is blocked -> ignored")
                 cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED)
                 return
             }
@@ -236,7 +267,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
 
         // As per config we automatically discard untrusted devices request
         if (cryptoConfig.discardRoomKeyRequestsFromUntrustedDevices) {
-            Timber.v("## processReceivedGossipingRequests() : discardRoomKeyRequestsFromUntrustedDevices")
+            Timber.v("## CRYPTO | processReceivedGossipingRequests() : discardRoomKeyRequestsFromUntrustedDevices")
             // At this point the device is unknown, we don't want to bother user with that
             cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED)
             return
@@ -249,30 +280,30 @@ internal class IncomingGossipingRequestManager @Inject constructor(
     private fun processIncomingSecretShareRequest(request: IncomingSecretShareRequest) {
         val secretName = request.secretName ?: return Unit.also {
             cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED)
-            Timber.v("## GOSSIP processIncomingSecretShareRequest() : Missing secret name")
+            Timber.v("## CRYPTO | GOSSIP processIncomingSecretShareRequest() : Missing secret name")
         }
 
         val userId = request.userId
         if (userId == null || credentials.userId != userId) {
-            Timber.e("## GOSSIP processIncomingSecretShareRequest() : Ignoring secret share request from other users")
+            Timber.e("## CRYPTO | GOSSIP processIncomingSecretShareRequest() : Ignoring secret share request from other users")
             cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED)
             return
         }
 
         val deviceId = request.deviceId
                 ?: return Unit.also {
-                    Timber.e("## GOSSIP processIncomingSecretShareRequest() : Malformed request, no ")
+                    Timber.e("## CRYPTO | GOSSIP processIncomingSecretShareRequest() : Malformed request, no ")
                     cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED)
                 }
 
         val device = cryptoStore.getUserDevice(userId, deviceId)
                 ?: return Unit.also {
-                    Timber.e("## GOSSIP processIncomingSecretShareRequest() : Received secret share request from unknown device ${request.deviceId}")
+                    Timber.e("## CRYPTO | GOSSIP processIncomingSecretShareRequest() : Received secret share request from unknown device ${request.deviceId}")
                     cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED)
                 }
 
         if (!device.isVerified || device.isBlocked) {
-            Timber.v("## GOSSIP processIncomingSecretShareRequest() : Ignoring secret share request from untrusted/blocked session $device")
+            Timber.v("## CRYPTO | GOSSIP processIncomingSecretShareRequest() : Ignoring secret share request from untrusted/blocked session $device")
             cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED)
             return
         }
@@ -289,7 +320,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
                     }
             else                       -> null
         }?.let { secretValue ->
-            Timber.i("## GOSSIP processIncomingSecretShareRequest() : Sharing secret $secretName with $device locally trusted")
+            Timber.i("## CRYPTO | GOSSIP processIncomingSecretShareRequest() : Sharing secret $secretName with $device locally trusted")
             if (isDeviceLocallyVerified == true && hasBeenVerifiedLessThanFiveMinutesFromNow(deviceId)) {
                 val params = SendGossipWorker.Params(
                         sessionId = sessionId,
@@ -301,13 +332,13 @@ internal class IncomingGossipingRequestManager @Inject constructor(
                 val workRequest = gossipingWorkManager.createWork<SendGossipWorker>(WorkerParamsFactory.toData(params), true)
                 gossipingWorkManager.postWork(workRequest)
             } else {
-                Timber.v("## GOSSIP processIncomingSecretShareRequest() : Can't share secret $secretName with $device, verification too old")
+                Timber.v("## CRYPTO | GOSSIP processIncomingSecretShareRequest() : Can't share secret $secretName with $device, verification too old")
                 cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED)
             }
             return
         }
 
-        Timber.v("## GOSSIP processIncomingSecretShareRequest() : $secretName unknown at SDK level, asking to app layer")
+        Timber.v("## CRYPTO | GOSSIP processIncomingSecretShareRequest() : $secretName unknown at SDK level, asking to app layer")
 
         request.ignore = Runnable {
             cryptoStore.updateGossipingRequestState(request, GossipingRequestState.REJECTED)
@@ -341,7 +372,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
                 try {
                     listener.onRoomKeyRequest(request)
                 } catch (e: Exception) {
-                    Timber.e(e, "## onRoomKeyRequest() failed")
+                    Timber.e(e, "## CRYPTO | onRoomKeyRequest() failed")
                 }
             }
         }
@@ -358,7 +389,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
                         return
                     }
                 } catch (e: Exception) {
-                    Timber.e(e, "## GOSSIP onRoomKeyRequest() failed")
+                    Timber.e(e, "## CRYPTO | GOSSIP onRoomKeyRequest() failed")
                 }
             }
         }
@@ -377,7 +408,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
                 try {
                     listener.onRoomKeyRequestCancellation(request)
                 } catch (e: Exception) {
-                    Timber.e(e, "## GOSSIP onRoomKeyRequestCancellation() failed")
+                    Timber.e(e, "## CRYPTO | GOSSIP onRoomKeyRequestCancellation() failed")
                 }
             }
         }

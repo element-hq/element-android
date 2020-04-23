@@ -6,7 +6,8 @@
     <!-- Sections has been created to limit merge conflicts. -->
 
     <!-- BEGIN Strings added by Valere -->
-
+    <string name="command_description_discard_session">Forces the current outbound group session in an encrypted room to be discarded</string>
+    <string name="command_description_discard_session_not_handled">Only supported in encrypted rooms</string>
     <!-- END Strings added by Valere -->
 
 

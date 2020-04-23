@@ -111,6 +111,8 @@ interface CryptoService {
                             roomId: String,
                             callback: MatrixCallback<MXEncryptEventContentResult>)
 
+    fun discardOutboundSession(roomId: String)
+
     @Throws(MXCryptoError::class)
     fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult
 

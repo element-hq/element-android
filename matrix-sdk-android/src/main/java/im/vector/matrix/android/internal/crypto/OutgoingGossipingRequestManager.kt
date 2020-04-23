@@ -55,7 +55,7 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
             cryptoStore.getOrAddOutgoingRoomKeyRequest(requestBody, recipients)?.let {
                 // Don't resend if it's already done, you need to cancel first (reRequest)
                 if (it.state == OutgoingGossipingRequestState.SENDING || it.state == OutgoingGossipingRequestState.SENT) {
-                    Timber.v("## GOSSIP sendOutgoingRoomKeyRequest() : we already request for that session: $it")
+                    Timber.v("## CRYPTO - GOSSIP sendOutgoingRoomKeyRequest() : we already request for that session: $it")
                     return@launch
                 }
 
@@ -72,7 +72,7 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
             cryptoStore.getOrAddOutgoingSecretShareRequest(secretName, recipients)?.let {
                 // TODO check if there is already one that is being sent?
                 if (it.state == OutgoingGossipingRequestState.SENDING || it.state == OutgoingGossipingRequestState.SENT) {
-                    Timber.v("## GOSSIP sendSecretShareRequest() : we already request for that session: $it")
+                    Timber.v("## CRYPTO - GOSSIP sendSecretShareRequest() : we already request for that session: $it")
                     return@launch
                 }
 
@@ -113,7 +113,7 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
         val req = cryptoStore.getOutgoingRoomKeyRequest(requestBody)
                 ?: // no request was made for this key
                 return Unit.also {
-                    Timber.v("## GOSSIP cancelRoomKeyRequest() Unknown request")
+                    Timber.v("## CRYPTO - GOSSIP cancelRoomKeyRequest() Unknown request $requestBody")
                 }
 
         sendOutgoingRoomKeyRequestCancellation(req, andResend)
@@ -125,7 +125,7 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
      * @param request the request
      */
     private fun sendOutgoingGossipingRequest(request: OutgoingGossipingRequest) {
-        Timber.v("## GOSSIP sendOutgoingRoomKeyRequest() : Requesting keys $request")
+        Timber.v("## CRYPTO - GOSSIP sendOutgoingRoomKeyRequest() : Requesting keys $request")
 
         val params = SendGossipRequestWorker.Params(
                 sessionId = sessionId,
@@ -143,7 +143,7 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
      * @param request the request
      */
     private fun sendOutgoingRoomKeyRequestCancellation(request: OutgoingRoomKeyRequest, resend: Boolean = false) {
-        Timber.v("$request")
+        Timber.v("## CRYPTO - sendOutgoingRoomKeyRequestCancellation $request")
         val params = CancelGossipRequestWorker.Params.fromRequest(sessionId, request)
         cryptoStore.updateOutgoingGossipingRequestState(request.requestId, OutgoingGossipingRequestState.CANCELLING)
 

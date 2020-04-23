@@ -555,11 +555,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getDeviceSession(sessionId: String?, deviceKey: String?): OlmSessionWrapper? {
-        if (sessionId == null || deviceKey == null) {
-            return null
-        }
-
+    override fun getDeviceSession(sessionId: String, deviceKey: String): OlmSessionWrapper? {
         val key = OlmSessionEntity.createPrimaryKey(sessionId, deviceKey)
 
         // If not in cache (or not found), try to read it from realm
