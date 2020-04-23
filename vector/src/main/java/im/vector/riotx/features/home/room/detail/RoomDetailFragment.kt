@@ -960,10 +960,10 @@ class RoomDetailFragment @Inject constructor(
                                                     .colorizeMatchingText(url, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
                                                     .colorizeMatchingText(title, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
                                     )
-                                    .setPositiveButton(R.string.external_link_confirmation_negative_button) { _, _ ->
+                                    .setPositiveButton(R.string._continue) { _, _ ->
                                         openUrlInExternalBrowser(requireContext(), url)
                                     }
-                                    .setNegativeButton(R.string.external_link_confirmation_positive_button, null)
+                                    .setNegativeButton(R.string.cancel, null)
                                     .show()
                                     .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                         } else {
