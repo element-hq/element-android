@@ -11,7 +11,8 @@
 
 
     <!-- BEGIN Strings added by Benoit -->
-
+    <string name="error_empty_field_choose_user_name">Please choose a username.</string>
+    <string name="error_empty_field_choose_password">Please choose a password.</string>
     <!-- END Strings added by Benoit -->
 
 

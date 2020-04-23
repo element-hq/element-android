@@ -191,7 +191,12 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         backgroundHandler.removeCallbacksAndMessages(null)
         backgroundHandler.postDelayed(
                 {
-                    refreshNotificationDrawerBg()
+                    try {
+                        refreshNotificationDrawerBg()
+                    } catch (throwable: Throwable) {
+                        // It can happen if for instance session has been destroyed. It's a bit ugly to try catch like this, but it's safer
+                        Timber.w(throwable, "refreshNotificationDrawerBg failure")
+                    }
                 }, 200)
     }
 

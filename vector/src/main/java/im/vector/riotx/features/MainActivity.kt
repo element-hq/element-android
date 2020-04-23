@@ -49,6 +49,7 @@ data class MainActivityArgs(
         val clearCache: Boolean = false,
         val clearCredentials: Boolean = false,
         val isUserLoggedOut: Boolean = false,
+        val isAccountDeactivated: Boolean = false,
         val isSoftLogout: Boolean = false
 ) : Parcelable
 
@@ -110,6 +111,7 @@ class MainActivity : VectorBaseActivity() {
                 clearCache = argsFromIntent?.clearCache ?: false,
                 clearCredentials = argsFromIntent?.clearCredentials ?: false,
                 isUserLoggedOut = argsFromIntent?.isUserLoggedOut ?: false,
+                isAccountDeactivated = argsFromIntent?.isAccountDeactivated ?: false,
                 isSoftLogout = argsFromIntent?.isSoftLogout ?: false
         )
     }
@@ -121,7 +123,14 @@ class MainActivity : VectorBaseActivity() {
             return
         }
         when {
-            args.clearCredentials -> session.signOut(
+            args.isAccountDeactivated -> {
+                // Just do the local cleanup
+                Timber.w("Account deactivated, start app")
+                sessionHolder.clearActiveSession()
+                doLocalCleanup()
+                startNextActivityAndFinish()
+            }
+            args.clearCredentials     -> session.signOut(
                     !args.isUserLoggedOut,
                     object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
@@ -135,7 +144,7 @@ class MainActivity : VectorBaseActivity() {
                             displayError(failure)
                         }
                     })
-            args.clearCache       -> session.clearCache(
+            args.clearCache           -> session.clearCache(
                     object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             doLocalCleanup()
@@ -182,16 +191,16 @@ class MainActivity : VectorBaseActivity() {
     private fun startNextActivityAndFinish() {
         val intent = when {
             args.clearCredentials
-                    && !args.isUserLoggedOut ->
-                // User has explicitly asked to log out
+                    && (!args.isUserLoggedOut || args.isAccountDeactivated) ->
+                // User has explicitly asked to log out or deactivated his account
                 LoginActivity.newIntent(this, null)
-            args.isSoftLogout                ->
+            args.isSoftLogout                                               ->
                 // The homeserver has invalidated the token, with a soft logout
                 SoftLogoutActivity.newIntent(this)
-            args.isUserLoggedOut             ->
+            args.isUserLoggedOut                                            ->
                 // the homeserver has invalidated the token (password changed, device deleted, other security reasons)
                 SignedOutActivity.newIntent(this)
-            sessionHolder.hasActiveSession() ->
+            sessionHolder.hasActiveSession()                                ->
                 // We have a session.
                 // Check it can be opened
                 if (sessionHolder.getActiveSession().isOpenable) {
@@ -200,7 +209,7 @@ class MainActivity : VectorBaseActivity() {
                     // The token is still invalid
                     SoftLogoutActivity.newIntent(this)
                 }
-            else                             ->
+            else                                                            ->
                 // First start, or no active session
                 LoginActivity.newIntent(this, null)
         }

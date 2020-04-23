@@ -35,6 +35,7 @@ import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
@@ -92,6 +93,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                 .subscribe { sharedAction ->
                     when (sharedAction) {
                         is HomeActivitySharedAction.OpenDrawer                 -> drawerLayout.openDrawer(GravityCompat.START)
+                        is HomeActivitySharedAction.CloseDrawer                -> drawerLayout.closeDrawer(GravityCompat.START)
                         is HomeActivitySharedAction.OpenGroup                  -> {
                             drawerLayout.closeDrawer(GravityCompat.START)
                             replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java)
@@ -99,7 +101,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                         is HomeActivitySharedAction.PromptForSecurityBootstrap -> {
                             BootstrapBottomSheet.show(supportFragmentManager, true)
                         }
-                    }
+                    }.exhaustive
                 }
                 .disposeOnDestroy()
 

@@ -24,11 +24,20 @@ import im.vector.matrix.android.internal.task.configureWith
 import javax.inject.Inject
 
 internal class DefaultAccountService @Inject constructor(private val changePasswordTask: ChangePasswordTask,
+                                                         private val deactivateAccountTask: DeactivateAccountTask,
                                                          private val taskExecutor: TaskExecutor) : AccountService {
 
     override fun changePassword(password: String, newPassword: String, callback: MatrixCallback<Unit>): Cancelable {
         return changePasswordTask
                 .configureWith(ChangePasswordTask.Params(password, newPassword)) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun deactivateAccount(password: String, eraseAllData: Boolean, callback: MatrixCallback<Unit>): Cancelable {
+        return deactivateAccountTask
+                .configureWith(DeactivateAccountTask.Params(password, eraseAllData)) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)

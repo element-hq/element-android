@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.account.model
+package im.vector.matrix.android.internal.session.account
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
