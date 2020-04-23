@@ -23,17 +23,19 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.error.ErrorFormatter
-import im.vector.riotx.core.extensions.addFragment
+import im.vector.riotx.core.extensions.commitTransaction
 import im.vector.riotx.core.platform.SimpleFragmentActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity.*
 import javax.inject.Inject
+import kotlin.reflect.KClass
 
 class SharedSecureStorageActivity : SimpleFragmentActivity() {
 
@@ -56,9 +58,6 @@ class SharedSecureStorageActivity : SimpleFragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         toolbar.visibility = View.GONE
-        if (isFirstCreation()) {
-            addFragment(R.id.container, SharedSecuredStoragePassphraseFragment::class.java)
-        }
 
         viewModel.viewEvents
                 .observe()
@@ -69,8 +68,20 @@ class SharedSecureStorageActivity : SimpleFragmentActivity() {
                 .disposeOnDestroy()
 
         viewModel.subscribe(this) {
-            //            renderState(it)
+            renderState(it)
         }
+    }
+
+    override fun onBackPressed() {
+        viewModel.handle(SharedSecureStorageAction.Back)
+    }
+
+    private fun renderState(state: SharedSecureStorageViewState) {
+        if (!state.ready) return
+        val fragment = if (state.hasPassphrase) {
+            if (state.useKey) SharedSecuredStorageKeyFragment::class else SharedSecuredStoragePassphraseFragment::class
+        } else SharedSecuredStorageKeyFragment::class
+        showFragment(fragment, Bundle())
     }
 
     private fun observeViewEvents(it: SharedSecureStorageViewEvent?) {
@@ -104,6 +115,18 @@ class SharedSecureStorageActivity : SimpleFragmentActivity() {
                 dataResult.putExtra(EXTRA_DATA_RESULT, it.cypherResult)
                 setResult(Activity.RESULT_OK, dataResult)
                 finish()
+            }
+        }
+    }
+
+    private fun showFragment(fragmentClass: KClass<out Fragment>, bundle: Bundle) {
+        if (supportFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
+            supportFragmentManager.commitTransaction {
+                replace(R.id.container,
+                        fragmentClass.java,
+                        bundle,
+                        fragmentClass.simpleName
+                )
             }
         }
     }

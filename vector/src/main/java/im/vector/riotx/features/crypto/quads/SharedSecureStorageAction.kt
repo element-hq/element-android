@@ -23,8 +23,11 @@ import im.vector.riotx.core.platform.WaitingViewData
 sealed class SharedSecureStorageAction : VectorViewModelAction {
 
     object TogglePasswordVisibility : SharedSecureStorageAction()
+    object UseKey : SharedSecureStorageAction()
+    object Back : SharedSecureStorageAction()
     object Cancel : SharedSecureStorageAction()
     data class SubmitPassphrase(val passphrase: String) : SharedSecureStorageAction()
+    data class SubmitKey(val recoveryKey: String) : SharedSecureStorageAction()
 }
 
 sealed class SharedSecureStorageViewEvent : VectorViewEvents {
@@ -33,6 +36,7 @@ sealed class SharedSecureStorageViewEvent : VectorViewEvents {
     data class FinishSuccess(val cypherResult: String) : SharedSecureStorageViewEvent()
     data class Error(val message: String, val dismiss: Boolean = false) : SharedSecureStorageViewEvent()
     data class InlineError(val message: String) : SharedSecureStorageViewEvent()
+    data class KeyInlineError(val message: String) : SharedSecureStorageViewEvent()
     object ShowModalLoading : SharedSecureStorageViewEvent()
     object HideModalLoading : SharedSecureStorageViewEvent()
     data class UpdateLoadingState(val waitingData: WaitingViewData) : SharedSecureStorageViewEvent()
