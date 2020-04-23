@@ -125,6 +125,11 @@ dependencies {
     // Database
     implementation 'com.github.Zhuinden:realm-monarchy:0.5.1'
     kapt 'dk.ilios:realmfieldnameshelper:1.1.1'
+    implementation "com.squareup.sqldelight:android-driver:1.2.2"
+    implementation 'net.zetetic:android-database-sqlcipher:4.3.0'
+    implementation project(':matrix-sdk-sqldelight')
+    implementation "com.squareup.sqldelight:coroutines-extensions:1.2.1"
+    implementation "com.squareup.sqldelight:android-paging-extensions:1.2.1"
 
     // Work
     implementation "androidx.work:work-runtime-ktx:$work_version"
