@@ -6,7 +6,12 @@
     <!-- Sections has been created to limit merge conflicts. -->
 
     <!-- BEGIN Strings added by Valere -->
-
+    <string name="monitor_content_description">Monitor</string>
+    <string name="mobile_content_description">Smartphone</string>
+    <string name="riot_desktop_web">Riot Web\nRiot Desktop</string>
+    <string name="riot_ios_android">Riot iOS\nRiot X for Android</string>
+    <string name="or_other_mx_capabale_client">or another cross-signing capable Matrix client</string>
+    <string name="use_latest_riot">Use the latest Riot on your other devices:</string>
     <!-- END Strings added by Valere -->
 
 
