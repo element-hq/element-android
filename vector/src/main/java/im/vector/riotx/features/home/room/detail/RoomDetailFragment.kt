@@ -39,6 +39,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.text.buildSpannedString
+import androidx.core.text.toSpannable
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
@@ -110,6 +111,7 @@ import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_PICK_ATTACHMENT
 import im.vector.riotx.core.utils.TextUtils
 import im.vector.riotx.core.utils.allGranted
 import im.vector.riotx.core.utils.checkPermissions
+import im.vector.riotx.core.utils.colorizeMatchingText
 import im.vector.riotx.core.utils.copyToClipboard
 import im.vector.riotx.core.utils.createUIHandler
 import im.vector.riotx.core.utils.getColorFromUserId
@@ -168,6 +170,7 @@ import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
 import timber.log.Timber
 import java.io.File
+import java.net.URL
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -948,16 +951,20 @@ class RoomDetailFragment @Inject constructor(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { managed ->
                     if (!managed) {
-                        if (title.isValidUrl() && title != url) {
+                        if (title.isValidUrl() && URL(title).host != URL(url).host) {
                             AlertDialog.Builder(requireActivity())
                                     .setTitle(R.string.external_link_confirmation_title)
-                                    .setMessage(getString(R.string.external_link_confirmation_message, title, url))
+                                    .setMessage(
+                                            getString(R.string.external_link_confirmation_message, title, url)
+                                                    .toSpannable()
+                                                    .colorizeMatchingText(url, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
+                                                    .colorizeMatchingText(title, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
+                                    )
                                     .setPositiveButton(R.string.external_link_confirmation_negative_button) { _, _ ->
                                         openUrlInExternalBrowser(requireContext(), url)
                                     }
                                     .setNegativeButton(R.string.external_link_confirmation_positive_button, null)
                                     .show()
-                                    .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                         } else {
                             // Open in external browser, in a new Tab
                             openUrlInExternalBrowser(requireContext(), url)
