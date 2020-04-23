@@ -41,6 +41,7 @@ import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
 import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
+import im.vector.matrix.android.internal.crypto.model.rest.KeysBackupData
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.model.toEntity
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
@@ -705,13 +706,18 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getKeysBackupData(): KeysBackupDataEntity? {
+    override fun getKeysBackupData(): KeysBackupData? {
         return doRealmQueryAndCopy(realmConfiguration) {
             it.where<KeysBackupDataEntity>().findFirst()
+        }?.let { entity ->
+            return KeysBackupData(
+                    backupLastServerHash = entity.backupLastServerHash,
+                    backupLastServerNumberOfKeys = entity.backupLastServerNumberOfKeys
+            )
         }
     }
 
-    override fun setKeysBackupData(keysBackupData: KeysBackupDataEntity?) {
+    override fun setKeysBackupData(keysBackupData: KeysBackupData?) {
         doRealmTransaction(realmConfiguration) {
             if (keysBackupData == null) {
                 // Clear the table
@@ -720,7 +726,10 @@ internal class RealmCryptoStore @Inject constructor(
                         .deleteAllFromRealm()
             } else {
                 // Only one object
-                it.copyToRealmOrUpdate(keysBackupData)
+                it.copyToRealmOrUpdate(it.createObject(KeysBackupDataEntity::class.java).apply {
+                    backupLastServerHash = keysBackupData.backupLastServerHash
+                    backupLastServerNumberOfKeys = keysBackupData.backupLastServerNumberOfKeys
+                })
             }
         }
     }

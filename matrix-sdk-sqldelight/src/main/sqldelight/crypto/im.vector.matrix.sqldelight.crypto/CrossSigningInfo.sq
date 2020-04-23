@@ -1,0 +1,82 @@
+import kotlin.collections.List;
+
+CREATE TABLE crossSigningInfoEntity (
+    user_id TEXT NOT NULL,
+    usages TEXT AS List<String> NOT NULL,
+    public_key_base64 TEXT,
+    signatures TEXT,
+    cross_signed_verified INTEGER AS Boolean DEFAULT 0 NOT NULL,
+    locally_verified INTEGER AS Boolean DEFAULT 0 NOT NULL,
+    PRIMARY KEY(user_id, usages)
+);
+
+insertOrUpdate:
+INSERT OR REPLACE INTO crossSigningInfoEntity VALUES ?;
+
+getAll:
+SELECT * FROM crossSigningInfoEntity;
+
+getByUserId:
+SELECT rowid AS _id,
+user_id,
+usages,
+public_key_base64,
+signatures,
+cross_signed_verified,
+locally_verified
+FROM crossSigningInfoEntity
+WHERE user_id = :userId;
+
+updateLocallyVerifiedWithRowId:
+UPDATE crossSigningInfoEntity
+SET locally_verified = :locallyVerified
+WHERE rowid = :rowId;
+
+updateLocallyVerified:
+UPDATE crossSigningInfoEntity
+SET locally_verified = :locallyVerified
+WHERE user_id = :userId;
+
+updateCrossSignedVerified:
+UPDATE crossSigningInfoEntity
+SET cross_signed_verified = :crossSignedVerified
+WHERE user_id = :userId;
+
+updateVerified:
+UPDATE crossSigningInfoEntity
+SET locally_verified = :locallyVerified,
+cross_signed_verified = :crossSignedVerified
+WHERE user_id = :userId;
+
+updateSignatures:
+UPDATE crossSigningInfoEntity
+SET signatures = :signatures
+WHERE user_id = :userId;
+
+updateSignaturesWithRowId:
+UPDATE crossSigningInfoEntity
+SET signatures = :signatures
+WHERE rowid = :rowId;
+
+updateUsages:
+UPDATE crossSigningInfoEntity
+SET usages = :usages
+WHERE user_id = :userId;
+
+updateUsagesWithRowId:
+UPDATE crossSigningInfoEntity
+SET usages = :usages
+WHERE rowid = :rowId;
+
+clearOtherUserTrust:
+UPDATE crossSigningInfoEntity
+SET locally_verified = 0,
+cross_signed_verified = 0
+WHERE user_id != :userId;
+
+deleteByUserId:
+DELETE FROM crossSigningInfoEntity
+WHERE user_id = :userId;
+
+deleteAll:
+DELETE FROM crossSigningInfoEntity;

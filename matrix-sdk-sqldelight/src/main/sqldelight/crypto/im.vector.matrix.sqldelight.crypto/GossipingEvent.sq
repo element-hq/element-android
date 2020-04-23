@@ -1,0 +1,31 @@
+import java.lang.Long;
+
+CREATE TABLE gossipingEventEntity (
+    type TEXT NOT NULL,
+    sender TEXT NOT NULL,
+    send_state TEXT,
+    content TEXT,
+    decryption_result_json TEXT,
+    decryption_error_code TEXT,
+    age_local_ts INTEGER AS Long DEFAULT 0 NOT NULL
+);
+
+CREATE INDEX gossiping_event_type ON gossipingEventEntity(type);
+CREATE INDEX gossiping_event_sender ON gossipingEventEntity(sender);
+
+insertOrUpdate:
+INSERT OR REPLACE INTO gossipingEventEntity VALUES ?;
+
+getAll:
+SELECT * FROM gossipingEventEntity;
+
+getByType:
+SELECT * FROM gossipingEventEntity
+WHERE type = :type;
+
+getBySender:
+SELECT * FROM gossipingEventEntity
+WHERE sender = :sender;
+
+deleteAll:
+DELETE FROM gossipingEventEntity;

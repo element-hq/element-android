@@ -18,14 +18,18 @@ package im.vector.matrix.android.internal.crypto.verification.qrcode
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import im.vector.matrix.android.InstrumentedTest
+import im.vector.matrix.android.api.session.crypto.verification.PendingVerificationRequest
 import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
 import im.vector.matrix.android.api.session.crypto.verification.VerificationService
+import im.vector.matrix.android.api.session.room.timeline.Timeline
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.common.CommonTestHelper
 import im.vector.matrix.android.common.CryptoTestHelper
 import im.vector.matrix.android.common.TestConstants
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
-import im.vector.matrix.android.api.session.crypto.verification.PendingVerificationRequest
 import org.amshove.kluent.shouldBe
+import org.junit.Assert.assertEquals
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -228,5 +232,47 @@ class VerificationTest : InstrumentedTest {
         }
 
         cryptoTestData.cleanUp(mTestHelper)
+    }
+
+    @Test
+    fun test_alice_sends_text_message_and_bob_can_decrypt() {
+        val lock = CountDownLatch(1)
+
+        val cryptoTestData = mCryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
+
+        val aliceSession = cryptoTestData.firstSession
+        val bobSession = cryptoTestData.secondSession!!
+
+        val roomFromBobPOV = bobSession.getRoom(cryptoTestData.roomId)!!
+
+        aliceSession.getRoom(cryptoTestData.roomId)!!.sendTextMessage("test")
+
+        val bobEventsListener = object : Timeline.Listener {
+            override fun onTimelineFailure(throwable: Throwable) {
+                // noop
+            }
+
+            override fun onNewTimelineEvents(eventIds: List<String>) {
+                // noop
+            }
+
+            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
+                if (snapshot.isNotEmpty() && snapshot.first().root.isEncrypted()) {
+                    lock.countDown()
+                }
+            }
+        }
+
+        val bobTimeline = roomFromBobPOV.createTimeline(null, TimelineSettings(20))
+        bobTimeline.start()
+        bobTimeline.addListener(bobEventsListener)
+
+        mTestHelper.await(lock)
+
+        bobTimeline.getTimelineEventAtIndex(0)?.root?.let {
+            val decryptionResult = bobSession.cryptoService().decryptEvent(it, "")
+            val text = (decryptionResult.clearEvent["content"] as Map<*, *>)["body"]
+            assertEquals("test", text)
+        }
     }
 }

@@ -1,0 +1,49 @@
+import java.lang.Long;
+
+CREATE TABLE incomingGossipingRequestEntity (
+    request_id TEXT NOT NULL,
+    type TEXT NOT NULL,
+    other_user_id TEXT,
+    requested_info_str TEXT,
+    request_state TEXT,
+    other_device_id TEXT,
+    local_creation_timestamp INTEGER AS Long DEFAULT 0 NOT NULL
+);
+
+CREATE INDEX incoming_gossiping_request_request_id ON incomingGossipingRequestEntity(request_id);
+CREATE INDEX incoming_gossiping_request_type ON incomingGossipingRequestEntity(type);
+
+insertOrUpdate:
+INSERT OR REPLACE INTO incomingGossipingRequestEntity VALUES ?;
+
+getAll:
+SELECT * FROM incomingGossipingRequestEntity;
+
+getByType:
+SELECT * FROM incomingGossipingRequestEntity
+WHERE type = :type;
+
+getByRequestState:
+SELECT * FROM incomingGossipingRequestEntity
+WHERE request_state = :requestState;
+
+getByTypeAndRequestState:
+SELECT * FROM incomingGossipingRequestEntity
+WHERE type = :type
+AND request_state = :requestState;
+
+getIncomingRoomKeyRequest:
+SELECT * FROM incomingGossipingRequestEntity
+WHERE type = :type
+AND other_user_id = :otherUserId
+AND other_device_id = :otherDeviceId;
+
+updateRequestState:
+UPDATE incomingGossipingRequestEntity
+SET request_state = :requestState
+WHERE other_user_id = :otherUserId
+AND other_device_id = :otherDeviceId
+AND request_id = :requestId;
+
+deleteAll:
+DELETE FROM incomingGossipingRequestEntity;

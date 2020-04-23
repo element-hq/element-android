@@ -1,0 +1,66 @@
+import java.lang.Boolean;
+
+CREATE TABLE cryptoMetadataEntity (
+    user_id TEXT PRIMARY KEY NOT NULL,
+    device_id TEXT,
+    olm_account_data TEXT,
+    device_sync_token TEXT,
+    global_blacklist_unverified_devices INTEGER AS Boolean DEFAULT 0 NOT NULL,
+    backup_version TEXT,
+    x_sign_master_private_key TEXT,
+    x_sign_user_private_key TEXT,
+    x_sign_self_signed_private_key TEXT,
+    key_backup_recovery_key TEXT,
+    key_backup_recovery_key_version TEXT
+);
+
+insertOrUpdate:
+INSERT OR REPLACE INTO cryptoMetadataEntity VALUES ?;
+
+getAll:
+SELECT * FROM cryptoMetadataEntity;
+
+getByUserId:
+SELECT * FROM cryptoMetadataEntity
+WHERE user_id = :userId;
+
+count:
+SELECT COUNT(*) FROM cryptoMetadataEntity;
+
+updateOlmAccountData:
+UPDATE cryptoMetadataEntity
+SET olm_account_data = :olmAccountData;
+
+updateGlobalBlacklistUnverifiedDevices:
+UPDATE cryptoMetadataEntity
+SET global_blacklist_unverified_devices = :globalBlacklistUnverifiedDevices;
+
+updateKeyBackupVersion:
+UPDATE cryptoMetadataEntity
+SET backup_version = :backupVersion;
+
+updateDeviceId:
+UPDATE cryptoMetadataEntity
+SET device_id = :deviceId;
+
+updateKeys:
+UPDATE cryptoMetadataEntity
+SET x_sign_master_private_key = :xSignMasterPrivateKey,
+x_sign_user_private_key = :xSignUserPrivateKey,
+x_sign_self_signed_private_key = :xSignSelfSignedPrivateKey;
+
+updateSelfSignedPrivateKey:
+UPDATE cryptoMetadataEntity
+SET x_sign_self_signed_private_key = :xSignSelfSignedPrivateKey;
+
+updateUserPrivateKey:
+UPDATE cryptoMetadataEntity
+SET x_sign_user_private_key = :xSignUserPrivateKey;
+
+updateKeyBackupRecoveryKey:
+UPDATE cryptoMetadataEntity
+SET key_backup_recovery_key = :keyBackupRecoveryKey,
+key_backup_recovery_key_version = :keyBackupRecoveryKeyVersion;
+
+deleteAll:
+DELETE FROM cryptoMetadataEntity;

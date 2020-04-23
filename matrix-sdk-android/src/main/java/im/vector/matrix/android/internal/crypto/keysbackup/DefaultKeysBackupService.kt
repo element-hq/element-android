@@ -69,7 +69,6 @@ import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.store.SavedKeyBackupKeyInfo
-import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.extensions.foldToCallback
@@ -1154,11 +1153,11 @@ internal class DefaultKeysBackupService @Inject constructor(
      * Update the DB with data fetch from the server
      */
     private fun onServerDataRetrieved(count: Int?, hash: String?) {
-        cryptoStore.setKeysBackupData(KeysBackupDataEntity()
-                .apply {
-                    backupLastServerNumberOfKeys = count
-                    backupLastServerHash = hash
-                }
+        cryptoStore.setKeysBackupData(
+                im.vector.matrix.android.internal.crypto.model.rest.KeysBackupData(
+                        backupLastServerNumberOfKeys = count,
+                        backupLastServerHash = hash
+                )
         )
     }
 

@@ -1,0 +1,56 @@
+import java.lang.Boolean;
+
+CREATE TABLE deviceInfoEntity (
+    user_id TEXT NOT NULL,
+    device_id TEXT NOT NULL,
+    identity_key TEXT,
+    is_blocked INTEGER AS Boolean DEFAULT 0 NOT NULL,
+    algorithm_list_json TEXT,
+    keys_map_json TEXT,
+    signature_map_json TEXT,
+    unsigned_map_json TEXT,
+    cross_signed_verified INTEGER AS Boolean DEFAULT 0 NOT NULL,
+    locally_verified INTEGER AS Boolean DEFAULT 0 NOT NULL,
+    PRIMARY KEY(user_id, device_id)
+);
+
+insertOrUpdate:
+INSERT OR REPLACE INTO deviceInfoEntity VALUES ?;
+
+getAll:
+SELECT * FROM deviceInfoEntity;
+
+getByUserIdAndDeviceId:
+SELECT * FROM deviceInfoEntity
+WHERE user_id = :userId
+AND device_id = :deviceId;
+
+getByUserId:
+SELECT * FROM deviceInfoEntity
+WHERE user_id = :userId;
+
+getByIdentityKey:
+SELECT * FROM deviceInfoEntity
+WHERE identity_key = :identityKey;
+
+updateLocallyVerified:
+UPDATE deviceInfoEntity
+SET locally_verified = :locallyVerified
+WHERE user_id = :userId
+AND device_id = :deviceId;
+
+updateCrossSignedVerified:
+UPDATE deviceInfoEntity
+SET cross_signed_verified = :crossSignedVerified
+WHERE user_id = :userId
+AND device_id = :deviceId;
+
+updateVerified:
+UPDATE deviceInfoEntity
+SET locally_verified = :locallyVerified,
+cross_signed_verified = :crossSignedVerified
+WHERE user_id = :userId
+AND device_id = :deviceId;
+
+deleteAll:
+DELETE FROM deviceInfoEntity;

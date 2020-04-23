@@ -1,0 +1,23 @@
+import java.lang.Integer;
+
+CREATE TABLE cryptoUserEntity (
+    user_id TEXT NOT NULL PRIMARY KEY,
+    device_tracking_status INTEGER AS Integer DEFAULT 0 NOT NULL
+);
+
+insertOrUpdate:
+INSERT OR REPLACE INTO cryptoUserEntity VALUES ?;
+
+getAll:
+SELECT * FROM cryptoUserEntity;
+
+getByUserId:
+SELECT * FROM cryptoUserEntity
+WHERE user_id = :userId;
+
+deleteByUserId:
+DELETE FROM cryptoUserEntity
+WHERE user_id = :userId;
+
+deleteAll:
+DELETE FROM cryptoUserEntity;

@@ -32,8 +32,8 @@ import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
 import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
+import im.vector.matrix.android.internal.crypto.model.rest.KeysBackupData
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
-import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
 import org.matrix.olm.OlmAccount
 
 /**
@@ -104,14 +104,14 @@ internal interface IMXCryptoStore {
     /**
      * Get the current keys backup local data
      */
-    fun getKeysBackupData(): KeysBackupDataEntity?
+    fun getKeysBackupData(): KeysBackupData?
 
     /**
      * Set the keys backup local data
      *
      * @param keysBackupData the keys backup local data, or null to erase data
      */
-    fun setKeysBackupData(keysBackupData: KeysBackupDataEntity?)
+    fun setKeysBackupData(keysBackupData: KeysBackupData?)
 
     /**
      * @return the devices statuses map (userId -> tracking status)

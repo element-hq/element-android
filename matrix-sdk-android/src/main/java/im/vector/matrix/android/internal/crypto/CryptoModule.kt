@@ -16,9 +16,15 @@
 
 package im.vector.matrix.android.internal.crypto
 
+import android.content.Context
+import android.util.Log
+import com.squareup.sqldelight.ColumnAdapter
+import com.squareup.sqldelight.android.AndroidSqliteDriver
+import com.squareup.sqldelight.logs.LogSqliteDriver
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
@@ -55,9 +61,9 @@ import im.vector.matrix.android.internal.crypto.keysbackup.tasks.StoreRoomSessio
 import im.vector.matrix.android.internal.crypto.keysbackup.tasks.StoreSessionsDataTask
 import im.vector.matrix.android.internal.crypto.keysbackup.tasks.UpdateKeysBackupVersionTask
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
-import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreMigration
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreModule
+import im.vector.matrix.android.internal.crypto.store.db.SqlCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
 import im.vector.matrix.android.internal.crypto.tasks.DefaultClaimOneTimeKeysForUsersDevice
 import im.vector.matrix.android.internal.crypto.tasks.DefaultDeleteDeviceTask
@@ -87,12 +93,13 @@ import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadSignaturesTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadSigningKeysTask
 import im.vector.matrix.android.internal.database.RealmKeysUtils
-import im.vector.matrix.android.internal.di.CryptoDatabase
 import im.vector.matrix.android.internal.di.SessionFilesDirectory
 import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.cache.ClearCacheTask
 import im.vector.matrix.android.internal.session.cache.RealmClearCacheTask
+import im.vector.matrix.sqldelight.crypto.CrossSigningInfoEntity
+import im.vector.matrix.sqldelight.crypto.CryptoDatabase
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -108,7 +115,7 @@ internal abstract class CryptoModule {
 
         @JvmStatic
         @Provides
-        @CryptoDatabase
+        @im.vector.matrix.android.internal.di.CryptoDatabase
         @SessionScope
         fun providesRealmConfiguration(@SessionFilesDirectory directory: File,
                                        @UserMd5 userMd5: String,
@@ -128,14 +135,39 @@ internal abstract class CryptoModule {
         @JvmStatic
         @Provides
         @SessionScope
+        fun providesCryptoDatabase(context: Context, @SessionFilesDirectory directory: File): CryptoDatabase {
+            val name = "${directory.name}-matrix-sdk-crypto.db"
+            val driver = if (BuildConfig.DEBUG) {
+                LogSqliteDriver(AndroidSqliteDriver(CryptoDatabase.Schema, context, name)) { log ->
+                    Log.d("SQLite", log)
+                }
+            } else {
+                AndroidSqliteDriver(CryptoDatabase.Schema, context, name)
+            }
+
+            val listOfStringAdapter = object : ColumnAdapter<List<String>, String> {
+                override fun decode(databaseValue: String) = databaseValue.split(",")
+                override fun encode(value: List<String>) = value.joinToString(separator = ",")
+            }
+            return CryptoDatabase(
+                    driver = driver,
+                    crossSigningInfoEntityAdapter = CrossSigningInfoEntity.Adapter(
+                            usagesAdapter = listOfStringAdapter
+                    )
+            )
+        }
+
+        @JvmStatic
+        @Provides
+        @SessionScope
         fun providesCryptoCoroutineScope(): CoroutineScope {
             return CoroutineScope(SupervisorJob())
         }
 
         @JvmStatic
         @Provides
-        @CryptoDatabase
-        fun providesClearCacheTask(@CryptoDatabase
+        @im.vector.matrix.android.internal.di.CryptoDatabase
+        fun providesClearCacheTask(@im.vector.matrix.android.internal.di.CryptoDatabase
                                    realmConfiguration: RealmConfiguration): ClearCacheTask {
             return RealmClearCacheTask(realmConfiguration)
         }
@@ -243,7 +275,7 @@ internal abstract class CryptoModule {
     abstract fun bindCrossSigningService(service: DefaultCrossSigningService): CrossSigningService
 
     @Binds
-    abstract fun bindCryptoStore(store: RealmCryptoStore): IMXCryptoStore
+    abstract fun bindCryptoStore(store: SqlCryptoStore): IMXCryptoStore
 
     @Binds
     abstract fun bindComputeShieldTrustTask(task: DefaultComputeTrustTask): ComputeTrustTask
