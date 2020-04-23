@@ -2166,7 +2166,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     </plurals>
     <string name="poll_item_selected_aria">Selected Option</string>
     <string name="command_description_poll">Creates a simple poll</string>
-    <string name="verification_cannot_access_other_session">Use a recovery method</string>
+    <string name="verification_cannot_access_other_session">Use a Recovery Passphrase or Key</string>
     <string name="verification_use_passphrase">If you can’t access an existing session</string>
 
     <string name="new_signin">New Sign In</string>
