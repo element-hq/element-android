@@ -965,6 +965,7 @@ class RoomDetailFragment @Inject constructor(
                                     }
                                     .setNegativeButton(R.string.external_link_confirmation_positive_button, null)
                                     .show()
+                                    .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
                         } else {
                             // Open in external browser, in a new Tab
                             openUrlInExternalBrowser(requireContext(), url)

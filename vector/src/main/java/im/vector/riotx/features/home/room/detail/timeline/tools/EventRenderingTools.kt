@@ -62,16 +62,17 @@ fun createLinkMovementMethod(urlClickCallback: TimelineEventController.UrlClickC
         override fun onLinkClicked(textView: TextView, span: ClickableSpan, url: String, actualText: String): Boolean {
             return url.isValidUrl() && urlClickCallback?.onUrlClicked(url, actualText) == true
         }
-    }).apply {
-        // We need also to fix the case when long click on link will trigger long click on cell
-        setOnLinkLongClickListener { tv, url ->
-            // Long clicks are handled by parent, return true to block android to do something with url
-            if (url.isValidUrl() && urlClickCallback?.onUrlLongClicked(url) == true) {
-                tv.dispatchTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0f, 0f, 0))
-                true
-            } else {
-                false
+    })
+            .apply {
+                // We need also to fix the case when long click on link will trigger long click on cell
+                setOnLinkLongClickListener { tv, url ->
+                    // Long clicks are handled by parent, return true to block android to do something with url
+                    if (url.isValidUrl() && urlClickCallback?.onUrlLongClicked(url) == true) {
+                        tv.dispatchTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0f, 0f, 0))
+                        true
+                    } else {
+                        false
+                    }
+                }
             }
-        }
-    }
 }
