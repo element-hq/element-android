@@ -17,17 +17,15 @@
 package im.vector.matrix.android.internal.session.sync
 
 import im.vector.matrix.android.R
-import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.internal.database.model.GroupEntity
-import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.mapWithProgress
 import im.vector.matrix.android.internal.session.sync.model.GroupsSyncResponse
 import im.vector.matrix.android.internal.session.sync.model.InvitedGroupSync
-import io.realm.Realm
+import im.vector.matrix.sqldelight.session.Memberships
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import javax.inject.Inject
 
-internal class GroupSyncHandler @Inject constructor() {
+internal class GroupSyncHandler @Inject constructor(private val sessionDatabase: SessionDatabase) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, Any>) : HandlingStrategy()
@@ -36,57 +34,33 @@ internal class GroupSyncHandler @Inject constructor() {
     }
 
     fun handle(
-            realm: Realm,
             roomsSyncResponse: GroupsSyncResponse,
             reporter: DefaultInitialSyncProgressService? = null
     ) {
-        handleGroupSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), reporter)
-        handleGroupSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), reporter)
-        handleGroupSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), reporter)
+        handleGroupSync(HandlingStrategy.JOINED(roomsSyncResponse.join), reporter)
+        handleGroupSync(HandlingStrategy.INVITED(roomsSyncResponse.invite), reporter)
+        handleGroupSync(HandlingStrategy.LEFT(roomsSyncResponse.leave), reporter)
     }
 
     // PRIVATE METHODS *****************************************************************************
 
-    private fun handleGroupSync(realm: Realm, handlingStrategy: HandlingStrategy, reporter: DefaultInitialSyncProgressService?) {
-        val groups = when (handlingStrategy) {
-            is HandlingStrategy.JOINED  ->
+    private fun handleGroupSync(handlingStrategy: HandlingStrategy, reporter: DefaultInitialSyncProgressService?) {
+        when (handlingStrategy) {
+            is HandlingStrategy.JOINED ->
                 handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_groups, 0.6f) {
-                    handleJoinedGroup(realm, it.key)
+                    sessionDatabase.groupQueries.insertOrReplaceGroup(it.key, Memberships.JOIN)
                 }
 
             is HandlingStrategy.INVITED ->
                 handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_groups, 0.3f) {
-                    handleInvitedGroup(realm, it.key)
+                    sessionDatabase.groupQueries.insertOrReplaceGroup(it.key, Memberships.INVITE)
                 }
 
-            is HandlingStrategy.LEFT    ->
+            is HandlingStrategy.LEFT ->
                 handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_groups, 0.1f) {
-                    handleLeftGroup(realm, it.key)
+                    sessionDatabase.groupQueries.insertOrReplaceGroup(it.key, Memberships.LEAVE)
                 }
         }
-
-        /** Note: [im.vector.matrix.android.internal.session.group.GroupSummaryUpdater] is observing changes */
-        realm.insertOrUpdate(groups)
     }
 
-    private fun handleJoinedGroup(realm: Realm,
-                                  groupId: String): GroupEntity {
-        val groupEntity = GroupEntity.where(realm, groupId).findFirst() ?: GroupEntity(groupId)
-        groupEntity.membership = Membership.JOIN
-        return groupEntity
-    }
-
-    private fun handleInvitedGroup(realm: Realm,
-                                   groupId: String): GroupEntity {
-        val groupEntity = GroupEntity.where(realm, groupId).findFirst() ?: GroupEntity(groupId)
-        groupEntity.membership = Membership.INVITE
-        return groupEntity
-    }
-
-    private fun handleLeftGroup(realm: Realm,
-                                groupId: String): GroupEntity {
-        val groupEntity = GroupEntity.where(realm, groupId).findFirst() ?: GroupEntity(groupId)
-        groupEntity.membership = Membership.LEAVE
-        return groupEntity
-    }
 }

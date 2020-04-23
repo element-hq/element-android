@@ -17,20 +17,20 @@
 package im.vector.matrix.android.internal.session.room.membership
 
 import im.vector.matrix.android.api.session.room.model.RoomMemberContent
-import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntity
+import im.vector.matrix.android.internal.database.mapper.map
+import im.vector.matrix.sqldelight.session.RoomMemberSummaryEntity
 
 internal object RoomMemberEntityFactory {
 
     fun create(roomId: String, userId: String, roomMember: RoomMemberContent): RoomMemberSummaryEntity {
-        val primaryKey = "${roomId}_$userId"
-        return RoomMemberSummaryEntity(
-                primaryKey = primaryKey,
-                userId = userId,
-                roomId = roomId,
-                displayName = roomMember.displayName,
-                avatarUrl = roomMember.avatarUrl
-        ).apply {
-            membership = roomMember.membership
-        }
+        return RoomMemberSummaryEntity.Impl(
+                user_id = userId,
+                room_id = roomId,
+                display_name = roomMember.displayName,
+                avatar_url = roomMember.avatarUrl,
+                membership = roomMember.membership.map(),
+                is_direct = false,
+                reason = null
+        )
     }
 }

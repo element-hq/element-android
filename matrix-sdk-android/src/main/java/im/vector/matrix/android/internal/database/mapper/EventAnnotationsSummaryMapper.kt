@@ -16,94 +16,77 @@
 
 package im.vector.matrix.android.internal.database.mapper
 
-import im.vector.matrix.android.api.session.room.model.EditAggregatedSummary
-import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
-import im.vector.matrix.android.api.session.room.model.ReactionAggregatedSummary
-import im.vector.matrix.android.api.session.room.model.ReferencesAggregatedSummary
-import im.vector.matrix.android.internal.database.model.EditAggregatedSummaryEntity
-import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
-import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntity
-import im.vector.matrix.android.internal.database.model.ReferencesAggregatedSummaryEntity
-import io.realm.RealmList
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.*
 
 internal object EventAnnotationsSummaryMapper {
-    fun map(annotationsSummary: EventAnnotationsSummaryEntity): EventAnnotationsSummary {
-        return EventAnnotationsSummary(
-                eventId = annotationsSummary.eventId,
-                reactionsSummary = annotationsSummary.reactionsSummary.toList().map {
-                    ReactionAggregatedSummary(
-                            it.key,
-                            it.count,
-                            it.addedByMe,
-                            it.firstTimestamp,
-                            it.sourceEvents.toList(),
-                            it.sourceLocalEcho.toList()
-                    )
-                },
-                editSummary = annotationsSummary.editSummary?.let {
-                    EditAggregatedSummary(
-                            ContentMapper.map(it.aggregatedContent),
-                            it.sourceEvents.toList(),
-                            it.sourceLocalEchoEvents.toList(),
-                            it.lastEditTs
-                    )
-                },
-                referencesAggregatedSummary = annotationsSummary.referencesSummaryEntity?.let {
-                    ReferencesAggregatedSummary(
-                            it.eventId,
-                            ContentMapper.map(it.content),
-                            it.sourceEvents.toList(),
-                            it.sourceLocalEcho.toList()
-                    )
-                },
-                pollResponseSummary = annotationsSummary.pollResponseSummary?.let {
-                    PollResponseAggregatedSummaryEntityMapper.map(it)
-                }
 
+    fun mapAnnotationsSummary(eventId: String,
+                              reactions: List<ReactionAggregatedSummary>,
+                              edit: EditAggregatedSummary?,
+                              references: ReferencesAggregatedSummary?,
+                              poll: PollResponseAggregatedSummary?): EventAnnotationsSummary {
+        return EventAnnotationsSummary(
+                eventId = eventId,
+                reactionsSummary = reactions,
+                referencesAggregatedSummary = references,
+                editSummary = edit,
+                pollResponseSummary = poll
         )
     }
 
-    fun map(annotationsSummary: EventAnnotationsSummary, roomId: String): EventAnnotationsSummaryEntity {
-        val eventAnnotationsSummaryEntity = EventAnnotationsSummaryEntity()
-        eventAnnotationsSummaryEntity.eventId = annotationsSummary.eventId
-        eventAnnotationsSummaryEntity.roomId = roomId
-        eventAnnotationsSummaryEntity.editSummary = annotationsSummary.editSummary?.let {
-            EditAggregatedSummaryEntity(
-                    ContentMapper.map(it.aggregatedContent),
-                    RealmList<String>().apply { addAll(it.sourceEvents) },
-                    RealmList<String>().apply { addAll(it.localEchos) },
-                    it.lastEditTs
-            )
-        }
-        eventAnnotationsSummaryEntity.reactionsSummary = annotationsSummary.reactionsSummary.let {
-            RealmList<ReactionAggregatedSummaryEntity>().apply {
-                addAll(it.map {
-                    ReactionAggregatedSummaryEntity(
-                            it.key,
-                            it.count,
-                            it.addedByMe,
-                            it.firstTimestamp,
-                            RealmList<String>().apply { addAll(it.sourceEvents) },
-                            RealmList<String>().apply { addAll(it.localEchoEvents) }
-                    )
-                })
-            }
-        }
-        eventAnnotationsSummaryEntity.referencesSummaryEntity = annotationsSummary.referencesAggregatedSummary?.let {
-            ReferencesAggregatedSummaryEntity(
-                    it.eventId,
-                    ContentMapper.map(it.content),
-                    RealmList<String>().apply { addAll(it.sourceEvents) },
-                    RealmList<String>().apply { addAll(it.localEchos) }
-            )
-        }
-        eventAnnotationsSummaryEntity.pollResponseSummary = annotationsSummary.pollResponseSummary?.let {
-            PollResponseAggregatedSummaryEntityMapper.map(it)
-        }
-        return eventAnnotationsSummaryEntity
+    fun mapReactionSummary(key: String,
+                           count: Long,
+                           added_by_me: Boolean,
+                           first_timestamp: Long,
+                           source_event_ids: List<String>,
+                           source_local_echo_ids: List<String>): ReactionAggregatedSummary {
+        return ReactionAggregatedSummary(
+                key = key,
+                count = count.toInt(),
+                addedByMe = added_by_me,
+                firstTimestamp = first_timestamp,
+                sourceEvents = source_event_ids,
+                localEchoEvents = source_local_echo_ids
+        )
     }
-}
 
-internal fun EventAnnotationsSummaryEntity.asDomain(): EventAnnotationsSummary {
-    return EventAnnotationsSummaryMapper.map(this)
+
+    fun mapEditSummary(aggregated_content: String?,
+                       last_edit_ts: Long,
+                       source_event_ids: List<String>,
+                       source_local_echo_ids: List<String>): EditAggregatedSummary {
+        return EditAggregatedSummary(
+                ContentMapper.map(aggregated_content),
+                source_event_ids,
+                source_local_echo_ids,
+                last_edit_ts
+        )
+    }
+
+    fun mapReferencesSummary(event_id: String,
+                             content: String?,
+                             source_event_ids: List<String>,
+                             source_local_echo_ids: List<String>): ReferencesAggregatedSummary {
+        return ReferencesAggregatedSummary(
+                event_id,
+                ContentMapper.map(content),
+                source_event_ids,
+                source_local_echo_ids
+        )
+    }
+
+    fun mapPollSummary(content: String?,
+                       closed_time: Long?,
+                       nb_options: Int,
+                       source_event_ids: List<String>,
+                       source_local_echo_ids: List<String>): PollResponseAggregatedSummary {
+        return PollResponseAggregatedSummary(
+                aggregatedContent = ContentMapper.map(content).toModel(),
+                closedTime = closed_time,
+                localEchos = source_local_echo_ids,
+                sourceEvents = source_event_ids,
+                nbOptions = nb_options
+        )
+    }
 }

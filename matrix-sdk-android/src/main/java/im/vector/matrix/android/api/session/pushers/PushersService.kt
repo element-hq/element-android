@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.session.pushers
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
+import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
 interface PushersService {
@@ -72,9 +73,9 @@ interface PushersService {
     fun removeHttpPusher(pushkey: String, appId: String, callback: MatrixCallback<Unit>): Cancelable
 
     /**
-     * Get the current pushers, as a LiveData
+     * Get the current pushers, as a Flow
      */
-    fun getPushersLive(): LiveData<List<Pusher>>
+    fun getPushersLive(): Flow<List<Pusher>>
 
     /**
      * Get the current pushers

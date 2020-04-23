@@ -30,6 +30,7 @@ import im.vector.matrix.android.api.session.room.state.StateService
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.api.session.room.typing.TypingService
 import im.vector.matrix.android.api.util.Optional
+import kotlinx.coroutines.flow.Flow
 
 /**
  * This interface defines methods to interact within a room.
@@ -56,7 +57,7 @@ interface Room :
      * A live [RoomSummary] associated with the room
      * You can observe this summary to get dynamic data from this room.
      */
-    fun getRoomSummaryLive(): LiveData<Optional<RoomSummary>>
+    fun getRoomSummaryLive(): Flow<Optional<RoomSummary>>
 
     /**
      * A current snapshot of [RoomSummary] associated with the room

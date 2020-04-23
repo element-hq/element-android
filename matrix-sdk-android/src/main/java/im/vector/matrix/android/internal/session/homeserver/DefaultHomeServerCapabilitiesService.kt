@@ -16,23 +16,13 @@
 
 package im.vector.matrix.android.internal.session.homeserver
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
-import im.vector.matrix.android.internal.database.mapper.HomeServerCapabilitiesMapper
-import im.vector.matrix.android.internal.database.model.HomeServerCapabilitiesEntity
-import im.vector.matrix.android.internal.database.query.get
-import io.realm.Realm
 import javax.inject.Inject
 
-internal class DefaultHomeServerCapabilitiesService @Inject constructor(private val monarchy: Monarchy) : HomeServerCapabilitiesService {
+internal class DefaultHomeServerCapabilitiesService @Inject constructor(private val homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource) : HomeServerCapabilitiesService {
 
     override fun getHomeServerCapabilities(): HomeServerCapabilities {
-        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            HomeServerCapabilitiesEntity.get(realm)?.let {
-                HomeServerCapabilitiesMapper.map(it)
-            }
-        }
-                ?: HomeServerCapabilities()
+        return homeServerCapabilitiesDataSource.getHomeServerCapabilities()
     }
 }

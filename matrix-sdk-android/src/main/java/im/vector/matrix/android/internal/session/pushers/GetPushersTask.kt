@@ -15,13 +15,13 @@
  */
 package im.vector.matrix.android.internal.session.pushers
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.pushers.PusherState
-import im.vector.matrix.android.internal.database.mapper.toEntity
-import im.vector.matrix.android.internal.database.model.PusherEntity
+import im.vector.matrix.android.internal.database.awaitTransaction
+import im.vector.matrix.android.internal.database.mapper.PushersMapper
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.awaitTransaction
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
@@ -29,7 +29,9 @@ internal interface GetPushersTask : Task<Unit, Unit>
 
 internal class DefaultGetPushersTask @Inject constructor(
         private val pushersAPI: PushersAPI,
-        private val monarchy: Monarchy,
+        private val sessionDatabase: SessionDatabase,
+        private val pushersMapper: PushersMapper,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val eventBus: EventBus
 ) : GetPushersTask {
 
@@ -37,15 +39,12 @@ internal class DefaultGetPushersTask @Inject constructor(
         val response = executeRequest<GetPushersResponse>(eventBus) {
             apiCall = pushersAPI.getPushers()
         }
-        monarchy.awaitTransaction { realm ->
+        sessionDatabase.awaitTransaction(coroutineDispatchers) {
             // clear existings?
-            realm.where(PusherEntity::class.java)
-                    .findAll().deleteAllFromRealm()
+            sessionDatabase.pushersQueries.deleteAll()
             response.pushers?.forEach { jsonPusher ->
-                jsonPusher.toEntity().also {
-                    it.state = PusherState.REGISTERED
-                    realm.insertOrUpdate(it)
-                }
+                val pusherEntity = pushersMapper.map(jsonPusher, PusherState.REGISTERED)
+                sessionDatabase.pushersQueries.insertOrReplace(pusherEntity)
             }
         }
     }

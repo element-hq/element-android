@@ -15,6 +15,8 @@
  */
 package im.vector.matrix.android.internal.database
 
+import com.squareup.sqldelight.Transacter
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +24,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-suspend fun <T> awaitTransaction(config: RealmConfiguration, transaction: suspend (realm: Realm) -> T) = withContext(Dispatchers.Default) {
+suspend fun <T> awaitTransaction(config: RealmConfiguration, transaction: suspend (realm: Realm) -> T) = withContext(Dispatchers.IO) {
     Realm.getInstance(config).use { bgRealm ->
         bgRealm.beginTransaction()
         val result: T
@@ -41,5 +43,24 @@ suspend fun <T> awaitTransaction(config: RealmConfiguration, transaction: suspen
             }
         }
         result
+    }
+}
+
+internal suspend fun <T : Transacter> T.awaitTransaction(dispatchers: MatrixCoroutineDispatchers, noEnclosing: Boolean = false, transaction: (db: T) -> Unit) = withContext(dispatchers.dbTransaction) {
+    transaction(noEnclosing = noEnclosing) {
+        try {
+            val start = System.currentTimeMillis()
+            transaction(this@awaitTransaction)
+            if (isActive) {
+                val end = System.currentTimeMillis()
+                val time = end - start
+                Timber.v("Execute transaction in $time millis")
+            } else {
+                rollback()
+            }
+        } catch (exception: Exception) {
+            Timber.e(exception)
+            rollback()
+        }
     }
 }

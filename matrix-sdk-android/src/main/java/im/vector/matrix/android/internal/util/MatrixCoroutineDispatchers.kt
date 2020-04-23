@@ -19,6 +19,8 @@ package im.vector.matrix.android.internal.util
 import kotlinx.coroutines.CoroutineDispatcher
 
 internal data class MatrixCoroutineDispatchers(
+        val dbTransaction: CoroutineDispatcher,
+        val dbQuery: CoroutineDispatcher,
         val io: CoroutineDispatcher,
         val computation: CoroutineDispatcher,
         val main: CoroutineDispatcher,

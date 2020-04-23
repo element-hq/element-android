@@ -20,6 +20,8 @@ import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.util.Optional
+import kotlinx.coroutines.flow.Flow
 
 /**
  * This interface defines methods to handling membership. It's implemented at the room level.
@@ -41,6 +43,14 @@ interface MembershipService {
     fun getRoomMember(userId: String): RoomMemberSummary?
 
     /**
+     * Return a live version of an optionnal roomMember with the given userId.
+     * @param userId the userId param to look for
+     *
+     * @return a [Flow] of [Optional] [RoomMemberSummary] with userId
+     */
+    fun getRoomMemberLive(userId: String): Flow<Optional<RoomMemberSummary>>
+
+    /**
      * Return all the roomMembers of the room with params
      * @param queryParams the params to query for
      * @return a roomMember list.
@@ -50,9 +60,10 @@ interface MembershipService {
     /**
      * Return all the roomMembers of the room filtered by memberships
      * @param queryParams the params to query for
-     * @return a [LiveData] of roomMember list.
+     * @return a [Flow] of roomMember list.
      */
-    fun getRoomMembersLive(queryParams: RoomMemberQueryParams): LiveData<List<RoomMemberSummary>>
+    fun getRoomMembersLive(queryParams: RoomMemberQueryParams): Flow<List<RoomMemberSummary>>
+
 
     fun getNumberOfJoinedMembers(): Int
 

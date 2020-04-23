@@ -18,10 +18,12 @@ package im.vector.matrix.android.api.session.room
 
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.room.model.Breadcrumb
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.Optional
+import kotlinx.coroutines.flow.Flow
 
 /**
  * This interface defines methods to get rooms. It's implemented at the session level.
@@ -67,21 +69,21 @@ interface RoomService {
 
     /**
      * Get a live list of room summaries. This list is refreshed as soon as the data changes.
-     * @return the [LiveData] of List[RoomSummary]
+     * @return the [Flow] of List[RoomSummary]
      */
-    fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams): LiveData<List<RoomSummary>>
+    fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams): Flow<List<RoomSummary>>
 
     /**
      * Get a snapshot list of Breadcrumbs
-     * @return the immutable list of [RoomSummary]
+     * @return the immutable list of [Breadcrumb]
      */
-    fun getBreadcrumbs(): List<RoomSummary>
+    fun getBreadcrumbs(): List<Breadcrumb>
 
     /**
      * Get a live list of Breadcrumbs
-     * @return the [LiveData] of [RoomSummary]
+     * @return the [Flow] of [Breadcrumb]
      */
-    fun getBreadcrumbsLive(): LiveData<List<RoomSummary>>
+    fun getBreadcrumbsLive(): Flow<List<Breadcrumb>>
 
     /**
      * Inform the Matrix SDK that a room is displayed.
@@ -102,5 +104,5 @@ interface RoomService {
                          searchOnServer: Boolean,
                          callback: MatrixCallback<Optional<String>>): Cancelable
 
-    fun getExistingDirectRoomWithUser(otherUserId: String) : Room?
+    fun getExistingDirectRoomWithUser(otherUserId: String): Room?
 }

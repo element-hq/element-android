@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.room.draft
 
-import androidx.lifecycle.LiveData
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
@@ -26,6 +25,7 @@ import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import kotlinx.coroutines.flow.Flow
 
 internal class DefaultDraftService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                private val draftRepository: DraftRepository,
@@ -54,7 +54,7 @@ internal class DefaultDraftService @AssistedInject constructor(@Assisted private
         }
     }
 
-    override fun getDraftsLive(): LiveData<List<UserDraft>> {
+    override fun getDraftsLive(): Flow<List<UserDraft>> {
         return draftRepository.getDraftsLive(roomId)
     }
 }

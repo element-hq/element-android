@@ -16,10 +16,8 @@
 
 package im.vector.matrix.android.internal.session.room
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.Room
-import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.draft.DefaultDraftService
 import im.vector.matrix.android.internal.session.room.membership.DefaultMembershipService
@@ -40,9 +38,7 @@ internal interface RoomFactory {
 }
 
 @SessionScope
-internal class DefaultRoomFactory @Inject constructor(private val monarchy: Monarchy,
-                                                      private val roomSummaryMapper: RoomSummaryMapper,
-                                                      private val cryptoService: CryptoService,
+internal class DefaultRoomFactory @Inject constructor(private val cryptoService: CryptoService,
                                                       private val timelineServiceFactory: DefaultTimelineService.Factory,
                                                       private val sendServiceFactory: DefaultSendService.Factory,
                                                       private val draftServiceFactory: DefaultDraftService.Factory,
@@ -53,6 +49,7 @@ internal class DefaultRoomFactory @Inject constructor(private val monarchy: Mona
                                                       private val relationServiceFactory: DefaultRelationService.Factory,
                                                       private val membershipServiceFactory: DefaultMembershipService.Factory,
                                                       private val roomPushRuleServiceFactory: DefaultRoomPushRuleService.Factory,
+                                                      private val roomSummaryDataSource: RoomSummaryDataSource,
                                                       private val taskExecutor: TaskExecutor,
                                                       private val sendStateTask: SendStateTask) :
         RoomFactory {
@@ -60,8 +57,6 @@ internal class DefaultRoomFactory @Inject constructor(private val monarchy: Mona
     override fun create(roomId: String): Room {
         return DefaultRoom(
                 roomId = roomId,
-                monarchy = monarchy,
-                roomSummaryMapper = roomSummaryMapper,
                 timelineService = timelineServiceFactory.create(roomId),
                 sendService = sendServiceFactory.create(roomId),
                 draftService = draftServiceFactory.create(roomId),
@@ -74,7 +69,8 @@ internal class DefaultRoomFactory @Inject constructor(private val monarchy: Mona
                 roomMembersService = membershipServiceFactory.create(roomId),
                 roomPushRuleService = roomPushRuleServiceFactory.create(roomId),
                 taskExecutor = taskExecutor,
-                sendStateTask = sendStateTask
+                sendStateTask = sendStateTask,
+                roomSummaryDataSource = roomSummaryDataSource
         )
     }
 }

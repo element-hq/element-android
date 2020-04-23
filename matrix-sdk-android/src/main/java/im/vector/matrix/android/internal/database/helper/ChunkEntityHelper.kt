@@ -16,26 +16,15 @@
 
 package im.vector.matrix.android.internal.database.helper
 
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.RoomMemberContent
-import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.model.CurrentStateEventEntityFields
-import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
-import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.EventEntityFields
-import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
-import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntity
-import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntity
-import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntityFields
-import im.vector.matrix.android.internal.database.model.TimelineEventEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
-import im.vector.matrix.android.internal.database.query.find
-import im.vector.matrix.android.internal.database.query.getOrCreate
-import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.database.model.*
 import im.vector.matrix.android.internal.extensions.assertIsManaged
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
+import im.vector.matrix.sqldelight.session.SessionDatabase
+import im.vector.matrix.sqldelight.session.TimelineEventQueries
 import io.realm.Realm
 import io.realm.Sort
-import io.realm.kotlin.createObject
 import timber.log.Timber
 
 internal fun ChunkEntity.deleteOnCascade() {
@@ -85,57 +74,47 @@ internal fun ChunkEntity.addStateEvent(roomId: String, stateEvent: EventEntity, 
     }
 }
 
-internal fun ChunkEntity.addTimelineEvent(roomId: String,
-                                          eventEntity: EventEntity,
-                                          direction: PaginationDirection,
-                                          roomMemberContentsByUser: Map<String, RoomMemberContent?>) {
-    val eventId = eventEntity.eventId
-    if (timelineEvents.find(eventId) != null) {
-        return
-    }
-    val displayIndex = nextDisplayIndex(direction)
-    val localId = TimelineEventEntity.nextId(realm)
-    val senderId = eventEntity.sender ?: ""
-
+internal fun SessionDatabase.addTimelineEvent(roomId: String,
+                                              chunkId: Long,
+                                              event: Event,
+                                              direction: PaginationDirection,
+                                              roomMemberContentsByUser: Map<String, RoomMemberContent?>) {
+    val eventId = event.eventId ?: "$roomId-$chunkId-${System.currentTimeMillis()}"
+    val displayIndex = timelineEventQueries.nextDisplayIndex(direction, chunkId)
+    val senderId = event.senderId ?: ""
+    val roomMemberContent = roomMemberContentsByUser[senderId]
     // Update RR for the sender of a new message with a dummy one
-    val readReceiptsSummaryEntity = handleReadReceipts(realm, roomId, eventEntity, senderId)
-    val timelineEventEntity = realm.createObject<TimelineEventEntity>().apply {
-        this.localId = localId
-        this.root = eventEntity
-        this.eventId = eventId
-        this.roomId = roomId
-        this.annotations = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
-        this.readReceipts = readReceiptsSummaryEntity
-        this.displayIndex = displayIndex
-        val roomMemberContent = roomMemberContentsByUser[senderId]
-        this.senderAvatar = roomMemberContent?.avatarUrl
-        this.senderName = roomMemberContent?.displayName
-        isUniqueDisplayName = if (roomMemberContent?.displayName != null) {
-            computeIsUnique(realm, roomId, isLastForward, roomMemberContent, roomMemberContentsByUser)
-        } else {
-            true
-        }
+    handleReadReceipts(this, roomId, eventId, event.originServerTs, senderId)
+    val isDisplayNameUnique = if (roomMemberContent?.displayName != null) {
+        computeIsUnique(this, roomId, chunkId, roomMemberContent, roomMemberContentsByUser)
+    } else {
+        true
     }
-    timelineEvents.add(timelineEventEntity)
+    timelineEventQueries.insert(
+            event_id = eventId,
+            sender_avatar = roomMemberContent?.avatarUrl,
+            chunk_id = chunkId,
+            room_id = roomId,
+            display_index = displayIndex,
+            is_unique_display_name = isDisplayNameUnique,
+            sender_name = roomMemberContent?.displayName
+    )
 }
 
 private fun computeIsUnique(
-        realm: Realm,
+        sessionDatabase: SessionDatabase,
         roomId: String,
-        isLastForward: Boolean,
+        chunkId: Long,
         myRoomMemberContent: RoomMemberContent,
         roomMemberContentsByUser: Map<String, RoomMemberContent?>
 ): Boolean {
     val isHistoricalUnique = roomMemberContentsByUser.values.find {
         it != myRoomMemberContent && it?.displayName == myRoomMemberContent.displayName
     } == null
+    val isLastForward = sessionDatabase.chunkQueries.isLastForward(chunkId).executeAsOne()
     return if (isLastForward) {
-        val isLiveUnique = RoomMemberSummaryEntity
-                .where(realm, roomId)
-                .equalTo(RoomMemberSummaryEntityFields.DISPLAY_NAME, myRoomMemberContent.displayName)
-                .findAll().none {
-                    !roomMemberContentsByUser.containsKey(it.userId)
-                }
+        val countMembersWithName = sessionDatabase.roomMemberSummaryQueries.countMembersWithNameInRoom(myRoomMemberContent.displayName, roomId).executeAsOne()
+        val isLiveUnique = countMembersWithName == 1L
         isHistoricalUnique && isLiveUnique
     } else {
         isHistoricalUnique
@@ -143,6 +122,7 @@ private fun computeIsUnique(
 }
 
 private fun ChunkEntity.addTimelineEventFromMerge(realm: Realm, timelineEventEntity: TimelineEventEntity, direction: PaginationDirection) {
+    /*
     val eventId = timelineEventEntity.eventId
     if (timelineEvents.find(eventId) != null) {
         return
@@ -162,36 +142,30 @@ private fun ChunkEntity.addTimelineEventFromMerge(realm: Realm, timelineEventEnt
         this.isUniqueDisplayName = timelineEventEntity.isUniqueDisplayName
     }
     timelineEvents.add(copied)
+     */
 }
 
-private fun handleReadReceipts(realm: Realm, roomId: String, eventEntity: EventEntity, senderId: String): ReadReceiptsSummaryEntity {
-    val readReceiptsSummaryEntity = ReadReceiptsSummaryEntity.where(realm, eventEntity.eventId).findFirst()
-            ?: realm.createObject<ReadReceiptsSummaryEntity>(eventEntity.eventId).apply {
-                this.roomId = roomId
-            }
-    val originServerTs = eventEntity.originServerTs
+private fun handleReadReceipts(
+        sessionDatabase: SessionDatabase,
+        roomId: String,
+        eventId: String,
+        originServerTs: Long?,
+        senderId: String) {
     if (originServerTs != null) {
         val timestampOfEvent = originServerTs.toDouble()
-        val readReceiptOfSender = ReadReceiptEntity.getOrCreate(realm, roomId = roomId, userId = senderId)
+        val oldTimestamp = sessionDatabase.readReceiptQueries.getTimestampForUser(roomId, senderId).executeAsOneOrNull()
         // If the synced RR is older, update
-        if (timestampOfEvent > readReceiptOfSender.originServerTs) {
-            val previousReceiptsSummary = ReadReceiptsSummaryEntity.where(realm, eventId = readReceiptOfSender.eventId).findFirst()
-            readReceiptOfSender.eventId = eventEntity.eventId
-            readReceiptOfSender.originServerTs = timestampOfEvent
-            previousReceiptsSummary?.readReceipts?.remove(readReceiptOfSender)
-            readReceiptsSummaryEntity.readReceipts.add(readReceiptOfSender)
+        if (oldTimestamp == null || timestampOfEvent > oldTimestamp) {
+            sessionDatabase.readReceiptQueries.updateReadReceipt(eventId, timestampOfEvent, roomId, senderId)
         }
     }
-    return readReceiptsSummaryEntity
 }
 
-internal fun ChunkEntity.nextDisplayIndex(direction: PaginationDirection): Int {
+internal fun TimelineEventQueries.nextDisplayIndex(direction: PaginationDirection, chunkId: Long): Int {
     return when (direction) {
-        PaginationDirection.FORWARDS  -> {
-            (timelineEvents.where().max(TimelineEventEntityFields.DISPLAY_INDEX)?.toInt() ?: 0) + 1
-        }
-        PaginationDirection.BACKWARDS -> {
-            (timelineEvents.where().min(TimelineEventEntityFields.DISPLAY_INDEX)?.toInt() ?: 0) - 1
-        }
+        PaginationDirection.FORWARDS -> (getMaxDisplayIndex(chunkId).executeAsOneOrNull()?.max_display_index?.toInt()
+                ?: 0) + 1
+        PaginationDirection.BACKWARDS -> (getMinDisplayIndex(chunkId).executeAsOneOrNull()?.min_display_index?.toInt()
+                ?: 0) - 1
     }
 }

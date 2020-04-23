@@ -17,11 +17,13 @@
 package im.vector.matrix.android.internal.database.mapper
 
 import im.vector.matrix.android.api.pushrules.rest.PushCondition
-import im.vector.matrix.android.internal.database.model.PushConditionEntity
+import im.vector.matrix.sqldelight.session.GetPushConditions
+import im.vector.matrix.sqldelight.session.PushConditionEntity
+import javax.inject.Inject
 
-internal object PushConditionMapper {
+internal class PushConditionMapper @Inject constructor() {
 
-    fun map(entity: PushConditionEntity): PushCondition {
+    fun map(entity: GetPushConditions): PushCondition {
         return PushCondition(
                 kind = entity.kind,
                 iz = entity.iz,
@@ -30,12 +32,14 @@ internal object PushConditionMapper {
         )
     }
 
-    fun map(domain: PushCondition): PushConditionEntity {
-        return PushConditionEntity(
-                kind = domain.kind,
-                iz = domain.iz,
-                key = domain.key,
-                pattern = domain.pattern
+    fun map(ruleId: String, pushCondition: PushCondition): PushConditionEntity {
+        return PushConditionEntity.Impl(
+                kind = pushCondition.kind,
+                iz = pushCondition.iz,
+                key = pushCondition.key,
+                pattern = pushCondition.pattern,
+                rule_id = ruleId
         )
     }
+
 }

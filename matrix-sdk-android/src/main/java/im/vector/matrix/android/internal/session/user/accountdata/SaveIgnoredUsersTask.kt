@@ -15,10 +15,10 @@
  */
 package im.vector.matrix.android.internal.session.user.accountdata
 
-import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.internal.database.model.IgnoredUserEntity
+import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.awaitTransaction
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import javax.inject.Inject
 
 /**
@@ -30,17 +30,16 @@ internal interface SaveIgnoredUsersTask : Task<SaveIgnoredUsersTask.Params, Unit
     )
 }
 
-internal class DefaultSaveIgnoredUsersTask @Inject constructor(private val monarchy: Monarchy) : SaveIgnoredUsersTask {
+internal class DefaultSaveIgnoredUsersTask @Inject constructor(private val sessionDatabase: SessionDatabase,
+                                                               private val coroutineDispatchers: MatrixCoroutineDispatchers ) : SaveIgnoredUsersTask {
 
     override suspend fun execute(params: SaveIgnoredUsersTask.Params) {
-        monarchy.awaitTransaction { realm ->
-            // clear current ignored users
-            realm.where(IgnoredUserEntity::class.java)
-                    .findAll()
-                    .deleteAllFromRealm()
-
+        sessionDatabase.awaitTransaction(coroutineDispatchers) {
+            sessionDatabase.userQueries.deleteAllIgnoredUsers()
             // And save the new received list
-            params.userIds.forEach { realm.createObject(IgnoredUserEntity::class.java).apply { userId = it } }
+            params.userIds.forEach {
+                sessionDatabase.userQueries.insertIgnored(it)
+            }
         }
     }
 }

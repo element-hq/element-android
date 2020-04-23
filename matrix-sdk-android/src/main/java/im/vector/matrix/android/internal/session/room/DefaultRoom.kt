@@ -16,9 +16,6 @@
 
 package im.vector.matrix.android.internal.session.room
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -35,21 +32,15 @@ import im.vector.matrix.android.api.session.room.state.StateService
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.api.session.room.typing.TypingService
 import im.vector.matrix.android.api.util.Optional
-import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
-import im.vector.matrix.android.internal.database.mapper.RoomSummaryMapper
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
-import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import kotlinx.coroutines.flow.Flow
 import java.security.InvalidParameterException
 import javax.inject.Inject
 
 internal class DefaultRoom @Inject constructor(override val roomId: String,
-                                               private val monarchy: Monarchy,
-                                               private val roomSummaryMapper: RoomSummaryMapper,
                                                private val timelineService: TimelineService,
                                                private val sendService: SendService,
                                                private val draftService: DraftService,
@@ -62,7 +53,8 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
                                                private val roomMembersService: MembershipService,
                                                private val roomPushRuleService: RoomPushRuleService,
                                                private val taskExecutor: TaskExecutor,
-                                               private val sendStateTask: SendStateTask) :
+                                               private val sendStateTask: SendStateTask,
+                                               private val roomSummaryDataSource: RoomSummaryDataSource) :
         Room,
         TimelineService by timelineService,
         SendService by sendService,
@@ -75,21 +67,12 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
         MembershipService by roomMembersService,
         RoomPushRuleService by roomPushRuleService {
 
-    override fun getRoomSummaryLive(): LiveData<Optional<RoomSummary>> {
-        val liveData = monarchy.findAllMappedWithChanges(
-                { realm -> RoomSummaryEntity.where(realm, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME) },
-                { roomSummaryMapper.map(it) }
-        )
-        return Transformations.map(liveData) { results ->
-            results.firstOrNull().toOptional()
-        }
+    override fun roomSummary(): RoomSummary? {
+        return roomSummaryDataSource.getRoomSummary(roomId)
     }
 
-    override fun roomSummary(): RoomSummary? {
-        return monarchy.fetchAllMappedSync(
-                { realm -> RoomSummaryEntity.where(realm, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME) },
-                { roomSummaryMapper.map(it) }
-        ).firstOrNull()
+    override fun getRoomSummaryLive(): Flow<Optional<RoomSummary>> {
+        return roomSummaryDataSource.getRoomSummaryLive(roomId)
     }
 
     override fun isEncrypted(): Boolean {
@@ -106,13 +89,13 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
 
     override fun enableEncryption(algorithm: String, callback: MatrixCallback<Unit>) {
         when {
-            isEncrypted()                          -> {
+            isEncrypted() -> {
                 callback.onFailure(IllegalStateException("Encryption is already enabled for this room"))
             }
             algorithm != MXCRYPTO_ALGORITHM_MEGOLM -> {
                 callback.onFailure(InvalidParameterException("Only MXCRYPTO_ALGORITHM_MEGOLM algorithm is supported"))
             }
-            else                                   -> {
+            else -> {
                 val params = SendStateTask.Params(roomId,
                         EventType.STATE_ROOM_ENCRYPTION,
                         mapOf(

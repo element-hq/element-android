@@ -16,12 +16,9 @@
 
 package im.vector.matrix.android.internal.session.user.accountdata
 
-import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.internal.database.model.BreadcrumbsEntity
-import im.vector.matrix.android.internal.database.query.get
 import im.vector.matrix.android.internal.session.sync.model.accountdata.BreadcrumbsContent
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.fetchCopied
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import javax.inject.Inject
 
 // Use the same arbitrary value than Riot-Web
@@ -36,27 +33,16 @@ internal interface UpdateBreadcrumbsTask : Task<UpdateBreadcrumbsTask.Params, Un
 internal class DefaultUpdateBreadcrumbsTask @Inject constructor(
         private val saveBreadcrumbsTask: SaveBreadcrumbsTask,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-        private val monarchy: Monarchy
+        private val sessionDatabase: SessionDatabase
 ) : UpdateBreadcrumbsTask {
 
     override suspend fun execute(params: UpdateBreadcrumbsTask.Params) {
-        val newBreadcrumbs =
-                // Get the breadcrumbs entity, if any
-                monarchy.fetchCopied { BreadcrumbsEntity.get(it) }
-                        ?.recentRoomIds
-                        ?.apply {
-                            // Modify the list to add the newTopRoomId first
-                            // Ensure the newTopRoomId is not already in the list
-                            remove(params.newTopRoomId)
-                            // Add the newTopRoomId at first position
-                            add(0, params.newTopRoomId)
-                        }
-                        ?.take(MAX_BREADCRUMBS_ROOMS_NUMBER)
-                        ?: listOf(params.newTopRoomId)
-
+        val currentBreadcrumbs = sessionDatabase.breadcrumbsQueries.getAllBreadcrumbsIds().executeAsList().toMutableList()
+        currentBreadcrumbs.remove(params.newTopRoomId)
+        currentBreadcrumbs.add(0, params.newTopRoomId)
+        val newBreadcrumbs = currentBreadcrumbs.take(MAX_BREADCRUMBS_ROOMS_NUMBER)
         // Update the DB locally, do not wait for the sync
         saveBreadcrumbsTask.execute(SaveBreadcrumbsTask.Params(newBreadcrumbs))
-
         // FIXME It can remove the previous breadcrumbs, if not synced yet
         // And update account data
         updateUserAccountDataTask.execute(UpdateUserAccountDataTask.BreadcrumbsParams(

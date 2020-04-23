@@ -16,25 +16,17 @@
 
 package im.vector.matrix.android.internal.session.user.accountdata
 
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.query.getDirectRooms
-import im.vector.matrix.android.internal.di.SessionDatabase
-import io.realm.Realm
-import io.realm.RealmConfiguration
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import javax.inject.Inject
 
-internal class DirectChatsHelper @Inject constructor(@SessionDatabase
-                                                     private val realmConfiguration: RealmConfiguration) {
+internal class DirectChatsHelper @Inject constructor(private val sessionDatabase: SessionDatabase) {
 
     /**
      * @return a map of userId <-> list of roomId
      */
-    fun getLocalUserAccount(filterRoomId: String? = null): MutableMap<String, MutableList<String>> {
-        return Realm.getInstance(realmConfiguration).use { realm ->
-            RoomSummaryEntity.getDirectRooms(realm)
-                    .asSequence()
-                    .filter { it.roomId != filterRoomId && it.directUserId != null }
-                    .groupByTo(mutableMapOf(), { it.directUserId!! }, { it.roomId })
-        }
+    fun getLocalUserAccount(): MutableMap<String, MutableList<String>> {
+        return sessionDatabase.roomSummaryQueries.getAllDirectUserIds().executeAsList()
+                .asSequence()
+                .groupByTo(mutableMapOf(), { it.direct_user_id!! }, { it.room_id })
     }
 }

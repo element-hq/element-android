@@ -16,57 +16,40 @@
 
 package im.vector.matrix.android.internal.session.room.create
 
-import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.session.events.model.Event
+import com.squareup.sqldelight.Query
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.VersioningState
 import im.vector.matrix.android.api.session.room.model.create.RoomCreateContent
-import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
+import im.vector.matrix.android.internal.database.SqlLiveEntityObserver
 import im.vector.matrix.android.internal.database.awaitTransaction
-import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.database.query.whereTypes
-import im.vector.matrix.android.internal.di.SessionDatabase
-import io.realm.OrderedCollectionChangeSet
-import io.realm.RealmConfiguration
-import io.realm.RealmResults
-import kotlinx.coroutines.launch
+import im.vector.matrix.android.internal.database.mapper.ContentMapper
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.sqldelight.session.EventInsertNotification
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import javax.inject.Inject
 
-internal class RoomCreateEventLiveObserver @Inject constructor(@SessionDatabase
-                                                               realmConfiguration: RealmConfiguration)
-    : RealmLiveEntityObserver<EventEntity>(realmConfiguration) {
+internal class RoomCreateEventLiveObserver @Inject constructor(sessionDatabase: SessionDatabase,
+                                                               private val coroutineDispatchers: MatrixCoroutineDispatchers )
+    : SqlLiveEntityObserver<EventInsertNotification>(sessionDatabase) {
 
-    override val query = Monarchy.Query<EventEntity> {
-        EventEntity.whereTypes(it, listOf(EventType.STATE_ROOM_CREATE))
-    }
+    override val query: Query<EventInsertNotification>
+        get() = sessionDatabase.observerTriggerQueries.getAllEventInsertNotifications(types = listOf(EventType.STATE_ROOM_CREATE))
 
-    override fun onChange(results: RealmResults<EventEntity>, changeSet: OrderedCollectionChangeSet) {
-        changeSet.insertions
-                .asSequence()
-                .mapNotNull {
-                    results[it]?.asDomain()
-                }
-                .toList()
-                .also {
-                    observerScope.launch {
-                        handleRoomCreateEvents(it)
-                    }
-                }
-    }
-
-    private suspend fun handleRoomCreateEvents(createEvents: List<Event>) = awaitTransaction(realmConfiguration) { realm ->
-        for (event in createEvents) {
-            val createRoomContent = event.getClearContent().toModel<RoomCreateContent>()
-            val predecessorRoomId = createRoomContent?.predecessor?.roomId ?: continue
-
-            val predecessorRoomSummary = RoomSummaryEntity.where(realm, predecessorRoomId).findFirst()
-                                         ?: RoomSummaryEntity(predecessorRoomId)
-            predecessorRoomSummary.versioningState = VersioningState.UPGRADED_ROOM_JOINED
-            realm.insertOrUpdate(predecessorRoomSummary)
+    override suspend fun handleChanges(results: List<EventInsertNotification>) {
+        sessionDatabase.awaitTransaction(coroutineDispatchers) {
+            val notificationsIds = ArrayList<String>(results.size)
+            results.forEach {
+                notificationsIds.add(it.event_id)
+                val eventContent = sessionDatabase.eventQueries.selectContent(it.event_id).executeAsOneOrNull()?.content
+                        ?: return@forEach
+                val createRoomContent = ContentMapper.map(eventContent).toModel<RoomCreateContent>()
+                val predecessorRoomId = createRoomContent?.predecessor?.roomId ?: return@forEach
+                sessionDatabase.roomSummaryQueries.insertOrIgnore(predecessorRoomId)
+                sessionDatabase.roomSummaryQueries.setVersioningState(VersioningState.UPGRADED_ROOM_JOINED.name, predecessorRoomId)
+            }
+            sessionDatabase.observerTriggerQueries.deleteEventInsertNotifications(notificationsIds)
         }
     }
+
 }

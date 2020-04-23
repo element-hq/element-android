@@ -18,6 +18,8 @@ package im.vector.matrix.android.internal.session.pushers
 import im.vector.matrix.android.api.pushrules.rest.GetPushRulesResponse
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
@@ -29,8 +31,9 @@ internal interface GetPushRulesTask : Task<GetPushRulesTask.Params, Unit> {
  * We keep this task, but it should not be used anymore, the push rules comes from the sync response
  */
 internal class DefaultGetPushRulesTask @Inject constructor(
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val pushRulesApi: PushRulesApi,
-        private val savePushRulesTask: SavePushRulesTask,
+        private val pushRulesPersistor: PushRulePersistor,
         private val eventBus: EventBus
 ) : GetPushRulesTask {
 
@@ -38,7 +41,8 @@ internal class DefaultGetPushRulesTask @Inject constructor(
         val response = executeRequest<GetPushRulesResponse>(eventBus) {
             apiCall = pushRulesApi.getAllRules()
         }
-
-        savePushRulesTask.execute(SavePushRulesTask.Params(response))
+        withContext(coroutineDispatchers.dbTransaction) {
+            pushRulesPersistor.persist(response)
+        }
     }
 }

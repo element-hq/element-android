@@ -21,6 +21,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import org.greenrobot.eventbus.EventBus
 import retrofit2.Call
+import timber.log.Timber
 import java.io.IOException
 
 internal suspend inline fun <DATA> executeRequest(eventBus: EventBus?,
@@ -38,6 +39,7 @@ internal class Request<DATA>(private val eventBus: EventBus?) {
 
     suspend fun execute(): DATA {
         return try {
+            Timber.v("Execute ${apiCall.request().url}")
             val response = apiCall.clone().awaitResponse()
             if (response.isSuccessful) {
                 response.body()

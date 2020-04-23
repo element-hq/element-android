@@ -16,15 +16,12 @@
 
 package im.vector.matrix.android.internal.session.pushers
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.pushers.PusherState
-import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.PusherEntity
-import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.awaitTransaction
-import io.realm.Realm
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
@@ -35,37 +32,35 @@ internal interface RemovePusherTask : Task<RemovePusherTask.Params, Unit> {
 
 internal class DefaultRemovePusherTask @Inject constructor(
         private val pushersAPI: PushersAPI,
-        private val monarchy: Monarchy,
+        private val sessionDatabase: SessionDatabase,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val eventBus: EventBus
 ) : RemovePusherTask {
 
     override suspend fun execute(params: RemovePusherTask.Params) {
-        monarchy.awaitTransaction { realm ->
-            val existingEntity = PusherEntity.where(realm, params.pushKey).findFirst()
-            existingEntity?.state = PusherState.UNREGISTERING
+        sessionDatabase.awaitTransaction(coroutineDispatchers) {
+            sessionDatabase.pushersQueries.updateState(PusherState.UNREGISTERING.name, params.pushKey)
         }
-
-        val existing = Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            PusherEntity.where(realm, params.pushKey).findFirst()?.asDomain()
-        } ?: throw Exception("No existing pusher")
+        val existing = sessionDatabase.pushersQueries.getWithPushKey(params.pushKey).executeAsOneOrNull()
+                ?: throw Exception("No existing pusher")
 
         val deleteBody = JsonPusher(
                 pushKey = params.pushKey,
                 appId = params.pushAppId,
                 // kind null deletes the pusher
                 kind = null,
-                appDisplayName = existing.appDisplayName ?: "",
-                deviceDisplayName = existing.deviceDisplayName ?: "",
-                profileTag = existing.profileTag ?: "",
+                appDisplayName = existing.app_display_name ?: "",
+                deviceDisplayName = existing.device_display_name ?: "",
+                profileTag = existing.profile_tag ?: "",
                 lang = existing.lang,
-                data = JsonPusherData(existing.data.url, existing.data.format),
+                data = JsonPusherData(existing.data_url, existing.data_format),
                 append = false
         )
         executeRequest<Unit>(eventBus) {
             apiCall = pushersAPI.setPusher(deleteBody)
         }
-        monarchy.awaitTransaction {
-            PusherEntity.where(it, params.pushKey).findFirst()?.deleteFromRealm()
+        sessionDatabase.awaitTransaction(coroutineDispatchers) {
+            sessionDatabase.pushersQueries.deleteWithPushKey(params.pushKey)
         }
     }
 }

@@ -30,7 +30,7 @@ import im.vector.matrix.android.internal.auth.PendingSessionStore
 import im.vector.matrix.android.internal.auth.SessionCreator
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.internal.auth.data.ThreePidMedium
-import im.vector.matrix.android.internal.auth.db.PendingSessionData
+import im.vector.matrix.android.internal.auth.registration.PendingSessionData
 import im.vector.matrix.android.internal.auth.registration.AddThreePidRegistrationParams
 import im.vector.matrix.android.internal.auth.registration.AddThreePidRegistrationResponse
 import im.vector.matrix.android.internal.auth.registration.RegisterAddThreePidTask

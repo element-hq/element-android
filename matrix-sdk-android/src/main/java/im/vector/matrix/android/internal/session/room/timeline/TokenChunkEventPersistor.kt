@@ -16,39 +16,24 @@
 
 package im.vector.matrix.android.internal.session.room.timeline
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomMemberContent
 import im.vector.matrix.android.api.session.room.send.SendState
-import im.vector.matrix.android.internal.database.helper.addOrUpdate
-import im.vector.matrix.android.internal.database.helper.addStateEvent
+import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.database.helper.addTimelineEvent
-import im.vector.matrix.android.internal.database.helper.deleteOnCascade
-import im.vector.matrix.android.internal.database.helper.merge
-import im.vector.matrix.android.internal.database.mapper.toEntity
-import im.vector.matrix.android.internal.database.model.ChunkEntity
-import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntity
-import im.vector.matrix.android.internal.database.query.copyToRealmOrIgnore
-import im.vector.matrix.android.internal.database.query.create
-import im.vector.matrix.android.internal.database.query.find
-import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
-import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
-import im.vector.matrix.android.internal.database.query.getOrCreate
-import im.vector.matrix.android.internal.database.query.latestEvent
-import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
-import im.vector.matrix.android.internal.util.awaitTransaction
-import io.realm.Realm
+import im.vector.matrix.android.internal.database.mapper.toSQLEntity
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.collections.set
 
 /**
  * Insert Chunk in DB, and eventually merge with existing chunk event
  */
-internal class TokenChunkEventPersistor @Inject constructor(private val monarchy: Monarchy) {
+internal class TokenChunkEventPersistor @Inject constructor(private val sessionDatabase: SessionDatabase,
+                                                            private val coroutineDispatchers: MatrixCoroutineDispatchers ) {
 
     /**
      * <pre>
@@ -121,9 +106,10 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
 
     suspend fun insertInDb(receivedChunk: TokenChunkEvent,
                            roomId: String,
-                           direction: PaginationDirection): Result {
-        monarchy
-                .awaitTransaction { realm ->
+                           direction: PaginationDirection,
+                           chunkId: Long?): Result {
+        sessionDatabase
+                .awaitTransaction(coroutineDispatchers) {
                     Timber.v("Start persisting ${receivedChunk.events.size} events in $roomId towards $direction")
 
                     val nextToken: String?
@@ -136,23 +122,43 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                         prevToken = receivedChunk.end
                     }
 
-                    val prevChunk = ChunkEntity.find(realm, roomId, nextToken = prevToken)
-                    val nextChunk = ChunkEntity.find(realm, roomId, prevToken = nextToken)
+                    val prevChunk = sessionDatabase.chunkQueries.getWithNextToken(roomId = roomId, nextToken = prevToken).executeAsOneOrNull()
+                    val nextChunk = sessionDatabase.chunkQueries.getWithPrevToken(roomId = roomId, prevToken = nextToken).executeAsOneOrNull()
 
-                    // The current chunk is the one we will keep all along the merge processChanges.
-                    // We try to look for a chunk next to the token,
-                    // otherwise we create a whole new one which is unlinked (not live)
-                    val currentChunk = if (direction == PaginationDirection.FORWARDS) {
-                        prevChunk?.apply { this.nextToken = nextToken }
+                    Timber.v("Prev chunk: $prevChunk")
+                    Timber.v("Next chunk: $nextChunk")
+
+                    val currentChunkId = if (direction == PaginationDirection.FORWARDS) {
+                        if (prevChunk == null) {
+                            if (chunkId != null) {
+                                sessionDatabase.chunkQueries.setPrevToken(prevToken, chunkId)
+                                sessionDatabase.chunkQueries.setNextToken(nextToken, chunkId)
+                            } else {
+                                sessionDatabase.chunkQueries.insert(roomId, nextToken, prevToken, false, false)
+                            }
+                            sessionDatabase.chunkQueries.getChunkIdWithNextAndPrevToken(roomId, nextToken, prevToken).executeAsOne()
+                        } else {
+                            sessionDatabase.chunkQueries.setNextToken(nextToken, prevChunk.chunk_id)
+                            prevChunk.chunk_id
+                        }
                     } else {
-                        nextChunk?.apply { this.prevToken = prevToken }
+                        if (nextChunk == null) {
+                            if (chunkId != null) {
+                                sessionDatabase.chunkQueries.setPrevToken(prevToken, chunkId)
+                                sessionDatabase.chunkQueries.setNextToken(nextToken, chunkId)
+                            } else {
+                                sessionDatabase.chunkQueries.insert(roomId, nextToken, prevToken, false, false)
+                            }
+                            sessionDatabase.chunkQueries.getChunkIdWithNextAndPrevToken(roomId, nextToken, prevToken).executeAsOne()
+                        } else {
+                            sessionDatabase.chunkQueries.setPrevToken(prevToken, nextChunk.chunk_id)
+                            nextChunk.chunk_id
+                        }
                     }
-                            ?: ChunkEntity.create(realm, prevToken, nextToken)
-
                     if (receivedChunk.events.isEmpty() && receivedChunk.end == receivedChunk.start) {
-                        handleReachEnd(realm, roomId, direction, currentChunk)
+                        handleReachEnd(roomId, direction, currentChunkId)
                     } else {
-                        handlePagination(realm, roomId, direction, receivedChunk, currentChunk)
+                        handlePagination(roomId, direction, receivedChunk, currentChunkId)
                     }
                 }
         return if (receivedChunk.events.isEmpty()) {
@@ -166,13 +172,14 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
         }
     }
 
-    private fun handleReachEnd(realm: Realm, roomId: String, direction: PaginationDirection, currentChunk: ChunkEntity) {
+    private fun handleReachEnd(roomId: String, direction: PaginationDirection, currentChunkId: Long) {
         Timber.v("Reach end of $roomId")
         if (direction == PaginationDirection.FORWARDS) {
-            val currentLiveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
-            if (currentChunk != currentLiveChunk) {
-                currentChunk.isLastForward = true
-                currentLiveChunk?.deleteOnCascade()
+            val currentLiveChunkId = sessionDatabase.chunkQueries.getChunkIdOfLive(roomId).executeAsOne()
+            if (currentChunkId != currentLiveChunkId) {
+                sessionDatabase.chunkQueries.deleteWithId(currentLiveChunkId)
+                sessionDatabase.chunkQueries.setIsLastForwards(true, currentChunkId)
+                /*
                 RoomSummaryEntity.where(realm, roomId).findFirst()?.apply {
                     latestPreviewableEvent = TimelineEventEntity.latestEvent(
                             realm,
@@ -181,38 +188,46 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                             filterTypes = RoomSummaryUpdater.PREVIEWABLE_TYPES
                     )
                 }
+
+                 */
             }
         } else {
-            currentChunk.isLastBackward = true
+            sessionDatabase.chunkQueries.setIsLastBackwards(true, currentChunkId)
         }
     }
 
     private fun handlePagination(
-            realm: Realm,
             roomId: String,
             direction: PaginationDirection,
             receivedChunk: TokenChunkEvent,
-            currentChunk: ChunkEntity
+            currentChunkId: Long
     ) {
-        Timber.v("Add ${receivedChunk.events.size} events in chunk(${currentChunk.nextToken} | ${currentChunk.prevToken}")
+        Timber.v("Add ${receivedChunk.events.size} events in chunk($currentChunkId")
         val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
         val eventList = receivedChunk.events
         val stateEvents = receivedChunk.stateEvents
 
         for (stateEvent in stateEvents) {
-            val stateEventEntity = stateEvent.toEntity(roomId, SendState.SYNCED).copyToRealmOrIgnore(realm)
-            currentChunk.addStateEvent(roomId, stateEventEntity, direction)
-            if (stateEvent.type == EventType.STATE_ROOM_MEMBER && stateEvent.stateKey != null) {
+            if (stateEvent.eventId == null || stateEvent.stateKey == null) {
+                continue
+            }
+            val eventEntity = stateEvent.toSQLEntity(roomId, SendState.SYNCED)
+            sessionDatabase.eventQueries.insert(eventEntity)
+            if (stateEvent.type == EventType.STATE_ROOM_MEMBER) {
                 roomMemberContentsByUser[stateEvent.stateKey] = stateEvent.content.toModel<RoomMemberContent>()
             }
         }
+
         val eventIds = ArrayList<String>(eventList.size)
         for (event in eventList) {
             if (event.eventId == null || event.senderId == null) {
                 continue
             }
             eventIds.add(event.eventId)
-            val eventEntity = event.toEntity(roomId, SendState.SYNCED).copyToRealmOrIgnore(realm)
+            if (sessionDatabase.eventQueries.exist(roomId = roomId, eventId = event.eventId).executeAsOneOrNull() == null) {
+                val eventEntity = event.toSQLEntity(roomId, SendState.SYNCED)
+                sessionDatabase.eventQueries.insert(eventEntity)
+            }
             if (event.type == EventType.STATE_ROOM_MEMBER && event.stateKey != null) {
                 val contentToUse = if (direction == PaginationDirection.BACKWARDS) {
                     event.prevContent
@@ -221,10 +236,17 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                 }
                 roomMemberContentsByUser[event.stateKey] = contentToUse.toModel<RoomMemberContent>()
             }
-
-            currentChunk.addTimelineEvent(roomId, eventEntity, direction, roomMemberContentsByUser)
+            sessionDatabase.addTimelineEvent(
+                    roomId = roomId,
+                    chunkId = currentChunkId,
+                    direction = direction,
+                    event = event,
+                    roomMemberContentsByUser = roomMemberContentsByUser
+            )
         }
-        val chunks = ChunkEntity.findAllIncludingEvents(realm, eventIds)
+
+        /*
+        val chunks = sessionDatabase.chunkQueriesChunkEntity.findAllIncludingEvents(realm, eventIds)
         val chunksToDelete = ArrayList<ChunkEntity>()
         chunks.forEach {
             if (it != currentChunk) {
@@ -247,5 +269,6 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
             roomSummaryEntity.latestPreviewableEvent = latestPreviewableEvent
         }
         RoomEntity.where(realm, roomId).findFirst()?.addOrUpdate(currentChunk)
+         */
     }
 }

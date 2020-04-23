@@ -20,6 +20,7 @@ import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.model.ReadReceipt
 import im.vector.matrix.android.api.util.Optional
+import kotlinx.coroutines.flow.Flow
 
 /**
  * This interface defines methods to handle read receipts and read marker in a room. It's implemented at the room level.
@@ -55,16 +56,16 @@ interface ReadService {
     /**
      * Returns a live read marker id for the room.
      */
-    fun getReadMarkerLive(): LiveData<Optional<String>>
+    fun getReadMarkerLive(): Flow<Optional<String>>
 
     /**
      * Returns a live read receipt id for the room.
      */
-    fun getMyReadReceiptLive(): LiveData<Optional<String>>
+    fun getMyReadReceiptLive(): Flow<Optional<String>>
 
     /**
      * Returns a live list of read receipts for a given event
      * @param eventId: the event
      */
-    fun getEventReadReceiptsLive(eventId: String): LiveData<List<ReadReceipt>>
+    fun getEventReadReceiptsLive(eventId: String): Flow<List<ReadReceipt>>
 }

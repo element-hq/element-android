@@ -16,10 +16,10 @@
 
 package im.vector.matrix.android.api.session.room.state
 
-import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.util.Optional
+import kotlinx.coroutines.flow.Flow
 
 interface StateService {
 
@@ -30,5 +30,5 @@ interface StateService {
 
     fun getStateEvent(eventType: String, stateKey: String): Event?
 
-    fun getStateEventLive(eventType: String, stateKey: String): LiveData<Optional<Event>>
+    fun getStateEventLive(eventType: String, stateKey: String): Flow<Optional<Event>>
 }

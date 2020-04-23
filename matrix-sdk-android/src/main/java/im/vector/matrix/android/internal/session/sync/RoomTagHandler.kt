@@ -17,26 +17,22 @@
 package im.vector.matrix.android.internal.session.sync
 
 import im.vector.matrix.android.api.session.room.model.tag.RoomTagContent
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.model.RoomTagEntity
-import im.vector.matrix.android.internal.database.query.where
-import io.realm.Realm
+import im.vector.matrix.sqldelight.session.RoomTagEntity
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import javax.inject.Inject
 
-internal class RoomTagHandler @Inject constructor() {
+internal class RoomTagHandler @Inject constructor(private val sessionDatabase: SessionDatabase) {
 
-    fun handle(realm: Realm, roomId: String, content: RoomTagContent?) {
+    fun handle(roomId: String, content: RoomTagContent?) {
         if (content == null) {
             return
         }
-        val tags = content.tags.entries.map { (tagName, params) ->
-            RoomTagEntity(tagName, params["order"] as? Double)
+        sessionDatabase.roomTagQueries.deleteAllForRoom(roomId)
+        content.tags.entries.forEach { (tagName, params) ->
+            val roomTagEntity = RoomTagEntity.Impl(tagName, params["order"] as? Double, roomId)
+            sessionDatabase.roomTagQueries.insert(roomTagEntity)
+            val roomTagEntity2 = RoomTagEntity.Impl(tagName, Math.random(), roomId)
+            sessionDatabase.roomTagQueries.insert(roomTagEntity2)
         }
-        val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
-                                ?: RoomSummaryEntity(roomId)
-
-        roomSummaryEntity.tags.clear()
-        roomSummaryEntity.tags.addAll(tags)
-        realm.insertOrUpdate(roomSummaryEntity)
     }
 }

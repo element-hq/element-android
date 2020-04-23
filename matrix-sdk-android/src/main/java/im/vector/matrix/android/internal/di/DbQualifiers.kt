@@ -20,12 +20,12 @@ import javax.inject.Qualifier
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class AuthDatabase
+annotation class RealmAuthDatabase
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class SessionDatabase
+annotation class RealmSessionDatabase
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class CryptoDatabase
+annotation class RealmCryptoDatabase

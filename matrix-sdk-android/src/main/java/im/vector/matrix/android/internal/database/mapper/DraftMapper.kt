@@ -17,29 +17,23 @@
 package im.vector.matrix.android.internal.database.mapper
 
 import im.vector.matrix.android.api.session.room.send.UserDraft
-import im.vector.matrix.android.internal.database.model.DraftEntity
+import im.vector.matrix.sqldelight.session.DraftMode
+import javax.inject.Inject
 
 /**
  * DraftEntity <-> UserDraft
  */
-internal object DraftMapper {
+internal class DraftMapper @Inject constructor() {
 
-    fun map(entity: DraftEntity): UserDraft {
-        return when (entity.draftMode) {
-            DraftEntity.MODE_REGULAR -> UserDraft.REGULAR(entity.content)
-            DraftEntity.MODE_EDIT    -> UserDraft.EDIT(entity.linkedEventId, entity.content)
-            DraftEntity.MODE_QUOTE   -> UserDraft.QUOTE(entity.linkedEventId, entity.content)
-            DraftEntity.MODE_REPLY   -> UserDraft.REPLY(entity.linkedEventId, entity.content)
-            else                     -> null
+    fun map(content: String,
+            draft_mode: String,
+            linked_event_id: String): UserDraft {
+        return when (draft_mode) {
+            DraftMode.MODE_REGULAR -> UserDraft.REGULAR(content)
+            DraftMode.MODE_EDIT -> UserDraft.EDIT(linked_event_id, content)
+            DraftMode.MODE_QUOTE -> UserDraft.QUOTE(linked_event_id, content)
+            DraftMode.MODE_REPLY -> UserDraft.REPLY(linked_event_id, content)
+            else -> null
         } ?: UserDraft.REGULAR("")
-    }
-
-    fun map(domain: UserDraft): DraftEntity {
-        return when (domain) {
-            is UserDraft.REGULAR -> DraftEntity(content = domain.text, draftMode = DraftEntity.MODE_REGULAR, linkedEventId = "")
-            is UserDraft.EDIT    -> DraftEntity(content = domain.text, draftMode = DraftEntity.MODE_EDIT, linkedEventId = domain.linkedEventId)
-            is UserDraft.QUOTE   -> DraftEntity(content = domain.text, draftMode = DraftEntity.MODE_QUOTE, linkedEventId = domain.linkedEventId)
-            is UserDraft.REPLY   -> DraftEntity(content = domain.text, draftMode = DraftEntity.MODE_REPLY, linkedEventId = domain.linkedEventId)
-        }
     }
 }

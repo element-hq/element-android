@@ -16,14 +16,11 @@
 
 package im.vector.matrix.android.internal.session.room.alias
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.util.Optional
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.query.findByAlias
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
-import io.realm.Realm
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
@@ -35,15 +32,13 @@ internal interface GetRoomIdByAliasTask : Task<GetRoomIdByAliasTask.Params, Opti
 }
 
 internal class DefaultGetRoomIdByAliasTask @Inject constructor(
-        private val monarchy: Monarchy,
+        private val sessionDatabase: SessionDatabase,
         private val roomAPI: RoomAPI,
         private val eventBus: EventBus
 ) : GetRoomIdByAliasTask {
 
     override suspend fun execute(params: GetRoomIdByAliasTask.Params): Optional<String> {
-        var roomId = Realm.getInstance(monarchy.realmConfiguration).use {
-            RoomSummaryEntity.findByAlias(it, params.roomAlias)?.roomId
-        }
+        var roomId = sessionDatabase.roomSummaryQueries.getRoomIdWithAlias(params.roomAlias).executeAsOneOrNull()
         return if (roomId != null) {
             Optional.from(roomId)
         } else if (!params.searchOnServer) {

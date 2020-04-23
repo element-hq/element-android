@@ -26,17 +26,17 @@ import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.sync.SyncTask
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import im.vector.matrix.android.internal.util.Debouncer
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.createUIHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import timber.log.Timber
+import java.lang.Runnable
 import java.net.SocketTimeoutException
-import java.util.Timer
-import java.util.TimerTask
+import java.util.*
 import javax.inject.Inject
 import kotlin.concurrent.schedule
 
@@ -145,12 +145,13 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                 val timeout = state.let { if (it is SyncState.Running && it.afterPause) 0 else DEFAULT_LONG_POOL_TIMEOUT }
                 Timber.v("Execute sync request with timeout $timeout")
                 val params = SyncTask.Params(timeout)
-                val sync = syncScope.launch {
+                val job = syncScope.launch {
                     doSync(params)
                 }
-                runBlocking {
-                    sync.join()
+                job.invokeOnCompletion {
+                    synchronized(lock) { lock.notify() }
                 }
+                synchronized(lock) { lock.wait() }
                 Timber.v("...Continue")
             }
         }

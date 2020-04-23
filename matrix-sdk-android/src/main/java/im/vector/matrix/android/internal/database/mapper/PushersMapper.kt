@@ -17,44 +17,48 @@ package im.vector.matrix.android.internal.database.mapper
 
 import im.vector.matrix.android.api.session.pushers.Pusher
 import im.vector.matrix.android.api.session.pushers.PusherData
-import im.vector.matrix.android.internal.database.model.PusherDataEntity
-import im.vector.matrix.android.internal.database.model.PusherEntity
+import im.vector.matrix.android.api.session.pushers.PusherState
 import im.vector.matrix.android.internal.session.pushers.JsonPusher
+import im.vector.matrix.sqldelight.session.PusherEntity
+import javax.inject.Inject
 
-internal object PushersMapper {
+internal class PushersMapper @Inject constructor() {
 
-    fun map(pushEntity: PusherEntity): Pusher {
+    fun map(push_key: String,
+            kind: String?,
+            app_id: String,
+            app_display_name: String?,
+            device_display_name: String?,
+            profile_tag: String?,
+            lang: String?,
+            data_url: String?,
+            data_format: String?,
+            state: String): Pusher {
         return Pusher(
-                pushKey = pushEntity.pushKey,
-                kind = pushEntity.kind ?: "",
-                appId = pushEntity.appId,
-                appDisplayName = pushEntity.appDisplayName,
-                deviceDisplayName = pushEntity.deviceDisplayName,
-                profileTag = pushEntity.profileTag,
-                lang = pushEntity.lang,
-                data = PusherData(pushEntity.data?.url, pushEntity.data?.format),
-                state = pushEntity.state
+                pushKey = push_key,
+                kind = kind ?: "",
+                appId = app_id,
+                appDisplayName = app_display_name,
+                deviceDisplayName = device_display_name,
+                profileTag = profile_tag,
+                lang = lang,
+                data = PusherData(data_url, data_format),
+                state = PusherState.valueOf(state)
         )
     }
 
-    fun map(pusher: JsonPusher): PusherEntity {
-        return PusherEntity(
-                pushKey = pusher.pushKey,
+    fun map(pusher: JsonPusher, state: PusherState): PusherEntity {
+        return PusherEntity.Impl(
+                push_key = pusher.pushKey,
                 kind = pusher.kind,
-                appId = pusher.appId,
-                appDisplayName = pusher.appDisplayName,
-                deviceDisplayName = pusher.deviceDisplayName,
-                profileTag = pusher.profileTag,
+                app_id = pusher.appId,
+                app_display_name = pusher.appDisplayName,
+                device_display_name = pusher.deviceDisplayName,
+                profile_tag = pusher.profileTag,
                 lang = pusher.lang,
-                data = PusherDataEntity(pusher.data?.url, pusher.data?.format)
+                data_url = pusher.data?.url,
+                data_format = pusher.data?.format,
+                state = state.name
         )
     }
-}
-
-internal fun PusherEntity.asDomain(): Pusher {
-    return PushersMapper.map(this)
-}
-
-internal fun JsonPusher.toEntity(): PusherEntity {
-    return PushersMapper.map(this)
 }

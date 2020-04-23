@@ -31,7 +31,6 @@ data class RoomSummary constructor(
         val topic: String = "",
         val avatarUrl: String = "",
         val canonicalAlias: String? = null,
-        val aliases: List<String> = emptyList(),
         val isDirect: Boolean = false,
         val joinedMembersCount: Int? = 0,
         val invitedMembersCount: Int? = 0,

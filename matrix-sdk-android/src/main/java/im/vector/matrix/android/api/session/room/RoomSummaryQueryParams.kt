@@ -28,6 +28,7 @@ fun roomSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = {
  * [im.vector.matrix.android.api.session.room.Room] and [im.vector.matrix.android.api.session.room.RoomService]
  */
 data class RoomSummaryQueryParams(
+        val fromGroupId: String?,
         val displayName: QueryStringValue,
         val canonicalAlias: QueryStringValue,
         val memberships: List<Membership>
@@ -35,11 +36,13 @@ data class RoomSummaryQueryParams(
 
     class Builder {
 
+        var fromGroupId: String? = null
         var displayName: QueryStringValue = QueryStringValue.IsNotEmpty
         var canonicalAlias: QueryStringValue = QueryStringValue.NoCondition
         var memberships: List<Membership> = Membership.all()
 
         fun build() = RoomSummaryQueryParams(
+                fromGroupId = fromGroupId,
                 displayName = displayName,
                 canonicalAlias = canonicalAlias,
                 memberships = memberships

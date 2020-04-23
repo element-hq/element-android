@@ -46,6 +46,6 @@ internal class DefaultPaginationTask @Inject constructor(
             isRetryable = true
             apiCall = roomAPI.getRoomMessagesFrom(params.roomId, params.from, params.direction.value, params.limit, filter)
         }
-        return tokenChunkEventPersistor.insertInDb(chunk, params.roomId, params.direction)
+        return tokenChunkEventPersistor.insertInDb(chunk, params.roomId, params.direction,null)
     }
 }

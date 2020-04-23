@@ -25,9 +25,7 @@ import im.vector.matrix.android.api.session.room.model.Membership
 data class GroupSummary(
         val groupId: String,
         val membership: Membership,
-        val displayName: String = "",
-        val shortDescription: String = "",
-        val avatarUrl: String = "",
-        val roomIds: List<String> = emptyList(),
-        val userIds: List<String> = emptyList()
+        val displayName: String? = null,
+        val shortDescription: String? = null,
+        val avatarUrl: String? = null
 )

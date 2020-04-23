@@ -16,29 +16,22 @@
 
 package im.vector.matrix.android.internal.session.room.state
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.state.StateService
 import im.vector.matrix.android.api.util.Optional
-import im.vector.matrix.android.api.util.toOptional
-import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
-import im.vector.matrix.android.internal.database.query.getOrNull
-import im.vector.matrix.android.internal.database.query.whereStateKey
+import im.vector.matrix.android.internal.database.repository.CurrentStateEventDataSource
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import io.realm.Realm
+import kotlinx.coroutines.flow.Flow
 
 internal class DefaultStateService @AssistedInject constructor(@Assisted private val roomId: String,
-                                                               private val monarchy: Monarchy,
                                                                private val taskExecutor: TaskExecutor,
-                                                               private val sendStateTask: SendStateTask
+                                                               private val sendStateTask: SendStateTask,
+                                                               private val currentStateEventDataSource: CurrentStateEventDataSource
 ) : StateService {
 
     @AssistedInject.Factory
@@ -47,27 +40,27 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
     }
 
     override fun getStateEvent(eventType: String, stateKey: String): Event? {
-        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            CurrentStateEventEntity.getOrNull(realm, roomId, type = eventType, stateKey = stateKey)?.root?.asDomain()
-        }
+        return currentStateEventDataSource.getCurrentMapped(
+                roomId = roomId,
+                type = eventType,
+                stateKey = stateKey
+        )
     }
 
-    override fun getStateEventLive(eventType: String, stateKey: String): LiveData<Optional<Event>> {
-        val liveData = monarchy.findAllMappedWithChanges(
-                { realm -> CurrentStateEventEntity.whereStateKey(realm, roomId, type = eventType, stateKey = "") },
-                { it.root?.asDomain() }
+    override fun getStateEventLive(eventType: String, stateKey: String): Flow<Optional<Event>> {
+        return currentStateEventDataSource.getCurrentLiveMapped(
+                roomId = roomId,
+                type = eventType,
+                stateKey = stateKey
         )
-        return Transformations.map(liveData) { results ->
-            results.firstOrNull().toOptional()
-        }
     }
 
     override fun updateTopic(topic: String, callback: MatrixCallback<Unit>) {
         val params = SendStateTask.Params(roomId,
-                EventType.STATE_ROOM_TOPIC,
-                mapOf(
-                        "topic" to topic
-                ))
+                                          EventType.STATE_ROOM_TOPIC,
+                                          mapOf(
+                                                  "topic" to topic
+                                          ))
 
         sendStateTask
                 .configureWith(params) {

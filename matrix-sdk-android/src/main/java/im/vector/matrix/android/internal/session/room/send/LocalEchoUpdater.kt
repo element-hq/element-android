@@ -16,41 +16,29 @@
 
 package im.vector.matrix.android.internal.session.room.send
 
-import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.session.events.model.Content
-import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.send.SendState
-import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
-import im.vector.matrix.android.internal.database.mapper.ContentMapper
-import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.database.awaitTransaction
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.sqldelight.session.SessionDatabase
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class LocalEchoUpdater @Inject constructor(private val monarchy: Monarchy) {
+internal class LocalEchoUpdater @Inject constructor(private val sessionDatabase: SessionDatabase,
+                                                    private val coroutineDispatchers: MatrixCoroutineDispatchers,
+                                                    private val taskExecutor: TaskExecutor) {
 
-    fun updateSendState(eventId: String, sendState: SendState) {
+    fun updateSendState(eventId: String, sendState: SendState) = taskExecutor.executorScope.launch {
         Timber.v("Update local state of $eventId to ${sendState.name}")
-        monarchy.writeAsync { realm ->
-            val sendingEventEntity = EventEntity.where(realm, eventId).findFirst()
-            if (sendingEventEntity != null) {
-                if (sendState == SendState.SENT && sendingEventEntity.sendState == SendState.SYNCED) {
-                    // If already synced, do not put as sent
-                } else {
-                    sendingEventEntity.sendState = sendState
-                }
-            }
+        sessionDatabase.awaitTransaction(coroutineDispatchers) {
+            sessionDatabase.eventQueries.updateSendState(
+                    eventIds = listOf(eventId),
+                    sendState = sendState.name,
+                    ignoreSendStates = listOf(SendState.SENT.name, SendState.SYNCED.name)
+            )
         }
     }
 
-    fun updateEncryptedEcho(eventId: String, encryptedContent: Content, mxEventDecryptionResult: MXEventDecryptionResult) {
-        monarchy.writeAsync { realm ->
-            val sendingEventEntity = EventEntity.where(realm, eventId).findFirst()
-            if (sendingEventEntity != null) {
-                sendingEventEntity.type = EventType.ENCRYPTED
-                sendingEventEntity.content = ContentMapper.map(encryptedContent)
-                sendingEventEntity.setDecryptionResult(mxEventDecryptionResult)
-            }
-        }
-    }
+
 }

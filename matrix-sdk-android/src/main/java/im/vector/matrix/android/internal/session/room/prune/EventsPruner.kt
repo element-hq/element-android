@@ -16,41 +16,32 @@
 
 package im.vector.matrix.android.internal.session.room.prune
 
-import com.zhuinden.monarchy.Monarchy
+import com.squareup.sqldelight.Query
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
-import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.query.whereTypes
-import im.vector.matrix.android.internal.di.SessionDatabase
-import io.realm.OrderedCollectionChangeSet
-import io.realm.RealmConfiguration
-import io.realm.RealmResults
-import kotlinx.coroutines.launch
-import timber.log.Timber
+import im.vector.matrix.android.internal.database.SqlLiveEntityObserver
+import im.vector.matrix.android.internal.database.awaitTransaction
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.sqldelight.session.EventInsertNotification
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import javax.inject.Inject
 
 /**
  * Listens to the database for the insertion of any redaction event.
  * As it will actually delete the content, it should be called last in the list of listener.
  */
-internal class EventsPruner @Inject constructor(@SessionDatabase realmConfiguration: RealmConfiguration,
+internal class EventsPruner @Inject constructor(sessionDatabase: SessionDatabase,
+                                                private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                                 private val pruneEventTask: PruneEventTask) :
-        RealmLiveEntityObserver<EventEntity>(realmConfiguration) {
+        SqlLiveEntityObserver<EventInsertNotification>(sessionDatabase) {
 
-    override val query = Monarchy.Query<EventEntity> { EventEntity.whereTypes(it, listOf(EventType.REDACTION)) }
+    override val query: Query<EventInsertNotification>
+        get() = sessionDatabase.observerTriggerQueries.getAllEventInsertNotifications(types = listOf(EventType.REDACTION))
 
-    override fun onChange(results: RealmResults<EventEntity>, changeSet: OrderedCollectionChangeSet) {
-        Timber.v("Event pruner called with ${changeSet.insertions.size} insertions")
-
-        val insertedDomains = changeSet.insertions
-                .asSequence()
-                .mapNotNull { results[it]?.asDomain() }
-                .toList()
-
-        observerScope.launch {
-            val params = PruneEventTask.Params(insertedDomains)
-            pruneEventTask.execute(params)
+    override suspend fun handleChanges(results: List<EventInsertNotification>) {
+        pruneEventTask.execute(PruneEventTask.Params(results))
+        sessionDatabase.awaitTransaction(coroutineDispatchers) {
+            val notificationIds = results.map { it.event_id }
+            sessionDatabase.observerTriggerQueries.deleteEventInsertNotifications(notificationIds)
         }
     }
 }

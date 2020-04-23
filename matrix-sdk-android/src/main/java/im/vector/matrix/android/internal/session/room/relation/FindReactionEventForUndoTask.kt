@@ -15,14 +15,9 @@
  */
 package im.vector.matrix.android.internal.session.room.relation
 
-import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
-import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.ReactionAggregatedSummaryEntityFields
-import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.task.Task
-import io.realm.Realm
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import javax.inject.Inject
 
 internal interface FindReactionEventForUndoTask : Task<FindReactionEventForUndoTask.Params, FindReactionEventForUndoTask.Result> {
@@ -39,33 +34,19 @@ internal interface FindReactionEventForUndoTask : Task<FindReactionEventForUndoT
 }
 
 internal class DefaultFindReactionEventForUndoTask @Inject constructor(
-        private val monarchy: Monarchy,
+        private val sessionDatabase: SessionDatabase,
         @UserId private val userId: String) : FindReactionEventForUndoTask {
 
     override suspend fun execute(params: FindReactionEventForUndoTask.Params): FindReactionEventForUndoTask.Result {
-        val eventId = Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            getReactionToRedact(realm, params.reaction, params.eventId)?.eventId
-        }
+        val eventId = getReactionToRedact(params.eventId, params.reaction)
         return FindReactionEventForUndoTask.Result(eventId)
     }
 
-    private fun getReactionToRedact(realm: Realm, reaction: String, eventId: String): EventEntity? {
-        val summary = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst() ?: return null
+    private fun getReactionToRedact(eventId: String, reaction: String): String? {
+        val reactionsSummary = sessionDatabase.eventAnnotationsQueries.selectReaction(eventId, reaction).executeAsOneOrNull()
+                ?: return null
 
-        val rase = summary.reactionsSummary.where()
-                .equalTo(ReactionAggregatedSummaryEntityFields.KEY, reaction)
-                .findFirst() ?: return null
-
-        // want to find the event originated by me!
-        return rase.sourceEvents
-                .asSequence()
-                .mapNotNull {
-                    // find source event
-                    EventEntity.where(realm, it).findFirst()
-                }
-                .firstOrNull { eventEntity ->
-                    // is it mine?
-                    eventEntity.sender == userId
-                }
+        val sourceEvents = reactionsSummary.source_event_ids
+        return sessionDatabase.eventQueries.findWithSender(userId, sourceEvents).executeAsList().firstOrNull()
     }
 }

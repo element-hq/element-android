@@ -15,66 +15,63 @@
  */
 package im.vector.matrix.android.internal.session.room.prune
 
-import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.events.model.UnsignedData
+import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.mapper.EventMapper
-import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntity
-import im.vector.matrix.android.internal.database.query.findWithSenderMembershipEvent
-import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.awaitTransaction
-import io.realm.Realm
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.sqldelight.session.EventInsertNotification
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import timber.log.Timber
 import javax.inject.Inject
 
 internal interface PruneEventTask : Task<PruneEventTask.Params, Unit> {
 
     data class Params(
-            val redactionEvents: List<Event>
+            val redactionInsertNotifications: List<EventInsertNotification>
     )
 }
 
-internal class DefaultPruneEventTask @Inject constructor(private val monarchy: Monarchy) : PruneEventTask {
+internal class DefaultPruneEventTask @Inject constructor(private val sessionDatabase: SessionDatabase,
+                                                         private val coroutineDispatchers: MatrixCoroutineDispatchers ) : PruneEventTask {
 
     override suspend fun execute(params: PruneEventTask.Params) {
-        monarchy.awaitTransaction { realm ->
-            params.redactionEvents.forEach { event ->
-                pruneEvent(realm, event)
+        sessionDatabase.awaitTransaction(coroutineDispatchers) {
+            params.redactionInsertNotifications.forEach { event ->
+                pruneEvent(event)
             }
         }
     }
 
-    private fun pruneEvent(realm: Realm, redactionEvent: Event) {
-        if (redactionEvent.redacts.isNullOrBlank()) {
+    private fun pruneEvent(redactionInsertNotification: EventInsertNotification) {
+        val redactionEvent = sessionDatabase.eventQueries.select(redactionInsertNotification.event_id).executeAsOneOrNull()
+        // Check that we know this event
+        val redacts = redactionEvent?.redacts
+        if (redacts.isNullOrBlank()) {
             return
         }
-
-        // Check that we know this event
-        EventEntity.where(realm, eventId = redactionEvent.eventId ?: "").findFirst() ?: return
-
-        val isLocalEcho = LocalEcho.isLocalEchoId(redactionEvent.eventId ?: "")
+        val isLocalEcho = LocalEcho.isLocalEchoId(redactionEvent.event_id)
         Timber.v("Redact event for ${redactionEvent.redacts} localEcho=$isLocalEcho")
 
-        val eventToPrune = EventEntity.where(realm, eventId = redactionEvent.redacts).findFirst()
+        val eventToPrune = sessionDatabase.eventQueries.select(redacts).executeAsOneOrNull()
                 ?: return
 
         val typeToPrune = eventToPrune.type
-        val stateKey = eventToPrune.stateKey
+        val stateKey = eventToPrune.state_key
         val allowedKeys = computeAllowedKeys(typeToPrune)
         if (allowedKeys.isNotEmpty()) {
             val prunedContent = ContentMapper.map(eventToPrune.content)?.filterKeys { key -> allowedKeys.contains(key) }
-            eventToPrune.content = ContentMapper.map(prunedContent)
+            sessionDatabase.eventQueries.updateContent(ContentMapper.map(prunedContent), eventToPrune.event_id)
         } else {
             when (typeToPrune) {
                 EventType.ENCRYPTED,
                 EventType.MESSAGE -> {
-                    Timber.d("REDACTION for message ${eventToPrune.eventId}")
+                    Timber.d("REDACTION for message ${eventToPrune.event_id}")
                     val unsignedData = EventMapper.map(eventToPrune).unsignedData
                             ?: UnsignedData(null, null)
 
@@ -84,17 +81,21 @@ internal class DefaultPruneEventTask @Inject constructor(private val monarchy: M
 //                        eventRelationsAggregationUpdater.handleRedactionOfReplace(eventToPrune, contentModel.relatesTo!!.eventId!!, realm)
 //                    }
 
-                    val modified = unsignedData.copy(redactedEvent = redactionEvent)
-                    eventToPrune.content = ContentMapper.map(emptyMap())
-                    eventToPrune.unsignedData = MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).toJson(modified)
-                    eventToPrune.decryptionResultJson = null
-                    eventToPrune.decryptionErrorCode = null
+                    val modified = unsignedData.copy(redactedEvent = redactionEvent.asDomain())
+                    val unsignedDataJson = MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).toJson(modified)
+                    val prunedContent = ContentMapper.map(emptyMap())
+                    sessionDatabase.eventQueries.pruneEvent(
+                            content = prunedContent,
+                            unsignedData = unsignedDataJson,
+                            eventId = eventToPrune.event_id
+                    )
                 }
 //                EventType.REACTION -> {
 //                    eventRelationsAggregationUpdater.handleReactionRedact(eventToPrune, realm, userId)
 //                }
             }
         }
+        /*
         if (typeToPrune == EventType.STATE_ROOM_MEMBER && stateKey != null) {
             TimelineEventEntity.findWithSenderMembershipEvent(realm, eventToPrune.eventId).forEach {
                 it.senderName = null
@@ -102,15 +103,17 @@ internal class DefaultPruneEventTask @Inject constructor(private val monarchy: M
                 it.senderAvatar = null
             }
         }
+
+         */
     }
 
     private fun computeAllowedKeys(type: String): List<String> {
         // Add filtered content, allowed keys in content depends on the event type
         return when (type) {
-            EventType.STATE_ROOM_MEMBER          -> listOf("membership")
-            EventType.STATE_ROOM_CREATE          -> listOf("creator")
-            EventType.STATE_ROOM_JOIN_RULES      -> listOf("join_rule")
-            EventType.STATE_ROOM_POWER_LEVELS    -> listOf("users",
+            EventType.STATE_ROOM_MEMBER -> listOf("membership")
+            EventType.STATE_ROOM_CREATE -> listOf("creator")
+            EventType.STATE_ROOM_JOIN_RULES -> listOf("join_rule")
+            EventType.STATE_ROOM_POWER_LEVELS -> listOf("users",
                     "users_default",
                     "events",
                     "events_default",
@@ -119,10 +122,10 @@ internal class DefaultPruneEventTask @Inject constructor(private val monarchy: M
                     "kick",
                     "redact",
                     "invite")
-            EventType.STATE_ROOM_ALIASES         -> listOf("aliases")
+            EventType.STATE_ROOM_ALIASES -> listOf("aliases")
             EventType.STATE_ROOM_CANONICAL_ALIAS -> listOf("alias")
-            EventType.FEEDBACK                   -> listOf("type", "target_event_id")
-            else                                 -> emptyList()
+            EventType.FEEDBACK -> listOf("type", "target_event_id")
+            else -> emptyList()
         }
     }
 }

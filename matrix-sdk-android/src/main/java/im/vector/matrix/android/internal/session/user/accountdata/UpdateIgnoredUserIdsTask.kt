@@ -16,12 +16,11 @@
 
 package im.vector.matrix.android.internal.session.user.accountdata
 
-import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.internal.database.model.IgnoredUserEntity
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.sync.model.accountdata.IgnoredUsersContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
+import im.vector.matrix.android.internal.session.user.UserDataSource
 import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
@@ -36,7 +35,7 @@ internal interface UpdateIgnoredUserIdsTask : Task<UpdateIgnoredUserIdsTask.Para
 
 internal class DefaultUpdateIgnoredUserIdsTask @Inject constructor(
         private val accountDataApi: AccountDataAPI,
-        private val monarchy: Monarchy,
+        private val userDataSource: UserDataSource,
         private val saveIgnoredUsersTask: SaveIgnoredUsersTask,
         @UserId private val userId: String,
         private val eventBus: EventBus
@@ -44,12 +43,8 @@ internal class DefaultUpdateIgnoredUserIdsTask @Inject constructor(
 
     override suspend fun execute(params: UpdateIgnoredUserIdsTask.Params) {
         // Get current list
-        val ignoredUserIds = monarchy.fetchAllMappedSync(
-                { realm -> realm.where(IgnoredUserEntity::class.java) },
-                { it.userId }
-        ).toMutableSet()
-
-        val original = ignoredUserIds.toList()
+        val ignoredUserIds = userDataSource.getAllIgnoredIds().toMutableSet()
+        val original = ignoredUserIds.toSet()
 
         ignoredUserIds.removeAll { it in params.userIdsToUnIgnore }
         ignoredUserIds.addAll(params.userIdsToIgnore)

@@ -29,7 +29,6 @@ import im.vector.matrix.android.internal.auth.AuthAPI
 import im.vector.matrix.android.internal.auth.PendingSessionStore
 import im.vector.matrix.android.internal.auth.SessionCreator
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
-import im.vector.matrix.android.internal.auth.db.PendingSessionData
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers

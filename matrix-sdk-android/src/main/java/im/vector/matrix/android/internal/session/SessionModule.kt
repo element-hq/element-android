@@ -18,7 +18,10 @@ package im.vector.matrix.android.internal.session
 
 import android.content.Context
 import android.os.Build
-import com.zhuinden.monarchy.Monarchy
+import com.squareup.sqldelight.ColumnAdapter
+import com.squareup.sqldelight.EnumColumnAdapter
+import com.squareup.sqldelight.android.AndroidSqliteDriver
+import com.squareup.sqldelight.db.SqlDriver
 import dagger.Binds
 import dagger.Lazy
 import dagger.Module
@@ -39,23 +42,9 @@ import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageSer
 import im.vector.matrix.android.internal.crypto.secrets.DefaultSharedSecretStorageService
 import im.vector.matrix.android.internal.crypto.verification.VerificationMessageLiveObserver
 import im.vector.matrix.android.internal.database.LiveEntityObserver
-import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
-import im.vector.matrix.android.internal.di.Authenticated
-import im.vector.matrix.android.internal.di.DeviceId
-import im.vector.matrix.android.internal.di.SessionCacheDirectory
-import im.vector.matrix.android.internal.di.SessionDatabase
-import im.vector.matrix.android.internal.di.SessionFilesDirectory
-import im.vector.matrix.android.internal.di.SessionId
-import im.vector.matrix.android.internal.di.Unauthenticated
-import im.vector.matrix.android.internal.di.UserId
-import im.vector.matrix.android.internal.di.UserMd5
-import im.vector.matrix.android.internal.network.AccessTokenInterceptor
-import im.vector.matrix.android.internal.network.DefaultNetworkConnectivityChecker
-import im.vector.matrix.android.internal.network.FallbackNetworkCallbackStrategy
-import im.vector.matrix.android.internal.network.NetworkCallbackStrategy
-import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
-import im.vector.matrix.android.internal.network.PreferredNetworkCallbackStrategy
-import im.vector.matrix.android.internal.network.RetrofitFactory
+import im.vector.matrix.android.internal.database.helper.ListOfStringColumnAdapter
+import im.vector.matrix.android.internal.di.*
+import im.vector.matrix.android.internal.network.*
 import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.homeserver.DefaultHomeServerCapabilitiesService
@@ -66,7 +55,7 @@ import im.vector.matrix.android.internal.session.room.tombstone.RoomTombstoneEve
 import im.vector.matrix.android.internal.session.securestorage.DefaultSecureStorageService
 import im.vector.matrix.android.internal.session.user.accountdata.DefaultAccountDataService
 import im.vector.matrix.android.internal.util.md5
-import io.realm.RealmConfiguration
+import im.vector.matrix.sqldelight.session.*
 import okhttp3.OkHttpClient
 import org.greenrobot.eventbus.EventBus
 import retrofit2.Retrofit
@@ -153,21 +142,30 @@ internal abstract class SessionModule {
 
         @JvmStatic
         @Provides
-        @SessionDatabase
         @SessionScope
-        fun providesRealmConfiguration(realmConfigurationFactory: SessionRealmConfigurationFactory): RealmConfiguration {
-            return realmConfigurationFactory.create()
+        fun providesSessionDriver(context: Context, @SessionFilesDirectory directory: File): SqlDriver {
+            val name = "${directory.name}-matrix-sdk-session.db"
+            return AndroidSqliteDriver(SessionDatabase.Schema, context, name)
         }
 
         @JvmStatic
         @Provides
         @SessionScope
-        fun providesMonarchy(@SessionDatabase
-                             realmConfiguration: RealmConfiguration): Monarchy {
-            return Monarchy.Builder()
-                    .setRealmConfiguration(realmConfiguration)
-                    .build()
+        fun providesSessionDatabase(driver: SqlDriver): SessionDatabase {
+            val membershipsAdapter: ColumnAdapter<Memberships, String> = EnumColumnAdapter()
+            val listOfStringAdapter = ListOfStringColumnAdapter()
+            return SessionDatabase(driver,
+                    groupSummaryEntityAdapter = GroupSummaryEntity.Adapter(membershipsAdapter),
+                    roomMemberSummaryEntityAdapter = RoomMemberSummaryEntity.Adapter(membershipsAdapter),
+                    roomSummaryEntityAdapter = RoomSummaryEntity.Adapter(membershipsAdapter),
+                    groupEntityAdapter = GroupEntity.Adapter(membershipsAdapter),
+                    editAggregatedSummaryAdapter = EditAggregatedSummary.Adapter(listOfStringAdapter, listOfStringAdapter),
+                    pollAggregatedSummaryAdapter = PollAggregatedSummary.Adapter(listOfStringAdapter, listOfStringAdapter),
+                    reactionAggregatedSummaryAdapter = ReactionAggregatedSummary.Adapter(listOfStringAdapter, listOfStringAdapter),
+                    referencesAggregatedSummaryAdapter = ReferencesAggregatedSummary.Adapter(listOfStringAdapter, listOfStringAdapter)
+            )
         }
+
 
         @JvmStatic
         @Provides

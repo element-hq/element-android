@@ -18,18 +18,16 @@ package im.vector.matrix.android.internal.database.mapper
 
 import im.vector.matrix.android.api.session.room.model.ReadReceipt
 import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntity
-import im.vector.matrix.android.internal.database.model.UserEntity
-import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.di.SessionDatabase
-import io.realm.Realm
+import im.vector.matrix.android.internal.di.RealmSessionDatabase
 import io.realm.RealmConfiguration
 import javax.inject.Inject
 
-internal class ReadReceiptsSummaryMapper @Inject constructor(@SessionDatabase private val realmConfiguration: RealmConfiguration) {
+internal class ReadReceiptsSummaryMapper @Inject constructor(@RealmSessionDatabase private val realmConfiguration: RealmConfiguration) {
 
     fun map(readReceiptsSummaryEntity: ReadReceiptsSummaryEntity?): List<ReadReceipt> {
-        if (readReceiptsSummaryEntity == null) {
-            return emptyList()
+        return emptyList()
+        /*if (readReceiptsSummaryEntity == null) {
+
         }
         return Realm.getInstance(realmConfiguration).use { realm ->
             val readReceipts = readReceiptsSummaryEntity.readReceipts
@@ -39,6 +37,6 @@ internal class ReadReceiptsSummaryMapper @Inject constructor(@SessionDatabase pr
                                    ?: return@mapNotNull null
                         ReadReceipt(user.asDomain(), it.originServerTs.toLong())
                     }
-        }
+        }*/
     }
 }

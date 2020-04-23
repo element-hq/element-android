@@ -16,24 +16,21 @@
 
 package im.vector.matrix.android.internal.session.room.notification
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.pushrules.RuleScope
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.matrix.android.api.session.room.notification.RoomPushRuleService
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.database.model.PushRuleEntity
-import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.session.pushers.PushRuleDataSource
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 internal class DefaultRoomPushRuleService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                       private val setRoomNotificationStateTask: SetRoomNotificationStateTask,
-                                                                      private val monarchy: Monarchy,
+                                                                      private val pushRuleDataSource: PushRuleDataSource,
                                                                       private val taskExecutor: TaskExecutor)
     : RoomPushRuleService {
 
@@ -42,10 +39,11 @@ internal class DefaultRoomPushRuleService @AssistedInject constructor(@Assisted 
         fun create(roomId: String): RoomPushRuleService
     }
 
-    override fun getLiveRoomNotificationState(): LiveData<RoomNotificationState> {
-        return Transformations.map(getPushRuleForRoom()) {
-            it?.toRoomNotificationState() ?: RoomNotificationState.ALL_MESSAGES
-        }
+    override fun getRoomNotificationStateLive(): Flow<RoomNotificationState> {
+        return pushRuleDataSource.getRoomPushRuleLive(roomId)
+                .map {
+                    it.getOrNull()?.toRoomNotificationState() ?: RoomNotificationState.ALL_MESSAGES
+                }
     }
 
     override fun setRoomNotificationState(roomNotificationState: RoomNotificationState, matrixCallback: MatrixCallback<Unit>): Cancelable {
@@ -54,19 +52,5 @@ internal class DefaultRoomPushRuleService @AssistedInject constructor(@Assisted 
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
-    }
-
-    private fun getPushRuleForRoom(): LiveData<RoomPushRule?> {
-        val liveData = monarchy.findAllMappedWithChanges(
-                { realm ->
-                    PushRuleEntity.where(realm, scope = RuleScope.GLOBAL, ruleId = roomId)
-                },
-                { result ->
-                    result.toRoomPushRule()
-                }
-        )
-        return Transformations.map(liveData) { results ->
-            results.firstOrNull()
-        }
     }
 }

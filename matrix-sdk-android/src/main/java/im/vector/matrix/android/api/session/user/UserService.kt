@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.Optional
+import kotlinx.coroutines.flow.Flow
 
 /**
  * This interface defines methods to get users. It's implemented at the session level.
@@ -48,27 +49,27 @@ interface UserService {
     /**
      * Observe a live user from a userId
      * @param userId the userId to look for.
-     * @return a LiveData of user with userId
+     * @return a Flow of user with userId
      */
-    fun getUserLive(userId: String): LiveData<Optional<User>>
+    fun getUserLive(userId: String): Flow<Optional<User>>
 
     /**
      * Observe a live list of users sorted alphabetically
-     * @return a Livedata of users
+     * @return a Flow of users
      */
-    fun getUsersLive(): LiveData<List<User>>
+    fun getUsersLive(): Flow<List<User>>
 
     /**
      * Observe a live [PagedList] of users sorted alphabetically. You can filter the users.
      * @param filter the filter. It will look into userId and displayName.
-     * @return a Livedata of users
+     * @return a Flow of users
      */
-    fun getPagedUsersLive(filter: String? = null): LiveData<PagedList<User>>
+    fun getPagedUsersLive(filter: String? = null): Flow<PagedList<User>>
 
     /**
      * Get list of ignored users
      */
-    fun getIgnoredUsersLive(): LiveData<List<User>>
+    fun getIgnoredUsersLive(): Flow<List<User>>
 
     /**
      * Ignore users

@@ -22,22 +22,23 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMemberContent
 import im.vector.matrix.android.internal.session.user.UserEntityFactory
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import io.realm.Realm
 import javax.inject.Inject
 
-internal class RoomMemberEventHandler @Inject constructor() {
+internal class RoomMemberEventHandler @Inject constructor(private val sessionDatabase: SessionDatabase) {
 
-    fun handle(realm: Realm, roomId: String, event: Event): Boolean {
+    fun handle(roomId: String, event: Event): Boolean {
         if (event.type != EventType.STATE_ROOM_MEMBER) {
             return false
         }
         val roomMember = event.content.toModel<RoomMemberContent>() ?: return false
         val userId = event.stateKey ?: return false
         val roomMemberEntity = RoomMemberEntityFactory.create(roomId, userId, roomMember)
-        realm.insertOrUpdate(roomMemberEntity)
+        sessionDatabase.roomMemberSummaryQueries.insertOrUpdate(roomMemberEntity)
         if (roomMember.membership in Membership.activeMemberships()) {
             val userEntity = UserEntityFactory.create(userId, roomMember)
-            realm.insertOrUpdate(userEntity)
+            sessionDatabase.userQueries.insertOrUpdate(userEntity)
         }
         return true
     }

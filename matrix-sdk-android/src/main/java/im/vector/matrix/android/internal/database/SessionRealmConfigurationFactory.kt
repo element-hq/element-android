@@ -16,79 +16,36 @@
 
 package im.vector.matrix.android.internal.database
 
-import android.content.Context
 import im.vector.matrix.android.internal.database.model.SessionRealmModule
 import im.vector.matrix.android.internal.di.SessionFilesDirectory
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.session.SessionModule
-import io.realm.Realm
 import io.realm.RealmConfiguration
-import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
-private const val REALM_SHOULD_CLEAR_FLAG_ = "REALM_SHOULD_CLEAR_FLAG_"
 private const val REALM_NAME = "disk_store.realm"
 
 /**
  * This class is handling creation of RealmConfiguration for a session.
- * It will handle corrupted realm by clearing the db file. It allows to just clear cache without losing your crypto keys.
- * It's clearly not perfect but there is no way to catch the native crash.
  */
 internal class SessionRealmConfigurationFactory @Inject constructor(
-        private val realmKeysUtils: RealmKeysUtils,
+        private val databaseKeysUtils: DatabaseKeysUtils,
         @SessionFilesDirectory val directory: File,
         @SessionId val sessionId: String,
-        @UserMd5 val userMd5: String,
-        context: Context) {
-
-    private val sharedPreferences = context.getSharedPreferences("im.vector.matrix.android.realm", Context.MODE_PRIVATE)
+        @UserMd5 val userMd5: String) {
 
     fun create(): RealmConfiguration {
-        val shouldClearRealm = sharedPreferences.getBoolean("$REALM_SHOULD_CLEAR_FLAG_$sessionId", false)
-        if (shouldClearRealm) {
-            Timber.v("************************************************************")
-            Timber.v("The realm file session was corrupted and couldn't be loaded.")
-            Timber.v("The file has been deleted to recover.")
-            Timber.v("************************************************************")
-            deleteRealmFiles()
-        }
-        sharedPreferences
-                .edit()
-                .putBoolean("$REALM_SHOULD_CLEAR_FLAG_$sessionId", true)
-                .apply()
-
-        val realmConfiguration = RealmConfiguration.Builder()
-                .compactOnLaunch()
+        return RealmConfiguration.Builder()
                 .directory(directory)
                 .name(REALM_NAME)
                 .apply {
-                    realmKeysUtils.configureEncryption(this, SessionModule.getKeyAlias(userMd5))
+                    databaseKeysUtils.configureEncryption(this, SessionModule.getKeyAlias(userMd5))
                 }
                 .modules(SessionRealmModule())
                 .deleteRealmIfMigrationNeeded()
                 .build()
-
-        // Try creating a realm instance and if it succeeds we can clear the flag
-        Realm.getInstance(realmConfiguration).use {
-            Timber.v("Successfully create realm instance")
-            sharedPreferences
-                    .edit()
-                    .putBoolean("$REALM_SHOULD_CLEAR_FLAG_$sessionId", false)
-                    .apply()
-        }
-        return realmConfiguration
     }
 
-    // Delete all the realm files of the session
-    private fun deleteRealmFiles() {
-        listOf(REALM_NAME, "$REALM_NAME.lock", "$REALM_NAME.note", "$REALM_NAME.management").forEach { file ->
-            try {
-                File(directory, file).deleteRecursively()
-            } catch (e: Exception) {
-                Timber.e(e, "Unable to delete files")
-            }
-        }
-    }
 }

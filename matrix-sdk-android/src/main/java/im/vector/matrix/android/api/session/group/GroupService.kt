@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.session.group
 
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.session.group.model.GroupSummary
+import kotlinx.coroutines.flow.Flow
 
 /**
  * This interface defines methods to get groups. It's implemented at the session level.
@@ -48,5 +49,5 @@ interface GroupService {
      * Get a live list of group summaries. This list is refreshed as soon as the data changes.
      * @return the [LiveData] of [GroupSummary]
      */
-    fun getGroupSummariesLive(groupSummaryQueryParams: GroupSummaryQueryParams): LiveData<List<GroupSummary>>
+    fun getGroupSummariesLive(groupSummaryQueryParams: GroupSummaryQueryParams): Flow<List<GroupSummary>>
 }

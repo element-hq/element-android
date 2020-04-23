@@ -16,24 +16,34 @@
 
 package im.vector.matrix.android.internal.database.mapper
 
+import com.squareup.sqldelight.db.SqlCursor
 import im.vector.matrix.android.api.session.group.model.GroupSummary
-import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
+import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.sqldelight.session.Memberships
+import javax.inject.Inject
 
-internal object GroupSummaryMapper {
+internal class GroupSummaryMapper @Inject constructor() {
 
-    fun map(groupSummaryEntity: GroupSummaryEntity): GroupSummary {
+    fun map(cursor: SqlCursor): GroupSummary = GroupSummary(
+            groupId = cursor.getString(0)!!,
+            membership = Membership.valueOf(cursor.getString(4)!!),
+            displayName = cursor.getString(1) ?: "",
+            shortDescription = cursor.getString(2) ?: "",
+            avatarUrl = cursor.getString(3) ?: ""
+    )
+
+    fun map(group_id: String,
+            display_name: String?,
+            short_description: String?,
+            avatar_url: String?,
+            membership: Memberships): GroupSummary {
+
         return GroupSummary(
-                groupSummaryEntity.groupId,
-                groupSummaryEntity.membership,
-                groupSummaryEntity.displayName,
-                groupSummaryEntity.shortDescription,
-                groupSummaryEntity.avatarUrl,
-                groupSummaryEntity.roomIds.toList(),
-                groupSummaryEntity.userIds.toList()
+                groupId = group_id,
+                membership = membership.map(),
+                displayName = display_name ?: "",
+                shortDescription = short_description ?: "",
+                avatarUrl = avatar_url ?: ""
         )
     }
-}
-
-internal fun GroupSummaryEntity.asDomain(): GroupSummary {
-    return GroupSummaryMapper.map(this)
 }

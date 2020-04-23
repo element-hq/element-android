@@ -16,12 +16,12 @@
 
 package im.vector.matrix.android.api.session.accountdata
 
-import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
+import kotlinx.coroutines.flow.Flow
 
 interface AccountDataService {
     /**
@@ -32,7 +32,7 @@ interface AccountDataService {
     /**
      * Observe the account data with the provided type
      */
-    fun getLiveAccountDataEvent(type: String): LiveData<Optional<UserAccountDataEvent>>
+    fun getLiveAccountDataEvent(type: String): Flow<Optional<UserAccountDataEvent>>
 
     /**
      * Retrieve the account data with the provided types. The return list can have a different size that
@@ -44,7 +44,7 @@ interface AccountDataService {
     /**
      * Observe the account data with the provided types. If an empty set is provided, all the AccountData are observed
      */
-    fun getLiveAccountDataEvents(types: Set<String>): LiveData<List<UserAccountDataEvent>>
+    fun getLiveAccountDataEvents(types: Set<String>): Flow<List<UserAccountDataEvent>>
 
     /**
      * Update the account data with the provided type and the provided account data content

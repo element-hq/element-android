@@ -20,13 +20,7 @@ import android.net.Uri
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.AuthenticationService
-import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
-import im.vector.matrix.android.api.auth.data.LoginFlowResult
-import im.vector.matrix.android.api.auth.data.SessionParams
-import im.vector.matrix.android.api.auth.data.Versions
-import im.vector.matrix.android.api.auth.data.isLoginAndRegistrationSupportedBySdk
-import im.vector.matrix.android.api.auth.data.isSupportedBySdk
+import im.vector.matrix.android.api.auth.data.*
 import im.vector.matrix.android.api.auth.login.LoginWizard
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
 import im.vector.matrix.android.api.failure.Failure
@@ -35,7 +29,7 @@ import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 import im.vector.matrix.android.internal.auth.data.RiotConfig
-import im.vector.matrix.android.internal.auth.db.PendingSessionData
+import im.vector.matrix.android.internal.auth.registration.PendingSessionData
 import im.vector.matrix.android.internal.auth.login.DefaultLoginWizard
 import im.vector.matrix.android.internal.auth.registration.DefaultRegistrationWizard
 import im.vector.matrix.android.internal.di.Unauthenticated
@@ -114,7 +108,7 @@ internal class DefaultAuthenticationService @Inject constructor(
     }
 
     private suspend fun getLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
-        return withContext(coroutineDispatchers.io) {
+        return withContext(coroutineDispatchers.computation) {
             val authAPI = buildAuthAPI(homeServerConnectionConfig)
 
             // First check the homeserver version

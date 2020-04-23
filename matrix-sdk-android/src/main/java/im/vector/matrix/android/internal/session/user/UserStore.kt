@@ -16,21 +16,23 @@
 
 package im.vector.matrix.android.internal.session.user
 
-import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.internal.database.model.UserEntity
-import im.vector.matrix.android.internal.util.awaitTransaction
+import im.vector.matrix.android.internal.database.awaitTransaction
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import javax.inject.Inject
 
 internal interface UserStore {
     suspend fun createOrUpdate(userId: String, displayName: String? = null, avatarUrl: String? = null)
 }
 
-internal class RealmUserStore @Inject constructor(private val monarchy: Monarchy) : UserStore {
-
+internal class SqlUserStore @Inject constructor(private val sessionDatabase: SessionDatabase,
+                                                private val coroutineDispatchers: MatrixCoroutineDispatchers ) : UserStore {
     override suspend fun createOrUpdate(userId: String, displayName: String?, avatarUrl: String?) {
-        monarchy.awaitTransaction {
-            val userEntity = UserEntity(userId, displayName ?: "", avatarUrl ?: "")
-            it.insertOrUpdate(userEntity)
+        sessionDatabase.awaitTransaction(coroutineDispatchers) {
+            val userEntity = im.vector.matrix.sqldelight.session.UserEntity.Impl(userId, displayName
+                    ?: "", avatarUrl ?: "")
+            it.userQueries.insertOrUpdate(userEntity)
         }
     }
+
 }

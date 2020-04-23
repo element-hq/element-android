@@ -17,16 +17,19 @@
 package im.vector.matrix.android.internal.auth
 
 import android.content.Context
+import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.api.auth.AuthenticationService
-import im.vector.matrix.android.internal.auth.db.AuthRealmMigration
-import im.vector.matrix.android.internal.auth.db.AuthRealmModule
-import im.vector.matrix.android.internal.auth.db.RealmPendingSessionStore
-import im.vector.matrix.android.internal.auth.db.RealmSessionParamsStore
-import im.vector.matrix.android.internal.database.RealmKeysUtils
-import im.vector.matrix.android.internal.di.AuthDatabase
+import im.vector.matrix.android.internal.auth.realm.AuthRealmMigration
+import im.vector.matrix.android.internal.auth.realm.AuthRealmModule
+import im.vector.matrix.android.internal.auth.sqlite.AuthSchema
+import im.vector.matrix.android.internal.auth.sqlite.SqlitePendingSessionStore
+import im.vector.matrix.android.internal.auth.sqlite.SqliteSessionParamsStore
+import im.vector.matrix.android.internal.database.DatabaseKeysUtils
+import im.vector.matrix.android.internal.di.MatrixScope
+import im.vector.matrix.sqldelight.auth.AuthDatabase
 import io.realm.RealmConfiguration
 import java.io.File
 
@@ -39,16 +42,16 @@ internal abstract class AuthModule {
 
         @JvmStatic
         @Provides
-        @AuthDatabase
-        fun providesRealmConfiguration(context: Context, realmKeysUtils: RealmKeysUtils): RealmConfiguration {
+        @im.vector.matrix.android.internal.di.RealmAuthDatabase
+        @MatrixScope
+        fun providesRealmConfiguration(context: Context, databaseKeysUtils: DatabaseKeysUtils): RealmConfiguration {
             val old = File(context.filesDir, "matrix-sdk-auth")
             if (old.exists()) {
                 old.renameTo(File(context.filesDir, "matrix-sdk-auth.realm"))
             }
-
             return RealmConfiguration.Builder()
                     .apply {
-                        realmKeysUtils.configureEncryption(this, DB_ALIAS)
+                        databaseKeysUtils.configureEncryption(this, DB_ALIAS)
                     }
                     .name("matrix-sdk-auth.realm")
                     .modules(AuthRealmModule())
@@ -56,13 +59,22 @@ internal abstract class AuthModule {
                     .migration(AuthRealmMigration)
                     .build()
         }
+
+        @JvmStatic
+        @Provides
+        @MatrixScope
+        fun providesAuthDatabase(context: Context, authSchema: AuthSchema, databaseKeysUtils: DatabaseKeysUtils): AuthDatabase {
+            val supportFactory = databaseKeysUtils.createEncryptedSQLiteOpenHelperFactory(DB_ALIAS)
+            val driver = AndroidSqliteDriver(authSchema, context, "matrix-sdk-auth.db", factory = supportFactory)
+            return AuthDatabase.invoke(driver)
+        }
     }
 
     @Binds
-    abstract fun bindSessionParamsStore(sessionParamsStore: RealmSessionParamsStore): SessionParamsStore
+    abstract fun bindSessionParamsStore(sessionParamsStore: SqliteSessionParamsStore): SessionParamsStore
 
     @Binds
-    abstract fun bindPendingSessionStore(pendingSessionStore: RealmPendingSessionStore): PendingSessionStore
+    abstract fun bindPendingSessionStore(pendingSessionStore: SqlitePendingSessionStore): PendingSessionStore
 
     @Binds
     abstract fun bindAuthenticationService(authenticationService: DefaultAuthenticationService): AuthenticationService

@@ -16,9 +16,9 @@
 
 package im.vector.matrix.android.api.session.room.send
 
-import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
+import kotlinx.coroutines.flow.Flow
 
 interface DraftService {
 
@@ -36,5 +36,5 @@ interface DraftService {
      * Return the current drafts if any, as a live data
      * The draft list can contain one draft for {regular, reply, quote} and an arbitrary number of {edit} drafts
      */
-    fun getDraftsLive(): LiveData<List<UserDraft>>
+    fun getDraftsLive(): Flow<List<UserDraft>>
 }

@@ -15,32 +15,29 @@
  */
 package im.vector.matrix.android.internal.session.pushers
 
-import androidx.lifecycle.LiveData
 import androidx.work.BackoffPolicy
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.pushers.Pusher
 import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.PusherEntity
-import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
+import kotlinx.coroutines.flow.Flow
 import java.security.InvalidParameterException
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 internal class DefaultPushersService @Inject constructor(
         private val workManagerProvider: WorkManagerProvider,
-        private val monarchy: Monarchy,
         @SessionId private val sessionId: String,
         private val getPusherTask: GetPushersTask,
         private val removePusherTask: RemovePusherTask,
+        private val pushersDataSource: PushersDataSource,
         private val taskExecutor: TaskExecutor
 ) : PushersService {
 
@@ -97,15 +94,12 @@ internal class DefaultPushersService @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
-    override fun getPushersLive(): LiveData<List<Pusher>> {
-        return monarchy.findAllMappedWithChanges(
-                { realm -> PusherEntity.where(realm) },
-                { it.asDomain() }
-        )
+    override fun getPushersLive(): Flow<List<Pusher>> {
+        return pushersDataSource.getPushersLive()
     }
 
     override fun getPushers(): List<Pusher> {
-        return monarchy.fetchAllCopiedSync { PusherEntity.where(it) }.map { it.asDomain() }
+        return pushersDataSource.getPushers()
     }
 
     companion object {

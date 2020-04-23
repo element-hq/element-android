@@ -16,47 +16,82 @@
 
 package im.vector.matrix.android.internal.database.mapper
 
+import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.model.VersioningState
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
+import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.sqldelight.session.RoomSummaryWithTimeline
 import javax.inject.Inject
 
-internal class RoomSummaryMapper @Inject constructor(private val timelineEventMapper: TimelineEventMapper) {
+internal class RoomSummaryMapper @Inject constructor() {
 
-    fun map(roomSummaryEntity: RoomSummaryEntity): RoomSummary {
-        val tags = roomSummaryEntity.tags.map {
-            RoomTag(it.tagName, it.tagOrder)
-        }
-
-        val latestEvent = roomSummaryEntity.latestPreviewableEvent?.let {
-            timelineEventMapper.map(it, buildReadReceipts = false)
-        }
-
+    fun map(roomSummaryWithTimeline: RoomSummaryWithTimeline, tags: List<RoomTag>): RoomSummary {
         return RoomSummary(
-                roomId = roomSummaryEntity.roomId,
-                displayName = roomSummaryEntity.displayName ?: "",
-                topic = roomSummaryEntity.topic ?: "",
-                avatarUrl = roomSummaryEntity.avatarUrl ?: "",
-                isDirect = roomSummaryEntity.isDirect,
-                latestPreviewableEvent = latestEvent,
-                joinedMembersCount = roomSummaryEntity.joinedMembersCount,
-                invitedMembersCount = roomSummaryEntity.invitedMembersCount,
-                otherMemberIds = roomSummaryEntity.otherMemberIds.toList(),
-                highlightCount = roomSummaryEntity.highlightCount,
-                notificationCount = roomSummaryEntity.notificationCount,
-                hasUnreadMessages = roomSummaryEntity.hasUnreadMessages,
+                roomId = roomSummaryWithTimeline.summary_room_id,
+                displayName = roomSummaryWithTimeline.display_name ?: "",
+                topic = roomSummaryWithTimeline.topic ?: "",
+                avatarUrl = roomSummaryWithTimeline.avatar_url ?: "",
+                isDirect = roomSummaryWithTimeline.is_direct,
+                latestPreviewableEvent = createTimelineEvent(roomSummaryWithTimeline),
+                joinedMembersCount = roomSummaryWithTimeline.joined_members_count,
+                invitedMembersCount = roomSummaryWithTimeline.invited_members_count,
+                otherMemberIds = emptyList(),
+                highlightCount = roomSummaryWithTimeline.highlight_count,
+                notificationCount = roomSummaryWithTimeline.notification_count,
+                hasUnreadMessages = roomSummaryWithTimeline.has_unread,
+                versioningState = VersioningState.valueOf(roomSummaryWithTimeline.versioning_state),
                 tags = tags,
-                membership = roomSummaryEntity.membership,
-                versioningState = roomSummaryEntity.versioningState,
-                readMarkerId = roomSummaryEntity.readMarkerId,
-                userDrafts = roomSummaryEntity.userDrafts?.userDrafts?.map { DraftMapper.map(it) } ?: emptyList(),
-                canonicalAlias = roomSummaryEntity.canonicalAlias,
-                aliases = roomSummaryEntity.aliases.toList(),
-                isEncrypted = roomSummaryEntity.isEncrypted,
-                typingRoomMemberIds = roomSummaryEntity.typingUserIds.toList(),
-                breadcrumbsIndex = roomSummaryEntity.breadcrumbsIndex,
-                roomEncryptionTrustLevel = roomSummaryEntity.roomEncryptionTrustLevel,
-                inviterId = roomSummaryEntity.inviterId
+                membership = roomSummaryWithTimeline.membership.map(),
+                readMarkerId = roomSummaryWithTimeline.read_marker_id,
+                userDrafts = emptyList(),
+                canonicalAlias = roomSummaryWithTimeline.canonical_alias,
+                inviterId = roomSummaryWithTimeline.inviter_id,
+                isEncrypted = roomSummaryWithTimeline.is_encrypted,
+                typingRoomMemberIds = emptyList(),//roomSummaryEntity.typingUserIds.toList(),
+                breadcrumbsIndex = roomSummaryWithTimeline.breadcrumb_index ?: -1,
+                roomEncryptionTrustLevel = roomSummaryWithTimeline.room_encryption_trust_level?.let {
+                    try {
+                        RoomEncryptionTrustLevel.valueOf(it)
+                    } catch (failure: Throwable) {
+                        null
+                    }
+                }
         )
     }
+
+    private fun createTimelineEvent(roomSummaryWithTimeline: RoomSummaryWithTimeline): TimelineEvent? {
+        val type = roomSummaryWithTimeline.type ?: return null
+        val roomId = roomSummaryWithTimeline.summary_room_id
+        val eventId = roomSummaryWithTimeline.event_id ?: return null
+        val displayIndex = roomSummaryWithTimeline.display_index ?: return null
+        val localId = roomSummaryWithTimeline.local_id ?: return null
+        val event = Event(
+                type = type,
+                roomId = roomId,
+                eventId = eventId,
+                content = ContentMapper.map(roomSummaryWithTimeline.content),
+                prevContent = ContentMapper.map(roomSummaryWithTimeline.prev_content),
+                originServerTs = roomSummaryWithTimeline.origin_server_ts,
+                senderId = roomSummaryWithTimeline.sender_id,
+                redacts = roomSummaryWithTimeline.redacts,
+                stateKey = roomSummaryWithTimeline.state_key,
+                unsignedData = null
+        ).setDecryptionValues(roomSummaryWithTimeline.decryption_result_json, roomSummaryWithTimeline.decryption_error_code)
+
+
+        return TimelineEvent(
+                root = event,
+                eventId = eventId,
+                annotations = null,
+                displayIndex = displayIndex,
+                isUniqueDisplayName = roomSummaryWithTimeline.is_unique_display_name ?: false,
+                localId = localId,
+                readReceipts = emptyList(),
+                senderAvatar = roomSummaryWithTimeline.sender_avatar,
+                senderName = roomSummaryWithTimeline.sender_name
+        )
+    }
+
 }

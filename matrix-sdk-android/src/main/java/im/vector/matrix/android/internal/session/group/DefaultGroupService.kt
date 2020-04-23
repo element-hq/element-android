@@ -16,52 +16,28 @@
 
 package im.vector.matrix.android.internal.session.group
 
-import androidx.lifecycle.LiveData
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.group.Group
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.group.GroupSummaryQueryParams
 import im.vector.matrix.android.api.session.group.model.GroupSummary
-import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
-import im.vector.matrix.android.internal.database.model.GroupSummaryEntityFields
-import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.query.process
-import im.vector.matrix.android.internal.util.fetchCopyMap
-import io.realm.Realm
-import io.realm.RealmQuery
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-internal class DefaultGroupService @Inject constructor(private val monarchy: Monarchy) : GroupService {
+internal class DefaultGroupService @Inject constructor(private val groupSummaryDataSource: GroupSummaryDataSource) : GroupService {
 
     override fun getGroup(groupId: String): Group? {
         return null
     }
 
     override fun getGroupSummary(groupId: String): GroupSummary? {
-        return monarchy.fetchCopyMap(
-                { realm -> GroupSummaryEntity.where(realm, groupId).findFirst() },
-                { it, _ -> it.asDomain() }
-        )
+        return groupSummaryDataSource.getGroupSummary(groupId)
     }
 
     override fun getGroupSummaries(groupSummaryQueryParams: GroupSummaryQueryParams): List<GroupSummary> {
-        return monarchy.fetchAllMappedSync(
-                { groupSummariesQuery(it, groupSummaryQueryParams) },
-                { it.asDomain() }
-        )
+        return groupSummaryDataSource.getGroupSummaries(groupSummaryQueryParams)
     }
 
-    override fun getGroupSummariesLive(groupSummaryQueryParams: GroupSummaryQueryParams): LiveData<List<GroupSummary>> {
-        return monarchy.findAllMappedWithChanges(
-                { groupSummariesQuery(it, groupSummaryQueryParams) },
-                { it.asDomain() }
-        )
-    }
-
-    private fun groupSummariesQuery(realm: Realm, queryParams: GroupSummaryQueryParams): RealmQuery<GroupSummaryEntity> {
-        return GroupSummaryEntity.where(realm)
-                .process(GroupSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
-                .process(GroupSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
+    override fun getGroupSummariesLive(groupSummaryQueryParams: GroupSummaryQueryParams): Flow<List<GroupSummary>> {
+        return groupSummaryDataSource.getGroupSummariesLive(groupSummaryQueryParams)
     }
 }

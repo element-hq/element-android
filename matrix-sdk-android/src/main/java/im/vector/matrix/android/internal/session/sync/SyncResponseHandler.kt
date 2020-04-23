@@ -16,31 +16,33 @@
 
 package im.vector.matrix.android.internal.session.sync
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.pushrules.RuleScope
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
+import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.notification.ProcessEventForPushTask
 import im.vector.matrix.android.internal.session.reportSubtask
 import im.vector.matrix.android.internal.session.sync.model.RoomsSyncResponse
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
-import im.vector.matrix.android.internal.util.awaitTransaction
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.system.measureTimeMillis
 
-internal class SyncResponseHandler @Inject constructor(private val monarchy: Monarchy,
-                                                       private val roomSyncHandler: RoomSyncHandler,
+internal class SyncResponseHandler @Inject constructor(private val roomSyncHandler: RoomSyncHandler,
                                                        private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
+                                                       private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                                        private val groupSyncHandler: GroupSyncHandler,
                                                        private val cryptoSyncHandler: CryptoSyncHandler,
                                                        private val cryptoService: DefaultCryptoService,
                                                        private val tokenStore: SyncTokenStore,
                                                        private val processEventForPushTask: ProcessEventForPushTask,
                                                        private val pushRuleService: PushRuleService,
-                                                       private val initialSyncProgressService: DefaultInitialSyncProgressService) {
+                                                       private val initialSyncProgressService: DefaultInitialSyncProgressService,
+                                                       private val sessionDatabase: SessionDatabase) {
 
     suspend fun handleResponse(syncResponse: SyncResponse, fromToken: String?) {
         val isInitialSync = fromToken == null
@@ -70,12 +72,12 @@ internal class SyncResponseHandler @Inject constructor(private val monarchy: Mon
         }
 
         // Start one big transaction
-        monarchy.awaitTransaction { realm ->
+        sessionDatabase.awaitTransaction(coroutineDispatchers) {
             measureTimeMillis {
                 Timber.v("Handle rooms")
                 reportSubtask(reporter, R.string.initial_sync_start_importing_account_rooms, 100, 0.7f) {
                     if (syncResponse.rooms != null) {
-                        roomSyncHandler.handle(realm, syncResponse.rooms, isInitialSync, reporter)
+                        roomSyncHandler.handle(syncResponse.rooms, reporter, isInitialSync)
                     }
                 }
             }.also {
@@ -83,26 +85,28 @@ internal class SyncResponseHandler @Inject constructor(private val monarchy: Mon
             }
 
             measureTimeMillis {
+                reportSubtask(reporter, R.string.initial_sync_start_importing_account_data, 100, 0.1f) {
+                    Timber.v("Handle accountData")
+                    userAccountDataSyncHandler.handle(syncResponse.accountData)
+                }
+            }.also {
+                Timber.v("Finish handling accountData in $it ms")
+            }
+
+            measureTimeMillis {
                 reportSubtask(reporter, R.string.initial_sync_start_importing_account_groups, 100, 0.1f) {
                     Timber.v("Handle groups")
                     if (syncResponse.groups != null) {
-                        groupSyncHandler.handle(realm, syncResponse.groups, reporter)
+                        groupSyncHandler.handle(syncResponse.groups, reporter)
                     }
                 }
             }.also {
                 Timber.v("Finish handling groups in $it ms")
             }
 
-            measureTimeMillis {
-                reportSubtask(reporter, R.string.initial_sync_start_importing_account_data, 100, 0.1f) {
-                    Timber.v("Handle accountData")
-                    userAccountDataSyncHandler.handle(realm, syncResponse.accountData)
-                }
-            }.also {
-                Timber.v("Finish handling accountData in $it ms")
-            }
-            tokenStore.saveToken(realm, syncResponse.nextBatch)
+            tokenStore.saveToken(syncResponse.nextBatch)
         }
+
 
         // Everything else we need to do outside the transaction
         syncResponse.rooms?.also {

@@ -17,15 +17,15 @@
 package im.vector.matrix.android.internal.session.user
 
 import im.vector.matrix.android.api.session.room.model.RoomMemberContent
-import im.vector.matrix.android.internal.database.model.UserEntity
+import im.vector.matrix.sqldelight.session.UserEntity
 
 internal object UserEntityFactory {
 
     fun create(userId: String, roomMember: RoomMemberContent): UserEntity {
-        return UserEntity(
-                userId = userId,
-                displayName = roomMember.displayName ?: "",
-                avatarUrl = roomMember.avatarUrl ?: ""
+        return UserEntity.Impl(
+                user_id = userId,
+                display_name = roomMember.displayName ?: "",
+                avatar_url = roomMember.avatarUrl ?: ""
         )
     }
 }

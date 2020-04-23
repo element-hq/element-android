@@ -16,13 +16,13 @@
 
 package im.vector.matrix.android.api.session.room.notification
 
-import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
+import kotlinx.coroutines.flow.Flow
 
 interface RoomPushRuleService {
 
-    fun getLiveRoomNotificationState(): LiveData<RoomNotificationState>
+    fun getRoomNotificationStateLive(): Flow<RoomNotificationState>
 
     fun setRoomNotificationState(roomNotificationState: RoomNotificationState, matrixCallback: MatrixCallback<Unit>): Cancelable
 }

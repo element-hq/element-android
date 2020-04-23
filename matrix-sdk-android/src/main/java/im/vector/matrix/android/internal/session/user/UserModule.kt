@@ -55,5 +55,5 @@ internal abstract class UserModule {
     abstract fun bindUpdateIgnoredUserIdsTask(task: DefaultUpdateIgnoredUserIdsTask): UpdateIgnoredUserIdsTask
 
     @Binds
-    abstract fun bindUserStore(store: RealmUserStore): UserStore
+    abstract fun bindUserStore(store: SqlUserStore): UserStore
 }

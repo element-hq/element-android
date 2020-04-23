@@ -17,19 +17,30 @@
 package im.vector.matrix.android.internal.database.mapper
 
 import im.vector.matrix.android.api.session.user.model.User
-import im.vector.matrix.android.internal.database.model.UserEntity
+import im.vector.matrix.sqldelight.session.UserEntity
+import javax.inject.Inject
 
-internal object UserMapper {
+internal class UserMapper @Inject constructor() {
 
     fun map(userEntity: UserEntity): User {
         return User(
-                userEntity.userId,
-                userEntity.displayName,
-                userEntity.avatarUrl
+                userEntity.user_id,
+                userEntity.display_name,
+                userEntity.avatar_url
+        )
+    }
+
+    fun map(user_id: String,
+            display_name: String?,
+            avatar_url: String?): User {
+        return User(
+                userId = user_id,
+                displayName = display_name,
+                avatarUrl = avatar_url
         )
     }
 }
 
 internal fun UserEntity.asDomain(): User {
-    return UserMapper.map(this)
+    return UserMapper().map(this)
 }

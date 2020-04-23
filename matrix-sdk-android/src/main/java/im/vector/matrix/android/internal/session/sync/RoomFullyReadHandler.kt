@@ -16,27 +16,20 @@
 
 package im.vector.matrix.android.internal.session.sync
 
-import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.session.room.read.FullyReadContent
-import io.realm.Realm
+import im.vector.matrix.sqldelight.session.ReadMarkerEntity
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class RoomFullyReadHandler @Inject constructor() {
+internal class RoomFullyReadHandler @Inject constructor(private val sessionDatabase: SessionDatabase) {
 
-    fun handle(realm: Realm, roomId: String, content: FullyReadContent?) {
+    fun handle(roomId: String, content: FullyReadContent?) {
         if (content == null) {
             return
         }
         Timber.v("Handle for roomId: $roomId eventId: ${content.eventId}")
-
-        RoomSummaryEntity.getOrCreate(realm, roomId).apply {
-            readMarkerId = content.eventId
-        }
-        ReadMarkerEntity.getOrCreate(realm, roomId).apply {
-            this.eventId = content.eventId
-        }
+        val readMarkerEntity = ReadMarkerEntity.Impl(roomId, content.eventId)
+        sessionDatabase.readMarkerQueries.insertOrUpdate(readMarkerEntity)
     }
 }

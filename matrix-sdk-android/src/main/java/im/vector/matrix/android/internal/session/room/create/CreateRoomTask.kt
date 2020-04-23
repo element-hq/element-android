@@ -16,26 +16,19 @@
 
 package im.vector.matrix.android.internal.session.room.create
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.room.failure.CreateRoomFailure
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomResponse
 import im.vector.matrix.android.internal.crypto.DeviceListManager
-import im.vector.matrix.android.internal.database.awaitNotEmptyResult
-import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.model.RoomEntityFields
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.di.SessionDatabase
+import im.vector.matrix.android.internal.database.awaitResult
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.session.user.accountdata.DirectChatsHelper
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.awaitTransaction
-import io.realm.RealmConfiguration
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import kotlinx.coroutines.TimeoutCancellationException
 import org.greenrobot.eventbus.EventBus
 import java.util.concurrent.TimeUnit
@@ -45,12 +38,10 @@ internal interface CreateRoomTask : Task<CreateRoomParams, String>
 
 internal class DefaultCreateRoomTask @Inject constructor(
         private val roomAPI: RoomAPI,
-        private val monarchy: Monarchy,
+        private val sessionDatabase: SessionDatabase,
         private val directChatsHelper: DirectChatsHelper,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
         private val readMarkersTask: SetReadMarkersTask,
-        @SessionDatabase
-        private val realmConfiguration: RealmConfiguration,
         private val crossSigningService: CrossSigningService,
         private val deviceListManager: DeviceListManager,
         private val eventBus: EventBus
@@ -69,10 +60,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
         val roomId = createRoomResponse.roomId
         // Wait for room to come back from the sync (but it can maybe be in the DB if the sync response is received before)
         try {
-            awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
-                realm.where(RoomEntity::class.java)
-                        .equalTo(RoomEntityFields.ROOM_ID, roomId)
-            }
+            sessionDatabase.roomQueries.exists(roomId).awaitResult(TimeUnit.MINUTES.toMillis(1L))
         } catch (exception: TimeoutCancellationException) {
             throw CreateRoomFailure.CreatedWithTimeout
         }
@@ -109,12 +97,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
         val otherUserId = params.getFirstInvitedUserId()
                 ?: throw IllegalStateException("You can't create a direct room without an invitedUser")
 
-        monarchy.awaitTransaction { realm ->
-            RoomSummaryEntity.where(realm, roomId).findFirst()?.apply {
-                this.directUserId = otherUserId
-                this.isDirect = true
-            }
-        }
+        sessionDatabase.roomSummaryQueries.setDirectForRoom(otherUserId, roomId)
         val directChats = directChatsHelper.getLocalUserAccount()
         updateUserAccountDataTask.execute(UpdateUserAccountDataTask.DirectChatParams(directMessages = directChats))
     }

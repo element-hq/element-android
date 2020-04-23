@@ -16,7 +16,7 @@
 
 package im.vector.matrix.android.internal.auth
 
-import im.vector.matrix.android.internal.auth.db.PendingSessionData
+import im.vector.matrix.android.internal.auth.registration.PendingSessionData
 
 /**
  * Store for elements when doing login or registration

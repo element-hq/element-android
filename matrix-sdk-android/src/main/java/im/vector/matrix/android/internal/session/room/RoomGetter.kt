@@ -16,16 +16,11 @@
 
 package im.vector.matrix.android.internal.session.room
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
-import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.database.mapper.map
 import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
-import io.realm.Realm
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import javax.inject.Inject
 
 internal interface RoomGetter {
@@ -36,31 +31,27 @@ internal interface RoomGetter {
 
 @SessionScope
 internal class DefaultRoomGetter @Inject constructor(
-        private val monarchy: Monarchy,
-        private val roomFactory: RoomFactory
+        private val roomFactory: RoomFactory,
+        private val sessionDatabase: SessionDatabase
 ) : RoomGetter {
 
     override fun getRoom(roomId: String): Room? {
-        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            createRoom(realm, roomId)
-        }
+        return createRoom(roomId)
     }
 
     override fun getDirectRoomWith(otherUserId: String): Room? {
-        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            RoomSummaryEntity.where(realm)
-                    .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-                    .equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
-                    .findAll()
-                    .filter { dm -> dm.otherMemberIds.contains(otherUserId) }
-                    .map { it.roomId }
-                    .firstOrNull { roomId -> otherUserId in RoomMemberHelper(realm, roomId).getActiveRoomMemberIds() }
-                    ?.let { roomId -> createRoom(realm, roomId) }
-        }
+        return sessionDatabase.roomQueries.getDirectRoomsWith(otherUserId, Membership.activeMemberships().map())
+                .executeAsList()
+                .firstOrNull()
+                ?.let { roomId -> createRoom(roomId) }
     }
 
-    private fun createRoom(realm: Realm, roomId: String): Room? {
-        return RoomEntity.where(realm, roomId).findFirst()
-                ?.let { roomFactory.create(roomId) }
+    private fun createRoom(roomId: String): Room? {
+        val exists = sessionDatabase.roomQueries.exists(roomId).executeAsOne()
+        return if (exists) {
+            roomFactory.create(roomId)
+        } else {
+            null
+        }
     }
 }

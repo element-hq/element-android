@@ -18,21 +18,24 @@ package im.vector.matrix.android.internal.session.cache
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.cache.CacheService
-import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-internal class DefaultCacheService @Inject constructor(@SessionDatabase
-                                                       private val clearCacheTask: ClearCacheTask,
-                                                       private val taskExecutor: TaskExecutor) : CacheService {
+internal class DefaultCacheService @Inject constructor(private val taskExecutor: TaskExecutor,
+                                                       private val coroutineDispatchers: MatrixCoroutineDispatchers,
+                                                       private val deleteAllSessionTables: DeleteAllSessionTablesStatement) : CacheService {
+
 
     override fun clearCache(callback: MatrixCallback<Unit>) {
         taskExecutor.cancelAll()
-        clearCacheTask
-                .configureWith {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        taskExecutor.executorScope.launch(coroutineDispatchers.main) {
+            withContext(coroutineDispatchers.dbTransaction) {
+                deleteAllSessionTables.execute()
+            }
+            callback.onSuccess(Unit)
+        }
     }
 }

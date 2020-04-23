@@ -16,16 +16,17 @@
 
 package im.vector.matrix.android.internal.session.group
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
-import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.group.model.GroupRooms
 import im.vector.matrix.android.internal.session.group.model.GroupSummaryResponse
 import im.vector.matrix.android.internal.session.group.model.GroupUsers
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.awaitTransaction
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.sqldelight.session.GroupSummaryEntity
+import im.vector.matrix.sqldelight.session.Memberships
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
@@ -36,8 +37,9 @@ internal interface GetGroupDataTask : Task<GetGroupDataTask.Params, Unit> {
 
 internal class DefaultGetGroupDataTask @Inject constructor(
         private val groupAPI: GroupAPI,
-        private val monarchy: Monarchy,
-        private val eventBus: EventBus
+        private val sessionDatabase: SessionDatabase,
+        private val eventBus: EventBus,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) : GetGroupDataTask {
 
     override suspend fun execute(params: GetGroupDataTask.Params) {
@@ -55,29 +57,33 @@ internal class DefaultGetGroupDataTask @Inject constructor(
     }
 
     private suspend fun insertInDb(groupSummary: GroupSummaryResponse,
-                           groupRooms: GroupRooms,
-                           groupUsers: GroupUsers,
-                           groupId: String) {
-        monarchy
-                .awaitTransaction { realm ->
-                    val groupSummaryEntity = GroupSummaryEntity.where(realm, groupId).findFirst()
-                            ?: realm.createObject(GroupSummaryEntity::class.java, groupId)
-
-                    groupSummaryEntity.avatarUrl = groupSummary.profile?.avatarUrl ?: ""
+                                   groupRooms: GroupRooms,
+                                   groupUsers: GroupUsers,
+                                   groupId: String) {
+        sessionDatabase
+                .awaitTransaction(coroutineDispatchers) {
                     val name = groupSummary.profile?.name
-                    groupSummaryEntity.displayName = if (name.isNullOrEmpty()) groupId else name
-                    groupSummaryEntity.shortDescription = groupSummary.profile?.shortDescription ?: ""
+                    val membership = when (groupSummary.user?.membership) {
+                        Membership.JOIN.value -> Memberships.JOIN
+                        Membership.INVITE.value -> Memberships.INVITE
+                        else -> Memberships.LEAVE
+                    }
 
-                    groupSummaryEntity.roomIds.clear()
-                    groupRooms.rooms.mapTo(groupSummaryEntity.roomIds) { it.roomId }
-
-                    groupSummaryEntity.userIds.clear()
-                    groupUsers.users.mapTo(groupSummaryEntity.userIds) { it.userId }
-
-                    groupSummaryEntity.membership = when (groupSummary.user?.membership) {
-                        Membership.JOIN.value   -> Membership.JOIN
-                        Membership.INVITE.value -> Membership.INVITE
-                        else                    -> Membership.LEAVE
+                    val groupSummaryEntity = GroupSummaryEntity.Impl(
+                            group_id = groupId,
+                            display_name = if (name.isNullOrEmpty()) groupId else name,
+                            short_description = groupSummary.profile?.shortDescription ?: "",
+                            membership = membership,
+                            avatar_url = groupSummary.profile?.avatarUrl ?: ""
+                    )
+                    it.groupSummaryQueries.insertOrReplaceGroupSummary(groupSummaryEntity)
+                    it.groupSummaryQueries.deleteGroupRooms(listOf(groupId))
+                    groupRooms.rooms.forEach { groupRoom ->
+                        sessionDatabase.groupSummaryQueries.insertGroupRoom(groupId, groupRoom.roomId)
+                    }
+                    it.groupSummaryQueries.deleteGroupUser(listOf(groupId))
+                    groupUsers.users.forEach { groupUser ->
+                        sessionDatabase.groupSummaryQueries.insertGroupUser(groupId, groupUser.userId)
                     }
                 }
     }

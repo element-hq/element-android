@@ -15,12 +15,9 @@
  */
 package im.vector.matrix.android.internal.session.room.relation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import androidx.work.OneTimeWorkRequest
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
@@ -30,13 +27,6 @@ import im.vector.matrix.android.api.session.room.model.relation.RelationService
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.NoOpCancellable
-import im.vector.matrix.android.api.util.Optional
-import im.vector.matrix.android.api.util.toOptional
-import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
-import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryEntity
-import im.vector.matrix.android.internal.database.model.TimelineEventEntity
-import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.session.room.send.EncryptEventWorker
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
@@ -45,8 +35,8 @@ import im.vector.matrix.android.internal.session.room.send.SendEventWorker
 import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEventWorkCommon
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.util.fetchCopyMap
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
+import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 
 internal class DefaultRelationService @AssistedInject constructor(
@@ -57,8 +47,7 @@ internal class DefaultRelationService @AssistedInject constructor(
         private val cryptoService: CryptoService,
         private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
         private val fetchEditHistoryTask: FetchEditHistoryTask,
-        private val timelineEventMapper: TimelineEventMapper,
-        private val monarchy: Monarchy,
+        private val eventAnnotationsSummaryDataSource: EventAnnotationsSummaryDataSource,
         private val taskExecutor: TaskExecutor)
     : RelationService {
 
@@ -68,25 +57,14 @@ internal class DefaultRelationService @AssistedInject constructor(
     }
 
     override fun sendReaction(targetEventId: String, reaction: String): Cancelable {
-        return if (monarchy
-                        .fetchCopyMap(
-                                { realm ->
-                                    TimelineEventEntity.where(realm, roomId, targetEventId).findFirst()
-                                },
-                                { entity, _ ->
-                                    timelineEventMapper.map(entity)
-                                })
-                        ?.annotations
-                        ?.reactionsSummary
-                        .orEmpty()
-                        .none { it.addedByMe && it.key == reaction }) {
+        return if (eventAnnotationsSummaryDataSource.hasAlreadySendReaction(targetEventId, reaction)) {
+            Timber.w("Reaction already added")
+            NoOpCancellable
+        } else {
             val event = eventFactory.createReactionEvent(roomId, targetEventId, reaction)
                     .also { saveLocalEcho(it) }
             val sendRelationWork = createSendEventWork(event, true)
             timeLineSendEventWorkCommon.postWork(roomId, sendRelationWork)
-        } else {
-            Timber.w("Reaction already added")
-            NoOpCancellable
         }
     }
 
@@ -207,23 +185,12 @@ internal class DefaultRelationService @AssistedInject constructor(
         return timeLineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, startChain)
     }
 
-    override fun getEventAnnotationsSummary(eventId: String): EventAnnotationsSummary? {
-        return monarchy.fetchCopyMap(
-                { EventAnnotationsSummaryEntity.where(it, eventId).findFirst() },
-                { entity, _ ->
-                    entity.asDomain()
-                }
-        )
+    override fun getEventAnnotationsSummary(eventId: String): EventAnnotationsSummary {
+        return eventAnnotationsSummaryDataSource.getEventAnnotationsSummary(eventId)
     }
 
-    override fun getEventAnnotationsSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>> {
-        val liveData = monarchy.findAllMappedWithChanges(
-                { EventAnnotationsSummaryEntity.where(it, eventId) },
-                { it.asDomain() }
-        )
-        return Transformations.map(liveData) { results ->
-            results.firstOrNull().toOptional()
-        }
+    override fun getEventAnnotationsSummaryLive(eventId: String): Flow<EventAnnotationsSummary> {
+        return eventAnnotationsSummaryDataSource.getEventAnnotationsSummaryLive(eventId)
     }
 
     /**

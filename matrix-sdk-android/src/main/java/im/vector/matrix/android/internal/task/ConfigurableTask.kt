@@ -46,7 +46,7 @@ internal data class ConfigurableTask<PARAMS, RESULT>(
             private val params: PARAMS,
             var id: UUID = UUID.randomUUID(),
             var callbackThread: TaskThread = TaskThread.MAIN,
-            var executionThread: TaskThread = TaskThread.IO,
+            var executionThread: TaskThread = TaskThread.COMPUTATION,
             var retryCount: Int = 0,
             var callback: MatrixCallback<RESULT> = NoOpMatrixCallback()
     ) {

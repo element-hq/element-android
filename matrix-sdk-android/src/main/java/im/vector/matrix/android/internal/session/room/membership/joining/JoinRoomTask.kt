@@ -18,15 +18,12 @@ package im.vector.matrix.android.internal.session.room.membership.joining
 
 import im.vector.matrix.android.api.session.room.failure.JoinRoomFailure
 import im.vector.matrix.android.api.session.room.model.create.JoinRoomResponse
-import im.vector.matrix.android.internal.database.awaitNotEmptyResult
-import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.model.RoomEntityFields
-import im.vector.matrix.android.internal.di.SessionDatabase
+import im.vector.matrix.android.internal.database.awaitResult
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.task.Task
-import io.realm.RealmConfiguration
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import kotlinx.coroutines.TimeoutCancellationException
 import org.greenrobot.eventbus.EventBus
 import java.util.concurrent.TimeUnit
@@ -43,8 +40,7 @@ internal interface JoinRoomTask : Task<JoinRoomTask.Params, Unit> {
 internal class DefaultJoinRoomTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val readMarkersTask: SetReadMarkersTask,
-        @SessionDatabase
-        private val realmConfiguration: RealmConfiguration,
+        private val sessionDatabase: SessionDatabase,
         private val eventBus: EventBus
 ) : JoinRoomTask {
 
@@ -55,10 +51,7 @@ internal class DefaultJoinRoomTask @Inject constructor(
         // Wait for room to come back from the sync (but it can maybe be in the DB is the sync response is received before)
         val roomId = joinRoomResponse.roomId
         try {
-            awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
-                realm.where(RoomEntity::class.java)
-                        .equalTo(RoomEntityFields.ROOM_ID, roomId)
-            }
+            sessionDatabase.roomQueries.exists(roomId).awaitResult(TimeUnit.MINUTES.toMillis(1L))
         } catch (exception: TimeoutCancellationException) {
             throw JoinRoomFailure.JoinedWithTimeout
         }

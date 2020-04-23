@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.session.room.model.EventAnnotationsSummary
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.Optional
+import kotlinx.coroutines.flow.Flow
 
 /**
  * In some cases, events may wish to reference other events.
@@ -113,12 +114,12 @@ interface RelationService {
      * @param eventId the eventId to look for EventAnnotationsSummary
      * @return the EventAnnotationsSummary found
      */
-    fun getEventAnnotationsSummary(eventId: String): EventAnnotationsSummary?
+    fun getEventAnnotationsSummary(eventId: String): EventAnnotationsSummary
 
     /**
      * Get a LiveData of EventAnnotationsSummary for the specified eventId
      * @param eventId the eventId to look for EventAnnotationsSummary
-     * @return the LiveData of EventAnnotationsSummary
+     * @return a [Flow] of EventAnnotationsSummary
      */
-    fun getEventAnnotationsSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>>
+    fun getEventAnnotationsSummaryLive(eventId: String): Flow<EventAnnotationsSummary>
 }

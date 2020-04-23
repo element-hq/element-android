@@ -16,10 +16,13 @@
 
 package im.vector.matrix.android.internal.database.mapper
 
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntity
+import im.vector.matrix.sqldelight.session.Memberships
+import javax.inject.Inject
 
-internal object RoomMemberSummaryMapper {
+internal class RoomMemberSummaryMapper @Inject constructor() {
 
     fun map(roomMemberSummaryEntity: RoomMemberSummaryEntity): RoomMemberSummary {
         return RoomMemberSummary(
@@ -29,8 +32,31 @@ internal object RoomMemberSummaryMapper {
                 membership = roomMemberSummaryEntity.membership
         )
     }
+
+    fun map(roomMemberSummaryEntity: im.vector.matrix.sqldelight.session.RoomMemberSummaryEntity): RoomMemberSummary {
+        return RoomMemberSummary(
+                userId = roomMemberSummaryEntity.user_id,
+                avatarUrl = roomMemberSummaryEntity.avatar_url,
+                displayName = roomMemberSummaryEntity.display_name,
+                membership = Membership.valueOf(roomMemberSummaryEntity.membership.name)
+        )
+    }
+
+    fun map(room_id: String, user_id: String, display_name: String?, avatar_url: String?, membership: Memberships): RoomMemberSummary {
+        return RoomMemberSummary(
+                userId = user_id,
+                membership = membership.map(),
+                displayName = display_name,
+                avatarUrl = avatar_url
+        )
+    }
+
+}
+
+internal fun im.vector.matrix.sqldelight.session.RoomMemberSummaryEntity.asDomain(): RoomMemberSummary {
+    return RoomMemberSummaryMapper().map(this)
 }
 
 internal fun RoomMemberSummaryEntity.asDomain(): RoomMemberSummary {
-    return RoomMemberSummaryMapper.map(this)
+    return RoomMemberSummaryMapper().map(this)
 }

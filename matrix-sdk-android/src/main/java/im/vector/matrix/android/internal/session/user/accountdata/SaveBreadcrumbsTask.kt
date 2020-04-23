@@ -15,16 +15,11 @@
  */
 package im.vector.matrix.android.internal.session.user.accountdata
 
-import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.internal.database.model.BreadcrumbsEntity
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntityFields
-import im.vector.matrix.android.internal.database.query.getOrCreate
-import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.database.awaitTransaction
+import im.vector.matrix.android.internal.database.helper.saveBreadcrumbs
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.awaitTransaction
-import io.realm.RealmList
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import javax.inject.Inject
 
 /**
@@ -37,32 +32,14 @@ internal interface SaveBreadcrumbsTask : Task<SaveBreadcrumbsTask.Params, Unit> 
 }
 
 internal class DefaultSaveBreadcrumbsTask @Inject constructor(
-        private val monarchy: Monarchy
+        private val sessionDatabase: SessionDatabase,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) : SaveBreadcrumbsTask {
 
     override suspend fun execute(params: SaveBreadcrumbsTask.Params) {
-        monarchy.awaitTransaction { realm ->
-            // Get or create a breadcrumbs entity
-            val entity = BreadcrumbsEntity.getOrCreate(realm)
-
-            // And save the new received list
-            entity.recentRoomIds = RealmList<String>().apply { addAll(params.recentRoomIds) }
-
-            // Update the room summaries
-            // Reset all the indexes...
-            RoomSummaryEntity.where(realm)
-                    .greaterThan(RoomSummaryEntityFields.BREADCRUMBS_INDEX, RoomSummary.NOT_IN_BREADCRUMBS)
-                    .findAll()
-                    .forEach {
-                        it.breadcrumbsIndex = RoomSummary.NOT_IN_BREADCRUMBS
-                    }
-
-            // ...and apply new indexes
-            params.recentRoomIds.forEachIndexed { index, roomId ->
-                RoomSummaryEntity.where(realm, roomId)
-                        .findFirst()
-                        ?.breadcrumbsIndex = index
-            }
+        sessionDatabase.awaitTransaction(coroutineDispatchers) {
+            val recentRoomIds = params.recentRoomIds
+            sessionDatabase.breadcrumbsQueries.saveBreadcrumbs(recentRoomIds)
         }
     }
 }

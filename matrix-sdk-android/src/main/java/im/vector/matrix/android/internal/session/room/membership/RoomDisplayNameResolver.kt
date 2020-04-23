@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.session.room.membership
 
 import android.content.Context
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -26,21 +25,19 @@ import im.vector.matrix.android.api.session.room.model.RoomAliasesContent
 import im.vector.matrix.android.api.session.room.model.RoomCanonicalAliasContent
 import im.vector.matrix.android.api.session.room.model.RoomNameContent
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
-import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
-import im.vector.matrix.android.internal.database.model.RoomEntity
-import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntity
-import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntityFields
-import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
-import im.vector.matrix.android.internal.database.query.getOrNull
-import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.database.repository.CurrentStateEventDataSource
 import im.vector.matrix.android.internal.di.UserId
+import im.vector.matrix.sqldelight.session.Memberships
+import im.vector.matrix.sqldelight.session.SessionDatabase
+import im.vector.matrix.sqldelight.session.SimpleRoomMemberSummary
 import javax.inject.Inject
 
 /**
  * This class computes room display name
  */
 internal class RoomDisplayNameResolver @Inject constructor(private val context: Context,
-                                                           private val monarchy: Monarchy,
+                                                           private val currentStateEventDataSource: CurrentStateEventDataSource,
+                                                           private val sessionDatabase: SessionDatabase,
                                                            @UserId private val userId: String
 ) {
 
@@ -50,90 +47,79 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
      * @param roomId: the roomId to resolve the name of.
      * @return the room display name
      */
-    fun resolve(roomId: String): CharSequence {
+    fun resolve(roomId: String, membership: Membership): CharSequence {
         // this algorithm is the one defined in
         // https://github.com/matrix-org/matrix-js-sdk/blob/develop/lib/models/room.js#L617
         // calculateRoomName(room, userId)
 
         // For Lazy Loaded room, see algorithm here:
         // https://docs.google.com/document/d/11i14UI1cUz-OJ0knD5BFu7fmT6Fo327zvMYqfSAR7xs/edit#heading=h.qif6pkqyjgzn
-        var name: CharSequence? = null
-        monarchy.doWithRealm { realm ->
-            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst()
-            val roomName = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_NAME, stateKey = "")?.root
-            name = ContentMapper.map(roomName?.content).toModel<RoomNameContent>()?.name
-            if (!name.isNullOrEmpty()) {
-                return@doWithRealm
-            }
+        var name: CharSequence?
+        val roomName = currentStateEventDataSource.getCurrent(roomId, type = EventType.STATE_ROOM_NAME, stateKey = "")
+        name = ContentMapper.map(roomName?.content).toModel<RoomNameContent>()?.name
+        if (!name.isNullOrEmpty()) {
+            return name
+        }
 
-            val canonicalAlias = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_CANONICAL_ALIAS, stateKey = "")?.root
-            name = ContentMapper.map(canonicalAlias?.content).toModel<RoomCanonicalAliasContent>()?.canonicalAlias
-            if (!name.isNullOrEmpty()) {
-                return@doWithRealm
-            }
+        val canonicalAlias = currentStateEventDataSource.getCurrent(roomId, type = EventType.STATE_ROOM_CANONICAL_ALIAS, stateKey = "")
+        name = ContentMapper.map(canonicalAlias?.content).toModel<RoomCanonicalAliasContent>()?.canonicalAlias
+        if (!name.isNullOrEmpty()) {
+            return name
+        }
 
-            val aliases = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_ALIASES, stateKey = "")?.root
-            name = ContentMapper.map(aliases?.content).toModel<RoomAliasesContent>()?.aliases?.firstOrNull()
-            if (!name.isNullOrEmpty()) {
-                return@doWithRealm
-            }
+        val aliases = currentStateEventDataSource.getCurrent(roomId, type = EventType.STATE_ROOM_ALIASES, stateKey = "")
+        name = ContentMapper.map(aliases?.content).toModel<RoomAliasesContent>()?.aliases?.firstOrNull()
+        if (!name.isNullOrEmpty()) {
+            return name
+        }
 
-            val roomMembers = RoomMemberHelper(realm, roomId)
-            val activeMembers = roomMembers.queryActiveRoomMembersEvent().findAll()
-
-            if (roomEntity?.membership == Membership.INVITE) {
-                val inviteMeEvent = roomMembers.getLastStateEvent(userId)
-                val inviterId = inviteMeEvent?.sender
-                name = if (inviterId != null) {
-                    activeMembers.where()
-                            .equalTo(RoomMemberSummaryEntityFields.USER_ID, inviterId)
-                            .findFirst()
-                            ?.displayName
-                } else {
-                    context.getString(R.string.room_displayname_room_invite)
-                }
-            } else if (roomEntity?.membership == Membership.JOIN) {
-                val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
-                val otherMembersSubset: List<RoomMemberSummaryEntity> = if (roomSummary?.heroes?.isNotEmpty() == true) {
-                    roomSummary.heroes.mapNotNull { userId ->
-                        roomMembers.getLastRoomMember(userId)?.takeIf {
-                            it.membership == Membership.INVITE || it.membership == Membership.JOIN
-                        }
-                    }
-                } else {
-                    activeMembers.where()
-                            .notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId)
-                            .limit(3)
-                            .findAll()
-                            .createSnapshot()
-                }
-                val otherMembersCount = otherMembersSubset.count()
-                name = when (otherMembersCount) {
-                    0    -> context.getString(R.string.room_displayname_empty_room)
-                    1    -> resolveRoomMemberName(otherMembersSubset[0], roomMembers)
-                    2    -> context.getString(R.string.room_displayname_two_members,
-                            resolveRoomMemberName(otherMembersSubset[0], roomMembers),
-                            resolveRoomMemberName(otherMembersSubset[1], roomMembers)
-                    )
-                    else -> context.resources.getQuantityString(R.plurals.room_displayname_three_and_more_members,
-                            roomMembers.getNumberOfJoinedMembers() - 1,
-                            resolveRoomMemberName(otherMembersSubset[0], roomMembers),
-                            roomMembers.getNumberOfJoinedMembers() - 1)
-                }
+        val roomMembers = RoomMemberHelper(sessionDatabase, roomId)
+        if (membership == Membership.INVITE) {
+            val inviteMeEvent = roomMembers.getLastStateEvent(userId)
+            val inviterId = inviteMeEvent?.sender_id
+            name = if (inviterId != null) {
+                roomMembers.getDisplayName(inviterId)
+            } else {
+                context.getString(R.string.room_displayname_room_invite)
             }
-            return@doWithRealm
+        } else if (membership == Membership.JOIN) {
+            val heroes = sessionDatabase.roomSummaryQueries.getHeroes(roomId).executeAsList()
+            val otherMembersSubset = if (heroes.isEmpty()) {
+                sessionDatabase.roomMemberSummaryQueries.getPagedFromRoom(
+                        roomId = roomId,
+                        memberships = listOf(Memberships.INVITE, Memberships.JOIN),
+                        excludedIds = listOf(userId),
+                        limit = 3,
+                        offset = 0
+                ).executeAsList()
+            } else {
+                heroes.filter { it.user_id != userId }
+            }
+            val otherMembersCount = otherMembersSubset.count()
+            name = when (otherMembersCount) {
+                0    -> context.getString(R.string.room_displayname_empty_room)
+                1    -> resolveRoomMemberName(otherMembersSubset[0], roomMembers)
+                2    -> context.getString(R.string.room_displayname_two_members,
+                                          resolveRoomMemberName(otherMembersSubset[0], roomMembers),
+                                          resolveRoomMemberName(otherMembersSubset[1], roomMembers)
+                )
+                else -> context.resources.getQuantityString(R.plurals.room_displayname_three_and_more_members,
+                                                            roomMembers.getNumberOfJoinedMembers() - 1,
+                                                            resolveRoomMemberName(otherMembersSubset[0], roomMembers),
+                                                            roomMembers.getNumberOfJoinedMembers() - 1)
+            }
         }
         return name ?: roomId
     }
 
-    private fun resolveRoomMemberName(roomMemberSummary: RoomMemberSummaryEntity?,
+    private fun resolveRoomMemberName(roomMemberSummary: SimpleRoomMemberSummary?,
                                       roomMemberHelper: RoomMemberHelper): String? {
         if (roomMemberSummary == null) return null
-        val isUnique = roomMemberHelper.isUniqueDisplayName(roomMemberSummary.displayName)
+        val isUnique = roomMemberHelper.isUniqueDisplayName(roomMemberSummary.display_name)
         return if (isUnique) {
-            roomMemberSummary.displayName
+            roomMemberSummary.display_name
         } else {
-            "${roomMemberSummary.displayName} (${roomMemberSummary.userId})"
+            "${roomMemberSummary.display_name} (${roomMemberSummary.user_id})"
         }
     }
 }
