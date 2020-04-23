@@ -19,35 +19,33 @@ package im.vector.matrix.android.internal.crypto.tasks
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.crypto.verification.VerificationService
-import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.events.model.toModel
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageRelationContent
-import im.vector.matrix.android.api.session.room.model.message.MessageType
-import im.vector.matrix.android.api.session.room.model.message.MessageVerificationReadyContent
-import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
-import im.vector.matrix.android.api.session.room.model.message.MessageVerificationStartContent
+import im.vector.matrix.android.api.session.room.model.message.*
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.crypto.verification.DefaultVerificationService
+import im.vector.matrix.android.internal.database.mapper.asDomain
 import im.vector.matrix.android.internal.di.DeviceId
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.task.Task
+import im.vector.matrix.sqldelight.session.EventInsertNotification
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import timber.log.Timber
-import java.util.ArrayList
+import java.util.*
 import javax.inject.Inject
 
 internal interface RoomVerificationUpdateTask : Task<RoomVerificationUpdateTask.Params, Unit> {
     data class Params(
-            val events: List<Event>,
-            val verificationService: DefaultVerificationService,
-            val cryptoService: CryptoService
+            val eventInsertNotifications: List<EventInsertNotification>
     )
 }
 
 internal class DefaultRoomVerificationUpdateTask @Inject constructor(
         @UserId private val userId: String,
         @DeviceId private val deviceId: String?,
+        private val sessionDatabase: SessionDatabase,
+        private val verificationService: DefaultVerificationService,
         private val cryptoService: CryptoService) : RoomVerificationUpdateTask {
 
     companion object {
@@ -57,8 +55,15 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
 
     override suspend fun execute(params: RoomVerificationUpdateTask.Params) {
         // TODO ignore initial sync or back pagination?
+        params.eventInsertNotifications.forEach { eventInsertNotification ->
+            val eventId = eventInsertNotification.event_id
+            val isLocalEcho = LocalEcho.isLocalEchoId(eventId)
+            if (isLocalEcho) {
+                return@forEach
+            }
+            val event = sessionDatabase.eventQueries.select(eventId).executeAsOneOrNull()?.asDomain()
+                    ?: return@forEach
 
-        params.events.forEach { event ->
             Timber.v("## SAS Verification live observer: received msgId: ${event.eventId} msgtype: ${event.type} from ${event.senderId}")
 
             // If the request is in the future by more than 5 minutes or more than 10 minutes in the past,
@@ -74,7 +79,7 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
                 // TODO use a global event decryptor? attache to session and that listen to new sessionId?
                 // for now decrypt sync
                 try {
-                    val result = cryptoService.decryptEvent(event, "")
+                    val result = cryptoService.decryptEvent(event, event.roomId + UUID.randomUUID().toString())
                     event.mxDecryptionResult = OlmDecryptionResult(
                             payload = result.clearEvent,
                             senderKey = result.senderCurve25519Key,
@@ -83,7 +88,7 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
                     )
                 } catch (e: MXCryptoError) {
                     Timber.e("## SAS Failed to decrypt event: ${event.eventId}")
-                    params.verificationService.onPotentiallyInterestingEventRoomFailToDecrypt(event)
+                    verificationService.onPotentiallyInterestingEventRoomFailToDecrypt(event)
                 }
             }
             Timber.v("## SAS Verification live observer: received msgId: ${event.eventId} type: ${event.getClearType()}")
@@ -112,7 +117,7 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
                             // The verification is started from another device
                             Timber.v("## SAS Verification live observer: Transaction started by other device  tid:$relatesToEventId ")
                             relatesToEventId?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
-                            params.verificationService.onRoomRequestHandledByOtherDevice(event)
+                            verificationService.onRoomRequestHandledByOtherDevice(event)
                         }
                     }
                 } else if (EventType.KEY_VERIFICATION_READY == event.getClearType()) {
@@ -121,13 +126,13 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
                             // The verification is started from another device
                             Timber.v("## SAS Verification live observer: Transaction started by other device  tid:$relatesToEventId ")
                             relatesToEventId?.let { txId -> transactionsHandledByOtherDevice.add(txId) }
-                            params.verificationService.onRoomRequestHandledByOtherDevice(event)
+                            verificationService.onRoomRequestHandledByOtherDevice(event)
                         }
                     }
                 } else if (EventType.KEY_VERIFICATION_CANCEL == event.getClearType() || EventType.KEY_VERIFICATION_DONE == event.getClearType()) {
                     relatesToEventId?.let {
                         transactionsHandledByOtherDevice.remove(it)
-                        params.verificationService.onRoomRequestHandledByOtherDevice(event)
+                        verificationService.onRoomRequestHandledByOtherDevice(event)
                     }
                 }
 
@@ -148,11 +153,11 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
                 EventType.KEY_VERIFICATION_CANCEL,
                 EventType.KEY_VERIFICATION_READY,
                 EventType.KEY_VERIFICATION_DONE -> {
-                    params.verificationService.onRoomEvent(event)
+                    verificationService.onRoomEvent(event)
                 }
                 EventType.MESSAGE -> {
                     if (MessageType.MSGTYPE_VERIFICATION_REQUEST == event.getClearContent().toModel<MessageContent>()?.msgType) {
-                        params.verificationService.onRoomRequestReceived(event)
+                        verificationService.onRoomRequestReceived(event)
                     }
                 }
             }

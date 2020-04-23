@@ -19,8 +19,8 @@ package im.vector.riotx.features.home.room.breadcrumbs
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.model.Breadcrumb
 
 data class BreadcrumbsViewState(
-        val asyncBreadcrumbs: Async<List<RoomSummary>> = Uninitialized
+        val asyncBreadcrumbs: Async<List<Breadcrumb>> = Uninitialized
 ) : MvRxState

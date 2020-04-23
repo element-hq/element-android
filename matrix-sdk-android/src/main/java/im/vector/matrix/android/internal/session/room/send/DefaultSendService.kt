@@ -168,7 +168,7 @@ internal class DefaultSendService @AssistedInject constructor(
 
     override fun deleteFailedEcho(localEcho: TimelineEvent) {
         taskExecutor.executorScope.launch {
-            localEchoRepository.deleteFailedEcho(roomId, localEcho)
+            localEchoRepository.deleteFailedEcho(localEcho)
         }
     }
 
@@ -197,7 +197,7 @@ internal class DefaultSendService @AssistedInject constructor(
             eventsToResend.forEach {
                 sendEvent(it)
             }
-            localEchoRepository.updateSendState(roomId, eventsToResend.mapNotNull { it.eventId }, SendState.UNSENT)
+            localEchoRepository.updateSendState(eventsToResend.mapNotNull { it.eventId }, SendState.UNSENT)
         }
     }
 

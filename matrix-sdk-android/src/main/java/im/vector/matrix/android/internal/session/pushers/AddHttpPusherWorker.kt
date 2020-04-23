@@ -19,19 +19,19 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.pushers.PusherState
-import im.vector.matrix.android.internal.database.mapper.toEntity
+import im.vector.matrix.android.internal.database.awaitTransaction
+import im.vector.matrix.android.internal.database.mapper.PushersMapper
 import im.vector.matrix.android.internal.database.model.PusherEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.util.awaitTransaction
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import org.greenrobot.eventbus.EventBus
-import timber.log.Timber
 import javax.inject.Inject
 
 internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
@@ -44,14 +44,20 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
             override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
-    @Inject lateinit var pushersAPI: PushersAPI
-    @Inject lateinit var monarchy: Monarchy
-    @Inject lateinit var eventBus: EventBus
+    @Inject
+    lateinit var pushersAPI: PushersAPI
+    @Inject
+    lateinit var sessionDatabase: SessionDatabase
+    @Inject
+    lateinit var pushersMapper: PushersMapper
+    @Inject
+    lateinit var eventBus: EventBus
+    @Inject
+    lateinit var coroutineDispatchers: MatrixCoroutineDispatchers
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
                 ?: return Result.failure()
-                        .also { Timber.e("Unable to parse work parameters") }
 
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
@@ -67,15 +73,12 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
         } catch (exception: Throwable) {
             when (exception) {
                 is Failure.NetworkConnection -> Result.retry()
-                else                         -> {
-                    monarchy.awaitTransaction { realm ->
-                        PusherEntity.where(realm, pusher.pushKey).findFirst()?.let {
-                            // update it
-                            it.state = PusherState.FAILED_TO_REGISTER
-                        }
+                else -> {
+                    sessionDatabase.awaitTransaction(coroutineDispatchers) {
+                        sessionDatabase.pushersQueries.updateState(PusherState.FAILED_TO_REGISTER.name, pusher.pushKey)
                     }
                     // always return success, or the chain will be stuck for ever!
-                    Result.failure()
+                    Result.success()
                 }
             }
         }
@@ -85,24 +88,9 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
         executeRequest<Unit>(eventBus) {
             apiCall = pushersAPI.setPusher(pusher)
         }
-        monarchy.awaitTransaction { realm ->
-            val echo = PusherEntity.where(realm, pusher.pushKey).findFirst()
-            if (echo != null) {
-                // update it
-                echo.appDisplayName = pusher.appDisplayName
-                echo.appId = pusher.appId
-                echo.kind = pusher.kind
-                echo.lang = pusher.lang
-                echo.profileTag = pusher.profileTag
-                echo.data?.format = pusher.data?.format
-                echo.data?.url = pusher.data?.url
-                echo.state = PusherState.REGISTERED
-            } else {
-                pusher.toEntity().also {
-                    it.state = PusherState.REGISTERED
-                    realm.insertOrUpdate(it)
-                }
-            }
+        sessionDatabase.awaitTransaction(coroutineDispatchers) {
+            val pusherEntity = pushersMapper.map(pusher, PusherState.REGISTERED)
+            sessionDatabase.pushersQueries.insertOrReplace(pusherEntity)
         }
     }
 }

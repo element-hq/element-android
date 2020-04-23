@@ -43,9 +43,7 @@ import javax.inject.Inject
 internal class LocalEchoRepository @Inject constructor(private val sessionDatabase: SessionDatabase,
                                                        private val roomSummaryUpdater: RoomSummaryUpdater,
                                                        private val eventBus: EventBus,
-                                                       private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                                       private val timelineEventMapper: TimelineEventMapper,
-                                                       private val roomMemberSummaryDataSource: RoomMemberSummaryDataSource) {
+                                                       private val coroutineDispatchers: MatrixCoroutineDispatchers) {
 
     suspend fun createLocalEcho(event: Event) {
         val roomId = event.roomId

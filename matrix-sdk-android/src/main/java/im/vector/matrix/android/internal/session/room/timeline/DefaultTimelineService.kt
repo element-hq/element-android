@@ -16,34 +16,18 @@
 
 package im.vector.matrix.android.internal.session.room.timeline
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.api.util.Optional
-import im.vector.matrix.android.api.util.toOptional
-import im.vector.matrix.android.internal.database.mapper.ReadReceiptsSummaryMapper
-import im.vector.matrix.android.internal.database.mapper.TimelineEventMapper
-import im.vector.matrix.android.internal.database.model.TimelineEventEntity
-import im.vector.matrix.android.internal.database.query.where
-import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.util.fetchCopyMap
-import org.greenrobot.eventbus.EventBus
+import kotlinx.coroutines.flow.Flow
 
 internal class DefaultTimelineService @AssistedInject constructor(@Assisted private val roomId: String,
-                                                                  private val monarchy: Monarchy,
-                                                                  private val eventBus: EventBus,
-                                                                  private val taskExecutor: TaskExecutor,
-                                                                  private val contextOfEventTask: GetContextOfEventTask,
-                                                                  private val eventDecryptor: TimelineEventDecryptor,
-                                                                  private val paginationTask: PaginationTask,
-                                                                  private val timelineEventMapper: TimelineEventMapper,
-                                                                  private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper
+                                                                  private val timelineEventDataSource: TimelineEventDataSource,
+                                                                  private val sqlTimelineFactory: SQLTimeline.Factory
 ) : TimelineService {
 
     @AssistedInject.Factory
@@ -52,37 +36,14 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
     }
 
     override fun createTimeline(eventId: String?, settings: TimelineSettings): Timeline {
-        return DefaultTimeline(
-                roomId = roomId,
-                initialEventId = eventId,
-                realmConfiguration = monarchy.realmConfiguration,
-                taskExecutor = taskExecutor,
-                contextOfEventTask = contextOfEventTask,
-                paginationTask = paginationTask,
-                timelineEventMapper = timelineEventMapper,
-                settings = settings,
-                hiddenReadReceipts = TimelineHiddenReadReceipts(readReceiptsSummaryMapper, roomId, settings),
-                eventBus = eventBus,
-                eventDecryptor = eventDecryptor
-        )
+        return sqlTimelineFactory.create(roomId, eventId, settings)
     }
 
     override fun getTimeLineEvent(eventId: String): TimelineEvent? {
-        return monarchy
-                .fetchCopyMap({
-                                  TimelineEventEntity.where(it, roomId = roomId, eventId = eventId).findFirst()
-                              }, { entity, _ ->
-                                  timelineEventMapper.map(entity)
-                              })
+        return timelineEventDataSource.getTimeLineEvent(eventId)
     }
 
-    override fun getTimeLineEventLive(eventId: String): LiveData<Optional<TimelineEvent>> {
-        val liveData = monarchy.findAllMappedWithChanges(
-                { TimelineEventEntity.where(it, roomId = roomId, eventId = eventId) },
-                { timelineEventMapper.map(it) }
-        )
-        return Transformations.map(liveData) { events ->
-            events.firstOrNull().toOptional()
-        }
+    override fun getTimeLineEventLive(eventId: String): Flow<Optional<TimelineEvent>> {
+        return timelineEventDataSource.getTimeLineEventLive(eventId)
     }
 }

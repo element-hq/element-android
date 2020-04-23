@@ -17,51 +17,45 @@
 package im.vector.matrix.android.internal.session.group
 
 import androidx.work.ExistingWorkPolicy
-import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.session.room.model.Membership
-import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
+import com.squareup.sqldelight.Query
+import im.vector.matrix.android.internal.database.SqlLiveEntityObserver
 import im.vector.matrix.android.internal.database.awaitTransaction
-import im.vector.matrix.android.internal.database.model.GroupEntity
-import im.vector.matrix.android.internal.database.model.GroupSummaryEntity
-import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.WorkManagerProvider
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
-import io.realm.OrderedCollectionChangeSet
-import io.realm.RealmResults
-import kotlinx.coroutines.launch
+import im.vector.matrix.sqldelight.session.Memberships
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import javax.inject.Inject
 
 private const val GET_GROUP_DATA_WORKER = "GET_GROUP_DATA_WORKER"
 
 internal class GroupSummaryUpdater @Inject constructor(
         private val workManagerProvider: WorkManagerProvider,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
         @SessionId private val sessionId: String,
-        private val monarchy: Monarchy)
-    : RealmLiveEntityObserver<GroupEntity>(monarchy.realmConfiguration) {
+        sessionDatabase: SessionDatabase)
+    : SqlLiveEntityObserver<String>(sessionDatabase) {
 
-    override val query = Monarchy.Query { GroupEntity.where(it) }
+    override val query: Query<String>
+        get() = sessionDatabase.observerTriggerQueries.getAllGroupNotifications()
 
-    override fun onChange(results: RealmResults<GroupEntity>, changeSet: OrderedCollectionChangeSet) {
-        // `insertions` for new groups and `changes` to handle left groups
-        val modifiedGroupEntity = (changeSet.insertions + changeSet.changes)
-                .asSequence()
-                .mapNotNull { results[it] }
+    override suspend fun handleChanges(results: List<String>) {
+        val groupIdsToFetchData = sessionDatabase.groupQueries.getAllGroupIdsWithinIdsAndMemberships(
+                groupIds = results,
+                memberships = listOf(Memberships.JOIN, Memberships.INVITE)
+        ).executeAsList()
+        fetchGroupsData(groupIdsToFetchData)
 
-        fetchGroupsData(modifiedGroupEntity
-                .filter { it.membership == Membership.JOIN || it.membership == Membership.INVITE }
-                .map { it.groupId }
-                .toList())
+        val groupIdsToDelete = sessionDatabase.groupQueries.getAllGroupIdsWithinIdsAndMemberships(
+                groupIds = results,
+                memberships = listOf(Memberships.LEAVE)
+        ).executeAsList()
 
-        modifiedGroupEntity
-                .filter { it.membership == Membership.LEAVE }
-                .map { it.groupId }
-                .toList()
-                .also {
-                    observerScope.launch {
-                        deleteGroups(it)
-                    }
-                }
+        sessionDatabase.awaitTransaction(coroutineDispatchers) {
+            sessionDatabase.groupSummaryQueries.deleteGroupSummaries(groupIdsToDelete)
+            sessionDatabase.observerTriggerQueries.deleteGroupNotifications(results)
+        }
     }
 
     private fun fetchGroupsData(groupIds: List<String>) {
@@ -79,12 +73,4 @@ internal class GroupSummaryUpdater @Inject constructor(
                 .enqueue()
     }
 
-    /**
-     * Delete the GroupSummaryEntity of left groups
-     */
-    private suspend fun deleteGroups(groupIds: List<String>) = awaitTransaction(monarchy.realmConfiguration) { realm ->
-        GroupSummaryEntity.where(realm, groupIds)
-                .findAll()
-                .deleteAllFromRealm()
-    }
 }

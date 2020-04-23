@@ -20,8 +20,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import arrow.core.Option
+import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.group.model.GroupSummary
-import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
 import im.vector.matrix.rx.rx
 import im.vector.riotx.features.grouplist.ALL_COMMUNITIES_GROUP_ID
@@ -29,11 +29,9 @@ import im.vector.riotx.features.grouplist.SelectedGroupDataSource
 import im.vector.riotx.features.home.HomeRoomListDataSource
 import im.vector.riotx.features.home.room.list.ChronologicalRoomComparator
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.addTo
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -62,32 +60,30 @@ class AppStateHandler @Inject constructor(
 
     private fun observeRoomsAndGroup() {
         Observable
-                .combineLatest<List<RoomSummary>, Option<GroupSummary>, List<RoomSummary>>(
-                        sessionDataSource.observe()
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .switchMap {
-                                    val query = roomSummaryQueryParams {}
-                                    it.orNull()?.rx()?.liveRoomSummaries(query)
-                                            ?: Observable.just(emptyList())
-                                }
-                                .throttleLast(300, TimeUnit.MILLISECONDS),
+                .combineLatest<Option<Session>, Option<GroupSummary>, Pair<Option<Session>, Option<GroupSummary>>>(
+                        sessionDataSource.observe(),
                         selectedGroupDataSource.observe(),
-                        BiFunction { rooms, selectedGroupOption ->
-                            val selectedGroup = selectedGroupOption.orNull()
-                            val filteredRooms = rooms.filter {
-                                if (selectedGroup == null || selectedGroup.groupId == ALL_COMMUNITIES_GROUP_ID) {
-                                    true
-                                } else if (it.isDirect) {
-                                    it.otherMemberIds
-                                            .intersect(selectedGroup.userIds)
-                                            .isNotEmpty()
-                                } else {
-                                    selectedGroup.roomIds.contains(it.roomId)
-                                }
-                            }
-                            filteredRooms.sortedWith(chronologicalRoomComparator)
+                        BiFunction { sessionOption, selectedGroupOption ->
+                            Pair(sessionOption, selectedGroupOption)
                         }
-                )
+                ).switchMap {
+                    val selectedGroup = it.second.orNull()
+                    val session = it.first.orNull()
+                    val queryParams = if (selectedGroup?.groupId == null || selectedGroup.groupId == ALL_COMMUNITIES_GROUP_ID) {
+                        roomSummaryQueryParams()
+                    } else {
+                        roomSummaryQueryParams {
+                            fromGroupId = selectedGroup.groupId
+                        }
+                    }
+                    session
+                            ?.rx()
+                            ?.liveRoomSummaries(queryParams)
+                            ?: Observable.empty()
+                }
+                .map {
+                    it.sortedWith(chronologicalRoomComparator)
+                }
                 .subscribe {
                     homeRoomListDataSource.post(it)
                 }

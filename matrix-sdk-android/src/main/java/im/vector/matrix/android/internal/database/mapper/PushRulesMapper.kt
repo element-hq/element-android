@@ -17,14 +17,16 @@ package im.vector.matrix.android.internal.database.mapper
 
 import com.squareup.moshi.Types
 import im.vector.matrix.android.api.pushrules.Condition
+import im.vector.matrix.android.api.pushrules.RuleKind
 import im.vector.matrix.android.api.pushrules.rest.PushCondition
 import im.vector.matrix.android.api.pushrules.rest.PushRule
-import im.vector.matrix.android.internal.database.model.PushRuleEntity
 import im.vector.matrix.android.internal.di.MoshiProvider
-import io.realm.RealmList
+import im.vector.matrix.sqldelight.session.GetPushConditions
+import im.vector.matrix.sqldelight.session.PushRuleEntity
 import timber.log.Timber
+import javax.inject.Inject
 
-internal object PushRulesMapper {
+internal class PushRulesMapper @Inject constructor(private val pushConditionMapper: PushConditionMapper) {
 
     private val moshiActionsAdapter = MoshiProvider.providesMoshi().adapter<List<Any>>(Types.newParameterizedType(List::class.java, Any::class.java))
 
@@ -33,10 +35,10 @@ internal object PushRulesMapper {
 
     fun mapContentRule(pushrule: PushRuleEntity): PushRule {
         return PushRule(
-                actions = fromActionStr(pushrule.actionsStr),
-                default = pushrule.default,
-                enabled = pushrule.enabled,
-                ruleId = pushrule.ruleId,
+                actions = fromActionStr(pushrule.action_str),
+                default = pushrule.is_default,
+                enabled = pushrule.is_enabled,
+                ruleId = pushrule.rule_id,
                 conditions = listOf(
                         PushCondition(Condition.Kind.EventMatch.value, "content.body", pushrule.pattern)
                 )
@@ -44,58 +46,60 @@ internal object PushRulesMapper {
     }
 
     private fun fromActionStr(actionsStr: String?): List<Any> {
-        try {
-            return actionsStr?.let { moshiActionsAdapter.fromJson(it) } ?: emptyList()
+        return try {
+            actionsStr?.let { moshiActionsAdapter.fromJson(it) } ?: emptyList()
         } catch (e: Throwable) {
             Timber.e(e, "## failed to map push rule actions <$actionsStr>")
-            return emptyList()
+            emptyList()
         }
     }
 
     fun mapRoomRule(pushrule: PushRuleEntity): PushRule {
         return PushRule(
-                actions = fromActionStr(pushrule.actionsStr),
-                default = pushrule.default,
-                enabled = pushrule.enabled,
-                ruleId = pushrule.ruleId,
+                actions = fromActionStr(pushrule.action_str),
+                default = pushrule.is_default,
+                enabled = pushrule.is_enabled,
+                ruleId = pushrule.rule_id,
                 conditions = listOf(
-                        PushCondition(Condition.Kind.EventMatch.value, "room_id", pushrule.ruleId)
+                        PushCondition(Condition.Kind.EventMatch.value, "room_id", pushrule.rule_id)
                 )
         )
     }
 
     fun mapSenderRule(pushrule: PushRuleEntity): PushRule {
         return PushRule(
-                actions = fromActionStr(pushrule.actionsStr),
-                default = pushrule.default,
-                enabled = pushrule.enabled,
-                ruleId = pushrule.ruleId,
+                actions = fromActionStr(pushrule.action_str),
+                default = pushrule.is_default,
+                enabled = pushrule.is_enabled,
+                ruleId = pushrule.rule_id,
                 conditions = listOf(
-                        PushCondition(Condition.Kind.EventMatch.value, "user_id", pushrule.ruleId)
+                        PushCondition(Condition.Kind.EventMatch.value, "user_id", pushrule.rule_id)
                 )
         )
     }
 
-    fun map(pushrule: PushRuleEntity): PushRule {
+    fun map(pushrule: PushRuleEntity, conditions: List<GetPushConditions>): PushRule {
         return PushRule(
-                actions = fromActionStr(pushrule.actionsStr),
-                default = pushrule.default,
-                enabled = pushrule.enabled,
-                ruleId = pushrule.ruleId,
-                conditions = pushrule.conditions?.map { PushConditionMapper.map(it) }
+                actions = fromActionStr(pushrule.action_str),
+                default = pushrule.is_default,
+                enabled = pushrule.is_enabled,
+                ruleId = pushrule.rule_id,
+                conditions = conditions.map {
+                    pushConditionMapper.map(it)
+                }
         )
     }
 
-    fun map(pushRule: PushRule): PushRuleEntity {
-        return PushRuleEntity(
-                actionsStr = moshiActionsAdapter.toJson(pushRule.actions),
-                default = pushRule.default ?: false,
-                enabled = pushRule.enabled,
-                ruleId = pushRule.ruleId,
+    fun map(scope: String, kind: RuleKind, pushRule: PushRule): PushRuleEntity {
+        return PushRuleEntity.Impl(
+                action_str = moshiActionsAdapter.toJson(pushRule.actions),
+                is_default = pushRule.default ?: false,
+                is_enabled = pushRule.enabled,
+                rule_id = pushRule.ruleId,
                 pattern = pushRule.pattern,
-                conditions = pushRule.conditions?.let {
-                    RealmList(*pushRule.conditions.map { PushConditionMapper.map(it) }.toTypedArray())
-                } ?: RealmList()
+                scope = scope,
+                kind = kind.name
         )
     }
+
 }

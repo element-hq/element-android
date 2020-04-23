@@ -154,7 +154,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 .liveAnnotationSummary(eventId)
                 .map { annotations ->
                     EmojiDataSource.quickEmojis.map { emoji ->
-                        ToggleState(emoji, annotations.getOrNull()?.reactionsSummary?.firstOrNull { it.key == emoji }?.addedByMe ?: false)
+                        ToggleState(emoji, annotations.reactionsSummary.firstOrNull { it.key == emoji }?.addedByMe ?: false)
                     }
                 }
                 .execute {

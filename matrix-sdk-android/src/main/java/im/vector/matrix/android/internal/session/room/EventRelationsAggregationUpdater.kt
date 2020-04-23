@@ -15,19 +15,10 @@
  */
 package im.vector.matrix.android.internal.session.room
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.internal.database.RealmLiveEntityObserver
-import im.vector.matrix.android.internal.database.mapper.asDomain
-import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.query.whereTypes
-import im.vector.matrix.android.internal.di.SessionDatabase
-import im.vector.matrix.android.internal.di.UserId
-import io.realm.OrderedCollectionChangeSet
-import io.realm.RealmConfiguration
-import io.realm.RealmResults
-import kotlinx.coroutines.launch
-import timber.log.Timber
+import im.vector.matrix.android.internal.database.SqlLiveEntityObserver
+import im.vector.matrix.sqldelight.session.EventInsertNotification
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import javax.inject.Inject
 
 /**
@@ -36,41 +27,32 @@ import javax.inject.Inject
  * The summaries can then be extracted and added (as a decoration) to a TimelineEvent for final display.
  */
 internal class EventRelationsAggregationUpdater @Inject constructor(
-        @SessionDatabase realmConfiguration: RealmConfiguration,
-        @UserId private val userId: String,
+        sessionDatabase: SessionDatabase,
         private val task: EventRelationsAggregationTask) :
-        RealmLiveEntityObserver<EventEntity>(realmConfiguration) {
+        SqlLiveEntityObserver<EventInsertNotification>(sessionDatabase) {
 
-    override val query = Monarchy.Query<EventEntity> {
-        EventEntity.whereTypes(it, listOf(
-                EventType.MESSAGE,
-                EventType.REDACTION,
-                EventType.REACTION,
-                EventType.KEY_VERIFICATION_DONE,
-                EventType.KEY_VERIFICATION_CANCEL,
-                EventType.KEY_VERIFICATION_ACCEPT,
-                EventType.KEY_VERIFICATION_START,
-                EventType.KEY_VERIFICATION_MAC,
-                // TODO Add ?
-                // EventType.KEY_VERIFICATION_READY,
-                EventType.KEY_VERIFICATION_KEY,
-                EventType.ENCRYPTED)
-        )
+    override val query = sessionDatabase.observerTriggerQueries.getAllEventInsertNotifications(
+            types = listOf(
+                    EventType.MESSAGE,
+                    EventType.REDACTION,
+                    EventType.REACTION,
+                    EventType.KEY_VERIFICATION_DONE,
+                    EventType.KEY_VERIFICATION_CANCEL,
+                    EventType.KEY_VERIFICATION_ACCEPT,
+                    EventType.KEY_VERIFICATION_START,
+                    EventType.KEY_VERIFICATION_MAC,
+                    // TODO Add ?
+                    // EventType.KEY_VERIFICATION_READY,
+                    EventType.KEY_VERIFICATION_KEY,
+                    EventType.ENCRYPTED)
+    )
+
+
+    override suspend fun handleChanges(results: List<EventInsertNotification>) {
+        val params = EventRelationsAggregationTask.Params(results)
+        task.execute(params)
+        val notificationIds = results.map { it.event_id }
+        sessionDatabase.observerTriggerQueries.deleteEventInsertNotifications(notificationIds)
     }
 
-    override fun onChange(results: RealmResults<EventEntity>, changeSet: OrderedCollectionChangeSet) {
-        Timber.v("EventRelationsAggregationUpdater called with ${changeSet.insertions.size} insertions")
-
-        val insertedDomains = changeSet.insertions
-                .asSequence()
-                .mapNotNull { results[it]?.asDomain() }
-                .toList()
-        val params = EventRelationsAggregationTask.Params(
-                insertedDomains,
-                userId
-        )
-        observerScope.launch {
-            task.execute(params)
-        }
-    }
 }

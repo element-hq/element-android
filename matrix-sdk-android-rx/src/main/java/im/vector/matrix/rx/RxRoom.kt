@@ -27,11 +27,9 @@ import im.vector.matrix.android.api.session.room.notification.RoomNotificationSt
 import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Optional
-import im.vector.matrix.android.api.util.toOptional
 import io.reactivex.Observable
 import io.reactivex.Single
 import kotlinx.coroutines.rx2.asObservable
-import timber.log.Timber
 
 class RxRoom(private val room: Room) {
 

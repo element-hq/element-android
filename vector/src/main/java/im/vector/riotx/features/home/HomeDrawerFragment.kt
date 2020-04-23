@@ -18,6 +18,7 @@ package im.vector.riotx.features.home
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.asLiveData
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
@@ -40,7 +41,7 @@ class HomeDrawerFragment @Inject constructor(
         if (savedInstanceState == null) {
             replaceChildFragment(R.id.homeDrawerGroupListContainer, GroupListFragment::class.java)
         }
-        session.getUserLive(session.myUserId).observeK(viewLifecycleOwner) { optionalUser ->
+        session.getUserLive(session.myUserId).asLiveData().observeK(viewLifecycleOwner) { optionalUser ->
             val user = optionalUser?.getOrNull()
             if (user != null) {
                 avatarRenderer.render(user.toMatrixItem(), homeDrawerHeaderAvatarView)

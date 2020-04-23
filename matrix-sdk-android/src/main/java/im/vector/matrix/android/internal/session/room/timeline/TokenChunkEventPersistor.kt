@@ -249,7 +249,7 @@ internal class TokenChunkEventPersistor @Inject constructor(private val sessionD
         val chunks = sessionDatabase.chunkQueriesChunkEntity.findAllIncludingEvents(realm, eventIds)
         val chunksToDelete = ArrayList<ChunkEntity>()
         chunks.forEach {
-            if (it != currentChunk) {
+            if (it != currentChunk) {s
                 currentChunk.merge(roomId, it, direction)
                 chunksToDelete.add(it)
             }

@@ -15,22 +15,18 @@
  */
 package im.vector.matrix.android.internal.session.notification
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.pushrules.RuleKind
-import im.vector.matrix.android.api.pushrules.RuleSetKey
 import im.vector.matrix.android.api.pushrules.getActions
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.pushrules.rest.RuleSet
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.database.mapper.PushRulesMapper
-import im.vector.matrix.android.internal.database.model.PushRulesEntity
-import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.pushers.AddPushRuleTask
 import im.vector.matrix.android.internal.session.pushers.GetPushRulesTask
+import im.vector.matrix.android.internal.session.pushers.PushRuleDataSource
 import im.vector.matrix.android.internal.session.pushers.RemovePushRuleTask
 import im.vector.matrix.android.internal.session.pushers.UpdatePushRuleActionsTask
 import im.vector.matrix.android.internal.session.pushers.UpdatePushRuleEnableStatusTask
@@ -44,10 +40,10 @@ internal class DefaultPushRuleService @Inject constructor(
         private val getPushRulesTask: GetPushRulesTask,
         private val updatePushRuleEnableStatusTask: UpdatePushRuleEnableStatusTask,
         private val addPushRuleTask: AddPushRuleTask,
-        private val updatePushRuleActionsTask: UpdatePushRuleActionsTask,
         private val removePushRuleTask: RemovePushRuleTask,
         private val taskExecutor: TaskExecutor,
-        private val monarchy: Monarchy
+        private val pushRuleDataSource: PushRuleDataSource,
+        private val updatePushRuleActionsTask: UpdatePushRuleActionsTask
 ) : PushRuleService {
 
     private var listeners = mutableSetOf<PushRuleService.PushRuleListener>()
@@ -59,47 +55,7 @@ internal class DefaultPushRuleService @Inject constructor(
     }
 
     override fun getPushRules(scope: String): RuleSet {
-        var contentRules: List<PushRule> = emptyList()
-        var overrideRules: List<PushRule> = emptyList()
-        var roomRules: List<PushRule> = emptyList()
-        var senderRules: List<PushRule> = emptyList()
-        var underrideRules: List<PushRule> = emptyList()
-
-        monarchy.doWithRealm { realm ->
-            PushRulesEntity.where(realm, scope, RuleSetKey.CONTENT)
-                    .findFirst()
-                    ?.let { pushRulesEntity ->
-                        contentRules = pushRulesEntity.pushRules.map { PushRulesMapper.mapContentRule(it) }
-                    }
-            PushRulesEntity.where(realm, scope, RuleSetKey.OVERRIDE)
-                    .findFirst()
-                    ?.let { pushRulesEntity ->
-                        overrideRules = pushRulesEntity.pushRules.map { PushRulesMapper.map(it) }
-                    }
-            PushRulesEntity.where(realm, scope, RuleSetKey.ROOM)
-                    .findFirst()
-                    ?.let { pushRulesEntity ->
-                        roomRules = pushRulesEntity.pushRules.map { PushRulesMapper.mapRoomRule(it) }
-                    }
-            PushRulesEntity.where(realm, scope, RuleSetKey.SENDER)
-                    .findFirst()
-                    ?.let { pushRulesEntity ->
-                        senderRules = pushRulesEntity.pushRules.map { PushRulesMapper.mapSenderRule(it) }
-                    }
-            PushRulesEntity.where(realm, scope, RuleSetKey.UNDERRIDE)
-                    .findFirst()
-                    ?.let { pushRulesEntity ->
-                        underrideRules = pushRulesEntity.pushRules.map { PushRulesMapper.map(it) }
-                    }
-        }
-
-        return RuleSet(
-                content = contentRules,
-                override = overrideRules,
-                room = roomRules,
-                sender = senderRules,
-                underride = underrideRules
-        )
+        return pushRuleDataSource.getPushRules(scope)
     }
 
     override fun updatePushRuleEnableStatus(kind: RuleKind, pushRule: PushRule, enabled: Boolean, callback: MatrixCallback<Unit>): Cancelable {

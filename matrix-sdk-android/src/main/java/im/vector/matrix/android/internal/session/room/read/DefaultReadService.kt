@@ -16,32 +16,26 @@
 
 package im.vector.matrix.android.internal.session.room.read
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.model.ReadReceipt
 import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.util.Optional
-import im.vector.matrix.android.api.util.toOptional
-import im.vector.matrix.android.internal.database.mapper.ReadReceiptsSummaryMapper
-import im.vector.matrix.android.internal.database.model.ReadMarkerEntity
-import im.vector.matrix.android.internal.database.model.ReadReceiptEntity
-import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntity
-import im.vector.matrix.android.internal.database.query.isEventRead
-import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.database.helper.isEventRead
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.sqldelight.session.SessionDatabase
+import kotlinx.coroutines.flow.Flow
 
 internal class DefaultReadService @AssistedInject constructor(
         @Assisted private val roomId: String,
-        private val monarchy: Monarchy,
         private val taskExecutor: TaskExecutor,
         private val setReadMarkersTask: SetReadMarkersTask,
-        private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,
+        private val sessionDatabase: SessionDatabase,
+        private val readMarkerDataSource: ReadMarkerDataSource,
+        private val readReceiptDataSource: ReadReceiptDataSource,
         @UserId private val userId: String
 ) : ReadService {
 
@@ -82,37 +76,19 @@ internal class DefaultReadService @AssistedInject constructor(
     }
 
     override fun isEventRead(eventId: String): Boolean {
-        return isEventRead(monarchy, userId, roomId, eventId)
+        return sessionDatabase.isEventRead(userId, roomId, eventId)
     }
 
-    override fun getReadMarkerLive(): LiveData<Optional<String>> {
-        val liveRealmData = monarchy.findAllMappedWithChanges(
-                { ReadMarkerEntity.where(it, roomId) },
-                { it.eventId }
-        )
-        return Transformations.map(liveRealmData) {
-            it.firstOrNull().toOptional()
-        }
+    override fun getReadMarkerLive(): Flow<Optional<String>> {
+        return readMarkerDataSource.getReadMarkerLive(roomId)
     }
 
-    override fun getMyReadReceiptLive(): LiveData<Optional<String>> {
-        val liveRealmData = monarchy.findAllMappedWithChanges(
-                { ReadReceiptEntity.where(it, roomId = roomId, userId = userId) },
-                { it.eventId }
-        )
-        return Transformations.map(liveRealmData) {
-            it.firstOrNull().toOptional()
-        }
+    override fun getMyReadReceiptLive(): Flow<Optional<String>> {
+        return readReceiptDataSource.getReadReceiptLive(roomId, userId)
     }
 
-    override fun getEventReadReceiptsLive(eventId: String): LiveData<List<ReadReceipt>> {
-        val liveRealmData = monarchy.findAllMappedWithChanges(
-                { ReadReceiptsSummaryEntity.where(it, eventId) },
-                { readReceiptsSummaryMapper.map(it) }
-        )
-        return Transformations.map(liveRealmData) {
-            it.firstOrNull() ?: emptyList()
-        }
+    override fun getEventReadReceiptsLive(eventId: String): Flow<List<ReadReceipt>> {
+        return readReceiptDataSource.getEventReadReceiptsLive(eventId)
     }
 
     private fun ReadService.MarkAsReadParams.forceReadMarker(): Boolean {

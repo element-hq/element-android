@@ -16,34 +16,14 @@
 
 package im.vector.matrix.android.internal.session.room.notification
 
-import im.vector.matrix.android.api.pushrules.Action
-import im.vector.matrix.android.api.pushrules.Condition
-import im.vector.matrix.android.api.pushrules.RuleSetKey
-import im.vector.matrix.android.api.pushrules.getActions
+import im.vector.matrix.android.api.pushrules.*
 import im.vector.matrix.android.api.pushrules.rest.PushCondition
 import im.vector.matrix.android.api.pushrules.rest.PushRule
-import im.vector.matrix.android.api.pushrules.toJson
 import im.vector.matrix.android.api.session.room.notification.RoomNotificationState
 import im.vector.matrix.android.internal.database.mapper.PushRulesMapper
 import im.vector.matrix.android.internal.database.model.PushRuleEntity
 
-internal fun PushRuleEntity.toRoomPushRule(): RoomPushRule? {
-    val kind = parent?.firstOrNull()?.kind
-    val pushRule = when (kind) {
-        RuleSetKey.OVERRIDE -> {
-            PushRulesMapper.map(this)
-        }
-        RuleSetKey.ROOM     -> {
-            PushRulesMapper.mapRoomRule(this)
-        }
-        else                -> null
-    }
-    return if (pushRule == null || kind == null) {
-        null
-    } else {
-        RoomPushRule(kind, pushRule)
-    }
-}
+
 
 internal fun RoomNotificationState.toRoomPushRule(roomId: String): RoomPushRule? {
     return when {

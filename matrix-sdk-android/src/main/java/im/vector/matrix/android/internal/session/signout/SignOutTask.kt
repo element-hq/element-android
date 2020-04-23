@@ -16,26 +16,17 @@
 
 package im.vector.matrix.android.internal.session.signout
 
-import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.CryptoModule
-import im.vector.matrix.android.internal.database.RealmKeysUtils
-import im.vector.matrix.android.internal.di.CryptoDatabase
-import im.vector.matrix.android.internal.di.SessionCacheDirectory
-import im.vector.matrix.android.internal.di.SessionDatabase
-import im.vector.matrix.android.internal.di.SessionFilesDirectory
-import im.vector.matrix.android.internal.di.SessionId
-import im.vector.matrix.android.internal.di.UserMd5
-import im.vector.matrix.android.internal.di.WorkManagerProvider
+import im.vector.matrix.android.internal.database.DatabaseKeysUtils
+import im.vector.matrix.android.internal.di.*
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.SessionModule
 import im.vector.matrix.android.internal.session.cache.ClearCacheTask
 import im.vector.matrix.android.internal.task.Task
-import io.realm.Realm
-import io.realm.RealmConfiguration
 import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import java.io.File
@@ -54,13 +45,10 @@ internal class DefaultSignOutTask @Inject constructor(
         private val signOutAPI: SignOutAPI,
         private val sessionManager: SessionManager,
         private val sessionParamsStore: SessionParamsStore,
-        @SessionDatabase private val clearSessionDataTask: ClearCacheTask,
-        @CryptoDatabase private val clearCryptoDataTask: ClearCacheTask,
+        @RealmCryptoDatabase private val clearCryptoDataTask: ClearCacheTask,
         @SessionFilesDirectory private val sessionFiles: File,
         @SessionCacheDirectory private val sessionCache: File,
-        private val realmKeysUtils: RealmKeysUtils,
-        @SessionDatabase private val realmSessionConfiguration: RealmConfiguration,
-        @CryptoDatabase private val realmCryptoConfiguration: RealmConfiguration,
+        private val databaseKeysUtils: DatabaseKeysUtils,
         @UserMd5 private val userMd5: String,
         private val eventBus: EventBus
 ) : SignOutTask {
@@ -96,9 +84,6 @@ internal class DefaultSignOutTask @Inject constructor(
         Timber.d("SignOut: delete session params...")
         sessionParamsStore.delete(sessionId)
 
-        Timber.d("SignOut: clear session data...")
-        clearSessionDataTask.execute(Unit)
-
         Timber.d("SignOut: clear crypto data...")
         clearCryptoDataTask.execute(Unit)
 
@@ -107,17 +92,7 @@ internal class DefaultSignOutTask @Inject constructor(
         sessionCache.deleteRecursively()
 
         Timber.d("SignOut: clear the database keys")
-        realmKeysUtils.clear(SessionModule.getKeyAlias(userMd5))
-        realmKeysUtils.clear(CryptoModule.getKeyAlias(userMd5))
-
-        // Sanity check
-        if (BuildConfig.DEBUG) {
-            Realm.getGlobalInstanceCount(realmSessionConfiguration)
-                    .takeIf { it > 0 }
-                    ?.let { Timber.e("All realm instance for session has not been closed ($it)") }
-            Realm.getGlobalInstanceCount(realmCryptoConfiguration)
-                    .takeIf { it > 0 }
-                    ?.let { Timber.e("All realm instance for crypto has not been closed ($it)") }
-        }
+        databaseKeysUtils.clear(SessionModule.getKeyAlias(userMd5))
+        databaseKeysUtils.clear(CryptoModule.getKeyAlias(userMd5))
     }
 }

@@ -25,7 +25,8 @@ internal class HomeServerCapabilitiesDataSource @Inject constructor(private val 
     fun getHomeServerCapabilities(): HomeServerCapabilities {
         return sessionDatabase.homeServerCapabilitiesQueries.selectMaxUploadFileSize().executeAsOneOrNull()
                 ?.let {
-                    HomeServerCapabilities(it)
+                    //TODO: handle canChangePassword
+                    HomeServerCapabilities(false, it)
                 }
                 ?: HomeServerCapabilities()
     }

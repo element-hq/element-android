@@ -92,7 +92,8 @@ import im.vector.matrix.android.internal.crypto.tasks.SetDeviceNameTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadSignaturesTask
 import im.vector.matrix.android.internal.crypto.tasks.UploadSigningKeysTask
-import im.vector.matrix.android.internal.database.RealmKeysUtils
+import im.vector.matrix.android.internal.database.DatabaseKeysUtils
+import im.vector.matrix.android.internal.di.RealmCryptoDatabase
 import im.vector.matrix.android.internal.di.SessionFilesDirectory
 import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.session.SessionScope
@@ -115,15 +116,15 @@ internal abstract class CryptoModule {
 
         @JvmStatic
         @Provides
-        @im.vector.matrix.android.internal.di.CryptoDatabase
+        @RealmCryptoDatabase
         @SessionScope
         fun providesRealmConfiguration(@SessionFilesDirectory directory: File,
                                        @UserMd5 userMd5: String,
-                                       realmKeysUtils: RealmKeysUtils): RealmConfiguration {
+                                       databaseKeysUtils: DatabaseKeysUtils): RealmConfiguration {
             return RealmConfiguration.Builder()
                     .directory(directory)
                     .apply {
-                        realmKeysUtils.configureEncryption(this, getKeyAlias(userMd5))
+                        databaseKeysUtils.configureEncryption(this, getKeyAlias(userMd5))
                     }
                     .name("crypto_store.realm")
                     .modules(RealmCryptoStoreModule())
@@ -166,8 +167,8 @@ internal abstract class CryptoModule {
 
         @JvmStatic
         @Provides
-        @im.vector.matrix.android.internal.di.CryptoDatabase
-        fun providesClearCacheTask(@im.vector.matrix.android.internal.di.CryptoDatabase
+        @RealmCryptoDatabase
+        fun providesClearCacheTask(@RealmCryptoDatabase
                                    realmConfiguration: RealmConfiguration): ClearCacheTask {
             return RealmClearCacheTask(realmConfiguration)
         }

@@ -88,7 +88,6 @@ class ViewReactionsViewModel @AssistedInject constructor(@Assisted
     private fun observeEventAnnotationSummaries() {
         RxRoom(room)
                 .liveAnnotationSummary(eventId)
-                .unwrap()
                 .flatMapSingle { summaries ->
                     Observable
                             .fromIterable(summaries.reactionsSummary)

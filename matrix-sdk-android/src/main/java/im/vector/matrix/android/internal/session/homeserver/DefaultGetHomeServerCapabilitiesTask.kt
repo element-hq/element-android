@@ -16,62 +16,44 @@
 
 package im.vector.matrix.android.internal.session.homeserver
 
-import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
-import im.vector.matrix.android.internal.database.model.HomeServerCapabilitiesEntity
-import im.vector.matrix.android.internal.database.query.getOrCreate
+import im.vector.matrix.android.internal.database.awaitTransaction
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.awaitTransaction
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.sqldelight.session.SessionDatabase
 import org.greenrobot.eventbus.EventBus
-import java.util.Date
+import java.util.*
 import javax.inject.Inject
 
 internal interface GetHomeServerCapabilitiesTask : Task<Unit, Unit>
 
 internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
         private val capabilitiesAPI: CapabilitiesAPI,
-        private val monarchy: Monarchy,
+        private val sessionDatabase: SessionDatabase,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val eventBus: EventBus
 ) : GetHomeServerCapabilitiesTask {
 
     override suspend fun execute(params: Unit) {
-        var doRequest = false
-        monarchy.awaitTransaction { realm ->
-            val homeServerCapabilitiesEntity = HomeServerCapabilitiesEntity.getOrCreate(realm)
-
-            doRequest = homeServerCapabilitiesEntity.lastUpdatedTimestamp + MIN_DELAY_BETWEEN_TWO_REQUEST_MILLIS < Date().time
-        }
-
+        val lastUpdatedTs = sessionDatabase.homeServerCapabilitiesQueries.selectLastUpdatedTimetamp().executeAsOneOrNull()
+        val doRequest = lastUpdatedTs == null || lastUpdatedTs + MIN_DELAY_BETWEEN_TWO_REQUEST_MILLIS < Date().time
         if (!doRequest) {
             return
         }
-
         val uploadCapabilities = executeRequest<GetUploadCapabilitiesResult>(eventBus) {
             apiCall = capabilitiesAPI.getUploadCapabilities()
         }
-
-        val capabilities = runCatching {
-            executeRequest<GetCapabilitiesResult>(eventBus) {
-                apiCall = capabilitiesAPI.getCapabilities()
-            }
-        }.getOrNull()
-
         // TODO Add other call here (get version, etc.)
-
-        insertInDb(capabilities, uploadCapabilities)
+        insertInDb(uploadCapabilities)
     }
 
-    private suspend fun insertInDb(getCapabilitiesResult: GetCapabilitiesResult?, getUploadCapabilitiesResult: GetUploadCapabilitiesResult) {
-        monarchy.awaitTransaction { realm ->
-            val homeServerCapabilitiesEntity = HomeServerCapabilitiesEntity.getOrCreate(realm)
-
-            homeServerCapabilitiesEntity.canChangePassword = getCapabilitiesResult.canChangePassword()
-
-            homeServerCapabilitiesEntity.maxUploadFileSize = getUploadCapabilitiesResult.maxUploadSize
+    private suspend fun insertInDb(getUploadCapabilitiesResult: GetUploadCapabilitiesResult) {
+        sessionDatabase.awaitTransaction(coroutineDispatchers) {
+            val maxUploadFileSize = getUploadCapabilitiesResult.maxUploadSize
                     ?: HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN
-
-            homeServerCapabilitiesEntity.lastUpdatedTimestamp = Date().time
+            val lastUpdatedTimestamp = Date().time
+            it.homeServerCapabilitiesQueries.insert(maxUploadFileSize, lastUpdatedTimestamp)
         }
     }
 

@@ -16,40 +16,87 @@
 
 package im.vector.matrix.android.internal.database.mapper
 
+import com.squareup.sqldelight.db.SqlCursor
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.model.ReadReceipt
-
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
-import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import javax.inject.Inject
 
-internal class TimelineEventMapper @Inject constructor(private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper) {
+internal class TimelineEventMapper @Inject constructor() {
 
-    fun map(timelineEventEntity: TimelineEventEntity, buildReadReceipts: Boolean = true, correctedReadReceipts: List<ReadReceipt>? = null): TimelineEvent {
-        val readReceipts = if (buildReadReceipts) {
-            correctedReadReceipts ?: timelineEventEntity.readReceipts
-                    ?.let {
-                        readReceiptsSummaryMapper.map(it)
-                    }
-        } else {
-            null
+    fun map(cursor: SqlCursor): TimelineEvent = map(
+            cursor.getLong(0)!!,
+            cursor.getLong(1)!!,
+            cursor.getLong(2)!!.toInt(),
+            cursor.getString(3),
+            cursor.getString(4),
+            cursor.getLong(5)!! == 1L,
+            cursor.getString(6)!!,
+            cursor.getString(7)!!,
+            cursor.getString(8),
+            cursor.getString(9),
+            cursor.getString(10),
+            cursor.getString(11)!!,
+            cursor.getString(12)!!,
+            cursor.getLong(13),
+            cursor.getString(14),
+            cursor.getString(15),
+            cursor.getString(16),
+            cursor.getLong(17),
+            cursor.getLong(18),
+            cursor.getString(19),
+            cursor.getString(20)
+    )
+
+    fun map(local_id: Long,
+            chunk_id: Long,
+            display_index: Int,
+            sender_name: String?,
+            sender_avatar: String?,
+            is_unique_display_name: Boolean,
+            event_id: String,
+            room_id: String,
+            content: String?,
+            prev_content: String?,
+            state_key: String?,
+            send_state: String,
+            type: String,
+            origin_server_ts: Long?,
+            sender_id: String?,
+            unsigned_data: String?,
+            redacts: String?,
+            age: Long?,
+            age_local_ts: Long?,
+            decryption_result_json: String?,
+            decryption_error_code: String?): TimelineEvent {
+
+        val event = Event(
+                type = type,
+                roomId = room_id,
+                eventId = event_id,
+                content = ContentMapper.map(content),
+                prevContent = ContentMapper.map(prev_content),
+                originServerTs = origin_server_ts,
+                senderId = sender_id,
+                redacts = redacts,
+                stateKey = state_key,
+                unsignedData = UnsignedDataMapper.mapFromString(unsigned_data)
+        ).also {
+            it.ageLocalTs = age_local_ts
+            it.sendState = SendState.valueOf(send_state)
+            it.setDecryptionValues(decryption_result_json, decryption_error_code)
         }
         return TimelineEvent(
-                root = timelineEventEntity.root?.asDomain()
-                        ?: Event("", timelineEventEntity.eventId),
-                eventId = timelineEventEntity.eventId,
-                annotations = timelineEventEntity.annotations?.asDomain(),
-                localId = timelineEventEntity.localId,
-                displayIndex = timelineEventEntity.displayIndex,
-                senderName = timelineEventEntity.senderName,
-                isUniqueDisplayName = timelineEventEntity.isUniqueDisplayName,
-                senderAvatar = timelineEventEntity.senderAvatar,
-                readReceipts = readReceipts
-                        ?.distinctBy {
-                            it.user
-                        }?.sortedByDescending {
-                            it.originServerTs
-                        } ?: emptyList()
+                root = event,
+                eventId = event_id,
+                annotations = null,
+                displayIndex = display_index,
+                isUniqueDisplayName = is_unique_display_name,
+                localId = local_id,
+                readReceipts = emptyList(),
+                senderAvatar = sender_avatar,
+                senderName = sender_name
         )
     }
+
 }

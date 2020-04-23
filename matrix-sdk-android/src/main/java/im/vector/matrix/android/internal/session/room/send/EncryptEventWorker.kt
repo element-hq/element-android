@@ -116,7 +116,8 @@ internal class EncryptEventWorker(context: Context, params: WorkerParameters)
                         senderCurve25519Key = result.eventContent["sender_key"] as? String,
                         claimedEd25519Key = crypto.getMyDevice().fingerprint()
                 )
-                localEchoUpdater.updateEncryptedEcho(localEvent.eventId, safeResult.eventContent, decryptionLocalEcho)
+                //TODO
+                //localEchoUpdater.updateEncryptedEcho(localEvent.eventId, safeResult.eventContent, decryptionLocalEcho)
             }
 
             val nextWorkerParams = SendEventWorker.Params(params.sessionId, encryptedEvent)

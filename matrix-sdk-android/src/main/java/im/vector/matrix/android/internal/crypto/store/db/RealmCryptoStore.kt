@@ -75,8 +75,8 @@ import im.vector.matrix.android.internal.crypto.store.db.query.get
 import im.vector.matrix.android.internal.crypto.store.db.query.getById
 import im.vector.matrix.android.internal.crypto.store.db.query.getOrCreate
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
-import im.vector.matrix.android.internal.di.CryptoDatabase
 import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.internal.di.RealmCryptoDatabase
 import im.vector.matrix.android.internal.session.SessionScope
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -91,7 +91,7 @@ import kotlin.collections.set
 
 @SessionScope
 internal class RealmCryptoStore @Inject constructor(
-        @CryptoDatabase private val realmConfiguration: RealmConfiguration,
+        @RealmCryptoDatabase private val realmConfiguration: RealmConfiguration,
         private val credentials: Credentials) : IMXCryptoStore {
 
     /* ==========================================================================================

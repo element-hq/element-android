@@ -23,7 +23,6 @@ import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LiveData
 import com.squareup.moshi.Types
-import com.zhuinden.monarchy.Monarchy
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.NoOpMatrixCallback
@@ -33,7 +32,6 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
-import im.vector.matrix.android.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.keyshare.GossipingRequestListener
@@ -53,11 +51,7 @@ import im.vector.matrix.android.internal.crypto.algorithms.olm.MXOlmEncryptionFa
 import im.vector.matrix.android.internal.crypto.crosssigning.DefaultCrossSigningService
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.keysbackup.DefaultKeysBackupService
-import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
-import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
-import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
-import im.vector.matrix.android.internal.crypto.model.MXEncryptEventContentResult
-import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
+import im.vector.matrix.android.internal.crypto.model.*
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.crypto.model.event.RoomKeyContent
 import im.vector.matrix.android.internal.crypto.model.event.SecretSendEventContent
@@ -65,19 +59,11 @@ import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
-import im.vector.matrix.android.internal.crypto.model.toRest
 import im.vector.matrix.android.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
-import im.vector.matrix.android.internal.crypto.tasks.DeleteDeviceTask
-import im.vector.matrix.android.internal.crypto.tasks.DeleteDeviceWithUserPasswordTask
-import im.vector.matrix.android.internal.crypto.tasks.GetDeviceInfoTask
-import im.vector.matrix.android.internal.crypto.tasks.GetDevicesTask
-import im.vector.matrix.android.internal.crypto.tasks.SetDeviceNameTask
-import im.vector.matrix.android.internal.crypto.tasks.UploadKeysTask
+import im.vector.matrix.android.internal.crypto.tasks.*
 import im.vector.matrix.android.internal.crypto.verification.DefaultVerificationService
-import im.vector.matrix.android.internal.database.model.EventEntity
-import im.vector.matrix.android.internal.database.model.EventEntityFields
-import im.vector.matrix.android.internal.database.query.whereType
+import im.vector.matrix.android.internal.database.repository.CurrentStateEventDataSource
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.session.SessionScope
@@ -89,13 +75,8 @@ import im.vector.matrix.android.internal.task.TaskThread
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.JsonCanonicalizer
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-import im.vector.matrix.android.internal.util.fetchCopied
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
+import im.vector.matrix.sqldelight.session.SessionDatabase
+import kotlinx.coroutines.*
 import org.matrix.olm.OlmManager
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
@@ -159,7 +140,7 @@ internal class DefaultCryptoService @Inject constructor(
         private val setDeviceNameTask: SetDeviceNameTask,
         private val uploadKeysTask: UploadKeysTask,
         private val loadRoomMembersTask: LoadRoomMembersTask,
-        private val monarchy: Monarchy,
+        private val sessionDatabase: SessionDatabase,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor,
         private val cryptoCoroutineScope: CoroutineScope
@@ -178,16 +159,16 @@ internal class DefaultCryptoService @Inject constructor(
 
     fun onStateEvent(roomId: String, event: Event) {
         when {
-            event.getClearType() == EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
-            event.getClearType() == EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
+            event.getClearType() == EventType.STATE_ROOM_ENCRYPTION -> onRoomEncryptionEvent(roomId, event)
+            event.getClearType() == EventType.STATE_ROOM_MEMBER -> onRoomMembershipEvent(roomId, event)
             event.getClearType() == EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
         }
     }
 
     fun onLiveEvent(roomId: String, event: Event) {
         when {
-            event.getClearType() == EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
-            event.getClearType() == EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
+            event.getClearType() == EventType.STATE_ROOM_ENCRYPTION -> onRoomEncryptionEvent(roomId, event)
+            event.getClearType() == EventType.STATE_ROOM_MEMBER -> onRoomMembershipEvent(roomId, event)
             event.getClearType() == EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
         }
     }
@@ -412,7 +393,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
-        return cryptoStore.getUserDevices(userId)?.map { it.value }?.sortedBy { it.deviceId } ?: emptyList()
+        return cryptoStore.getUserDevices(userId)?.map { it.value } ?: emptyList()
     }
 
     override fun getLiveCryptoDeviceInfo(): LiveData<List<CryptoDeviceInfo>> {
@@ -508,7 +489,7 @@ internal class DefaultCryptoService @Inject constructor(
 
         val alg: IMXEncrypting = when (algorithm) {
             MXCRYPTO_ALGORITHM_MEGOLM -> megolmEncryptionFactory.create(roomId)
-            else                      -> olmEncryptionFactory.create(roomId)
+            else -> olmEncryptionFactory.create(roomId)
         }
 
         synchronized(roomEncryptors) {
@@ -542,12 +523,10 @@ internal class DefaultCryptoService @Inject constructor(
      * @return true if the room is encrypted with algorithm MXCRYPTO_ALGORITHM_MEGOLM
      */
     override fun isRoomEncrypted(roomId: String): Boolean {
-        val encryptionEvent = monarchy.fetchCopied { realm ->
-            EventEntity.whereType(realm, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION)
-                    .contains(EventEntityFields.CONTENT, "\"algorithm\":\"$MXCRYPTO_ALGORITHM_MEGOLM\"")
-                    .findFirst()
-        }
-        return encryptionEvent != null
+        return sessionDatabase.eventQueries
+                .findWithContent(roomId = roomId, content = "\"algorithm\":\"$MXCRYPTO_ALGORITHM_MEGOLM\"")
+                .executeAsList()
+                .firstOrNull() != null
     }
 
     /**
@@ -706,17 +685,17 @@ internal class DefaultCryptoService @Inject constructor(
                     onRoomKeyEvent(event)
                 }
                 EventType.REQUEST_SECRET,
-                EventType.ROOM_KEY_REQUEST                       -> {
+                EventType.ROOM_KEY_REQUEST -> {
                     // save audit trail
                     cryptoStore.saveGossipingEvent(event)
                     // Requests are stacked, and will be handled one by one at the end of the sync (onSyncComplete)
                     incomingGossipingRequestManager.onGossipingRequestEvent(event)
                 }
-                EventType.SEND_SECRET                            -> {
+                EventType.SEND_SECRET -> {
                     cryptoStore.saveGossipingEvent(event)
                     onSecretSendReceived(event)
                 }
-                else                                             -> {
+                else -> {
                     // ignore
                 }
             }
@@ -767,30 +746,19 @@ internal class DefaultCryptoService @Inject constructor(
             return
         }
 
-        if (!handleSDKLevelGossip(existingRequest.secretName, secretContent.secretValue)) {
-            // TODO Ask to application layer?
-            Timber.v("## onSecretSend() : secret not handled by SDK")
-        }
-    }
-
-    /**
-     * Returns true if handled by SDK, otherwise should be sent to application layer
-     */
-    private fun handleSDKLevelGossip(secretName: String?, secretValue: String): Boolean {
-        return when (secretName) {
+        when (existingRequest.secretName) {
             SELF_SIGNING_KEY_SSSS_NAME -> {
-                crossSigningService.onSecretSSKGossip(secretValue)
-                true
+                crossSigningService.onSecretSSKGossip(secretContent.secretValue)
+                return
             }
             USER_SIGNING_KEY_SSSS_NAME -> {
-                crossSigningService.onSecretUSKGossip(secretValue)
-                true
+                crossSigningService.onSecretUSKGossip(secretContent.secretValue)
+                return
             }
-            KEYBACKUP_SECRET_SSSS_NAME -> {
-                keysBackupService.onSecretKeyGossip(secretValue)
-                true
+            else -> {
+                // Ask to application layer?
+                Timber.v("## onSecretSend() : secret not handled by SDK")
             }
-            else                       -> false
         }
     }
 
@@ -804,29 +772,24 @@ internal class DefaultCryptoService @Inject constructor(
             val params = LoadRoomMembersTask.Params(roomId)
             try {
                 loadRoomMembersTask.execute(params)
-            } catch (throwable: Throwable) {
-                Timber.e(throwable, "## onRoomEncryptionEvent ERROR FAILED TO SETUP CRYPTO ")
-            } finally {
                 val userIds = getRoomUserIds(roomId)
                 setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), true, userIds)
+            } catch (throwable: Throwable) {
+                Timber.e(throwable, "## onRoomEncryptionEvent ERROR FAILED TO SETUP CRYPTO ")
             }
         }
     }
 
     private fun getRoomUserIds(roomId: String): List<String> {
-        var userIds: List<String> = emptyList()
-        monarchy.doWithRealm { realm ->
-            // Check whether the event content must be encrypted for the invited members.
-            val encryptForInvitedMembers = isEncryptionEnabledForInvitedUser()
-                    && shouldEncryptForInvitedMembers(roomId)
+        // Check whether the event content must be encrypted for the invited members.
+        val encryptForInvitedMembers = isEncryptionEnabledForInvitedUser()
+                && shouldEncryptForInvitedMembers(roomId)
 
-            userIds = if (encryptForInvitedMembers) {
-                RoomMemberHelper(realm, roomId).getActiveRoomMemberIds()
-            } else {
-                RoomMemberHelper(realm, roomId).getJoinedRoomMemberIds()
-            }
+        return if (encryptForInvitedMembers) {
+            RoomMemberHelper(sessionDatabase, roomId).getActiveRoomMemberIds()
+        } else {
+            RoomMemberHelper(sessionDatabase, roomId).getJoinedRoomMemberIds()
         }
-        return userIds
     }
 
     /**
