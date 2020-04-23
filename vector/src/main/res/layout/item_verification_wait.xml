@@ -28,7 +28,7 @@
         android:contentDescription="@string/monitor_content_description"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_monitor"
-        android:tint="?riotx_text_primary"
+        android:tint="@color/riotx_notice_secondary"
         app:layout_constraintEnd_toStartOf="@id/smartphoneIcon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/use_latest_riot" />
@@ -41,7 +41,7 @@
         android:contentDescription="@string/monitor_content_description"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_smartphone"
-        android:tint="?riotx_text_primary"
+        android:tint="@color/riotx_notice_secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/monitorIcon"
         app:layout_constraintTop_toBottomOf="@+id/use_latest_riot" />
