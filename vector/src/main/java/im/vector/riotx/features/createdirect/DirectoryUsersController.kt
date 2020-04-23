@@ -23,6 +23,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
+import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.api.util.toMatrixItem
@@ -56,13 +57,27 @@ class DirectoryUsersController @Inject constructor(private val session: Session,
     override fun buildModels() {
         val currentState = state ?: return
         val hasSearch = currentState.directorySearchTerm.isNotBlank()
-        val asyncUsers = currentState.directoryUsers
-        when (asyncUsers) {
+        when (val asyncUsers = currentState.directoryUsers) {
             is Uninitialized -> renderEmptyState(false)
             is Loading       -> renderLoading()
-            is Success       -> renderSuccess(asyncUsers(), currentState.selectedUsers.map { it.userId }, hasSearch)
+            is Success       -> renderSuccess(
+                    computeUsersList(asyncUsers(), currentState.directorySearchTerm),
+                    currentState.selectedUsers.map { it.userId },
+                    hasSearch
+            )
             is Fail          -> renderFailure(asyncUsers.error)
         }
+    }
+
+    /**
+     * Eventually add the searched terms, if it is a userId, and if not already present in the result
+     */
+    private fun computeUsersList(directoryUsers: List<User>, searchTerms: String): List<User> {
+        return directoryUsers +
+                searchTerms
+                        .takeIf { terms -> MatrixPatterns.isUserId(terms) && !directoryUsers.any { it.userId == terms } }
+                        ?.let { listOf(User(it)) }
+                        .orEmpty()
     }
 
     private fun renderLoading() {

@@ -44,6 +44,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
+import timber.log.Timber
 import java.util.ArrayList
 import java.util.UUID
 import java.util.concurrent.CountDownLatch
@@ -58,6 +59,8 @@ class CommonTestHelper(context: Context) {
     val matrix: Matrix
 
     init {
+        Timber.plant(Timber.DebugTree())
+
         Matrix.initialize(context, MatrixConfiguration("TestFlavor"))
 
         matrix = Matrix.getInstance(context)
@@ -183,9 +186,9 @@ class CommonTestHelper(context: Context) {
      * @param testParams test params about the session
      * @return the session associated with the existing account
      */
-    private fun logIntoAccount(userId: String,
-                               password: String,
-                               testParams: SessionTestParams): Session {
+    fun logIntoAccount(userId: String,
+                       password: String,
+                       testParams: SessionTestParams): Session {
         val session = logAccountAndSync(userId, password, testParams)
         assertNotNull(session)
         return session
@@ -261,13 +264,44 @@ class CommonTestHelper(context: Context) {
     }
 
     /**
+     * Log into the account and expect an error
+     *
+     * @param userName the account username
+     * @param password the password
+     */
+    fun logAccountWithError(userName: String,
+                            password: String): Throwable {
+        val hs = createHomeServerConfig()
+
+        doSync<LoginFlowResult> {
+            matrix.authenticationService
+                    .getLoginFlow(hs, it)
+        }
+
+        var requestFailure: Throwable? = null
+        waitWithLatch { latch ->
+            matrix.authenticationService
+                    .getLoginWizard()
+                    .login(userName, password, "myDevice", object : TestMatrixCallback<Session>(latch, onlySuccessful = false) {
+                        override fun onFailure(failure: Throwable) {
+                            requestFailure = failure
+                            super.onFailure(failure)
+                        }
+                    })
+        }
+
+        assertNotNull(requestFailure)
+        return requestFailure!!
+    }
+
+    /**
      * Await for a latch and ensure the result is true
      *
      * @param latch
      * @throws InterruptedException
      */
-    fun await(latch: CountDownLatch, timout: Long? = TestConstants.timeOutMillis) {
-        assertTrue(latch.await(timout ?: TestConstants.timeOutMillis, TimeUnit.MILLISECONDS))
+    fun await(latch: CountDownLatch, timeout: Long? = TestConstants.timeOutMillis) {
+        assertTrue(latch.await(timeout ?: TestConstants.timeOutMillis, TimeUnit.MILLISECONDS))
     }
 
     fun retryPeriodicallyWithLatch(latch: CountDownLatch, condition: (() -> Boolean)) {
@@ -282,10 +316,10 @@ class CommonTestHelper(context: Context) {
         }
     }
 
-    fun waitWithLatch(timout: Long? = TestConstants.timeOutMillis, block: (CountDownLatch) -> Unit) {
+    fun waitWithLatch(timeout: Long? = TestConstants.timeOutMillis, block: (CountDownLatch) -> Unit) {
         val latch = CountDownLatch(1)
         block(latch)
-        await(latch, timout)
+        await(latch, timeout)
     }
 
     // Transform a method with a MatrixCallback to a synchronous method

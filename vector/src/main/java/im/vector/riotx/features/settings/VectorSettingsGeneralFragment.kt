@@ -234,19 +234,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
             false
         }
-
-        // Deactivate account section
-
-        // deactivate account
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_DEACTIVATE_ACCOUNT_KEY)!!
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            activity?.let {
-                notImplemented()
-                // TODO startActivity(DeactivateAccountActivity.getIntent(it))
-            }
-
-            false
-        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

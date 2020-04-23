@@ -65,14 +65,16 @@ class VerificationRequestController @Inject constructor(
                 id("sep")
             }
 
-            bottomSheetVerificationActionItem {
-                id("passphrase")
-                title(stringProvider.getString(R.string.verification_cannot_access_other_session))
-                titleColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
-                subTitle(stringProvider.getString(R.string.verification_use_passphrase))
-                iconRes(R.drawable.ic_arrow_right)
-                iconColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
-                listener { listener?.onClickRecoverFromPassphrase() }
+            if (state.quadSContainsSecrets) {
+                bottomSheetVerificationActionItem {
+                    id("passphrase")
+                    title(stringProvider.getString(R.string.verification_cannot_access_other_session))
+                    titleColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                    subTitle(stringProvider.getString(R.string.verification_use_passphrase))
+                    iconRes(R.drawable.ic_arrow_right)
+                    iconColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                    listener { listener?.onClickRecoverFromPassphrase() }
+                }
             }
 
             dividerItem {

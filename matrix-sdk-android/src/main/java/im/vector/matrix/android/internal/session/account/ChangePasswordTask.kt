@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.session.account
 
 import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.session.account.model.ChangePasswordParams
 import im.vector.matrix.android.internal.auth.registration.RegistrationFlowResponse
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.di.UserId

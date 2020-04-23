@@ -39,10 +39,10 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
         toDevice.events?.forEachIndexed { index, event ->
             initialSyncProgressService?.reportProgress(((index / total.toFloat()) * 100).toInt())
             // Decrypt event if necessary
-            decryptEvent(event, null)
+            decryptToDeviceEvent(event, null)
             if (event.getClearType() == EventType.MESSAGE
                     && event.getClearContent()?.toModel<MessageContent>()?.msgType == "m.bad.encrypted") {
-                Timber.e("## handleToDeviceEvent() : Warning: Unable to decrypt to-device event : ${event.content}")
+                Timber.e("## CRYPTO | handleToDeviceEvent() : Warning: Unable to decrypt to-device event : ${event.content}")
             } else {
                 verificationService.onToDeviceEvent(event)
                 cryptoService.onToDeviceEvent(event)
@@ -61,28 +61,24 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
      * @param timelineId the timeline identifier
      * @return true if the event has been decrypted
      */
-    private fun decryptEvent(event: Event, timelineId: String?): Boolean {
+    private fun decryptToDeviceEvent(event: Event, timelineId: String?): Boolean {
+        Timber.v("## CRYPTO | decryptToDeviceEvent")
         if (event.getClearType() == EventType.ENCRYPTED) {
             var result: MXEventDecryptionResult? = null
             try {
                 result = cryptoService.decryptEvent(event, timelineId ?: "")
             } catch (exception: MXCryptoError) {
                 event.mCryptoError = (exception as? MXCryptoError.Base)?.errorType // setCryptoError(exception.cryptoError)
+                Timber.e("## CRYPTO | Failed to decrypt to device event: ${event.mCryptoError ?: exception}")
             }
 
             if (null != result) {
-//                event.mxDecryptionResult = MXDecryptionResult(
-//                        payload = result.clearEvent,
-//                        keysClaimed = map
-//                )
-                // TODO persist that?
                 event.mxDecryptionResult = OlmDecryptionResult(
                         payload = result.clearEvent,
                         senderKey = result.senderCurve25519Key,
                         keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
                         forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
                 )
-//                event.setClearData(result)
                 return true
             }
         }

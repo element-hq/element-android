@@ -11,11 +11,14 @@
     <string name="riot_ios_android">Riot iOS\nRiot X for Android</string>
     <string name="or_other_mx_capabale_client">or another cross-signing capable Matrix client</string>
     <string name="use_latest_riot">Use the latest Riot on your other devices:</string>
+    <string name="command_description_discard_session">Forces the current outbound group session in an encrypted room to be discarded</string>
+    <string name="command_description_discard_session_not_handled">Only supported in encrypted rooms</string>
     <!-- END Strings added by Valere -->
 
 
     <!-- BEGIN Strings added by Benoit -->
-
+    <string name="error_empty_field_choose_user_name">Please choose a username.</string>
+    <string name="error_empty_field_choose_password">Please choose a password.</string>
     <!-- END Strings added by Benoit -->
 
 
@@ -33,4 +36,5 @@
 
     <!-- END Strings added by Others -->
 
+    <string name="create_room_dm_failure">"We couldn't create your DM. Please check the users you want to invite and try again."</string>
 </resources>
