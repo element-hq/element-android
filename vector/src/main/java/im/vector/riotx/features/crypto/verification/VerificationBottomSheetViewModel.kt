@@ -44,6 +44,7 @@ import im.vector.matrix.android.api.session.crypto.verification.VerificationTran
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
+import im.vector.matrix.android.api.session.securestorage.IntegrityResult
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
@@ -73,7 +74,8 @@ data class VerificationBottomSheetViewState(
         val isMe: Boolean = false,
         val currentDeviceCanCrossSign: Boolean = false,
         val userWantsToCancel: Boolean = false,
-        val userThinkItsNotHim: Boolean = false
+        val userThinkItsNotHim: Boolean = false,
+        val quadSContainsSecrets: Boolean = true
 ) : MvRxState
 
 class VerificationBottomSheetViewModel @AssistedInject constructor(
@@ -116,6 +118,10 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             session.cryptoService().verificationService().getExistingTransaction(args.otherUserId, it) as? QrCodeVerificationTransaction
         }
 
+        val ssssOk = session.sharedSecretStorageService.checkShouldBeAbleToAccessSecrets(
+                listOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME),
+                null // default key
+        ) is IntegrityResult.Success
         setState {
             copy(
                     otherUserMxItem = userItem?.toMatrixItem(),
@@ -126,7 +132,8 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     selfVerificationMode = selfVerificationMode,
                     roomId = args.roomId,
                     isMe = args.otherUserId == session.myUserId,
-                    currentDeviceCanCrossSign = session.cryptoService().crossSigningService().canCrossSign()
+                    currentDeviceCanCrossSign = session.cryptoService().crossSigningService().canCrossSign(),
+                    quadSContainsSecrets = ssssOk
             )
         }
 

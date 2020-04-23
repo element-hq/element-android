@@ -17,6 +17,7 @@
 
 package im.vector.matrix.android.internal.crypto.algorithms
 
+import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.IncomingSecretShareRequest
@@ -35,6 +36,7 @@ internal interface IMXDecrypting {
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @return the decryption information, or an error
      */
+    @Throws(MXCryptoError::class)
     fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult
 
     /**

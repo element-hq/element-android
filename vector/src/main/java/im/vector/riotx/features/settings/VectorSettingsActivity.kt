@@ -20,6 +20,7 @@ import android.content.Intent
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import im.vector.matrix.android.api.failure.GlobalError
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
@@ -43,6 +44,8 @@ class VectorSettingsActivity : VectorBaseActivity(),
 
     private var keyToHighlight: String? = null
 
+    var ignoreInvalidTokenError = false
+
     @Inject lateinit var session: Session
 
     override fun injectWith(injector: ScreenComponent) {
@@ -57,7 +60,7 @@ class VectorSettingsActivity : VectorBaseActivity(),
             when (intent.getIntExtra(EXTRA_DIRECT_ACCESS, EXTRA_DIRECT_ACCESS_ROOT)) {
                 EXTRA_DIRECT_ACCESS_ADVANCED_SETTINGS ->
                     replaceFragment(R.id.vector_settings_page, VectorSettingsAdvancedSettingsFragment::class.java, null, FRAGMENT_TAG)
-                EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY ->
+                EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY  ->
                     replaceFragment(R.id.vector_settings_page, VectorSettingsSecurityPrivacyFragment::class.java, null, FRAGMENT_TAG)
                 else                                  ->
                     replaceFragment(R.id.vector_settings_page, VectorSettingsRootFragment::class.java, null, FRAGMENT_TAG)
@@ -108,6 +111,14 @@ class VectorSettingsActivity : VectorBaseActivity(),
 
     override fun requestedKeyToHighlight(): String? {
         return keyToHighlight
+    }
+
+    override fun handleInvalidToken(globalError: GlobalError.InvalidToken) {
+        if (ignoreInvalidTokenError) {
+            Timber.w("Ignoring invalid token global error")
+        } else {
+            super.handleInvalidToken(globalError)
+        }
     }
 
     companion object {

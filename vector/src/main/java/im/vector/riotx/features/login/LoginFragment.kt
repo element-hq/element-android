@@ -19,6 +19,7 @@ package im.vector.riotx.features.login
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.autofill.HintConstants
 import androidx.core.view.isVisible
 import butterknife.OnClick
@@ -40,7 +41,8 @@ import kotlinx.android.synthetic.main.fragment_login.*
 import javax.inject.Inject
 
 /**
- * In this screen, in signin mode:
+ * In this screen:
+ * In signin mode:
  * - the user is asked for login (or email) and password to sign in to a homeserver.
  * - He also can reset his password
  * In signup mode:
@@ -49,6 +51,7 @@ import javax.inject.Inject
 class LoginFragment @Inject constructor() : AbstractLoginFragment() {
 
     private var passwordShown = false
+    private var isSignupMode = false
 
     override fun getLayoutResId() = R.layout.fragment_login
 
@@ -57,6 +60,14 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
 
         setupSubmitButton()
         setupPasswordReveal()
+
+        passwordField.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                submit()
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
+        }
     }
 
     private fun setupAutoFill(state: LoginViewState) {
@@ -82,7 +93,20 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
         val login = loginField.text.toString()
         val password = passwordField.text.toString()
 
-        loginViewModel.handle(LoginAction.LoginOrRegister(login, password, getString(R.string.login_mobile_device_riotx)))
+        // This can be called by the IME action, so deal with empty cases
+        var error = 0
+        if (login.isEmpty()) {
+            loginFieldTil.error = getString(if (isSignupMode) R.string.error_empty_field_choose_user_name else R.string.error_empty_field_enter_user_name)
+            error++
+        }
+        if (password.isEmpty()) {
+            passwordFieldTil.error = getString(if (isSignupMode) R.string.error_empty_field_choose_password else R.string.error_empty_field_your_password)
+            error++
+        }
+
+        if (error == 0) {
+            loginViewModel.handle(LoginAction.LoginOrRegister(login, password, getString(R.string.login_mobile_device_riotx)))
+        }
     }
 
     private fun cleanupUi() {
@@ -190,6 +214,8 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
     }
 
     override fun updateWithState(state: LoginViewState) {
+        isSignupMode = state.signMode == SignMode.SignUp
+
         setupUi(state)
         setupAutoFill(state)
         setupButtons(state)

@@ -82,6 +82,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
+                        android:imeOptions="actionDone"
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:paddingEnd="48dp"
@@ -104,19 +105,18 @@
 
             </FrameLayout>
 
-            <RelativeLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
-                android:orientation="horizontal">
+                android:layout_marginTop="22dp">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/forgetPasswordButton"
                     style="@style/Style.Vector.Login.Button.Text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:text="@string/auth_forgot_password" />
+                    android:text="@string/auth_forgot_password"
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/loginSubmit"
@@ -124,12 +124,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_gravity="end"
                     android:text="@string/auth_login"
+                    app:layout_constraintEnd_toEndOf="parent"
                     tools:enabled="false"
                     tools:ignore="RelativeOverlap" />
 
-            </RelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
 

@@ -103,10 +103,11 @@ class OlmInboundGroupSessionWrapper : Serializable {
 
     /**
      * Export the inbound group session keys
+     * @param index the index to export. If null, the first known index will be used
      *
      * @return the inbound group session as MegolmSessionData if the operation succeeds
      */
-    fun exportKeys(): MegolmSessionData? {
+    fun exportKeys(index: Long? = null): MegolmSessionData? {
         return try {
             if (null == forwardingCurve25519KeyChain) {
                 forwardingCurve25519KeyChain = ArrayList()
@@ -116,6 +117,8 @@ class OlmInboundGroupSessionWrapper : Serializable {
                 return null
             }
 
+            val wantedIndex = index ?: olmInboundGroupSession!!.firstKnownIndex
+
             MegolmSessionData(
                     senderClaimedEd25519Key = keysClaimed?.get("ed25519"),
                     forwardingCurve25519KeyChain = ArrayList(forwardingCurve25519KeyChain!!),
@@ -123,7 +126,7 @@ class OlmInboundGroupSessionWrapper : Serializable {
                     senderClaimedKeys = keysClaimed,
                     roomId = roomId,
                     sessionId = olmInboundGroupSession!!.sessionIdentifier(),
-                    sessionKey = olmInboundGroupSession!!.export(olmInboundGroupSession!!.firstKnownIndex),
+                    sessionKey = olmInboundGroupSession!!.export(wantedIndex),
                     algorithm = MXCRYPTO_ALGORITHM_MEGOLM
             )
         } catch (e: Exception) {

@@ -81,6 +81,9 @@ object EventType {
     // Relation Events
     const val REACTION = "m.reaction"
 
+    // Unwedging
+    internal const val DUMMY = "m.dummy"
+
     private val STATE_EVENTS = listOf(
             STATE_ROOM_NAME,
             STATE_ROOM_TOPIC,
