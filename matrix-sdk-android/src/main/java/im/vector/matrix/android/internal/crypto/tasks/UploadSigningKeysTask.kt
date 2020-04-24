@@ -17,14 +17,13 @@
 package im.vector.matrix.android.internal.crypto.tasks
 
 import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.internal.auth.registration.RegistrationFlowResponse
+import im.vector.matrix.android.api.failure.toRegistrationFlowResponse
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.rest.KeysQueryResponse
 import im.vector.matrix.android.internal.crypto.model.rest.UploadSigningKeysBody
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import im.vector.matrix.android.internal.crypto.model.toRest
-import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
@@ -65,37 +64,25 @@ internal class DefaultUploadSigningKeysTask @Inject constructor(
             }
             return
         } catch (throwable: Throwable) {
-            if (throwable is Failure.OtherServerError
-                    && throwable.httpCode == 401
+            val registrationFlowResponse = throwable.toRegistrationFlowResponse()
+            if (registrationFlowResponse != null
                     && params.userPasswordAuth != null
                     /* Avoid infinite loop */
                     && params.userPasswordAuth.session.isNullOrEmpty()
             ) {
-                try {
-                    MoshiProvider.providesMoshi()
-                            .adapter(RegistrationFlowResponse::class.java)
-                            .fromJson(throwable.errorBody)
-                } catch (e: Exception) {
-                    null
-                }?.let {
-                    // Retry with authentication
-                    try {
-                        val req = executeRequest<KeysQueryResponse>(eventBus) {
-                            apiCall = cryptoApi.uploadSigningKeys(
-                                    uploadQuery.copy(auth = params.userPasswordAuth.copy(session = it.session))
-                            )
-                        }
-                        if (req.failures?.isNotEmpty() == true) {
-                            throw UploadSigningKeys(req.failures)
-                        }
-                        return
-                    } catch (failure: Throwable) {
-                        throw failure
-                    }
+                // Retry with authentication
+                val req = executeRequest<KeysQueryResponse>(eventBus) {
+                    apiCall = cryptoApi.uploadSigningKeys(
+                            uploadQuery.copy(auth = params.userPasswordAuth.copy(session = registrationFlowResponse.session))
+                    )
                 }
+                if (req.failures?.isNotEmpty() == true) {
+                    throw UploadSigningKeys(req.failures)
+                }
+            } else {
+                // Other error
+                throw throwable
             }
-            // Other error
-            throw throwable
         }
     }
 }

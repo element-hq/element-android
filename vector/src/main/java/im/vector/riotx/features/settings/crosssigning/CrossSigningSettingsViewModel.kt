@@ -22,14 +22,12 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.failure.toRegistrationFlowResponse
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
-import im.vector.matrix.android.internal.auth.registration.RegistrationFlowResponse
 import im.vector.matrix.android.internal.crypto.crosssigning.isVerified
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
-import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
@@ -113,35 +111,26 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted privat
             override fun onFailure(failure: Throwable) {
                 _pendingSession = null
 
-                if (failure is Failure.OtherServerError && failure.httpCode == 401) {
-                    try {
-                        MoshiProvider.providesMoshi()
-                                .adapter(RegistrationFlowResponse::class.java)
-                                .fromJson(failure.errorBody)
-                    } catch (e: Exception) {
-                        null
-                    }?.let { flowResponse ->
-                        // Retry with authentication
-                        if (flowResponse.flows?.any { it.stages?.contains(LoginFlowTypes.PASSWORD) == true } == true) {
-                            _pendingSession = flowResponse.session ?: ""
-                            _viewEvents.post(CrossSigningSettingsViewEvents.RequestPassword)
-                            return
-                        } else {
-                            // can't do this from here
-                            _viewEvents.post(CrossSigningSettingsViewEvents.Failure(Throwable("You cannot do that from mobile")))
+                val registrationFlowResponse = failure.toRegistrationFlowResponse()
+                if (registrationFlowResponse != null) {
+                    // Retry with authentication
+                    if (registrationFlowResponse.flows?.any { it.stages?.contains(LoginFlowTypes.PASSWORD) == true } == true) {
+                        _pendingSession = registrationFlowResponse.session ?: ""
+                        _viewEvents.post(CrossSigningSettingsViewEvents.RequestPassword)
+                    } else {
+                        // can't do this from here
+                        _viewEvents.post(CrossSigningSettingsViewEvents.Failure(Throwable("You cannot do that from mobile")))
 
-                            setState {
-                                copy(isUploadingKeys = false)
-                            }
-                            return
+                        setState {
+                            copy(isUploadingKeys = false)
                         }
                     }
-                }
+                } else {
+                    _viewEvents.post(CrossSigningSettingsViewEvents.Failure(failure))
 
-                _viewEvents.post(CrossSigningSettingsViewEvents.Failure(failure))
-
-                setState {
-                    copy(isUploadingKeys = false)
+                    setState {
+                        copy(isUploadingKeys = false)
+                    }
                 }
             }
         })
