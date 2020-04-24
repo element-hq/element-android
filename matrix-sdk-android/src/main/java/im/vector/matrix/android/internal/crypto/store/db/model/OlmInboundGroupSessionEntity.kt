@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.crypto.store.db.model
 
+import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
 import im.vector.matrix.android.internal.crypto.store.db.deserializeFromRealm
 import im.vector.matrix.android.internal.crypto.store.db.serializeForRealm
@@ -36,7 +37,7 @@ internal open class OlmInboundGroupSessionEntity(
     : RealmObject() {
 
     fun getInboundGroupSession(): OlmInboundGroupSessionWrapper? {
-        return deserializeFromRealm(olmInboundGroupSessionData)
+        return tryThis { deserializeFromRealm<OlmInboundGroupSessionWrapper?>(olmInboundGroupSessionData) }
     }
 
     fun putInboundGroupSession(olmInboundGroupSessionWrapper: OlmInboundGroupSessionWrapper?) {
