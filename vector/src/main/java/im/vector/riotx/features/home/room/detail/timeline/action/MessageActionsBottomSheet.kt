@@ -63,8 +63,8 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
         super.onDestroyView()
     }
 
-    override fun onUrlClicked(url: String): Boolean {
-        sharedActionViewModel.post(EventSharedAction.OnUrlClicked(url))
+    override fun onUrlClicked(url: String, title: String): Boolean {
+        sharedActionViewModel.post(EventSharedAction.OnUrlClicked(url, title))
         // Always consume
         return true
     }

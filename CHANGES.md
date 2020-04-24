@@ -23,6 +23,7 @@ Improvements 🙌:
  - Emoji Verification | It's not the same butterfly! (#1220)
  - Cross-Signing | Composer decoration: shields (#1077)
  - Cross-Signing | Migrate existing keybackup to cross signing with 4S from mobile (#1197)
+ - Show a warning dialog if the text of the clicked link does not match the link target (#922)
  - Cross-Signing | Consider not using a spinner on the 'complete security' prompt (#1271)
  - Restart broken Olm sessions ([MSC1719](https://github.com/matrix-org/matrix-doc/pull/1719))
  - Cross-Signing | Hide Use recovery key when 4S is not setup (#1007)

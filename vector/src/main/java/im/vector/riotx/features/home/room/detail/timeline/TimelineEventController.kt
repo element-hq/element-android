@@ -104,7 +104,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     interface UrlClickCallback {
-        fun onUrlClicked(url: String): Boolean
+        fun onUrlClicked(url: String, title: String): Boolean
         fun onUrlLongClicked(url: String): Boolean
     }
 
