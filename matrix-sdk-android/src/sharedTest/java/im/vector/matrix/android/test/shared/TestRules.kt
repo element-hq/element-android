@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2016 Jeff Gilfelt.
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,23 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.network.interceptors
+package im.vector.matrix.android.test.shared
 
-import im.vector.matrix.android.internal.di.MatrixScope
-import okhttp3.Interceptor
-import okhttp3.Response
-import java.io.IOException
-import javax.inject.Inject
+import net.lachlanmckee.timberjunit.TimberTestRule
 
-/**
- * No op interceptor
- */
-@MatrixScope
-internal class CurlLoggingInterceptor @Inject constructor()
-    : Interceptor {
-
-    @Throws(IOException::class)
-    override fun intercept(chain: Interceptor.Chain): Response {
-        return chain.proceed(chain.request())
-    }
+fun createTimberTestRule(): TimberTestRule {
+    return TimberTestRule.builder()
+            .showThread(false)
+            .showTimestamp(false)
+            .onlyLogWhenTestFails(false)
+            .build()
 }

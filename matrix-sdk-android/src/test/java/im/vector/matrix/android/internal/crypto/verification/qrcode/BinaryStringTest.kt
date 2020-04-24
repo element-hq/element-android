@@ -16,13 +16,14 @@
 
 package im.vector.matrix.android.internal.crypto.verification.qrcode
 
+import im.vector.matrix.android.MatrixTest
 import org.amshove.kluent.shouldEqualTo
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runners.MethodSorters
 
 @FixMethodOrder(MethodSorters.JVM)
-class BinaryStringTest {
+class BinaryStringTest: MatrixTest {
 
     /**
      * I want to put bytes to a String, and vice versa

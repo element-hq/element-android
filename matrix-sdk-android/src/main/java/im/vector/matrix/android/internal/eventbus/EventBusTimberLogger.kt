@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2016 Jeff Gilfelt.
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,23 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.network.interceptors
+package im.vector.matrix.android.internal.eventbus
 
-import im.vector.matrix.android.internal.di.MatrixScope
-import okhttp3.Interceptor
-import okhttp3.Response
-import java.io.IOException
-import javax.inject.Inject
+import org.greenrobot.eventbus.Logger
+import timber.log.Timber
+import java.util.logging.Level
 
-/**
- * No op interceptor
- */
-@MatrixScope
-internal class CurlLoggingInterceptor @Inject constructor()
-    : Interceptor {
+class EventBusTimberLogger : Logger {
+    override fun log(level: Level, msg: String) {
+        Timber.d(msg)
+    }
 
-    @Throws(IOException::class)
-    override fun intercept(chain: Interceptor.Chain): Response {
-        return chain.proceed(chain.request())
+    override fun log(level: Level, msg: String, th: Throwable) {
+        Timber.e(th, msg)
     }
 }

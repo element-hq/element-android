@@ -74,7 +74,6 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
                             it.state = PusherState.FAILED_TO_REGISTER
                         }
                     }
-                    // always return success, or the chain will be stuck for ever!
                     Result.failure()
                 }
             }

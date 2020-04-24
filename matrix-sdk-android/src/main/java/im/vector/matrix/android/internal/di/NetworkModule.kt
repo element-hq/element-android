@@ -57,7 +57,7 @@ internal object NetworkModule {
     @Provides
     @JvmStatic
     fun providesCurlLoggingInterceptor(): CurlLoggingInterceptor {
-        return CurlLoggingInterceptor(HttpLoggingInterceptor.Logger.DEFAULT)
+        return CurlLoggingInterceptor()
     }
 
     @MatrixScope
