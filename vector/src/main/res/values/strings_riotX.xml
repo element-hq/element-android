@@ -19,6 +19,9 @@
     <string name="enter_secret_storage_input_key">Select your Recovery Key, or input it manually by typing it or pasting from your clipboard</string>
     <string name="keys_backup_recovery_key_error_decrypt">Backup could not be decrypted with this Recovery Key: please verify that you entered the correct Recovery Key.</string>
     <string name="failed_to_access_secure_storage">Failed to access secure storage</string>
+
+    <string name="unencrytped">Unencrypted</string>
+    <string name="encrypted_unverified">Encrypted by an unverified device</string>
     <!-- END Strings added by Valere -->
 
 

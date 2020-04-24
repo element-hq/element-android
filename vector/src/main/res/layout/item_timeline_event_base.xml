@@ -62,6 +62,18 @@
         android:layout_height="0dp"
         tools:layout_marginStart="52dp" />
 
+    <ImageView
+        android:id="@+id/messageE2EDecoration"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_alignTop="@id/viewStubContainer"
+        android:layout_toStartOf="@id/viewStubContainer"
+        android:visibility="gone"
+        android:layout_marginEnd="-4dp"
+        android:layout_marginTop="7dp"
+        tools:src="@drawable/ic_shield_warning"
+        tools:visibility="visible" />
+
     <FrameLayout
         android:id="@+id/viewStubContainer"
         android:layout_width="match_parent"

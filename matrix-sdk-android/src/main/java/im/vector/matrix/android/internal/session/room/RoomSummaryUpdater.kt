@@ -136,6 +136,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         roomSummaryEntity.aliases.addAll(roomAliases)
         roomSummaryEntity.flatAliases = roomAliases.joinToString(separator = "|", prefix = "|")
         roomSummaryEntity.isEncrypted = encryptionEvent != null
+        roomSummaryEntity.encryptionEventTs = encryptionEvent?.originServerTs ?: System.currentTimeMillis()
         roomSummaryEntity.typingUserIds.clear()
         roomSummaryEntity.typingUserIds.addAll(ephemeralResult?.typingUserIds.orEmpty())
 
