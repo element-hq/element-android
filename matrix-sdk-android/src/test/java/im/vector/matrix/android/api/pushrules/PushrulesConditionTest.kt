@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.api.pushrules
 
+import im.vector.matrix.android.MatrixTest
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.room.Room
@@ -30,7 +31,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class PushrulesConditionTest {
+class PushrulesConditionTest: MatrixTest {
 
     /* ==========================================================================================
      * Test EventMatchCondition

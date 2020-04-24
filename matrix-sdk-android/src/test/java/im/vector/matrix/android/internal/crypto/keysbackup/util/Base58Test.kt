@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.crypto.keysbackup.util
 
+import im.vector.matrix.android.MatrixTest
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.FixMethodOrder
@@ -23,7 +24,7 @@ import org.junit.Test
 import org.junit.runners.MethodSorters
 
 @FixMethodOrder(MethodSorters.JVM)
-class Base58Test {
+class Base58Test: MatrixTest {
 
     @Test
     fun encode() {
