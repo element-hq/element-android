@@ -43,6 +43,7 @@ Bugfix 🐛:
  - RiotX now uses as many threads as it needs to do work and send messages (#1221)
  - Fix issue with media path (#1227)
  - Add user to direct chat by user id (#1065)
+ - Use correct URL for SSO connection (#1178)
 
 Translations 🗣:
  -
