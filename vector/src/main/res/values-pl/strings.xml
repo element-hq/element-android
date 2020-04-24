@@ -2172,7 +2172,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="enter_secret_storage_passphrase">Wprowadź hasło tajemnej przestrzeni</string>
     <string name="enter_secret_storage_passphrase_warning">Ostrzeżenie:</string>
     <string name="enter_secret_storage_passphrase_warning_text">Powinieneś(-nnaś) uzyskać dostęp do tajnej przestrzeni jedynie z zaufanego urządzenia</string>
-    <string name="enter_secret_storage_passphrase_reason_verify">Uzyskaj dostęp do historii bezpiecznych wiadomości i Twojego(-jej) tożsamości podpisu krzyżowego poprzez weryfikację innej sesji za pomocą hasła</string>
 
     <string name="message_action_item_redact">Usuń…</string>
     <string name="share_confirm_room">Czy chcesz wysłać załącznik do %1$s\?</string>

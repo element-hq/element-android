@@ -2144,7 +2144,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="enter_secret_storage_passphrase">輸入秘密儲存空間通關密語</string>
     <string name="enter_secret_storage_passphrase_warning">警告：</string>
     <string name="enter_secret_storage_passphrase_warning_text">您僅能從受信任的裝置存取秘密儲存空間</string>
-    <string name="enter_secret_storage_passphrase_reason_verify">透過輸入通關密語來存取您的安全訊息歷史與您的交叉簽章身份以驗證其他工作階段</string>
 
     <string name="message_action_item_redact">移除……</string>
     <string name="share_confirm_room">您想要傳送此附件到 %1$s 嗎？</string>

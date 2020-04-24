@@ -2251,7 +2251,6 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="enter_secret_storage_passphrase">Gib die geheime Speicherpassphrase ein</string>
     <string name="enter_secret_storage_passphrase_warning">Warnung:</string>
     <string name="enter_secret_storage_passphrase_warning_text">Du solltest nur von einem vertrauenswürdigen Gerät auf den geheimen Speicher zugreifen</string>
-    <string name="enter_secret_storage_passphrase_reason_verify">Greife auf deinen sicheren Nachrichtenverlauf und deine Cross-Signing-Identität zu, um andere Sitzungen zu überprüfen, indem du deine Passphrase eingibst</string>
 
     <string name="message_action_item_redact">Entfernen…</string>
     <string name="share_confirm_room">Möchtest du diesen Anhang an %1$s senden\?</string>

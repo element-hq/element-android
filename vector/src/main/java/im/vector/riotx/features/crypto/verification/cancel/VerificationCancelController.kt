@@ -76,7 +76,7 @@ class VerificationCancelController @Inject constructor(
 
         bottomSheetVerificationActionItem {
             id("cancel")
-            title(stringProvider.getString(R.string.cancel))
+            title(stringProvider.getString(R.string.skip))
             titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
             iconRes(R.drawable.ic_arrow_right)
             iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))

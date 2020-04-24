@@ -2166,7 +2166,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     </plurals>
     <string name="poll_item_selected_aria">Selected Option</string>
     <string name="command_description_poll">Creates a simple poll</string>
-    <string name="verification_cannot_access_other_session">Use a recovery method</string>
+    <string name="verification_cannot_access_other_session">Use a Recovery Passphrase or Key</string>
     <string name="verification_use_passphrase">If you can’t access an existing session</string>
 
     <string name="new_signin">New Sign In</string>
@@ -2175,7 +2175,6 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="enter_secret_storage_passphrase">Enter secret storage passphrase</string>
     <string name="enter_secret_storage_passphrase_warning">Warning:</string>
     <string name="enter_secret_storage_passphrase_warning_text">You should only access secret storage from a trusted device</string>
-    <string name="enter_secret_storage_passphrase_reason_verify">Access your secure message history and your cross-signing identity for verifying other sessions by entering your passphrase</string>
 
     <string name="message_action_item_redact">Remove…</string>
     <string name="share_confirm_room">Do you want to send this attachment to %1$s?</string>

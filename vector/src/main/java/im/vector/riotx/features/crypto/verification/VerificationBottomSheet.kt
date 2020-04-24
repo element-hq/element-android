@@ -324,10 +324,6 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
     }
 
-    override fun dismiss() {
-        super.dismiss()
-    }
-
     companion object {
 
         const val SECRET_REQUEST_CODE = 101

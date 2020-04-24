@@ -211,6 +211,12 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                         )
                     }
                 } else {
+                    setState {
+                        copy(
+                                passphrase = null,
+                                passphraseRepeat = null
+                        )
+                    }
                     startInitializeFlow(action.auth)
                 }
             }
@@ -438,7 +444,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     _viewEvents.post(BootstrapViewEvents.SkipBootstrap())
                 }
             }
-            is BootstrapStep.GetBackupSecretKeyForMigration -> {
+            is BootstrapStep.GetBackupSecretKeyForMigration  -> {
                 // do we let you cancel from here?
                 _viewEvents.post(BootstrapViewEvents.SkipBootstrap())
             }
