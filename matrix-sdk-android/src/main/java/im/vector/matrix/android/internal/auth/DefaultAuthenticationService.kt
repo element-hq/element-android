@@ -208,7 +208,7 @@ internal class DefaultAuthenticationService @Inject constructor(
         return when (wellknownResult) {
             is WellknownResult.Prompt -> {
                 val newHomeServerConnectionConfig = homeServerConnectionConfig.copy(
-                        homeServerUri = Uri.parse(wellknownResult.homerServerUrl),
+                        homeServerUri = Uri.parse(wellknownResult.homeServerUrl),
                         identityServerUri = wellknownResult.identityServerUrl?.let { Uri.parse(it) }
                 )
 
@@ -218,7 +218,7 @@ internal class DefaultAuthenticationService @Inject constructor(
                     apiCall = newAuthAPI.versions()
                 }
 
-                getLoginFlowResult(newAuthAPI, versions, wellknownResult.homerServerUrl)
+                getLoginFlowResult(newAuthAPI, versions, wellknownResult.homeServerUrl)
             }
             else                      -> throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
         }.exhaustive

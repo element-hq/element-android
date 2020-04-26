@@ -485,7 +485,7 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun onWellknownSuccess(action: LoginAction.LoginOrRegister, wellKnownPrompt: WellknownResult.Prompt) {
         val homeServerConnectionConfig = HomeServerConnectionConfig(
-                homeServerUri = Uri.parse(wellKnownPrompt.homerServerUrl),
+                homeServerUri = Uri.parse(wellKnownPrompt.homeServerUrl),
                 identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
         )
 

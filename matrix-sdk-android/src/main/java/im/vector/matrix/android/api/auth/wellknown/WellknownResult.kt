@@ -31,7 +31,7 @@ sealed class WellknownResult {
      * Retrieve the specific piece of information from the user in a way which fits within the existing client user experience,
      * if the client is inclined to do so. Failure can take place instead if no good user experience for this is possible at this point.
      */
-    data class Prompt(val homerServerUrl: String,
+    data class Prompt(val homeServerUrl: String,
                       val identityServerUrl: String?,
                       val wellKnown: WellKnown) : WellknownResult()
 
