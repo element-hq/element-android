@@ -48,6 +48,7 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.android.internal.util.exhaustive
 import im.vector.matrix.android.internal.util.toCancelable
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -156,27 +157,71 @@ internal class DefaultAuthenticationService @Inject constructor(
         val authAPI = buildAuthAPI(homeServerConnectionConfig)
 
         // Ok, try to get the config.json file of a RiotWeb client
-        val riotConfig = executeRequest<RiotConfig>(null) {
-            apiCall = authAPI.getRiotConfig()
-        }
-
-        if (riotConfig.defaultHomeServerUrl?.isNotBlank() == true) {
-            // Ok, good sign, we got a default hs url
-            val newHomeServerConnectionConfig = homeServerConnectionConfig.copy(
-                    homeServerUri = Uri.parse(riotConfig.defaultHomeServerUrl)
-            )
-
-            val newAuthAPI = buildAuthAPI(newHomeServerConnectionConfig)
-
-            val versions = executeRequest<Versions>(null) {
-                apiCall = newAuthAPI.versions()
+        return runCatching {
+            executeRequest<RiotConfig>(null) {
+                apiCall = authAPI.getRiotConfig()
             }
-
-            return getLoginFlowResult(newAuthAPI, versions, riotConfig.defaultHomeServerUrl)
-        } else {
-            // Config exists, but there is no default homeserver url (ex: https://riot.im/app)
-            throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
         }
+                .map { riotConfig ->
+                    if (riotConfig.defaultHomeServerUrl?.isNotBlank() == true) {
+                        // Ok, good sign, we got a default hs url
+                        val newHomeServerConnectionConfig = homeServerConnectionConfig.copy(
+                                homeServerUri = Uri.parse(riotConfig.defaultHomeServerUrl)
+                        )
+
+                        val newAuthAPI = buildAuthAPI(newHomeServerConnectionConfig)
+
+                        val versions = executeRequest<Versions>(null) {
+                            apiCall = newAuthAPI.versions()
+                        }
+
+                        getLoginFlowResult(newAuthAPI, versions, riotConfig.defaultHomeServerUrl)
+                    } else {
+                        // Config exists, but there is no default homeserver url (ex: https://riot.im/app)
+                        throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
+                    }
+                }
+                .fold(
+                        {
+                            it
+                        },
+                        {
+                            if (it is Failure.OtherServerError
+                                    && it.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
+                                // Try with wellknown
+                                getWellknownLoginFlowInternal(homeServerConnectionConfig)
+                            } else {
+                                throw it
+                            }
+                        }
+                )
+    }
+
+    private suspend fun getWellknownLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
+        val domain = homeServerConnectionConfig.homeServerUri.host
+                ?: throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
+
+        // Create a fake userId, for the getWellknown task
+        val fakeUserId = "@alice:$domain"
+        val wellknownResult = getWellknownTask.execute(GetWellknownTask.Params(fakeUserId))
+
+        return when (wellknownResult) {
+            is WellknownResult.Prompt -> {
+                val newHomeServerConnectionConfig = homeServerConnectionConfig.copy(
+                        homeServerUri = Uri.parse(wellknownResult.homerServerUrl),
+                        identityServerUri = wellknownResult.identityServerUrl?.let { Uri.parse(it) }
+                )
+
+                val newAuthAPI = buildAuthAPI(newHomeServerConnectionConfig)
+
+                val versions = executeRequest<Versions>(null) {
+                    apiCall = newAuthAPI.versions()
+                }
+
+                getLoginFlowResult(newAuthAPI, versions, wellknownResult.homerServerUrl)
+            }
+            else                      -> throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
+        }.exhaustive
     }
 
     private suspend fun getLoginFlowResult(authAPI: AuthAPI, versions: Versions, homeServerUrl: String): LoginFlowResult {
