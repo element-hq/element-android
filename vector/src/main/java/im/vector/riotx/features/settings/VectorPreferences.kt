@@ -201,6 +201,11 @@ class VectorPreferences @Inject constructor(private val context: Context) {
                 SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY,
                 SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY,
 
+                SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY,
+                SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY,
+                SETTINGS_LABS_ALLOW_EXTENDED_LOGS,
+                SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY,
+
                 SETTINGS_USE_RAGE_SHAKE_KEY,
                 SETTINGS_SECURITY_USE_FLAG_SECURE
         )
