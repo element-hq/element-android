@@ -23,6 +23,11 @@ import im.vector.riotx.features.home.RoomListDisplayMode
  */
 interface UiStateRepository {
 
+    /**
+     * Reset all the saved data
+     */
+    fun reset()
+
     fun getDisplayMode(): RoomListDisplayMode
 
     fun storeDisplayMode(displayMode: RoomListDisplayMode)

@@ -34,8 +34,10 @@ import im.vector.riotx.core.utils.deleteAllFiles
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.login.LoginActivity
 import im.vector.riotx.features.notifications.NotificationDrawerManager
+import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.signout.hard.SignedOutActivity
 import im.vector.riotx.features.signout.soft.SoftLogoutActivity
+import im.vector.riotx.features.ui.UiStateRepository
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -78,6 +80,8 @@ class MainActivity : VectorBaseActivity() {
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var sessionHolder: ActiveSessionHolder
     @Inject lateinit var errorFormatter: ErrorFormatter
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var uiStateRepository: UiStateRepository
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -127,7 +131,7 @@ class MainActivity : VectorBaseActivity() {
                 // Just do the local cleanup
                 Timber.w("Account deactivated, start app")
                 sessionHolder.clearActiveSession()
-                doLocalCleanup()
+                doLocalCleanup(clearPreferences = true)
                 startNextActivityAndFinish()
             }
             args.clearCredentials     -> session.signOut(
@@ -136,7 +140,7 @@ class MainActivity : VectorBaseActivity() {
                         override fun onSuccess(data: Unit) {
                             Timber.w("SIGN_OUT: success, start app")
                             sessionHolder.clearActiveSession()
-                            doLocalCleanup()
+                            doLocalCleanup(clearPreferences = true)
                             startNextActivityAndFinish()
                         }
 
@@ -147,7 +151,7 @@ class MainActivity : VectorBaseActivity() {
             args.clearCache           -> session.clearCache(
                     object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
-                            doLocalCleanup()
+                            doLocalCleanup(clearPreferences = false)
                             session.startSyncing(applicationContext)
                             startNextActivityAndFinish()
                         }
@@ -164,10 +168,15 @@ class MainActivity : VectorBaseActivity() {
         Timber.w("Ignoring invalid token global error")
     }
 
-    private fun doLocalCleanup() {
+    private fun doLocalCleanup(clearPreferences: Boolean) {
         GlobalScope.launch(Dispatchers.Main) {
             // On UI Thread
             Glide.get(this@MainActivity).clearMemory()
+
+            if (clearPreferences) {
+                vectorPreferences.clearPreferences()
+                uiStateRepository.reset()
+            }
             withContext(Dispatchers.IO) {
                 // On BG thread
                 Glide.get(this@MainActivity).clearDiskCache()
