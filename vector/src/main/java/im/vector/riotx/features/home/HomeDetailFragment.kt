@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2019 New Vector Ltd
  *
@@ -61,7 +60,7 @@ class HomeDetailFragment @Inject constructor(
     private val unreadCounterBadgeViews = arrayListOf<UnreadCounterBadgeView>()
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
-    private val unknownDeviceDetectorSharedViewModel : UnknownDeviceDetectorSharedViewModel by activityViewModel()
+    private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
@@ -112,7 +111,11 @@ class HomeDetailFragment @Inject constructor(
                                             ?.navigator
                                             ?.requestSessionVerification(requireContext(), newest.deviceId ?: "")
                                 }
-                                dismissedAction = Runnable {}
+                                dismissedAction = Runnable {
+                                    unknownDeviceDetectorSharedViewModel.handle(
+                                            UnknownDeviceDetectorSharedViewModel.Action.IgnoreDevice(newest.deviceId ?: "")
+                                    )
+                                }
                             }
                     )
                 }
