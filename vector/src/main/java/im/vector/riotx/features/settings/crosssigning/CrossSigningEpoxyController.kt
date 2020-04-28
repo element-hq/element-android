@@ -59,7 +59,7 @@ class CrossSigningEpoxyController @Inject constructor(
             if (!data.isUploadingKeys) {
                 bottomSheetVerificationActionItem {
                     id("verify")
-                    title(stringProvider.getString(R.string.complete_security))
+                    title(stringProvider.getString(R.string.crosssigning_verify_this_session))
                     titleColor(colorProvider.getColor(R.color.riotx_positive_accent))
                     iconRes(R.drawable.ic_arrow_right)
                     iconColor(colorProvider.getColor(R.color.riotx_positive_accent))
@@ -76,7 +76,7 @@ class CrossSigningEpoxyController @Inject constructor(
             }
             bottomSheetVerificationActionItem {
                 id("verify")
-                title(stringProvider.getString(R.string.complete_security))
+                title(stringProvider.getString(R.string.crosssigning_verify_this_session))
                 titleColor(colorProvider.getColor(R.color.riotx_positive_accent))
                 iconRes(R.drawable.ic_arrow_right)
                 iconColor(colorProvider.getColor(R.color.riotx_positive_accent))

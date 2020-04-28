@@ -165,7 +165,9 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 } else {
                     otherUserShield.setImageResource(R.drawable.ic_shield_warning)
                 }
-                otherUserNameText.text = getString(R.string.complete_security)
+                otherUserNameText.text = getString(
+                        if (state.selfVerificationMode) R.string.crosssigning_verify_this_session else R.string.crosssigning_verify_session
+                )
                 otherUserShield.isVisible = true
             } else {
                 avatarRenderer.render(matrixItem, otherUserAvatarImageView)
@@ -241,7 +243,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
 
         when (state.qrTransactionState) {
-            is VerificationTxState.QrScannedByOther -> {
+            is VerificationTxState.QrScannedByOther               -> {
                 showFragment(VerificationQrScannedByOtherFragment::class, Bundle())
                 return@withState
             }
@@ -252,19 +254,19 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 })
                 return@withState
             }
-            is VerificationTxState.Verified         -> {
+            is VerificationTxState.Verified                       -> {
                 showFragment(VerificationConclusionFragment::class, Bundle().apply {
                     putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null, state.isMe))
                 })
                 return@withState
             }
-            is VerificationTxState.Cancelled        -> {
+            is VerificationTxState.Cancelled                      -> {
                 showFragment(VerificationConclusionFragment::class, Bundle().apply {
                     putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(false, state.qrTransactionState.cancelCode.value, state.isMe))
                 })
                 return@withState
             }
-            else                                    -> Unit
+            else                                                  -> Unit
         }
 
         // At this point there is no SAS transaction for this request

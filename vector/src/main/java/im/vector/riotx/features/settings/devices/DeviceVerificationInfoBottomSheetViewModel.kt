@@ -37,7 +37,10 @@ import im.vector.riotx.core.platform.VectorViewModel
 
 data class DeviceVerificationInfoBottomSheetViewState(
         val cryptoDeviceInfo: Async<CryptoDeviceInfo?> = Uninitialized,
-        val deviceInfo: Async<DeviceInfo> = Uninitialized
+        val deviceInfo: Async<DeviceInfo> = Uninitialized,
+        val hasAccountCrossSigning: Boolean = false,
+        val accountCrossSigningIsTrusted: Boolean = false,
+        val isMine : Boolean = false
 ) : MvRxState
 
 class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@Assisted initialState: DeviceVerificationInfoBottomSheetViewState,
@@ -51,13 +54,29 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
     }
 
     init {
+
+        setState {
+            copy(
+                    hasAccountCrossSigning = session.cryptoService().crossSigningService().getMyCrossSigningKeys() != null,
+                    accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified()
+            )
+        }
+        session.rx().liveCrossSigningInfo(session.myUserId)
+                .execute {
+                    copy(
+                            hasAccountCrossSigning = it.invoke()?.get() != null,
+                            accountCrossSigningIsTrusted = it.invoke()?.get()?.isTrusted() == true
+                    )
+                }
+
         session.rx().liveUserCryptoDevices(session.myUserId)
                 .map { list ->
                     list.firstOrNull { it.deviceId == deviceId }
                 }
                 .execute {
                     copy(
-                            cryptoDeviceInfo = it
+                            cryptoDeviceInfo = it,
+                            isMine = it.invoke()?.deviceId == session.sessionParams.credentials.deviceId
                     )
                 }
         setState {

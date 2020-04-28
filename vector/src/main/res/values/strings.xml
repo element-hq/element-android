@@ -1024,7 +1024,7 @@
     <string name="encryption_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified sessions from this session.</string>
     <string name="encryption_import_room_keys_success">%1$d/%2$d key(s) imported with success.</string>
 
-    <string name="encryption_information_not_verified">NOT Verified</string>
+    <string name="encryption_information_not_verified">Not Verified</string>
     <string name="encryption_information_verified">Verified</string>
     <string name="encryption_information_blocked">Blacklisted</string>
 
@@ -1038,8 +1038,8 @@
     <string name="encryption_information_unblock">Unblacklist</string>
 
     <string name="encryption_information_verify_device">Verify session</string>
-    <string name="encryption_information_verify_device_warning">To verify that this session can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this session matches the key below:</string>
-    <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. If it doesn’t, then someone else is intercepting this session and you should probably blacklist it. In the future this verification process will be more sophisticated.</string>
+    <string name="encryption_information_verify_device_warning">Confirm by comparing the following with the User Settings in your other session:</string>
+    <string name="encryption_information_verify_device_warning2">"If they don't match, the security of your communication may be compromised."</string>
     <string name="encryption_information_verify_key_match">I verify that the keys match</string>
 
     <string name="e2e_enabling_on_app_update">Riot now supports end-to-end encryption but you need to log in again to enable it.\n\nYou can do it now or later from the application settings.</string>
@@ -2110,7 +2110,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="settings_active_sessions_list">Active Sessions</string>
     <string name="settings_active_sessions_show_all">Show All Sessions</string>
     <string name="settings_active_sessions_manage">Manage Sessions</string>
-    <string name="settings_active_sessions_signout_device">Sign out this session</string>
+    <string name="settings_active_sessions_signout_device">Sign out of this session</string>
 
     <string name="settings_failed_to_get_crypto_device_info">No cryptographic information available</string>
 
@@ -2122,7 +2122,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
         <item quantity="other">%d active sessions</item>
     </plurals>
 
-    <string name="crosssigning_verify_this_session">Verify this session</string>
+    <string name="crosssigning_verify_this_session">Verify this login</string>
     <string name="crosssigning_other_user_not_trust">Other users may not trust it</string>
     <string name="complete_security">Complete Security</string>
 
