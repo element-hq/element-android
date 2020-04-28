@@ -2246,6 +2246,7 @@
     <string name="enter_secret_storage_passphrase">Inserisci la password dell\'archivio segreto</string>
     <string name="enter_secret_storage_passphrase_warning">Attenzione:</string>
     <string name="enter_secret_storage_passphrase_warning_text">Dovresti accedere all\'archivio segreto solo da un dispositivo fidato</string>
+    <string name="enter_secret_storage_passphrase_reason_verify">Accedi alla cronologia dei messaggi sicuri e all\'identità di firma incrociata per verificare altre sessioni inserendo la tua password</string>
 
     <string name="message_action_item_redact">Rimuovi…</string>
     <string name="share_confirm_room">Vuoi inviare questo allegato a %1$s\?</string>
@@ -2272,7 +2273,7 @@
 
     <string name="refresh">Ricarica</string>
 
-    <string name="new_session">Nuova sessione</string>
+    <string name="new_session">Accesso non verificato. Eri tu\?</string>
     <string name="new_session_review">Tocca per controllare e verificare</string>
     <string name="verify_new_session_notice">Usa questa sessione per verificare quella nuova, dandole l\'accesso ai messaggi cifrati.</string>
     <string name="verify_new_session_was_not_me">Non ero io</string>
@@ -2294,7 +2295,7 @@
     <string name="verify_cancelled_notice">Verifica i tuoi dispositivi dalle impostazioni.</string>
     <string name="verification_cancelled">Verifica annullata</string>
 
-    <string name="recovery_passphrase">password dei messaggi</string>
+    <string name="recovery_passphrase">Password di ripristino</string>
     <string name="message_key">chiave dei messaggi</string>
     <string name="account_password">password dell\'account</string>
 
@@ -2341,7 +2342,7 @@
     <string name="bootstrap_skip_text">Impostare una password dei messaggi ti consente di proteggere e sbloccare i messaggi cifrati e di fidarti.
 \n
 \nSe non vuoi impostare una password dei messaggi, genera una chiave dei messaggi.</string>
-    <string name="bootstrap_skip_text_no_gen_key">Impostare una password dei messaggi ti consente di proteggere e sbloccare i messaggi cifrati e di fidarti.</string>
+    <string name="bootstrap_skip_text_no_gen_key">Impostare una password di ripristino ti consente di proteggere e sbloccare i messaggi cifrati e di fidarti.</string>
 
 
     <string name="encryption_enabled">Cifratura attiva</string>
@@ -2368,5 +2369,39 @@
     <string name="command_description_plain">Invia un messaggio come testo semplice, senza interpretarlo come markdown</string>
 
     <string name="auth_invalid_login_param_space_in_password">Nome utente e/o password errati. La password inserita inizia o termina con spazi, controllala.</string>
+
+    <string name="room_message_placeholder">Messaggio…</string>
+
+    <string name="upgrade_security">Aggiornamento cifratura disponibile</string>
+    <string name="security_prompt_text">Verifica te stesso e gli altri per tenere al sicuro le chat</string>
+
+    <string name="bootstrap_enter_recovery">Inserisci la tua %s per continuare</string>
+    <string name="use_file">Usa file</string>
+
+    <string name="enter_backup_passphrase">Inserisci la %s</string>
+    <string name="backup_recovery_passphrase">Password di ripristino</string>
+    <string name="bootstrap_invalid_recovery_key">Non è una chiave di ripristino valida</string>
+    <string name="recovery_key_empty_error_message">Inserisci una chiave di ripristino</string>
+
+    <string name="bootstrap_progress_checking_backup">Controllo della chiave di backup</string>
+    <string name="bootstrap_progress_checking_backup_with_info">Controllo della chiave di backup (%s)</string>
+    <string name="bootstrap_progress_compute_curve_key">Rilevazione chiave di curva ellittica</string>
+    <string name="bootstrap_progress_generating_ssss">Generazione chiave SSSS dalla password</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">Generazione chiave SSSS dalla password (%s)</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">Generazione chiave SSSS dalla chiave di ripristino</string>
+    <string name="bootstrap_progress_storing_in_sss">Memorizzazione segreto della chiave in SSSS</string>
+    <string name="new_session_review_with_info">%1$s (%2$s)</string>
+
+    <string name="bootstrap_migration_enter_backup_password">Inserisci la password del backup chiavi per continuare.</string>
+    <string name="bootstrap_migration_use_recovery_key">usare la chiave di ripristino del backup chiavi</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">Non conosci la password del backup chiavi, puoi %s.</string>
+    <string name="bootstrap_migration_backup_recovery_key">Chiave di ripristino del backup chiavi</string>
+
+    <string name="settings_security_prevent_screenshots_title">Impedisci la cattura di schermate dell\'app</string>
+    <string name="settings_security_prevent_screenshots_summary">Attivandolo verrà aggiunto FLAG_SECURE a tutte le Activity. Riavvia l\'applicazione per applicare le modifiche.</string>
+
+    <string name="media_file_added_to_gallery">File multimediale aggiunto alla galleria</string>
+    <string name="error_adding_media_file_to_gallery">Impossibile aggiungere il file multimediale alla galleria</string>
+    <string name="change_password_summary">Imposta una nuova password dell\'account…</string>
 
 </resources>

@@ -555,7 +555,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="encryption_information_sender_device_information">A küldő munkamenet információi</string>
     <string name="encryption_information_device_name">Nyilvános név</string>
     <string name="encryption_information_name">Nyilvános név</string>
-    <string name="encryption_information_device_id">Azon.</string>
+    <string name="encryption_information_device_id">Azonosító</string>
     <string name="encryption_information_device_key">Munkamenet kulcs</string>
     <string name="encryption_information_verification">Hitelesítés</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 ujjlenyomat</string>
@@ -1631,7 +1631,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="none">Nincs</string>
     <string name="revoke">Visszavonás</string>
     <string name="disconnect">Bontás</string>
-    <string name="people_no_identity_server">Azonosítási szerver nincs beállítva.</string>
+    <string name="people_no_identity_server">Nincs beállítva azonosítási kiszolgáló.</string>
 
     <string name="call_failed_no_ice_title">A hívás sikertelen a hibásan beállított szerver miatt</string>
     <string name="call_failed_no_ice_description">Kérd meg a matrix szervered (%1$s) adminisztrátorát, hogy állítson be egy TURN szervert, hogy a hívások megbízhatóan működjenek.
@@ -2196,6 +2196,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="enter_secret_storage_passphrase">Add meg a jelmondatot a biztonsági tárolóhoz</string>
     <string name="enter_secret_storage_passphrase_warning">Figyelem:</string>
     <string name="enter_secret_storage_passphrase_warning_text">Csak biztonságos eszközről férj hozzá a biztonsági tárolóhoz</string>
+    <string name="enter_secret_storage_passphrase_reason_verify">A jelmondat megadásával hozzáférhetsz a biztonságos üzeneteidhez és az eszközök közötti hitelesítéshez használt személyazonosságodhoz, hogy más munkameneteket hitelesíthess</string>
 
     <string name="message_action_item_redact">Töröl…</string>
     <string name="share_confirm_room">Ezt a csatolmányt el szeretnéd küldeni ide: %1$s\?</string>
@@ -2222,7 +2223,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="refresh">Frissítés</string>
 
-    <string name="new_session">Új munkamenet</string>
+    <string name="new_session">Ismeretlen bejelentkezés. Ez te vagy\?</string>
     <string name="new_session_review">A megtekintéshez és ellenőrzéshez koppints</string>
     <string name="verify_new_session_notice">Az új munkamenet ellenőrzéséhez használd ezt, amivel hozzáférést adsz a titkosított üzenetekhez.</string>
     <string name="verify_new_session_was_not_me">Nem én voltam</string>
@@ -2244,7 +2245,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="verify_cancelled_notice">Ellenőrizd az eszközödet a Beállításokból.</string>
     <string name="verification_cancelled">Ellenőrzés megszakítva</string>
 
-    <string name="recovery_passphrase">Üzenet Jelszó</string>
+    <string name="recovery_passphrase">Visszaállítási jelmondat</string>
     <string name="message_key">Üzenet Kulcs</string>
     <string name="account_password">Fiók Jelszó</string>
 
@@ -2291,7 +2292,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="bootstrap_skip_text">Az Üzenet Jelszó beállításával biztonságba helyezheted és hozzáférhetsz a titkosított üzeneteidhez valamint a bizalomhoz.
 \n
 \nHa nem akarsz Üzenet Jelszót beállítani, hozz létre inkább Üzenet Kulcsot.</string>
-    <string name="bootstrap_skip_text_no_gen_key">Az Üzenet Jelszó beállításával biztonságba helyezheted és hozzáférhetsz a titkosított üzeneteidhez valamint a bizalomhoz.</string>
+    <string name="bootstrap_skip_text_no_gen_key">Az Visszaállítási Jelmondat beállításával biztonságba helyezheted és hozzáférhetsz a titkosított üzeneteidhez valamint a bizalomhoz.</string>
 
 
     <string name="encryption_enabled">Titkosítás bekapcsolva</string>
@@ -2318,5 +2319,39 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="command_description_plain">Az üzenet elküldése sima szövegként anélkül, hogy „markdown” formázás lenne</string>
 
     <string name="auth_invalid_login_param_space_in_password">Felhasználói név és/vagy jelszó hibás. A beírt jelszó szóközzel kezdődik vagy ér véget, kérlek ellenőrizd.</string>
+
+    <string name="room_message_placeholder">Üzenet…</string>
+
+    <string name="upgrade_security">A titkosítás fejlesztése elérhető</string>
+    <string name="security_prompt_text">Ellenőrizd magad és másokat, hogy a csevegéseid biztonságban legyenek</string>
+
+    <string name="bootstrap_enter_recovery">A továbblépéshez add meg: %s</string>
+    <string name="use_file">Fájl használata</string>
+
+    <string name="enter_backup_passphrase">Bevitel: %s</string>
+    <string name="backup_recovery_passphrase">Visszaállítási Jelmondat</string>
+    <string name="bootstrap_invalid_recovery_key">Ez nem egy érvényes visszaállítási kulcs</string>
+    <string name="recovery_key_empty_error_message">Kérlek add meg a visszaállítási kulcsot</string>
+
+    <string name="bootstrap_progress_checking_backup">Mentés Kulcs ellenőrzése</string>
+    <string name="bootstrap_progress_checking_backup_with_info">Mentés Kulcs (%s) ellenőrzése</string>
+    <string name="bootstrap_progress_compute_curve_key">Curve kulcs megszerzése</string>
+    <string name="bootstrap_progress_generating_ssss">SSSS kulcs készítése a jelmondatból</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">SSSS kulcs készítése a jelmondatból (%s)</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">SSSS kulcs készítése a visszaállítási kulcsból</string>
+    <string name="bootstrap_progress_storing_in_sss">Kulcsmentés titok tárolása az SSSS-ben</string>
+    <string name="new_session_review_with_info">%1$s (%2$s)</string>
+
+    <string name="bootstrap_migration_enter_backup_password">A továbblépéshez add meg a kulcs mentés jelmondatát.</string>
+    <string name="bootstrap_migration_use_recovery_key">használd a Kulcs Mentés visszaállítási kulcsot</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">Ha nem tudod a Kulcs Mentés Jelmondatodat, akkor %s.</string>
+    <string name="bootstrap_migration_backup_recovery_key">Kulcs Mentés visszaállítási kulcs</string>
+
+    <string name="settings_security_prevent_screenshots_title">Az alkalmazásról képernyőkép készítésének megakadályozása</string>
+    <string name="settings_security_prevent_screenshots_summary">A beállítással minden \"Activiti\" megkapja a \"FLAG_SECURE\" flaget. Indítsd újra az alkalmazást, hogy a változás életbe léphessen.</string>
+
+    <string name="media_file_added_to_gallery">A média fájl a Galériához hozzáadva</string>
+    <string name="error_adding_media_file_to_gallery">A média fájlt nem sikerült hozzáadni a Galériához</string>
+    <string name="change_password_summary">Új fiók jelszó beállítása…</string>
 
 </resources>
