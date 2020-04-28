@@ -152,7 +152,7 @@ internal class RoomSummaryUpdater @Inject constructor(
 
         if (updateMembers) {
             val otherRoomMembers = RoomMemberHelper(realm, roomId)
-                    .queryRoomMembersEvent()
+                    .queryActiveRoomMembersEvent()
                     .notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId)
                     .findAll()
                     .asSequence()
