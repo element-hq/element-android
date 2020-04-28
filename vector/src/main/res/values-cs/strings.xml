@@ -2183,7 +2183,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="enter_secret_storage_passphrase">Zadejte heslo pro úložište údajů</string>
     <string name="enter_secret_storage_passphrase_warning">Varování:</string>
     <string name="enter_secret_storage_passphrase_warning_text">Měli byste otevřít úložiště údajů z důvěryhodného zařízení</string>
-    <string name="enter_secret_storage_passphrase_reason_verify">Získejte přístup k zabezpečené historii svých zpráv a identitě pro křížový podpis, abyste mohli ověřit jiné relace zadáním hesla</string>
 
     <string name="message_action_item_redact">Odstranit…</string>
     <string name="share_confirm_room">Chcete %1$s poslat tuto přílohu\?</string>
