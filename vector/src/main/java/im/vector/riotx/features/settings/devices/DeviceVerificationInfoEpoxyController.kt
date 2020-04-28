@@ -73,7 +73,7 @@ class DeviceVerificationInfoEpoxyController @Inject constructor(private val stri
         }
 
         // COMMON ACTIONS (Rename / signout)
-        addGenericDeviceManageActions(data, cryptoDeviceInfo)
+        addGenericDeviceManageActions(data, cryptoDeviceInfo.deviceId)
     }
 
     private fun handleE2EWithCrossSigning(isMine: Boolean, currentSessionIsTrusted: Boolean, cryptoDeviceInfo: CryptoDeviceInfo, shield: Int) {
@@ -205,66 +205,6 @@ class DeviceVerificationInfoEpoxyController @Inject constructor(private val stri
                 }
             }
         }
-
-//        if (cryptoDeviceInfo.isVerified) {
-//            genericItem {
-//                id("trust${cryptoDeviceInfo.deviceId}")
-//                style(GenericItem.STYLE.BIG_TEXT)
-//                titleIconResourceId(shield)
-//                title(stringProvider.getString(R.string.encryption_information_verified))
-//                description(stringProvider.getString(R.string.settings_active_sessions_verified_device_desc))
-//            }
-//        } else {
-//            genericItem {
-//                id("trust${cryptoDeviceInfo.deviceId}")
-//                titleIconResourceId(shield)
-//                style(GenericItem.STYLE.BIG_TEXT)
-//                title(stringProvider.getString(R.string.encryption_information_not_verified))
-//                description(stringProvider.getString(R.string.settings_active_sessions_unverified_device_desc))
-//            }
-//        }
-
-//        genericItem {
-//            id("info${cryptoDeviceInfo.deviceId}")
-//            title(cryptoDeviceInfo.displayName() ?: "")
-//            description("(${cryptoDeviceInfo.deviceId})")
-//        }
-
-//        if (data.isMine && !data.accountCrossSigningIsTrusted) {
-//            // we should offer to complete security
-//            dividerItem {
-//                id("d1")
-//            }
-//            bottomSheetVerificationActionItem {
-//                id("complete")
-//                title(stringProvider.getString(R.string.complete_security))
-//                titleColor(colorProvider.getColor(R.color.riotx_accent))
-//                iconRes(R.drawable.ic_arrow_right)
-//                iconColor(colorProvider.getColor(R.color.riotx_accent))
-//                listener {
-//                    callback?.onAction(DevicesAction.CompleteSecurity(cryptoDeviceInfo.deviceId))
-//                }
-//            }
-//        }
-//
-//
-//        if (!cryptoDeviceInfo.isVerified) {
-//            dividerItem {
-//                id("d1")
-//            }
-//            bottomSheetVerificationActionItem {
-//                id("verify")
-//                title(stringProvider.getString(R.string.verification_verify_device))
-//                titleColor(colorProvider.getColor(R.color.riotx_accent))
-//                iconRes(R.drawable.ic_arrow_right)
-//                iconColor(colorProvider.getColor(R.color.riotx_accent))
-//                listener {
-//                    callback?.onAction(DevicesAction.VerifyMyDevice(cryptoDeviceInfo.deviceId))
-//                }
-//            }
-//        }
-
-//        addGenericDeviceManageActions(data, cryptoDeviceInfo)
     }
 
     private fun addVerifyActions(cryptoDeviceInfo: CryptoDeviceInfo) {
@@ -296,12 +236,12 @@ class DeviceVerificationInfoEpoxyController @Inject constructor(private val stri
         }
     }
 
-    private fun addGenericDeviceManageActions(data: DeviceVerificationInfoBottomSheetViewState, cryptoDeviceInfo: CryptoDeviceInfo) {
+    private fun addGenericDeviceManageActions(data: DeviceVerificationInfoBottomSheetViewState, deviceId: String) {
         // Offer delete session if not me
         if (!data.isMine) {
             // Add the delete option
             dividerItem {
-                id("d2")
+                id("manageD1")
             }
             bottomSheetVerificationActionItem {
                 id("delete")
@@ -310,14 +250,14 @@ class DeviceVerificationInfoEpoxyController @Inject constructor(private val stri
                 iconRes(R.drawable.ic_arrow_right)
                 iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
                 listener {
-                    callback?.onAction(DevicesAction.Delete(cryptoDeviceInfo.deviceId))
+                    callback?.onAction(DevicesAction.Delete(deviceId))
                 }
             }
         }
 
         // Always offer rename
         dividerItem {
-            id("d3")
+            id("manageD2")
         }
         bottomSheetVerificationActionItem {
             id("rename")
@@ -326,40 +266,25 @@ class DeviceVerificationInfoEpoxyController @Inject constructor(private val stri
             iconRes(R.drawable.ic_arrow_right)
             iconColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
             listener {
-                callback?.onAction(DevicesAction.PromptRename(cryptoDeviceInfo.deviceId))
+                callback?.onAction(DevicesAction.PromptRename(deviceId))
             }
         }
     }
 
     private fun handleNonE2EDevice(data: DeviceVerificationInfoBottomSheetViewState) {
-        val info = data.deviceInfo.invoke()
+        val info = data.deviceInfo.invoke() ?: return
         genericItem {
-            id("info${info?.deviceId}")
-            title(info?.displayName ?: "")
-            description("(${info?.deviceId})")
+            id("info${info.deviceId}")
+            title(info.displayName ?: "")
+            description("(${info.deviceId})")
         }
 
         genericFooterItem {
-            id("infoCrypto${info?.deviceId}")
+            id("infoCrypto${info.deviceId}")
             text(stringProvider.getString(R.string.settings_failed_to_get_crypto_device_info))
         }
 
-        if (!data.isMine) {
-            // Add the delete option
-            dividerItem {
-                id("d2")
-            }
-            bottomSheetVerificationActionItem {
-                id("delete")
-                title(stringProvider.getString(R.string.settings_active_sessions_signout_device))
-                titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                iconRes(R.drawable.ic_arrow_right)
-                iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                listener {
-                    callback?.onAction(DevicesAction.Delete(info?.deviceId ?: ""))
-                }
-            }
-        }
+        info.deviceId?.let { addGenericDeviceManageActions(data, it) }
     }
 
     interface Callback {

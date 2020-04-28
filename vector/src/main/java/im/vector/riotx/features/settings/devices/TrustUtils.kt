@@ -16,11 +16,13 @@
 
 package im.vector.riotx.features.settings.devices
 
+import androidx.annotation.DrawableRes
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.riotx.R
 
 object TrustUtils {
 
+    @DrawableRes
     fun shieldForTrust(currentDevice: Boolean, trustMSK: Boolean, legacyMode: Boolean, deviceTrustLevel: DeviceTrustLevel?): Int {
         return when {
             currentDevice -> {
@@ -44,7 +46,7 @@ object TrustUtils {
                                 ?: R.drawable.ic_shield_warning
                     } else {
                         // The current session is untrusted, so displays others in black
-                        // as we can't know there cross-signing state
+                        // as we can't know the cross-signing state
                         R.drawable.ic_shield_black
                     }
                 }
