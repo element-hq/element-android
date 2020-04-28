@@ -27,6 +27,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.riotx.R
+import im.vector.riotx.core.dialogs.ManuallyVerifyDialog
 import im.vector.riotx.core.dialogs.PromptPasswordDialog
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
@@ -72,6 +73,15 @@ class VectorSettingsDevicesFragment @Inject constructor(
                             otherUserId = it.userId,
                             transactionId = it.transactionId
                     ).show(childFragmentManager, "REQPOP")
+                }
+                is DevicesViewEvents.SelfVerification   -> {
+                    VerificationBottomSheet.forSelfVerification(it.session)
+                            .show(childFragmentManager, "REQPOP")
+                }
+                is DevicesViewEvents.ShowManuallyVerify -> {
+                    ManuallyVerifyDialog.show(requireActivity(), it.cryptoDeviceInfo) {
+                        viewModel.handle(DevicesAction.MarkAsManuallyVerified(it.cryptoDeviceInfo))
+                    }
                 }
             }.exhaustive
         }

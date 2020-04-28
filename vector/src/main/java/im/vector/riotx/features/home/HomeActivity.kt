@@ -185,8 +185,8 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             // We need to ask
             promptSecurityEvent(
                     session,
-                    R.string.complete_security,
-                    R.string.crosssigning_verify_this_session
+                    R.string.crosssigning_verify_this_session,
+                    R.string.confirm_your_identity
             ) {
                 it.navigator.waitSessionVerification(it)
             }

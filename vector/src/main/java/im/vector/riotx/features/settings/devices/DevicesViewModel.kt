@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.settings.devices
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -28,26 +29,33 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
 import im.vector.matrix.android.api.session.crypto.verification.VerificationService
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
+import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
+import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.crypto.verification.SupportedVerificationMethodsProvider
+import kotlinx.coroutines.launch
 
 data class DevicesViewState(
         val myDeviceId: String = "",
         val devices: Async<List<DeviceInfo>> = Uninitialized,
         val cryptoDevices: Async<List<CryptoDeviceInfo>> = Uninitialized,
         // TODO Replace by isLoading boolean
-        val request: Async<Unit> = Uninitialized
+        val request: Async<Unit> = Uninitialized,
+        val hasAccountCrossSigning: Boolean = false,
+        val accountCrossSigningIsTrusted: Boolean = false
 ) : MvRxState
 
 class DevicesViewModel @AssistedInject constructor(
@@ -75,6 +83,21 @@ class DevicesViewModel @AssistedInject constructor(
     private var _currentSession: String? = null
 
     init {
+
+        setState {
+            copy(
+                    hasAccountCrossSigning = session.cryptoService().crossSigningService().getMyCrossSigningKeys() != null,
+                    accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified()
+            )
+        }
+        session.rx().liveCrossSigningInfo(session.myUserId)
+                .execute {
+                    copy(
+                            hasAccountCrossSigning = it.invoke()?.get() != null,
+                            accountCrossSigningIsTrusted = it.invoke()?.get()?.isTrusted() == true
+                    )
+                }
+
         refreshDevicesList()
         session.cryptoService().verificationService().addListener(this)
 
@@ -164,23 +187,54 @@ class DevicesViewModel @AssistedInject constructor(
 
     override fun handle(action: DevicesAction) {
         return when (action) {
-            is DevicesAction.Retry          -> refreshDevicesList()
-            is DevicesAction.Delete         -> handleDelete(action)
-            is DevicesAction.Password       -> handlePassword(action)
-            is DevicesAction.Rename         -> handleRename(action)
-            is DevicesAction.PromptRename   -> handlePromptRename(action)
-            is DevicesAction.VerifyMyDevice -> handleVerify(action)
+            is DevicesAction.Retry                  -> refreshDevicesList()
+            is DevicesAction.Delete                 -> handleDelete(action)
+            is DevicesAction.Password               -> handlePassword(action)
+            is DevicesAction.Rename                 -> handleRename(action)
+            is DevicesAction.PromptRename           -> handlePromptRename(action)
+            is DevicesAction.VerifyMyDevice         -> handleInteractiveVerification(action)
+            is DevicesAction.CompleteSecurity       -> handleCompleteSecurity()
+            is DevicesAction.MarkAsManuallyVerified -> handleVerifyManually(action)
+            is DevicesAction.VerifyMyDeviceManually -> handleShowDeviceCryptoInfo(action)
         }
     }
 
-    private fun handleVerify(action: DevicesAction.VerifyMyDevice) {
+    private fun handleInteractiveVerification(action: DevicesAction.VerifyMyDevice) {
         val txID = session.cryptoService()
                 .verificationService()
-                .requestKeyVerification(supportedVerificationMethodsProvider.provide(), session.myUserId, listOf(action.deviceId))
+                .beginKeyVerification(VerificationMethod.SAS, session.myUserId, action.deviceId, null)
         _viewEvents.post(DevicesViewEvents.ShowVerifyDevice(
                 session.myUserId,
-                txID.transactionId
+                txID
         ))
+    }
+
+    private fun handleShowDeviceCryptoInfo(action: DevicesAction.VerifyMyDeviceManually) = withState { state ->
+        state.cryptoDevices.invoke()
+                ?.firstOrNull { it.deviceId == action.deviceId }
+                ?.let {
+                    _viewEvents.post(DevicesViewEvents.ShowManuallyVerify(it))
+                }
+    }
+
+    private fun handleVerifyManually(action: DevicesAction.MarkAsManuallyVerified) = withState { state ->
+        viewModelScope.launch {
+            if (state.hasAccountCrossSigning) {
+                awaitCallback<Unit> {
+                    tryThis { session.cryptoService().crossSigningService().trustDevice(action.cryptoDeviceInfo.deviceId, it) }
+                }
+            } else {
+                // legacy
+                session.cryptoService().setDeviceVerification(
+                        DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
+                        action.cryptoDeviceInfo.userId,
+                        action.cryptoDeviceInfo.deviceId)
+            }
+        }
+    }
+
+    private fun handleCompleteSecurity() {
+        _viewEvents.post(DevicesViewEvents.SelfVerification(session))
     }
 
     private fun handlePromptRename(action: DevicesAction.PromptRename) = withState { state ->

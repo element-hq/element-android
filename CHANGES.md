@@ -28,6 +28,7 @@ Improvements 🙌:
  - Restart broken Olm sessions ([MSC1719](https://github.com/matrix-org/matrix-doc/pull/1719))
  - Cross-Signing | Hide Use recovery key when 4S is not setup (#1007)
  - Cross-Signing | Trust account xSigning keys by entering Recovery Key (select file or copy) #1199
+ - Manage Session Settings / Cross Signing update (#1295)
 
 Bugfix 🐛:
  - Fix summary notification staying after "mark as read"
