@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.test.shared
+package im.vector.riotx
 
-import net.lachlanmckee.timberjunit.TimberTestRule
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
+import im.vector.riotx.test.shared.createTimberTestRule
+import org.junit.Rule
 
-internal fun createTimberTestRule(): TimberTestRule {
-    return TimberTestRule.builder()
-            .showThread(false)
-            .showTimestamp(false)
-            .onlyLogWhenTestFails(false)
-            .build()
+interface InstrumentedTest {
+
+    @Rule
+    fun timberTestRule() = createTimberTestRule()
+
+    fun context(): Context {
+        return ApplicationProvider.getApplicationContext()
+    }
 }

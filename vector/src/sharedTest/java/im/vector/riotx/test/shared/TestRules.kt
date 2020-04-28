@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.test.shared
+package im.vector.riotx.test.shared
 
 import net.lachlanmckee.timberjunit.TimberTestRule
 
-internal fun createTimberTestRule(): TimberTestRule {
+fun createTimberTestRule(): TimberTestRule {
     return TimberTestRule.builder()
             .showThread(false)
             .showTimestamp(false)
