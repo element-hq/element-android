@@ -210,7 +210,6 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                 it.setString(KeyInfoEntityFields.SIGNATURES, jsonSignatures)
             }
         } catch (failure: Throwable) {
-
         }
     }
 }

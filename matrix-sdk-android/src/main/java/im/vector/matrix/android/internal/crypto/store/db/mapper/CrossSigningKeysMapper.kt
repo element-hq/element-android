@@ -67,7 +67,6 @@ internal class CrossSigningKeysMapper @Inject constructor(moshi: Moshi) {
         }
     }
 
-
     fun serializeSignatures(signatures: Map<String, Map<String, String>>?): String {
         return signaturesAdapter.toJson(signatures)
     }
@@ -83,6 +82,4 @@ internal class CrossSigningKeysMapper @Inject constructor(moshi: Moshi) {
             null
         }
     }
-
-
 }
