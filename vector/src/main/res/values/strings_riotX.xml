@@ -36,6 +36,7 @@
     <!-- BEGIN Strings added by Onuray -->
     <string name="external_link_confirmation_title">Double-check this link</string>
     <string name="external_link_confirmation_message">The link %1$s is taking you to another site: %2$s.\n\nAre you sure you want to continue?</string>
+    <string name="add_members_to_room">Add members</string>
     <!-- END Strings added by Onuray -->
 
 
