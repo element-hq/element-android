@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.ReferencesAggregatedContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
@@ -76,51 +77,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         }
 
         val room = event.root.roomId?.let { session.getRoom(it) }
-        val e2eDecoration: E2EDecoration
-        val isUserVerified = session.cryptoService().crossSigningService().getUserCrossSigningKeys(event.root.senderId ?: "")?.isTrusted() == true
-        if (room?.isEncrypted() == true && isUserVerified) {
-            val ts = room.roomSummary()?.encryptionEventTs ?: 0
-            val eventTs = event.root.originServerTs ?: 0
-            if (event.isEncrypted()) {
-                // Do not decorate failed to decrypt, or redaction (we lost sender device info)
-                if (event.root.getClearType() == EventType.ENCRYPTED || event.root.isRedacted()) {
-                    e2eDecoration = E2EDecoration.NONE
-                } else {
-                    val sendingDevice = event.root.content
-                            .toModel<EncryptedEventContent>()
-                            ?.deviceId
-                            ?.let { deviceId ->
-                                session.cryptoService().getDeviceInfo(event.root.senderId ?: "", deviceId)
-                            }
-                    e2eDecoration = when {
-                        sendingDevice == null                            -> {
-                            // For now do not decorate this with warning
-                            // maybe it's a deleted session
-                            E2EDecoration.NONE
-                        }
-                        sendingDevice.trustLevel == null                 -> {
-                            E2EDecoration.WARN_SENT_BY_UNKNOWN
-                        }
-                        sendingDevice.trustLevel?.isVerified().orFalse() -> {
-                            E2EDecoration.NONE
-                        }
-                        else                                             -> {
-                            E2EDecoration.WARN_SENT_BY_UNVERIFIED
-                        }
-                    }
-                }
-            } else {
-                if (EventType.isStateEvent(event.root.type)) {
-                    // Do not warn for state event, they are always in clear
-                    e2eDecoration = E2EDecoration.NONE
-                } else {
-                    // If event is in clear after the room enabled encryption we should warn
-                    e2eDecoration = if (eventTs > ts) E2EDecoration.WARN_IN_CLEAR else E2EDecoration.NONE
-                }
-            }
-        } else {
-            e2eDecoration = E2EDecoration.NONE
-        }
+        val e2eDecoration = getE2EDecoration(room, event)
         return MessageInformationData(
                 eventId = eventId,
                 senderId = event.root.senderId ?: "",
@@ -163,6 +120,54 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 sentByMe = event.root.senderId == session.myUserId,
                 e2eDecoration = e2eDecoration
         )
+    }
+
+    private fun getE2EDecoration(room: Room?, event: TimelineEvent): E2EDecoration {
+        return if (room?.isEncrypted() == true
+                // is user verified
+                && session.cryptoService().crossSigningService().getUserCrossSigningKeys(event.root.senderId ?: "")?.isTrusted() == true) {
+            val ts = room.roomSummary()?.encryptionEventTs ?: 0
+            val eventTs = event.root.originServerTs ?: 0
+            if (event.isEncrypted()) {
+                // Do not decorate failed to decrypt, or redaction (we lost sender device info)
+                if (event.root.getClearType() == EventType.ENCRYPTED || event.root.isRedacted()) {
+                    E2EDecoration.NONE
+                } else {
+                    val sendingDevice = event.root.content
+                            .toModel<EncryptedEventContent>()
+                            ?.deviceId
+                            ?.let { deviceId ->
+                                session.cryptoService().getDeviceInfo(event.root.senderId ?: "", deviceId)
+                            }
+                    when {
+                        sendingDevice == null                            -> {
+                            // For now do not decorate this with warning
+                            // maybe it's a deleted session
+                            E2EDecoration.NONE
+                        }
+                        sendingDevice.trustLevel == null                 -> {
+                            E2EDecoration.WARN_SENT_BY_UNKNOWN
+                        }
+                        sendingDevice.trustLevel?.isVerified().orFalse() -> {
+                            E2EDecoration.NONE
+                        }
+                        else                                             -> {
+                            E2EDecoration.WARN_SENT_BY_UNVERIFIED
+                        }
+                    }
+                }
+            } else {
+                if (EventType.isStateEvent(event.root.type)) {
+                    // Do not warn for state event, they are always in clear
+                    E2EDecoration.NONE
+                } else {
+                    // If event is in clear after the room enabled encryption we should warn
+                    if (eventTs > ts) E2EDecoration.WARN_IN_CLEAR else E2EDecoration.NONE
+                }
+            }
+        } else {
+            E2EDecoration.NONE
+        }
     }
 
     /**

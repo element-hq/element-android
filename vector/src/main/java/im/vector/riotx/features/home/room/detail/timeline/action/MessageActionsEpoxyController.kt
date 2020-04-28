@@ -78,7 +78,7 @@ class MessageActionsEpoxyController @Inject constructor(
                 bottomSheetSendStateItem {
                     id("e2e_clear")
                     showProgress(false)
-                    text(stringProvider.getString(R.string.unencrytped))
+                    text(stringProvider.getString(R.string.unencrypted))
                     drawableStart(R.drawable.ic_shield_warning_small)
                 }
             }

@@ -21,7 +21,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.IdRes
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.riotx.R
@@ -100,7 +99,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
             E2EDecoration.WARN_IN_CLEAR,
             E2EDecoration.WARN_SENT_BY_UNVERIFIED,
             E2EDecoration.WARN_SENT_BY_UNKNOWN -> {
-                holder.e2EDecorationView.setImageDrawable(ContextCompat.getDrawable(holder.view.context, R.drawable.ic_shield_warning))
+                holder.e2EDecorationView.setImageResource(R.drawable.ic_shield_warning)
                 holder.e2EDecorationView.isVisible = true
             }
         }
