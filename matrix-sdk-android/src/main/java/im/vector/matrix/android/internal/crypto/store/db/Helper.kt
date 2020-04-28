@@ -62,6 +62,7 @@ fun doRealmTransaction(realmConfiguration: RealmConfiguration, action: (Realm) -
         realm.executeTransaction { action.invoke(it) }
     }
 }
+
 fun doRealmTransactionAsync(realmConfiguration: RealmConfiguration, action: (Realm) -> Unit) {
     Realm.getInstance(realmConfiguration).use { realm ->
         realm.executeTransactionAsync { action.invoke(it) }
@@ -79,31 +80,26 @@ fun serializeForRealm(o: Any?): String? {
     val baos = ByteArrayOutputStream()
     val gzis = CompatUtil.createGzipOutputStream(baos)
     val out = ObjectOutputStream(gzis)
-
-    out.writeObject(o)
-    out.close()
-
+    out.use {
+        it.writeObject(o)
+    }
     return Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT)
 }
 
 /**
  * Do the opposite of serializeForRealm.
  */
+@Suppress("UNCHECKED_CAST")
 fun <T> deserializeFromRealm(string: String?): T? {
     if (string == null) {
         return null
     }
-
     val decodedB64 = Base64.decode(string.toByteArray(), Base64.DEFAULT)
 
     val bais = ByteArrayInputStream(decodedB64)
     val gzis = GZIPInputStream(bais)
     val ois = ObjectInputStream(gzis)
-
-    @Suppress("UNCHECKED_CAST")
-    val result = ois.readObject() as T
-
-    ois.close()
-
-    return result
+    return ois.use {
+        it.readObject() as T
+    }
 }
