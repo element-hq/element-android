@@ -19,6 +19,7 @@ package im.vector.riotx.features.home
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.matrix.android.api.session.Session
@@ -30,9 +31,11 @@ import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.singleBuilder
 import im.vector.riotx.core.di.HasScreenInjector
-import im.vector.riotx.core.platform.EmptyAction
 import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.core.platform.VectorViewModelAction
+import im.vector.riotx.features.settings.VectorPreferences
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 data class UnknownDevicesState(
@@ -40,16 +43,31 @@ data class UnknownDevicesState(
         val canCrossSign: Boolean = false
 ) : MvRxState
 
-class UnknownDeviceDetectorSharedViewModel(session: Session, initialState: UnknownDevicesState)
-    : VectorViewModel<UnknownDevicesState, EmptyAction, EmptyViewEvents>(initialState) {
+class UnknownDeviceDetectorSharedViewModel(
+        session: Session,
+        private val vectorPreferences: VectorPreferences,
+        initialState: UnknownDevicesState)
+    : VectorViewModel<UnknownDevicesState, UnknownDeviceDetectorSharedViewModel.Action, EmptyViewEvents>(initialState) {
+
+    sealed class Action : VectorViewModelAction {
+        data class IgnoreDevice(val deviceId: String) : Action()
+    }
+
+    val ignoredDeviceList = ArrayList<String>()
 
     init {
+
+        ignoredDeviceList.addAll(
+                vectorPreferences.getUnknownDeviceDismissedList().also {
+                    Timber.v("## Detector - Remembered ignored list $it")
+                }
+        )
         session.rx().liveUserCryptoDevices(session.myUserId)
                 .debounce(600, TimeUnit.MILLISECONDS)
                 .distinct()
                 .switchMap { deviceList ->
-                    //                    Timber.v("## Detector - ============================")
-//                    Timber.v("## Detector - Crypto device update  ${deviceList.map { "${it.deviceId} : ${it.isVerified}" }}")
+                    Timber.v("## Detector - ============================")
+                    Timber.v("## Detector - Crypto device update  ${deviceList.map { "${it.deviceId} : ${it.isVerified}" }}")
                     singleBuilder<DevicesListResponse> {
                         session.cryptoService().getDevicesList(it)
                         NoOpCancellable
@@ -59,10 +77,13 @@ class UnknownDeviceDetectorSharedViewModel(session: Session, initialState: Unkno
                             deviceList.firstOrNull { info.deviceId == it.deviceId }?.let {
                                 !it.isVerified
                             } ?: false
-                        }?.sortedByDescending { it.lastSeenTs }
+                        }
+                                ?.sortedByDescending { it.lastSeenTs }
                                 ?.map {
                                     session.getUser(it.user_id ?: "")?.toMatrixItem() to it
-                                } ?: emptyList()
+                                }
+                                ?.filter { !ignoredDeviceList.contains(it.second.deviceId) }
+                                ?: emptyList()
                     }
                             .toObservable()
                 }
@@ -76,12 +97,28 @@ class UnknownDeviceDetectorSharedViewModel(session: Session, initialState: Unkno
                 }
     }
 
-    override fun handle(action: EmptyAction) {}
+    override fun handle(action: Action) {
+        when (action) {
+            is Action.IgnoreDevice -> {
+                // local echo
+                withState { state ->
+                    state.unknownSessions.invoke()?.let {
+                        val updated = it.filter { it.second.deviceId != action.deviceId  }
+                        setState {
+                            copy(unknownSessions = Success(updated))
+                        }
+                    }
+                }
+                ignoredDeviceList.add(action.deviceId)
+                vectorPreferences.storeUnknownDeviceDismissedList(ignoredDeviceList)
+            }
+        }
+    }
 
     companion object : MvRxViewModelFactory<UnknownDeviceDetectorSharedViewModel, UnknownDevicesState> {
         override fun create(viewModelContext: ViewModelContext, state: UnknownDevicesState): UnknownDeviceDetectorSharedViewModel? {
             val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
-            return UnknownDeviceDetectorSharedViewModel(session, state)
+            return UnknownDeviceDetectorSharedViewModel(session, VectorPreferences(viewModelContext.activity()), state)
         }
     }
 }

@@ -24,6 +24,7 @@ import android.provider.MediaStore
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.squareup.seismic.ShakeDetector
+import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.features.homeserver.ServerUrlsRepository
@@ -165,6 +166,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val MEDIA_SAVING_1_WEEK = 1
         private const val MEDIA_SAVING_1_MONTH = 2
         private const val MEDIA_SAVING_FOREVER = 3
+
+        private const val SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST = "SETTINGS_UNKNWON_DEVICE_DISMISSED_LIST"
 
         // some preferences keys must be kept after a logout
         private val mKeysToKeepAfterLogout = listOf(
@@ -367,6 +370,18 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun useShutterSound(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_PLAY_SHUTTER_SOUND_KEY, true)
+    }
+
+    fun storeUnknownDeviceDismissedList(deviceIds: List<String>) {
+        defaultPrefs.edit(true) {
+            putStringSet(SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST, deviceIds.toSet())
+        }
+    }
+
+    fun getUnknownDeviceDismissedList(): List<String> {
+        return tryThis {
+            defaultPrefs.getStringSet(SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST, null)?.toList()
+        } ?: emptyList()
     }
 
     /**
