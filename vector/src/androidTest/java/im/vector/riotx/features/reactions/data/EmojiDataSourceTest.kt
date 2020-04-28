@@ -77,7 +77,17 @@ class EmojiDataSourceTest : InstrumentedTest {
     }
 
     @Test
-    fun testQuickReaction() {
+    fun testTada() {
+        val emojiDataSource = EmojiDataSource(context().resources)
+
+        val result = emojiDataSource.filterWith("tada")
+
+        assertEquals("Should find tada emoji", 1, result.size)
+        assertEquals("Should find tada emoji", "🎉", result[0].emoji)
+    }
+
+    @Test
+    fun testQuickReactions() {
         val emojiDataSource = EmojiDataSource(context().resources)
 
         assertEquals("Should have 8 quick reactions", 8, emojiDataSource.getQuickReactions().size)

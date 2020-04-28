@@ -32,6 +32,23 @@ class EmojiDataSource @Inject constructor(
                         .adapter(EmojiData::class.java)
                         .fromJson(input.bufferedReader().use { it.readText() })
             }
+            ?.let { parsedRawData ->
+                // Add key as a keyword, it will solve the issue that ":tada" is not available in completion
+                parsedRawData.copy(
+                        emojis = mutableMapOf<String, EmojiItem>().apply {
+                            parsedRawData.emojis.keys.forEach { key ->
+                                val origin = parsedRawData.emojis[key] ?: return@forEach
+
+                                // Do not add keys containing '_'
+                                if (origin.keywords.contains(key) || key.contains("_")) {
+                                    put(key, origin)
+                                } else {
+                                    put(key, origin.copy(keywords = origin.keywords + key))
+                                }
+                            }
+                        }
+                )
+            }
             ?: EmojiData(emptyList(), emptyMap(), emptyMap())
 
     private val quickReactions = mutableListOf<EmojiItem>()

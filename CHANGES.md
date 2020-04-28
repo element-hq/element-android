@@ -44,6 +44,7 @@ Bugfix 🐛:
  - Fix issue with media path (#1227)
  - Add user to direct chat by user id (#1065)
  - Use correct URL for SSO connection (#1178)
+ - Emoji completion :tada: does not completes to 🎉 like on web (#1285)
 
 Translations 🗣:
  -
