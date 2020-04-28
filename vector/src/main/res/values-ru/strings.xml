@@ -128,7 +128,7 @@
     <string name="start_voice_call">Начать голосовой вызов</string>
     <string name="start_video_call">Начать видеовызов</string>
 
-    <string name="option_send_files">Отправка файлов</string>
+    <string name="option_send_files">Отправить файлы</string>
     <string name="option_take_photo_video">Камера</string>
 
     <!-- Authentication -->
@@ -957,7 +957,7 @@
     <string name="download">Скачать</string>
     <string name="speak">Говорить</string>
     <string name="clear">Очистить</string>
-    <string name="e2e_re_request_encryption_key"><u>Повторно запросить ключи шифрования</u> с других ваших сессий.</string>
+    <string name="e2e_re_request_encryption_key">Перезапросить ключи шифрования у других ваших сессий.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Отправлен запрос ключа.</string>
 
@@ -1007,21 +1007,19 @@
 
     <string name="missing_permissions_error">Из-за отсутствия разрешений это действие невозможно.</string>
     <plurals name="format_time_s">
-        <item quantity="one">%d сек.</item>
-        <item quantity="few">%d сек.</item>
-        <item quantity="many">%d сек.</item>
+        <item quantity="one">%d секунда</item>
+        <item quantity="few">%d секунды</item>
+        <item quantity="many">%d секунд</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">%dm</item>
-        <item quantity="few">%dm</item>
-        <item quantity="many">%dm</item>
-        <item quantity="other" />
+        <item quantity="one">%d минута</item>
+        <item quantity="few">%d минуты</item>
+        <item quantity="many">%d минут</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">%dh</item>
-        <item quantity="few">%dh</item>
-        <item quantity="many">%dh</item>
-        <item quantity="other" />
+        <item quantity="one">%d час</item>
+        <item quantity="few">%d часа</item>
+        <item quantity="many">%d часов</item>
     </plurals>
     <plurals name="format_time_d">
         <item quantity="one">%d день</item>
@@ -1136,7 +1134,7 @@
     <string name="settings_troubleshoot_diagnostic">Результаты диагностики</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Запустить тесты</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Выполняется… (%1$d из %2$d)</string>
-    <string name="settings_troubleshoot_diagnostic_success_status">В основном всё в порядке. Если вы по-прежнему не получаете уведомления, пожалуйста, отправьте отчет об ошибке, чтобы помочь нам исследовать проблему.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">В основном, всё в порядке. Если вы по-прежнему не получаете уведомления, пожалуйста, отправьте отчет об ошибке, чтобы помочь нам разобраться.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Один или несколько тестов не пройдены, попробуйте предлагаемые решения.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Один или несколько тестов не пройдены, пожалуйста, отправьте отчет об ошибке, чтобы помочь нам исследовать проблему.</string>
 
@@ -1502,18 +1500,18 @@
     <string name="sas_security_advise">Для обеспечения максимальной безопасности мы рекомендуем делать это лично или использовать другие надежные средства связи.</string>
     <string name="sas_verify_start_button_title">Начать проверку</string>
     <string name="sas_incoming_request_title">Входящий запрос о проверке</string>
-    <string name="sas_incoming_request_description">Проверьте это устройство, чтобы отметить его как доверенное. Доверенные устройства партнеров дают вам дополнительное спокойствие при использовании сквозного шифрования сообщений.</string>
-    <string name="sas_incoming_request_description_2">Убедитесь, что данное устройство является доверенным, а также проверьте, что оно доверено вашему партнеру.</string>
+    <string name="sas_incoming_request_description">Проверьте эту сессию, чтобы отметить её как доверенную. Доверие сессиям партнеров позволяет быть уверенным в надёжности сквозного шифрования сообщений.</string>
+    <string name="sas_incoming_request_description_2">Потдверждение этой сессии пометит её доверенной для вас и вашего партнёра.</string>
 
-    <string name="sas_emoji_description">Проверьте это устройство, убедившись, что следующие смайлики появляются на экране партнера</string>
-    <string name="sas_decimal_description">Проверьте это устройство, убедившись, что следующие цифры появляются на экране партнера</string>
+    <string name="sas_emoji_description">Подтвердите эту сессию, убедившись, что следующие смайлики появляются на экране партнера</string>
+    <string name="sas_decimal_description">Подтвердите эту сессию, убедившись, что следующие цифры появляются на экране партнера</string>
 
     <string name="sas_incoming_verification_request_dialog">Вы получили входящий запрос на подтверждение.</string>
     <string name="sas_view_request_action">Посмотреть запрос</string>
     <string name="sas_waiting_for_partner">В ожидании партнера, чтобы подтвердить …</string>
 
     <string name="sas_verified">Проверено!</string>
-    <string name="sas_verified_successful">Вы успешно проверили это устройство.</string>
+    <string name="sas_verified_successful">Вы успешно подтвердили эту сессию.</string>
     <string name="sas_verified_successful_description">Защищенные сообщения от этого пользователя шифруются end-to-end и не могут быть прочитаны третьими лицами.</string>
     <string name="sas_got_it">Понял</string>
 
@@ -1527,17 +1525,17 @@
     <string name="sas_cancelled_by_me">Проверка отменена.
 \nПричина: %s</string>
 
-    <string name="sas_verification_request_notification_channel">Интерактивная проверка устройства</string>
+    <string name="sas_verification_request_notification_channel">Интерактивное подтверждение сессии</string>
     <string name="sas_incoming_request_notif_title">Запрос на подтверждение</string>
-    <string name="sas_incoming_request_notif_content">%s хочет проверить ваше устройство</string>
+    <string name="sas_incoming_request_notif_content">%s желает подтвердить ваше устройство</string>
 
     <string name="sas_error_m_user">Пользователь отменил проверку</string>
     <string name="sas_error_m_timeout">Время проверки истекло</string>
-    <string name="sas_error_m_unknown_transaction">Устройство не знает об этой транзакции</string>
-    <string name="sas_error_m_unknown_method">Устройство не может договориться о соглашении по ключе, хэше, MAC или методе SAS</string>
+    <string name="sas_error_m_unknown_transaction">Сессия не знает об этой транзакции</string>
+    <string name="sas_error_m_unknown_method">Сессия не может договориться о выработке общего ключе, хэше, MAC или методе SAS</string>
     <string name="sas_error_m_mismatched_commitment">Полученный хеш не соответствует</string>
     <string name="sas_error_m_mismatched_sas">SAS не соответствует</string>
-    <string name="sas_error_m_unexpected_message">Устройство получило нежданное сообщение</string>
+    <string name="sas_error_m_unexpected_message">Сессия получила неожиданное сообщение</string>
     <string name="sas_error_m_invalid_message">Было получено недопустимое сообщение</string>
     <string name="sas_error_m_key_mismatch">Несоответствие ключей</string>
     <string name="sas_error_m_user_error">Несоответствие пользователя</string>
@@ -1564,7 +1562,7 @@
     <string name="room_list_catchup_welcome_title">Добро пожаловать домой!</string>
     <string name="room_list_catchup_welcome_body">Узнайте больше о непрочитанных сообщениях здесь</string>
     <string name="room_list_people_empty_title">Беседа</string>
-    <string name="room_list_people_empty_body">Ваше прямое сообщение будет отображаться здесь</string>
+    <string name="room_list_people_empty_body">Здесь будут отображаться ваши диалоги</string>
     <string name="room_list_rooms_empty_title">Комнаты</string>
     <string name="room_list_rooms_empty_body">Ваши комнаты будут отображаться здесь</string>
 
@@ -1628,7 +1626,7 @@
     <string name="push_gateway_item_app_id">app_id:</string>
     <string name="push_gateway_item_push_key">push_key:</string>
     <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_device_name">device_name:</string>
+    <string name="push_gateway_item_device_name">session_name:</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Формат:</string>
 
@@ -1787,7 +1785,7 @@
 
     <string name="settings_discovery_disconnect_with_bound_pid">В настоящее время вы делитесь адресами электронной почты или телефонными номерами на сервере идентификации %1$s. Вам нужно повторно подключиться к %2$s, чтобы прекратить делиться ими.</string>
     <string name="settings_agree_to_terms">Примите Условия обслуживания сервера идентификации (%s), чтобы разрешить обнаружение по адресу электронной почты или номеру телефона.</string>
-    <string name="labs_allow_extended_logging">Включить подробное журнал.</string>
+    <string name="labs_allow_extended_logging">Включить подробные логи.</string>
     <string name="send_attachment">Отправить вложенное</string>
 
     <string name="a11y_open_drawer">Откройте навигационный ящик</string>
@@ -1846,4 +1844,7 @@
     <string name="room_list_quick_actions_leave">Покинуть комнату</string>
     <string name="room_join_rules_public">%1$s сделал комнату доступной для всех, у кого есть ссылка.</string>
     <string name="room_join_rules_invite">%1$s сделал комнату доступной только по приглашению.</string>
+    <string name="labs_allow_extended_logging_summary">Подробные логи помогут разработчикам, предоставив больше информации, когда вы отправляете RageShake. Даже когда они разрешены, приложение не логирует ваши сообщения и другие приватные данные.</string>
+
+
 </resources>
