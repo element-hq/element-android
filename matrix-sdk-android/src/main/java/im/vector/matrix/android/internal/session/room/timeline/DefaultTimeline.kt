@@ -383,7 +383,7 @@ internal class DefaultTimeline(
     }
 
     /**
-     * This has to be called on TimelineThread as it access realm live results
+     * This has to be called on TimelineThread as it accesses realm live results
      * @return true if createSnapshot should be posted
      */
     private fun paginateInternal(startDisplayIndex: Int?,
@@ -446,7 +446,7 @@ internal class DefaultTimeline(
     }
 
     /**
-     * This has to be called on TimelineThread as it access realm live results
+     * This has to be called on TimelineThread as it accesses realm live results
      */
     private fun handleInitialLoad() {
         var shouldFetchInitialEvent = false
@@ -478,7 +478,7 @@ internal class DefaultTimeline(
     }
 
     /**
-     * This has to be called on TimelineThread as it access realm live results
+     * This has to be called on TimelineThread as it accesses realm live results
      */
     private fun handleUpdates(results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet) {
         // If changeSet has deletion we are having a gap, so we clear everything
@@ -516,7 +516,7 @@ internal class DefaultTimeline(
     }
 
     /**
-     * This has to be called on TimelineThread as it access realm live results
+     * This has to be called on TimelineThread as it accesses realm live results
      */
     private fun executePaginationTask(direction: Timeline.Direction, limit: Int) {
         val token = getTokenLive(direction)
@@ -560,23 +560,22 @@ internal class DefaultTimeline(
     }
 
     /**
-     * This has to be called on TimelineThread as it access realm live results
+     * This has to be called on TimelineThread as it accesses realm live results
      */
-
     private fun getTokenLive(direction: Timeline.Direction): String? {
         val chunkEntity = getLiveChunk() ?: return null
         return if (direction == Timeline.Direction.BACKWARDS) chunkEntity.prevToken else chunkEntity.nextToken
     }
 
     /**
-     * This has to be called on TimelineThread as it access realm live results
+     * This has to be called on TimelineThread as it accesses realm live results
      */
     private fun getLiveChunk(): ChunkEntity? {
         return nonFilteredEvents.firstOrNull()?.chunk?.firstOrNull()
     }
 
     /**
-     * This has to be called on TimelineThread as it access realm live results
+     * This has to be called on TimelineThread as it accesses realm live results
      * @return number of items who have been added
      */
     private fun buildTimelineEvents(startDisplayIndex: Int?,
@@ -628,7 +627,7 @@ internal class DefaultTimeline(
     )
 
     /**
-     * This has to be called on TimelineThread as it access realm live results
+     * This has to be called on TimelineThread as it accesses realm live results
      */
     private fun getOffsetResults(startDisplayIndex: Int,
                                  direction: Timeline.Direction,
