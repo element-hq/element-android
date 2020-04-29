@@ -52,6 +52,8 @@ internal class DefaultSendToDeviceTask @Inject constructor(
                     params.transactionId ?: Random.nextInt(Integer.MAX_VALUE).toString(),
                     sendToDeviceBody
             )
+            isRetryable = true
+            maxRetryCount = 3
         }
     }
 }
