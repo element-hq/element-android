@@ -1314,4 +1314,10 @@ Objavte skutočne výkonné možnosti otvorenej spolupráce s Riot.im!</string>
     <string name="review">Náhlad</string>
     <string name="decline">Odmietnuť</string>
 
+    <string name="people_no_identity_server">Nebol nakonfigurovaný overovací server.</string>
+
+    <string name="call_failed_no_ice_title">Hovor zlyhal kvôli zle nakonfigurovanému serveru</string>
+    <string name="call_failed_no_ice_description">Prosím, požiadajte administrátora vášho homeserveru (%1$s) o konfiguráciu TURN serveru, aby hovory fungovali spoľahlivo. 
+\n 
+\nPrípadně môžete skúsiť použiť verejný server %2$s, ale nebude tak spoľahlivý a bude zdielať vašu IP adresu s týmto serverom. V nastaveniach sa to dá zmeniť.</string>
     </resources>
