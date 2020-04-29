@@ -53,17 +53,19 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
     /**
      * @return alice session
      */
-    fun doE2ETestWithAliceInARoom(): CryptoTestData {
+    fun doE2ETestWithAliceInARoom(encryptedRoom: Boolean = true): CryptoTestData {
         val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)
 
         val roomId = mTestHelper.doSync<String> {
             aliceSession.createRoom(CreateRoomParams(name = "MyRoom"), it)
         }
 
-        val room = aliceSession.getRoom(roomId)!!
+        if (encryptedRoom) {
+            val room = aliceSession.getRoom(roomId)!!
 
-        mTestHelper.doSync<Unit> {
-            room.enableEncryption(callback = it)
+            mTestHelper.doSync<Unit> {
+                room.enableEncryption(callback = it)
+            }
         }
 
         return CryptoTestData(aliceSession, roomId)
@@ -72,8 +74,8 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
     /**
      * @return alice and bob sessions
      */
-    fun doE2ETestWithAliceAndBobInARoom(): CryptoTestData {
-        val cryptoTestData = doE2ETestWithAliceInARoom()
+    fun doE2ETestWithAliceAndBobInARoom(encryptedRoom: Boolean = true): CryptoTestData {
+        val cryptoTestData = doE2ETestWithAliceInARoom(encryptedRoom)
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId
 
