@@ -1,5 +1,6 @@
 package ${escapeKotlinIdentifiers(packageName)}
 
+import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -18,6 +19,7 @@ class ${viewModelClass} @AssistedInject constructor(@Assisted initialState: ${vi
     <#else>
     : VectorViewModel<${viewStateClass}, ${actionClass}, EmptyViewEvents>(initialState) {
     </#if>
+
     @AssistedInject.Factory
     interface Factory {
         fun create(initialState: ${viewStateClass}): ${viewModelClass}
@@ -27,8 +29,11 @@ class ${viewModelClass} @AssistedInject constructor(@Assisted initialState: ${vi
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: ${viewStateClass}): ${viewModelClass}? {
-            val fragment: ${fragmentClass} = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewModelFactory.create(state)
+            val factory = when (viewModelContext) {
+                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
+                is ActivityViewModelContext -> viewModelContext.activity as? Factory
+            }
+            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
         }
     }
 
