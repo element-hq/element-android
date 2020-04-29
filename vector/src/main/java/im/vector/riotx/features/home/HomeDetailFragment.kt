@@ -116,7 +116,7 @@ class HomeDetailFragment @Inject constructor(
                 VerificationVectorAlert(
                         uid = uid,
                         title = getString(R.string.new_session),
-                        description = getString(R.string.new_session_review_with_info, user?.displayName ?: "", newest.deviceId ?: ""),
+                        description = getString(R.string.new_session_review_with_info, newest.displayName ?: "", newest.deviceId ?: ""),
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
                     matrixItem = user
