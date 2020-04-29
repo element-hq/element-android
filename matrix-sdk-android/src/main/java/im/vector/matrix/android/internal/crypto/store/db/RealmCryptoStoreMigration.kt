@@ -219,6 +219,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
     private fun migrateTo5(realm: DynamicRealm) {
         realm.schema.create("MyDeviceLastSeenInfoEntity")
                 .addField(MyDeviceLastSeenInfoEntityFields.DEVICE_ID, String::class.java)
+                .addPrimaryKey(MyDeviceLastSeenInfoEntityFields.DEVICE_ID)
                 .addField(MyDeviceLastSeenInfoEntityFields.DISPLAY_NAME, String::class.java)
                 .addField(MyDeviceLastSeenInfoEntityFields.LAST_SEEN_IP, String::class.java)
                 .addField(MyDeviceLastSeenInfoEntityFields.LAST_SEEN_TS, Long::class.java)
