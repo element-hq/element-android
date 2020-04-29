@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.createdirect
+package im.vector.riotx.features.userdirectory
 
-import im.vector.riotx.core.platform.VectorViewEvents
+import im.vector.riotx.core.platform.VectorSharedActionViewModel
+import javax.inject.Inject
 
-sealed class CreateDirectRoomViewEvents : VectorViewEvents
+class UserDirectorySharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<UserDirectorySharedAction>()

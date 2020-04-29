@@ -1,28 +1,27 @@
 /*
+ * Copyright (c) 2020 New Vector Ltd
  *
- *  * Copyright 2019 New Vector Ltd
- *  *
- *  * Licensed under the Apache License, Version 2.0 (the "License");
- *  * you may not use this file except in compliance with the License.
- *  * You may obtain a copy of the License at
- *  *
- *  *     http://www.apache.org/licenses/LICENSE-2.0
- *  *
- *  * Unless required by applicable law or agreed to in writing, software
- *  * distributed under the License is distributed on an "AS IS" BASIS,
- *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  * See the License for the specific language governing permissions and
- *  * limitations under the License.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-package im.vector.riotx.features.createdirect
+package im.vector.riotx.features.userdirectory
 
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ScrollView
+import androidx.core.view.forEach
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.chip.Chip
@@ -35,30 +34,33 @@ import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.setupAsSearch
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.DimensionConverter
-import kotlinx.android.synthetic.main.fragment_create_direct_room.*
+import kotlinx.android.synthetic.main.fragment_known_users.*
 import javax.inject.Inject
 
-class CreateDirectRoomKnownUsersFragment @Inject constructor(
+class KnownUsersFragment @Inject constructor(
+        val userDirectoryViewModelFactory: UserDirectoryViewModel.Factory,
         private val knownUsersController: KnownUsersController,
         private val dimensionConverter: DimensionConverter
 ) : VectorBaseFragment(), KnownUsersController.Callback {
 
-    override fun getLayoutResId() = R.layout.fragment_create_direct_room
+    override fun getLayoutResId() = R.layout.fragment_known_users
 
-    override fun getMenuRes() = R.menu.vector_create_direct_room
+    override fun getMenuRes() = withState(viewModel) {
+        return@withState it.menuResId ?: -1
+    }
 
-    private val viewModel: CreateDirectRoomViewModel by activityViewModel()
-    private lateinit var sharedActionViewModel: CreateDirectRoomSharedActionViewModel
+    private val viewModel: UserDirectoryViewModel by activityViewModel()
+    private lateinit var sharedActionViewModel: UserDirectorySharedActionViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedActionViewModel = activityViewModelProvider.get(CreateDirectRoomSharedActionViewModel::class.java)
-        vectorBaseActivity.setSupportActionBar(createDirectRoomToolbar)
+        sharedActionViewModel = activityViewModelProvider.get(UserDirectorySharedActionViewModel::class.java)
+        vectorBaseActivity.setSupportActionBar(knownUsersToolbar)
         setupRecyclerView()
         setupFilterView()
         setupAddByMatrixIdView()
         setupCloseView()
-        viewModel.selectSubscribe(this, CreateDirectRoomViewState::selectedUsers) {
+        viewModel.selectSubscribe(this, UserDirectoryViewState::selectedUsers) {
             renderSelectedUsers(it)
         }
     }
@@ -71,27 +73,22 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         withState(viewModel) {
-            val createMenuItem = menu.findItem(R.id.action_create_direct_room)
             val showMenuItem = it.selectedUsers.isNotEmpty()
-            createMenuItem.setVisible(showMenuItem)
+            menu.forEach { menuItem ->
+                menuItem.isVisible = showMenuItem
+            }
         }
         super.onPrepareOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_create_direct_room -> {
-                viewModel.handle(CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers)
-                true
-            }
-            else                           ->
-                super.onOptionsItemSelected(item)
-        }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = withState(viewModel) {
+        sharedActionViewModel.post(UserDirectorySharedAction.OnMenuItemSelected(item.itemId, it.selectedUsers))
+        return@withState true
     }
 
     private fun setupAddByMatrixIdView() {
         addByMatrixId.setOnClickListener {
-            sharedActionViewModel.post(CreateDirectRoomSharedAction.OpenUsersDirectory)
+            sharedActionViewModel.post(UserDirectorySharedAction.OpenUsersDirectory)
         }
     }
 
@@ -102,26 +99,26 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
     }
 
     private fun setupFilterView() {
-        createDirectRoomFilter
+        knownUsersFilter
                 .textChanges()
-                .startWith(createDirectRoomFilter.text)
+                .startWith(knownUsersFilter.text)
                 .subscribe { text ->
                     val filterValue = text.trim()
                     val action = if (filterValue.isBlank()) {
-                        CreateDirectRoomAction.ClearFilterKnownUsers
+                        UserDirectoryAction.ClearFilterKnownUsers
                     } else {
-                        CreateDirectRoomAction.FilterKnownUsers(filterValue.toString())
+                        UserDirectoryAction.FilterKnownUsers(filterValue.toString())
                     }
                     viewModel.handle(action)
                 }
                 .disposeOnDestroyView()
 
-        createDirectRoomFilter.setupAsSearch()
-        createDirectRoomFilter.requestFocus()
+        knownUsersFilter.setupAsSearch()
+        knownUsersFilter.requestFocus()
     }
 
     private fun setupCloseView() {
-        createDirectRoomClose.setOnClickListener {
+        knownUsersClose.setOnClickListener {
             requireActivity().finish()
         }
     }
@@ -157,12 +154,12 @@ class CreateDirectRoomKnownUsersFragment @Inject constructor(
         chip.isCloseIconVisible = true
         chipGroup.addView(chip)
         chip.setOnCloseIconClickListener {
-            viewModel.handle(CreateDirectRoomAction.RemoveSelectedUser(user))
+            viewModel.handle(UserDirectoryAction.RemoveSelectedUser(user))
         }
     }
 
     override fun onItemClick(user: User) {
         view?.hideKeyboard()
-        viewModel.handle(CreateDirectRoomAction.SelectUser(user))
+        viewModel.handle(UserDirectoryAction.SelectUser(user))
     }
 }

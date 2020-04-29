@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.createdirect
+package im.vector.riotx.features.userdirectory
 
-import im.vector.riotx.core.platform.VectorViewEvents
+import im.vector.matrix.android.api.session.user.model.User
+import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class CreateDirectRoomViewEvents : VectorViewEvents
+sealed class UserDirectoryAction : VectorViewModelAction {
+    data class FilterKnownUsers(val value: String) : UserDirectoryAction()
+    data class SearchDirectoryUsers(val value: String) : UserDirectoryAction()
+    object ClearFilterKnownUsers : UserDirectoryAction()
+    data class SelectUser(val user: User) : UserDirectoryAction()
+    data class RemoveSelectedUser(val user: User) : UserDirectoryAction()
+}

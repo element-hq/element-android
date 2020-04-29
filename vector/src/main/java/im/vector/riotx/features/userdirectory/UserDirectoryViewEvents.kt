@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.createdirect
+package im.vector.riotx.features.userdirectory
 
 import im.vector.riotx.core.platform.VectorViewEvents
 
-sealed class CreateDirectRoomViewEvents : VectorViewEvents
+/**
+ * Transient events for create direct room screen
+ */
+sealed class UserDirectoryViewEvents : VectorViewEvents

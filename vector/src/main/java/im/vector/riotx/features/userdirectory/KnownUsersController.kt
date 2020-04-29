@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.createdirect
+package im.vector.riotx.features.userdirectory
 
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.paging.PagedListEpoxyController
@@ -49,7 +49,7 @@ class KnownUsersController @Inject constructor(private val session: Session,
         requestModelBuild()
     }
 
-    fun setData(state: CreateDirectRoomViewState) {
+    fun setData(state: UserDirectoryViewState) {
         this.isFiltering = !state.filterKnownUsersValue.isEmpty()
         val newSelection = state.selectedUsers.map { it.userId }
         this.users = state.knownUsers
@@ -65,7 +65,7 @@ class KnownUsersController @Inject constructor(private val session: Session,
             EmptyItem_().id(currentPosition)
         } else {
             val isSelected = selectedUsers.contains(item.userId)
-            CreateDirectRoomUserItem_()
+            UserDirectoryUserItem_()
                     .id(item.userId)
                     .selected(isSelected)
                     .matrixItem(item.toMatrixItem())
@@ -84,13 +84,13 @@ class KnownUsersController @Inject constructor(private val session: Session,
         } else {
             var lastFirstLetter: String? = null
             for (model in models) {
-                if (model is CreateDirectRoomUserItem) {
+                if (model is UserDirectoryUserItem) {
                     if (model.matrixItem.id == session.myUserId) continue
                     val currentFirstLetter = model.matrixItem.firstLetterOfDisplayName()
                     val showLetter = !isFiltering && currentFirstLetter.isNotEmpty() && lastFirstLetter != currentFirstLetter
                     lastFirstLetter = currentFirstLetter
 
-                    CreateDirectRoomLetterHeaderItem_()
+                    UserDirectoryLetterHeaderItem_()
                             .id(currentFirstLetter)
                             .letter(currentFirstLetter)
                             .addIf(showLetter, this)
