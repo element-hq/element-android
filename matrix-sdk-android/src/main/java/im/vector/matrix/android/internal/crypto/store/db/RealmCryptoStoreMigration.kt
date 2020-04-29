@@ -20,6 +20,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.store.db.mapper.CrossSigningKeysMapper
 import im.vector.matrix.android.internal.crypto.store.db.model.CrossSigningInfoEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.CryptoMetadataEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.DeviceInfoEntityFields
@@ -33,11 +34,14 @@ import im.vector.matrix.android.internal.di.SerializeNulls
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
 import timber.log.Timber
+import javax.inject.Inject
 
-internal object RealmCryptoStoreMigration : RealmMigration {
+internal class RealmCryptoStoreMigration @Inject constructor(private val crossSigningKeysMapper: CrossSigningKeysMapper) : RealmMigration {
 
     // Version 1L added Cross Signing info persistence
-    const val CRYPTO_STORE_SCHEMA_VERSION = 3L
+    companion object {
+        const val CRYPTO_STORE_SCHEMA_VERSION = 4L
+    }
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.v("Migrating Realm Crypto from $oldVersion to $newVersion")
@@ -45,6 +49,7 @@ internal object RealmCryptoStoreMigration : RealmMigration {
         if (oldVersion <= 0) migrateTo1(realm)
         if (oldVersion <= 1) migrateTo2(realm)
         if (oldVersion <= 2) migrateTo3(realm)
+        if (oldVersion <= 3) migrateTo4(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -192,5 +197,19 @@ internal object RealmCryptoStoreMigration : RealmMigration {
         realm.schema.get("CryptoMetadataEntity")
                 ?.addField(CryptoMetadataEntityFields.KEY_BACKUP_RECOVERY_KEY, String::class.java)
                 ?.addField(CryptoMetadataEntityFields.KEY_BACKUP_RECOVERY_KEY_VERSION, String::class.java)
+    }
+
+    private fun migrateTo4(realm: DynamicRealm) {
+        Timber.d("Updating KeyInfoEntity table")
+        val keyInfoEntities = realm.where("KeyInfoEntity").findAll()
+        try {
+            keyInfoEntities.forEach {
+                val stringSignatures = it.getString(KeyInfoEntityFields.SIGNATURES)
+                val objectSignatures: Map<String, Map<String, String>>? = deserializeFromRealm(stringSignatures)
+                val jsonSignatures = crossSigningKeysMapper.serializeSignatures(objectSignatures)
+                it.setString(KeyInfoEntityFields.SIGNATURES, jsonSignatures)
+            }
+        } catch (failure: Throwable) {
+        }
     }
 }
