@@ -26,9 +26,11 @@ import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.MatrixItem
+import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
+import im.vector.matrix.android.internal.crypto.store.PrivateKeysInfo
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.EmptyViewEvents
@@ -36,19 +38,19 @@ import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.platform.VectorViewModelAction
 import im.vector.riotx.features.settings.VectorPreferences
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function3
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 data class UnknownDevicesState(
         val myMatrixItem: MatrixItem.UserItem? = null,
-        val unknownSessions: Async<List<DeviceDetectionInfo>> = Uninitialized,
-        val canCrossSign: Boolean = false
+        val unknownSessions: Async<List<DeviceDetectionInfo>> = Uninitialized
 ) : MvRxState
 
 data class DeviceDetectionInfo(
         val deviceInfo: DeviceInfo,
-        val isNew: Boolean
+        val isNew: Boolean,
+        val currentSessionTrust: Boolean
 )
 
 class UnknownDeviceDetectorSharedViewModel(
@@ -76,10 +78,13 @@ class UnknownDeviceDetectorSharedViewModel(
                 }
         )
 
-        Observable.combineLatest<List<CryptoDeviceInfo>, List<DeviceInfo>, List<DeviceDetectionInfo>>(
+        Observable.combineLatest<List<CryptoDeviceInfo>, List<DeviceInfo>, Optional<PrivateKeysInfo>, List<DeviceDetectionInfo>>(
                 session.rx().liveUserCryptoDevices(session.myUserId),
                 session.rx().liveMyDeviceInfo(),
-                BiFunction { cryptoList, infoList ->
+                session.rx().liveCrossSigningPrivateKeys(),
+                Function3 { cryptoList, infoList, pInfo ->
+//                    Timber.v("## Detector trigger ${cryptoList.map { "${it.deviceId} ${it.trustLevel}" }}")
+//                    Timber.v("## Detector trigger canCrossSign ${pInfo.get().selfSigned != null}")
                     infoList
                             .filter { info ->
                                 // filter verified session, by checking the crypto device info
@@ -92,16 +97,15 @@ class UnknownDeviceDetectorSharedViewModel(
                                 val deviceKnownSince = cryptoList.firstOrNull { it.deviceId == deviceInfo.deviceId }?.firsTimeSeenLocalTs ?: 0
                                 DeviceDetectionInfo(
                                         deviceInfo,
-                                        deviceKnownSince > currentSessionTs + 60_000 // short window to avoid false positive
+                                        deviceKnownSince > currentSessionTs + 60_000, // short window to avoid false positive,
+                                        pInfo.getOrNull()?.selfSigned != null // adding this to pass distinct when cross sign change
                                 )
-//                                        .also {
-//                                            Timber.v("## Detector - first seen Difference with ${deviceInfo.deviceId} is ${deviceKnownSince - currentSessionTs}")
-//                                        }
                             }
                 }
         )
                 .distinct()
                 .execute { async ->
+//                    Timber.v("## Detector trigger passed distinct")
                     copy(
                             myMatrixItem = session.getUser(session.myUserId)?.toMatrixItem(),
                             unknownSessions = async
@@ -115,11 +119,6 @@ class UnknownDeviceDetectorSharedViewModel(
                     // If we have a new crypto device change, we might want to trigger refresh of device info
                     session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
                 }.disposeOnClear()
-
-        session.rx().liveCrossSigningInfo(session.myUserId)
-                .execute {
-                    copy(canCrossSign = session.cryptoService().crossSigningService().canCrossSign())
-                }
 
         // trigger a refresh of lastSeen / last Ip
         session.cryptoService().fetchDevicesList(NoOpMatrixCallback())

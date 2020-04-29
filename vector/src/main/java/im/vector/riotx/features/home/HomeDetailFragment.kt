@@ -90,7 +90,8 @@ class HomeDetailFragment @Inject constructor(
 
         unknownDeviceDetectorSharedViewModel.subscribe { state ->
             state.unknownSessions.invoke()?.let { unknownDevices ->
-                if (state.canCrossSign && unknownDevices.isNotEmpty()) {
+//                Timber.v("## Detector Triggerred in fragment - ${unknownDevices.firstOrNull()}")
+                if (unknownDevices.firstOrNull()?.currentSessionTrust == true) {
                     Timber.v("## Detector - ${unknownDevices.size} Unknown sessions")
                     unknownDevices.forEachIndexed { index, detectionInfo ->
                         Timber.v("## Detector - #$index deviceId:${detectionInfo.deviceInfo.deviceId} lastSeenTs:${detectionInfo.deviceInfo.lastSeenTs} is New: ${detectionInfo.isNew}")
@@ -125,6 +126,9 @@ class HomeDetailFragment @Inject constructor(
                         (weakCurrentActivity?.get() as? VectorBaseActivity)
                                 ?.navigator
                                 ?.requestSessionVerification(requireContext(), newest.deviceId ?: "")
+                        unknownDeviceDetectorSharedViewModel.handle(
+                                UnknownDeviceDetectorSharedViewModel.Action.IgnoreDevice(newest.deviceId?.let { listOf(it) } ?: emptyList())
+                        )
                     }
                     dismissedAction = Runnable {
                         unknownDeviceDetectorSharedViewModel.handle(

@@ -409,6 +409,7 @@ internal interface IMXCryptoStore {
     fun storeUSKPrivateKey(usk: String?)
 
     fun getCrossSigningPrivateKeys(): PrivateKeysInfo?
+    fun getLiveCrossSigningPrivateKeys(): LiveData<Optional<PrivateKeysInfo>>
 
     fun saveBackupRecoveryKey(recoveryKey: String?, version: String?)
     fun getKeyBackupRecoveryKeyInfo() : SavedKeyBackupKeyInfo?

@@ -366,6 +366,25 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
+    override fun getLiveCrossSigningPrivateKeys(): LiveData<Optional<PrivateKeysInfo>> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { realm: Realm ->
+                    realm
+                            .where<CryptoMetadataEntity>()
+                },
+                {
+                    PrivateKeysInfo(
+                            master = it.xSignMasterPrivateKey,
+                            selfSigned = it.xSignSelfSignedPrivateKey,
+                            user = it.xSignUserPrivateKey
+                    )
+                }
+        )
+        return Transformations.map(liveData) {
+            it.firstOrNull().toOptional()
+        }
+    }
+
     override fun storePrivateKeysInfo(msk: String?, usk: String?, ssk: String?) {
         doRealmTransaction(realmConfiguration) { realm ->
             realm.where<CryptoMetadataEntity>().findFirst()?.apply {
