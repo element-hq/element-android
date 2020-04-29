@@ -117,6 +117,7 @@ internal class VerificationTransportToDevice(
                                  onDone: (() -> Unit)?) {
         Timber.d("## SAS sending msg type $type")
         Timber.v("## SAS sending msg info $verificationInfo")
+        val stateBeforeCall = tx?.state
         val tx = tx ?: return
         val contentMap = MXUsersDevicesMap<Any>()
         val toSendToDeviceObject = verificationInfo.toSendToDeviceObject()
@@ -132,7 +133,11 @@ internal class VerificationTransportToDevice(
                             if (onDone != null) {
                                 onDone()
                             } else {
-                                tx.state = nextState
+                                // we may have received next state (e.g received accept in sending_start)
+                                // We only put next state if the state was what is was before we started
+                                if (tx.state == stateBeforeCall) {
+                                    tx.state = nextState
+                                }
                             }
                         }
 
