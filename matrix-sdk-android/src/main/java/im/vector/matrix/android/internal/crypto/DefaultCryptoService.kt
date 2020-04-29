@@ -251,13 +251,31 @@ internal class DefaultCryptoService @Inject constructor(
         return myDeviceInfoHolder.get().myDevice
     }
 
-    override fun getDevicesList(callback: MatrixCallback<DevicesListResponse>) {
+    override fun fetchDevicesList(callback: MatrixCallback<DevicesListResponse>) {
         getDevicesTask
                 .configureWith {
                     //                    this.executionThread = TaskThread.CRYPTO
-                    this.callback = callback
+                    this.callback = object : MatrixCallback<DevicesListResponse> {
+                        override fun onFailure(failure: Throwable) {
+                            callback.onFailure(failure)
+                        }
+
+                        override fun onSuccess(data: DevicesListResponse) {
+                            // Save in local DB
+                            cryptoStore.saveMyDeviceInfos(data.devices ?: emptyList())
+                            callback.onSuccess(data)
+                        }
+                    }
                 }
                 .executeBy(taskExecutor)
+    }
+
+    override fun getLiveMyDeviceInfo(): LiveData<List<DeviceInfo>> {
+        return cryptoStore.getLiveMyDeviceInfo()
+    }
+
+    override fun getMyDeviceInfo(): List<DeviceInfo> {
+        return cryptoStore.getMyDeviceInfo()
     }
 
     override fun getDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>) {
@@ -318,6 +336,8 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             internalStart(isInitialSync)
         }
+        // Just update
+        fetchDevicesList(NoOpMatrixCallback())
     }
 
     private suspend fun internalStart(isInitialSync: Boolean) {

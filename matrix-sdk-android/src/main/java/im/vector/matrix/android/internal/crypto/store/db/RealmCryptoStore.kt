@@ -40,6 +40,7 @@ import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
 import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
+import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.model.toEntity
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
@@ -59,6 +60,7 @@ import im.vector.matrix.android.internal.crypto.store.db.model.IncomingGossiping
 import im.vector.matrix.android.internal.crypto.store.db.model.IncomingGossipingRequestEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.KeyInfoEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
+import im.vector.matrix.android.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.OlmInboundGroupSessionEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.OlmSessionEntity
@@ -287,10 +289,16 @@ internal class RealmCryptoStore @Inject constructor(
                 UserEntity.getOrCreate(realm, userId)
                         .let { u ->
                             // Add the devices
+                            val currentKnownDevices = u.devices.toList()
+                            val new = devices.map { entry -> entry.value.toEntity() }
+                            new.forEach { entity ->
+                                // Maintain first time seen
+                                val existing = currentKnownDevices.firstOrNull { it.deviceId == entity.deviceId && it.identityKey == entity.identityKey }
+                                entity.firstTimeSeenLocalTs = existing?.firstTimeSeenLocalTs ?: System.currentTimeMillis()
+                                realm.insertOrUpdate(entity)
+                            }
                             // Ensure all other devices are deleted
                             u.devices.deleteAllFromRealm()
-                            val new = devices.map { entry -> entry.value.toEntity() }
-                            new.forEach { realm.insertOrUpdate(it) }
                             u.devices.addAll(new)
                         }
             }
@@ -479,6 +487,52 @@ internal class RealmCryptoStore @Inject constructor(
         )
         return Transformations.map(liveData) {
             it.firstOrNull() ?: emptyList()
+        }
+    }
+
+    override fun getMyDeviceInfo(): List<DeviceInfo> {
+        return monarchy.fetchAllCopiedSync {
+            it.where<MyDeviceLastSeenInfoEntity>()
+        }.map {
+            DeviceInfo(
+                    deviceId = it.deviceId,
+                    lastSeenIp = it.lastSeenIp,
+                    lastSeenTs = it.lastSeenTs,
+                    displayName = it.displayName
+            )
+        }
+    }
+
+    override fun getLiveMyDeviceInfo(): LiveData<List<DeviceInfo>> {
+        return monarchy.findAllMappedWithChanges(
+                { realm: Realm ->
+                    realm.where<MyDeviceLastSeenInfoEntity>()
+                },
+                { entity ->
+                    DeviceInfo(
+                            deviceId = entity.deviceId,
+                            lastSeenIp = entity.lastSeenIp,
+                            lastSeenTs = entity.lastSeenTs,
+                            displayName = entity.displayName
+                    )
+                }
+        )
+    }
+
+    override fun saveMyDeviceInfos(info: List<DeviceInfo>) {
+        val entities = info.map {
+            MyDeviceLastSeenInfoEntity(
+                    lastSeenTs = it.lastSeenTs,
+                    lastSeenIp = it.lastSeenIp,
+                    displayName = it.displayName,
+                    deviceId = it.deviceId
+            )
+        }
+        monarchy.writeAsync { realm ->
+            realm.where<MyDeviceLastSeenInfoEntity>().findAll().deleteAllFromRealm()
+            entities.forEach {
+                realm.insertOrUpdate(it)
+            }
         }
     }
 

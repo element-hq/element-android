@@ -31,6 +31,7 @@ import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -55,6 +56,13 @@ class RxSession(private val session: Session) {
         return session.getBreadcrumbsLive().asObservable()
                 .startWithCallable {
                     session.getBreadcrumbs()
+                }
+    }
+
+    fun liveMyDeviceInfo(): Observable<List<DeviceInfo>> {
+        return session.cryptoService().getLiveMyDeviceInfo().asObservable()
+                .startWithCallable {
+                    session.cryptoService().getMyDeviceInfo()
                 }
     }
 

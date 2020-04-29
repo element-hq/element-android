@@ -22,26 +22,34 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
+import im.vector.matrix.android.api.NoOpMatrixCallback
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.MatrixItem
-import im.vector.matrix.android.api.util.NoOpCancellable
 import im.vector.matrix.android.api.util.toMatrixItem
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
-import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.matrix.rx.rx
-import im.vector.matrix.rx.singleBuilder
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.platform.VectorViewModelAction
 import im.vector.riotx.features.settings.VectorPreferences
+import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 data class UnknownDevicesState(
-        val unknownSessions: Async<List<Pair<MatrixItem?, DeviceInfo>>> = Uninitialized,
+        val myMatrixItem: MatrixItem.UserItem? = null,
+        val unknownSessions: Async<List<DeviceDetectionInfo>> = Uninitialized,
         val canCrossSign: Boolean = false
 ) : MvRxState
+
+data class DeviceDetectionInfo(
+        val deviceInfo: DeviceInfo,
+        val isNew: Boolean
+)
 
 class UnknownDeviceDetectorSharedViewModel(
         session: Session,
@@ -50,72 +58,97 @@ class UnknownDeviceDetectorSharedViewModel(
     : VectorViewModel<UnknownDevicesState, UnknownDeviceDetectorSharedViewModel.Action, EmptyViewEvents>(initialState) {
 
     sealed class Action : VectorViewModelAction {
-        data class IgnoreDevice(val deviceId: String) : Action()
+        data class IgnoreDevice(val deviceIds: List<String>) : Action()
     }
 
-    val ignoredDeviceList = ArrayList<String>()
+    private val ignoredDeviceList = ArrayList<String>()
 
     init {
+
+        val currentSessionTs = session.cryptoService().getCryptoDeviceInfo(session.myUserId).firstOrNull {
+            it.deviceId == session.sessionParams.credentials.deviceId
+        }?.firsTimeSeenLocalTs ?: System.currentTimeMillis()
+        Timber.v("## Detector - Current Session first time seen $currentSessionTs")
 
         ignoredDeviceList.addAll(
                 vectorPreferences.getUnknownDeviceDismissedList().also {
                     Timber.v("## Detector - Remembered ignored list $it")
                 }
         )
-        session.rx().liveUserCryptoDevices(session.myUserId)
-                .debounce(600, TimeUnit.MILLISECONDS)
+
+        Observable.combineLatest<List<CryptoDeviceInfo>, List<DeviceInfo>, List<DeviceDetectionInfo>>(
+                session.rx().liveUserCryptoDevices(session.myUserId),
+                session.rx().liveMyDeviceInfo(),
+                BiFunction { cryptoList, infoList ->
+                    infoList
+                            .filter { info ->
+                                // filter verified session, by checking the crypto device info
+                                cryptoList.firstOrNull { info.deviceId == it.deviceId }?.isVerified?.not().orFalse()
+                            }
+                            // filter out ignored devices
+                            .filter { !ignoredDeviceList.contains(it.deviceId) }
+                            .sortedByDescending { it.lastSeenTs }
+                            .map { deviceInfo ->
+                                val deviceKnownSince = cryptoList.firstOrNull { it.deviceId == deviceInfo.deviceId }?.firsTimeSeenLocalTs ?: 0
+                                DeviceDetectionInfo(
+                                        deviceInfo,
+                                        deviceKnownSince > currentSessionTs + 60_000 // short window to avoid false positive
+                                )
+//                                        .also {
+//                                            Timber.v("## Detector - first seen Difference with ${deviceInfo.deviceId} is ${deviceKnownSince - currentSessionTs}")
+//                                        }
+                            }
+                }
+        )
                 .distinct()
-                .switchMap { deviceList ->
-                    Timber.v("## Detector - ============================")
-                    Timber.v("## Detector - Crypto device update  ${deviceList.map { "${it.deviceId} : ${it.isVerified}" }}")
-                    singleBuilder<DevicesListResponse> {
-                        session.cryptoService().getDevicesList(it)
-                        NoOpCancellable
-                    }.map { resp ->
-                        //                        Timber.v("## Detector - Device Infos  ${resp.devices?.map { "${it.deviceId} : lastSeen:${it.lastSeenTs}" }}")
-                        resp.devices?.filter { info ->
-                            deviceList.firstOrNull { info.deviceId == it.deviceId }?.let {
-                                !it.isVerified
-                            } ?: false
-                        }
-                                ?.sortedByDescending { it.lastSeenTs }
-                                ?.map {
-                                    session.getUser(it.user_id ?: "")?.toMatrixItem() to it
-                                }
-                                ?.filter { !ignoredDeviceList.contains(it.second.deviceId) }
-                                ?: emptyList()
-                    }
-                            .toObservable()
-                }
                 .execute { async ->
-                    copy(unknownSessions = async)
+                    copy(
+                            myMatrixItem = session.getUser(session.myUserId)?.toMatrixItem(),
+                            unknownSessions = async
+                    )
                 }
+
+        session.rx().liveUserCryptoDevices(session.myUserId)
+                .distinct()
+                .throttleLast(5_000, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    // If we have a new crypto device change, we might want to trigger refresh of device info
+                    session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
+                }.disposeOnClear()
 
         session.rx().liveCrossSigningInfo(session.myUserId)
                 .execute {
                     copy(canCrossSign = session.cryptoService().crossSigningService().canCrossSign())
                 }
+
+        // trigger a refresh of lastSeen / last Ip
+        session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
     }
 
     override fun handle(action: Action) {
         when (action) {
             is Action.IgnoreDevice -> {
+                ignoredDeviceList.addAll(action.deviceIds)
                 // local echo
                 withState { state ->
-                    state.unknownSessions.invoke()?.let {
-                        val updated = it.filter { it.second.deviceId != action.deviceId  }
+                    state.unknownSessions.invoke()?.let { detectedSessions ->
+                        val updated = detectedSessions.filter { !action.deviceIds.contains(it.deviceInfo.deviceId) }
                         setState {
                             copy(unknownSessions = Success(updated))
                         }
                     }
                 }
-                ignoredDeviceList.add(action.deviceId)
-                vectorPreferences.storeUnknownDeviceDismissedList(ignoredDeviceList)
             }
         }
     }
 
+    override fun onCleared() {
+        vectorPreferences.storeUnknownDeviceDismissedList(ignoredDeviceList)
+        super.onCleared()
+    }
+
     companion object : MvRxViewModelFactory<UnknownDeviceDetectorSharedViewModel, UnknownDevicesState> {
+
         override fun create(viewModelContext: ViewModelContext, state: UnknownDevicesState): UnknownDeviceDetectorSharedViewModel? {
             val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
             return UnknownDeviceDetectorSharedViewModel(session, VectorPreferences(viewModelContext.activity()), state)

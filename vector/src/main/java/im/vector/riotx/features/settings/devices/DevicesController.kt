@@ -83,7 +83,7 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
                                  legacyMode: Boolean,
                                  currentSessionCrossTrusted: Boolean) {
         devices
-                .firstOrNull() {
+                .firstOrNull {
                     it.deviceId == myDeviceId
                 }?.let { deviceInfo ->
 

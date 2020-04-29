@@ -29,6 +29,7 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
@@ -39,14 +40,13 @@ import im.vector.matrix.android.api.session.crypto.verification.VerificationTxSt
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
-import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
-import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.features.crypto.verification.SupportedVerificationMethodsProvider
+import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 data class DevicesViewState(
         val myDeviceId: String = "",
@@ -60,9 +60,8 @@ data class DevicesViewState(
 
 class DevicesViewModel @AssistedInject constructor(
         @Assisted initialState: DevicesViewState,
-        private val session: Session,
-        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider)
-    : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvents>(initialState), VerificationService.Listener {
+        private val session: Session
+) : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvents>(initialState), VerificationService.Listener {
 
     @AssistedInject.Factory
     interface Factory {
@@ -82,12 +81,15 @@ class DevicesViewModel @AssistedInject constructor(
     private var _currentDeviceId: String? = null
     private var _currentSession: String? = null
 
+    private val refreshPublisher: PublishSubject<Unit> = PublishSubject.create()
+
     init {
 
         setState {
             copy(
                     hasAccountCrossSigning = session.cryptoService().crossSigningService().getMyCrossSigningKeys() != null,
-                    accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified()
+                    accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified(),
+                    myDeviceId = session.sessionParams.credentials.deviceId ?: ""
             )
         }
         session.rx().liveCrossSigningInfo(session.myUserId)
@@ -97,16 +99,29 @@ class DevicesViewModel @AssistedInject constructor(
                             accountCrossSigningIsTrusted = it.invoke()?.get()?.isTrusted() == true
                     )
                 }
-
-        refreshDevicesList()
         session.cryptoService().verificationService().addListener(this)
 
+        session.rx().liveMyDeviceInfo()
+                .execute {
+                    copy(
+                            devices = it
+                    )
+                }
         session.rx().liveUserCryptoDevices(session.myUserId)
                 .execute {
                     copy(
                             cryptoDevices = it
                     )
                 }
+
+        refreshPublisher.throttleFirst(4_000, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
+                    session.cryptoService().downloadKeys(listOf(session.myUserId), true, NoOpMatrixCallback())
+                }
+                .disposeOnClear()
+        // then force download
+        queryRefreshDevicesList()
     }
 
     override fun onCleared() {
@@ -116,7 +131,7 @@ class DevicesViewModel @AssistedInject constructor(
 
     override fun transactionUpdated(tx: VerificationTransaction) {
         if (tx.state == VerificationTxState.Verified) {
-            refreshDevicesList()
+            queryRefreshDevicesList()
         }
     }
 
@@ -125,75 +140,68 @@ class DevicesViewModel @AssistedInject constructor(
      * The devices list is the list of the devices where the user is logged in.
      * It can be any mobile devices, and any browsers.
      */
-    private fun refreshDevicesList() {
-        if (!session.sessionParams.credentials.deviceId.isNullOrEmpty()) {
-            // display something asap
-            val localKnown = session.cryptoService().getUserDevices(session.myUserId).map {
-                DeviceInfo(
-                        user_id = session.myUserId,
-                        deviceId = it.deviceId,
-                        displayName = it.displayName()
-                )
-            }
+    private fun queryRefreshDevicesList() {
+        refreshPublisher.onNext(Unit)
 
-            setState {
-                copy(
-                        // Keep known list if we have it, and let refresh go in backgroung
-                        devices = this.devices.takeIf { it is Success } ?: Success(localKnown)
-                )
-            }
-
-            session.cryptoService().getDevicesList(object : MatrixCallback<DevicesListResponse> {
-                override fun onSuccess(data: DevicesListResponse) {
-                    setState {
-                        copy(
-                                myDeviceId = session.sessionParams.credentials.deviceId ?: "",
-                                devices = Success(data.devices.orEmpty())
-                        )
-                    }
-                }
-
-                override fun onFailure(failure: Throwable) {
-                    setState {
-                        copy(
-                                devices = Fail(failure)
-                        )
-                    }
-                }
-            })
-
-            // Put cached state
-            setState {
-                copy(
-                        myDeviceId = session.sessionParams.credentials.deviceId ?: "",
-                        cryptoDevices = Success(session.cryptoService().getUserDevices(session.myUserId))
-                )
-            }
-
-            // then force download
-            session.cryptoService().downloadKeys(listOf(session.myUserId), true, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
-                override fun onSuccess(data: MXUsersDevicesMap<CryptoDeviceInfo>) {
-                    setState {
-                        copy(
-                                cryptoDevices = Success(session.cryptoService().getUserDevices(session.myUserId))
-                        )
-                    }
-                }
-            })
-        } else {
-            // Should not happen
-        }
+//        if (!session.sessionParams.credentials.deviceId.isNullOrEmpty()) {
+//            // display something asap
+//            val localKnown = session.cryptoService().getUserDevices(session.myUserId).map {
+//                DeviceInfo(
+//                        user_id = session.myUserId,
+//                        deviceId = it.deviceId,
+//                        displayName = it.displayName()
+//                )
+//            }
+//
+//            setState {
+//                copy(
+//                        // Keep known list if we have it, and let refresh go in backgroung
+//                        devices = this.devices.takeIf { it is Success } ?: Success(localKnown)
+//                )
+//            }
+//
+//            session.cryptoService().fetchDevicesList(object : MatrixCallback<DevicesListResponse> {
+//                override fun onSuccess(data: DevicesListResponse) {
+//                    setState {
+//                        copy(
+//                                myDeviceId = session.sessionParams.credentials.deviceId ?: "",
+//                                devices = Success(data.devices.orEmpty())
+//                        )
+//                    }
+//                }
+//
+//                override fun onFailure(failure: Throwable) {
+//                    setState {
+//                        copy(
+//                                devices = Fail(failure)
+//                        )
+//                    }
+//                }
+//            })
+//
+//            // Put cached state
+//            setState {
+//                copy(
+//                        myDeviceId = session.sessionParams.credentials.deviceId ?: "",
+//                        cryptoDevices = Success(session.cryptoService().getUserDevices(session.myUserId))
+//                )
+//            }
+//
+//
+//        } else {
+//            // Should not happen
+//        }
     }
 
     override fun handle(action: DevicesAction) {
         return when (action) {
-            is DevicesAction.Retry                  -> refreshDevicesList()
-            is DevicesAction.Delete                 -> handleDelete(action)
-            is DevicesAction.Password               -> handlePassword(action)
-            is DevicesAction.Rename                 -> handleRename(action)
-            is DevicesAction.PromptRename           -> handlePromptRename(action)
-            is DevicesAction.VerifyMyDevice         -> handleInteractiveVerification(action)
-            is DevicesAction.CompleteSecurity       -> handleCompleteSecurity()
+            is DevicesAction.Refresh          -> queryRefreshDevicesList()
+            is DevicesAction.Delete           -> handleDelete(action)
+            is DevicesAction.Password         -> handlePassword(action)
+            is DevicesAction.Rename           -> handleRename(action)
+            is DevicesAction.PromptRename     -> handlePromptRename(action)
+            is DevicesAction.VerifyMyDevice   -> handleInteractiveVerification(action)
+            is DevicesAction.CompleteSecurity -> handleCompleteSecurity()
             is DevicesAction.MarkAsManuallyVerified -> handleVerifyManually(action)
             is DevicesAction.VerifyMyDeviceManually -> handleShowDeviceCryptoInfo(action)
         }
@@ -253,7 +261,7 @@ class DevicesViewModel @AssistedInject constructor(
                     )
                 }
                 // force settings update
-                refreshDevicesList()
+                queryRefreshDevicesList()
             }
 
             override fun onFailure(failure: Throwable) {
@@ -324,7 +332,7 @@ class DevicesViewModel @AssistedInject constructor(
                     )
                 }
                 // force settings update
-                refreshDevicesList()
+                queryRefreshDevicesList()
             }
         })
     }
@@ -353,7 +361,7 @@ class DevicesViewModel @AssistedInject constructor(
                     )
                 }
                 // force settings update
-                refreshDevicesList()
+                queryRefreshDevicesList()
             }
 
             override fun onFailure(failure: Throwable) {

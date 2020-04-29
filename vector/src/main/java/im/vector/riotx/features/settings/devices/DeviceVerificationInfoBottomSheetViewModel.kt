@@ -16,17 +16,14 @@
 package im.vector.riotx.features.settings.devices
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
@@ -40,7 +37,7 @@ data class DeviceVerificationInfoBottomSheetViewState(
         val deviceInfo: Async<DeviceInfo> = Uninitialized,
         val hasAccountCrossSigning: Boolean = false,
         val accountCrossSigningIsTrusted: Boolean = false,
-        val isMine : Boolean = false
+        val isMine: Boolean = false
 ) : MvRxState
 
 class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@Assisted initialState: DeviceVerificationInfoBottomSheetViewState,
@@ -79,22 +76,18 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
                             isMine = it.invoke()?.deviceId == session.sessionParams.credentials.deviceId
                     )
                 }
+
         setState {
             copy(deviceInfo = Loading())
         }
-        session.cryptoService().getDeviceInfo(deviceId, object : MatrixCallback<DeviceInfo> {
-            override fun onSuccess(data: DeviceInfo) {
-                setState {
-                    copy(deviceInfo = Success(data))
-                }
-            }
 
-            override fun onFailure(failure: Throwable) {
-                setState {
-                    copy(deviceInfo = Fail(failure))
+        session.rx().liveMyDeviceInfo()
+                .map { devices ->
+                    devices.firstOrNull { it.deviceId == deviceId } ?: DeviceInfo(deviceId = deviceId)
                 }
-            }
-        })
+                .execute {
+                    copy(deviceInfo = it)
+                }
     }
 
     companion object : MvRxViewModelFactory<DeviceVerificationInfoBottomSheetViewModel, DeviceVerificationInfoBottomSheetViewState> {

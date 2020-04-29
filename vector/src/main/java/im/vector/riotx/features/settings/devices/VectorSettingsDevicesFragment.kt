@@ -102,8 +102,8 @@ class VectorSettingsDevicesFragment @Inject constructor(
 
     override fun onResume() {
         super.onResume()
-
         (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_active_sessions_manage)
+        viewModel.handle(DevicesAction.Refresh)
     }
 
     override fun onDeviceClicked(deviceInfo: DeviceInfo) {
@@ -122,7 +122,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
 //    }
 
     override fun retry() {
-        viewModel.handle(DevicesAction.Retry)
+        viewModel.handle(DevicesAction.Refresh)
     }
 
     /**

@@ -6,7 +6,8 @@
     <!-- Sections has been created to limit merge conflicts. -->
 
     <!-- BEGIN Strings added by Valere -->
-
+    <string name="review_logins">Review where you’re logged in</string>
+    <string name="verify_other_sessions">Verify your other sessions</string>
     <!-- END Strings added by Valere -->
 
 
