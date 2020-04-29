@@ -92,10 +92,6 @@ class HomeDetailFragment @Inject constructor(
             state.unknownSessions.invoke()?.let { unknownDevices ->
 //                Timber.v("## Detector Triggerred in fragment - ${unknownDevices.firstOrNull()}")
                 if (unknownDevices.firstOrNull()?.currentSessionTrust == true) {
-                    Timber.v("## Detector - ${unknownDevices.size} Unknown sessions")
-                    unknownDevices.forEachIndexed { index, detectionInfo ->
-                        Timber.v("## Detector - #$index deviceId:${detectionInfo.deviceInfo.deviceId} lastSeenTs:${detectionInfo.deviceInfo.lastSeenTs} is New: ${detectionInfo.isNew}")
-                    }
                     val uid = "review_login"
                     alertManager.cancelAlert(uid)
                     val olderUnverified = unknownDevices.filter { !it.isNew }
