@@ -58,6 +58,9 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
     var trusted: DeviceTrustLevel? = null
 
     @EpoxyAttribute
+    var e2Ecapable: Boolean = true
+
+    @EpoxyAttribute
     var legacyMode: Boolean = false
 
     @EpoxyAttribute
@@ -79,7 +82,9 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
                 trusted
         )
 
-        holder.trustIcon.setImageResource(shield)
+        if (e2Ecapable) {
+            holder.trustIcon.setImageResource(shield)
+        }
 
         val detailedModeLabels = listOf(
                 holder.displayNameLabelText,

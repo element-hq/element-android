@@ -28,7 +28,6 @@ import im.vector.matrix.android.internal.crypto.store.db.model.DeviceInfoEntityF
 import im.vector.matrix.android.internal.crypto.store.db.model.GossipingEventEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.IncomingGossipingRequestEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.KeyInfoEntityFields
-import im.vector.matrix.android.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.OutgoingGossipingRequestEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.TrustLevelEntityFields

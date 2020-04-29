@@ -44,20 +44,27 @@ import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.platform.VectorViewModel
+import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 data class DevicesViewState(
         val myDeviceId: String = "",
-        val devices: Async<List<DeviceInfo>> = Uninitialized,
-        val cryptoDevices: Async<List<CryptoDeviceInfo>> = Uninitialized,
+//        val devices: Async<List<DeviceInfo>> = Uninitialized,
+//        val cryptoDevices: Async<List<CryptoDeviceInfo>> = Uninitialized,
+        val devices: Async<List<DeviceFullInfo>> = Uninitialized,
         // TODO Replace by isLoading boolean
         val request: Async<Unit> = Uninitialized,
         val hasAccountCrossSigning: Boolean = false,
         val accountCrossSigningIsTrusted: Boolean = false
 ) : MvRxState
 
+data class DeviceFullInfo(
+        val deviceInfo: DeviceInfo,
+        val cryptoDeviceInfo: CryptoDeviceInfo?
+)
 class DevicesViewModel @AssistedInject constructor(
         @Assisted initialState: DevicesViewState,
         private val session: Session
@@ -92,6 +99,26 @@ class DevicesViewModel @AssistedInject constructor(
                     myDeviceId = session.sessionParams.credentials.deviceId ?: ""
             )
         }
+
+        Observable.combineLatest<List<CryptoDeviceInfo>, List<DeviceInfo>, List<DeviceFullInfo>>(
+                session.rx().liveUserCryptoDevices(session.myUserId),
+                session.rx().liveMyDeviceInfo(),
+                BiFunction { cryptoList, infoList ->
+                    infoList
+                            .sortedByDescending { it.lastSeenTs }
+                            .map { deviceInfo ->
+                                val cryptoDeviceInfo = cryptoList.firstOrNull { it.deviceId == deviceInfo.deviceId }
+                                DeviceFullInfo(deviceInfo, cryptoDeviceInfo)
+                            }
+                }
+        )
+                .distinct()
+                .execute { async ->
+                    copy(
+                            devices = async
+                    )
+                }
+
         session.rx().liveCrossSigningInfo(session.myUserId)
                 .execute {
                     copy(
@@ -101,18 +128,27 @@ class DevicesViewModel @AssistedInject constructor(
                 }
         session.cryptoService().verificationService().addListener(this)
 
-        session.rx().liveMyDeviceInfo()
-                .execute {
-                    copy(
-                            devices = it
-                    )
-                }
+//        session.rx().liveMyDeviceInfo()
+//                .execute {
+//                    copy(
+//                            devices = it
+//                    )
+//                }
+
         session.rx().liveUserCryptoDevices(session.myUserId)
-                .execute {
-                    copy(
-                            cryptoDevices = it
-                    )
-                }
+                .distinct()
+                .throttleLast(5_000, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    // If we have a new crypto device change, we might want to trigger refresh of device info
+                    session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
+                }.disposeOnClear()
+
+//        session.rx().liveUserCryptoDevices(session.myUserId)
+//                .execute {
+//                    copy(
+//                            cryptoDevices = it
+//                    )
+//                }
 
         refreshPublisher.throttleFirst(4_000, TimeUnit.MILLISECONDS)
                 .subscribe {
@@ -142,66 +178,17 @@ class DevicesViewModel @AssistedInject constructor(
      */
     private fun queryRefreshDevicesList() {
         refreshPublisher.onNext(Unit)
-
-//        if (!session.sessionParams.credentials.deviceId.isNullOrEmpty()) {
-//            // display something asap
-//            val localKnown = session.cryptoService().getUserDevices(session.myUserId).map {
-//                DeviceInfo(
-//                        user_id = session.myUserId,
-//                        deviceId = it.deviceId,
-//                        displayName = it.displayName()
-//                )
-//            }
-//
-//            setState {
-//                copy(
-//                        // Keep known list if we have it, and let refresh go in backgroung
-//                        devices = this.devices.takeIf { it is Success } ?: Success(localKnown)
-//                )
-//            }
-//
-//            session.cryptoService().fetchDevicesList(object : MatrixCallback<DevicesListResponse> {
-//                override fun onSuccess(data: DevicesListResponse) {
-//                    setState {
-//                        copy(
-//                                myDeviceId = session.sessionParams.credentials.deviceId ?: "",
-//                                devices = Success(data.devices.orEmpty())
-//                        )
-//                    }
-//                }
-//
-//                override fun onFailure(failure: Throwable) {
-//                    setState {
-//                        copy(
-//                                devices = Fail(failure)
-//                        )
-//                    }
-//                }
-//            })
-//
-//            // Put cached state
-//            setState {
-//                copy(
-//                        myDeviceId = session.sessionParams.credentials.deviceId ?: "",
-//                        cryptoDevices = Success(session.cryptoService().getUserDevices(session.myUserId))
-//                )
-//            }
-//
-//
-//        } else {
-//            // Should not happen
-//        }
     }
 
     override fun handle(action: DevicesAction) {
         return when (action) {
-            is DevicesAction.Refresh          -> queryRefreshDevicesList()
-            is DevicesAction.Delete           -> handleDelete(action)
-            is DevicesAction.Password         -> handlePassword(action)
-            is DevicesAction.Rename           -> handleRename(action)
-            is DevicesAction.PromptRename     -> handlePromptRename(action)
-            is DevicesAction.VerifyMyDevice   -> handleInteractiveVerification(action)
-            is DevicesAction.CompleteSecurity -> handleCompleteSecurity()
+            is DevicesAction.Refresh                -> queryRefreshDevicesList()
+            is DevicesAction.Delete                 -> handleDelete(action)
+            is DevicesAction.Password               -> handlePassword(action)
+            is DevicesAction.Rename                 -> handleRename(action)
+            is DevicesAction.PromptRename           -> handlePromptRename(action)
+            is DevicesAction.VerifyMyDevice         -> handleInteractiveVerification(action)
+            is DevicesAction.CompleteSecurity       -> handleCompleteSecurity()
             is DevicesAction.MarkAsManuallyVerified -> handleVerifyManually(action)
             is DevicesAction.VerifyMyDeviceManually -> handleShowDeviceCryptoInfo(action)
         }
@@ -218,10 +205,10 @@ class DevicesViewModel @AssistedInject constructor(
     }
 
     private fun handleShowDeviceCryptoInfo(action: DevicesAction.VerifyMyDeviceManually) = withState { state ->
-        state.cryptoDevices.invoke()
-                ?.firstOrNull { it.deviceId == action.deviceId }
+        state.devices.invoke()
+                ?.firstOrNull { it.cryptoDeviceInfo?.deviceId == action.deviceId }
                 ?.let {
-                    _viewEvents.post(DevicesViewEvents.ShowManuallyVerify(it))
+                    _viewEvents.post(DevicesViewEvents.ShowManuallyVerify(it.cryptoDeviceInfo!!))
                 }
     }
 
@@ -246,9 +233,9 @@ class DevicesViewModel @AssistedInject constructor(
     }
 
     private fun handlePromptRename(action: DevicesAction.PromptRename) = withState { state ->
-        val info = state.devices.invoke()?.firstOrNull { it.deviceId == action.deviceId }
+        val info = state.devices.invoke()?.firstOrNull { it.deviceInfo.deviceId == action.deviceId }
         if (info != null) {
-            _viewEvents.post(DevicesViewEvents.PromptRenameDevice(info))
+            _viewEvents.post(DevicesViewEvents.PromptRenameDevice(info.deviceInfo))
         }
     }
 
