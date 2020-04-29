@@ -143,7 +143,8 @@ class CommonTestHelper(context: Context) {
         for (i in 0 until nbOfMessages) {
             room.sendTextMessage(message + " #" + (i + 1))
         }
-        await(latch)
+        // Wait 3 second more per message
+        await(latch, timeout = TestConstants.timeOutMillis + 3_000L * nbOfMessages)
         timeline.removeListener(timelineListener)
         timeline.dispose()
 
