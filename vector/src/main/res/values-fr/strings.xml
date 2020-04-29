@@ -145,7 +145,7 @@
     <string name="login_error_not_json">Ne contient pas de JSON valide</string>
     <string name="read_receipts_list">Liste des accusés de lecture</string>
 
-    <string name="compression_options">"Envoyer en "</string>
+    <string name="compression_options">Envoyer en</string>
     <string name="compression_opt_list_original">Original</string>
     <string name="compression_opt_list_large">Grand</string>
     <string name="compression_opt_list_medium">Moyen</string>
@@ -407,7 +407,7 @@
     <string name="encryption_import_room_keys">Importer les clés des salons</string>
     <string name="encryption_import_import">Importer</string>
     <string name="encryption_never_send_to_unverified_devices_title">Chiffrer uniquement vers les sessions vérifiées</string>
-    <string name="encryption_information_not_verified">NON vérifié</string>
+    <string name="encryption_information_not_verified">Non vérifié</string>
     <string name="encryption_information_verified">Vérifié</string>
     <string name="encryption_information_blocked">Sur liste noire</string>
 
@@ -473,7 +473,7 @@
 
     <string name="attachment_cancel_upload">Annuler l’envoi ?</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
-    <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
+    <string name="attachment_remaining_time_minutes">%1$d min %2$d s</string>
 
     <string name="leave">Quitter</string>
     <string name="quote">Citer</string>
@@ -484,13 +484,13 @@
 
 Veuillez autoriser l’accès dans la prochaine fenêtre contextuelle pour pouvoir envoyer des fichiers depuis votre téléphone.</string>
     <string name="permissions_rationale_msg_camera">Riot a besoin d’accéder à votre appareil photo pour prendre des photos et passer des appels vidéo.</string>
-    <string name="permissions_rationale_msg_camera_explanation">
-
-Veuillez autoriser l’accès dans la prochaine fenêtre contextuelle pour pouvoir effectuer l’appel.</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nVeuillez autoriser l’accès dans la prochaine fenêtre contextuelle pour pouvoir effectuer l’appel."</string>
     <string name="permissions_rationale_msg_record_audio">Riot a besoin d’accéder à votre microphone pour passer des appels audio.</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">
-
-Veuillez autoriser l’accès dans la prochaine fenêtre contextuelle pour pouvoir effectuer l’appel.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nVeuillez autoriser l’accès dans la prochaine fenêtre contextuelle pour pouvoir effectuer l’appel."</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot a besoin d’accéder à votre appareil photo et à votre microphone pour passer des appels vidéo.
 
 Veuillez autoriser l’accès dans les prochaines fenêtres contextuelles pour pouvoir effectuer l’appel.</string>
@@ -602,8 +602,8 @@ Attention : ce fichier peut être supprimé si l’application est désinstallé
     <string name="encryption_import_room_keys_summary">Importer les clés à partir d’un fichier local</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Ne jamais envoyer de messages chiffrés aux sessions non vérifiées depuis cette session.</string>
 
-    <string name="encryption_information_verify_device_warning">Pour vérifier que cette session est fiable, contactez son propriétaire en utilisant un autre moyen (par ex. en personne ou par téléphone) et demandez-lui si la clé qu’il voit dans ses paramètres utilisateur pour cette session correspond à la clé ci-dessous :</string>
-    <string name="encryption_information_verify_device_warning2">Si elle correspond, appuyez sur le bouton « Vérifier » ci-dessous. Si ce n’est pas le cas, quelqu’un d’autre intercepte cette session et vous devriez probablement le bloquer. À l’avenir, ce processus de vérification sera plus évolué.</string>
+    <string name="encryption_information_verify_device_warning">Confirmez en comparant les informations suivantes avec les paramètres utilisateur dans votre autre session :</string>
+    <string name="encryption_information_verify_device_warning2">Si elles ne correspondent pas, la sécurité de votre communication est peut-être compromise.</string>
     <string name="encryption_information_verify_key_match">Je confirme que les clés correspondent</string>
 
     <string name="e2e_enabling_on_app_update">Riot prend désormais en charge le chiffrement de bout en bout, mais vous devez vous reconnecter pour l’activer.
@@ -2136,7 +2136,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="settings_active_sessions_list">Sessions actives</string>
     <string name="settings_active_sessions_show_all">Afficher toutes les sessions</string>
     <string name="settings_active_sessions_manage">Gérer les sessions</string>
-    <string name="settings_active_sessions_signout_device">Déconnecter cette session</string>
+    <string name="settings_active_sessions_signout_device">Se déconnecter de cette session</string>
 
     <string name="settings_failed_to_get_crypto_device_info">Aucune information cryptographique n’est disponible</string>
 
@@ -2192,7 +2192,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     </plurals>
     <string name="poll_item_selected_aria">Option sélectionnée</string>
     <string name="command_description_poll">Crée un sondage simple</string>
-    <string name="verification_cannot_access_other_session">Utiliser une méthode de récupération</string>
+    <string name="verification_cannot_access_other_session">Utiliser une phrase secrète ou une clé de récupération</string>
     <string name="verification_use_passphrase">Si vous n’avez pas accès à une session existante</string>
 
     <string name="new_signin">Nouvelle connexion</string>
@@ -2358,4 +2358,33 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="error_adding_media_file_to_gallery">Impossible d’ajouter le fichier multimédia à la galerie</string>
     <string name="change_password_summary">Définir un nouveau mot de passe de compte…</string>
 
+<string name="use_other_session_content_description">Utilisez la dernière version de Riot sur vos autres appareils : Riot Web, Riot pour Bureau, Riot iOS, RiotX pour Android, ou un autre client Matrix qui prend en charge la signature croisée</string>
+    <string name="riot_desktop_web">Riot Web
+\nRiot pour Bureau</string>
+    <string name="riot_ios_android">Riot iOS
+\nRiot X pour Android</string>
+    <string name="or_other_mx_capabale_client">ou un autre client Matrix qui prend en charge la signature croisée</string>
+    <string name="use_latest_riot">Utilisez la dernière version de Riot sur vos autre appareils :</string>
+    <string name="command_description_discard_session">Force la session de groupe sortante actuelle dans un salon chiffré à être abandonnée</string>
+    <string name="command_description_discard_session_not_handled">Seulement pris en charge dans les salons chiffrés</string>
+    <string name="enter_secret_storage_passphrase_or_key">Utilisez votre %1$s ou votre %2$s pour continuer.</string>
+    <string name="use_recovery_key">Utiliser la clé de récupération</string>
+    <string name="enter_secret_storage_input_key">Sélectionnez votre clé de récupération ou saisissez-la manuellement avec le clavier ou en la copiant depuis le presse-papiers</string>
+    <string name="keys_backup_recovery_key_error_decrypt">La sauvegarde n’a pas pu être déchiffrée avec cette clé de récupération : veuillez vérifier que vous avez saisi la bonne clé de récupération.</string>
+    <string name="failed_to_access_secure_storage">Échec d’accès au coffre secret</string>
+
+    <string name="cross_signing_verify_by_text">Vérifier manuellement avec un texte</string>
+    <string name="crosssigning_verify_session">Vérifier la connexion</string>
+    <string name="cross_signing_verify_by_emoji">Vérifier de façon interactive avec des émojis</string>
+    <string name="confirm_your_identity">Confirmez votre identité en vérifiant cette connexion depuis une de vos autres sessions, ce qui lui permettra d’avoir accès à vos messages chiffrés.</string>
+    <string name="mark_as_verified">Marquer comme fiable</string>
+
+    <string name="error_empty_field_choose_user_name">Veuillez choisir un nom d’utilisateur.</string>
+    <string name="error_empty_field_choose_password">Veuillez choisir un mot de passe.</string>
+    <string name="external_link_confirmation_title">Vérifiez ce lien</string>
+    <string name="external_link_confirmation_message">Le lien %1$s vous emmène à un autre site : %2$s.
+\n
+\nVoulez-vous vraiment continuer \?</string>
+
+    <string name="create_room_dm_failure">Nous n’avons pas pu créer votre conversation directe. Vérifiez les utilisateurs que vous souhaitez inviter et réessayez.</string>
 </resources>
