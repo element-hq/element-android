@@ -81,8 +81,8 @@ class RxSession(private val session: Session) {
         return session.getIgnoredUsersLive().asObservable()
     }
 
-    fun livePagedUsers(filter: String? = null): Observable<PagedList<User>> {
-        return session.getPagedUsersLive(filter).asObservable()
+    fun livePagedUsers(filter: String? = null, excludedUserIds: Set<String>? = null): Observable<PagedList<User>> {
+        return session.getPagedUsersLive(filter, excludedUserIds).asObservable()
     }
 
     fun createRoom(roomParams: CreateRoomParams): Single<String> = singleBuilder {

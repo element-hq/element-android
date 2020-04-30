@@ -85,7 +85,8 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
                     KnownUsersFragment::class.java,
                     KnownUsersFragmentArgs(
                             title = getString(R.string.invite_users_to_room_title),
-                            menuResId = R.menu.vector_invite_users_to_room
+                            menuResId = R.menu.vector_invite_users_to_room,
+                            excludedUserIds = viewModel.getUserIdsOfRoomMembers()
                     )
             )
         }

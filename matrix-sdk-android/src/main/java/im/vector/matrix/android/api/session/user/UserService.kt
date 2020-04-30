@@ -63,7 +63,7 @@ interface UserService {
      * @param filter the filter. It will look into userId and displayName.
      * @return a Livedata of users
      */
-    fun getPagedUsersLive(filter: String? = null): LiveData<PagedList<User>>
+    fun getPagedUsersLive(filter: String? = null, excludedUserIds: Set<String>? = null): LiveData<PagedList<User>>
 
     /**
      * Get list of ignored users

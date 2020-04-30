@@ -24,6 +24,7 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.user.model.User
 
 data class UserDirectoryViewState(
+        val excludedUserIds: Set<String>? = null,
         val knownUsers: Async<PagedList<User>> = Uninitialized,
         val directoryUsers: Async<List<User>> = Uninitialized,
         val selectedUsers: Set<User> = emptySet(),
@@ -34,7 +35,7 @@ data class UserDirectoryViewState(
         val menuResId: Int?
 ) : MvRxState {
 
-    constructor(args: KnownUsersFragmentArgs) : this(title = args.title, menuResId = args.menuResId)
+    constructor(args: KnownUsersFragmentArgs) : this(title = args.title, menuResId = args.menuResId, excludedUserIds = args.excludedUserIds)
 
     enum class DisplayMode {
         KNOWN_USERS,

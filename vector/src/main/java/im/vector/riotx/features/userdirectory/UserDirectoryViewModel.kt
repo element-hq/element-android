@@ -96,7 +96,7 @@ class UserDirectoryViewModel @AssistedInject constructor(@Assisted
         setState { copy(selectedUsers = selectedUsers) }
     }
 
-    private fun observeDirectoryUsers() {
+    private fun observeDirectoryUsers() = withState { state ->
         directoryUsersSearch
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .switchMapSingle { search ->
@@ -104,7 +104,7 @@ class UserDirectoryViewModel @AssistedInject constructor(@Assisted
                         Single.just(emptyList())
                     } else {
                         session.rx()
-                                .searchUsersDirectory(search, 50, emptySet())
+                                .searchUsersDirectory(search, 50, state.excludedUserIds ?: emptySet())
                                 .map { users ->
                                     users.sortedBy { it.toMatrixItem().firstLetterOfDisplayName() }
                                 }
@@ -117,12 +117,12 @@ class UserDirectoryViewModel @AssistedInject constructor(@Assisted
                 .disposeOnClear()
     }
 
-    private fun observeKnownUsers() {
+    private fun observeKnownUsers() = withState { state ->
         knownUsersFilter
                 .throttleLast(300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .switchMap {
-                    session.rx().livePagedUsers(it.orNull())
+                    session.rx().livePagedUsers(it.orNull(), state.excludedUserIds)
                 }
                 .execute { async ->
                     copy(

@@ -91,7 +91,7 @@ internal class DefaultUserService @Inject constructor(private val monarchy: Mona
         )
     }
 
-    override fun getPagedUsersLive(filter: String?): LiveData<PagedList<User>> {
+    override fun getPagedUsersLive(filter: String?, excludedUserIds: Set<String>?): LiveData<PagedList<User>> {
         realmDataSourceFactory.updateQuery { realm ->
             val query = realm.where(UserEntity::class.java)
             if (filter.isNullOrEmpty()) {
@@ -103,6 +103,9 @@ internal class DefaultUserService @Inject constructor(private val monarchy: Mona
                         .or()
                         .contains(UserEntityFields.USER_ID, filter)
                         .endGroup()
+            }
+            excludedUserIds?.let {
+                query.not().`in`(UserEntityFields.USER_ID, it.toTypedArray())
             }
             query.sort(UserEntityFields.DISPLAY_NAME)
         }
