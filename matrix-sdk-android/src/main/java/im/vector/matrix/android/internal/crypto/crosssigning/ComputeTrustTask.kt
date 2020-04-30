@@ -34,17 +34,16 @@ internal interface ComputeTrustTask : Task<ComputeTrustTask.Params, RoomEncrypti
 
 internal class DefaultComputeTrustTask @Inject constructor(
         private val cryptoStore: IMXCryptoStore,
-        @UserId private val myUserId: String,
+        @UserId private val userId: String,
         private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) : ComputeTrustTask {
 
     override suspend fun execute(params: ComputeTrustTask.Params): RoomEncryptionTrustLevel = withContext(coroutineDispatchers.crypto) {
-
         // The set of “all users” depends on the type of room:
         // For regular / topic rooms, all users including yourself, are considered when decorating a room
         // For 1:1 and group DM rooms, all other users (i.e. excluding yourself) are considered when decorating a room
         val listToCheck = if (params.isDirectRoom) {
-            params.activeMemberUserIds.filter { it != myUserId }
+            params.activeMemberUserIds.filter { it != userId }
         } else {
             params.activeMemberUserIds
         }
