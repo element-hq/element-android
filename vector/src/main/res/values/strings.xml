@@ -1024,7 +1024,7 @@
     <string name="encryption_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified sessions from this session.</string>
     <string name="encryption_import_room_keys_success">%1$d/%2$d key(s) imported with success.</string>
 
-    <string name="encryption_information_not_verified">NOT Verified</string>
+    <string name="encryption_information_not_verified">Not Verified</string>
     <string name="encryption_information_verified">Verified</string>
     <string name="encryption_information_blocked">Blacklisted</string>
 
@@ -1038,8 +1038,8 @@
     <string name="encryption_information_unblock">Unblacklist</string>
 
     <string name="encryption_information_verify_device">Verify session</string>
-    <string name="encryption_information_verify_device_warning">To verify that this session can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this session matches the key below:</string>
-    <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. If it doesn’t, then someone else is intercepting this session and you should probably blacklist it. In the future this verification process will be more sophisticated.</string>
+    <string name="encryption_information_verify_device_warning">Confirm by comparing the following with the User Settings in your other session:</string>
+    <string name="encryption_information_verify_device_warning2">"If they don't match, the security of your communication may be compromised."</string>
     <string name="encryption_information_verify_key_match">I verify that the keys match</string>
 
     <string name="e2e_enabling_on_app_update">Riot now supports end-to-end encryption but you need to log in again to enable it.\n\nYou can do it now or later from the application settings.</string>
@@ -2110,7 +2110,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="settings_active_sessions_list">Active Sessions</string>
     <string name="settings_active_sessions_show_all">Show All Sessions</string>
     <string name="settings_active_sessions_manage">Manage Sessions</string>
-    <string name="settings_active_sessions_signout_device">Sign out this session</string>
+    <string name="settings_active_sessions_signout_device">Sign out of this session</string>
 
     <string name="settings_failed_to_get_crypto_device_info">No cryptographic information available</string>
 
@@ -2122,7 +2122,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
         <item quantity="other">%d active sessions</item>
     </plurals>
 
-    <string name="crosssigning_verify_this_session">Verify this session</string>
+    <string name="crosssigning_verify_this_session">Verify this login</string>
     <string name="crosssigning_other_user_not_trust">Other users may not trust it</string>
     <string name="complete_security">Complete Security</string>
 
@@ -2201,7 +2201,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="refresh">Refresh</string>
 
-    <string name="new_session">Unverified login. Was this you?</string>
+    <string name="new_session">New login. Was this you?</string>
     <string name="new_session_review">Tap to review &amp; verify</string>
     <string name="verify_new_session_notice">Use this session to verify your new one, granting it access to encrypted messages.</string>
     <string name="verify_new_session_was_not_me">This wasn’t me</string>
@@ -2336,4 +2336,30 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="error_adding_media_file_to_gallery">Could not add media file to the Gallery</string>
     <string name="change_password_summary">Set a new account password…</string>
 
+    <string name="use_other_session_content_description">Use the latest Riot on your other devices, Riot Web, Riot Desktop, Riot iOS, RiotX for Android, or another cross-signing capable Matrix client</string>
+    <string name="riot_desktop_web">Riot Web\nRiot Desktop</string>
+    <string name="riot_ios_android">Riot iOS\nRiot X for Android</string>
+    <string name="or_other_mx_capabale_client">or another cross-signing capable Matrix client</string>
+    <string name="use_latest_riot">Use the latest Riot on your other devices:</string>
+    <string name="command_description_discard_session">Forces the current outbound group session in an encrypted room to be discarded</string>
+    <string name="command_description_discard_session_not_handled">Only supported in encrypted rooms</string>
+    <!-- first will be replaced by recovery_passphrase, second will be replaced by recovery_key-->
+    <string name="enter_secret_storage_passphrase_or_key">Use your %1$s or use your %2$s to continue.</string>
+    <string name="use_recovery_key">Use Recovery Key</string>
+    <string name="enter_secret_storage_input_key">Select your Recovery Key, or input it manually by typing it or pasting from your clipboard</string>
+    <string name="keys_backup_recovery_key_error_decrypt">Backup could not be decrypted with this Recovery Key: please verify that you entered the correct Recovery Key.</string>
+    <string name="failed_to_access_secure_storage">Failed to access secure storage</string>
+
+    <string name="cross_signing_verify_by_text">Manually Verify by Text</string>
+    <string name="crosssigning_verify_session">Verify login</string>
+    <string name="cross_signing_verify_by_emoji">Interactively Verify by Emoji</string>
+    <string name="confirm_your_identity">Confirm your identity by verifying this login from one of your other sessions, granting it access to encrypted messages.</string>
+    <string name="mark_as_verified">Mark as Trusted</string>
+
+    <string name="error_empty_field_choose_user_name">Please choose a username.</string>
+    <string name="error_empty_field_choose_password">Please choose a password.</string>
+    <string name="external_link_confirmation_title">Double-check this link</string>
+    <string name="external_link_confirmation_message">The link %1$s is taking you to another site: %2$s.\n\nAre you sure you want to continue?</string>
+
+    <string name="create_room_dm_failure">"We couldn't create your DM. Please check the users you want to invite and try again."</string>
 </resources>

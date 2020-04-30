@@ -24,6 +24,7 @@ import android.provider.MediaStore
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.squareup.seismic.ShakeDetector
+import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.features.homeserver.ServerUrlsRepository
@@ -166,6 +167,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val MEDIA_SAVING_1_MONTH = 2
         private const val MEDIA_SAVING_FOREVER = 3
 
+        private const val SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST = "SETTINGS_UNKNWON_DEVICE_DISMISSED_LIST"
+
         // some preferences keys must be kept after a logout
         private val mKeysToKeepAfterLogout = listOf(
                 SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY,
@@ -200,6 +203,11 @@ class VectorPreferences @Inject constructor(private val context: Context) {
                 SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY,
                 SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY,
                 SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY,
+
+                SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY,
+                SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY,
+                SETTINGS_LABS_ALLOW_EXTENDED_LOGS,
+                SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY,
 
                 SETTINGS_USE_RAGE_SHAKE_KEY,
                 SETTINGS_SECURITY_USE_FLAG_SECURE
@@ -362,6 +370,18 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun useShutterSound(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_PLAY_SHUTTER_SOUND_KEY, true)
+    }
+
+    fun storeUnknownDeviceDismissedList(deviceIds: List<String>) {
+        defaultPrefs.edit(true) {
+            putStringSet(SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST, deviceIds.toSet())
+        }
+    }
+
+    fun getUnknownDeviceDismissedList(): List<String> {
+        return tryThis {
+            defaultPrefs.getStringSet(SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST, null)?.toList()
+        } ?: emptyList()
     }
 
     /**

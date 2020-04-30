@@ -90,6 +90,14 @@ class BootstrapEnterPassphraseFragment @Inject constructor(
                     sharedViewModel.handle(BootstrapActions.TogglePasswordVisibility)
                 }
                 .disposeOnDestroyView()
+
+        bootstrapSubmit.clicks()
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    submit()
+                }
+                .disposeOnDestroyView()
     }
 
     private fun submit() = withState(sharedViewModel) { state ->
@@ -108,8 +116,6 @@ class BootstrapEnterPassphraseFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(sharedViewModel) { state ->
-        super.invalidate()
-
         if (state.step is BootstrapStep.SetupPassphrase) {
             val isPasswordVisible = state.step.isPasswordVisible
             ssss_passphrase_enter_edittext.showPassword(isPasswordVisible, updateCursor = false)

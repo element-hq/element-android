@@ -17,10 +17,9 @@
 package im.vector.matrix.android.internal.crypto.tasks
 
 import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.internal.auth.registration.RegistrationFlowResponse
+import im.vector.matrix.android.api.failure.toRegistrationFlowResponse
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.rest.DeleteDeviceParams
-import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
@@ -43,25 +42,9 @@ internal class DefaultDeleteDeviceTask @Inject constructor(
                 apiCall = cryptoApi.deleteDevice(params.deviceId, DeleteDeviceParams())
             }
         } catch (throwable: Throwable) {
-            if (throwable is Failure.OtherServerError && throwable.httpCode == 401) {
-                // Parse to get a RegistrationFlowResponse
-                val registrationFlowResponse = try {
-                    MoshiProvider.providesMoshi()
-                            .adapter(RegistrationFlowResponse::class.java)
-                            .fromJson(throwable.errorBody)
-                } catch (e: Exception) {
-                    null
-                }
-                // check if the server response can be casted
-                if (registrationFlowResponse != null) {
-                    throw Failure.RegistrationFlowError(registrationFlowResponse)
-                } else {
-                    throw throwable
-                }
-            } else {
-                // Other error
-                throw throwable
-            }
+            throw throwable.toRegistrationFlowResponse()
+                    ?.let { Failure.RegistrationFlowError(it) }
+                    ?: throwable
         }
     }
 }

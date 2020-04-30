@@ -423,7 +423,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 }
             } catch (failure: Throwable) {
                 // Just ignore for now
-                Timber.v("## Failed to restore backup after SSSS recovery")
+                Timber.e(failure, "## Failed to restore backup after SSSS recovery")
             }
         }
     }

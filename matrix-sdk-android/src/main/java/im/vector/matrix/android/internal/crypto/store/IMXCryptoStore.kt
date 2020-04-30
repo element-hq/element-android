@@ -32,6 +32,7 @@ import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
 import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
+import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
 import org.matrix.olm.OlmAccount
@@ -218,6 +219,9 @@ internal interface IMXCryptoStore {
     // TODO temp
     fun getLiveDeviceList(): LiveData<List<CryptoDeviceInfo>>
 
+    fun getMyDevicesInfo() : List<DeviceInfo>
+    fun getLiveMyDevicesInfo() : LiveData<List<DeviceInfo>>
+    fun saveMyDevicesInfo(info: List<DeviceInfo>)
     /**
      * Store the crypto algorithm for a room.
      *
@@ -405,6 +409,7 @@ internal interface IMXCryptoStore {
     fun storeUSKPrivateKey(usk: String?)
 
     fun getCrossSigningPrivateKeys(): PrivateKeysInfo?
+    fun getLiveCrossSigningPrivateKeys(): LiveData<Optional<PrivateKeysInfo>>
 
     fun saveBackupRecoveryKey(recoveryKey: String?, version: String?)
     fun getKeyBackupRecoveryKeyInfo() : SavedKeyBackupKeyInfo?

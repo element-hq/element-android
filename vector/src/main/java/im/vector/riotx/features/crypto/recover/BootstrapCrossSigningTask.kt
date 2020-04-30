@@ -18,7 +18,9 @@ package im.vector.riotx.features.crypto.recover
 
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
+import im.vector.matrix.android.api.failure.toRegistrationFlowResponse
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
@@ -27,11 +29,11 @@ import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageSer
 import im.vector.matrix.android.api.session.securestorage.SsssKeyCreationInfo
 import im.vector.matrix.android.api.session.securestorage.SsssKeySpec
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
-import im.vector.matrix.android.internal.auth.registration.RegistrationFlowResponse
+import im.vector.matrix.android.internal.crypto.crosssigning.toBase64NoPadding
 import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersion
+import im.vector.matrix.android.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
-import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.ViewModelTask
@@ -206,6 +208,16 @@ class BootstrapCrossSigningTask @Inject constructor(
                 }
                 // Save it for gossiping
                 session.cryptoService().keysBackupService().saveBackupRecoveryKey(creationInfo.recoveryKey, version = version.version)
+
+                awaitCallback<Unit> {
+                    extractCurveKeyFromRecoveryKey(creationInfo.recoveryKey)?.toBase64NoPadding()?.let { secret ->
+                        ssssService.storeSecret(
+                                KEYBACKUP_SECRET_SSSS_NAME,
+                                secret,
+                                listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec)), it
+                        )
+                    }
+                }
             }
         } catch (failure: Throwable) {
             Timber.e("## BootstrapCrossSigningTask: Failed to init keybackup")
@@ -217,15 +229,10 @@ class BootstrapCrossSigningTask @Inject constructor(
     private fun handleInitializeXSigningError(failure: Throwable): BootstrapResult {
         if (failure is Failure.ServerError && failure.error.code == MatrixError.M_FORBIDDEN) {
             return BootstrapResult.InvalidPasswordError(failure.error)
-        } else if (failure is Failure.OtherServerError && failure.httpCode == 401) {
-            try {
-                MoshiProvider.providesMoshi()
-                        .adapter(RegistrationFlowResponse::class.java)
-                        .fromJson(failure.errorBody)
-            } catch (e: Exception) {
-                null
-            }?.let { flowResponse ->
-                if (flowResponse.flows?.any { it.stages?.contains(LoginFlowTypes.PASSWORD) == true } != true) {
+        } else {
+            val registrationFlowResponse = failure.toRegistrationFlowResponse()
+            if (registrationFlowResponse != null) {
+                if (registrationFlowResponse.flows?.any { it.stages?.contains(LoginFlowTypes.PASSWORD) == true } != true) {
                     // can't do this from here
                     return BootstrapResult.UnsupportedAuthFlow()
                 }

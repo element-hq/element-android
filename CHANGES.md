@@ -29,6 +29,8 @@ Improvements 🙌:
  - Cross-Signing | Hide Use recovery key when 4S is not setup (#1007)
  - Cross-Signing | Trust account xSigning keys by entering Recovery Key (select file or copy) #1199
  - E2E timeline decoration (#1279)
+ - Manage Session Settings / Cross Signing update (#1295)
+ - Cross-Signing | Review sessions toast update old vs new (#1293, #1306)
 
 Bugfix 🐛:
  - Fix summary notification staying after "mark as read"
@@ -44,6 +46,9 @@ Bugfix 🐛:
  - RiotX now uses as many threads as it needs to do work and send messages (#1221)
  - Fix issue with media path (#1227)
  - Add user to direct chat by user id (#1065)
+ - Use correct URL for SSO connection (#1178)
+ - Emoji completion :tada: does not completes to 🎉 like on web (#1285)
+ - Fix bad Shield Logic for DM (#963)
 
 Translations 🗣:
  -

@@ -17,6 +17,8 @@
 
 package im.vector.riotx.features.settings.devices
 
+import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.riotx.core.platform.VectorViewEvents
 
@@ -35,4 +37,10 @@ sealed class DevicesViewEvents : VectorViewEvents {
             val userId: String,
             val transactionId: String?
     ) : DevicesViewEvents()
+
+    data class SelfVerification(
+            val session: Session
+    ) : DevicesViewEvents()
+
+    data class ShowManuallyVerify(val cryptoDeviceInfo: CryptoDeviceInfo) : DevicesViewEvents()
 }

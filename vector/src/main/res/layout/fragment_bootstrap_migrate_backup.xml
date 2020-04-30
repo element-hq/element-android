@@ -79,7 +79,6 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/bootstrapMigrateContinueButton"
         style="@style/VectorButtonStyleText"
-        android:layout_gravity="end"
         android:layout_marginTop="@dimen/layout_vertical_margin"
         android:text="@string/_continue"
         app:layout_constraintBottom_toBottomOf="parent"

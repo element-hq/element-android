@@ -20,6 +20,8 @@ import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStore
 import im.vector.matrix.android.internal.crypto.store.db.RealmCryptoStoreModule
+import im.vector.matrix.android.internal.crypto.store.db.mapper.CrossSigningKeysMapper
+import im.vector.matrix.android.internal.di.MoshiProvider
 import io.realm.RealmConfiguration
 import kotlin.random.Random
 
@@ -31,6 +33,7 @@ internal class CryptoStoreHelper {
                         .name("test.realm")
                         .modules(RealmCryptoStoreModule())
                         .build(),
+                crossSigningKeysMapper = CrossSigningKeysMapper(MoshiProvider.providesMoshi()),
                 credentials = createCredential())
     }
 

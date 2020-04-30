@@ -112,6 +112,7 @@ internal abstract class CryptoModule {
         @SessionScope
         fun providesRealmConfiguration(@SessionFilesDirectory directory: File,
                                        @UserMd5 userMd5: String,
+                                       realmCryptoStoreMigration: RealmCryptoStoreMigration,
                                        realmKeysUtils: RealmKeysUtils): RealmConfiguration {
             return RealmConfiguration.Builder()
                     .directory(directory)
@@ -121,7 +122,7 @@ internal abstract class CryptoModule {
                     .name("crypto_store.realm")
                     .modules(RealmCryptoStoreModule())
                     .schemaVersion(RealmCryptoStoreMigration.CRYPTO_STORE_SCHEMA_VERSION)
-                    .migration(RealmCryptoStoreMigration)
+                    .migration(realmCryptoStoreMigration)
                     .build()
         }
 

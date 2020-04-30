@@ -58,7 +58,7 @@
             android:id="@+id/messageContentMergedCreationStub"
             style="@style/TimelineContentStubBaseParams"
             android:layout="@layout/item_timeline_event_merged_room_creation_stub"
-            tools:layout_marginTop="160dp"
+            tools:layout_marginTop="240dp"
             tools:visibility="visible" />
 
     </FrameLayout>

@@ -16,9 +16,7 @@
 
 package im.vector.matrix.android.internal.session.account
 
-import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.internal.auth.registration.RegistrationFlowResponse
-import im.vector.matrix.android.internal.di.MoshiProvider
+import im.vector.matrix.android.api.failure.toRegistrationFlowResponse
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
@@ -45,31 +43,20 @@ internal class DefaultChangePasswordTask @Inject constructor(
                 apiCall = accountAPI.changePassword(changePasswordParams)
             }
         } catch (throwable: Throwable) {
-            if (throwable is Failure.OtherServerError
-                    && throwable.httpCode == 401
+            val registrationFlowResponse = throwable.toRegistrationFlowResponse()
+
+            if (registrationFlowResponse != null
                     /* Avoid infinite loop */
                     && changePasswordParams.auth?.session == null) {
-                try {
-                    MoshiProvider.providesMoshi()
-                            .adapter(RegistrationFlowResponse::class.java)
-                            .fromJson(throwable.errorBody)
-                } catch (e: Exception) {
-                    null
-                }?.let {
-                    // Retry with authentication
-                    try {
-                        executeRequest<Unit>(eventBus) {
-                            apiCall = accountAPI.changePassword(
-                                    changePasswordParams.copy(auth = changePasswordParams.auth?.copy(session = it.session))
-                            )
-                        }
-                        return
-                    } catch (failure: Throwable) {
-                        throw failure
-                    }
+                // Retry with authentication
+                executeRequest<Unit>(eventBus) {
+                    apiCall = accountAPI.changePassword(
+                            changePasswordParams.copy(auth = changePasswordParams.auth?.copy(session = registrationFlowResponse.session))
+                    )
                 }
+            } else {
+                throw throwable
             }
-            throw throwable
         }
     }
 }
