@@ -2350,6 +2350,11 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="keys_backup_recovery_key_error_decrypt">Backup could not be decrypted with this Recovery Key: please verify that you entered the correct Recovery Key.</string>
     <string name="failed_to_access_secure_storage">Failed to access secure storage</string>
 
+    <string name="unencrypted">Unencrypted</string>
+    <string name="encrypted_unverified">Encrypted by an unverified device</string>
+    <string name="review_logins">Review where you’re logged in</string>
+    <string name="verify_other_sessions">Verify all your sessions to ensure your account &amp; messages are safe</string>
+
     <string name="cross_signing_verify_by_text">Manually Verify by Text</string>
     <string name="crosssigning_verify_session">Verify login</string>
     <string name="cross_signing_verify_by_emoji">Interactively Verify by Emoji</string>
