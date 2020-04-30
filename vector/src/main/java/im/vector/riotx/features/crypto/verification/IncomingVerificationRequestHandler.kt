@@ -66,7 +66,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                         uid,
                         context.getString(R.string.sas_incoming_request_notif_title),
                         context.getString(R.string.sas_incoming_request_notif_content, name),
-                        R.drawable.shield,
+                        R.drawable.ic_shield_black,
                         shouldBeDisplayedIn = { activity ->
                             if (activity is VectorBaseActivity) {
                                 // TODO a bit too hugly :/
