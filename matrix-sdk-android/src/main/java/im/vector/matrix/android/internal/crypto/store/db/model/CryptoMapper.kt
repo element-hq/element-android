@@ -105,7 +105,7 @@ object CryptoMapper {
                         null
                     }
                 },
-                firsTimeSeenLocalTs = deviceInfoEntity.firstTimeSeenLocalTs
+                firstTimeSeenLocalTs = deviceInfoEntity.firstTimeSeenLocalTs
         )
     }
 }

@@ -30,7 +30,7 @@ data class CryptoDeviceInfo(
         val unsigned: JsonDict? = null,
         var trustLevel: DeviceTrustLevel? = null,
         var isBlocked: Boolean = false,
-        val firsTimeSeenLocalTs: Long? = null
+        val firstTimeSeenLocalTs: Long? = null
 ) : CryptoInfo {
 
     val isVerified: Boolean

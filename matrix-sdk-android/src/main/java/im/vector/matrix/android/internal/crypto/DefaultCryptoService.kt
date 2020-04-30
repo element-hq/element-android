@@ -262,7 +262,7 @@ internal class DefaultCryptoService @Inject constructor(
 
                         override fun onSuccess(data: DevicesListResponse) {
                             // Save in local DB
-                            cryptoStore.saveMyDeviceInfos(data.devices ?: emptyList())
+                            cryptoStore.saveMyDevicesInfo(data.devices ?: emptyList())
                             callback.onSuccess(data)
                         }
                     }
@@ -270,12 +270,12 @@ internal class DefaultCryptoService @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
-    override fun getLiveMyDeviceInfo(): LiveData<List<DeviceInfo>> {
-        return cryptoStore.getLiveMyDeviceInfo()
+    override fun getLiveMyDevicesInfo(): LiveData<List<DeviceInfo>> {
+        return cryptoStore.getLiveMyDevicesInfo()
     }
 
-    override fun getMyDeviceInfo(): List<DeviceInfo> {
-        return cryptoStore.getMyDeviceInfo()
+    override fun getMyDevicesInfo(): List<DeviceInfo> {
+        return cryptoStore.getMyDevicesInfo()
     }
 
     override fun getDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>) {

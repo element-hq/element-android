@@ -69,7 +69,7 @@ class UnknownDeviceDetectorSharedViewModel(
 
         val currentSessionTs = session.cryptoService().getCryptoDeviceInfo(session.myUserId).firstOrNull {
             it.deviceId == session.sessionParams.credentials.deviceId
-        }?.firsTimeSeenLocalTs ?: System.currentTimeMillis()
+        }?.firstTimeSeenLocalTs ?: System.currentTimeMillis()
         Timber.v("## Detector - Current Session first time seen $currentSessionTs")
 
         ignoredDeviceList.addAll(
@@ -94,7 +94,7 @@ class UnknownDeviceDetectorSharedViewModel(
                             .filter { !ignoredDeviceList.contains(it.deviceId) }
                             .sortedByDescending { it.lastSeenTs }
                             .map { deviceInfo ->
-                                val deviceKnownSince = cryptoList.firstOrNull { it.deviceId == deviceInfo.deviceId }?.firsTimeSeenLocalTs ?: 0
+                                val deviceKnownSince = cryptoList.firstOrNull { it.deviceId == deviceInfo.deviceId }?.firstTimeSeenLocalTs ?: 0
                                 DeviceDetectionInfo(
                                         deviceInfo,
                                         deviceKnownSince > currentSessionTs + 60_000, // short window to avoid false positive,

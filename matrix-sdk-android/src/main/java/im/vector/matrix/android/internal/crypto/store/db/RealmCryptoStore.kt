@@ -509,7 +509,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getMyDeviceInfo(): List<DeviceInfo> {
+    override fun getMyDevicesInfo(): List<DeviceInfo> {
         return monarchy.fetchAllCopiedSync {
             it.where<MyDeviceLastSeenInfoEntity>()
         }.map {
@@ -522,7 +522,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getLiveMyDeviceInfo(): LiveData<List<DeviceInfo>> {
+    override fun getLiveMyDevicesInfo(): LiveData<List<DeviceInfo>> {
         return monarchy.findAllMappedWithChanges(
                 { realm: Realm ->
                     realm.where<MyDeviceLastSeenInfoEntity>()
@@ -538,7 +538,7 @@ internal class RealmCryptoStore @Inject constructor(
         )
     }
 
-    override fun saveMyDeviceInfos(info: List<DeviceInfo>) {
+    override fun saveMyDevicesInfo(info: List<DeviceInfo>) {
         val entities = info.map {
             MyDeviceLastSeenInfoEntity(
                     lastSeenTs = it.lastSeenTs,

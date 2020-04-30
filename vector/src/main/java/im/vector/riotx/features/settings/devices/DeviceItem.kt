@@ -58,7 +58,7 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
     var trusted: DeviceTrustLevel? = null
 
     @EpoxyAttribute
-    var e2Ecapable: Boolean = true
+    var e2eCapable: Boolean = true
 
     @EpoxyAttribute
     var legacyMode: Boolean = false
@@ -82,7 +82,7 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
                 trusted
         )
 
-        if (e2Ecapable) {
+        if (e2eCapable) {
             holder.trustIcon.setImageResource(shield)
         } else {
             holder.trustIcon.setImageDrawable(null)

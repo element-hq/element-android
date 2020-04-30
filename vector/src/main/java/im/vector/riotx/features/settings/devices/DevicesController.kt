@@ -99,7 +99,7 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
                         detailedMode(vectorPreferences.developerMode())
                         deviceInfo(deviceInfo)
                         currentDevice(true)
-                        e2Ecapable(true)
+                        e2eCapable(true)
                         itemClickAction { callback?.onDeviceClicked(deviceInfo) }
                         trusted(DeviceTrustLevel(currentSessionCrossTrusted, true))
                     }
@@ -142,7 +142,7 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
                             deviceInfo(deviceInfo)
                             currentDevice(false)
                             itemClickAction { callback?.onDeviceClicked(deviceInfo) }
-                            e2Ecapable(cryptoInfo != null)
+                            e2eCapable(cryptoInfo != null)
                             trusted(cryptoInfo?.trustLevel)
                         }
                     }

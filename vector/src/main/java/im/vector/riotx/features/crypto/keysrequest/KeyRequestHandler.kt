@@ -123,7 +123,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context, privat
                     deviceInfo.trustLevel = DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false)
 
                     // can we get more info on this device?
-                    session?.cryptoService()?.getMyDeviceInfo()?.firstOrNull { it.deviceId == deviceId }?.let {
+                    session?.cryptoService()?.getMyDevicesInfo()?.firstOrNull { it.deviceId == deviceId }?.let {
                         postAlert(context, userId, deviceId, true, deviceInfo, it)
                     } ?: kotlin.run {
                         postAlert(context, userId, deviceId, true, deviceInfo)

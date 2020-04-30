@@ -219,9 +219,9 @@ internal interface IMXCryptoStore {
     // TODO temp
     fun getLiveDeviceList(): LiveData<List<CryptoDeviceInfo>>
 
-    fun getMyDeviceInfo() : List<DeviceInfo>
-    fun getLiveMyDeviceInfo() : LiveData<List<DeviceInfo>>
-    fun saveMyDeviceInfos(info: List<DeviceInfo>)
+    fun getMyDevicesInfo() : List<DeviceInfo>
+    fun getLiveMyDevicesInfo() : LiveData<List<DeviceInfo>>
+    fun saveMyDevicesInfo(info: List<DeviceInfo>)
     /**
      * Store the crypto algorithm for a room.
      *
