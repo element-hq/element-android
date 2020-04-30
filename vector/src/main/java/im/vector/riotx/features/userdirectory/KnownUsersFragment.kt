@@ -23,6 +23,7 @@ import android.view.View
 import android.widget.ScrollView
 import androidx.core.view.forEach
 import com.airbnb.mvrx.activityViewModel
+import com.airbnb.mvrx.args
 import com.airbnb.mvrx.withState
 import com.google.android.material.chip.Chip
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -43,6 +44,8 @@ class KnownUsersFragment @Inject constructor(
         private val dimensionConverter: DimensionConverter
 ) : VectorBaseFragment(), KnownUsersController.Callback {
 
+    private val args: KnownUsersFragmentArgs by args()
+
     override fun getLayoutResId() = R.layout.fragment_known_users
 
     override fun getMenuRes() = withState(viewModel) {
@@ -55,6 +58,9 @@ class KnownUsersFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(UserDirectorySharedActionViewModel::class.java)
+
+        knownUsersTitle.text = args.title
+
         vectorBaseActivity.setSupportActionBar(knownUsersToolbar)
         setupRecyclerView()
         setupFilterView()

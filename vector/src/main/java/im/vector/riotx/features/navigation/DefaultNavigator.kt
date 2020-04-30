@@ -41,6 +41,7 @@ import im.vector.riotx.features.debug.DebugMenuActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailArgs
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
+import im.vector.riotx.features.invite.InviteUsersToRoomActivity
 import im.vector.riotx.features.media.BigImageViewerActivity
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
@@ -160,6 +161,11 @@ class DefaultNavigator @Inject constructor(
 
     override fun openCreateDirectRoom(context: Context) {
         val intent = CreateDirectRoomActivity.getIntent(context)
+        context.startActivity(intent)
+    }
+
+    override fun openInviteUsersToRoom(context: Context, roomId: String) {
+        val intent = InviteUsersToRoomActivity.getIntent(context, roomId)
         context.startActivity(intent)
     }
 

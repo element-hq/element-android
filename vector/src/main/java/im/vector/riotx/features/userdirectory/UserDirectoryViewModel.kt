@@ -31,6 +31,7 @@ import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.toggle
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.createdirect.CreateDirectRoomActivity
+import im.vector.riotx.features.invite.InviteUsersToRoomActivity
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
@@ -59,6 +60,7 @@ class UserDirectoryViewModel @AssistedInject constructor(@Assisted
                 is ActivityViewModelContext -> {
                     when (viewModelContext.activity<FragmentActivity>()) {
                         is CreateDirectRoomActivity -> viewModelContext.activity<CreateDirectRoomActivity>().userDirectoryViewModelFactory.create(state)
+                        is InviteUsersToRoomActivity -> viewModelContext.activity<InviteUsersToRoomActivity>().userDirectoryViewModelFactory.create(state)
                         else                        -> error("Wrong activity or fragment")
                     }
                 }

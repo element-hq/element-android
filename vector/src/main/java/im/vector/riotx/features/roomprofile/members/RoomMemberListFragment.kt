@@ -49,7 +49,7 @@ class RoomMemberListFragment @Inject constructor(
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_room_member_list_add_member -> {
-                navigator.openCreateDirectRoom(requireContext())
+                navigator.openInviteUsersToRoom(requireContext(), roomProfileArgs.roomId)
                 return true
             }
         }
