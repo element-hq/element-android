@@ -13,6 +13,24 @@ Dedicated room for RiotX: [![RiotX Android Matrix room #riot-android:matrix.org]
 Please set the "hard wrap" setting of Android Studio to 160 chars, this is the setting we use internally to format the source code (Menu `Settings/Editor/Code Style` then `Hard wrap at`).
 Please ensure that your using the project formatting rules (which are in the project at .idea/codeStyles/), and format the file before committing them.
 
+### Template
+
+An Android Studio template has been added to the project to help creating all files needed when adding a new screen to the application. Fragment, ViewModel, Activity, etc.
+
+To install the template (to be done only once):
+- Go to folder `./tools/template`.
+- Run the script `./configure.sh`.
+- Restart Android Studio.
+
+To create a new screen:
+- First create a new package in your code.
+- Then right click on the package, and select `New/New Vector/RiotX Feature`.
+- Follow the Wizard, especially replace `Main` by something more relevant to your feature.
+- Click on `Finish`.
+- Remainning steps are described as TODO in the generated files, or will be pointed out by the compilator, or at runtime :)
+
+Note that if the templates are modified, the only things to do is to restart Android Studio for the change to take effect.
+
 ## Compilation
 
 For now, the Matrix SDK and the RiotX application are in the same project. So there is no specific thing to do, this project should compile without any special action.
