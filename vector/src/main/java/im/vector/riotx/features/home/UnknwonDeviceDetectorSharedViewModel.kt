@@ -103,7 +103,7 @@ class UnknownDeviceDetectorSharedViewModel(
                             }
                 }
         )
-                .distinct()
+                .distinctUntilChanged()
                 .execute { async ->
 //                    Timber.v("## Detector trigger passed distinct")
                     copy(
