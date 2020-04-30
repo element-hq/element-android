@@ -63,7 +63,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                 }
             }
             is Success    -> {
-                val deviceList = data.cryptoDevices.invoke().sortedByDescending {
+                val deviceList = data.cryptoDevices.invoke().sortedBy {
                     it.isVerified
                 }
 
