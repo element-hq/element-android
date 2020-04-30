@@ -28,10 +28,10 @@ import im.vector.matrix.android.api.auth.data.LoginFlowResult
 import im.vector.matrix.android.api.auth.registration.RegistrationResult
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
@@ -116,7 +116,7 @@ class CommonTestHelper(context: Context) {
      */
     fun sendTextMessage(room: Room, message: String, nbOfMessages: Int): List<TimelineEvent> {
         val sentEvents = ArrayList<TimelineEvent>(nbOfMessages)
-        val latch = CountDownLatch(nbOfMessages)
+        val latch = CountDownLatch(1)
         val timelineListener = object : Timeline.Listener {
             override fun onTimelineFailure(throwable: Throwable) {
             }
@@ -127,7 +127,7 @@ class CommonTestHelper(context: Context) {
 
             override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
                 val newMessages = snapshot
-                        .filter { LocalEcho.isLocalEchoId(it.eventId).not() }
+                        .filter { it.root.sendState == SendState.SYNCED }
                         .filter { it.root.getClearType() == EventType.MESSAGE }
                         .filter { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(message) == true }
 
@@ -290,6 +290,24 @@ class CommonTestHelper(context: Context) {
 
         assertNotNull(requestFailure)
         return requestFailure!!
+    }
+
+    fun createEventListener(latch: CountDownLatch, predicate: (List<TimelineEvent>) -> Boolean): Timeline.Listener {
+        return object : Timeline.Listener {
+            override fun onTimelineFailure(throwable: Throwable) {
+                // noop
+            }
+
+            override fun onNewTimelineEvents(eventIds: List<String>) {
+                // noop
+            }
+
+            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
+                if (predicate(snapshot)) {
+                    latch.countDown()
+                }
+            }
+        }
     }
 
     /**
