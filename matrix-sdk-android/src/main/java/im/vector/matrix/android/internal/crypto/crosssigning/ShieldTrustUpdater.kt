@@ -79,7 +79,7 @@ internal class ShieldTrustUpdater @Inject constructor(
             return
         }
         taskExecutor.executorScope.launch(BACKGROUND_HANDLER_DISPATCHER) {
-            val updatedTrust = computeTrustTask.execute(ComputeTrustTask.Params(update.userIds))
+            val updatedTrust = computeTrustTask.execute(ComputeTrustTask.Params(update.userIds, update.isDirect))
             // We need to send that back to session base
             backgroundSessionRealm.get()?.executeTransaction { realm ->
                 roomSummaryUpdater.updateShieldTrust(realm, update.roomId, updatedTrust)
@@ -109,8 +109,9 @@ internal class ShieldTrustUpdater @Inject constructor(
                 if (roomSummary?.isEncrypted.orFalse()) {
                     val allActiveRoomMembers = RoomMemberHelper(realm, roomId).getActiveRoomMemberIds()
                     try {
-                        // Can throw if the crypto database has been closed in between, in this case log and ignore?
-                        val updatedTrust = computeTrustTask.execute(ComputeTrustTask.Params(allActiveRoomMembers))
+                        val updatedTrust = computeTrustTask.execute(
+                                ComputeTrustTask.Params(allActiveRoomMembers, roomSummary?.isDirect == true)
+                        )
                         realm.executeTransaction {
                             roomSummaryUpdater.updateShieldTrust(it, roomId, updatedTrust)
                         }

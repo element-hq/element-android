@@ -122,8 +122,8 @@ class DevicesViewModel @AssistedInject constructor(
         session.rx().liveCrossSigningInfo(session.myUserId)
                 .execute {
                     copy(
-                            hasAccountCrossSigning = it.invoke()?.get() != null,
-                            accountCrossSigningIsTrusted = it.invoke()?.get()?.isTrusted() == true
+                            hasAccountCrossSigning = it.invoke()?.getOrNull() != null,
+                            accountCrossSigningIsTrusted = it.invoke()?.getOrNull()?.isTrusted() == true
                     )
                 }
         session.cryptoService().verificationService().addListener(this)

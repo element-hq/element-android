@@ -19,6 +19,7 @@ import im.vector.matrix.android.api.crypto.RoomEncryptionTrustLevel
 import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.withContext
@@ -26,17 +27,28 @@ import javax.inject.Inject
 
 internal interface ComputeTrustTask : Task<ComputeTrustTask.Params, RoomEncryptionTrustLevel> {
     data class Params(
-            val userIds: List<String>
+            val activeMemberUserIds: List<String>,
+            val isDirectRoom: Boolean
     )
 }
 
 internal class DefaultComputeTrustTask @Inject constructor(
         private val cryptoStore: IMXCryptoStore,
+        @UserId private val userId: String,
         private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) : ComputeTrustTask {
 
     override suspend fun execute(params: ComputeTrustTask.Params): RoomEncryptionTrustLevel = withContext(coroutineDispatchers.crypto) {
-        val allTrustedUserIds = params.userIds
+        // The set of “all users” depends on the type of room:
+        // For regular / topic rooms, all users including yourself, are considered when decorating a room
+        // For 1:1 and group DM rooms, all other users (i.e. excluding yourself) are considered when decorating a room
+        val listToCheck = if (params.isDirectRoom) {
+            params.activeMemberUserIds.filter { it != userId }
+        } else {
+            params.activeMemberUserIds
+        }
+
+        val allTrustedUserIds = listToCheck
                 .filter { userId -> getUserCrossSigningKeys(userId)?.isTrusted() == true }
 
         if (allTrustedUserIds.isEmpty()) {
@@ -60,7 +72,7 @@ internal class DefaultComputeTrustTask @Inject constructor(
                         if (hasWarning) {
                             RoomEncryptionTrustLevel.Warning
                         } else {
-                            if (params.userIds.size == allTrustedUserIds.size) {
+                            if (listToCheck.size == allTrustedUserIds.size) {
                                 // all users are trusted and all devices are verified
                                 RoomEncryptionTrustLevel.Trusted
                             } else {

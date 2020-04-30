@@ -17,6 +17,7 @@ package im.vector.matrix.android.internal.crypto.crosssigning
 
 data class SessionToCryptoRoomMembersUpdate(
         val roomId: String,
+        val isDirect: Boolean,
         val userIds: List<String>
 )
 
