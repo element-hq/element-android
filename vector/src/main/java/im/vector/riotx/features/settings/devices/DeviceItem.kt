@@ -84,6 +84,8 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
 
         if (e2Ecapable) {
             holder.trustIcon.setImageResource(shield)
+        } else {
+            holder.trustIcon.setImageDrawable(null)
         }
 
         val detailedModeLabels = listOf(
