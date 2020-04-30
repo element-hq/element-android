@@ -2354,6 +2354,8 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="encrypted_unverified">Encrypted by an unverified device</string>
     <string name="review_logins">Review where you’re logged in</string>
     <string name="verify_other_sessions">Verify all your sessions to ensure your account &amp; messages are safe</string>
+    <!-- Argument will be replaced by the other session name (e.g, Riot Desktop, mobile) -->
+    <string name="verify_this_session">Verify the new login accessing your account: %1$s</string>
 
     <string name="cross_signing_verify_by_text">Manually Verify by Text</string>
     <string name="crosssigning_verify_session">Verify login</string>
