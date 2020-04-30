@@ -74,6 +74,19 @@ internal class DefaultSendService @AssistedInject constructor(
         return sendEvent(event)
     }
 
+    // For test only
+    private fun sendTextMessages(text: CharSequence, msgType: String, autoMarkdown: Boolean, times: Int): Cancelable {
+        return CancelableBag().apply {
+            // Send the event several times
+            repeat(times) { i ->
+                val event = localEchoEventFactory.createTextEvent(roomId, msgType, "$text - $i", autoMarkdown).also {
+                    createLocalEcho(it)
+                }
+                add(sendEvent(event))
+            }
+        }
+    }
+
     override fun sendFormattedTextMessage(text: String, formattedText: String, msgType: String): Cancelable {
         val event = localEchoEventFactory.createFormattedTextEvent(roomId, TextContent(text, formattedText), msgType).also {
             createLocalEcho(it)
