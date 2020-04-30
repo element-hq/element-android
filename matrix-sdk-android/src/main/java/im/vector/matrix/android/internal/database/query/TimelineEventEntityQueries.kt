@@ -59,7 +59,7 @@ internal fun TimelineEventEntity.Companion.latestEvent(realm: Realm,
                                                        filterTypes: List<String> = emptyList()): TimelineEventEntity? {
     val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: return null
     val sendingTimelineEvents = roomEntity.sendingTimelineEvents.where().filterTypes(filterTypes)
-    val liveEvents = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)?.timelineEvents?.where()?.filterTypes(filterTypes)
+    val liveEvents = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId)?.timelineEvents?.where()?.filterTypes(filterTypes)
     if (filterContentRelation) {
         liveEvents
                 ?.not()?.like(TimelineEventEntityFields.ROOT.CONTENT, FilterContent.EDIT_TYPE)

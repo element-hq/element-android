@@ -36,7 +36,7 @@ import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.query.copyToRealmOrIgnore
 import im.vector.matrix.android.internal.database.query.find
-import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
+import im.vector.matrix.android.internal.database.query.findLastForwardChunkOfRoom
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.getOrNull
 import im.vector.matrix.android.internal.database.query.where
@@ -220,12 +220,13 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                      prevToken: String? = null,
                                      isLimited: Boolean = true,
                                      syncLocalTimestampMillis: Long): ChunkEntity {
-        val lastChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomEntity.roomId)
+        val lastChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomEntity.roomId)
         val chunkEntity = if (!isLimited && lastChunk != null) {
             lastChunk
         } else {
             realm.createObject<ChunkEntity>().apply { this.prevToken = prevToken }
         }
+        // Only one chunk has isLastForward set to true
         lastChunk?.isLastForward = false
         chunkEntity.isLastForward = true
 

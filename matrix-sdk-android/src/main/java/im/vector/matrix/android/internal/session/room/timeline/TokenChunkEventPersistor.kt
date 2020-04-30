@@ -35,7 +35,7 @@ import im.vector.matrix.android.internal.database.query.copyToRealmOrIgnore
 import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
-import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
+import im.vector.matrix.android.internal.database.query.findLastForwardChunkOfRoom
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.where
@@ -169,10 +169,10 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
     private fun handleReachEnd(realm: Realm, roomId: String, direction: PaginationDirection, currentChunk: ChunkEntity) {
         Timber.v("Reach end of $roomId")
         if (direction == PaginationDirection.FORWARDS) {
-            val currentLiveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
-            if (currentChunk != currentLiveChunk) {
+            val currentLastForwardChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId)
+            if (currentChunk != currentLastForwardChunk) {
                 currentChunk.isLastForward = true
-                currentLiveChunk?.deleteOnCascade()
+                currentLastForwardChunk?.deleteOnCascade()
                 RoomSummaryEntity.where(realm, roomId).findFirst()?.apply {
                     latestPreviewableEvent = TimelineEventEntity.latestEvent(
                             realm,
