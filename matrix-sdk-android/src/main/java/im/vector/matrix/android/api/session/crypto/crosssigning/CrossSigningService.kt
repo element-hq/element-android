@@ -55,6 +55,8 @@ interface CrossSigningService {
 
     fun getCrossSigningPrivateKeys(): PrivateKeysInfo?
 
+    fun getLiveCrossSigningPrivateKeys(): LiveData<Optional<PrivateKeysInfo>>
+
     fun canCrossSign(): Boolean
 
     fun trustUser(otherUserId: String,

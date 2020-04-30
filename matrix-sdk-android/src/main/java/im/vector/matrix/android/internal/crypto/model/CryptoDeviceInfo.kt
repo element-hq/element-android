@@ -29,7 +29,8 @@ data class CryptoDeviceInfo(
         override val signatures: Map<String, Map<String, String>>? = null,
         val unsigned: JsonDict? = null,
         var trustLevel: DeviceTrustLevel? = null,
-        var isBlocked: Boolean = false
+        var isBlocked: Boolean = false,
+        val firstTimeSeenLocalTs: Long? = null
 ) : CryptoInfo {
 
     val isVerified: Boolean

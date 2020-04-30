@@ -53,8 +53,6 @@ internal class DefaultSyncTask @Inject constructor(
 
     private suspend fun doSync(params: SyncTask.Params) {
         Timber.v("Sync task started on Thread: ${Thread.currentThread().name}")
-        // Maybe refresh the home server capabilities data we know
-        getHomeServerCapabilitiesTask.execute(Unit)
 
         val requestParams = HashMap<String, String>()
         var timeout = 0L
@@ -73,6 +71,9 @@ internal class DefaultSyncTask @Inject constructor(
             initialSyncProgressService.endAll()
             initialSyncProgressService.startTask(R.string.initial_sync_start_importing_account, 100)
         }
+        // Maybe refresh the home server capabilities data we know
+        getHomeServerCapabilitiesTask.execute(Unit)
+
         val syncResponse = executeRequest<SyncResponse>(eventBus) {
             apiCall = syncAPI.sync(requestParams)
         }

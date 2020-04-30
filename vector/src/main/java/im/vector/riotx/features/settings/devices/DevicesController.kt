@@ -21,20 +21,23 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.api.extensions.sortByLastSeen
-import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
+import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.errorWithRetryItem
 import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.ui.list.genericItemHeader
+import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.settings.VectorPreferences
 import javax.inject.Inject
 
 class DevicesController @Inject constructor(private val errorFormatter: ErrorFormatter,
                                             private val stringProvider: StringProvider,
+                                            private val colorProvider: ColorProvider,
+                                            private val dimensionConverter: DimensionConverter,
                                             private val vectorPreferences: VectorPreferences) : EpoxyController() {
 
     var callback: Callback? = null
@@ -68,30 +71,51 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
                     listener { callback?.retry() }
                 }
             is Success       ->
-                buildDevicesList(devices(), state.cryptoDevices(), state.myDeviceId)
+                buildDevicesList(devices(), state.myDeviceId, !state.hasAccountCrossSigning, state.accountCrossSigningIsTrusted)
         }
     }
 
-    private fun buildDevicesList(devices: List<DeviceInfo>, cryptoDevices: List<CryptoDeviceInfo>?, myDeviceId: String) {
-        // Current device
-        genericItemHeader {
-            id("current")
-            text(stringProvider.getString(R.string.devices_current_device))
-        }
-
+    private fun buildDevicesList(devices: List<DeviceFullInfo>,
+                                 myDeviceId: String,
+                                 legacyMode: Boolean,
+                                 currentSessionCrossTrusted: Boolean) {
         devices
-                .filter {
-                    it.deviceId == myDeviceId
-                }
-                .forEachIndexed { idx, deviceInfo ->
+                .firstOrNull {
+                    it.deviceInfo.deviceId == myDeviceId
+                }?.let { fullInfo ->
+                    val deviceInfo = fullInfo.deviceInfo
+                    // Current device
+                    genericItemHeader {
+                        id("current")
+                        text(stringProvider.getString(R.string.devices_current_device))
+                    }
+
                     deviceItem {
-                        id("myDevice$idx")
+                        id("myDevice${deviceInfo.deviceId}")
+                        legacyMode(legacyMode)
+                        trustedSession(currentSessionCrossTrusted)
+                        dimensionConverter(dimensionConverter)
+                        colorProvider(colorProvider)
                         detailedMode(vectorPreferences.developerMode())
                         deviceInfo(deviceInfo)
                         currentDevice(true)
+                        e2eCapable(true)
                         itemClickAction { callback?.onDeviceClicked(deviceInfo) }
-                        trusted(true)
+                        trusted(DeviceTrustLevel(currentSessionCrossTrusted, true))
                     }
+
+//                    // If cross signing enabled and this session not trusted, add short cut to complete security
+                    // NEED DESIGN
+//                    if (!legacyMode && !currentSessionCrossTrusted) {
+//                        genericButtonItem {
+//                            id("complete_security")
+//                            iconRes(R.drawable.ic_shield_warning)
+//                            text(stringProvider.getString(R.string.complete_security))
+//                            itemClickAction(DebouncedClickListener(View.OnClickListener { _ ->
+//                                callback?.completeSecurity()
+//                            }))
+//                        }
+//                    }
                 }
 
         // Other devices
@@ -103,19 +127,23 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
 
             devices
                     .filter {
-                        it.deviceId != myDeviceId
+                        it.deviceInfo.deviceId != myDeviceId
                     }
-                    // sort before display: most recent first
-                    .sortByLastSeen()
-                    .forEachIndexed { idx, deviceInfo ->
-                        val isCurrentDevice = deviceInfo.deviceId == myDeviceId
+                    .forEachIndexed { idx, deviceInfoPair ->
+                        val deviceInfo = deviceInfoPair.deviceInfo
+                        val cryptoInfo = deviceInfoPair.cryptoDeviceInfo
                         deviceItem {
                             id("device$idx")
+                            legacyMode(legacyMode)
+                            trustedSession(currentSessionCrossTrusted)
+                            dimensionConverter(dimensionConverter)
+                            colorProvider(colorProvider)
                             detailedMode(vectorPreferences.developerMode())
                             deviceInfo(deviceInfo)
-                            currentDevice(isCurrentDevice)
+                            currentDevice(false)
                             itemClickAction { callback?.onDeviceClicked(deviceInfo) }
-                            trusted(cryptoDevices?.firstOrNull { it.deviceId == deviceInfo.deviceId }?.isVerified)
+                            e2eCapable(cryptoInfo != null)
+                            trusted(cryptoInfo?.trustLevel)
                         }
                     }
         }

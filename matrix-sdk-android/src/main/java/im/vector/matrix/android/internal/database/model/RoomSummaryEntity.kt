@@ -48,6 +48,7 @@ internal open class RoomSummaryEntity(
         // this is required for querying
         var flatAliases: String = "",
         var isEncrypted: Boolean = false,
+        var encryptionEventTs: Long? = 0,
         var typingUserIds: RealmList<String> = RealmList(),
         var roomEncryptionTrustLevelStr: String? = null,
         var inviterId: String? = null

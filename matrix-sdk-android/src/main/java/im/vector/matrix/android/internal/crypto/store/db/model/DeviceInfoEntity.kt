@@ -34,7 +34,12 @@ internal open class DeviceInfoEntity(@PrimaryKey var primaryKey: String = "",
                                      var keysMapJson: String? = null,
                                      var signatureMapJson: String? = null,
                                      var unsignedMapJson: String? = null,
-                                     var trustLevelEntity: TrustLevelEntity? = null
+                                     var trustLevelEntity: TrustLevelEntity? = null,
+                                     /**
+                                      * We use that to make distinction between old devices (there before mine)
+                                      * and new ones. Used for example to detect new unverified login
+                                      */
+                                     var firstTimeSeenLocalTs: Long? = null
 ) : RealmObject() {
 
 //    // Deserialize data

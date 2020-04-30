@@ -138,7 +138,7 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
 
     override fun onVerificationAccept(accept: ValidVerificationInfoAccept) {
         Timber.v("## SAS O: onVerificationAccept id:$transactionId")
-        if (state != VerificationTxState.Started) {
+        if (state != VerificationTxState.Started && state !=  VerificationTxState.SendingStart) {
             Timber.e("## SAS O: received accept request from invalid state $state")
             cancel(CancelCode.UnexpectedMessage)
             return
@@ -148,7 +148,7 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
                 || !KNOWN_HASHES.contains(accept.hash)
                 || !KNOWN_MACS.contains(accept.messageAuthenticationCode)
                 || accept.shortAuthenticationStrings.intersect(KNOWN_SHORT_CODES).isEmpty()) {
-            Timber.e("## SAS O: received accept request from invalid state")
+            Timber.e("## SAS O: received invalid accept")
             cancel(CancelCode.UnknownMethod)
             return
         }

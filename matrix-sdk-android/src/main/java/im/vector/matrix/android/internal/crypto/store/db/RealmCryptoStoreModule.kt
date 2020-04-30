@@ -24,6 +24,7 @@ import im.vector.matrix.android.internal.crypto.store.db.model.GossipingEventEnt
 import im.vector.matrix.android.internal.crypto.store.db.model.IncomingGossipingRequestEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.KeyInfoEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
+import im.vector.matrix.android.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.OlmSessionEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.OutgoingGossipingRequestEntity
@@ -48,6 +49,7 @@ import io.realm.annotations.RealmModule
             TrustLevelEntity::class,
             GossipingEventEntity::class,
             IncomingGossipingRequestEntity::class,
-            OutgoingGossipingRequestEntity::class
+            OutgoingGossipingRequestEntity::class,
+            MyDeviceLastSeenInfoEntity::class
         ])
 internal class RealmCryptoStoreModule

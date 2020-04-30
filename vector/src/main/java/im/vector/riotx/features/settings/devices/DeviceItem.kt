@@ -20,15 +20,17 @@ import android.graphics.Typeface
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import im.vector.riotx.core.resources.ColorProvider
+import im.vector.riotx.core.utils.DimensionConverter
+import me.gujun.android.span.span
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -53,21 +55,37 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
     var detailedMode = false
 
     @EpoxyAttribute
-    var trusted : Boolean? = null
+    var trusted: DeviceTrustLevel? = null
+
+    @EpoxyAttribute
+    var e2eCapable: Boolean = true
+
+    @EpoxyAttribute
+    var legacyMode: Boolean = false
+
+    @EpoxyAttribute
+    var trustedSession: Boolean = false
+
+    @EpoxyAttribute
+    var colorProvider: ColorProvider? = null
+
+    @EpoxyAttribute
+    var dimensionConverter: DimensionConverter? = null
 
     override fun bind(holder: Holder) {
         holder.root.setOnClickListener { itemClickAction?.invoke() }
 
-        if (trusted != null) {
-            holder.trustIcon.setImageDrawable(
-                    ContextCompat.getDrawable(
-                            holder.view.context,
-                            if (trusted!!) R.drawable.ic_shield_trusted else R.drawable.ic_shield_warning
-                    )
-            )
-            holder.trustIcon.isInvisible = false
+        val shield = TrustUtils.shieldForTrust(
+                currentDevice,
+                trustedSession,
+                legacyMode,
+                trusted
+        )
+
+        if (e2eCapable) {
+            holder.trustIcon.setImageResource(shield)
         } else {
-            holder.trustIcon.isInvisible = true
+            holder.trustIcon.setImageDrawable(null)
         }
 
         val detailedModeLabels = listOf(
@@ -103,7 +121,28 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
                 it.setTypeface(null, if (currentDevice) Typeface.BOLD else Typeface.NORMAL)
             }
         } else {
-            holder.summaryLabelText.text = deviceInfo.displayName ?: deviceInfo.deviceId ?: ""
+            holder.summaryLabelText.text =
+                    span {
+                        +(deviceInfo.displayName ?: deviceInfo.deviceId ?: "")
+                        apply {
+                            // Add additional info if current session is not trusted
+                            if (!trustedSession) {
+                                +"\n"
+                                span {
+                                    text = "${deviceInfo.deviceId}"
+                                    apply {
+                                        colorProvider?.getColorFromAttribute(R.attr.riotx_text_secondary)?.let {
+                                            textColor = it
+                                        }
+                                        dimensionConverter?.spToPx(12)?.let {
+                                            textSize = it
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
             holder.summaryLabelText.isVisible = true
             detailedModeLabels.map {
                 it.isVisible = false

@@ -33,7 +33,7 @@
     <LinearLayout
         android:id="@+id/alerter_texts"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,6 +68,7 @@
             android:textAppearance="@style/AlertTextAppearance.Text"
             android:visibility="gone"
             tools:text="Text"
+            android:maxLines="3"
             tools:visibility="visible" />
 
     </LinearLayout>

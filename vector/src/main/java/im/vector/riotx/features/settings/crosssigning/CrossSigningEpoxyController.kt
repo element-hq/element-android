@@ -37,7 +37,6 @@ class CrossSigningEpoxyController @Inject constructor(
 
     interface InteractionListener {
         fun onInitializeCrossSigningKeys()
-        fun onResetCrossSigningKeys()
         fun verifySession()
     }
 
@@ -51,18 +50,6 @@ class CrossSigningEpoxyController @Inject constructor(
                 titleIconResourceId(R.drawable.ic_shield_trusted)
                 title(stringProvider.getString(R.string.encryption_information_dg_xsigning_complete))
             }
-            if (vectorPreferences.developerMode() && !data.isUploadingKeys) {
-                bottomSheetVerificationActionItem {
-                    id("resetkeys")
-                    title("Reset keys")
-                    titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                    iconRes(R.drawable.ic_arrow_right)
-                    iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                    listener {
-                        interactionListener?.onResetCrossSigningKeys()
-                    }
-                }
-            }
         } else if (data.xSigningKeysAreTrusted) {
             genericItem {
                 id("trusted")
@@ -70,22 +57,9 @@ class CrossSigningEpoxyController @Inject constructor(
                 title(stringProvider.getString(R.string.encryption_information_dg_xsigning_trusted))
             }
             if (!data.isUploadingKeys) {
-                if (vectorPreferences.developerMode()) {
-                    bottomSheetVerificationActionItem {
-                        id("resetkeys")
-                        title("Reset keys")
-                        titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                        iconRes(R.drawable.ic_arrow_right)
-                        iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                        listener {
-                            interactionListener?.onResetCrossSigningKeys()
-                        }
-                    }
-                }
-
                 bottomSheetVerificationActionItem {
                     id("verify")
-                    title(stringProvider.getString(R.string.complete_security))
+                    title(stringProvider.getString(R.string.crosssigning_verify_this_session))
                     titleColor(colorProvider.getColor(R.color.riotx_positive_accent))
                     iconRes(R.drawable.ic_arrow_right)
                     iconColor(colorProvider.getColor(R.color.riotx_positive_accent))
@@ -102,24 +76,12 @@ class CrossSigningEpoxyController @Inject constructor(
             }
             bottomSheetVerificationActionItem {
                 id("verify")
-                title(stringProvider.getString(R.string.complete_security))
+                title(stringProvider.getString(R.string.crosssigning_verify_this_session))
                 titleColor(colorProvider.getColor(R.color.riotx_positive_accent))
                 iconRes(R.drawable.ic_arrow_right)
                 iconColor(colorProvider.getColor(R.color.riotx_positive_accent))
                 listener {
                     interactionListener?.verifySession()
-                }
-            }
-            if (vectorPreferences.developerMode()) {
-                bottomSheetVerificationActionItem {
-                    id("resetkeys")
-                    title("Reset keys")
-                    titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                    iconRes(R.drawable.ic_arrow_right)
-                    iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                    listener {
-                        interactionListener?.onResetCrossSigningKeys()
-                    }
                 }
             }
         } else {
@@ -130,7 +92,7 @@ class CrossSigningEpoxyController @Inject constructor(
             if (vectorPreferences.developerMode() && !data.isUploadingKeys) {
                 bottomSheetVerificationActionItem {
                     id("initKeys")
-                    title("Initialize keys")
+                    title(stringProvider.getString(R.string.initialize_cross_signing))
                     titleColor(colorProvider.getColor(R.color.riotx_positive_accent))
                     iconRes(R.drawable.ic_arrow_right)
                     iconColor(colorProvider.getColor(R.color.riotx_positive_accent))

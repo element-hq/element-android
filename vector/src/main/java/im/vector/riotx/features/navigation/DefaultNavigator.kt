@@ -97,7 +97,7 @@ class DefaultNavigator @Inject constructor(
                     roomId = null,
                     otherUserId = session.myUserId,
                     transactionId = pr.transactionId
-            ).show(context.supportFragmentManager, "REQPOP")
+            ).show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
         }
     }
 

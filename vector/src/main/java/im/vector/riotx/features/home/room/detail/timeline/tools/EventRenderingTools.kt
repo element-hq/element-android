@@ -31,6 +31,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import im.vector.riotx.core.utils.isValidUrl
 
 fun CharSequence.findPillsAndProcess(scope: CoroutineScope, processBlock: (PillImageSpan) -> Unit) {
     scope.launch(Dispatchers.Main) {
@@ -59,14 +60,16 @@ fun CharSequence.linkify(callback: TimelineEventController.UrlClickCallback?): C
 fun createLinkMovementMethod(urlClickCallback: TimelineEventController.UrlClickCallback?): EvenBetterLinkMovementMethod {
     return EvenBetterLinkMovementMethod(object : EvenBetterLinkMovementMethod.OnLinkClickListener {
         override fun onLinkClicked(textView: TextView, span: ClickableSpan, url: String, actualText: String): Boolean {
-            return urlClickCallback?.onUrlClicked(url, actualText) == true
+            // Always return false if the url is not valid, so the EvenBetterLinkMovementMethod can fallback to default click listener.
+            return url.isValidUrl() && urlClickCallback?.onUrlClicked(url, actualText) == true
         }
     })
             .apply {
                 // We need also to fix the case when long click on link will trigger long click on cell
                 setOnLinkLongClickListener { tv, url ->
                     // Long clicks are handled by parent, return true to block android to do something with url
-                    if (urlClickCallback?.onUrlLongClicked(url) == true) {
+                    // Always return false if the url is not valid, so the EvenBetterLinkMovementMethod can fallback to default click listener.
+                    if (url.isValidUrl() && urlClickCallback?.onUrlLongClicked(url) == true) {
                         tv.dispatchTouchEvent(MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0f, 0f, 0))
                         true
                     } else {

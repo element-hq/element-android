@@ -53,6 +53,7 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
                 canonicalAlias = roomSummaryEntity.canonicalAlias,
                 aliases = roomSummaryEntity.aliases.toList(),
                 isEncrypted = roomSummaryEntity.isEncrypted,
+                encryptionEventTs = roomSummaryEntity.encryptionEventTs,
                 typingRoomMemberIds = roomSummaryEntity.typingUserIds.toList(),
                 breadcrumbsIndex = roomSummaryEntity.breadcrumbsIndex,
                 roomEncryptionTrustLevel = roomSummaryEntity.roomEncryptionTrustLevel,

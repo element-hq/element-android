@@ -27,6 +27,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.riotx.R
+import im.vector.riotx.core.dialogs.ManuallyVerifyDialog
 import im.vector.riotx.core.dialogs.PromptPasswordDialog
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
@@ -73,6 +74,15 @@ class VectorSettingsDevicesFragment @Inject constructor(
                             transactionId = it.transactionId
                     ).show(childFragmentManager, "REQPOP")
                 }
+                is DevicesViewEvents.SelfVerification   -> {
+                    VerificationBottomSheet.forSelfVerification(it.session)
+                            .show(childFragmentManager, "REQPOP")
+                }
+                is DevicesViewEvents.ShowManuallyVerify -> {
+                    ManuallyVerifyDialog.show(requireActivity(), it.cryptoDeviceInfo) {
+                        viewModel.handle(DevicesAction.MarkAsManuallyVerified(it.cryptoDeviceInfo))
+                    }
+                }
             }.exhaustive
         }
     }
@@ -92,8 +102,8 @@ class VectorSettingsDevicesFragment @Inject constructor(
 
     override fun onResume() {
         super.onResume()
-
         (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_active_sessions_manage)
+        viewModel.handle(DevicesAction.Refresh)
     }
 
     override fun onDeviceClicked(deviceInfo: DeviceInfo) {
@@ -112,7 +122,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
 //    }
 
     override fun retry() {
-        viewModel.handle(DevicesAction.Retry)
+        viewModel.handle(DevicesAction.Refresh)
     }
 
     /**

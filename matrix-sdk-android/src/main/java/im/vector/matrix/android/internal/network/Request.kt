@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.network
 
 import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.failure.shouldBeRetried
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import org.greenrobot.eventbus.EventBus
@@ -46,7 +47,7 @@ internal class Request<DATA>(private val eventBus: EventBus?) {
                 throw response.toFailure(eventBus)
             }
         } catch (exception: Throwable) {
-            if (isRetryable && currentRetryCount++ < maxRetryCount && exception is IOException) {
+            if (isRetryable && currentRetryCount++ < maxRetryCount && exception.shouldBeRetried()) {
                 delay(currentDelay)
                 currentDelay = (currentDelay * 2L).coerceAtMost(maxDelay)
                 return execute()

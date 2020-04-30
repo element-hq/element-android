@@ -92,6 +92,18 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
             holder.reactionsContainer.setOnLongClickListener(baseAttributes.itemLongClickListener)
         }
 
+        when (baseAttributes.informationData.e2eDecoration) {
+            E2EDecoration.NONE                 -> {
+                holder.e2EDecorationView.isVisible = false
+            }
+            E2EDecoration.WARN_IN_CLEAR,
+            E2EDecoration.WARN_SENT_BY_UNVERIFIED,
+            E2EDecoration.WARN_SENT_BY_UNKNOWN -> {
+                holder.e2EDecorationView.setImageResource(R.drawable.ic_shield_warning)
+                holder.e2EDecorationView.isVisible = true
+            }
+        }
+
         holder.view.setOnClickListener(baseAttributes.itemClickListener)
         holder.view.setOnLongClickListener(baseAttributes.itemLongClickListener)
     }
@@ -110,6 +122,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
 
     abstract class Holder(@IdRes stubId: Int) : BaseEventItem.BaseHolder(stubId) {
         val reactionsContainer by bind<ViewGroup>(R.id.reactionsContainer)
+        val e2EDecorationView by bind<ImageView>(R.id.messageE2EDecoration)
     }
 
     /**

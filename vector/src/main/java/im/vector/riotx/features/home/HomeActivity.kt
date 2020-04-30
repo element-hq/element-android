@@ -167,20 +167,26 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         val crossSigningEnabledOnAccount = myCrossSigningKeys != null
 
         if (!crossSigningEnabledOnAccount && !sharedActionViewModel.isAccountCreation) {
-            // We need to ask
-            promptSecurityEvent(
-                    session,
-                    R.string.upgrade_security,
-                    R.string.security_prompt_text
-            ) {
-                it.navigator.upgradeSessionSecurity(it)
+            // Do not propose for SSO accounts, because we do not support yet confirming account credentials using SSO
+            if (session.getHomeServerCapabilities().canChangePassword) {
+                // We need to ask
+                promptSecurityEvent(
+                        session,
+                        R.string.upgrade_security,
+                        R.string.security_prompt_text
+                ) {
+                    it.navigator.upgradeSessionSecurity(it)
+                }
+            } else {
+                // Do not do it again
+                sharedActionViewModel.hasDisplayedCompleteSecurityPrompt = true
             }
         } else if (myCrossSigningKeys?.isTrusted() == false) {
             // We need to ask
             promptSecurityEvent(
                     session,
-                    R.string.complete_security,
-                    R.string.crosssigning_verify_this_session
+                    R.string.crosssigning_verify_this_session,
+                    R.string.confirm_your_identity
             ) {
                 it.navigator.waitSessionVerification(it)
             }

@@ -881,7 +881,7 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
     <string name="download">Deskargatu</string>
     <string name="speak">Hitz egin</string>
     <string name="clear">Garbitu</string>
-    <string name="e2e_re_request_encryption_key"><u>Berriro eskatu zifratze-gakoak</u> zure beste saioetatik.</string>
+    <string name="e2e_re_request_encryption_key">Eskatu berriro zifratze-gakoak zure beste saioetatik.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Gako eskaria bidalita.</string>
 
@@ -1344,7 +1344,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="keys_backup_banner_recover_line1">Ez galdu inoiz zifratutako mezuak</string>
     <string name="keys_backup_banner_recover_line2">Erabili gakoen babes-kopia</string>
 
-    <string name="keys_backup_banner_update_line1">Zifratutako mezuen gako berriak</string>
+    <string name="keys_backup_banner_update_line1">Mezu seguruen gako berriak</string>
     <string name="keys_backup_banner_update_line2">Kudeatu gakoen babes-kopian</string>
 
     <string name="keys_backup_banner_in_progress">Gakoen babes-kopia egiten…</string>
@@ -2144,7 +2144,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="crosssigning_other_user_not_trust">Beste erabiltzaile batzuk ez fidagarritzat jo lezakete</string>
     <string name="complete_security">Bete segurtasuna</string>
 
-    <string name="verification_open_other_to_verify">Ireki aurreko saio bat eta erabili hori saio hau egiaztatzeko, mezu zifratuetara sarbidea emanez.</string>
+    <string name="verification_open_other_to_verify">Erabili aurreko saio bat saio hau egiaztatzeko, mezu zifratuetara sarbidea emanez.</string>
 
 
     <string name="verification_profile_verify">Egiaztatu</string>
@@ -2166,6 +2166,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="a11y_qr_code_for_verification">QR kodea</string>
 
+    <string name="qr_code_scanned_by_other_notice">Ia bukatu duzu! %s-ek ezkutu bera erakusten du\?</string>
     <string name="qr_code_scanned_by_other_yes">Bai</string>
     <string name="qr_code_scanned_by_other_no">Ez</string>
 
@@ -2183,8 +2184,8 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     </plurals>
     <string name="poll_item_selected_aria">Hautatutako aukera</string>
     <string name="command_description_poll">Inkesta sinplea sortzen du</string>
-    <string name="verification_cannot_access_other_session">Ezin zara badagoen saio batera sartu\?</string>
-    <string name="verification_use_passphrase">Erabili berreskuratze gakoa edo pasa-esaldia</string>
+    <string name="verification_cannot_access_other_session">Erabili berreskuratze metodo bat</string>
+    <string name="verification_use_passphrase">Ezin baduzu badagoen saio bat erabili</string>
 
     <string name="new_signin">Saio berria</string>
 
@@ -2209,5 +2210,144 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="event_redacted_by_admin_reason_with_reason">Gelako moderatzaile batek kendu du gertaera, arrazoia: %1$s</string>
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Gakoak egunean daude jada!</string>
+
+    <string name="login_mobile_device_riotx">RiotX Android</string>
+
+    <string name="settings_key_requests">Gako eskaerak</string>
+
+    <string name="e2e_use_keybackup">Desblokeatu zifratutako mezuen historiala</string>
+
+    <string name="refresh">Freskatu</string>
+
+    <string name="new_session">Egiaztatu gabeko saioa. Zu izan zara\?</string>
+    <string name="new_session_review">Sakatu eta berrikusi eta egiaztatu</string>
+    <string name="verify_new_session_notice">Erabili saio hau berria egiaztatzeko, honela mezu zifratuetara sarbidea emanez.</string>
+    <string name="verify_new_session_was_not_me">Ez naiz ni izan</string>
+    <string name="verify_new_session_compromized">Zure kontua konprometituta egon daiteke</string>
+
+    <string name="verify_cancel_self_verification_from_untrusted">Ezeztatzen baduzu, ezin izango dituzu zifratutako mezuak irakurri gailu honetan, eta beste erabiltzaileek ez dute fidagarritzat joko</string>
+    <string name="verify_cancel_self_verification_from_trusted">Ezeztatzen baduzu, ezin izango dituzu zifratutako mezuak irakurri gailu berrian, eta beste erabiltzaileek ez dute fidagarritzat joko</string>
+    <string name="verify_cancel_other">Ez duzu %1$s (%2$s) egiaztatuko orain ezeztatzen baduzu. Hasi berriro bere erabiltzaile profilean.</string>
+
+    <string name="verify_not_me_self_verification">Hauetakoren bat konprometituta egon daiteke:
+\n
+\n- Zure pasahitza
+\n- Zure hasiera-zerbitzaria
+\n- Gailu hau, edo beste gailua
+\n- Gailuren batek darabilen internet konexioa
+\n
+\nPasahitza eta berreskuratze gajoa ezarpenetan berehala aldatzea aholkatzen dugu.</string>
+
+    <string name="verify_cancelled_notice">Egiaztatu gailuak ezarpenetatik.</string>
+    <string name="verification_cancelled">Egiaztaketa ezeztatuta</string>
+
+    <string name="recovery_passphrase">Berreskuratze pasa-esaldia</string>
+    <string name="message_key">Mezu-gakoa</string>
+    <string name="account_password">Kontuaren pasahitza</string>
+
+    <string name="set_recovery_passphrase">Ezarri %s bat</string>
+    <string name="generate_message_key">Sortu mezu-gakoa</string>
+
+    <string name="confirm_recovery_passphrase">Berretsi %s</string>
+
+    <string name="enter_account_password">Sartu zure %s jarraitzeko.</string>
+
+    <string name="bootstrap_info_text">Babestu eta desblokeatu zifratutako mezuak eta jo fidagarritzat %s erabiliz.</string>
+    <string name="bootstrap_info_confirm_text">Sartu zure %s berriro hau berresteko.</string>
+    <string name="bootstrap_dont_reuse_pwd">Ez berrerabili zure kontuaren pasahitza.</string>
+
+
+    <string name="bootstrap_loading_text">Honek segundo batzuk behar litzake, itxaron.</string>
+    <string name="bootstrap_loading_title">Berrekuratzea ezartzen.</string>
+    <string name="your_recovery_key">Zure berreskuratze-gakoa</string>
+    <string name="bootstrap_finish_title">Bukatu duzu!</string>
+    <string name="keep_it_safe">Gorde toki seguruan</string>
+    <string name="finish">Amaitu</string>
+
+    <string name="bootstrap_save_key_description">Erabili %1$s hau babes gehigarri gisa, %2$s ahaztekotan.</string>
+
+    <string name="bootstrap_crosssigning_progress_initializing">Sortutako identitate-gakoak argitaratzen</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">Gako segurua pasa-esalditik sortzen</string>
+    <string name="bootstrap_crosssigning_progress_default_key">Lehenetsitako SSSS gakoa definitzen</string>
+    <string name="bootstrap_crosssigning_progress_save_msk">Gako nagusia sinkronizatzen</string>
+    <string name="bootstrap_crosssigning_progress_save_usk">Erabiltzaile-gakoa sinkronizatzen</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">Norberak sinatzeko gakoa sinkronizatzen</string>
+    <string name="bootstrap_crosssigning_progress_key_backup">Gakoen babeskopia ezartzen</string>
+
+
+    <string name="bootstrap_cross_signing_success">"Zure %2$s eta %1$s ezarrita daude.
+\n
+\nGorde toki seguruan! Zifratutako mezuak eta informazio segurua desblokeatzeko beharko dituzu  zure saio aktibo guztiak galduz gero."</string>
+
+    <string name="bootstrap_crosssigning_print_it">Inprimatu eta gorde toki seguruan</string>
+    <string name="bootstrap_crosssigning_save_usb">Gorde USB memorian edo babes-kopien diskoan</string>
+    <string name="bootstrap_crosssigning_save_cloud">Kopiatu zure hodei pertsonalean</string>
+
+    <string name="auth_flow_not_supported">Ezin duzu hori mugikorretik egin</string>
+
+    <string name="bootstrap_skip_text">Berreskuratze pasa-esaldia ezartzeak zifratutako mezuak babestea zein desblokeatzea eta fidagarritasuna ezartzea ahalbidetzen dizu.
+\n
+\nEz baduzu mezuen pasahitz bat ezarri, sortu mezuen gakoa.</string>
+    <string name="bootstrap_skip_text_no_gen_key">Berreskuratze pasa-esaldia ezartzeak zifratutako mezuak babestea zein desblokeatzea eta fidagarritasuna ezartzea ahalbidetzen dizu.</string>
+
+
+    <string name="encryption_enabled">Zifratzea gaituta</string>
+    <string name="encryption_enabled_tile_description">Gela honetako mezuak muturretik muturrera zifratuta daude. Ikasi gehiago eta egiaztatu erabiltzaileak bere erabiltzaile-profilean.</string>
+    <string name="encryption_not_enabled">Zifratzea gaitu gabe</string>
+    <string name="encryption_unknown_algorithm_tile_description">Gela honetan erabilitako zifratzea ez da onartzen</string>
+
+    <string name="room_created_summary_item">%s erabiltzaileak gela sortu eta konfiguratu du.</string>
+
+    <string name="qr_code_scanned_self_verif_notice">Ia amaitu duzu! Zure beste gailuak ezkutu bera erakusten du\?</string>
+    <string name="qr_code_scanned_verif_waiting_notice">Ia bukatu duzu! Baieztapenaren zain…</string>
+    <string name="qr_code_scanned_verif_waiting">%s itxaroten…</string>
+
+    <string name="error_failed_to_import_keys">Ezin izan dira gakoak inportatu</string>
+
+    <string name="settings_notification_configuration">Jakinarazpenen ezarpena</string>
+    <string name="settings_messages_at_room">\@room duten mezuak</string>
+    <string name="settings_messages_in_e2e_one_to_one">Zifratutako mezuak bi pertsonen arteko txatetan</string>
+    <string name="settings_messages_in_e2e_group_chat">Zifratutako mezuak talde-txatetan</string>
+    <string name="settings_when_rooms_are_upgraded">Gelak eguneratzean</string>
+    <string name="settings_troubleshoot_title">Arazo-ehiza</string>
+    <string name="settings_notification_advanced_summary_riotx">Ezarri jakinarazpenen garrantzia gertaerako</string>
+
+    <string name="command_description_plain">Mezua test arrunt gisa bidaltzen du, markdown den aztertu gabe</string>
+
+    <string name="auth_invalid_login_param_space_in_password">Erabiltzaile-izen edo pasahitz okerra. Sartutako pasahitzak zuriuneak ditu hasiera edo amaieran, egiztatu.</string>
+
+    <string name="room_message_placeholder">Mezua…</string>
+
+    <string name="upgrade_security">Zifratze eguneratzea eskuragarri</string>
+    <string name="security_prompt_text">Egiaztatu zure burua eta besteak txatak seguru mantentzeko</string>
+
+    <string name="bootstrap_enter_recovery">Sartu zure %s jarraitzeko</string>
+    <string name="use_file">Erabili fitxategia</string>
+
+    <string name="enter_backup_passphrase">Sartu %s</string>
+    <string name="backup_recovery_passphrase">Berreskuratze pasa-esaldia</string>
+    <string name="bootstrap_invalid_recovery_key">Ez da baliozko berreskuratze-gakoa</string>
+    <string name="recovery_key_empty_error_message">Sartu berreskuratze-gakoa</string>
+
+    <string name="bootstrap_progress_checking_backup">Babes-kopiaren gakoa egiaztatzen</string>
+    <string name="bootstrap_progress_checking_backup_with_info">Babes-kopiaren gakoa egiaztatzen (%s)</string>
+    <string name="bootstrap_progress_compute_curve_key">Curve gakoa jasotzen</string>
+    <string name="bootstrap_progress_generating_ssss">SSSS gakoa pasa-esalditik sortzen</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">SSSS gakoa pasa-esalditik sortzen (%s)</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">SSSS gakoa berreskuratze pasa-esalditik sortzen</string>
+    <string name="bootstrap_progress_storing_in_sss">Gakoen babes-kopia sekretua SSSS-n gordetzen</string>
+    <string name="new_session_review_with_info">%1$s (%2$s)</string>
+
+    <string name="bootstrap_migration_enter_backup_password">Sartu zure gakoen babes-kopiaren pasa-esaldia jarraitzeko.</string>
+    <string name="bootstrap_migration_use_recovery_key">erabili zure gakoen babes-kopiaren berrekuratze gakoa</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">Ez badakizu zure gakoen babes-koparen pasa-esaldia, %s.</string>
+    <string name="bootstrap_migration_backup_recovery_key">Gakoen babes-kopiaren berrekuratze gakoa</string>
+
+    <string name="settings_security_prevent_screenshots_title">Eragotzi aplikazioaren pantaila-argazkiak</string>
+    <string name="settings_security_prevent_screenshots_summary">Ezarpen hau gaitzeak FLAG_SECURE gehitzen die jarduera guztiei. Berrabiarazi aplikazioa aldaketa aplikatzeko.</string>
+
+    <string name="media_file_added_to_gallery">Multimedia fitxategia galeriara gehituta</string>
+    <string name="error_adding_media_file_to_gallery">Ezin izan da multimedia fitxategia galeriara gehitu</string>
+    <string name="change_password_summary">Ezarri kontuaren pasahitz berria…</string>
 
 </resources>

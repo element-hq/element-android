@@ -15,18 +15,20 @@
  */
 package im.vector.matrix.android.internal.crypto.crosssigning
 
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntityFields
+import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
+import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import im.vector.matrix.android.internal.task.TaskExecutor
-import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.createBackgroundHandler
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import timber.log.Timber
@@ -38,13 +40,13 @@ internal class ShieldTrustUpdater @Inject constructor(
         private val eventBus: EventBus,
         private val computeTrustTask: ComputeTrustTask,
         private val taskExecutor: TaskExecutor,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers,
         @SessionDatabase private val sessionRealmConfiguration: RealmConfiguration,
         private val roomSummaryUpdater: RoomSummaryUpdater
 ) {
 
     companion object {
         private val BACKGROUND_HANDLER = createBackgroundHandler("SHIELD_CRYPTO_DB_THREAD")
+        private val BACKGROUND_HANDLER_DISPATCHER = BACKGROUND_HANDLER.asCoroutineDispatcher()
     }
 
     private val backgroundSessionRealm = AtomicReference<Realm>()
@@ -76,14 +78,11 @@ internal class ShieldTrustUpdater @Inject constructor(
         if (!isStarted.get()) {
             return
         }
-        taskExecutor.executorScope.launch(coroutineDispatchers.crypto) {
-            val updatedTrust = computeTrustTask.execute(ComputeTrustTask.Params(update.userIds))
+        taskExecutor.executorScope.launch(BACKGROUND_HANDLER_DISPATCHER) {
+            val updatedTrust = computeTrustTask.execute(ComputeTrustTask.Params(update.userIds, update.isDirect))
             // We need to send that back to session base
-
-            BACKGROUND_HANDLER.post {
-                backgroundSessionRealm.get()?.executeTransaction { realm ->
-                    roomSummaryUpdater.updateShieldTrust(realm, update.roomId, updatedTrust)
-                }
+            backgroundSessionRealm.get()?.executeTransaction { realm ->
+                roomSummaryUpdater.updateShieldTrust(realm, update.roomId, updatedTrust)
             }
         }
     }
@@ -93,45 +92,31 @@ internal class ShieldTrustUpdater @Inject constructor(
         if (!isStarted.get()) {
             return
         }
-
         onCryptoDevicesChange(update.userIds)
     }
 
     private fun onCryptoDevicesChange(users: List<String>) {
-        BACKGROUND_HANDLER.post {
-            val impactedRoomsId = backgroundSessionRealm.get()?.where(RoomMemberSummaryEntity::class.java)
-                    ?.`in`(RoomMemberSummaryEntityFields.USER_ID, users.toTypedArray())
-                    ?.findAll()
-                    ?.map { it.roomId }
-                    ?.distinct()
+        taskExecutor.executorScope.launch(BACKGROUND_HANDLER_DISPATCHER) {
+            val realm = backgroundSessionRealm.get() ?: return@launch
+            val distinctRoomIds = realm.where(RoomMemberSummaryEntity::class.java)
+                    .`in`(RoomMemberSummaryEntityFields.USER_ID, users.toTypedArray())
+                    .distinct(RoomMemberSummaryEntityFields.ROOM_ID)
+                    .findAll()
+                    .map { it.roomId }
 
-            val map = HashMap<String, List<String>>()
-            impactedRoomsId?.forEach { roomId ->
-                backgroundSessionRealm.get()?.let { realm ->
-                    RoomMemberSummaryEntity.where(realm, roomId)
-                            .findAll()
-                            .let { results ->
-                                map[roomId] = results.map { it.userId }
-                            }
-                }
-            }
-
-            map.forEach { entry ->
-                val roomId = entry.key
-                val userList = entry.value
-                taskExecutor.executorScope.launch {
-                    withContext(coroutineDispatchers.crypto) {
-                        try {
-                            // Can throw if the crypto database has been closed in between, in this case log and ignore?
-                            val updatedTrust = computeTrustTask.execute(ComputeTrustTask.Params(userList))
-                            BACKGROUND_HANDLER.post {
-                                backgroundSessionRealm.get()?.executeTransaction { realm ->
-                                    roomSummaryUpdater.updateShieldTrust(realm, roomId, updatedTrust)
-                                }
-                            }
-                        } catch (failure: Throwable) {
-                            Timber.e(failure)
+            distinctRoomIds.forEach { roomId ->
+                val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
+                if (roomSummary?.isEncrypted.orFalse()) {
+                    val allActiveRoomMembers = RoomMemberHelper(realm, roomId).getActiveRoomMemberIds()
+                    try {
+                        val updatedTrust = computeTrustTask.execute(
+                                ComputeTrustTask.Params(allActiveRoomMembers, roomSummary?.isDirect == true)
+                        )
+                        realm.executeTransaction {
+                            roomSummaryUpdater.updateShieldTrust(it, roomId, updatedTrust)
                         }
+                    } catch (failure: Throwable) {
+                        Timber.e(failure)
                     }
                 }
             }

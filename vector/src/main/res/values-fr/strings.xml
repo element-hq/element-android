@@ -875,11 +875,11 @@ Voulez-vous en ajouter ?</string>
     <string name="dialog_user_consent_submit">Voir maintenant</string>
 
     <string name="deactivate_account_title">Désactiver le compte</string>
-    <string name="deactivate_account_content">Votre compte sera inutilisable de façon permanente. Vous ne pourrez plus vous connecter et personne ne pourra se réenregistrer avec le même identifiant d’utilisateur. Le compte quittera tous les salons auxquels il participe et tous ses détails seront supprimés du serveur d’identité. <b>Cette action est irréversible. </b>
-
-Désactiver votre compte <b>ne nous fait pas oublier les messages que vous avez envoyés par défaut</b>. Si vous souhaitez que nous oubliions vos messages, cochez la case ci-dessous.
-
-La visibilité des messages dans Matrix est identique à celle des e-mails. Si nous oublions vos messages, cela signifie que les messages que vous avez envoyés ne seront plus partagés avec les nouveaux utilisateurs ou les utilisateurs non enregistrés, mais les utilisateurs enregistrés qui ont déjà accès à ces messages en conserveront leur copie.</string>
+    <string name="deactivate_account_content">\"Votre compte sera inutilisable de façon permanente. Vous ne pourrez plus vous connecter et personne ne pourra se réenregistrer avec le même identifiant d’utilisateur. Le compte quittera tous les salons auxquels il participe et tous ses détails seront supprimés du serveur d’identité. <b>Cette action est irréversible.</b>
+\n
+\nDésactiver votre compte <b>ne nous fait pas oublier les messages que vous avez envoyés par défaut</b>. Si vous souhaitez que nous oubliions vos messages, cochez la case ci-dessous.
+\n
+\nLa visibilité des messages dans Matrix est identique à celle des e-mails. Si nous oublions vos messages, cela signifie que les messages que vous avez envoyés ne seront plus partagés avec les nouveaux utilisateurs ou les utilisateurs non enregistrés, mais les utilisateurs enregistrés qui ont déjà accès à ces messages en conserveront leur copie.\"</string>
     <string name="deactivate_account_delete_checkbox">Veuillez oublier tous les messages que j’ai envoyé quand mon compte sera désactivé (Avertissement : les futurs utilisateurs verront une version incomplète des conversations)</string>
     <string name="deactivate_account_prompt_password">Pour continuer, veuillez renseigner votre mot de passe :</string>
     <string name="deactivate_account_submit">Désactiver le compte</string>
@@ -2227,7 +2227,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="refresh">Actualiser</string>
 
-    <string name="new_session">Nouvelle session</string>
+    <string name="new_session">Connexion non vérifiée. Était-ce vous \?</string>
     <string name="new_session_review">Appuyer pour examiner et vérifier</string>
     <string name="verify_new_session_notice">Utilisez cette session pour vérifiez la nouvelle, ce qui lui permettra d’avoir accès aux messages chiffrés.</string>
     <string name="verify_new_session_was_not_me">Ce n’était pas moi</string>
@@ -2249,7 +2249,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="verify_cancelled_notice">Vérifiez vos appareils depuis les paramètres.</string>
     <string name="verification_cancelled">Vérification annulée</string>
 
-    <string name="recovery_passphrase">mot de passe des messages</string>
+    <string name="recovery_passphrase">Phrase de récupération</string>
     <string name="message_key">clé des messages</string>
     <string name="account_password">Mot de passe du compte</string>
 
@@ -2296,7 +2296,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="bootstrap_skip_text">La configuration d’un mot de passe de messages vous permet des sécuriser et déverrouiller les messages chiffrés et les vérifications.
 \n
 \nSi vous ne voulez pas définir un mot de passe de messages, générez plutôt une clé de messages.</string>
-    <string name="bootstrap_skip_text_no_gen_key">La configuration d’un mot de passe de messages vous permet des sécuriser et déverrouiller les messages chiffrés et les vérifications.</string>
+    <string name="bootstrap_skip_text_no_gen_key">La configuration d’une Phrase de récupération vous permet des sécuriser et déverrouiller les messages chiffrés et les vérifications.</string>
 
 
     <string name="encryption_enabled">Chiffrement activé</string>
@@ -2323,5 +2323,39 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="command_description_plain">Envoie un message en texte simple, sans l’interpréter comme du Markdown</string>
 
     <string name="auth_invalid_login_param_space_in_password">Nom et/ou mot de passe incorrect(s). Le mot de passe saisi commence ou se termine par des espaces, veuillez le vérifier.</string>
+
+    <string name="room_message_placeholder">Message…</string>
+
+    <string name="upgrade_security">Mise à niveau du chiffrement disponible</string>
+    <string name="bootstrap_enter_recovery">Entrez votre %s pour continuer</string>
+    <string name="use_file">Utiliser un fichier</string>
+
+    <string name="enter_backup_passphrase">Entrez %s</string>
+    <string name="backup_recovery_passphrase">Phrase de récupération</string>
+    <string name="bootstrap_invalid_recovery_key">Ce n\'est pas une clé de récupération valide</string>
+    <string name="recovery_key_empty_error_message">Veuillez entrer une clé de récupération</string>
+
+    <string name="bootstrap_progress_checking_backup">Vérification de la clé de sauvegarde</string>
+    <string name="bootstrap_progress_checking_backup_with_info">Vérification de la clé de sauvegarde (%s)</string>
+    <string name="bootstrap_progress_generating_ssss">Génération de la clé SSSS à partir de la phrase secrète</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">Génération de la clé SSSS à partir de la phrase secrète (%s)</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">Génération de la clé SSSS à partir de la clé de récupération</string>
+    <string name="bootstrap_progress_storing_in_sss">Stockage du secret de sauvegarde dans le SSSS</string>
+    <string name="new_session_review_with_info">%1$s (%2$s)</string>
+
+    <string name="security_prompt_text">Vérifiez vos sessions et les autres pour garantir la sûreté de vos discussions</string>
+
+    <string name="bootstrap_progress_compute_curve_key">Récupération de la clé de courbe</string>
+    <string name="bootstrap_migration_enter_backup_password">Saisissez votre phrase secrète de sauvegarde de clés pour continuer.</string>
+    <string name="bootstrap_migration_use_recovery_key">utiliser votre clé de récupération de sauvegarde de clés</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">Vous ne connaissez pas votre phrase secrète de sauvegarde de clés, vous pouvez %s.</string>
+    <string name="bootstrap_migration_backup_recovery_key">Clé de récupération de sauvegarde de clés</string>
+
+    <string name="settings_security_prevent_screenshots_title">Empêcher les captures d’écran de l’application</string>
+    <string name="settings_security_prevent_screenshots_summary">L’activation de ce paramètre ajoute FLAG_SECURE à toutes les activités. Redémarrez l’application pour que la modification soit prise en compte.</string>
+
+    <string name="media_file_added_to_gallery">Fichier multimédia ajouté à la galerie</string>
+    <string name="error_adding_media_file_to_gallery">Impossible d’ajouter le fichier multimédia à la galerie</string>
+    <string name="change_password_summary">Définir un nouveau mot de passe de compte…</string>
 
 </resources>

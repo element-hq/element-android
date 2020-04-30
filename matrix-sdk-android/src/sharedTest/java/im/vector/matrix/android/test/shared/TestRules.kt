@@ -18,7 +18,7 @@ package im.vector.matrix.android.test.shared
 
 import net.lachlanmckee.timberjunit.TimberTestRule
 
-fun createTimberTestRule(): TimberTestRule {
+internal fun createTimberTestRule(): TimberTestRule {
     return TimberTestRule.builder()
             .showThread(false)
             .showTimestamp(false)

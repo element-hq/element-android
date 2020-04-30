@@ -26,7 +26,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.content.ContextCompat
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import androidx.transition.AutoTransition
@@ -172,7 +171,7 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
                 RoomEncryptionTrustLevel.Warning -> R.drawable.ic_shield_warning
                 else                             -> R.drawable.ic_shield_black
             }
-            composerShieldImageView.setImageDrawable(ContextCompat.getDrawable(context, shieldRes))
+            composerShieldImageView.setImageResource(shieldRes)
         } else {
             composerEditText.setHint(R.string.room_message_placeholder)
             composerShieldImageView.isVisible = false
