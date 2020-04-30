@@ -7,8 +7,8 @@
     <string name="notice_room_invite_no_invitee">%s\'s invitation</string>
     <string name="notice_room_invite">%1$s invited %2$s</string>
     <string name="notice_room_invite_you">%1$s invited you</string>
-    <string name="notice_room_join">%1$s joined</string>
-    <string name="notice_room_leave">%1$s left</string>
+    <string name="notice_room_join">%1$s joined the room</string>
+    <string name="notice_room_leave">%1$s left the room</string>
     <string name="notice_room_reject">%1$s rejected the invitation</string>
     <string name="notice_room_kick">%1$s kicked %2$s</string>
     <string name="notice_room_unban">%1$s unbanned %2$s</string>
@@ -246,8 +246,8 @@
     <string name="notice_room_invite_no_invitee_with_reason">%1$s\'s invitation. Reason: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s invited %2$s. Reason: %3$s</string>
     <string name="notice_room_invite_you_with_reason">%1$s invited you. Reason: %2$s</string>
-    <string name="notice_room_join_with_reason">%1$s joined. Reason: %2$s</string>
-    <string name="notice_room_leave_with_reason">%1$s left. Reason: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s joined the room. Reason: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s left the room. Reason: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s rejected the invitation. Reason: %2$s</string>
     <string name="notice_room_kick_with_reason">%1$s kicked %2$s. Reason: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s unbanned %2$s. Reason: %3$s</string>
