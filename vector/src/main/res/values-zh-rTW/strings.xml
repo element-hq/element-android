@@ -736,8 +736,8 @@
     <string name="encryption_information_unblock">解除黑名單</string>
 
     <string name="encryption_information_verify_device">驗證工作階段</string>
-    <string name="encryption_information_verify_device_warning">要驗證此工作階段是否可信，請使用其他方式（例如：面對面或是打電話）聯絡它的擁有者並詢問他們在使用者設定中看到此工作階段的金鑰是否與下列的金鑰相符：</string>
-    <string name="encryption_information_verify_device_warning2">如果符合的話，請按下方的驗證按鈕。如果沒有的話，那麼其他地方的某個人可能正在攔截此工作階段，您應該將其列入黑名單。未來，這個驗證程序會變得更加複雜。</string>
+    <string name="encryption_information_verify_device_warning">透過將以下內容與您的其他工作階段中的使用者設定來確認：</string>
+    <string name="encryption_information_verify_device_warning2">如果不符合的話，您的通訊安全可能正受到威脅。</string>
     <string name="encryption_information_verify_key_match">我驗證金鑰相符</string>
 
     <string name="e2e_enabling_on_app_update">Riot 目前支援端到端加密，但您需要重新登入以啟用。
