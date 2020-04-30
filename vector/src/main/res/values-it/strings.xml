@@ -668,8 +668,8 @@
     <string name="encryption_information_unblock">Togli dalla lista nera</string>
 
     <string name="encryption_information_verify_device">Verifica la sessione</string>
-    <string name="encryption_information_verify_device_warning">Per verificare se questa sessione sia affidabile, contatta il suo proprietario utilizzando altre vie di comunicazione (es. di persona o per telefono) e chiedigli se la chiave che vede nelle Impostazioni Utente per questa sessione corrisponde a quella riportata sotto:</string>
-    <string name="encryption_information_verify_device_warning2">Se corrisponde, premi il pulsante di verifica qui sotto. In caso contrario, qualcun altro sta intercettando questa sessione e probabilmente dovresti metterlo in lista nera. In futuro il processo di verifica sarà più sofisticato.</string>
+    <string name="encryption_information_verify_device_warning">Conferma confrontando la seguente con le impostazioni utente della tua altra sessione:</string>
+    <string name="encryption_information_verify_device_warning2">Se non corrispondono, la sicurezza delle tue comunicazioni potrebbe essere compromessa.</string>
     <string name="encryption_information_verify_key_match">Ho verificato che le chiavi corrispondono</string>
 
     <string name="e2e_enabling_on_app_update">Riot supporta ora la crittografia da-utente-a-utente, ma per abilitarla devi riconnetterti.
@@ -2193,7 +2193,7 @@
         <item quantity="other">%d sessioni attive</item>
     </plurals>
 
-    <string name="crosssigning_verify_this_session">Verifica questa sessione</string>
+    <string name="crosssigning_verify_this_session">Verifica questo accesso</string>
     <string name="crosssigning_other_user_not_trust">Gli altri utenti potrebbero non fidarsi</string>
     <string name="complete_security">Completa la sicurezza</string>
 
@@ -2237,7 +2237,7 @@
     </plurals>
     <string name="poll_item_selected_aria">Opzione selezionata</string>
     <string name="command_description_poll">Crea un semplice sondaggio</string>
-    <string name="verification_cannot_access_other_session">Usa un metodo di recupero</string>
+    <string name="verification_cannot_access_other_session">Usa una password o chiave di recupero</string>
     <string name="verification_use_passphrase">Se non puoi accedere a una sessione esistente</string>
 
     <string name="new_signin">Nuovo accesso</string>
