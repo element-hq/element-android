@@ -43,7 +43,8 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
         super.bind(holder)
 
         if (attributes.isCollapsed) {
-            val data = distinctMergeData.firstOrNull()
+            // Take the oldest data
+            val data = distinctMergeData.lastOrNull()
 
             val summary = holder.expandView.resources.getString(R.string.room_created_summary_item,
                     data?.memberName ?: data?.userId ?: "")
