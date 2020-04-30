@@ -470,6 +470,10 @@ internal class DefaultCrossSigningService @Inject constructor(
         return cryptoStore.getCrossSigningPrivateKeys()
     }
 
+    override fun getLiveCrossSigningPrivateKeys(): LiveData<Optional<PrivateKeysInfo>> {
+        return cryptoStore.getLiveCrossSigningPrivateKeys()
+    }
+
     override fun canCrossSign(): Boolean {
         return checkSelfTrust().isVerified() && cryptoStore.getCrossSigningPrivateKeys()?.selfSigned != null
                 && cryptoStore.getCrossSigningPrivateKeys()?.user != null

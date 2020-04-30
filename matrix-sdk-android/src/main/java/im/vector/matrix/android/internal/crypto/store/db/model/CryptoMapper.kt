@@ -104,7 +104,8 @@ object CryptoMapper {
                         Timber.e(failure)
                         null
                     }
-                }
+                },
+                firstTimeSeenLocalTs = deviceInfoEntity.firstTimeSeenLocalTs
         )
     }
 }

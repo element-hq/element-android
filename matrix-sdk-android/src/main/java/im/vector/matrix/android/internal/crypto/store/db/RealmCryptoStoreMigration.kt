@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.crypto.store.db
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
+import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
 import im.vector.matrix.android.internal.crypto.store.db.mapper.CrossSigningKeysMapper
@@ -27,6 +28,7 @@ import im.vector.matrix.android.internal.crypto.store.db.model.DeviceInfoEntityF
 import im.vector.matrix.android.internal.crypto.store.db.model.GossipingEventEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.IncomingGossipingRequestEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.KeyInfoEntityFields
+import im.vector.matrix.android.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.OutgoingGossipingRequestEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.TrustLevelEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.UserEntityFields
@@ -40,7 +42,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
 
     // Version 1L added Cross Signing info persistence
     companion object {
-        const val CRYPTO_STORE_SCHEMA_VERSION = 4L
+        const val CRYPTO_STORE_SCHEMA_VERSION = 5L
     }
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
@@ -50,6 +52,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
         if (oldVersion <= 1) migrateTo2(realm)
         if (oldVersion <= 2) migrateTo3(realm)
         if (oldVersion <= 3) migrateTo4(realm)
+        if (oldVersion <= 4) migrateTo5(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -211,5 +214,25 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
             }
         } catch (failure: Throwable) {
         }
+    }
+
+    private fun migrateTo5(realm: DynamicRealm) {
+        realm.schema.create("MyDeviceLastSeenInfoEntity")
+                .addField(MyDeviceLastSeenInfoEntityFields.DEVICE_ID, String::class.java)
+                .addPrimaryKey(MyDeviceLastSeenInfoEntityFields.DEVICE_ID)
+                .addField(MyDeviceLastSeenInfoEntityFields.DISPLAY_NAME, String::class.java)
+                .addField(MyDeviceLastSeenInfoEntityFields.LAST_SEEN_IP, String::class.java)
+                .addField(MyDeviceLastSeenInfoEntityFields.LAST_SEEN_TS, Long::class.java)
+                .setNullable(MyDeviceLastSeenInfoEntityFields.LAST_SEEN_TS, true)
+
+        val now = System.currentTimeMillis()
+        realm.schema.get("DeviceInfoEntity")
+                ?.addField(DeviceInfoEntityFields.FIRST_TIME_SEEN_LOCAL_TS, Long::class.java)
+                ?.setNullable(DeviceInfoEntityFields.FIRST_TIME_SEEN_LOCAL_TS, true)
+                ?.transform { deviceInfoEntity ->
+                    tryThis {
+                        deviceInfoEntity.setLong(DeviceInfoEntityFields.FIRST_TIME_SEEN_LOCAL_TS, now)
+                    }
+                }
     }
 }

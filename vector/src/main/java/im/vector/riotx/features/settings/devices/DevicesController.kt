@@ -21,9 +21,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.api.extensions.sortByLastSeen
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
-import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.errorWithRetryItem
@@ -73,20 +71,19 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
                     listener { callback?.retry() }
                 }
             is Success       ->
-                buildDevicesList(devices(), state.cryptoDevices(), state.myDeviceId, !state.hasAccountCrossSigning, state.accountCrossSigningIsTrusted)
+                buildDevicesList(devices(), state.myDeviceId, !state.hasAccountCrossSigning, state.accountCrossSigningIsTrusted)
         }
     }
 
-    private fun buildDevicesList(devices: List<DeviceInfo>,
-                                 cryptoDevices: List<CryptoDeviceInfo>?,
+    private fun buildDevicesList(devices: List<DeviceFullInfo>,
                                  myDeviceId: String,
                                  legacyMode: Boolean,
                                  currentSessionCrossTrusted: Boolean) {
         devices
-                .firstOrNull() {
-                    it.deviceId == myDeviceId
-                }?.let { deviceInfo ->
-
+                .firstOrNull {
+                    it.deviceInfo.deviceId == myDeviceId
+                }?.let { fullInfo ->
+                    val deviceInfo = fullInfo.deviceInfo
                     // Current device
                     genericItemHeader {
                         id("current")
@@ -102,6 +99,7 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
                         detailedMode(vectorPreferences.developerMode())
                         deviceInfo(deviceInfo)
                         currentDevice(true)
+                        e2eCapable(true)
                         itemClickAction { callback?.onDeviceClicked(deviceInfo) }
                         trusted(DeviceTrustLevel(currentSessionCrossTrusted, true))
                     }
@@ -129,12 +127,11 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
 
             devices
                     .filter {
-                        it.deviceId != myDeviceId
+                        it.deviceInfo.deviceId != myDeviceId
                     }
-                    // sort before display: most recent first
-                    .sortByLastSeen()
-                    .forEachIndexed { idx, deviceInfo ->
-                        val isCurrentDevice = deviceInfo.deviceId == myDeviceId
+                    .forEachIndexed { idx, deviceInfoPair ->
+                        val deviceInfo = deviceInfoPair.deviceInfo
+                        val cryptoInfo = deviceInfoPair.cryptoDeviceInfo
                         deviceItem {
                             id("device$idx")
                             legacyMode(legacyMode)
@@ -143,9 +140,10 @@ class DevicesController @Inject constructor(private val errorFormatter: ErrorFor
                             colorProvider(colorProvider)
                             detailedMode(vectorPreferences.developerMode())
                             deviceInfo(deviceInfo)
-                            currentDevice(isCurrentDevice)
+                            currentDevice(false)
                             itemClickAction { callback?.onDeviceClicked(deviceInfo) }
-                            trusted(cryptoDevices?.firstOrNull { it.deviceId == deviceInfo.deviceId }?.trustLevel)
+                            e2eCapable(cryptoInfo != null)
+                            trusted(cryptoInfo?.trustLevel)
                         }
                     }
         }

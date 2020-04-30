@@ -27,14 +27,13 @@ import im.vector.matrix.android.api.session.crypto.verification.SasVerificationT
 import im.vector.matrix.android.api.session.crypto.verification.VerificationService
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
-import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.IncomingRequestCancellation
+import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.IncomingSecretShareRequest
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
-import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
 import im.vector.riotx.R
 import im.vector.riotx.features.popup.DefaultVectorAlert
 import im.vector.riotx.features.popup.PopupAlertManager
@@ -75,7 +74,7 @@ class KeyRequestHandler @Inject constructor(private val context: Context, privat
         session = null
     }
 
-    override fun onSecretShareRequest(request: IncomingSecretShareRequest) : Boolean {
+    override fun onSecretShareRequest(request: IncomingSecretShareRequest): Boolean {
         // By default riotX will not prompt if the SDK has decided that the request should not be fulfilled
         Timber.v("## onSecretShareRequest() : Ignoring $request")
         request.ignore?.run()
@@ -124,19 +123,11 @@ class KeyRequestHandler @Inject constructor(private val context: Context, privat
                     deviceInfo.trustLevel = DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false)
 
                     // can we get more info on this device?
-                    session?.cryptoService()?.getDevicesList(object : MatrixCallback<DevicesListResponse> {
-                        override fun onSuccess(data: DevicesListResponse) {
-                            data.devices?.find { it.deviceId == deviceId }?.let {
-                                postAlert(context, userId, deviceId, true, deviceInfo, it)
-                            } ?: run {
-                                postAlert(context, userId, deviceId, true, deviceInfo)
-                            }
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            postAlert(context, userId, deviceId, true, deviceInfo)
-                        }
-                    })
+                    session?.cryptoService()?.getMyDevicesInfo()?.firstOrNull { it.deviceId == deviceId }?.let {
+                        postAlert(context, userId, deviceId, true, deviceInfo, it)
+                    } ?: kotlin.run {
+                        postAlert(context, userId, deviceId, true, deviceInfo)
+                    }
                 } else {
                     postAlert(context, userId, deviceId, false, deviceInfo)
                 }

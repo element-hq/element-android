@@ -29,6 +29,7 @@ Improvements 🙌:
  - Cross-Signing | Hide Use recovery key when 4S is not setup (#1007)
  - Cross-Signing | Trust account xSigning keys by entering Recovery Key (select file or copy) #1199
  - Manage Session Settings / Cross Signing update (#1295)
+ - Cross-Signing | Review sessions toast update old vs new (#1293, #1306)
 
 Bugfix 🐛:
  - Fix summary notification staying after "mark as read"

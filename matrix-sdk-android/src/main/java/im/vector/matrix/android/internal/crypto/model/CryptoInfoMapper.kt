@@ -61,20 +61,4 @@ internal object CryptoInfoMapper {
                 signatures = keyInfo.signatures
         )
     }
-
-    fun RestDeviceInfo.toCryptoModel(): CryptoDeviceInfo {
-        return map(this)
-    }
-
-    fun CryptoDeviceInfo.toRest(): RestDeviceInfo {
-        return map(this)
-    }
-
-//    fun RestKeyInfo.toCryptoModel(): CryptoCrossSigningKey {
-//        return map(this)
-//    }
-
-    fun CryptoCrossSigningKey.toRest(): RestKeyInfo {
-        return map(this)
-    }
 }
