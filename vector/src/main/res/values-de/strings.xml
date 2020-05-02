@@ -2346,4 +2346,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="auth_invalid_login_param_space_in_password">Inkorrekter Benutzername und/oder Passwort. Das eingegebene Passwort beginnt oder endet mit Leerzeichen, bitte kontrolliere es.</string>
 
-</resources>
+<string name="message_key">Nachrichtenschlüssel</string>
+    <string name="account_password">Kontopasswort</string>
+
+    </resources>
