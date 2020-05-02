@@ -2227,7 +2227,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="refresh">Actualiser</string>
 
-    <string name="new_session">Connexion non vérifiée. Était-ce vous \?</string>
+    <string name="new_session">Nouvelle connexion. Était-ce vous \?</string>
     <string name="new_session_review">Appuyer pour examiner et vérifier</string>
     <string name="verify_new_session_notice">Utilisez cette session pour vérifiez la nouvelle, ce qui lui permettra d’avoir accès aux messages chiffrés.</string>
     <string name="verify_new_session_was_not_me">Ce n’était pas moi</string>
@@ -2387,4 +2387,10 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 \nVoulez-vous vraiment continuer \?</string>
 
     <string name="create_room_dm_failure">Nous n’avons pas pu créer votre conversation directe. Vérifiez les utilisateurs que vous souhaitez inviter et réessayez.</string>
-</resources>
+<string name="unencrypted">Non chiffré</string>
+    <string name="encrypted_unverified">Chiffré par un appareil non vérifié</string>
+    <string name="review_logins">Vérifiez où vous vous êtes connecté</string>
+    <string name="verify_other_sessions">Vérifiez toutes les sessions pour vous assurer que votre compte et vos messages sont en sécurité</string>
+    <string name="verify_this_session">Vérifiez la nouvelle connexion accédant à votre compte : %1$s</string>
+
+    </resources>
