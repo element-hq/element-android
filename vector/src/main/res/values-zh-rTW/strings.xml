@@ -2169,7 +2169,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="refresh">重新整理</string>
 
-    <string name="new_session">未驗證的登入。是您嗎？</string>
+    <string name="new_session">新登入。是您嗎？</string>
     <string name="new_session_review">輕觸即可以審閱並驗證</string>
     <string name="verify_new_session_notice">使用此工作階段來驗證新的，讓它可以存取已加密的訊息。</string>
     <string name="verify_new_session_was_not_me">這不是我</string>
@@ -2329,4 +2329,10 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 \n您確定您想要繼續嗎？</string>
 
     <string name="create_room_dm_failure">我們無法建立您的直接訊息。請檢查您想要邀請的使用者，然後再試一次。</string>
-</resources>
+<string name="unencrypted">未加密</string>
+    <string name="encrypted_unverified">由未驗證的裝置加密</string>
+    <string name="review_logins">審閱您從何處登入</string>
+    <string name="verify_other_sessions">驗證您所有的工作階段以確保您的帳號與訊息都安全</string>
+    <string name="verify_this_session">驗證正在存取您帳號的新登入：%1$s</string>
+
+    </resources>
