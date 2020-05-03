@@ -2349,4 +2349,5 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 <string name="message_key">Nachrichtenschlüssel</string>
     <string name="account_password">Kontopasswort</string>
 
+    <string name="recovery_passphrase">Wiederherstellungspassphrase</string>
     </resources>
