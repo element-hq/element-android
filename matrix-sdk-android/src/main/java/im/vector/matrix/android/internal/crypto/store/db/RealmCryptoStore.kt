@@ -58,7 +58,6 @@ import im.vector.matrix.android.internal.crypto.store.db.model.DeviceInfoEntityF
 import im.vector.matrix.android.internal.crypto.store.db.model.GossipingEventEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.IncomingGossipingRequestEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.IncomingGossipingRequestEntityFields
-import im.vector.matrix.android.internal.crypto.store.db.model.KeyInfoEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
@@ -81,7 +80,6 @@ import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.session.SessionScope
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import io.realm.RealmList
 import io.realm.Sort
 import io.realm.kotlin.where
 import org.matrix.olm.OlmAccount
@@ -1423,22 +1421,21 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     private fun addOrUpdateCrossSigningInfo(realm: Realm, userId: String, info: MXCrossSigningInfo?): CrossSigningInfoEntity? {
-        var existing = CrossSigningInfoEntity.get(realm, userId)
         if (info == null) {
             // Delete known if needed
-            existing?.deleteFromRealm()
+            CrossSigningInfoEntity.get(realm, userId)?.deleteFromRealm()
+            return null
             // TODO notify, we might need to untrust things?
         } else {
             // Just override existing, caller should check and untrust id needed
-            existing = CrossSigningInfoEntity.getOrCreate(realm, userId)
-            // existing.crossSigningKeys.forEach { it.deleteFromRealm() }
-            val xkeys = RealmList<KeyInfoEntity>()
-            info.crossSigningKeys.forEach { cryptoCrossSigningKey ->
-                val keyEntity = crossSigningKeysMapper.map(cryptoCrossSigningKey)
-                xkeys.add(keyEntity)
-            }
-            existing.crossSigningKeys = xkeys
+            val existing = CrossSigningInfoEntity.getOrCreate(realm, userId)
+            existing.crossSigningKeys.forEach { it.deleteFromRealm() }
+            existing.crossSigningKeys.addAll(
+                    info.crossSigningKeys.map {
+                        crossSigningKeysMapper.map(it)
+                    }
+            )
+            return existing
         }
-        return existing
     }
 }
