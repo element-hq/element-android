@@ -1783,10 +1783,10 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_text_message_sent">Eine Textnachricht wurde an %s gesendet. Bitte gebe den Verifizierungscode ein, den sie enthält.</string>
 
     <string name="labs_allow_extended_logging">Aktiviere ausführliche Logs.</string>
-    <string name="labs_allow_extended_logging_summary">Gesprächige Logs wird den Entwicklern helfen indem sie mehr Informationen enthalten, wenn du einen Fehlerbericht sendest. Auch wenn dies aktiviert ist, werden keine Nachrichteninhalte oder andere privaten Daten aufgezeichnet.</string>
+    <string name="labs_allow_extended_logging_summary">Ausführliche Logs werden den Entwicklern helfen, indem sie mehr Informationen enthalten, wenn du einen Fehlerbericht sendest. Auch wenn dies aktiviert ist, werden keine Nachrichteninhalte oder andere privaten Daten aufgezeichnet.</string>
 
 
-    <string name="error_terms_not_accepted">Bitte erneut versuchen, nachdem du die Nutzungsbedingungendeines Home-Servers akzeptiert hast.</string>
+    <string name="error_terms_not_accepted">Bitte erneut versuchen, nachdem du die Nutzungsbedingungen deines Home-Servers akzeptiert hast.</string>
 
     <string name="room_widget_permission_webview_shared_info_title">Bei Benutzung könnten Cookies gesetzt werden und es könnten Daten mit %s geteilt werden:</string>
     <string name="room_widget_permission_shared_info_title">Bei Benutzung könnten Daten mit %s geteilt werden:</string>
