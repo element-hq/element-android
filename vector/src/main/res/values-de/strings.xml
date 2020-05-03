@@ -2280,7 +2280,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="refresh">Neu laden</string>
 
-    <string name="new_session">Neue Sitzung</string>
+    <string name="new_session">Neue Anmeldung. Warst du das\?</string>
     <string name="new_session_review">Tippe für eine Überprüfung &amp; Verifikation</string>
     <string name="verify_new_session_notice">Benutze diese Sitzung um deine neue zu verfizieren, damit sie auf verschlüsselte Nachrichten zugreifen kann.</string>
     <string name="verify_new_session_was_not_me">Das war ich nicht</string>
