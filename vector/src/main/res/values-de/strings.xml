@@ -2346,7 +2346,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="auth_invalid_login_param_space_in_password">Inkorrekter Benutzername und/oder Passwort. Das eingegebene Passwort beginnt oder endet mit Leerzeichen, bitte kontrolliere es.</string>
 
-<string name="message_key">Nachrichtenschlüssel</string>
+    <string name="message_key">Nachrichtenschlüssel</string>
     <string name="account_password">Kontopasswort</string>
 
     <string name="recovery_passphrase">Wiederherstellungs-Passphrase</string>
@@ -2354,4 +2354,4 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="bootstrap_crosssigning_save_cloud">Kopier es in deinen persönlichen Cloud-Speicher</string>
 
     <string name="encryption_not_enabled">Verschlüsselung ist nicht aktiviert</string>
-    </resources>
+</resources>

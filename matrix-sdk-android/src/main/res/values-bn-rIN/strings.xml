@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="summary_user_sent_image">%1$s একটি ফটো পাঠিয়েছে।</string>
+<resources>
+    <string name="summary_user_sent_image">%1$s একটি ফটো পাঠিয়েছে।</string>
     <string name="summary_user_sent_sticker">%1$s একটি স্তিকার পাঠিয়েছে।</string>
 
     <string name="notice_room_invite_no_invitee">%s এর আমন্ত্রণ</string>
@@ -20,4 +21,4 @@
     <string name="notice_room_name_changed">%1$s রুম এর নাম এতে পরিবর্তন করেছে: %2$s</string>
     <string name="notice_placed_video_call">%s একটি ভিডিও কল স্থাপন করেছিল।</string>
     <string name="notice_placed_voice_call">%s একটি ভয়েস কল দিয়েছে।</string>
-    </resources>
+</resources>

@@ -2052,7 +2052,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="room_profile_leaving_room">Poistutaan huoneesta…</string>
 
     <string name="login_signup_username_hint">Käyttäjätunnus</string>
-<string name="notification_initial_sync">Synkronoidaan tietoja ensimmäistä kertaa…</string>
+    <string name="notification_initial_sync">Synkronoidaan tietoja ensimmäistä kertaa…</string>
 
     <string name="settings_developer_mode">Kehittäjämoodi</string>
     <string name="settings_developer_mode_summary">Kehittäjämoodi aktivoi piilotettuja ominaisuuksia, mutta voi tehdä sovelluksesta epävakaan. Vain kehittäjille!</string>
@@ -2075,4 +2075,4 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="verification_conclusion_not_secure">Ei turvallinen</string>
     <string name="sent_a_video">Video.</string>
     <string name="sent_an_image">Kuva.</string>
-    </resources>
+</resources>

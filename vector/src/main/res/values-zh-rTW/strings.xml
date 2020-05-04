@@ -2300,7 +2300,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="error_adding_media_file_to_gallery">無法新增媒體檔案到媒體庫中</string>
     <string name="change_password_summary">設定新的帳號密碼……</string>
 
-<string name="use_other_session_content_description">在您的其他裝置上使用最新的 Riot、Riot Web、Riot 桌面版、Riot iOS、RiotX for Android 或其他有交叉簽章功能的 Matrix 客戶端</string>
+    <string name="use_other_session_content_description">在您的其他裝置上使用最新的 Riot、Riot Web、Riot 桌面版、Riot iOS、RiotX for Android 或其他有交叉簽章功能的 Matrix 客戶端</string>
     <string name="riot_desktop_web">Riot Web
 \nRiot 桌面版</string>
     <string name="riot_ios_android">Riot iOS
@@ -2329,10 +2329,10 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 \n您確定您想要繼續嗎？</string>
 
     <string name="create_room_dm_failure">我們無法建立您的直接訊息。請檢查您想要邀請的使用者，然後再試一次。</string>
-<string name="unencrypted">未加密</string>
+    <string name="unencrypted">未加密</string>
     <string name="encrypted_unverified">由未驗證的裝置加密</string>
     <string name="review_logins">審閱您從何處登入</string>
     <string name="verify_other_sessions">驗證您所有的工作階段以確保您的帳號與訊息都安全</string>
     <string name="verify_this_session">驗證正在存取您帳號的新登入：%1$s</string>
 
-    </resources>
+</resources>

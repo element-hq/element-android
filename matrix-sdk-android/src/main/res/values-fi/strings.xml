@@ -206,7 +206,7 @@
     <string name="notice_room_guest_access_can_join">%1$s salli vieraiden liittyä huoneeseen.</string>
     <string name="notice_room_guest_access_forbidden">%1$s esti vieraita liittymästä huoneeseen.</string>
 
-<string name="notice_end_to_end_ok">%1$s laittoi päälle osapuolten välisen salauksen.</string>
+    <string name="notice_end_to_end_ok">%1$s laittoi päälle osapuolten välisen salauksen.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s laittoi päälle osapuolisten välisen salauksen (tuntematon algoritmi %2$s).</string>
 
-    </resources>
+</resources>

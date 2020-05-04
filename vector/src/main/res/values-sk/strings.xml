@@ -94,7 +94,7 @@
         <item quantity="one">1 používateľ</item>
         <item quantity="few">%d používatelia</item>
         <item quantity="many">%d používateľov</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="send_bug_report_include_logs">Odoslať záznamy</string>
@@ -790,7 +790,7 @@ Neznáme zariadenia:</string>
         <item quantity="one">1 zmena stavu</item>
         <item quantity="few">%d zmeny stavu</item>
         <item quantity="many">%d zmien stavu</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="list_members">Zobraziť členov</string>
@@ -800,50 +800,50 @@ Neznáme zariadenia:</string>
         <item quantity="one">1 aktívny člen</item>
         <item quantity="few">%d aktívni členovia</item>
         <item quantity="many">%d aktívnych členov</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">1 člen</item>
         <item quantity="few">%d členovia</item>
         <item quantity="many">%d členov</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="room_new_messages_notification">
         <item quantity="one">1 nová správa</item>
         <item quantity="few">%d nové správy</item>
         <item quantity="many">%d nových správ</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <plurals name="directory_search_rooms">
         <item quantity="one">1 miestnosť</item>
         <item quantity="few">%d miestnosti</item>
         <item quantity="many">%d miestností</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="directory_search_rooms_for">
         <item quantity="one">Nájdená %1$s miestnosť pre %2$s</item>
         <item quantity="few">Nájdené %1$s miestnosti pre %2$s</item>
         <item quantity="many">Nájdených %1$s miestností pre %2$s</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">1 neprečítaná správa</item>
         <item quantity="few">%d neprečítané správy</item>
         <item quantity="many">%d neprečítaných správ</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
         <item quantity="one">1 neprečítaná správa</item>
         <item quantity="few">%d neprečítané správy</item>
         <item quantity="many">%d neprečítaných správ</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">1 miestnosti</item>
         <item quantity="few">%d miestnostiach</item>
         <item quantity="many">%d miestnostiach</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s v %2$s</string>
 
@@ -851,7 +851,7 @@ Neznáme zariadenia:</string>
         <item quantity="one">1 aktívny widget</item>
         <item quantity="few">%d aktívne widgety</item>
         <item quantity="many">%d aktívnych widgetov</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <!-- Widget Integration Manager -->
@@ -933,25 +933,25 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
         <item quantity="one">1s</item>
         <item quantity="few">%ds</item>
         <item quantity="many">%ds</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="format_time_m">
         <item quantity="one">1m</item>
         <item quantity="few">%dm</item>
         <item quantity="many">%dm</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="format_time_h">
         <item quantity="one">1h</item>
         <item quantity="few">%dh</item>
         <item quantity="many">%dh</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="format_time_d">
         <item quantity="one">1d</item>
         <item quantity="few">%dd</item>
         <item quantity="many">%dd</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="room_participants_now">teraz %1$s</string>
@@ -970,7 +970,7 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
         <item quantity="one">1 vybratý</item>
         <item quantity="few">%d vybratí</item>
         <item quantity="many">%d vybratých</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="settings_preview_media_before_sending">Zobraziť náhľad médií pred odoslaním</string>
 
@@ -995,14 +995,14 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
         <item quantity="one">1 člen</item>
         <item quantity="few">%d členovia</item>
         <item quantity="many">%d členov</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <plurals name="group_rooms">
         <item quantity="one">1 miestnosť</item>
         <item quantity="few">%d miestnosti</item>
         <item quantity="many">%d miestností</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="room_tombstone_versioned_description">Táto miestnosť bola nahradená inou a nie je viac aktívna</string>
     <string name="room_tombstone_continuation_link">Konverzácia pokračuje tu</string>
@@ -1069,7 +1069,7 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
         <item quantity="one">Ste si istí, že chcete z miestnosti vykázať tohoto používateľa?</item>
         <item quantity="few">Ste si istí, že chcete z miestnosti vykázať týchto používateľov?</item>
         <item quantity="many">Ste si istí, že chcete z miestnosti vykázať týchto používateľov?</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="reason_hint">Dôvod</string>
 
@@ -1306,7 +1306,7 @@ Objavte skutočne výkonné možnosti otvorenej spolupráce s Riot.im!</string>
     <string name="error_empty_field_enter_user_name">Prosím zadajte meno používateľa.</string>
     <string name="title_activity_verify_device">Overiť zariadenie</string>
 
-<string name="resources_script">Latn</string>
+    <string name="resources_script">Latn</string>
 
     <string name="none">Žiadny</string>
     <string name="revoke">Zrušiť</string>
@@ -1329,4 +1329,4 @@ Objavte skutočne výkonné možnosti otvorenej spolupráce s Riot.im!</string>
     <string name="auth_add_email_and_phone_message_2">Nastavte e-mail na obnovenie účtu. Použite e-mail alebo telefónne číslo voliteľne neskôr, aby ich našli ľudia, ktorí vás poznajú.</string>
     <string name="login_error_no_homeserver_found">Toto nie je platná adresa Matrix serveru</string>
     <string name="login_error_homeserver_not_found">Homeserver nie je dostupný na tomto URL, prosím, preverte</string>
-    </resources>
+</resources>

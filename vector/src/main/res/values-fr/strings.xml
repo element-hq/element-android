@@ -2358,7 +2358,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="error_adding_media_file_to_gallery">Impossible d’ajouter le fichier multimédia à la galerie</string>
     <string name="change_password_summary">Définir un nouveau mot de passe de compte…</string>
 
-<string name="use_other_session_content_description">Utilisez la dernière version de Riot sur vos autres appareils : Riot Web, Riot pour Bureau, Riot iOS, RiotX pour Android, ou un autre client Matrix qui prend en charge la signature croisée</string>
+    <string name="use_other_session_content_description">Utilisez la dernière version de Riot sur vos autres appareils : Riot Web, Riot pour Bureau, Riot iOS, RiotX pour Android, ou un autre client Matrix qui prend en charge la signature croisée</string>
     <string name="riot_desktop_web">Riot Web
 \nRiot pour Bureau</string>
     <string name="riot_ios_android">Riot iOS
@@ -2387,10 +2387,10 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 \nVoulez-vous vraiment continuer \?</string>
 
     <string name="create_room_dm_failure">Nous n’avons pas pu créer votre conversation directe. Vérifiez les utilisateurs que vous souhaitez inviter et réessayez.</string>
-<string name="unencrypted">Non chiffré</string>
+    <string name="unencrypted">Non chiffré</string>
     <string name="encrypted_unverified">Chiffré par un appareil non vérifié</string>
     <string name="review_logins">Vérifiez où vous vous êtes connecté</string>
     <string name="verify_other_sessions">Vérifiez toutes les sessions pour vous assurer que votre compte et vos messages sont en sécurité</string>
     <string name="verify_this_session">Vérifiez la nouvelle connexion accédant à votre compte : %1$s</string>
 
-    </resources>
+</resources>
