@@ -15,7 +15,6 @@
  */
 package im.vector.riotx.features.crypto.keysbackup.restore
 
-import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableString
