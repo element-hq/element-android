@@ -2353,4 +2353,5 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="bootstrap_crosssigning_print_it">Druck es aus und speichere es an einem sicheren Ort</string>
     <string name="bootstrap_crosssigning_save_cloud">Kopier es in deinen persönlichen Cloud-Speicher</string>
 
+    <string name="encryption_not_enabled">Verschlüsselung ist nicht aktiviert</string>
     </resources>
