@@ -196,6 +196,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
     }
 
     private fun migrateTo3(realm: DynamicRealm) {
+        Timber.d("Step 2 -> 3")
         Timber.d("Updating CryptoMetadataEntity table")
         realm.schema.get("CryptoMetadataEntity")
                 ?.addField(CryptoMetadataEntityFields.KEY_BACKUP_RECOVERY_KEY, String::class.java)
@@ -203,6 +204,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
     }
 
     private fun migrateTo4(realm: DynamicRealm) {
+        Timber.d("Step 3 -> 4")
         Timber.d("Updating KeyInfoEntity table")
         val keyInfoEntities = realm.where("KeyInfoEntity").findAll()
         try {
@@ -217,6 +219,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
     }
 
     private fun migrateTo5(realm: DynamicRealm) {
+        Timber.d("Step 4 -> 5")
         realm.schema.create("MyDeviceLastSeenInfoEntity")
                 .addField(MyDeviceLastSeenInfoEntityFields.DEVICE_ID, String::class.java)
                 .addPrimaryKey(MyDeviceLastSeenInfoEntityFields.DEVICE_ID)
