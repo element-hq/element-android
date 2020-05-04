@@ -21,4 +21,5 @@ import javax.inject.Inject
 
 class HomeSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<HomeActivitySharedAction>() {
     var hasDisplayedCompleteSecurityPrompt : Boolean = false
+    var isAccountCreation : Boolean = false
 }

@@ -31,10 +31,12 @@ import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.ui.list.GenericItem
 import im.vector.riotx.core.ui.list.genericItem
+import im.vector.riotx.features.settings.VectorPreferences
 import java.util.UUID
 import javax.inject.Inject
 
 class KeysBackupSettingsRecyclerViewController @Inject constructor(private val stringProvider: StringProvider,
+                                                                   private val vectorPreferences: VectorPreferences,
                                                                    private val session: Session) : TypedEpoxyController<KeysBackupSettingViewState>() {
 
     var listener: Listener? = null
@@ -149,7 +151,9 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(private val s
                 description(keyVersionResult?.algorithm ?: "")
             }
 
-            buildKeysBackupTrust(data.keysBackupVersionTrust)
+            if (vectorPreferences.developerMode()) {
+                buildKeysBackupTrust(data.keysBackupVersionTrust)
+            }
         }
 
         // Footer

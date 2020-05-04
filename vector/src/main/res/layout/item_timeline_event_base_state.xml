@@ -49,10 +49,22 @@
         <ViewStub
             android:id="@+id/messageVerificationDoneStub"
             style="@style/TimelineContentStubBaseParams"
-            android:layout="@layout/item_timeline_event_verification_done_stub"
+            android:layout="@layout/item_timeline_event_status_tile_stub"
             tools:visibility="visible" />
 
     </FrameLayout>
+
+
+    <ImageView
+        android:id="@+id/messageE2EDecoration"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_alignTop="@id/viewStubContainer"
+        android:layout_toStartOf="@id/viewStubContainer"
+        android:visibility="gone"
+        tools:src="@drawable/ic_shield_warning"
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/messageFailToSendIndicator"

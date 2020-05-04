@@ -24,21 +24,27 @@ import im.vector.matrix.android.api.pushrules.RoomMemberCountCondition
 import im.vector.matrix.android.api.pushrules.SenderNotificationPermissionCondition
 import timber.log.Timber
 
+/**
+ * Ref: https://matrix.org/docs/spec/client_server/latest#get-matrix-client-r0-pushrules
+ */
 @JsonClass(generateAdapter = true)
 data class PushCondition(
         /**
          * Required. The kind of condition to apply.
          */
+        @Json(name = "kind")
         val kind: String,
 
         /**
          * Required for event_match conditions. The dot- separated field of the event to match.
          */
+        @Json(name = "key")
         val key: String? = null,
 
         /**
          * Required for event_match conditions.
          */
+        @Json(name = "pattern")
         val pattern: String? = null,
 
         /**
@@ -47,7 +53,8 @@ data class PushCondition(
          * A prefix of < matches rooms where the member count is strictly less than the given number and so forth.
          * If no prefix is present, this parameter defaults to ==.
          */
-        @Json(name = "is") val iz: String? = null
+        @Json(name = "is")
+        val iz: String? = null
 ) {
 
     fun asExecutableCondition(): Condition? {

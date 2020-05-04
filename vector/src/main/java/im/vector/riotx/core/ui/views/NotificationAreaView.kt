@@ -87,7 +87,7 @@ class NotificationAreaView @JvmOverloads constructor(
         }
     }
 
-    // PRIVATE METHODS *****************************************************************************************************************************************
+    // PRIVATE METHODS ****************************************************************************************************************************************
 
     private fun setupView() {
         inflate(context, R.layout.view_notification_area, this)

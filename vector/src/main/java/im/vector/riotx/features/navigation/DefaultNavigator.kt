@@ -24,7 +24,6 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.view.ViewCompat
 import im.vector.matrix.android.api.session.crypto.verification.IncomingSasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
@@ -35,6 +34,8 @@ import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.createdirect.CreateDirectRoomActivity
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupActivity
+import im.vector.riotx.features.crypto.recover.BootstrapBottomSheet
+import im.vector.riotx.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.debug.DebugMenuActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
@@ -56,7 +57,8 @@ import javax.inject.Singleton
 @Singleton
 class DefaultNavigator @Inject constructor(
         private val sessionHolder: ActiveSessionHolder,
-        private val vectorPreferences: VectorPreferences
+        private val vectorPreferences: VectorPreferences,
+        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider
 ) : Navigator {
 
     override fun openRoom(context: Context, roomId: String, eventId: String?, buildTask: Boolean) {
@@ -82,18 +84,19 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun requestSessionVerification(context: Context) {
+    override fun requestSessionVerification(context: Context, otherSessionId: String) {
         val session = sessionHolder.getSafeActiveSession() ?: return
         val pr = session.cryptoService().verificationService().requestKeyVerification(
-                listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SCAN, VerificationMethod.QR_CODE_SHOW),
+                supportedVerificationMethodsProvider.provide(),
                 session.myUserId,
-                session.cryptoService().getUserDevices(session.myUserId).map { it.deviceId })
+                listOf(otherSessionId)
+        )
         if (context is VectorBaseActivity) {
             VerificationBottomSheet.withArgs(
                     roomId = null,
                     otherUserId = session.myUserId,
                     transactionId = pr.transactionId
-            ).show(context.supportFragmentManager, "REQPOP")
+            ).show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
         }
     }
 
@@ -102,6 +105,12 @@ class DefaultNavigator @Inject constructor(
         if (context is VectorBaseActivity) {
             VerificationBottomSheet.forSelfVerification(session)
                     .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
+        }
+    }
+
+    override fun upgradeSessionSecurity(context: Context) {
+        if (context is VectorBaseActivity) {
+            BootstrapBottomSheet.show(context.supportFragmentManager, false)
         }
     }
 

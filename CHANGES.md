@@ -1,3 +1,109 @@
+Changes in RiotX 0.19.0 (2020-05-04)
+===================================================
+
+Features ✨:
+ - Change password (#528)
+ - Cross-Signing | Support SSSS secret sharing (#944)
+ - Cross-Signing | Verify new session from existing session (#1134)
+ - Cross-Signing | Bootstraping cross signing with 4S from mobile (#985)
+ - Save media files to Gallery (#973)
+ - Account deactivation (with password only) (#35)
+
+Improvements 🙌:
+ - Verification DM / Handle concurrent .start after .ready (#794)
+ - Reimplementation of multiple attachment picker
+ - Cross-Signing | Update Shield Logic for DM (#963)
+ - Cross-Signing | Complete security new session design update (#1135)
+ - Cross-Signing | Setup key backup as part of SSSS bootstrapping (#1201)
+ - Cross-Signing | Gossip key backup recovery key (#1200)
+ - Show room encryption status as a bubble tile (#1078)
+ - UX/UI | Add indicator to home tab on invite (#957)
+ - Cross-Signing | Restore history after recover from passphrase (#1214)
+ - Cross-Sign | QR code scan confirmation screens design update (#1187)
+ - Emoji Verification | It's not the same butterfly! (#1220)
+ - Cross-Signing | Composer decoration: shields (#1077)
+ - Cross-Signing | Migrate existing keybackup to cross signing with 4S from mobile (#1197)
+ - Show a warning dialog if the text of the clicked link does not match the link target (#922)
+ - Cross-Signing | Consider not using a spinner on the 'complete security' prompt (#1271)
+ - Restart broken Olm sessions ([MSC1719](https://github.com/matrix-org/matrix-doc/pull/1719))
+ - Cross-Signing | Hide Use recovery key when 4S is not setup (#1007)
+ - Cross-Signing | Trust account xSigning keys by entering Recovery Key (select file or copy) #1199
+ - E2E timeline decoration (#1279)
+ - Manage Session Settings / Cross Signing update (#1295)
+ - Cross-Signing | Review sessions toast update old vs new (#1293, #1306)
+
+Bugfix 🐛:
+ - Fix summary notification staying after "mark as read"
+ - Missing avatar/displayname after verification request message (#841)
+ - Crypto | RiotX sometimes rotate the current device keys (#1170)
+ - RiotX can't restore cross signing keys saved by web in SSSS (#1174)
+ - Cross- Signing | After signin in new session, verification paper trail in DM is off (#1191)
+ - Failed to encrypt message in room (message stays in red), [thanks to pwr22] (#925)
+ - Cross-Signing | web <-> riotX After QR code scan, gossiping fails (#1210)
+ - Fix crash when trying to download file without internet connection (#1229)
+ - Local echo are not updated in timeline (for failed & encrypted states)
+ - Render image event even if thumbnail_info does not have mimetype defined (#1209)
+ - RiotX now uses as many threads as it needs to do work and send messages (#1221)
+ - Fix issue with media path (#1227)
+ - Add user to direct chat by user id (#1065)
+ - Use correct URL for SSO connection (#1178)
+ - Emoji completion :tada: does not completes to 🎉 like on web (#1285)
+ - Fix bad Shield Logic for DM (#963)
+
+Translations 🗣:
+ - Weblate now create PR directly to RiotX GitHub project
+
+SDK API changes ⚠️:
+ - Increase targetSdkVersion to 29
+
+Build 🧱:
+ - Compile with Android SDK 29 (Android Q)
+
+Other changes:
+ - Add a setting to prevent screenshots of the application, disabled by default (#1027)
+ - Increase File Logger capacities ( + use dev log preferences)
+
+Changes in RiotX 0.18.1 (2020-03-17)
+===================================================
+
+Improvements 🙌:
+ - Implementation of /join command
+
+Bugfix 🐛:
+ - Message transitions in encrypted rooms are jarring #518
+ - Images that failed to send are waiting to be sent forever #1145
+ - Fix / Crashed when trying to send a gif from the Gboard #1136
+ - Fix / Cannot click on key backup banner when new keys are available
+
+
+Changes in RiotX 0.18.0 (2020-03-11)
+===================================================
+
+Improvements 🙌:
+ - Share image and other media from e2e rooms (#677)
+ - Add support for `/plain` command (#12)
+ - Detect spaces in password if user fail to login (#1038)
+ - FTUE: do not display a different color when encrypting message when not in developer mode.
+ - Open room member profile from avatar of the room member state event (#935)
+ - Restore the push rules configuration in the settings
+
+Bugfix 🐛:
+ - Fix crash on attachment preview screen (#1088)
+ - "Share" option is not appearing in encrypted rooms for images (#1031)
+ - Set "image/jpeg" as MIME type of images instead of "image/jpg" (#1075)
+ - Self verification via QR code is failing (#1130)
+
+SDK API changes ⚠️:
+ - PushRuleService.getPushRules() now returns a RuleSet. Use getAllRules() on this object to get all the rules.
+
+Build 🧱:
+ - Upgrade ktlint to version 0.36.0
+ - Pipeline file for Buildkite is now hosted on another Github repository: https://github.com/matrix-org/pipelines/blob/master/riotx-android/pipeline.yml
+
+Other changes:
+ - Restore availability to Chromebooks (#932)
+ - Add a [documentation](./docs/integration_tests.md) to run integration tests
+
 Changes in RiotX 0.17.0 (2020-02-27)
 ===================================================
 
@@ -363,6 +469,7 @@ Bugfix:
  - Fix messages with empty `in_reply_to` not rendering (#447)
  - Fix clear cache (#408) and Logout (#205)
  - Fix `(edited)` link can be copied to clipboard (#402)
+ - KeyBackup / SSSS | Should get the key from SSSS instead of asking recovery Key (#1163)
 
 Build:
  - Split APK: generate one APK per arch, to reduce APK size of about 30%

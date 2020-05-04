@@ -26,6 +26,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.di.DaggerScreenComponent
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.utils.toast
 import timber.log.Timber
@@ -40,6 +41,7 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasScree
 
     // members
     protected lateinit var session: Session
+    protected lateinit var errorFormatter: ErrorFormatter
     private lateinit var screenComponent: ScreenComponent
 
     abstract val preferenceXmlRes: Int
@@ -54,6 +56,7 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasScree
         screenComponent = DaggerScreenComponent.factory().create(vectorActivity.getVectorComponent(), vectorActivity)
         super.onAttach(context)
         session = screenComponent.activeSessionHolder().getActiveSession()
+        errorFormatter = screenComponent.errorFormatter()
         injectWith(injector())
     }
 

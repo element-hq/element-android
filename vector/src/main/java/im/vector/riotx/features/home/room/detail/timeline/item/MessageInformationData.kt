@@ -40,7 +40,8 @@ data class MessageInformationData(
         val hasPendingEdits: Boolean = false,
         val readReceipts: List<ReadReceiptData> = emptyList(),
         val referencesInfoData: ReferencesInfoData? = null,
-        val sentByMe : Boolean
+        val sentByMe : Boolean,
+        val e2eDecoration: E2EDecoration = E2EDecoration.NONE
 ) : Parcelable {
 
     val matrixItem: MatrixItem
@@ -74,5 +75,12 @@ data class PollResponseData(
         val votes: Map<Int, Int>?,
         val isClosed: Boolean = false
 ) : Parcelable
+
+enum class E2EDecoration {
+    NONE,
+    WARN_IN_CLEAR,
+    WARN_SENT_BY_UNVERIFIED,
+    WARN_SENT_BY_UNKNOWN
+}
 
 fun ReadReceiptData.toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)

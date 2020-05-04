@@ -136,6 +136,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         roomSummaryEntity.aliases.addAll(roomAliases)
         roomSummaryEntity.flatAliases = roomAliases.joinToString(separator = "|", prefix = "|")
         roomSummaryEntity.isEncrypted = encryptionEvent != null
+        roomSummaryEntity.encryptionEventTs = encryptionEvent?.originServerTs
         roomSummaryEntity.typingUserIds.clear()
         roomSummaryEntity.typingUserIds.addAll(ephemeralResult?.typingUserIds.orEmpty())
 
@@ -152,7 +153,7 @@ internal class RoomSummaryUpdater @Inject constructor(
 
         if (updateMembers) {
             val otherRoomMembers = RoomMemberHelper(realm, roomId)
-                    .queryRoomMembersEvent()
+                    .queryActiveRoomMembersEvent()
                     .notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId)
                     .findAll()
                     .asSequence()
@@ -161,7 +162,7 @@ internal class RoomSummaryUpdater @Inject constructor(
             roomSummaryEntity.otherMemberIds.clear()
             roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers)
             if (roomSummaryEntity.isEncrypted) {
-                eventBus.post(SessionToCryptoRoomMembersUpdate(roomId, roomSummaryEntity.otherMemberIds.toList() + userId))
+                eventBus.post(SessionToCryptoRoomMembersUpdate(roomId, roomSummaryEntity.isDirect, roomSummaryEntity.otherMemberIds.toList() + userId))
             }
         }
     }

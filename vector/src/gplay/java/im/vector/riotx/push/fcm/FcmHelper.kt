@@ -19,7 +19,7 @@ package im.vector.riotx.push.fcm
 
 import android.app.Activity
 import android.content.Context
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import android.widget.Toast
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -68,7 +68,7 @@ object FcmHelper {
      *
      * @param activity the first launch Activity
      */
-    fun ensureFcmTokenIsRetrieved(activity: Activity, pushersManager: PushersManager) {
+    fun ensureFcmTokenIsRetrieved(activity: Activity, pushersManager: PushersManager, registerPusher: Boolean) {
         //        if (TextUtils.isEmpty(getFcmToken(activity))) {
         // 'app should always check the device for a compatible Google Play services APK before accessing Google Play services features'
         if (checkPlayServices(activity)) {
@@ -76,7 +76,9 @@ object FcmHelper {
                 FirebaseInstanceId.getInstance().instanceId
                         .addOnSuccessListener(activity) { instanceIdResult ->
                             storeFcmToken(activity, instanceIdResult.token)
-                            pushersManager.registerPusherWithFcmKey(instanceIdResult.token)
+                            if (registerPusher) {
+                                pushersManager.registerPusherWithFcmKey(instanceIdResult.token)
+                            }
                         }
                         .addOnFailureListener(activity) { e -> Timber.e(e, "## ensureFcmTokenIsRetrieved() : failed") }
             } catch (e: Throwable) {

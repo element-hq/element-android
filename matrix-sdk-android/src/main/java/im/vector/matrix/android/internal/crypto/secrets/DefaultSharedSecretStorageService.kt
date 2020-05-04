@@ -33,14 +33,16 @@ import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageSer
 import im.vector.matrix.android.api.session.securestorage.SsssKeyCreationInfo
 import im.vector.matrix.android.api.session.securestorage.SsssKeySpec
 import im.vector.matrix.android.api.session.securestorage.SsssPassphrase
+import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestManager
 import im.vector.matrix.android.internal.crypto.SSSS_ALGORITHM_AES_HMAC_SHA2
 import im.vector.matrix.android.internal.crypto.SSSS_ALGORITHM_CURVE25519_AES_SHA2
-import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64NoPadding
+import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
 import im.vector.matrix.android.internal.crypto.crosssigning.toBase64NoPadding
 import im.vector.matrix.android.internal.crypto.keysbackup.generatePrivateKeyWithPassword
 import im.vector.matrix.android.internal.crypto.keysbackup.util.computeRecoveryKey
 import im.vector.matrix.android.internal.crypto.tools.HkdfSha256
 import im.vector.matrix.android.internal.crypto.tools.withOlmDecryption
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.extensions.foldToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
@@ -55,20 +57,24 @@ import javax.inject.Inject
 import kotlin.experimental.and
 
 internal class DefaultSharedSecretStorageService @Inject constructor(
+        @UserId private val userId: String,
         private val accountDataService: AccountDataService,
+        private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope
 ) : SharedSecretStorageService {
 
     override fun generateKey(keyId: String,
+                             key: SsssKeySpec?,
                              keyName: String,
                              keySigner: KeySigner?,
                              callback: MatrixCallback<SsssKeyCreationInfo>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.main) {
-            val key = try {
-                ByteArray(32).also {
-                    SecureRandom().nextBytes(it)
-                }
+            val bytes = try {
+                (key as? RawBytesKeySpec)?.privateKey
+                        ?: ByteArray(32).also {
+                            SecureRandom().nextBytes(it)
+                        }
             } catch (failure: Throwable) {
                 callback.onFailure(failure)
                 return@launch
@@ -98,7 +104,8 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                             callback.onSuccess(SsssKeyCreationInfo(
                                     keyId = keyId,
                                     content = storageKeyContent,
-                                    recoveryKey = computeRecoveryKey(key)
+                                    recoveryKey = computeRecoveryKey(bytes),
+                                    keySpec = RawBytesKeySpec(bytes)
                             ))
                         }
                     }
@@ -138,7 +145,8 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                             callback.onSuccess(SsssKeyCreationInfo(
                                     keyId = keyId,
                                     content = storageKeyContent,
-                                    recoveryKey = computeRecoveryKey(privatePart.privateKey)
+                                    recoveryKey = computeRecoveryKey(privatePart.privateKey),
+                                    keySpec = RawBytesKeySpec(privatePart.privateKey)
                             ))
                         }
                     }
@@ -268,7 +276,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         val ivParameterSpec = IvParameterSpec(iv)
         cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec)
         // secret are not that big, just do Final
-        val cipherBytes = cipher.doFinal(clearDataBase64.fromBase64NoPadding())
+        val cipherBytes = cipher.doFinal(clearDataBase64.toByteArray())
         require(cipherBytes.isNotEmpty())
 
         val macKeySpec = SecretKeySpec(macKey, "HmacSHA256")
@@ -295,9 +303,18 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         val aesKey = pseudoRandomKey.copyOfRange(0, 32)
         val macKey = pseudoRandomKey.copyOfRange(32, 64)
 
-        val iv = cipherContent.initializationVector?.fromBase64NoPadding() ?: ByteArray(16)
+        val iv = cipherContent.initializationVector?.fromBase64() ?: ByteArray(16)
 
-        val cipherRawBytes = cipherContent.ciphertext!!.fromBase64NoPadding()
+        val cipherRawBytes = cipherContent.ciphertext?.fromBase64() ?: throw SharedSecretStorageError.BadCipherText
+
+        // Check Signature
+        val macKeySpec = SecretKeySpec(macKey, "HmacSHA256")
+        val mac = Mac.getInstance("HmacSHA256").apply { init(macKeySpec) }
+        val digest = mac.doFinal(cipherRawBytes)
+
+        if (!cipherContent.mac?.fromBase64()?.contentEquals(digest).orFalse()) {
+            throw SharedSecretStorageError.BadMac
+        }
 
         val cipher = Cipher.getInstance("AES/CTR/NoPadding")
 
@@ -309,17 +326,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
 
         require(decryptedSecret.isNotEmpty())
 
-        // Check Signature
-        val macKeySpec = SecretKeySpec(macKey, "HmacSHA256")
-        val mac = Mac.getInstance("HmacSHA256").apply { init(macKeySpec) }
-        val digest = mac.doFinal(cipherRawBytes)
-
-        if (!cipherContent.mac?.fromBase64NoPadding()?.contentEquals(digest).orFalse()) {
-            throw SharedSecretStorageError.BadMac
-        } else {
-            // we are good
-            return decryptedSecret.toBase64NoPadding()
-        }
+        return String(decryptedSecret, Charsets.UTF_8)
     }
 
     override fun getAlgorithmsForSecret(name: String): List<KeyInfoResult> {
@@ -412,7 +419,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                 ?: return IntegrityResult.Error(SharedSecretStorageError.UnknownKey(keyId ?: ""))
 
         if (keyInfo.content.algorithm != SSSS_ALGORITHM_AES_HMAC_SHA2
-                || keyInfo.content.algorithm != SSSS_ALGORITHM_CURVE25519_AES_SHA2) {
+                && keyInfo.content.algorithm != SSSS_ALGORITHM_CURVE25519_AES_SHA2) {
             // Unsupported algorithm
             return IntegrityResult.Error(
                     SharedSecretStorageError.UnsupportedAlgorithm(keyInfo.content.algorithm ?: "")
@@ -428,5 +435,12 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         }
 
         return IntegrityResult.Success(keyInfo.content.passphrase != null)
+    }
+
+    override fun requestSecret(name: String, myOtherDeviceId: String) {
+        outgoingGossipingRequestManager.sendSecretShareRequest(
+                name,
+                mapOf(userId to listOf(myOtherDeviceId))
+        )
     }
 }

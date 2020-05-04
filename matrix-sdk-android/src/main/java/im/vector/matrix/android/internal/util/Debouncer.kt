@@ -23,11 +23,9 @@ internal class Debouncer(private val handler: Handler) {
     private val runnables = HashMap<String, Runnable>()
 
     fun debounce(identifier: String, r: Runnable, millis: Long): Boolean {
-        if (runnables.containsKey(identifier)) {
-            // debounce
-            val old = runnables[identifier]
-            handler.removeCallbacks(old)
-        }
+        // debounce
+        runnables[identifier]?.let { runnable -> handler.removeCallbacks(runnable) }
+
         insertRunnable(identifier, r, millis)
         return true
     }

@@ -20,6 +20,7 @@ import com.squareup.moshi.JsonClass
 
 /**
  * All push rulesets for a user.
+ * Ref: https://matrix.org/docs/spec/client_server/latest#get-matrix-client-r0-pushrules
  */
 @JsonClass(generateAdapter = true)
 internal data class GetPushRulesResponse(
@@ -27,11 +28,11 @@ internal data class GetPushRulesResponse(
          * Global rules, account level applying to all devices
          */
         @Json(name = "global")
-        val global: Ruleset,
+        val global: RuleSet,
 
         /**
          * Device specific rules, apply only to current device
          */
         @Json(name = "device")
-        val device: Ruleset? = null
+        val device: RuleSet? = null
 )

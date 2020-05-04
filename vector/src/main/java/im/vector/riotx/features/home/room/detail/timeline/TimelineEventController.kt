@@ -47,9 +47,9 @@ import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineEventVi
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.riotx.features.home.room.detail.timeline.helper.nextOrNull
 import im.vector.riotx.features.home.room.detail.timeline.item.BaseEventItem
+import im.vector.riotx.features.home.room.detail.timeline.item.BasedMergedItem
 import im.vector.riotx.features.home.room.detail.timeline.item.DaySeparatorItem
 import im.vector.riotx.features.home.room.detail.timeline.item.DaySeparatorItem_
-import im.vector.riotx.features.home.room.detail.timeline.item.MergedHeaderItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.riotx.features.home.room.detail.timeline.item.TimelineReadMarkerItem_
@@ -104,7 +104,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     interface UrlClickCallback {
-        fun onUrlClicked(url: String): Boolean
+        fun onUrlClicked(url: String, title: String): Boolean
         fun onUrlLongClicked(url: String): Boolean
     }
 
@@ -373,7 +373,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             val localId: Long,
             val eventId: String?,
             val eventModel: EpoxyModel<*>? = null,
-            val mergedHeaderModel: MergedHeaderItem? = null,
+            val mergedHeaderModel: BasedMergedItem<*>? = null,
             val formattedDayModel: DaySeparatorItem? = null
     ) {
         fun shouldTriggerBuild(): Boolean {

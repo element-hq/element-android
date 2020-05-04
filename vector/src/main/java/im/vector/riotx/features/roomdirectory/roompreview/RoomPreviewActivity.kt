@@ -70,7 +70,7 @@ class RoomPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
         if (isFirstCreation()) {
             val args = intent.getParcelableExtra<RoomPreviewData>(ARG)
 
-            if (args.worldReadable) {
+            if (args?.worldReadable == true) {
                 // TODO Room preview: Note: M does not recommend to use /events anymore, so for now we just display the room preview
                 // TODO the same way if it was not world readable
                 addFragment(R.id.simpleFragmentContainer, RoomPreviewNoPreviewFragment::class.java, args)

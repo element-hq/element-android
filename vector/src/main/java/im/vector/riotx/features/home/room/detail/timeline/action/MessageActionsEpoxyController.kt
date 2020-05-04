@@ -29,6 +29,7 @@ import im.vector.riotx.core.epoxy.dividerItem
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
+import im.vector.riotx.features.home.room.detail.timeline.item.E2EDecoration
 import im.vector.riotx.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.riotx.features.home.room.detail.timeline.tools.linkify
 import javax.inject.Inject
@@ -69,6 +70,29 @@ class MessageActionsEpoxyController @Inject constructor(
                 showProgress(false)
                 text(stringProvider.getString(R.string.unable_to_send_message))
                 drawableStart(R.drawable.ic_warning_small)
+            }
+        }
+
+        when (state.informationData.e2eDecoration) {
+            E2EDecoration.WARN_IN_CLEAR        -> {
+                bottomSheetSendStateItem {
+                    id("e2e_clear")
+                    showProgress(false)
+                    text(stringProvider.getString(R.string.unencrypted))
+                    drawableStart(R.drawable.ic_shield_warning_small)
+                }
+            }
+            E2EDecoration.WARN_SENT_BY_UNVERIFIED,
+            E2EDecoration.WARN_SENT_BY_UNKNOWN -> {
+                bottomSheetSendStateItem {
+                    id("e2e_unverified")
+                    showProgress(false)
+                    text(stringProvider.getString(R.string.encrypted_unverified))
+                    drawableStart(R.drawable.ic_shield_warning_small)
+                }
+            }
+            else                               -> {
+                // nothing
             }
         }
 

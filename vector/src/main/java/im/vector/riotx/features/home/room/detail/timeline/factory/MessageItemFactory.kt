@@ -222,7 +222,7 @@ class MessageItemFactory @Inject constructor(
                                 referenceId = informationData.eventId,
                                 informationData = informationData,
                                 avatarRenderer = attributes.avatarRenderer,
-                                colorProvider = attributes.colorProvider,
+                                messageColorProvider = attributes.messageColorProvider,
                                 itemLongClickListener = attributes.itemLongClickListener,
                                 itemClickListener = attributes.itemClickListener,
                                 reactionPillCallback = attributes.reactionPillCallback,
@@ -279,6 +279,7 @@ class MessageItemFactory @Inject constructor(
                                       attributes: AbsMessageItem.Attributes): MessageImageVideoItem? {
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
         val data = ImageContentRenderer.Data(
+                eventId = informationData.eventId,
                 filename = messageContent.body,
                 url = messageContent.getFileUrl(),
                 elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
@@ -314,6 +315,7 @@ class MessageItemFactory @Inject constructor(
                                       attributes: AbsMessageItem.Attributes): MessageImageVideoItem? {
         val (maxWidth, maxHeight) = timelineMediaSizeProvider.getMaxSize()
         val thumbnailData = ImageContentRenderer.Data(
+                eventId = informationData.eventId,
                 filename = messageContent.body,
                 url = messageContent.videoInfo?.thumbnailFile?.url
                         ?: messageContent.videoInfo?.thumbnailUrl,
@@ -440,11 +442,11 @@ class MessageItemFactory @Inject constructor(
                 Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
 
         spannable.setSpan(object : ClickableSpan() {
-            override fun onClick(widget: View?) {
+            override fun onClick(widget: View) {
                 callback?.onEditedDecorationClicked(informationData)
             }
 
-            override fun updateDrawState(ds: TextPaint?) {
+            override fun updateDrawState(ds: TextPaint) {
                 // nop
             }
         },

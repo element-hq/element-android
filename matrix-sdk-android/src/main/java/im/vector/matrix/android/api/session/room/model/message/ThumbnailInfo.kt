@@ -39,5 +39,5 @@ data class ThumbnailInfo(
         /**
          * The mimetype of the image, e.g. "image/jpeg".
          */
-        @Json(name = "mimetype") val mimeType: String
+        @Json(name = "mimetype") val mimeType: String?
 )

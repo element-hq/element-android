@@ -39,12 +39,14 @@ import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.HomeRoomListDataSource
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.VectorHtmlCompressor
+import im.vector.riotx.features.login.ReAuthHelper
 import im.vector.riotx.features.navigation.Navigator
 import im.vector.riotx.features.notifications.NotifiableEventResolver
 import im.vector.riotx.features.notifications.NotificationBroadcastReceiver
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.notifications.NotificationUtils
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
+import im.vector.riotx.features.popup.PopupAlertManager
 import im.vector.riotx.features.rageshake.BugReporter
 import im.vector.riotx.features.rageshake.VectorFileLogger
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
@@ -127,6 +129,10 @@ interface VectorComponent {
     fun uiStateRepository(): UiStateRepository
 
     fun emojiDataSource(): EmojiDataSource
+
+    fun alertManager() : PopupAlertManager
+
+    fun reAuthHelper() : ReAuthHelper
 
     @Component.Factory
     interface Factory {

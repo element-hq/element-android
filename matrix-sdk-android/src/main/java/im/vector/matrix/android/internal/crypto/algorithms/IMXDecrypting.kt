@@ -17,8 +17,10 @@
 
 package im.vector.matrix.android.internal.crypto.algorithms
 
+import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
+import im.vector.matrix.android.internal.crypto.IncomingSecretShareRequest
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.crypto.keysbackup.DefaultKeysBackupService
 
@@ -34,7 +36,8 @@ internal interface IMXDecrypting {
      * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
      * @return the decryption information, or an error
      */
-    suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult
+    @Throws(MXCryptoError::class)
+    fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult
 
     /**
      * Handle a key event.
@@ -65,4 +68,8 @@ internal interface IMXDecrypting {
      * @param request keyRequest
      */
     fun shareKeysWithDevice(request: IncomingRoomKeyRequest) {}
+
+    fun shareSecretWithDevice(request: IncomingSecretShareRequest, secretValue : String) {}
+
+    fun requestKeysForEvent(event: Event)
 }

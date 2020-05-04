@@ -19,21 +19,19 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfoAccept
 import im.vector.matrix.android.internal.crypto.verification.VerificationInfoAcceptFactory
-import timber.log.Timber
 
 /**
  * Sent by Bob to accept a verification from a previously sent m.key.verification.start message.
  */
 @JsonClass(generateAdapter = true)
 internal data class KeyVerificationAccept(
-
         /**
          * string to identify the transaction.
          * This string must be unique for the pair of users performing verification for the duration that the transaction is valid.
          * Alice’s device should record this ID and use it in future messages in this transaction.
          */
         @Json(name = "transaction_id")
-        override val transactionID: String? = null,
+        override val transactionId: String? = null,
 
         /**
          * The key agreement protocol that Bob’s device has selected to use, out of the list proposed by Alice’s device
@@ -67,19 +65,6 @@ internal data class KeyVerificationAccept(
         override var commitment: String? = null
 ) : SendToDeviceObject, VerificationInfoAccept {
 
-    override fun isValid(): Boolean {
-        if (transactionID.isNullOrBlank()
-                || keyAgreementProtocol.isNullOrBlank()
-                || hash.isNullOrBlank()
-                || commitment.isNullOrBlank()
-                || messageAuthenticationCode.isNullOrBlank()
-                || shortAuthenticationStrings.isNullOrEmpty()) {
-            Timber.e("## received invalid verification request")
-            return false
-        }
-        return true
-    }
-
     override fun toSendToDeviceObject() = this
 
     companion object : VerificationInfoAcceptFactory {
@@ -90,7 +75,7 @@ internal data class KeyVerificationAccept(
                             messageAuthenticationCode: String,
                             shortAuthenticationStrings: List<String>): VerificationInfoAccept {
             return KeyVerificationAccept(
-                    transactionID = tid,
+                    transactionId = tid,
                     keyAgreementProtocol = keyAgreementProtocol,
                     hash = hash,
                     commitment = commitment,

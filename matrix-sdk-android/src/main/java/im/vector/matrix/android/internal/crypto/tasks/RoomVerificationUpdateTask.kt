@@ -35,7 +35,6 @@ import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.task.Task
 import timber.log.Timber
 import java.util.ArrayList
-import java.util.UUID
 import javax.inject.Inject
 
 internal interface RoomVerificationUpdateTask : Task<RoomVerificationUpdateTask.Params, Unit> {
@@ -60,8 +59,7 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
         // TODO ignore initial sync or back pagination?
 
         params.events.forEach { event ->
-            Timber.d("## SAS Verification live observer: received msgId: ${event.eventId} msgtype: ${event.type} from ${event.senderId}")
-            Timber.v("## SAS Verification live observer: received msgId: $event")
+            Timber.v("## SAS Verification live observer: received msgId: ${event.eventId} msgtype: ${event.type} from ${event.senderId}")
 
             // If the request is in the future by more than 5 minutes or more than 10 minutes in the past,
             // the message should be ignored by the receiver.
@@ -76,7 +74,7 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
                 // TODO use a global event decryptor? attache to session and that listen to new sessionId?
                 // for now decrypt sync
                 try {
-                    val result = cryptoService.decryptEvent(event, event.roomId + UUID.randomUUID().toString())
+                    val result = cryptoService.decryptEvent(event, "")
                     event.mxDecryptionResult = OlmDecryptionResult(
                             payload = result.clearEvent,
                             senderKey = result.senderCurve25519Key,
@@ -85,6 +83,7 @@ internal class DefaultRoomVerificationUpdateTask @Inject constructor(
                     )
                 } catch (e: MXCryptoError) {
                     Timber.e("## SAS Failed to decrypt event: ${event.eventId}")
+                    params.verificationService.onPotentiallyInterestingEventRoomFailToDecrypt(event)
                 }
             }
             Timber.v("## SAS Verification live observer: received msgId: ${event.eventId} type: ${event.getClearType()}")

@@ -16,6 +16,7 @@
         <item name="riotx_header_panel_text_secondary">@color/riotx_header_panel_text_secondary_dark</item>
         <item name="riotx_text_primary">@color/riotx_text_primary_dark</item>
         <item name="riotx_text_secondary">@color/riotx_text_secondary_dark</item>
+        <item name="riotx_text_primary_body_contrast">@color/riotx_text_primary_body_contrast_dark</item>
         <item name="riotx_android_secondary">@color/riotx_android_secondary_dark</item>
         <item name="riotx_search_placeholder">@color/riotx_search_placeholder_dark</item>
         <item name="riotx_room_highlight">@color/riotx_room_highlight_dark</item>
@@ -35,8 +36,6 @@
 
         <!-- Drawables -->
         <item name="riotx_highlighted_message_background">@drawable/highlighted_message_background_dark</item>
-
-        <item name="android:listDivider">@color/riotx_header_panel_border_mobile_dark</item>
 
         <!-- Material color: Note: this block should be the same in all theme because it references only common colors and ?riotx attributes -->
         <item name="colorPrimary">@color/riotx_accent</item>

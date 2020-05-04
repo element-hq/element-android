@@ -17,7 +17,7 @@
 package im.vector.riotx.features.disclaimer
 
 import android.app.Activity
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog

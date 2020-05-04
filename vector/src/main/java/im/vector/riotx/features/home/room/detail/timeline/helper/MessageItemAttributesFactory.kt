@@ -20,9 +20,9 @@ package im.vector.riotx.features.home.room.detail.timeline.helper
 import android.view.View
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.riotx.EmojiCompatFontProvider
-import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
@@ -30,7 +30,7 @@ import javax.inject.Inject
 
 class MessageItemAttributesFactory @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
-        private val colorProvider: ColorProvider,
+        private val messageColorProvider: MessageColorProvider,
         private val avatarSizeProvider: AvatarSizeProvider,
         private val emojiCompatFontProvider: EmojiCompatFontProvider) {
 
@@ -41,7 +41,7 @@ class MessageItemAttributesFactory @Inject constructor(
                 avatarSize = avatarSizeProvider.avatarSize,
                 informationData = informationData,
                 avatarRenderer = avatarRenderer,
-                colorProvider = colorProvider,
+                messageColorProvider = messageColorProvider,
                 itemLongClickListener = View.OnLongClickListener { view ->
                     callback?.onEventLongClicked(informationData, messageContent, view) ?: false
                 },

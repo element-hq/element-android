@@ -39,6 +39,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.yalantis.ucrop.UCrop
 import com.yalantis.ucrop.UCropActivity
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
@@ -115,7 +116,7 @@ class AttachmentsPreviewFragment @Inject constructor(
     override fun onPrepareOptionsMenu(menu: Menu) {
         withState(viewModel) { state ->
             val editMenuItem = menu.findItem(R.id.attachmentsPreviewEditAction)
-            val showEditMenuItem = state.attachments[state.currentAttachmentIndex].isEditable()
+            val showEditMenuItem = state.attachments.getOrNull(state.currentAttachmentIndex)?.isEditable().orFalse()
             editMenuItem.setVisible(showEditMenuItem)
         }
 
@@ -171,9 +172,9 @@ class AttachmentsPreviewFragment @Inject constructor(
     }
 
     private fun handleCropResult(result: Intent) {
-        val resultPath = UCrop.getOutput(result)?.path
-        if (resultPath != null) {
-            viewModel.handle(AttachmentsPreviewAction.UpdatePathOfCurrentAttachment(resultPath))
+        val resultUri = UCrop.getOutput(result)
+        if (resultUri != null) {
+            viewModel.handle(AttachmentsPreviewAction.UpdatePathOfCurrentAttachment(resultUri))
         } else {
             Toast.makeText(requireContext(), "Cannot retrieve cropped value", Toast.LENGTH_SHORT).show()
         }
@@ -201,8 +202,7 @@ class AttachmentsPreviewFragment @Inject constructor(
     private fun doHandleEditAction() = withState(viewModel) {
         val currentAttachment = it.attachments.getOrNull(it.currentAttachmentIndex) ?: return@withState
         val destinationFile = File(requireContext().cacheDir, "${currentAttachment.name}_edited_image_${System.currentTimeMillis()}")
-        // Note: using currentAttachment.queryUri.toUri() make the app crash when sharing from Google Photos
-        val uri = File(currentAttachment.path).toUri()
+        val uri = currentAttachment.queryUri
         UCrop.of(uri, destinationFile.toUri())
                 .withOptions(
                         UCrop.Options()

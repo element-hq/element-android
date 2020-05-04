@@ -36,6 +36,7 @@ import im.vector.matrix.android.internal.crypto.MXOlmDevice
 import im.vector.matrix.android.internal.crypto.MegolmSessionData
 import im.vector.matrix.android.internal.crypto.ObjectSigner
 import im.vector.matrix.android.internal.crypto.actions.MegolmSessionDataImporter
+import im.vector.matrix.android.internal.crypto.crosssigning.fromBase64
 import im.vector.matrix.android.internal.crypto.keysbackup.model.KeysBackupVersionTrust
 import im.vector.matrix.android.internal.crypto.keysbackup.model.KeysBackupVersionTrustSignature
 import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupAuthData
@@ -67,6 +68,7 @@ import im.vector.matrix.android.internal.crypto.keysbackup.util.extractCurveKeyF
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
+import im.vector.matrix.android.internal.crypto.store.SavedKeyBackupKeyInfo
 import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.di.UserId
@@ -580,6 +582,31 @@ internal class DefaultKeysBackupService @Inject constructor(
         }
     }
 
+    override fun onSecretKeyGossip(secret: String) {
+        Timber.i("## CrossSigning - onSecretKeyGossip")
+
+        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
+            try {
+                val keysBackupVersion = getKeysBackupLastVersionTask.execute(Unit)
+                val recoveryKey = computeRecoveryKey(secret.fromBase64())
+                if (isValidRecoveryKeyForKeysBackupVersion(recoveryKey, keysBackupVersion)) {
+                    awaitCallback<Unit> {
+                        trustKeysBackupVersion(keysBackupVersion, true, it)
+                    }
+                    val importResult = awaitCallback<ImportRoomKeysResult> {
+                        restoreKeysWithRecoveryKey(keysBackupVersion, recoveryKey, null, null, null, it)
+                    }
+                    cryptoStore.saveBackupRecoveryKey(recoveryKey, keysBackupVersion.version)
+                    Timber.i("onSecretKeyGossip: Recovered keys ${importResult.successfullyNumberOfImportedKeys} out of ${importResult.totalNumberOfKeys}")
+                } else {
+                    Timber.e("onSecretKeyGossip: Recovery key is not valid ${keysBackupVersion.version}")
+                }
+            } catch (failure: Throwable) {
+                Timber.e("onSecretKeyGossip: failed to trust key backup version ${keysBackupVersion?.version}")
+            }
+        }
+    }
+
     /**
      * Get public key from a Recovery key
      *
@@ -701,7 +728,8 @@ internal class DefaultKeysBackupService @Inject constructor(
                     if (backUp) {
                         maybeBackupKeys()
                     }
-
+                    // Save for next time and for gossiping
+                    saveBackupRecoveryKey(recoveryKey, keysVersionResult.version)
                     result
                 }
             }.foldToCallback(callback)
@@ -1073,6 +1101,16 @@ internal class DefaultKeysBackupService @Inject constructor(
         return true
     }
 
+    override fun isValidRecoveryKeyForCurrentVersion(recoveryKey: String, callback: MatrixCallback<Boolean>) {
+        val safeKeysBackupVersion = keysBackupVersion ?: return Unit.also { callback.onSuccess(false) }
+
+        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
+            isValidRecoveryKeyForKeysBackupVersion(recoveryKey, safeKeysBackupVersion).let {
+                callback.onSuccess(it)
+            }
+        }
+    }
+
     /**
      * Enable backing up of keys.
      * This method will update the state and will start sending keys in nominal case
@@ -1389,6 +1427,14 @@ internal class DefaultKeysBackupService @Inject constructor(
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
+    }
+
+    override fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo? {
+        return cryptoStore.getKeyBackupRecoveryKeyInfo()
+    }
+
+    override fun saveBackupRecoveryKey(recoveryKey: String?, version: String?) {
+        cryptoStore.saveBackupRecoveryKey(recoveryKey, version)
     }
 
     companion object {

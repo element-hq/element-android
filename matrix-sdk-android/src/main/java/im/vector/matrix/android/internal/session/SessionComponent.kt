@@ -20,11 +20,15 @@ import dagger.BindsInstance
 import dagger.Component
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.internal.crypto.CancelGossipRequestWorker
 import im.vector.matrix.android.internal.crypto.CryptoModule
+import im.vector.matrix.android.internal.crypto.SendGossipRequestWorker
+import im.vector.matrix.android.internal.crypto.SendGossipWorker
 import im.vector.matrix.android.internal.crypto.verification.SendVerificationMessageWorker
 import im.vector.matrix.android.internal.di.MatrixComponent
 import im.vector.matrix.android.internal.di.SessionAssistedInjectModule
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
+import im.vector.matrix.android.internal.session.account.AccountModule
 import im.vector.matrix.android.internal.session.cache.CacheModule
 import im.vector.matrix.android.internal.session.content.ContentModule
 import im.vector.matrix.android.internal.session.content.UploadContentWorker
@@ -52,24 +56,25 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 
 @Component(dependencies = [MatrixComponent::class],
-           modules = [
-               SessionModule::class,
-               RoomModule::class,
-               SyncModule::class,
-               HomeServerCapabilitiesModule::class,
-               SignOutModule::class,
-               GroupModule::class,
-               UserModule::class,
-               FilterModule::class,
-               GroupModule::class,
-               ContentModule::class,
-               CacheModule::class,
-               CryptoModule::class,
-               PushersModule::class,
-               AccountDataModule::class,
-               ProfileModule::class,
-               SessionAssistedInjectModule::class
-           ]
+        modules = [
+            SessionModule::class,
+            RoomModule::class,
+            SyncModule::class,
+            HomeServerCapabilitiesModule::class,
+            SignOutModule::class,
+            GroupModule::class,
+            UserModule::class,
+            FilterModule::class,
+            GroupModule::class,
+            ContentModule::class,
+            CacheModule::class,
+            CryptoModule::class,
+            PushersModule::class,
+            AccountDataModule::class,
+            ProfileModule::class,
+            SessionAssistedInjectModule::class,
+            AccountModule::class
+        ]
 )
 @SessionScope
 internal interface SessionComponent {
@@ -105,6 +110,12 @@ internal interface SessionComponent {
     fun inject(worker: AddHttpPusherWorker)
 
     fun inject(worker: SendVerificationMessageWorker)
+
+    fun inject(worker: SendGossipRequestWorker)
+
+    fun inject(worker: CancelGossipRequestWorker)
+
+    fun inject(worker: SendGossipWorker)
 
     @Component.Factory
     interface Factory {

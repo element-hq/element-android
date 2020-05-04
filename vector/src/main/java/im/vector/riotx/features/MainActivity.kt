@@ -34,8 +34,10 @@ import im.vector.riotx.core.utils.deleteAllFiles
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.login.LoginActivity
 import im.vector.riotx.features.notifications.NotificationDrawerManager
+import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.signout.hard.SignedOutActivity
 import im.vector.riotx.features.signout.soft.SoftLogoutActivity
+import im.vector.riotx.features.ui.UiStateRepository
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -49,6 +51,7 @@ data class MainActivityArgs(
         val clearCache: Boolean = false,
         val clearCredentials: Boolean = false,
         val isUserLoggedOut: Boolean = false,
+        val isAccountDeactivated: Boolean = false,
         val isSoftLogout: Boolean = false
 ) : Parcelable
 
@@ -77,6 +80,8 @@ class MainActivity : VectorBaseActivity() {
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var sessionHolder: ActiveSessionHolder
     @Inject lateinit var errorFormatter: ErrorFormatter
+    @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var uiStateRepository: UiStateRepository
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -110,6 +115,7 @@ class MainActivity : VectorBaseActivity() {
                 clearCache = argsFromIntent?.clearCache ?: false,
                 clearCredentials = argsFromIntent?.clearCredentials ?: false,
                 isUserLoggedOut = argsFromIntent?.isUserLoggedOut ?: false,
+                isAccountDeactivated = argsFromIntent?.isAccountDeactivated ?: false,
                 isSoftLogout = argsFromIntent?.isSoftLogout ?: false
         )
     }
@@ -121,13 +127,20 @@ class MainActivity : VectorBaseActivity() {
             return
         }
         when {
-            args.clearCredentials -> session.signOut(
+            args.isAccountDeactivated -> {
+                // Just do the local cleanup
+                Timber.w("Account deactivated, start app")
+                sessionHolder.clearActiveSession()
+                doLocalCleanup(clearPreferences = true)
+                startNextActivityAndFinish()
+            }
+            args.clearCredentials     -> session.signOut(
                     !args.isUserLoggedOut,
                     object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             Timber.w("SIGN_OUT: success, start app")
                             sessionHolder.clearActiveSession()
-                            doLocalCleanup()
+                            doLocalCleanup(clearPreferences = true)
                             startNextActivityAndFinish()
                         }
 
@@ -135,10 +148,10 @@ class MainActivity : VectorBaseActivity() {
                             displayError(failure)
                         }
                     })
-            args.clearCache       -> session.clearCache(
+            args.clearCache           -> session.clearCache(
                     object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
-                            doLocalCleanup()
+                            doLocalCleanup(clearPreferences = false)
                             session.startSyncing(applicationContext)
                             startNextActivityAndFinish()
                         }
@@ -155,10 +168,15 @@ class MainActivity : VectorBaseActivity() {
         Timber.w("Ignoring invalid token global error")
     }
 
-    private fun doLocalCleanup() {
+    private fun doLocalCleanup(clearPreferences: Boolean) {
         GlobalScope.launch(Dispatchers.Main) {
             // On UI Thread
             Glide.get(this@MainActivity).clearMemory()
+
+            if (clearPreferences) {
+                vectorPreferences.clearPreferences()
+                uiStateRepository.reset()
+            }
             withContext(Dispatchers.IO) {
                 // On BG thread
                 Glide.get(this@MainActivity).clearDiskCache()
@@ -182,16 +200,16 @@ class MainActivity : VectorBaseActivity() {
     private fun startNextActivityAndFinish() {
         val intent = when {
             args.clearCredentials
-                    && !args.isUserLoggedOut ->
-                // User has explicitly asked to log out
+                    && (!args.isUserLoggedOut || args.isAccountDeactivated) ->
+                // User has explicitly asked to log out or deactivated his account
                 LoginActivity.newIntent(this, null)
-            args.isSoftLogout                ->
+            args.isSoftLogout                                               ->
                 // The homeserver has invalidated the token, with a soft logout
                 SoftLogoutActivity.newIntent(this)
-            args.isUserLoggedOut             ->
+            args.isUserLoggedOut                                            ->
                 // the homeserver has invalidated the token (password changed, device deleted, other security reasons)
                 SignedOutActivity.newIntent(this)
-            sessionHolder.hasActiveSession() ->
+            sessionHolder.hasActiveSession()                                ->
                 // We have a session.
                 // Check it can be opened
                 if (sessionHolder.getActiveSession().isOpenable) {
@@ -200,7 +218,7 @@ class MainActivity : VectorBaseActivity() {
                     // The token is still invalid
                     SoftLogoutActivity.newIntent(this)
                 }
-            else                             ->
+            else                                                            ->
                 // First start, or no active session
                 LoginActivity.newIntent(this, null)
         }

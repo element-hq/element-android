@@ -301,7 +301,7 @@
     <string name="e2e_need_log_in_again">You need to log back in to generate end-to-end encryption keys for this session and submit the public key to your homeserver.\nThis is a once off.\nSorry for the inconvenience.</string>
 
     <!-- request again e2e key -->
-    <string name="e2e_re_request_encryption_key"><u>Re-request encryption keys</u> from your other sessions.</string>
+    <string name="e2e_re_request_encryption_key">Re-request encryption keys from your other sessions.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Key request sent.</string>
 
@@ -645,7 +645,7 @@
     <string name="settings_troubleshoot_diagnostic">Troubleshooting diagnostics</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Run Tests</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Running… (%1$d of %2$d)</string>
-    <string name="settings_troubleshoot_diagnostic_success_status">Basic diagnostic is ok. If you still do not receive notifications, please submit a bug report to help us investigate.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Basic diagnostic is OK. If you still do not receive notifications, please submit a bug report to help us investigate.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">One or more tests have failed, try suggested fix(es).</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">One or more tests have failed, please submit a bug report to help us investigate.</string>
 
@@ -1024,7 +1024,7 @@
     <string name="encryption_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified sessions from this session.</string>
     <string name="encryption_import_room_keys_success">%1$d/%2$d key(s) imported with success.</string>
 
-    <string name="encryption_information_not_verified">NOT Verified</string>
+    <string name="encryption_information_not_verified">Not Verified</string>
     <string name="encryption_information_verified">Verified</string>
     <string name="encryption_information_blocked">Blacklisted</string>
 
@@ -1038,8 +1038,8 @@
     <string name="encryption_information_unblock">Unblacklist</string>
 
     <string name="encryption_information_verify_device">Verify session</string>
-    <string name="encryption_information_verify_device_warning">To verify that this session can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this session matches the key below:</string>
-    <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. If it doesn’t, then someone else is intercepting this session and you should probably blacklist it. In the future this verification process will be more sophisticated.</string>
+    <string name="encryption_information_verify_device_warning">Confirm by comparing the following with the User Settings in your other session:</string>
+    <string name="encryption_information_verify_device_warning2">"If they don't match, the security of your communication may be compromised."</string>
     <string name="encryption_information_verify_key_match">I verify that the keys match</string>
 
     <string name="e2e_enabling_on_app_update">Riot now supports end-to-end encryption but you need to log in again to enable it.\n\nYou can do it now or later from the application settings.</string>
@@ -1461,7 +1461,7 @@ Why choose Riot.im?
     <string name="keys_backup_banner_recover_line1">Never lose encrypted messages</string>
     <string name="keys_backup_banner_recover_line2">Use Key Backup</string>
 
-    <string name="keys_backup_banner_update_line1">New encrypted messages keys</string>
+    <string name="keys_backup_banner_update_line1">New secure message keys</string>
     <string name="keys_backup_banner_update_line2">Manage in Key Backup</string>
 
     <string name="keys_backup_banner_in_progress">Backing up keys…</string>
@@ -2110,7 +2110,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="settings_active_sessions_list">Active Sessions</string>
     <string name="settings_active_sessions_show_all">Show All Sessions</string>
     <string name="settings_active_sessions_manage">Manage Sessions</string>
-    <string name="settings_active_sessions_signout_device">Sign out this session</string>
+    <string name="settings_active_sessions_signout_device">Sign out of this session</string>
 
     <string name="settings_failed_to_get_crypto_device_info">No cryptographic information available</string>
 
@@ -2122,11 +2122,11 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
         <item quantity="other">%d active sessions</item>
     </plurals>
 
-    <string name="crosssigning_verify_this_session">Verify this session</string>
+    <string name="crosssigning_verify_this_session">Verify this login</string>
     <string name="crosssigning_other_user_not_trust">Other users may not trust it</string>
     <string name="complete_security">Complete Security</string>
 
-    <string name="verification_open_other_to_verify">Open an existing session &amp; use it to verify this one, granting it access to encrypted messages.</string>
+    <string name="verification_open_other_to_verify">Use an existing session to verify this one, granting it access to encrypted messages.</string>
 
 
     <string name="verification_profile_verify">Verify</string>
@@ -2148,7 +2148,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="a11y_qr_code_for_verification">QR code</string>
 
-    <string name="qr_code_scanned_by_other_notice">Did the other user successfully scan the QR code?</string>
+    <string name="qr_code_scanned_by_other_notice">Almost there! Is %s showing the same shield?</string>
     <string name="qr_code_scanned_by_other_yes">Yes</string>
     <string name="qr_code_scanned_by_other_no">No</string>
 
@@ -2166,8 +2166,8 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     </plurals>
     <string name="poll_item_selected_aria">Selected Option</string>
     <string name="command_description_poll">Creates a simple poll</string>
-    <string name="verification_cannot_access_other_session">Can‘t access an existing session?</string>
-    <string name="verification_use_passphrase">Use your recovery key or passphrase</string>
+    <string name="verification_cannot_access_other_session">Use a Recovery Passphrase or Key</string>
+    <string name="verification_use_passphrase">If you can’t access an existing session</string>
 
     <string name="new_signin">New Sign In</string>
 
@@ -2175,7 +2175,6 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="enter_secret_storage_passphrase">Enter secret storage passphrase</string>
     <string name="enter_secret_storage_passphrase_warning">Warning:</string>
     <string name="enter_secret_storage_passphrase_warning_text">You should only access secret storage from a trusted device</string>
-    <string name="enter_secret_storage_passphrase_reason_verify">Access your secure message history and your cross-signing identity for verifying other sessions by entering your passphrase</string>
 
     <string name="message_action_item_redact">Remove…</string>
     <string name="share_confirm_room">Do you want to send this attachment to %1$s?</string>
@@ -2194,4 +2193,180 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="keys_backup_restore_success_title_already_up_to_date">Keys are already up to date!</string>
 
+    <string name="login_mobile_device_riotx">RiotX Android</string>
+
+    <string name="settings_key_requests">Key Requests</string>
+
+    <string name="e2e_use_keybackup">Unlock encrypted messages history</string>
+
+    <string name="refresh">Refresh</string>
+
+    <string name="new_session">New login. Was this you?</string>
+    <string name="new_session_review">Tap to review &amp; verify</string>
+    <string name="verify_new_session_notice">Use this session to verify your new one, granting it access to encrypted messages.</string>
+    <string name="verify_new_session_was_not_me">This wasn’t me</string>
+    <string name="verify_new_session_compromized">Your account may be compromised</string>
+
+    <string name="verify_cancel_self_verification_from_untrusted">If you cancel, you won’t be able to read encrypted messages on this device, and other users won’t trust it</string>
+    <string name="verify_cancel_self_verification_from_trusted">If you cancel, you won’t be able to read encrypted messages on your new device, and other users won’t trust it</string>
+    <string name="verify_cancel_other">You won’t verify %1$s (%2$s) if you cancel now. Start again in their user profile.</string>
+
+    <string name="verify_not_me_self_verification">
+        One of the following may be compromised:\n\n- Your password\n- Your homeserver\n- This device, or the other device\n- The internet connection either device is using\n\nWe recommend you change your password &amp; recovery key in Settings immediately.
+    </string>
+
+    <string name="verify_cancelled_notice">Verify your devices from Settings.</string>
+    <string name="verification_cancelled">Verification Cancelled</string>
+
+    <string name="recovery_passphrase">Recovery Passphrase</string>
+    <string name="message_key">Message Key</string>
+    <string name="account_password">Account Password</string>
+
+    <!-- %s will be replaced by recovery_passphrase -->
+    <string name="set_recovery_passphrase">Set a %s</string>
+    <string name="generate_message_key">Generate a Message Key</string>
+
+    <!-- %s will be replaced by recovery_passphrase -->
+    <string name="confirm_recovery_passphrase">Confirm %s</string>
+
+    <!-- %s will be replaced by account_password -->
+    <string name="enter_account_password">Enter your %s to continue.</string>
+
+    <!-- %s will be replaced by recovery_passphrase -->
+    <string name="bootstrap_info_text">Secure &amp; unlock encrypted messages and trust with a %s.</string>
+    <!-- %s will be replaced by recovery_passphrase -->
+    <string name="bootstrap_info_confirm_text">Enter your %s again to confirm it.</string>
+    <string name="bootstrap_dont_reuse_pwd">Don’t re-use your account password.</string>
+
+
+    <string name="bootstrap_loading_text">This might take several seconds, please be patient.</string>
+    <string name="bootstrap_loading_title">Setting up recovery.</string>
+    <string name="your_recovery_key">Your recovery key</string>
+    <string name="bootstrap_finish_title">"You're done!"</string>
+    <string name="keep_it_safe">Keep it safe</string>
+    <string name="finish">Finish</string>
+
+    <!-- %1$s is replaced by message_key and %2$s by recovery_passphrase -->
+    <string name="bootstrap_save_key_description">Use this %1$s as a safety net in case you forget your %2$s.</string>
+
+    <string name="bootstrap_crosssigning_progress_initializing">Publishing created identity keys</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">Generating secure key from passphrase</string>
+    <string name="bootstrap_crosssigning_progress_default_key">Defining SSSS default Key</string>
+    <string name="bootstrap_crosssigning_progress_save_msk">Synchronizing Master key</string>
+    <string name="bootstrap_crosssigning_progress_save_usk">Synchronizing User key</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">Synchronizing Self Signing key</string>
+    <string name="bootstrap_crosssigning_progress_key_backup">Setting Up Key Backup</string>
+
+
+    <!-- %1$s is replaced by message_key and %2$s by recovery_passphrase -->
+    <string name="bootstrap_cross_signing_success">Your %2$s &amp; %1$s are now set.\n\nKeep them safe! You’ll need them to unlock encrypted messages and secure information if you lose all of your active sessions.</string>
+
+    <!-- the %s will be replaced by a check mark on screen-->
+    <string name="bootstrap_crosssigning_print_it">Print it and store it somewhere safe</string>
+    <string name="bootstrap_crosssigning_save_usb">Save it on a USB key or backup drive</string>
+    <string name="bootstrap_crosssigning_save_cloud">Copy it to your personal cloud storage</string>
+
+    <string name="auth_flow_not_supported">You cannot do that from mobile</string>
+
+    <string name="bootstrap_skip_text">Setting a Recovery Passphrase lets you secure &amp; unlock encrypted messages and trust.\n\nIf you don’t want to set a Message Password, generate a Message Key instead.</string>
+    <string name="bootstrap_skip_text_no_gen_key">Setting a Recovery Passphrase lets you secure &amp; unlock encrypted messages and trust.</string>
+
+
+    <string name="encryption_enabled">Encryption enabled</string>
+    <string name="encryption_enabled_tile_description">Messages in this room are end-to-end encrypted. Learn more &amp; verify users in their profile.</string>
+    <string name="encryption_not_enabled">Encryption not enabled</string>
+    <string name="encryption_unknown_algorithm_tile_description">The encryption used by this room is not supported</string>
+
+    <string name="room_created_summary_item">%s created and configured the room.</string>
+
+    <string name="qr_code_scanned_self_verif_notice">Almost there! Is the other device showing the same shield?</string>
+    <string name="qr_code_scanned_verif_waiting_notice">Almost there! Waiting for confirmation…</string>
+    <string name="qr_code_scanned_verif_waiting">Waiting for %s…</string>
+
+    <string name="error_failed_to_import_keys">Failed to import keys</string>
+
+    <string name="settings_notification_configuration">Notifications configuration</string>
+    <string name="settings_messages_at_room">Messages containing @room</string>
+    <string name="settings_messages_in_e2e_one_to_one">Encrypted messages in one-to-one chats</string>
+    <string name="settings_messages_in_e2e_group_chat">Encrypted messages in group chats</string>
+    <string name="settings_when_rooms_are_upgraded">When rooms are upgraded</string>
+    <string name="settings_troubleshoot_title">Troubleshoot</string>
+    <string name="settings_notification_advanced_summary_riotx">Set notification importance by event</string>
+
+    <string name="command_description_plain">Sends a message as plain text, without interpreting it as markdown</string>
+
+    <string name="auth_invalid_login_param_space_in_password">Incorrect username and/or password. The entered password starts or ends with spaces, please check it.</string>
+
+    <string name="room_message_placeholder">Message…</string>
+
+    <string name="upgrade_security">Encryption upgrade available</string>
+    <string name="security_prompt_text">Verify yourself &amp; others to keep your chats safe</string>
+
+    <!-- %s will be replaced by recovery_key -->
+    <string name="bootstrap_enter_recovery">Enter your %s to continue</string>
+    <string name="use_file">Use File</string>
+
+    <!-- %s will be replaced by recovery_passphrase -->
+    <!--    <string name="upgrade_account_desc">Upgrade this session to allow it to verify other sessions, granting them access to encrypted messages and marking them as trusted for other users.</string>-->
+    <string name="enter_backup_passphrase">Enter %s</string>
+    <string name="backup_recovery_passphrase">Recovery Passphrase</string>
+    <string name="bootstrap_invalid_recovery_key">"It's not a valid recovery key"</string>
+    <string name="recovery_key_empty_error_message">Please enter a recovery key</string>
+
+    <string name="bootstrap_progress_checking_backup">Checking backup Key</string>
+    <string name="bootstrap_progress_checking_backup_with_info">Checking backup Key (%s)</string>
+    <string name="bootstrap_progress_compute_curve_key">Getting curve key</string>
+    <string name="bootstrap_progress_generating_ssss">Generating SSSS key from passphrase</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">Generating SSSS key from passphrase (%s)</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">Generating SSSS key from recovery key</string>
+    <string name="bootstrap_progress_storing_in_sss">Storing keybackup secret in SSSS</string>
+    <!-- To produce things like 'RiotX Android (IQDHUVJTTV)' -->
+    <string name="new_session_review_with_info">%1$s (%2$s)</string>
+
+    <string name="bootstrap_migration_enter_backup_password">Enter your Key Backup Passphrase to continue.</string>
+    <string name="bootstrap_migration_use_recovery_key">use your Key Backup recovery key</string>
+    <!-- %s will be replaced by the value of bootstrap_migration_use_recovery_key  -->
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">Don’t know your Key Backup Passphrase, you can %s.</string>
+    <string name="bootstrap_migration_backup_recovery_key">Key Backup recovery key</string>
+
+    <string name="settings_security_prevent_screenshots_title">Prevent screenshots of the application</string>
+    <string name="settings_security_prevent_screenshots_summary">Enabling this setting adds the FLAG_SECURE to all Activities. Restart the application for the change to take effect.</string>
+
+    <string name="media_file_added_to_gallery">Media file added to the Gallery</string>
+    <string name="error_adding_media_file_to_gallery">Could not add media file to the Gallery</string>
+    <string name="change_password_summary">Set a new account password…</string>
+
+    <string name="use_other_session_content_description">Use the latest Riot on your other devices, Riot Web, Riot Desktop, Riot iOS, RiotX for Android, or another cross-signing capable Matrix client</string>
+    <string name="riot_desktop_web">Riot Web\nRiot Desktop</string>
+    <string name="riot_ios_android">Riot iOS\nRiot X for Android</string>
+    <string name="or_other_mx_capabale_client">or another cross-signing capable Matrix client</string>
+    <string name="use_latest_riot">Use the latest Riot on your other devices:</string>
+    <string name="command_description_discard_session">Forces the current outbound group session in an encrypted room to be discarded</string>
+    <string name="command_description_discard_session_not_handled">Only supported in encrypted rooms</string>
+    <!-- first will be replaced by recovery_passphrase, second will be replaced by recovery_key-->
+    <string name="enter_secret_storage_passphrase_or_key">Use your %1$s or use your %2$s to continue.</string>
+    <string name="use_recovery_key">Use Recovery Key</string>
+    <string name="enter_secret_storage_input_key">Select your Recovery Key, or input it manually by typing it or pasting from your clipboard</string>
+    <string name="keys_backup_recovery_key_error_decrypt">Backup could not be decrypted with this Recovery Key: please verify that you entered the correct Recovery Key.</string>
+    <string name="failed_to_access_secure_storage">Failed to access secure storage</string>
+
+    <string name="unencrypted">Unencrypted</string>
+    <string name="encrypted_unverified">Encrypted by an unverified device</string>
+    <string name="review_logins">Review where you’re logged in</string>
+    <string name="verify_other_sessions">Verify all your sessions to ensure your account &amp; messages are safe</string>
+    <!-- Argument will be replaced by the other session name (e.g, Riot Desktop, mobile) -->
+    <string name="verify_this_session">Verify the new login accessing your account: %1$s</string>
+
+    <string name="cross_signing_verify_by_text">Manually Verify by Text</string>
+    <string name="crosssigning_verify_session">Verify login</string>
+    <string name="cross_signing_verify_by_emoji">Interactively Verify by Emoji</string>
+    <string name="confirm_your_identity">Confirm your identity by verifying this login from one of your other sessions, granting it access to encrypted messages.</string>
+    <string name="mark_as_verified">Mark as Trusted</string>
+
+    <string name="error_empty_field_choose_user_name">Please choose a username.</string>
+    <string name="error_empty_field_choose_password">Please choose a password.</string>
+    <string name="external_link_confirmation_title">Double-check this link</string>
+    <string name="external_link_confirmation_message">The link %1$s is taking you to another site: %2$s.\n\nAre you sure you want to continue?</string>
+
+    <string name="create_room_dm_failure">"We couldn't create your DM. Please check the users you want to invite and try again."</string>
 </resources>

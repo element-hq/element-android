@@ -191,7 +191,7 @@
     <string name="cannot_start_call">无法开始通话，请稍后重试</string>
     <string name="missing_permissions_warning">由于缺少权限，某些功能将无法使用…</string>
     <string name="missing_permissions_title_to_start_conf_call">无法发起通话</string>
-    <string name="device_information">设备信息</string>
+    <string name="device_information">会话信息</string>
     <string name="room_no_conference_call_in_encrypted_rooms">加密的聊天室不支持电话会议</string>
     <string name="action_open">打开</string>
     <string name="action_close">关闭</string>
@@ -1373,7 +1373,7 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
 
     <string name="error_jitsi_not_supported_on_old_device">抱歉，旧设备 （Android 系统版本低于 5.0）不支持使用 Jitsi 创建电话会议</string>
 
-    <string name="title_activity_verify_device">验证设备</string>
+    <string name="title_activity_verify_device">验证会话</string>
 
     <string name="encryption_information_unknown_ip">未知 IP</string>
     <string name="you_added_a_new_device_with_info">一个新设备正在请求加密密钥。
@@ -1480,4 +1480,19 @@ Riot 在后台时的工作将被显著的限制，这可能会影响消息通知
     <string name="people_no_identity_server">没有设置身份服务器。</string>
 
     <string name="call_failed_no_ice_title">服务器的错误配置导致通话失败</string>
+    <string name="resources_script">Latn</string>
+
+    <string name="call_failed_no_ice_description">请要求您的家庭服务器（%1$s）的管理员配置TURN服务器，以使通话可靠地工作。
+\n
+\n 或者，您可以尝试使用%2$s的公共服务器，但这将不那么可靠，并且它将与该服务器共享您的IP地址。 您也可以在“设置”中进行管理。</string>
+    <string name="call_failed_no_ice_use_alt">尝试使用 %s</string>
+    <string name="call_failed_dont_ask_again">不要再问我</string>
+
+    <string name="auth_add_email_message_2">设置用于帐户恢复的电子邮件，然后就可以让认识您的人选择性探索到您。</string>
+    <string name="auth_add_phone_message_2">设定电话，然后就可以让认识您的人选择性探索到您。</string>
+    <string name="auth_add_email_phone_message_2">设定电子邮件以供帐号复原。 然后就可以让认识您的人用电子邮件或电话选择性探索到您。</string>
+    <string name="auth_add_email_and_phone_message_2">设定电子邮件以供帐号复原。 然后就可以让认识您的人用电子邮件或电话选择性探索到您。</string>
+    <string name="login_error_no_homeserver_found">這不是有效的 Matrix 服务器位置</string>
+    <string name="login_error_homeserver_not_found">无法在此 URL 找到家庭服务器，请检查</string>
+    <string name="settings_call_ringtone_use_default_stun">允许后备呼叫协助服务器</string>
 </resources>

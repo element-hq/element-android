@@ -24,12 +24,11 @@ import androidx.annotation.IdRes
 import androidx.core.view.isVisible
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.riotx.R
-import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.reactions.widget.ReactionButton
-import im.vector.riotx.features.ui.getMessageTextColor
 
 /**
  * Base timeline item with reactions and read receipts.
@@ -93,6 +92,18 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
             holder.reactionsContainer.setOnLongClickListener(baseAttributes.itemLongClickListener)
         }
 
+        when (baseAttributes.informationData.e2eDecoration) {
+            E2EDecoration.NONE                 -> {
+                holder.e2EDecorationView.isVisible = false
+            }
+            E2EDecoration.WARN_IN_CLEAR,
+            E2EDecoration.WARN_SENT_BY_UNVERIFIED,
+            E2EDecoration.WARN_SENT_BY_UNKNOWN -> {
+                holder.e2EDecorationView.setImageResource(R.drawable.ic_shield_warning)
+                holder.e2EDecorationView.isVisible = true
+            }
+        }
+
         holder.view.setOnClickListener(baseAttributes.itemClickListener)
         holder.view.setOnLongClickListener(baseAttributes.itemLongClickListener)
     }
@@ -105,12 +116,13 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
     protected open fun renderSendState(root: View, textView: TextView?, failureIndicator: ImageView? = null) {
         root.isClickable = baseAttributes.informationData.sendState.isSent()
         val state = if (baseAttributes.informationData.hasPendingEdits) SendState.UNSENT else baseAttributes.informationData.sendState
-        textView?.setTextColor(baseAttributes.colorProvider.getMessageTextColor(state))
+        textView?.setTextColor(baseAttributes.messageColorProvider.getMessageTextColor(state))
         failureIndicator?.isVisible = baseAttributes.informationData.sendState.hasFailed()
     }
 
     abstract class Holder(@IdRes stubId: Int) : BaseEventItem.BaseHolder(stubId) {
         val reactionsContainer by bind<ViewGroup>(R.id.reactionsContainer)
+        val e2EDecorationView by bind<ImageView>(R.id.messageE2EDecoration)
     }
 
     /**
@@ -120,7 +132,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
         //            val avatarSize: Int,
         val informationData: MessageInformationData
         val avatarRenderer: AvatarRenderer
-        val colorProvider: ColorProvider
+        val messageColorProvider: MessageColorProvider
         val itemLongClickListener: View.OnLongClickListener?
         val itemClickListener: View.OnClickListener?
         //        val memberClickListener: View.OnClickListener?

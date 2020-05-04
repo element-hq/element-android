@@ -19,11 +19,13 @@
       <w>msisdn</w>
       <w>pbkdf</w>
       <w>pkcs</w>
+      <w>riotx</w>
       <w>signin</w>
       <w>signout</w>
       <w>signup</w>
       <w>ssss</w>
       <w>threepid</w>
+      <w>unwedging</w>
     </words>
   </dictionary>
 </component>

@@ -19,8 +19,10 @@ package im.vector.riotx.features.home
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.view.forEachIndexed
 import androidx.lifecycle.Observer
+import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
@@ -28,15 +30,20 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.matrix.android.api.util.toMatrixItem
+import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.commitTransactionNow
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.platform.ToolbarConfigurable
+import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.ui.views.KeysBackupBanner
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.home.room.list.RoomListParams
 import im.vector.riotx.features.home.room.list.UnreadCounterBadgeView
+import im.vector.riotx.features.popup.PopupAlertManager
+import im.vector.riotx.features.popup.VerificationVectorAlert
+import im.vector.riotx.features.settings.VectorSettingsActivity.Companion.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
 import im.vector.riotx.features.workers.signout.SignOutViewModel
 import kotlinx.android.synthetic.main.fragment_home_detail.*
 import timber.log.Timber
@@ -48,12 +55,15 @@ private const val INDEX_ROOMS = 2
 
 class HomeDetailFragment @Inject constructor(
         val homeDetailViewModelFactory: HomeDetailViewModel.Factory,
-        private val avatarRenderer: AvatarRenderer
+        private val avatarRenderer: AvatarRenderer,
+        private val alertManager: PopupAlertManager
 ) : VectorBaseFragment(), KeysBackupBanner.Delegate {
 
     private val unreadCounterBadgeViews = arrayListOf<UnreadCounterBadgeView>()
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
+    private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
+
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
     override fun getLayoutResId() = R.layout.fragment_home_detail
@@ -77,6 +87,81 @@ class HomeDetailFragment @Inject constructor(
         viewModel.selectSubscribe(this, HomeDetailViewState::displayMode) { displayMode ->
             switchDisplayMode(displayMode)
         }
+
+        unknownDeviceDetectorSharedViewModel.subscribe { state ->
+            state.unknownSessions.invoke()?.let { unknownDevices ->
+//                Timber.v("## Detector Triggerred in fragment - ${unknownDevices.firstOrNull()}")
+                if (unknownDevices.firstOrNull()?.currentSessionTrust == true) {
+                    val uid = "review_login"
+                    alertManager.cancelAlert(uid)
+                    val olderUnverified = unknownDevices.filter { !it.isNew }
+                    val newest = unknownDevices.firstOrNull { it.isNew }?.deviceInfo
+                    if (newest != null) {
+                        promptForNewUnknownDevices(uid, state, newest)
+                    } else if (olderUnverified.isNotEmpty()) {
+                        // In this case we prompt to go to settings to review logins
+                        promptToReviewChanges(uid, state, olderUnverified.map { it.deviceInfo })
+                    }
+                }
+            }
+        }
+    }
+
+    private fun promptForNewUnknownDevices(uid: String, state: UnknownDevicesState, newest: DeviceInfo) {
+        val user = state.myMatrixItem
+        alertManager.postVectorAlert(
+                VerificationVectorAlert(
+                        uid = uid,
+                        title = getString(R.string.new_session),
+                        description = getString(R.string.verify_this_session, newest.displayName ?: newest.deviceId ?: ""),
+                        iconId = R.drawable.ic_shield_warning
+                ).apply {
+                    matrixItem = user
+                    colorInt = ContextCompat.getColor(requireActivity(), R.color.riotx_accent)
+                    contentAction = Runnable {
+                        (weakCurrentActivity?.get() as? VectorBaseActivity)
+                                ?.navigator
+                                ?.requestSessionVerification(requireContext(), newest.deviceId ?: "")
+                        unknownDeviceDetectorSharedViewModel.handle(
+                                UnknownDeviceDetectorSharedViewModel.Action.IgnoreDevice(newest.deviceId?.let { listOf(it) } ?: emptyList())
+                        )
+                    }
+                    dismissedAction = Runnable {
+                        unknownDeviceDetectorSharedViewModel.handle(
+                                UnknownDeviceDetectorSharedViewModel.Action.IgnoreDevice(newest.deviceId?.let { listOf(it) } ?: emptyList())
+                        )
+                    }
+                }
+        )
+    }
+
+    private fun promptToReviewChanges(uid: String, state: UnknownDevicesState, oldUnverified: List<DeviceInfo>) {
+        val user = state.myMatrixItem
+        alertManager.postVectorAlert(
+                VerificationVectorAlert(
+                        uid = uid,
+                        title = getString(R.string.review_logins),
+                        description = getString(R.string.verify_other_sessions),
+                        iconId = R.drawable.ic_shield_warning
+                ).apply {
+                    matrixItem = user
+                    colorInt = ContextCompat.getColor(requireActivity(), R.color.riotx_accent)
+                    contentAction = Runnable {
+                        (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
+                            // mark as ignored to avoid showing it again
+                            unknownDeviceDetectorSharedViewModel.handle(
+                                    UnknownDeviceDetectorSharedViewModel.Action.IgnoreDevice(oldUnverified.mapNotNull { it.deviceId })
+                            )
+                            it.navigator.openSettings(it, EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS)
+                        }
+                    }
+                    dismissedAction = Runnable {
+                        unknownDeviceDetectorSharedViewModel.handle(
+                                UnknownDeviceDetectorSharedViewModel.Action.IgnoreDevice(oldUnverified.mapNotNull { it.deviceId })
+                        )
+                    }
+                }
+        )
     }
 
     private fun onGroupChange(groupSummary: GroupSummary?) {

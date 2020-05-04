@@ -26,12 +26,8 @@ import im.vector.matrix.android.internal.crypto.verification.VerificationInfoRea
 internal data class KeyVerificationReady(
         @Json(name = "from_device") override val fromDevice: String?,
         @Json(name = "methods") override val methods: List<String>?,
-        @Json(name = "transaction_id") override val transactionID: String? = null
+        @Json(name = "transaction_id") override val transactionId: String? = null
 ) : SendToDeviceObject, VerificationInfoReady {
 
     override fun toSendToDeviceObject() = this
-
-    override fun isValid(): Boolean {
-        return !transactionID.isNullOrBlank() && !fromDevice.isNullOrBlank() && !methods.isNullOrEmpty()
-    }
 }

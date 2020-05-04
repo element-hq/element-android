@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.session.room.send
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import androidx.exifinterface.media.ExifInterface
@@ -71,9 +72,10 @@ import javax.inject.Inject
  * (the transaction ID), this id is used when receiving an event from a sync to check if this event
  * is matching an existing local echo.
  *
- * The transactionID is used as loc
+ * The transactionId is used as loc
  */
 internal class LocalEchoEventFactory @Inject constructor(
+        private val context: Context,
         @UserId private val userId: String,
         private val stringProvider: StringProvider,
         private val textPillsUtils: TextPillsUtils,
@@ -261,19 +263,19 @@ internal class LocalEchoEventFactory @Inject constructor(
                 msgType = MessageType.MSGTYPE_IMAGE,
                 body = attachment.name ?: "image",
                 info = ImageInfo(
-                        mimeType = attachment.mimeType,
+                        mimeType = attachment.getSafeMimeType(),
                         width = width?.toInt() ?: 0,
                         height = height?.toInt() ?: 0,
                         size = attachment.size.toInt()
                 ),
-                url = attachment.path
+                url = attachment.queryUri.toString()
         )
         return createEvent(roomId, content)
     }
 
     private fun createVideoEvent(roomId: String, attachment: ContentAttachmentData): Event {
         val mediaDataRetriever = MediaMetadataRetriever()
-        mediaDataRetriever.setDataSource(attachment.path)
+        mediaDataRetriever.setDataSource(context, attachment.queryUri)
 
         // Use frame to calculate height and width as we are sure to get the right ones
         val firstFrame: Bitmap? = mediaDataRetriever.frameAtTime
@@ -281,7 +283,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         val width = firstFrame?.width ?: 0
         mediaDataRetriever.release()
 
-        val thumbnailInfo = ThumbnailExtractor.extractThumbnail(attachment)?.let {
+        val thumbnailInfo = ThumbnailExtractor.extractThumbnail(context, attachment)?.let {
             ThumbnailInfo(
                     width = it.width,
                     height = it.height,
@@ -293,16 +295,16 @@ internal class LocalEchoEventFactory @Inject constructor(
                 msgType = MessageType.MSGTYPE_VIDEO,
                 body = attachment.name ?: "video",
                 videoInfo = VideoInfo(
-                        mimeType = attachment.mimeType,
+                        mimeType = attachment.getSafeMimeType(),
                         width = width,
                         height = height,
                         size = attachment.size,
                         duration = attachment.duration?.toInt() ?: 0,
                         // Glide will be able to use the local path and extract a thumbnail.
-                        thumbnailUrl = attachment.path,
+                        thumbnailUrl = attachment.queryUri.toString(),
                         thumbnailInfo = thumbnailInfo
                 ),
-                url = attachment.path
+                url = attachment.queryUri.toString()
         )
         return createEvent(roomId, content)
     }
@@ -312,10 +314,10 @@ internal class LocalEchoEventFactory @Inject constructor(
                 msgType = MessageType.MSGTYPE_AUDIO,
                 body = attachment.name ?: "audio",
                 audioInfo = AudioInfo(
-                        mimeType = attachment.mimeType?.takeIf { it.isNotBlank() } ?: "audio/mpeg",
+                        mimeType = attachment.getSafeMimeType()?.takeIf { it.isNotBlank() },
                         size = attachment.size
                 ),
-                url = attachment.path
+                url = attachment.queryUri.toString()
         )
         return createEvent(roomId, content)
     }
@@ -325,35 +327,34 @@ internal class LocalEchoEventFactory @Inject constructor(
                 msgType = MessageType.MSGTYPE_FILE,
                 body = attachment.name ?: "file",
                 info = FileInfo(
-                        mimeType = attachment.mimeType?.takeIf { it.isNotBlank() }
-                                ?: "application/octet-stream",
+                        mimeType = attachment.getSafeMimeType()?.takeIf { it.isNotBlank() },
                         size = attachment.size
                 ),
-                url = attachment.path
+                url = attachment.queryUri.toString()
         )
         return createEvent(roomId, content)
     }
 
     private fun createEvent(roomId: String, content: Any? = null): Event {
-        val localID = LocalEcho.createLocalEchoId()
+        val localId = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
                 senderId = userId,
-                eventId = localID,
+                eventId = localId,
                 type = EventType.MESSAGE,
                 content = content.toContent(),
-                unsignedData = UnsignedData(age = null, transactionId = localID)
+                unsignedData = UnsignedData(age = null, transactionId = localId)
         )
     }
 
     fun createVerificationRequest(roomId: String, fromDevice: String, toUserId: String, methods: List<String>): Event {
-        val localID = LocalEcho.createLocalEchoId()
+        val localId = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
                 senderId = userId,
-                eventId = localID,
+                eventId = localId,
                 type = EventType.MESSAGE,
                 content = MessageVerificationRequestContent(
                         body = stringProvider.getString(R.string.key_verification_request_fallback_message, userId),
@@ -362,7 +363,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         timestamp = System.currentTimeMillis(),
                         methods = methods
                 ).toContent(),
-                unsignedData = UnsignedData(age = null, transactionId = localID)
+                unsignedData = UnsignedData(age = null, transactionId = localId)
         )
     }
 
@@ -469,16 +470,16 @@ internal class LocalEchoEventFactory @Inject constructor(
     }
      */
     fun createRedactEvent(roomId: String, eventId: String, reason: String?): Event {
-        val localID = LocalEcho.createLocalEchoId()
+        val localId = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
                 senderId = userId,
-                eventId = localID,
+                eventId = localId,
                 type = EventType.REDACTION,
                 redacts = eventId,
                 content = reason?.let { mapOf("reason" to it).toContent() },
-                unsignedData = UnsignedData(age = null, transactionId = localID)
+                unsignedData = UnsignedData(age = null, transactionId = localId)
         )
     }
 

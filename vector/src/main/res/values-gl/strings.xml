@@ -460,7 +460,7 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="event_formatter_widget_removed">%1$s eliminado por %2$s</string>
     <plurals name="active_widgets">
         <item quantity="one">1 trebello activo</item>
-        <item quantity="other">%1 trebellos activos</item>
+        <item quantity="other">%d trebellos activos</item>
     </plurals>
 
     <string name="widget_integration_unable_to_create">Non se puido crear o trebello.</string>

@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.api.session.content
 
+import android.net.Uri
 import android.os.Parcelable
 import androidx.exifinterface.media.ExifInterface
 import kotlinx.android.parcel.Parcelize
@@ -29,9 +30,8 @@ data class ContentAttachmentData(
         val width: Long? = 0,
         val exifOrientation: Int = ExifInterface.ORIENTATION_UNDEFINED,
         val name: String? = null,
-        val queryUri: String,
-        val path: String,
-        val mimeType: String?,
+        val queryUri: Uri,
+        private val mimeType: String?,
         val type: Type
 ) : Parcelable {
 
@@ -41,4 +41,6 @@ data class ContentAttachmentData(
         AUDIO,
         VIDEO
     }
+
+    fun getSafeMimeType() = if (mimeType == "image/jpg") "image/jpeg" else mimeType
 }

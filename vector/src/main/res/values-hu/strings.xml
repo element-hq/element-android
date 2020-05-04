@@ -555,7 +555,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="encryption_information_sender_device_information">A küldő munkamenet információi</string>
     <string name="encryption_information_device_name">Nyilvános név</string>
     <string name="encryption_information_name">Nyilvános név</string>
-    <string name="encryption_information_device_id">Azon.</string>
+    <string name="encryption_information_device_id">Azonosító</string>
     <string name="encryption_information_device_key">Munkamenet kulcs</string>
     <string name="encryption_information_verification">Hitelesítés</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 ujjlenyomat</string>
@@ -884,7 +884,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="download">Letöltés</string>
     <string name="speak">Beszélj</string>
     <string name="clear">Törlés</string>
-    <string name="e2e_re_request_encryption_key">Végpontok közötti titkosításhoz használt <u>kulcsok újrakérése</u> a többi munkamenetedtől.</string>
+    <string name="e2e_re_request_encryption_key">Végpontok közötti titkosításhoz használt kulcsok újrakérése a többi munkamenetedtől.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Kulcs újrakérve.</string>
 
@@ -1319,7 +1319,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="keys_backup_banner_recover_line1">Soha ne veszíts el titkosított üzenetet</string>
     <string name="keys_backup_banner_recover_line2">Kulcs Mentés használata</string>
 
-    <string name="keys_backup_banner_update_line1">Új titkosítási kulcsok</string>
+    <string name="keys_backup_banner_update_line1">Új titkosított üzenet kulcsok</string>
     <string name="keys_backup_banner_update_line2">Kulcs Mentések kezelése</string>
 
     <string name="keys_backup_banner_in_progress">Kulcsok mentése…</string>
@@ -1497,7 +1497,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="group_all_communities">Minden közösség</string>
 
     <string name="room_preview_no_preview">Ennek a szobának nincs előnézete</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">A RiotX-ben a nyilvános szoba előnézete egyenlőre nem támogatott</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">A RiotX-ben a nyilvános szoba előnézete egyelőre nem támogatott</string>
 
     <string name="fab_menu_create_room">Szobák</string>
     <string name="fab_menu_create_chat">Közvetlen üzenetek</string>
@@ -1631,7 +1631,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="none">Nincs</string>
     <string name="revoke">Visszavonás</string>
     <string name="disconnect">Bontás</string>
-    <string name="people_no_identity_server">Azonosítási szerver nincs beállítva.</string>
+    <string name="people_no_identity_server">Nincs beállítva azonosítási kiszolgáló.</string>
 
     <string name="call_failed_no_ice_title">A hívás sikertelen a hibásan beállított szerver miatt</string>
     <string name="call_failed_no_ice_description">Kérd meg a matrix szervered (%1$s) adminisztrátorát, hogy állítson be egy TURN szervert, hogy a hívások megbízhatóan működjenek.
@@ -1895,7 +1895,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="login_set_msisdn_submit">Következő</string>
 
     <string name="login_msisdn_confirm_title">Telefonszám ellenőrzése</string>
-    <string name="login_msisdn_confirm_notice">Elküldtük a kódot ide: %1$s. Add meg itt alul amivel ellenőrizhetjük, hogy te te vagy.</string>
+    <string name="login_msisdn_confirm_notice">Elküldtük a kódot ide: %1$s. Add meg itt alul amivel ellenőrizhetjük, hogy te vagy.</string>
     <string name="login_msisdn_confirm_hint">Kód megadása</string>
     <string name="login_msisdn_confirm_send_again">Küld újra</string>
     <string name="login_msisdn_confirm_submit">Következő</string>
@@ -2082,8 +2082,8 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="room_member_jump_to_read_receipt">Olvasási visszaigazolásra ugrás</string>
 
-    <string name="rendering_event_error_type_of_event_not_handled">RiotX (egyenlőre) nem kezeli ezt az eseményt: \'%1$s\'</string>
-    <string name="rendering_event_error_type_of_message_not_handled">RiotX (egyenlőre) nem kezeli ezt az üzenet típust: \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_event_not_handled">RiotX nem kezeli ezt az eseményt: \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">RiotX nem kezeli ezt az üzenet típust: \'%1$s\'</string>
     <string name="rendering_event_error_exception">RiotX problémába ütközött az esemény (azon: %1$s) megjelenítésekor</string>
 
     <string name="unignore">Figyelembe vesz</string>
@@ -2147,7 +2147,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="crosssigning_other_user_not_trust">Más felhasználók lehet, hogy nem bíznak benne</string>
     <string name="complete_security">Biztonság beállítása</string>
 
-    <string name="verification_open_other_to_verify">A titkosított üzenetekhez való hozzáféréshez nyiss meg egy létező munkamenetet és használd ennek a hitelesítésére. Ha egyhez sem férsz hozzá használd a visszaállítási kulcsodat vagy jelmondatodat.</string>
+    <string name="verification_open_other_to_verify">A titkosított üzenetekhez való hozzáféréshez nyiss meg egy létező munkamenetet és használd ennek a hitelesítésére.</string>
 
 
     <string name="verification_profile_verify">Ellenőriz</string>
@@ -2169,9 +2169,217 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="a11y_qr_code_for_verification">QR kód</string>
 
-    <string name="qr_code_scanned_by_other_notice">A másik felhasználó sikeresen beolvasta a QR kódot\?</string>
+    <string name="qr_code_scanned_by_other_notice">Majdnem kész! %s is ugyanazt a pajzsot mutatja\?</string>
     <string name="qr_code_scanned_by_other_yes">Igen</string>
     <string name="qr_code_scanned_by_other_no">Nem</string>
 
     <string name="no_connectivity_to_the_server_indicator">Megszakadt a kapcsolat a szerverrel</string>
+    <string name="login_signup_username_hint">Felhasználónév</string>
+    <string name="settings_dev_tools">Fejlesztői Eszközök</string>
+    <string name="settings_account_data">Fiók Adatok</string>
+    <plurals name="poll_info">
+        <item quantity="one">%d szavazat</item>
+        <item quantity="other">%d szavazat</item>
+    </plurals>
+    <plurals name="poll_info_final">
+        <item quantity="one">Végeredmény - %d szavazat</item>
+        <item quantity="other">Végeredmény - %d szavazat</item>
+    </plurals>
+    <string name="poll_item_selected_aria">Kiválasztott Beállítások</string>
+    <string name="command_description_poll">Egyszerű szavazás készítése</string>
+    <string name="verification_cannot_access_other_session">Használd a visszaállítási eljárást</string>
+    <string name="verification_use_passphrase">Ha nem érsz el létező munkamenetet</string>
+
+    <string name="new_signin">Új Bejelentkezés</string>
+
+    <string name="enter_secret_storage_invalid">A tárolóban nem található jelszó/kulcs</string>
+    <string name="enter_secret_storage_passphrase">Add meg a jelmondatot a biztonsági tárolóhoz</string>
+    <string name="enter_secret_storage_passphrase_warning">Figyelem:</string>
+    <string name="enter_secret_storage_passphrase_warning_text">Csak biztonságos eszközről férj hozzá a biztonsági tárolóhoz</string>
+
+    <string name="message_action_item_redact">Töröl…</string>
+    <string name="share_confirm_room">Ezt a csatolmányt el szeretnéd küldeni ide: %1$s\?</string>
+    <plurals name="send_images_with_original_size">
+        <item quantity="one">Kép küldése eredeti méretben</item>
+        <item quantity="other">Képek küldése eredeti méretben</item>
+    </plurals>
+
+    <string name="delete_event_dialog_title">Törlés megerősítése</string>
+    <string name="delete_event_dialog_content">Biztos hogy eltávolítod (törlöd) ezt az eseményt\? Figyelem, ha törlöd vagy megváltoztatod a szoba nevét vagy a témát ez a változtatás érvényét vesztheti.</string>
+    <string name="delete_event_dialog_reason_checkbox">Ok megadása</string>
+    <string name="delete_event_dialog_reason_hint">Ok a kitakaráshoz</string>
+
+    <string name="event_redacted_by_user_reason_with_reason">Az eseményt a felhasználó törölte, ezért: %1$s</string>
+    <string name="event_redacted_by_admin_reason_with_reason">Az eseményt a szoba adminisztrátora moderálta, ezért: %1$s</string>
+
+    <string name="keys_backup_restore_success_title_already_up_to_date">A kulcsok már frissek!</string>
+
+    <string name="login_mobile_device_riotx">RiotX Android</string>
+
+    <string name="settings_key_requests">Kulcs kérések</string>
+
+    <string name="e2e_use_keybackup">Régi titkosított üzenetek feloldása</string>
+
+    <string name="refresh">Frissítés</string>
+
+    <string name="new_session">Új bejelentkezés. Ez te vagy\?</string>
+    <string name="new_session_review">A megtekintéshez és ellenőrzéshez koppints</string>
+    <string name="verify_new_session_notice">Az új munkamenet ellenőrzéséhez használd ezt, amivel hozzáférést adsz a titkosított üzenetekhez.</string>
+    <string name="verify_new_session_was_not_me">Nem én voltam</string>
+    <string name="verify_new_session_compromized">A fiókodat lehet, hogy feltörték</string>
+
+    <string name="verify_cancel_self_verification_from_untrusted">Ha megszakítod akkor ezen az eszközön nem tudod majd elolvasni a titkosított üzeneteket és mások nem fogják megbízhatónak látni</string>
+    <string name="verify_cancel_self_verification_from_trusted">Ha megszakítod akkor az eszközödön nem tudod majd elolvasni a titkosított üzeneteket és mások nem fogják megbízhatónak látni</string>
+    <string name="verify_cancel_other">Ha most megszakítod akkor ezt nem fogod ellenőrizni: %1$s (%2$s). A felhasználói profilból újrakezdheted.</string>
+
+    <string name="verify_not_me_self_verification">Az egyik az alábbiak közül kompromittálódhatott:
+\n
+\n- A jelszavad
+\n- A matrix szervered
+\n- Ez vagy egy másik eszköz
+\n- Valamelyik eszköz által használt internet elérés
+\n
+\nJavasoljuk, hogy azonnal cseréld le a jelszavadat és a visszaállítási kulcsot a Beállításokban.</string>
+
+    <string name="verify_cancelled_notice">Ellenőrizd az eszközödet a Beállításokból.</string>
+    <string name="verification_cancelled">Ellenőrzés megszakítva</string>
+
+    <string name="recovery_passphrase">Visszaállítási jelmondat</string>
+    <string name="message_key">Üzenet Kulcs</string>
+    <string name="account_password">Fiók Jelszó</string>
+
+    <string name="set_recovery_passphrase">Beállítás: %s</string>
+    <string name="generate_message_key">Üzenet kulcs létrehozása</string>
+
+    <string name="confirm_recovery_passphrase">Megerősít: %s</string>
+
+    <string name="enter_account_password">A továbblépéshez add meg: %s.</string>
+
+    <string name="bootstrap_info_text">Helyezd biztonságba és férj hozzá a titkosított üzenetekhez valamint bízz meg benne ezzel: %s.</string>
+    <string name="bootstrap_info_confirm_text">A megerősítéshez add meg újra ezt: %s.</string>
+    <string name="bootstrap_dont_reuse_pwd">Ne a fiók jelszavadat használd.</string>
+
+
+    <string name="bootstrap_loading_text">Ez eltarthat néhány másodpercig, kérlek legyél türelmes.</string>
+    <string name="bootstrap_loading_title">Visszaállítás beállítása.</string>
+    <string name="your_recovery_key">Visszaállítási kulcsod</string>
+    <string name="bootstrap_finish_title">Kész vagy!</string>
+    <string name="keep_it_safe">Tartsd biztonságban</string>
+    <string name="finish">Befejez</string>
+
+    <string name="bootstrap_save_key_description">A biztonság kedvéért használd ezt: %1$s arra az esetre ha elfelejtenéd ezt: %2$s.</string>
+
+    <string name="bootstrap_crosssigning_progress_initializing">Az elkészített azonosítási kulcsok közzé tétele</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">Biztonságos kulcs készítése a jelmondatból</string>
+    <string name="bootstrap_crosssigning_progress_default_key">SSSS alapértelmezett kulcs meghatározása</string>
+    <string name="bootstrap_crosssigning_progress_save_msk">Mester kulcs szinkronizálása</string>
+    <string name="bootstrap_crosssigning_progress_save_usk">Felhasználói kulcs szinkronizálása</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">Saját magával aláírt kulcs szinkronizálása</string>
+    <string name="bootstrap_crosssigning_progress_key_backup">Kulcs Mentés beállítása</string>
+
+
+    <string name="bootstrap_cross_signing_success">Ezek lettek beállítva: %2$s és %1$s.
+\n
+\nTartsd őket biztonságban! Szükség lesz rájuk a titkosított üzenetek és biztonsági információk eléréséhez ha minden aktív munkameneted megszűnik.</string>
+
+    <string name="bootstrap_crosssigning_print_it">Nyomtasd ki és tárold valahol biztonságos helyen</string>
+    <string name="bootstrap_crosssigning_save_usb">Mentsd el egy USB kulcsra vagy mentő eszközre</string>
+    <string name="bootstrap_crosssigning_save_cloud">Másold fel a személyes felhő tárhelyedre</string>
+
+    <string name="auth_flow_not_supported">Mobilról ezt nem tudod megtenni</string>
+
+    <string name="bootstrap_skip_text">Az Üzenet Jelszó beállításával biztonságba helyezheted és hozzáférhetsz a titkosított üzeneteidhez valamint a bizalomhoz.
+\n
+\nHa nem akarsz Üzenet Jelszót beállítani, hozz létre inkább Üzenet Kulcsot.</string>
+    <string name="bootstrap_skip_text_no_gen_key">Az Visszaállítási Jelmondat beállításával biztonságba helyezheted és hozzáférhetsz a titkosított üzeneteidhez valamint a bizalomhoz.</string>
+
+
+    <string name="encryption_enabled">Titkosítás bekapcsolva</string>
+    <string name="encryption_enabled_tile_description">Ebben a szobában az üzenetek végpontok között titkosítottak. További információkért és ellenőrzéshez nyisd meg a felhasználók profilját.</string>
+    <string name="encryption_not_enabled">Titkosítás nincs engedélyezve</string>
+    <string name="encryption_unknown_algorithm_tile_description">A szobában használt titkosítás nem támogatott</string>
+
+    <string name="room_created_summary_item">%s elkészítette és beállította a szobát.</string>
+
+    <string name="qr_code_scanned_self_verif_notice">Majdnem kész! A többi eszközöd is ugyanazt a pajzsot mutatja\?</string>
+    <string name="qr_code_scanned_verif_waiting_notice">Majdnem kész! Várakozás a megerősítésre…</string>
+    <string name="qr_code_scanned_verif_waiting">Várakozás erre: %s…</string>
+
+    <string name="error_failed_to_import_keys">A kulcsok betöltése sikertelen</string>
+
+    <string name="settings_notification_configuration">Értesítések beállítása</string>
+    <string name="settings_messages_at_room">Az üzenetek „@room”-ot tartalmaznak</string>
+    <string name="settings_messages_in_e2e_one_to_one">Titkosított üzenetek közvetlen csevegésekben</string>
+    <string name="settings_messages_in_e2e_group_chat">Titkosított üzenetek a csoportos beszélgetésekben</string>
+    <string name="settings_when_rooms_are_upgraded">Ha a szobák fejlesztésre kerülnek</string>
+    <string name="settings_troubleshoot_title">Hibakeresés</string>
+    <string name="settings_notification_advanced_summary_riotx">Értesítés fontosságának beállítása eseménynél</string>
+
+    <string name="command_description_plain">Az üzenet elküldése sima szövegként anélkül, hogy „markdown” formázás lenne</string>
+
+    <string name="auth_invalid_login_param_space_in_password">Felhasználói név és/vagy jelszó hibás. A beírt jelszó szóközzel kezdődik vagy ér véget, kérlek ellenőrizd.</string>
+
+    <string name="room_message_placeholder">Üzenet…</string>
+
+    <string name="upgrade_security">A titkosítás fejlesztése elérhető</string>
+    <string name="security_prompt_text">Ellenőrizd magad és másokat, hogy a csevegéseid biztonságban legyenek</string>
+
+    <string name="bootstrap_enter_recovery">A továbblépéshez add meg: %s</string>
+    <string name="use_file">Fájl használata</string>
+
+    <string name="enter_backup_passphrase">Bevitel: %s</string>
+    <string name="backup_recovery_passphrase">Visszaállítási Jelmondat</string>
+    <string name="bootstrap_invalid_recovery_key">Ez nem egy érvényes visszaállítási kulcs</string>
+    <string name="recovery_key_empty_error_message">Kérlek add meg a visszaállítási kulcsot</string>
+
+    <string name="bootstrap_progress_checking_backup">Mentés Kulcs ellenőrzése</string>
+    <string name="bootstrap_progress_checking_backup_with_info">Mentés Kulcs (%s) ellenőrzése</string>
+    <string name="bootstrap_progress_compute_curve_key">Curve kulcs megszerzése</string>
+    <string name="bootstrap_progress_generating_ssss">SSSS kulcs készítése a jelmondatból</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">SSSS kulcs készítése a jelmondatból (%s)</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">SSSS kulcs készítése a visszaállítási kulcsból</string>
+    <string name="bootstrap_progress_storing_in_sss">Kulcsmentés titok tárolása az SSSS-ben</string>
+    <string name="new_session_review_with_info">%1$s (%2$s)</string>
+
+    <string name="bootstrap_migration_enter_backup_password">A továbblépéshez add meg a kulcs mentés jelmondatát.</string>
+    <string name="bootstrap_migration_use_recovery_key">használd a Kulcs Mentés visszaállítási kulcsot</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">Ha nem tudod a Kulcs Mentés Jelmondatodat, akkor %s.</string>
+    <string name="bootstrap_migration_backup_recovery_key">Kulcs Mentés visszaállítási kulcs</string>
+
+    <string name="settings_security_prevent_screenshots_title">Az alkalmazásról képernyőkép készítésének megakadályozása</string>
+    <string name="settings_security_prevent_screenshots_summary">A beállítással minden \"Activiti\" megkapja a \"FLAG_SECURE\" flaget. Indítsd újra az alkalmazást, hogy a változás életbe léphessen.</string>
+
+    <string name="media_file_added_to_gallery">A média fájl a Galériához hozzáadva</string>
+    <string name="error_adding_media_file_to_gallery">A média fájlt nem sikerült hozzáadni a Galériához</string>
+    <string name="change_password_summary">Új fiók jelszó beállítása…</string>
+
+    <string name="riot_desktop_web">Riot Web
+\nRiot Desktop</string>
+    <string name="riot_ios_android">Riot iOS
+\nRiot X for Android</string>
+    <string name="or_other_mx_capabale_client">vagy másik eszközök közötti hitelesítésre alkalmas Matrix kliensre</string>
+    <string name="use_latest_riot">A Riot legújabb kliensét használd a többi eszközödön:</string>
+    <string name="command_description_discard_session">A jelenlegi csoport munkamenet törlését kikényszeríti a titkosított szobában</string>
+    <string name="command_description_discard_session_not_handled">Csak a titkosított szobákban támogatott</string>
+    <string name="enter_secret_storage_passphrase_or_key">Használd ezt: %1$s vagy ezt: %2$s a továbblépéshez.</string>
+    <string name="use_recovery_key">Használd a Visszaállítási Kulcsot</string>
+    <string name="enter_secret_storage_input_key">Válaszd ki a Visszaállítási Kulcsot, add meg kézzel vagy másold be a vágólapról</string>
+    <string name="keys_backup_recovery_key_error_decrypt">Ezzel a Visszaállítási Kulccsal a mentést nem lehet visszafejteni: kérlek ellenőrizd, hogy a visszaállítási kulcsot jól adtad-e meg.</string>
+    <string name="failed_to_access_secure_storage">A biztonsági tárolóhoz nem sikerült hozzáférni</string>
+
+    <string name="unencrypted">Titkosítatlan</string>
+    <string name="encrypted_unverified">Ellenőrizetlen eszközzel titkosította</string>
+    <string name="review_logins">Tekintsd át hol vagy bejelentkezve</string>
+    <string name="verify_other_sessions">Ellenőrizd minden munkamenetedet, hogy a fiókod és az üzeneteid biztonságban legyenek</string>
+    <string name="verify_this_session">Ellenőrizd ezt az új bejelentkezést ami hozzáfér a fiókodhoz: %1$s</string>
+
+    <string name="cross_signing_verify_by_text">Manuális szöveges ellenőrzés</string>
+    <string name="crosssigning_verify_session">Belépés ellenőrzése</string>
+    <string name="cross_signing_verify_by_emoji">Közös ellenőrzés Emodzsival</string>
+    <string name="mark_as_verified">Megbízhatónak jelölés</string>
+
+    <string name="error_empty_field_choose_user_name">Kérlek válasz felhasználói nevet.</string>
+    <string name="error_empty_field_choose_password">Kérlek válassz jelszót.</string>
+    <string name="external_link_confirmation_title">Ezt a hivatkozást ellenőrizd le még egyszer</string>
+    <string name="create_room_dm_failure">A közvetlen üzenetedet nem sikerült elkészíteni. Ellenőrizd azokat a felhasználókat akiket meg szeretnél hívni és próbáld újra.</string>
 </resources>

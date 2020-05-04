@@ -57,7 +57,7 @@ We get credential (200)
 
 ```json
 {
-  "user_id": "@benoit0816:matrix.org",
+  "user_id": "@alice:matrix.org",
   "access_token": "MDAxOGxvY2F0aW9uIG1hdHREDACTEDb2l0MDgxNjptYXRyaXgub3JnCjAwMTZjaWQgdHlwZSA9IGFjY2VzcwowMDIxY2lkIG5vbmNlID0gfnYrSypfdTtkNXIuNWx1KgowMDJmc2lnbmF0dXJlIOsh1XqeAkXexh4qcofl_aR4kHJoSOWYGOhE7-ubX-DZCg",
   "home_server": "matrix.org",
   "device_id": "GTVREDALBF",
@@ -127,6 +127,8 @@ We get the credentials (200)
   }
 }
 ```
+
+It's worth noting that the response from the homeserver contains the userId of Alice.
 
 ### Login with Msisdn
 

@@ -38,6 +38,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.api.session.sync.SyncState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -182,9 +183,9 @@ class CommonTestHelper(context: Context) {
      * @param testParams test params about the session
      * @return the session associated with the existing account
      */
-    private fun logIntoAccount(userId: String,
-                               password: String,
-                               testParams: SessionTestParams): Session {
+    fun logIntoAccount(userId: String,
+                       password: String,
+                       testParams: SessionTestParams): Session {
         val session = logAccountAndSync(userId, password, testParams)
         assertNotNull(session)
         return session
@@ -260,13 +261,62 @@ class CommonTestHelper(context: Context) {
     }
 
     /**
+     * Log into the account and expect an error
+     *
+     * @param userName the account username
+     * @param password the password
+     */
+    fun logAccountWithError(userName: String,
+                            password: String): Throwable {
+        val hs = createHomeServerConfig()
+
+        doSync<LoginFlowResult> {
+            matrix.authenticationService
+                    .getLoginFlow(hs, it)
+        }
+
+        var requestFailure: Throwable? = null
+        waitWithLatch { latch ->
+            matrix.authenticationService
+                    .getLoginWizard()
+                    .login(userName, password, "myDevice", object : TestMatrixCallback<Session>(latch, onlySuccessful = false) {
+                        override fun onFailure(failure: Throwable) {
+                            requestFailure = failure
+                            super.onFailure(failure)
+                        }
+                    })
+        }
+
+        assertNotNull(requestFailure)
+        return requestFailure!!
+    }
+
+    /**
      * Await for a latch and ensure the result is true
      *
      * @param latch
      * @throws InterruptedException
      */
-    fun await(latch: CountDownLatch) {
-        assertTrue(latch.await(TestConstants.timeOutMillis, TimeUnit.MILLISECONDS))
+    fun await(latch: CountDownLatch, timeout: Long? = TestConstants.timeOutMillis) {
+        assertTrue(latch.await(timeout ?: TestConstants.timeOutMillis, TimeUnit.MILLISECONDS))
+    }
+
+    fun retryPeriodicallyWithLatch(latch: CountDownLatch, condition: (() -> Boolean)) {
+        GlobalScope.launch {
+            while (true) {
+                delay(1000)
+                if (condition()) {
+                    latch.countDown()
+                    return@launch
+                }
+            }
+        }
+    }
+
+    fun waitWithLatch(timeout: Long? = TestConstants.timeOutMillis, block: (CountDownLatch) -> Unit) {
+        val latch = CountDownLatch(1)
+        block(latch)
+        await(latch, timeout)
     }
 
     // Transform a method with a MatrixCallback to a synchronous method

@@ -30,6 +30,10 @@ import io.reactivex.Single
 abstract class VectorViewModel<S : MvRxState, VA : VectorViewModelAction, VE : VectorViewEvents>(initialState: S)
     : BaseMvRxViewModel<S>(initialState, false) {
 
+    interface Factory<S: MvRxState> {
+        fun create(state: S): BaseMvRxViewModel<S>
+    }
+
     // Used to post transient events to the View
     protected val _viewEvents = PublishDataSource<VE>()
     val viewEvents: DataSource<VE> = _viewEvents

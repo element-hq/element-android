@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/creationEncryptionTile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="52dp"
+        android:layout_marginBottom="2dp"
+        android:background="@drawable/rounded_rect_shape_8"
+        android:padding="8dp">
+
+        <include layout="@layout/item_timeline_event_status_tile_stub" />
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/mergedSumContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/creationEncryptionTile">
+
+        <ImageView
+            android:id="@+id/itemNoticeAvatarView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/itemNoticeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="top"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_toStartOf="@id/itemMergedExpandTextView"
+            android:layout_toEndOf="@id/itemNoticeAvatarView"
+            android:textColor="?riotx_text_secondary"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            tools:text="@string/room_created_summary_item" />
+
+
+        <TextView
+            android:id="@+id/itemMergedExpandTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="2dp"
+            android:paddingLeft="8dp"
+            android:paddingTop="4dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="4dp"
+            android:text="@string/merged_events_expand"
+            android:textColor="?attr/colorAccent"
+            android:textSize="14sp"
+            android:textStyle="italic" />
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/itemMergedSeparatorView"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/mergedSumContainer"
+        android:layout_marginTop="4dp"
+        android:background="?attr/riotx_header_panel_background" />
+
+</RelativeLayout>

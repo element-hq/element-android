@@ -16,6 +16,10 @@
 
 package im.vector.matrix.android.api.failure
 
+import im.vector.matrix.android.api.extensions.tryThis
+import im.vector.matrix.android.internal.auth.registration.RegistrationFlowResponse
+import im.vector.matrix.android.internal.di.MoshiProvider
+import java.io.IOException
 import javax.net.ssl.HttpsURLConnection
 
 fun Throwable.is401() =
@@ -29,5 +33,27 @@ fun Throwable.isTokenError() =
 
 fun Throwable.shouldBeRetried(): Boolean {
     return this is Failure.NetworkConnection
+            || this is IOException
             || (this is Failure.ServerError && error.code == MatrixError.M_LIMIT_EXCEEDED)
+}
+
+fun Throwable.isInvalidPassword(): Boolean {
+    return this is Failure.ServerError
+            && error.code == MatrixError.M_FORBIDDEN
+            && error.message == "Invalid password"
+}
+
+/**
+ * Try to convert to a RegistrationFlowResponse. Return null in the cases it's not possible
+ */
+fun Throwable.toRegistrationFlowResponse(): RegistrationFlowResponse? {
+    return if (this is Failure.OtherServerError && this.httpCode == 401) {
+        tryThis {
+            MoshiProvider.providesMoshi()
+                    .adapter(RegistrationFlowResponse::class.java)
+                    .fromJson(this.errorBody)
+        }
+    } else {
+        null
+    }
 }

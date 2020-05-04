@@ -202,4 +202,12 @@
     <string name="notice_room_canonical_alias_set">%1$s настрой %2$s като основен адрес за тази стая.</string>
     <string name="notice_room_canonical_alias_unset">%1$s премахна основния адрес за тази стая.</string>
 
+    <string name="notice_room_guest_access_can_join">%1$s разреши на гости да се присъединяват в стаята.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s предотврати присъединяването на гости в стаята.</string>
+
+    <string name="notice_end_to_end_ok">%1$s включи шифроване от-край-до-край.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s включи шифроване от-край-до-край (неразпознат алгоритъм %2$s).</string>
+
+    <string name="key_verification_request_fallback_message">%s изпрати запитване за потвърждение на ключа ви, но клиентът ви не поддържа верифициране посредством чат. Ще трябва да използвате стария метод за верифициране на ключове.</string>
+
 </resources>

@@ -19,5 +19,6 @@ package im.vector.matrix.android.api.session.securestorage
 data class SsssKeyCreationInfo(
         val keyId: String = "",
         var content: SecretStorageKeyContent?,
-        val recoveryKey: String = ""
+        val recoveryKey: String = "",
+        val keySpec: SsssKeySpec
 )

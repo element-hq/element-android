@@ -25,13 +25,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.vectorComponent
-import im.vector.riotx.core.preference.BingRule
 import im.vector.riotx.core.pushers.PushersManager
 import im.vector.riotx.features.badge.BadgeProxy
 import im.vector.riotx.features.notifications.NotifiableEventResolver
@@ -196,7 +196,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                     description = "",
                     type = null,
                     timestamp = System.currentTimeMillis(),
-                    soundName = BingRule.ACTION_VALUE_DEFAULT,
+                    soundName = PushRule.ACTION_VALUE_DEFAULT,
                     isPushGatewayEvent = true
             )
             notificationDrawerManager.onNotifiableEventReceived(simpleNotifiableEvent)

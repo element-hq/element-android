@@ -58,6 +58,8 @@ class VerificationConclusionController @Inject constructor(
                     id("image")
                     imageRes(R.drawable.ic_shield_trusted)
                 }
+
+                bottomDone()
             }
             ConclusionState.WARNING -> {
                 bottomSheetVerificationNoticeItem {
@@ -74,10 +76,32 @@ class VerificationConclusionController @Inject constructor(
                     id("warning_notice")
                     notice(eventHtmlRenderer.render(stringProvider.getString(R.string.verification_conclusion_compromised)))
                 }
-            }
-            else                    -> Unit
-        }
 
+                bottomDone()
+            }
+            ConclusionState.CANCELLED -> {
+                bottomSheetVerificationNoticeItem {
+                    id("notice_cancelled")
+                    notice(stringProvider.getString(R.string.verify_cancelled_notice))
+                }
+
+                dividerItem {
+                    id("sep0")
+                }
+
+                bottomSheetVerificationActionItem {
+                    id("got_it")
+                    title(stringProvider.getString(R.string.sas_got_it))
+                    titleColor(colorProvider.getColor(R.color.riotx_accent))
+                    iconRes(R.drawable.ic_arrow_right)
+                    iconColor(colorProvider.getColor(R.color.riotx_accent))
+                    listener { listener?.onButtonTapped() }
+                }
+            }
+        }
+    }
+
+    private fun bottomDone() {
         dividerItem {
             id("sep0")
         }

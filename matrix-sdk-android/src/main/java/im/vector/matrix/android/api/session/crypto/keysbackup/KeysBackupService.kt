@@ -24,6 +24,7 @@ import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupCre
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersion
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
+import im.vector.matrix.android.internal.crypto.store.SavedKeyBackupKeyInfo
 
 interface KeysBackupService {
     /**
@@ -172,6 +173,8 @@ interface KeysBackupService {
                                              password: String,
                                              callback: MatrixCallback<Unit>)
 
+    fun onSecretKeyGossip(secret: String)
+
     /**
      * Restore a backup with a recovery key from a given backup version stored on the homeserver.
      *
@@ -210,4 +213,10 @@ interface KeysBackupService {
     val isEnabled: Boolean
     val isStucked: Boolean
     val state: KeysBackupState
+
+    // For gossiping
+    fun saveBackupRecoveryKey(recoveryKey: String?, version: String?)
+    fun getKeyBackupRecoveryKeyInfo() : SavedKeyBackupKeyInfo?
+
+    fun isValidRecoveryKeyForCurrentVersion(recoveryKey: String, callback: MatrixCallback<Boolean>)
 }

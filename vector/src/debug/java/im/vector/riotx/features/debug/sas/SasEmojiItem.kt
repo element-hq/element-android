@@ -18,11 +18,14 @@ package im.vector.riotx.features.debug.sas
 
 import android.annotation.SuppressLint
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.matrix.android.api.session.crypto.verification.EmojiRepresentation
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import me.gujun.android.span.image
+import me.gujun.android.span.span
 
 @EpoxyModelClass(layout = im.vector.riotx.R.layout.item_sas_emoji)
 abstract class SasEmojiItem : VectorEpoxyModel<SasEmojiItem.Holder>() {
@@ -36,7 +39,12 @@ abstract class SasEmojiItem : VectorEpoxyModel<SasEmojiItem.Holder>() {
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.indexView.text = "$index:"
-        holder.emojiView.text = emojiRepresentation.emoji
+        holder.emojiView.text = span {
+            +emojiRepresentation.emoji
+            emojiRepresentation.drawableRes?.let {
+                image(ContextCompat.getDrawable(holder.view.context, it)!!)
+            }
+        }
         holder.textView.setText(emojiRepresentation.nameResId)
         holder.idView.text = holder.idView.resources.getResourceEntryName(emojiRepresentation.nameResId)
     }

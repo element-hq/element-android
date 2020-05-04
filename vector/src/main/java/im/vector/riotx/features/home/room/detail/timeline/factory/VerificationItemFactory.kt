@@ -23,18 +23,19 @@ import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageRelationContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationCancelContent
-import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.session.room.VerificationState
+import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
-import im.vector.riotx.core.resources.ColorProvider
+import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.resources.UserPreferencesProvider
+import im.vector.riotx.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.riotx.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.riotx.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
-import im.vector.riotx.features.home.room.detail.timeline.item.VerificationRequestConclusionItem
-import im.vector.riotx.features.home.room.detail.timeline.item.VerificationRequestConclusionItem_
+import im.vector.riotx.features.home.room.detail.timeline.item.StatusTileTimelineItem
+import im.vector.riotx.features.home.room.detail.timeline.item.StatusTileTimelineItem_
 import javax.inject.Inject
 
 /**
@@ -43,12 +44,13 @@ import javax.inject.Inject
  * several checks are made to see if this conclusion is attached to a known request
  */
 class VerificationItemFactory @Inject constructor(
-        private val colorProvider: ColorProvider,
+        private val messageColorProvider: MessageColorProvider,
         private val messageInformationDataFactory: MessageInformationDataFactory,
         private val messageItemAttributesFactory: MessageItemAttributesFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
         private val noticeItemFactory: NoticeItemFactory,
         private val userPreferencesProvider: UserPreferencesProvider,
+        private val stringProvider: StringProvider,
         private val session: Session
 ) {
 
@@ -71,7 +73,7 @@ class VerificationItemFactory @Inject constructor(
                 ?: return ignoredConclusion(event, highlight, callback)
 
         // If it's not a request ignore this event
-        if (refEvent.root.getClearContent().toModel<MessageVerificationRequestContent>() == null) return ignoredConclusion(event, highlight, callback)
+        // if (refEvent.root.getClearContent().toModel<MessageVerificationRequestContent>() == null) return ignoredConclusion(event, highlight, callback)
 
         val referenceInformationData = messageInformationDataFactory.create(refEvent, null)
 
@@ -89,15 +91,15 @@ class VerificationItemFactory @Inject constructor(
                     CancelCode.MismatchedKeys,
                     CancelCode.MismatchedSas -> {
                         // We should display these bad conclusions
-                        return VerificationRequestConclusionItem_()
+                        return StatusTileTimelineItem_()
                                 .attributes(
-                                        VerificationRequestConclusionItem.Attributes(
-                                                toUserId = informationData.senderId,
-                                                toUserName = informationData.memberName.toString(),
-                                                isPositive = false,
+                                        StatusTileTimelineItem.Attributes(
+                                                title = stringProvider.getString(R.string.verification_conclusion_warning),
+                                                description = "${informationData.memberName} (${informationData.senderId})",
+                                                shieldUIState = StatusTileTimelineItem.ShieldUIState.RED,
                                                 informationData = informationData,
                                                 avatarRenderer = attributes.avatarRenderer,
-                                                colorProvider = colorProvider,
+                                                messageColorProvider = messageColorProvider,
                                                 emojiTypeFace = attributes.emojiTypeFace,
                                                 itemClickListener = attributes.itemClickListener,
                                                 itemLongClickListener = attributes.itemLongClickListener,
@@ -122,15 +124,15 @@ class VerificationItemFactory @Inject constructor(
                     // We only display the done sent by the other user, the done send by me is ignored
                     return ignoredConclusion(event, highlight, callback)
                 }
-                return VerificationRequestConclusionItem_()
+                return StatusTileTimelineItem_()
                         .attributes(
-                                VerificationRequestConclusionItem.Attributes(
-                                        toUserId = informationData.senderId,
-                                        toUserName = informationData.memberName.toString(),
-                                        isPositive = true,
+                                StatusTileTimelineItem.Attributes(
+                                        title = stringProvider.getString(R.string.sas_verified),
+                                        description = "${informationData.memberName} (${informationData.senderId})",
+                                        shieldUIState = StatusTileTimelineItem.ShieldUIState.GREEN,
                                         informationData = informationData,
                                         avatarRenderer = attributes.avatarRenderer,
-                                        colorProvider = colorProvider,
+                                        messageColorProvider = messageColorProvider,
                                         emojiTypeFace = attributes.emojiTypeFace,
                                         itemClickListener = attributes.itemClickListener,
                                         itemLongClickListener = attributes.itemLongClickListener,

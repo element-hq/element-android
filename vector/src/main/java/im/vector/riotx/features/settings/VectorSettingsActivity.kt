@@ -20,11 +20,13 @@ import android.content.Intent
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import im.vector.matrix.android.api.failure.GlobalError
 import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.features.settings.devices.VectorSettingsDevicesFragment
 import kotlinx.android.synthetic.main.activity_vector_settings.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -43,6 +45,8 @@ class VectorSettingsActivity : VectorBaseActivity(),
 
     private var keyToHighlight: String? = null
 
+    var ignoreInvalidTokenError = false
+
     @Inject lateinit var session: Session
 
     override fun injectWith(injector: ScreenComponent) {
@@ -55,9 +59,16 @@ class VectorSettingsActivity : VectorBaseActivity(),
         if (isFirstCreation()) {
             // display the fragment
             when (intent.getIntExtra(EXTRA_DIRECT_ACCESS, EXTRA_DIRECT_ACCESS_ROOT)) {
-                EXTRA_DIRECT_ACCESS_ADVANCED_SETTINGS ->
+                EXTRA_DIRECT_ACCESS_ADVANCED_SETTINGS                ->
                     replaceFragment(R.id.vector_settings_page, VectorSettingsAdvancedSettingsFragment::class.java, null, FRAGMENT_TAG)
-                else                                  ->
+                EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY                 ->
+                    replaceFragment(R.id.vector_settings_page, VectorSettingsSecurityPrivacyFragment::class.java, null, FRAGMENT_TAG)
+                EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS ->
+                    replaceFragment(R.id.vector_settings_page,
+                            VectorSettingsDevicesFragment::class.java,
+                            null,
+                            FRAGMENT_TAG)
+                else                                                 ->
                     replaceFragment(R.id.vector_settings_page, VectorSettingsRootFragment::class.java, null, FRAGMENT_TAG)
             }
         }
@@ -77,21 +88,14 @@ class VectorSettingsActivity : VectorBaseActivity(),
     }
 
     override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
-        val oFragment = when {
-            VectorPreferences.SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY == pref.key ->
-                supportFragmentManager.fragmentFactory.instantiate(classLoader, VectorSettingsNotificationsTroubleshootFragment::class.java.name)
-            VectorPreferences.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY == pref.key     ->
-                supportFragmentManager.fragmentFactory.instantiate(classLoader, VectorSettingsAdvancedNotificationPreferenceFragment::class.java.name)
-            else                                                                            ->
-                try {
-                    pref.fragment?.let {
-                        supportFragmentManager.fragmentFactory.instantiate(classLoader, it)
-                    }
-                } catch (e: Throwable) {
-                    showSnackbar(getString(R.string.not_implemented))
-                    Timber.e(e)
-                    null
-                }
+        val oFragment = try {
+            pref.fragment?.let {
+                supportFragmentManager.fragmentFactory.instantiate(classLoader, it)
+            }
+        } catch (e: Throwable) {
+            showSnackbar(getString(R.string.not_implemented))
+            Timber.e(e)
+            null
         }
 
         if (oFragment != null) {
@@ -115,6 +119,14 @@ class VectorSettingsActivity : VectorBaseActivity(),
         return keyToHighlight
     }
 
+    override fun handleInvalidToken(globalError: GlobalError.InvalidToken) {
+        if (ignoreInvalidTokenError) {
+            Timber.w("Ignoring invalid token global error")
+        } else {
+            super.handleInvalidToken(globalError)
+        }
+    }
+
     companion object {
         fun getIntent(context: Context, directAccess: Int) = Intent(context, VectorSettingsActivity::class.java)
                 .apply { putExtra(EXTRA_DIRECT_ACCESS, directAccess) }
@@ -123,6 +135,8 @@ class VectorSettingsActivity : VectorBaseActivity(),
 
         const val EXTRA_DIRECT_ACCESS_ROOT = 0
         const val EXTRA_DIRECT_ACCESS_ADVANCED_SETTINGS = 1
+        const val EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY = 2
+        const val EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS = 3
 
         private const val FRAGMENT_TAG = "VectorSettingsPreferencesFragment"
     }

@@ -48,6 +48,7 @@ import im.vector.riotx.features.lifecycle.VectorActivityLifecycleCallbacks
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.notifications.NotificationUtils
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
+import im.vector.riotx.features.popup.PopupAlertManager
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.session.SessionListener
 import im.vector.riotx.features.settings.VectorPreferences
@@ -55,6 +56,7 @@ import im.vector.riotx.features.version.VersionProvider
 import im.vector.riotx.push.fcm.FcmHelper
 import timber.log.Timber
 import java.text.SimpleDateFormat
+import java.util.concurrent.Executors
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
@@ -77,6 +79,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
     @Inject lateinit var notificationUtils: NotificationUtils
     @Inject lateinit var appStateHandler: AppStateHandler
     @Inject lateinit var rxConfig: RxConfig
+    @Inject lateinit var popupAlertManager: PopupAlertManager
     lateinit var vectorComponent: VectorComponent
     private var fontThreadHandler: Handler? = null
 
@@ -102,7 +105,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
         BigImageViewer.initialize(GlideImageLoader.with(applicationContext))
         EpoxyController.defaultDiffingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
         EpoxyController.defaultModelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
-        registerActivityLifecycleCallbacks(VectorActivityLifecycleCallbacks())
+        registerActivityLifecycleCallbacks(VectorActivityLifecycleCallbacks(popupAlertManager))
         val fontRequest = FontRequest(
                 "com.google.android.gms.fonts",
                 "com.google.android.gms",
@@ -144,7 +147,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
 
     override fun providesMatrixConfiguration() = MatrixConfiguration(BuildConfig.FLAVOR_DESCRIPTION)
 
-    override fun getWorkManagerConfiguration() = androidx.work.Configuration.Builder().build()
+    override fun getWorkManagerConfiguration() = androidx.work.Configuration.Builder().setExecutor(Executors.newCachedThreadPool()).build()
 
     override fun injector(): VectorComponent {
         return vectorComponent
@@ -169,7 +172,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
         MultiDex.install(this)
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration?) {
+    override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         vectorConfiguration.onConfigurationChanged()
     }

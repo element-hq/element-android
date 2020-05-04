@@ -62,10 +62,10 @@ object ThemeUtils {
      */
     fun setApplicationTheme(context: Context, aTheme: String) {
         when (aTheme) {
-            THEME_DARK_VALUE -> context.setTheme(R.style.AppTheme_Dark)
-            THEME_BLACK_VALUE -> context.setTheme(R.style.AppTheme_Black)
+            THEME_DARK_VALUE   -> context.setTheme(R.style.AppTheme_Dark)
+            THEME_BLACK_VALUE  -> context.setTheme(R.style.AppTheme_Black)
             THEME_STATUS_VALUE -> context.setTheme(R.style.AppTheme_Status)
-            else -> context.setTheme(R.style.AppTheme_Light)
+            else               -> context.setTheme(R.style.AppTheme_Light)
         }
 
         // Clear the cache
@@ -170,6 +170,7 @@ object ThemeUtils {
                     R.drawable.bg_search_edit_text_light     -> R.drawable.bg_search_edit_text_dark
                     R.drawable.bg_unread_notification_light  -> R.drawable.bg_unread_notification_dark
                     R.drawable.vector_label_background_light -> R.drawable.vector_label_background_dark
+                    R.drawable.divider_horizontal_light      -> R.drawable.divider_horizontal_dark
                     else                                     -> {
                         Timber.w("Warning, missing case for wanted drawable in dark theme")
                         resourceId
@@ -181,6 +182,7 @@ object ThemeUtils {
                     R.drawable.bg_search_edit_text_light     -> R.drawable.bg_search_edit_text_black
                     R.drawable.bg_unread_notification_light  -> R.drawable.bg_unread_notification_black
                     R.drawable.vector_label_background_light -> R.drawable.vector_label_background_black
+                    R.drawable.divider_horizontal_light      -> R.drawable.divider_horizontal_black
                     else                                     -> {
                         Timber.w("Warning, missing case for wanted drawable in black theme")
                         resourceId

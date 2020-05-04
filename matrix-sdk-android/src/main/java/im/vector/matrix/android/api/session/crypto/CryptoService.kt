@@ -22,12 +22,14 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.session.crypto.crosssigning.CrossSigningService
 import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupService
-import im.vector.matrix.android.api.session.crypto.keyshare.RoomKeysRequestListener
+import im.vector.matrix.android.api.session.crypto.keyshare.GossipingRequestListener
 import im.vector.matrix.android.api.session.crypto.verification.VerificationService
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.MXEventDecryptionResult
 import im.vector.matrix.android.internal.crypto.NewSessionListener
+import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
@@ -86,15 +88,19 @@ interface CryptoService {
 
     fun getDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo?
 
+    fun requestRoomKeyForEvent(event: Event)
+
     fun reRequestRoomKeyForEvent(event: Event)
 
     fun cancelRoomKeyRequest(requestBody: RoomKeyRequestBody)
 
-    fun addRoomKeysRequestListener(listener: RoomKeysRequestListener)
+    fun addRoomKeysRequestListener(listener: GossipingRequestListener)
 
-    fun removeRoomKeysRequestListener(listener: RoomKeysRequestListener)
+    fun removeRoomKeysRequestListener(listener: GossipingRequestListener)
 
-    fun getDevicesList(callback: MatrixCallback<DevicesListResponse>)
+    fun fetchDevicesList(callback: MatrixCallback<DevicesListResponse>)
+    fun getMyDevicesInfo() : List<DeviceInfo>
+    fun getLiveMyDevicesInfo() : LiveData<List<DeviceInfo>>
 
     fun getDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>)
 
@@ -106,6 +112,8 @@ interface CryptoService {
                             eventType: String,
                             roomId: String,
                             callback: MatrixCallback<MXEncryptEventContentResult>)
+
+    fun discardOutboundSession(roomId: String)
 
     @Throws(MXCryptoError::class)
     fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult
@@ -129,4 +137,8 @@ interface CryptoService {
     fun addNewSessionListener(newSessionListener: NewSessionListener)
 
     fun removeSessionListener(listener: NewSessionListener)
+
+    fun getOutgoingRoomKeyRequest(): List<OutgoingRoomKeyRequest>
+    fun getIncomingRoomKeyRequest(): List<IncomingRoomKeyRequest>
+    fun getGossipingEventsTrail(): List<Event>
 }

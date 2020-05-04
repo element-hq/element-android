@@ -28,7 +28,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.kbeanie.multipicker.utils.IntentUtils
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.R
@@ -73,18 +72,18 @@ class IncomingShareFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         setupToolbar(incomingShareToolbar)
-        attachmentsHelper = AttachmentsHelper.create(this, this).register()
+        attachmentsHelper = AttachmentsHelper(requireContext(), this).register()
 
         val intent = vectorBaseActivity.intent
         val isShareManaged = when (intent?.action) {
             Intent.ACTION_SEND          -> {
-                var isShareManaged = attachmentsHelper.handleShareIntent(IntentUtils.getPickerIntentForSharing(intent))
+                var isShareManaged = attachmentsHelper.handleShareIntent(requireContext(), intent)
                 if (!isShareManaged) {
                     isShareManaged = handleTextShare(intent)
                 }
                 isShareManaged
             }
-            Intent.ACTION_SEND_MULTIPLE -> attachmentsHelper.handleShareIntent(intent)
+            Intent.ACTION_SEND_MULTIPLE -> attachmentsHelper.handleShareIntent(requireContext(), intent)
             else                        -> false
         }
 

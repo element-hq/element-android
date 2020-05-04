@@ -6,8 +6,8 @@
     <string name="notice_room_invite_no_invitee">%s 的邀請</string>
     <string name="notice_room_invite">%1$s 邀請了 %2$s</string>
     <string name="notice_room_invite_you">%1$s 邀請您</string>
-    <string name="notice_room_join">%1$s 已加入</string>
-    <string name="notice_room_leave">%1$s 已離開</string>
+    <string name="notice_room_join">%1$s 已加入聊天室</string>
+    <string name="notice_room_leave">%1$s 已離開聊天室</string>
     <string name="notice_room_reject">%1$s 拒絕邀請</string>
     <string name="notice_room_kick">%1$s 踢出 %2$s</string>
     <string name="notice_room_unban">%1$s 解除禁止 %2$s</string>
@@ -174,8 +174,8 @@
     <string name="notice_room_invite_no_invitee_with_reason">%1$s 的邀請。理由：%2$s</string>
     <string name="notice_room_invite_with_reason">%1$s 邀請了 %2$s。理由：%3$s</string>
     <string name="notice_room_invite_you_with_reason">%1$s 邀請了您。理由：%2$s</string>
-    <string name="notice_room_join_with_reason">%1$s 已加入。理由：%2$s</string>
-    <string name="notice_room_leave_with_reason">%1$s 已離開。理由：%2$s</string>
+    <string name="notice_room_join_with_reason">%1$s 已加入聊天室。理由：%2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s 已離開聊天室。理由：%2$s</string>
     <string name="notice_room_reject_with_reason">%1$s 已回絕邀請。理由：%2$s</string>
     <string name="notice_room_kick_with_reason">%1$s 踢走了 %2$s。理由：%3$s</string>
     <string name="notice_room_unban_with_reason">%1$s 取消封鎖了 %2$s。理由：%3$s</string>
@@ -197,5 +197,13 @@
 
     <string name="notice_room_canonical_alias_set">%1$s 為此聊天室設定了 %2$s 為主地址。</string>
     <string name="notice_room_canonical_alias_unset">%1$s 為此聊天室移除了主要地址。</string>
+
+    <string name="notice_room_guest_access_can_join">%1$s 已允許訪客加入聊天室。</string>
+    <string name="notice_room_guest_access_forbidden">%1$s 已禁止訪客加入聊天室。</string>
+
+    <string name="notice_end_to_end_ok">%1$s 已開啟端到端加密。</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s 已開啟端到端加密（無法識別的演算法 %2$s）。</string>
+
+    <string name="key_verification_request_fallback_message">%s 正在請求驗證您的金鑰，但您的客戶端不支援聊天中金鑰驗證。您將必須使用舊版的金鑰驗證來驗證金鑰。</string>
 
 </resources>

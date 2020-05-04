@@ -49,6 +49,7 @@ import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.di.UserMd5
+import im.vector.matrix.android.internal.eventbus.EventBusTimberLogger
 import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import im.vector.matrix.android.internal.network.DefaultNetworkConnectivityChecker
 import im.vector.matrix.android.internal.network.FallbackNetworkCallbackStrategy
@@ -205,7 +206,10 @@ internal abstract class SessionModule {
         @Provides
         @SessionScope
         fun providesEventBus(): EventBus {
-            return EventBus.builder().build()
+            return EventBus
+                    .builder()
+                    .logger(EventBusTimberLogger())
+                    .build()
         }
 
         @JvmStatic

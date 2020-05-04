@@ -50,6 +50,27 @@ fun TimelineEvent.canBeMerged(): Boolean {
     return root.getClearType() == EventType.STATE_ROOM_MEMBER
 }
 
+fun TimelineEvent.isRoomConfiguration(roomCreatorUserId: String?): Boolean {
+    return when (root.getClearType()) {
+        EventType.STATE_ROOM_GUEST_ACCESS,
+        EventType.STATE_ROOM_HISTORY_VISIBILITY,
+        EventType.STATE_ROOM_JOIN_RULES,
+        EventType.STATE_ROOM_NAME,
+        EventType.STATE_ROOM_TOPIC,
+        EventType.STATE_ROOM_AVATAR,
+        EventType.STATE_ROOM_ALIASES,
+        EventType.STATE_ROOM_CANONICAL_ALIAS,
+        EventType.STATE_ROOM_POWER_LEVELS,
+        EventType.STATE_ROOM_ENCRYPTION -> true
+        EventType.STATE_ROOM_MEMBER     -> {
+            // Keep only room member events regarding the room creator (when he joined the room),
+            // but exclude events where the room creator invite others, or where others join
+            roomCreatorUserId != null && root.stateKey == roomCreatorUserId
+        }
+        else                            -> false
+    }
+}
+
 fun List<TimelineEvent>.nextSameTypeEvents(index: Int, minSize: Int): List<TimelineEvent> {
     if (index >= size - 1) {
         return emptyList()

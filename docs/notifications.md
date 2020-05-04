@@ -38,10 +38,10 @@ When the client receives the new information, it immediately sends another reque
 This effectively emulates a server push feature.
 
 The HTTP long Polling can be fine tuned in the **SDK** using two parameters:
-* timout (Sync request timeout)
+* timeout (Sync request timeout)
 * delay (Delay between each sync)
 
-**timeout** is a server paramter, defined by:
+**timeout** is a server parameter, defined by:
 ```
 The maximum time to wait, in milliseconds, before returning this request.`
 If no events (or other data) become available before this time elapses, the server will return a response with empty fields.

@@ -27,7 +27,7 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.pushers.Pusher
 import im.vector.matrix.rx.RxSession
-import im.vector.riotx.core.platform.EmptyAction
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 
@@ -37,7 +37,7 @@ data class PushGatewayViewState(
 
 class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: PushGatewayViewState,
                                                         private val session: Session)
-    : VectorViewModel<PushGatewayViewState, EmptyAction, EmptyViewEvents>(initialState) {
+    : VectorViewModel<PushGatewayViewState, PushGatewayAction, EmptyViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -55,6 +55,8 @@ class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: 
 
     init {
         observePushers()
+        // Force a refresh
+        session.refreshPushers()
     }
 
     private fun observePushers() {
@@ -65,7 +67,13 @@ class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: 
                 }
     }
 
-    override fun handle(action: EmptyAction) {
-        // No op
+    override fun handle(action: PushGatewayAction) {
+        when (action) {
+            is PushGatewayAction.Refresh -> handleRefresh()
+        }.exhaustive
+    }
+
+    private fun handleRefresh() {
+        session.refreshPushers()
     }
 }

@@ -57,6 +57,15 @@ object CommandParser {
             }
 
             return when (val slashCommand = messageParts.first()) {
+                Command.PLAIN.command                  -> {
+                    val text = textMessage.substring(Command.PLAIN.command.length).trim()
+
+                    if (text.isNotEmpty()) {
+                        ParsedCommand.SendPlainText(text)
+                    } else {
+                        ParsedCommand.ErrorSyntax(Command.PLAIN)
+                    }
+                }
                 Command.CHANGE_DISPLAY_NAME.command    -> {
                     val newDisplayName = textMessage.substring(Command.CHANGE_DISPLAY_NAME.command.length).trim()
 
@@ -271,6 +280,9 @@ object CommandParser {
                     } else {
                         ParsedCommand.ErrorSyntax(Command.POLL)
                     }
+                }
+                Command.DISCARD_SESSION.command        -> {
+                    ParsedCommand.DiscardSession
                 }
                 else                                   -> {
                     // Unknown command

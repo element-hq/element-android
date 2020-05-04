@@ -16,10 +16,13 @@
 
 package im.vector.riotx.core.extensions
 
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
+import im.vector.riotx.R
+import im.vector.riotx.features.themes.ThemeUtils
 
 /**
  * Apply a Vertical LinearLayout Manager to the recyclerView and set the adapter from the epoxy controller
@@ -40,7 +43,13 @@ fun RecyclerView.configureWith(epoxyController: EpoxyController,
         itemAnimator?.let { this.itemAnimator = it }
     }
     if (showDivider) {
-        addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        addItemDecoration(
+                DividerItemDecoration(context, DividerItemDecoration.VERTICAL).apply {
+                    ContextCompat.getDrawable(context, ThemeUtils.getResourceId(context, R.drawable.divider_horizontal_light))?.let {
+                        setDrawable(it)
+                    }
+                }
+        )
     }
     setHasFixedSize(hasFixedSize)
     adapter = epoxyController.adapter

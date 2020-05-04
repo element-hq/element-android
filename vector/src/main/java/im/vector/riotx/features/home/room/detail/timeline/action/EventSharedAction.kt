@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.detail.timeline.action
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import im.vector.matrix.android.api.session.room.model.message.MessageWithAttachmentContent
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorSharedAction
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
@@ -46,8 +47,11 @@ sealed class EventSharedAction(@StringRes val titleRes: Int,
     data class Reply(val eventId: String) :
             EventSharedAction(R.string.reply, R.drawable.ic_reply)
 
-    data class Share(val imageUrl: String) :
+    data class Share(val eventId: String, val messageContent: MessageWithAttachmentContent) :
             EventSharedAction(R.string.share, R.drawable.ic_share)
+
+    data class Save(val eventId: String, val messageContent: MessageWithAttachmentContent) :
+            EventSharedAction(R.string.save, R.drawable.ic_material_save)
 
     data class Resend(val eventId: String) :
             EventSharedAction(R.string.global_retry, R.drawable.ic_refresh_cw)
@@ -95,10 +99,16 @@ sealed class EventSharedAction(@StringRes val titleRes: Int,
             EventSharedAction(R.string.message_view_edit_history, R.drawable.ic_view_edit_history)
 
     // An url in the event preview has been clicked
-    data class OnUrlClicked(val url: String) :
+    data class OnUrlClicked(val url: String, val title: String) :
             EventSharedAction(0, 0)
 
     // An url in the event preview has been long clicked
     data class OnUrlLongClicked(val url: String) :
             EventSharedAction(0, 0)
+
+    data class ReRequestKey(val eventId: String) :
+            EventSharedAction(R.string.e2e_re_request_encryption_key, R.drawable.key_small)
+
+    object UseKeyBackup :
+            EventSharedAction(R.string.e2e_use_keybackup, R.drawable.shield)
 }

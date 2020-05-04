@@ -16,6 +16,7 @@
 package im.vector.matrix.android.internal.crypto.verification
 
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.crypto.verification.ValidVerificationInfoRequest
 import im.vector.matrix.android.api.session.crypto.verification.CancelCode
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -46,28 +47,34 @@ internal class VerificationTransportToDevice(
 ) : VerificationTransport {
 
     override fun sendVerificationRequest(supportedMethods: List<String>,
-                                         localID: String,
+                                         localId: String,
                                          otherUserId: String,
                                          roomId: String?,
                                          toDevices: List<String>?,
-                                         callback: (String?, VerificationInfoRequest?) -> Unit) {
+                                         callback: (String?, ValidVerificationInfoRequest?) -> Unit) {
         Timber.d("## SAS sending verification request with supported methods: $supportedMethods")
         val contentMap = MXUsersDevicesMap<Any>()
-        val keyReq = KeyVerificationRequest(
-                fromDevice = myDeviceId,
+        val validKeyReq = ValidVerificationInfoRequest(
+                transactionId = localId,
+                fromDevice = myDeviceId ?: "",
                 methods = supportedMethods,
-                timestamp = System.currentTimeMillis(),
-                transactionID = localID
+                timestamp = System.currentTimeMillis()
+        )
+        val keyReq = KeyVerificationRequest(
+                fromDevice = validKeyReq.fromDevice,
+                methods = validKeyReq.methods,
+                timestamp = validKeyReq.timestamp,
+                transactionId = validKeyReq.transactionId
         )
         toDevices?.forEach {
             contentMap.setObject(otherUserId, it, keyReq)
         }
         sendToDeviceTask
-                .configureWith(SendToDeviceTask.Params(MessageType.MSGTYPE_VERIFICATION_REQUEST, contentMap, localID)) {
+                .configureWith(SendToDeviceTask.Params(MessageType.MSGTYPE_VERIFICATION_REQUEST, contentMap, localId)) {
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
                             Timber.v("## verification [$tx.transactionId] send toDevice request success")
-                            callback.invoke(localID, keyReq)
+                            callback.invoke(localId, validKeyReq)
                         }
 
                         override fun onFailure(failure: Throwable) {
@@ -103,13 +110,14 @@ internal class VerificationTransportToDevice(
                 .executeBy(taskExecutor)
     }
 
-    override fun sendToOther(type: String,
-                             verificationInfo: VerificationInfo,
-                             nextState: VerificationTxState,
-                             onErrorReason: CancelCode,
-                             onDone: (() -> Unit)?) {
+    override fun <T> sendToOther(type: String,
+                                 verificationInfo: VerificationInfo<T>,
+                                 nextState: VerificationTxState,
+                                 onErrorReason: CancelCode,
+                                 onDone: (() -> Unit)?) {
         Timber.d("## SAS sending msg type $type")
         Timber.v("## SAS sending msg info $verificationInfo")
+        val stateBeforeCall = tx?.state
         val tx = tx ?: return
         val contentMap = MXUsersDevicesMap<Any>()
         val toSendToDeviceObject = verificationInfo.toSendToDeviceObject()
@@ -125,7 +133,11 @@ internal class VerificationTransportToDevice(
                             if (onDone != null) {
                                 onDone()
                             } else {
-                                tx.state = nextState
+                                // we may have received next state (e.g received accept in sending_start)
+                                // We only put next state if the state was what is was before we started
+                                if (tx.state == stateBeforeCall) {
+                                    tx.state = nextState
+                                }
                             }
                         }
 
@@ -138,7 +150,7 @@ internal class VerificationTransportToDevice(
                 .executeBy(taskExecutor)
     }
 
-    override fun done(transactionId: String) {
+    override fun done(transactionId: String, onDone: (() -> Unit)?) {
         val otherUserId = tx?.otherUserId ?: return
         val otherUserDeviceId = tx?.otherDeviceId ?: return
         val cancelMessage = KeyVerificationDone(transactionId)
@@ -148,6 +160,7 @@ internal class VerificationTransportToDevice(
                 .configureWith(SendToDeviceTask.Params(EventType.KEY_VERIFICATION_DONE, contentMap, transactionId)) {
                     this.callback = object : MatrixCallback<Unit> {
                         override fun onSuccess(data: Unit) {
+                            onDone?.invoke()
                             Timber.v("## SAS verification [$transactionId] done")
                         }
 
@@ -197,7 +210,7 @@ internal class VerificationTransportToDevice(
     override fun createMac(tid: String, mac: Map<String, String>, keys: String) = KeyVerificationMac.create(tid, mac, keys)
 
     override fun createStartForSas(fromDevice: String,
-                                   transactionID: String,
+                                   transactionId: String,
                                    keyAgreementProtocols: List<String>,
                                    hashes: List<String>,
                                    messageAuthenticationCodes: List<String>,
@@ -205,7 +218,7 @@ internal class VerificationTransportToDevice(
         return KeyVerificationStart(
                 fromDevice,
                 VERIFICATION_METHOD_SAS,
-                transactionID,
+                transactionId,
                 keyAgreementProtocols,
                 hashes,
                 messageAuthenticationCodes,
@@ -214,12 +227,12 @@ internal class VerificationTransportToDevice(
     }
 
     override fun createStartForQrCode(fromDevice: String,
-                                      transactionID: String,
+                                      transactionId: String,
                                       sharedSecret: String): VerificationInfoStart {
         return KeyVerificationStart(
                 fromDevice,
                 VERIFICATION_METHOD_RECIPROCATE,
-                transactionID,
+                transactionId,
                 null,
                 null,
                 null,
@@ -229,7 +242,7 @@ internal class VerificationTransportToDevice(
 
     override fun createReady(tid: String, fromDevice: String, methods: List<String>): VerificationInfoReady {
         return KeyVerificationReady(
-                transactionID = tid,
+                transactionId = tid,
                 fromDevice = fromDevice,
                 methods = methods
         )

@@ -16,6 +16,11 @@
 
 package im.vector.riotx.features.settings
 
+import android.app.Activity
+import android.content.Intent
+import android.media.RingtoneManager
+import android.net.Uri
+import android.os.Parcelable
 import android.widget.Toast
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
@@ -24,8 +29,10 @@ import im.vector.matrix.android.api.pushrules.RuleIds
 import im.vector.matrix.android.api.pushrules.RuleKind
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
+import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.core.preference.VectorSwitchPreference
 import im.vector.riotx.core.pushers.PushersManager
+import im.vector.riotx.features.notifications.NotificationUtils
 import im.vector.riotx.push.fcm.FcmHelper
 import javax.inject.Inject
 
@@ -42,7 +49,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
     override fun bindPref() {
         findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY)!!.let { pref ->
             val pushRuleService = session
-            val mRuleMaster = pushRuleService.getPushRules()
+            val mRuleMaster = pushRuleService.getPushRules().getAllRules()
                     .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
 
             if (mRuleMaster == null) {
@@ -53,6 +60,79 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
 
             val areNotifEnabledAtAccountLevel = !mRuleMaster.enabled
             (pref as SwitchPreference).isChecked = areNotifEnabledAtAccountLevel
+        }
+
+        handleSystemPreference()
+    }
+
+    private fun handleSystemPreference() {
+        val callNotificationsSystemOptions = findPreference<VectorPreference>(VectorPreferences.SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY)!!
+        if (NotificationUtils.supportNotificationChannels()) {
+            callNotificationsSystemOptions.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                NotificationUtils.openSystemSettingsForCallCategory(this)
+                false
+            }
+        } else {
+            callNotificationsSystemOptions.isVisible = false
+        }
+
+        val noisyNotificationsSystemOptions = findPreference<VectorPreference>(VectorPreferences.SETTINGS_SYSTEM_NOISY_NOTIFICATION_PREFERENCE_KEY)!!
+        if (NotificationUtils.supportNotificationChannels()) {
+            noisyNotificationsSystemOptions.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                NotificationUtils.openSystemSettingsForNoisyCategory(this)
+                false
+            }
+        } else {
+            noisyNotificationsSystemOptions.isVisible = false
+        }
+
+        val silentNotificationsSystemOptions = findPreference<VectorPreference>(VectorPreferences.SETTINGS_SYSTEM_SILENT_NOTIFICATION_PREFERENCE_KEY)!!
+        if (NotificationUtils.supportNotificationChannels()) {
+            silentNotificationsSystemOptions.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                NotificationUtils.openSystemSettingsForSilentCategory(this)
+                false
+            }
+        } else {
+            silentNotificationsSystemOptions.isVisible = false
+        }
+
+        // Ringtone
+        val ringtonePreference = findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY)!!
+
+        if (NotificationUtils.supportNotificationChannels()) {
+            ringtonePreference.isVisible = false
+        } else {
+            ringtonePreference.summary = vectorPreferences.getNotificationRingToneName()
+            ringtonePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
+
+                if (null != vectorPreferences.getNotificationRingTone()) {
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, vectorPreferences.getNotificationRingTone())
+                }
+
+                startActivityForResult(intent, REQUEST_NOTIFICATION_RINGTONE)
+                false
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                REQUEST_NOTIFICATION_RINGTONE -> {
+                    vectorPreferences.setNotificationRingTone(data?.getParcelableExtra<Parcelable>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI) as Uri?)
+
+                    // test if the selected ring tone can be played
+                    val notificationRingToneName = vectorPreferences.getNotificationRingToneName()
+                    if (null != notificationRingToneName) {
+                        vectorPreferences.setNotificationRingTone(vectorPreferences.getNotificationRingTone())
+                        findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY)!!
+                                .summary = notificationRingToneName
+                    }
+                }
+            }
         }
     }
 
@@ -81,20 +161,21 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         val switchPref = preference as SwitchPreference
         if (switchPref.isChecked) {
             FcmHelper.getFcmToken(requireContext())?.let {
-                if (vectorPreferences.areNotificationEnabledForDevice()) {
-                    pushManager.registerPusherWithFcmKey(it)
-                }
+                pushManager.registerPusherWithFcmKey(it)
             }
         } else {
             FcmHelper.getFcmToken(requireContext())?.let {
                 pushManager.unregisterPusher(it, object : MatrixCallback<Unit> {
                     override fun onSuccess(data: Unit) {
                         session.refreshPushers()
-                        super.onSuccess(data)
                     }
 
                     override fun onFailure(failure: Throwable) {
-                        session.refreshPushers()
+                        if (!isAdded) {
+                            return
+                        }
+                        // revert the check box
+                        switchPref.isChecked = !switchPref.isChecked
                         Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
                     }
                 })
@@ -105,7 +186,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
     private fun updateEnabledForAccount(preference: Preference?) {
         val pushRuleService = session
         val switchPref = preference as SwitchPreference
-        pushRuleService.getPushRules()
+        pushRuleService.getPushRules().getAllRules()
                 .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
                 ?.let {
                     // Trick, we must enable this room to disable notifications
@@ -114,7 +195,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                             !switchPref.isChecked,
                             object : MatrixCallback<Unit> {
                                 override fun onSuccess(data: Unit) {
-                                    // Push rules will be updated form the sync
+                                    // Push rules will be updated from the sync
                                 }
 
                                 override fun onFailure(failure: Throwable) {
@@ -128,5 +209,9 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                                 }
                             })
                 }
+    }
+
+    companion object {
+        private const val REQUEST_NOTIFICATION_RINGTONE = 888
     }
 }

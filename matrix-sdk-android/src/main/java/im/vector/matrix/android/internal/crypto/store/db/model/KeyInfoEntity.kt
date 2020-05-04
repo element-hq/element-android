@@ -16,8 +16,6 @@
 
 package im.vector.matrix.android.internal.crypto.store.db.model
 
-import im.vector.matrix.android.internal.crypto.store.db.deserializeFromRealm
-import im.vector.matrix.android.internal.crypto.store.db.serializeForRealm
 import io.realm.RealmList
 import io.realm.RealmObject
 
@@ -31,15 +29,4 @@ internal open class KeyInfoEntity(
          */
         var signatures: String? = null,
         var trustLevelEntity: TrustLevelEntity? = null
-) : RealmObject() {
-
-    // Deserialize data
-    fun getSignatures(): Map<String, Map<String, String>>? {
-        return deserializeFromRealm(signatures)
-    }
-
-    // Serialize data
-    fun putSignatures(deviceInfo: Map<String, Map<String, String>>?) {
-        signatures = serializeForRealm(deviceInfo)
-    }
-}
+) : RealmObject()

@@ -33,6 +33,7 @@ sealed class ParsedCommand {
 
     // Valid commands:
 
+    class SendPlainText(val message: CharSequence) : ParsedCommand()
     class SendEmote(val message: CharSequence) : ParsedCommand()
     class SendRainbow(val message: CharSequence) : ParsedCommand()
     class SendRainbowEmote(val message: CharSequence) : ParsedCommand()
@@ -51,4 +52,5 @@ sealed class ParsedCommand {
     class SendShrug(val message: CharSequence) : ParsedCommand()
     class VerifyUser(val userId: String) : ParsedCommand()
     class SendPoll(val question: String, val options: List<String>) : ParsedCommand()
+    object DiscardSession: ParsedCommand()
 }

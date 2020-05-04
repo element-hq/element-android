@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    tools:background="@android:color/darker_gray"
+    tools:foreground="?android:attr/selectableItemBackground"
+    tools:style="@style/AlertStyle">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivUserAvatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/alerter_texts"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintCircle="@+id/ivUserAvatar"
+        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleRadius="20dp"
+        tools:ignore="MissingConstraints"
+        android:src="@drawable/ic_shield_warning"
+        tools:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/alerter_texts"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ivUserAvatar"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/alerter_padding_half"
+            android:layout_marginEnd="@dimen/alerter_padding_half"
+            android:paddingStart="@dimen/alerter_padding_small"
+            android:paddingLeft="@dimen/alerter_padding_small"
+            android:paddingEnd="@dimen/alerter_padding_small"
+            android:textAppearance="@style/AlertTextAppearance.Title"
+            android:visibility="gone"
+            tools:text="Title"
+            tools:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/alerter_padding_half"
+            android:layout_marginEnd="@dimen/alerter_padding_half"
+            android:paddingStart="@dimen/alerter_padding_small"
+            android:paddingLeft="@dimen/alerter_padding_small"
+            android:paddingTop="@dimen/alerter_padding_small"
+            android:paddingEnd="@dimen/alerter_padding_small"
+            android:paddingBottom="@dimen/alerter_padding_small"
+            android:textAppearance="@style/AlertTextAppearance.Text"
+            android:visibility="gone"
+            tools:text="Text"
+            android:maxLines="3"
+            tools:visibility="visible" />
+
+    </LinearLayout>
+
+    <!--    <FrameLayout-->
+    <!--        android:id="@+id/flRightIconContainer"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_gravity="center_vertical">-->
+
+    <!--        <androidx.appcompat.widget.AppCompatImageView-->
+    <!--            android:id="@+id/ivRightIcon"-->
+    <!--            android:layout_width="@dimen/alerter_alert_icn_size"-->
+    <!--            android:layout_height="@dimen/alerter_alert_icn_size"-->
+    <!--            android:maxWidth="@dimen/alerter_alert_icn_size"-->
+    <!--            android:maxHeight="@dimen/alerter_alert_icn_size"-->
+    <!--            android:visibility="gone"-->
+    <!--            app:srcCompat="@drawable/alerter_ic_notifications"-->
+    <!--            app:tint="@color/alert_default_icon_color"-->
+    <!--            tools:visibility="visible" />-->
+    <!--    </FrameLayout>-->
+</androidx.constraintlayout.widget.ConstraintLayout>

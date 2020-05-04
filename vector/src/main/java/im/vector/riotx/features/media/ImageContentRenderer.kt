@@ -46,6 +46,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
 
     @Parcelize
     data class Data(
+            val eventId: String,
             val filename: String,
             val url: String?,
             val elementToDecrypt: ElementToDecrypt?,
@@ -127,6 +128,15 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
             GlideApp
                     .with(imageView)
                     .load(resolvedUrl)
+                    .apply {
+                        if (mode == Mode.THUMBNAIL) {
+                            error(
+                                    GlideApp
+                                            .with(imageView)
+                                            .load(contentUrlResolver.resolveFullSize(data.url))
+                            )
+                        }
+                    }
         }
     }
 

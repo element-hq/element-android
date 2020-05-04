@@ -27,7 +27,7 @@
     <string name="keys_backup_is_not_finished_please_wait">কী ব্যাকআপ শেষ হয়নি, দয়া করে অপেক্ষা করুন …</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">আপনি এখন সাইন আউট করলে আপনার এনক্রিপ্ট হওয়া বার্তাগুলি হারিয়ে ফেলবেন</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">অগ্রগতি কী ব্যাকআপ। আপনি এখন সাইন আউট করলে আপনি আপনার এনক্রিপ্ট করা বার্তাগুলির অ্যাক্সেস হারাবেন।</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">আপনার এনক্রিপ্ট করা বার্তাগুলির অ্যাক্সেস হারাতে এড়াতে আপনার সমস্ত ডিভাইসগুলিতে নিরাপদ কী ব্যাকআপ সক্রিয় থাকা উচিত।</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">আপনার এনক্রিপ্ট করা বার্তাগুলির অ্যাক্সেস হারাতে এড়াতে আপনার সমস্ত সেশানগুলিতে নিরাপদ কী ব্যাকআপ সক্রিয় থাকা উচিত।</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">আমি আমার এনক্রিপ্টেড বার্তা চাই না</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">কী ব্যাকআপ করছে…</string>
     <string name="keys_backup_activate">কী ব্যাকআপ ব্যবহার করুন</string>
@@ -71,7 +71,7 @@
     <string name="missing_permissions_error">অনুপস্থিত অনুমতিগুলির কারণে, এই পদক্ষেপটি সম্ভব নয়।</string>
     <string name="missing_permissions_to_start_conf_call">আপনি এই রুমে একটি সম্মেলন শুরু করার জন্য আমন্ত্রণ করার অনুমতি প্রয়োজন</string>
     <string name="missing_permissions_title_to_start_conf_call">কল শুরু করা গেলো না</string>
-    <string name="device_information">যন্ত্রের তথ্য</string>
+    <string name="device_information">সেশানের তথ্য</string>
     <string name="room_no_conference_call_in_encrypted_rooms">কনফারেন্স কল এনক্রিপ্ট কক্ষগুলিতে সমর্থিত নয়</string>
     <string name="call_anyway">যেকোন ভাবেই কল করুন</string>
     <string name="send_anyway">যেকোন ভাবেই পাঠাও</string>
@@ -236,9 +236,9 @@
     <string name="auth_reset_password_missing_password">একটি নতুন পাসওয়ার্ড প্রবেশ করা আবশ্যক।</string>
     <string name="auth_reset_password_email_validation_message">একটি ইমেল %s কে পাঠানো হয়েছে। একবার এটিতে থাকা লিঙ্কটি অনুসরণ করার পরে, নীচে ক্লিক করুন।</string>
     <string name="auth_reset_password_error_unauthorized">ইমেল ঠিকানা যাচাই করতে ব্যর্থ: ইমেলটিতে লিঙ্কে আপনি ক্লিক করেছেন তা নিশ্চিত করুন</string>
-    <string name="auth_reset_password_success_message">আপনার পাসওয়ার্ড পুনরায় সেট করা হয়েছে।
-\n
-\nআপনি সমস্ত ডিভাইস থেকে লগ আউট করা হয়েছে এবং আর পুশ বিজ্ঞপ্তি পাবেন না। বিজ্ঞপ্তিগুলি পুনরায় সক্ষম করতে, প্রতিটি ডিভাইসে পুনরায় লগ ইন করুন।</string>
+    <string name="auth_reset_password_success_message">আপনার পাসওয়ার্ড পুনরায় সেট করা হয়েছে। 
+\n 
+\nআপনি সমস্ত সেশান থেকে লগ আউট করা হয়েছে এবং আর পুশ বিজ্ঞপ্তি পাবেন না। বিজ্ঞপ্তিগুলি পুনরায় সক্ষম করতে, প্রতিটি ডিভাইসে পুনরায় লগ ইন করুন।</string>
     <string name="auth_accept_policies">পর্যালোচনা করুন এবং এই হোমসার্ভার এর নীতিগুলি গ্রহণ করুন:</string>
 
     <string name="login_error_must_start_http">URL টি http[s]:// দিয়ে শুরু করতে হবে</string>
@@ -260,16 +260,16 @@
     <string name="login_error_user_in_use">এই ব্যাবহারকারী আগেও নাম ব্যবহার করে ছিল</string>
     <string name="login_error_login_email_not_yet">এই ইমেইল লিংক যেটা এখনো ক্লিক করা হয়নি</string>
 
-    <string name="e2e_need_log_in_again">আপনার প্রয়জনীয় পিছনে লগ করা যন্ত্রের জন্য এনক্রিপশন চাবি উৎপন্ন করতে শেষ থেকে শেষে এবং জমা করা জনগণ এর চাবি আপনার ঘরের লোক এর কাছে। 
+    <string name="e2e_need_log_in_again">আপনার প্রয়জনীয় পিছনে লগ করা সেশানের জন্য এনক্রিপশন চাবি উৎপন্ন করতে শেষ থেকে শেষে এবং জমা করা জনগণ এর চাবি আপনার ঘরের লোক এর কাছে। 
 \nএটাই হলো একবার। 
 \nক্ষমা করবেন এটাই হলো অসুবিধা।</string>
 
-    <string name="e2e_re_request_encryption_key"><ও>পুনরায় অনুরোধ এনক্রিপশন চাবিগুলি</ও>আপনার অন্য যন্ত্রগুলি থেকে।</string>
+    <string name="e2e_re_request_encryption_key"><u>পুনরায় অনুরোধ এনক্রিপশন চাবিগুলি</u>আপনার অন্য সেশানগুলি থেকে।</string>
 
     <string name="e2e_re_request_encryption_key_sent">চাবির অনুরোধ পাঠানো।</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">অনুরোধ পাঠানো</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">দয়া করে শুরু করুন Riot অন্য যন্ত্রে যেটা পারে বর্ণনা করতে বার্তা কে সুতরাং এটা পারে পাঠাতে চাবিগুলো কে যন্ত্র তে.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">দয়া করে শুরু করুন Riot অন্য সেশান যেটা পারে বর্ণনা করতে বার্তা কে সুতরাং এটা পারে পাঠাতে চাবিগুলো কে যন্ত্র তে.</string>
 
     <string name="read_receipts_list">পড়ো প্রাপ্তিগুলি সারি</string>
 
@@ -409,7 +409,7 @@
     <string name="room_participants_header_admin_tools">অ্যাডমিন সরঞ্জাম</string>
     <string name="room_participants_header_call">কল</string>
     <string name="room_participants_header_direct_chats">সরাসরি বার্তা</string>
-    <string name="room_participants_header_devices">যন্ত্রগুলি</string>
+    <string name="room_participants_header_devices">সেশানগুলি</string>
 
     <string name="room_participants_action_invite">আমন্ত্রণ</string>
     <string name="room_participants_action_leave">এই রুম ছাড়ো</string>
@@ -427,7 +427,7 @@
 \nমনে রাখবেন যে এই পদক্ষেপটি অ্যাপ্লিকেশনটি পুনরায় চালু করবে এবং এটি কিছু সময় নিতে পারে।</string>
     <string name="room_participants_invite_search_another_user">ব্যবহারকারী আইডি, নাম বা ইমেইল</string>
     <string name="room_participants_action_mention">উল্লেখ</string>
-    <string name="room_participants_action_devices_list">ডিভাইস তালিকা প্রদর্শন কর</string>
+    <string name="room_participants_action_devices_list">সেশান তালিকা প্রদর্শন কর</string>
     <string name="room_participants_power_level_prompt">আপনি এই পরিবর্তনটি পূর্বাবস্থায় ফিরিয়ে আনতে সক্ষম হবেন না যেহেতু আপনি ব্যবহারকারীকে একই শক্তি স্তর হিসাবে প্রচার করার জন্য প্রচার করছেন।
 \nআপনি কি নিশ্চিত\?</string>
 
@@ -462,7 +462,7 @@
     <string name="room_message_placeholder_reply_to_not_encrypted">একটি উত্তর পাঠান (এনক্রিপশনবিহীন)…</string>
     <string name="room_offline_notification">সার্ভারের সাথে সংযুক্তি হারিয়ে গেছে।</string>
     <string name="room_unsent_messages_notification">বার্তা পাঠানো হয় নি। %1$s বা %2$s এখন\?</string>
-    <string name="room_unknown_devices_messages_notification">অজানা ডিভাইস উপস্থিত থাকার কারণে বার্তা পাঠানো হয় নি। %1$s বা %2$s এখন\?</string>
+    <string name="room_unknown_devices_messages_notification">অজানা সেশান উপস্থিত থাকার কারণে বার্তা পাঠানো হয় নি। %1$s বা %2$s এখন\?</string>
     <string name="room_prompt_resend">সব আবার পাঠান</string>
     <string name="room_prompt_cancel">সব বাতিল করুন</string>
     <string name="room_resend_unsent_messages">অপ্রচলিত বার্তা আবার পাঠান</string>
@@ -577,9 +577,9 @@
 \nঅনুগ্রহ করে একাউন্ট সেটিংস যাচাই করে নিন।</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">সক্ষম</string>
 
-    <string name="settings_troubleshoot_test_device_settings_title">যন্ত্র সেটিংস।</string>
-    <string name="settings_troubleshoot_test_device_settings_success">বিজ্ঞপ্তি এই ডিভাইসের জন্য সক্রিয় করা হয়েছে।</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">বিজ্ঞপ্তি এই ডিভাইসের জন্য অনুমতি দেওয়া হয় নি। 
+    <string name="settings_troubleshoot_test_device_settings_title">সেশান সেটিংস।</string>
+    <string name="settings_troubleshoot_test_device_settings_success">বিজ্ঞপ্তি এই সেশানের জন্য সক্রিয় করা হয়েছে।</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">বিজ্ঞপ্তি এই সেশানের জন্য অনুমতি দেওয়া হয় নি। 
 \nRiot এর সেটিংস যাচাই করুন।</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">সক্ষম</string>
 
@@ -667,13 +667,13 @@
 
     <string name="settings_theme">থিম</string>
 
-    <string name="encryption_information_verify_device_warning">এই ডিভাইসটি বিশ্বাসযোগ্য হতে পারে তা যাচাই করতে, অন্য কোন উপায়ে (যেমন ব্যক্তি বা ফোন কল) ব্যবহার করে তার মালিকের সাথে যোগাযোগ করুন এবং এই ডিভাইসটির জন্য তাদের ব্যবহারকারী সেটিংসে এ কুঞ্জি দেখছে তা তাদের জিজ্ঞাসা করুন নীচের কুঞ্জিটির সাথে মেলে কিনা:</string>
+    <string name="encryption_information_verify_device_warning">এই সেশানটি বিশ্বাসযোগ্য হতে পারে তা যাচাই করতে, অন্য কোন উপায়ে (যেমন ব্যক্তি বা ফোন কল) ব্যবহার করে তার মালিকের সাথে যোগাযোগ করুন এবং এই সেশানটির জন্য তাদের ব্যবহারকারী সেটিংসে এ কুঞ্জি দেখছে তা তাদের জিজ্ঞাসা করুন নীচের কুঞ্জিটির সাথে মেলে কিনা:</string>
     <string name="e2e_enabling_on_app_update">দাঙ্গা এখন শেষ-থেকে-শেষ এনক্রিপশন সমর্থন করে তবে এটি সক্ষম করতে আপনাকে আবার লগ ইন করতে হবে।
 \n
 \nআপনি এখন বা পরে এপ্লিকেশন সেটিংস থেকে এটি করতে পারেন।</string>
 
     <string name="font_size">অক্ষর এর আকার</string>
-    <string name="you_added_a_new_device">আপনি একটি নতুন ডিভাইস \'%s\' যোগ করেছেন, যা এনক্রিপশন কীগুলির জন্য অনুরোধ করছে।</string>
+    <string name="you_added_a_new_device">আপনি একটি নতুন সেশান \'%s\' যোগ করেছেন, যা এনক্রিপশন কীগুলির জন্য অনুরোধ করছে।</string>
     <string name="command_description_clear_scalar_token">ম্যাট্রিক্স অ্যাপ্লিকেশন ব্যবস্থাপনা ঠিক করতে</string>
 
     <string name="encrypted_message">এনক্রিপ্ট করা বার্তা</string>
@@ -693,7 +693,7 @@
     <string name="new_recovery_method_popup_description">একটি নতুন সুরক্ষিত বার্তা কুঞ্জি ব্যাকআপ সনাক্ত করা হয়েছে।
 \n
 \nআপনি যদি নতুন পুনরুদ্ধারের পদ্ধতি সেট না করে থাকেন তবে একজন আক্রমণকারী আপনার অ্যাকাউন্ট অ্যাক্সেস করার চেষ্টা করছেন। আপনার অ্যাকাউন্ট পাসওয়ার্ড পরিবর্তন করুন এবং সেটিংসে অবিলম্বে একটি নতুন পুনরুদ্ধার পদ্ধতি সেট করুন।</string>
-    <string name="title_activity_verify_device">ডিভাইস যাচাই করুন</string>
+    <string name="title_activity_verify_device">সেশন যাচাই করুন</string>
 
     <string name="settings_notification_privacy_no_background_sync">অ্যাপগুলি ব্যাকগ্রাউন্ডে হোম সার্ভারের সাথে সংযোগ করার প্রয়োজন করার প্রয়োজন <b>নেই</b> , এটি ব্যাটারির ব্যবহারকে কমাতে পারে</string>
     <string name="settings_notification_privacy_fcm">• বিজ্ঞপ্তি Firebase ক্লাউড মেসেজিং মাধ্যমে পাঠানো হয়</string>
@@ -704,7 +704,7 @@
 
     <string name="settings_notification_ringtone">বিজ্ঞপ্তি শব্দ</string>
     <string name="settings_enable_all_notif">এই অ্যাকাউন্টের জন্য বিজ্ঞপ্তি সক্রিয় করুন</string>
-    <string name="settings_enable_this_device">এই ডিভাইসের জন্য বিজ্ঞপ্তি সক্রিয় করুন</string>
+    <string name="settings_enable_this_device">এই সেশানের জন্য বিজ্ঞপ্তি সক্রিয় করুন</string>
     <string name="settings_turn_screen_on">স্ক্রিন টি ৩ সেকেন্ডের জন্য চালু করুন</string>
     <string name="settings_noisy_notifications_preferences">হাল্লা বিজ্ঞপ্তিগুলি কনফিগার করুন</string>
     <string name="settings_call_notifications_preferences">কল বিজ্ঞপ্তিগুলি কনফিগার করুন</string>
@@ -751,7 +751,7 @@
     <string name="settings_home_display">হোম প্রদর্শন</string>
     <string name="settings_pin_missed_notifications">মিস বিজ্ঞপ্তি সঙ্গে পিন রুমগুলি</string>
     <string name="settings_pin_unread_messages">অপঠিত বার্তা সঙ্গে পিন কক্ষগুলি</string>
-    <string name="settings_devices_list">যন্ত্রগুলি</string>
+    <string name="settings_devices_list">সেশানগুলি</string>
     <string name="settings_send_typing_notifs_summary">অন্যান্য ব্যবহারকারীদের কে আপনি টাইপ করছেন সেটা জানান।</string>
     <string name="settings_send_markdown">মার্কডাউন বিন্যাস</string>
     <string name="settings_send_markdown_summary">প্রেরিত হওয়ার আগে মার্কডাউন সিনট্যাক্স ব্যবহার করে বার্তাগুলি ফরম্যাট করুন। এটি ইটালিক পাঠ্য প্রদর্শনের জন্য তারকাচিহ্নগুলি ব্যবহার করার মতো উন্নত ফর্ম্যাটিংয়ের জন্য অনুমতি দেয়।</string>
@@ -789,7 +789,7 @@
     <string name="settings_data_save_mode">ডেটা সংরক্ষণ মোড</string>
     <string name="settings_data_save_mode_summary">ডেটা সংরক্ষণ মোড একটি নির্দিষ্ট ফিল্টার প্রয়োগ করে যাতে উপস্থিতি আপডেট এবং টাইপিং বিজ্ঞপ্তি ফিল্টার করা হয়।</string>
 
-    <string name="devices_details_dialog_title">যন্ত্রের তথ্য</string>
+    <string name="devices_details_dialog_title">সেশানের তথ্য</string>
     <string name="devices_details_id_title">আইডি</string>
     <string name="devices_details_name_title">সর্বজনীন নাম</string>
     <string name="devices_details_device_name">সর্বজনীন নাম আপডেট করুন</string>
@@ -899,8 +899,8 @@
     <string name="room_settings_labs_end_to_end">শেষ থেকে শেষ এনক্রিপশন</string>
     <string name="room_settings_labs_end_to_end_is_active">শেষ থেকে শেষ এনক্রিপশন সক্রিয় আছে</string>
     <string name="room_settings_labs_end_to_end_warnings">এনক্রিপশন সক্রিয় করতে সক্ষম হবার জন্য আপনাকে লগআউট করতে হবে।</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">শুধুমাত্র যাচাই ডিভাইসে এনক্রিপ্ট করুন</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">এই ডিভাইস থেকে এই রুমে যাচাই করা ডিভাইসগুলিতে এনক্রিপ্ট করা বার্তাগুলি কখনও প্রেরণ করবেন না।</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">শুধুমাত্র যাচাই সেশানে এনক্রিপ্ট করুন</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">এই সেশান থেকে এই রুমে যাচাই করা সেশানগুলিতে এনক্রিপ্ট করা বার্তাগুলি কখনও প্রেরণ করবেন না।</string>
 
     <string name="room_settings_addresses_no_local_addresses">এই রুমে কোন স্থানীয় ঠিকানা নেই</string>
     <string name="room_settings_addresses_add_new_address">নতুন ঠিকানা (যেমন #foo:matrix.org)</string>
@@ -939,11 +939,11 @@
     <string name="encryption_information_session_id">সেশন আইডি</string>
     <string name="encryption_information_decryption_error">ডিক্রিপশন সমস্যা</string>
 
-    <string name="encryption_information_sender_device_information">প্রেরক ডিভাইস তথ্য</string>
+    <string name="encryption_information_sender_device_information">প্রেরক সেশান তথ্য</string>
     <string name="encryption_information_device_name">সর্বজনীন নাম</string>
     <string name="encryption_information_name">সর্বজনীন নাম</string>
     <string name="encryption_information_device_id">আইডি</string>
-    <string name="encryption_information_device_key">যন্ত্রের কুঞ্জি</string>
+    <string name="encryption_information_device_key">সেশানের কুঞ্জি</string>
     <string name="encryption_information_verification">প্রতিপাদন</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 ফিঙ্গারপ্রিন্ট</string>
 
@@ -963,15 +963,15 @@
     <string name="encryption_import_room_keys">রুমের কুঞ্জিগুলি ইমপোর্ট করুন</string>
     <string name="encryption_import_room_keys_summary">একটি স্থানীয় ফাইল থেকে কুঞ্জি ইম্পোর্ট করুন</string>
     <string name="encryption_import_import">ইম্পোর্ট</string>
-    <string name="encryption_never_send_to_unverified_devices_title">শুধুমাত্র যাচাই ডিভাইসে এনক্রিপ্ট করুন</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">এই ডিভাইস থেকে যাচাই করা ডিভাইসগুলিতে এনক্রিপ্ট করা বার্তাগুলি কখনও প্রেরণ করবেন না।</string>
+    <string name="encryption_never_send_to_unverified_devices_title">শুধুমাত্র যাচাই সেশানে এনক্রিপ্ট করুন</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">এই সেশান থেকে যাচাই করা সেশানগুলিতে এনক্রিপ্ট করা বার্তাগুলি কখনও প্রেরণ করবেন না।</string>
     <string name="encryption_import_room_keys_success">%1$d/%2$d কুঞ্জি(গুলি) সাফল্য সাথে ইম্পোর্ট করা হয়েছে।</string>
 
     <string name="encryption_information_not_verified">যাচাই করা হয়নি</string>
     <string name="encryption_information_verified">প্রতিপাদিত</string>
     <string name="encryption_information_blocked">কালোতালিকাভুক্ত</string>
 
-    <string name="encryption_information_unknown_device">অজ্ঞাত যন্ত্র</string>
+    <string name="encryption_information_unknown_device">অজ্ঞাত সেশান</string>
     <string name="encryption_information_unknown_ip">অজ্ঞাত ip</string>
     <string name="encryption_information_none">কেউ না</string>
 
@@ -980,16 +980,16 @@
     <string name="encryption_information_block">কালোতালিকা</string>
     <string name="encryption_information_unblock">কালোতালিকাযুক্ত না</string>
 
-    <string name="encryption_information_verify_device">ডিভাইস যাচাই করুন</string>
-    <string name="encryption_information_verify_device_warning2">এটি মিললে, নীচের যাচাই বাটন টিপুন। যদি এটি না হয় তবে অন্য কেউ এই ডিভাইসটিকে আটক করছে এবং আপনাকে সম্ভবত এটি কালো তালিকাভুক্ত করা উচিত। ভবিষ্যতে এই যাচাই প্রক্রিয়া আরো পরিশীলিত হবে।</string>
+    <string name="encryption_information_verify_device">সেশান যাচাই করুন</string>
+    <string name="encryption_information_verify_device_warning2">এটি মিললে, নীচের যাচাই বাটন টিপুন। যদি এটি না হয় তবে অন্য কেউ এই সেশানটিকে আটক করছে এবং আপনাকে সম্ভবত এটি কালো তালিকাভুক্ত করা উচিত। ভবিষ্যতে এই যাচাই প্রক্রিয়া আরো পরিশীলিত হবে।</string>
     <string name="encryption_information_verify_key_match">আমি যে কি মেলে মেলে যাচাই</string>
 
-    <string name="unknown_devices_alert_title">রুমে অজানা ডিভাইস রয়েছে</string>
-    <string name="unknown_devices_alert_message">এই রুমে অজানা ডিভাইস রয়েছে যা যাচাই করা হয়নি।
-\nএর অর্থ এই যে ডিভাইসগুলি যে ব্যবহারকারীদের দাবি করে সেগুলির সাথে ডিভাইসগুলির কোনও নিশ্চয়তা নেই।
-\nআমরা আপনাকে চালিয়ে যাওয়ার আগে প্রতিটি ডিভাইসের জন্য যাচাইকরণ প্রক্রিয়ার মধ্য দিয়ে যেতে পরামর্শ দিই তবে আপনি যদি পছন্দ করেন তবে যাচাই না করে বার্তাটি পুনরায় পাঠাতে পারেন।
-\n
-\nঅজানা ডিভাইস:</string>
+    <string name="unknown_devices_alert_title">রুমে অজানা সেশান রয়েছে</string>
+    <string name="unknown_devices_alert_message">এই রুমে অজানা সেশান রয়েছে যা যাচাই করা হয়নি। 
+\nএর অর্থ এই যে সেশানগুলি যে ব্যবহারকারীদের দাবি করে সেগুলির সাথে সেশানগুলির কোনও নিশ্চয়তা নেই। 
+\nআমরা আপনাকে চালিয়ে যাওয়ার আগে প্রতিটি সেশানের জন্য যাচাইকরণ প্রক্রিয়ার মধ্য দিয়ে যেতে পরামর্শ দিই তবে আপনি যদি পছন্দ করেন তবে যাচাই না করে বার্তাটি পুনরায় পাঠাতে পারেন। 
+\n 
+\nঅজানা সেশানগুলি:</string>
 
     <string name="select_room_directory">একটি রুম ডিরেক্টরি নির্বাচন করুন</string>
     <string name="directory_server_fail_to_retrieve_server">সার্ভার অনুপলব্ধ বা ওভারলোড হতে পারে</string>
@@ -1070,15 +1070,15 @@
     <string name="settings_labs_enable_send_voice">ভয়েস বার্তা পাঠান</string>
     <string name="settings_labs_enable_send_voice_summary">এই বিকল্প বার্তা রেকর্ড করার জন্য একটি তৃতীয় পক্ষের অ্যাপ্লিকেশন প্রয়োজন।</string>
 
-    <string name="you_added_a_new_device_with_info">একটি নতুন ডিভাইস এনক্রিপশন কুঞ্জি অনুরোধ করছে।
-\nডিভাইসের নাম: %1$s
-\nশেষ দেখা হয়েছে: %2$s
-\nআপনি অন্য ডিভাইসে লগ ইন না করলে, এই অনুরোধটি উপেক্ষা করুন।</string>
-    <string name="your_unverified_device_requesting">আপনার যাচাই না করা ডিভাইস \'%s\' এনক্রিপশন কুঞ্জি অনুরোধ করছে।</string>
-    <string name="your_unverified_device_requesting_with_info">একটি যাচাইকরণ ডিভাইস এনক্রিপশন কুঞ্জি অনুরোধ করছে।
-\nডিভাইসের নাম: %1$s
-\nশেষ দেখা হয়েছে: %2$s
-\nআপনি অন্য ডিভাইসে লগ ইন না করলে, এই অনুরোধটি উপেক্ষা করুন।</string>
+    <string name="you_added_a_new_device_with_info">একটি নতুন সেশান এনক্রিপশন কুঞ্জি অনুরোধ করছে। 
+\nসেশানের নাম: %1$s 
+\nশেষ দেখা হয়েছে: %2$s 
+\nআপনি অন্য সেশানে লগ ইন না করলে, এই অনুরোধটি উপেক্ষা করুন।</string>
+    <string name="your_unverified_device_requesting">আপনার যাচাই না করা সেশান \'%s\' এনক্রিপশন কুঞ্জি অনুরোধ করছে।</string>
+    <string name="your_unverified_device_requesting_with_info">একটি যাচাইকরণ সেশান এনক্রিপশন কুঞ্জি অনুরোধ করছে। 
+\nসেশানের নাম: %1$s 
+\nশেষ দেখা হয়েছে: %2$s 
+\nআপনি অন্য সেশানে লগ ইন না করলে, এই অনুরোধটি উপেক্ষা করুন।</string>
 
     <string name="start_verification">যাচাই শুরু করুন</string>
     <string name="start_verification_short_label">যাচাই</string>
@@ -1148,7 +1148,7 @@
     <string name="settings_integration_manager">ইন্টিগ্রেশন ম্যানেজার</string>
 
     <string name="encryption_information_device_name_with_warning">সর্বজনীন নাম (যাদের সাথে আপনি যোগাযোগ করেন তাদের কাছে দৃশ্যমান)</string>
-    <string name="device_name_warning">একটি ডিভাইসের সর্বজনীন নাম আপনি যাদের সাথে যোগাযোগ করেন তাদের কাছে দৃশ্যমান</string>
+    <string name="device_name_warning">একটি সেশানের সর্বজনীন নাম আপনি যাদের সাথে যোগাযোগ করেন তাদের কাছে দৃশ্যমান</string>
     <string name="room_widget_activity_title">উইজেট</string>
     <string name="room_widget_permission_title">উইজেট লোড করুন</string>
     <string name="room_widget_permission_added_by">এই উইজেটটি যুক্ত করেছেন:</string>
@@ -1192,4 +1192,76 @@
     <string name="markdown_has_been_disabled">মার্কডাউন অক্ষম করা হয়েছে।</string>
 
     <string name="notification_off">অফ</string>
+    <string name="login_error_no_homeserver_found">এটি কোনও বৈধ ম্যাট্রিক্স সার্ভারের ঠিকানা নয়</string>
+    <string name="notification_silent">নিঃশব্দ</string>
+    <string name="notification_noisy">সশব্দ</string>
+
+    <string name="create">সৃষ্টি</string>
+    <string name="create_community">সম্প্রদায় তৈরি করুন</string>
+    <string name="community_name">সম্প্রদায়ের নাম</string>
+    <string name="community_name_hint">উদাহরণ</string>
+    <string name="community_id">সম্প্রদায়ের আইডি</string>
+    <string name="community_id_hint">উদাহরণ</string>
+
+    <string name="group_details_home">ঘর</string>
+    <string name="group_details_people">লোক</string>
+    <string name="group_details_rooms">ঘরগুলি</string>
+    <string name="no_users_placeholder">কোন ব্যবহারকারি নেই</string>
+
+    <string name="rooms">ঘরগুলি</string>
+    <string name="invited">আমন্ত্রিত</string>
+    <string name="filter_group_members">গোষ্ঠীর সদস্যদের ফিল্টার করুন</string>
+    <string name="filter_group_rooms">গোষ্ঠীর ঘরগুলো ফিল্টার করুন</string>
+
+    <plurals name="group_members">
+        <item quantity="one">১ জন সদস্য</item>
+        <item quantity="other">%d জন সদস্য</item>
+    </plurals>
+
+    <plurals name="group_rooms">
+        <item quantity="one">১ টি ঘর</item>
+        <item quantity="other">%d টি ঘর</item>
+    </plurals>
+    <string name="group_no_long_description">সম্প্রদায় প্রশাসক এই সম্প্রদায়ের জন্য দীর্ঘ বিবরণ সরবরাহ করেনি।</string>
+
+    <string name="has_been_banned">%2$s দ্বারা আপনাকে %1$s থেকে নিষিদ্ধ করা হয়েছে।</string>
+    <string name="reason_colon">কারণ: %1$s</string>
+    <string name="rejoin">পুনরায় যুক্ত</string>
+    <string name="forget_room">ঘর ভুলে যান</string>
+
+    <string name="receipt_avatar">রিসিপ্ট অবতার</string>
+    <string name="notice_avatar">অবতার নোট করুন</string>
+    <string name="avatar">আবতার</string>
+
+    <string name="dialog_user_consent_content">"%1$s হোমসার্ভারটি ব্যবহার চালিয়ে যেতে আপনাকে অবশ্যই শর্তাদিটি কে পর্যালোচনা এবং সম্মত  করতে হবে।"</string>
+    <string name="dialog_user_consent_submit">এখনই পর্যালোচনা করুন</string>
+
+    <string name="deactivate_account_title">অ্যাকাউন্ট নিষ্ক্রিয় করুন</string>
+    <string name="deactivate_account_content">এটি আপনার অ্যাকাউন্টকে স্থায়ীভাবে অকেজো করে তুলবে। আপনি লগ ইন করতে সক্ষম হবেন না এবং কেউ একই ব্যবহারকারীর আইডি পুনরায় নিবন্ধন করতে সক্ষম হবেন না। এটি আপনার অ্যাকাউন্টের অংশ নিচ্ছে এমন সমস্ত কক্ষ ছেড়ে দেবে এবং এটি আপনার পরিচয় সার্ভার থেকে আপনার অ্যাকাউন্টের বিশদ সরিয়ে দেবে। <b> এই ক্রিয়াটি অপরিবর্তনীয় </b>।
+\n
+\nআপনার অ্যাকাউন্টটি নিষ্ক্রিয় করা <b> ডিফল্টরূপে আমাদের পাঠানো বার্তাগুলি ভুলে যাওয়ার কারণ নয় </b>। আপনি যদি আমাদের বার্তা ভুলে যেতে চান তবে দয়া করে নীচের বাক্সটি টিক দিন।
+\n
+\nম্যাট্রিক্সে বার্তার দৃশ্যমানতা ইমেলের অনুরূপ। আমাদের আপনার বার্তাগুলি ভুলে যাওয়ার অর্থ হ\'ল আপনি যে বার্তাগুলি প্রেরণ করেছেন সেগুলি কোনও নতুন বা নিবন্ধিত ব্যবহারকারীদের সাথে ভাগ করা হবে না, তবে নিবন্ধিত ব্যবহারকারীরা যাদের ইতিমধ্যে এই বার্তাগুলিতে অ্যাক্সেস রয়েছে তাদের কপিটিতে এখনও অ্যাক্সেস থাকবে।</string>
+    <string name="deactivate_account_delete_checkbox">আমার অ্যাকাউন্টটি নিষ্ক্রিয় করার সময় আমি যে সমস্ত বার্তা প্রেরণ করেছি তা ভুলে যান (সতর্কতা: এটি ভবিষ্যতের ব্যবহারকারীদের কথোপকথনের একটি অসম্পূর্ণ দৃশ্য দেখতে পাবে)</string>
+    <string name="deactivate_account_prompt_password">চালিয়ে যেতে, দয়া করে আপনার পাসওয়ার্ড লিখুন:</string>
+    <string name="deactivate_account_submit">অ্যাকাউন্ট নিষ্ক্রিয় করুন</string>
+
+    <string name="error_empty_field_enter_user_name">দয়া করে একটি ব্যবহারকারীর নাম লিখুন।</string>
+    <string name="error_empty_field_your_password">আপনার পাসওয়ার্ড দিন।</string>
+    <string name="room_tombstone_versioned_description">এই ঘরটি প্রতিস্থাপন করা হয়েছে এবং এটি আর সক্রিয় নেই</string>
+    <string name="room_tombstone_continuation_link">কথোপকথন এখানে অবিরত</string>
+    <string name="room_tombstone_continuation_description">এই ঘরটি অন্য কথোপকথনের একটি ধারাবাহিকতা</string>
+    <string name="room_tombstone_predecessor_link">পুরানো বার্তা দেখতে এখানে ক্লিক করুন</string>
+
+    <string name="resource_limit_exceeded_title">সংস্থান সীমা অতিক্রম করেছে</string>
+    <string name="resource_limit_contact_action">প্রশাসকের সাথে যোগাযোগ করুন</string>
+
+    <string name="resource_limit_contact_admin">আপনার পরিষেবা প্রশাসকের সাথে যোগাযোগ করুন</string>
+
+    <string name="resource_limit_soft_default">এই হোমসার্ভারটি এর একটি রিসোর্স সীমা অতিক্রম করেছে সুতরাং <b> কিছু ব্যবহারকারী লগ ইন করতে পারবেন না </b>।</string>
+    <string name="resource_limit_hard_default">এই হোমসার্ভারটি এর অন্যতম এক রিসোর্স সীমা অতিক্রম করেছে।</string>
+
+    <string name="resource_limit_soft_mau"> এই হোমসার্ভারটি তার মাসিক অ্যাক্টিভ ব্যবহারকারীর সীমাটিতে আঘাত করেছে তাই <b> কিছু ব্যবহারকারী লগ ইন করতে পারবেন না </b>।</string>
+    <string name="resource_limit_hard_mau">এই হোমসার্ভারটি তার মাসিক সক্রিয় ব্যবহারকারীর সীমাতে ছুঁয়েছে।</string>
+
 </resources>

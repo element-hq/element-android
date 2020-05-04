@@ -33,18 +33,10 @@ data class MessageVerificationRequestContent(
         @Json(name = "format") val format: String? = null,
         @Json(name = "formatted_body") val formattedBody: String? = null,
         @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
-        @Json(name = "m.new_content") override val newContent: Content? = null
+        @Json(name = "m.new_content") override val newContent: Content? = null,
+        // Not parsed, but set after, using the eventId
+        override val transactionId: String? = null
 ) : MessageContent, VerificationInfoRequest {
-
-    override fun isValid(): Boolean {
-        if (transactionID.isNullOrBlank() || methods.isNullOrEmpty() || fromDevice.isNullOrEmpty()) {
-            return false
-        }
-        return true
-    }
-
-    override val transactionID: String?
-        get() = relatesTo?.eventId
 
     override fun toEventContent() = toContent()
 }

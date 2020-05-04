@@ -22,6 +22,7 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.EmptyViewEvents
@@ -116,10 +117,14 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 .observeOn(Schedulers.computation())
                 .map { it.asSequence() }
                 .subscribe { summaries ->
+                    val invites = summaries
+                            .filter { it.membership == Membership.INVITE }
+                            .count()
+
                     val peopleNotifications = summaries
                             .filter { it.isDirect }
                             .map { it.notificationCount }
-                            .sumBy { i -> i }
+                            .sum()
                     val peopleHasHighlight = summaries
                             .filter { it.isDirect }
                             .any { it.highlightCount > 0 }
@@ -127,14 +132,14 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                     val roomsNotifications = summaries
                             .filter { !it.isDirect }
                             .map { it.notificationCount }
-                            .sumBy { i -> i }
+                            .sum()
                     val roomsHasHighlight = summaries
                             .filter { !it.isDirect }
                             .any { it.highlightCount > 0 }
 
                     setState {
                         copy(
-                                notificationCountCatchup = peopleNotifications + roomsNotifications,
+                                notificationCountCatchup = peopleNotifications + roomsNotifications + invites,
                                 notificationHighlightCatchup = peopleHasHighlight || roomsHasHighlight,
                                 notificationCountPeople = peopleNotifications,
                                 notificationHighlightPeople = peopleHasHighlight,

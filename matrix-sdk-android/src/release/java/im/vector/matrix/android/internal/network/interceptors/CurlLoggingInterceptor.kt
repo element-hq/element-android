@@ -20,7 +20,6 @@ package im.vector.matrix.android.internal.network.interceptors
 import im.vector.matrix.android.internal.di.MatrixScope
 import okhttp3.Interceptor
 import okhttp3.Response
-import okhttp3.logging.HttpLoggingInterceptor
 import java.io.IOException
 import javax.inject.Inject
 
@@ -28,7 +27,7 @@ import javax.inject.Inject
  * No op interceptor
  */
 @MatrixScope
-internal class CurlLoggingInterceptor @Inject constructor(private val logger: HttpLoggingInterceptor.Logger)
+internal class CurlLoggingInterceptor @Inject constructor()
     : Interceptor {
 
     @Throws(IOException::class)

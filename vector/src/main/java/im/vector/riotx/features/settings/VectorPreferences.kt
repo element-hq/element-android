@@ -24,18 +24,17 @@ import android.provider.MediaStore
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.squareup.seismic.ShakeDetector
+import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.features.homeserver.ServerUrlsRepository
 import im.vector.riotx.features.themes.ThemeUtils
 import timber.log.Timber
-import java.io.File
 import javax.inject.Inject
 
 class VectorPreferences @Inject constructor(private val context: Context) {
 
     companion object {
-        const val SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY = "SETTINGS_MESSAGES_SENT_BY_BOT_PREFERENCE_KEY_2"
         const val SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY = "SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY"
         const val SETTINGS_VERSION_PREFERENCE_KEY = "SETTINGS_VERSION_PREFERENCE_KEY"
         const val SETTINGS_SDK_VERSION_PREFERENCE_KEY = "SETTINGS_SDK_VERSION_PREFERENCE_KEY"
@@ -46,7 +45,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         const val SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY = "SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY"
         const val SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY = "SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY"
 
-        const val SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
         const val SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY"
         const val SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY = "SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY"
         const val SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY = "SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY"
@@ -70,7 +68,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         const val SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_EXPORT_E2E_ROOM_KEYS_PREFERENCE_KEY"
         const val SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_IMPORT_E2E_ROOM_KEYS_PREFERENCE_KEY"
         const val SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY = "SETTINGS_ENCRYPTION_NEVER_SENT_TO_PREFERENCE_KEY"
-        const val SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY =  "SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY"
+        const val SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY = "SETTINGS_SHOW_DEVICES_LIST_PREFERENCE_KEY"
 
         const val SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY = "SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY"
 
@@ -106,7 +104,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         const val SETTINGS_GROUPS_FLAIR_KEY = "SETTINGS_GROUPS_FLAIR_KEY"
 
         // notifications
-        const val SETTINGS_NOTIFICATIONS_KEY = "SETTINGS_NOTIFICATIONS_KEY"
         const val SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY = "SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
         const val SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY = "SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
         //    public static final String SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY = "SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY";
@@ -115,12 +112,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         const val SETTINGS_SYSTEM_SILENT_NOTIFICATION_PREFERENCE_KEY = "SETTINGS_SYSTEM_SILENT_NOTIFICATION_PREFERENCE_KEY"
         const val SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY"
         const val SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY"
-        const val SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY = "SETTINGS_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY_2"
-        const val SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY = "SETTINGS_CONTAINING_MY_USER_NAME_PREFERENCE_KEY_2"
-        const val SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY = "SETTINGS_MESSAGES_IN_ONE_TO_ONE_PREFERENCE_KEY_2"
-        const val SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY = "SETTINGS_MESSAGES_IN_GROUP_CHAT_PREFERENCE_KEY_2"
-        const val SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY = "SETTINGS_INVITED_TO_ROOM_PREFERENCE_KEY_2"
-        const val SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY = "SETTINGS_CALL_INVITATIONS_PREFERENCE_KEY_2"
 
         // media
         private const val SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY = "SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY"
@@ -160,19 +151,23 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         const val SETTINGS_USE_RAGE_SHAKE_KEY = "SETTINGS_USE_RAGE_SHAKE_KEY"
         const val SETTINGS_RAGE_SHAKE_DETECTION_THRESHOLD_KEY = "SETTINGS_RAGE_SHAKE_DETECTION_THRESHOLD_KEY"
 
+        // Security
+        const val SETTINGS_SECURITY_USE_FLAG_SECURE = "SETTINGS_SECURITY_USE_FLAG_SECURE"
+
         // other
         const val SETTINGS_MEDIA_SAVING_PERIOD_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_KEY"
         private const val SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY = "SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY"
         private const val DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY = "DID_ASK_TO_IGNORE_BATTERY_OPTIMIZATIONS_KEY"
         private const val DID_MIGRATE_TO_NOTIFICATION_REWORK = "DID_MIGRATE_TO_NOTIFICATION_REWORK"
         private const val DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY = "DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY"
-        const val SETTINGS_DEACTIVATE_ACCOUNT_KEY = "SETTINGS_DEACTIVATE_ACCOUNT_KEY"
         private const val SETTINGS_DISPLAY_ALL_EVENTS_KEY = "SETTINGS_DISPLAY_ALL_EVENTS_KEY"
 
         private const val MEDIA_SAVING_3_DAYS = 0
         private const val MEDIA_SAVING_1_WEEK = 1
         private const val MEDIA_SAVING_1_MONTH = 2
         private const val MEDIA_SAVING_FOREVER = 3
+
+        private const val SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST = "SETTINGS_UNKNWON_DEVICE_DISMISSED_LIST"
 
         // some preferences keys must be kept after a logout
         private val mKeysToKeepAfterLogout = listOf(
@@ -209,7 +204,13 @@ class VectorPreferences @Inject constructor(private val context: Context) {
                 SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY,
                 SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY,
 
-                SETTINGS_USE_RAGE_SHAKE_KEY
+                SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY,
+                SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY,
+                SETTINGS_LABS_ALLOW_EXTENDED_LOGS,
+                SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY,
+
+                SETTINGS_USE_RAGE_SHAKE_KEY,
+                SETTINGS_SECURITY_USE_FLAG_SECURE
         )
     }
 
@@ -245,9 +246,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         return defaultPrefs.getBoolean(SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY, true)
     }
 
-    fun setNotificationEnabledForDevice(enabled: Boolean?) {
+    fun setNotificationEnabledForDevice(enabled: Boolean) {
         defaultPrefs.edit {
-            putBoolean(SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY, enabled!!)
+            putBoolean(SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY, enabled)
         }
     }
 
@@ -371,6 +372,18 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         return defaultPrefs.getBoolean(SETTINGS_PLAY_SHUTTER_SOUND_KEY, true)
     }
 
+    fun storeUnknownDeviceDismissedList(deviceIds: List<String>) {
+        defaultPrefs.edit(true) {
+            putStringSet(SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST, deviceIds.toSet())
+        }
+    }
+
+    fun getUnknownDeviceDismissedList(): List<String> {
+        return tryThis {
+            defaultPrefs.getStringSet(SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST, null)?.toList()
+        } ?: emptyList()
+    }
+
     /**
      * Update the notification ringtone
      *
@@ -423,7 +436,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
             uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         }
 
-        Timber.v("## getNotificationRingTone() returns " + uri!!)
+        Timber.v("## getNotificationRingTone() returns $uri")
         return uri
     }
 
@@ -436,11 +449,11 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         val toneUri = getNotificationRingTone() ?: return null
 
         try {
-            val proj = arrayOf(MediaStore.Audio.Media.DATA)
+            val proj = arrayOf(MediaStore.Audio.Media.DISPLAY_NAME)
             return context.contentResolver.query(toneUri, proj, null, null, null)?.use {
-                val columnIndex = it.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
+                val columnIndex = it.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
                 it.moveToFirst()
-                File(it.getString(columnIndex)).nameWithoutExtension
+                it.getString(columnIndex)
             }
         } catch (e: Exception) {
             Timber.e(e, "## getNotificationRingToneName() failed")
@@ -755,5 +768,12 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun displayAllEvents(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_DISPLAY_ALL_EVENTS_KEY, false)
+    }
+
+    /**
+     * The user does not allow screenshots of the application
+     */
+    fun useFlagSecure(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_FLAG_SECURE, false)
     }
 }

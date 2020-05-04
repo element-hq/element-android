@@ -1,0 +1,54 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="36dp"
+    android:height="36dp"
+    android:viewportWidth="36"
+    android:viewportHeight="36">
+  <path
+      android:pathData="M22,33c0,2.209 -1.791,3 -4,3s-4,-0.791 -4,-3l1,-9c0,-2.209 0.791,-2 3,-2s3,-0.209 3,2l1,9z"
+      android:fillColor="#662113"/>
+  <path
+      android:pathData="M34,17c0,8.837 -7.163,12 -16,12 -8.836,0 -16,-3.163 -16,-12C2,8.164 11,0 18,0s16,8.164 16,17z"
+      android:fillColor="#5C913B"/>
+  <path
+      android:pathData="M4,21a2,1 0,1 0,4 0a2,1 0,1 0,-4 0z"
+      android:fillColor="#3E721D"/>
+  <path
+      android:pathData="M28,21a2,1 0,1 0,4 0a2,1 0,1 0,-4 0z"
+      android:fillColor="#3E721D"/>
+  <path
+      android:pathData="M8,25a2,1 0,1 0,4 0a2,1 0,1 0,-4 0z"
+      android:fillColor="#3E721D"/>
+  <path
+      android:pathData="M12,22a2,1 0,1 0,4 0a2,1 0,1 0,-4 0z"
+      android:fillColor="#3E721D"/>
+  <path
+      android:pathData="M8,16a2,1 0,1 0,4 0a2,1 0,1 0,-4 0z"
+      android:fillColor="#3E721D"/>
+  <path
+      android:pathData="M5,12a2,1 0,1 0,4 0a2,1 0,1 0,-4 0z"
+      android:fillColor="#3E721D"/>
+  <path
+      android:pathData="M27,12a2,1 0,1 0,4 0a2,1 0,1 0,-4 0z"
+      android:fillColor="#3E721D"/>
+  <path
+      android:pathData="M12,10a2,1 0,1 0,4 0a2,1 0,1 0,-4 0z"
+      android:fillColor="#3E721D"/>
+  <path
+      android:pathData="M20,10a2,1 0,1 0,4 0a2,1 0,1 0,-4 0z"
+      android:fillColor="#3E721D"/>
+  <path
+      android:pathData="M24,16a2,1 0,1 0,4 0a2,1 0,1 0,-4 0z"
+      android:fillColor="#3E721D"/>
+  <path
+      android:pathData="M16,17a2,1 0,1 0,4 0a2,1 0,1 0,-4 0z"
+      android:fillColor="#3E721D"/>
+  <path
+      android:pathData="M20,22a2,1 0,1 0,4 0a2,1 0,1 0,-4 0z"
+      android:fillColor="#3E721D"/>
+  <path
+      android:pathData="M16,26a2,1 0,1 0,4 0a2,1 0,1 0,-4 0z"
+      android:fillColor="#3E721D"/>
+  <path
+      android:pathData="M24,25a2,1 0,1 0,4 0a2,1 0,1 0,-4 0z"
+      android:fillColor="#3E721D"/>
+</vector>

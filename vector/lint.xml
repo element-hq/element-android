@@ -6,9 +6,15 @@
     <issue id="MissingTranslation" severity="warning" />
     <issue id="TypographyEllipsis" severity="error" />
     <issue id="ImpliedQuantity" severity="warning" />
+    <issue id="IconXmlAndPng" severity="error" />
+    <issue id="IconDipSize" severity="error" />
+    <issue id="IconDuplicatesConfig" severity="error" />
+    <issue id="IconDuplicates" severity="error" />
+    <issue id="IconExpectedSize" severity="error" />
 
     <!-- UX -->
     <issue id="ButtonOrder" severity="error" />
+    <issue id="TextFields" severity="error" />
 
     <!-- Layout -->
     <issue id="UnknownIdInLayout" severity="error" />
@@ -19,6 +25,7 @@
     <issue id="InefficientWeight" severity="error" />
     <issue id="DisableBaselineAlignment" severity="error" />
     <issue id="ScrollViewSize" severity="error" />
+    <issue id="NegativeMargin" severity="error" />
 
     <!-- RTL -->
     <issue id="RtlEnabled" severity="error" />
@@ -30,9 +37,22 @@
     <issue id="SetTextI18n" severity="error" />
     <issue id="ViewConstructor" severity="error" />
     <issue id="UseValueOf" severity="error" />
+    <issue id="Recycle" severity="error" />
+    <issue id="KotlinPropertyAccess" severity="error" />
 
     <!-- Ignore error from HtmlCompressor lib -->
     <issue id="InvalidPackage">
-        <ignore path="**/htmlcompressor-1.4.jar"/>
+        <ignore path="**/htmlcompressor-1.4.jar" />
     </issue>
+
+    <!-- Manifest -->
+    <issue id="PermissionImpliesUnsupportedChromeOsHardware" severity="error" />
+
+    <!-- Timber -->
+    <!--    This rule is failing on CI because it's marked as unknwown rule id :/-->
+    <!--    <issue id="BinaryOperationInTimber" severity="error" />-->
+
+    <!-- Wording -->
+    <!-- TODO When strings are imported from Weblate, move this to error -->
+    <issue id="Typos" severity="warning" />
 </lint>

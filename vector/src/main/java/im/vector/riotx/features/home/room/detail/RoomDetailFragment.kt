@@ -37,7 +37,9 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.text.buildSpannedString
+import androidx.core.text.toSpannable
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
@@ -57,17 +59,17 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.github.piasy.biv.BigImageViewer
-import com.github.piasy.biv.loader.ImageLoader
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.jakewharton.rxbinding3.widget.textChanges
+import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
@@ -77,12 +79,14 @@ import im.vector.matrix.android.api.session.room.model.message.MessageImageInfoC
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
+import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
+import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.riotx.R
 import im.vector.riotx.core.dialogs.withColoredButton
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
@@ -93,6 +97,7 @@ import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.extensions.showKeyboard
 import im.vector.riotx.core.files.addEntryToDownloadManager
 import im.vector.riotx.core.glide.GlideApp
+import im.vector.riotx.core.intent.getMimeTypeFromUri
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.ui.views.JumpToReadMarkerView
@@ -106,11 +111,14 @@ import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_PICK_ATTACHMENT
 import im.vector.riotx.core.utils.TextUtils
 import im.vector.riotx.core.utils.allGranted
 import im.vector.riotx.core.utils.checkPermissions
+import im.vector.riotx.core.utils.colorizeMatchingText
 import im.vector.riotx.core.utils.copyToClipboard
 import im.vector.riotx.core.utils.createUIHandler
 import im.vector.riotx.core.utils.getColorFromUserId
+import im.vector.riotx.core.utils.isValidUrl
 import im.vector.riotx.core.utils.jsonViewerStyler
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
+import im.vector.riotx.core.utils.saveMedia
 import im.vector.riotx.core.utils.shareMedia
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.attachments.AttachmentTypeSelectorView
@@ -120,6 +128,7 @@ import im.vector.riotx.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.riotx.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.riotx.features.attachments.toGroupedContentAttachmentData
 import im.vector.riotx.features.command.Command
+import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.riotx.features.crypto.util.toImageRes
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.home.AvatarRenderer
@@ -161,6 +170,7 @@ import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
 import timber.log.Timber
 import java.io.File
+import java.net.URL
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -245,7 +255,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
-        attachmentsHelper = AttachmentsHelper.create(this, this).register()
+        attachmentsHelper = AttachmentsHelper(requireContext(), this).register()
         keyboardStateUtils = KeyboardStateUtils(requireActivity())
         setupToolbar(roomToolbar)
         setupRecyclerView()
@@ -285,17 +295,24 @@ class RoomDetailFragment @Inject constructor(
 
         roomDetailViewModel.observeViewEvents {
             when (it) {
-                is RoomDetailViewEvents.Failure             -> showErrorInSnackbar(it.throwable)
-                is RoomDetailViewEvents.OnNewTimelineEvents -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
-                is RoomDetailViewEvents.ActionSuccess       -> displayRoomDetailActionSuccess(it)
-                is RoomDetailViewEvents.ActionFailure       -> displayRoomDetailActionFailure(it)
-                is RoomDetailViewEvents.ShowMessage         -> showSnackWithMessage(it.message, Snackbar.LENGTH_LONG)
-                is RoomDetailViewEvents.NavigateToEvent     -> navigateToEvent(it)
-                is RoomDetailViewEvents.FileTooBigError     -> displayFileTooBigError(it)
-                is RoomDetailViewEvents.DownloadFileState   -> handleDownloadFileState(it)
-                is RoomDetailViewEvents.SendMessageResult   -> renderSendMessageResult(it)
+                is RoomDetailViewEvents.Failure                -> showErrorInSnackbar(it.throwable)
+                is RoomDetailViewEvents.OnNewTimelineEvents    -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
+                is RoomDetailViewEvents.ActionSuccess          -> displayRoomDetailActionSuccess(it)
+                is RoomDetailViewEvents.ActionFailure          -> displayRoomDetailActionFailure(it)
+                is RoomDetailViewEvents.ShowMessage            -> showSnackWithMessage(it.message, Snackbar.LENGTH_LONG)
+                is RoomDetailViewEvents.NavigateToEvent        -> navigateToEvent(it)
+                is RoomDetailViewEvents.FileTooBigError        -> displayFileTooBigError(it)
+                is RoomDetailViewEvents.DownloadFileState      -> handleDownloadFileState(it)
+                is RoomDetailViewEvents.JoinRoomCommandSuccess -> handleJoinedToAnotherRoom(it)
+                is RoomDetailViewEvents.SendMessageResult      -> renderSendMessageResult(it)
             }.exhaustive
         }
+    }
+
+    private fun handleJoinedToAnotherRoom(action: RoomDetailViewEvents.JoinRoomCommandSuccess) {
+        updateComposerText("")
+        lockSendButton = false
+        navigator.openRoom(vectorBaseActivity, action.roomId)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -653,7 +670,7 @@ class RoomDetailFragment @Inject constructor(
     private fun sendUri(uri: Uri): Boolean {
         roomDetailViewModel.preventAttachmentPreview = true
         val shareIntent = Intent(Intent.ACTION_SEND, uri)
-        val isHandled = attachmentsHelper.handleShareIntent(shareIntent)
+        val isHandled = attachmentsHelper.handleShareIntent(requireContext(), shareIntent)
         if (!isHandled) {
             roomDetailViewModel.preventAttachmentPreview = false
             Toast.makeText(requireContext(), R.string.error_handling_incoming_share, Toast.LENGTH_SHORT).show()
@@ -688,7 +705,7 @@ class RoomDetailFragment @Inject constructor(
         val isRoomEncrypted = summary?.isEncrypted ?: false
         if (state.tombstoneEvent == null) {
             composerLayout.visibility = View.VISIBLE
-            composerLayout.setRoomEncrypted(isRoomEncrypted)
+            composerLayout.setRoomEncrypted(isRoomEncrypted, state.asyncRoomSummary.invoke()?.roomEncryptionTrustLevel)
             notificationAreaView.render(NotificationAreaView.State.Hidden)
         } else {
             composerLayout.visibility = View.GONE
@@ -770,7 +787,7 @@ class RoomDetailFragment @Inject constructor(
                 updateComposerText("")
             }
             is RoomDetailViewEvents.SlashCommandResultError    -> {
-                displayCommandError(sendMessageResult.throwable.localizedMessage)
+                displayCommandError(sendMessageResult.throwable.localizedMessage ?: getString(R.string.unexpected_error))
             }
             is RoomDetailViewEvents.SlashCommandNotImplemented -> {
                 displayCommandError(getString(R.string.not_implemented))
@@ -906,7 +923,7 @@ class RoomDetailFragment @Inject constructor(
 
     // TimelineEventController.Callback ************************************************************
 
-    override fun onUrlClicked(url: String): Boolean {
+    override fun onUrlClicked(url: String, title: String): Boolean {
         permalinkHandler
                 .launch(requireActivity(), url, object : NavigationInterceptor {
                     override fun navToRoom(roomId: String?, eventId: String?): Boolean {
@@ -934,8 +951,25 @@ class RoomDetailFragment @Inject constructor(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { managed ->
                     if (!managed) {
-                        // Open in external browser, in a new Tab
-                        openUrlInExternalBrowser(requireContext(), url)
+                        if (title.isValidUrl() && url.isValidUrl() && URL(title).host != URL(url).host) {
+                            AlertDialog.Builder(requireActivity())
+                                    .setTitle(R.string.external_link_confirmation_title)
+                                    .setMessage(
+                                            getString(R.string.external_link_confirmation_message, title, url)
+                                                    .toSpannable()
+                                                    .colorizeMatchingText(url, colorProvider.getColorFromAttribute(R.attr.riotx_text_primary_body_contrast))
+                                                    .colorizeMatchingText(title, colorProvider.getColorFromAttribute(R.attr.riotx_text_primary_body_contrast))
+                                    )
+                                    .setPositiveButton(R.string._continue) { _, _ ->
+                                        openUrlInExternalBrowser(requireContext(), url)
+                                    }
+                                    .setNegativeButton(R.string.cancel, null)
+                                    .show()
+                                    .withColoredButton(DialogInterface.BUTTON_NEGATIVE)
+                        } else {
+                            // Open in external browser, in a new Tab
+                            openUrlInExternalBrowser(requireContext(), url)
+                        }
                     }
                 }
                 .disposeOnDestroyView()
@@ -944,7 +978,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onUrlLongClicked(url: String): Boolean {
-        if (url != getString(R.string.edited_suffix)) {
+        if (url != getString(R.string.edited_suffix) && url.isValidUrl()) {
             // Copy the url to the clipboard
             copyToClipboard(requireContext(), url, true, R.string.link_copied_to_clipboard)
         }
@@ -1124,6 +1158,50 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.handle(RoomDetailAction.EnterTrackingUnreadMessagesState)
     }
 
+    private fun onShareActionClicked(action: EventSharedAction.Share) {
+        session.downloadFile(
+                FileService.DownloadMode.FOR_EXTERNAL_SHARE,
+                action.eventId,
+                action.messageContent.body,
+                action.messageContent.getFileUrl(),
+                action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
+                object : MatrixCallback<File> {
+                    override fun onSuccess(data: File) {
+                        if (isAdded) {
+                            shareMedia(requireContext(), data, getMimeTypeFromUri(requireContext(), data.toUri()))
+                        }
+                    }
+                }
+        )
+    }
+
+    private fun onSaveActionClicked(action: EventSharedAction.Save) {
+        session.downloadFile(
+                FileService.DownloadMode.FOR_EXTERNAL_SHARE,
+                action.eventId,
+                action.messageContent.body,
+                action.messageContent.getFileUrl(),
+                action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
+                object : MatrixCallback<File> {
+                    override fun onSuccess(data: File) {
+                        if (isAdded) {
+                            val saved = saveMedia(
+                                    context = requireContext(),
+                                    file = data,
+                                    title = action.messageContent.body,
+                                    mediaMimeType = getMimeTypeFromUri(requireContext(), data.toUri())
+                            )
+                            if (saved) {
+                                Toast.makeText(requireContext(), R.string.media_file_added_to_gallery, Toast.LENGTH_LONG).show()
+                            } else {
+                                Toast.makeText(requireContext(), R.string.error_adding_media_file_to_gallery, Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }
+                }
+        )
+    }
+
     private fun handleActions(action: EventSharedAction) {
         when (action) {
             is EventSharedAction.OpenUserProfile            -> {
@@ -1145,32 +1223,10 @@ class RoomDetailFragment @Inject constructor(
                 promptConfirmationToRedactEvent(action)
             }
             is EventSharedAction.Share                      -> {
-                // TODO current data communication is too limited
-                // Need to now the media type
-                // TODO bad, just POC
-                BigImageViewer.imageLoader().loadImage(
-                        action.hashCode(),
-                        Uri.parse(action.imageUrl),
-                        object : ImageLoader.Callback {
-                            override fun onFinish() {}
-
-                            override fun onSuccess(image: File?) {
-                                if (image != null) {
-                                    shareMedia(requireContext(), image, "image/*")
-                                }
-                            }
-
-                            override fun onFail(error: Exception?) {}
-
-                            override fun onCacheHit(imageType: Int, image: File?) {}
-
-                            override fun onCacheMiss(imageType: Int, image: File?) {}
-
-                            override fun onProgress(progress: Int) {}
-
-                            override fun onStart() {}
-                        }
-                )
+                onShareActionClicked(action)
+            }
+            is EventSharedAction.Save                       -> {
+                onSaveActionClicked(action)
             }
             is EventSharedAction.ViewEditHistory            -> {
                 onEditedDecorationClicked(action.messageInformationData)
@@ -1228,10 +1284,18 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.IgnoreUser(action.senderId))
             }
             is EventSharedAction.OnUrlClicked               -> {
-                onUrlClicked(action.url)
+                onUrlClicked(action.url, action.title)
             }
             is EventSharedAction.OnUrlLongClicked           -> {
                 onUrlLongClicked(action.url)
+            }
+            is EventSharedAction.ReRequestKey               -> {
+                roomDetailViewModel.handle(RoomDetailAction.ReRequestKeys(action.eventId))
+            }
+            is EventSharedAction.UseKeyBackup               -> {
+                context?.let {
+                    startActivity(KeysBackupRestoreActivity.intent(it))
+                }
             }
             else                                            -> {
                 Toast.makeText(context, "Action $action is not implemented yet", Toast.LENGTH_LONG).show()
@@ -1338,11 +1402,11 @@ class RoomDetailFragment @Inject constructor(
 
     private fun launchAttachmentProcess(type: AttachmentTypeSelectorView.Type) {
         when (type) {
-            AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera()
-            AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile()
-            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery()
-            AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio()
-            AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact()
+            AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera(this)
+            AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile(this)
+            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(this)
+            AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio(this)
+            AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(this)
             AttachmentTypeSelectorView.Type.STICKER -> vectorBaseActivity.notImplemented("Adding stickers")
         }.exhaustive
     }

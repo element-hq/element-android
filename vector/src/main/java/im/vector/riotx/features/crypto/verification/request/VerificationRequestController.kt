@@ -27,6 +27,7 @@ import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.colorizeMatchingText
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheetViewState
+import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetSelfWaitItem
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationWaitingItem
@@ -56,39 +57,49 @@ class VerificationRequestController @Inject constructor(
                 notice(stringProvider.getString(R.string.verification_open_other_to_verify))
             }
 
+            bottomSheetSelfWaitItem {
+                id("waiting")
+            }
+
             dividerItem {
                 id("sep")
             }
 
-            bottomSheetVerificationWaitingItem {
-                id("waiting")
-                title(stringProvider.getString(R.string.verification_request_waiting, matrixItem.getBestName()))
+            if (state.quadSContainsSecrets) {
+                bottomSheetVerificationActionItem {
+                    id("passphrase")
+                    title(stringProvider.getString(R.string.verification_cannot_access_other_session))
+                    titleColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                    subTitle(stringProvider.getString(R.string.verification_use_passphrase))
+                    iconRes(R.drawable.ic_arrow_right)
+                    iconColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                    listener { listener?.onClickRecoverFromPassphrase() }
+                }
             }
 
-            bottomSheetVerificationActionItem {
-                id("passphrase")
-                title(stringProvider.getString(R.string.verification_cannot_access_other_session))
-                titleColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
-                subTitle(stringProvider.getString(R.string.verification_use_passphrase))
-                iconRes(R.drawable.ic_arrow_right)
-                iconColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
-                listener { listener?.onClickRecoverFromPassphrase() }
+            dividerItem {
+                id("sep1")
             }
+
             bottomSheetVerificationActionItem {
                 id("skip")
                 title(stringProvider.getString(R.string.skip))
                 titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-//                subTitle(stringProvider.getString(R.string.verification_use_passphrase))
                 iconRes(R.drawable.ic_arrow_right)
                 iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
-                listener { listener?.onClickDismiss() }
+                listener { listener?.onClickSkip() }
             }
         } else {
-            val styledText = matrixItem.let {
-                stringProvider.getString(R.string.verification_request_notice, it.id)
-                        .toSpannable()
-                        .colorizeMatchingText(it.id, colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color))
-            }
+            val styledText =
+                    if (state.isMe) {
+                        stringProvider.getString(R.string.verify_new_session_notice)
+                    } else {
+                        matrixItem.let {
+                            stringProvider.getString(R.string.verification_request_notice, it.id)
+                                    .toSpannable()
+                                    .colorizeMatchingText(it.id, colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color))
+                        }
+                    }
 
             bottomSheetVerificationNoticeItem {
                 id("notice")
@@ -119,19 +130,44 @@ class VerificationRequestController @Inject constructor(
                 }
                 is Success       -> {
                     if (!pr.invoke().isReady) {
-                        bottomSheetVerificationWaitingItem {
-                            id("waiting")
-                            title(stringProvider.getString(R.string.verification_request_waiting_for, matrixItem.getBestName()))
+                        if (state.isMe) {
+                            bottomSheetVerificationWaitingItem {
+                                id("waiting")
+                                title(stringProvider.getString(R.string.verification_request_waiting))
+                            }
+                        } else {
+                            bottomSheetVerificationWaitingItem {
+                                id("waiting")
+                                title(stringProvider.getString(R.string.verification_request_waiting_for, matrixItem.getBestName()))
+                            }
                         }
                     }
                 }
+            }
+        }
+
+        if (state.isMe && state.currentDeviceCanCrossSign) {
+            dividerItem {
+                id("sep_notMe")
+            }
+
+            bottomSheetVerificationActionItem {
+                id("wasnote")
+                title(stringProvider.getString(R.string.verify_new_session_was_not_me))
+                titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
+                subTitle(stringProvider.getString(R.string.verify_new_session_compromized))
+                iconRes(R.drawable.ic_arrow_right)
+                iconColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                listener { listener?.onClickOnWasNotMe() }
             }
         }
     }
 
     interface Listener {
         fun onClickOnVerificationStart()
+        fun onClickOnWasNotMe()
         fun onClickRecoverFromPassphrase()
         fun onClickDismiss()
+        fun onClickSkip()
     }
 }

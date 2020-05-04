@@ -32,6 +32,7 @@ import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import okhttp3.OkHttpClient
 import org.matrix.olm.OlmManager
+import java.io.File
 
 @Component(modules = [MatrixModule::class, NetworkModule::class, AuthModule::class])
 @MatrixScope
@@ -51,6 +52,12 @@ internal interface MatrixComponent {
     fun matrixConfiguration(): MatrixConfiguration
 
     fun resources(): Resources
+
+    @CacheDirectory
+    fun cacheDir(): File
+
+    @ExternalFilesDirectory
+    fun externalFilesDir(): File?
 
     fun olmManager(): OlmManager
 

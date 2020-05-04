@@ -15,4 +15,12 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
-interface VerificationInfoDone : VerificationInfo
+import im.vector.matrix.android.api.session.room.model.message.ValidVerificationDone
+
+internal interface VerificationInfoDone : VerificationInfo<ValidVerificationDone> {
+
+    override fun asValidObject(): ValidVerificationDone? {
+        val validTransactionId = transactionId?.takeIf { it.isNotEmpty() } ?: return null
+        return ValidVerificationDone(validTransactionId)
+    }
+}

@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="light_theme">Světlý motiv</string>
-    <string name="black_them">Černý motiv</string>
+    <string name="light_theme">Světlý vzhled</string>
+    <string name="black_them">Černý vzhled</string>
 
-    <string name="dark_theme">Tmavý motiv</string>
+    <string name="dark_theme">Tmavý vzhled</string>
     <string name="title_activity_home">Zprávy</string>
     <string name="title_activity_room">Místnost</string>
     <string name="title_activity_settings">Nastavení</string>
@@ -28,7 +28,7 @@
     <string name="resources_country_code">CZ</string>
 
     <string name="forget_room">Zapomenout místnost</string>
-    <string name="notification_sync_in_progress">Synchronizuji..</string>
+    <string name="notification_sync_in_progress">Probíhá synchronizace…</string>
     <string name="notification_noisy_notifications">Hlasitá oznámení</string>
     <string name="notification_silent_notifications">Tichá oznámení</string>
 
@@ -46,8 +46,8 @@
     <string name="view_decrypted_source">Zobraz dešifrovaný zdroj</string>
     <string name="report_content">Nahlásit obsah</string>
     <string name="active_call">Aktivní hovor</string>
-    <string name="ongoing_conference_call">Probíhající konferenční hovor.
-\nPřipojit se jako %1$s nebo %2$s.</string>
+    <string name="ongoing_conference_call">Probíhající konferenční hovor. 
+\nPřipojit se jako %1$s nebo %2$s</string>
     <string name="ongoing_conference_call_voice">Hlasem</string>
     <string name="ongoing_conference_call_video">Videem</string>
     <string name="cannot_start_call">Nemohu spustit hovor, prosím zkusit později</string>
@@ -72,7 +72,7 @@
     <string name="disable">Zakázat</string>
 
     <string name="dialog_title_confirmation">Potvrzení</string>
-    <string name="dialog_title_warning">Upozornění</string>
+    <string name="dialog_title_warning">Varování</string>
 
     <string name="bottom_action_home">Domů</string>
     <string name="bottom_action_favourites">Oblíbené</string>
@@ -99,13 +99,12 @@
 
     <string name="rooms_header">Místnosti</string>
     <string name="rooms_directory_header">Adresář místností</string>
-    <string name="no_room_placeholder">Žádne místností</string>
+    <string name="no_room_placeholder">Žádné místnosti</string>
     <string name="no_public_room_placeholder">Žádné veřejné mistnosti nejsou k dispozici</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">1 uživatel</item>
+        <item quantity="one">Jeden uživatel</item>
         <item quantity="few">%d uživatelé</item>
-        <item quantity="many">%d uživatelé</item>
-        <item quantity="other" />
+        <item quantity="other">%d uživatelů</item>
     </plurals>
 
     <string name="groups_invite_header">Pozvat</string>
@@ -140,9 +139,9 @@
     <string name="start_voice_call">Začít hlasový hovor</string>
     <string name="start_video_call">Začít video hovor</string>
 
-    <string name="start_new_chat_prompt_msg">Jste si jisti, že chcete začít nový rozhovor s %s?</string>
-    <string name="start_voice_call_prompt_msg">Jste si jisti, že chcete zahájit hlasový hovor?</string>
-    <string name="start_video_call_prompt_msg">Jste si jisti, že chcete zahájit video hovor?</string>
+    <string name="start_new_chat_prompt_msg">Opravdu chcete začít novou konverzaci s %s\?</string>
+    <string name="start_voice_call_prompt_msg">Opravdu chcete zahájit hlasový hovor\?</string>
+    <string name="start_video_call_prompt_msg">Opravdu chcete zahájit videohovor\?</string>
 
     <string name="option_send_files">Odeslat soubory</string>
     <string name="option_take_photo_video">Pořídit fotku nebo video</string>
@@ -153,9 +152,9 @@
     <string name="auth_register">Vytvořit účet</string>
     <string name="auth_submit">Potvrdit</string>
     <string name="auth_skip">Přeskočit</string>
-    <string name="auth_send_reset_email">Odeslat reset email</string>
+    <string name="auth_send_reset_email">Odeslat obnovovací e-mail</string>
     <string name="auth_return_to_login">Návrat na přihlašovací obrazovku</string>
-    <string name="auth_user_id_placeholder">Email nebo uživatelské jméno</string>
+    <string name="auth_user_id_placeholder">E-mail nebo uživatelské jméno</string>
     <string name="auth_password_placeholder">Heslo</string>
     <string name="auth_new_password_placeholder">Nové heslo</string>
     <string name="auth_user_name_placeholder">Uživatelské jméno</string>
@@ -169,33 +168,33 @@
     <string name="auth_invalid_user_name">Uživatelské jméno může obsahovat pouze písmena, číslice, tečky, pomlčky a podtržítka</string>
     <string name="auth_invalid_password">Heslo je velmi krátké (min 6)</string>
     <string name="auth_missing_password">Chybí heslo</string>
-    <string name="auth_invalid_email">Zdá se, že toto není platná emailová adresa</string>
+    <string name="auth_invalid_email">Zdá se, že toto není platná e-mailová adresa</string>
     <string name="auth_invalid_phone">Zdá se, že toto není platné telefonní číslo</string>
-    <string name="auth_email_already_defined">Tato emailová adresa je již použita.</string>
-    <string name="auth_missing_email">Chybí emailová adresa</string>
+    <string name="auth_email_already_defined">Tato e-mailová adresa je již použita.</string>
+    <string name="auth_missing_email">Chybí e-mailová adresa</string>
     <string name="auth_missing_phone">Chybí telefonní číslo</string>
-    <string name="auth_missing_email_or_phone">Chybí emailová adresa nebo telefonní číslo</string>
+    <string name="auth_missing_email_or_phone">Chybí e-mailová adresa nebo telefonní číslo</string>
     <string name="auth_invalid_token">Neplatný token</string>
     <string name="auth_password_dont_match">Hesla se neshodují</string>
     <string name="auth_forgot_password">Zapomenuté heslo?</string>
     <string name="auth_use_server_options">Použít vlastní možnosti serveru (pokročilé)</string>
-    <string name="auth_email_validation_message">Prosím zkontrolujte své emaily, abyste mohli pokračovat v registraci</string>
+    <string name="auth_email_validation_message">Prosím zkontrolujte své e-maily, abyste mohli pokračovat v registraci</string>
     <string name="auth_recaptcha_message">Tento domovský server by se rád přesvědčil, že nejste robot</string>
     <string name="auth_username_in_use">Uživatelské jméno je použito</string>
     <string name="auth_home_server">Domácí server:</string>
     <string name="auth_identity_server">Server identity:</string>
     <string name="auth_reset_password_next_step_button">Ověřil/a jsem svoji e-mailovou adresu</string>
     <string name="auth_reset_password_message">K resetování hesla vložte e-mailovou adresu spojenou s vaším účtem:</string>
-    <string name="auth_reset_password_missing_email">Musíte zadat emailovou adresu spojenou s vaším účtem.</string>
+    <string name="auth_reset_password_missing_email">Musíte zadat e-mailovou adresu spojenou s vaším účtem.</string>
     <string name="auth_reset_password_missing_password">Musíte zadat nové heslo.</string>
-    <string name="auth_reset_password_email_validation_message">Na adresu %s byla odeslána zpráva. Potom, co přejdete na odkaz z této zprávy, klikněte níže.</string>
-    <string name="auth_reset_password_error_unauthorized">E-mailovou adresu se nepodařilo ověřit. Přesvědčte se, že jste kliknul/a na zaslaný odkaz</string>
+    <string name="auth_reset_password_email_validation_message">Na adresu %s byla odeslána zpráva. Potom, co přejdete na odkaz z této zprávy, klepněte níže.</string>
+    <string name="auth_reset_password_error_unauthorized">E-mailovou adresu se nepodařilo ověřit. Přesvědčte se, že jste klepli na zaslaný odkaz</string>
     <string name="login_error_must_start_http">URL musí začínat s http[s]://</string>
     <string name="login_error_network_error">Nelze se příhlásit: Síťová chyba</string>
     <string name="login_error_unable_login">Nelze se příhlásit</string>
     <string name="login_error_registration_network_error">Nelze se registrovat: Síťová chyba</string>
     <string name="login_error_unable_register">Nelze se registrovat</string>
-    <string name="login_error_unable_register_mail_ownership">Nelze se registrovat: chyba oveření vlastnictví emailu</string>
+    <string name="login_error_unable_register_mail_ownership">Nelze se registrovat: chyba ověření vlastnictví e-mailu</string>
     <string name="login_error_invalid_home_server">Prosím, zadejte platné URL</string>
     <string name="login_mobile_device">Mobil</string>
 
@@ -203,7 +202,7 @@
     <string name="login_error_bad_json">Poškozený JSON</string>
     <string name="login_error_limit_exceeded">Příliš mnoho požadavků bylo odeslano</string>
     <string name="login_error_user_in_use">Toto uživatelské jméno je již použito</string>
-    <string name="status_theme">Motiv Status.im</string>
+    <string name="status_theme">Motiv vzhledu Status.im</string>
 
     <string name="title_activity_choose_sticker">Odeslat nálepku</string>
 
@@ -240,19 +239,19 @@
 
 Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="auth_reset_password_success_message">Vaše heslo bylo obnoveno. 
-\n
-\nByli jste odhlášeni ze všech relací a již nebudete dostávat oznámení. Pro opětovnou aktivaci oznámení se znovu přihlašte na každém zařízení.</string>
+\n 
+\nByli jste odhlášeni ze všech relací a již nebudete dostávat oznámení. Pro opětovnou aktivaci oznámení se znovu přihlaste na každém zařízení.</string>
     <string name="auth_accept_policies">Prosím, přečtěte si a souhlaste s pravidly tohoto serveru:</string>
 
     <string name="login_error_unknown_token">Přistupový token nebyl rozpoznán</string>
     <string name="login_error_not_json">Neobsahuje platný JSON</string>
-    <string name="login_error_login_email_not_yet">E-mailový odkaz, na který ještě nebylo kliknuto</string>
+    <string name="login_error_login_email_not_yet">E-mailový odkaz, na který ještě nebylo klepnuto</string>
 
-    <string name="e2e_need_log_in_again">Je nutné se znovu přihlásit, aby byly vygenerovány E2E šifrovací klíče pro toto zařízení a odeslán veřejný klíč Vašemu homeserveru.
+    <string name="e2e_need_log_in_again">Je nutné se znovu přihlásit, aby byly vygenerovány E2E šifrovací klíče pro toto zařízení a odeslán veřejný klíč vašemu homeserveru.
 \nToto je nutné pouze jednou. 
 \nOmlouváme se za způsobené nepříjemnosti.</string>
 
-    <string name="e2e_re_request_encryption_key"><u>Znovu požádat o šifrovací klíče </u> z Vašich ostatních relací.</string>
+    <string name="e2e_re_request_encryption_key">Znovu požádat o šifrovací klíče z vašich ostatních relací.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Žádost o klíče odeslána.</string>
 
@@ -358,33 +357,29 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     </plurals>
     <string name="room_title_one_member">1 člen</string>
     <plurals name="format_time_s">
-        <item quantity="one">1s</item>
-        <item quantity="few">%ds</item>
-        <item quantity="many">%ds</item>
-        <item quantity="other" />
+        <item quantity="one">1 s</item>
+        <item quantity="few">%d s</item>
+        <item quantity="other">%d s</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">1min</item>
-        <item quantity="few">%dmin</item>
-        <item quantity="many">%dmin</item>
-        <item quantity="other" />
+        <item quantity="one">1 min</item>
+        <item quantity="few">%d min</item>
+        <item quantity="other">%d min</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">1h</item>
-        <item quantity="few">%dh</item>
-        <item quantity="many">%dh</item>
-        <item quantity="other" />
+        <item quantity="one">1 h</item>
+        <item quantity="few">%d h</item>
+        <item quantity="other">%d h</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="one">1d</item>
-        <item quantity="few">%dd</item>
-        <item quantity="many">%dd</item>
-        <item quantity="other" />
+        <item quantity="one">1 d</item>
+        <item quantity="few">%d d</item>
+        <item quantity="other">%d d</item>
     </plurals>
 
     <string name="room_participants_leave_prompt_title">Opustit místnost</string>
-    <string name="room_participants_leave_prompt_msg">Jste si jisti, že chcete opustit tuto místnost?</string>
-    <string name="room_participants_remove_prompt_msg">Jste si jisti, že chcete vyhodit %s z této konverzace?</string>
+    <string name="room_participants_leave_prompt_msg">Opravdu chcete opustit tuto místnost\?</string>
+    <string name="room_participants_remove_prompt_msg">Opravdu chcete vyhodit %s z této konverzace\?</string>
     <string name="room_participants_create">Vytvořit</string>
 
     <string name="room_participants_online">On-line</string>
@@ -415,15 +410,14 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="room_preview_room_interactions_disabled">Toto je náhled místnosti. Interakce s místností byla vypnuta.</string>
 
     <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Jste si jisti, že chcete vyhodit tohoto uživatele z této konverzace?</item>
-        <item quantity="few">Jste si jisti, že chcete vyhodit tyto uživatele z této konverzace?</item>
-        <item quantity="many">Jste si jisti, že chcete vyhodit tyto uživatele z této konverzace?</item>
-        <item quantity="other" />
+        <item quantity="one">Opravdu chcete vyhodit tohoto uživatele z této konverzace\?</item>
+        <item quantity="few">Opravdu chcete vyhodit tyto uživatele z této konverzace\?</item>
+        <item quantity="other">Opravdu chcete vyhodit tyto uživatele z této konverzace\?</item>
     </plurals>
-    <string name="room_participants_ban_prompt_msg">Jste si jisti, že chcete zakázat vstup tohoto uživatele do této konverzace?</string>
+    <string name="room_participants_ban_prompt_msg">Opravdu chcete zakázat vstup tohoto uživatele do této konverzace\?</string>
     <string name="reason_hint">Důvod</string>
 
-    <string name="room_participants_invite_prompt_msg">Jste si jisti, že chcete pozvat %s do této konverzace?</string>
+    <string name="room_participants_invite_prompt_msg">Opravdu chcete pozvat uživatele %s do této konverzace\?</string>
     <string name="room_participants_invite_join_names">"%1$s, "</string>
     <string name="room_participants_invite_join_names_and">%1$s a %2$s</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
@@ -478,43 +472,43 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="title_activity_keys_backup_setup">Záloha klíče</string>
     <string name="title_activity_keys_backup_restore">Použít zálohu klíče</string>
 
-    <string name="keys_backup_is_not_finished_please_wait">Záloha klíče není ještě dokončena, prosím počkejte…</string>
-    <string name="sign_out_bottom_sheet_warning_no_backup">Pokud se nyní odhlásíte, ztratíte vaše zašifrované zprávy</string>
-    <string name="sign_out_bottom_sheet_warning_backing_up">Probíhá záloha klíče. Pokud se nyní odhlásíte, ztratíte přístup k vašim zašifrovaným zprávám.</string>
+    <string name="keys_backup_is_not_finished_please_wait">Záloha klíčů není ještě dokončena, prosím počkejte…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Pokud se nyní odhlásíte, přijdete o své zašifrované zprávy</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Probíhá záloha klíče. Pokud se nyní odhlásíte, ztratíte přístup ke svým zašifrovaným zprávám.</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">Zabezpečená záloha klíčů by měla být aktivní na všech vašich relacích, aby se předešlo ztrátě přístupu k vašim zašifrovaným zprávám.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Nechci své zašifrované zprávy</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Zálohuji klíče…</string>
     <string name="keys_backup_activate">Použít zálohu klíče</string>
-    <string name="are_you_sure">Jste si jisti\?</string>
+    <string name="are_you_sure">Opravdu\?</string>
     <string name="backup">Záloha</string>
-    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Pokud neprovedete zálohu vašich klíčů před odhlášením, ztratíte přístup k vašim zašifrovaným zprávám.</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Pokud nezazálohujete své klíče před odhlášením, přijdete o přístup ke svým zašifrovaným zprávám.</string>
 
     <string name="stay">Zůstat</string>
     <string name="skip">Přeskočit</string>
     <string name="done">Hotovo</string>
     <string name="abort">Přerušit</string>
 
-    <string name="action_sign_out_confirmation_simple">Jste si jisti, že se chcete odhlásit\?</string>
+    <string name="action_sign_out_confirmation_simple">Opravdu se chcete odhlásit\?</string>
     <string name="video_call_in_progress">Probíhá video hovor…</string>
 
     <string name="permissions_rationale_msg_camera_and_audio">Riot potřebuje oprávnění pro přístup k Vaší kameře a mikrofonu pro uskutečnění video hovoru.
 \n
 \nProsím, povolte přístup na následující hlášce abyste mohli uskutečnit hovor.</string>
-    <string name="permissions_rationale_msg_contacts">Riot může nahlédnout do Vašeho adresáře, aby nalezl ostatní uživatele Matrixu na základě jejich emailu a telefonního čísla. Pokud souhlasíte se sdílením svého adresáře za tímto účelem, prosím, povolte přístup v příští hlášce.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Riot může nahlédnout do Vašeho adresáře, aby nalezl ostatní uživatele Matrixu na základě jejich emailu a telefonního čísla. 
+    <string name="permissions_rationale_msg_contacts">Riot může nahlédnout do vašeho adresáře, aby nalezl ostatní uživatele Matrixu na základě jejich e-mailu a telefonního čísla. Pokud souhlasíte se sdílením svého adresáře za tímto účelem, prosím, povolte přístup v příští hlášce.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot může nahlédnout do vašeho adresáře, aby nalezl ostatní uživatele Matrixu na základě jejich e-mailu a telefonního čísla. 
 \n 
-\nSouhlasíte se sdílením svěho adresáře za tímto účelem\?</string>
+\nSouhlasíte se sdílením svého adresáře za tímto účelem\?</string>
 
     <string name="room_preview_unlinked_email_warning">Pozvánka byla odeslána na %s, což není spárováno s tímto účtem. 
-\nPřihlaste se s jiným účtem nebo přidejte tento email k svému současnému účtu.</string>
+\nPřihlaste se s jiným účtem nebo přidejte tento e-mail ke svému současnému účtu.</string>
     <string name="room_preview_try_join_an_unknown_room">Snažíte se přistupovat k %s. Chcete vstoupit, abyste se mohli podílet na diskuzi\?</string>
     <string name="room_participants_action_unignore_prompt">Zobrazit všechny zprávy od tohoto uživatele\?
 \n
 \nTato akce provede restart aplikace a může nějakou dobu trvat.</string>
-    <string name="room_participants_power_level_prompt">Nebudete schopni tuto změnu vrátit protože povyšujete uživatele na stejnou úroveň jako jste vy.
-\nJste si jisti\?</string>
+    <string name="room_participants_power_level_prompt">Tuto změnu nelze vrátit, protože povyšujete uživatele na stejnou úroveň, jakou máte vy. 
+\nOpravdu to chcete udělat\?</string>
 
-    <string name="people_search_invite_by_id_dialog_description">Prosím zadejte jednu nebo více emailových adres nebo Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Prosím zadejte jednu nebo více e-mailových adres nebo Matrix ID</string>
     <string name="room_unknown_devices_messages_notification">Zprávy nebyly odeslány z důvodu přítomnosti neznámých relací. %1$s nebo %2$s nyní\?</string>
     <string name="ssl_cert_not_trust">Toto by mohlo znamenat, že někdo škodlivě zachytává Vaši komunikaci nebo že Váš telefon nedůvěřuje certifikátu poskytnutému vzdáleným serverem.</string>
     <string name="ssl_cert_new_account_expl">Pokud administrátor serveru řekl že toto je předpokládané, ujistěte se, že otisk níže se shoduje s otiskem který Vám poskytl.</string>
@@ -522,7 +516,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="ssl_expected_existing_expl">Certifikát se změnil z předtím důvěryhodného na nyní nedůvěryhodný. Server mohl obnovit svůj certifikát. Kontaktujte administrátora pro ověření předpokládaného otisku.</string>
     <string name="ssl_only_accept">Přijměte certifikát pouze pokud administrátor serveru publikoval otisk který odpovídá tomu uvedenému výše.</string>
 
-    <string name="malformed_id">Neplatné ID. Mělo by být buď emailová adresa nebo Matrix ID např. \'@localpart:domain\'</string>
+    <string name="malformed_id">Neplatné ID. Mělo by být buď e-mailová adresa nebo Matrix ID např. \'@localpart:example.com\'</string>
     <string name="room_details_people_invited_group_name">POZVÁN</string>
     <string name="room_details_people_present_group_name">PŘIPOJEN</string>
 
@@ -588,19 +582,19 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 
     <string name="settings_profile_picture">Profilová fotografie</string>
     <string name="settings_display_name">Zobrazované jméno</string>
-    <string name="settings_email_address">Email</string>
-    <string name="settings_add_email_address">Přidat emailovou adresu</string>
+    <string name="settings_email_address">E-mail</string>
+    <string name="settings_add_email_address">Přidat e-mailovou adresu</string>
     <string name="settings_phone_number">Telefon</string>
     <string name="settings_add_phone_number">Přidat telefonní číslo</string>
     <string name="settings_app_info_link_title">Informace o aplikaci</string>
     <string name="settings_app_info_link_summary">Zobrazit informace o aplikaci v systémovém nastavení.</string>
 
 
-    <string name="settings_notification_advanced">Pokročilé nestavení upozornění</string>
-    <string name="settings_notification_advanced_summary">Nastavit důležitost upozornění na základě události, nastavení zvuku, LED, vibrací</string>
-    <string name="settings_notification_by_event">Důležitost upozornění na základě události</string>
+    <string name="settings_notification_advanced">Rozšířená nestavení oznámení</string>
+    <string name="settings_notification_advanced_summary">Nastavit důležitost oznámení na základě události, nastavení zvuku, LED, vibrací</string>
+    <string name="settings_notification_by_event">Důležitost oznámení na základě události</string>
 
-    <string name="notification_sync_init">Inicializuji službu</string>
+    <string name="notification_sync_init">Spouštím služby</string>
     <string name="title_activity_verify_device">Ověřte relaci</string>
 
     <string name="disconnect">Odpojit</string>
@@ -623,10 +617,10 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="call_failed_dont_ask_again">Dále se netázat</string>
 
     <string name="auth_login_sso">Přihlásit se se single sign-on</string>
-    <string name="auth_add_email_message_2">Nastavte email pro obnovení účtu a volitelně aby jej později lidé, kteří Vás znají, mohli najít.</string>
+    <string name="auth_add_email_message_2">Nastavte e-mail pro obnovení účtu a volitelně aby jej později lidé, kteří vás znají, mohli najít.</string>
     <string name="auth_add_phone_message_2">Nastavte telefonní číslo, aby později bylo volitelně k nalezení lidmi, kteří Vás znají.</string>
-    <string name="auth_add_email_phone_message_2">Nastavte email pro obnovení účtu. Použijte email nebo telefonní číslo volitelně později, aby je našli lidé, kteří Vás znají.</string>
-    <string name="auth_add_email_and_phone_message_2">Nastavte email pro obnovení účtu. Použijte email nebo telefonní číslo volitelně později, aby je našli lidé, kteří Vás znají.</string>
+    <string name="auth_add_email_phone_message_2">Nastavte e-mail pro obnovení účtu. Použijte e-mail nebo telefonní číslo volitelně později, aby je našli lidé, kteří vás znají.</string>
+    <string name="auth_add_email_and_phone_message_2">Nastavte e-mail pro obnovení účtu. Použijte e-mail nebo telefonní číslo volitelně později, aby je našli lidé, kteří vás znají.</string>
     <string name="login_error_unknown_host">Toto URL není dostupné, prosím, prověřte</string>
     <string name="login_error_no_homeserver_found">To není platná adresa Matrix serveru</string>
     <string name="login_error_homeserver_not_found">Homeserver není dostupný na tomto URL, prosím, prověřte</string>
@@ -640,35 +634,35 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 
 
     <string name="settings_notification_privacy">Soukromí oznámení</string>
-    <string name="settings_notification_troubleshoot">Řešit oznámení</string>
+    <string name="settings_notification_troubleshoot">Problém s oznámeními</string>
     <string name="settings_troubleshoot_diagnostic">Řešit diagnostiku</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Spustit testy</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Spouštím… (%1$d z %2$d)</string>
-    <string name="settings_troubleshoot_diagnostic_success_status">Základní diagnostika je ok. Pokud stále ještě nedocházejí oznámení, prosím, pomůžete nám s vyšetřováním, nahlásíte-li chybu.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Základní diagnostika je OK. Pokud stále ještě nedostáváte oznámení, pomůžete nám s vyšetřováním, nahlásíte-li nám to jako chybu.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Jeden či více testů selhalo, zkuste navržené opravy.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Jeden či více testů selhalo, prosím, pomůžete nám s vyšetřováním, nahlásíte-li chybu.</string>
 
     <string name="settings_troubleshoot_test_system_settings_title">Systémová nastavení.</string>
-    <string name="settings_troubleshoot_test_system_settings_success">Oznámení jsou zapnuta v systémových nastavení.</string>
-    <string name="settings_troubleshoot_test_system_settings_failed">Oznámení jsou vypnuta v systémových nastavení.
+    <string name="settings_troubleshoot_test_system_settings_success">Oznámení jsou zapnuta v nastavení systému.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Oznámení jsou vypnuta v nastavení systému. 
 \nProsím, prověřte systémová nastavení.</string>
     <string name="open_settings">Otevřít nastavení</string>
 
     <string name="settings_troubleshoot_test_account_settings_title">Nastavení účtu.</string>
-    <string name="settings_troubleshoot_test_account_settings_success">Oznámení jsou zapnuta pro Váš účet.</string>
-    <string name="settings_troubleshoot_test_account_settings_failed">Oznámení jsou vypnuta pro Váš účet.
-\nProsím, prověřte systémová nastavení.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Oznámení jsou pro vás účet zapnuta.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Oznámení jsou pro váš účet vypnuta. 
+\nProsím, prověřte nastavení systému.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Zapnout</string>
 
     <string name="settings_troubleshoot_test_device_settings_title">Nastavení relací.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Oznámení jsou zapnuta pro tuto relaci.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Oznámení nejosu zapnuta pro tuto relaci.
+    <string name="settings_troubleshoot_test_device_settings_failed">Oznámení nejsou zapnuta pro tuto relaci. 
 \nProsím, prověřte nastavení Riotu.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Zapnout</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Vlastní nastavení.</string>
-    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Všimněte si, že některé typy zpráv jsou jsou umlčeny (vyvolají oznámeni bez zvuku).</string>
-    <string name="settings_troubleshoot_test_bing_settings_failed">Některá oznámení jsou vypnuta ve vlastních nastavení.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Všimněte si, že některé typy zpráv jsou ztišeny (vyvolají oznámeni bez zvuku).</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Některá oznámení jsou vypnuta ve vlastním nastavení.</string>
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Načtení vlastních pravidel selhalo, prosím, zkuste znovu.</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Kontrola nastavení</string>
 
@@ -698,8 +692,8 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 
     <string name="settings_troubleshoot_test_foreground_service_started_title">Služba oznámení</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Služba oznámení je v chodu.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Služba oznámení není v chodu.
-\nZkuste restarovat aplikaci.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">Služba oznámení není v chodu. 
+\nZkuste restartovat aplikaci.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Spustit službu</string>
 
     <string name="settings_troubleshoot_test_service_restart_title">Auto-restart služby oznámení</string>
@@ -721,7 +715,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 
     <string name="settings_troubleshoot_test_battery_title">Optimalizace baterie</string>
     <string name="settings_troubleshoot_test_battery_success">Optimalizace baterie nemá na Riot vliv.</string>
-    <string name="settings_troubleshoot_test_battery_failed">Nechá-li uživatel zařízení vytažený ze zásuvky a v klidu po nějakou dobu a s obrazovkou vypnutou, zařízení vstoupí do stavu spánku. Ten zamezí aplikacím přístup k síti a odloží jejich úlohy, synchronizaci a standartní upozornění.</string>
+    <string name="settings_troubleshoot_test_battery_failed">Nechá-li uživatel zařízení vytažený ze zásuvky a v klidu po nějakou dobu a s obrazovkou vypnutou, zařízení vstoupí do stavu spánku. Ten zamezí aplikacím přístup k síti a odloží jejich úlohy, synchronizaci a běžná upozornění.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorovat optimalizaci</string>
 
     <string name="settings_notification_privacy_normal">Normální</string>
@@ -812,7 +806,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="settings_always_show_timestamps">Zobrazit časovou značku u všech zpráv</string>
     <string name="settings_12_24_timestamps">Zobrazit časovou značku ve 12-hodinovém formátu</string>
     <string name="settings_show_read_receipts">Ukázat potvrzení o přečtení</string>
-    <string name="settings_show_read_receipts_summary">Kliknout na potvrzení o přečtení pro podrobnosti.</string>
+    <string name="settings_show_read_receipts_summary">Klepněte na potvrzení o přečtení pro podrobnosti.</string>
     <string name="settings_show_join_leave_messages">Ukázat události příchodů a odchodů</string>
     <string name="settings_show_join_leave_messages_summary">Nemá vliv na pozvánky, nakopnutí a zákazy.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Ukázat události účtu</string>
@@ -868,12 +862,12 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="settings_select_language">Zvolit jazyk</string>
 
     <string name="account_email_validation_title">Čekám na potvrzení</string>
-    <string name="account_email_validation_message">Prosím, zkontrolujte svůj email a klikněte na odkaz v něm. Jakmile hotovo, klikněte pokračovat.</string>
-    <string name="account_email_validation_error">Nemohu potvrdit emailovou adresu. Prosím, zkontrolujte svůj email a klikněte na odkaz v něm. Jakmile hotovo, klikněte pokračovat.</string>
-    <string name="account_email_already_used_error">Tato emailová adresa byla již zadána.</string>
-    <string name="account_email_not_found_error">Tato emailová adresa nebyla nalezena.</string>
+    <string name="account_email_validation_message">Prosím, zkontrolujte svůj e-mail a klepněte na odkaz v něm. Poté klepněte na pokračovat.</string>
+    <string name="account_email_validation_error">E-mailovou adresu nelze ověřit. Zkontrolujte svůj e-mail a klepněte na odkaz v něm. Poté klepněte na pokračovat.</string>
+    <string name="account_email_already_used_error">Tato e-mailová adresa byla již zadána.</string>
+    <string name="account_email_not_found_error">Tato e-mailová adresa nebyla nalezena.</string>
     <string name="account_phone_number_already_used_error">Toto telefonní číslo bylo již zadáno.</string>
-    <string name="account_email_error">Při potvrzování Vaší emailové adresy došlo k chybě.</string>
+    <string name="account_email_error">Při potvrzování vaší e-mailové adresy došlo k chybě.</string>
 
     <string name="settings_password">Heslo</string>
     <string name="settings_change_password">Změnit heslo</string>
@@ -888,9 +882,9 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 \nPřipomínám, že tato akce restartuje aplikaci a může chvíli trvat.</string>
     <string name="passwords_do_not_match">Hesla se neshodují</string>
 
-    <string name="settings_delete_notification_targets_confirmation">Jste si jisti, že chcete odstranit tento cíl oznámení\?</string>
+    <string name="settings_delete_notification_targets_confirmation">Opravdu chcete odstranit tento cíl oznámení\?</string>
 
-    <string name="settings_delete_threepid_confirmation">Jste si jisti, že chcete odstranit %1$s %2$s\?</string>
+    <string name="settings_delete_threepid_confirmation">Opravdu chcete odstranit %1$s %2$s\?</string>
 
     <string name="settings_select_country">Vybrat zemi</string>
 
@@ -913,7 +907,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="media_source_choose">Vybrat</string>
     <string name="settings_play_shutter_sound">Přehrát zvuk uzávěrky</string>
 
-    <string name="settings_flair">Flér</string>
+    <string name="settings_flair">Příslušnost ke skupinám</string>
     <string name="settings_without_flair">Zatím nejste členem žádné komunity.</string>
 
     <string name="media_saving_period_3_days">3 dny</string>
@@ -954,7 +948,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="room_settings_category_advanced_title">Pokročilé</string>
     <string name="room_settings_room_internal_id">Interní ID této místnosti</string>
     <string name="room_settings_addresses_pref_title">Adresa</string>
-    <string name="room_settings_labs_pref_title">Labs</string>
+    <string name="room_settings_labs_pref_title">Experimentální funkce</string>
     <string name="room_settings_labs_warning_message">Toto jsou experimentální funkce, které mohou selhat neočekávanými způsoby. Použijte obezřetně.</string>
     <string name="room_settings_labs_end_to_end">Šifrování end-to-end</string>
     <string name="room_settings_labs_end_to_end_is_active">Šifrování end-to-end je aktivní</string>
@@ -987,7 +981,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 \n(varování: nelze vypnout!)</string>
 
     <string name="directory_title">Adresář</string>
-    <string name="settings_theme">Motiv</string>
+    <string name="settings_theme">Motiv vzhledu</string>
 
     <string name="failed_to_load_timeline_position">%s se pokusil načíst určitý okamžik v historii této místnosti, ale nemohl jej najít.</string>
 
@@ -1045,4 +1039,1306 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="encryption_information_unblock">Odebrat z černé listiny</string>
 
     <string name="encryption_information_verify_device">Potvrdit relaci</string>
+    <string name="font_size">Velikost písma</string>
+    <string name="tiny">Velmi malé</string>
+    <string name="small">Malé</string>
+    <string name="normal">Normální</string>
+    <string name="large">Velké</string>
+    <string name="larger">Větší</string>
+    <string name="largest">Největší</string>
+    <string name="huge">Obrovské</string>
+
+    <string name="login_signup_password_hint">Heslo</string>
+    <string name="login_signup_submit">Další</string>
+    <string name="soft_logout_signin_password_hint">Heslo</string>
+    <string name="encryption_information_verify_key_match">Potvrzuji, že klíče se shodují</string>
+
+    <string name="you_added_a_new_device">Přidal/a jste novou relaci \'%s\', která požaduje šifrovací klíče.</string>
+    <string name="keys_backup_setup_step1_manual_export">Exportovat klíče ručně</string>
+
+    <string name="keys_backup_setup_step3_text_line1">Probíhá zálohování vašich klíčů.</string>
+    <string name="keys_backup_setup_backup_started_message">Na pozadí právě probíhá zálohování vašich klíčů na domovský server. Prvotní zálohování může trvat několik minut.</string>
+
+
+    <string name="keys_backup_restoring_downloading_backup_waiting_message">Stahuji klíče…</string>
+    <string name="keys_backup_restoring_importing_keys_waiting_message">Importuji klíče…</string>
+    <plurals name="keys_backup_restore_success_description_part1">
+        <item quantity="one">Obnovena záloha s %d klíčem.</item>
+        <item quantity="few">Obnovena záloha s %d klíči.</item>
+        <item quantity="other">Obnovena záloha s %d klíči.</item>
+    </plurals>
+    <plurals name="keys_backup_restore_success_description_part2">
+        <item quantity="one">Do této relace byl přidán %d nový klíč.</item>
+        <item quantity="few">Do této relace byly přidány %d nové klíče.</item>
+        <item quantity="other">Do této relace bylo přidáno %d nových klíčů.</item>
+    </plurals>
+
+    <string name="keys_backup_banner_in_progress">Zálohuji klíče…</string>
+
+    <string name="keys_backup_info_keys_all_backup_up">Všechny klíče zazálohovány</string>
+    <plurals name="keys_backup_info_keys_backing_up">
+        <item quantity="one">Zálohuji %d klíč…</item>
+        <item quantity="few">Zálohuji %d klíče…</item>
+        <item quantity="other">Zálohuji %d klíčů…</item>
+    </plurals>
+
+    <string name="import_e2e_keys_from_file">Importovat e2e klíče ze souboru \"%1$s\".</string>
+
+    <string name="encryption_information_verify_device_warning">Abyste ověřili důvěryhodnost této relace, prosím, kontaktujte jejího majitele nějakým jiným způsobem (např. osobně nebo telefonátem) s otázkou, zda se klíč, jenž je zobrazen v jejich Nastavení uživatele, shoduje s klíčem níže:</string>
+    <string name="encryption_information_verify_device_warning2">Pokud se shoduje, klepněte na tlačítko ověřit. Pokud ne, pak někdo jiný zachycuje tuto relaci a měli byste je snad zadat na černou listinu. V budoucnu bude tento ověřovací proces sofistikovanější.</string>
+    <string name="e2e_enabling_on_app_update">Riot nyní podporuje šifrování end-to-end, ale pro aktivaci se musíte se opět přihlásit.
+\n
+\nMůžete to provést nyní nebo později z aplikačních nastavení.</string>
+
+    <string name="unknown_devices_alert_title">Místnost obsahuje neznámé relace</string>
+    <string name="unknown_devices_alert_message">Tato místnost obsahuje neznámé relace, která nebyla ověřena.
+\nNelze tedy zaručit, že sezení patří těm uživatelům, o nichž to tvrdí.
+\nDoporučujeme, abyste prošli ověřovacím procesem pro každou relaci, než budete pokračovat, ale můžete poslat zprávu bez ověření, pokud si tak přejete.
+\n
+\nNeznámé relace:</string>
+
+    <string name="select_room_directory">Vybrat adresář místností</string>
+    <string name="directory_server_fail_to_retrieve_server">Server je partně nedostupný nebo přetížený</string>
+    <string name="directory_server_type_homeserver">Zadejte homeserver, z něhož si žádáte seznam veřejných místností</string>
+    <string name="directory_server_placeholder">URL homeserveru</string>
+    <string name="directory_server_all_rooms_on_server">Všechny místnosti na serveru %s</string>
+    <string name="directory_server_native_rooms">Všech %s vlastních místností</string>
+
+    <string name="lock_screen_hint">Zadat zde…</string>
+
+    <plurals name="notification_unread_notified_messages">
+        <item quantity="one">1 nepřečtená oznámená zpráva</item>
+        <item quantity="few">%d nepřečtené oznámené zprávy</item>
+        <item quantity="other">%d nepřečtených oznámených zpráv</item>
+    </plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+        <item quantity="one">1 nepřečtená oznámená zpráva</item>
+        <item quantity="few">%d nepřečtené oznámené zprávy</item>
+        <item quantity="other">%d nepřečtených oznámených zpráv</item>
+    </plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+        <item quantity="one">1 místnost</item>
+        <item quantity="few">%d místnosti</item>
+        <item quantity="other">%d místností</item>
+    </plurals>
+
+    <plurals name="notification_compat_summary_line_for_room">
+        <item quantity="one">%1$s: 1 zpráva</item>
+        <item quantity="few">%1$s: %2$d zprávy</item>
+        <item quantity="other">%1$s: %2$d zpráv</item>
+    </plurals>
+    <plurals name="notification_compat_summary_title">
+        <item quantity="one">%d oznámení</item>
+        <item quantity="few">%d oznámení</item>
+        <item quantity="other">%d oznámení</item>
+    </plurals>
+
+    <string name="notification_unread_notified_messages_in_room">%1$s v %2$s</string>
+    <string name="notification_unknown_new_event">Nová událost</string>
+    <string name="notification_unknown_room_name">Místnost</string>
+    <string name="notification_new_messages">Nové zprávy</string>
+    <string name="notification_new_invitation">Nová pozvánka</string>
+    <string name="notification_sender_me">Já</string>
+    <string name="notification_inline_reply_failed">** Odeslání selhalo - prosím, otevřete místnost</string>
+
+    <string name="historical_placeholder">Hledej v minulosti</string>
+
+    <string name="widget_no_power_to_manage">Pro správu widgetů v této místnosti potřebujete oprávnění</string>
+    <string name="widget_creation_failure">Založení widgetu se nezdařilo</string>
+    <string name="event_formatter_widget_added">%2$s přidal %1$s</string>
+    <string name="event_formatter_widget_removed">%2$s odstranil(a) %1$s</string>
+    <string name="settings_labs_create_conference_with_jitsi">Založit konferenční hovor s jitsi</string>
+    <string name="widget_delete_message_confirmation">Jste si jisti, že chcete smazat widget z této místnosti\?</string>
+    <plurals name="active_widgets">
+        <item quantity="one">1 aktivní widget</item>
+        <item quantity="few">%d aktivní widgety</item>
+        <item quantity="other">%d aktivních widgetů</item>
+    </plurals>
+
+
+    <string name="room_widget_activity_title">Widget</string>
+    <string name="room_widget_permission_title">Načíst widget</string>
+    <string name="room_widget_permission_added_by">Tento widget přidal:</string>
+    <string name="room_widget_permission_webview_shared_info_title">Použitím může dojít k nastavení cookie a sdílení dat s %s:</string>
+    <string name="room_widget_permission_shared_info_title">Použitím může dojít k sdílení dat s %s:</string>
+    <string name="room_widget_failed_to_load">Načtení widgetu se nezdařilo.
+\n%s</string>
+    <string name="room_widget_reload">Opět načíst widget</string>
+    <string name="room_widget_open_in_browser">Otevřít v prohlížeči</string>
+    <string name="room_widget_revoke_access">Zrušit přístup pro mě</string>
+
+    <string name="room_widget_permission_display_name">Vaše veřejné jméno</string>
+    <string name="room_widget_permission_avatar_url">URL Vašeho avatara</string>
+    <string name="room_widget_permission_user_id">Vaše uživatelské ID</string>
+    <string name="room_widget_permission_theme">Váš motiv</string>
+    <string name="room_widget_permission_widget_id">ID widgetu</string>
+    <string name="room_widget_permission_room_id">ID místnosti</string>
+
+
+    <string name="error_jitsi_not_supported_on_old_device">Promiňte, konferenční hovory s Jitsi nejsou podporovány na starších zařízeních (zařízení s Androidem nižším než 5.0)</string>
+    <string name="room_widget_resource_permission_title">Widget si žádá použití následujících zdrojů:</string>
+    <string name="room_widget_resource_grant_permission">Povolit</string>
+    <string name="room_widget_resource_decline_permission">Zamítnout vše</string>
+    <string name="room_widget_webview_access_camera">Použít fotoaparát</string>
+    <string name="room_widget_webview_access_microphone">Použít mikrofon</string>
+    <string name="room_widget_webview_read_protected_media">Číst media chráněná DRM</string>
+
+    <string name="widget_integration_unable_to_create">Nelze založit widget.</string>
+    <string name="widget_integration_failed_to_send_request">Odeslání požadavku selhalo.</string>
+    <string name="widget_integration_positive_power_level">Energetická hladina musí být pozitivní celé číslo.</string>
+    <string name="widget_integration_must_be_in_room">Nejste v této místnosti.</string>
+    <string name="widget_integration_no_permission_in_room">Nemáte oprávnění tak učinit v této místnosti.</string>
+    <string name="widget_integration_missing_room_id">V požadavku chybí id místnosti.</string>
+    <string name="widget_integration_missing_user_id">V požadavku chybí id uživatele.</string>
+    <string name="widget_integration_room_not_visible">Místnost %s není viditelná.</string>
+    <string name="widget_integration_missing_parameter">Požadovaný parametr chybí.</string>
+    <string name="widget_integration_invalid_parameter">Parametr není platný.</string>
+    <string name="integration_manager_not_configured">Žádný správce integrací není konfigurován.</string>
+    <string name="room_add_matrix_apps">Přidat aplikace Matrix</string>
+    <string name="settings_labs_native_camera">Použít vestavěný fotoaparát</string>
+    <string name="settings_labs_native_camera_summary">Spustit systémový fotoaprát místo vlastní obrazovky fotoaparátu.</string>
+    <string name="settings_labs_keyboard_options_to_send_message">Stisknout enter na klávesníci k odeslání zprávy</string>
+    <string name="settings_labs_enable_send_voice">Poslat hlasovou zprávu</string>
+    <string name="settings_labs_enable_send_voice_summary">Tato volba požaduje pro nahrání zprávy aplikaci třetí strany.</string>
+    <string name="widget_integration_review_terms">Před pokračováním musíte přijmout Podmínky této služby.</string>
+
+    <string name="you_added_a_new_device_with_info">Nová relace požaduje šifrovací klíč. Jméno relace: %1$s
+\nNaposledy viděna: %2$s
+\nPokud jste se nepřihlásili do jiné relace, ignorujte tento požadavek.</string>
+    <string name="your_unverified_device_requesting">Vaše neověřená relace \'%s\' požaduje šifrovací klíče.</string>
+    <string name="your_unverified_device_requesting_with_info">Neověřená relace požaduje šifrovací klíče.
+\nJméno relace: %1$s
+\nNaposledy viděna: %2$s
+\nPokud jste se nepřihlásili do jiné relace, ignorujte tento požadavek.</string>
+
+    <string name="start_verification">Spustit ověření</string>
+    <string name="start_verification_short_label">Ověřit</string>
+    <string name="share_without_verifying">Sdílet bez ověření</string>
+    <string name="share_without_verifying_short_label">Sdílet</string>
+    <string name="key_share_request">Požadavek na sdílení klíče</string>
+    <string name="ignore_request">Ignorovat požadavek</string>
+    <string name="ignore_request_short_label">Ignorovat</string>
+
+    <string name="conference_call_warning_title">Varování!</string>
+    <string name="conference_call_warning_message">Konferenční hovory jsou ve vývoji a mohou být nespolehlivé.</string>
+
+    <string name="command_error">Chyba příkazu</string>
+    <string name="unrecognized_command">Neznámý příkaz: %s</string>
+    <string name="command_problem_with_parameters">Příkaz \"%s\" potřebuje více parametrů nebo některé parametry jsou nesprávné.</string>
+    <string name="command_description_emote">Zobrazí akce</string>
+    <string name="command_description_ban_user">Zakáže uživatele s daným id</string>
+    <string name="command_description_unban_user">Zruší zákaz uživateli s daným id</string>
+    <string name="command_description_op_user">Určit úroveň pokročilosti uživatele</string>
+    <string name="command_description_invite_user">Pozve uživatele s daným id do této místnosti</string>
+    <string name="command_description_join_room">Vstoupí do místnosti s daným aliasem</string>
+    <string name="command_description_part_room">Opustit místnost</string>
+    <string name="command_description_topic">Určit téma místnosti</string>
+    <string name="command_description_kick_user">Nakopne uživatele s daným id</string>
+    <string name="command_description_nick">Změní Vaši veřejnou přezdívku</string>
+    <string name="command_description_markdown">Markdown zap/vyp</string>
+    <string name="command_description_deop_user">Odebere práva uživateli s daným id</string>
+    <string name="command_description_clear_scalar_token">Opravit správu aplikací Matrix</string>
+
+    <string name="markdown_has_been_enabled">Markdown byl zapnut.</string>
+    <string name="markdown_has_been_disabled">Markdown byl vypnut.</string>
+
+    <string name="notification_off">Vypnout</string>
+    <string name="notification_silent">Tiché</string>
+    <string name="notification_noisy">Hlučné</string>
+
+    <string name="create">Založit</string>
+    <string name="create_community">Založit komunitu</string>
+    <string name="community_name">Jméno komunity</string>
+    <string name="community_name_hint">Příklad</string>
+    <string name="community_id">Id komunity</string>
+    <string name="community_id_hint">příklad</string>
+
+    <string name="group_details_home">Doma</string>
+    <string name="group_details_people">Lidé</string>
+    <string name="group_details_rooms">Místnosti</string>
+    <string name="no_users_placeholder">Žádní uživatelé</string>
+
+    <string name="rooms">Místnosti</string>
+    <string name="joined">Přítomní</string>
+    <string name="invited">Pozvaní</string>
+    <string name="filter_group_members">Filtrovat členy skupiny</string>
+    <string name="filter_group_rooms">Filtrovat místnosti skupiny</string>
+
+    <plurals name="group_members">
+        <item quantity="one">1 člen</item>
+        <item quantity="few">%d členové</item>
+        <item quantity="other">%d členů</item>
+    </plurals>
+
+    <plurals name="group_rooms">
+        <item quantity="one">1 místnost</item>
+        <item quantity="few">%d místnosti</item>
+        <item quantity="other">%d místností</item>
+    </plurals>
+    <string name="group_no_long_description">Správce komunity neposkytl podrobný popis této lomunity.</string>
+
+    <string name="has_been_kicked">%2$s Vás vykopnul z %1$s</string>
+    <string name="has_been_banned">%2$s Vám zakázal %1$s</string>
+    <string name="reason_colon">Důvod: %1$s</string>
+    <string name="rejoin">Opět se přidejte</string>
+    <string name="receipt_avatar">Avatar přijetí</string>
+    <string name="notice_avatar">Avatar vypovězení</string>
+    <string name="avatar">Avatar</string>
+
+    <string name="dialog_user_consent_content">Abyste mohli dále používat homeserver %1$s, musíte prohlédnout všeobecné podmínky a souhlasit s nimi.</string>
+    <string name="dialog_user_consent_submit">Prohlédnout nyní</string>
+
+    <string name="deactivate_account_title">Deaktivovat účet</string>
+    <string name="deactivate_account_content">To učiní Váš účet trvale nepoužitelným. Nebudete se moci přihlásit a nikdo nebude moci registrovat stejné uživatelské ID. Způsobí odchod Vašeho účtu ze všech místností, jichž se účastní a odstraní podrobnosti Vašeho účtu z ověřovacího serveru. <b>Tato akce je nevratná</b>.
+\n
+\nDeaktivace Vašeho účtu <b>samosebou nezpůsobí zapomenutí zpráv, jež jste poslali</b>. Pokud si přejete, abychom Vaše zprávy zapomněli, zaškrtněte box níže.
+\n
+\nViditelnost zpráv v Matrixu je podobná emailu. To, že zapomeneme Vaše zprávy, znamená, že nebudou ani s novými, ani neregistrovanými uživateli sdíleny, ale registrovaní uživatelé, kteří již přístup k Vašim zprávám mají, jej budou mít k jejich kopiím.</string>
+    <string name="deactivate_account_delete_checkbox">Prosím, při deaktivaci mého účtu zapomeňte všechny zprávy, které jsem poslal(a) (Varování: způsobí, že budoucí uživatelé uvidí neúplné konverzace)</string>
+    <string name="deactivate_account_prompt_password">Pokračujte po zadání svého hesla:</string>
+    <string name="deactivate_account_submit">Deaktivovat účet</string>
+
+    <string name="error_empty_field_enter_user_name">Prosím, zadejte uživatelské jméno.</string>
+    <string name="error_empty_field_your_password">Prosím, zadejte své heslo.</string>
+    <string name="room_tombstone_versioned_description">Tato místnost byla nahrazena a není již aktivní</string>
+    <string name="room_tombstone_continuation_link">Konverzace pokračuje tady</string>
+    <string name="room_tombstone_continuation_description">Tato místnost je pokračováním jiné konverzace</string>
+    <string name="room_tombstone_predecessor_link">Po kliknutí zde uvidíte starší zprávy</string>
+
+    <string name="resource_limit_exceeded_title">Mez zdrojů překročena</string>
+    <string name="resource_limit_contact_action">Kontaktovat správce</string>
+
+    <string name="resource_limit_contact_admin">kontaktovat Vašeho správce služby</string>
+
+    <string name="resource_limit_soft_default">Tento homeserver překročil jednu ze svých mezí zdrojů, a tak <b>se někteří uživatelé nebudou moci přihlásit</b>.</string>
+    <string name="resource_limit_hard_default">Tento homeserver překročil jednu ze svých mezí zdrojů.</string>
+
+    <string name="resource_limit_soft_mau"> Tent homeserver narazil na svoji měsíční mez aktivních uživatelů, a tak <b>se někteří uživatelé nebudou moci přihlásit</b>.</string>
+    <string name="resource_limit_hard_mau">Tento homeserver narazil na svoji měsíční mez aktivních uživatelů.</string>
+
+    <string name="resource_limit_soft_contact">Prosím, %s, aby zvýšili mez.</string>
+    <string name="resource_limit_hard_contact">Prosím, %s, abyste mohli službu dále používate.</string>
+
+    <string name="settings_lazy_loading_title">Pomalé načítání členů místností</string>
+    <string name="settings_lazy_loading_description">Zvýší výkon tím, že načte členy místnosti při prvním náhledu.</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Váš homeserver dosud nepodporuje pomalé načtení členů místností. Zkuste později.</string>
+
+    <string name="unknown_error">Omlouváme se, došlo k chybě</string>
+
+    <string name="merged_events_expand">rozbalit</string>
+    <string name="merged_events_collapse">sbalit</string>
+
+    <string name="settings_info_area_show">Ukázat informační pole</string>
+    <string name="show_info_area_always">Vždy</string>
+    <string name="show_info_area_messages_and_errors">U zpráv a chyb</string>
+    <string name="show_info_area_only_errors">Jen u chyb</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+    <string name="no_valid_google_play_services_apk">Žádný platný APK Google Plaz Services nenalezen. Oznámení možná nebudou pracovat spolehlivě.</string>
+
+    <string name="store_title">Riot.im - Komunikujte, svým způsobem</string>
+    <string name="store_whats_new">Stále měníme a vylepšujeme Riot.im. Úplný seznam změn je k nalezení zde: %1$s. Abyste zajistili, že nic nezmeškáte, ponechte aktualizace zapnuté.</string>
+    <string name="store_short_description">Univerzální zabezpečená chat aplikace zcela pod Vaší kontrolou.</string>
+    <string name="store_full_description">Chat aplikace pod Vaší kontrolou a zcela flexibilní. Riot Vás nechá komunikovat způsobem, kterým chcete. Vytvořena pro [matrix] - standard otevřené, decentralizované komunikace.
+\n
+\nZaložte si bezplatný účet u matrix.org, založte si svůj server na https://modular.im nebo použijte jiný Matrix server.
+\n
+\nProč zvolit Riot.im\?
+\n
+\n• KOMPLETNÍ KOMUNIKACE: Zakládejte místnosti pro své týmy, přátele, komunitu - jakkoli chcete! Chatujte, sdílejte soubory, přidávejte widgety, komunikujte hovorem či video hovorem - vše bezplatně.
+\n
+\n• HLUBOKÉ INTEGRACE: Používejte Riot.im s nástroji, jež znáte a máte rádi. S Riot.im můžete dokonce chatovat s uživateli a skupinami s jinými chat aplikacemi.
+\n
+\n• SOUKROMÁ A ZABEZBEČENÁ: Udržujte své konverzace tajné. Nejmodernější end-to-end šifrování zaručí, že soukromé konverzace soukromými zůstanou. 
+\n
+\n• OTEVŘENÁ, NE ZAVŘENÁ: Open source a postavená na Matrixu. Staňte se vlastníky svých dat tím, že si založíte vlastní server, nebo si zvolíte ten, jemuž důvěřujete.
+\n
+\n• KDEKOLI JSTE: Zůstaňte v kontaktu, ať už jste kdekoli, s plně synchronizovanou historií zpráv přes všechna svá zařízení nebo online u https://riot.im.</string>
+
+    <string name="passphrase_create_passphrase">Založit heslo</string>
+    <string name="passphrase_confirm_passphrase">Potvrdit heslo</string>
+    <string name="passphrase_enter_passphrase">Zadat heslo</string>
+    <string name="passphrase_passphrase_does_not_match">Heslo se neshoduje</string>
+    <string name="passphrase_empty_error_message">Prosím, zadejte heslo</string>
+    <string name="passphrase_passphrase_too_weak">Heslo je příliš slabé</string>
+
+    <string name="keys_backup_passphrase_not_empty_error_message">Prosím, smažte heslo, přejete-lis si, aby Riot generoval klíč pro obnovu.</string>
+    <string name="keys_backup_no_session_error">Žádná relace Matrix není dostupná</string>
+
+    <string name="keys_backup_setup_step1_title">Nikdy neztraťte šifrované zprávy</string>
+    <string name="keys_backup_setup_step1_description">Zprávy v šifrovaných místnostech jsou zabezpečeny pomocí end.to-end šifrováním. Pouze Vy a adresát(i) máte klíče ke čtení těchto zpráv.</string>
+    <string name="keys_backup_setup">Začít používat zálohu klíčů</string>
+    <string name="keys_backup_setup_step1_advanced">(Pokročilé)</string>
+    <string name="keys_backup_setup_step2_text_title">Zabezpečit zálohu heslem.</string>
+    <string name="keys_backup_setup_step2_text_description">Uložíme zašifrovanou kopii Vašich klíčů na Vašem homeserveru. Chraňte svoji zálohu heslem, abyste ji udrželi v bezpečí.
+\n
+\nZ důvodu nejvyšší bezpečnosti by se mělo lišit od hesla účtu.</string>
+    <string name="keys_backup_setup_step2_button_title">Nastavit heslo</string>
+    <string name="keys_backup_setup_creating_backup">Zálohuji</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">Nebo zabezpečte svoji zálohu pomocí klíče obnovy, uloženého někde v bezpečí.</string>
+    <string name="keys_backup_setup_step2_skip_button_title">(Pokročilé) Nastavit s klíčem obnovy</string>
+    <string name="keys_backup_setup_step3_success_title">Podařilo se!</string>
+    <string name="keys_backup_setup_step3_text_line2">Váš klíč obnovy je záchranná síť - lze jej použít pro obnovu Vašich šifrovaných zpráv, pokud zapomenete své heslo.
+\nUchovávejte svůj klíč obnovy velmi bezpečně, např. ve správci hesel (nebo trezoru)</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Uchovávejte svůj klíč obnovy velmi bezpečně, např. ve správci hesel (nebo trezoru)</string>
+    <string name="keys_backup_setup_step3_button_title">Hotovo</string>
+    <string name="keys_backup_setup_step3_button_title_no_passphrase">Udělal jsem kopii</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Uložit klíč obnovy</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">Sdílet</string>
+    <string name="keys_backup_setup_step3_save_button_title">Uložit jako soubor</string>
+    <string name="recovery_key_export_saved_as_warning">Klíč obnovy byl uložen do %s\'.
+\n
+\nVarování: může dojít ke smazání tohoto souboru, pokud odstraníte aplikaci.</string>
+
+    <string name="keys_backup_setup_override_backup_prompt_tile">Záloha již existuje na Vašem homeserveru</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Vypadá to, že jste již nastavili zálohu klíče z jiné relace. Chcete ji nahradit zálohou, již právě provádíte\?</string>
+    <string name="keys_backup_setup_override_replace">Nahradit</string>
+    <string name="keys_backup_setup_override_stop">Zastavit</string>
+
+    <string name="keys_backup_setup_step3_please_make_copy">Prosím, udělat kopii</string>
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">Sdílet klíč obnovy s…</string>
+    <string name="keys_backup_setup_step3_generating_key_status">Generuji klíč obnovy pomocí hesla, tento proces může trvat několi vteřin.</string>
+    <string name="recovery_key">Klíč obnovy</string>
+    <string name="unexpected_error">Neočekávaná chyba</string>
+    <string name="keys_backup_setup_backup_started_title">Zálohování se spustilo</string>
+    <string name="keys_backup_setup_skip_title">Jste si jisti\?</string>
+    <string name="keys_backup_setup_skip_msg">Můžete ztratit přístup ke svým zprávám, pokud se odhlásíte nebo ztratíte toto zařízení.</string>
+
+    <string name="keys_backup_restore_is_getting_backup_version">Načítám verzi zálohy…</string>
+    <string name="keys_backup_restore_with_passphrase">Použijte heslo obnovy k odemknutí historie svých šifrovaných zpráv</string>
+    <string name="keys_backup_restore_use_recovery_key">použít klíč obnovy</string>
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">Neznám Vaše heslo obnovy, můžete %s.</string>
+
+    <string name="keys_backup_restore_with_recovery_key">Použijte svůj klíč obnovy k odemknutí historie svých šifrovaných zpráv</string>
+    <string name="keys_backup_restore_key_enter_hint">Zadat klíč obnovy</string>
+
+    <string name="keys_backup_restore_setup_recovery_key">Obnova zpráv</string>
+
+    <string name="keys_backup_restore_with_key_helper">Ztratili jste klíč obnovy\? Můžete nastavit nový v nastavení.</string>
+    <string name="keys_backup_passphrase_error_decrypt">Zálohu nebylo možno s tímto heslem dešifrovat: prosím, ověřit, že jste zadali správné heslo obnovy.</string>
+    <string name="network_error_please_check_and_retry">Síťová chyba: prosím, ověřte své spojení a opakujte.</string>
+
+    <string name="keys_backup_restoring_waiting_message">Obnovuji zálohu:</string>
+    <string name="keys_backup_restoring_computing_key_waiting_message">Kalkuluji klíč zálohy…</string>
+    <string name="keys_backup_unlock_button">Odemknout historii</string>
+    <string name="keys_backup_recovery_code_empty_error_message">Prosím, zadejte klíč obnovy</string>
+    <string name="keys_backup_recovery_code_error_decrypt">Zálohu nebylo možno s tímto heslem dešifrovat: prosím, ověřte, že jste zadali správný klíč obnovy.</string>
+
+    <string name="keys_backup_restore_success_title">Záloha obnovena %s !</string>
+    <string name="keys_backup_restore_success_description">Obnoveno %1$d relačních klíčů a doplněno %2$d nových klíčů, které této relaci nebyly známy</string>
+    <string name="keys_backup_get_version_error">Načtení poslední verze klíčů obnovy selhalo (%s).</string>
+    <string name="keys_backup_no_keysbackup_sdk_error">Krypto relace není zapnuto</string>
+
+
+    <string name="keys_backup_settings_restore_backup_button">Obnovit ze zálohy</string>
+    <string name="keys_backup_settings_delete_backup_button">Smazat zálohu</string>
+
+    <string name="keys_backup_settings_status_ok">Klíč zálohy byl pro tuto relaci správně nastaven.</string>
+    <string name="keys_backup_settings_status_ko">Záloha klíču není pro tuto relaci zapnuta.</string>
+    <string name="keys_backup_settings_status_not_setup">Vaše klíče nejsou z této relace zálohovány.</string>
+
+    <string name="keys_backup_settings_signature_from_unknown_device">Záloha je podepsána neznámou relací s ID %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_this_device">Záloha má platný podpis z této relace.</string>
+    <string name="keys_backup_settings_valid_signature_from_verified_device">Záloha má platný podpis z ověřené relace %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">Záloha má platný podpis z neověřené relace %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_verified_device">Záloha má neplatný podpis z ověřené relace %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_unverified_device">Záloha má neplatný podpis z neověřené relace %s</string>
+    <string name="keys_backup_get_trust_error">Načtení informace o důvěryhodnosti zálohy (%s) se nezdařilo.</string>
+
+    <string name="keys_backup_settings_untrusted_backup">Abyste použili zálohu klíčů na tuto relaci, obnovte nyní pomocí svého hesla nebo klíče obnovy.</string>
+    <string name="keys_backup_settings_deleting_backup">Odstraňuji zálohu…</string>
+    <string name="keys_backup_settings_delete_backup_error">Odstranění zálohy (%s) selhalo</string>
+
+    <string name="keys_backup_settings_checking_backup_state">Kontroluji stav zálohy</string>
+    <string name="keys_backup_settings_delete_confirm_title">Smazat zálohu</string>
+    <string name="keys_backup_settings_delete_confirm_message">Smazat Vaše zálohované šifrovací klíče ze serveru\? Ke čtení šifrované historie zpráv již nebude moci použít klíč obnovy.</string>
+
+    <string name="new_recovery_method_popup_title">Nová záloha klíče</string>
+    <string name="new_recovery_method_popup_description">Nová bezpečná záloha klíče zpráv byla nalezena.
+\n
+\nPokud jste nenastavili novou metodu obnovy, útočník se může pokoušet o přístup k Vašemu účtu. Ihned změňte heslo svého účtu a nastavte novou metodu obnovy v nastavení.</string>
+    <string name="new_recovery_method_popup_was_me">To jsem byl já</string>
+    <string name="keys_backup_banner_setup_line1">Nikdy neztraťte šifrované zprávy</string>
+    <string name="keys_backup_banner_setup_line2">Začněte používat zálohu klíče</string>
+
+    <string name="keys_backup_banner_recover_line1">Nikdy neztraťte šifrované zprávy</string>
+    <string name="keys_backup_banner_recover_line2">Použíjte zálohu klíče</string>
+
+    <string name="keys_backup_banner_update_line1">Nový bezpečný klíč zpráv</string>
+    <string name="keys_backup_banner_update_line2">Správa v záloze klíčů</string>
+
+    <string name="keys_backup_info_title_version">Verze</string>
+    <string name="keys_backup_info_title_algorithm">Algoritmus</string>
+    <string name="keys_backup_info_title_signature">Podpis</string>
+
+    <string name="autodiscover_invalid_response">Neplatná odpověď z hledání homeserverů</string>
+    <string name="autodiscover_well_known_autofill_dialog_title">Volby serveru automaticky</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">"Riot nalezl vlastní konfiguraci serveru pro doménu Vašeho uživatelského Id  \"%1$s\":
+\n%2$s"</string>
+    <string name="autodiscover_well_known_autofill_confirm">Použít konfiguraci</string>
+
+    <string name="invalid_or_expired_credentials">Byli jste odhlášení kvůli chybným či neplatným ověřovacím údajům.</string>
+
+    <string name="sas_verify_title">Ověřit pomocí srovnání krátkého textového řetězce.</string>
+    <string name="sas_security_advise">Pro nejvyšší bezpečnost doporučujeme, abyste to provedli osobně nebo jiným způsobem důvěryhodné komunikace.</string>
+    <string name="sas_verify_start_button_title">Začít ověření</string>
+    <string name="sas_incoming_request_title">Příchozí požadavek na ověření</string>
+    <string name="sas_incoming_request_description">Ověřuji tuto relaci, abych ji označil za důvěryhodnou. Důvěřování relacím partnerů Vám dodá více klidu mysli, používáte-li end-to-end šifrované zprávy.</string>
+    <string name="sas_incoming_request_description_2">Ověření této relace ji označí za důvěryhodnou a také označí Vaši relaci důvěryhodnou Vašemu partnerovi.</string>
+
+    <string name="sas_emoji_description">Ověřit tuto relaci potvrzením, že se následující emoji ukáže na obrazovce partnera</string>
+    <string name="sas_decimal_description">Ověřit tuto relaci potvrzením, že se následující čísla ukážou na obrazovce partnera</string>
+
+    <string name="sas_incoming_verification_request_dialog">Obdrželi jste příchozí žádost o ověření.</string>
+    <string name="sas_view_request_action">Ukázat žádost</string>
+    <string name="sas_waiting_for_partner">Čekám na potvrzení od partnera…</string>
+
+    <string name="sas_verified">Ověřeno!</string>
+    <string name="sas_verified_successful">Úspěšně jste ověřili tuto relaci.</string>
+    <string name="sas_verified_successful_description">Zabezpečené zprávy s tímto uživatelem jsou end-to-end šifrovány a nemohou být čteny třetími stranami.</string>
+    <string name="sas_got_it">Rozumím</string>
+
+    <string name="sas_verifying_keys">Nic se neukazuje\? Dosud nepodporují všichni klienti interaktivní ověření. Použijte tradiční ověření.</string>
+    <string name="sas_legacy_verification_button_title">Použijte tradiční ověření.</string>
+
+    <string name="sas_verification_request_notification_channel_title">Ověření klíče</string>
+    <string name="sas_cancelled_dialog_title">Žádost zrušena</string>
+    <string name="sas_cancelled_by_other">Druhá strana zrušila ověření.
+\n%s</string>
+    <string name="sas_cancelled_by_me">Ověření je zrušeno.
+\nDůvod: %s</string>
+
+    <string name="sas_verification_request_notification_channel">Interaktivní ověření relace</string>
+    <string name="sas_incoming_request_notif_title">Žádost na ověření</string>
+    <string name="sas_incoming_request_notif_content">%s chce ověřit Vaši relaci</string>
+
+    <string name="sas_error_m_user">Uživatel zrušil ověření</string>
+    <string name="sas_error_m_timeout">Čas ověřovacího procesu vypršel</string>
+    <string name="sas_error_m_unknown_transaction">Tato relace neví o té transakci</string>
+    <string name="sas_error_m_unknown_method">Tato relace se nemůže shodnout na dohodě o klíčích, MAC nebo metodě SAS</string>
+    <string name="sas_error_m_mismatched_commitment">Závazek o haši se neshodnul</string>
+    <string name="sas_error_m_mismatched_sas">SAS se neshodnul</string>
+    <string name="sas_error_m_unexpected_message">Relace obdržela neočekávanou zprávu</string>
+    <string name="sas_error_m_invalid_message">Byla obdržena neplatná zpráva</string>
+    <string name="sas_error_m_key_mismatch">Neshoda klíčů</string>
+    <string name="sas_error_m_user_error">Neshoda uživatelů</string>
+    <string name="sas_error_unknown">Neznámá chyba</string>
+
+    <string name="identity_server_not_defined">Nepoužíváte žádný server pro identity</string>
+    <string name="identity_server_not_defined_for_password_reset">Není konfigurován žádný server pro identity, musíte přenastavit heslo.</string>
+
+    <string name="security_warning_identity_server">Předchozí verze Riotu měly bezpečnostní chybu, jež umožnila serveru pro identity (%1$s) přístup k Vašemu účtu. Pokud důvěřujete %2$s, můžete ignorovat; jinak se, prosím, odhlašte a znovu přihlašte.
+\n
+\nDetaily zde:
+\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
+
+    <string name="error_user_already_logged_in">Vypadá to, že se chcete připojit k jinému homeserveru. Chcete se odhlásit\?</string>
+
+    <string name="edit">Upravit</string>
+    <string name="reply">Odpovědět</string>
+
+    <string name="global_retry">Opakovat</string>
+    <string name="room_list_empty">Začněte používat aplikaci vstupem do mísnosti.</string>
+    <string name="send_you_invite">Poslali Vám pozvánku</string>
+    <string name="invited_by">%s Vás pozval</string>
+
+    <string name="room_list_catchup_empty_title">Vše jste dohnali!</string>
+    <string name="room_list_catchup_empty_body">Nemáte již žádné nepřečtené zprávy</string>
+    <string name="room_list_catchup_welcome_title">Vítejte doma!</string>
+    <string name="room_list_catchup_welcome_body">Zde doženete nepřečtené zprávy</string>
+    <string name="room_list_people_empty_title">Konverzace</string>
+    <string name="room_list_people_empty_body">Tady budou zobrazeny Vaše přímé konverzace</string>
+    <string name="room_list_rooms_empty_title">Místnosti</string>
+    <string name="room_list_rooms_empty_body">Tady budou zobrazeny Vaše místnosti</string>
+
+    <string name="title_activity_emoji_reaction_picker">Reakce</string>
+    <string name="reactions_agree">Souhlasit</string>
+    <string name="reactions_like">Líbí se</string>
+    <string name="message_add_reaction">Přidat reakci</string>
+    <string name="message_view_reaction">Ukázat reakce</string>
+    <string name="reactions">Reakce</string>
+
+    <string name="event_redacted_by_user_reason">Událost smazána uživatelem</string>
+    <string name="event_redacted_by_admin_reason">Událost moderována správcem místnosti</string>
+    <string name="last_edited_info_message">Naposledy upravil %1$s dne %2$s</string>
+
+
+    <string name="malformed_message">Nečitelná událost, nelze zobrazit</string>
+    <string name="create_new_room">Založit novou místnost</string>
+    <string name="error_no_network">Žádná síť. Prosím, zkontrolujte své spojení do internetu.</string>
+    <string name="action_change">Změnit</string>
+    <string name="change_room_directory_network">Změnit síť</string>
+    <string name="please_wait">Prosím, čekejte…</string>
+    <string name="group_all_communities">Všechny komunity</string>
+
+    <string name="room_preview_no_preview">Nelze provést náhled této místnosti</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Náhled místnosti čitelné pro všechny zatím RiotX nepodporuje</string>
+
+    <string name="fab_menu_create_room">Místnosti</string>
+    <string name="fab_menu_create_chat">Přímé zprávy</string>
+
+    <string name="create_room_title">Nová místnost</string>
+    <string name="create_room_action_create">ZALOŽIT</string>
+    <string name="create_room_name_hint">Jméno místnosti</string>
+    <string name="create_room_public_title">Veřejná</string>
+    <string name="create_room_public_description">Kdokoli smí vstoupit do této místnosti</string>
+    <string name="create_room_directory_title">Adresář místností</string>
+    <string name="create_room_directory_description">Zveřejnit tuto místnost v adresáři místností</string>
+
+    <string name="keys_backup_unable_to_get_trust_info">Při načítání důvěryhodnosti došlo k chybě</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">Při načítání dat zálohy klíčů došlo k chybě</string>
+
+    <string name="alpha_disclaimer_title">Vítejte v betě!</string>
+    <string name="alpha_disclaimer_content_line_1">Protože RiotX je v raném vývoji, některé funkce mohou chybět a mohou se objevit i chyby.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay">Seznam nejnovějších funkcí je vždy na %1$s a pokud nejdete chyby, prosím, zapište hlášení v levém horním menu na domovské obrazovce. Opravíme je tak brzy, jak jen můžeme.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Popis v Play Store</string>
+    <string name="alpha_disclaimer_content_line_2_fdroid">Pokud nejdete chyby, prosím, zapište hlášení v levém horním menu na domovské obrazovce. Opravíme je tak brzy, jak jen můžeme.</string>
+
+    <string name="settings_sdk_version">Verze Matrix SDK</string>
+    <string name="settings_other_third_party_notices">Jiná oznámení třetích stran</string>
+    <string name="navigate_to_room_when_already_in_the_room">Již se díváte do této místnosti!</string>
+
+    <string name="quick_reactions">Rychlé reakce</string>
+
+    <string name="settings_general_title">Obecná</string>
+    <string name="settings_preferences">Možnosti</string>
+    <string name="settings_security_and_privacy">Bezpečí &amp; Soukromí</string>
+    <string name="settings_expert">Expert</string>
+    <string name="settings_push_rules">Push pravidla</string>
+    <string name="settings_push_rules_no_rules">Žádná push pravidla nejsou definována</string>
+    <string name="settings_push_gateway_no_pushers">Žádné push brány nejsou registrovány</string>
+
+    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_push_key">push_klíč:</string>
+    <string name="push_gateway_item_app_display_name">app_display_name:</string>
+    <string name="push_gateway_item_device_name">jméno_relace:</string>
+    <string name="push_gateway_item_url">Url:</string>
+    <string name="push_gateway_item_format">Formát:</string>
+
+    <string name="preference_voice_and_video">Hlas &amp; Video</string>
+    <string name="preference_root_help_about">Nápověda &amp; O aplikaci</string>
+
+
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">Registrovat token</string>
+
+    <string name="send_suggestion">Učinit návrh</string>
+    <string name="send_suggestion_content">Prosím, zapište svůj návrh níže.</string>
+    <string name="send_suggestion_report_placeholder">Popište svůj návrh tady</string>
+    <string name="send_suggestion_sent">Děkujeme, návrh byl úspěšně odeslán</string>
+    <string name="send_suggestion_failed">Odeslání návrhu selhalo (%s)</string>
+
+    <string name="settings_labs_show_hidden_events_in_timeline">Ukázat skryté události v časovém sledu</string>
+
+    <string name="store_riotx_title">RiotX - Klient Matrixu pro příští generaci</string>
+    <string name="store_riotx_short_description">Rychlejši a lehčí klient Matrixu s nejnovějšími konstrukcemi Androidu</string>
+    <string name="store_riotx_full_description">"RiotX je nový klient protokolu Matrix (Matrix.org): otevřená síť pro bezpečnou, decentralizovanou komunikaci. RiotX je úplný přepis klienta Riot Android založený na úplném přepisu Matrix Android SDK.
+\n
+\nProhlášení: Toto je beta verze. RiotX nyní prochází aktivním vývojem, obsahuje omezení a (doufáme, že ne moc) chyby. Veškerý feedback je vítán.
+\n
+\nRiotX podporuje: • Přihlášní do existujícího účtu  • Založení místnosti a vstup do veřejných místností  • Přijetí a odmítnutí pozvánek  • Seznam místností uživatelů  • Náhled podrobností místnosti  • Odesílání textových zpráv  • Odesílání příloh  • Čtení a psaní zpráv v zašifrovaných místnostech  • Krypto: záloha klíčů E2E, pokročilé ověření zařízení, požadavek na sdílení klíče a jeho uspokojení   • Push oznámení  • Světlý, tmavý a černý motiv
+\n
+\nJeště nejsou všechny funkce Riotu v RiotX implementovány. Hlavní chybějící funkce (přijdou brzy!): • Nastavení místnosti (seznam členů místnosti, atd.) • Hovory • Widgety • …"</string>
+
+    <string name="bottom_action_people_x">Přímé zprávy</string>
+
+    <string name="send_file_step_idle">Čekám…</string>
+    <string name="send_file_step_encrypting_thumbnail">Šifruji miniaturu…</string>
+    <string name="send_file_step_sending_thumbnail">Odesílám miniaturu (%1$s / %2$s)</string>
+    <string name="send_file_step_encrypting_file">Šifruji soubor…</string>
+    <string name="send_file_step_sending_file">Odesílám soubor (%1$s / %2$s)</string>
+
+    <string name="downloading_file">Stahuji soubor %1$s…</string>
+    <string name="downloaded_file">Soubor %1$s byl stažen!</string>
+
+    <string name="edited_suffix">(upraveno)</string>
+
+    <string name="riotx_no_registration_notice">%1$s pro založení účtu.</string>
+    <string name="riotx_no_registration_notice_colored_part">Použít zastaralou aplikaci</string>
+
+
+    <string name="message_edits">Úpravy zpráv</string>
+    <string name="no_message_edits_found">Úpravy nenalezeny</string>
+
+    <string name="room_filtering_filter_hint">Vytřídit konverzace…</string>
+    <string name="room_filtering_footer_title">Nemůžete najít, co hledáte\?</string>
+    <string name="room_filtering_footer_create_new_room">Založit novou místnost</string>
+    <string name="room_filtering_footer_create_new_direct_message">Poslat novou přímou zprávu</string>
+    <string name="room_filtering_footer_open_room_directory">Ukázat adresář místností</string>
+
+    <string name="room_directory_search_hint">Jméno nebo ID (#example:matrix.org)</string>
+
+    <string name="labs_swipe_to_reply_in_timeline">Zapnout přetažení pro odpověď v časovém sledu</string>
+
+    <string name="link_copied_to_clipboard">Odkaz zkopírován do schránky</string>
+
+    <string name="add_by_matrix_id">Přidat pomocí matrix ID</string>
+    <string name="creating_direct_room">Zakládám místnost…</string>
+    <string name="direct_room_no_known_users">Žádný výsledek nenalezen, použijte Přidat pomocí matrix ID k hledání na serveru.</string>
+    <string name="direct_room_start_search">K obdržení výsledků začněte zadávat</string>
+    <string name="direct_room_filter_hint">Vytřídit uživatelským jménem nebo ID…</string>
+
+    <string name="joining_room">Vstupuji do místnosti…</string>
+
+    <string name="message_view_edit_history">Ukázat historii úprav</string>
+
+    <string name="terms_of_service">Všeobecné podmínky</string>
+    <string name="review_terms">Pročíst všeobecné podmínky</string>
+    <string name="terms_description_for_identity_server">Nechte se nalézt druhými</string>
+    <string name="terms_description_for_integration_manager">Použijte boty, můstky, widgety a nálepky</string>
+
+    <string name="read_at">Čtěte na</string>
+
+
+    <string name="identity_server">Server pro identity</string>
+    <string name="disconnect_identity_server">Odpojit server pro identity</string>
+    <string name="add_identity_server">Nastavit server pro identity</string>
+    <string name="change_identity_server">Změnit server pro identity</string>
+    <string name="settings_discovery_identity_server_info">Nyní používáte %1$s, abyste nalezli a byli nalezeni existujícími kontakty, které znáte.</string>
+    <string name="settings_discovery_identity_server_info_none">Nyní nepoužíváte server pro identity. Abyste existující známé kontakty nalezli a nechali se jimi nalézt, nastavte nějaký níže.</string>
+    <string name="settings_discovery_emails_title">Emailová adresa k nalezení</string>
+    <string name="settings_discovery_no_mails">Volby pro nalezení se ukážou, jakmile doplníte email.</string>
+    <string name="settings_discovery_no_msisdn">Volby pro nalezení se ukážou, jakmile doplníte telefonní číslo.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">Odpojení od serveru identit bude znamenat, že Vás jiní uživatelé nebudou moci nalézt a Vy nebudete moci pozvat druhé pomocí emailu nebo telefonního čísla.</string>
+    <string name="settings_discovery_msisdn_title">Telefonní čísla pro nalezení</string>
+    <string name="settings_discovery_confirm_mail">Poslali jsme Vám potvrzovací email na %s, podívejte se do emailu a klikněte na protvrzovací odkaz</string>
+    <string name="settings_discovery_mail_pending">Nevyřízený</string>
+
+    <string name="settings_discovery_enter_identity_server">Zadejte nový server pro identity</string>
+    <string name="settings_discovery_bad_identity_server">Nemohl jsem se spojit se serverem pro identity</string>
+    <string name="settings_discovery_please_enter_server">Prosím, zadejte url serveru pro identity</string>
+    <string name="settings_discovery_no_terms_title">Server pro identity nemá žádné všeobecné podmínky</string>
+    <string name="settings_discovery_no_terms">Server pro identity, pro který jste se rozhodli, nemá žádné všeobecné podmínky. Pokračujte pouze tehdy, důvěřujete-li vlastníku služby</string>
+    <string name="settings_text_message_sent">Textová zpráva byla odeslána na %s. Prosím, zadejte ověřovací kód v ní obsažený.</string>
+
+    <string name="settings_discovery_disconnect_with_bound_pid">Nyní sdílíte emailovou adresu nebo telefonní číslo na serveru identit %1$s. Budete se muset přepojit na %2$s, abyste je dále nesdíleli.</string>
+    <string name="settings_agree_to_terms">Souhlaste se všeobecnými podmínkami serveru identit (%s), abyste byli k nalezení podle emailové adresy nebo telefonního čísla.</string>
+
+    <string name="labs_allow_extended_logging">Zapnout podrobné záznamy.</string>
+    <string name="labs_allow_extended_logging_summary">Podrobné záznamy pomohou vývojářům mnoha podrobnostmi, odešlete-li RageShake. I když jsou zapnuty, aplikace nezaznamenává obsah zpráv nebo jakákoli soukromá data.</string>
+
+
+    <string name="error_terms_not_accepted">Prosím, opakujte, jakmile jste přijali všeobecné podmínky svého homeserveru.</string>
+
+    <string name="error_network_timeout">Vypadá to, že serveru dlouho trvá odpovědět, to může být způsobeno buď slabým spojením nebo chybou na serveru. Prosím, opakujte za chvíli.</string>
+
+    <string name="send_attachment">Poslat přílohu</string>
+
+    <string name="a11y_open_drawer">Otevřít navigační zásuvku</string>
+    <string name="a11y_create_menu_open">Otevřít menu založení místnosti</string>
+    <string name="a11y_create_menu_close">Zavřít menu založení místnosti…</string>
+    <string name="a11y_create_direct_message">Založit novou přímou konverzaci</string>
+    <string name="a11y_create_room">Založit novou místnost</string>
+    <string name="a11y_close_keys_backup_banner">Zavřít titulek zálohy klíčů</string>
+    <string name="a11y_show_password">Ukázat heslo</string>
+    <string name="a11y_hide_password">Skrýt heslo</string>
+    <string name="a11y_jump_to_bottom">Přeskočit až dolů</string>
+
+    <string name="two_and_some_others_read">%1$s, %2$s a %3$d dalších přečetli</string>
+    <string name="three_users_read">%1$s, %2$s a %3$s přečetli</string>
+    <string name="two_users_read">%1$s a %2$s přečetli</string>
+    <string name="one_user_read">%s přečetl(a)</string>
+    <plurals name="fallback_users_read">
+        <item quantity="one">1 uživatel přečetl</item>
+        <item quantity="few">%d uživatelé přečetli</item>
+        <item quantity="other">%d uživatelů přečetlo</item>
+    </plurals>
+
+    <string name="error_file_too_big">Soubor \'%1$s\' (%2$s) je příliš velký k nahrání. Limit je %3$s.</string>
+
+    <string name="error_attachment">Během načítání přílohy došlo k chybě.</string>
+    <string name="attachment_type_file">Soubor</string>
+    <string name="attachment_type_contact">Kontakt</string>
+    <string name="attachment_type_camera">Fotoaparát</string>
+    <string name="attachment_type_audio">Audio</string>
+    <string name="attachment_type_gallery">Galerie</string>
+    <string name="attachment_type_sticker">Nálepka</string>
+    <string name="error_handling_incoming_share">Nemohl jsem zpracovat sdílená data</string>
+
+    <string name="report_content_spam">Je to spam</string>
+    <string name="report_content_inappropriate">Je to nepatřičné</string>
+    <string name="report_content_custom">Vlastní hlášení…</string>
+    <string name="report_content_custom_title">Nahlásit tento obsah</string>
+    <string name="report_content_custom_hint">Důvod k nahlášení tohoto obsahu</string>
+    <string name="report_content_custom_submit">HLÁŠENÍ</string>
+    <string name="block_user">ZABLOKOVAT UŽIVATELE</string>
+
+    <string name="content_reported_title">Obsah ohlášen</string>
+    <string name="content_reported_content">Tento obsah byl ohlášen.
+\n
+\nPokud si dále nepřejete vidět více obsahu tohoto uživatele, můžete jej zablokovat a tím skrýt jejich zprávy</string>
+    <string name="content_reported_as_spam_title">Nahlášeno jako spam</string>
+    <string name="content_reported_as_spam_content">Tento obsah byl nahlášen jako spam.
+\n
+\nPokud si dále nepřejete vidět více obsahu tohoto uživatele, můžete jej zablokovat a tím skrýt jejich zprávy</string>
+    <string name="content_reported_as_inappropriate_title">Nahlášeno jako nepatřičné</string>
+    <string name="content_reported_as_inappropriate_content">Obsah byl nahlášen jako nepatřičný.
+\n
+\nPokud si dále nepřejete vidět obsah tohoto uživatele, můžete jej zablokovat a tím skrýt jejich zprávy</string>
+
+    <string name="permissions_rationale_msg_keys_backup_export">Riot potřebuje práva k uložení Vašich E2E klíčů na disk.
+\n
+\nProsím, povolte přístup v příštím dialogu, abyste mohli exportovat své klíče manuálně.</string>
+
+    <string name="no_network_indicator">Právě nyní není k dispozici žádné síťové spojení</string>
+
+    <string name="message_ignore_user">Zablokovat uživatele</string>
+
+    <string name="room_list_quick_actions_notifications_all_noisy">Všechny zprávy (hlučné)</string>
+    <string name="room_list_quick_actions_notifications_all">Všechny zprávy</string>
+    <string name="room_list_quick_actions_notifications_mentions">Pouze zmínky</string>
+    <string name="room_list_quick_actions_notifications_mute">Utišit</string>
+    <string name="room_list_quick_actions_settings">Nastavení</string>
+    <string name="room_list_quick_actions_leave">Opustit místnost</string>
+    <string name="notice_member_no_changes">%1$s neučinil žádné změny</string>
+    <string name="command_description_spoiler">Odeslat danou zprávu jako spoiler</string>
+    <string name="spoiler">Spoiler</string>
+    <string name="reaction_search_type_hint">Pro nalezení reakce zadejte klíčové slovo.</string>
+
+    <string name="no_ignored_users">Neignorujete žádné uživatele</string>
+
+    <string name="help_long_click_on_room_for_more_options">Více možností po dlouhém stisku na místnost</string>
+
+
+    <string name="room_join_rules_public">%1$s učinil místnost veřejnou pro kohokoli znalého odkazu.</string>
+    <string name="room_join_rules_invite">%1$s nastavil místnost jen pro pozvané.</string>
+    <string name="timeline_unread_messages">Nepřečtené zprávy</string>
+
+    <string name="login_splash_title">Osvoboďte svou komunikaci</string>
+    <string name="login_splash_text1">Chatujte s lidmi přímo nebo ve skupinách</string>
+    <string name="login_splash_text2">Udržujte konverzace soukromé pomocí šifrování</string>
+    <string name="login_splash_text3">Rozšiřte &amp; upravte si svůj zážitek</string>
+    <string name="login_splash_submit">Můžeme začít</string>
+
+    <string name="login_server_title">Vybrat server</string>
+    <string name="login_server_text">Jako email, účty mají jeden domov, ačkoli můžete mluvit s kýmkoli</string>
+    <string name="login_server_matrix_org_text">Přidejte se k miliónům svobodným na největším veřejném serveru</string>
+    <string name="login_server_modular_text">Prémiový hosting pro organizace</string>
+    <string name="login_server_modular_learn_more">Dozvědět se víc</string>
+    <string name="login_server_other_title">Další</string>
+    <string name="login_server_other_text">Vlastní &amp; pokročilá nastavení</string>
+
+    <string name="login_continue">Pokračovat</string>
+    <string name="login_connect_to">Připojit k %1$s</string>
+    <string name="login_connect_to_modular">Připojit k Modular</string>
+    <string name="login_connect_to_a_custom_server">Upravit připojení k serveru</string>
+    <string name="login_signin_to">Přihlásit se na %1$s</string>
+    <string name="login_signup">Založit účet</string>
+    <string name="login_signin">Přihlásit se</string>
+    <string name="login_signin_sso">Pokračovat s SSO</string>
+
+    <string name="login_server_url_form_modular_hint">Adresa Modular</string>
+    <string name="login_server_url_form_other_hint">Adresa</string>
+    <string name="login_server_url_form_modular_text">Prémiový hosting pro organizace</string>
+    <string name="login_server_url_form_modular_notice">Zadejte adresu Modular RIot nebo serveru, který chcete použít</string>
+    <string name="login_server_url_form_other_notice">Zadejte adresu serveru nebo Riotu, k němuž se chcete připojit</string>
+
+    <string name="login_sso_error_message">Při načítání stránky došlo k chybě: %1$s (%2$d)</string>
+    <string name="login_mode_not_supported">Aplikace se nemůže přihlásit k tomuto homeserveru. Homeserver podporuje následující typy přihlášení: %1$s.
+\n
+\nChcete se přihlásit webovým klientem\?</string>
+    <string name="login_registration_disabled">Omlouváme se, tento server již nepřijímá nové účty.</string>
+    <string name="login_registration_not_supported">Aplikace nemůže založit účet na tomto homeserveru.
+\n
+\nChcete se přihlásit webovým klientem\?</string>
+
+    <string name="login_login_with_email_error">Tato emailová adresa se nevztahuje k žádnému účtu.</string>
+
+    <string name="login_reset_password_on">Resetovat heslo na %1$s</string>
+    <string name="login_reset_password_notice">Ověřovací email bude odeslán do Vašeho mailboxu za účelem potvrzení nastavení nového heslo.</string>
+    <string name="login_reset_password_submit">Dále</string>
+    <string name="login_reset_password_email_hint">Email</string>
+    <string name="login_reset_password_password_hint">Nové heslo</string>
+
+    <string name="login_reset_password_warning_title">Varování!</string>
+    <string name="login_reset_password_warning_content">Změna hesla přenastaví všechny end-to-end šifrovací klíče pro všechny Vaše relace, a tak učiní zašifrovanou historii chatů nečitelnou. Nastavte zálohu klíčů nebo exportujte své klíče místností z jiné relace, než se rozhodnete pokračovat.</string>
+    <string name="login_reset_password_warning_submit">Pokračovat</string>
+
+    <string name="login_reset_password_error_not_found">Tato emailová adresa se nevztahuje k žádnému účtu</string>
+
+    <string name="login_reset_password_mail_confirmation_title">Nahlédněte do inboxu</string>
+    <string name="login_reset_password_mail_confirmation_notice">Ověřovací email byl odeslán na %1$s.</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">Pro potvrzení svého nového hesla klepněte na odkaz. Jakmile otevřete v něm uvedený odkaz, klikněte níže.</string>
+    <string name="login_reset_password_mail_confirmation_submit">Ověřil(a) jsem svou emailovou adresu</string>
+
+    <string name="login_reset_password_success_title">Hotovo!</string>
+    <string name="login_reset_password_success_notice">Vaše heslo bylo přenastaveno.</string>
+    <string name="login_reset_password_success_notice_2">Byli jste odhlášeni ze všech svých relací a dále již neobdržíte žádná push oznámení. Abyste je opět zapnuli, přihlašte se na každém zařízení.</string>
+    <string name="login_reset_password_success_submit">Zpět na přihlášení</string>
+
+    <string name="login_reset_password_cancel_confirmation_title">Varování</string>
+    <string name="login_reset_password_cancel_confirmation_content">Vaše heslo nebylo dosud změněno.
+\n
+\nZastavit proces změny hesla\?</string>
+
+    <string name="login_set_email_title">Nastavit emailovou adresu</string>
+    <string name="login_set_email_notice">Nastavte emailovou adresu pro obnově svého účtu. Později můžete volitelně dovolit lidem, které znáte, aby Vás podle emailu nalezli.</string>
+    <string name="login_set_email_mandatory_hint">Email</string>
+    <string name="login_set_email_optional_hint">Email (volitelné)</string>
+    <string name="login_set_email_submit">Dále</string>
+
+    <string name="login_set_msisdn_title">Nastavit telefonní číslo</string>
+    <string name="login_set_msisdn_notice">Nastavte telefonní číslo, abyste volitelně dovolili lidem, které znáte, aby Vás nalezli.</string>
+    <string name="login_set_msisdn_notice2">Prosím, použijte mezinárodní formát.</string>
+    <string name="login_set_msisdn_mandatory_hint">Telefonní číslo</string>
+    <string name="login_set_msisdn_optional_hint">Telefonní číslo (volitelné)</string>
+    <string name="login_set_msisdn_submit">Dále</string>
+
+    <string name="login_msisdn_confirm_title">Potvrdit telefonní číslo</string>
+    <string name="login_msisdn_confirm_notice">Právě jsme poslali kód na %1$s. Zadejte jej níže pro ověření, že jste to Vy.</string>
+    <string name="login_msisdn_confirm_hint">Zadejte kód</string>
+    <string name="login_msisdn_confirm_send_again">Poslat znovu</string>
+    <string name="login_msisdn_confirm_submit">Dále</string>
+
+    <string name="login_msisdn_error_not_international">Mezinárodní telefonní čísla musí začít s \'+\'</string>
+    <string name="login_msisdn_error_other">Telefonní číslo se zdá neplatné. Prosím, zkontrolujte</string>
+
+    <string name="login_signup_to">Přihlásit se k %1$s</string>
+    <string name="login_signin_username_hint">Uživatelské jméno nebo email</string>
+    <string name="login_signup_username_hint">Uživatelské jméno</string>
+    <string name="login_signup_error_user_in_use">Toto uživatelské jméno je již obsazeno</string>
+    <string name="login_signup_cancel_confirmation_title">Varování</string>
+    <string name="login_signup_cancel_confirmation_content">Váš účet nebyl ještě založen.
+\n
+\nZastavit registrační proces\?</string>
+
+    <string name="login_a11y_choose_matrix_org">Vybrat matrix.org</string>
+    <string name="login_a11y_choose_modular">Vybrat modular</string>
+    <string name="login_a11y_choose_other">Vybrat upravený homeserver</string>
+    <string name="login_a11y_captcha_container">Prosím, proveďte vybídnutí captcha</string>
+    <string name="login_terms_title">Přijmout všeobecné podmínky a pokračovat</string>
+
+    <string name="login_wait_for_email_title">Prosím, nahlédněte do svého emailu</string>
+    <string name="login_wait_for_email_notice">Právě jsme odeslali email na %1$s.
+\nNež budete pokračovat se založením účtu, prosím, klikněte na odkaz v něm obsažený.</string>
+    <string name="login_validation_code_is_not_correct">Zadaný kód není správný. Prosím, zkontrolujte.</string>
+    <string name="login_error_outdated_homeserver_title">Zastaralý homeserver</string>
+    <string name="login_error_outdated_homeserver_content">Tento homeserver používá za účelem spojení příliš starou verzi. Požádejte správce, aby provedl aktualizaci.</string>
+
+    <plurals name="login_error_limit_exceeded_retry_after">
+        <item quantity="one">Bylo odesláno příliš mnoho požadavků. Můžete opakovat za %1$d vteřinu…</item>
+        <item quantity="few">Bylo odesláno příliš mnoho požadavků. Můžete opakovat za %1$d vteřiny…</item>
+        <item quantity="other">Bylo odesláno příliš mnoho požadavků. Můžete opakovat za %1$d vteřin…</item>
+    </plurals>
+
+    <string name="seen_by">Viděno</string>
+
+    <string name="signed_out_title">Právě jste se odhlásili</string>
+    <string name="signed_out_notice">Může to být způsobeno rozmanitými příčinami:
+\n
+\n• Změnili jste své heslo v jiné relaci.
+\n
+\n• Smazali jste tuto relaci z jiné relace.
+\n
+\n• Správce Vašeho serveru zneplatnil Váš přístup z bezpečnostních důvodů.</string>
+    <string name="signed_out_submit">Znovu se přihlásit</string>
+
+    <string name="soft_logout_title">Právě jste se odhlásili</string>
+    <string name="soft_logout_signin_title">Přihlásit se</string>
+    <string name="soft_logout_signin_notice">Správce Vašeho homeserveru (%1$s) Vás odhlásil z Vašeho účtu %2$s (%3$s).</string>
+    <string name="soft_logout_signin_e2e_warning_notice">Přihlašte se, abyste získali přístup k šifrovacím klíčům uloženým výlučně v tomto zařízení. Potřebujete je ke čtení všech svých zpráv na jakémkoli zařízení.</string>
+    <string name="soft_logout_signin_submit">Přihlásit</string>
+    <string name="soft_logout_clear_data_title">Vyčistit osobní údaje</string>
+    <string name="soft_logout_clear_data_notice">Varování: Vaše osobní údaje (včetně šifrovacích klíčů) jsou dosud uložena v tomto zařízení.
+\n
+\nVyčistěte je, pokud toto zařízení nebudete dále používat nebo se chcete přihlásit k jinému účtu.</string>
+    <string name="soft_logout_clear_data_submit">Vyčistit všechna data</string>
+
+    <string name="soft_logout_clear_data_dialog_title">Vyčistit data</string>
+    <string name="soft_logout_clear_data_dialog_content">Vyčistit všechna data uložená v tomto zařízení\?
+\nPro přístup k účtu a zprávám se znovu se přihlaste.</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">Ztratíte přístup k šifrovaným zprávám, pokud se nepřihlásíte za účelem obnovy šifrovacích klíčů.</string>
+    <string name="soft_logout_clear_data_dialog_submit">Vyčistit data</string>
+    <string name="soft_logout_sso_not_same_user_error">Tato relace je pro uživatele %1$s a Vy jste zadali údaje pro uživatele %2$s. RiotX toto nepodporuje.
+\nProsím, nejdříve vyčistěte data a pak se přihlaste k jinému účtu.</string>
+
+    <string name="permalink_malformed">Váš odkaz matrix.to byl chybný</string>
+    <string name="bug_report_error_too_short">Popis je příliš krátký</string>
+
+    <string name="notification_initial_sync">Prvotní sync…</string>
+
+    <string name="settings_show_devices_list">Ukázat všechny mé relace</string>
+    <string name="settings_advanced_settings">Pokročilá nastavení</string>
+    <string name="settings_developer_mode">Vývojářský režim</string>
+    <string name="settings_developer_mode_summary">Vývojářský režim aktivuje skryté funkce a může tak učinit aplikaci méně stabilní. Jen pro vývojáře!</string>
+    <string name="settings_rageshake">Rageshake</string>
+    <string name="settings_rageshake_detection_threshold">Práh detekce</string>
+    <string name="settings_rageshake_detection_threshold_summary">Pro test prahu detekce zatřeste svým telefonem</string>
+    <string name="rageshake_detected">Zatřesení detekováno!</string>
+    <string name="settings">Nastavení</string>
+    <string name="devices_current_device">Nynější relace</string>
+    <string name="devices_other_devices">Jiné relace</string>
+
+    <string name="autocomplete_limited_results">Ukazuji jen první výsledky, zadejte více znaků…</string>
+
+    <string name="settings_developer_mode_fail_fast_title">Fail-fast</string>
+    <string name="settings_developer_mode_fail_fast_summary">RiotX se může zbořit častěji, když se objeví neočekávané chyby</string>
+
+    <string name="command_description_verify">Požadavek ověření daného uživatelského ID</string>
+    <string name="command_description_shrug">Předsune ¯\\_(ツ)_/¯ do textové zprávy</string>
+
+    <string name="create_room_encryption_title">Zapnout šifrování</string>
+    <string name="create_room_encryption_description">Jakmile zapnuto, šifrování nelze vypnout.</string>
+
+    <string name="login_error_threepid_denied">Vaše emailová doména není autorizována registrovat se na tomto serveru</string>
+
+    <string name="verification_conclusion_warning">Nedůvěryhodné přihlášení</string>
+    <string name="verification_sas_match">Shodují se</string>
+    <string name="verification_sas_do_not_match">Neshodují se</string>
+    <string name="verify_user_sas_emoji_help_text">Ověřte tohoto uživatele potvrzením, že se následující ojedinělá emoji ukážou na jejich obrazovce ve stejném pořadí.</string>
+    <string name="verify_user_sas_emoji_security_tip">Pro nejvyšší zabezpečení použijte další důvěryhodný způsob komunikace nebo proveďte osobně.</string>
+    <string name="verification_green_shield">Abyste se ujistili o důvěryhodnosti uživatele, dívejte se po zeleném štítu. Pro zabezpečení místnosti důvěřujte všem uživatelům v místnosti.</string>
+
+    <string name="verification_conclusion_not_secure">Nezabezpečené</string>
+    <string name="verification_conclusion_compromised">Něco z následujích je patrně narušeno:
+\n
+\n- Váš homeserver
+\n- Homeserver uživatele, jejž právě ověřujete
+\n- Spojení do internetu Vaše či dalších uživatelů
+\n- Zařízení Vaše či dalších uživatelů</string>
+
+    <string name="sent_a_video">Video.</string>
+    <string name="sent_an_image">Obrázek.</string>
+    <string name="sent_an_audio_file">Audio</string>
+    <string name="sent_a_file">Soubor</string>
+
+    <string name="verification_request_waiting">Čekám…</string>
+    <string name="verification_request_other_cancelled">%s zrušeno</string>
+    <string name="verification_request_you_cancelled">Zrušili jste</string>
+    <string name="verification_request_other_accepted">%s přijal</string>
+    <string name="verification_request_you_accepted">Přijali jste</string>
+    <string name="verification_sent">Ověření odesláno</string>
+    <string name="verification_request">Požadavek na ověření</string>
+
+
+    <string name="verification_verify_device">Ověřit tuto relaci</string>
+    <string name="verification_verify_device_manually">Ověřit manuálně</string>
+
+    <string name="you">Vy</string>
+
+    <string name="verification_scan_notice">Pro bezpečné vzájemné ověření oskenujte kód zařízením druhého uživatele</string>
+    <string name="verification_scan_their_code">Skenovat kód</string>
+    <string name="verification_scan_emoji_title">Nelze skenovat</string>
+    <string name="verification_scan_emoji_subtitle">V případě neosobního ověření porovnejte emoji</string>
+
+    <string name="verification_no_scan_emoji_title">Ověřit porovnáním emoji</string>
+
+    <string name="verify_by_emoji_title">Ověřit pomocí emoji</string>
+    <string name="verify_by_emoji_description">Nemůžete-li skenovat kód nahoře, ověřte porovnáním krátkého, ojedinělého výběru emoji.</string>
+
+    <string name="a13n_qr_code_description">Obrázek QR kódu</string>
+
+    <string name="verification_verify_user">Ověřit %s</string>
+    <string name="verification_verified_user">Ověřeno %s</string>
+    <string name="verification_request_waiting_for">Čekám na %s…</string>
+    <string name="verification_request_alert_description">Pro vyšší zabezpečení ověřte %s kontrolou jednorázového kódu na obou zařízeních.
+\n
+\nPro nejvyšší zabezpečení proveďte osobně.</string>
+    <string name="room_profile_not_encrypted_subtitle">Zprávy v této místnosti nejsou šifrovány end-to-end.</string>
+    <string name="room_profile_encrypted_subtitle">Zprávy v této místnosti jsou šifrovány end-to-end.
+\n
+\nVaše zprávy jsou zabezpečeny zámky a pouze Vy a příjemce máte jedinečné klíče k jejich odemknutí.</string>
+    <string name="room_profile_section_security">Zabezpečení</string>
+    <string name="room_profile_section_security_learn_more">Dozvědět se víc</string>
+    <string name="room_profile_section_more">Více</string>
+    <string name="room_profile_section_more_settings">Nastavení místnosti</string>
+    <string name="room_profile_section_more_notifications">Oznámení</string>
+    <plurals name="room_profile_section_more_member_list">
+        <item quantity="one">Jedna osoba</item>
+        <item quantity="few">%1$d osoby</item>
+        <item quantity="other">%1$d osob</item>
+    </plurals>
+    <string name="room_profile_section_more_uploads">Nahrání</string>
+    <string name="room_profile_section_more_leave">Opustit místnost</string>
+    <string name="room_profile_leaving_room">Opouštím místnost…</string>
+
+    <string name="room_member_power_level_admins">Správci</string>
+    <string name="room_member_power_level_moderators">Moderátoři</string>
+    <string name="room_member_power_level_custom">Vlastní</string>
+    <string name="room_member_power_level_invites">Pozvánky</string>
+    <string name="room_member_power_level_users">Uživatelé</string>
+
+    <string name="room_member_power_level_admin_in">Správce v %1$s</string>
+    <string name="room_member_power_level_moderator_in">Moderátor v %1$s</string>
+    <string name="room_member_power_level_custom_in">Vlastní (%1$d) in %2$s</string>
+
+    <string name="room_member_jump_to_read_receipt">Přeskočit k potvrzení přečtení</string>
+
+    <string name="rendering_event_error_type_of_event_not_handled">RiotX neobstarává události typu \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">RiotX neobstarává zprávy typu \'%1$s\'</string>
+    <string name="rendering_event_error_exception">RiotX narazil na chybu při převádění obsahu události s id \'%1$s\'</string>
+
+    <string name="unignore">Odignorovat</string>
+
+    <string name="verify_cannot_cross_sign">Tato relace nemůže sdílet toto ověření s jinými z Vašich relací.
+\nToto ověření bude uloženo místně a sdíleno v budoucí verzi aplikace.</string>
+
+    <string name="room_list_sharing_header_recent_rooms">Poslední místnosti</string>
+    <string name="room_list_sharing_header_other_rooms">Další místnosti</string>
+
+    <string name="command_description_rainbow">Odešle danou zprávu zabarvenou jako duha</string>
+    <string name="command_description_rainbow_emote">Odešle daný emote zabarvený jako duha</string>
+
+    <string name="settings_category_timeline">Časová osa</string>
+
+    <string name="settings_category_composer">Editor zpráv</string>
+
+    <string name="room_settings_enable_encryption">Zapnout šifrování end-to-end</string>
+    <string name="room_settings_enable_encryption_warning">Jakmile zapnuto, šifrování nelze vypnout.</string>
+
+    <string name="room_settings_enable_encryption_dialog_title">Zapnout šifrování\?</string>
+    <string name="room_settings_enable_encryption_dialog_content">Jakmile zapnuto, šifrování místnosti nelze vypnout. Zprávy odeslané v zašifrované místnosti nemohou být čteny serverem, ale pouze účastníky místnosti. Zapnutím šifrování mohou boty a můstky přestat správně pracovat.</string>
+    <string name="room_settings_enable_encryption_dialog_submit">Zapnout šifrování</string>
+
+    <string name="verification_request_notice">Za účelem bezpečnosti ověřte %s kontrolou jednorázového kódu.</string>
+    <string name="verification_request_start_notice">Za účelem bezpečnosti to proveďte osobně nebo použijte jiný způsob komunikace.</string>
+
+    <string name="verification_emoji_notice">Porovnejte jedinečná emoji a ujistěte se, že se ukážou ve stejném pořadí.</string>
+    <string name="verification_code_notice">Porovnejte kód s tím na obrazovce druhého uživatele.</string>
+    <string name="verification_conclusion_ok_notice">Zprávy s tímto uživatelem jsou zašifrovány end-to-end a nemohou být čteny třetími stranami.</string>
+    <string name="verification_conclusion_ok_self_notice">Vaše nová relace je nyní ověřena. Má přístup k Vašim zašifrovaným zprávám a ostatní uživatelé ji uvidi jako důvěryhodnou.</string>
+
+
+    <string name="encryption_information_cross_signing_state">Křížový podpis</string>
+    <string name="encryption_information_dg_xsigning_complete">Křížový podpis je zapnut.
+\nPrivátní klíče v zařízení.</string>
+    <string name="encryption_information_dg_xsigning_trusted">Křížový podpis je zapnut
+\nKlíče jsou důvěryhodné.
+\nPrivátní klíče nejsou známy</string>
+    <string name="encryption_information_dg_xsigning_not_trusted">Křížový podpis je zapnut.
+\nKlíče nejsou důvěryhodné</string>
+    <string name="encryption_information_dg_xsigning_disabled">Křížový podpis není zapnut</string>
+
+
+    <string name="settings_active_sessions_list">Aktivní relace</string>
+    <string name="settings_active_sessions_show_all">Ukázat všechny relace</string>
+    <string name="settings_active_sessions_manage">Správa relací</string>
+    <string name="settings_active_sessions_signout_device">Odhlásit se z této relace</string>
+
+    <string name="settings_failed_to_get_crypto_device_info">Žádná kryptografická informace není k dispozici</string>
+
+    <string name="settings_active_sessions_verified_device_desc">Tato relace je důvěryhodná pro bezpečnou komunikaci, protože jste ji ověřili:</string>
+    <string name="settings_active_sessions_unverified_device_desc">Ověřte tuto relaci a tím ji označíte za důvěryhodnou &amp; dovolíte jí přístup k zašifrovaným zprávám. Pokud jste se do této relace nepřihlásili, může být Váš účet ohrožen:</string>
+
+    <plurals name="settings_active_sessions_count">
+        <item quantity="one">%d aktivní relace</item>
+        <item quantity="few">%d aktivní relace</item>
+        <item quantity="other">%d aktivních relací</item>
+    </plurals>
+
+    <string name="crosssigning_verify_this_session">Ověřit tuto relaci</string>
+    <string name="crosssigning_other_user_not_trust">Ostatní uživatelé ji nemusí důvěřovat</string>
+    <string name="complete_security">Dokončit zabezpečení</string>
+
+    <string name="verification_open_other_to_verify">Pro ověření této relace použijte existující relaci, a tím ji udělíte přístup k zašifrovaným zprávám.</string>
+
+
+    <string name="verification_profile_verify">Ověřit</string>
+    <string name="verification_profile_verified">Ověřeno</string>
+    <string name="verification_profile_warning">Varování</string>
+
+    <string name="room_member_profile_failed_to_get_devices">Načtení relací selhalo</string>
+    <string name="room_member_profile_sessions_section_title">Relace</string>
+    <string name="trusted">Důvěryhodné</string>
+    <string name="not_trusted">Nedůvěryhodné</string>
+
+    <string name="verification_profile_device_verified_because">Tato relace je důvěryhodná pro bezpečnou komunikaci, protože %1$s (%2$s) ji ověřili:</string>
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) se příhlásili skrze novou relaci:</string>
+    <string name="verification_profile_device_untrust_info">Dokud tento uživatel nezačne důvěřovat této relaci, zprávy z ní odeslané a v ní přijaté budou označeny varováním. Volitelně ji můžete manuálně ověřit.</string>
+
+
+    <string name="initialize_cross_signing">Spustit křížové podepsání</string>
+    <string name="reset_cross_signing">Resetovat klíče</string>
+
+    <string name="a11y_qr_code_for_verification">QR kód</string>
+
+    <string name="qr_code_scanned_by_other_notice">Skoro u konce! Ukazuje %s totožný štít\?</string>
+    <string name="qr_code_scanned_by_other_yes">Ano</string>
+    <string name="qr_code_scanned_by_other_no">Ne</string>
+
+    <string name="no_connectivity_to_the_server_indicator">Spojení k serveru bylo ztraceno</string>
+
+    <string name="settings_dev_tools">Vývojářské nástroje</string>
+    <string name="settings_account_data">Údaje účtu</string>
+    <plurals name="poll_info">
+        <item quantity="one">%d hlas</item>
+        <item quantity="few">%d hlasy</item>
+        <item quantity="other">%d hlasů</item>
+    </plurals>
+    <plurals name="poll_info_final">
+        <item quantity="one">%d hlas - Konečné výsledky</item>
+        <item quantity="few">%d hlasy - Konečné výsledky</item>
+        <item quantity="other">%d hlasů - Konečné výsledky</item>
+    </plurals>
+    <string name="poll_item_selected_aria">Zvolená možnost</string>
+    <string name="command_description_poll">Založí jednoduchou anketu</string>
+    <string name="verification_cannot_access_other_session">Použijte metodu obnovy</string>
+    <string name="verification_use_passphrase">Pokud se nemůžete dostat do existující relace</string>
+
+    <string name="new_signin">Nové přihlášení</string>
+
+    <string name="enter_secret_storage_invalid">Nemohu najít přihlašovací data v úložišti</string>
+    <string name="enter_secret_storage_passphrase">Zadejte heslo pro úložište údajů</string>
+    <string name="enter_secret_storage_passphrase_warning">Varování:</string>
+    <string name="enter_secret_storage_passphrase_warning_text">Měli byste otevřít úložiště údajů z důvěryhodného zařízení</string>
+
+    <string name="message_action_item_redact">Odstranit…</string>
+    <string name="share_confirm_room">Chcete %1$s poslat tuto přílohu\?</string>
+    <plurals name="send_images_with_original_size">
+        <item quantity="one">Odeslat obrázek v původní velikosti</item>
+        <item quantity="few">Odeslat obrázky v původní velikosti</item>
+        <item quantity="other">Odeslat obrázky v původní velikosti</item>
+    </plurals>
+
+    <string name="delete_event_dialog_title">Potvrďte odstranění</string>
+    <string name="delete_event_dialog_content">Jste si jist, že chcete odstranit (smazat) tuto událost\? Pamatujte, že pokud odstraníte jméno místnosti nebo téma, mohlo by to změnu zvrátit.</string>
+    <string name="delete_event_dialog_reason_checkbox">Udejte důvod</string>
+    <string name="delete_event_dialog_reason_hint">Důvod pro úpravu</string>
+
+    <string name="event_redacted_by_user_reason_with_reason">Událost smazána uživatelem, důvod: %1$s</string>
+    <string name="event_redacted_by_admin_reason_with_reason">Událost moderována správcem místnosti, důvod: %1$s</string>
+
+    <string name="keys_backup_restore_success_title_already_up_to_date">Klíče jsou již aktuální!</string>
+
+    <string name="login_mobile_device_riotx">RiotX Android</string>
+
+    <string name="settings_key_requests">Požadavky na klíče</string>
+
+    <string name="e2e_use_keybackup">Odemknout zašifrovanou historii zpráv</string>
+
+    <string name="refresh">Obnovit</string>
+
+    <string name="new_session">Nové přihlášení. Byli jste to Vy\?</string>
+    <string name="new_session_review">Klepněte pro přehled &amp; ověření</string>
+    <string name="verify_new_session_notice">Použijte tuto relaci k ověření relace nové, a tím ji udělíte přístup k zašifrovaným zprávám.</string>
+    <string name="verify_new_session_was_not_me">To jsem nebyl(a) já</string>
+    <string name="verify_new_session_compromized">Váš účet může být ohrožen</string>
+
+    <string name="verify_cancel_self_verification_from_untrusted">Pokud přerušíte, nebudete moci číst zašifrované zprávy na tomto zařízení a ostatní uživatelé mu nebudou důvěřovat</string>
+    <string name="verify_cancel_self_verification_from_trusted">Pokud přerušíte, nebudete moci číst zašifrované zprávy na svém novém zařízení a ostatní uživatelé mu nebudou důvěřovat</string>
+    <string name="verify_cancel_other">Nebudete moci ověřit %1$s (%2$s), pokud nyní přerušíte. Začněte znovu v jejich uživatelském profilu.</string>
+
+    <string name="verify_not_me_self_verification">Jedno z následujících může být ohroženo:
+\n
+\n- Vaše heslo
+\n- Váš homeserver
+\n- Toto zařízení nebo to druhé
+\n- Spojení do internetu obou zařízení
+\n
+\nDoporučujeme, abyste okamžitě změnili heslo &amp; klíč obnovy v nastavení.</string>
+
+    <string name="verify_cancelled_notice">Ověřit svá zařízení v nastavení.</string>
+    <string name="verification_cancelled">Ověření zrušeno</string>
+
+    <string name="recovery_passphrase">Heslo obnovy</string>
+    <string name="message_key">Klíč zpráv</string>
+    <string name="account_password">Heslo účtu</string>
+
+    <string name="set_recovery_passphrase">Nastavte %s</string>
+    <string name="generate_message_key">Generovat klíč zpráv</string>
+
+    <string name="confirm_recovery_passphrase">Potvrďte %s</string>
+
+    <string name="enter_account_password">Zadejte své %s a pokračujte.</string>
+
+    <string name="bootstrap_info_text">Zabezpečit &amp; odemknout zašifrované zprávy a důvěru s %s.</string>
+    <string name="bootstrap_info_confirm_text">Zadejte opět své %s a potvrďte.</string>
+    <string name="bootstrap_dont_reuse_pwd">Nepoužívejte heslo účtu opakovaně.</string>
+
+
+    <string name="bootstrap_loading_text">To může několik vteřin trvat, prosím, buďte trpěliví.</string>
+    <string name="bootstrap_loading_title">Nastavuji obnovení.</string>
+    <string name="your_recovery_key">Váš klíč obnovení</string>
+    <string name="bootstrap_finish_title">Hotovo!</string>
+    <string name="keep_it_safe">Udržujte v bezpečí</string>
+    <string name="finish">Dokončit</string>
+
+    <string name="bootstrap_save_key_description">Použijte tento %1$s jako záchrannou síť v případě, že zapomenete své %2$s.</string>
+
+    <string name="bootstrap_crosssigning_progress_initializing">Zvěřejňuji založené klíče identity</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">Generuji zabezpečené klíče z hesla</string>
+    <string name="bootstrap_crosssigning_progress_default_key">Určuji výchozí klíč SSSS</string>
+    <string name="bootstrap_crosssigning_progress_save_msk">Synchronizuji hlavní klíč</string>
+    <string name="bootstrap_crosssigning_progress_save_usk">Synchronizuji uživatelský klíč</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">Synchronizuji sebepodpisový klíč</string>
+    <string name="bootstrap_crosssigning_progress_key_backup">Nastavuji zálohu klíčů</string>
+
+
+    <string name="bootstrap_cross_signing_success">Vaše %2$s &amp; %1$s jsou nyní nastaveny.
+\n
+\nUdržujte je v bezpečí! Budete je potřebovat k odemknutí zašifrovaných zpráv a zabezpečených informací, pokud přijdete o všechny své aktivní relace.</string>
+
+    <string name="bootstrap_crosssigning_print_it">Vytiskněte a uložte na bezpečném místě</string>
+    <string name="bootstrap_crosssigning_save_usb">Uložte je na USB nebo zálohový disk</string>
+    <string name="bootstrap_crosssigning_save_cloud">Nahrajte do svého osobního úložiště v cloudu</string>
+
+    <string name="auth_flow_not_supported">To nelze provést z mobilního zařízení</string>
+
+    <string name="bootstrap_skip_text">Nastavení hesla pro obnovení Vám umožní zabezpečit &amp; odemknout zašifrované zprávy a důvěryhodnost.
+\n
+\nPokud nechcete nastavit heslo pro zprávy, založte klíč pro zprávy.</string>
+    <string name="bootstrap_skip_text_no_gen_key">Nastavení hesla pro obnovení Vám umožní zabezpečit &amp; odemknout zašifrované zprávy a důvěryhodnost.</string>
+
+
+    <string name="encryption_enabled">Šifrování zapnuto</string>
+    <string name="encryption_enabled_tile_description">Zprávy v této místnosti jsou zašifrovány end-to-end. Poučte se více &amp; ověřte uživatele v jejich profilech.</string>
+    <string name="encryption_not_enabled">Šifrování není zapnuto</string>
+    <string name="encryption_unknown_algorithm_tile_description">Šifrování použité v této místnosti není podporováno</string>
+
+    <string name="room_created_summary_item">%s založil a nastavil tuto místnost.</string>
+
+    <string name="qr_code_scanned_self_verif_notice">Skoro u konce! Ukazuje druhé zařízení stejný štít\?</string>
+    <string name="qr_code_scanned_verif_waiting_notice">Skoro u konce! Čekám na potvrzení…</string>
+    <string name="qr_code_scanned_verif_waiting">Čekám na %s…</string>
+
+    <string name="error_failed_to_import_keys">Import klíčů selhal</string>
+
+    <string name="settings_notification_configuration">Konfigurace oznámení</string>
+    <string name="settings_messages_at_room">Zprávy obsahující @room</string>
+    <string name="settings_messages_in_e2e_one_to_one">Zašifrované zprávy v chatech one-to-one</string>
+    <string name="settings_messages_in_e2e_group_chat">Zašifrované zprávy ve skupinových chatech</string>
+    <string name="settings_when_rooms_are_upgraded">Když dojde k upgradu místností</string>
+    <string name="settings_troubleshoot_title">Řešit problémy</string>
+    <string name="settings_notification_advanced_summary_riotx">Nastavit důležitost oznámení podle události</string>
+
+    <string name="command_description_plain">Odešle zprávu jako prostý text bez interpretace markdown</string>
+
+    <string name="auth_invalid_login_param_space_in_password">Nesprávné uživatelské jméno a/nebo heslo. Zadané heslo začíná nebo končí mezerami, prosím, zkontrolovat.</string>
+
+    <string name="room_message_placeholder">Zpráva…</string>
+
+    <string name="upgrade_security">Upgrade šifrování je k dispozici</string>
+    <string name="security_prompt_text">Ověřit sebe &amp; ostatní za účelem bezpečí chatů</string>
+
+    <string name="bootstrap_enter_recovery">Zadejte svůj %s a pokračujte</string>
+    <string name="use_file">Použít soubor</string>
+
+    <string name="enter_backup_passphrase">Zadejte %s</string>
+    <string name="backup_recovery_passphrase">Heslo obnovení</string>
+    <string name="bootstrap_invalid_recovery_key">To není platný klíč obnovení</string>
+    <string name="recovery_key_empty_error_message">Prosím, zadejte klíč obnovení</string>
+
+    <string name="bootstrap_progress_checking_backup">Kontroluji klíč zálohy</string>
+    <string name="bootstrap_progress_checking_backup_with_info">Kontroluji klíč zálohy (%s)</string>
+    <string name="bootstrap_progress_compute_curve_key">Generuji klíč curve</string>
+    <string name="bootstrap_progress_generating_ssss">Generuji klíč SSSS z hesla</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">Generuji klíč SSSS z hesla (%s)</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">Generuji klíč SSSS z klíče obnovení</string>
+    <string name="bootstrap_progress_storing_in_sss">Ukládám heslo pro zálohu klíče v SSSS</string>
+    <string name="new_session_review_with_info">%1$s (%2$s)</string>
+
+    <string name="bootstrap_migration_enter_backup_password">Zadejte své heslo pro zálohu klíče a pokračujte.</string>
+    <string name="bootstrap_migration_use_recovery_key">použít svůj klíč obnovy zálohy klíčů</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">Neznáte-li své heslo zálohy klíčů, můžete %s.</string>
+    <string name="bootstrap_migration_backup_recovery_key">Klíč pro obnovu zálohy klíčů</string>
+
+    <string name="settings_security_prevent_screenshots_title">Zamezte screenshotům aplikace</string>
+    <string name="settings_security_prevent_screenshots_summary">Zapnutí toho nastavení doplní značku FLAG_SECURE ke všem aktivitám. Pro aktivaci změny restartujte aplikaci.</string>
+
+    <string name="media_file_added_to_gallery">Mediální soubor byl připojen do galerie</string>
+    <string name="error_adding_media_file_to_gallery">Mediální soubor nemohl být připojen do galerie</string>
+    <string name="change_password_summary">Nastavit nové heslo účtu…</string>
+
 </resources>

@@ -25,15 +25,16 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import dagger.Lazy
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.keysbackup.KeysBackupState
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.isTextMessage
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFormat
-import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
+import im.vector.matrix.android.api.session.room.model.message.MessageWithAttachmentContent
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
@@ -209,6 +210,31 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         } ?: ""
     }
 
+    private fun getRedactionReason(timelineEvent: TimelineEvent): String {
+        return (timelineEvent
+                .root
+                .unsignedData
+                ?.redactedEvent
+                ?.content
+                ?.get("reason") as? String)
+                ?.takeIf { it.isNotBlank() }
+                .let { reason ->
+                    if (reason == null) {
+                        if (timelineEvent.root.isRedactedBySameUser()) {
+                            stringProvider.getString(R.string.event_redacted_by_user_reason)
+                        } else {
+                            stringProvider.getString(R.string.event_redacted_by_admin_reason)
+                        }
+                    } else {
+                        if (timelineEvent.root.isRedactedBySameUser()) {
+                            stringProvider.getString(R.string.event_redacted_by_user_reason_with_reason, reason)
+                        } else {
+                            stringProvider.getString(R.string.event_redacted_by_admin_reason_with_reason, reason)
+                        }
+                    }
+                }
+    }
+
     private fun actionsForEvent(timelineEvent: TimelineEvent): List<EventSharedAction> {
         val messageContent: MessageContent? = timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
                 ?: timelineEvent.root.getClearContent().toModel()
@@ -260,13 +286,12 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                         add(EventSharedAction.ViewEditHistory(informationData))
                     }
 
-                    if (canShare(msgType)) {
-                        if (messageContent is MessageImageContent) {
-                            session.contentUrlResolver().resolveFullSize(messageContent.url)?.let { url ->
-                                add(EventSharedAction.Share(url))
-                            }
-                        }
-                        // TODO
+                    if (canShare(msgType) && messageContent is MessageWithAttachmentContent) {
+                        add(EventSharedAction.Share(timelineEvent.eventId, messageContent))
+                    }
+
+                    if (canSave(msgType) && messageContent is MessageWithAttachmentContent) {
+                        add(EventSharedAction.Save(timelineEvent.eventId, messageContent))
                     }
 
                     if (timelineEvent.root.sendState == SendState.SENT) {
@@ -277,8 +302,21 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 }
 
                 if (vectorPreferences.developerMode()) {
+                    if (timelineEvent.isEncrypted() && timelineEvent.root.mCryptoError != null) {
+                        val keysBackupService = session.cryptoService().keysBackupService()
+                        if (keysBackupService.state == KeysBackupState.NotTrusted
+                                || (keysBackupService.state == KeysBackupState.ReadyToBackUp
+                                        && keysBackupService.canRestoreKeys())
+                        ) {
+                            add(EventSharedAction.UseKeyBackup)
+                        }
+                        if (session.cryptoService().getCryptoDeviceInfo(session.myUserId).size > 1) {
+                            add(EventSharedAction.ReRequestKey(timelineEvent.eventId))
+                        }
+                    }
+
                     add(EventSharedAction.ViewSource(timelineEvent.root.toContentStringWithIndent()))
-                    if (timelineEvent.isEncrypted()) {
+                    if (timelineEvent.isEncrypted() && timelineEvent.root.mxDecryptionResult != null) {
                         val decryptedContent = timelineEvent.root.toClearContentStringWithIndent()
                                 ?: stringProvider.getString(R.string.encryption_information_decryption_error)
                         add(EventSharedAction.ViewDecryptedSource(decryptedContent))
@@ -374,8 +412,19 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         return when (msgType) {
             MessageType.MSGTYPE_IMAGE,
             MessageType.MSGTYPE_AUDIO,
-            MessageType.MSGTYPE_VIDEO -> true
-            else                      -> false
+            MessageType.MSGTYPE_VIDEO,
+            MessageType.MSGTYPE_FILE -> true
+            else                     -> false
+        }
+    }
+
+    private fun canSave(msgType: String?): Boolean {
+        return when (msgType) {
+            MessageType.MSGTYPE_IMAGE,
+            MessageType.MSGTYPE_AUDIO,
+            MessageType.MSGTYPE_VIDEO,
+            MessageType.MSGTYPE_FILE -> true
+            else                     -> false
         }
     }
 }

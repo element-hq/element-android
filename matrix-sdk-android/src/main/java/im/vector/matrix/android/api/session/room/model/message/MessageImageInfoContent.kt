@@ -20,6 +20,6 @@ package im.vector.matrix.android.api.session.room.model.message
 /**
  * A content with image information
  */
-interface MessageImageInfoContent : MessageEncryptedContent {
+interface MessageImageInfoContent : MessageWithAttachmentContent {
     val info: ImageInfo?
 }

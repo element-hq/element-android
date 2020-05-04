@@ -34,7 +34,11 @@ interface FileService {
         /**
          * Download file in cache
          */
-        FOR_INTERNAL_USE
+        FOR_INTERNAL_USE,
+        /**
+         * Download file in file provider path
+         */
+        FOR_EXTERNAL_SHARE
     }
 
     /**

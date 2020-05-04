@@ -15,6 +15,7 @@
  */
 package im.vector.matrix.android.internal.crypto.verification
 
+import im.vector.matrix.android.api.session.crypto.verification.ValidVerificationInfoRequest
 import im.vector.matrix.android.api.session.crypto.verification.CancelCode
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 
@@ -27,25 +28,29 @@ internal interface VerificationTransport {
     /**
      * Sends a message
      */
-    fun sendToOther(type: String,
-                    verificationInfo: VerificationInfo,
-                    nextState: VerificationTxState,
-                    onErrorReason: CancelCode,
-                    onDone: (() -> Unit)?)
+    fun <T> sendToOther(type: String,
+                        verificationInfo: VerificationInfo<T>,
+                        nextState: VerificationTxState,
+                        onErrorReason: CancelCode,
+                        onDone: (() -> Unit)?)
 
+    /**
+     * @param callback will be called with eventId and ValidVerificationInfoRequest in case of success
+     */
     fun sendVerificationRequest(supportedMethods: List<String>,
-                                localID: String,
+                                localId: String,
                                 otherUserId: String,
                                 roomId: String?,
                                 toDevices: List<String>?,
-                                callback: (String?, VerificationInfoRequest?) -> Unit)
+                                callback: (String?, ValidVerificationInfoRequest?) -> Unit)
 
     fun cancelTransaction(transactionId: String,
                           otherUserId: String,
                           otherUserDeviceId: String?,
                           code: CancelCode)
 
-    fun done(transactionId: String)
+    fun done(transactionId: String,
+             onDone: (() -> Unit)?)
 
     /**
      * Creates an accept message suitable for this transport
@@ -64,7 +69,7 @@ internal interface VerificationTransport {
      * Create start for SAS verification
      */
     fun createStartForSas(fromDevice: String,
-                          transactionID: String,
+                          transactionId: String,
                           keyAgreementProtocols: List<String>,
                           hashes: List<String>,
                           messageAuthenticationCodes: List<String>,
@@ -74,7 +79,7 @@ internal interface VerificationTransport {
      * Create start for QR code verification
      */
     fun createStartForQrCode(fromDevice: String,
-                             transactionID: String,
+                             transactionId: String,
                              sharedSecret: String): VerificationInfoStart
 
     fun createMac(tid: String, mac: Map<String, String>, keys: String): VerificationInfoMac

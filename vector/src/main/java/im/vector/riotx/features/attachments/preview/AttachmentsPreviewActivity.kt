@@ -43,7 +43,7 @@ class AttachmentsPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
         }
 
         fun getOutput(intent: Intent): List<ContentAttachmentData> {
-            return intent.getParcelableArrayListExtra(ATTACHMENTS_PREVIEW_RESULT)
+            return intent.getParcelableArrayListExtra(ATTACHMENTS_PREVIEW_RESULT) ?: emptyList()
         }
 
         fun getKeepOriginalSize(intent: Intent): Boolean {

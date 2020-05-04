@@ -120,7 +120,7 @@ internal class SyncResponseHandler @Inject constructor(private val monarchy: Mon
             return
         } // nothing on initial sync
 
-        val rules = pushRuleService.getPushRules(RuleScope.GLOBAL)
+        val rules = pushRuleService.getPushRules(RuleScope.GLOBAL).getAllRules()
         processEventForPushTask.execute(ProcessEventForPushTask.Params(roomsSyncResponse, rules))
         Timber.v("[PushRules] <-- Push task scheduled")
     }

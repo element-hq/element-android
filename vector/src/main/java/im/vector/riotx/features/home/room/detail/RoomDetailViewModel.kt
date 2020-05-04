@@ -65,7 +65,7 @@ import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.core.utils.subscribeLogError
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
-import im.vector.riotx.features.crypto.verification.supportedVerificationMethods
+import im.vector.riotx.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.riotx.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import im.vector.riotx.features.home.room.typing.TypingHelper
@@ -81,13 +81,15 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
-class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: RoomDetailViewState,
-                                                      userPreferencesProvider: UserPreferencesProvider,
-                                                      private val vectorPreferences: VectorPreferences,
-                                                      private val stringProvider: StringProvider,
-                                                      private val typingHelper: TypingHelper,
-                                                      private val rainbowGenerator: RainbowGenerator,
-                                                      private val session: Session
+class RoomDetailViewModel @AssistedInject constructor(
+        @Assisted initialState: RoomDetailViewState,
+        userPreferencesProvider: UserPreferencesProvider,
+        private val vectorPreferences: VectorPreferences,
+        private val stringProvider: StringProvider,
+        private val typingHelper: TypingHelper,
+        private val rainbowGenerator: RainbowGenerator,
+        private val session: Session,
+        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState), Timeline.Listener {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -207,6 +209,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             is RoomDetailAction.DeclineVerificationRequest       -> handleDeclineVerification(action)
             is RoomDetailAction.RequestVerification              -> handleRequestVerification(action)
             is RoomDetailAction.ResumeVerification               -> handleResumeRequestVerification(action)
+            is RoomDetailAction.ReRequestKeys                    -> handleReRequestKeys(action)
         }
     }
 
@@ -340,6 +343,12 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         is ParsedCommand.ErrorUnknownSlashCommand -> {
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandUnknown(slashCommandResult.slashCommand))
                         }
+                        is ParsedCommand.SendPlainText            -> {
+                            // Send the text message to the room, without markdown
+                            room.sendTextMessage(slashCommandResult.message, autoMarkdown = false)
+                            _viewEvents.post(RoomDetailViewEvents.MessageSent)
+                            popDraft()
+                        }
                         is ParsedCommand.Invite                   -> {
                             handleInviteSlashCommand(slashCommandResult)
                             popDraft()
@@ -371,8 +380,8 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.JoinRoom                 -> {
-                            // TODO
-                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
+                            handleJoinToAnotherRoomSlashCommand(slashCommandResult)
+                            popDraft()
                         }
                         is ParsedCommand.PartRoom                 -> {
                             // TODO
@@ -421,7 +430,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                             session
                                     .cryptoService()
                                     .verificationService()
-                                    .requestKeyVerificationInDMs(supportedVerificationMethods, slashCommandResult.userId, room.roomId)
+                                    .requestKeyVerificationInDMs(supportedVerificationMethodsProvider.provide(), slashCommandResult.userId, room.roomId)
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
@@ -437,6 +446,19 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         is ParsedCommand.ChangeDisplayName        -> {
                             // TODO
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
+                        }
+                        is ParsedCommand.DiscardSession           -> {
+                            if (room.isEncrypted()) {
+                                session.cryptoService().discardOutboundSession(room.roomId)
+                                _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+                                popDraft()
+                            } else {
+                                _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+                                _viewEvents.post(
+                                        RoomDetailViewEvents
+                                                .ShowMessage(stringProvider.getString(R.string.command_description_discard_session_not_handled))
+                                )
+                            }
                         }
                     }.exhaustive
                 }
@@ -502,6 +524,22 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
 
     private fun popDraft() {
         room.deleteDraft(NoOpMatrixCallback())
+    }
+
+    private fun handleJoinToAnotherRoomSlashCommand(command: ParsedCommand.JoinRoom) {
+        session.joinRoom(command.roomAlias, command.reason, object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                session.getRoomSummary(command.roomAlias)
+                        ?.roomId
+                        ?.let {
+                            _viewEvents.post(RoomDetailViewEvents.JoinRoomCommandSuccess(it))
+                        }
+            }
+
+            override fun onFailure(failure: Throwable) {
+                _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
+            }
+        })
     }
 
     private fun legacyRiotQuoteText(quotedText: String?, myText: String): String {
@@ -585,7 +623,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
             when (val tooBigFile = attachments.find { it.size > maxUploadFileSize }) {
                 null -> room.sendMedias(attachments, action.compressBeforeSending, emptySet())
                 else -> _viewEvents.post(RoomDetailViewEvents.FileTooBigError(
-                        tooBigFile.name ?: tooBigFile.path,
+                        tooBigFile.name ?: tooBigFile.queryUri.toString(),
                         tooBigFile.size,
                         maxUploadFileSize
                 ))
@@ -828,7 +866,7 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
     private fun handleAcceptVerification(action: RoomDetailAction.AcceptVerificationRequest) {
         Timber.v("## SAS handleAcceptVerification ${action.otherUserId},  roomId:${room.roomId}, txId:${action.transactionId}")
         if (session.cryptoService().verificationService().readyPendingVerificationInDMs(
-                        supportedVerificationMethods,
+                        supportedVerificationMethodsProvider.provide(),
                         action.otherUserId,
                         room.roomId,
                         action.transactionId)) {
@@ -859,6 +897,14 @@ class RoomDetailViewModel @AssistedInject constructor(@Assisted initialState: Ro
                         otherUserId = it.otherUserId
                 )))
             }
+        }
+    }
+
+    private fun handleReRequestKeys(action: RoomDetailAction.ReRequestKeys) {
+        // Check if this request is still active and handled by me
+        room.getTimeLineEvent(action.eventId)?.let {
+            session.cryptoService().reRequestRoomKeyForEvent(it.root)
+            _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.e2e_re_request_encryption_key_dialog_content)))
         }
     }
 

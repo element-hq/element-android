@@ -29,6 +29,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val encryptedItemFactory: EncryptedItemFactory,
                                               private val noticeItemFactory: NoticeItemFactory,
                                               private val defaultItemFactory: DefaultItemFactory,
+                                              private val encryptionItemFactory: EncryptionItemFactory,
                                               private val roomCreateItemFactory: RoomCreateItemFactory,
                                               private val verificationConclusionItemFactory: VerificationItemFactory,
                                               private val userPreferencesProvider: UserPreferencesProvider) {
@@ -57,8 +58,10 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.CALL_HANGUP,
                 EventType.CALL_ANSWER,
                 EventType.REACTION,
-                EventType.REDACTION,
-                EventType.STATE_ROOM_ENCRYPTION         -> noticeItemFactory.create(event, highlight, callback)
+                EventType.REDACTION -> noticeItemFactory.create(event, highlight, callback)
+                EventType.STATE_ROOM_ENCRYPTION         -> {
+                    encryptionItemFactory.create(event, highlight, callback)
+                }
                 // State room create
                 EventType.STATE_ROOM_CREATE             -> roomCreateItemFactory.create(event, callback)
                 // Crypto

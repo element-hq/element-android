@@ -17,7 +17,7 @@
 package im.vector.matrix.android.internal.session.content
 
 import com.squareup.moshi.Moshi
-import im.vector.matrix.android.api.auth.data.SessionParams
+import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.internal.di.Authenticated
 import im.vector.matrix.android.internal.network.ProgressRequestBody
 import im.vector.matrix.android.internal.network.awaitResponse
@@ -37,10 +37,10 @@ import javax.inject.Inject
 internal class FileUploader @Inject constructor(@Authenticated
                                                 private val okHttpClient: OkHttpClient,
                                                 private val eventBus: EventBus,
-                                                sessionParams: SessionParams,
+                                                contentUrlResolver: ContentUrlResolver,
                                                 moshi: Moshi) {
 
-    private val uploadUrl = DefaultContentUrlResolver.getUploadUrl(sessionParams.homeServerConnectionConfig)
+    private val uploadUrl = contentUrlResolver.uploadUrl
     private val responseAdapter = moshi.adapter(ContentUploadResponse::class.java)
 
     suspend fun uploadFile(file: File,
@@ -53,9 +53,9 @@ internal class FileUploader @Inject constructor(@Authenticated
 
     suspend fun uploadByteArray(byteArray: ByteArray,
                                 filename: String?,
-                                mimeType: String,
+                                mimeType: String?,
                                 progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
-        val uploadBody = byteArray.toRequestBody(mimeType.toMediaTypeOrNull())
+        val uploadBody = byteArray.toRequestBody(mimeType?.toMediaTypeOrNull())
         return upload(uploadBody, filename, progressListener)
     }
 
