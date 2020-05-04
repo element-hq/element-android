@@ -2354,4 +2354,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="bootstrap_crosssigning_save_cloud">Kopier es in deinen persönlichen Cloud-Speicher</string>
 
     <string name="encryption_not_enabled">Verschlüsselung ist nicht aktiviert</string>
-</resources>
+<string name="auth_flow_not_supported">Dies kann nicht von einem mobilen Gerät erfolgen</string>
+
+    <string name="settings_when_rooms_are_upgraded">Wenn sich Raumversionen ändern</string>
+    </resources>
