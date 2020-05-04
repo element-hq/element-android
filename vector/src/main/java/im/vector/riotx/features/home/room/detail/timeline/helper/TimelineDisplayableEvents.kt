@@ -106,11 +106,3 @@ fun List<TimelineEvent>.prevSameTypeEvents(index: Int, minSize: Int): List<Timel
             .nextSameTypeEvents(0, minSize)
             .reversed()
 }
-
-fun List<TimelineEvent>.nextOrNull(index: Int): TimelineEvent? {
-    return if (index >= size - 1) {
-        null
-    } else {
-        subList(index + 1, this.size).firstOrNull()
-    }
-}

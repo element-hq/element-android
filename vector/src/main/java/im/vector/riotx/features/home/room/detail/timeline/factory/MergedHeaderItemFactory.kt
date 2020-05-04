@@ -22,7 +22,7 @@ import im.vector.matrix.android.api.session.room.model.create.RoomCreateContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.crypto.model.event.EncryptionEventContent
-import im.vector.riotx.core.di.ActiveSessionHolder
+import im.vector.riotx.core.extensions.prevOrNull
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.helper.AvatarSizeProvider
@@ -37,15 +37,15 @@ import im.vector.riotx.features.home.room.detail.timeline.item.MergedRoomCreatio
 import im.vector.riotx.features.home.room.detail.timeline.item.MergedRoomCreationItem_
 import javax.inject.Inject
 
-class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: ActiveSessionHolder,
-                                                  private val avatarRenderer: AvatarRenderer,
+class MergedHeaderItemFactory @Inject constructor(private val avatarRenderer: AvatarRenderer,
                                                   private val avatarSizeProvider: AvatarSizeProvider) {
 
     private val collapsedEventIds = linkedSetOf<Long>()
     private val mergeItemCollapseStates = HashMap<Long, Boolean>()
 
     /**
-     * Note: nextEvent is an older event than event
+     * @param nextEvent is an older event than event
+     * @param items all known items, sorted from newer event to oldest event
      */
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
@@ -127,9 +127,9 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
                                                eventIdToHighlight: String?,
                                                requestModelBuild: () -> Unit,
                                                callback: TimelineEventController.Callback?): MergedRoomCreationItem_? {
-        var prevEvent = if (currentPosition > 0) items[currentPosition - 1] else null
+        var prevEvent = items.prevOrNull(currentPosition)
         var tmpPos = currentPosition - 1
-        val mergedEvents = ArrayList<TimelineEvent>().also { it.add(event) }
+        val mergedEvents = mutableListOf(event)
         var hasEncryption = false
         var encryptionAlgorithm: String? = null
         while (prevEvent != null && prevEvent.isRoomConfiguration(null)) {
@@ -139,7 +139,7 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
             }
             mergedEvents.add(prevEvent)
             tmpPos--
-            prevEvent = if (tmpPos >= 0) items[tmpPos] else null
+            prevEvent = items.getOrNull(tmpPos)
         }
         return if (mergedEvents.size > 2) {
             var highlighted = false
