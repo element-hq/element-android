@@ -1,4 +1,4 @@
-Changes in RiotX 0.19.0 (2020-XX-XX)
+Changes in RiotX 0.19.0 (2020-05-04)
 ===================================================
 
 Features ✨:
@@ -51,7 +51,7 @@ Bugfix 🐛:
  - Fix bad Shield Logic for DM (#963)
 
 Translations 🗣:
- -
+ - Weblate now create PR directly to RiotX GitHub project
 
 SDK API changes ⚠️:
  - Increase targetSdkVersion to 29
