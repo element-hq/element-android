@@ -64,60 +64,69 @@ class MergedHeaderItemFactory @Inject constructor(private val avatarRenderer: Av
         } else if (!event.canBeMerged() || (nextEvent?.root?.getClearType() == event.root.getClearType() && !addDaySeparator)) {
             null
         } else {
-            val prevSameTypeEvents = items.prevSameTypeEvents(currentPosition, 2)
-            if (prevSameTypeEvents.isEmpty()) {
-                null
-            } else {
-                var highlighted = false
-                val mergedEvents = (prevSameTypeEvents + listOf(event)).asReversed()
-                val mergedData = ArrayList<BasedMergedItem.Data>(mergedEvents.size)
-                mergedEvents.forEach { mergedEvent ->
-                    if (!highlighted && mergedEvent.root.eventId == eventIdToHighlight) {
-                        highlighted = true
-                    }
-                    val senderAvatar = mergedEvent.senderAvatar
-                    val senderName = mergedEvent.getDisambiguatedDisplayName()
-                    val data = BasedMergedItem.Data(
-                            userId = mergedEvent.root.senderId ?: "",
-                            avatarUrl = senderAvatar,
-                            memberName = senderName,
-                            localId = mergedEvent.localId,
-                            eventId = mergedEvent.root.eventId ?: ""
-                    )
-                    mergedData.add(data)
+            buildMembershipEventsMergedSummary(currentPosition, items, event, eventIdToHighlight, requestModelBuild, callback)
+        }
+    }
+
+    private fun buildMembershipEventsMergedSummary(currentPosition: Int,
+                                                   items: List<TimelineEvent>,
+                                                   event: TimelineEvent,
+                                                   eventIdToHighlight: String?,
+                                                   requestModelBuild: () -> Unit,
+                                                   callback: TimelineEventController.Callback?): MergedMembershipEventsItem_? {
+        val prevSameTypeEvents = items.prevSameTypeEvents(currentPosition, 2)
+        return if (prevSameTypeEvents.isEmpty()) {
+            null
+        } else {
+            var highlighted = false
+            val mergedEvents = (prevSameTypeEvents + listOf(event)).asReversed()
+            val mergedData = ArrayList<BasedMergedItem.Data>(mergedEvents.size)
+            mergedEvents.forEach { mergedEvent ->
+                if (!highlighted && mergedEvent.root.eventId == eventIdToHighlight) {
+                    highlighted = true
                 }
-                val mergedEventIds = mergedEvents.map { it.localId }
-                // We try to find if one of the item id were used as mergeItemCollapseStates key
-                // => handle case where paginating from mergeable events and we get more
-                val previousCollapseStateKey = mergedEventIds.intersect(mergeItemCollapseStates.keys).firstOrNull()
-                val initialCollapseState = mergeItemCollapseStates.remove(previousCollapseStateKey)
-                        ?: true
-                val isCollapsed = mergeItemCollapseStates.getOrPut(event.localId) { initialCollapseState }
-                if (isCollapsed) {
-                    collapsedEventIds.addAll(mergedEventIds)
-                } else {
-                    collapsedEventIds.removeAll(mergedEventIds)
-                }
-                val mergeId = mergedEventIds.joinToString(separator = "_") { it.toString() }
-                val attributes = MergedMembershipEventsItem.Attributes(
-                        isCollapsed = isCollapsed,
-                        mergeData = mergedData,
-                        avatarRenderer = avatarRenderer,
-                        onCollapsedStateChanged = {
-                            mergeItemCollapseStates[event.localId] = it
-                            requestModelBuild()
-                        },
-                        readReceiptsCallback = callback
+                val senderAvatar = mergedEvent.senderAvatar
+                val senderName = mergedEvent.getDisambiguatedDisplayName()
+                val data = BasedMergedItem.Data(
+                        userId = mergedEvent.root.senderId ?: "",
+                        avatarUrl = senderAvatar,
+                        memberName = senderName,
+                        localId = mergedEvent.localId,
+                        eventId = mergedEvent.root.eventId ?: ""
                 )
-                MergedMembershipEventsItem_()
-                        .id(mergeId)
-                        .leftGuideline(avatarSizeProvider.leftGuideline)
-                        .highlighted(isCollapsed && highlighted)
-                        .attributes(attributes)
-                        .also {
-                            it.setOnVisibilityStateChanged(MergedTimelineEventVisibilityStateChangedListener(callback, mergedEvents))
-                        }
+                mergedData.add(data)
             }
+            val mergedEventIds = mergedEvents.map { it.localId }
+            // We try to find if one of the item id were used as mergeItemCollapseStates key
+            // => handle case where paginating from mergeable events and we get more
+            val previousCollapseStateKey = mergedEventIds.intersect(mergeItemCollapseStates.keys).firstOrNull()
+            val initialCollapseState = mergeItemCollapseStates.remove(previousCollapseStateKey)
+                    ?: true
+            val isCollapsed = mergeItemCollapseStates.getOrPut(event.localId) { initialCollapseState }
+            if (isCollapsed) {
+                collapsedEventIds.addAll(mergedEventIds)
+            } else {
+                collapsedEventIds.removeAll(mergedEventIds)
+            }
+            val mergeId = mergedEventIds.joinToString(separator = "_") { it.toString() }
+            val attributes = MergedMembershipEventsItem.Attributes(
+                    isCollapsed = isCollapsed,
+                    mergeData = mergedData,
+                    avatarRenderer = avatarRenderer,
+                    onCollapsedStateChanged = {
+                        mergeItemCollapseStates[event.localId] = it
+                        requestModelBuild()
+                    },
+                    readReceiptsCallback = callback
+            )
+            MergedMembershipEventsItem_()
+                    .id(mergeId)
+                    .leftGuideline(avatarSizeProvider.leftGuideline)
+                    .highlighted(isCollapsed && highlighted)
+                    .attributes(attributes)
+                    .also {
+                        it.setOnVisibilityStateChanged(MergedTimelineEventVisibilityStateChangedListener(callback, mergedEvents))
+                    }
         }
     }
 
