@@ -65,7 +65,8 @@ class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
                 },
                 {
                     _viewEvents.post(InviteUsersToRoomViewEvents.Failure(it))
-                }).disposeOnClear()
+                })
+                .disposeOnClear()
     }
 
     fun getUserIdsOfRoomMembers(): Set<String> {
