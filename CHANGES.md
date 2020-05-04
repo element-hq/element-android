@@ -1,3 +1,27 @@
+Changes in RiotX 0.20.0 (2020-XX-XX)
+===================================================
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ -
+
+Bugfix 🐛:
+ -
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ -
+
+Build 🧱:
+ -
+
+Other changes:
+ -
+
 Changes in RiotX 0.19.0 (2020-05-04)
 ===================================================
 

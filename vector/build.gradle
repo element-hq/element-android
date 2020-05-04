@@ -15,7 +15,7 @@ androidExtensions {
 }
 
 ext.versionMajor = 0
-ext.versionMinor = 19
+ext.versionMinor = 20
 ext.versionPatch = 0
 
 static def getGitTimestamp() {
