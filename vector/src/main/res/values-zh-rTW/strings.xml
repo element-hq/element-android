@@ -218,7 +218,7 @@
 
     <string name="groups_list">群組清單</string>
 
-    <string name="compression_options">"傳送為 "</string>
+    <string name="compression_options">傳送為</string>
     <string name="compression_opt_list_original">原始</string>
     <string name="compression_opt_list_large">大</string>
     <string name="compression_opt_list_medium">中</string>
@@ -258,13 +258,13 @@
 
 請在下個彈跳視窗允許存取，來從手機傳送檔案。</string>
     <string name="permissions_rationale_msg_camera">Riot 需要權限存取您的相機，來拍照與視訊通話。</string>
-    <string name="permissions_rationale_msg_camera_explanation">
-
-為了要通話，請在下個彈跳視窗中允許存取。</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\n為了要通話，請在下個彈跳視窗中允許存取。"</string>
     <string name="permissions_rationale_msg_record_audio">Riot 需要權限來存取麥克風，來撥打語音通話。</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">
-
-為了要通話，請在下個彈跳視窗中允許存取。</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\n為了要通話，請在下個彈跳視窗中允許存取。"</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot 需要權限來存取相機及麥克風來撥打視訊通話。
 
 為了要通話，請在下個彈跳視窗中允許存取。</string>
@@ -736,8 +736,8 @@
     <string name="encryption_information_unblock">解除黑名單</string>
 
     <string name="encryption_information_verify_device">驗證工作階段</string>
-    <string name="encryption_information_verify_device_warning">要驗證此工作階段是否可信，請使用其他方式（例如：面對面或是打電話）聯絡它的擁有者並詢問他們在使用者設定中看到此工作階段的金鑰是否與下列的金鑰相符：</string>
-    <string name="encryption_information_verify_device_warning2">如果符合的話，請按下方的驗證按鈕。如果沒有的話，那麼其他地方的某個人可能正在攔截此工作階段，您應該將其列入黑名單。未來，這個驗證程序會變得更加複雜。</string>
+    <string name="encryption_information_verify_device_warning">透過將以下內容與您的其他工作階段中的使用者設定來確認：</string>
+    <string name="encryption_information_verify_device_warning2">如果不符合的話，您的通訊安全可能正受到威脅。</string>
     <string name="encryption_information_verify_key_match">我驗證金鑰相符</string>
 
     <string name="e2e_enabling_on_app_update">Riot 目前支援端到端加密，但您需要重新登入以啟用。
@@ -915,7 +915,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="room_participants_now">目前 %1$s</string>
     <string name="room_participants_ago">%1$s %2$s 前</string>
 
-    <string name="room_participants_invite_join_names">%1$s，</string>
+    <string name="room_participants_invite_join_names">"%1$s， "</string>
     <string name="room_participants_invite_join_names_and">%1$s 與 %2$s</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
 
@@ -2093,7 +2093,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
         <item quantity="other">%d 活躍的工作階段</item>
     </plurals>
 
-    <string name="crosssigning_verify_this_session">驗證此工作階段</string>
+    <string name="crosssigning_verify_this_session">驗證此登入</string>
     <string name="crosssigning_other_user_not_trust">其他使用者可能不會信任它</string>
     <string name="complete_security">全面的安全性</string>
 
@@ -2135,7 +2135,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     </plurals>
     <string name="poll_item_selected_aria">已選取的選項</string>
     <string name="command_description_poll">建立簡易投票</string>
-    <string name="verification_cannot_access_other_session">使用復原方法</string>
+    <string name="verification_cannot_access_other_session">使用復原通關密語或金鑰</string>
     <string name="verification_use_passphrase">如果您無法存取既有的工作階段的話</string>
 
     <string name="new_signin">新登入</string>
@@ -2169,7 +2169,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="refresh">重新整理</string>
 
-    <string name="new_session">未驗證的登入。是您嗎？</string>
+    <string name="new_session">新登入。是您嗎？</string>
     <string name="new_session_review">輕觸即可以審閱並驗證</string>
     <string name="verify_new_session_notice">使用此工作階段來驗證新的，讓它可以存取已加密的訊息。</string>
     <string name="verify_new_session_was_not_me">這不是我</string>
@@ -2300,4 +2300,39 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="error_adding_media_file_to_gallery">無法新增媒體檔案到媒體庫中</string>
     <string name="change_password_summary">設定新的帳號密碼……</string>
 
-</resources>
+<string name="use_other_session_content_description">在您的其他裝置上使用最新的 Riot、Riot Web、Riot 桌面版、Riot iOS、RiotX for Android 或其他有交叉簽章功能的 Matrix 客戶端</string>
+    <string name="riot_desktop_web">Riot Web
+\nRiot 桌面版</string>
+    <string name="riot_ios_android">Riot iOS
+\nRiot X for Android</string>
+    <string name="or_other_mx_capabale_client">或其他有交叉簽章功能的 Matrix 客戶端</string>
+    <string name="use_latest_riot">在您的其他裝置上使用最新的 Riot：</string>
+    <string name="command_description_discard_session">強制丟棄目前在加密聊天室中的外發群組工作階段</string>
+    <string name="command_description_discard_session_not_handled">僅在加密聊天室中支援</string>
+    <string name="enter_secret_storage_passphrase_or_key">使用您的 %1$s 或使用您的 %2$s 以繼續。</string>
+    <string name="use_recovery_key">使用復原金鑰</string>
+    <string name="enter_secret_storage_input_key">選取您的復原金鑰，或是透過打字或從您的剪貼簿貼上來手動輸入</string>
+    <string name="keys_backup_recovery_key_error_decrypt">無法使用此復原金鑰解密備份：請驗證您是否輸入了正確的復原金鑰。</string>
+    <string name="failed_to_access_secure_storage">存取安全儲存空間失敗</string>
+
+    <string name="cross_signing_verify_by_text">透過文字手動驗證</string>
+    <string name="crosssigning_verify_session">驗證登入</string>
+    <string name="cross_signing_verify_by_emoji">透過顏文字來進行互動驗證</string>
+    <string name="confirm_your_identity">從您的其他工作階段驗證此登入以確認您的身份並授予存取加密訊息的權限。</string>
+    <string name="mark_as_verified">標記為受信任</string>
+
+    <string name="error_empty_field_choose_user_name">請選擇使用者名稱。</string>
+    <string name="error_empty_field_choose_password">請選擇密碼。</string>
+    <string name="external_link_confirmation_title">仔細檢查此連結</string>
+    <string name="external_link_confirmation_message">連結 %1$s 正在將您帶往其他網站：%2$s。
+\n
+\n您確定您想要繼續嗎？</string>
+
+    <string name="create_room_dm_failure">我們無法建立您的直接訊息。請檢查您想要邀請的使用者，然後再試一次。</string>
+<string name="unencrypted">未加密</string>
+    <string name="encrypted_unverified">由未驗證的裝置加密</string>
+    <string name="review_logins">審閱您從何處登入</string>
+    <string name="verify_other_sessions">驗證您所有的工作階段以確保您的帳號與訊息都安全</string>
+    <string name="verify_this_session">驗證正在存取您帳號的新登入：%1$s</string>
+
+    </resources>

@@ -1783,10 +1783,10 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_text_message_sent">Eine Textnachricht wurde an %s gesendet. Bitte gebe den Verifizierungscode ein, den sie enthält.</string>
 
     <string name="labs_allow_extended_logging">Aktiviere ausführliche Logs.</string>
-    <string name="labs_allow_extended_logging_summary">Gesprächige Logs wird den Entwicklern helfen indem sie mehr Informationen enthalten, wenn du einen Fehlerbericht sendest. Auch wenn dies aktiviert ist, werden keine Nachrichteninhalte oder andere privaten Daten aufgezeichnet.</string>
+    <string name="labs_allow_extended_logging_summary">Ausführliche Logs werden den Entwicklern helfen, indem sie mehr Informationen enthalten, wenn du einen Fehlerbericht sendest. Auch wenn dies aktiviert ist, werden keine Nachrichteninhalte oder andere privaten Daten aufgezeichnet.</string>
 
 
-    <string name="error_terms_not_accepted">Bitte erneut versuchen, nachdem du die Nutzungsbedingungendeines Home-Servers akzeptiert hast.</string>
+    <string name="error_terms_not_accepted">Bitte erneut versuchen, nachdem du die Nutzungsbedingungen deines Home-Servers akzeptiert hast.</string>
 
     <string name="room_widget_permission_webview_shared_info_title">Bei Benutzung könnten Cookies gesetzt werden und es könnten Daten mit %s geteilt werden:</string>
     <string name="room_widget_permission_shared_info_title">Bei Benutzung könnten Daten mit %s geteilt werden:</string>
@@ -2280,7 +2280,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="refresh">Neu laden</string>
 
-    <string name="new_session">Neue Sitzung</string>
+    <string name="new_session">Neue Anmeldung. Warst du das\?</string>
     <string name="new_session_review">Tippe für eine Überprüfung &amp; Verifikation</string>
     <string name="verify_new_session_notice">Benutze diese Sitzung um deine neue zu verfizieren, damit sie auf verschlüsselte Nachrichten zugreifen kann.</string>
     <string name="verify_new_session_was_not_me">Das war ich nicht</string>
@@ -2346,4 +2346,12 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="auth_invalid_login_param_space_in_password">Inkorrekter Benutzername und/oder Passwort. Das eingegebene Passwort beginnt oder endet mit Leerzeichen, bitte kontrolliere es.</string>
 
-</resources>
+<string name="message_key">Nachrichtenschlüssel</string>
+    <string name="account_password">Kontopasswort</string>
+
+    <string name="recovery_passphrase">Wiederherstellungs-Passphrase</string>
+    <string name="bootstrap_crosssigning_print_it">Druck es aus und speichere es an einem sicheren Ort</string>
+    <string name="bootstrap_crosssigning_save_cloud">Kopier es in deinen persönlichen Cloud-Speicher</string>
+
+    <string name="encryption_not_enabled">Verschlüsselung ist nicht aktiviert</string>
+    </resources>
