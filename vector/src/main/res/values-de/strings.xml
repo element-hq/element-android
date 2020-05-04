@@ -2357,4 +2357,10 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 <string name="auth_flow_not_supported">Dies kann nicht von einem mobilen Gerät erfolgen</string>
 
     <string name="settings_when_rooms_are_upgraded">Wenn sich Raumversionen ändern</string>
+    <string name="encryption_enabled">Verschlüsselung aktiviert</string>
+    <string name="encryption_enabled_tile_description">Nachrichten in diesem Raum sind Ende-zu-Ende verschlüsselt. Erfahre mehr &amp; verifiziere Benutzer in deren Profil.</string>
+    <string name="encryption_unknown_algorithm_tile_description">Die Verschlüsselung in diesem Raum wird nicht unterstützt</string>
+
+    <string name="qr_code_scanned_verif_waiting">Warte auf %s...</string>
+
     </resources>
