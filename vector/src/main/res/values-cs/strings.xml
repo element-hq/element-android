@@ -259,7 +259,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
         <item quantity="one">1 změna členství</item>
         <item quantity="few">%d změny členství</item>
         <item quantity="many">%d změn členství</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="compression_options">Odeslat jako</string>
@@ -347,13 +347,13 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
         <item quantity="one">1 aktivní člen</item>
         <item quantity="few">%d aktivní členové</item>
         <item quantity="many">%d aktivních členů</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">1 člen</item>
         <item quantity="few">%d členové</item>
         <item quantity="many">%d členů</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="room_title_one_member">1 člen</string>
     <plurals name="format_time_s">
@@ -450,7 +450,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
         <item quantity="one">1 nová zpráva</item>
         <item quantity="few">%d nové zprávy</item>
         <item quantity="many">%d nových zpráv</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="ssl_trust">Důvěřovat</string>
@@ -467,7 +467,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
         <item quantity="one">1 vybrán</item>
         <item quantity="few">%d vybrány</item>
         <item quantity="many">%d vybráno</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="title_activity_keys_backup_setup">Záloha klíče</string>
     <string name="title_activity_keys_backup_restore">Použít zálohu klíče</string>
@@ -2210,7 +2210,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 
     <string name="refresh">Obnovit</string>
 
-    <string name="new_session">Neověřené přihlášení. Byli jste to Vy\?</string>
+    <string name="new_session">Nové přihlášení. Byli jste to Vy\?</string>
     <string name="new_session_review">Klepněte pro přehled &amp; ověření</string>
     <string name="verify_new_session_notice">Použijte tuto relaci k ověření relace nové, a tím ji udělíte přístup k zašifrovaným zprávám.</string>
     <string name="verify_new_session_was_not_me">To jsem nebyl(a) já</string>
