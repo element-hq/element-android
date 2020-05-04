@@ -5,6 +5,7 @@
     <string name="summary_user_sent_sticker">%1$s sent a sticker.</string>
 
     <string name="notice_room_invite_no_invitee">%s\'s invitation</string>
+    <string name="notice_room_created">%1$s created the room</string>
     <string name="notice_room_invite">%1$s invited %2$s</string>
     <string name="notice_room_invite_you">%1$s invited you</string>
     <string name="notice_room_join">%1$s joined the room</string>
