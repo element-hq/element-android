@@ -5,8 +5,8 @@
     <string name="notice_room_invite_no_invitee">Käyttäjän %s kutsu</string>
     <string name="notice_room_invite">%1$s kutsui käyttäjän %2$s</string>
     <string name="notice_room_invite_you">%1$s kutsui sinut</string>
-    <string name="notice_room_join">%1$s liittyi</string>
-    <string name="notice_room_leave">%1$s poistui</string>
+    <string name="notice_room_join">%1$s liittyi huoneeseen</string>
+    <string name="notice_room_leave">%1$s poistui huoneesta</string>
     <string name="notice_room_reject">%1$s hylkäsi kutsun</string>
     <string name="notice_room_kick">%1$s poisti käyttäjän %2$s</string>
     <string name="notice_room_unban">%1$s poisti porttikiellon käyttäjältä %2$s</string>
@@ -177,8 +177,8 @@
     <string name="notice_room_invite_no_invitee_with_reason">Henkilön %1$s kutsu. Syy: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s kutsui henkilön %2$s. Syy: %3$s</string>
     <string name="notice_room_invite_you_with_reason">%1$s kutsui sinut. Syy: %2$s</string>
-    <string name="notice_room_join_with_reason">%1$s liittyi. Syy: %2$s</string>
-    <string name="notice_room_leave_with_reason">%1$s poistui. Syy: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s liittyi huoneeseen. Syy: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s poistui huoneesta. Syy: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s hylkäsi kutsun. Syy: %2$s</string>
     <string name="notice_room_kick_with_reason">%1$s poisti käyttäjän %2$s huoneesta. Syy: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s poisti porttikiellon käyttäjältä %2$s. Syy: %3$s</string>
@@ -206,4 +206,7 @@
     <string name="notice_room_guest_access_can_join">%1$s salli vieraiden liittyä huoneeseen.</string>
     <string name="notice_room_guest_access_forbidden">%1$s esti vieraita liittymästä huoneeseen.</string>
 
-</resources>
+<string name="notice_end_to_end_ok">%1$s laittoi päälle osapuolten välisen salauksen.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s laittoi päälle osapuolisten välisen salauksen (tuntematon algoritmi %2$s).</string>
+
+    </resources>
