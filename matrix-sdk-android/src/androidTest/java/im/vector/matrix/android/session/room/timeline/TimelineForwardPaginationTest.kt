@@ -17,7 +17,10 @@
 package im.vector.matrix.android.session.room.timeline
 
 import im.vector.matrix.android.InstrumentedTest
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.common.CommonTestHelper
@@ -57,7 +60,7 @@ class TimelineForwardPaginationTest : InstrumentedTest {
         // Alice sends X messages
         val sentMessages = commonTestHelper.sendTextMessage(
                 roomFromAlicePOV,
-                "Message from Alice, long enough to observe the problem, if it is not long enough, there is not always the problem",
+                "Message from Alice",
                 numberOfMessagesToSend)
 
         // Alice clear the cache
@@ -65,11 +68,13 @@ class TimelineForwardPaginationTest : InstrumentedTest {
             aliceSession.clearCache(it)
         }
 
+        // And restarts the sync
         aliceSession.startSync(true)
 
         val aliceTimeline = roomFromAlicePOV.createTimeline(null, TimelineSettings(30))
         aliceTimeline.start()
 
+        // Alice sees the 10 last message of the room, and can only navigate BACKWARD
         run {
             val lock = CountDownLatch(1)
             val eventsListener = commonTestHelper.createEventListener(lock) { snapshot ->
@@ -78,8 +83,9 @@ class TimelineForwardPaginationTest : InstrumentedTest {
                     Timber.w(" event ${it.root.content}")
                 }
 
-                // Ok, we have the 10 first messages of the initial sync
+                // Ok, we have the 10 last messages of the initial sync
                 snapshot.size == 10
+                        && snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith("Message from Alice").orFalse() }
             }
 
             // Open the timeline at last sent message
@@ -91,6 +97,8 @@ class TimelineForwardPaginationTest : InstrumentedTest {
             aliceTimeline.hasMoreToLoad(Timeline.Direction.FORWARDS).shouldBeFalse()
         }
 
+        // Alice navigates to the first message of the room, which is not in its database. A GET /context is performed
+        // Then she can paginate BACKWARD and FORWARD
         run {
             val lock = CountDownLatch(1)
             val aliceEventsListener = commonTestHelper.createEventListener(lock) { snapshot ->
@@ -101,6 +109,7 @@ class TimelineForwardPaginationTest : InstrumentedTest {
 
                 // The event is not in db, so it is fetch alone
                 snapshot.size == 1
+                        && snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith("Message from Alice").orFalse() }
             }
 
             aliceTimeline.addListener(aliceEventsListener)
@@ -115,6 +124,8 @@ class TimelineForwardPaginationTest : InstrumentedTest {
             aliceTimeline.hasMoreToLoad(Timeline.Direction.BACKWARDS).shouldBeTrue()
         }
 
+        // Alice paginates BACKWARD and FORWARD of 50 events each
+        // Then she can only navigate FORWARD
         run {
             val lock = CountDownLatch(1)
             val aliceEventsListener = commonTestHelper.createEventListener(lock) { snapshot ->
@@ -143,6 +154,8 @@ class TimelineForwardPaginationTest : InstrumentedTest {
             aliceTimeline.hasMoreToLoad(Timeline.Direction.BACKWARDS).shouldBeFalse()
         }
 
+        // Alice paginates once again FORWARD for 50 events
+        // All the timeline is retrieved, she cannot paginate anymore in both direction
         run {
             val lock = CountDownLatch(1)
             val aliceEventsListener = commonTestHelper.createEventListener(lock) { snapshot ->

@@ -70,7 +70,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
                     Timber.w(" event ${it.root}")
                 }
 
-                // Ok, we have the 8 first messages of the initial sync (room creation and bob join event)
+                // Ok, we have the 8 first messages of the initial sync (room creation and bob invite and join events)
                 snapshot.size == 8
             }
 
