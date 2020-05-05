@@ -231,12 +231,20 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
         chunks.forEach {
             if (it != currentChunk) {
                 if (direction == PaginationDirection.FORWARDS && it.hasBeenALastForwardChunk()) {
-                    Timber.d("Do not merge $it")
+                    // Maybe it was a trick to get a nextToken
+                    if (receivedChunk.events.size == 1) {
+                        Timber.d("Receiving a new nextToken")
+                        it.nextToken = receivedChunk.end
+                        chunksToDelete.add(currentChunk)
+                    } else {
+                        Timber.d("Do not merge $it")
+                        chunksToDelete.add(it)
+                    }
                 } else {
                     Timber.d("Merge $it")
                     currentChunk.merge(roomId, it, direction)
+                    chunksToDelete.add(it)
                 }
-                chunksToDelete.add(it)
             }
         }
         val shouldUpdateSummary = chunksToDelete.isNotEmpty() && currentChunk.isLastForward && direction == PaginationDirection.FORWARDS
@@ -253,6 +261,8 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
             )
             roomSummaryEntity.latestPreviewableEvent = latestPreviewableEvent
         }
-        RoomEntity.where(realm, roomId).findFirst()?.addOrUpdate(currentChunk)
+        if (currentChunk.isValid) {
+            RoomEntity.where(realm, roomId).findFirst()?.addOrUpdate(currentChunk)
+        }
     }
 }

@@ -521,6 +521,12 @@ internal class DefaultTimeline(
     private fun executePaginationTask(direction: Timeline.Direction, limit: Int) {
         val token = getTokenLive(direction)
         if (token == null) {
+            val currentChunk = getLiveChunk()
+            if (direction == Timeline.Direction.FORWARDS && currentChunk?.hasBeenALastForwardChunk() == true) {
+                // We are in the case that next event exists, but we do not know the next token.
+                // Fetch (again) the last event to get a nextToken
+                currentChunk.timelineEvents.lastOrNull()?.eventId?.let { fetchEvent(it) }
+            }
             updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
             return
         }
