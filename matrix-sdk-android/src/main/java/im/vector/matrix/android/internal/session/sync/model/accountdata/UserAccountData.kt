@@ -30,5 +30,9 @@ abstract class UserAccountData : AccountDataContent {
         const val TYPE_PREVIEW_URLS = "org.matrix.preview_urls"
         const val TYPE_WIDGETS = "m.widgets"
         const val TYPE_PUSH_RULES = "m.push_rules"
+
+        const val ACCOUNT_DATA_TYPE_INTEGRATION_PROVISIONING = "im.vector.setting.integration_provisioning"
+        const val ACCOUNT_DATA_TYPE_ALLOWED_WIDGETS = "im.vector.setting.allowed_widgets"
+
     }
 }
