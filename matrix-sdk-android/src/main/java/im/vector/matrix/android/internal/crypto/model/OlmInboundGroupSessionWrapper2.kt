@@ -1,6 +1,5 @@
 /*
- * Copyright 2016 OpenMarket Ltd
- * Copyright 2018 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +26,7 @@ import java.io.Serializable
  * This class adds more context to a OlmInboundGroupSession object.
  * This allows additional checks. The class implements Serializable so that the context can be stored.
  */
-class OlmInboundGroupSessionWrapper : Serializable {
+class OlmInboundGroupSessionWrapper2 : Serializable {
 
     // The associated olm inbound group session.
     var olmInboundGroupSession: OlmInboundGroupSession? = null
@@ -78,6 +77,9 @@ class OlmInboundGroupSessionWrapper : Serializable {
         }
     }
 
+    constructor() {
+        // empty
+    }
     /**
      * Create a new instance from the provided keys map.
      *
@@ -103,10 +105,11 @@ class OlmInboundGroupSessionWrapper : Serializable {
 
     /**
      * Export the inbound group session keys
+     * @param index the index to export. If null, the first known index will be used
      *
      * @return the inbound group session as MegolmSessionData if the operation succeeds
      */
-    fun exportKeys(): MegolmSessionData? {
+    fun exportKeys(index: Long? = null): MegolmSessionData? {
         return try {
             if (null == forwardingCurve25519KeyChain) {
                 forwardingCurve25519KeyChain = ArrayList()
@@ -116,6 +119,8 @@ class OlmInboundGroupSessionWrapper : Serializable {
                 return null
             }
 
+            val wantedIndex = index ?: olmInboundGroupSession!!.firstKnownIndex
+
             MegolmSessionData(
                     senderClaimedEd25519Key = keysClaimed?.get("ed25519"),
                     forwardingCurve25519KeyChain = ArrayList(forwardingCurve25519KeyChain!!),
@@ -123,7 +128,7 @@ class OlmInboundGroupSessionWrapper : Serializable {
                     senderClaimedKeys = keysClaimed,
                     roomId = roomId,
                     sessionId = olmInboundGroupSession!!.sessionIdentifier(),
-                    sessionKey = olmInboundGroupSession!!.export(olmInboundGroupSession!!.firstKnownIndex),
+                    sessionKey = olmInboundGroupSession!!.export(wantedIndex),
                     algorithm = MXCRYPTO_ALGORITHM_MEGOLM
             )
         } catch (e: Exception) {

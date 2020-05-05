@@ -21,7 +21,7 @@ import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.util.JSON_DICT_PARAMETERIZED_TYPE
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
-import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
+import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.di.MoshiProvider
@@ -488,7 +488,7 @@ internal class MXOlmDevice @Inject constructor(
                                forwardingCurve25519KeyChain: List<String>,
                                keysClaimed: Map<String, String>,
                                exportFormat: Boolean): Boolean {
-        val session = OlmInboundGroupSessionWrapper(sessionKey, exportFormat)
+        val session = OlmInboundGroupSessionWrapper2(sessionKey, exportFormat)
         runCatching { getInboundGroupSession(sessionId, senderKey, roomId) }
                 .fold(
                         {
@@ -543,18 +543,18 @@ internal class MXOlmDevice @Inject constructor(
      * @param megolmSessionsData the megolm sessions data
      * @return the successfully imported sessions.
      */
-    fun importInboundGroupSessions(megolmSessionsData: List<MegolmSessionData>): List<OlmInboundGroupSessionWrapper> {
-        val sessions = ArrayList<OlmInboundGroupSessionWrapper>(megolmSessionsData.size)
+    fun importInboundGroupSessions(megolmSessionsData: List<MegolmSessionData>): List<OlmInboundGroupSessionWrapper2> {
+        val sessions = ArrayList<OlmInboundGroupSessionWrapper2>(megolmSessionsData.size)
 
         for (megolmSessionData in megolmSessionsData) {
             val sessionId = megolmSessionData.sessionId
             val senderKey = megolmSessionData.senderKey
             val roomId = megolmSessionData.roomId
 
-            var session: OlmInboundGroupSessionWrapper? = null
+            var session: OlmInboundGroupSessionWrapper2? = null
 
             try {
-                session = OlmInboundGroupSessionWrapper(megolmSessionData)
+                session = OlmInboundGroupSessionWrapper2(megolmSessionData)
             } catch (e: Exception) {
                 Timber.e(e, "## importInboundGroupSession() : Update for megolm session $senderKey/$sessionId")
             }
@@ -741,7 +741,7 @@ internal class MXOlmDevice @Inject constructor(
      * @param senderKey the base64-encoded curve25519 key of the sender.
      * @return the inbound group session.
      */
-    fun getInboundGroupSession(sessionId: String?, senderKey: String?, roomId: String?): OlmInboundGroupSessionWrapper {
+    fun getInboundGroupSession(sessionId: String?, senderKey: String?, roomId: String?): OlmInboundGroupSessionWrapper2 {
         if (sessionId.isNullOrBlank() || senderKey.isNullOrBlank()) {
             throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_SENDER_KEY, MXCryptoError.ERROR_MISSING_PROPERTY_REASON)
         }
