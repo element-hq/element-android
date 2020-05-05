@@ -2369,4 +2369,15 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="qr_code_scanned_self_verif_notice">Fast geschafft! Zeigt das andere Gerät das gleiche Schild an\?</string>
     <string name="qr_code_scanned_verif_waiting_notice">Fast geschafft! Warte auf Bestätigung…</string>
+    <string name="settings_messages_in_e2e_one_to_one">Verschlüsselte Nachrichten in 1:1 Chats</string>
+    <string name="room_message_placeholder">Nachricht…</string>
+
+    <string name="security_prompt_text">Verifiziere dich &amp; andere, um eure Chats zu schützen</string>
+
+    <string name="bootstrap_enter_recovery">Gebe deinen %s ein um fortzufahren.</string>
+    <string name="use_file">Datei benutzen</string>
+
+    <string name="bootstrap_invalid_recovery_key">Dies ist kein gültiger Wiederherstellungsschlüssel</string>
+    <string name="recovery_key_empty_error_message">Bitte gib deinen Wiederherstellungsschlüssel ein</string>
+
     </resources>
