@@ -224,11 +224,18 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
 
             currentChunk.addTimelineEvent(roomId, eventEntity, direction, roomMemberContentsByUser)
         }
+        // Find all the chunks which contain at least one event from the list of eventIds
         val chunks = ChunkEntity.findAllIncludingEvents(realm, eventIds)
+        Timber.d("Found ${chunks.size} chunks containing at least one of the eventIds")
         val chunksToDelete = ArrayList<ChunkEntity>()
         chunks.forEach {
             if (it != currentChunk) {
-                currentChunk.merge(roomId, it, direction)
+                if (direction == PaginationDirection.FORWARDS && it.hasBeenALastForwardChunk()) {
+                    Timber.d("Do not merge $it")
+                } else {
+                    Timber.d("Merge $it")
+                    currentChunk.merge(roomId, it, direction)
+                }
                 chunksToDelete.add(it)
             }
         }

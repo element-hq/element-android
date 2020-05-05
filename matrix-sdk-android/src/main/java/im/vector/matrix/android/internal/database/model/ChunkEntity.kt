@@ -34,6 +34,9 @@ internal open class ChunkEntity(@Index var prevToken: String? = null,
 
     fun identifier() = "${prevToken}_$nextToken"
 
+    // If true, then this chunk was previously a last forward chunk
+    fun hasBeenALastForwardChunk() = nextToken == null && !isLastForward
+
     @LinkingObjects("chunks")
     val room: RealmResults<RoomEntity>? = null
 

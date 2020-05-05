@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - After jump to unread, newer messages are never loaded (#1008)
 
 Translations 🗣:
  -

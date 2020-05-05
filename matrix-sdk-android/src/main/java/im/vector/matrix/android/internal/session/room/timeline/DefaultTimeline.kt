@@ -559,6 +559,28 @@ internal class DefaultTimeline(
                 .executeBy(taskExecutor)
     }
 
+    // For debug purpose only
+    private fun dumpAndLogChunks() {
+        val liveChunk = getLiveChunk()
+        Timber.w("Live chunk: $liveChunk")
+
+        Realm.getInstance(realmConfiguration).use { realm ->
+            ChunkEntity.where(realm, roomId).findAll()
+                    .also { Timber.w("Found ${it.size} chunks") }
+                    .forEach {
+                        Timber.w("")
+                        Timber.w("ChunkEntity: $it")
+                        Timber.w("prevToken: ${it.prevToken}")
+                        Timber.w("nextToken: ${it.nextToken}")
+                        Timber.w("isLastBackward: ${it.isLastBackward}")
+                        Timber.w("isLastForward: ${it.isLastForward}")
+                        it.timelineEvents.forEach { tle ->
+                            Timber.w("   TLE: ${tle.root?.content}")
+                        }
+                    }
+        }
+    }
+
     /**
      * This has to be called on TimelineThread as it accesses realm live results
      */
@@ -569,6 +591,7 @@ internal class DefaultTimeline(
 
     /**
      * This has to be called on TimelineThread as it accesses realm live results
+     * Return the current Chunk
      */
     private fun getLiveChunk(): ChunkEntity? {
         return nonFilteredEvents.firstOrNull()?.chunk?.firstOrNull()
@@ -576,7 +599,7 @@ internal class DefaultTimeline(
 
     /**
      * This has to be called on TimelineThread as it accesses realm live results
-     * @return number of items who have been added
+     * @return the number of items who have been added
      */
     private fun buildTimelineEvents(startDisplayIndex: Int?,
                                     direction: Timeline.Direction,
@@ -617,6 +640,8 @@ internal class DefaultTimeline(
         }
         val time = System.currentTimeMillis() - start
         Timber.v("Built ${offsetResults.size} items from db in $time ms")
+        // For the case where wo reach the lastForward chunk
+        updateLoadingStates(filteredEvents)
         return offsetResults.size
     }
 
