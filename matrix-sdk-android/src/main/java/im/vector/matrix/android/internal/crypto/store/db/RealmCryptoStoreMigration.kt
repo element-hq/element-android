@@ -21,6 +21,8 @@ import com.squareup.moshi.Types
 import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
+import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import im.vector.matrix.android.internal.crypto.store.db.mapper.CrossSigningKeysMapper
 import im.vector.matrix.android.internal.crypto.store.db.model.CrossSigningInfoEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.CryptoMetadataEntityFields
@@ -29,6 +31,7 @@ import im.vector.matrix.android.internal.crypto.store.db.model.GossipingEventEnt
 import im.vector.matrix.android.internal.crypto.store.db.model.IncomingGossipingRequestEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.KeyInfoEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntityFields
+import im.vector.matrix.android.internal.crypto.store.db.model.OlmInboundGroupSessionEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.OutgoingGossipingRequestEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.TrustLevelEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.UserEntityFields
@@ -213,6 +216,23 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                 it.setString(KeyInfoEntityFields.SIGNATURES, jsonSignatures)
             }
         } catch (failure: Throwable) {
+        }
+
+        // Migrate frozen classes
+        val inboundGroupSessions = realm.where("OlmInboundGroupSessionEntity").findAll()
+        inboundGroupSessions.forEach { dynamicObject ->
+            dynamicObject.getString(OlmInboundGroupSessionEntityFields.OLM_INBOUND_GROUP_SESSION_DATA)?.let { serializedObject ->
+                try {
+                    deserializeFromRealm<OlmInboundGroupSessionWrapper?>(serializedObject)?.let { oldFormat ->
+                        val newFormat = oldFormat.exportKeys()?.let {
+                            OlmInboundGroupSessionWrapper2(it)
+                        }
+                        dynamicObject.setString(OlmInboundGroupSessionEntityFields.OLM_INBOUND_GROUP_SESSION_DATA, serializeForRealm(newFormat))
+                    }
+                } catch (failure: Throwable) {
+                    Timber.e(failure, "## OlmInboundGroupSessionEntity migration failed")
+                }
+            }
         }
     }
 
