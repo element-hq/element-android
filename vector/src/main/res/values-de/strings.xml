@@ -2363,7 +2363,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="qr_code_scanned_verif_waiting">Warte auf %s...</string>
 
-    <string name="set_recovery_passphrase">Lege eine %s fest</string>
+    <string name="set_recovery_passphrase">%s setzen</string>
     <string name="settings_troubleshoot_title">Fehlerbehebung</string>
     <string name="room_created_summary_item">%s hat den Raum erstellt und konfiguriert.</string>
 
