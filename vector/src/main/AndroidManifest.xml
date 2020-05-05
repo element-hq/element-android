@@ -8,7 +8,15 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!-- Call feature -->
+    <uses-permission android:name="android.permission.MANAGE_OWN_CALLS"/>
+    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+    <!-- READ_PHONE_STATE is needed only if your calling app reads numbers from the `PHONE_STATE`
+            intent action. -->
+
 
     <!-- Adding CAMERA permission prevents Chromebooks to see the application on the PlayStore -->
     <!-- Tell that the Camera is not mandatory to install the application -->
@@ -172,6 +180,7 @@
         <activity
             android:name=".features.attachments.preview.AttachmentsPreviewActivity"
             android:theme="@style/AppTheme.AttachmentsPreview" />
+        <activity android:name=".features.call.VectorCallActivity" />
 
         <activity android:name=".features.terms.ReviewTermsActivity" />
         <activity android:name=".features.widgets.WidgetActivity" />
@@ -185,6 +194,13 @@
         <service
             android:name=".core.services.VectorSyncService"
             android:exported="false" />
+
+        <service android:name=".features.call.VectorConnectionService"
+            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE">
+            <intent-filter>
+                <action android:name="android.telecom.ConnectionService" />
+            </intent-filter>
+        </service>
 
         <!-- Receivers -->
 

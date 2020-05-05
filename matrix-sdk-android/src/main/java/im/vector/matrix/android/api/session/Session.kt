@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.pushrules.PushRuleService
 import im.vector.matrix.android.api.session.account.AccountService
 import im.vector.matrix.android.api.session.accountdata.AccountDataService
 import im.vector.matrix.android.api.session.cache.CacheService
+import im.vector.matrix.android.api.session.call.CallService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.crypto.CryptoService
@@ -164,6 +165,11 @@ interface Session :
      * Returns the integration manager service associated with the session
      */
     fun integrationManagerService(): IntegrationManagerService
+
+    /**
+     * Returns the cryptoService associated with the session
+     */
+    fun callService(): CallService
 
     /**
      * Add a listener to the session.

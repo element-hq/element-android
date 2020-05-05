@@ -162,6 +162,10 @@ dependencies {
     // Phone number https://github.com/google/libphonenumber
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.10.23'
 
+    // Web RTC
+    // TODO meant for development purposes only
+    implementation 'org.webrtc:google-webrtc:1.0.+'
+
     debugImplementation 'com.airbnb.okreplay:okreplay:1.5.0'
     releaseImplementation 'com.airbnb.okreplay:noop:1.5.0'
     androidTestImplementation 'com.airbnb.okreplay:espresso:1.5.0'

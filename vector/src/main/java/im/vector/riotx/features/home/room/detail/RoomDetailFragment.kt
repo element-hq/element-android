@@ -127,6 +127,7 @@ import im.vector.riotx.features.attachments.ContactAttachment
 import im.vector.riotx.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.riotx.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.riotx.features.attachments.toGroupedContentAttachmentData
+import im.vector.riotx.features.call.VectorCallActivity
 import im.vector.riotx.features.command.Command
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.riotx.features.crypto.util.toImageRes
@@ -479,6 +480,17 @@ class RoomDetailFragment @Inject constructor(
             }
             else                     -> super.onOptionsItemSelected(item)
         }
+        if (item.itemId == R.id.resend_all) {
+            roomDetailViewModel.handle(RoomDetailAction.ResendAll)
+            return true
+        }
+        if (item.itemId == R.id.voip_call) {
+            VectorCallActivity.newIntent(requireContext(), roomDetailArgs.roomId).let {
+                startActivity(it)
+            }
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun displayDisabledIntegrationDialog() {

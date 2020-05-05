@@ -66,6 +66,7 @@ import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.core.utils.subscribeLogError
+import im.vector.riotx.features.call.VectorCallActivity
 import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
 import im.vector.riotx.features.crypto.verification.SupportedVerificationMethodsProvider
@@ -372,6 +373,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         R.id.resend_all          -> timeline.failedToDeliverEventCount() > 0
         R.id.clear_all           -> timeline.failedToDeliverEventCount() > 0
         R.id.open_matrix_apps    -> true
+        R.id.voip_call           -> room.roomSummary()?.isDirect == true && room.roomSummary()?.joinedMembersCount == 2
         else                     -> false
     }
 

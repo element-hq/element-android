@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.account.AccountService
 import im.vector.matrix.android.api.session.accountdata.AccountDataService
 import im.vector.matrix.android.api.session.cache.CacheService
+import im.vector.matrix.android.api.session.call.CallService
 import im.vector.matrix.android.api.session.content.ContentUploadStateTracker
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.api.session.crypto.CryptoService
@@ -110,7 +111,8 @@ internal class DefaultSession @Inject constructor(
         private val integrationManagerService: IntegrationManagerService,
         private val taskExecutor: TaskExecutor,
         private val widgetDependenciesHolder: WidgetDependenciesHolder,
-        private val shieldTrustUpdater: ShieldTrustUpdater)
+        private val shieldTrustUpdater: ShieldTrustUpdater,
+        private val callService: Lazy<CallService>)
     : Session,
         RoomService by roomService.get(),
         RoomDirectoryService by roomDirectoryService.get(),
@@ -244,6 +246,8 @@ internal class DefaultSession @Inject constructor(
     override fun widgetService(): WidgetService = widgetService.get()
 
     override fun integrationManagerService() = integrationManagerService
+
+    override fun callService(): CallService = callService.get()
 
     override fun addListener(listener: Session.Listener) {
         sessionListeners.addListener(listener)

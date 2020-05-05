@@ -35,6 +35,7 @@ import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
 import im.vector.riotx.core.utils.allGranted
 import im.vector.riotx.core.utils.checkPermissions
 import im.vector.riotx.core.utils.toast
+import im.vector.riotx.features.call.VectorCallActivity
 import im.vector.riotx.features.debug.sas.DebugSasEmojiActivity
 import im.vector.riotx.features.qrcode.QrCodeScannerActivity
 import kotlinx.android.synthetic.debug.activity_debug_menu.*
@@ -183,7 +184,8 @@ class DebugMenuActivity : VectorBaseActivity() {
     @OnClick(R.id.debug_scan_qr_code)
     fun scanQRCode() {
         if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
-            doScanQRCode()
+            //doScanQRCode()
+            startActivity(VectorCallActivity.newIntent(this, "!cyIJhOLwWgmmqreHLD:matrix.org"))
         }
     }
 

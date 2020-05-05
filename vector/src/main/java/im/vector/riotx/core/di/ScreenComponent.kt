@@ -24,6 +24,7 @@ import dagger.Component
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.preference.UserAvatarPreference
 import im.vector.riotx.features.MainActivity
+import im.vector.riotx.features.call.VectorCallActivity
 import im.vector.riotx.features.createdirect.CreateDirectRoomActivity
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.riotx.features.crypto.quads.SharedSecureStorageActivity
@@ -130,6 +131,7 @@ interface ScreenComponent {
     fun inject(activity: InviteUsersToRoomActivity)
     fun inject(activity: ReviewTermsActivity)
     fun inject(activity: WidgetActivity)
+    fun inject(activity: VectorCallActivity)
 
     /* ==========================================================================================
      * BottomSheets
