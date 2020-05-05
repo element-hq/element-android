@@ -2368,4 +2368,5 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="room_created_summary_item">%s hat den Raum erstellt und konfiguriert.</string>
 
     <string name="qr_code_scanned_self_verif_notice">Fast geschaft! Zeigt das andere Gerät das gleiche Schild an\?</string>
+    <string name="qr_code_scanned_verif_waiting_notice">Fast geschaft! Warte auf Bestätigung...</string>
     </resources>
