@@ -2380,4 +2380,5 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="bootstrap_invalid_recovery_key">Dies ist kein gültiger Wiederherstellungsschlüssel</string>
     <string name="recovery_key_empty_error_message">Bitte gib deinen Wiederherstellungsschlüssel ein</string>
 
+    <string name="bootstrap_info_text">Verschlüsselte Nachrichten und Verifizierungen mit einer %s absichern und entsperren.</string>
     </resources>
