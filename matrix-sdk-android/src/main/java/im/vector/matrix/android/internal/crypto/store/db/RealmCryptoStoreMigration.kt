@@ -26,7 +26,6 @@ import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrap
 import im.vector.matrix.android.internal.crypto.store.db.mapper.CrossSigningKeysMapper
 import im.vector.matrix.android.internal.crypto.store.db.model.CrossSigningInfoEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.CryptoMetadataEntityFields
-import im.vector.matrix.android.internal.crypto.store.db.model.DeviceInfoEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.DeviceInfoEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.GossipingEventEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.IncomingGossipingRequestEntityFields
