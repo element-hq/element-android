@@ -90,7 +90,7 @@ internal class DefaultIdentityService @Inject constructor(
 
     private fun notifyIdentityServerUrlChange(baseUrl: String?) {
         // This is maybe not a real change (local echo of account data we are just setting
-        if (identityServiceStore.get().identityServerUrl == baseUrl) {
+        if (identityServiceStore.get()?.identityServerUrl == baseUrl) {
             Timber.d("Local echo of identity server url change")
         } else {
             // Url has changed, we have to reset our store, update internal configuration and notify listeners
@@ -109,7 +109,7 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     override fun getCurrentIdentityServer(): String? {
-        return identityServiceStore.get().identityServerUrl
+        return identityServiceStore.get()?.identityServerUrl
     }
 
     override fun disconnect() {
@@ -176,7 +176,7 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     private suspend fun ensureToken() {
-        val entity = identityServiceStore.get()
+        val entity = identityServiceStore.get() ?: throw IdentityServiceError.NoIdentityServerConfigured
         val url = entity.identityServerUrl ?: throw IdentityServiceError.NoIdentityServerConfigured
 
         if (entity.token == null) {

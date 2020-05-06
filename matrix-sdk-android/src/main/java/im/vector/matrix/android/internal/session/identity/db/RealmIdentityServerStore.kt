@@ -27,27 +27,33 @@ internal class RealmIdentityServerStore @Inject constructor(
         private val realmConfiguration: RealmConfiguration
 ) : IdentityServiceStore {
 
-    override fun get(): IdentityServerEntity {
+    override fun get(): IdentityServerEntity? {
         return Realm.getInstance(realmConfiguration).use {
-            IdentityServerEntity.getOrCreate(it)
+            IdentityServerEntity.get(it)
         }
     }
 
     override fun setUrl(url: String?) {
         Realm.getInstance(realmConfiguration).use {
-            IdentityServerEntity.setUrl(it, url)
+            it.executeTransaction { realm ->
+                IdentityServerEntity.setUrl(realm, url)
+            }
         }
     }
 
     override fun setToken(token: String?) {
         Realm.getInstance(realmConfiguration).use {
-            IdentityServerEntity.setToken(it, token)
+            it.executeTransaction { realm ->
+                IdentityServerEntity.setToken(realm, token)
+            }
         }
     }
 
     override fun setHashDetails(hashDetailResponse: IdentityHashDetailResponse) {
         Realm.getInstance(realmConfiguration).use {
-            IdentityServerEntity.setHashDetails(it, hashDetailResponse.pepper, hashDetailResponse.algorithms)
+            it.executeTransaction { realm ->
+                IdentityServerEntity.setHashDetails(realm, hashDetailResponse.pepper, hashDetailResponse.algorithms)
+            }
         }
     }
 }

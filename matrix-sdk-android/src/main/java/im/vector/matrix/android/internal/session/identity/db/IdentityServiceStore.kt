@@ -20,7 +20,7 @@ import im.vector.matrix.android.internal.session.identity.model.IdentityHashDeta
 
 internal interface IdentityServiceStore {
 
-    fun get(): IdentityServerEntity
+    fun get(): IdentityServerEntity?
 
     fun setUrl(url: String?)
 

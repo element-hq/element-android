@@ -43,7 +43,7 @@ internal class DefaultBulkLookupTask @Inject constructor(
 
     override suspend fun execute(params: BulkLookupTask.Params): List<FoundThreePid> {
         val identityAPI = identityApiProvider.identityApi ?: throw IdentityServiceError.NoIdentityServerConfigured
-        val entity = identityServiceStore.get()
+        val entity = identityServiceStore.get() ?: throw IdentityServiceError.NoIdentityServerConfigured
         val pepper = entity.hashLookupPepper
         val hashDetailResponse = if (pepper == null) {
             // We need to fetch the hash details first

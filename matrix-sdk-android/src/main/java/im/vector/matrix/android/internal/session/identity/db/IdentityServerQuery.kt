@@ -24,8 +24,12 @@ import io.realm.kotlin.where
 /**
  * Only one object can be stored at a time
  */
+internal fun IdentityServerEntity.Companion.get(realm: Realm): IdentityServerEntity? {
+    return realm.where<IdentityServerEntity>().findFirst()
+}
+
 internal fun IdentityServerEntity.Companion.getOrCreate(realm: Realm): IdentityServerEntity {
-    return realm.where<IdentityServerEntity>().findFirst() ?: realm.createObject()
+    return get(realm) ?: realm.createObject()
 }
 
 internal fun IdentityServerEntity.Companion.setUrl(realm: Realm,
