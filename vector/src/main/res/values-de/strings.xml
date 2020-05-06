@@ -2423,4 +2423,11 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="enter_secret_storage_passphrase_or_key">Benutze dein %1$s oder deinen %2$s um fortzufahren.</string>
     <string name="use_recovery_key">Wiederherstellungsschlüssel verwenden</string>
     <string name="enter_secret_storage_input_key">Wähle deinen Wiederherstellungsschüssel, gib ihn ein oder füge ihn aus der Zwischenablage ein</string>
+    <string name="keys_backup_recovery_key_error_decrypt">Sicherung konnte mit diesem Wiederherstellungsschlüssel nicht entschlüsselt werden. Bitte stelle sicher, dass du den korrekten Wiederherstellungsschlüssel eingegeben hast.</string>
+    <string name="failed_to_access_secure_storage">Konnte nicht auf gesicherten Speicher zugreifen</string>
+
+    <string name="unencrypted">Unverschlüsselt</string>
+    <string name="encrypted_unverified">Verschlüsselt von einem unbekannten Gerät</string>
+    <string name="review_logins">Überprüfe, wo du eingeloggt bist</string>
+    <string name="verify_other_sessions">Bestätige all deine Sitzungen, um sicher zu stellen, dass dein Konto &amp; Nachrichten sicher sind</string>
     </resources>
