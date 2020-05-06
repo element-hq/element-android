@@ -2384,4 +2384,8 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="bootstrap_skip_text">Das setzen eines Wiederherstellungspassworts ermöglicht das sichern &amp; entsperren von verschlüsselten Nachrichten und Verifizierungen.
 \n
 \nWenn du kein Nachrichtenpasswort setzen willst, erzeuge stattdessen einen Nachrichtenschlüssel.</string>
+    <string name="bootstrap_skip_text_no_gen_key">Das setzen einer Wiederherstellungspassphrase ermöglicht das ver- &amp; entschlüsseln von Nachrichten und Vertrauen.
+\n</string>
+
+
     </resources>
