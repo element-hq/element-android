@@ -32,7 +32,7 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
         fun getData(): Any
     }
 
-    data class IdentityParams(override val type: String = UserAccountData.TYPE_IDENTITY,
+    data class IdentityParams(override val type: String = UserAccountData.TYPE_IDENTITY_SERVER,
                               private val identityContent: IdentityContent
     ) : Params {
 

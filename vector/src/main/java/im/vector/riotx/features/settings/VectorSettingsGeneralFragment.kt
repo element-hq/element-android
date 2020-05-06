@@ -165,8 +165,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                 .summary = session.sessionParams.homeServerConnectionConfig.homeServerUri.toString()
 
         // identity server
+        // TODO Handle refresh of the value
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)!!
-                .summary = session.sessionParams.homeServerConnectionConfig.identityServerUri.toString()
+                .summary = session.identityService().getCurrentIdentityServer() ?: getString(R.string.identity_server_not_defined)
 
         refreshEmailsList()
         refreshPhoneNumbersList()

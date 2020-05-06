@@ -27,7 +27,7 @@ interface IdentityService {
     /**
      * Return the default identity server of the homeserver (using Wellknown request)
      */
-    fun getDefaultIdentityServer(): String?
+    fun getDefaultIdentityServer(callback: MatrixCallback<String?>): Cancelable
 
     fun getCurrentIdentityServer(): String?
 
@@ -35,9 +35,11 @@ interface IdentityService {
 
     fun disconnect()
 
-    fun bindThreePid()
+    fun startBindSession(threePid: ThreePid, nothing: Nothing?, matrixCallback: MatrixCallback<ThreePid>)
+    fun finalizeBindSessionFor3PID(threePid: ThreePid, matrixCallback: MatrixCallback<Unit>)
+    fun submitValidationToken(pid: ThreePid, code: String, matrixCallback: MatrixCallback<Unit>)
 
-    fun unbindThreePid()
+    fun startUnBindSession(threePid: ThreePid, nothing: Nothing?, matrixCallback: MatrixCallback<Pair<Boolean, ThreePid?>>)
 
     fun lookUp(threePids: List<ThreePid>, callback: MatrixCallback<List<FoundThreePid>>): Cancelable
 

@@ -18,5 +18,5 @@ package im.vector.matrix.android.api.session.identity
 
 sealed class ThreePid(open val value: String) {
     data class Email(val email: String) : ThreePid(email)
-    data class Msisdn(val msisdn: String) : ThreePid(msisdn)
+    data class Msisdn(val msisdn: String, val countryCode: String? = null) : ThreePid(msisdn)
 }

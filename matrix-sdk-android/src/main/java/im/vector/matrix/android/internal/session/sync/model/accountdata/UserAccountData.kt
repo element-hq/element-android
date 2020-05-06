@@ -30,6 +30,6 @@ abstract class UserAccountData : AccountDataContent {
         const val TYPE_PREVIEW_URLS = "org.matrix.preview_urls"
         const val TYPE_WIDGETS = "m.widgets"
         const val TYPE_PUSH_RULES = "m.push_rules"
-        const val TYPE_IDENTITY = "m.identity"
+        const val TYPE_IDENTITY_SERVER = "m.identity_server"
     }
 }

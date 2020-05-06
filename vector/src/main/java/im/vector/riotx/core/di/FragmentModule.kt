@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentFactory
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import im.vector.riotx.features.discovery.DiscoverySettingsFragment
 import im.vector.riotx.features.attachments.preview.AttachmentsPreviewFragment
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
 import im.vector.riotx.features.crypto.quads.SharedSecuredStorageKeyFragment
@@ -41,6 +42,7 @@ import im.vector.riotx.features.crypto.verification.emoji.VerificationEmojiCodeF
 import im.vector.riotx.features.crypto.verification.qrconfirmation.VerificationQRWaitingFragment
 import im.vector.riotx.features.crypto.verification.qrconfirmation.VerificationQrScannedByOtherFragment
 import im.vector.riotx.features.crypto.verification.request.VerificationRequestFragment
+import im.vector.riotx.features.discovery.change.SetIdentityServerFragment
 import im.vector.riotx.features.grouplist.GroupListFragment
 import im.vector.riotx.features.home.HomeDetailFragment
 import im.vector.riotx.features.home.HomeDrawerFragment
@@ -474,4 +476,14 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(SharedSecuredStorageKeyFragment::class)
     fun bindSharedSecuredStorageKeyFragment(fragment: SharedSecuredStorageKeyFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SetIdentityServerFragment::class)
+    fun bindSetIdentityServerFragment(fragment: SetIdentityServerFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(DiscoverySettingsFragment::class)
+    fun bindDiscoverySettingsFragment(fragment: DiscoverySettingsFragment): Fragment
 }
