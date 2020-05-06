@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Fix | Verify Manually by Text crashes if private SSK not known (#1337)
 
 Translations 🗣:
  -
