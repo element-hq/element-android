@@ -104,9 +104,11 @@ internal class DefaultUserService @Inject constructor(private val monarchy: Mona
                         .contains(UserEntityFields.USER_ID, filter)
                         .endGroup()
             }
-            excludedUserIds?.let {
-                query.not().`in`(UserEntityFields.USER_ID, it.toTypedArray())
-            }
+            excludedUserIds
+                    ?.takeIf { it.isNotEmpty() }
+                    ?.let {
+                        query.not().`in`(UserEntityFields.USER_ID, it.toTypedArray())
+                    }
             query.sort(UserEntityFields.DISPLAY_NAME)
         }
         return monarchy.findAllPagedWithChanges(realmDataSourceFactory, livePagedListBuilder)

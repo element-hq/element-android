@@ -30,15 +30,8 @@ data class UserDirectoryViewState(
         val selectedUsers: Set<User> = emptySet(),
         val createAndInviteState: Async<String> = Uninitialized,
         val directorySearchTerm: String = "",
-        val filterKnownUsersValue: Option<String> = Option.empty(),
-        val title: String,
-        val menuResId: Int?
+        val filterKnownUsersValue: Option<String> = Option.empty()
 ) : MvRxState {
 
-    constructor(args: KnownUsersFragmentArgs) : this(title = args.title, menuResId = args.menuResId, excludedUserIds = args.excludedUserIds)
-
-    enum class DisplayMode {
-        KNOWN_USERS,
-        DIRECTORY_USERS
-    }
+    constructor(args: KnownUsersFragmentArgs) : this(excludedUserIds = args.excludedUserIds)
 }

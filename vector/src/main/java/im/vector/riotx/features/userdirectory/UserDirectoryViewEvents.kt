@@ -19,6 +19,6 @@ package im.vector.riotx.features.userdirectory
 import im.vector.riotx.core.platform.VectorViewEvents
 
 /**
- * Transient events for create direct room screen
+ * Transient events for invite users to room screen
  */
 sealed class UserDirectoryViewEvents : VectorViewEvents

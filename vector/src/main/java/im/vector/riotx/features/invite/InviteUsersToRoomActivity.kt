@@ -26,7 +26,6 @@ import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.failure.Failure
-import im.vector.matrix.android.api.session.room.failure.CreateRoomFailure
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.error.ErrorFormatter
@@ -114,20 +113,16 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
 
     private fun renderInviteFailure(error: Throwable) {
         hideWaitingView()
-        if (error is CreateRoomFailure.CreatedWithTimeout) {
-            finish()
+        val message = if (error is Failure.ServerError && error.httpCode == HttpURLConnection.HTTP_INTERNAL_ERROR /*500*/) {
+            // This error happen if the invited userId does not exist.
+            getString(R.string.invite_users_to_room_failure)
         } else {
-            val message = if (error is Failure.ServerError && error.httpCode == HttpURLConnection.HTTP_INTERNAL_ERROR /*500*/) {
-                // This error happen if the invited userId does not exist.
-                getString(R.string.invite_users_to_room_failure)
-            } else {
-                errorFormatter.toHumanReadable(error)
-            }
-            AlertDialog.Builder(this)
-                    .setMessage(message)
-                    .setPositiveButton(R.string.ok, null)
-                    .show()
+            errorFormatter.toHumanReadable(error)
         }
+        AlertDialog.Builder(this)
+                .setMessage(message)
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 
     private fun renderInvitationSuccess() = withState(viewModel) {

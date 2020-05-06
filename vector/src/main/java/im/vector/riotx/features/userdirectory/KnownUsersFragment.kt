@@ -48,9 +48,7 @@ class KnownUsersFragment @Inject constructor(
 
     override fun getLayoutResId() = R.layout.fragment_known_users
 
-    override fun getMenuRes() = withState(viewModel) {
-        return@withState it.menuResId ?: -1
-    }
+    override fun getMenuRes() = args.menuResId
 
     private val viewModel: UserDirectoryViewModel by activityViewModel()
     private lateinit var sharedActionViewModel: UserDirectorySharedActionViewModel
