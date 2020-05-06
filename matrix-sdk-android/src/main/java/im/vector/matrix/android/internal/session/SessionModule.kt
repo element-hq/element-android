@@ -36,6 +36,7 @@ import im.vector.matrix.android.api.session.accountdata.AccountDataService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
 import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageService
+import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.secrets.DefaultSharedSecretStorageService
 import im.vector.matrix.android.internal.crypto.verification.VerificationMessageLiveObserver
 import im.vector.matrix.android.internal.database.LiveEntityObserver
@@ -43,6 +44,7 @@ import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
 import im.vector.matrix.android.internal.di.Authenticated
 import im.vector.matrix.android.internal.di.DeviceId
+import im.vector.matrix.android.internal.di.HomeserverAccessToken
 import im.vector.matrix.android.internal.di.IdentityDatabase
 import im.vector.matrix.android.internal.di.SessionCacheDirectory
 import im.vector.matrix.android.internal.di.SessionDatabase
@@ -60,6 +62,8 @@ import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.network.PreferredNetworkCallbackStrategy
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
+import im.vector.matrix.android.internal.network.token.AccessTokenProvider
+import im.vector.matrix.android.internal.network.token.HomeserverAccessTokenProvider
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.homeserver.DefaultHomeServerCapabilitiesService
 import im.vector.matrix.android.internal.session.identity.db.IdentityRealmModule
@@ -195,14 +199,14 @@ internal abstract class SessionModule {
         @SessionScope
         @Authenticated
         fun providesOkHttpClient(@Unauthenticated okHttpClient: OkHttpClient,
-                                 accessTokenInterceptor: AccessTokenInterceptor): OkHttpClient {
+                                 @Authenticated accessTokenProvider: AccessTokenProvider): OkHttpClient {
             return okHttpClient.newBuilder()
                     .apply {
                         // Remove the previous CurlLoggingInterceptor, to add it after the accessTokenInterceptor
                         val existingCurlInterceptors = interceptors().filterIsInstance<CurlLoggingInterceptor>()
                         interceptors().removeAll(existingCurlInterceptors)
 
-                        addInterceptor(accessTokenInterceptor)
+                        addInterceptor(AccessTokenInterceptor(accessTokenProvider))
 
                         // Re add eventually the curl logging interceptors
                         existingCurlInterceptors.forEach {
@@ -210,6 +214,14 @@ internal abstract class SessionModule {
                         }
                     }
                     .build()
+        }
+
+        @JvmStatic
+        @Provides
+        @Authenticated
+        fun providesAccessTokenProvider(@SessionId sessionId: String,
+                                        sessionParamsStore: SessionParamsStore): AccessTokenProvider {
+            return HomeserverAccessTokenProvider(sessionId, sessionParamsStore)
         }
 
         @JvmStatic
@@ -252,6 +264,10 @@ internal abstract class SessionModule {
             return matrixConfiguration.cryptoConfig
         }
     }
+
+    @Binds
+    @HomeserverAccessToken
+    abstract fun bindAccessTokenProvider(provider: HomeserverAccessTokenProvider): AccessTokenProvider
 
     @Binds
     abstract fun bindSession(session: DefaultSession): Session
