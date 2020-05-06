@@ -22,11 +22,11 @@ import im.vector.matrix.android.api.util.JsonDict
 
 @JsonClass(generateAdapter = true)
 data class WidgetContent(
-        @Json(name = "creatorUserId") val creatorUserId: String,
-        @Json(name = "id") val id: String,
-        @Json(name = "type") val type: String,
-        @Json(name = "url") val url: String,
-        @Json(name = "name") val name: String,
-        @Json(name = "data") val data: JsonDict,
+        @Json(name = "creatorUserId") val creatorUserId: String? = null,
+        @Json(name = "id") val id: String? = null,
+        @Json(name = "type") val type: String? = null,
+        @Json(name = "url") val url: String? = null,
+        @Json(name = "name") val name: String? = null,
+        @Json(name = "data") val data: JsonDict = emptyMap(),
         @Json(name = "waitForIframeLoad") val waitForIframeLoad: Boolean = false
 )

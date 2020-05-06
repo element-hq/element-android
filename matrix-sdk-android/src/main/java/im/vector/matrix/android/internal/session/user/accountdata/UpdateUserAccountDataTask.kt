@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.user.accountdata
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.integrationmanager.AllowedWidgetsContent
+import im.vector.matrix.android.internal.session.integrationmanager.IntegrationProvisioningContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.BreadcrumbsContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
 import im.vector.matrix.android.internal.task.Task
@@ -56,6 +57,14 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
 
         override fun getData(): Any {
             return allowedWidgetsContent
+        }
+    }
+
+    data class IntegrationProvisioning(override val type: String = UserAccountData.ACCOUNT_DATA_TYPE_INTEGRATION_PROVISIONING,
+                                       private val integrationProvisioningContent: IntegrationProvisioningContent) : Params {
+
+        override fun getData(): Any {
+            return integrationProvisioningContent
         }
     }
 

@@ -24,7 +24,7 @@ data class AllowedWidgetsContent(
         /**
          * Map of stateEventId to Allowed
          */
-        @Json(name = "widgets") val widgets: Map<String, Boolean>,
+        @Json(name = "widgets") val widgets: Map<String, Boolean> = emptyMap(),
 
         /**
          * Map of native widgetType to a map of domain to Allowed
@@ -35,5 +35,5 @@ data class AllowedWidgetsContent(
          *      }
          * }
          */
-        @Json(name = "native_widgets") val native: Map<String, Map<String, Boolean>>
+        @Json(name = "native_widgets") val native: Map<String, Map<String, Boolean>> = emptyMap()
 )
