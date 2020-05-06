@@ -2395,4 +2395,6 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="bootstrap_progress_compute_curve_key">Erzeuge Kurvenschlüssel</string>
     <string name="bootstrap_progress_generating_ssss">Generiere SSSS Schlüssel aus dem Passwort</string>
     <string name="bootstrap_progress_generating_ssss_with_info">Generiere SSSS Schlüssel aus dem Passwort (%s)</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">Generiere SSSS Schlüssel aus dem Wiederherstellungsschlüssel</string>
+    <string name="bootstrap_progress_storing_in_sss">"Speichere  Schlüssel-Backup Schlüssel in SSSS"</string>
     </resources>
