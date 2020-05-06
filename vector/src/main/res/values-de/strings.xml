@@ -2435,5 +2435,5 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="cross_signing_verify_by_text">Verifiziere manuell mit einem Text</string>
     <string name="crosssigning_verify_session">Verifiziere Anmeldung</string>
     <string name="cross_signing_verify_by_emoji">Verifiziere interaktiv mit Emojis</string>
-    <string name="confirm_your_identity">Bestätige deine Identität indem du diesen Login von einer deiner anderen Sitzungen verifizierst um Zugriff auf deine verschlüsselten Nachrichten zu erhalten.</string>
+    <string name="confirm_your_identity">Bestätige deine Identität, indem du diesen Login von einer deiner anderen Sitzungen verifizierst, um Zugriff auf deine verschlüsselten Nachrichten zu erhalten.</string>
     </resources>
