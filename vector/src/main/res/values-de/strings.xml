@@ -2401,5 +2401,5 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="bootstrap_migration_enter_backup_password">Gib dein Passwort für das Schlüsselbackup ein, um fortzufahren.</string>
     <string name="bootstrap_migration_use_recovery_key">nutze deinen Schlüsselbackup Wiederherstellungsschlüssel</string>
-    <string name="bootstrap_migration_with_passphrase_helper_with_link">Wenn du deine Schlüssel-Backup Passphrase nicht weißt, kannst du %s.</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">Wenn du dein Schlüsselbackup Passwort nicht weißt, kannst du %s.</string>
     </resources>
