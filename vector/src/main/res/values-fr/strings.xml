@@ -2,8 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
-    <string name="resources_language">utiliser pour récupérer la liste des langues prises en charge
-\ndoit avoir la même valeur que le nom</string>
+    <string name="resources_language">fr</string>
     <string name="resources_country_code">FR</string>
 
     <string name="title_activity_home">Messages</string>
