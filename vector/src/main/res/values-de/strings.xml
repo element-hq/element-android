@@ -2430,4 +2430,10 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="encrypted_unverified">Verschlüsselt von einem unbekannten Gerät</string>
     <string name="review_logins">Überprüfe, wo du eingeloggt bist</string>
     <string name="verify_other_sessions">Verifiziere alle deine Sitzungen, um sicher zu stellen, dass dein Konto &amp; deine Nachrichten sicher sind</string>
+    <string name="verify_this_session">Bestätige neue Anmeldung für dein Konto: %1$s</string>
+
+    <string name="cross_signing_verify_by_text">Verifiziere manuell mit einem Text</string>
+    <string name="crosssigning_verify_session">Verifiziere Anmeldung</string>
+    <string name="cross_signing_verify_by_emoji">Verifiziere interaktiv mit Emojis</string>
+    <string name="confirm_your_identity">Bestätige deine Identität indem du diesen Login von einer deiner anderen Sitzungen verifizierst um Zugriff auf deine verschlüsselten Nachrichten zu erhalten.</string>
     </resources>
