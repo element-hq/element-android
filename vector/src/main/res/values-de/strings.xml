@@ -2388,4 +2388,6 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
 
     <string name="upgrade_security">Verschlüsselungsupgrade verfügbar</string>
+    <string name="enter_backup_passphrase">%s eingeben</string>
+    <string name="backup_recovery_passphrase">Wiederherstellungs-Passphrase</string>
     </resources>
