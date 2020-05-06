@@ -2436,4 +2436,14 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="crosssigning_verify_session">Verifiziere Anmeldung</string>
     <string name="cross_signing_verify_by_emoji">Verifiziere interaktiv mit Emojis</string>
     <string name="confirm_your_identity">Bestätige deine Identität, indem du diesen Login von einer deiner anderen Sitzungen verifizierst, um Zugriff auf deine verschlüsselten Nachrichten zu erhalten.</string>
-    </resources>
+    <string name="mark_as_verified">Als vertraut markieren</string>
+
+    <string name="error_empty_field_choose_user_name">Bitte wähle einen Benutzernamen.</string>
+    <string name="error_empty_field_choose_password">Bitte wähle ein Passwort.</string>
+    <string name="external_link_confirmation_title">Überprüfe diesen Link genau</string>
+    <string name="external_link_confirmation_message">Dieser Link %1$s bringt dich zu einer anderen Seite: %2$s.
+\n
+\nWillst du wirklich fortfahren\?</string>
+
+    <string name="create_room_dm_failure">Konnte Direkt-Nachrichten Raum nicht erzeugen. Prüfe die Nutzer, die du einladen willst und versuche es erneut.</string>
+</resources>
