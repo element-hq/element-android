@@ -2409,6 +2409,6 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="media_file_added_to_gallery">Datei wurde der Galerie hinzugefügt</string>
     <string name="error_adding_media_file_to_gallery">Datei konnte nicht zur Galerie hinzugefügt werden</string>
-    <string name="change_password_summary">Neues Benutzerkonto-Passwort festlegen…</string>
+    <string name="change_password_summary">Neues Benutzerpasswort festlegen…</string>
 
     </resources>
