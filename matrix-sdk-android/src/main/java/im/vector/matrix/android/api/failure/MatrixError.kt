@@ -129,6 +129,8 @@ data class MatrixError(
         /** (Not documented yet) */
         const val M_WRONG_ROOM_KEYS_VERSION = "M_WRONG_ROOM_KEYS_VERSION"
 
+        const val M_TERMS_NOT_SIGNED = "M_TERMS_NOT_SIGNED"
+
         // Possible value for "limit_type"
         const val LIMIT_TYPE_MAU = "monthly_active_user"
     }

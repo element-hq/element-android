@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,9 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.di
+package im.vector.matrix.android.api.session.identity
 
-import javax.inject.Qualifier
-
-// TODO Add internal ?
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class Authenticated
-
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class AuthenticatedIdentity
-
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class Unauthenticated
+sealed class ThreePid(open val value: String) {
+    data class Email(val email: String) : ThreePid(email)
+    data class Msisdn(val msisdn: String) : ThreePid(msisdn)
+}

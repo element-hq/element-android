@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.di
+package im.vector.matrix.android.internal.session.identity.model
 
-import javax.inject.Qualifier
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-// TODO Add internal ?
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class Authenticated
+@JsonClass(generateAdapter = true)
+internal data class IdentityAccountResponse(
+        @Json(name = "user_id")
+        val userId: String
+)
 
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class AuthenticatedIdentity
-
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class Unauthenticated

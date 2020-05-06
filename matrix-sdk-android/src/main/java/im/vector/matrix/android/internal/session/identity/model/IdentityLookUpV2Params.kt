@@ -14,15 +14,24 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.network.token
+package im.vector.matrix.android.internal.session.identity.model
 
-import im.vector.matrix.android.internal.auth.SessionParamsStore
-import im.vector.matrix.android.internal.di.SessionId
-import javax.inject.Inject
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-internal class HomeserverAccessTokenProvider @Inject constructor(
-        @SessionId private val sessionId: String,
-        private val sessionParamsStore: SessionParamsStore
-) : AccessTokenProvider {
-    override fun getToken() = sessionParamsStore.get(sessionId)?.credentials?.accessToken
-}
+/**
+ * Ref: https://github.com/matrix-org/matrix-doc/blob/hs/hash-identity/proposals/2134-identity-hash-lookup.md
+ */
+@JsonClass(generateAdapter = true)
+internal data class IdentityLookUpV2Params(
+        @Json(name = "addresses")
+        val hashedAddresses: List<String>,
+
+        @JvmField
+        @Json(name = "algorithm")
+        val algorithm: String,
+
+        @JvmField
+        @Json(name = "pepper")
+        val pepper: String
+)

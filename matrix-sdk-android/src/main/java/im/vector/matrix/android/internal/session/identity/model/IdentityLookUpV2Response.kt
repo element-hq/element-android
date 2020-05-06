@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.di
+package im.vector.matrix.android.internal.session.identity.model
 
-import javax.inject.Qualifier
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-// TODO Add internal ?
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class Authenticated
-
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class AuthenticatedIdentity
-
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class Unauthenticated
+/**
+ * Ref: https://github.com/matrix-org/matrix-doc/blob/hs/hash-identity/proposals/2134-identity-hash-lookup.md
+ */
+@JsonClass(generateAdapter = true)
+internal data class IdentityLookUpV2Response(
+        @Json(name = "mappings")
+        val mappings: Map<String, String>
+)

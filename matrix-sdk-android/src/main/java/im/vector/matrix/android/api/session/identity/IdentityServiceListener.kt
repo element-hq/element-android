@@ -14,15 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.di
+package im.vector.matrix.android.api.session.identity
 
-import javax.inject.Qualifier
-
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class HomeserverAccessToken
-
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class IdentityServerAccessToken
-
+interface IdentityServiceListener {
+    fun onIdentityServerChange()
+}

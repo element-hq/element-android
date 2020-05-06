@@ -36,6 +36,7 @@ import im.vector.matrix.android.internal.session.filter.FilterModule
 import im.vector.matrix.android.internal.session.group.GetGroupDataWorker
 import im.vector.matrix.android.internal.session.group.GroupModule
 import im.vector.matrix.android.internal.session.homeserver.HomeServerCapabilitiesModule
+import im.vector.matrix.android.internal.session.identity.IdentityModule
 import im.vector.matrix.android.internal.session.openid.OpenIdModule
 import im.vector.matrix.android.internal.session.profile.ProfileModule
 import im.vector.matrix.android.internal.session.pushers.AddHttpPusherWorker
@@ -72,6 +73,7 @@ import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
             CryptoModule::class,
             PushersModule::class,
             OpenIdModule::class,
+            IdentityModule::class,
             AccountDataModule::class,
             ProfileModule::class,
             SessionAssistedInjectModule::class,

@@ -50,6 +50,7 @@ import im.vector.matrix.android.internal.crypto.crosssigning.ShieldTrustUpdater
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.WorkManagerProvider
+import im.vector.matrix.android.internal.session.identity.DefaultIdentityService
 import im.vector.matrix.android.internal.session.room.timeline.TimelineEventDecryptor
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
@@ -97,7 +98,8 @@ internal class DefaultSession @Inject constructor(
         private val _sharedSecretStorageService: Lazy<SharedSecretStorageService>,
         private val accountService: Lazy<AccountService>,
         private val timelineEventDecryptor: TimelineEventDecryptor,
-        private val shieldTrustUpdater: ShieldTrustUpdater)
+        private val shieldTrustUpdater: ShieldTrustUpdater,
+        private val defaultIdentityService: DefaultIdentityService)
     : Session,
         RoomService by roomService.get(),
         RoomDirectoryService by roomDirectoryService.get(),
@@ -133,6 +135,7 @@ internal class DefaultSession @Inject constructor(
         eventBus.register(this)
         timelineEventDecryptor.start()
         shieldTrustUpdater.start()
+        defaultIdentityService.start()
     }
 
     override fun requireBackgroundSync() {
@@ -175,6 +178,7 @@ internal class DefaultSession @Inject constructor(
         isOpen = false
         eventBus.unregister(this)
         shieldTrustUpdater.stop()
+        defaultIdentityService.stop()
     }
 
     override fun getSyncStateLive(): LiveData<SyncState> {
@@ -217,6 +221,8 @@ internal class DefaultSession @Inject constructor(
     override fun contentUploadProgressTracker() = contentUploadProgressTracker
 
     override fun cryptoService(): CryptoService = cryptoService.get()
+
+    override fun identityService() = defaultIdentityService
 
     override fun addListener(listener: Session.Listener) {
         sessionListeners.addListener(listener)

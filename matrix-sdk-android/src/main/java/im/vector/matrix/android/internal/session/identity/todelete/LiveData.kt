@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.network.token
+package im.vector.matrix.android.internal.session.identity.todelete
 
-import im.vector.matrix.android.internal.auth.SessionParamsStore
-import im.vector.matrix.android.internal.di.SessionId
-import javax.inject.Inject
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 
-internal class HomeserverAccessTokenProvider @Inject constructor(
-        @SessionId private val sessionId: String,
-        private val sessionParamsStore: SessionParamsStore
-) : AccessTokenProvider {
-    override fun getToken() = sessionParamsStore.get(sessionId)?.credentials?.accessToken
+// There will be a duplicated class when Integration manager will be merged, so delete this one
+inline fun <T> LiveData<T>.observeK(owner: LifecycleOwner, crossinline observer: (T?) -> Unit) {
+    this.observe(owner, Observer { observer(it) })
+}
+
+inline fun <T> LiveData<T>.observeNotNull(owner: LifecycleOwner, crossinline observer: (T) -> Unit) {
+    this.observe(owner, Observer { it?.run(observer) })
 }

@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.user.accountdata
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.sync.model.accountdata.BreadcrumbsContent
+import im.vector.matrix.android.internal.session.sync.model.accountdata.IdentityContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
 import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
@@ -29,6 +30,15 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
     interface Params {
         val type: String
         fun getData(): Any
+    }
+
+    data class IdentityParams(override val type: String = UserAccountData.TYPE_IDENTITY,
+                              private val identityContent: IdentityContent
+    ) : Params {
+
+        override fun getData(): Any {
+            return identityContent
+        }
     }
 
     // TODO Use [UserAccountDataDirectMessages] class?

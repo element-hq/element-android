@@ -36,7 +36,6 @@ import im.vector.matrix.android.api.session.accountdata.AccountDataService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
 import im.vector.matrix.android.api.session.securestorage.SecureStorageService
 import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageService
-import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.secrets.DefaultSharedSecretStorageService
 import im.vector.matrix.android.internal.crypto.verification.VerificationMessageLiveObserver
 import im.vector.matrix.android.internal.database.LiveEntityObserver
@@ -44,7 +43,6 @@ import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
 import im.vector.matrix.android.internal.di.Authenticated
 import im.vector.matrix.android.internal.di.DeviceId
-import im.vector.matrix.android.internal.di.HomeserverAccessToken
 import im.vector.matrix.android.internal.di.IdentityDatabase
 import im.vector.matrix.android.internal.di.SessionCacheDirectory
 import im.vector.matrix.android.internal.di.SessionDatabase
@@ -218,14 +216,6 @@ internal abstract class SessionModule {
 
         @JvmStatic
         @Provides
-        @Authenticated
-        fun providesAccessTokenProvider(@SessionId sessionId: String,
-                                        sessionParamsStore: SessionParamsStore): AccessTokenProvider {
-            return HomeserverAccessTokenProvider(sessionId, sessionParamsStore)
-        }
-
-        @JvmStatic
-        @Provides
         @SessionScope
         fun providesRetrofit(@Authenticated okHttpClient: Lazy<OkHttpClient>,
                              sessionParams: SessionParams,
@@ -266,7 +256,7 @@ internal abstract class SessionModule {
     }
 
     @Binds
-    @HomeserverAccessToken
+    @Authenticated
     abstract fun bindAccessTokenProvider(provider: HomeserverAccessTokenProvider): AccessTokenProvider
 
     @Binds
