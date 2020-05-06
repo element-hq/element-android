@@ -2405,4 +2405,6 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="bootstrap_migration_backup_recovery_key">Schlüsselbackup Wiederherstellungsschlüssel</string>
 
     <string name="settings_security_prevent_screenshots_title">Verhindere Screenshots innerhalb der Anwendung</string>
+    <string name="settings_security_prevent_screenshots_summary">Das aktivieren dieser Einstellung setzt das FLAG_SECURE in allen Aktivitäten. Starte die Anwendung neu, damit die Änderung wirksam wird.</string>
+
     </resources>
