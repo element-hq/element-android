@@ -2399,5 +2399,5 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="bootstrap_progress_storing_in_sss">Speichere Schlüsselbackup Schlüssel in SSSS</string>
     <string name="new_session_review_with_info">%1$s (%2$s)</string>
 
-    <string name="bootstrap_migration_enter_backup_password">Gebe dein Password für das Schlüssel-Backup ein um fortzufahren.</string>
+    <string name="bootstrap_migration_enter_backup_password">Gib dein Passwort für das Schlüsselbackup ein, um fortzufahren.</string>
     </resources>
