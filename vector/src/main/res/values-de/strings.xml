@@ -2381,4 +2381,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="recovery_key_empty_error_message">Bitte gib deinen Wiederherstellungsschlüssel ein</string>
 
     <string name="bootstrap_info_text">Verschlüsselte Nachrichten und Verifizierungen mit einer %s absichern und entsperren.</string>
+    <string name="bootstrap_skip_text">Das setzen einer Wiederherstellungspassphrase ermöglicht das ver- &amp; entschlüsseln von Nachrichten und Vertrauen.
+\n
+\nWenn du kein Nachrichtenpassword setzen willst, erzeuge stattdessen einen Nachrichtenschlüssel.</string>
     </resources>
