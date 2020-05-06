@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.session.room.state
 
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.util.Optional
 
@@ -28,7 +29,11 @@ interface StateService {
      */
     fun updateTopic(topic: String, callback: MatrixCallback<Unit>)
 
-    fun getStateEvent(eventType: String, stateKey: String): Event?
+    fun getStateEvent(eventType: String, stateKey: QueryStringValue = QueryStringValue.NoCondition): Event?
 
-    fun getStateEventLive(eventType: String, stateKey: String): LiveData<Optional<Event>>
+    fun getStateEventLive(eventType: String, stateKey: QueryStringValue = QueryStringValue.NoCondition): LiveData<Optional<Event>>
+
+    fun getStateEvents(eventTypes: Set<String>, stateKey: QueryStringValue = QueryStringValue.NoCondition): List<Event>
+
+    fun getStateEventsLive(eventTypes: Set<String>, stateKey: QueryStringValue = QueryStringValue.NoCondition): LiveData<List<Event>>
 }

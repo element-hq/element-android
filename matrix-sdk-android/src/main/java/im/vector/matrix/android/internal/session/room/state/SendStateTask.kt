@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.session.room.state
 
+import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
@@ -26,7 +27,7 @@ internal interface SendStateTask : Task<SendStateTask.Params, Unit> {
     data class Params(
             val roomId: String,
             val eventType: String,
-            val body: Map<String, String>
+            val body: JsonDict
     )
 }
 

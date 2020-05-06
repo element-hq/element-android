@@ -184,7 +184,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
 
     private fun observeRoomSummaryAndPowerLevels(room: Room) {
         val roomSummaryLive = room.rx().liveRoomSummary().unwrap()
-        val powerLevelsContentLive = room.rx().liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, "")
+        val powerLevelsContentLive = room.rx().liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
                 .mapOptional { it.content.toModel<PowerLevelsContent>() }
                 .unwrap()
 
