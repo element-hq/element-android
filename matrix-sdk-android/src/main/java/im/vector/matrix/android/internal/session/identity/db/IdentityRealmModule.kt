@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,22 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.di
+package im.vector.matrix.android.internal.session.identity.db
 
-import javax.inject.Qualifier
+import io.realm.annotations.RealmModule
 
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class AuthDatabase
-
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class SessionDatabase
-
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class CryptoDatabase
-
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class IdentityDatabase
+/**
+ * Realm module for identity server classes
+ */
+@RealmModule(library = true,
+        classes = [
+            IdentityServerEntity::class
+        ])
+internal class IdentityRealmModule
