@@ -2411,4 +2411,12 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="error_adding_media_file_to_gallery">Datei konnte nicht zur Galerie hinzugefügt werden</string>
     <string name="change_password_summary">Neues Benutzerpasswort festlegen…</string>
 
+    <string name="use_other_session_content_description">Nutze die neueste Version von Riot auf deinen anderen Geräten, Riot Web, Riot Desktop, Riot iOS, RiotX für Android oder einen anderen cross-signing fähigen Matrix client</string>
+    <string name="riot_desktop_web">Riot Web
+\nRiot Desktop</string>
+    <string name="riot_ios_android">Riot iOS
+\nRiot X für Android</string>
+    <string name="or_other_mx_capabale_client">oder einen anderen cross-signing fähigen Matrix Client</string>
+    <string name="use_latest_riot">Nutze die neueste Version von Riot auf deinen anderen Geräten:</string>
+    <string name="command_description_discard_session">Erzwingt, dass die aktuell ausgehende Gruppen-Sitzung in einem verschlüsseltem Raum verworfen wird</string>
     </resources>
