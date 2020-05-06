@@ -2404,4 +2404,5 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="bootstrap_migration_with_passphrase_helper_with_link">Wenn du dein Schlüsselbackup Passwort nicht weißt, kannst du %s.</string>
     <string name="bootstrap_migration_backup_recovery_key">Schlüsselbackup Wiederherstellungsschlüssel</string>
 
+    <string name="settings_security_prevent_screenshots_title">Verhindere Screenshots der Anwendung</string>
     </resources>
