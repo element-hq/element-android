@@ -592,7 +592,7 @@
     <string name="encryption_import_import">Importo</string>
     <string name="passphrase_enter_passphrase">Jepni frazëkalimin</string>
     <string name="encryption_never_send_to_unverified_devices_title">Fshehtëzoje vetëm për sesione të verifikuar</string>
-    <string name="encryption_information_not_verified">Jo i verifikuar</string>
+    <string name="encryption_information_not_verified">Jo i Verifikuar</string>
     <string name="encryption_information_verified">I verifikuar</string>
     <string name="encryption_information_blocked">Në Listë të Zezë</string>
 
@@ -2147,7 +2147,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     </plurals>
     <string name="poll_item_selected_aria">Mundësi e Përzgjedhur</string>
     <string name="command_description_poll">Krijoni një pyetësor të thjeshtë</string>
-    <string name="verification_cannot_access_other_session">Përdorni metodë rimarrjesh</string>
+    <string name="verification_cannot_access_other_session">Përdorni Frazëkalim Rikthimesh ose Kyç</string>
     <string name="verification_use_passphrase">Nëse s’hyni dot në një sesion ekzistues</string>
 
     <string name="new_signin">Hyrje e Re</string>
@@ -2204,7 +2204,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="verify_cancelled_notice">Verifikoni pajisjet tuaja që prej Rregullimeve.</string>
     <string name="verification_cancelled">Verifikimi u Anulua</string>
 
-    <string name="recovery_passphrase">Fjalëkalim Mesazhesh</string>
+    <string name="recovery_passphrase">Frazëkalim Rikthimesh</string>
     <string name="message_key">Kyç Mesazhesh</string>
     <string name="account_password">Fjalëkalim Llogarie</string>
 
@@ -2278,7 +2278,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="auth_invalid_login_param_space_in_password">Emër përdoruesi dhe/ose fjalëkalim i pasaktë. Fjalëkalimi i dhënë fillon ose mbaron me hapësirë, ju lutemi, kontrollojeni.</string>
 
-<string name="settings_rageshake"></string>
+<string name="settings_rageshake"/>
     <string name="bootstrap_crosssigning_progress_initializing">Po publikohen kyçe të krijuar identiteti</string>
     <string name="room_message_placeholder">Mesazh…</string>
 
@@ -2325,7 +2325,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="use_recovery_key">Përdorni Kyçin Rimarrjesh</string>
     <string name="enter_secret_storage_input_key">Përzgjidhni Kyçin tuaj të Rimarrjeve, ose jepeni dorazi duke e shtypur ose duke e ngjitur prej të papastrës tuaj</string>
     <string name="keys_backup_recovery_key_error_decrypt">Kopjeruajtja s’u shfshehtëzua dot me këtë Kyç Rimarrjesh: ju lutemi, verifikoni se keni dhënë Kyçin e saktë të Rimarrjeve.</string>
-    <string name="failed_to_access_secure_storage">S\"u arrit të hyhet në depozitë të sigurt</string>
+    <string name="failed_to_access_secure_storage">S’u arrit të hyhet në depozitë të sigurt</string>
 
     <string name="unencrypted">Të pafshehtëzuara</string>
     <string name="encrypted_unverified">Fshehtëzuar nga një pajisje e paverifikuar</string>
@@ -2335,11 +2335,11 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="cross_signing_verify_by_text">Verifikojeni Dorazi përmes Teksti</string>
     <string name="crosssigning_verify_session">Verifikoni kredenciale hyrjeje</string>
-    <string name="cross_signing_verify_by_emoji">Verifikojeni përmes Emoji-sh</string>
+    <string name="cross_signing_verify_by_emoji">Verifikojeni Në Mënyrë Interaktive përmes Emoji-sh</string>
     <string name="confirm_your_identity">Ripohoni identitetin tuaj duke verifikuar këto kredenciale hyrjesh prej një nga sesionet tuaj të tjerë, duke i akorduar hyrje te mesazhet e fshehtëzuar.</string>
     <string name="mark_as_verified">Vërini shenjë si i Besuar</string>
 
-    <string name="error_empty_field_choose_user_name">Ju lutemi zgjidhni një emër përdoruesi.</string>
+    <string name="error_empty_field_choose_user_name">Ju lutemi, zgjidhni një emër përdoruesi.</string>
     <string name="error_empty_field_choose_password">Ju lutemi, zgjidhni një fjalëkalim.</string>
     <string name="external_link_confirmation_title">Kontrollojeni edhe një herë këtë lidhje</string>
     <string name="external_link_confirmation_message">Lidhja %1$s po ju shpie te një tjetër sajt: %2$s.
