@@ -2445,5 +2445,5 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 \n
 \nWillst du wirklich fortfahren\?</string>
 
-    <string name="create_room_dm_failure">Konnte Direkt-Nachrichten Raum nicht erzeugen. Prüfe die Nutzer, die du einladen willst und versuche es erneut.</string>
+    <string name="create_room_dm_failure">Konnte Direktnachricht nicht erzeugen. Prüfe die Nutzer, die du einladen willst und versuche es erneut.</string>
 </resources>
