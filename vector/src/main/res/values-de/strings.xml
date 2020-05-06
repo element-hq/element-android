@@ -2422,4 +2422,5 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="command_description_discard_session_not_handled">Wird nur in verschlüsselten Räumen unterstützt</string>
     <string name="enter_secret_storage_passphrase_or_key">Benutze dein %1$s oder deinen %2$s um fortzufahren.</string>
     <string name="use_recovery_key">Wiederherstellungsschlüssel verwenden</string>
+    <string name="enter_secret_storage_input_key">Wähle deinen Wiederherstellungsschüssel, geben ihn ein oder füge ihn aus der Zwischenablage ein</string>
     </resources>
