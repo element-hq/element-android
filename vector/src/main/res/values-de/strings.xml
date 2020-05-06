@@ -2392,5 +2392,5 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="backup_recovery_passphrase">Wiederherstellungspasswort</string>
     <string name="bootstrap_progress_checking_backup">Überprüfe Wiederherstellungsschlüssel</string>
     <string name="bootstrap_progress_checking_backup_with_info">Überprüfe Sicherungsstatus (%s)</string>
-    <string name="bootstrap_progress_compute_curve_key">Erzeuge Kurven-Schlüssel</string>
+    <string name="bootstrap_progress_compute_curve_key">Erzeuge Kurvenschlüssel</string>
     </resources>
