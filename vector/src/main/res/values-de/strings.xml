@@ -2418,5 +2418,5 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 \nRiot X für Android</string>
     <string name="or_other_mx_capabale_client">oder einen anderen cross-signing fähigen Matrix Client</string>
     <string name="use_latest_riot">Nutze die neueste Version von Riot auf deinen anderen Geräten:</string>
-    <string name="command_description_discard_session">Erzwingt, dass die aktuell ausgehende Gruppen-Sitzung in einem verschlüsseltem Raum verworfen wird</string>
+    <string name="command_description_discard_session">Erzwingt das Verferfen der aktuell ausgehende Gruppensitzung in einem verschlüsseltem Raum</string>
     </resources>
