@@ -1089,6 +1089,8 @@
     <string name="notification_new_invitation">New Invitation</string>
     <string name="notification_sender_me">Me</string>
     <string name="notification_inline_reply_failed">** Failed to send - please open room</string>
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
 
     <!-- historical -->
     <string name="historical_placeholder">Search for historical</string>
