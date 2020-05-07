@@ -45,7 +45,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
 
     // Version 1L added Cross Signing info persistence
     companion object {
-        const val CRYPTO_STORE_SCHEMA_VERSION = 5L
+        const val CRYPTO_STORE_SCHEMA_VERSION = 6L
     }
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
@@ -56,6 +56,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
         if (oldVersion <= 2) migrateTo3(realm)
         if (oldVersion <= 3) migrateTo4(realm)
         if (oldVersion <= 4) migrateTo5(realm)
+        if (oldVersion <= 5) migrateTo6(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -254,5 +255,23 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                         deviceInfoEntity.setLong(DeviceInfoEntityFields.FIRST_TIME_SEEN_LOCAL_TS, now)
                     }
                 }
+    }
+
+    // Fixes duplicate devices in UserEntity#devices
+    private fun migrateTo6(realm: DynamicRealm) {
+        val userEntities = realm.where("UserEntity").findAll()
+        userEntities.forEach {
+            try {
+                val deviceList = it.getList(UserEntityFields.DEVICES.`$`)
+                        ?: return@forEach
+                val distinct = deviceList.distinctBy { it.getString(DeviceInfoEntityFields.DEVICE_ID) }
+                if (distinct.size != deviceList.size) {
+                    deviceList.clear()
+                    deviceList.addAll(distinct)
+                }
+            } catch (failure: Throwable) {
+                Timber.w(failure, "Crypto Data base migration error for migrateTo6")
+            }
+        }
     }
 }
