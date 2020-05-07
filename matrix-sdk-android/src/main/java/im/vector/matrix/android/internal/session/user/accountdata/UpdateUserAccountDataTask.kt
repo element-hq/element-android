@@ -19,7 +19,7 @@ package im.vector.matrix.android.internal.session.user.accountdata
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.sync.model.accountdata.BreadcrumbsContent
-import im.vector.matrix.android.internal.session.sync.model.accountdata.IdentityContent
+import im.vector.matrix.android.internal.session.sync.model.accountdata.IdentityServerContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
 import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
@@ -33,7 +33,7 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
     }
 
     data class IdentityParams(override val type: String = UserAccountData.TYPE_IDENTITY_SERVER,
-                              private val identityContent: IdentityContent
+                              private val identityContent: IdentityServerContent
     ) : Params {
 
         override fun getData(): Any {

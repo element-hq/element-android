@@ -39,9 +39,8 @@ import im.vector.matrix.android.internal.session.identity.db.IdentityServiceStor
 import im.vector.matrix.android.internal.session.identity.todelete.AccountDataDataSource
 import im.vector.matrix.android.internal.session.identity.todelete.observeNotNull
 import im.vector.matrix.android.internal.session.openid.GetOpenIdTokenTask
-import im.vector.matrix.android.internal.session.sync.model.accountdata.IdentityContent
+import im.vector.matrix.android.internal.session.sync.model.accountdata.IdentityServerContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
-import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataIdentity
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.launchToCallback
@@ -81,16 +80,16 @@ internal class DefaultIdentityService @Inject constructor(
         accountDataDataSource
                 .getLiveAccountDataEvent(UserAccountData.TYPE_IDENTITY_SERVER)
                 .observeNotNull(lifecycleOwner) {
-                    val identityServerContent = it.getOrNull()?.content?.toModel<UserAccountDataIdentity>()
+                    val identityServerContent = it.getOrNull()?.content?.toModel<IdentityServerContent>()
                     if (identityServerContent != null) {
-                        notifyIdentityServerUrlChange(identityServerContent.content?.baseUrl)
+                        notifyIdentityServerUrlChange(identityServerContent.baseUrl)
                     }
                     // TODO Handle the case where the account data is deleted?
                 }
     }
 
     private fun notifyIdentityServerUrlChange(baseUrl: String?) {
-        // This is maybe not a real change (local echo of account data we are just setting
+        // This is maybe not a real change (local echo of account data we are just setting)
         if (identityServiceStore.get()?.identityServerUrl == baseUrl) {
             Timber.d("Local echo of identity server url change")
         } else {
@@ -169,11 +168,16 @@ internal class DefaultIdentityService @Inject constructor(
 
     private suspend fun updateAccountData(url: String?) {
         updateUserAccountDataTask.execute(UpdateUserAccountDataTask.IdentityParams(
-                identityContent = IdentityContent(baseUrl = url)
+                identityContent = IdentityServerContent(baseUrl = url)
         ))
     }
 
     override fun lookUp(threePids: List<ThreePid>, callback: MatrixCallback<List<FoundThreePid>>): Cancelable {
+        if (threePids.isEmpty()) {
+            callback.onSuccess(emptyList())
+            return NoOpCancellable
+        }
+
         return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
             lookUpInternal(true, threePids)
         }

@@ -28,8 +28,8 @@ internal class RealmIdentityServerStore @Inject constructor(
 ) : IdentityServiceStore {
 
     override fun get(): IdentityServerEntity? {
-        return Realm.getInstance(realmConfiguration).use {
-            IdentityServerEntity.get(it)
+        return Realm.getInstance(realmConfiguration).use { realm ->
+            IdentityServerEntity.get(realm)?.let { realm.copyFromRealm(it) }
         }
     }
 

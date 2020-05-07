@@ -140,11 +140,7 @@ class DiscoverySettingsFragment @Inject constructor(
 
     override fun onTapChangeIdentityServer() = withState(viewModel) { state ->
         //we should prompt if there are bound items with current is
-        val pidList = ArrayList<PidInfo>().apply {
-            state.emailList()?.let { addAll(it) }
-            state.phoneNumbersList()?.let { addAll(it) }
-        }
-
+        val pidList = state.emailList().orEmpty() + state.phoneNumbersList().orEmpty()
         val hasBoundIds = pidList.any { it.isShared() == PidInfo.SharedState.SHARED }
 
         if (hasBoundIds) {
@@ -164,11 +160,7 @@ class DiscoverySettingsFragment @Inject constructor(
     override fun onTapDisconnectIdentityServer() {
         //we should prompt if there are bound items with current is
         withState(viewModel) { state ->
-            val pidList = ArrayList<PidInfo>().apply {
-                state.emailList()?.let { addAll(it) }
-                state.phoneNumbersList()?.let { addAll(it) }
-            }
-
+            val pidList = state.emailList().orEmpty() + state.phoneNumbersList().orEmpty()
             val hasBoundIds = pidList.any { it.isShared() == PidInfo.SharedState.SHARED }
 
             if (hasBoundIds) {

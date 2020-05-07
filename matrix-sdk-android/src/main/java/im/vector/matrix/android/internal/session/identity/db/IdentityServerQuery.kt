@@ -28,7 +28,7 @@ internal fun IdentityServerEntity.Companion.get(realm: Realm): IdentityServerEnt
     return realm.where<IdentityServerEntity>().findFirst()
 }
 
-internal fun IdentityServerEntity.Companion.getOrCreate(realm: Realm): IdentityServerEntity {
+private fun IdentityServerEntity.Companion.getOrCreate(realm: Realm): IdentityServerEntity {
     return get(realm) ?: realm.createObject()
 }
 

@@ -20,12 +20,12 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal data class UserAccountDataIdentity(
+internal data class UserAccountDataIdentityServer(
         @Json(name = "type") override val type: String = TYPE_IDENTITY_SERVER,
-        @Json(name = "content") val content: IdentityContent? = null
+        @Json(name = "content") val content: IdentityServerContent? = null
 ) : UserAccountData()
 
 @JsonClass(generateAdapter = true)
-internal data class IdentityContent(
+internal data class IdentityServerContent(
         @Json(name = "base_url") val baseUrl: String? = null
 )

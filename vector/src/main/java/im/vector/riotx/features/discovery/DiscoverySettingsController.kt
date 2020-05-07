@@ -18,12 +18,14 @@ package im.vector.riotx.features.discovery
 import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
+import timber.log.Timber
 import javax.inject.Inject
 
 class DiscoverySettingsController @Inject constructor(
@@ -66,18 +68,18 @@ class DiscoverySettingsController @Inject constructor(
         }
 
         when (data.phoneNumbersList) {
-            is Loading -> {
+            is Incomplete -> {
                 settingsLoadingItem {
                     id("phoneLoading")
                 }
             }
-            is Fail    -> {
+            is Fail       -> {
                 settingsInfoItem {
                     id("msisdnListError")
                     helperText(data.phoneNumbersList.error.message)
                 }
             }
-            is Success -> {
+            is Success    -> {
                 val phones = data.phoneNumbersList.invoke()
                 if (phones.isEmpty()) {
                     settingsInfoItem {
@@ -86,101 +88,19 @@ class DiscoverySettingsController @Inject constructor(
                     }
                 } else {
                     phones.forEach { piState ->
-                        val phoneNumber = PhoneNumberUtil.getInstance()
-                                .parse("+${piState.value}", null)
+                        val phoneNumber = try {
+                            PhoneNumberUtil.getInstance().parse("+${piState.threePid.value}", null)
+                        } catch (t: Throwable) {
+                            Timber.e(t, "Unable to parse the phone number")
+                            null
+                        }
                                 ?.let {
                                     PhoneNumberUtil.getInstance().format(it, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL)
                                 }
 
                         settingsTextButtonItem {
-                            id(piState.value)
+                            id(piState.threePid.value)
                             title(phoneNumber)
-                            colorProvider(colorProvider)
-                            stringProvider(stringProvider)
-                            when {
-                                piState.isShared is Loading -> buttonIndeterminate(true)
-                                piState.isShared is Fail    -> {
-                                    buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
-                                    buttonStyle(SettingsTextButtonItem.ButtonStyle.DESTRUCTIVE)
-                                    buttonTitle(stringProvider.getString(R.string.global_retry))
-                                    infoMessage(piState.isShared.error.message)
-                                    buttonClickListener(View.OnClickListener {
-                                        listener?.onTapRetryToRetrieveBindings()
-                                    })
-                                }
-                                piState.isShared is Success -> when (piState.isShared()) {
-                                    PidInfo.SharedState.SHARED,
-                                    PidInfo.SharedState.NOT_SHARED              -> {
-                                        checked(piState.isShared() == PidInfo.SharedState.SHARED)
-                                        buttonType(SettingsTextButtonItem.ButtonType.SWITCH)
-                                        switchChangeListener { _, checked ->
-                                            if (checked) {
-                                                listener?.onTapShareMsisdn(piState.value)
-                                            } else {
-                                                listener?.onTapRevokeMsisdn(piState.value)
-                                            }
-                                        }
-                                    }
-                                    PidInfo.SharedState.NOT_VERIFIED_FOR_BIND,
-                                    PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> {
-                                        buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
-                                        buttonTitle("")
-                                    }
-                                }
-                            }
-                        }
-                        when (piState.isShared()) {
-                            PidInfo.SharedState.NOT_VERIFIED_FOR_BIND,
-                            PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> {
-                                settingsItemText {
-                                    id("tverif" + piState.value)
-                                    descriptionText(stringProvider.getString(R.string.settings_text_message_sent, phoneNumber))
-                                    interactionListener(object : SettingsItemText.Listener {
-                                        override fun onValidate(code: String) {
-                                            val bind = piState.isShared() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
-                                            listener?.checkMsisdnVerification(piState.value, code, bind)
-                                        }
-                                    })
-                                }
-                            }
-                            else                                        -> {
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun buildMailSection(data: DiscoverySettingsState) {
-        settingsSectionTitle {
-            id("emails")
-            titleResId(R.string.settings_discovery_emails_title)
-        }
-        when (data.emailList) {
-            is Loading -> {
-                settingsLoadingItem {
-                    id("mailLoading")
-                }
-            }
-            is Fail    -> {
-                settingsInfoItem {
-                    id("mailListError")
-                    helperText(data.emailList.error.message)
-                }
-            }
-            is Success -> {
-                val emails = data.emailList.invoke()
-                if (emails.isEmpty()) {
-                    settingsInfoItem {
-                        id("no_emails")
-                        helperText(stringProvider.getString(R.string.settings_discovery_no_mails))
-                    }
-                } else {
-                    emails.forEach { piState ->
-                        settingsTextButtonItem {
-                            id(piState.value)
-                            title(piState.value)
                             colorProvider(colorProvider)
                             stringProvider(stringProvider)
                             when (piState.isShared) {
@@ -201,9 +121,95 @@ class DiscoverySettingsController @Inject constructor(
                                         buttonType(SettingsTextButtonItem.ButtonType.SWITCH)
                                         switchChangeListener { _, checked ->
                                             if (checked) {
-                                                listener?.onTapShareEmail(piState.value)
+                                                listener?.onTapShareMsisdn(piState.threePid.value)
                                             } else {
-                                                listener?.onTapRevokeEmail(piState.value)
+                                                listener?.onTapRevokeMsisdn(piState.threePid.value)
+                                            }
+                                        }
+                                    }
+                                    PidInfo.SharedState.NOT_VERIFIED_FOR_BIND,
+                                    PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> {
+                                        buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
+                                        buttonTitle("")
+                                    }
+                                }
+                            }
+                        }
+                        when (piState.isShared()) {
+                            PidInfo.SharedState.NOT_VERIFIED_FOR_BIND,
+                            PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> {
+                                settingsItemText {
+                                    id("tverif" + piState.threePid.value)
+                                    descriptionText(stringProvider.getString(R.string.settings_text_message_sent, phoneNumber))
+                                    interactionListener(object : SettingsItemText.Listener {
+                                        override fun onValidate(code: String) {
+                                            val bind = piState.isShared() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
+                                            listener?.checkMsisdnVerification(piState.threePid.value, code, bind)
+                                        }
+                                    })
+                                }
+                            }
+                            else                                        -> {
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun buildMailSection(data: DiscoverySettingsState) {
+        settingsSectionTitle {
+            id("emails")
+            titleResId(R.string.settings_discovery_emails_title)
+        }
+        when (data.emailList) {
+            is Incomplete -> {
+                settingsLoadingItem {
+                    id("mailLoading")
+                }
+            }
+            is Fail    -> {
+                settingsInfoItem {
+                    id("mailListError")
+                    helperText(data.emailList.error.message)
+                }
+            }
+            is Success -> {
+                val emails = data.emailList.invoke()
+                if (emails.isEmpty()) {
+                    settingsInfoItem {
+                        id("no_emails")
+                        helperText(stringProvider.getString(R.string.settings_discovery_no_mails))
+                    }
+                } else {
+                    emails.forEach { piState ->
+                        settingsTextButtonItem {
+                            id(piState.threePid.value)
+                            title(piState.threePid.value)
+                            colorProvider(colorProvider)
+                            stringProvider(stringProvider)
+                            when (piState.isShared) {
+                                is Loading -> buttonIndeterminate(true)
+                                is Fail    -> {
+                                    buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
+                                    buttonStyle(SettingsTextButtonItem.ButtonStyle.DESTRUCTIVE)
+                                    buttonTitle(stringProvider.getString(R.string.global_retry))
+                                    infoMessage(piState.isShared.error.message)
+                                    buttonClickListener(View.OnClickListener {
+                                        listener?.onTapRetryToRetrieveBindings()
+                                    })
+                                }
+                                is Success -> when (piState.isShared()) {
+                                    PidInfo.SharedState.SHARED,
+                                    PidInfo.SharedState.NOT_SHARED              -> {
+                                        checked(piState.isShared() == PidInfo.SharedState.SHARED)
+                                        buttonType(SettingsTextButtonItem.ButtonType.SWITCH)
+                                        switchChangeListener { _, checked ->
+                                            if (checked) {
+                                                listener?.onTapShareEmail(piState.threePid.value)
+                                            } else {
+                                                listener?.onTapRevokeEmail(piState.threePid.value)
                                             }
                                         }
                                     }
@@ -212,10 +218,10 @@ class DiscoverySettingsController @Inject constructor(
                                         buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
                                         buttonTitleId(R.string._continue)
                                         infoMessageTintColorId(R.color.vector_info_color)
-                                        infoMessage(stringProvider.getString(R.string.settings_discovery_confirm_mail, piState.value))
+                                        infoMessage(stringProvider.getString(R.string.settings_discovery_confirm_mail, piState.threePid.value))
                                         buttonClickListener(View.OnClickListener {
                                             val bind = piState.isShared() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
-                                            listener?.checkEmailVerification(piState.value, bind)
+                                            listener?.checkEmailVerification(piState.threePid.value, bind)
                                         })
                                     }
                                 }

@@ -29,17 +29,21 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.identity.FoundThreePid
+import im.vector.matrix.android.api.session.identity.IdentityServiceError
 import im.vector.matrix.android.api.session.identity.IdentityServiceListener
 import im.vector.matrix.android.api.session.identity.ThreePid
+import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.platform.VectorViewModelAction
 
 data class PidInfo(
-        val value: String,
-        val isShared: Async<SharedState>,
-        val _3pid: ThreePid? = null
+        // Retrieved from the homeserver
+        val threePid: ThreePid,
+        // Retrieved from IdentityServer, or transient state
+        val isShared: Async<SharedState>
 ) {
     enum class SharedState {
         SHARED,
@@ -53,7 +57,7 @@ data class DiscoverySettingsState(
         val identityServer: Async<String?> = Uninitialized,
         val emailList: Async<List<PidInfo>> = Uninitialized,
         val phoneNumbersList: Async<List<PidInfo>> = Uninitialized,
-        // TODO Use ViewEvents
+        // TODO Use ViewEvents?
         val termsNotSigned: Boolean = false
 ) : MvRxState
 
@@ -100,13 +104,25 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
             setState {
                 copy(identityServer = Success(identityServerUrl))
             }
-            if (currentIS != identityServerUrl) refreshModel()
+            if (currentIS != identityServerUrl) retrieveBinding()
         }
     }
 
     init {
+        setState {
+            copy(identityServer = Success(identityService.getCurrentIdentityServer()))
+        }
         startListenToIdentityManager()
-        refreshModel()
+        observeThreePids()
+    }
+
+    private fun observeThreePids() {
+        session.rx()
+                .liveThreePIds()
+                .subscribe {
+                    retrieveBinding(it)
+                }
+                .disposeOnClear()
     }
 
     override fun onCleared() {
@@ -140,7 +156,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                             identityServer = Success(action.url)
                     )
                 }
-                refreshModel()
+                retrieveBinding()
             }
 
             override fun onFailure(failure: Throwable) {
@@ -162,12 +178,12 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
     private fun shareEmail(email: String) = withState { state ->
         if (state.identityServer() == null) return@withState
-        changeMailState(email, Loading(), null)
+        changeMailState(email, Loading())
 
         identityService.startBindSession(ThreePid.Email(email), null,
                 object : MatrixCallback<ThreePid> {
                     override fun onSuccess(data: ThreePid) {
-                        changeMailState(email, Success(PidInfo.SharedState.NOT_VERIFIED_FOR_BIND), data)
+                        changeMailState(email, Success(PidInfo.SharedState.NOT_VERIFIED_FOR_BIND)/* TODO , data*/)
                     }
 
                     override fun onFailure(failure: Throwable) {
@@ -178,30 +194,12 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                 })
     }
 
-    private fun changeMailState(address: String, state: Async<PidInfo.SharedState>, threePid: ThreePid?) {
-        setState {
-            val currentMails = emailList() ?: emptyList()
-            copy(emailList = Success(
-                    currentMails.map {
-                        if (it.value == address) {
-                            it.copy(
-                                    _3pid = threePid,
-                                    isShared = state
-                            )
-                        } else {
-                            it
-                        }
-                    }
-            ))
-        }
-    }
-
     private fun changeMailState(address: String, state: Async<PidInfo.SharedState>) {
         setState {
             val currentMails = emailList() ?: emptyList()
             copy(emailList = Success(
                     currentMails.map {
-                        if (it.value == address) {
+                        if (it.threePid.value == address) {
                             it.copy(isShared = state)
                         } else {
                             it
@@ -211,16 +209,13 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
         }
     }
 
-    private fun changeMsisdnState(address: String, state: Async<PidInfo.SharedState>, threePid: ThreePid?) {
+    private fun changeMsisdnState(address: String, state: Async<PidInfo.SharedState>) {
         setState {
             val phones = phoneNumbersList() ?: emptyList()
             copy(phoneNumbersList = Success(
                     phones.map {
-                        if (it.value == address) {
-                            it.copy(
-                                    _3pid = threePid,
-                                    isShared = state
-                            )
+                        if (it.threePid.value == address) {
+                            it.copy(isShared = state)
                         } else {
                             it
                         }
@@ -245,7 +240,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
             override fun onSuccess(data: Pair<Boolean, ThreePid?>) {
                 if (data.first) {
                     // requires mail validation
-                    changeMailState(email, Success(PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND), data.second)
+                    changeMailState(email, Success(PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND) /* TODO , data.second */)
                 } else {
                     changeMailState(email, Success(PidInfo.SharedState.NOT_SHARED))
                 }
@@ -271,7 +266,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
         identityService.startUnBindSession(ThreePid.Msisdn(msisdn, countryCode), null, object : MatrixCallback<Pair<Boolean, ThreePid?>> {
             override fun onSuccess(data: Pair<Boolean, ThreePid?>) {
                 if (data.first /*requires mail validation */) {
-                    changeMsisdnState(msisdn, Success(PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND), data.second)
+                    changeMsisdnState(msisdn, Success(PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND) /* TODO , data.second */)
                 } else {
                     changeMsisdnState(msisdn, Success(PidInfo.SharedState.NOT_SHARED))
                 }
@@ -297,7 +292,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
         identityService.startBindSession(ThreePid.Msisdn(msisdn, countryCode), null, object : MatrixCallback<ThreePid> {
             override fun onSuccess(data: ThreePid) {
-                changeMsisdnState(msisdn, Success(PidInfo.SharedState.NOT_VERIFIED_FOR_BIND), data)
+                changeMsisdnState(msisdn, Success(PidInfo.SharedState.NOT_VERIFIED_FOR_BIND) /* TODO , data */)
             }
 
             override fun onFailure(failure: Throwable) {
@@ -308,21 +303,6 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
         })
     }
 
-    private fun changeMsisdnState(msisdn: String, sharedState: Async<PidInfo.SharedState>) {
-        setState {
-            val currentMsisdns = phoneNumbersList()!!
-            copy(phoneNumbersList = Success(
-                    currentMsisdns.map {
-                        if (it.value == msisdn) {
-                            it.copy(isShared = sharedState)
-                        } else {
-                            it
-                        }
-                    })
-            )
-        }
-    }
-
     private fun startListenToIdentityManager() {
         identityService.addListener(identityServerManagerListener)
     }
@@ -331,115 +311,66 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
         identityService.addListener(identityServerManagerListener)
     }
 
-    private fun refreshModel() = withState { state ->
+    private fun retrieveBinding() {
+        retrieveBinding(session.getThreePids())
+    }
+
+    private fun retrieveBinding(threePids: List<ThreePid>) = withState { state ->
         if (state.identityServer().isNullOrBlank()) return@withState
+
+        val emails = threePids.filterIsInstance<ThreePid.Email>()
+        val msisdns = threePids.filterIsInstance<ThreePid.Msisdn>()
 
         setState {
             copy(
-                    emailList = Loading(),
-                    phoneNumbersList = Loading()
+                    emailList = Success(emails.map { PidInfo(it, Loading()) }),
+                    phoneNumbersList = Success(msisdns.map { PidInfo(it, Loading()) })
             )
         }
 
-        /* TODO
-        session.refreshThirdPartyIdentifiers(object : MatrixCallback<Unit> {
-            override fun onFailure(failure: Throwable) {
-                _errorLiveEvent.postValue(LiveEvent(failure))
+        identityService.lookUp(threePids,
+                object : MatrixCallback<List<FoundThreePid>> {
+                    override fun onSuccess(data: List<FoundThreePid>) {
+                        setState {
+                            copy(
+                                    emailList = Success(toPidInfoList(emails, data)),
+                                    phoneNumbersList = Success(toPidInfoList(msisdns, data))
+                            )
+                        }
+                    }
 
-                setState {
-                    copy(
-                            emailList = Fail(failure),
-                            phoneNumbersList = Fail(failure)
-                    )
-                }
-            }
+                    override fun onFailure(failure: Throwable) {
+                        if (failure is IdentityServiceError.TermsNotSignedException) {
+                            setState {
+                                // TODO Use ViewEvent ?
+                                copy(termsNotSigned = true)
+                            }
+                        }
 
-            override fun onSuccess(data: Unit) {
-                setState {
-                    copy(termsNotSigned = false)
-                }
+                        _viewEvents.post(DiscoverySettingsViewEvents.Failure(failure))
 
-                retrieveBinding()
-            }
-        })
-        */
+                        setState {
+                            copy(
+                                    emailList = Success(emails.map { PidInfo(it, Fail(failure)) }),
+                                    phoneNumbersList = Success(msisdns.map { PidInfo(it, Fail(failure)) })
+                            )
+                        }
+                    }
+                })
     }
 
-    private fun retrieveBinding() {
-        /* TODO
-            val linkedMailsInfo = session.myUser.getlinkedEmails()
-            val knownEmails = linkedMailsInfo.map { it.address }
-            // Note: it will be a list of "email"
-            val knownEmailMedium = linkedMailsInfo.map { it.medium }
-
-            val linkedMsisdnsInfo = session.myUser.getlinkedPhoneNumbers()
-            val knownMsisdns = linkedMsisdnsInfo.map { it.address }
-            // Note: it will be a list of "msisdn"
-            val knownMsisdnMedium = linkedMsisdnsInfo.map { it.medium }
-
-            setState {
-                copy(
-                        emailList = Success(knownEmails.map { PidInfo(it, Loading()) }),
-                        phoneNumbersList = Success(knownMsisdns.map { PidInfo(it, Loading()) })
-                )
-            }
-
-            identityService.lookup(knownEmails + knownMsisdns,
-                    knownEmailMedium + knownMsisdnMedium,
-                    object : MatrixCallback<List<FoundThreePid>> {
-                        override fun onSuccess(data: List<FoundThreePid>) {
-                            setState {
-                                copy(
-                                        emailList = Success(toPidInfoList(knownEmails, data.take(knownEmails.size))),
-                                        phoneNumbersList = Success(toPidInfoList(knownMsisdns, data.takeLast(knownMsisdns.size)))
-                                )
-                            }
-                        }
-
-                        override fun onUnexpectedError(e: Exception) {
-                            if (e is TermsNotSignedException) {
-                                setState {
-                                    // TODO Use ViewEvent
-                                    copy(termsNotSigned = true)
-                                }
-                            }
-                            onError(e)
-                        }
-
-                        override fun onNetworkError(e: Exception) {
-                            onError(e)
-                        }
-
-                        override fun onMatrixError(e: MatrixError) {
-                            onError(Throwable(e.message))
-                        }
-
-                        private fun onError(e: Throwable) {
-                            _errorLiveEvent.postValue(LiveEvent(e))
-
-                            setState {
-                                copy(
-                                        emailList = Success(knownEmails.map { PidInfo(it, Fail(e)) }),
-                                        phoneNumbersList = Success(knownMsisdns.map { PidInfo(it, Fail(e)) })
-                                )
-                            }
-                        }
-                    })
-         */
-    }
-
-    private fun toPidInfoList(addressList: List<String>, matrixIds: List<String>): List<PidInfo> {
-        return addressList.map {
-            val hasMatrixId = matrixIds[addressList.indexOf(it)].isNotBlank()
+    private fun toPidInfoList(threePids: List<ThreePid>, foundThreePids: List<FoundThreePid>): List<PidInfo> {
+        return threePids.map { threePid ->
+            val hasMatrixId = foundThreePids.any { it.threePid == threePid }
             PidInfo(
-                    value = it,
+                    threePid = threePid,
                     isShared = Success(PidInfo.SharedState.SHARED.takeIf { hasMatrixId } ?: PidInfo.SharedState.NOT_SHARED)
             )
         }
     }
 
     private fun submitMsisdnToken(action: DiscoverySettingsAction.SubmitMsisdnToken) = withState { state ->
-        val pid = state.phoneNumbersList()?.find { it.value == action.msisdn }?._3pid ?: return@withState
+        val pid = state.phoneNumbersList()?.find { it.threePid.value == action.msisdn }?.threePid ?: return@withState
 
         identityService.submitValidationToken(pid,
                 action.code,
@@ -460,11 +391,11 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
         val _3pid = when (action.threePid) {
             is ThreePid.Email  -> {
                 changeMailState(action.threePid.email, Loading())
-                state.emailList()?.find { it.value == action.threePid.email }?._3pid ?: return@withState
+                state.emailList()?.find { it.threePid.value == action.threePid.email }?.threePid ?: return@withState
             }
             is ThreePid.Msisdn -> {
                 changeMsisdnState(action.threePid.msisdn, Loading())
-                state.phoneNumbersList()?.find { it.value == action.threePid.msisdn }?._3pid ?: return@withState
+                state.phoneNumbersList()?.find { it.threePid.value == action.threePid.msisdn }?.threePid ?: return@withState
             }
         }
 
@@ -472,8 +403,8 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
             override fun onSuccess(data: Unit) {
                 val sharedState = Success(if (action.bind) PidInfo.SharedState.SHARED else PidInfo.SharedState.NOT_SHARED)
                 when (action.threePid) {
-                    is ThreePid.Email  -> changeMailState(action.threePid.email, sharedState, null)
-                    is ThreePid.Msisdn -> changeMsisdnState(action.threePid.msisdn, sharedState, null)
+                    is ThreePid.Email  -> changeMailState(action.threePid.email, sharedState)
+                    is ThreePid.Msisdn -> changeMsisdnState(action.threePid.msisdn, sharedState)
                 }
             }
 
@@ -494,8 +425,8 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     private fun refreshPendingEmailBindings() = withState { state ->
         state.emailList()?.forEach { info ->
             when (info.isShared()) {
-                PidInfo.SharedState.NOT_VERIFIED_FOR_BIND   -> finalizeBind3pid(DiscoverySettingsAction.FinalizeBind3pid(ThreePid.Email(info.value), true))
-                PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> finalizeBind3pid(DiscoverySettingsAction.FinalizeBind3pid(ThreePid.Email(info.value), false))
+                PidInfo.SharedState.NOT_VERIFIED_FOR_BIND   -> finalizeBind3pid(DiscoverySettingsAction.FinalizeBind3pid(info.threePid, true))
+                PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> finalizeBind3pid(DiscoverySettingsAction.FinalizeBind3pid(info.threePid, false))
                 else                                        -> Unit
             }
         }
