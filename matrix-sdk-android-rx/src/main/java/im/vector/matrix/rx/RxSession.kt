@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.api.session.group.GroupSummaryQueryParams
 import im.vector.matrix.android.api.session.group.model.GroupSummary
+import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.api.session.pushers.Pusher
 import im.vector.matrix.android.api.session.room.RoomSummaryQueryParams
 import im.vector.matrix.android.api.session.room.model.RoomSummary
@@ -92,6 +93,11 @@ class RxSession(private val session: Session) {
 
     fun livePagedUsers(filter: String? = null, excludedUserIds: Set<String>? = null): Observable<PagedList<User>> {
         return session.getPagedUsersLive(filter, excludedUserIds).asObservable()
+    }
+
+    fun liveThreePIds(): Observable<List<ThreePid>> {
+        return session.getThreePidsLive().asObservable()
+                .startWithCallable { session.getThreePids() }
     }
 
     fun createRoom(roomParams: CreateRoomParams): Single<String> = singleBuilder {

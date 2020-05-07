@@ -17,7 +17,9 @@
 
 package im.vector.matrix.android.api.session.profile
 
+import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.Optional
@@ -53,4 +55,14 @@ interface ProfileService {
      *
      */
     fun getProfile(userId: String, matrixCallback: MatrixCallback<JsonDict>): Cancelable
+
+    /**
+     * Get the current user 3Pids
+     */
+    fun getThreePids(): List<ThreePid>
+
+    /**
+     * Get the current user 3Pids Live
+     */
+    fun getThreePidsLive(): LiveData<List<ThreePid>>
 }

@@ -42,4 +42,7 @@ internal abstract class ProfileModule {
 
     @Binds
     abstract fun bindGetProfileTask(task: DefaultGetProfileInfoTask): GetProfileInfoTask
+
+    @Binds
+    abstract fun bindRefreshUserThreePidsTask(task: DefaultRefreshUserThreePidsTask): RefreshUserThreePidsTask
 }
