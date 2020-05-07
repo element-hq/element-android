@@ -52,6 +52,7 @@ import im.vector.matrix.android.internal.session.sync.SyncModule
 import im.vector.matrix.android.internal.session.sync.SyncTask
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.sync.job.SyncWorker
+import im.vector.matrix.android.internal.session.terms.TermsModule
 import im.vector.matrix.android.internal.session.user.UserModule
 import im.vector.matrix.android.internal.session.user.accountdata.AccountDataModule
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -74,6 +75,7 @@ import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
             PushersModule::class,
             OpenIdModule::class,
             IdentityModule::class,
+            TermsModule::class,
             AccountDataModule::class,
             ProfileModule::class,
             SessionAssistedInjectModule::class,

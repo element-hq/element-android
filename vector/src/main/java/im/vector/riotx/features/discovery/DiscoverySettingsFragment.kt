@@ -15,6 +15,7 @@
  */
 package im.vector.riotx.features.discovery
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -23,6 +24,7 @@ import androidx.lifecycle.Observer
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.identity.ThreePid
+import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
@@ -30,6 +32,8 @@ import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.discovery.change.SetIdentityServerFragment
+import im.vector.riotx.features.discovery.change.SetIdentityServerViewModel
+import im.vector.riotx.features.terms.ReviewTermsActivity
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import javax.inject.Inject
 
@@ -86,31 +90,25 @@ class DiscoverySettingsFragment @Inject constructor(
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        /* TODO
-        if (requestCode == TERMS_REQUEST_CODE) {
+        if (requestCode == ReviewTermsActivity.TERMS_REQUEST_CODE) {
             if (Activity.RESULT_OK == resultCode) {
-                viewModel.refreshModel()
+                viewModel.handle(DiscoverySettingsAction.RetrieveBinding)
             } else {
                 //add some error?
             }
         }
 
-         */
         super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onSelectIdentityServer() = withState(viewModel) { state ->
         if (state.termsNotSigned) {
-            /*
-            TODO
-            ReviewTermsActivity.intent(requireContext(),
-                    TermsManager.ServiceType.IdentityService,
+            // TODO Use ViewEvents?
+            navigator.openTerms(
+                    this,
+                    TermsService.ServiceType.IdentityService,
                     SetIdentityServerViewModel.sanitatizeBaseURL(state.identityServer() ?: ""),
-                    null).also {
-                startActivityForResult(it, TERMS_REQUEST_CODE)
-            }
-
-             */
+                    null)
         }
     }
 

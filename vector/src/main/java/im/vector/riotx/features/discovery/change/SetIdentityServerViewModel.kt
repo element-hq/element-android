@@ -22,7 +22,11 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.terms.GetTermsResponse
+import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewEvents
@@ -102,41 +106,42 @@ class SetIdentityServerViewModel @AssistedInject constructor(
             }
             return@withState
         }
-        // TODO baseUrl = sanitatizeBaseURL(baseUrl)
+        baseUrl = sanitatizeBaseURL(baseUrl)
         setState {
             copy(isVerifyingServer = true)
         }
 
-        /* TODO
-        mxSession.termsManager.get(TermsManager.ServiceType.IdentityService,
+        mxSession.getTerms(TermsService.ServiceType.IdentityService,
                 baseUrl,
-                object : ApiCallback<GetTermsResponse> {
-                    override fun onSuccess(info: GetTermsResponse) {
+                object : MatrixCallback<GetTermsResponse> {
+                    override fun onSuccess(data: GetTermsResponse) {
                         //has all been accepted?
                         setState {
                             copy(isVerifyingServer = false)
                         }
-                        val resp = info.serverResponse
+                        val resp = data.serverResponse
                         val tos = resp.getLocalizedTerms(userLanguage)
                         if (tos.isEmpty()) {
                             //prompt do not define policy
-                            navigateEvent.value = LiveEvent(NavigateEvent.NoTerms)
+                            _viewEvents.post(SetIdentityServerViewEvents.NoTerms)
                         } else {
-                            val shouldPrompt = tos.any { !info.alreadyAcceptedTermUrls.contains(it.localizedUrl) }
+                            val shouldPrompt = tos.any { !data.alreadyAcceptedTermUrls.contains(it.localizedUrl) }
                             if (shouldPrompt) {
-                                navigateEvent.value = LiveEvent(NavigateEvent.ShowTerms(baseUrl))
+                                _viewEvents.post(SetIdentityServerViewEvents.ShowTerms(baseUrl))
                             } else {
-                                navigateEvent.value = LiveEvent(NavigateEvent.TermsAccepted)
+                                _viewEvents.post(SetIdentityServerViewEvents.TermsAccepted)
                             }
                         }
                     }
 
-                    override fun onUnexpectedError(e: Exception) {
-                        if (e is HttpException && e.httpError.httpCode == 404) {
+                    override fun onFailure(failure: Throwable) {
+                        if (failure is Failure.OtherServerError && failure.httpCode == 404) {
                             setState {
                                 copy(isVerifyingServer = false)
                             }
-                            navigateEvent.value = LiveEvent(NavigateEvent.NoTerms)
+                            // 404: Same as NoTerms
+                            // TODO Handle the case where identity
+                            _viewEvents.post(SetIdentityServerViewEvents.NoTerms)
                         } else {
                             setState {
                                 copy(
@@ -146,26 +151,6 @@ class SetIdentityServerViewModel @AssistedInject constructor(
                             }
                         }
                     }
-
-                    override fun onNetworkError(e: Exception) {
-                        setState {
-                            copy(
-                                    isVerifyingServer = false,
-                                    errorMessageId = R.string.settings_discovery_bad_identity_server
-                            )
-                        }
-                    }
-
-                    override fun onMatrixError(e: MatrixError) {
-                        setState {
-                            copy(
-                                    isVerifyingServer = false,
-                                    errorMessageId = R.string.settings_discovery_bad_identity_server
-                            )
-                        }
-                    }
                 })
-
-         */
     }
 }

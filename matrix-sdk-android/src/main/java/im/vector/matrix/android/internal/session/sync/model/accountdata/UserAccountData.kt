@@ -31,5 +31,6 @@ abstract class UserAccountData : AccountDataContent {
         const val TYPE_WIDGETS = "m.widgets"
         const val TYPE_PUSH_RULES = "m.push_rules"
         const val TYPE_IDENTITY_SERVER = "m.identity_server"
+        const val TYPE_ACCEPTED_TERMS = "m.accepted_terms"
     }
 }

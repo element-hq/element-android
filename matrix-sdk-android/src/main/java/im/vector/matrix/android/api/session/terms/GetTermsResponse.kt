@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.auth.registration
+package im.vector.matrix.android.api.session.terms
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import im.vector.matrix.android.internal.session.terms.TermsResponse
 
-/**
- * This class represent a localized privacy policy for registration Flow.
- */
-@Parcelize
-data class LocalizedFlowDataLoginTerms(
-        var policyName: String? = null,
-        var version: String? = null,
-        var localizedUrl: String? = null,
-        var localizedName: String? = null
-) : Parcelable
+data class GetTermsResponse(
+        val serverResponse: TermsResponse,
+        val alreadyAcceptedTermUrls: Set<String>
+)

@@ -70,6 +70,7 @@ import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.themes.ActivityOtherThemes
 import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.receivers.DebugReceiver
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
@@ -93,6 +94,17 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
 
     protected val viewModelProvider
         get() = ViewModelProvider(this, viewModelFactory)
+
+    // TODO Other Activity should use this also
+    protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(observer: (T) -> Unit) {
+        viewEvents
+                .observe()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    observer(it)
+                }
+                .disposeOnDestroy()
+    }
 
     /* ==========================================================================================
      * DATA

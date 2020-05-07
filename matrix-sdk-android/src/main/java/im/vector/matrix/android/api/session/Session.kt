@@ -40,6 +40,7 @@ import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageSer
 import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.sync.SyncState
+import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.session.user.UserService
 
 /**
@@ -55,6 +56,7 @@ interface Session :
         SignOutService,
         FilterService,
         FileService,
+        TermsService,
         ProfileService,
         PushRuleService,
         PushersService,

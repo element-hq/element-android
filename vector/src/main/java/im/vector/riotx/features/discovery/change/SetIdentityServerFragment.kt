@@ -15,6 +15,7 @@
  */
 package im.vector.riotx.features.discovery.change
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -30,10 +31,12 @@ import butterknife.OnTextChanged
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.textfield.TextInputLayout
+import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.discovery.DiscoverySharedViewModel
+import im.vector.riotx.features.terms.ReviewTermsActivity
 import javax.inject.Inject
 
 class SetIdentityServerFragment @Inject constructor(
@@ -66,7 +69,7 @@ class SetIdentityServerFragment @Inject constructor(
             mProgressBar.isVisible = false
         }
         val newText = state.newIdentityServer ?: ""
-        if (!newText.equals(mKeyTextEdit.text.toString())) {
+        if (newText != mKeyTextEdit.text.toString()) {
             mKeyTextEdit.setText(newText)
         }
         mKeyInputLayout.error = state.errorMessageId?.let { getString(it) }
@@ -122,29 +125,24 @@ class SetIdentityServerFragment @Inject constructor(
                 }
 
                 is SetIdentityServerViewEvents.ShowTerms     -> {
-                    /* TODO
-                    ReviewTermsActivity.intent(requireContext(),
-                            TermsManager.ServiceType.IdentityService,
-                            SetIdentityServerViewModel.sanitatizeBaseURL(event.newIdentityServer),
-                            null).also {
-                        startActivityForResult(it, TERMS_REQUEST_CODE)
-                    }
-                    */
+                    navigator.openTerms(
+                            this,
+                            TermsService.ServiceType.IdentityService,
+                            SetIdentityServerViewModel.sanitatizeBaseURL(it.newIdentityServer),
+                            null)
                 }
             }
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        /* TODO
-        if (requestCode == TERMS_REQUEST_CODE) {
+        if (requestCode == ReviewTermsActivity.TERMS_REQUEST_CODE) {
             if (Activity.RESULT_OK == resultCode) {
                 processIdentityServerChange()
             } else {
                 //add some error?
             }
         }
-         */
         super.onActivityResult(requestCode, resultCode, data)
     }
 

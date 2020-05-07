@@ -1,0 +1,112 @@
+/*
+ * Copyright (c) 2020 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package im.vector.riotx.features.terms
+
+import android.os.Bundle
+import android.view.View
+import androidx.core.view.isVisible
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.activityViewModel
+import com.airbnb.mvrx.withState
+import im.vector.matrix.android.api.session.terms.TermsService
+import im.vector.riotx.R
+import im.vector.riotx.core.epoxy.onClick
+import im.vector.riotx.core.extensions.cleanup
+import im.vector.riotx.core.extensions.configureWith
+import im.vector.riotx.core.extensions.exhaustive
+import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.utils.openUrlInExternalBrowser
+import kotlinx.android.synthetic.main.fragment_review_terms.*
+import javax.inject.Inject
+
+class ReviewTermsFragment @Inject constructor(
+        private val termsController: TermsController
+) : VectorBaseFragment(), TermsController.Listener {
+
+    private val reviewTermsViewModel: ReviewTermsViewModel by activityViewModel()
+
+    override fun getLayoutResId() = R.layout.fragment_review_terms
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        termsController.description = when (reviewTermsViewModel.termsArgs.type) {
+            TermsService.ServiceType.IdentityService    -> getString(R.string.terms_description_for_identity_server)
+            TermsService.ServiceType.IntegrationManager -> getString(R.string.terms_description_for_integration_manager)
+        }
+
+        termsController.listener = this
+        reviewTermsRecyclerView.configureWith(termsController)
+
+        reviewTermsAccept.onClick { reviewTermsViewModel.handle(ReviewTermsAction.Accept) }
+        reviewTermsDecline.onClick { activity?.finish() }
+
+        reviewTermsViewModel.observeViewEvents {
+            when (it) {
+                is ReviewTermsViewEvents.Failure -> {
+                    reviewTermsWaitOverlay.isVisible = false
+                    // Dialog is displayed by the Activity
+                }
+                ReviewTermsViewEvents.Success    -> {
+                    // Handled by the Activity
+                }
+            }.exhaustive
+        }
+
+        reviewTermsViewModel.handle(ReviewTermsAction.LoadTerms(getString(R.string.resources_language)))
+    }
+
+    override fun onDestroyView() {
+        reviewTermsRecyclerView.cleanup()
+        termsController.listener = null
+        super.onDestroyView()
+    }
+
+    override fun invalidate() = withState(reviewTermsViewModel) { state ->
+        when (state.termsList) {
+            is Loading -> {
+                reviewTermsBottomBar.isVisible = false
+                reviewTermsWaitOverlay.isVisible = true
+            }
+            is Success -> {
+                updateState(state.termsList.invoke())
+                reviewTermsWaitOverlay.isVisible = false
+                reviewTermsBottomBar.isVisible = true
+                reviewTermsAccept.isEnabled = state.termsList.invoke().all { it.accepted }
+            }
+            else       -> {
+                reviewTermsWaitOverlay.isVisible = false
+            }
+        }
+
+        if (!reviewTermsWaitOverlay.isVisible) {
+            reviewTermsWaitOverlay.isVisible = state.acceptingTerms is Loading
+        }
+    }
+
+    private fun updateState(terms: List<Term>) {
+        termsController.setData(terms)
+    }
+
+    override fun setChecked(term: Term, isChecked: Boolean) {
+        reviewTermsViewModel.handle(ReviewTermsAction.MarkTermAsAccepted(term.url, isChecked))
+    }
+
+    override fun review(term: Term) {
+        openUrlInExternalBrowser(requireContext(), term.url)
+    }
+}

@@ -54,7 +54,7 @@ import javax.net.ssl.HttpsURLConnection
 @SessionScope
 internal class DefaultIdentityService @Inject constructor(
         private val identityServiceStore: IdentityServiceStore,
-        private val openIdTokenTask: GetOpenIdTokenTask,
+        private val getOpenIdTokenTask: GetOpenIdTokenTask,
         private val bulkLookupTask: BulkLookupTask,
         private val identityRegisterTask: IdentityRegisterTask,
         private val taskExecutor: TaskExecutor,
@@ -210,7 +210,7 @@ internal class DefaultIdentityService @Inject constructor(
     private suspend fun getIdentityServerToken(url: String) {
         val api = retrofitFactory.create(unauthenticatedOkHttpClient, url).create(IdentityAuthAPI::class.java)
 
-        val openIdToken = openIdTokenTask.execute(Unit)
+        val openIdToken = getOpenIdTokenTask.execute(Unit)
         val token = identityRegisterTask.execute(IdentityRegisterTask.Params(api, openIdToken))
 
         identityServiceStore.setToken(token.token)
