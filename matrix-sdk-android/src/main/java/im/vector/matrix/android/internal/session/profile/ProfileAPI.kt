@@ -23,7 +23,7 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 
-interface ProfileAPI {
+internal interface ProfileAPI {
 
     /**
      * Get the combined profile information for this user.

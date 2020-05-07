@@ -31,9 +31,11 @@ interface IdentityService {
 
     fun getCurrentIdentityServer(): String?
 
+    /**
+     * Update the identity server url.
+     * @param url the new url. Set to null to disconnect from the identity server
+     */
     fun setNewIdentityServer(url: String?, callback: MatrixCallback<Unit>): Cancelable
-
-    fun disconnect()
 
     fun startBindSession(threePid: ThreePid, nothing: Nothing?, matrixCallback: MatrixCallback<ThreePid>)
     fun finalizeBindSessionFor3PID(threePid: ThreePid, matrixCallback: MatrixCallback<Unit>)

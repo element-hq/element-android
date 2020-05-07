@@ -17,11 +17,13 @@
 package im.vector.matrix.android.internal.session.identity.db
 
 import im.vector.matrix.android.internal.di.IdentityDatabase
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.identity.model.IdentityHashDetailResponse
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import javax.inject.Inject
 
+@SessionScope
 internal class RealmIdentityServerStore @Inject constructor(
         @IdentityDatabase
         private val realmConfiguration: RealmConfiguration

@@ -42,7 +42,7 @@ class SetIdentityServerFragment @Inject constructor(
 
     override fun getLayoutResId() = R.layout.fragment_set_identity_server
 
-    override fun getMenuRes() = R.menu.menu_phone_number_addition
+    override fun getMenuRes() = R.menu.menu_submit
 
     @BindView(R.id.discovery_identity_server_enter_til)
     lateinit var mKeyInputLayout: TextInputLayout
@@ -73,17 +73,16 @@ class SetIdentityServerFragment @Inject constructor(
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            // TODO Create another menu
-            R.id.action_add_phone_number -> {
+        return when (item.itemId) {
+            R.id.action_submit -> {
                 withState(viewModel) { state ->
                     if (!state.isVerifyingServer) {
                         viewModel.handle(SetIdentityServerAction.DoChangeServerName)
                     }
                 }
-                return true
+                true
             }
-            else                         -> return super.onOptionsItemSelected(item)
+            else               -> super.onOptionsItemSelected(item)
         }
     }
 

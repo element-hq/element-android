@@ -114,10 +114,6 @@ internal class DefaultIdentityService @Inject constructor(
         return identityServiceStore.get()?.identityServerUrl
     }
 
-    override fun disconnect() {
-        TODO("Not yet implemented")
-    }
-
     override fun startBindSession(threePid: ThreePid, nothing: Nothing?, matrixCallback: MatrixCallback<ThreePid>) {
         TODO("Not yet implemented")
     }

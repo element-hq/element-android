@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_add_phone_number"
-        android:icon="@drawable/ic_material_done_white"
-        android:title="@string/settings_add_phone_number"
+        android:id="@+id/action_submit"
+        android:icon="@drawable/ic_material_done"
+        android:title="@string/ok"
+        app:iconTint="@color/riotx_accent"
         app:showAsAction="always" />
 
 </menu>

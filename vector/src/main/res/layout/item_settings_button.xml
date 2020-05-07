@@ -2,11 +2,12 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:minHeight="64dp"
     android:layout_height="wrap_content">
 
     <Button
         android:id="@+id/settings_item_button"
-        style="@style/VectorButtonStyle"
+        style="@style/VectorButtonStyleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
