@@ -344,9 +344,9 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                     }
 
                     val tickerText = if (roomEventGroupInfo.isDirect) {
-                        stringProvider.getString(R.string.notification_ticker_text_dm, events[0].senderName, events[0].description)
+                        stringProvider.getString(R.string.notification_ticker_text_dm, events.last().senderName, events.last().description)
                     } else {
-                        stringProvider.getString(R.string.notification_ticker_text_group, roomName, events[0].senderName, events[0].description)
+                        stringProvider.getString(R.string.notification_ticker_text_group, roomName, events.last().senderName, events.last().description)
                     }
 
                     val notification = notificationUtils.buildMessagesListNotification(
