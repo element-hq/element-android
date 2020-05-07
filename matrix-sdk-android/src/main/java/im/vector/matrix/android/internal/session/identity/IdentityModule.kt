@@ -70,4 +70,7 @@ internal abstract class IdentityModule {
 
     @Binds
     abstract fun bindBulkLookupTask(task: DefaultBulkLookupTask): BulkLookupTask
+
+    @Binds
+    abstract fun bindIdentityDisconnectTask(task: DefaultIdentityDisconnectTask): IdentityDisconnectTask
 }

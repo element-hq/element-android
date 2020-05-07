@@ -130,6 +130,10 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
             // Unfortunately, this is not supported in lib v7
             // it.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+            it.setOnPreferenceClickListener {
+                notImplemented()
+                true
+            }
 
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 notImplemented()

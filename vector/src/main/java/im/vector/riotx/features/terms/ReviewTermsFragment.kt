@@ -28,6 +28,7 @@ import im.vector.riotx.core.epoxy.onClick
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
+import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import kotlinx.android.synthetic.main.fragment_review_terms.*
@@ -74,6 +75,11 @@ class ReviewTermsFragment @Inject constructor(
         reviewTermsRecyclerView.cleanup()
         termsController.listener = null
         super.onDestroyView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.terms_of_service)
     }
 
     override fun invalidate() = withState(reviewTermsViewModel) { state ->

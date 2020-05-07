@@ -42,7 +42,6 @@ import im.vector.matrix.android.internal.session.openid.GetOpenIdTokenTask
 import im.vector.matrix.android.internal.session.sync.model.accountdata.IdentityServerContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
-import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
@@ -57,7 +56,7 @@ internal class DefaultIdentityService @Inject constructor(
         private val getOpenIdTokenTask: GetOpenIdTokenTask,
         private val bulkLookupTask: BulkLookupTask,
         private val identityRegisterTask: IdentityRegisterTask,
-        private val taskExecutor: TaskExecutor,
+        private val identityDisconnectTask: IdentityDisconnectTask,
         @Unauthenticated
         private val unauthenticatedOkHttpClient: Lazy<OkHttpClient>,
         @AuthenticatedIdentity
@@ -147,12 +146,19 @@ internal class DefaultIdentityService @Inject constructor(
                     // Nothing to do
                     Timber.d("Same URL, nothing to do")
                 null    -> {
-                    // TODO Disconnect previous one if any
+                    // Disconnect previous one if any
+                    identityServiceStore.get()?.let {
+                        if (it.identityServerUrl != null && it.token != null) {
+                            // Disconnect, ignoring any error
+                            runCatching {
+                                identityDisconnectTask.execute(Unit)
+                            }
+                        }
+                    }
                     identityServiceStore.setUrl(null)
                     updateAccountData(null)
                 }
                 else    -> {
-                    // TODO: check first that it is a valid identity server
                     // Try to get a token
                     getIdentityServerToken(urlCandidate)
 
@@ -179,7 +185,7 @@ internal class DefaultIdentityService @Inject constructor(
         }
     }
 
-    private suspend fun lookUpInternal(firstTime: Boolean, threePids: List<ThreePid>): List<FoundThreePid> {
+    private suspend fun lookUpInternal(canRetry: Boolean, threePids: List<ThreePid>): List<FoundThreePid> {
         ensureToken()
 
         return try {
@@ -187,12 +193,12 @@ internal class DefaultIdentityService @Inject constructor(
         } catch (throwable: Throwable) {
             // Refresh token?
             when {
-                throwable.isInvalidToken() && firstTime -> {
+                throwable.isInvalidToken() && canRetry -> {
                     identityServiceStore.setToken(null)
                     lookUpInternal(false, threePids)
                 }
-                throwable.isTermsNotSigned()            -> throw IdentityServiceError.TermsNotSignedException
-                else                                    -> throw throwable
+                throwable.isTermsNotSigned()           -> throw IdentityServiceError.TermsNotSignedException
+                else                                   -> throw throwable
             }
         }
     }
