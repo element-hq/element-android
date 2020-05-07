@@ -17,6 +17,7 @@ Improvements 🙌:
  - Cross-Signing | Restore history after recover from passphrase (#1214)
  - Cross-Sign | QR code scan confirmation screens design update (#1187)
  - Emoji Verification | It's not the same butterfly! (#1220)
+ - Improve notification accessibility with ticker text (#1226)
 
 Bugfix 🐛:
  - Missing avatar/displayname after verification request message (#841)
