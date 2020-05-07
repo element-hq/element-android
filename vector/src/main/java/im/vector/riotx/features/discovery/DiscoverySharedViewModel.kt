@@ -17,19 +17,18 @@ package im.vector.riotx.features.discovery
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import im.vector.riotx.core.extensions.postLiveEvent
 import im.vector.riotx.core.utils.LiveEvent
 import javax.inject.Inject
 
-// TODO Rework this
+sealed class DiscoverySharedViewModelAction {
+    data class ChangeIdentityServer(val newUrl: String) : DiscoverySharedViewModelAction()
+}
+
 class DiscoverySharedViewModel @Inject constructor() : ViewModel() {
+    var navigateEvent = MutableLiveData<LiveEvent<DiscoverySharedViewModelAction>>()
 
-    var navigateEvent = MutableLiveData<LiveEvent<Pair<String, String>>>()
-
-    companion object {
-        const val NEW_IDENTITY_SERVER_SET_REQUEST = "NEW_IDENTITY_SERVER_SET_REQUEST"
-    }
-
-    fun requestChangeToIdentityServer(server: String) {
-        navigateEvent.postValue(LiveEvent(NEW_IDENTITY_SERVER_SET_REQUEST to server))
+    fun requestChangeToIdentityServer(serverUrl: String) {
+        navigateEvent.postLiveEvent(DiscoverySharedViewModelAction.ChangeIdentityServer(serverUrl))
     }
 }

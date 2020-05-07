@@ -20,7 +20,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.Observer
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.identity.ThreePid
@@ -29,6 +28,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
+import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.discovery.change.SetIdentityServerFragment
@@ -56,11 +56,12 @@ class DiscoverySettingsFragment @Inject constructor(
         controller.listener = this
         recyclerView.configureWith(controller)
 
-        sharedViewModel.navigateEvent.observe(viewLifecycleOwner, Observer {
-            if (it.peekContent().first == DiscoverySharedViewModel.NEW_IDENTITY_SERVER_SET_REQUEST) {
-                viewModel.handle(DiscoverySettingsAction.ChangeIdentityServer(it.peekContent().second))
-            }
-        })
+        sharedViewModel.navigateEvent.observeEvent(this) {
+            when (it) {
+                is DiscoverySharedViewModelAction.ChangeIdentityServer ->
+                    viewModel.handle(DiscoverySettingsAction.ChangeIdentityServer(it.newUrl))
+            }.exhaustive
+        }
 
         viewModel.observeViewEvents {
             when (it) {
