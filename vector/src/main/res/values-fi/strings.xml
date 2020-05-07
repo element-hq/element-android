@@ -2282,4 +2282,10 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 
     <string name="auth_flow_not_supported">Tätä ei pysty tekemään kännykällä</string>
 
+    <string name="room_member_power_level_custom">Mukautettu</string>
+    <string name="room_member_power_level_custom_in">Mukautettu (%1$d) %2$s:ssä</string>
+
+    <string name="delete_event_dialog_reason_hint">Syy poistoon</string>
+
+    <string name="message_key">Viestin avain</string>
     </resources>
