@@ -1,2 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="resources_language">sv</string>
+    <string name="resources_country_code">SE</string>
+    <string name="resources_script">Latn</string>
+
+    <string name="light_theme">Ljust tema</string>
+    <string name="dark_theme">Mörkt tema</string>
+    <string name="black_them">Svart tema</string>
+    <string name="status_theme">Status.im-tema</string>
+
+    <string name="notification_sync_init">Initialiserar tjänsten</string>
+    </resources>
