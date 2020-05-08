@@ -23,6 +23,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import im.vector.riotx.R
+import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import timber.log.Timber
@@ -38,7 +39,7 @@ class DiscoverySettingsController @Inject constructor(
     override fun buildModels(data: DiscoverySettingsState) {
         when (data.identityServer) {
             is Loading -> {
-                settingsLoadingItem {
+                loadingItem {
                     id("identityServerLoading")
                 }
             }
@@ -69,8 +70,8 @@ class DiscoverySettingsController @Inject constructor(
 
         when (data.phoneNumbersList) {
             is Incomplete -> {
-                settingsLoadingItem {
-                    id("phoneLoading")
+                loadingItem {
+                    id("msisdnLoading")
                 }
             }
             is Fail       -> {
@@ -165,17 +166,17 @@ class DiscoverySettingsController @Inject constructor(
         }
         when (data.emailList) {
             is Incomplete -> {
-                settingsLoadingItem {
+                loadingItem {
                     id("mailLoading")
                 }
             }
-            is Fail    -> {
+            is Fail       -> {
                 settingsInfoItem {
                     id("mailListError")
                     helperText(data.emailList.error.message)
                 }
             }
-            is Success -> {
+            is Success    -> {
                 val emails = data.emailList.invoke()
                 if (emails.isEmpty()) {
                     settingsInfoItem {
