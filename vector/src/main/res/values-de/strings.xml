@@ -251,9 +251,9 @@
 \n
 \nBitte erlaube den Zugriff im nächsten Dialog, um den Anruf zu durchzuführen."</string>
     <string name="permissions_rationale_msg_record_audio">Riot benötigt die Berechtigung, auf dein Mikrofon zugreifen zu können, um (Sprach-)Anrufe tätigen zu können.</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">
-
-Bitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nBitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen."</string>
     <string name="permissions_rationale_msg_camera_and_audio">Riot benötigt die Berechtigung, auf deine Kamera und dein Mikrofon zugreifen zu können, um Video-Anrufe durchführen zu können.
 
 Bitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen.</string>
@@ -646,8 +646,8 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="encryption_information_unblock">Zulassen</string>
 
     <string name="encryption_information_verify_device">Sitzung verifizieren</string>
-    <string name="encryption_information_verify_device_warning">Um zu verifizieren, dass dieser Sitzung vertraut werden kann, kontaktiere bitte den/die Eigentümer!n der Sitzung über andere Kommunikationsmittel (z. B. persönlich oder telefonisch) und vergewissere dich, ob der Schüssel, den er/sie in den Benutzereinstellungen für diese Sitzung sieht, mit folgendem übereinstimmt:</string>
-    <string name="encryption_information_verify_device_warning2">Wenn er übereinstimmt, drücke unten den Bestätigen-Button. Stimmt er nicht überein, überwacht jemand anderes diese Sitzung und du solltest ggf. den Blockieren-Button drücken. In Zukunft wird dieser Bestätigungsprozess noch komfortabler gestaltet.</string>
+    <string name="encryption_information_verify_device_warning">Vergleiche die folgenden Zeichen mit den Einstellungen in der Sitzung des/der anderen Nutzer!n und bestätige:</string>
+    <string name="encryption_information_verify_device_warning2">Falls sie nicht übereinstimmen, wurde die Kommunikation vielleicht kompromittiert.</string>
     <string name="encryption_information_verify_key_match">Ich bestätige, dass die Schlüssel übereinstimmen</string>
 
     <string name="e2e_enabling_on_app_update">Riot unterstützt jetzt Ende-zu-Ende-Verschlüsselung, du musst dich jedoch erneut anmelden, um sie zu aktivieren.
@@ -1302,9 +1302,9 @@ Dieser Fehler ist außerhalb von Riot passiert. Es gibt kein Google-Konto auf de
     <string name="keys_backup_restore_success_title">Sicherung wiederhergestellt %s !</string>
     <string name="keys_backup_restore_success_description">%1$d Sitzungsschlüssel wurde(n) wiederhergestellt und %2$d vorher unbekannte(r) Schlüssel wurde(n) hinzugefügt</string>
     <plurals name="keys_backup_restore_success_description_part1">
-        <item quantity="one">Backup mit %d Schlüssel wiederhergestellt.</item>
-        <item quantity="other">Backup mit %d Schlüssel wiederhergestellt.</item>
-    </plurals>
+	<item quantity="one">Backup mit %d Schlüssel wiederhergestellt.</item>
+	<item quantity="other">Backup mit %d Schlüsseln wiederhergestellt.</item>
+</plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d neuer Schlüssel wurde dieser Sitzung hinzugefügt.</item>
         <item quantity="other">%d neue Schlüssel wurden dieser Sitzung hinzugefügt.</item>
