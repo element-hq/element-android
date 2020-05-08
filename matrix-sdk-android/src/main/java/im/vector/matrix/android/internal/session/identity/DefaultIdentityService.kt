@@ -130,7 +130,7 @@ internal class DefaultIdentityService @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun setNewIdentityServer(url: String?, callback: MatrixCallback<Unit>): Cancelable {
+    override fun setNewIdentityServer(url: String?, callback: MatrixCallback<String?>): Cancelable {
         val urlCandidate = url?.let { param ->
             buildString {
                 if (!param.startsWith("http")) {
@@ -171,6 +171,7 @@ internal class DefaultIdentityService @Inject constructor(
                     updateAccountData(urlCandidate)
                 }
             }
+            urlCandidate
         }
     }
 

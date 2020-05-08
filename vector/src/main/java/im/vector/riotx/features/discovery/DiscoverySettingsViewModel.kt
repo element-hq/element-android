@@ -149,11 +149,11 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
             )
         }
 
-        session.identityService().setNewIdentityServer(action.url, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
+        session.identityService().setNewIdentityServer(action.url, object : MatrixCallback<String?> {
+            override fun onSuccess(data: String?) {
                 setState {
                     copy(
-                            identityServer = Success(action.url)
+                            identityServer = Success(data)
                     )
                 }
                 retrieveBinding()

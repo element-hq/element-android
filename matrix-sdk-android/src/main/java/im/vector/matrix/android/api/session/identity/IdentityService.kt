@@ -34,8 +34,10 @@ interface IdentityService {
     /**
      * Update the identity server url.
      * @param url the new url. Set to null to disconnect from the identity server
+     * @param callback will notify the user is change successful. The String will be the final url of the identity server, or null.
+     * The SDK can append "https://" for instance.
      */
-    fun setNewIdentityServer(url: String?, callback: MatrixCallback<Unit>): Cancelable
+    fun setNewIdentityServer(url: String?, callback: MatrixCallback<String?>): Cancelable
 
     fun startBindSession(threePid: ThreePid, nothing: Nothing?, matrixCallback: MatrixCallback<ThreePid>)
     fun finalizeBindSessionFor3PID(threePid: ThreePid, matrixCallback: MatrixCallback<Unit>)
