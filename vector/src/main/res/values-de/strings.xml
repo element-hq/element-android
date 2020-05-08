@@ -247,9 +247,9 @@
     <string name="permissions_rationale_popup_title">Information</string>
     <string name="permissions_rationale_msg_storage">Riot benötigt die Berechtigung, auf deine Fotos und Videos zugreifen zu können, um Anhänge zu senden und zu speichern.\n\nBitte erlaube den Zugriff im nächsten Dialog, um Dateien von deinem Gerät zu versenden.</string>
     <string name="permissions_rationale_msg_camera">Riot benötigt die Berechtigung, auf deine Kamera zugreifen zu können, um Bilder aufzunehmen und Video-Anrufe durchzuführen.</string>
-    <string name="permissions_rationale_msg_camera_explanation">
-
-Bitte erlaube den Zugriff im nächsten Dialog, um den Anruf zu durchzuführen.</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nBitte erlaube den Zugriff im nächsten Dialog, um den Anruf zu durchzuführen."</string>
     <string name="permissions_rationale_msg_record_audio">Riot benötigt die Berechtigung, auf dein Mikrofon zugreifen zu können, um (Sprach-)Anrufe tätigen zu können.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">
 
@@ -768,12 +768,12 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="loading">Lädt…</string>
 
     <string name="action_exit">Schließen</string>
-    <string name="bottom_action_groups">Communities</string>
+    <string name="bottom_action_groups">Gemeinschaften</string>
 
     <string name="home_filter_placeholder_groups">Community-Namen filtern</string>
 
     <string name="groups_invite_header">Einladen</string>
-    <string name="groups_header">Communities</string>
+    <string name="groups_header">Gemeinschaften</string>
     <string name="no_group_placeholder">Keine Gruppen</string>
 
     <string name="start_new_chat_prompt_msg">Bist du sicher, dass du einen neuen Chat mit %s starten möchtest?</string>
@@ -2356,7 +2356,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="encryption_not_enabled">Verschlüsselung ist nicht aktiviert</string>
 <string name="auth_flow_not_supported">Dies kann nicht von einem mobilen Gerät erfolgen</string>
 
-    <string name="settings_when_rooms_are_upgraded">Wenn sich Raumversionen ändern</string>
+    <string name="settings_when_rooms_are_upgraded">Wenn Räume verbessert werden</string>
     <string name="encryption_enabled">Verschlüsselung aktiviert</string>
     <string name="encryption_enabled_tile_description">Nachrichten in diesem Raum sind Ende-zu-Ende verschlüsselt. Erfahre mehr &amp; verifiziere Benutzer in deren Profil.</string>
     <string name="encryption_unknown_algorithm_tile_description">Die Verschlüsselung in diesem Raum wird nicht unterstützt</string>
