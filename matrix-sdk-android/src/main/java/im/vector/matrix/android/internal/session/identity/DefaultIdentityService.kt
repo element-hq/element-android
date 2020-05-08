@@ -21,6 +21,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -45,6 +46,7 @@ import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAcco
 import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import timber.log.Timber
 import javax.inject.Inject
@@ -79,23 +81,22 @@ internal class DefaultIdentityService @Inject constructor(
         accountDataDataSource
                 .getLiveAccountDataEvent(UserAccountData.TYPE_IDENTITY_SERVER)
                 .observeNotNull(lifecycleOwner) {
-                    val identityServerContent = it.getOrNull()?.content?.toModel<IdentityServerContent>()
-                    if (identityServerContent != null) {
-                        notifyIdentityServerUrlChange(identityServerContent.baseUrl)
-                    }
-                    // TODO Handle the case where the account data is deleted?
+                    notifyIdentityServerUrlChange(it.getOrNull()?.content?.toModel<IdentityServerContent>()?.baseUrl)
                 }
+
+        // Init identityApi
+        updateIdentityAPI(identityServiceStore.get()?.identityServerUrl)
     }
 
     private fun notifyIdentityServerUrlChange(baseUrl: String?) {
-        // This is maybe not a real change (local echo of account data we are just setting)
+        // This is maybe not a real change (echo of account data we are just setting)
         if (identityServiceStore.get()?.identityServerUrl == baseUrl) {
-            Timber.d("Local echo of identity server url change")
+            Timber.d("Echo of local identity server url change, or no change")
         } else {
             // Url has changed, we have to reset our store, update internal configuration and notify listeners
             identityServiceStore.setUrl(baseUrl)
             updateIdentityAPI(baseUrl)
-            listeners.toList().forEach { it.onIdentityServerChange() }
+            listeners.toList().forEach { tryThis { it.onIdentityServerChange() } }
         }
     }
 
@@ -156,11 +157,16 @@ internal class DefaultIdentityService @Inject constructor(
                         }
                     }
                     identityServiceStore.setUrl(null)
+                    updateIdentityAPI(null)
                     updateAccountData(null)
                 }
                 else    -> {
                     // Try to get a token
-                    getIdentityServerToken(urlCandidate)
+                    val token = getNewIdentityServerToken(urlCandidate)
+
+                    identityServiceStore.setUrl(urlCandidate)
+                    identityServiceStore.setToken(token)
+                    updateIdentityAPI(urlCandidate)
 
                     updateAccountData(urlCandidate)
                 }
@@ -169,6 +175,11 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     private suspend fun updateAccountData(url: String?) {
+        // Also notify the listener
+        withContext(coroutineDispatchers.main) {
+            listeners.toList().forEach { tryThis { it.onIdentityServerChange() } }
+        }
+
         updateUserAccountDataTask.execute(UpdateUserAccountDataTask.IdentityParams(
                 identityContent = IdentityServerContent(baseUrl = url)
         ))
@@ -209,17 +220,18 @@ internal class DefaultIdentityService @Inject constructor(
 
         if (entity.token == null) {
             // Try to get a token
-            getIdentityServerToken(url)
+            val token = getNewIdentityServerToken(url)
+            identityServiceStore.setToken(token)
         }
     }
 
-    private suspend fun getIdentityServerToken(url: String) {
+    private suspend fun getNewIdentityServerToken(url: String): String {
         val api = retrofitFactory.create(unauthenticatedOkHttpClient, url).create(IdentityAuthAPI::class.java)
 
         val openIdToken = getOpenIdTokenTask.execute(Unit)
         val token = identityRegisterTask.execute(IdentityRegisterTask.Params(api, openIdToken))
 
-        identityServiceStore.setToken(token.token)
+        return token.token
     }
 
     override fun addListener(listener: IdentityServiceListener) {
@@ -231,12 +243,9 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     private fun updateIdentityAPI(url: String?) {
-        if (url == null) {
-            identityApiProvider.identityApi = null
-        } else {
-            val retrofit = retrofitFactory.create(okHttpClient, url)
-            identityApiProvider.identityApi = retrofit.create(IdentityAPI::class.java)
-        }
+        identityApiProvider.identityApi = url
+                ?.let { retrofitFactory.create(okHttpClient, it) }
+                ?.let { it.create(IdentityAPI::class.java) }
     }
 }
 
