@@ -2243,4 +2243,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
 
     <string name="e2e_use_keybackup">Odblokuj historię zaszyfrowanych wiadomości</string>
 
+    <string name="login_mobile_device_riotx">" RiotX Android"</string>
+
     </resources>
