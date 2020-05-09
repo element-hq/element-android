@@ -199,7 +199,7 @@ internal class DefaultRegistrationWizard(
                 code = code
         )
         val validationResponse = validateCodeTask.execute(ValidateCodeTask.Params(url, validationBody))
-        if (validationResponse.success == true) {
+        if (validationResponse.isSuccess()) {
             // The entered code is correct
             // Same than validate email
             return performRegistrationRequest(registrationParams, 3_000)
