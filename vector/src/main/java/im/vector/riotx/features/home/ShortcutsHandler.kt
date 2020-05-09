@@ -19,13 +19,10 @@ package im.vector.riotx.features.home
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
-import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.core.glide.GlideApp
@@ -51,14 +48,24 @@ class ShortcutsHandler @Inject constructor(
                 .observeOn(Schedulers.computation())
                 .subscribe { rooms ->
                     val shortcuts = rooms
-                            .favoriteRooms()
+                            .filter { room -> room.tags.any { it.name == RoomTag.ROOM_TAG_FAVOURITE } }
+                            .take(n = 4) // Android only allows us to create 4 shortcuts
                             .map { room ->
                                 val intent = RoomDetailActivity.shortcutIntent(context, room.roomId)
-                                val drawable = avatarRenderer.shortcutDrawable(context, GlideApp.with(context), room.toMatrixItem())
+
+                                val adaptiveIconSize = dimensionConverter.dpToPx(adaptiveIconSizeDp)
+                                val adaptiveIconOuterSides = dimensionConverter.dpToPx(adaptiveIconOuterSidesDp)
+                                val size = if (useAdaptiveIcon) {
+                                    adaptiveIconSize - adaptiveIconOuterSides
+                                } else {
+                                    dimensionConverter.dpToPx(72)
+                                }
+
+                                val bitmap = avatarRenderer.shortcutDrawable(context, GlideApp.with(context), room.toMatrixItem(), size)
 
                                 ShortcutInfoCompat.Builder(context, room.roomId)
                                         .setShortLabel(room.displayName)
-                                        .setIcon(drawable.toProfileImageIcon())
+                                        .setIcon(bitmap.toProfileImageIcon())
                                         .setIntent(intent)
                                         .build()
                             }
@@ -70,28 +77,11 @@ class ShortcutsHandler @Inject constructor(
 
     // PRIVATE API *********************************************************************************
 
-    private fun List<RoomSummary>.favoriteRooms(): List<RoomSummary> {
-        return filter { room -> room.tags.any { it.name == RoomTag.ROOM_TAG_FAVOURITE } }
-                .take(n = 4) // Android only allows us to create 4 shortcuts
-    }
-
-    private fun Drawable.toProfileImageIcon(): IconCompat {
-        val adaptiveIconSize = dimensionConverter.dpToPx(adaptiveIconSizeDp)
-        val adaptiveIconOuterSides = dimensionConverter.dpToPx(adaptiveIconOuterSidesDp)
-
-        val bitmap = Bitmap.createBitmap(adaptiveIconSize, adaptiveIconSize, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-
+    private fun Bitmap.toProfileImageIcon(): IconCompat {
         return if (useAdaptiveIcon) {
-            setBounds(adaptiveIconOuterSides, adaptiveIconOuterSides, adaptiveIconSize - adaptiveIconOuterSides, adaptiveIconSize - adaptiveIconOuterSides)
-            draw(canvas)
-
-            IconCompat.createWithAdaptiveBitmap(bitmap)
+            IconCompat.createWithAdaptiveBitmap(this)
         } else {
-            setBounds(0, 0, bitmap.width, bitmap.height)
-            draw(canvas)
-
-            IconCompat.createWithBitmap(bitmap)
+            IconCompat.createWithBitmap(this)
         }
     }
 }

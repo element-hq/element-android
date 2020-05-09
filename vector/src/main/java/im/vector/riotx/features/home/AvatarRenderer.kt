@@ -17,11 +17,13 @@
 package im.vector.riotx.features.home
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import com.amulyakhare.textdrawable.TextDrawable
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.DrawableImageViewTarget
@@ -73,9 +75,9 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     }
 
     @AnyThread
-    fun shortcutDrawable(context: Context, glideRequest: GlideRequests, matrixItem: MatrixItem): Drawable {
+    fun shortcutDrawable(context: Context, glideRequest: GlideRequests, matrixItem: MatrixItem, iconSize: Int): Bitmap {
         return glideRequest
-                .asDrawable()
+                .asBitmap()
                 .apply {
                     val resolvedUrl = resolvedUrl(matrixItem.avatarUrl)
                     if (resolvedUrl != null) {
@@ -86,10 +88,11 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                                 .beginConfig()
                                 .bold()
                                 .endConfig()
-                                .buildRect(matrixItem.firstLetterOfDisplayName(), avatarColor))
+                                .buildRect(matrixItem.firstLetterOfDisplayName(), avatarColor)
+                                .toBitmap(width = iconSize, height = iconSize))
                     }
                 }
-                .submit()
+                .submit(iconSize, iconSize)
                 .get()
     }
 
@@ -103,10 +106,7 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
 
     @AnyThread
     fun getPlaceholderDrawable(context: Context, matrixItem: MatrixItem): Drawable {
-        val avatarColor = when (matrixItem) {
-            is MatrixItem.UserItem -> ContextCompat.getColor(context, getColorFromUserId(matrixItem.id))
-            else                   -> ContextCompat.getColor(context, getColorFromRoomId(matrixItem.id))
-        }
+        val avatarColor = avatarColor(matrixItem, context)
         return TextDrawable.builder()
                 .beginConfig()
                 .bold()
@@ -117,9 +117,7 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     // PRIVATE API *********************************************************************************
 
     private fun buildGlideRequest(glideRequest: GlideRequests, avatarUrl: String?): GlideRequest<Drawable> {
-        val resolvedUrl = activeSessionHolder.getSafeActiveSession()?.contentUrlResolver()
-                ?.resolveThumbnail(avatarUrl, THUMBNAIL_SIZE, THUMBNAIL_SIZE, ContentUrlResolver.ThumbnailMethod.SCALE)
-
+        val resolvedUrl = resolvedUrl(avatarUrl)
         return glideRequest
                 .load(resolvedUrl)
                 .apply(RequestOptions.circleCropTransform())
