@@ -65,6 +65,15 @@ interface IdentityService {
      */
     fun lookUp(threePids: List<ThreePid>, callback: MatrixCallback<List<FoundThreePid>>): Cancelable
 
+    /**
+     * Get the status of the current user's threePid
+     * A lookup will be performed, but also pending binding state will be restored
+     *
+     * @param threePids the list of threePid the user owns (retrieved form the homeserver)
+     * @param callback onSuccess will be called with a map of ThreePid -> SharedState
+     */
+    fun getShareStatus(threePids: List<ThreePid>, callback: MatrixCallback<Map<ThreePid, SharedState>>): Cancelable
+
     fun addListener(listener: IdentityServiceListener)
     fun removeListener(listener: IdentityServiceListener)
 }

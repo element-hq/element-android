@@ -29,7 +29,6 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.identity.FoundThreePid
 import im.vector.matrix.android.api.session.identity.IdentityServiceError
 import im.vector.matrix.android.api.session.identity.IdentityServiceListener
 import im.vector.matrix.android.api.session.identity.SharedState
@@ -282,13 +281,13 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
             )
         }
 
-        identityService.lookUp(threePids,
-                object : MatrixCallback<List<FoundThreePid>> {
-                    override fun onSuccess(data: List<FoundThreePid>) {
+        identityService.getShareStatus(threePids,
+                object : MatrixCallback<Map<ThreePid, SharedState>> {
+                    override fun onSuccess(data: Map<ThreePid, SharedState>) {
                         setState {
                             copy(
-                                    emailList = Success(toPidInfoList(emails, data)),
-                                    phoneNumbersList = Success(toPidInfoList(msisdns, data))
+                                    emailList = Success(toPidInfoList(data.filter { it.key is ThreePid.Email })),
+                                    phoneNumbersList = Success(toPidInfoList(data.filter { it.key is ThreePid.Msisdn }))
                             )
                         }
                     }
@@ -313,12 +312,11 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                 })
     }
 
-    private fun toPidInfoList(threePids: List<ThreePid>, foundThreePids: List<FoundThreePid>): List<PidInfo> {
-        return threePids.map { threePid ->
-            val hasMatrixId = foundThreePids.any { it.threePid == threePid }
+    private fun toPidInfoList(threePidStatuses: Map<ThreePid, SharedState>): List<PidInfo> {
+        return threePidStatuses.map { threePidStatus ->
             PidInfo(
-                    threePid = threePid,
-                    isShared = Success(SharedState.SHARED.takeIf { hasMatrixId } ?: SharedState.NOT_SHARED)
+                    threePid = threePidStatus.key,
+                    isShared = Success(threePidStatus.value)
             )
         }
     }

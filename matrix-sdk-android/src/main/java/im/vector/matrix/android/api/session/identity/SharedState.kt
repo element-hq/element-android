@@ -16,11 +16,6 @@
 
 package im.vector.matrix.android.api.session.identity
 
-data class ThreePidStatus(
-        val threePid: ThreePid,
-        val shareState: SharedState
-)
-
 enum class SharedState {
     SHARED,
     NOT_SHARED,

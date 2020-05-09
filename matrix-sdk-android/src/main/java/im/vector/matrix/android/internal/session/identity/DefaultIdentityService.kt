@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.session.identity.FoundThreePid
 import im.vector.matrix.android.api.session.identity.IdentityService
 import im.vector.matrix.android.api.session.identity.IdentityServiceError
 import im.vector.matrix.android.api.session.identity.IdentityServiceListener
+import im.vector.matrix.android.api.session.identity.SharedState
 import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.NoOpCancellable
@@ -205,6 +206,30 @@ internal class DefaultIdentityService @Inject constructor(
 
         return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
             lookUpInternal(true, threePids)
+        }
+    }
+
+    override fun getShareStatus(threePids: List<ThreePid>, callback: MatrixCallback<Map<ThreePid, SharedState>>): Cancelable {
+        if (threePids.isEmpty()) {
+            callback.onSuccess(emptyMap())
+            return NoOpCancellable
+        }
+
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            val lookupResult = lookUpInternal(true, threePids)
+
+            threePids.associateWith { threePid ->
+                // If not in lookup result, check if there is a pending binding
+                if (lookupResult.firstOrNull { it.threePid == threePid } == null) {
+                    if (identityServiceStore.getPendingBinding(threePid) == null) {
+                        SharedState.NOT_SHARED
+                    } else {
+                        SharedState.BINDING_IN_PROGRESS
+                    }
+                } else {
+                    SharedState.SHARED
+                }
+            }
         }
     }
 
