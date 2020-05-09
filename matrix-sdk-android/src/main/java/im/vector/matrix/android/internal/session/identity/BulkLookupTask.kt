@@ -86,7 +86,7 @@ internal class DefaultBulkLookupTask @Inject constructor(
             executeRequest(null) {
                 apiCall = identityAPI.lookup(IdentityLookUpParams(
                         hashedAddresses,
-                        "sha256",
+                        IdentityHashDetailResponse.ALGORITHM_SHA256,
                         hashDetailResponse.pepper
                 ))
             }
@@ -103,7 +103,7 @@ internal class DefaultBulkLookupTask @Inject constructor(
                     // Retrieve the new hash details
                     val newHashDetailResponse = fetchAndStoreHashDetails(identityAPI)
 
-                    if (hashDetailResponse.algorithms.contains("sha256").not()) {
+                    if (hashDetailResponse.algorithms.contains(IdentityHashDetailResponse.ALGORITHM_SHA256).not()) {
                         // TODO We should ask the user if he is ok to send their 3Pid in clear, but for the moment we do not do it
                         // Also, what we have in cache is maybe outdated, the identity server maybe now support sha256
                         throw IdentityServiceError.BulkLookupSha256NotSupported

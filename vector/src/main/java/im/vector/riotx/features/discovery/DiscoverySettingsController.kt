@@ -132,7 +132,7 @@ class DiscoverySettingsController @Inject constructor(
                                     }
                                     SharedState.BINDING_IN_PROGRESS -> {
                                         buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
-                                        buttonTitle("")
+                                        buttonTitle(null)
                                     }
                                 }
                             }
@@ -145,7 +145,7 @@ class DiscoverySettingsController @Inject constructor(
                                     interactionListener(object : SettingsItemText.Listener {
                                         override fun onValidate(code: String) {
                                             if (piState.threePid is ThreePid.Msisdn) {
-                                                listener?.checkMsisdnVerification(piState.threePid, code)
+                                                listener?.sendMsisdnVerificationCode(piState.threePid, code)
                                             }
                                         }
                                     })
@@ -299,7 +299,7 @@ class DiscoverySettingsController @Inject constructor(
         fun onTapRevoke(threePid: ThreePid)
         fun onTapShare(threePid: ThreePid)
         fun checkEmailVerification(threePid: ThreePid.Email)
-        fun checkMsisdnVerification(threePid: ThreePid.Msisdn, code: String)
+        fun sendMsisdnVerificationCode(threePid: ThreePid.Msisdn, code: String)
         fun onTapChangeIdentityServer()
         fun onTapDisconnectIdentityServer()
         fun onTapRetryToRetrieveBindings()

@@ -67,7 +67,7 @@ class DiscoverySettingsFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is DiscoverySettingsViewEvents.Failure -> {
-                    // TODO Snackbar.make(view, throwable.toString(), Snackbar.LENGTH_LONG).show()
+                    displayErrorDialog(it.throwable)
                 }
             }.exhaustive
         }
@@ -126,7 +126,7 @@ class DiscoverySettingsFragment @Inject constructor(
         viewModel.handle(DiscoverySettingsAction.FinalizeBind3pid(threePid))
     }
 
-    override fun checkMsisdnVerification(threePid: ThreePid.Msisdn, code: String) {
+    override fun sendMsisdnVerificationCode(threePid: ThreePid.Msisdn, code: String) {
         viewModel.handle(DiscoverySettingsAction.SubmitMsisdnToken(threePid, code))
     }
 

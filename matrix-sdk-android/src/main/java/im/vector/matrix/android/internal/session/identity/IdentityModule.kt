@@ -83,7 +83,6 @@ internal abstract class IdentityModule {
                     .deleteRealmIfMigrationNeeded()
                     .build()
         }
-
     }
 
     @Binds
@@ -98,6 +97,9 @@ internal abstract class IdentityModule {
 
     @Binds
     abstract fun bindIdentityRequestTokenForBindingTask(task: DefaultIdentityRequestTokenForBindingTask): IdentityRequestTokenForBindingTask
+
+    @Binds
+    abstract fun bindIdentitySubmitTokenForBindingTask(task: DefaultIdentitySubmitTokenForBindingTask): IdentitySubmitTokenForBindingTask
 
     @Binds
     abstract fun bindBulkLookupTask(task: DefaultBulkLookupTask): BulkLookupTask

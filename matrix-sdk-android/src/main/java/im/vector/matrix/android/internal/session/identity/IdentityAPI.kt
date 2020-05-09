@@ -16,11 +16,13 @@
 
 package im.vector.matrix.android.internal.session.identity
 
+import im.vector.matrix.android.internal.auth.registration.SuccessResult
 import im.vector.matrix.android.internal.network.NetworkConstants
 import im.vector.matrix.android.internal.session.identity.model.IdentityAccountResponse
 import im.vector.matrix.android.internal.session.identity.model.IdentityHashDetailResponse
 import im.vector.matrix.android.internal.session.identity.model.IdentityLookUpParams
 import im.vector.matrix.android.internal.session.identity.model.IdentityLookUpResponse
+import im.vector.matrix.android.internal.session.identity.model.IdentityRequestOwnershipParams
 import im.vector.matrix.android.internal.session.identity.model.IdentityRequestTokenForEmailBody
 import im.vector.matrix.android.internal.session.identity.model.IdentityRequestTokenForMsisdnBody
 import im.vector.matrix.android.internal.session.identity.model.IdentityRequestTokenResponse
@@ -28,6 +30,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 /**
  * Ref: https://matrix.org/docs/spec/identity_service/latest
@@ -83,4 +86,13 @@ internal interface IdentityAPI {
      */
     @POST(NetworkConstants.URI_IDENTITY_PATH_V2 + "validate/msisdn/requestToken")
     fun requestTokenToBindMsisdn(@Body body: IdentityRequestTokenForMsisdnBody): Call<IdentityRequestTokenResponse>
+
+    /**
+     * Validate ownership of an email address, or a phone number.
+     * Ref:
+     * - https://matrix.org/docs/spec/identity_service/latest#post-matrix-identity-v2-validate-msisdn-submittoken
+     * - https://matrix.org/docs/spec/identity_service/latest#post-matrix-identity-v2-validate-email-submittoken
+     */
+    @POST(NetworkConstants.URI_IDENTITY_PATH_V2 + "validate/{medium}/submitToken")
+    fun submitToken(@Path("medium") medium: String, @Body body: IdentityRequestOwnershipParams): Call<SuccessResult>
 }

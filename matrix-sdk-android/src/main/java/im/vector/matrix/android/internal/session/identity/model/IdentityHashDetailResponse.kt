@@ -37,4 +37,9 @@ internal data class IdentityHashDetailResponse(
          */
         @Json(name = "algorithms")
         val algorithms: List<String>
-)
+) {
+    companion object{
+        const val ALGORITHM_SHA256 = "sha256"
+        const val ALGORITHM_NONE = "none"
+    }
+}

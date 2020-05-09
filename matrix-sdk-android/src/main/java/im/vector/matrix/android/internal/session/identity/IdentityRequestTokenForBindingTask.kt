@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.identity
 
 import im.vector.matrix.android.api.session.identity.IdentityServiceError
 import im.vector.matrix.android.api.session.identity.ThreePid
+import im.vector.matrix.android.api.session.identity.getCountryCode
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.identity.db.RealmIdentityServiceStore
@@ -52,12 +53,14 @@ internal class DefaultIdentityRequestTokenForBindingTask @Inject constructor(
                         sendAttempt = 1,
                         email = params.threePid.email
                 ))
-                is ThreePid.Msisdn -> identityAPI.requestTokenToBindMsisdn(IdentityRequestTokenForMsisdnBody(
-                        clientSecret = clientSecret,
-                        sendAttempt = 1,
-                        phoneNumber = params.threePid.msisdn,
-                        countryCode = params.threePid.countryCode
-                ))
+                is ThreePid.Msisdn -> {
+                    identityAPI.requestTokenToBindMsisdn(IdentityRequestTokenForMsisdnBody(
+                            clientSecret = clientSecret,
+                            sendAttempt = 1,
+                            phoneNumber = params.threePid.msisdn,
+                            countryCode = params.threePid.getCountryCode()
+                    ))
+                }
             }
         }
 

@@ -24,7 +24,6 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
-import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
@@ -166,18 +165,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
         if (state.identityServer() == null) return@withState
         changeThreePidState(action.threePid, Loading())
 
-        val threePid = if (action.threePid is ThreePid.Msisdn && action.threePid.countryCode == null) {
-            // Ensure we have a country code
-
-            val phoneNumber = PhoneNumberUtil.getInstance()
-                    .parse("+${action.threePid.msisdn}", null)
-            action.threePid.copy(countryCode = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(phoneNumber.countryCode)
-            )
-        } else {
-            action.threePid
-        }
-
-        identityService.startBindThreePid(threePid, object : MatrixCallback<Unit> {
+        identityService.startBindThreePid(action.threePid, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 changeThreePidState(action.threePid, Success(SharedState.BINDING_IN_PROGRESS))
             }
@@ -286,8 +274,8 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                     override fun onSuccess(data: Map<ThreePid, SharedState>) {
                         setState {
                             copy(
-                                    emailList = Success(toPidInfoList(data.filter { it.key is ThreePid.Email })),
-                                    phoneNumbersList = Success(toPidInfoList(data.filter { it.key is ThreePid.Msisdn }))
+                                    emailList = Success(data.filter { it.key is ThreePid.Email }.toPidInfoList()),
+                                    phoneNumbersList = Success(data.filter { it.key is ThreePid.Msisdn }.toPidInfoList())
                             )
                         }
                     }
@@ -312,8 +300,8 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                 })
     }
 
-    private fun toPidInfoList(threePidStatuses: Map<ThreePid, SharedState>): List<PidInfo> {
-        return threePidStatuses.map { threePidStatus ->
+    private fun Map<ThreePid, SharedState>.toPidInfoList(): List<PidInfo> {
+        return map { threePidStatus ->
             PidInfo(
                     threePid = threePidStatus.key,
                     isShared = Success(threePidStatus.value)
@@ -328,7 +316,6 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                 action.code,
                 object : MatrixCallback<Unit> {
                     override fun onSuccess(data: Unit) {
-                        // TODO This should be done in the task
                         finalizeBind3pid(DiscoverySettingsAction.FinalizeBind3pid(action.threePid))
                     }
 

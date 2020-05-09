@@ -23,9 +23,9 @@ import im.vector.matrix.android.api.util.Cancelable
  * Provides access to the identity server configuration and services identity server can provide
  */
 interface IdentityService {
-
     /**
-     * Return the default identity server of the homeserver (using Wellknown request)
+     * Return the default identity server of the homeserver (using Wellknown request).
+     * It may be different from the current configured identity server
      */
     fun getDefaultIdentityServer(callback: MatrixCallback<String?>): Cancelable
 
@@ -51,9 +51,11 @@ interface IdentityService {
     fun finalizeBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable
 
     /**
-     * @param code the code sent to the user phone number
+     * Submit the code that the identity server has sent to the user (in email or SMS)
+     * Once successful, you will have to call [finalizeBindThreePid]
+     * @param code the code sent to the user
      */
-    fun submitValidationToken(pid: ThreePid, code: String, callback: MatrixCallback<Unit>): Cancelable
+    fun submitValidationToken(threePid: ThreePid, code: String, callback: MatrixCallback<Unit>): Cancelable
 
     /**
      * The request will actually be done on the homeserver

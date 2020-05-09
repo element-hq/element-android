@@ -71,6 +71,7 @@ internal class DefaultIdentityService @Inject constructor(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
         private val bindThreePidsTask: BindThreePidsTask,
+        private val submitTokenForBindingTask: IdentitySubmitTokenForBindingTask,
         private val unbindThreePidsTask: UnbindThreePidsTask,
         private val identityApiProvider: IdentityApiProvider,
         private val accountDataDataSource: AccountDataDataSource
@@ -132,8 +133,10 @@ internal class DefaultIdentityService @Inject constructor(
         }
     }
 
-    override fun submitValidationToken(pid: ThreePid, code: String, callback: MatrixCallback<Unit>): Cancelable {
-        TODO("Not yet implemented")
+    override fun submitValidationToken(threePid: ThreePid, code: String, callback: MatrixCallback<Unit>): Cancelable {
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            submitTokenForBindingTask.execute(IdentitySubmitTokenForBindingTask.Params(threePid, code))
+        }
     }
 
     override fun unbindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
