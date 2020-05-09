@@ -65,6 +65,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var popupAlertManager: PopupAlertManager
+    @Inject lateinit var shortcutsHandler: ShortcutsHandler
 
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
         override fun onDrawerStateChanged(newState: Int) {
@@ -144,6 +145,8 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                 && activeSessionHolder.getSafeActiveSession()?.hasAlreadySynced() == true) {
             promptCompleteSecurityIfNeeded()
         }
+
+        shortcutsHandler.observeRoomsAndBuildShortcuts(context = this)
     }
 
     private fun promptCompleteSecurityIfNeeded() {

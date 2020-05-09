@@ -73,6 +73,27 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     }
 
     @AnyThread
+    fun shortcutDrawable(context: Context, glideRequest: GlideRequests, matrixItem: MatrixItem): Drawable {
+        return glideRequest
+                .asDrawable()
+                .apply {
+                    val resolvedUrl = resolvedUrl(matrixItem.avatarUrl)
+                    if (resolvedUrl != null) {
+                        load(resolvedUrl)
+                    } else {
+                        val avatarColor = avatarColor(matrixItem, context)
+                        load(TextDrawable.builder()
+                                .beginConfig()
+                                .bold()
+                                .endConfig()
+                                .buildRect(matrixItem.firstLetterOfDisplayName(), avatarColor))
+                    }
+                }
+                .submit()
+                .get()
+    }
+
+    @AnyThread
     fun getCachedDrawable(glideRequest: GlideRequests, matrixItem: MatrixItem): Drawable {
         return buildGlideRequest(glideRequest, matrixItem.avatarUrl)
                 .onlyRetrieveFromCache(true)
@@ -102,5 +123,17 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
         return glideRequest
                 .load(resolvedUrl)
                 .apply(RequestOptions.circleCropTransform())
+    }
+
+    private fun resolvedUrl(avatarUrl: String?): String? {
+        return activeSessionHolder.getSafeActiveSession()?.contentUrlResolver()
+                ?.resolveThumbnail(avatarUrl, THUMBNAIL_SIZE, THUMBNAIL_SIZE, ContentUrlResolver.ThumbnailMethod.SCALE)
+    }
+
+    private fun avatarColor(matrixItem: MatrixItem, context: Context): Int {
+        return when (matrixItem) {
+            is MatrixItem.UserItem -> ContextCompat.getColor(context, getColorFromUserId(matrixItem.id))
+            else                   -> ContextCompat.getColor(context, getColorFromRoomId(matrixItem.id))
+        }
     }
 }

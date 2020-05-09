@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home
 
+import androidx.core.content.pm.ShortcutInfoCompat
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
