@@ -27,11 +27,5 @@ internal data class IdentityRequestTokenResponse(
          * Their length must not exceed 255 characters and they must not be empty.
          */
         @Json(name = "sid")
-        val sid: String,
-
-        /**
-         * Not documented
-         */
-        @Json(name = "success")
-        val success: Boolean
+        val sid: String
 )

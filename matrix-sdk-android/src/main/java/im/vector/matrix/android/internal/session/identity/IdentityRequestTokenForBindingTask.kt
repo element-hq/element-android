@@ -16,7 +16,6 @@
 
 package im.vector.matrix.android.internal.session.identity
 
-import im.vector.matrix.android.api.session.identity.IdentityServiceError
 import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.api.session.identity.getCountryCode
 import im.vector.matrix.android.internal.di.UserId
@@ -62,10 +61,6 @@ internal class DefaultIdentityRequestTokenForBindingTask @Inject constructor(
                     ))
                 }
             }
-        }
-
-        if (!tokenResponse.success) {
-            throw IdentityServiceError.BindingError
         }
 
         // Store client secret and sid
