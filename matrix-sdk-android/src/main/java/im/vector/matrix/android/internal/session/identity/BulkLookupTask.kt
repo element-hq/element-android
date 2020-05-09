@@ -28,8 +28,8 @@ import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.identity.db.IdentityServiceStore
 import im.vector.matrix.android.internal.session.identity.model.IdentityHashDetailResponse
-import im.vector.matrix.android.internal.session.identity.model.IdentityLookUpV2Params
-import im.vector.matrix.android.internal.session.identity.model.IdentityLookUpV2Response
+import im.vector.matrix.android.internal.session.identity.model.IdentityLookUpParams
+import im.vector.matrix.android.internal.session.identity.model.IdentityLookUpResponse
 import im.vector.matrix.android.internal.task.Task
 import java.util.Locale
 import javax.inject.Inject
@@ -81,10 +81,10 @@ internal class DefaultBulkLookupTask @Inject constructor(
     private suspend fun lookUpInternal(identityAPI: IdentityAPI,
                                        hashedAddresses: List<String>,
                                        hashDetailResponse: IdentityHashDetailResponse,
-                                       canRetry: Boolean): IdentityLookUpV2Response {
+                                       canRetry: Boolean): IdentityLookUpResponse {
         return try {
             executeRequest(null) {
-                apiCall = identityAPI.bulkLookupV2(IdentityLookUpV2Params(
+                apiCall = identityAPI.lookup(IdentityLookUpParams(
                         hashedAddresses,
                         "sha256",
                         hashDetailResponse.pepper
@@ -125,9 +125,9 @@ internal class DefaultBulkLookupTask @Inject constructor(
                 .also { identityServiceStore.setHashDetails(it) }
     }
 
-    private fun handleSuccess(threePids: List<ThreePid>, hashedAddresses: List<String>, identityLookUpV2Response: IdentityLookUpV2Response): List<FoundThreePid> {
-        return identityLookUpV2Response.mappings.keys.map { hashedAddress ->
-            FoundThreePid(threePids[hashedAddresses.indexOf(hashedAddress)], identityLookUpV2Response.mappings[hashedAddress] ?: error(""))
+    private fun handleSuccess(threePids: List<ThreePid>, hashedAddresses: List<String>, identityLookUpResponse: IdentityLookUpResponse): List<FoundThreePid> {
+        return identityLookUpResponse.mappings.keys.map { hashedAddress ->
+            FoundThreePid(threePids[hashedAddresses.indexOf(hashedAddress)], identityLookUpResponse.mappings[hashedAddress] ?: error(""))
         }
     }
 }

@@ -23,15 +23,11 @@ import com.squareup.moshi.JsonClass
  * Ref: https://github.com/matrix-org/matrix-doc/blob/hs/hash-identity/proposals/2134-identity-hash-lookup.md
  */
 @JsonClass(generateAdapter = true)
-internal data class IdentityLookUpV2Params(
-        @Json(name = "addresses")
-        val hashedAddresses: List<String>,
-
-        @JvmField
-        @Json(name = "algorithm")
-        val algorithm: String,
-
-        @JvmField
-        @Json(name = "pepper")
-        val pepper: String
+internal data class IdentityLookUpResponse(
+        /**
+         * Required. Any applicable mappings of addresses to Matrix User IDs. Addresses which do not have associations will
+         * not be included, which can make this property be an empty object.
+         */
+        @Json(name = "mappings")
+        val mappings: Map<String, String>
 )

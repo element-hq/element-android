@@ -16,13 +16,11 @@
 
 package im.vector.matrix.android.internal.session.identity
 
-import im.vector.matrix.android.internal.auth.registration.SuccessResult
 import im.vector.matrix.android.internal.network.NetworkConstants
 import im.vector.matrix.android.internal.session.identity.model.IdentityAccountResponse
 import im.vector.matrix.android.internal.session.identity.model.IdentityHashDetailResponse
-import im.vector.matrix.android.internal.session.identity.model.IdentityLookUpV2Params
-import im.vector.matrix.android.internal.session.identity.model.IdentityLookUpV2Response
-import im.vector.matrix.android.internal.session.identity.model.IdentityRequestOwnershipParams
+import im.vector.matrix.android.internal.session.identity.model.IdentityLookUpParams
+import im.vector.matrix.android.internal.session.identity.model.IdentityLookUpResponse
 import im.vector.matrix.android.internal.session.identity.model.IdentityRequestTokenForEmailBody
 import im.vector.matrix.android.internal.session.identity.model.IdentityRequestTokenForMsisdnBody
 import im.vector.matrix.android.internal.session.identity.model.IdentityRequestTokenResponse
@@ -30,7 +28,6 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Path
 
 /**
  * Ref: https://matrix.org/docs/spec/identity_service/latest
@@ -40,6 +37,7 @@ internal interface IdentityAPI {
     /**
      * Gets information about what user owns the access token used in the request.
      * Will return a 403 for when terms are not signed
+     * Ref: https://matrix.org/docs/spec/identity_service/latest#get-matrix-identity-v2-account
      */
     @GET(NetworkConstants.URI_IDENTITY_PATH_V2 + "account")
     fun getAccount(): Call<IdentityAccountResponse>
@@ -52,17 +50,19 @@ internal interface IdentityAPI {
 
     /**
      * Request the hash detail to request a bunch of 3PIDs
+     * Ref: https://matrix.org/docs/spec/identity_service/latest#get-matrix-identity-v2-hash-details
      */
     @GET(NetworkConstants.URI_IDENTITY_PATH_V2 + "hash_details")
     fun hashDetails(): Call<IdentityHashDetailResponse>
 
     /**
      * Request a bunch of 3PIDs
+     * Ref: https://matrix.org/docs/spec/identity_service/latest#post-matrix-identity-v2-lookup
      *
      * @param body the body request
      */
     @POST(NetworkConstants.URI_IDENTITY_PATH_V2 + "lookup")
-    fun bulkLookupV2(@Body body: IdentityLookUpV2Params): Call<IdentityLookUpV2Response>
+    fun lookup(@Body body: IdentityLookUpParams): Call<IdentityLookUpResponse>
 
     /**
      * Create a session to change the bind status of an email to an identity server
