@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package im.vector.matrix.android.internal.session.profile
 
-package im.vector.matrix.android.api.session.identity
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-sealed class IdentityServiceError(cause: Throwable? = null) : Throwable(cause = cause) {
-    object NoIdentityServerConfigured : IdentityServiceError(null)
-    object TermsNotSignedException : IdentityServiceError(null)
-    object BulkLookupSha256NotSupported : IdentityServiceError(null)
-    object BindingError : IdentityServiceError(null)
-    object NoCurrentBindingError : IdentityServiceError(null)
+@JsonClass(generateAdapter = true)
+internal data class UnbindThreePidResponse(
+        @Json(name = "id_server_unbind_result")
+        val idServerUnbindResult: String?
+) {
+    fun isSuccess() = idServerUnbindResult == "success"
 }

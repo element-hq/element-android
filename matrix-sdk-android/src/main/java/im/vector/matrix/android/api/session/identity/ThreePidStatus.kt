@@ -16,10 +16,13 @@
 
 package im.vector.matrix.android.api.session.identity
 
-sealed class IdentityServiceError(cause: Throwable? = null) : Throwable(cause = cause) {
-    object NoIdentityServerConfigured : IdentityServiceError(null)
-    object TermsNotSignedException : IdentityServiceError(null)
-    object BulkLookupSha256NotSupported : IdentityServiceError(null)
-    object BindingError : IdentityServiceError(null)
-    object NoCurrentBindingError : IdentityServiceError(null)
+data class ThreePidStatus(
+        val threePid: ThreePid,
+        val shareState: SharedState
+)
+
+enum class SharedState {
+    SHARED,
+    NOT_SHARED,
+    BINDING_IN_PROGRESS
 }

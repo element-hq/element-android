@@ -16,6 +16,8 @@
 
 package im.vector.matrix.android.internal.session.identity.db
 
+import im.vector.matrix.android.api.session.identity.ThreePid
+import im.vector.matrix.android.api.session.identity.toMedium
 import im.vector.matrix.android.internal.di.IdentityDatabase
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.identity.model.IdentityHashDetailResponse
@@ -24,12 +26,12 @@ import io.realm.RealmConfiguration
 import javax.inject.Inject
 
 @SessionScope
-internal class RealmIdentityServerStore @Inject constructor(
+internal class RealmIdentityServiceStore @Inject constructor(
         @IdentityDatabase
         private val realmConfiguration: RealmConfiguration
 ) : IdentityServiceStore {
 
-    override fun get(): IdentityServerEntity? {
+    override fun getIdentityServerDetails(): IdentityServerEntity? {
         return Realm.getInstance(realmConfiguration).use { realm ->
             IdentityServerEntity.get(realm)?.let { realm.copyFromRealm(it) }
         }
@@ -55,6 +57,33 @@ internal class RealmIdentityServerStore @Inject constructor(
         Realm.getInstance(realmConfiguration).use {
             it.executeTransaction { realm ->
                 IdentityServerEntity.setHashDetails(realm, hashDetailResponse.pepper, hashDetailResponse.algorithms)
+            }
+        }
+    }
+
+    override fun storePendingBinding(threePid: ThreePid, clientSecret: String, sid: String) {
+        Realm.getInstance(realmConfiguration).use {
+            it.executeTransaction { realm ->
+                IdentityPendingBindingEntity.getOrCreate(realm, threePid).let { entity ->
+                    entity.threePidValue = threePid.value
+                    entity.medium = threePid.toMedium()
+                    entity.clientSecret = clientSecret
+                    entity.sid = sid
+                }
+            }
+        }
+    }
+
+    override fun getPendingBinding(threePid: ThreePid): IdentityPendingBindingEntity? {
+        return Realm.getInstance(realmConfiguration).use { realm ->
+            IdentityPendingBindingEntity.get(realm, threePid)?.let { realm.copyFromRealm(it) }
+        }
+    }
+
+    override fun deletePendingBinding(threePid: ThreePid) {
+        Realm.getInstance(realmConfiguration).use {
+            it.executeTransaction { realm ->
+                IdentityPendingBindingEntity.delete(realm, threePid)
             }
         }
     }

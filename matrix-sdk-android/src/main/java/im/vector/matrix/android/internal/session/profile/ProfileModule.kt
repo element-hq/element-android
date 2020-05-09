@@ -45,4 +45,10 @@ internal abstract class ProfileModule {
 
     @Binds
     abstract fun bindRefreshUserThreePidsTask(task: DefaultRefreshUserThreePidsTask): RefreshUserThreePidsTask
+
+    @Binds
+    abstract fun bindBindThreePidsTask(task: DefaultBindThreePidsTask): BindThreePidsTask
+
+    @Binds
+    abstract fun bindUnbindThreePidsTask(task: DefaultUnbindThreePidsTask): UnbindThreePidsTask
 }

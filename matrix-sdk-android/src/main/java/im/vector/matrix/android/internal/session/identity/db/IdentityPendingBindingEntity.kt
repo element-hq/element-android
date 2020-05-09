@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.identity
+package im.vector.matrix.android.internal.session.identity.db
 
-sealed class IdentityServiceError(cause: Throwable? = null) : Throwable(cause = cause) {
-    object NoIdentityServerConfigured : IdentityServiceError(null)
-    object TermsNotSignedException : IdentityServiceError(null)
-    object BulkLookupSha256NotSupported : IdentityServiceError(null)
-    object BindingError : IdentityServiceError(null)
-    object NoCurrentBindingError : IdentityServiceError(null)
+import io.realm.RealmObject
+
+internal open class IdentityPendingBindingEntity(
+        var threePidValue: String = "",
+        var medium: String = "",
+        var clientSecret: String = "",
+        var sid: String = ""
+) : RealmObject() {
+
+    companion object
 }

@@ -40,6 +40,8 @@ import im.vector.matrix.android.internal.session.identity.db.IdentityServiceStor
 import im.vector.matrix.android.internal.session.identity.todelete.AccountDataDataSource
 import im.vector.matrix.android.internal.session.identity.todelete.observeNotNull
 import im.vector.matrix.android.internal.session.openid.GetOpenIdTokenTask
+import im.vector.matrix.android.internal.session.profile.BindThreePidsTask
+import im.vector.matrix.android.internal.session.profile.UnbindThreePidsTask
 import im.vector.matrix.android.internal.session.sync.model.accountdata.IdentityServerContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
@@ -59,6 +61,7 @@ internal class DefaultIdentityService @Inject constructor(
         private val bulkLookupTask: BulkLookupTask,
         private val identityRegisterTask: IdentityRegisterTask,
         private val identityDisconnectTask: IdentityDisconnectTask,
+        private val identityRequestTokenForBindingTask: IdentityRequestTokenForBindingTask,
         @Unauthenticated
         private val unauthenticatedOkHttpClient: Lazy<OkHttpClient>,
         @AuthenticatedIdentity
@@ -66,6 +69,8 @@ internal class DefaultIdentityService @Inject constructor(
         private val retrofitFactory: RetrofitFactory,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
+        private val bindThreePidsTask: BindThreePidsTask,
+        private val unbindThreePidsTask: UnbindThreePidsTask,
         private val identityApiProvider: IdentityApiProvider,
         private val accountDataDataSource: AccountDataDataSource
 ) : IdentityService {
@@ -85,12 +90,12 @@ internal class DefaultIdentityService @Inject constructor(
                 }
 
         // Init identityApi
-        updateIdentityAPI(identityServiceStore.get()?.identityServerUrl)
+        updateIdentityAPI(identityServiceStore.getIdentityServerDetails()?.identityServerUrl)
     }
 
     private fun notifyIdentityServerUrlChange(baseUrl: String?) {
         // This is maybe not a real change (echo of account data we are just setting)
-        if (identityServiceStore.get()?.identityServerUrl == baseUrl) {
+        if (identityServiceStore.getIdentityServerDetails()?.identityServerUrl == baseUrl) {
             Timber.d("Echo of local identity server url change, or no change")
         } else {
             // Url has changed, we have to reset our store, update internal configuration and notify listeners
@@ -111,23 +116,29 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     override fun getCurrentIdentityServer(): String? {
-        return identityServiceStore.get()?.identityServerUrl
+        return identityServiceStore.getIdentityServerDetails()?.identityServerUrl
     }
 
-    override fun startBindSession(threePid: ThreePid, nothing: Nothing?, matrixCallback: MatrixCallback<ThreePid>) {
+    override fun startBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            identityRequestTokenForBindingTask.execute(IdentityRequestTokenForBindingTask.Params(threePid))
+        }
+    }
+
+    override fun finalizeBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            bindThreePidsTask.execute(BindThreePidsTask.Params(threePid))
+        }
+    }
+
+    override fun submitValidationToken(pid: ThreePid, code: String, callback: MatrixCallback<Unit>): Cancelable {
         TODO("Not yet implemented")
     }
 
-    override fun finalizeBindSessionFor3PID(threePid: ThreePid, matrixCallback: MatrixCallback<Unit>) {
-        TODO("Not yet implemented")
-    }
-
-    override fun submitValidationToken(pid: ThreePid, code: String, matrixCallback: MatrixCallback<Unit>) {
-        TODO("Not yet implemented")
-    }
-
-    override fun startUnBindSession(threePid: ThreePid, nothing: Nothing?, matrixCallback: MatrixCallback<Pair<Boolean, ThreePid?>>) {
-        TODO("Not yet implemented")
+    override fun unbindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            unbindThreePidsTask.execute(UnbindThreePidsTask.Params(threePid))
+        }
     }
 
     override fun setNewIdentityServer(url: String?, callback: MatrixCallback<String?>): Cancelable {
@@ -148,7 +159,7 @@ internal class DefaultIdentityService @Inject constructor(
                     Timber.d("Same URL, nothing to do")
                 null    -> {
                     // Disconnect previous one if any
-                    identityServiceStore.get()?.let {
+                    identityServiceStore.getIdentityServerDetails()?.let {
                         if (it.identityServerUrl != null && it.token != null) {
                             // Disconnect, ignoring any error
                             runCatching {
@@ -216,7 +227,7 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     private suspend fun ensureToken() {
-        val entity = identityServiceStore.get() ?: throw IdentityServiceError.NoIdentityServerConfigured
+        val entity = identityServiceStore.getIdentityServerDetails() ?: throw IdentityServiceError.NoIdentityServerConfigured
         val url = entity.identityServerUrl ?: throw IdentityServiceError.NoIdentityServerConfigured
 
         if (entity.token == null) {
@@ -246,7 +257,7 @@ internal class DefaultIdentityService @Inject constructor(
     private fun updateIdentityAPI(url: String?) {
         identityApiProvider.identityApi = url
                 ?.let { retrofitFactory.create(okHttpClient, it) }
-                ?.let { it.create(IdentityAPI::class.java) }
+                ?.create(IdentityAPI::class.java)
     }
 }
 

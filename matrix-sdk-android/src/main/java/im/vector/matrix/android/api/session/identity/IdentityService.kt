@@ -39,12 +39,30 @@ interface IdentityService {
      */
     fun setNewIdentityServer(url: String?, callback: MatrixCallback<String?>): Cancelable
 
-    fun startBindSession(threePid: ThreePid, nothing: Nothing?, matrixCallback: MatrixCallback<ThreePid>)
-    fun finalizeBindSessionFor3PID(threePid: ThreePid, matrixCallback: MatrixCallback<Unit>)
-    fun submitValidationToken(pid: ThreePid, code: String, matrixCallback: MatrixCallback<Unit>)
+    /**
+     * This will ask the identity server to send an email or an SMS to let the user confirm he owns the ThreePid,
+     * and then the threePid will be associated with the matrix account
+     */
+    fun startBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable
 
-    fun startUnBindSession(threePid: ThreePid, nothing: Nothing?, matrixCallback: MatrixCallback<Pair<Boolean, ThreePid?>>)
+    /**
+     * This will perform the actual association of ThreePid and Matrix account
+     */
+    fun finalizeBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable
 
+    /**
+     * @param code the code sent to the user phone number
+     */
+    fun submitValidationToken(pid: ThreePid, code: String, callback: MatrixCallback<Unit>): Cancelable
+
+    /**
+     * The request will actually be done on the homeserver
+     */
+    fun unbindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable
+
+    /**
+     * Search MatrixId of users providing email and phone numbers
+     */
     fun lookUp(threePids: List<ThreePid>, callback: MatrixCallback<List<FoundThreePid>>): Cancelable
 
     fun addListener(listener: IdentityServiceListener)

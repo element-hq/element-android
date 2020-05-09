@@ -22,6 +22,8 @@ import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.google.i18n.phonenumbers.PhoneNumberUtil
+import im.vector.matrix.android.api.session.identity.SharedState
+import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.resources.ColorProvider
@@ -116,20 +118,19 @@ class DiscoverySettingsController @Inject constructor(
                                     })
                                 }
                                 is Success -> when (piState.isShared()) {
-                                    PidInfo.SharedState.SHARED,
-                                    PidInfo.SharedState.NOT_SHARED              -> {
-                                        checked(piState.isShared() == PidInfo.SharedState.SHARED)
+                                    SharedState.SHARED,
+                                    SharedState.NOT_SHARED          -> {
+                                        checked(piState.isShared() == SharedState.SHARED)
                                         buttonType(SettingsTextButtonItem.ButtonType.SWITCH)
                                         switchChangeListener { _, checked ->
                                             if (checked) {
-                                                listener?.onTapShareMsisdn(piState.threePid.value)
+                                                listener?.onTapShare(piState.threePid)
                                             } else {
-                                                listener?.onTapRevokeMsisdn(piState.threePid.value)
+                                                listener?.onTapRevoke(piState.threePid)
                                             }
                                         }
                                     }
-                                    PidInfo.SharedState.NOT_VERIFIED_FOR_BIND,
-                                    PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> {
+                                    SharedState.BINDING_IN_PROGRESS -> {
                                         buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
                                         buttonTitle("")
                                     }
@@ -137,21 +138,20 @@ class DiscoverySettingsController @Inject constructor(
                             }
                         }
                         when (piState.isShared()) {
-                            PidInfo.SharedState.NOT_VERIFIED_FOR_BIND,
-                            PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> {
+                            SharedState.BINDING_IN_PROGRESS -> {
                                 settingsItemText {
                                     id("tverif" + piState.threePid.value)
                                     descriptionText(stringProvider.getString(R.string.settings_text_message_sent, phoneNumber))
                                     interactionListener(object : SettingsItemText.Listener {
                                         override fun onValidate(code: String) {
-                                            val bind = piState.isShared() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
-                                            listener?.checkMsisdnVerification(piState.threePid.value, code, bind)
+                                            if (piState.threePid is ThreePid.Msisdn) {
+                                                listener?.checkMsisdnVerification(piState.threePid, code)
+                                            }
                                         }
                                     })
                                 }
                             }
-                            else                                        -> {
-                            }
+                            else                            -> Unit
                         }
                     }
                 }
@@ -202,27 +202,27 @@ class DiscoverySettingsController @Inject constructor(
                                     })
                                 }
                                 is Success -> when (piState.isShared()) {
-                                    PidInfo.SharedState.SHARED,
-                                    PidInfo.SharedState.NOT_SHARED              -> {
-                                        checked(piState.isShared() == PidInfo.SharedState.SHARED)
+                                    SharedState.SHARED,
+                                    SharedState.NOT_SHARED          -> {
+                                        checked(piState.isShared() == SharedState.SHARED)
                                         buttonType(SettingsTextButtonItem.ButtonType.SWITCH)
                                         switchChangeListener { _, checked ->
                                             if (checked) {
-                                                listener?.onTapShareEmail(piState.threePid.value)
+                                                listener?.onTapShare(piState.threePid)
                                             } else {
-                                                listener?.onTapRevokeEmail(piState.threePid.value)
+                                                listener?.onTapRevoke(piState.threePid)
                                             }
                                         }
                                     }
-                                    PidInfo.SharedState.NOT_VERIFIED_FOR_BIND,
-                                    PidInfo.SharedState.NOT_VERIFIED_FOR_UNBIND -> {
+                                    SharedState.BINDING_IN_PROGRESS -> {
                                         buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
                                         buttonTitleId(R.string._continue)
                                         infoMessageTintColorId(R.color.vector_info_color)
                                         infoMessage(stringProvider.getString(R.string.settings_discovery_confirm_mail, piState.threePid.value))
                                         buttonClickListener(View.OnClickListener {
-                                            val bind = piState.isShared() == PidInfo.SharedState.NOT_VERIFIED_FOR_BIND
-                                            listener?.checkEmailVerification(piState.threePid.value, bind)
+                                            if (piState.threePid is ThreePid.Email) {
+                                                listener?.checkEmailVerification(piState.threePid)
+                                            }
                                         })
                                     }
                                 }
@@ -296,12 +296,10 @@ class DiscoverySettingsController @Inject constructor(
 
     interface Listener {
         fun onSelectIdentityServer()
-        fun onTapRevokeEmail(email: String)
-        fun onTapShareEmail(email: String)
-        fun checkEmailVerification(email: String, bind: Boolean)
-        fun checkMsisdnVerification(msisdn: String, code: String, bind: Boolean)
-        fun onTapRevokeMsisdn(msisdn: String)
-        fun onTapShareMsisdn(msisdn: String)
+        fun onTapRevoke(threePid: ThreePid)
+        fun onTapShare(threePid: ThreePid)
+        fun checkEmailVerification(threePid: ThreePid.Email)
+        fun checkMsisdnVerification(threePid: ThreePid.Msisdn, code: String)
         fun onTapChangeIdentityServer()
         fun onTapDisconnectIdentityServer()
         fun onTapRetryToRetrieveBindings()

@@ -177,23 +177,6 @@ internal abstract class SessionModule {
 
         @JvmStatic
         @Provides
-        @IdentityDatabase
-        @SessionScope
-        fun providesIdentityRealmConfiguration(realmKeysUtils: RealmKeysUtils,
-                                               @SessionFilesDirectory directory: File,
-                                               @UserMd5 userMd5: String): RealmConfiguration {
-            return RealmConfiguration.Builder()
-                    .directory(directory)
-                    .name("matrix-sdk-identity.realm")
-                    .apply {
-                        realmKeysUtils.configureEncryption(this, getKeyAlias(userMd5))
-                    }
-                    .modules(IdentityRealmModule())
-                    .build()
-        }
-
-        @JvmStatic
-        @Provides
         @SessionScope
         @Authenticated
         fun providesOkHttpClient(@Unauthenticated okHttpClient: OkHttpClient,

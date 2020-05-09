@@ -35,6 +35,8 @@ private fun IdentityServerEntity.Companion.getOrCreate(realm: Realm): IdentitySe
 internal fun IdentityServerEntity.Companion.setUrl(realm: Realm,
                                                    url: String?) {
     realm.where<IdentityServerEntity>().findAll().deleteAllFromRealm()
+    // Delete all pending binding if any
+    IdentityPendingBindingEntity.deleteAll(realm)
 
     if (url != null) {
         getOrCreate(realm).apply {

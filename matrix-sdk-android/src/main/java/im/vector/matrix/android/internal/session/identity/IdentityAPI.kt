@@ -23,6 +23,9 @@ import im.vector.matrix.android.internal.session.identity.model.IdentityHashDeta
 import im.vector.matrix.android.internal.session.identity.model.IdentityLookUpV2Params
 import im.vector.matrix.android.internal.session.identity.model.IdentityLookUpV2Response
 import im.vector.matrix.android.internal.session.identity.model.IdentityRequestOwnershipParams
+import im.vector.matrix.android.internal.session.identity.model.IdentityRequestTokenForEmailBody
+import im.vector.matrix.android.internal.session.identity.model.IdentityRequestTokenForMsisdnBody
+import im.vector.matrix.android.internal.session.identity.model.IdentityRequestTokenResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -62,12 +65,22 @@ internal interface IdentityAPI {
     fun bulkLookupV2(@Body body: IdentityLookUpV2Params): Call<IdentityLookUpV2Response>
 
     /**
-     * Request the ownership validation of an email address or a phone number previously set
-     * by [ProfileApi.requestEmailValidation]
+     * Create a session to change the bind status of an email to an identity server
+     * The identity server will also send an email
      *
-     * @param medium the medium of the 3pid
+     * @param body
+     * @return the sid
      */
-    @POST(NetworkConstants.URI_IDENTITY_PATH_V2 + "validate/{medium}/submitToken")
-    fun requestOwnershipValidationV2(@Path("medium") medium: String?,
-                                     @Body body: IdentityRequestOwnershipParams): Call<SuccessResult>
+    @POST(NetworkConstants.URI_IDENTITY_PATH_V2 + "validate/email/requestToken")
+    fun requestTokenToBindEmail(@Body body: IdentityRequestTokenForEmailBody): Call<IdentityRequestTokenResponse>
+
+    /**
+     * Create a session to change the bind status of an phone number to an identity server
+     * The identity server will also send an SMS on the ThreePid provided
+     *
+     * @param body
+     * @return the sid
+     */
+    @POST(NetworkConstants.URI_IDENTITY_PATH_V2 + "validate/msisdn/requestToken")
+    fun requestTokenToBindMsisdn(@Body body: IdentityRequestTokenForMsisdnBody): Call<IdentityRequestTokenResponse>
 }

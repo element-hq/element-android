@@ -21,14 +21,15 @@ import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.session.identity.FoundThreePid
 import im.vector.matrix.android.api.session.identity.IdentityServiceError
 import im.vector.matrix.android.api.session.identity.ThreePid
+import im.vector.matrix.android.api.session.identity.toMedium
 import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachments.base64ToBase64Url
 import im.vector.matrix.android.internal.crypto.tools.withOlmUtility
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.identity.db.IdentityServiceStore
 import im.vector.matrix.android.internal.session.identity.model.IdentityHashDetailResponse
 import im.vector.matrix.android.internal.session.identity.model.IdentityLookUpV2Params
 import im.vector.matrix.android.internal.session.identity.model.IdentityLookUpV2Response
-import im.vector.matrix.android.internal.session.profile.ThirdPartyIdentifier
 import im.vector.matrix.android.internal.task.Task
 import java.util.Locale
 import javax.inject.Inject
@@ -41,12 +42,13 @@ internal interface BulkLookupTask : Task<BulkLookupTask.Params, List<FoundThreeP
 
 internal class DefaultBulkLookupTask @Inject constructor(
         private val identityApiProvider: IdentityApiProvider,
-        private val identityServiceStore: IdentityServiceStore
+        private val identityServiceStore: IdentityServiceStore,
+        @UserId private val userId: String
 ) : BulkLookupTask {
 
     override suspend fun execute(params: BulkLookupTask.Params): List<FoundThreePid> {
-        val identityAPI = identityApiProvider.identityApi ?: throw IdentityServiceError.NoIdentityServerConfigured
-        val entity = identityServiceStore.get() ?: throw IdentityServiceError.NoIdentityServerConfigured
+        val identityAPI = getIdentityApiAndEnsureTerms(identityApiProvider, userId)
+        val entity = identityServiceStore.getIdentityServerDetails() ?: throw IdentityServiceError.NoIdentityServerConfigured
         val pepper = entity.hashLookupPepper
         val hashDetailResponse = if (pepper == null) {
             // We need to fetch the hash details first
@@ -126,13 +128,6 @@ internal class DefaultBulkLookupTask @Inject constructor(
     private fun handleSuccess(threePids: List<ThreePid>, hashedAddresses: List<String>, identityLookUpV2Response: IdentityLookUpV2Response): List<FoundThreePid> {
         return identityLookUpV2Response.mappings.keys.map { hashedAddress ->
             FoundThreePid(threePids[hashedAddresses.indexOf(hashedAddress)], identityLookUpV2Response.mappings[hashedAddress] ?: error(""))
-        }
-    }
-
-    private fun ThreePid.toMedium(): String {
-        return when (this) {
-            is ThreePid.Email  -> ThirdPartyIdentifier.MEDIUM_EMAIL
-            is ThreePid.Msisdn -> ThirdPartyIdentifier.MEDIUM_MSISDN
         }
     }
 }

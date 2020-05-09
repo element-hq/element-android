@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.identity
+package im.vector.matrix.android.internal.session.identity.model
 
-sealed class IdentityServiceError(cause: Throwable? = null) : Throwable(cause = cause) {
-    object NoIdentityServerConfigured : IdentityServiceError(null)
-    object TermsNotSignedException : IdentityServiceError(null)
-    object BulkLookupSha256NotSupported : IdentityServiceError(null)
-    object BindingError : IdentityServiceError(null)
-    object NoCurrentBindingError : IdentityServiceError(null)
-}
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
+internal data class IdentityRequestTokenResponse(
+        @Json(name = "sid")
+        val sid: String,
+
+        @Json(name = "success")
+        val success: Boolean
+)

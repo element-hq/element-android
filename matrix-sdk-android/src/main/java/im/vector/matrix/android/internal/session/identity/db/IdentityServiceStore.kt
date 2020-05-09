@@ -16,15 +16,27 @@
 
 package im.vector.matrix.android.internal.session.identity.db
 
+import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.internal.session.identity.model.IdentityHashDetailResponse
 
 internal interface IdentityServiceStore {
 
-    fun get(): IdentityServerEntity?
+    fun getIdentityServerDetails(): IdentityServerEntity?
 
     fun setUrl(url: String?)
 
     fun setToken(token: String?)
 
     fun setHashDetails(hashDetailResponse: IdentityHashDetailResponse)
+
+    /**
+     * Store details about a current binding
+     */
+    fun storePendingBinding(threePid: ThreePid,
+                            clientSecret: String,
+                            sid: String)
+
+    fun getPendingBinding(threePid: ThreePid): IdentityPendingBindingEntity?
+
+    fun deletePendingBinding(threePid: ThreePid)
 }

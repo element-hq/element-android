@@ -22,6 +22,7 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import im.vector.matrix.android.api.session.identity.SharedState
 import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.riotx.R
@@ -113,34 +114,26 @@ class DiscoverySettingsFragment @Inject constructor(
         }
     }
 
-    override fun onTapRevokeEmail(email: String) {
-        viewModel.handle(DiscoverySettingsAction.RevokeThreePid(ThreePid.Email(email)))
+    override fun onTapRevoke(threePid: ThreePid) {
+        viewModel.handle(DiscoverySettingsAction.RevokeThreePid(threePid))
     }
 
-    override fun onTapShareEmail(email: String) {
-        viewModel.handle(DiscoverySettingsAction.ShareThreePid(ThreePid.Email(email)))
+    override fun onTapShare(threePid: ThreePid) {
+        viewModel.handle(DiscoverySettingsAction.ShareThreePid(threePid))
     }
 
-    override fun checkEmailVerification(email: String, bind: Boolean) {
-        viewModel.handle(DiscoverySettingsAction.FinalizeBind3pid(ThreePid.Email(email), bind))
+    override fun checkEmailVerification(threePid: ThreePid.Email) {
+        viewModel.handle(DiscoverySettingsAction.FinalizeBind3pid(threePid))
     }
 
-    override fun checkMsisdnVerification(msisdn: String, code: String, bind: Boolean) {
-        viewModel.handle(DiscoverySettingsAction.SubmitMsisdnToken(msisdn, code, bind))
-    }
-
-    override fun onTapRevokeMsisdn(msisdn: String) {
-        viewModel.handle(DiscoverySettingsAction.RevokeThreePid(ThreePid.Msisdn(msisdn)))
-    }
-
-    override fun onTapShareMsisdn(msisdn: String) {
-        viewModel.handle(DiscoverySettingsAction.ShareThreePid(ThreePid.Msisdn(msisdn)))
+    override fun checkMsisdnVerification(threePid: ThreePid.Msisdn, code: String) {
+        viewModel.handle(DiscoverySettingsAction.SubmitMsisdnToken(threePid, code))
     }
 
     override fun onTapChangeIdentityServer() = withState(viewModel) { state ->
         //we should prompt if there are bound items with current is
         val pidList = state.emailList().orEmpty() + state.phoneNumbersList().orEmpty()
-        val hasBoundIds = pidList.any { it.isShared() == PidInfo.SharedState.SHARED }
+        val hasBoundIds = pidList.any { it.isShared() == SharedState.SHARED }
 
         if (hasBoundIds) {
             //we should prompt
@@ -160,7 +153,7 @@ class DiscoverySettingsFragment @Inject constructor(
         //we should prompt if there are bound items with current is
         withState(viewModel) { state ->
             val pidList = state.emailList().orEmpty() + state.phoneNumbersList().orEmpty()
-            val hasBoundIds = pidList.any { it.isShared() == PidInfo.SharedState.SHARED }
+            val hasBoundIds = pidList.any { it.isShared() == SharedState.SHARED }
 
             if (hasBoundIds) {
                 //we should prompt

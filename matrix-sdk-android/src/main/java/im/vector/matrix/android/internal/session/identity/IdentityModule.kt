@@ -19,15 +19,23 @@ package im.vector.matrix.android.internal.session.identity
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.di.AuthenticatedIdentity
+import im.vector.matrix.android.internal.di.IdentityDatabase
+import im.vector.matrix.android.internal.di.SessionFilesDirectory
 import im.vector.matrix.android.internal.di.Unauthenticated
+import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
 import im.vector.matrix.android.internal.network.token.AccessTokenProvider
+import im.vector.matrix.android.internal.session.SessionModule
 import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.session.identity.db.IdentityRealmModule
 import im.vector.matrix.android.internal.session.identity.db.IdentityServiceStore
-import im.vector.matrix.android.internal.session.identity.db.RealmIdentityServerStore
+import im.vector.matrix.android.internal.session.identity.db.RealmIdentityServiceStore
+import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
+import java.io.File
 
 @Module
 internal abstract class IdentityModule {
@@ -56,6 +64,26 @@ internal abstract class IdentityModule {
                     }
                     .build()
         }
+
+        @JvmStatic
+        @Provides
+        @IdentityDatabase
+        @SessionScope
+        fun providesIdentityRealmConfiguration(realmKeysUtils: RealmKeysUtils,
+                                               @SessionFilesDirectory directory: File,
+                                               @UserMd5 userMd5: String): RealmConfiguration {
+            return RealmConfiguration.Builder()
+                    .directory(directory)
+                    .name("matrix-sdk-identity.realm")
+                    .apply {
+                        realmKeysUtils.configureEncryption(this, SessionModule.getKeyAlias(userMd5))
+                    }
+                    .modules(IdentityRealmModule())
+                    // TODO Handle migration properly
+                    .deleteRealmIfMigrationNeeded()
+                    .build()
+        }
+
     }
 
     @Binds
@@ -63,10 +91,13 @@ internal abstract class IdentityModule {
     abstract fun bindAccessTokenProvider(provider: IdentityAccessTokenProvider): AccessTokenProvider
 
     @Binds
-    abstract fun bindIdentityServiceStore(store: RealmIdentityServerStore): IdentityServiceStore
+    abstract fun bindIdentityServiceStore(store: RealmIdentityServiceStore): IdentityServiceStore
 
     @Binds
     abstract fun bindIdentityRegisterTask(task: DefaultIdentityRegisterTask): IdentityRegisterTask
+
+    @Binds
+    abstract fun bindIdentityRequestTokenForBindingTask(task: DefaultIdentityRequestTokenForBindingTask): IdentityRequestTokenForBindingTask
 
     @Binds
     abstract fun bindBulkLookupTask(task: DefaultBulkLookupTask): BulkLookupTask
