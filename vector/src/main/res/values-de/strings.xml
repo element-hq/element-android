@@ -101,10 +101,10 @@
     <string name="send_bug_report_include_crash_logs">Absturzberichte übermitteln</string>
     <string name="send_bug_report_include_screenshot">Screenshot übermitteln</string>
     <string name="send_bug_report">Problem melden</string>
-    <string name="send_bug_report_description">Bitte beschreibe das Problem. Was hast du genau gemacht? Was sollte passieren? Was passierte tatsächlich?</string>
+    <string name="send_bug_report_description">Bitte beschreiben Sie das Problem. Was haben Sie genau gemacht\? Was sollte passieren\? Was passierte tatsächlich\?</string>
     <string name="send_bug_report_placeholder">Problembeschreibung</string>
-    <string name="send_bug_report_logs_description">Um Probleme diagnostizieren zu können, werden Protokolle dieses Clients zusammen mit dem Fehlerbericht übermittelt. Dieser Fehlerbericht wird, wie die Protokolle und Screenshot, nicht öffentlich sichtbar sein. Wenn du nur den oben eingegebenen Text senden möchtest, bitte die nachfolgenden Haken entsprechend entfernen:</string>
-    <string name="send_bug_report_alert_message">Du scheinst dein Telefon frustriert zu schütteln. Möchtest du das Fenster zum Senden eines Fehlerberichts öffnen?</string>
+    <string name="send_bug_report_logs_description">Um Probleme diagnostizieren zu können, werden Protokolle dieses Clients zusammen mit dem Fehlerbericht übermittelt. Dieser Fehlerbericht wird, wie die Protokolle und der Screenshot, nicht öffentlich sichtbar sein. Wenn Sie nur den oben eingegebenen Text senden möchten, bitte die nachfolgenden Haken entsprechend entfernen:</string>
+    <string name="send_bug_report_alert_message">Sie scheinen Ihr Telefon frustriert zu schütteln. Möchten Sie das Fenster zum Senden eines Fehlerberichts öffnen\?</string>
     <string name="send_bug_report_sent">Der Fehlerbericht wurde erfolgreich übermittelt</string>
     <string name="send_bug_report_failed">Der Fehlerbericht konnte nicht übermittelt werden (%s)</string>
     <string name="send_bug_report_progress">Fortschritt (%s%%)</string>
@@ -776,9 +776,9 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="groups_header">Communities</string>
     <string name="no_group_placeholder">Keine Gruppen</string>
 
-    <string name="start_new_chat_prompt_msg">Bist du sicher, dass du einen neuen Chat mit %s starten möchtest?</string>
-    <string name="start_voice_call_prompt_msg">Bist du sicher, dass du einen Sprachanruf starten möchtest?</string>
-    <string name="start_video_call_prompt_msg">Bist du sicher, dass du einen Videoanruf starten möchtest?</string>
+    <string name="start_new_chat_prompt_msg">Sind Sie sicher, dass Sie einen neuen Chat mit %s starten möchten\?</string>
+    <string name="start_voice_call_prompt_msg">Sind Sie sicher, dass Sie einen Sprachanruf starten möchten\?</string>
+    <string name="start_video_call_prompt_msg">Sind Sie sicher, dass Sie einen Videoanruf starten möchten\?</string>
 
     <string name="groups_list">Gruppenliste</string>
 
@@ -828,7 +828,7 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
 
     <string name="settings_flair">Flair</string>
 
-    <string name="send_bug_report_rage_shake">Schüttele um einen Fehler zu melden</string>
+    <string name="send_bug_report_rage_shake">Schüttele, um einen Fehler zu melden</string>
 
     <string name="actions">Aktionen</string>
     <string name="list_members">Mitglieder auflisten</string>
@@ -1708,9 +1708,9 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_discovery_bad_identity_server">Konnte keine Verbindung zum Heimserver herstellen</string>
     <string name="resources_script">Latn</string>
 
-    <string name="call_failed_no_ice_description">Bitte frage die Administration deines Heimservers (%1$s) um einen TURN-Server einzurichten, damit Anrufe zuverlässig funktionieren. 
+    <string name="call_failed_no_ice_description">Bitte bitten Sie den Administrator Ihres Heimservers (%1$s), einen TURN server einzurichten, damit Anrufe zuverlässig funktionieren. 
 \n 
-\nAlternativ kannst du einen öffentlichen Server auf %2$s nutzen, doch wird das nicht zu zuverlässig sein und es wird deine IP-Adresse mit dem Server geteilt. Du kannst dies auch in den Einstellungen konfigurieren.</string>
+\nAlternativ können Sie einen öffentlichen Server auf %2$s nutzen, doch wird das nicht so zuverlässig sein und es wird Ihre IP-Adresse mit dem Server teilen. Sie können dies auch in den Einstellungen konfigurieren.</string>
     <string name="login_error_no_homeserver_found">Dies ist keine Adresse eines Matrixservers</string>
     <string name="login_error_homeserver_not_found">Kann Home-Server nicht bei dieser URL erreichen. Bitte überprüfen</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Wir nutzen %s als Assistenten wenn dein Home-Server keinen anbietet (Deine IP-Adresse wird während des Anrufs geteilt)</string>
