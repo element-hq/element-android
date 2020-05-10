@@ -136,7 +136,7 @@
     <string name="auth_skip">Überspringen</string>
     <string name="auth_send_reset_email">Rücksetz-E-Mail senden</string>
     <string name="auth_return_to_login">Zur Anmeldemaske zurückkehren</string>
-    <string name="auth_user_id_placeholder">E-Mail oder Nutzername</string>
+    <string name="auth_user_id_placeholder">E-Mail oder Benutzername</string>
     <string name="auth_password_placeholder">Passwort</string>
     <string name="auth_new_password_placeholder">Neues Passwort</string>
     <string name="auth_user_name_placeholder">Benutzername</string>
@@ -147,7 +147,7 @@
     <string name="auth_repeat_password_placeholder">Passwort wiederholen</string>
     <string name="auth_repeat_new_password_placeholder">Neues Passwort bestätigen</string>
     <string name="auth_invalid_login_param">Benutzername und/oder Passwort falsch</string>
-    <string name="auth_invalid_user_name">Nutzernamen dürfen nur Buchstaben, Nummern, Punkte, Binde- und Unterstriche enthalten</string>
+    <string name="auth_invalid_user_name">Benutzernamen dürfen nur Buchstaben, Nummern, Punkte, Binde- und Unterstriche enthalten</string>
     <string name="auth_invalid_password">Passwort zu kurz (min. 6 Zeichen)</string>
     <string name="auth_missing_password">Passwort fehlt</string>
     <string name="auth_invalid_email">Dies scheint keine gültige E-Mail-Adresse zu sein</string>
@@ -1396,7 +1396,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="keys_backup_restoring_importing_keys_waiting_message">Importiere Schlüssel…</string>
     <string name="ignore">Ignorieren</string>
 
-    <string name="auth_login_sso">Mit single-sign-on anmelden</string>
+    <string name="auth_login_sso">Mit Single-Sign-On anmelden</string>
     <string name="login_error_unknown_host">Diese URL ist nicht erreichbar, bitte prüfen</string>
     <string name="login_error_ssl_handshake">Dein Gerät nutzt eine veraltetes TLS-Sicherheitsprotokoll, das anfällig für Angriffe ist. Zu deiner Sicherheit wirst du nicht in der Lage sein, dich zu verbinden</string>
     <string name="settings_send_message_with_enter">Schicke Nachricht mit Eingabetaste</string>
