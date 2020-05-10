@@ -106,7 +106,6 @@ class SetIdentityServerFragment @Inject constructor(
             return@setOnEditorActionListener false
         }
 
-
         viewModel.observeViewEvents {
             when (it) {
                 is SetIdentityServerViewEvents.NoTerms       -> {
@@ -140,7 +139,7 @@ class SetIdentityServerFragment @Inject constructor(
             if (Activity.RESULT_OK == resultCode) {
                 processIdentityServerChange()
             } else {
-                //add some error?
+                // add some error?
             }
         }
         super.onActivityResult(requestCode, resultCode, data)

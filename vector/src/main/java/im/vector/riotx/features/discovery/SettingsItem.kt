@@ -48,7 +48,6 @@ abstract class SettingsItem : EpoxyModelWithHolder<SettingsItem.Holder>() {
     var itemClickListener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
-
         if (titleResId != null) {
             holder.titleText.setText(titleResId!!)
         } else {

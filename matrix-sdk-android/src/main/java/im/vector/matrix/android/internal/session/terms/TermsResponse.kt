@@ -53,4 +53,3 @@ data class TermsResponse(
         const val URL = "url"
     }
 }
-

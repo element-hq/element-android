@@ -39,11 +39,9 @@ import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageSer
 import im.vector.matrix.android.internal.crypto.secrets.DefaultSharedSecretStorageService
 import im.vector.matrix.android.internal.crypto.verification.VerificationMessageLiveObserver
 import im.vector.matrix.android.internal.database.LiveEntityObserver
-import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
 import im.vector.matrix.android.internal.di.Authenticated
 import im.vector.matrix.android.internal.di.DeviceId
-import im.vector.matrix.android.internal.di.IdentityDatabase
 import im.vector.matrix.android.internal.di.SessionCacheDirectory
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.SessionFilesDirectory
@@ -64,7 +62,6 @@ import im.vector.matrix.android.internal.network.token.AccessTokenProvider
 import im.vector.matrix.android.internal.network.token.HomeserverAccessTokenProvider
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.homeserver.DefaultHomeServerCapabilitiesService
-import im.vector.matrix.android.internal.session.identity.db.IdentityRealmModule
 import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
 import im.vector.matrix.android.internal.session.room.create.RoomCreateEventLiveObserver
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner

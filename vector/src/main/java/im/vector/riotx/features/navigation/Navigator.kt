@@ -71,5 +71,9 @@ interface Navigator {
 
     fun openBigImageViewer(activity: Activity, sharedElement: View?, matrixItem: MatrixItem)
 
-    fun openTerms(fragment: Fragment,serviceType: TermsService.ServiceType, baseUrl: String, token: String?, requestCode : Int = ReviewTermsActivity.TERMS_REQUEST_CODE)
+    fun openTerms(fragment: Fragment,
+                  serviceType: TermsService.ServiceType,
+                  baseUrl: String,
+                  token: String?,
+                  requestCode: Int = ReviewTermsActivity.TERMS_REQUEST_CODE)
 }

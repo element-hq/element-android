@@ -46,7 +46,7 @@ class TermsController @Inject constructor() : TypedEpoxyController<List<Term>>()
                 }
             }
         }
-        //TODO error mgmt
+        // TODO error mgmt
     }
 
     interface Listener {

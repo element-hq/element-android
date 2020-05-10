@@ -27,4 +27,3 @@ internal data class IdentityAccountResponse(
         @Json(name = "user_id")
         val userId: String
 )
-

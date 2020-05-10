@@ -41,7 +41,6 @@ abstract class SettingsEditTextItem : EpoxyModelWithHolder<SettingsEditTextItem.
         super.bind(holder)
         holder.textView.setTextOrHide(descriptionText)
 
-
         holder.editText.isEnabled = !inProgress
 
         if (errorText.isNullOrBlank()) {

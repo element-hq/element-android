@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.session.identity.db
 
 import im.vector.matrix.android.api.session.identity.ThreePid
-import im.vector.matrix.android.api.session.identity.toMedium
 import im.vector.matrix.android.internal.di.IdentityDatabase
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.identity.model.IdentityHashDetailResponse

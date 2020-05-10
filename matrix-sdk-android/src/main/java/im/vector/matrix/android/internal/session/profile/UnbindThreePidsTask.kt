@@ -36,7 +36,8 @@ internal class DefaultUnbindThreePidsTask @Inject constructor(private val profil
                                                               private val identityServiceStore: IdentityServiceStore,
                                                               private val eventBus: EventBus) : UnbindThreePidsTask() {
     override suspend fun execute(params: Params): Boolean {
-        val identityServerUrlWithoutProtocol = identityServiceStore.getIdentityServerUrlWithoutProtocol() ?: throw IdentityServiceError.NoIdentityServerConfigured
+        val identityServerUrlWithoutProtocol = identityServiceStore.getIdentityServerUrlWithoutProtocol()
+                ?: throw IdentityServiceError.NoIdentityServerConfigured
 
         return executeRequest<UnbindThreePidResponse>(eventBus) {
             apiCall = profileAPI.unbindThreePid(

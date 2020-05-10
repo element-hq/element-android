@@ -128,14 +128,13 @@ abstract class SettingsTextButtonSingleLineItem : EpoxyModelWithHolder<SettingsT
                 ButtonType.SWITCH    -> {
                     holder.mainButton.isVisible = false
                     holder.switchButton.isVisible = true
-                    //set to null before changing the state
+                    // set to null before changing the state
                     holder.switchButton.setOnCheckedChangeListener(null)
                     checked?.let { holder.switchButton.isChecked = it }
                     holder.switchButton.setOnCheckedChangeListener(switchChangeListener)
                 }
             }.exhaustive
         }
-
 
         when (iconMode) {
             IconMode.NONE  -> {

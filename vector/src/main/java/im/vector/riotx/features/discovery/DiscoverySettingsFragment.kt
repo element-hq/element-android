@@ -87,7 +87,7 @@ class DiscoverySettingsFragment @Inject constructor(
         super.onResume()
         (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_discovery_category)
 
-        //If some 3pids are pending, we can try to check if they have been verified here
+        // If some 3pids are pending, we can try to check if they have been verified here
         viewModel.handle(DiscoverySettingsAction.Refresh)
     }
 
@@ -96,7 +96,7 @@ class DiscoverySettingsFragment @Inject constructor(
             if (Activity.RESULT_OK == resultCode) {
                 viewModel.handle(DiscoverySettingsAction.RetrieveBinding)
             } else {
-                //add some error?
+                // add some error?
             }
         }
 
@@ -135,12 +135,12 @@ class DiscoverySettingsFragment @Inject constructor(
     }
 
     override fun onTapChangeIdentityServer() = withState(viewModel) { state ->
-        //we should prompt if there are bound items with current is
+        // we should prompt if there are bound items with current is
         val pidList = state.emailList().orEmpty() + state.phoneNumbersList().orEmpty()
         val hasBoundIds = pidList.any { it.isShared() == SharedState.SHARED }
 
         if (hasBoundIds) {
-            //we should prompt
+            // we should prompt
             AlertDialog.Builder(requireActivity())
                     .setTitle(R.string.change_identity_server)
                     .setMessage(getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer()))
@@ -154,13 +154,13 @@ class DiscoverySettingsFragment @Inject constructor(
     }
 
     override fun onTapDisconnectIdentityServer() {
-        //we should prompt if there are bound items with current is
+        // we should prompt if there are bound items with current is
         withState(viewModel) { state ->
             val pidList = state.emailList().orEmpty() + state.phoneNumbersList().orEmpty()
             val hasBoundIds = pidList.any { it.isShared() == SharedState.SHARED }
 
             if (hasBoundIds) {
-                //we should prompt
+                // we should prompt
                 AlertDialog.Builder(requireActivity())
                         .setTitle(R.string.disconnect_identity_server)
                         .setMessage(getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer()))

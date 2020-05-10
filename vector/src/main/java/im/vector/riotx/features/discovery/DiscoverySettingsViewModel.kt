@@ -402,7 +402,6 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                 }
             }
         })
-
     }
 
     private fun refreshPendingEmailBindings() = withState { state ->

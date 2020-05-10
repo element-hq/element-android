@@ -339,7 +339,7 @@ class DiscoverySettingsController @Inject constructor(
                 val errorText = if (pidInfo.finalRequest is Fail) {
                     val error = pidInfo.finalRequest.error
                     // Deal with error 500
-                    //Ref: https://github.com/matrix-org/sydent/issues/292
+                    // Ref: https://github.com/matrix-org/sydent/issues/292
                     if (error is Failure.ServerError
                             && error.httpCode == HttpsURLConnection.HTTP_INTERNAL_ERROR /* 500 */) {
                         stringProvider.getString(R.string.settings_text_message_sent_wrong_code)
@@ -410,4 +410,3 @@ class DiscoverySettingsController @Inject constructor(
         fun onTapRetryToRetrieveBindings()
     }
 }
-

@@ -88,9 +88,9 @@ internal class DefaultTermsService @Inject constructor(
                 apiCall = termsAPI.agreeToTerms("${url}terms", AcceptTermsBody(agreedUrls), "Bearer $tokenToUse")
             }
 
-            //client SHOULD update this account data section adding any the URLs
+            // client SHOULD update this account data section adding any the URLs
             // of any additional documents that the user agreed to this list.
-            //Get current m.accepted_terms append new ones and update account data
+            // Get current m.accepted_terms append new ones and update account data
             val listOfAcceptedTerms = getAlreadyAcceptedTermUrlsFromAccountData()
 
             val newList = listOfAcceptedTerms.toMutableSet().apply { addAll(agreedUrls) }.toList()

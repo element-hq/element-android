@@ -115,14 +115,14 @@ class SetIdentityServerViewModel @AssistedInject constructor(
                 baseUrl,
                 object : MatrixCallback<GetTermsResponse> {
                     override fun onSuccess(data: GetTermsResponse) {
-                        //has all been accepted?
+                        // has all been accepted?
                         setState {
                             copy(isVerifyingServer = false)
                         }
                         val resp = data.serverResponse
                         val tos = resp.getLocalizedTerms(userLanguage)
                         if (tos.isEmpty()) {
-                            //prompt do not define policy
+                            // prompt do not define policy
                             _viewEvents.post(SetIdentityServerViewEvents.NoTerms)
                         } else {
                             val shouldPrompt = tos.any { !data.alreadyAcceptedTermUrls.contains(it.localizedUrl) }
