@@ -20,7 +20,7 @@ import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.api.session.identity.getCountryCode
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.identity.db.RealmIdentityServiceStore
+import im.vector.matrix.android.internal.session.identity.db.IdentityServiceStore
 import im.vector.matrix.android.internal.session.identity.model.IdentityRequestTokenForEmailBody
 import im.vector.matrix.android.internal.session.identity.model.IdentityRequestTokenForMsisdnBody
 import im.vector.matrix.android.internal.session.identity.model.IdentityRequestTokenResponse
@@ -36,26 +36,29 @@ internal interface IdentityRequestTokenForBindingTask : Task<IdentityRequestToke
 
 internal class DefaultIdentityRequestTokenForBindingTask @Inject constructor(
         private val identityApiProvider: IdentityApiProvider,
-        private val identityServiceStore: RealmIdentityServiceStore,
+        private val identityServiceStore: IdentityServiceStore,
         @UserId private val userId: String
 ) : IdentityRequestTokenForBindingTask {
 
     override suspend fun execute(params: IdentityRequestTokenForBindingTask.Params) {
         val identityAPI = getIdentityApiAndEnsureTerms(identityApiProvider, userId)
 
-        val clientSecret = UUID.randomUUID().toString()
+        val pendingBindingEntity = identityServiceStore.getPendingBinding(params.threePid)
+
+        val clientSecret = pendingBindingEntity?.clientSecret ?: UUID.randomUUID().toString()
+        val sendAttempt = pendingBindingEntity?.sendAttempt?.inc() ?: 1
 
         val tokenResponse = executeRequest<IdentityRequestTokenResponse>(null) {
             apiCall = when (params.threePid) {
                 is ThreePid.Email  -> identityAPI.requestTokenToBindEmail(IdentityRequestTokenForEmailBody(
                         clientSecret = clientSecret,
-                        sendAttempt = 1,
+                        sendAttempt = sendAttempt,
                         email = params.threePid.email
                 ))
                 is ThreePid.Msisdn -> {
                     identityAPI.requestTokenToBindMsisdn(IdentityRequestTokenForMsisdnBody(
                             clientSecret = clientSecret,
-                            sendAttempt = 1,
+                            sendAttempt = sendAttempt,
                             phoneNumber = params.threePid.msisdn,
                             countryCode = params.threePid.getCountryCode()
                     ))
@@ -67,7 +70,7 @@ internal class DefaultIdentityRequestTokenForBindingTask @Inject constructor(
         identityServiceStore.storePendingBinding(
                 params.threePid,
                 clientSecret,
-                1,
+                sendAttempt,
                 tokenResponse.sid)
     }
 }

@@ -22,7 +22,7 @@ import im.vector.matrix.android.api.session.identity.toMedium
 import im.vector.matrix.android.internal.auth.registration.SuccessResult
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.identity.db.RealmIdentityServiceStore
+import im.vector.matrix.android.internal.session.identity.db.IdentityServiceStore
 import im.vector.matrix.android.internal.session.identity.model.IdentityRequestOwnershipParams
 import im.vector.matrix.android.internal.task.Task
 import javax.inject.Inject
@@ -36,7 +36,7 @@ internal interface IdentitySubmitTokenForBindingTask : Task<IdentitySubmitTokenF
 
 internal class DefaultIdentitySubmitTokenForBindingTask @Inject constructor(
         private val identityApiProvider: IdentityApiProvider,
-        private val identityServiceStore: RealmIdentityServiceStore,
+        private val identityServiceStore: IdentityServiceStore,
         @UserId private val userId: String
 ) : IdentitySubmitTokenForBindingTask {
 
