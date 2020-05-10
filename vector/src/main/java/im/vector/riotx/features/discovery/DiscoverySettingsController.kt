@@ -160,46 +160,8 @@ class DiscoverySettingsController @Inject constructor(
     }
 
     private fun buildEmail(pidInfo: PidInfo) {
-        settingsTextButtonSingleLineItem {
-            id(pidInfo.threePid.value)
-            title(pidInfo.threePid.value)
-            colorProvider(colorProvider)
-            stringProvider(stringProvider)
-            when (pidInfo.isShared) {
-                is Loading -> {
-                    buttonIndeterminate(true)
-                }
-                is Fail    -> {
-                    buttonType(ButtonType.NORMAL)
-                    buttonStyle(ButtonStyle.DESTRUCTIVE)
-                    buttonTitle(stringProvider.getString(R.string.global_retry))
-                    iconMode(IconMode.ERROR)
-                    buttonClickListener { listener?.onTapRetryToRetrieveBindings() }
-                }
-                is Success -> when (pidInfo.isShared()) {
-                    SharedState.SHARED,
-                    SharedState.NOT_SHARED          -> {
-                        buttonType(ButtonType.SWITCH)
-                        checked(pidInfo.isShared() == SharedState.SHARED)
-                        switchChangeListener { _, checked ->
-                            if (checked) {
-                                listener?.onTapShare(pidInfo.threePid)
-                            } else {
-                                listener?.onTapRevoke(pidInfo.threePid)
-                            }
-                        }
-                    }
-                    SharedState.BINDING_IN_PROGRESS -> {
-                        buttonType(ButtonType.NO_BUTTON)
-                        when (pidInfo.finalRequest) {
-                            is Incomplete -> iconMode(IconMode.INFO)
-                            is Fail       -> iconMode(IconMode.ERROR)
-                            else          -> iconMode(IconMode.NONE)
-                        }
-                    }
-                }
-            }
-        }
+        buildThreePid(pidInfo)
+
         if (pidInfo.isShared is Fail) {
             buildSharedFail(pidInfo)
             buildContinueCancel(pidInfo.threePid)
@@ -278,41 +240,8 @@ class DiscoverySettingsController @Inject constructor(
                 }
                 ?: pidInfo.threePid.value
 
-        settingsTextButtonSingleLineItem {
-            id(pidInfo.threePid.value)
-            title(phoneNumber)
-            colorProvider(colorProvider)
-            stringProvider(stringProvider)
-            when (pidInfo.isShared) {
-                is Loading -> {
-                    buttonIndeterminate(true)
-                }
-                is Fail    -> {
-                    buttonType(ButtonType.NORMAL)
-                    buttonStyle(ButtonStyle.DESTRUCTIVE)
-                    buttonTitle(stringProvider.getString(R.string.global_retry))
-                    iconMode(IconMode.ERROR)
-                    buttonClickListener { listener?.onTapRetryToRetrieveBindings() }
-                }
-                is Success -> when (pidInfo.isShared()) {
-                    SharedState.SHARED,
-                    SharedState.NOT_SHARED          -> {
-                        checked(pidInfo.isShared() == SharedState.SHARED)
-                        buttonType(ButtonType.SWITCH)
-                        switchChangeListener { _, checked ->
-                            if (checked) {
-                                listener?.onTapShare(pidInfo.threePid)
-                            } else {
-                                listener?.onTapRevoke(pidInfo.threePid)
-                            }
-                        }
-                    }
-                    SharedState.BINDING_IN_PROGRESS -> {
-                        buttonType(ButtonType.NO_BUTTON)
-                    }
-                }
-            }
-        }
+        buildThreePid(pidInfo, phoneNumber)
+
         if (pidInfo.isShared is Fail) {
             buildSharedFail(pidInfo)
         }
@@ -353,6 +282,49 @@ class DiscoverySettingsController @Inject constructor(
             }
             else                            -> Unit
         }.exhaustive
+    }
+
+    private fun buildThreePid(pidInfo: PidInfo, title: String = pidInfo.threePid.value) {
+        settingsTextButtonSingleLineItem {
+            id(pidInfo.threePid.value)
+            title(title)
+            colorProvider(colorProvider)
+            stringProvider(stringProvider)
+            when (pidInfo.isShared) {
+                is Loading -> {
+                    buttonIndeterminate(true)
+                }
+                is Fail    -> {
+                    buttonType(ButtonType.NORMAL)
+                    buttonStyle(ButtonStyle.DESTRUCTIVE)
+                    buttonTitle(stringProvider.getString(R.string.global_retry))
+                    iconMode(IconMode.ERROR)
+                    buttonClickListener { listener?.onTapRetryToRetrieveBindings() }
+                }
+                is Success -> when (pidInfo.isShared()) {
+                    SharedState.SHARED,
+                    SharedState.NOT_SHARED          -> {
+                        buttonType(ButtonType.SWITCH)
+                        checked(pidInfo.isShared() == SharedState.SHARED)
+                        switchChangeListener { _, checked ->
+                            if (checked) {
+                                listener?.onTapShare(pidInfo.threePid)
+                            } else {
+                                listener?.onTapRevoke(pidInfo.threePid)
+                            }
+                        }
+                    }
+                    SharedState.BINDING_IN_PROGRESS -> {
+                        buttonType(ButtonType.NO_BUTTON)
+                        when (pidInfo.finalRequest) {
+                            is Incomplete -> iconMode(IconMode.INFO)
+                            is Fail       -> iconMode(IconMode.ERROR)
+                            else          -> iconMode(IconMode.NONE)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun buildSharedFail(pidInfo: PidInfo) {
