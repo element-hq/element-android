@@ -1708,9 +1708,9 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_discovery_bad_identity_server">Konnte keine Verbindung zum Heimserver herstellen</string>
     <string name="resources_script">Latn</string>
 
-    <string name="call_failed_no_ice_description">Bitte bitten Sie den Administrator Ihres Heimservers (%1$s), einen TURN server einzurichten, damit Anrufe zuverlässig funktionieren. 
+    <string name="call_failed_no_ice_description">Bitte fragen Sie den Administrator Ihres Home-Servers nach der Einrichtung eines TURN-Servers, damit Anrufe zuverlässig funktionieren.
 \n 
-\nAlternativ können Sie einen öffentlichen Server auf %2$s nutzen, doch wird das nicht so zuverlässig sein und es wird Ihre IP-Adresse mit dem Server teilen. Sie können dies auch in den Einstellungen konfigurieren.</string>
+\nAlternativ können Sie einen öffentlichen Server auf %2$s nutzen. Dies wird jedoch weniger zuverlässig sein und Ihre IP-Adresse gegenüber diesem Server preisgeben. Sie können dies auch in den Einstellungen anpassen.</string>
     <string name="login_error_no_homeserver_found">Dies ist keine Adresse eines Matrixservers</string>
     <string name="login_error_homeserver_not_found">Kann Home-Server nicht bei dieser URL erreichen. Bitte überprüfen</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Wir nutzen %s als Assistenten wenn dein Home-Server keinen anbietet (Deine IP-Adresse wird während des Anrufs geteilt)</string>
