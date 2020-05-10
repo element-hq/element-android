@@ -902,9 +902,7 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="title_activity_choose_sticker">Sende einen Sticker</string>
 
     <string name="option_send_sticker">Sende Sticker</string>
-    <string name="no_sticker_application_dialog_content">Du hast aktuell keine Stickerpackete aktiviert.
-
-Willst du welche hinzufügen?</string>
+    <string name="no_sticker_application_dialog_content">Sie haben aktuell keine Stickerpackete aktiviert. Wollen Sie welche hinzufügen\?</string>
 
     <string name="settings_deactivate_account_section">Deaktiviere Account</string>
     <string name="settings_deactivate_my_account">Deaktivere meinen Account</string>
@@ -1660,7 +1658,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="people_no_identity_server">Kein Integrationsserver konfiguriert.</string>
 
     <string name="call_failed_no_ice_title">Anruf aufgrund eines falsch konfigurierten Servers fehlgeschlagen</string>
-    <string name="call_failed_no_ice_use_alt">Versuche es mit %s</string>
+    <string name="call_failed_no_ice_use_alt">Versuchen Sie es mit %s</string>
     <string name="call_failed_dont_ask_again">Nicht erneut fragen</string>
 
     <string name="auth_add_email_message_2">Richte eine E-Mail für die Kontowiederherstellung ein. Optional, kannst du später einrichten, dass Personen dich über diese Adresse finden.</string>
