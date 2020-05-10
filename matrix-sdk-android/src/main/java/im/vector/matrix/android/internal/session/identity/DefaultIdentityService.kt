@@ -61,6 +61,7 @@ internal class DefaultIdentityService @Inject constructor(
         private val getOpenIdTokenTask: GetOpenIdTokenTask,
         private val bulkLookupTask: BulkLookupTask,
         private val identityRegisterTask: IdentityRegisterTask,
+        private val identityPingTask: IdentityPingTask,
         private val identityDisconnectTask: IdentityDisconnectTask,
         private val identityRequestTokenForBindingTask: IdentityRequestTokenForBindingTask,
         @Unauthenticated
@@ -154,6 +155,14 @@ internal class DefaultIdentityService @Inject constructor(
     override fun unbindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
         return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
             unbindThreePidsTask.execute(UnbindThreePidsTask.Params(threePid))
+        }
+    }
+
+    override fun isValidIdentityServer(url: String, callback: MatrixCallback<Unit>): Cancelable {
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            val api = retrofitFactory.create(unauthenticatedOkHttpClient, url).create(IdentityAuthAPI::class.java)
+
+            identityPingTask.execute(IdentityPingTask.Params(api))
         }
     }
 

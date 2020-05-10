@@ -20,8 +20,7 @@ import androidx.annotation.StringRes
 import com.airbnb.mvrx.MvRxState
 
 data class SetIdentityServerState(
-        val existingIdentityServer: String? = null,
-        val newIdentityServer: String? = null,
+        val newIdentityServerUrl: String? = null,
         @StringRes val errorMessageId: Int? = null,
         val isVerifyingServer: Boolean = false
 ) : MvRxState

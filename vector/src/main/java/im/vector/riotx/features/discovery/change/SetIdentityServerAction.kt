@@ -19,6 +19,6 @@ package im.vector.riotx.features.discovery.change
 import im.vector.riotx.core.platform.VectorViewModelAction
 
 sealed class SetIdentityServerAction : VectorViewModelAction {
-    data class UpdateServerName(val url: String) : SetIdentityServerAction()
-    object DoChangeServerName : SetIdentityServerAction()
+    data class UpdateIdentityServerUrl(val url: String) : SetIdentityServerAction()
+    object DoChangeIdentityServerUrl : SetIdentityServerAction()
 }

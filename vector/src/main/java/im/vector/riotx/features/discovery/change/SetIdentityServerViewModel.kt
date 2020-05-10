@@ -23,6 +23,7 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.identity.IdentityServiceError
 import im.vector.matrix.android.api.session.terms.GetTermsResponse
 import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.riotx.R
@@ -62,22 +63,22 @@ class SetIdentityServerViewModel @AssistedInject constructor(
 
     override fun handle(action: SetIdentityServerAction) {
         when (action) {
-            is SetIdentityServerAction.UpdateServerName -> updateServerName(action)
-            SetIdentityServerAction.DoChangeServerName  -> doChangeServerName()
+            is SetIdentityServerAction.UpdateIdentityServerUrl -> updateIdentityServerUrl(action)
+            SetIdentityServerAction.DoChangeIdentityServerUrl  -> doChangeIdentityServerUrl()
         }.exhaustive
     }
 
-    private fun updateServerName(action: SetIdentityServerAction.UpdateServerName) {
+    private fun updateIdentityServerUrl(action: SetIdentityServerAction.UpdateIdentityServerUrl) {
         setState {
             copy(
-                    newIdentityServer = action.url,
+                    newIdentityServerUrl = action.url,
                     errorMessageId = null
             )
         }
     }
 
-    private fun doChangeServerName() = withState {
-        var baseUrl: String? = it.newIdentityServer
+    private fun doChangeIdentityServerUrl() = withState {
+        var baseUrl: String? = it.newIdentityServerUrl
         if (baseUrl.isNullOrBlank()) {
             setState {
                 copy(errorMessageId = R.string.settings_discovery_please_enter_server)
@@ -89,6 +90,29 @@ class SetIdentityServerViewModel @AssistedInject constructor(
             copy(isVerifyingServer = true)
         }
 
+        // First ping the identity server v2 API
+        mxSession.identityService().isValidIdentityServer(baseUrl, object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                // Ok, next step
+                checkTerms(baseUrl)
+            }
+
+            override fun onFailure(failure: Throwable) {
+                setState {
+                    copy(
+                            isVerifyingServer = false,
+                            errorMessageId = if (failure is IdentityServiceError.OutdatedIdentityServer) {
+                                R.string.settings_discovery_outdated_identity_server
+                            } else {
+                                R.string.settings_discovery_bad_identity_server
+                            }
+                    )
+                }
+            }
+        })
+    }
+
+    private fun checkTerms(baseUrl: String) {
         mxSession.getTerms(TermsService.ServiceType.IdentityService,
                 baseUrl,
                 object : MatrixCallback<GetTermsResponse> {

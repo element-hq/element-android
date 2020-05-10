@@ -1738,6 +1738,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="settings_discovery_enter_identity_server">Enter a new identity server</string>
     <string name="settings_discovery_bad_identity_server">Could not connect to identity server</string>
+    <string name="settings_discovery_outdated_identity_server">This identity server does not support API V2</string>
     <string name="settings_discovery_please_enter_server">Please enter the identity server url</string>
     <string name="settings_discovery_no_terms_title">Identity server has no terms of services</string>
     <string name="settings_discovery_no_terms">The identity server you have chosen does not have any terms of services. Only continue if you trust the owner of the service</string>

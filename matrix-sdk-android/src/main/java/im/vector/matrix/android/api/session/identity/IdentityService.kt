@@ -32,6 +32,13 @@ interface IdentityService {
     fun getCurrentIdentityServer(): String?
 
     /**
+     * Check if the identity server is valid
+     * See https://matrix.org/docs/spec/identity_service/latest#status-check
+     * RiotX SDK only supports identity server API v2
+     */
+    fun isValidIdentityServer(url: String, callback: MatrixCallback<Unit>): Cancelable
+
+    /**
      * Update the identity server url.
      * @param url the new url. Set to null to disconnect from the identity server
      * @param callback will notify the user is change successful. The String will be the final url of the identity server, or null.

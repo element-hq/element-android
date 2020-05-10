@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session.identity
 
 sealed class IdentityServiceError(cause: Throwable? = null) : Throwable(cause = cause) {
+    object OutdatedIdentityServer : IdentityServiceError(null)
     object NoIdentityServerConfigured : IdentityServiceError(null)
     object TermsNotSignedException : IdentityServiceError(null)
     object BulkLookupSha256NotSupported : IdentityServiceError(null)

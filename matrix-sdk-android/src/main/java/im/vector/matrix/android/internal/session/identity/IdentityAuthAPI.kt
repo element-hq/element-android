@@ -32,14 +32,21 @@ internal interface IdentityAuthAPI {
 
     /**
      * https://matrix.org/docs/spec/client_server/r0.4.0.html#server-discovery
-     * Simple ping call to check if server alive
+     * Simple ping call to check if server exists and is alive
      *
      * Ref: https://matrix.org/docs/spec/identity_service/unstable#status-check
+     * https://matrix.org/docs/spec/identity_service/latest#get-matrix-identity-v2
      *
      * @return 200 in case of success
      */
-    @GET(NetworkConstants.URI_API_PREFIX_IDENTITY)
-    fun ping(): Call<Void>
+    @GET(NetworkConstants.URI_IDENTITY_PREFIX_PATH)
+    fun ping(): Call<Unit>
+
+    /**
+     * Ping v1 will be used to check outdated Identity server
+     */
+    @GET("_matrix/identity/api/v1")
+    fun pingV1(): Call<Unit>
 
     /**
      * Exchanges an OpenID token from the homeserver for an access token to access the identity server.

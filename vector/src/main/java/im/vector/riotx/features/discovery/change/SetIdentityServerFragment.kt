@@ -68,7 +68,7 @@ class SetIdentityServerFragment @Inject constructor(
             mKeyTextEdit.isEnabled = true
             mProgressBar.isVisible = false
         }
-        val newText = state.newIdentityServer ?: ""
+        val newText = state.newIdentityServerUrl ?: ""
         if (newText != mKeyTextEdit.text.toString()) {
             mKeyTextEdit.setText(newText)
         }
@@ -80,7 +80,7 @@ class SetIdentityServerFragment @Inject constructor(
             R.id.action_submit -> {
                 withState(viewModel) { state ->
                     if (!state.isVerifyingServer) {
-                        viewModel.handle(SetIdentityServerAction.DoChangeServerName)
+                        viewModel.handle(SetIdentityServerAction.DoChangeIdentityServerUrl)
                     }
                 }
                 true
@@ -98,7 +98,7 @@ class SetIdentityServerFragment @Inject constructor(
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 withState(viewModel) { state ->
                     if (!state.isVerifyingServer) {
-                        viewModel.handle(SetIdentityServerAction.DoChangeServerName)
+                        viewModel.handle(SetIdentityServerAction.DoChangeIdentityServerUrl)
                     }
                 }
                 return@setOnEditorActionListener true
@@ -147,8 +147,8 @@ class SetIdentityServerFragment @Inject constructor(
 
     private fun processIdentityServerChange() {
         withState(viewModel) { state ->
-            if (state.newIdentityServer != null) {
-                sharedViewModel.requestChangeToIdentityServer(state.newIdentityServer)
+            if (state.newIdentityServerUrl != null) {
+                sharedViewModel.requestChangeToIdentityServer(state.newIdentityServerUrl)
                 parentFragmentManager.popBackStack()
             }
         }
@@ -156,7 +156,7 @@ class SetIdentityServerFragment @Inject constructor(
 
     @OnTextChanged(R.id.discovery_identity_server_enter_edittext)
     fun onTextEditChange(s: Editable?) {
-        s?.toString()?.let { viewModel.handle(SetIdentityServerAction.UpdateServerName(it)) }
+        s?.toString()?.let { viewModel.handle(SetIdentityServerAction.UpdateIdentityServerUrl(it)) }
     }
 
     override fun onResume() {

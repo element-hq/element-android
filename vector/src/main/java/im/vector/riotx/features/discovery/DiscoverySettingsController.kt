@@ -198,7 +198,6 @@ class DiscoverySettingsController @Inject constructor(
                 is Loading ->
                     settingsProgressItem {
                         id("progress${pidInfo.threePid.value}")
-
                     }
                 is Success -> Unit /* Cannot happen */
             }
