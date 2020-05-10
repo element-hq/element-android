@@ -17,6 +17,7 @@ package im.vector.riotx.features.discovery
 
 import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
+import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Loading
@@ -66,8 +67,8 @@ class DiscoverySettingsController @Inject constructor(
                 buildIdentityServerSection(data)
                 val hasIdentityServer = data.identityServer().isNullOrBlank().not()
                 if (hasIdentityServer) {
-                    buildMailSection(data)
-                    buildPhoneNumberSection(data)
+                    buildEmailsSection(data.emailList)
+                    buildMsisdnSection(data.phoneNumbersList)
                 }
             }
         }
@@ -105,15 +106,12 @@ class DiscoverySettingsController @Inject constructor(
         settingsButtonItem {
             id("change")
             colorProvider(colorProvider)
-            if (data.identityServer() != null) {
-                buttonTitleId(R.string.change_identity_server)
-            } else {
+            if (data.identityServer() == null) {
                 buttonTitleId(R.string.add_identity_server)
+            } else {
+                buttonTitleId(R.string.change_identity_server)
             }
-            buttonStyle(ButtonStyle.POSITIVE)
-            buttonClickListener(View.OnClickListener {
-                listener?.onTapChangeIdentityServer()
-            })
+            buttonClickListener { listener?.onTapChangeIdentityServer() }
         }
 
         if (data.identityServer() != null) {
@@ -126,39 +124,36 @@ class DiscoverySettingsController @Inject constructor(
                 colorProvider(colorProvider)
                 buttonTitleId(R.string.disconnect_identity_server)
                 buttonStyle(ButtonStyle.DESTRUCTIVE)
-                buttonClickListener(View.OnClickListener {
-                    listener?.onTapDisconnectIdentityServer()
-                })
+                buttonClickListener { listener?.onTapDisconnectIdentityServer() }
             }
         }
     }
 
-    private fun buildMailSection(data: DiscoverySettingsState) {
+    private fun buildEmailsSection(emails: Async<List<PidInfo>>) {
         settingsSectionTitleItem {
             id("emails")
             titleResId(R.string.settings_discovery_emails_title)
         }
-        when (data.emailList) {
+        when (emails) {
             is Incomplete -> {
                 loadingItem {
-                    id("mailLoading")
+                    id("emailsLoading")
                 }
             }
             is Fail       -> {
                 settingsInfoItem {
-                    id("mailListError")
-                    helperText(data.emailList.error.message)
+                    id("emailsError")
+                    helperText(emails.error.message)
                 }
             }
             is Success    -> {
-                val emails = data.emailList.invoke()
-                if (emails.isEmpty()) {
+                if (emails().isEmpty()) {
                     settingsInfoItem {
-                        id("no_emails")
+                        id("emailsEmpty")
                         helperText(stringProvider.getString(R.string.settings_discovery_no_mails))
                     }
                 } else {
-                    emails.forEach { buildEmail(it) }
+                    emails().forEach { buildEmail(it) }
                 }
             }
         }
@@ -175,6 +170,7 @@ class DiscoverySettingsController @Inject constructor(
                     buttonIndeterminate(true)
                 }
                 is Fail    -> {
+                    buttonType(ButtonType.NORMAL)
                     buttonStyle(ButtonStyle.DESTRUCTIVE)
                     buttonTitle(stringProvider.getString(R.string.global_retry))
                     iconMode(IconMode.ERROR)
@@ -183,8 +179,8 @@ class DiscoverySettingsController @Inject constructor(
                 is Success -> when (pidInfo.isShared()) {
                     SharedState.SHARED,
                     SharedState.NOT_SHARED          -> {
-                        checked(pidInfo.isShared() == SharedState.SHARED)
                         buttonType(ButtonType.SWITCH)
+                        checked(pidInfo.isShared() == SharedState.SHARED)
                         switchChangeListener { _, checked ->
                             if (checked) {
                                 listener?.onTapShare(pidInfo.threePid)
@@ -205,55 +201,47 @@ class DiscoverySettingsController @Inject constructor(
             }
         }
         if (pidInfo.isShared is Fail) {
-            settingsInformationItem {
-                id("info${pidInfo.threePid.value}")
-                colorProvider(colorProvider)
-                textColorId(R.color.vector_error_color)
-                message(pidInfo.isShared.error.message ?: "")
-            }
+            buildSharedFail(pidInfo)
             buildContinueCancel(pidInfo.threePid)
-        }
-        if (pidInfo.isShared() == SharedState.BINDING_IN_PROGRESS) {
+        } else if (pidInfo.isShared() == SharedState.BINDING_IN_PROGRESS) {
             when (pidInfo.finalRequest) {
-                is Uninitialized -> {
+                is Uninitialized,
+                is Loading ->
                     settingsInformationItem {
                         id("info${pidInfo.threePid.value}")
                         colorProvider(colorProvider)
                         message(stringProvider.getString(R.string.settings_discovery_confirm_mail, pidInfo.threePid.value))
                     }
-                    buildContinueCancel(pidInfo.threePid)
-                }
-                is Loading       -> {
-                    settingsInformationItem {
-                        id("info${pidInfo.threePid.value}")
-                        colorProvider(colorProvider)
-                        message(stringProvider.getString(R.string.settings_discovery_confirm_mail, pidInfo.threePid.value))
-                    }
-                    settingsProgressItem {
-                        id("progress${pidInfo.threePid.value}")
-                    }
-                }
-                is Fail          -> {
+                is Fail    ->
                     settingsInformationItem {
                         id("info${pidInfo.threePid.value}")
                         colorProvider(colorProvider)
                         message(stringProvider.getString(R.string.settings_discovery_confirm_mail_not_clicked, pidInfo.threePid.value))
                         textColorId(R.color.riotx_destructive_accent)
                     }
+                is Success -> Unit /* Cannot happen */
+            }
+            when (pidInfo.finalRequest) {
+                is Uninitialized,
+                is Fail    ->
                     buildContinueCancel(pidInfo.threePid)
-                }
-                is Success       -> Unit /* Cannot happen */
+                is Loading ->
+                    settingsProgressItem {
+                        id("progress${pidInfo.threePid.value}")
+
+                    }
+                is Success -> Unit /* Cannot happen */
             }
         }
     }
 
-    private fun buildPhoneNumberSection(data: DiscoverySettingsState) {
+    private fun buildMsisdnSection(msisdns: Async<List<PidInfo>>) {
         settingsSectionTitleItem {
             id("msisdn")
             titleResId(R.string.settings_discovery_msisdn_title)
         }
 
-        when (data.phoneNumbersList) {
+        when (msisdns) {
             is Incomplete -> {
                 loadingItem {
                     id("msisdnLoading")
@@ -262,18 +250,17 @@ class DiscoverySettingsController @Inject constructor(
             is Fail       -> {
                 settingsInfoItem {
                     id("msisdnListError")
-                    helperText(data.phoneNumbersList.error.message)
+                    helperText(msisdns.error.message)
                 }
             }
             is Success    -> {
-                val phones = data.phoneNumbersList.invoke()
-                if (phones.isEmpty()) {
+                if (msisdns().isEmpty()) {
                     settingsInfoItem {
                         id("no_msisdn")
                         helperText(stringProvider.getString(R.string.settings_discovery_no_msisdn))
                     }
                 } else {
-                    phones.forEach { buildMsisdn(it) }
+                    msisdns().forEach { buildMsisdn(it) }
                 }
             }
         }
@@ -327,12 +314,7 @@ class DiscoverySettingsController @Inject constructor(
             }
         }
         if (pidInfo.isShared is Fail) {
-            settingsInformationItem {
-                id("info${pidInfo.threePid.value}")
-                colorProvider(colorProvider)
-                textColorId(R.color.vector_error_color)
-                message(pidInfo.isShared.error.message ?: "")
-            }
+            buildSharedFail(pidInfo)
         }
         when (pidInfo.isShared()) {
             SharedState.BINDING_IN_PROGRESS -> {
@@ -371,6 +353,15 @@ class DiscoverySettingsController @Inject constructor(
             }
             else                            -> Unit
         }.exhaustive
+    }
+
+    private fun buildSharedFail(pidInfo: PidInfo) {
+        settingsInformationItem {
+            id("info${pidInfo.threePid.value}")
+            colorProvider(colorProvider)
+            textColorId(R.color.vector_error_color)
+            message((pidInfo.isShared as? Fail)?.error?.message ?: "")
+        }
     }
 
     private fun buildContinueCancel(threePid: ThreePid) {

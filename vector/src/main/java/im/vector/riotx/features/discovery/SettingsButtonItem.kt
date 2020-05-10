@@ -15,15 +15,16 @@
  */
 package im.vector.riotx.features.discovery
 
-import android.view.View
 import android.widget.Button
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.riotx.R
+import im.vector.riotx.core.epoxy.ClickListener
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.attributes.ButtonStyle
+import im.vector.riotx.core.epoxy.onClick
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.resources.ColorProvider
 
@@ -44,7 +45,7 @@ abstract class SettingsButtonItem : EpoxyModelWithHolder<SettingsButtonItem.Hold
     var buttonStyle: ButtonStyle = ButtonStyle.POSITIVE
 
     @EpoxyAttribute
-    var buttonClickListener: View.OnClickListener? = null
+    var buttonClickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -63,7 +64,7 @@ abstract class SettingsButtonItem : EpoxyModelWithHolder<SettingsButtonItem.Hold
             }
         }
 
-        holder.button.setOnClickListener(buttonClickListener)
+        holder.button.onClick(buttonClickListener)
     }
 
     class Holder : VectorEpoxyHolder() {
