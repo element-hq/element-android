@@ -150,8 +150,8 @@
     <string name="auth_invalid_user_name">Nutzernamen dürfen nur Buchstaben, Nummern, Punkte, Binde- und Unterstriche enthalten</string>
     <string name="auth_invalid_password">Passwort zu kurz (min. 6 Zeichen)</string>
     <string name="auth_missing_password">Passwort fehlt</string>
-    <string name="auth_invalid_email">Dies sieht nicht nach einer gültigen E-Mail-Adresse aus</string>
-    <string name="auth_invalid_phone">Dies sieht nicht nach einer gültigen Telefonnummer aus</string>
+    <string name="auth_invalid_email">Dies scheint keine gültige E-Mail-Adresse zu sein</string>
+    <string name="auth_invalid_phone">Dies scheint keine gültige Telefonnummer zu sein</string>
     <string name="auth_email_already_defined">Diese E-Mail-Adresse wird bereits verwendet.</string>
     <string name="auth_missing_email">E-Mail-Adresse fehlt</string>
     <string name="auth_missing_phone">Telefonnummer fehlt</string>
@@ -902,7 +902,7 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
     <string name="title_activity_choose_sticker">Sende einen Sticker</string>
 
     <string name="option_send_sticker">Sende Sticker</string>
-    <string name="no_sticker_application_dialog_content">Sie haben aktuell keine Stickerpackete aktiviert. Wollen Sie welche hinzufügen\?</string>
+    <string name="no_sticker_application_dialog_content">Sie haben aktuell keine Stickerpakete aktiviert. Möchten Sie welche hinzufügen\?</string>
 
     <string name="settings_deactivate_account_section">Deaktiviere Account</string>
     <string name="settings_deactivate_my_account">Deaktivere meinen Account</string>
