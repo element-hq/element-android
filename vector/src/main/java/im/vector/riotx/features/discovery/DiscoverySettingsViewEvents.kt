@@ -13,18 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package im.vector.riotx.features.discovery
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import im.vector.riotx.core.extensions.postLiveEvent
-import im.vector.riotx.core.utils.LiveEvent
-import javax.inject.Inject
+import im.vector.riotx.core.platform.VectorViewEvents
 
-class DiscoverySharedViewModel @Inject constructor() : ViewModel() {
-    var navigateEvent = MutableLiveData<LiveEvent<DiscoverySharedViewModelAction>>()
-
-    fun requestChangeToIdentityServer(serverUrl: String) {
-        navigateEvent.postLiveEvent(DiscoverySharedViewModelAction.ChangeIdentityServer(serverUrl))
-    }
+sealed class DiscoverySettingsViewEvents : VectorViewEvents {
+    data class Failure(val throwable: Throwable) : DiscoverySettingsViewEvents()
 }

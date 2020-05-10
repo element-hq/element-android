@@ -13,18 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package im.vector.riotx.features.discovery
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import im.vector.riotx.core.extensions.postLiveEvent
-import im.vector.riotx.core.utils.LiveEvent
-import javax.inject.Inject
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.Uninitialized
 
-class DiscoverySharedViewModel @Inject constructor() : ViewModel() {
-    var navigateEvent = MutableLiveData<LiveEvent<DiscoverySharedViewModelAction>>()
-
-    fun requestChangeToIdentityServer(serverUrl: String) {
-        navigateEvent.postLiveEvent(DiscoverySharedViewModelAction.ChangeIdentityServer(serverUrl))
-    }
-}
+data class DiscoverySettingsState(
+        val identityServer: Async<String?> = Uninitialized,
+        val emailList: Async<List<PidInfo>> = Uninitialized,
+        val phoneNumbersList: Async<List<PidInfo>> = Uninitialized,
+        // Can be true if terms are updated
+        val termsNotSigned: Boolean = false
+) : MvRxState

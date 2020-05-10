@@ -19,7 +19,6 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
@@ -34,43 +33,7 @@ import im.vector.matrix.android.api.session.identity.SharedState
 import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.exhaustive
-import im.vector.riotx.core.platform.VectorViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.core.platform.VectorViewModelAction
-
-data class PidInfo(
-        // Retrieved from the homeserver
-        val threePid: ThreePid,
-        // Retrieved from IdentityServer, or transient state
-        val isShared: Async<SharedState>,
-        // Contains information about a current request to submit the token (for instance SMS code received by SMS)
-        // Or a current binding finalization, for email
-        val finalRequest: Async<Unit> = Uninitialized
-)
-
-data class DiscoverySettingsState(
-        val identityServer: Async<String?> = Uninitialized,
-        val emailList: Async<List<PidInfo>> = Uninitialized,
-        val phoneNumbersList: Async<List<PidInfo>> = Uninitialized,
-        // Can be true if terms are updated
-        val termsNotSigned: Boolean = false
-) : MvRxState
-
-sealed class DiscoverySettingsAction : VectorViewModelAction {
-    object RetrieveBinding : DiscoverySettingsAction()
-    object Refresh : DiscoverySettingsAction()
-
-    data class ChangeIdentityServer(val url: String?) : DiscoverySettingsAction()
-    data class RevokeThreePid(val threePid: ThreePid) : DiscoverySettingsAction()
-    data class ShareThreePid(val threePid: ThreePid) : DiscoverySettingsAction()
-    data class FinalizeBind3pid(val threePid: ThreePid) : DiscoverySettingsAction()
-    data class SubmitMsisdnToken(val threePid: ThreePid.Msisdn, val code: String) : DiscoverySettingsAction()
-    data class CancelBinding(val threePid: ThreePid) : DiscoverySettingsAction()
-}
-
-sealed class DiscoverySettingsViewEvents : VectorViewEvents {
-    data class Failure(val throwable: Throwable) : DiscoverySettingsViewEvents()
-}
 
 class DiscoverySettingsViewModel @AssistedInject constructor(
         @Assisted initialState: DiscoverySettingsState,

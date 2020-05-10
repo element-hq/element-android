@@ -15,9 +15,7 @@
  */
 package im.vector.riotx.features.discovery.change
 
-import androidx.annotation.StringRes
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
@@ -29,28 +27,8 @@ import im.vector.matrix.android.api.session.terms.GetTermsResponse
 import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.exhaustive
-import im.vector.riotx.core.platform.VectorViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.core.platform.VectorViewModelAction
 import im.vector.riotx.core.resources.StringProvider
-
-data class SetIdentityServerState(
-        val existingIdentityServer: String? = null,
-        val newIdentityServer: String? = null,
-        @StringRes val errorMessageId: Int? = null,
-        val isVerifyingServer: Boolean = false
-) : MvRxState
-
-sealed class SetIdentityServerAction : VectorViewModelAction {
-    data class UpdateServerName(val url: String) : SetIdentityServerAction()
-    object DoChangeServerName : SetIdentityServerAction()
-}
-
-sealed class SetIdentityServerViewEvents : VectorViewEvents {
-    data class ShowTerms(val newIdentityServer: String) : SetIdentityServerViewEvents()
-    object NoTerms : SetIdentityServerViewEvents()
-    object TermsAccepted : SetIdentityServerViewEvents()
-}
 
 class SetIdentityServerViewModel @AssistedInject constructor(
         @Assisted initialState: SetIdentityServerState,

@@ -13,18 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.riotx.features.discovery
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import im.vector.riotx.core.extensions.postLiveEvent
-import im.vector.riotx.core.utils.LiveEvent
-import javax.inject.Inject
+package im.vector.riotx.features.discovery.change
 
-class DiscoverySharedViewModel @Inject constructor() : ViewModel() {
-    var navigateEvent = MutableLiveData<LiveEvent<DiscoverySharedViewModelAction>>()
+import androidx.annotation.StringRes
+import com.airbnb.mvrx.MvRxState
 
-    fun requestChangeToIdentityServer(serverUrl: String) {
-        navigateEvent.postLiveEvent(DiscoverySharedViewModelAction.ChangeIdentityServer(serverUrl))
-    }
-}
+data class SetIdentityServerState(
+        val existingIdentityServer: String? = null,
+        val newIdentityServer: String? = null,
+        @StringRes val errorMessageId: Int? = null,
+        val isVerifyingServer: Boolean = false
+) : MvRxState
