@@ -84,7 +84,7 @@
     <string name="local_address_book_header">Lokales Adressbuch</string>
     <string name="matrix_only_filter">Nur Matrix-Kontakte</string>
     <string name="no_conversation_placeholder">Keine Konversationen</string>
-    <string name="no_contact_access_placeholder">Sie haben Riot nicht erlaubt, auf deine lokalen Kontakte zuzugreifen</string>
+    <string name="no_contact_access_placeholder">Sie haben Riot nicht erlaubt, auf lokale Kontakte zuzugreifen</string>
     <string name="no_result_placeholder">Keine Ergebnisse</string>
 
     <!-- Rooms fragment -->
@@ -124,7 +124,7 @@
 
     <string name="start_new_chat">Neuen Chat starten</string>
     <string name="start_voice_call">Sprachanruf starten</string>
-    <string name="start_video_call">Video-Anruf starten</string>
+    <string name="start_video_call">Videoanruf starten</string>
 
     <string name="option_send_files">Dateien senden</string>
     <string name="option_take_photo_video">Foto oder Video aufnehmen</string>
@@ -952,7 +952,7 @@ Willst du welche hinzufügen?</string>
 
     <string name="error_empty_field_your_password">Bitte gib dein Passwort ein.</string>
 
-    <string name="send_bug_report_description_in_english">Wenn möglich, beschreibe bitte in Englisch.</string>
+    <string name="send_bug_report_description_in_english">Wenn möglich, schreiben Sie bitte auf Englisch.</string>
     <string name="room_message_placeholder_reply_to_encrypted">Sende verschlüsselte Antwort…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Sende unverschlüsselte Antwort…</string>
     <string name="settings_preview_media_before_sending">Zeige Medien vor dem Senden</string>
