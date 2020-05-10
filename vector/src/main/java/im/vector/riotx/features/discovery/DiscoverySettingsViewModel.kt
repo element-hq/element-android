@@ -52,7 +52,7 @@ data class DiscoverySettingsState(
         val identityServer: Async<String?> = Uninitialized,
         val emailList: Async<List<PidInfo>> = Uninitialized,
         val phoneNumbersList: Async<List<PidInfo>> = Uninitialized,
-        // TODO Use ViewEvents?
+        // Can be true if terms are updated
         val termsNotSigned: Boolean = false
 ) : MvRxState
 
@@ -329,7 +329,6 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                     override fun onFailure(failure: Throwable) {
                         if (failure is IdentityServiceError.TermsNotSignedException) {
                             setState {
-                                // TODO Use ViewEvent ?
                                 copy(termsNotSigned = true)
                             }
                         }

@@ -65,7 +65,7 @@ class DiscoverySettingsController @Inject constructor(
             is Success -> {
                 buildIdentityServerSection(data)
                 val hasIdentityServer = data.identityServer().isNullOrBlank().not()
-                if (hasIdentityServer) {
+                if (hasIdentityServer && !data.termsNotSigned) {
                     buildEmailsSection(data.emailList)
                     buildMsisdnSection(data.phoneNumbersList)
                 }
@@ -77,7 +77,7 @@ class DiscoverySettingsController @Inject constructor(
         val identityServer = data.identityServer() ?: stringProvider.getString(R.string.none)
 
         settingsSectionTitleItem {
-            id("idsTitle")
+            id("idServerTitle")
             titleResId(R.string.identity_server)
         }
 
@@ -91,7 +91,7 @@ class DiscoverySettingsController @Inject constructor(
             if (data.termsNotSigned) {
                 helperText(stringProvider.getString(R.string.settings_agree_to_terms, identityServer))
                 showCompoundDrawable(true)
-                itemClickListener(View.OnClickListener { listener?.onSelectIdentityServer() })
+                itemClickListener(View.OnClickListener { listener?.openIdentityServerTerms() })
             } else {
                 showCompoundDrawable(false)
                 if (data.identityServer() != null) {
@@ -357,7 +357,7 @@ class DiscoverySettingsController @Inject constructor(
     }
 
     interface Listener {
-        fun onSelectIdentityServer()
+        fun openIdentityServerTerms()
         fun onTapRevoke(threePid: ThreePid)
         fun onTapShare(threePid: ThreePid)
         fun checkEmailVerification(threePid: ThreePid.Email)

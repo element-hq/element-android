@@ -103,9 +103,8 @@ class DiscoverySettingsFragment @Inject constructor(
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onSelectIdentityServer() = withState(viewModel) { state ->
+    override fun openIdentityServerTerms() = withState(viewModel) { state ->
         if (state.termsNotSigned) {
-            // TODO Use ViewEvents?
             navigator.openTerms(
                     this,
                     TermsService.ServiceType.IdentityService,
