@@ -208,8 +208,8 @@ class DiscoverySettingsController @Inject constructor(
             settingsInformationItem {
                 id("info${pidInfo.threePid.value}")
                 colorProvider(colorProvider)
-                infoMessageColorId(R.color.vector_error_color)
-                infoMessage(pidInfo.isShared.error.message ?: "")
+                textColorId(R.color.vector_error_color)
+                message(pidInfo.isShared.error.message ?: "")
             }
             buildContinueCancel(pidInfo.threePid)
         }
@@ -219,8 +219,7 @@ class DiscoverySettingsController @Inject constructor(
                     settingsInformationItem {
                         id("info${pidInfo.threePid.value}")
                         colorProvider(colorProvider)
-                        infoMessage(stringProvider.getString(R.string.settings_discovery_confirm_mail, pidInfo.threePid.value))
-                        infoMessageColorId(R.color.vector_info_color)
+                        message(stringProvider.getString(R.string.settings_discovery_confirm_mail, pidInfo.threePid.value))
                     }
                     buildContinueCancel(pidInfo.threePid)
                 }
@@ -228,8 +227,7 @@ class DiscoverySettingsController @Inject constructor(
                     settingsInformationItem {
                         id("info${pidInfo.threePid.value}")
                         colorProvider(colorProvider)
-                        infoMessage(stringProvider.getString(R.string.settings_discovery_confirm_mail, pidInfo.threePid.value))
-                        infoMessageColorId(R.color.vector_info_color)
+                        message(stringProvider.getString(R.string.settings_discovery_confirm_mail, pidInfo.threePid.value))
                     }
                     settingsProgressItem {
                         id("progress${pidInfo.threePid.value}")
@@ -239,8 +237,8 @@ class DiscoverySettingsController @Inject constructor(
                     settingsInformationItem {
                         id("info${pidInfo.threePid.value}")
                         colorProvider(colorProvider)
-                        infoMessage(stringProvider.getString(R.string.settings_discovery_confirm_mail_not_clicked, pidInfo.threePid.value))
-                        infoMessageColorId(R.color.riotx_destructive_accent)
+                        message(stringProvider.getString(R.string.settings_discovery_confirm_mail_not_clicked, pidInfo.threePid.value))
+                        textColorId(R.color.riotx_destructive_accent)
                     }
                     buildContinueCancel(pidInfo.threePid)
                 }
@@ -332,8 +330,8 @@ class DiscoverySettingsController @Inject constructor(
             settingsInformationItem {
                 id("info${pidInfo.threePid.value}")
                 colorProvider(colorProvider)
-                infoMessageColorId(R.color.vector_error_color)
-                infoMessage(pidInfo.isShared.error.message ?: "")
+                textColorId(R.color.vector_error_color)
+                message(pidInfo.isShared.error.message ?: "")
             }
         }
         when (pidInfo.isShared()) {

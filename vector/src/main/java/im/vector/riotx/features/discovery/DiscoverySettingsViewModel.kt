@@ -133,7 +133,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
             is DiscoverySettingsAction.ChangeIdentityServer -> changeIdentityServer(action)
             is DiscoverySettingsAction.RevokeThreePid       -> revokeThreePid(action)
             is DiscoverySettingsAction.ShareThreePid        -> shareThreePid(action)
-            is DiscoverySettingsAction.FinalizeBind3pid     -> finalizeBind3pid(action)
+            is DiscoverySettingsAction.FinalizeBind3pid     -> finalizeBind3pid(action, true)
             is DiscoverySettingsAction.SubmitMsisdnToken    -> submitMsisdnToken(action)
             is DiscoverySettingsAction.CancelBinding        -> cancelBinding(action)
         }.exhaustive
@@ -278,7 +278,6 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     }
 
     private fun cancelBinding(action: DiscoverySettingsAction.CancelBinding) {
-        // TODO: remove the callback
         identityService.cancelBindThreePid(action.threePid, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 changeThreePidState(action.threePid, Success(SharedState.NOT_SHARED))
@@ -366,7 +365,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                 object : MatrixCallback<Unit> {
                     override fun onSuccess(data: Unit) {
                         changeThreePidSubmitState(action.threePid, Uninitialized)
-                        finalizeBind3pid(DiscoverySettingsAction.FinalizeBind3pid(action.threePid))
+                        finalizeBind3pid(DiscoverySettingsAction.FinalizeBind3pid(action.threePid), true)
                     }
 
                     override fun onFailure(failure: Throwable) {
@@ -376,7 +375,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
         )
     }
 
-    private fun finalizeBind3pid(action: DiscoverySettingsAction.FinalizeBind3pid) = withState { state ->
+    private fun finalizeBind3pid(action: DiscoverySettingsAction.FinalizeBind3pid, fromUser: Boolean) = withState { state ->
         val threePid = when (action.threePid) {
             is ThreePid.Email  -> {
                 state.emailList()?.find { it.threePid.value == action.threePid.email }?.threePid ?: return@withState
@@ -395,7 +394,12 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
             }
 
             override fun onFailure(failure: Throwable) {
-                changeThreePidSubmitState(action.threePid, Fail(failure))
+                // If this is not from user (user did not click to "Continue", but this is a refresh when Fragment is resumed), do no display the error
+                if (fromUser) {
+                    changeThreePidSubmitState(action.threePid, Fail(failure))
+                } else {
+                    changeThreePidSubmitState(action.threePid, Uninitialized)
+                }
             }
         })
 
@@ -404,7 +408,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     private fun refreshPendingEmailBindings() = withState { state ->
         state.emailList()?.forEach { info ->
             when (info.isShared()) {
-                SharedState.BINDING_IN_PROGRESS -> finalizeBind3pid(DiscoverySettingsAction.FinalizeBind3pid(info.threePid))
+                SharedState.BINDING_IN_PROGRESS -> finalizeBind3pid(DiscoverySettingsAction.FinalizeBind3pid(info.threePid), false)
                 else                            -> Unit
             }
         }

@@ -30,21 +30,18 @@ abstract class SettingsInformationItem : EpoxyModelWithHolder<SettingsInformatio
     @EpoxyAttribute
     lateinit var colorProvider: ColorProvider
 
-    // TODO Rename message
     @EpoxyAttribute
-    lateinit var infoMessage: String
+    lateinit var message: String
 
     @EpoxyAttribute
     @ColorRes
-    var infoMessageColorId: Int = R.color.vector_error_color
+    var textColorId: Int = R.color.vector_info_color
 
     override fun bind(holder: Holder) {
         super.bind(holder)
 
-        holder.textView.text = infoMessage
-
-        val errorColor = colorProvider.getColor(infoMessageColorId)
-        holder.textView.setTextColor(errorColor)
+        holder.textView.text = message
+        holder.textView.setTextColor(colorProvider.getColor(textColorId))
     }
 
     class Holder : VectorEpoxyHolder() {
