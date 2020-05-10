@@ -211,4 +211,12 @@
     <string name="auth_register">Skapa konto</string>
     <string name="auth_submit">Skicka in</string>
     <string name="auth_skip">Hoppa över</string>
+    <string name="auth_send_reset_email">Skicka e-brev för återställning</string>
+    <string name="auth_return_to_login">Gå tillbaka till inloggningsskärmen</string>
+    <string name="auth_user_id_placeholder">E-postadress eller användarnamn</string>
+    <string name="auth_password_placeholder">Lösenord</string>
+    <string name="auth_new_password_placeholder">Nytt lösenord</string>
+    <string name="auth_user_name_placeholder">Användarnamn</string>
+    <string name="auth_add_email_message_2">Sätt en e-postadress för kontoåterförvärv, och senare för att valfritt vara upptäckbar av folk som som känner dig.</string>
+    <string name="auth_add_phone_message_2">Sätt ett telefonnummer som folk som känner dig kan använda för att hitta dig.</string>
     </resources>
