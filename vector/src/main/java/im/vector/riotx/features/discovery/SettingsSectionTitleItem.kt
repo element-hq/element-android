@@ -15,12 +15,8 @@
  */
 package im.vector.riotx.features.discovery
 
-import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
@@ -28,8 +24,8 @@ import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_settings_radio_single_line)
-abstract class SettingsImageItem : EpoxyModelWithHolder<SettingsImageItem.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_settings_section_title)
+abstract class SettingsSectionTitleItem : EpoxyModelWithHolder<SettingsSectionTitleItem.Holder>() {
 
     @EpoxyAttribute
     var title: String? = null
@@ -37,13 +33,6 @@ abstract class SettingsImageItem : EpoxyModelWithHolder<SettingsImageItem.Holder
     @EpoxyAttribute
     @StringRes
     var titleResId: Int? = null
-
-    @EpoxyAttribute
-    @DrawableRes
-    var endIconResourceId: Int = -1
-
-    @EpoxyAttribute
-    var itemClickListener: View.OnClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -53,18 +42,9 @@ abstract class SettingsImageItem : EpoxyModelWithHolder<SettingsImageItem.Holder
         } else {
             holder.textView.setTextOrHide(title)
         }
-        if (endIconResourceId != -1) {
-            holder.accessoryImage.setImageResource(endIconResourceId)
-            holder.accessoryImage.isVisible = true
-        } else {
-            holder.accessoryImage.isVisible = false
-        }
-
-        holder.view.setOnClickListener(itemClickListener)
     }
 
     class Holder : VectorEpoxyHolder() {
-        val textView by bind<TextView>(R.id.settings_item_text)
-        val accessoryImage by bind<ImageView>(R.id.settings_item_image)
+        val textView by bind<TextView>(R.id.settings_section_title_text)
     }
 }

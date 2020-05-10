@@ -18,7 +18,7 @@ package im.vector.riotx.features.terms
 import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.riotx.R
-import im.vector.riotx.features.discovery.settingsSectionTitle
+import im.vector.riotx.features.discovery.settingsSectionTitleItem
 import javax.inject.Inject
 
 class TermsController @Inject constructor() : TypedEpoxyController<List<Term>>() {
@@ -28,7 +28,7 @@ class TermsController @Inject constructor() : TypedEpoxyController<List<Term>>()
 
     override fun buildModels(data: List<Term>?) {
         data?.let {
-            settingsSectionTitle {
+            settingsSectionTitleItem {
                 id("header")
                 titleResId(R.string.widget_integration_review_terms)
             }

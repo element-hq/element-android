@@ -278,9 +278,11 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     }
 
     private fun cancelBinding(action: DiscoverySettingsAction.CancelBinding) {
+        // TODO: remove the callback
         identityService.cancelBindThreePid(action.threePid, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 changeThreePidState(action.threePid, Success(SharedState.NOT_SHARED))
+                changeThreePidSubmitState(action.threePid, Uninitialized)
             }
 
             override fun onFailure(failure: Throwable) {

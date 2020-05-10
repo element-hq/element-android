@@ -15,36 +15,38 @@
  */
 package im.vector.riotx.features.discovery
 
-import android.widget.TextView
-import androidx.annotation.StringRes
+import android.widget.Button
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
-import im.vector.riotx.core.extensions.setTextOrHide
 
-@EpoxyModelClass(layout = R.layout.item_settings_section_title)
-abstract class SettingsSectionTitle : EpoxyModelWithHolder<SettingsSectionTitle.Holder>() {
-
-    @EpoxyAttribute
-    var title: String? = null
+@EpoxyModelClass(layout = R.layout.item_settings_continue_cancel)
+abstract class SettingsContinueCancelItem : EpoxyModelWithHolder<SettingsContinueCancelItem.Holder>() {
 
     @EpoxyAttribute
-    @StringRes
-    var titleResId: Int? = null
+    var interactionListener: Listener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
 
-        if (titleResId != null) {
-            holder.textView.setText(titleResId!!)
-        } else {
-            holder.textView.setTextOrHide(title)
+        holder.cancelButton.setOnClickListener {
+            interactionListener?.onCancel()
+        }
+
+        holder.continueButton.setOnClickListener {
+            interactionListener?.onContinue()
         }
     }
 
     class Holder : VectorEpoxyHolder() {
-        val textView by bind<TextView>(R.id.settings_section_title_text)
+        val cancelButton by bind<Button>(R.id.settings_item_cancel_button)
+        val continueButton by bind<Button>(R.id.settings_item_continue_button)
+    }
+
+    interface Listener {
+        fun onContinue()
+        fun onCancel()
     }
 }

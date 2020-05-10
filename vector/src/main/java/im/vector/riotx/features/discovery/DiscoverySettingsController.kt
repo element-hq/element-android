@@ -44,6 +44,8 @@ class DiscoverySettingsController @Inject constructor(
 
     var listener: Listener? = null
 
+    private val codes = mutableMapOf<ThreePid, String>()
+
     override fun buildModels(data: DiscoverySettingsState) {
         when (data.identityServer) {
             is Loading -> {
@@ -59,9 +61,7 @@ class DiscoverySettingsController @Inject constructor(
             }
             is Success -> {
                 buildIdentityServerSection(data)
-
                 val hasIdentityServer = data.identityServer().isNullOrBlank().not()
-
                 if (hasIdentityServer) {
                     buildMailSection(data)
                     buildPhoneNumberSection(data)
@@ -70,226 +70,17 @@ class DiscoverySettingsController @Inject constructor(
         }
     }
 
-    private fun buildPhoneNumberSection(data: DiscoverySettingsState) {
-        settingsSectionTitle {
-            id("msisdn")
-            titleResId(R.string.settings_discovery_msisdn_title)
-        }
-
-        when (data.phoneNumbersList) {
-            is Incomplete -> {
-                loadingItem {
-                    id("msisdnLoading")
-                }
-            }
-            is Fail       -> {
-                settingsInfoItem {
-                    id("msisdnListError")
-                    helperText(data.phoneNumbersList.error.message)
-                }
-            }
-            is Success    -> {
-                val phones = data.phoneNumbersList.invoke()
-                if (phones.isEmpty()) {
-                    settingsInfoItem {
-                        id("no_msisdn")
-                        helperText(stringProvider.getString(R.string.settings_discovery_no_msisdn))
-                    }
-                } else {
-                    phones.forEach { piState ->
-                        val phoneNumber = try {
-                            PhoneNumberUtil.getInstance().parse("+${piState.threePid.value}", null)
-                        } catch (t: Throwable) {
-                            Timber.e(t, "Unable to parse the phone number")
-                            null
-                        }
-                                ?.let {
-                                    PhoneNumberUtil.getInstance().format(it, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL)
-                                }
-
-                        settingsTextButtonItem {
-                            id(piState.threePid.value)
-                            title(phoneNumber)
-                            colorProvider(colorProvider)
-                            stringProvider(stringProvider)
-                            when (piState.isShared) {
-                                is Loading -> {
-                                    buttonIndeterminate(true)
-                                }
-                                is Fail    -> {
-                                    buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
-                                    buttonStyle(SettingsTextButtonItem.ButtonStyle.DESTRUCTIVE)
-                                    buttonTitle(stringProvider.getString(R.string.global_retry))
-                                    infoMessage(piState.isShared.error.message)
-                                    buttonClickListener { listener?.onTapRetryToRetrieveBindings() }
-                                }
-                                is Success -> when (piState.isShared()) {
-                                    SharedState.SHARED,
-                                    SharedState.NOT_SHARED          -> {
-                                        checked(piState.isShared() == SharedState.SHARED)
-                                        buttonType(SettingsTextButtonItem.ButtonType.SWITCH)
-                                        switchChangeListener { _, checked ->
-                                            if (checked) {
-                                                listener?.onTapShare(piState.threePid)
-                                            } else {
-                                                listener?.onTapRevoke(piState.threePid)
-                                            }
-                                        }
-                                    }
-                                    SharedState.BINDING_IN_PROGRESS -> {
-                                        buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
-                                        buttonTitle(null)
-                                    }
-                                }
-                            }
-                        }
-                        when (piState.isShared()) {
-                            SharedState.BINDING_IN_PROGRESS -> {
-                                val errorText = if (piState.finalRequest is Fail) {
-                                    val error = piState.finalRequest.error
-                                    // Deal with error 500
-                                    //Ref: https://github.com/matrix-org/sydent/issues/292
-                                    if (error is Failure.ServerError
-                                            && error.httpCode == HttpsURLConnection.HTTP_INTERNAL_ERROR /* 500 */) {
-                                        stringProvider.getString(R.string.settings_text_message_sent_wrong_code)
-                                    } else {
-                                        errorFormatter.toHumanReadable(error)
-                                    }
-                                } else {
-                                    null
-                                }
-                                settingsItemEditText {
-                                    id("tverif" + piState.threePid.value)
-                                    descriptionText(stringProvider.getString(R.string.settings_text_message_sent, phoneNumber))
-                                    errorText(errorText)
-                                    inProgress(piState.finalRequest is Loading)
-                                    interactionListener(object : SettingsItemEditText.Listener {
-                                        override fun onValidate(code: String) {
-                                            if (piState.threePid is ThreePid.Msisdn) {
-                                                listener?.sendMsisdnVerificationCode(piState.threePid, code)
-                                            }
-                                        }
-
-                                        override fun onCancel() {
-                                            listener?.cancelBinding(piState.threePid)
-                                        }
-                                    })
-                                }
-                            }
-                            else                            -> Unit
-                        }.exhaustive
-                    }
-                }
-            }
-        }
-    }
-
-    private fun buildMailSection(data: DiscoverySettingsState) {
-        settingsSectionTitle {
-            id("emails")
-            titleResId(R.string.settings_discovery_emails_title)
-        }
-        when (data.emailList) {
-            is Incomplete -> {
-                loadingItem {
-                    id("mailLoading")
-                }
-            }
-            is Fail       -> {
-                settingsInfoItem {
-                    id("mailListError")
-                    helperText(data.emailList.error.message)
-                }
-            }
-            is Success    -> {
-                val emails = data.emailList.invoke()
-                if (emails.isEmpty()) {
-                    settingsInfoItem {
-                        id("no_emails")
-                        helperText(stringProvider.getString(R.string.settings_discovery_no_mails))
-                    }
-                } else {
-                    emails.forEach { piState ->
-                        settingsTextButtonItem {
-                            id(piState.threePid.value)
-                            title(piState.threePid.value)
-                            colorProvider(colorProvider)
-                            stringProvider(stringProvider)
-                            when (piState.isShared) {
-                                is Loading -> {
-                                    buttonIndeterminate(true)
-                                    showBottomButtons(false)
-                                }
-                                is Fail    -> {
-                                    buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
-                                    buttonStyle(SettingsTextButtonItem.ButtonStyle.DESTRUCTIVE)
-                                    buttonTitle(stringProvider.getString(R.string.global_retry))
-                                    infoMessage(piState.isShared.error.message)
-                                    buttonClickListener { listener?.onTapRetryToRetrieveBindings() }
-                                    showBottomButtons(false)
-                                }
-                                is Success -> when (piState.isShared()) {
-                                    SharedState.SHARED,
-                                    SharedState.NOT_SHARED          -> {
-                                        checked(piState.isShared() == SharedState.SHARED)
-                                        buttonType(SettingsTextButtonItem.ButtonType.SWITCH)
-                                        switchChangeListener { _, checked ->
-                                            if (checked) {
-                                                listener?.onTapShare(piState.threePid)
-                                            } else {
-                                                listener?.onTapRevoke(piState.threePid)
-                                            }
-                                        }
-                                    }
-                                    SharedState.BINDING_IN_PROGRESS -> {
-                                        buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
-                                        buttonTitle(null)
-                                        showBottomButtons(true)
-                                        when (piState.finalRequest) {
-                                            is Uninitialized -> {
-                                                infoMessage(stringProvider.getString(R.string.settings_discovery_confirm_mail, piState.threePid.value))
-                                                infoMessageTintColorId(R.color.vector_info_color)
-                                                showBottomLoading(false)
-                                            }
-                                            is Loading       -> {
-                                                infoMessage(stringProvider.getString(R.string.settings_discovery_confirm_mail, piState.threePid.value))
-                                                infoMessageTintColorId(R.color.vector_info_color)
-                                                showBottomLoading(true)
-                                            }
-                                            is Fail          -> {
-                                                infoMessage(stringProvider.getString(R.string.settings_discovery_confirm_mail_not_clicked, piState.threePid.value))
-                                                infoMessageTintColorId(R.color.riotx_destructive_accent)
-                                                showBottomLoading(false)
-                                            }
-                                            is Success       -> Unit /* Cannot happen */
-                                        }
-                                        cancelClickListener { listener?.cancelBinding(piState.threePid) }
-                                        continueClickListener {
-                                            if (piState.threePid is ThreePid.Email) {
-                                                listener?.checkEmailVerification(piState.threePid)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     private fun buildIdentityServerSection(data: DiscoverySettingsState) {
         val identityServer = data.identityServer() ?: stringProvider.getString(R.string.none)
 
-        settingsSectionTitle {
+        settingsSectionTitleItem {
             id("idsTitle")
             titleResId(R.string.identity_server)
         }
 
         settingsItem {
             id("idServer")
-            description(identityServer)
+            title(identityServer)
         }
 
         settingsInfoItem {
@@ -316,7 +107,7 @@ class DiscoverySettingsController @Inject constructor(
             } else {
                 buttonTitleId(R.string.add_identity_server)
             }
-            buttonStyle(SettingsTextButtonItem.ButtonStyle.POSITIVE)
+            buttonStyle(SettingsTextButtonSingleLineItem.ButtonStyle.POSITIVE)
             buttonClickListener(View.OnClickListener {
                 listener?.onTapChangeIdentityServer()
             })
@@ -331,11 +122,278 @@ class DiscoverySettingsController @Inject constructor(
                 id("remove")
                 colorProvider(colorProvider)
                 buttonTitleId(R.string.disconnect_identity_server)
-                buttonStyle(SettingsTextButtonItem.ButtonStyle.DESTRUCTIVE)
+                buttonStyle(SettingsTextButtonSingleLineItem.ButtonStyle.DESTRUCTIVE)
                 buttonClickListener(View.OnClickListener {
                     listener?.onTapDisconnectIdentityServer()
                 })
             }
+        }
+    }
+
+    private fun buildMailSection(data: DiscoverySettingsState) {
+        settingsSectionTitleItem {
+            id("emails")
+            titleResId(R.string.settings_discovery_emails_title)
+        }
+        when (data.emailList) {
+            is Incomplete -> {
+                loadingItem {
+                    id("mailLoading")
+                }
+            }
+            is Fail       -> {
+                settingsInfoItem {
+                    id("mailListError")
+                    helperText(data.emailList.error.message)
+                }
+            }
+            is Success    -> {
+                val emails = data.emailList.invoke()
+                if (emails.isEmpty()) {
+                    settingsInfoItem {
+                        id("no_emails")
+                        helperText(stringProvider.getString(R.string.settings_discovery_no_mails))
+                    }
+                } else {
+                    emails.forEach { buildEmail(it) }
+                }
+            }
+        }
+    }
+
+    private fun buildEmail(pidInfo: PidInfo) {
+        settingsTextButtonSingleLineItem {
+            id(pidInfo.threePid.value)
+            title(pidInfo.threePid.value)
+            colorProvider(colorProvider)
+            stringProvider(stringProvider)
+            when (pidInfo.isShared) {
+                is Loading -> {
+                    buttonIndeterminate(true)
+                }
+                is Fail    -> {
+                    buttonStyle(SettingsTextButtonSingleLineItem.ButtonStyle.DESTRUCTIVE)
+                    buttonTitle(stringProvider.getString(R.string.global_retry))
+                    iconMode(IconMode.Error)
+                    buttonClickListener { listener?.onTapRetryToRetrieveBindings() }
+                }
+                is Success -> when (pidInfo.isShared()) {
+                    SharedState.SHARED,
+                    SharedState.NOT_SHARED          -> {
+                        checked(pidInfo.isShared() == SharedState.SHARED)
+                        buttonType(SettingsTextButtonSingleLineItem.ButtonType.SWITCH)
+                        switchChangeListener { _, checked ->
+                            if (checked) {
+                                listener?.onTapShare(pidInfo.threePid)
+                            } else {
+                                listener?.onTapRevoke(pidInfo.threePid)
+                            }
+                        }
+                    }
+                    SharedState.BINDING_IN_PROGRESS -> {
+                        buttonType(SettingsTextButtonSingleLineItem.ButtonType.NO_BUTTON)
+                        when (pidInfo.finalRequest) {
+                            is Incomplete -> iconMode(IconMode.Info)
+                            is Fail       -> iconMode(IconMode.Error)
+                            else          -> iconMode(IconMode.None)
+                        }
+                    }
+                }
+            }
+        }
+        if (pidInfo.isShared is Fail) {
+            settingsInformationItem {
+                id("info${pidInfo.threePid.value}")
+                colorProvider(colorProvider)
+                infoMessageColorId(R.color.vector_error_color)
+                infoMessage(pidInfo.isShared.error.message ?: "")
+            }
+            buildContinueCancel(pidInfo.threePid)
+        }
+        if (pidInfo.isShared() == SharedState.BINDING_IN_PROGRESS) {
+            when (pidInfo.finalRequest) {
+                is Uninitialized -> {
+                    settingsInformationItem {
+                        id("info${pidInfo.threePid.value}")
+                        colorProvider(colorProvider)
+                        infoMessage(stringProvider.getString(R.string.settings_discovery_confirm_mail, pidInfo.threePid.value))
+                        infoMessageColorId(R.color.vector_info_color)
+                    }
+                    buildContinueCancel(pidInfo.threePid)
+                }
+                is Loading       -> {
+                    settingsInformationItem {
+                        id("info${pidInfo.threePid.value}")
+                        colorProvider(colorProvider)
+                        infoMessage(stringProvider.getString(R.string.settings_discovery_confirm_mail, pidInfo.threePid.value))
+                        infoMessageColorId(R.color.vector_info_color)
+                    }
+                    settingsProgressItem {
+                        id("progress${pidInfo.threePid.value}")
+                    }
+                }
+                is Fail          -> {
+                    settingsInformationItem {
+                        id("info${pidInfo.threePid.value}")
+                        colorProvider(colorProvider)
+                        infoMessage(stringProvider.getString(R.string.settings_discovery_confirm_mail_not_clicked, pidInfo.threePid.value))
+                        infoMessageColorId(R.color.riotx_destructive_accent)
+                    }
+                    buildContinueCancel(pidInfo.threePid)
+                }
+                is Success       -> Unit /* Cannot happen */
+            }
+        }
+    }
+
+    private fun buildPhoneNumberSection(data: DiscoverySettingsState) {
+        settingsSectionTitleItem {
+            id("msisdn")
+            titleResId(R.string.settings_discovery_msisdn_title)
+        }
+
+        when (data.phoneNumbersList) {
+            is Incomplete -> {
+                loadingItem {
+                    id("msisdnLoading")
+                }
+            }
+            is Fail       -> {
+                settingsInfoItem {
+                    id("msisdnListError")
+                    helperText(data.phoneNumbersList.error.message)
+                }
+            }
+            is Success    -> {
+                val phones = data.phoneNumbersList.invoke()
+                if (phones.isEmpty()) {
+                    settingsInfoItem {
+                        id("no_msisdn")
+                        helperText(stringProvider.getString(R.string.settings_discovery_no_msisdn))
+                    }
+                } else {
+                    phones.forEach { buildMsisdn(it) }
+                }
+            }
+        }
+    }
+
+    private fun buildMsisdn(pidInfo: PidInfo) {
+        val phoneNumber = try {
+            PhoneNumberUtil.getInstance().parse("+${pidInfo.threePid.value}", null)
+        } catch (t: Throwable) {
+            Timber.e(t, "Unable to parse the phone number")
+            null
+        }
+                ?.let {
+                    PhoneNumberUtil.getInstance().format(it, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL)
+                }
+                ?: pidInfo.threePid.value
+
+        settingsTextButtonSingleLineItem {
+            id(pidInfo.threePid.value)
+            title(phoneNumber)
+            colorProvider(colorProvider)
+            stringProvider(stringProvider)
+            when (pidInfo.isShared) {
+                is Loading -> {
+                    buttonIndeterminate(true)
+                }
+                is Fail    -> {
+                    buttonType(SettingsTextButtonSingleLineItem.ButtonType.NORMAL)
+                    buttonStyle(SettingsTextButtonSingleLineItem.ButtonStyle.DESTRUCTIVE)
+                    buttonTitle(stringProvider.getString(R.string.global_retry))
+                    iconMode(IconMode.Error)
+                    buttonClickListener { listener?.onTapRetryToRetrieveBindings() }
+                }
+                is Success -> when (pidInfo.isShared()) {
+                    SharedState.SHARED,
+                    SharedState.NOT_SHARED          -> {
+                        checked(pidInfo.isShared() == SharedState.SHARED)
+                        buttonType(SettingsTextButtonSingleLineItem.ButtonType.SWITCH)
+                        switchChangeListener { _, checked ->
+                            if (checked) {
+                                listener?.onTapShare(pidInfo.threePid)
+                            } else {
+                                listener?.onTapRevoke(pidInfo.threePid)
+                            }
+                        }
+                    }
+                    SharedState.BINDING_IN_PROGRESS -> {
+                        buttonType(SettingsTextButtonSingleLineItem.ButtonType.NO_BUTTON)
+                    }
+                }
+            }
+        }
+        if (pidInfo.isShared is Fail) {
+            settingsInformationItem {
+                id("info${pidInfo.threePid.value}")
+                colorProvider(colorProvider)
+                infoMessageColorId(R.color.vector_error_color)
+                infoMessage(pidInfo.isShared.error.message ?: "")
+            }
+        }
+        when (pidInfo.isShared()) {
+            SharedState.BINDING_IN_PROGRESS -> {
+                val errorText = if (pidInfo.finalRequest is Fail) {
+                    val error = pidInfo.finalRequest.error
+                    // Deal with error 500
+                    //Ref: https://github.com/matrix-org/sydent/issues/292
+                    if (error is Failure.ServerError
+                            && error.httpCode == HttpsURLConnection.HTTP_INTERNAL_ERROR /* 500 */) {
+                        stringProvider.getString(R.string.settings_text_message_sent_wrong_code)
+                    } else {
+                        errorFormatter.toHumanReadable(error)
+                    }
+                } else {
+                    null
+                }
+                settingsEditTextItem {
+                    id("msisdnVerification${pidInfo.threePid.value}")
+                    descriptionText(stringProvider.getString(R.string.settings_text_message_sent, phoneNumber))
+                    errorText(errorText)
+                    inProgress(pidInfo.finalRequest is Loading)
+                    interactionListener(object : SettingsEditTextItem.Listener {
+                        override fun onValidate() {
+                            val code = codes[pidInfo.threePid]
+                            if (pidInfo.threePid is ThreePid.Msisdn && code != null) {
+                                listener?.sendMsisdnVerificationCode(pidInfo.threePid, code)
+                            }
+                        }
+
+                        override fun onCodeChange(code: String) {
+                            codes[pidInfo.threePid] = code
+                        }
+                    })
+                }
+                buildContinueCancel(pidInfo.threePid)
+            }
+            else                            -> Unit
+        }.exhaustive
+    }
+
+    private fun buildContinueCancel(threePid: ThreePid) {
+        settingsContinueCancelItem {
+            id("bottom${threePid.value}")
+            interactionListener(object : SettingsContinueCancelItem.Listener {
+                override fun onContinue() {
+                    when (threePid) {
+                        is ThreePid.Email  -> {
+                            listener?.checkEmailVerification(threePid)
+                        }
+                        is ThreePid.Msisdn -> {
+                            val code = codes[threePid]
+                            if (code != null) {
+                                listener?.sendMsisdnVerificationCode(threePid, code)
+                            }
+                        }
+                    }
+                }
+
+                override fun onCancel() {
+                    listener?.cancelBinding(threePid)
+                }
+            })
         }
     }
 

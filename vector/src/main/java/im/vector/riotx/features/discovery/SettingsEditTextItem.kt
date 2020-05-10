@@ -15,13 +15,10 @@
  */
 package im.vector.riotx.features.discovery
 
-import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
@@ -31,7 +28,7 @@ import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.extensions.setTextOrHide
 
 @EpoxyModelClass(layout = R.layout.item_settings_edit_text)
-abstract class SettingsItemEditText : EpoxyModelWithHolder<SettingsItemEditText.Holder>() {
+abstract class SettingsEditTextItem : EpoxyModelWithHolder<SettingsEditTextItem.Holder>() {
 
     @EpoxyAttribute var descriptionText: String? = null
     @EpoxyAttribute var errorText: String? = null
@@ -44,14 +41,6 @@ abstract class SettingsItemEditText : EpoxyModelWithHolder<SettingsItemEditText.
         super.bind(holder)
         holder.textView.setTextOrHide(descriptionText)
 
-        holder.validateButton.setOnClickListener {
-            val code = holder.editText.text.toString()
-            interactionListener?.onValidate(code)
-        }
-
-        holder.cancelButton.setOnClickListener {
-            interactionListener?.onCancel()
-        }
 
         holder.editText.isEnabled = !inProgress
 
@@ -61,13 +50,12 @@ abstract class SettingsItemEditText : EpoxyModelWithHolder<SettingsItemEditText.
             holder.textInputLayout.error = errorText
         }
 
-        holder.validateButton.isInvisible = inProgress
-        holder.progress.isVisible = inProgress
-
-        holder.editText.setOnEditorActionListener { tv, actionId, _ ->
+        holder.editText.doOnTextChanged { code, _, _, _ ->
+            code?.let { interactionListener?.onCodeChange(it.toString()) }
+        }
+        holder.editText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                val code = tv.text.toString()
-                interactionListener?.onValidate(code)
+                interactionListener?.onValidate()
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
@@ -75,16 +63,13 @@ abstract class SettingsItemEditText : EpoxyModelWithHolder<SettingsItemEditText.
     }
 
     class Holder : VectorEpoxyHolder() {
-        val textView by bind<TextView>(R.id.settings_item_description)
-        val editText by bind<EditText>(R.id.settings_item_edittext)
-        val textInputLayout by bind<TextInputLayout>(R.id.settings_item_enter_til)
-        val validateButton by bind<Button>(R.id.settings_item_enter_button)
-        val cancelButton by bind<Button>(R.id.settings_item_enter_cancel_button)
-        val progress by bind<View>(R.id.settings_item_enter_progress)
+        val textView by bind<TextView>(R.id.settings_item_edit_text_description)
+        val editText by bind<EditText>(R.id.settings_item_edit_text)
+        val textInputLayout by bind<TextInputLayout>(R.id.settings_item_edit_text_til)
     }
 
     interface Listener {
-        fun onValidate(code: String)
-        fun onCancel()
+        fun onValidate()
+        fun onCodeChange(code: String)
     }
 }

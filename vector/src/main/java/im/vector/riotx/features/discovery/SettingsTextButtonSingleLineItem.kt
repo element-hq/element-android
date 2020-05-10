@@ -20,7 +20,6 @@ import android.widget.CompoundButton
 import android.widget.ProgressBar
 import android.widget.Switch
 import android.widget.TextView
-import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
@@ -32,13 +31,14 @@ import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.ClickListener
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.onClick
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.themes.ThemeUtils
 
 @EpoxyModelClass(layout = R.layout.item_settings_button_single_line)
-abstract class SettingsTextButtonItem : EpoxyModelWithHolder<SettingsTextButtonItem.Holder>() {
+abstract class SettingsTextButtonSingleLineItem : EpoxyModelWithHolder<SettingsTextButtonSingleLineItem.Holder>() {
 
     enum class ButtonStyle {
         POSITIVE,
@@ -46,6 +46,7 @@ abstract class SettingsTextButtonItem : EpoxyModelWithHolder<SettingsTextButtonI
     }
 
     enum class ButtonType {
+        NO_BUTTON,
         NORMAL,
         SWITCH
     }
@@ -62,6 +63,9 @@ abstract class SettingsTextButtonItem : EpoxyModelWithHolder<SettingsTextButtonI
     @EpoxyAttribute
     @StringRes
     var titleResId: Int? = null
+
+    @EpoxyAttribute
+    var iconMode: IconMode = IconMode.None
 
     @EpoxyAttribute
     var buttonTitle: String? = null
@@ -83,33 +87,10 @@ abstract class SettingsTextButtonItem : EpoxyModelWithHolder<SettingsTextButtonI
     var checked: Boolean? = null
 
     @EpoxyAttribute
-    var showBottomLoading: Boolean = false
-
-    @EpoxyAttribute
-    var showBottomButtons: Boolean = false
-
-    @EpoxyAttribute
     var buttonClickListener: ClickListener? = null
 
     @EpoxyAttribute
-    var continueClickListener: ClickListener? = null
-
-    @EpoxyAttribute
-    var cancelClickListener: ClickListener? = null
-
-    @EpoxyAttribute
     var switchChangeListener: CompoundButton.OnCheckedChangeListener? = null
-
-    @EpoxyAttribute
-    var infoMessage: String? = null
-
-    @EpoxyAttribute
-    @StringRes
-    var infoMessageId: Int? = null
-
-    @EpoxyAttribute
-    @ColorRes
-    var infoMessageTintColorId: Int = R.color.vector_error_color
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -126,22 +107,20 @@ abstract class SettingsTextButtonItem : EpoxyModelWithHolder<SettingsTextButtonI
             holder.mainButton.setTextOrHide(buttonTitle)
         }
 
-        holder.bottomLoading.isVisible = showBottomLoading
-        holder.continueButton.isInvisible = showBottomLoading || !showBottomButtons
-        holder.cancelButton.isVisible = !showBottomLoading && showBottomButtons
-        holder.continueButton.onClick(continueClickListener)
-        holder.cancelButton.onClick(cancelClickListener)
-
         if (buttonIndeterminate) {
-            holder.spinner.isVisible = true
+            holder.progress.isVisible = true
             holder.mainButton.isInvisible = true
             holder.switchButton.isInvisible = true
             holder.switchButton.setOnCheckedChangeListener(null)
             holder.mainButton.setOnClickListener(null)
         } else {
-            holder.spinner.isVisible = false
+            holder.progress.isVisible = false
             when (buttonType) {
-                ButtonType.NORMAL -> {
+                ButtonType.NO_BUTTON -> {
+                    holder.mainButton.isVisible = false
+                    holder.switchButton.isVisible = false
+                }
+                ButtonType.NORMAL    -> {
                     holder.mainButton.isVisible = true
                     holder.switchButton.isVisible = false
                     when (buttonStyle) {
@@ -151,34 +130,39 @@ abstract class SettingsTextButtonItem : EpoxyModelWithHolder<SettingsTextButtonI
                         ButtonStyle.DESTRUCTIVE -> {
                             holder.mainButton.setTextColor(colorProvider.getColor(R.color.vector_error_color))
                         }
-                    }
+                    }.exhaustive
                     holder.mainButton.onClick(buttonClickListener)
                 }
-                ButtonType.SWITCH -> {
-                    holder.mainButton.isInvisible = true
+                ButtonType.SWITCH    -> {
+                    holder.mainButton.isVisible = false
                     holder.switchButton.isVisible = true
                     //set to null before changing the state
                     holder.switchButton.setOnCheckedChangeListener(null)
                     checked?.let { holder.switchButton.isChecked = it }
                     holder.switchButton.setOnCheckedChangeListener(switchChangeListener)
                 }
-            }
+            }.exhaustive
         }
 
-        val errorMessage = infoMessageId?.let { stringProvider.getString(it) } ?: infoMessage
-        if (errorMessage != null) {
-            holder.errorTextView.isVisible = true
-            holder.errorTextView.setTextOrHide(errorMessage)
-            val errorColor = colorProvider.getColor(infoMessageTintColorId)
-            ContextCompat.getDrawable(holder.view.context, R.drawable.ic_notification_privacy_warning)?.apply {
-                ThemeUtils.tintDrawableWithColor(this, errorColor)
-                holder.textView.setCompoundDrawablesWithIntrinsicBounds(this, null, null, null)
+
+        when (iconMode) {
+            IconMode.None  -> {
+                holder.textView.setCompoundDrawables(null, null, null, null)
             }
-            holder.errorTextView.setTextColor(errorColor)
-        } else {
-            holder.errorTextView.isVisible = false
-            holder.errorTextView.text = null
-            holder.textView.setCompoundDrawables(null, null, null, null)
+            IconMode.Info  -> {
+                val errorColor = colorProvider.getColor(R.color.notification_accent_color)
+                ContextCompat.getDrawable(holder.view.context, R.drawable.ic_notification_privacy_warning)?.apply {
+                    ThemeUtils.tintDrawableWithColor(this, errorColor)
+                    holder.textView.setCompoundDrawablesWithIntrinsicBounds(this, null, null, null)
+                }
+            }
+            IconMode.Error -> {
+                val errorColor = colorProvider.getColor(R.color.vector_error_color)
+                ContextCompat.getDrawable(holder.view.context, R.drawable.ic_notification_privacy_warning)?.apply {
+                    ThemeUtils.tintDrawableWithColor(this, errorColor)
+                    holder.textView.setCompoundDrawablesWithIntrinsicBounds(this, null, null, null)
+                }
+            }
         }
     }
 
@@ -186,10 +170,6 @@ abstract class SettingsTextButtonItem : EpoxyModelWithHolder<SettingsTextButtonI
         val textView by bind<TextView>(R.id.settings_item_text)
         val mainButton by bind<Button>(R.id.settings_item_button)
         val switchButton by bind<Switch>(R.id.settings_item_switch)
-        val spinner by bind<ProgressBar>(R.id.settings_item_button_spinner)
-        val errorTextView by bind<TextView>(R.id.settings_item_error_message)
-        val continueButton by bind<Button>(R.id.settings_item_continue_button)
-        val cancelButton by bind<Button>(R.id.settings_item_cancel_button)
-        val bottomLoading by bind<ProgressBar>(R.id.settings_item_bottom_loading)
+        val progress by bind<ProgressBar>(R.id.settings_item_progress)
     }
 }

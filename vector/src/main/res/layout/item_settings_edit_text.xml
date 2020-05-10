@@ -5,13 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/colorBackgroundFloating"
-    android:orientation="vertical"
     android:paddingStart="@dimen/layout_horizontal_margin"
-    android:paddingEnd="@dimen/layout_horizontal_margin"
-    android:paddingBottom="@dimen/layout_vertical_margin">
+    android:paddingEnd="@dimen/layout_horizontal_margin">
 
     <TextView
-        android:id="@+id/settings_item_description"
+        android:id="@+id/settings_item_edit_text_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -23,17 +21,17 @@
         tools:text="@string/settings_text_message_sent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/settings_item_enter_til"
+        android:id="@+id/settings_item_edit_text_til"
         style="@style/VectorTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_item_description">
+        app:layout_constraintTop_toBottomOf="@+id/settings_item_edit_text_description">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/settings_item_edittext"
+            android:id="@+id/settings_item_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionDone|flagNoPersonalizedLearning"
@@ -43,34 +41,5 @@
             tools:text="1234" />
 
     </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/settings_item_enter_button"
-        style="@style/VectorButtonStyleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:text="@string/_continue"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_item_enter_til" />
-
-    <Button
-        android:id="@+id/settings_item_enter_cancel_button"
-        style="@style/VectorButtonStyleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/cancel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_item_enter_til" />
-
-    <ProgressBar
-        android:id="@+id/settings_item_enter_progress"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/settings_item_enter_button"
-        app:layout_constraintEnd_toEndOf="@+id/settings_item_enter_button"
-        app:layout_constraintStart_toStartOf="@+id/settings_item_enter_button"
-        app:layout_constraintTop_toTopOf="@+id/settings_item_enter_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

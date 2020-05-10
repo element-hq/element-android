@@ -40,7 +40,7 @@ abstract class SettingsButtonItem : EpoxyModelWithHolder<SettingsButtonItem.Hold
     var buttonTitleId: Int? = null
 
     @EpoxyAttribute
-    var buttonStyle: SettingsTextButtonItem.ButtonStyle = SettingsTextButtonItem.ButtonStyle.POSITIVE
+    var buttonStyle: SettingsTextButtonSingleLineItem.ButtonStyle = SettingsTextButtonSingleLineItem.ButtonStyle.POSITIVE
 
     @EpoxyAttribute
     var buttonClickListener: View.OnClickListener? = null
@@ -54,10 +54,10 @@ abstract class SettingsButtonItem : EpoxyModelWithHolder<SettingsButtonItem.Hold
         }
 
         when (buttonStyle) {
-            SettingsTextButtonItem.ButtonStyle.POSITIVE    -> {
+            SettingsTextButtonSingleLineItem.ButtonStyle.POSITIVE    -> {
                 holder.button.setTextColor(colorProvider.getColor(R.color.riotx_accent))
             }
-            SettingsTextButtonItem.ButtonStyle.DESTRUCTIVE -> {
+            SettingsTextButtonSingleLineItem.ButtonStyle.DESTRUCTIVE -> {
                 holder.button.setTextColor(colorProvider.getColor(R.color.riotx_destructive_accent))
             }
         }
