@@ -30,6 +30,9 @@ import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.ClickListener
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
+import im.vector.riotx.core.epoxy.attributes.ButtonStyle
+import im.vector.riotx.core.epoxy.attributes.ButtonType
+import im.vector.riotx.core.epoxy.attributes.IconMode
 import im.vector.riotx.core.epoxy.onClick
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.setTextOrHide
@@ -39,17 +42,6 @@ import im.vector.riotx.features.themes.ThemeUtils
 
 @EpoxyModelClass(layout = R.layout.item_settings_button_single_line)
 abstract class SettingsTextButtonSingleLineItem : EpoxyModelWithHolder<SettingsTextButtonSingleLineItem.Holder>() {
-
-    enum class ButtonStyle {
-        POSITIVE,
-        DESTRUCTIVE
-    }
-
-    enum class ButtonType {
-        NO_BUTTON,
-        NORMAL,
-        SWITCH
-    }
 
     @EpoxyAttribute
     lateinit var colorProvider: ColorProvider
@@ -65,7 +57,7 @@ abstract class SettingsTextButtonSingleLineItem : EpoxyModelWithHolder<SettingsT
     var titleResId: Int? = null
 
     @EpoxyAttribute
-    var iconMode: IconMode = IconMode.None
+    var iconMode: IconMode = IconMode.NONE
 
     @EpoxyAttribute
     var buttonTitle: String? = null
@@ -146,17 +138,17 @@ abstract class SettingsTextButtonSingleLineItem : EpoxyModelWithHolder<SettingsT
 
 
         when (iconMode) {
-            IconMode.None  -> {
+            IconMode.NONE  -> {
                 holder.textView.setCompoundDrawables(null, null, null, null)
             }
-            IconMode.Info  -> {
+            IconMode.INFO  -> {
                 val errorColor = colorProvider.getColor(R.color.notification_accent_color)
                 ContextCompat.getDrawable(holder.view.context, R.drawable.ic_notification_privacy_warning)?.apply {
                     ThemeUtils.tintDrawableWithColor(this, errorColor)
                     holder.textView.setCompoundDrawablesWithIntrinsicBounds(this, null, null, null)
                 }
             }
-            IconMode.Error -> {
+            IconMode.ERROR -> {
                 val errorColor = colorProvider.getColor(R.color.vector_error_color)
                 ContextCompat.getDrawable(holder.view.context, R.drawable.ic_notification_privacy_warning)?.apply {
                     ThemeUtils.tintDrawableWithColor(this, errorColor)

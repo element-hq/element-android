@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.discovery
+package im.vector.riotx.core.epoxy.attributes
 
-enum class IconMode {
-    None,
-    Info,
-    Error
+enum class ButtonType {
+    NO_BUTTON,
+    NORMAL,
+    SWITCH
 }

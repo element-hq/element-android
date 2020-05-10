@@ -23,6 +23,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
+import im.vector.riotx.core.epoxy.attributes.ButtonStyle
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.resources.ColorProvider
 
@@ -40,7 +41,7 @@ abstract class SettingsButtonItem : EpoxyModelWithHolder<SettingsButtonItem.Hold
     var buttonTitleId: Int? = null
 
     @EpoxyAttribute
-    var buttonStyle: SettingsTextButtonSingleLineItem.ButtonStyle = SettingsTextButtonSingleLineItem.ButtonStyle.POSITIVE
+    var buttonStyle: ButtonStyle = ButtonStyle.POSITIVE
 
     @EpoxyAttribute
     var buttonClickListener: View.OnClickListener? = null
@@ -54,10 +55,10 @@ abstract class SettingsButtonItem : EpoxyModelWithHolder<SettingsButtonItem.Hold
         }
 
         when (buttonStyle) {
-            SettingsTextButtonSingleLineItem.ButtonStyle.POSITIVE    -> {
+            ButtonStyle.POSITIVE    -> {
                 holder.button.setTextColor(colorProvider.getColor(R.color.riotx_accent))
             }
-            SettingsTextButtonSingleLineItem.ButtonStyle.DESTRUCTIVE -> {
+            ButtonStyle.DESTRUCTIVE -> {
                 holder.button.setTextColor(colorProvider.getColor(R.color.riotx_destructive_accent))
             }
         }

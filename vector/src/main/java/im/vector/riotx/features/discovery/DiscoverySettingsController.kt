@@ -27,6 +27,9 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.identity.SharedState
 import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.riotx.R
+import im.vector.riotx.core.epoxy.attributes.ButtonStyle
+import im.vector.riotx.core.epoxy.attributes.ButtonType
+import im.vector.riotx.core.epoxy.attributes.IconMode
 import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.exhaustive
@@ -107,7 +110,7 @@ class DiscoverySettingsController @Inject constructor(
             } else {
                 buttonTitleId(R.string.add_identity_server)
             }
-            buttonStyle(SettingsTextButtonSingleLineItem.ButtonStyle.POSITIVE)
+            buttonStyle(ButtonStyle.POSITIVE)
             buttonClickListener(View.OnClickListener {
                 listener?.onTapChangeIdentityServer()
             })
@@ -122,7 +125,7 @@ class DiscoverySettingsController @Inject constructor(
                 id("remove")
                 colorProvider(colorProvider)
                 buttonTitleId(R.string.disconnect_identity_server)
-                buttonStyle(SettingsTextButtonSingleLineItem.ButtonStyle.DESTRUCTIVE)
+                buttonStyle(ButtonStyle.DESTRUCTIVE)
                 buttonClickListener(View.OnClickListener {
                     listener?.onTapDisconnectIdentityServer()
                 })
@@ -172,16 +175,16 @@ class DiscoverySettingsController @Inject constructor(
                     buttonIndeterminate(true)
                 }
                 is Fail    -> {
-                    buttonStyle(SettingsTextButtonSingleLineItem.ButtonStyle.DESTRUCTIVE)
+                    buttonStyle(ButtonStyle.DESTRUCTIVE)
                     buttonTitle(stringProvider.getString(R.string.global_retry))
-                    iconMode(IconMode.Error)
+                    iconMode(IconMode.ERROR)
                     buttonClickListener { listener?.onTapRetryToRetrieveBindings() }
                 }
                 is Success -> when (pidInfo.isShared()) {
                     SharedState.SHARED,
                     SharedState.NOT_SHARED          -> {
                         checked(pidInfo.isShared() == SharedState.SHARED)
-                        buttonType(SettingsTextButtonSingleLineItem.ButtonType.SWITCH)
+                        buttonType(ButtonType.SWITCH)
                         switchChangeListener { _, checked ->
                             if (checked) {
                                 listener?.onTapShare(pidInfo.threePid)
@@ -191,11 +194,11 @@ class DiscoverySettingsController @Inject constructor(
                         }
                     }
                     SharedState.BINDING_IN_PROGRESS -> {
-                        buttonType(SettingsTextButtonSingleLineItem.ButtonType.NO_BUTTON)
+                        buttonType(ButtonType.NO_BUTTON)
                         when (pidInfo.finalRequest) {
-                            is Incomplete -> iconMode(IconMode.Info)
-                            is Fail       -> iconMode(IconMode.Error)
-                            else          -> iconMode(IconMode.None)
+                            is Incomplete -> iconMode(IconMode.INFO)
+                            is Fail       -> iconMode(IconMode.ERROR)
+                            else          -> iconMode(IconMode.NONE)
                         }
                     }
                 }
@@ -300,17 +303,17 @@ class DiscoverySettingsController @Inject constructor(
                     buttonIndeterminate(true)
                 }
                 is Fail    -> {
-                    buttonType(SettingsTextButtonSingleLineItem.ButtonType.NORMAL)
-                    buttonStyle(SettingsTextButtonSingleLineItem.ButtonStyle.DESTRUCTIVE)
+                    buttonType(ButtonType.NORMAL)
+                    buttonStyle(ButtonStyle.DESTRUCTIVE)
                     buttonTitle(stringProvider.getString(R.string.global_retry))
-                    iconMode(IconMode.Error)
+                    iconMode(IconMode.ERROR)
                     buttonClickListener { listener?.onTapRetryToRetrieveBindings() }
                 }
                 is Success -> when (pidInfo.isShared()) {
                     SharedState.SHARED,
                     SharedState.NOT_SHARED          -> {
                         checked(pidInfo.isShared() == SharedState.SHARED)
-                        buttonType(SettingsTextButtonSingleLineItem.ButtonType.SWITCH)
+                        buttonType(ButtonType.SWITCH)
                         switchChangeListener { _, checked ->
                             if (checked) {
                                 listener?.onTapShare(pidInfo.threePid)
@@ -320,7 +323,7 @@ class DiscoverySettingsController @Inject constructor(
                         }
                     }
                     SharedState.BINDING_IN_PROGRESS -> {
-                        buttonType(SettingsTextButtonSingleLineItem.ButtonType.NO_BUTTON)
+                        buttonType(ButtonType.NO_BUTTON)
                     }
                 }
             }
