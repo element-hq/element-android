@@ -321,24 +321,22 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                         setState {
                             copy(
                                     emailList = Success(data.filter { it.key is ThreePid.Email }.toPidInfoList()),
-                                    phoneNumbersList = Success(data.filter { it.key is ThreePid.Msisdn }.toPidInfoList())
+                                    phoneNumbersList = Success(data.filter { it.key is ThreePid.Msisdn }.toPidInfoList()),
+                                    termsNotSigned = false
                             )
                         }
                     }
 
                     override fun onFailure(failure: Throwable) {
-                        if (failure is IdentityServiceError.TermsNotSignedException) {
-                            setState {
-                                copy(termsNotSigned = true)
-                            }
+                        if (failure !is IdentityServiceError.TermsNotSignedException) {
+                            _viewEvents.post(DiscoverySettingsViewEvents.Failure(failure))
                         }
-
-                        _viewEvents.post(DiscoverySettingsViewEvents.Failure(failure))
 
                         setState {
                             copy(
                                     emailList = Success(emails.map { PidInfo(it, Fail(failure)) }),
-                                    phoneNumbersList = Success(msisdns.map { PidInfo(it, Fail(failure)) })
+                                    phoneNumbersList = Success(msisdns.map { PidInfo(it, Fail(failure)) }),
+                                    termsNotSigned = failure is IdentityServiceError.TermsNotSignedException
                             )
                         }
                     }

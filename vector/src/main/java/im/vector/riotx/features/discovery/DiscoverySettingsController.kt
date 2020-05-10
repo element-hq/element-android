@@ -86,13 +86,22 @@ class DiscoverySettingsController @Inject constructor(
             title(identityServer)
         }
 
-        settingsInfoItem {
-            id("idServerFooter")
-            if (data.termsNotSigned) {
+        if (data.identityServer() != null && data.termsNotSigned) {
+            settingsInfoItem {
+                id("idServerFooter")
                 helperText(stringProvider.getString(R.string.settings_agree_to_terms, identityServer))
                 showCompoundDrawable(true)
                 itemClickListener(View.OnClickListener { listener?.openIdentityServerTerms() })
-            } else {
+            }
+            settingsButtonItem {
+                id("seeTerms")
+                colorProvider(colorProvider)
+                buttonTitle(stringProvider.getString(R.string.open_terms_of, identityServer))
+                buttonClickListener { listener?.openIdentityServerTerms() }
+            }
+        } else {
+            settingsInfoItem {
+                id("idServerFooter")
                 showCompoundDrawable(false)
                 if (data.identityServer() != null) {
                     helperText(stringProvider.getString(R.string.settings_discovery_identity_server_info, identityServer))
