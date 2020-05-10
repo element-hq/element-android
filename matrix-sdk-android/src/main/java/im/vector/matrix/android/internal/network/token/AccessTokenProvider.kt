@@ -16,6 +16,6 @@
 
 package im.vector.matrix.android.internal.network.token
 
-interface AccessTokenProvider {
+internal interface AccessTokenProvider {
     fun getToken(): String?
 }

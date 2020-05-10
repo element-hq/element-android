@@ -18,15 +18,14 @@ package im.vector.matrix.android.internal.di
 
 import javax.inject.Qualifier
 
-// TODO Add internal ?
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class Authenticated
+internal annotation class Authenticated
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class AuthenticatedIdentity
+internal annotation class AuthenticatedIdentity
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class Unauthenticated
+internal annotation class Unauthenticated
