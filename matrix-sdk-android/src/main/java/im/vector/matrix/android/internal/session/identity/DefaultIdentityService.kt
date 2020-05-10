@@ -113,8 +113,8 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     override fun getDefaultIdentityServer(callback: MatrixCallback<String?>): Cancelable {
-        // TODO Use Wellknown request
-        callback.onSuccess("https://vector.im")
+        // TODO Use Wellknown request, but waiting for PR about Wellknown to be merged
+        callback.onSuccess(null)
         return NoOpCancellable
     }
 
