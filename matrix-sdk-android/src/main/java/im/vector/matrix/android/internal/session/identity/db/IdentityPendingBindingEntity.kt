@@ -16,14 +16,22 @@
 
 package im.vector.matrix.android.internal.session.identity.db
 
+import im.vector.matrix.android.api.session.identity.ThreePid
+import im.vector.matrix.android.api.session.identity.toMedium
 import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 
 internal open class IdentityPendingBindingEntity(
-        var threePidValue: String = "",
-        var medium: String = "",
+        @PrimaryKey var threePid: String = "",
+        /* Managed by Riot */
         var clientSecret: String = "",
+        /* Managed by Riot */
+        var sendAttempt: Int = 0,
+        /* Provided by the identity server */
         var sid: String = ""
 ) : RealmObject() {
 
-    companion object
+    companion object {
+        fun ThreePid.toPrimaryKey() = "${toMedium()}_$value"
+    }
 }

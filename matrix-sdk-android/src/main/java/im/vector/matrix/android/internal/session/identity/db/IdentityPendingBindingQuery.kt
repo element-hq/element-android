@@ -17,26 +17,23 @@
 package im.vector.matrix.android.internal.session.identity.db
 
 import im.vector.matrix.android.api.session.identity.ThreePid
-import im.vector.matrix.android.api.session.identity.toMedium
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 
 internal fun IdentityPendingBindingEntity.Companion.get(realm: Realm, threePid: ThreePid): IdentityPendingBindingEntity? {
     return realm.where<IdentityPendingBindingEntity>()
-            .equalTo(IdentityPendingBindingEntityFields.THREE_PID_VALUE, threePid.value)
-            .equalTo(IdentityPendingBindingEntityFields.MEDIUM, threePid.toMedium())
+            .equalTo(IdentityPendingBindingEntityFields.THREE_PID, threePid.toPrimaryKey())
             .findFirst()
 }
 
 internal fun IdentityPendingBindingEntity.Companion.getOrCreate(realm: Realm, threePid: ThreePid): IdentityPendingBindingEntity {
-    return get(realm, threePid) ?: realm.createObject()
+    return get(realm, threePid) ?: realm.createObject(threePid.toPrimaryKey())
 }
 
 internal fun IdentityPendingBindingEntity.Companion.delete(realm: Realm, threePid: ThreePid) {
     realm.where<IdentityPendingBindingEntity>()
-            .equalTo(IdentityPendingBindingEntityFields.THREE_PID_VALUE, threePid.value)
-            .equalTo(IdentityPendingBindingEntityFields.MEDIUM, threePid.toMedium())
+            .equalTo(IdentityPendingBindingEntityFields.THREE_PID, threePid.toPrimaryKey())
             .findAll()
             .deleteAllFromRealm()
 }

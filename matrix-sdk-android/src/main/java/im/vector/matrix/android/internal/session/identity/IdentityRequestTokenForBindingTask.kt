@@ -67,6 +67,7 @@ internal class DefaultIdentityRequestTokenForBindingTask @Inject constructor(
         identityServiceStore.storePendingBinding(
                 params.threePid,
                 clientSecret,
+                1,
                 tokenResponse.sid)
     }
 }

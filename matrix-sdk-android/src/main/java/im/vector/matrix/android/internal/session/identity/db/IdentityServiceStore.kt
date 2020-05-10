@@ -34,6 +34,7 @@ internal interface IdentityServiceStore {
      */
     fun storePendingBinding(threePid: ThreePid,
                             clientSecret: String,
+                            sendAttempt: Int,
                             sid: String)
 
     fun getPendingBinding(threePid: ThreePid): IdentityPendingBindingEntity?

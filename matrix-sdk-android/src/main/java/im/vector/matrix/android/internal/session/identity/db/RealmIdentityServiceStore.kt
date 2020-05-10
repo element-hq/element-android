@@ -61,13 +61,12 @@ internal class RealmIdentityServiceStore @Inject constructor(
         }
     }
 
-    override fun storePendingBinding(threePid: ThreePid, clientSecret: String, sid: String) {
+    override fun storePendingBinding(threePid: ThreePid, clientSecret: String, sendAttempt: Int, sid: String) {
         Realm.getInstance(realmConfiguration).use {
             it.executeTransaction { realm ->
                 IdentityPendingBindingEntity.getOrCreate(realm, threePid).let { entity ->
-                    entity.threePidValue = threePid.value
-                    entity.medium = threePid.toMedium()
                     entity.clientSecret = clientSecret
+                    entity.sendAttempt = sendAttempt
                     entity.sid = sid
                 }
             }
