@@ -44,7 +44,8 @@ data class PidInfo(
         // Retrieved from IdentityServer, or transient state
         val isShared: Async<SharedState>,
         // Contains information about a current request to submit the token (for instance SMS code received by SMS)
-        val isTokenSubmitted: Async<Unit> = Uninitialized
+        // Or a current binding finalization, for email
+        val finalRequest: Async<Unit> = Uninitialized
 )
 
 data class DiscoverySettingsState(
@@ -64,6 +65,7 @@ sealed class DiscoverySettingsAction : VectorViewModelAction {
     data class ShareThreePid(val threePid: ThreePid) : DiscoverySettingsAction()
     data class FinalizeBind3pid(val threePid: ThreePid) : DiscoverySettingsAction()
     data class SubmitMsisdnToken(val threePid: ThreePid.Msisdn, val code: String) : DiscoverySettingsAction()
+    data class CancelBinding(val threePid: ThreePid) : DiscoverySettingsAction()
 }
 
 sealed class DiscoverySettingsViewEvents : VectorViewEvents {
@@ -133,6 +135,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
             is DiscoverySettingsAction.ShareThreePid        -> shareThreePid(action)
             is DiscoverySettingsAction.FinalizeBind3pid     -> finalizeBind3pid(action)
             is DiscoverySettingsAction.SubmitMsisdnToken    -> submitMsisdnToken(action)
+            is DiscoverySettingsAction.CancelBinding        -> cancelBinding(action)
         }.exhaustive
     }
 
@@ -214,7 +217,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                     emailList = Success(
                             currentMails.map {
                                 if (it.threePid == threePid) {
-                                    it.copy(isTokenSubmitted = submitState)
+                                    it.copy(finalRequest = submitState)
                                 } else {
                                     it
                                 }
@@ -223,7 +226,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                     phoneNumbersList = Success(
                             phones.map {
                                 if (it.threePid == threePid) {
-                                    it.copy(isTokenSubmitted = submitState)
+                                    it.copy(finalRequest = submitState)
                                 } else {
                                     it
                                 }
@@ -270,6 +273,18 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
             override fun onFailure(failure: Throwable) {
                 _viewEvents.post(DiscoverySettingsViewEvents.Failure(failure))
                 changeThreePidState(threePid, Fail(failure))
+            }
+        })
+    }
+
+    private fun cancelBinding(action: DiscoverySettingsAction.CancelBinding) {
+        identityService.cancelBindThreePid(action.threePid, object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                changeThreePidState(action.threePid, Success(SharedState.NOT_SHARED))
+            }
+
+            override fun onFailure(failure: Throwable) {
+                // This could never fail
             }
         })
     }
@@ -362,25 +377,23 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     private fun finalizeBind3pid(action: DiscoverySettingsAction.FinalizeBind3pid) = withState { state ->
         val threePid = when (action.threePid) {
             is ThreePid.Email  -> {
-                changeThreePidState(action.threePid, Loading())
                 state.emailList()?.find { it.threePid.value == action.threePid.email }?.threePid ?: return@withState
             }
             is ThreePid.Msisdn -> {
-                changeThreePidState(action.threePid, Loading())
                 state.phoneNumbersList()?.find { it.threePid.value == action.threePid.msisdn }?.threePid ?: return@withState
             }
         }
 
+        changeThreePidSubmitState(action.threePid, Loading())
+
         identityService.finalizeBindThreePid(threePid, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
+                changeThreePidSubmitState(action.threePid, Uninitialized)
                 changeThreePidState(action.threePid, Success(SharedState.SHARED))
             }
 
             override fun onFailure(failure: Throwable) {
-                _viewEvents.post(DiscoverySettingsViewEvents.Failure(failure))
-
-                // Restore previous state after an error
-                changeThreePidState(action.threePid, Success(SharedState.BINDING_IN_PROGRESS))
+                changeThreePidSubmitState(action.threePid, Fail(failure))
             }
         })
 

@@ -21,6 +21,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.identity.SharedState
@@ -28,6 +29,7 @@ import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.error.ErrorFormatter
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import timber.log.Timber
@@ -111,15 +113,15 @@ class DiscoverySettingsController @Inject constructor(
                             colorProvider(colorProvider)
                             stringProvider(stringProvider)
                             when (piState.isShared) {
-                                is Loading -> buttonIndeterminate(true)
+                                is Loading -> {
+                                    buttonIndeterminate(true)
+                                }
                                 is Fail    -> {
                                     buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
                                     buttonStyle(SettingsTextButtonItem.ButtonStyle.DESTRUCTIVE)
                                     buttonTitle(stringProvider.getString(R.string.global_retry))
                                     infoMessage(piState.isShared.error.message)
-                                    buttonClickListener(View.OnClickListener {
-                                        listener?.onTapRetryToRetrieveBindings()
-                                    })
+                                    buttonClickListener { listener?.onTapRetryToRetrieveBindings() }
                                 }
                                 is Success -> when (piState.isShared()) {
                                     SharedState.SHARED,
@@ -143,8 +145,8 @@ class DiscoverySettingsController @Inject constructor(
                         }
                         when (piState.isShared()) {
                             SharedState.BINDING_IN_PROGRESS -> {
-                                val errorText = if (piState.isTokenSubmitted is Fail) {
-                                    val error = piState.isTokenSubmitted.error
+                                val errorText = if (piState.finalRequest is Fail) {
+                                    val error = piState.finalRequest.error
                                     // Deal with error 500
                                     //Ref: https://github.com/matrix-org/sydent/issues/292
                                     if (error is Failure.ServerError
@@ -160,18 +162,22 @@ class DiscoverySettingsController @Inject constructor(
                                     id("tverif" + piState.threePid.value)
                                     descriptionText(stringProvider.getString(R.string.settings_text_message_sent, phoneNumber))
                                     errorText(errorText)
-                                    inProgress(piState.isTokenSubmitted is Loading)
+                                    inProgress(piState.finalRequest is Loading)
                                     interactionListener(object : SettingsItemEditText.Listener {
                                         override fun onValidate(code: String) {
                                             if (piState.threePid is ThreePid.Msisdn) {
                                                 listener?.sendMsisdnVerificationCode(piState.threePid, code)
                                             }
                                         }
+
+                                        override fun onCancel() {
+                                            listener?.cancelBinding(piState.threePid)
+                                        }
                                     })
                                 }
                             }
                             else                            -> Unit
-                        }
+                        }.exhaustive
                     }
                 }
             }
@@ -210,15 +216,17 @@ class DiscoverySettingsController @Inject constructor(
                             colorProvider(colorProvider)
                             stringProvider(stringProvider)
                             when (piState.isShared) {
-                                is Loading -> buttonIndeterminate(true)
+                                is Loading -> {
+                                    buttonIndeterminate(true)
+                                    showBottomButtons(false)
+                                }
                                 is Fail    -> {
                                     buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
                                     buttonStyle(SettingsTextButtonItem.ButtonStyle.DESTRUCTIVE)
                                     buttonTitle(stringProvider.getString(R.string.global_retry))
                                     infoMessage(piState.isShared.error.message)
-                                    buttonClickListener(View.OnClickListener {
-                                        listener?.onTapRetryToRetrieveBindings()
-                                    })
+                                    buttonClickListener { listener?.onTapRetryToRetrieveBindings() }
+                                    showBottomButtons(false)
                                 }
                                 is Success -> when (piState.isShared()) {
                                     SharedState.SHARED,
@@ -235,14 +243,32 @@ class DiscoverySettingsController @Inject constructor(
                                     }
                                     SharedState.BINDING_IN_PROGRESS -> {
                                         buttonType(SettingsTextButtonItem.ButtonType.NORMAL)
-                                        buttonTitleId(R.string._continue)
-                                        infoMessageTintColorId(R.color.vector_info_color)
-                                        infoMessage(stringProvider.getString(R.string.settings_discovery_confirm_mail, piState.threePid.value))
-                                        buttonClickListener(View.OnClickListener {
+                                        buttonTitle(null)
+                                        showBottomButtons(true)
+                                        when (piState.finalRequest) {
+                                            is Uninitialized -> {
+                                                infoMessage(stringProvider.getString(R.string.settings_discovery_confirm_mail, piState.threePid.value))
+                                                infoMessageTintColorId(R.color.vector_info_color)
+                                                showBottomLoading(false)
+                                            }
+                                            is Loading       -> {
+                                                infoMessage(stringProvider.getString(R.string.settings_discovery_confirm_mail, piState.threePid.value))
+                                                infoMessageTintColorId(R.color.vector_info_color)
+                                                showBottomLoading(true)
+                                            }
+                                            is Fail          -> {
+                                                infoMessage(stringProvider.getString(R.string.settings_discovery_confirm_mail_not_clicked, piState.threePid.value))
+                                                infoMessageTintColorId(R.color.riotx_destructive_accent)
+                                                showBottomLoading(false)
+                                            }
+                                            is Success       -> Unit /* Cannot happen */
+                                        }
+                                        cancelClickListener { listener?.cancelBinding(piState.threePid) }
+                                        continueClickListener {
                                             if (piState.threePid is ThreePid.Email) {
                                                 listener?.checkEmailVerification(piState.threePid)
                                             }
-                                        })
+                                        }
                                     }
                                 }
                             }
@@ -318,6 +344,7 @@ class DiscoverySettingsController @Inject constructor(
         fun onTapRevoke(threePid: ThreePid)
         fun onTapShare(threePid: ThreePid)
         fun checkEmailVerification(threePid: ThreePid.Email)
+        fun cancelBinding(threePid: ThreePid)
         fun sendMsisdnVerificationCode(threePid: ThreePid.Msisdn, code: String)
         fun onTapChangeIdentityServer()
         fun onTapDisconnectIdentityServer()

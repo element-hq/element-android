@@ -40,15 +40,19 @@ interface IdentityService {
     fun setNewIdentityServer(url: String?, callback: MatrixCallback<String?>): Cancelable
 
     /**
-     * This will ask the identity server to send an email or an SMS to let the user confirm he owns the ThreePid,
-     * and then the threePid will be associated with the matrix account
+     * This will ask the identity server to send an email or an SMS to let the user confirm he owns the ThreePid
      */
     fun startBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable
 
     /**
-     * This will perform the actual association of ThreePid and Matrix account
+     * This will cancel a pending binding of threePid.
      */
-    fun finalizeBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable
+    fun cancelBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable
+
+    /**
+     * This will ask the identity server to send an new email or a new SMS to let the user confirm he owns the ThreePid
+     */
+    fun sendAgainValidationCode(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable
 
     /**
      * Submit the code that the identity server has sent to the user (in email or SMS)
@@ -58,6 +62,12 @@ interface IdentityService {
     fun submitValidationToken(threePid: ThreePid, code: String, callback: MatrixCallback<Unit>): Cancelable
 
     /**
+     * This will perform the actual association of ThreePid and Matrix account
+     */
+    fun finalizeBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable
+
+    /**
+     * Unbind a threePid
      * The request will actually be done on the homeserver
      */
     fun unbindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable

@@ -130,6 +130,10 @@ class DiscoverySettingsFragment @Inject constructor(
         viewModel.handle(DiscoverySettingsAction.SubmitMsisdnToken(threePid, code))
     }
 
+    override fun cancelBinding(threePid: ThreePid) {
+        viewModel.handle(DiscoverySettingsAction.CancelBinding(threePid))
+    }
+
     override fun onTapChangeIdentityServer() = withState(viewModel) { state ->
         //we should prompt if there are bound items with current is
         val pidList = state.emailList().orEmpty() + state.phoneNumbersList().orEmpty()

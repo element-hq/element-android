@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.session.identity
 
+import im.vector.matrix.android.api.session.identity.IdentityServiceError
 import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.api.session.identity.getCountryCode
 import im.vector.matrix.android.internal.di.UserId
@@ -30,7 +31,9 @@ import javax.inject.Inject
 
 internal interface IdentityRequestTokenForBindingTask : Task<IdentityRequestTokenForBindingTask.Params, Unit> {
     data class Params(
-            val threePid: ThreePid
+            val threePid: ThreePid,
+            // True to request the identity server to send again the email or the SMS
+            val sendAgain: Boolean
     )
 }
 
@@ -44,6 +47,10 @@ internal class DefaultIdentityRequestTokenForBindingTask @Inject constructor(
         val identityAPI = getIdentityApiAndEnsureTerms(identityApiProvider, userId)
 
         val pendingBindingEntity = identityServiceStore.getPendingBinding(params.threePid)
+
+        if (params.sendAgain && pendingBindingEntity == null) {
+            throw IdentityServiceError.NoCurrentBindingError
+        }
 
         val clientSecret = pendingBindingEntity?.clientSecret ?: UUID.randomUUID().toString()
         val sendAttempt = pendingBindingEntity?.sendAttempt?.inc() ?: 1

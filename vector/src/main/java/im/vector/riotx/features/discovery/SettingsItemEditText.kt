@@ -49,6 +49,10 @@ abstract class SettingsItemEditText : EpoxyModelWithHolder<SettingsItemEditText.
             interactionListener?.onValidate(code)
         }
 
+        holder.cancelButton.setOnClickListener {
+            interactionListener?.onCancel()
+        }
+
         holder.editText.isEnabled = !inProgress
 
         if (errorText.isNullOrBlank()) {
@@ -75,10 +79,12 @@ abstract class SettingsItemEditText : EpoxyModelWithHolder<SettingsItemEditText.
         val editText by bind<EditText>(R.id.settings_item_edittext)
         val textInputLayout by bind<TextInputLayout>(R.id.settings_item_enter_til)
         val validateButton by bind<Button>(R.id.settings_item_enter_button)
+        val cancelButton by bind<Button>(R.id.settings_item_enter_cancel_button)
         val progress by bind<View>(R.id.settings_item_enter_progress)
     }
 
     interface Listener {
         fun onValidate(code: String)
+        fun onCancel()
     }
 }

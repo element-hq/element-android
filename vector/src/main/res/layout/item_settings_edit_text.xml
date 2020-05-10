@@ -54,6 +54,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settings_item_enter_til" />
 
+    <Button
+        android:id="@+id/settings_item_enter_cancel_button"
+        style="@style/VectorButtonStyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_item_enter_til" />
+
     <ProgressBar
         android:id="@+id/settings_item_enter_progress"
         style="?android:attr/progressBarStyle"

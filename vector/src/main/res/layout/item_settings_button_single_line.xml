@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -11,63 +12,59 @@
     android:paddingEnd="@dimen/layout_horizontal_margin"
     android:paddingBottom="@dimen/layout_vertical_margin">
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/settings_item_text"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/settings_item_button"
+        app:layout_constraintEnd_toStartOf="@+id/settings_item_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/settings_item_button"
+        tools:drawableLeft="@drawable/ic_notification_privacy_warning"
+        tools:drawableStart="@drawable/ic_notification_privacy_warning"
+        tools:drawableTint="@color/vector_error_color"
+        tools:text="foo@bar.test" />
 
-        <TextView
-            android:id="@+id/settings_item_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:textColor="?android:textColorPrimary"
-            android:textSize="15sp"
-            tools:drawableLeft="@drawable/ic_notification_privacy_warning"
-            tools:drawableStart="@drawable/ic_notification_privacy_warning"
-            tools:drawableTint="@color/vector_error_color"
-            tools:text="foo@bar.test" />
+    <Button
+        android:id="@+id/settings_item_button"
+        style="@style/VectorButtonStyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/share"
+        tools:visibility="visible" />
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:minWidth="70dp">
+    <ProgressBar
+        android:id="@+id/settings_item_button_spinner"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/settings_item_button"
+        app:layout_constraintEnd_toEndOf="@+id/settings_item_button"
+        app:layout_constraintStart_toStartOf="@+id/settings_item_button"
+        app:layout_constraintTop_toTopOf="@+id/settings_item_button"
+        tools:visibility="invisible" />
 
-            <Button
-                android:id="@+id/settings_item_button"
-                style="@style/VectorButtonStyleText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="invisible"
-                tools:text="@string/share"
-                tools:visibility="visible" />
-
-            <ProgressBar
-                android:id="@+id/settings_item_button_spinner"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center"
-                android:visibility="invisible"
-                tools:visibility="invisible" />
-
-            <Switch
-                android:id="@+id/settings_item_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                tools:visibility="visible" />
-
-        </FrameLayout>
-
-    </LinearLayout>
-
+    <Switch
+        android:id="@+id/settings_item_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/settings_item_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/settings_item_button"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/settings_item_error_message"
@@ -77,10 +74,42 @@
         android:gravity="center_vertical"
         android:textSize="12sp"
         android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/settings_item_button"
         tools:drawableStart="@drawable/ic_notification_privacy_warning"
         tools:text="Error Message"
         tools:textColor="@color/vector_info_color"
         tools:visibility="visible">
 
     </TextView>
-</LinearLayout>
+
+    <Button
+        android:id="@+id/settings_item_continue_button"
+        style="@style/VectorButtonStyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="@string/_continue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_item_error_message" />
+
+    <ProgressBar
+        android:id="@+id/settings_item_bottom_loading"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/settings_item_continue_button"
+        app:layout_constraintEnd_toEndOf="@+id/settings_item_continue_button"
+        app:layout_constraintStart_toStartOf="@+id/settings_item_continue_button"
+        app:layout_constraintTop_toTopOf="@+id/settings_item_continue_button" />
+
+    <Button
+        android:id="@+id/settings_item_cancel_button"
+        style="@style/VectorButtonStyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel"
+        android:textColor="@color/riotx_destructive_accent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_item_error_message" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

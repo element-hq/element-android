@@ -32,10 +32,7 @@ internal fun IdentityPendingBindingEntity.Companion.getOrCreate(realm: Realm, th
 }
 
 internal fun IdentityPendingBindingEntity.Companion.delete(realm: Realm, threePid: ThreePid) {
-    realm.where<IdentityPendingBindingEntity>()
-            .equalTo(IdentityPendingBindingEntityFields.THREE_PID, threePid.toPrimaryKey())
-            .findAll()
-            .deleteAllFromRealm()
+    get(realm, threePid)?.deleteFromRealm()
 }
 
 internal fun IdentityPendingBindingEntity.Companion.deleteAll(realm: Realm) {

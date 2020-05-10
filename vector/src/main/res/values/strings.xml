@@ -1733,6 +1733,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="settings_discovery_disconnect_identity_server_info">Disconnecting from your identity server will mean you won’t be discoverable by other users and you won’t be able to invite others by email or phone.</string>
     <string name="settings_discovery_msisdn_title">Discoverable phone numbers</string>
     <string name="settings_discovery_confirm_mail">We sent you a confirm email to %s, check your email and click on the confirmation link</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">We sent you a confirm email to %s, please first check your email and click on the confirmation link</string>
     <string name="settings_discovery_mail_pending">Pending</string>
 
     <string name="settings_discovery_enter_identity_server">Enter a new identity server</string>

@@ -15,7 +15,6 @@
  */
 package im.vector.riotx.features.discovery
 
-import android.view.View
 import android.widget.Button
 import android.widget.CompoundButton
 import android.widget.ProgressBar
@@ -30,7 +29,9 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.riotx.R
+import im.vector.riotx.core.epoxy.ClickListener
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
+import im.vector.riotx.core.epoxy.onClick
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
@@ -82,7 +83,19 @@ abstract class SettingsTextButtonItem : EpoxyModelWithHolder<SettingsTextButtonI
     var checked: Boolean? = null
 
     @EpoxyAttribute
-    var buttonClickListener: View.OnClickListener? = null
+    var showBottomLoading: Boolean = false
+
+    @EpoxyAttribute
+    var showBottomButtons: Boolean = false
+
+    @EpoxyAttribute
+    var buttonClickListener: ClickListener? = null
+
+    @EpoxyAttribute
+    var continueClickListener: ClickListener? = null
+
+    @EpoxyAttribute
+    var cancelClickListener: ClickListener? = null
 
     @EpoxyAttribute
     var switchChangeListener: CompoundButton.OnCheckedChangeListener? = null
@@ -108,35 +121,41 @@ abstract class SettingsTextButtonItem : EpoxyModelWithHolder<SettingsTextButtonI
         }
 
         if (buttonTitleId != null) {
-            holder.button.setText(buttonTitleId!!)
+            holder.mainButton.setText(buttonTitleId!!)
         } else {
-            holder.button.setTextOrHide(buttonTitle)
+            holder.mainButton.setTextOrHide(buttonTitle)
         }
+
+        holder.bottomLoading.isVisible = showBottomLoading
+        holder.continueButton.isInvisible = showBottomLoading || !showBottomButtons
+        holder.cancelButton.isVisible = !showBottomLoading && showBottomButtons
+        holder.continueButton.onClick(continueClickListener)
+        holder.cancelButton.onClick(cancelClickListener)
 
         if (buttonIndeterminate) {
             holder.spinner.isVisible = true
-            holder.button.isInvisible = true
+            holder.mainButton.isInvisible = true
             holder.switchButton.isInvisible = true
             holder.switchButton.setOnCheckedChangeListener(null)
-            holder.button.setOnClickListener(null)
+            holder.mainButton.setOnClickListener(null)
         } else {
             holder.spinner.isVisible = false
             when (buttonType) {
                 ButtonType.NORMAL -> {
-                    holder.button.isVisible = true
+                    holder.mainButton.isVisible = true
                     holder.switchButton.isVisible = false
                     when (buttonStyle) {
                         ButtonStyle.POSITIVE    -> {
-                            holder.button.setTextColor(colorProvider.getColorFromAttribute(R.attr.colorAccent))
+                            holder.mainButton.setTextColor(colorProvider.getColorFromAttribute(R.attr.colorAccent))
                         }
                         ButtonStyle.DESTRUCTIVE -> {
-                            holder.button.setTextColor(colorProvider.getColor(R.color.vector_error_color))
+                            holder.mainButton.setTextColor(colorProvider.getColor(R.color.vector_error_color))
                         }
                     }
-                    holder.button.setOnClickListener(buttonClickListener)
+                    holder.mainButton.onClick(buttonClickListener)
                 }
                 ButtonType.SWITCH -> {
-                    holder.button.isVisible = false
+                    holder.mainButton.isInvisible = true
                     holder.switchButton.isVisible = true
                     //set to null before changing the state
                     holder.switchButton.setOnCheckedChangeListener(null)
@@ -165,9 +184,12 @@ abstract class SettingsTextButtonItem : EpoxyModelWithHolder<SettingsTextButtonI
 
     class Holder : VectorEpoxyHolder() {
         val textView by bind<TextView>(R.id.settings_item_text)
-        val button by bind<Button>(R.id.settings_item_button)
+        val mainButton by bind<Button>(R.id.settings_item_button)
         val switchButton by bind<Switch>(R.id.settings_item_switch)
         val spinner by bind<ProgressBar>(R.id.settings_item_button_spinner)
         val errorTextView by bind<TextView>(R.id.settings_item_error_message)
+        val continueButton by bind<Button>(R.id.settings_item_continue_button)
+        val cancelButton by bind<Button>(R.id.settings_item_cancel_button)
+        val bottomLoading by bind<ProgressBar>(R.id.settings_item_bottom_loading)
     }
 }

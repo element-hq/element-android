@@ -123,7 +123,19 @@ internal class DefaultIdentityService @Inject constructor(
 
     override fun startBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
         return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
-            identityRequestTokenForBindingTask.execute(IdentityRequestTokenForBindingTask.Params(threePid))
+            identityRequestTokenForBindingTask.execute(IdentityRequestTokenForBindingTask.Params(threePid, false))
+        }
+    }
+
+    override fun cancelBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            identityServiceStore.deletePendingBinding(threePid)
+        }
+    }
+
+    override fun sendAgainValidationCode(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            identityRequestTokenForBindingTask.execute(IdentityRequestTokenForBindingTask.Params(threePid, true))
         }
     }
 
