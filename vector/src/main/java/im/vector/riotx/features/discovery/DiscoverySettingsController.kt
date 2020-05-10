@@ -33,7 +33,6 @@ import im.vector.riotx.core.epoxy.attributes.ButtonType
 import im.vector.riotx.core.epoxy.attributes.IconMode
 import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.error.ErrorFormatter
-import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import timber.log.Timber
@@ -244,44 +243,40 @@ class DiscoverySettingsController @Inject constructor(
 
         if (pidInfo.isShared is Fail) {
             buildSharedFail(pidInfo)
-        }
-        when (pidInfo.isShared()) {
-            SharedState.BINDING_IN_PROGRESS -> {
-                val errorText = if (pidInfo.finalRequest is Fail) {
-                    val error = pidInfo.finalRequest.error
-                    // Deal with error 500
-                    // Ref: https://github.com/matrix-org/sydent/issues/292
-                    if (error is Failure.ServerError
-                            && error.httpCode == HttpsURLConnection.HTTP_INTERNAL_ERROR /* 500 */) {
-                        stringProvider.getString(R.string.settings_text_message_sent_wrong_code)
-                    } else {
-                        errorFormatter.toHumanReadable(error)
-                    }
+        } else if (pidInfo.isShared() == SharedState.BINDING_IN_PROGRESS) {
+            val errorText = if (pidInfo.finalRequest is Fail) {
+                val error = pidInfo.finalRequest.error
+                // Deal with error 500
+                // Ref: https://github.com/matrix-org/sydent/issues/292
+                if (error is Failure.ServerError
+                        && error.httpCode == HttpsURLConnection.HTTP_INTERNAL_ERROR /* 500 */) {
+                    stringProvider.getString(R.string.settings_text_message_sent_wrong_code)
                 } else {
-                    null
+                    errorFormatter.toHumanReadable(error)
                 }
-                settingsEditTextItem {
-                    id("msisdnVerification${pidInfo.threePid.value}")
-                    descriptionText(stringProvider.getString(R.string.settings_text_message_sent, phoneNumber))
-                    errorText(errorText)
-                    inProgress(pidInfo.finalRequest is Loading)
-                    interactionListener(object : SettingsEditTextItem.Listener {
-                        override fun onValidate() {
-                            val code = codes[pidInfo.threePid]
-                            if (pidInfo.threePid is ThreePid.Msisdn && code != null) {
-                                listener?.sendMsisdnVerificationCode(pidInfo.threePid, code)
-                            }
-                        }
-
-                        override fun onCodeChange(code: String) {
-                            codes[pidInfo.threePid] = code
-                        }
-                    })
-                }
-                buildContinueCancel(pidInfo.threePid)
+            } else {
+                null
             }
-            else                            -> Unit
-        }.exhaustive
+            settingsEditTextItem {
+                id("msisdnVerification${pidInfo.threePid.value}")
+                descriptionText(stringProvider.getString(R.string.settings_text_message_sent, phoneNumber))
+                errorText(errorText)
+                inProgress(pidInfo.finalRequest is Loading)
+                interactionListener(object : SettingsEditTextItem.Listener {
+                    override fun onValidate() {
+                        val code = codes[pidInfo.threePid]
+                        if (pidInfo.threePid is ThreePid.Msisdn && code != null) {
+                            listener?.sendMsisdnVerificationCode(pidInfo.threePid, code)
+                        }
+                    }
+
+                    override fun onCodeChange(code: String) {
+                        codes[pidInfo.threePid] = code
+                    }
+                })
+            }
+            buildContinueCancel(pidInfo.threePid)
+        }
     }
 
     private fun buildThreePid(pidInfo: PidInfo, title: String = pidInfo.threePid.value) {
