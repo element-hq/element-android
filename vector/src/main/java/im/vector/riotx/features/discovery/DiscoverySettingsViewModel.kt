@@ -42,7 +42,9 @@ data class PidInfo(
         // Retrieved from the homeserver
         val threePid: ThreePid,
         // Retrieved from IdentityServer, or transient state
-        val isShared: Async<SharedState>
+        val isShared: Async<SharedState>,
+        // Contains information about a current request to submit the token (for instance SMS code received by SMS)
+        val isTokenSubmitted: Async<Unit> = Uninitialized
 )
 
 data class DiscoverySettingsState(
@@ -181,19 +183,47 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
         setState {
             val currentMails = emailList() ?: emptyList()
             val phones = phoneNumbersList() ?: emptyList()
-            copy(emailList = Success(
-                    currentMails.map {
-                        if (it.threePid == threePid) {
-                            it.copy(isShared = state)
-                        } else {
-                            it
-                        }
-                    }
-            ),
+            copy(
+                    emailList = Success(
+                            currentMails.map {
+                                if (it.threePid == threePid) {
+                                    it.copy(isShared = state)
+                                } else {
+                                    it
+                                }
+                            }
+                    ),
                     phoneNumbersList = Success(
                             phones.map {
                                 if (it.threePid == threePid) {
                                     it.copy(isShared = state)
+                                } else {
+                                    it
+                                }
+                            }
+                    )
+            )
+        }
+    }
+
+    private fun changeThreePidSubmitState(threePid: ThreePid, submitState: Async<Unit>) {
+        setState {
+            val currentMails = emailList() ?: emptyList()
+            val phones = phoneNumbersList() ?: emptyList()
+            copy(
+                    emailList = Success(
+                            currentMails.map {
+                                if (it.threePid == threePid) {
+                                    it.copy(isTokenSubmitted = submitState)
+                                } else {
+                                    it
+                                }
+                            }
+                    ),
+                    phoneNumbersList = Success(
+                            phones.map {
+                                if (it.threePid == threePid) {
+                                    it.copy(isTokenSubmitted = submitState)
                                 } else {
                                     it
                                 }
@@ -312,16 +342,18 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     private fun submitMsisdnToken(action: DiscoverySettingsAction.SubmitMsisdnToken) = withState { state ->
         if (state.identityServer().isNullOrBlank()) return@withState
 
+        changeThreePidSubmitState(action.threePid, Loading())
+
         identityService.submitValidationToken(action.threePid,
                 action.code,
                 object : MatrixCallback<Unit> {
                     override fun onSuccess(data: Unit) {
+                        changeThreePidSubmitState(action.threePid, Uninitialized)
                         finalizeBind3pid(DiscoverySettingsAction.FinalizeBind3pid(action.threePid))
                     }
 
                     override fun onFailure(failure: Throwable) {
-                        _viewEvents.post(DiscoverySettingsViewEvents.Failure(failure))
-                        changeThreePidState(action.threePid, Fail(failure))
+                        changeThreePidSubmitState(action.threePid, Fail(failure))
                     }
                 }
         )

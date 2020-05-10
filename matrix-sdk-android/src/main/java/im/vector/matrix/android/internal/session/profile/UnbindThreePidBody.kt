@@ -25,7 +25,7 @@ internal data class UnbindThreePidBody(
          * If the homeserver does not know the original id_server, it MUST return a id_server_unbind_result of no-support.
          */
         @Json(name = "id_server")
-        val idServer: String?,
+        val identityServerUrlWithoutProtocol: String?,
 
         /**
          * Required. The medium of the third party identifier being removed. One of: ["email", "msisdn"]

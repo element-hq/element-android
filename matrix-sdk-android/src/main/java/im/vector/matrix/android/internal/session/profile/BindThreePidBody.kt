@@ -30,13 +30,13 @@ internal data class BindThreePidBody(
          * Required. The identity server to use. (without "https://")
          */
         @Json(name = "id_server")
-        var idServer: String,
+        var identityServerUrlWithoutProtocol: String,
 
         /**
          * Required. An access token previously registered with the identity server.
          */
         @Json(name = "id_access_token")
-        var idAccessToken: String,
+        var identityServerAccessToken: String,
 
         /**
          * Required. The session identifier given by the identity server.

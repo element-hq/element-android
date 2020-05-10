@@ -40,3 +40,7 @@ internal interface IdentityServiceStore {
 
     fun deletePendingBinding(threePid: ThreePid)
 }
+
+internal fun IdentityServiceStore.getIdentityServerUrlWithoutProtocol(): String? {
+    return getIdentityServerDetails()?.identityServerUrl?.substringAfter("://")
+}

@@ -18,8 +18,11 @@ package im.vector.matrix.android.internal.session.profile
 
 import im.vector.matrix.android.api.session.identity.IdentityServiceError
 import im.vector.matrix.android.api.session.identity.ThreePid
+import im.vector.matrix.android.internal.di.AuthenticatedIdentity
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.network.token.AccessTokenProvider
 import im.vector.matrix.android.internal.session.identity.db.IdentityServiceStore
+import im.vector.matrix.android.internal.session.identity.db.getIdentityServerUrlWithoutProtocol
 import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
@@ -32,18 +35,21 @@ internal abstract class BindThreePidsTask : Task<BindThreePidsTask.Params, Unit>
 
 internal class DefaultBindThreePidsTask @Inject constructor(private val profileAPI: ProfileAPI,
                                                             private val identityServiceStore: IdentityServiceStore,
+                                                            @AuthenticatedIdentity
+                                                            private val accessTokenProvider: AccessTokenProvider,
                                                             private val eventBus: EventBus) : BindThreePidsTask() {
     override suspend fun execute(params: Params) {
-        val idServer = identityServiceStore.getIdentityServerDetails()?.identityServerUrl?.substringAfter("://") ?: throw IdentityServiceError.NoIdentityServerConfigured
-        val idToken = identityServiceStore.getIdentityServerDetails()?.token ?: throw IdentityServiceError.NoIdentityServerConfigured
+        val identityServerUrlWithoutProtocol = identityServiceStore.getIdentityServerUrlWithoutProtocol()
+                ?: throw IdentityServiceError.NoIdentityServerConfigured
+        val identityServerAccessToken = accessTokenProvider.getToken() ?: throw IdentityServiceError.NoIdentityServerConfigured
         val pendingThreePid = identityServiceStore.getPendingBinding(params.threePid) ?: throw IdentityServiceError.NoCurrentBindingError
 
         executeRequest<Unit>(eventBus) {
             apiCall = profileAPI.bindThreePid(
                     BindThreePidBody(
                             clientSecret = pendingThreePid.clientSecret,
-                            idServer = idServer,
-                            idAccessToken = idToken,
+                            identityServerUrlWithoutProtocol = identityServerUrlWithoutProtocol,
+                            identityServerAccessToken = identityServerAccessToken,
                             sid = pendingThreePid.sid
                     ))
         }

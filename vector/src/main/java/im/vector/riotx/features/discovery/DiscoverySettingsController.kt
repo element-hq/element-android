@@ -22,18 +22,22 @@ import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.google.i18n.phonenumbers.PhoneNumberUtil
+import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.identity.SharedState
 import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.loadingItem
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import timber.log.Timber
 import javax.inject.Inject
+import javax.net.ssl.HttpsURLConnection
 
 class DiscoverySettingsController @Inject constructor(
         private val colorProvider: ColorProvider,
-        private val stringProvider: StringProvider
+        private val stringProvider: StringProvider,
+        private val errorFormatter: ErrorFormatter
 ) : TypedEpoxyController<DiscoverySettingsState>() {
 
     var listener: Listener? = null
@@ -139,10 +143,25 @@ class DiscoverySettingsController @Inject constructor(
                         }
                         when (piState.isShared()) {
                             SharedState.BINDING_IN_PROGRESS -> {
-                                settingsItemText {
+                                val errorText = if (piState.isTokenSubmitted is Fail) {
+                                    val error = piState.isTokenSubmitted.error
+                                    // Deal with error 500
+                                    //Ref: https://github.com/matrix-org/sydent/issues/292
+                                    if (error is Failure.ServerError
+                                            && error.httpCode == HttpsURLConnection.HTTP_INTERNAL_ERROR /* 500 */) {
+                                        stringProvider.getString(R.string.settings_text_message_sent_wrong_code)
+                                    } else {
+                                        errorFormatter.toHumanReadable(error)
+                                    }
+                                } else {
+                                    null
+                                }
+                                settingsItemEditText {
                                     id("tverif" + piState.threePid.value)
                                     descriptionText(stringProvider.getString(R.string.settings_text_message_sent, phoneNumber))
-                                    interactionListener(object : SettingsItemText.Listener {
+                                    errorText(errorText)
+                                    inProgress(piState.isTokenSubmitted is Loading)
+                                    interactionListener(object : SettingsItemEditText.Listener {
                                         override fun onValidate(code: String) {
                                             if (piState.threePid is ThreePid.Msisdn) {
                                                 listener?.sendMsisdnVerificationCode(piState.threePid, code)
