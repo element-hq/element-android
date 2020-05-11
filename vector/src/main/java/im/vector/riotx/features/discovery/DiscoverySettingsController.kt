@@ -172,7 +172,6 @@ class DiscoverySettingsController @Inject constructor(
 
         if (pidInfo.isShared is Fail) {
             buildSharedFail(pidInfo)
-            buildContinueCancel(pidInfo.threePid)
         } else if (pidInfo.isShared() == SharedState.BINDING_IN_PROGRESS) {
             when (pidInfo.finalRequest) {
                 is Uninitialized,
