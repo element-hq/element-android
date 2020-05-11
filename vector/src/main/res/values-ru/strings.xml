@@ -128,7 +128,7 @@
     <string name="start_voice_call">Начать голосовой вызов</string>
     <string name="start_video_call">Начать видеовызов</string>
 
-    <string name="option_send_files">Отправка файлов</string>
+    <string name="option_send_files">Отправить файлы</string>
     <string name="option_take_photo_video">Камера</string>
 
     <!-- Authentication -->
@@ -632,7 +632,7 @@
     <string name="encryption_never_send_to_unverified_devices_title">Шифровать только для проверенных сессий</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Не отправлять зашифрованные сообщения непроверенным сессиям с этой сессии.</string>
 
-    <string name="encryption_information_not_verified">НЕ проверено</string>
+    <string name="encryption_information_not_verified">Не проверено</string>
     <string name="encryption_information_verified">Проверено</string>
     <string name="encryption_information_blocked">В черном списке</string>
 
@@ -957,7 +957,7 @@
     <string name="download">Скачать</string>
     <string name="speak">Говорить</string>
     <string name="clear">Очистить</string>
-    <string name="e2e_re_request_encryption_key"><u>Повторно запросить ключи шифрования</u> с других ваших сессий.</string>
+    <string name="e2e_re_request_encryption_key">Перезапросить ключи шифрования у других ваших сессий.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Отправлен запрос ключа.</string>
 
@@ -1007,21 +1007,19 @@
 
     <string name="missing_permissions_error">Из-за отсутствия разрешений это действие невозможно.</string>
     <plurals name="format_time_s">
-        <item quantity="one">%d сек.</item>
-        <item quantity="few">%d сек.</item>
-        <item quantity="many">%d сек.</item>
+        <item quantity="one">%d секунда</item>
+        <item quantity="few">%d секунды</item>
+        <item quantity="many">%d секунд</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">%dm</item>
-        <item quantity="few">%dm</item>
-        <item quantity="many">%dm</item>
-        <item quantity="other" />
+        <item quantity="one">%d минута</item>
+        <item quantity="few">%d минуты</item>
+        <item quantity="many">%d минут</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">%dh</item>
-        <item quantity="few">%dh</item>
-        <item quantity="many">%dh</item>
-        <item quantity="other" />
+        <item quantity="one">%d час</item>
+        <item quantity="few">%d часа</item>
+        <item quantity="many">%d часов</item>
     </plurals>
     <plurals name="format_time_d">
         <item quantity="one">%d день</item>
@@ -1136,7 +1134,7 @@
     <string name="settings_troubleshoot_diagnostic">Результаты диагностики</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Запустить тесты</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Выполняется… (%1$d из %2$d)</string>
-    <string name="settings_troubleshoot_diagnostic_success_status">В основном всё в порядке. Если вы по-прежнему не получаете уведомления, пожалуйста, отправьте отчет об ошибке, чтобы помочь нам исследовать проблему.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">В основном, всё в порядке. Если вы по-прежнему не получаете уведомления, пожалуйста, отправьте отчет об ошибке, чтобы помочь нам разобраться.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Один или несколько тестов не пройдены, попробуйте предлагаемые решения.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Один или несколько тестов не пройдены, пожалуйста, отправьте отчет об ошибке, чтобы помочь нам исследовать проблему.</string>
 
@@ -1297,17 +1295,17 @@
     <string name="keys_backup_settings_delete_backup_error">Не удалось удалить резервную копию (%s)</string>
 
     <string name="keys_backup_settings_deleting_backup">Удаление резервной копии…</string>
-    <string name="keys_backup_settings_untrusted_backup">Для Безопасного Восстановления Сообщений на этом устройстве, требуется пароль или ключ восстановления.</string>
-    <string name="keys_backup_settings_invalid_signature_from_verified_device">Резервная копия имеет невалидную подпись верифицированного устройства %s</string>
-    <string name="keys_backup_settings_valid_signature_from_unverified_device">Резервная копия имеет валидную подпись неверифицированного устройства %s</string>
-    <string name="keys_backup_settings_valid_signature_from_verified_device">Резервная копия имеет валидную подпись верифицированного устройства %s.</string>
-    <string name="keys_backup_settings_valid_signature_from_this_device">Резервная копия имеет валидную подпись этого устройства.</string>
-    <string name="keys_backup_settings_signature_from_unknown_device">Резервная копия подписана устройством с идентификатором: %s.</string>
-    <string name="keys_backup_settings_status_not_setup">Ваши ключи не сохраняются с этого устройства.</string>
+    <string name="keys_backup_settings_untrusted_backup">Для Восстановления Сообщений в этой сессии, требуется пароль или ключ восстановления.</string>
+    <string name="keys_backup_settings_invalid_signature_from_verified_device">Резервная копия имеет недействительную подпись из подтвержденной сессии %s</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">"Резервная копия имеет  действительную подпись из неподтвержденной сессии %s"</string>
+    <string name="keys_backup_settings_valid_signature_from_verified_device">Резервная копия имеет действительно подпись из подтверждённой сессии %s.</string>
+    <string name="keys_backup_settings_valid_signature_from_this_device">Резервная копия имеет действительную подпись с этой сессии.</string>
+    <string name="keys_backup_settings_signature_from_unknown_device">Резервная копия подписана сессией с идентификатором %s.</string>
+    <string name="keys_backup_settings_status_not_setup">Резервные копии ключей этой сессии не сохраняются.</string>
 
 
-    <string name="keys_backup_settings_status_ko">Резервное копирование ключей не активно на этом устройстве.</string>
-    <string name="keys_backup_settings_status_ok">Резервное копирование ключей успешно настроено для этого устройства.</string>
+    <string name="keys_backup_settings_status_ko">Резервное копирование ключей не активировано в этой сессии.</string>
+    <string name="keys_backup_settings_status_ok">Резервное копирование ключей успешно настроено для этой сессии.</string>
     <string name="keys_backup_settings_delete_backup_button">Удалить резервную копию</string>
 
     <string name="keys_backup_settings_restore_backup_button">Восстановить из резервной копии</string>
@@ -1335,7 +1333,7 @@
     <string name="keys_backup_restore_success_title">Резервная копия восстановлена %s !</string>
     <string name="keys_backup_get_trust_error">Ошибка получения информации о доверии для резервной копии (%s).</string>
 
-    <string name="keys_backup_settings_invalid_signature_from_unverified_device">Резервная копия имеет невалиндую подпись неверифицированного устройства %s</string>
+    <string name="keys_backup_settings_invalid_signature_from_unverified_device">Резервная копия имеет недействительную подпись из неподтвержденной сессии %s</string>
     <string name="keys_backup_get_version_error">Не удалось получить последнюю версию ключей восстановления (%s).</string>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d новый ключ был добавлен к этому устройству.</item>
@@ -1349,7 +1347,7 @@
         <item quantity="few">Восстановлены резервные копии с %d ключами.</item>
         <item quantity="many">Восстановлены резервные копии с %d ключами.</item>
     </plurals>
-    <string name="keys_backup_restore_success_description">Восстановлены %1$d сеансовые ключи и добавлены %2$d новые ключи, которые не были известны этому устройству</string>
+    <string name="keys_backup_restore_success_description">Восстановлены %1$d сессионные ключи и добавлены %2$d новые ключи, которые не были известны этой сессии</string>
     <string name="keys_backup_recovery_code_error_decrypt">Невозможно расшифровать резервную копию с помощью этого ключа восстановления: убедитесь, что вы ввели правильный ключ.</string>
 
     <string name="keys_backup_passphrase_error_decrypt">Невозможно расшифровать резервную копию с помощью этой парольной фразы: убедитесь, что вы ввели верную фразу.</string>
@@ -1452,12 +1450,12 @@
     <plurals name="notification_compat_summary_line_for_room">
         <item quantity="one">%1$s: 1 сообщение</item>
         <item quantity="few">%1$s: %2$d сообщения</item>
-        <item quantity="many">%1$s: %2$d сообщения</item>
+        <item quantity="many">%1$s: %2$d сообщений</item>
     </plurals>
     <plurals name="notification_compat_summary_title">
         <item quantity="one">%d оповещение</item>
         <item quantity="few">%d оповещения</item>
-        <item quantity="many">%d оповещения</item>
+        <item quantity="many">%d оповещений</item>
     </plurals>
 
     <string name="notification_unknown_new_event">Новое событие</string>
@@ -1484,10 +1482,10 @@
 \nИмя сессии: %1$s 
 \nПоследний раз в сети: %2$s 
 \nЕсли вы не вошли с другой сессии, проигнорируйте этот запрос.</string>
-    <string name="your_unverified_device_requesting_with_info">Непроверенное устройство запрашивает ключи шифрования.
-\nИмя устройства: %1$s
-\nПоследний раз в сети: %2$s
-\nЕсли вы не вошли с другого устройства, проигнорируйте этот запрос.</string>
+    <string name="your_unverified_device_requesting_with_info">Непроверенная сессия запрашивает ключи шифрования. 
+\nИмя сессии: %1$s 
+\nПоследний раз в сети: %2$s 
+\nЕсли вы не открывали новую сессию - проигнорируйте этот запрос.</string>
 
     <string name="start_verification_short_label">Подтвердить</string>
     <string name="share_without_verifying_short_label">Поделиться</string>
@@ -1502,18 +1500,18 @@
     <string name="sas_security_advise">Для обеспечения максимальной безопасности мы рекомендуем делать это лично или использовать другие надежные средства связи.</string>
     <string name="sas_verify_start_button_title">Начать проверку</string>
     <string name="sas_incoming_request_title">Входящий запрос о проверке</string>
-    <string name="sas_incoming_request_description">Проверьте это устройство, чтобы отметить его как доверенное. Доверенные устройства партнеров дают вам дополнительное спокойствие при использовании сквозного шифрования сообщений.</string>
-    <string name="sas_incoming_request_description_2">Убедитесь, что данное устройство является доверенным, а также проверьте, что оно доверено вашему партнеру.</string>
+    <string name="sas_incoming_request_description">Проверьте эту сессию, чтобы отметить её как доверенную. Доверие сессиям партнеров позволяет быть уверенным в надёжности сквозного шифрования сообщений.</string>
+    <string name="sas_incoming_request_description_2">Потдверждение этой сессии пометит её доверенной для вас и вашего партнёра.</string>
 
-    <string name="sas_emoji_description">Проверьте это устройство, убедившись, что следующие смайлики появляются на экране партнера</string>
-    <string name="sas_decimal_description">Проверьте это устройство, убедившись, что следующие цифры появляются на экране партнера</string>
+    <string name="sas_emoji_description">Подтвердите эту сессию, убедившись, что следующие смайлики появляются на экране партнера</string>
+    <string name="sas_decimal_description">Подтвердите эту сессию, убедившись, что следующие цифры появляются на экране партнера</string>
 
     <string name="sas_incoming_verification_request_dialog">Вы получили входящий запрос на подтверждение.</string>
     <string name="sas_view_request_action">Посмотреть запрос</string>
     <string name="sas_waiting_for_partner">В ожидании партнера, чтобы подтвердить …</string>
 
     <string name="sas_verified">Проверено!</string>
-    <string name="sas_verified_successful">Вы успешно проверили это устройство.</string>
+    <string name="sas_verified_successful">Вы успешно подтвердили эту сессию.</string>
     <string name="sas_verified_successful_description">Защищенные сообщения от этого пользователя шифруются end-to-end и не могут быть прочитаны третьими лицами.</string>
     <string name="sas_got_it">Понял</string>
 
@@ -1527,24 +1525,24 @@
     <string name="sas_cancelled_by_me">Проверка отменена.
 \nПричина: %s</string>
 
-    <string name="sas_verification_request_notification_channel">Интерактивная проверка устройства</string>
+    <string name="sas_verification_request_notification_channel">Интерактивное подтверждение сессии</string>
     <string name="sas_incoming_request_notif_title">Запрос на подтверждение</string>
-    <string name="sas_incoming_request_notif_content">%s хочет проверить ваше устройство</string>
+    <string name="sas_incoming_request_notif_content">%s желает подтвердить ваше устройство</string>
 
     <string name="sas_error_m_user">Пользователь отменил проверку</string>
     <string name="sas_error_m_timeout">Время проверки истекло</string>
-    <string name="sas_error_m_unknown_transaction">Устройство не знает об этой транзакции</string>
-    <string name="sas_error_m_unknown_method">Устройство не может договориться о соглашении по ключе, хэше, MAC или методе SAS</string>
+    <string name="sas_error_m_unknown_transaction">Сессия не знает об этой транзакции</string>
+    <string name="sas_error_m_unknown_method">Сессия не может договориться о выработке общего ключе, хэше, MAC или методе SAS</string>
     <string name="sas_error_m_mismatched_commitment">Полученный хеш не соответствует</string>
     <string name="sas_error_m_mismatched_sas">SAS не соответствует</string>
-    <string name="sas_error_m_unexpected_message">Устройство получило нежданное сообщение</string>
+    <string name="sas_error_m_unexpected_message">Сессия получила неожиданное сообщение</string>
     <string name="sas_error_m_invalid_message">Было получено недопустимое сообщение</string>
     <string name="sas_error_m_key_mismatch">Несоответствие ключей</string>
     <string name="sas_error_m_user_error">Несоответствие пользователя</string>
     <string name="sas_error_unknown">Неизвестная ошибка</string>
 
     <string name="keys_backup_setup_override_backup_prompt_tile">Резервная копия существует на домашнем сервере</string>
-    <string name="keys_backup_setup_override_backup_prompt_description">Похоже, что у вас уже есть резервное копирование ключа настройки с другого устройства. Вы хотите заменить его на тот, который вы создаете\?</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">"Похоже, у вас уже есть резервная копия  ключа настройки из другой сессии. Хотите заменить его новым\?"</string>
     <string name="keys_backup_setup_override_replace">Заменить</string>
     <string name="keys_backup_setup_override_stop">Стоп</string>
 
@@ -1564,7 +1562,7 @@
     <string name="room_list_catchup_welcome_title">Добро пожаловать домой!</string>
     <string name="room_list_catchup_welcome_body">Узнайте больше о непрочитанных сообщениях здесь</string>
     <string name="room_list_people_empty_title">Беседа</string>
-    <string name="room_list_people_empty_body">Ваше прямое сообщение будет отображаться здесь</string>
+    <string name="room_list_people_empty_body">Здесь будут отображаться ваши диалоги</string>
     <string name="room_list_rooms_empty_title">Комнаты</string>
     <string name="room_list_rooms_empty_body">Ваши комнаты будут отображаться здесь</string>
 
@@ -1628,7 +1626,7 @@
     <string name="push_gateway_item_app_id">app_id:</string>
     <string name="push_gateway_item_push_key">push_key:</string>
     <string name="push_gateway_item_app_display_name">app_display_name:</string>
-    <string name="push_gateway_item_device_name">device_name:</string>
+    <string name="push_gateway_item_device_name">session_name:</string>
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Формат:</string>
 
@@ -1787,7 +1785,7 @@
 
     <string name="settings_discovery_disconnect_with_bound_pid">В настоящее время вы делитесь адресами электронной почты или телефонными номерами на сервере идентификации %1$s. Вам нужно повторно подключиться к %2$s, чтобы прекратить делиться ими.</string>
     <string name="settings_agree_to_terms">Примите Условия обслуживания сервера идентификации (%s), чтобы разрешить обнаружение по адресу электронной почты или номеру телефона.</string>
-    <string name="labs_allow_extended_logging">Включить подробное журнал.</string>
+    <string name="labs_allow_extended_logging">Включить подробные логи.</string>
     <string name="send_attachment">Отправить вложенное</string>
 
     <string name="a11y_open_drawer">Откройте навигационный ящик</string>
@@ -1809,6 +1807,44 @@
     <string name="room_widget_permission_added_by">Этот виджет был добавлен:</string>
     <string name="room_widget_permission_theme">Ваши тема</string>
     <string name="room_widget_permission_room_id">ID комнаты</string>
+
+
+    <string name="resources_script">Cyrl</string>
+
+    <string name="settings_integrations_summary">Используйте менеджер интеграций чтобы управлять ботами, мостами, виджетами и наборами стикеров.
+\nМенеджеры интеграций получают данные о конфигурации, могут изменять виджеты, отправлять приглашения в комнаты и устанавливать права от вашего имени.</string>
+    <string name="room_widget_permission_webview_shared_info_title">"Использование может оставить cookie на вашем устройстве и отправить данные в  %s:"</string>
+    <string name="room_widget_permission_shared_info_title">Использование может отправить данные в %s:</string>
+    <string name="room_widget_failed_to_load">Не удалось загрузить виджет.
+\n%s</string>
+    <string name="room_widget_revoke_access">Отозвать доступ для меня</string>
+
+    <string name="room_widget_permission_display_name">Ваше отображаемое имя</string>
+    <string name="room_widget_permission_avatar_url">URL вашего аватара</string>
+    <string name="room_widget_permission_user_id">Ваш ID</string>
+    <string name="room_widget_resource_permission_title">Данный виджет запрашивает доступ к следующим ресурсам:</string>
+    <string name="room_widget_resource_decline_permission">Запретить все</string>
+    <string name="room_widget_webview_access_camera">Использовать камеру</string>
+    <string name="room_widget_webview_access_microphone">Использовать микрофон</string>
+    <string name="room_widget_webview_read_protected_media">Получать доступ к медиа, защищённым DRM</string>
+
+    <string name="a11y_create_room">Создать новую комнату</string>
+    <string name="a11y_show_password">Показать пароль</string>
+    <string name="a11y_hide_password">Скрыть пароль</string>
+    <string name="attachment_type_file">Файл</string>
+    <string name="attachment_type_camera">Камера</string>
+    <string name="attachment_type_audio">Звук</string>
+    <string name="attachment_type_gallery">Галерея</string>
+    <string name="report_content_spam">Это спам</string>
+    <string name="message_ignore_user">Заблокировать пользователя</string>
+
+    <string name="room_list_quick_actions_notifications_all">Все сообщения</string>
+    <string name="room_list_quick_actions_notifications_mentions">Только упоминания</string>
+    <string name="room_list_quick_actions_settings">Настройки</string>
+    <string name="room_list_quick_actions_leave">Покинуть комнату</string>
+    <string name="room_join_rules_public">%1$s сделал комнату доступной для всех, у кого есть ссылка.</string>
+    <string name="room_join_rules_invite">%1$s сделал комнату доступной только по приглашению.</string>
+    <string name="labs_allow_extended_logging_summary">Подробные логи помогут разработчикам, предоставив больше информации, когда вы отправляете RageShake. Даже когда они разрешены, приложение не логирует ваши сообщения и другие приватные данные.</string>
 
 
 </resources>

@@ -18,9 +18,14 @@ package im.vector.matrix.android
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
+import im.vector.matrix.android.test.shared.createTimberTestRule
+import org.junit.Rule
 import java.io.File
 
 interface InstrumentedTest {
+
+    @Rule
+    fun timberTestRule() = createTimberTestRule()
 
     fun context(): Context {
         return ApplicationProvider.getApplicationContext()

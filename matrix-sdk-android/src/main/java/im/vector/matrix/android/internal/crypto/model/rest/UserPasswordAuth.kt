@@ -21,7 +21,7 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 
 /**
- * This class provides the authentication data to delete a device
+ * This class provides the authentication data by using user and password
  */
 @JsonClass(generateAdapter = true)
 data class UserPasswordAuth(

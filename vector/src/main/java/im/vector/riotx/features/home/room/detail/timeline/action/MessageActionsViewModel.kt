@@ -30,11 +30,11 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.isTextMessage
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageWithAttachmentContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFormat
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
+import im.vector.matrix.android.api.session.room.model.message.MessageWithAttachmentContent
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
@@ -290,6 +290,10 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                         add(EventSharedAction.Share(timelineEvent.eventId, messageContent))
                     }
 
+                    if (canSave(msgType) && messageContent is MessageWithAttachmentContent) {
+                        add(EventSharedAction.Save(timelineEvent.eventId, messageContent))
+                    }
+
                     if (timelineEvent.root.sendState == SendState.SENT) {
                         // TODO Can be redacted
 
@@ -405,6 +409,16 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun canShare(msgType: String?): Boolean {
+        return when (msgType) {
+            MessageType.MSGTYPE_IMAGE,
+            MessageType.MSGTYPE_AUDIO,
+            MessageType.MSGTYPE_VIDEO,
+            MessageType.MSGTYPE_FILE -> true
+            else                     -> false
+        }
+    }
+
+    private fun canSave(msgType: String?): Boolean {
         return when (msgType) {
             MessageType.MSGTYPE_IMAGE,
             MessageType.MSGTYPE_AUDIO,

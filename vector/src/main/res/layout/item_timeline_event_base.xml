@@ -62,6 +62,24 @@
         android:layout_height="0dp"
         tools:layout_marginStart="52dp" />
 
+    <Space
+        android:id="@+id/decorationSpace"
+        android:layout_width="4dp"
+        android:layout_height="8dp"
+        android:layout_toEndOf="@id/messageStartGuideline"
+        />
+
+    <ImageView
+        android:id="@+id/messageE2EDecoration"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_alignTop="@id/viewStubContainer"
+        android:layout_marginTop="7dp"
+        android:layout_alignEnd="@id/decorationSpace"
+        android:visibility="gone"
+        tools:src="@drawable/ic_shield_warning"
+        tools:visibility="visible" />
+
     <FrameLayout
         android:id="@+id/viewStubContainer"
         android:layout_width="match_parent"

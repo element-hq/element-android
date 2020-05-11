@@ -27,6 +27,7 @@ import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.colorizeMatchingText
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheetViewState
+import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetSelfWaitItem
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.riotx.features.crypto.verification.epoxy.bottomSheetVerificationWaitingItem
@@ -56,23 +57,37 @@ class VerificationRequestController @Inject constructor(
                 notice(stringProvider.getString(R.string.verification_open_other_to_verify))
             }
 
+            bottomSheetSelfWaitItem {
+                id("waiting")
+            }
+
             dividerItem {
                 id("sep")
             }
 
-            bottomSheetVerificationWaitingItem {
-                id("waiting")
-                title(stringProvider.getString(R.string.verification_request_waiting, matrixItem.getBestName()))
+            if (state.quadSContainsSecrets) {
+                bottomSheetVerificationActionItem {
+                    id("passphrase")
+                    title(stringProvider.getString(R.string.verification_cannot_access_other_session))
+                    titleColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                    subTitle(stringProvider.getString(R.string.verification_use_passphrase))
+                    iconRes(R.drawable.ic_arrow_right)
+                    iconColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+                    listener { listener?.onClickRecoverFromPassphrase() }
+                }
+            }
+
+            dividerItem {
+                id("sep1")
             }
 
             bottomSheetVerificationActionItem {
-                id("passphrase")
-                title(stringProvider.getString(R.string.verification_cannot_access_other_session))
-                titleColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
-                subTitle(stringProvider.getString(R.string.verification_use_passphrase))
+                id("skip")
+                title(stringProvider.getString(R.string.skip))
+                titleColor(colorProvider.getColor(R.color.riotx_destructive_accent))
                 iconRes(R.drawable.ic_arrow_right)
-                iconColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
-                listener { listener?.onClickRecoverFromPassphrase() }
+                iconColor(colorProvider.getColor(R.color.riotx_destructive_accent))
+                listener { listener?.onClickSkip() }
             }
         } else {
             val styledText =
@@ -153,5 +168,6 @@ class VerificationRequestController @Inject constructor(
         fun onClickOnWasNotMe()
         fun onClickRecoverFromPassphrase()
         fun onClickDismiss()
+        fun onClickSkip()
     }
 }

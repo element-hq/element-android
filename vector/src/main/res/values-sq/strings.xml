@@ -831,7 +831,7 @@
     <string name="login_error_limit_exceeded">Janë dërguar shumë kërkesa</string>
     <string name="login_error_login_email_not_yet">Lidhja email që s’është klikuar ende</string>
 
-    <string name="e2e_re_request_encryption_key"><u>Rikërkoni kyçe fshehtëzimi</u> prej sesionesh tuaj të tjerë.</string>
+    <string name="e2e_re_request_encryption_key">Rikërkoni kyçe fshehtëzimi prej sesionesh tuaj të tjerë.</string>
 
     <plurals name="membership_changes">
         <item quantity="one">1 ndryshim anëtarësie</item>
@@ -1283,7 +1283,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="keys_backup_banner_recover_line1">Mos humbni kurrë mesazhe të fshehtëzuar</string>
     <string name="keys_backup_banner_recover_line2">Përdor Kopjeruajtje Kyçesh</string>
 
-    <string name="keys_backup_banner_update_line1">Kyçe të rinj mesazhesh të fshehtëzuar</string>
+    <string name="keys_backup_banner_update_line1">Kyçe të rinj mesazhesh të sigurt</string>
     <string name="keys_backup_banner_update_line2">Administroni Kopjeruajtje Kyçesh</string>
 
     <string name="keys_backup_banner_in_progress">Po kopjeruhen kyçet…</string>
@@ -1313,7 +1313,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="keys_backup_restoring_computing_key_waiting_message">Po përllogariten kyçe rimarrjesh…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Po shkarkohen kyçe…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Po importohen kyçe…</string>
-    <string name="keys_backup_settings_untrusted_backup">Që të përdorni Kopjeruajtje Kyçesh në këtë sesion, rikthejeni tani përmes frazëkalimit tuaj ose kyçit të rikthimeve.</string>
+    <string name="keys_backup_settings_untrusted_backup">Që të përdorni Kopjeruajtje Kyçesh në këtë sesion, rikthejeni tani përmes frazëkalimit tuaj ose kyçi rimarrjesh.</string>
     <string name="new_recovery_method_popup_title">Kopjeruajtje e Re Kyçesh</string>
     <string name="new_recovery_method_popup_description">U pikas një kopjeruajtje e re kyçesh mesazhesh të sigurt. 
 \n 
@@ -2103,8 +2103,8 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="verification_request_alert_description">Për siguri ekstra, verifikojeni %s duke parë kontrolluar në të dy pajisjet tuaja një kod njëpërdorimsh.
 \n
 \nPër sigurinë maksimale, bëjeni këtë ju vetë.</string>
-    <string name="rendering_event_error_type_of_event_not_handled">RiotX (ende) nuk trajton akte të llojit \'%1$s\'</string>
-    <string name="rendering_event_error_type_of_message_not_handled">RiotX (ende) nuk trajton mesazhe të llojit \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_event_not_handled">RiotX nuk trajton akte të llojit \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">RiotX nuk trajton mesazhe të llojit \'%1$s\'</string>
     <string name="rendering_event_error_exception">RiotX ndeshi një problem kur vizatohej lëndë e aktit me ID \'%1$s\'</string>
 
     <string name="verify_cannot_cross_sign">Ky sesion s’është në gjendje të ndajë këtë verifikim me sesionet tuaj të tjerë.
@@ -2120,7 +2120,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 \nKyçet privatë nuk njihen</string>
     <string name="settings_active_sessions_unverified_device_desc">Verifikojeni këtë sesion që t’i vihet shenjë si i besuar &amp; dhe t’i akordohet hyrje te mesazhe të fshehtëzuar. Nëse s’keni bërë hyrjen në këtë sesion, llogaria juaj mund të jetë komprometuar:</string>
 
-    <string name="verification_open_other_to_verify">Hapni një sesion ekzistues &amp; përdoreni për të verifikuar këtë, duke i akorduar hyrje te mesazhe të fshehtëzuar. Nëse s’hyni dot te një, përdorni kyçin ose fjalëkalimin tuaj për rimarrje.</string>
+    <string name="verification_open_other_to_verify">Përdorni një sesion ekzistues që të verifikoni këtë këtu, duke i akorduar hyrje te mesazhe të fshehtëzuar.</string>
 
 
     <string name="not_trusted">Jo i Besuar</string>
@@ -2129,7 +2129,153 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="initialize_cross_signing">Gatit <em>CrossSigning</em></string>
     <string name="reset_cross_signing">Zeroji Kyçet</string>
 
+    <string name="qr_code_scanned_by_other_notice">Thuaje mbërritëm! A shfaq %s të njëjtën mburojë\?</string>
     <string name="qr_code_scanned_by_other_no">Jo</string>
 
     <string name="no_connectivity_to_the_server_indicator">Humbi lidhja me shërbyesin</string>
+    <string name="login_signup_username_hint">Emër përdoruesi</string>
+    <string name="verification_verified_user">%s i verifikuar</string>
+    <string name="settings_dev_tools">Mjete Zhvilluesi</string>
+    <string name="settings_account_data">Të dhëna Llogarie</string>
+    <plurals name="poll_info">
+        <item quantity="one">%d votë</item>
+        <item quantity="other">%d vota</item>
+    </plurals>
+    <plurals name="poll_info_final">
+        <item quantity="one">%d votë - Përfundimet finale</item>
+        <item quantity="other">%d vota - Përfundimet finale</item>
+    </plurals>
+    <string name="poll_item_selected_aria">Mundësi e Përzgjedhur</string>
+    <string name="command_description_poll">Krijoni një pyetësor të thjeshtë</string>
+    <string name="verification_cannot_access_other_session">Përdorni metodë rimarrjesh</string>
+    <string name="verification_use_passphrase">Nëse s’hyni dot në një sesion ekzistues</string>
+
+    <string name="new_signin">Hyrje e Re</string>
+
+    <string name="enter_secret_storage_invalid">S’gjenden dot të fshehta në depozitim</string>
+    <string name="enter_secret_storage_passphrase">Jepni frazëkalimin e fshehtë për në depozitim</string>
+    <string name="enter_secret_storage_passphrase_warning">Kujdes:</string>
+    <string name="enter_secret_storage_passphrase_warning_text">Duhet të hyni në depozitim të fshehtë vetëm nga një pajisje e besuar</string>
+
+    <string name="message_action_item_redact">Hiqni…</string>
+    <string name="share_confirm_room">Doni të dërgohet kjo bashkëngjitje te %1$s\?</string>
+    <plurals name="send_images_with_original_size">
+        <item quantity="one">Dërgoje figurën në madhësinë origjinale</item>
+        <item quantity="other">Dërgoji figurat në madhësinë origjinale</item>
+    </plurals>
+
+    <string name="delete_event_dialog_title">Ripohoni Heqjen</string>
+    <string name="delete_event_dialog_content">Jeni i sigurt se doni të hiqet (fshihet) kjo veprimtari\? Kini parasysh se, nëse fshini emrin ose ndryshimin e temës së një dhome, ndryshimi mund të zhbëhet.</string>
+    <string name="delete_event_dialog_reason_checkbox">Përfshini një arsye</string>
+    <string name="delete_event_dialog_reason_hint">Arsye për redaktimin</string>
+
+    <string name="event_redacted_by_user_reason_with_reason">Veprimtari e fshirë nga përdorues, arsye: %1$s</string>
+    <string name="event_redacted_by_admin_reason_with_reason">Veprimtari e moderuar nga përgjegjësi i dhomës, arsye: %1$s</string>
+
+    <string name="keys_backup_restore_success_title_already_up_to_date">Kyçet janë tashmë të përditësuar!</string>
+
+    <string name="login_mobile_device_riotx">RiotX Android</string>
+
+    <string name="settings_key_requests">Kërkesa Kyçi</string>
+
+    <string name="e2e_use_keybackup">Shkyçni historik mesazhesh të fshehtëzuar</string>
+
+    <string name="refresh">Rifreskoje</string>
+
+    <string name="new_session">Sesion i Ri</string>
+    <string name="new_session_review">Prekeni, që ta shqyrtoni &amp; verifikoni</string>
+    <string name="verify_new_session_notice">Përdoreni këtë sesion që të verifikoni atë të riun tuaj, duke i akorduar hyrje te mesazhe të fshehtëzuar.</string>
+    <string name="verify_new_session_was_not_me">Ky s’qeshë unë</string>
+    <string name="verify_new_session_compromized">Llogaria juaj mund të jetë komprometuar</string>
+
+    <string name="verify_cancel_self_verification_from_untrusted">Nëse e anuloni, s’do të jeni në gjendje të lexoni mesazhe të fshehtëzuar në këtë pajisje, dhe përdoruesit e tjerë s’do ta besojnë</string>
+    <string name="verify_cancel_self_verification_from_trusted">Nëse e anuloni, s’do të jeni në gjendje të lexoni mesazhe të fshehtëzuar në pajisjen tuaj të re, dhe përdoruesit e tjerë s’do ta besojnë</string>
+    <string name="verify_cancel_other">S’do ta verifikoni %1$s (%2$s), nëse e anuloni tani. Fillojani sërish te profili i tij i përdoruesit.</string>
+
+    <string name="verify_not_me_self_verification">Një nga sa vijon mund të jetë komprometuar:
+\n
+\n- Fjalëkalimi juaj
+\n- Shërbyesi juaj Home
+\n- Kjo pajisje, ose pajisja tjetër
+\n- Lidhja internet që përdor njëra pajisje, ose tjetra
+\n
+\nKëshillojmë të ndryshoni menjëherë fjalëkalimin &amp; kyçin tuaj të rimarrjeve te Rregullimet.</string>
+
+    <string name="verify_cancelled_notice">Verifikoni pajisjet tuaja që prej Rregullimeve.</string>
+    <string name="verification_cancelled">Verifikimi u Anulua</string>
+
+    <string name="recovery_passphrase">Fjalëkalim Mesazhesh</string>
+    <string name="message_key">Kyç Mesazhesh</string>
+    <string name="account_password">Fjalëkalim Llogarie</string>
+
+    <string name="set_recovery_passphrase">Caktoni një %s</string>
+    <string name="generate_message_key">Prodhoni një Kyç Mesazhesh</string>
+
+    <string name="confirm_recovery_passphrase">Ripohoni %s</string>
+
+    <string name="enter_account_password">Që të vazhdohet, jepni % tuaj.</string>
+
+    <string name="bootstrap_info_text">Siguroni &amp; shkyçni mesazhet tuaj të fshehtëzuar dhe besim me një %s.</string>
+    <string name="bootstrap_info_confirm_text">Për ta ripohuar, rijepni %s tuaj.</string>
+    <string name="bootstrap_dont_reuse_pwd">Mos ripërdorni fjalëkalimin e llogarisë tuaj.</string>
+
+
+    <string name="bootstrap_loading_text">Kjo mund dojë disa sekonda, ju lutemi, jini i durueshëm.</string>
+    <string name="bootstrap_loading_title">Po ujdiset rimarrje.</string>
+    <string name="your_recovery_key">Kyçi juaj i rimarrjeve</string>
+    <string name="bootstrap_finish_title">Mbaruat!</string>
+    <string name="keep_it_safe">Mbajeni të sigurt</string>
+    <string name="finish">Përfundoje</string>
+
+    <string name="bootstrap_save_key_description">Përdoreni këtë %1$s si një rrjetë sigurie, në rast se harroni %2$s tuaj.</string>
+
+    <string name="bootstrap_crosssigning_progress_pbkdf2">Po prodhohet kyç i sigurt prej frazëkalimi</string>
+    <string name="bootstrap_crosssigning_progress_default_key">Po përcaktohet Kyç parazgjedhje SSSS</string>
+    <string name="bootstrap_crosssigning_progress_save_msk">Po njëkohësohet kyçi i Përgjithshëm</string>
+    <string name="bootstrap_crosssigning_progress_save_usk">Po njëkohësohet kyç Përdoruesi</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">Po njëkohësohet kyç Vetënënshkrues</string>
+    <string name="bootstrap_crosssigning_progress_key_backup">Po Ujdiset Kopjeruajtje Kyçesh</string>
+
+
+    <string name="bootstrap_cross_signing_success">%2$s &amp; %1$s tani janë ujdisur.
+\n
+\nMbajini të parrezikuar! Do t’ju duhen për të shkyçur mesazhe të fshehtëzuar dhe informacione të sigurta, nëse humbni krejt sesionet tuaja aktive.</string>
+
+    <string name="bootstrap_crosssigning_print_it">Shtypeni dhe ruajeni diku në një vend të parrezik</string>
+    <string name="bootstrap_crosssigning_save_usb">Ruajeni në një diskth USB ose pajisje kopjeruajtjesh</string>
+    <string name="bootstrap_crosssigning_save_cloud">Kopjojeni te depozita juaj personale në re</string>
+
+    <string name="auth_flow_not_supported">Këtë s’e bëni dot prej celulari</string>
+
+    <string name="bootstrap_skip_text">Ujdisja e një Fjalëkalimi Mesazhesh ju lejon të siguroni &amp; shkyçni mesazhe të fshehtëzuar dhe besim.
+\n
+\nNëse s’doni të ujdisni një Fjalëkalim Mesazhesh, prodhoni atëherë një Kyç Mesazhesh.</string>
+    <string name="bootstrap_skip_text_no_gen_key">Ujdisja e një Fjalëkalimi Mesazhesh ju lejon të siguroni &amp; shkyçni mesazhe të fshehtëzuar dhe besim.</string>
+
+
+    <string name="encryption_enabled">Fshehtëzimi u aktivizua</string>
+    <string name="encryption_enabled_tile_description">Mesazhet në këtë dhomë janë të fshehtëzuara skaj-më-skaj. Mësoni më tepër &amp; verifikoni përdorues te profilet e tyre.</string>
+    <string name="encryption_not_enabled">Fshehtëzim jo i aktivizuar</string>
+    <string name="encryption_unknown_algorithm_tile_description">Fshehtëzimi i përdorur nga kjo dhomë nuk mbulohet</string>
+
+    <string name="room_created_summary_item">%s krijoi dhe formësoi dhomën.</string>
+
+    <string name="qr_code_scanned_self_verif_notice">Thuajse mbërritëm! A shfaq pajisja juaj tjetër të njëjtën mburojë\?</string>
+    <string name="qr_code_scanned_verif_waiting_notice">Thuajse mbërritëm! Po pritet për ripohim…</string>
+    <string name="qr_code_scanned_verif_waiting">Po pritet për %s…</string>
+
+    <string name="error_failed_to_import_keys">S’u arrit të importohen kyçe</string>
+
+    <string name="settings_notification_configuration">Formësim njoftimesh</string>
+    <string name="settings_messages_at_room">Mesazhe që përmbajnë @room</string>
+    <string name="settings_messages_in_e2e_one_to_one">Mesazhe të fshehtëzuar në biseda tek-për-tek</string>
+    <string name="settings_messages_in_e2e_group_chat">Mesazhe të fshehtëzuar te biseda në grup</string>
+    <string name="settings_when_rooms_are_upgraded">Kur dhomat përditësohen</string>
+    <string name="settings_troubleshoot_title">Diagnostikoje</string>
+    <string name="settings_notification_advanced_summary_riotx">Caktoni rëndësi njoftimi sipas aktesh</string>
+
+    <string name="command_description_plain">E dërgon një mesazh si tekst të thjeshtë, pa interpretuar elementët Markdown</string>
+
+    <string name="auth_invalid_login_param_space_in_password">Emër përdoruesi dhe/ose fjalëkalim i pasaktë. Fjalëkalimi i dhënë fillon ose mbaron me hapësirë, ju lutemi, kontrollojeni.</string>
+
 </resources>

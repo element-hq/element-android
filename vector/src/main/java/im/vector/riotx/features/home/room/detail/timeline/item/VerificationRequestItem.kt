@@ -81,7 +81,8 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
             }
             VerificationState.CANCELED_BY_OTHER -> {
                 holder.buttonBar.isVisible = false
-                holder.statusTextView.text = holder.view.context.getString(R.string.verification_request_other_cancelled, attributes.informationData.memberName)
+                holder.statusTextView.text = holder.view.context
+                        .getString(R.string.verification_request_other_cancelled, attributes.informationData.memberName)
                 holder.statusTextView.isVisible = true
             }
             VerificationState.CANCELED_BY_ME    -> {

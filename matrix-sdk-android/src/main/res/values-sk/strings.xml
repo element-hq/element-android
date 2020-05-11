@@ -174,4 +174,18 @@
     <string name="clear_timeline_send_queue">Vymazať správy na odoslanie</string>
 
     <string name="notice_room_third_party_revoked_invite">%1$s zamietol pozvanie používateľa %2$s vstúpiť do miestnosti</string>
+    <string name="notice_room_invite_no_invitee_with_reason">Pozvanie od používateľa %1$s. Dôvod: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s pozval používateľa %2$s. Dôvod: %3$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s vás pozval. Dôvod: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s sa pridal. Dôvod: %2$s</string>
+    <string name="notice_room_leave_with_reason">Používateľ %1$s odišiel. Dôvod: %2$s</string>
+    <string name="notice_room_reject_with_reason">%1$s odmietol pozvanie. Dôvod: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s vyhodil používateľa %2$s. Dôvod: %3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s znovu pridaný používateľom %2$s. Dôvod: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s vyhodil %2$s. Dôvod: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s poslal pozvánku používateľovi %2$s, aby sa pripojil na miestnosť. Dôvod: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s odvolal pozvánku pre používateľa %2$s, aby sa pripojil na miestnosť. Dôvod: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s prijal pozvanie od používateľa %2$s. Dôvod: %3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s odoprel pozvánku používateľa %2$s. Dôvod: %3$s</string>
+
 </resources>

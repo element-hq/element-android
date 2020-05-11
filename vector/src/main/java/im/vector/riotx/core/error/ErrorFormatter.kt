@@ -18,6 +18,7 @@ package im.vector.riotx.core.error
 
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
+import im.vector.matrix.android.api.failure.isInvalidPassword
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
 import java.net.HttpURLConnection
@@ -54,8 +55,7 @@ class DefaultErrorFormatter @Inject constructor(
                         // Special case for terms and conditions
                         stringProvider.getString(R.string.error_terms_not_accepted)
                     }
-                    throwable.error.code == MatrixError.M_FORBIDDEN
-                            && throwable.error.message == "Invalid password" -> {
+                    throwable.isInvalidPassword()                            -> {
                         stringProvider.getString(R.string.auth_invalid_login_param)
                     }
                     throwable.error.code == MatrixError.M_USER_IN_USE        -> {
@@ -67,7 +67,7 @@ class DefaultErrorFormatter @Inject constructor(
                     throwable.error.code == MatrixError.M_NOT_JSON           -> {
                         stringProvider.getString(R.string.login_error_not_json)
                     }
-                    throwable.error.code == MatrixError.M_THREEPID_DENIED           -> {
+                    throwable.error.code == MatrixError.M_THREEPID_DENIED    -> {
                         stringProvider.getString(R.string.login_error_threepid_denied)
                     }
                     throwable.error.code == MatrixError.M_LIMIT_EXCEEDED     -> {

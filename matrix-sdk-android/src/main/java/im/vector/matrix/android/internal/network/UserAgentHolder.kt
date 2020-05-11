@@ -51,7 +51,7 @@ internal class UserAgentHolder @Inject constructor(private val context: Context,
             appName = pm.getApplicationLabel(appInfo).toString()
 
             val pkgInfo = pm.getPackageInfo(context.applicationContext.packageName, 0)
-            appVersion = pkgInfo.versionName
+            appVersion = pkgInfo.versionName ?: ""
 
             // Use appPackageName instead of appName if appName contains any non-ASCII character
             if (!appName.matches("\\A\\p{ASCII}*\\z".toRegex())) {

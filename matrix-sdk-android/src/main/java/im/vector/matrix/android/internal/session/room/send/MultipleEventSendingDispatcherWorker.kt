@@ -25,6 +25,7 @@ import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.di.WorkManagerProvider
+import im.vector.matrix.android.internal.session.content.UploadContentWorker
 import im.vector.matrix.android.internal.session.room.timeline.TimelineSendEventWorkCommon
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
@@ -36,6 +37,9 @@ import javax.inject.Inject
 
 /**
  * This worker creates a new work for each events passed in parameter
+ *
+ * Possible previous worker: Always [UploadContentWorker]
+ * Possible next worker    : None, but it will post new work to send events, encrypted or not
  */
 internal class MultipleEventSendingDispatcherWorker(context: Context, params: WorkerParameters)
     : CoroutineWorker(context, params) {
@@ -55,9 +59,8 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
     override suspend fun doWork(): Result {
         Timber.v("Start dispatch sending multiple event work")
         val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.success().also {
-                    Timber.e("Work cancelled due to input error from parent")
-                }
+                ?: return Result.success()
+                        .also { Timber.e("Unable to parse work parameters") }
 
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
@@ -68,6 +71,7 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
             }
             // Transmit the error if needed?
             return Result.success(inputData)
+                    .also { Timber.e("Work cancelled due to input error from parent") }
         }
 
         // Create a work for every event

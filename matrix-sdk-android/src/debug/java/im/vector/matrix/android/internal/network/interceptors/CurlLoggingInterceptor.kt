@@ -20,7 +20,6 @@ package im.vector.matrix.android.internal.network.interceptors
 import im.vector.matrix.android.internal.di.MatrixScope
 import okhttp3.Interceptor
 import okhttp3.Response
-import okhttp3.logging.HttpLoggingInterceptor
 import okio.Buffer
 import timber.log.Timber
 import java.io.IOException
@@ -37,7 +36,7 @@ import javax.inject.Inject
  * non-production environment.
  */
 @MatrixScope
-internal class CurlLoggingInterceptor @Inject constructor(private val logger: HttpLoggingInterceptor.Logger)
+internal class CurlLoggingInterceptor @Inject constructor()
     : Interceptor {
 
     /**
@@ -97,8 +96,8 @@ internal class CurlLoggingInterceptor @Inject constructor(private val logger: Ht
         // Add Json formatting
         curlCmd += " | python -m json.tool"
 
-        logger.log("--- cURL (" + request.url + ")")
-        logger.log(curlCmd)
+        Timber.d("--- cURL (${request.url})")
+        Timber.d(curlCmd)
 
         return chain.proceed(request)
     }

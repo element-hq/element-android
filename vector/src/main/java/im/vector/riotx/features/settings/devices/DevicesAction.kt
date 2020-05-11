@@ -16,14 +16,18 @@
 
 package im.vector.riotx.features.settings.devices
 
+import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.riotx.core.platform.VectorViewModelAction
 
 sealed class DevicesAction : VectorViewModelAction {
-    object Retry : DevicesAction()
+    object Refresh : DevicesAction()
     data class Delete(val deviceId: String) : DevicesAction()
     data class Password(val password: String) : DevicesAction()
     data class Rename(val deviceId: String, val newName: String) : DevicesAction()
 
     data class PromptRename(val deviceId: String) : DevicesAction()
     data class VerifyMyDevice(val deviceId: String) : DevicesAction()
+    data class VerifyMyDeviceManually(val deviceId: String) : DevicesAction()
+    object CompleteSecurity : DevicesAction()
+    data class MarkAsManuallyVerified(val cryptoDeviceInfo: CryptoDeviceInfo) : DevicesAction()
 }

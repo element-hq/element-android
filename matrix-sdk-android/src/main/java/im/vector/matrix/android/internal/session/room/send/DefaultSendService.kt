@@ -228,7 +228,7 @@ internal class DefaultSendService @AssistedInject constructor(
                     keys.forEach { isRoomEncrypted ->
                         // Should never be empty
                         val localEchoes = get(isRoomEncrypted).orEmpty()
-                        val uploadWork = createUploadMediaWork(localEchoes, attachment, isRoomEncrypted, compressBeforeSending, startChain = true)
+                        val uploadWork = createUploadMediaWork(localEchoes, attachment, isRoomEncrypted, compressBeforeSending)
 
                         val dispatcherWork = createMultipleEventDispatcherWork(isRoomEncrypted)
 
@@ -293,14 +293,13 @@ internal class DefaultSendService @AssistedInject constructor(
     private fun createUploadMediaWork(allLocalEchos: List<Event>,
                                       attachment: ContentAttachmentData,
                                       isRoomEncrypted: Boolean,
-                                      compressBeforeSending: Boolean,
-                                      startChain: Boolean): OneTimeWorkRequest {
+                                      compressBeforeSending: Boolean): OneTimeWorkRequest {
         val uploadMediaWorkerParams = UploadContentWorker.Params(sessionId, allLocalEchos, attachment, isRoomEncrypted, compressBeforeSending)
         val uploadWorkData = WorkerParamsFactory.toData(uploadMediaWorkerParams)
 
         return workManagerProvider.matrixOneTimeWorkRequestBuilder<UploadContentWorker>()
                 .setConstraints(WorkManagerProvider.workConstraints)
-                .startChain(startChain)
+                .startChain(true)
                 .setInputData(uploadWorkData)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY, TimeUnit.MILLISECONDS)
                 .build()

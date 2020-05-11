@@ -136,6 +136,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         roomSummaryEntity.aliases.addAll(roomAliases)
         roomSummaryEntity.flatAliases = roomAliases.joinToString(separator = "|", prefix = "|")
         roomSummaryEntity.isEncrypted = encryptionEvent != null
+        roomSummaryEntity.encryptionEventTs = encryptionEvent?.originServerTs
         roomSummaryEntity.typingUserIds.clear()
         roomSummaryEntity.typingUserIds.addAll(ephemeralResult?.typingUserIds.orEmpty())
 
@@ -152,7 +153,7 @@ internal class RoomSummaryUpdater @Inject constructor(
 
         if (updateMembers) {
             val otherRoomMembers = RoomMemberHelper(realm, roomId)
-                    .queryRoomMembersEvent()
+                    .queryActiveRoomMembersEvent()
                     .notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId)
                     .findAll()
                     .asSequence()
@@ -161,15 +162,7 @@ internal class RoomSummaryUpdater @Inject constructor(
             roomSummaryEntity.otherMemberIds.clear()
             roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers)
             if (roomSummaryEntity.isEncrypted) {
-                // The set of “all users” depends on the type of room:
-                // For regular / topic rooms, all users including yourself, are considered when decorating a room
-                // For 1:1 and group DM rooms, all other users (i.e. excluding yourself) are considered when decorating a room
-                val listToCheck = if (roomSummaryEntity.isDirect) {
-                    roomSummaryEntity.otherMemberIds.toList()
-                } else {
-                    roomSummaryEntity.otherMemberIds.toList() + userId
-                }
-                eventBus.post(SessionToCryptoRoomMembersUpdate(roomId, listToCheck))
+                eventBus.post(SessionToCryptoRoomMembersUpdate(roomId, roomSummaryEntity.isDirect, roomSummaryEntity.otherMemberIds.toList() + userId))
             }
         }
     }

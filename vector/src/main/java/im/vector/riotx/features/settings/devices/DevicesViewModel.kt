@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.settings.devices
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -28,33 +29,46 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.NoOpMatrixCallback
+import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
 import im.vector.matrix.android.api.session.crypto.verification.VerificationService
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
+import im.vector.matrix.android.internal.crypto.crosssigning.DeviceTrustLevel
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
-import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
-import im.vector.matrix.android.internal.crypto.model.rest.DevicesListResponse
+import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.features.crypto.verification.SupportedVerificationMethodsProvider
+import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
+import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 data class DevicesViewState(
         val myDeviceId: String = "",
-        val devices: Async<List<DeviceInfo>> = Uninitialized,
-        val cryptoDevices: Async<List<CryptoDeviceInfo>> = Uninitialized,
+//        val devices: Async<List<DeviceInfo>> = Uninitialized,
+//        val cryptoDevices: Async<List<CryptoDeviceInfo>> = Uninitialized,
+        val devices: Async<List<DeviceFullInfo>> = Uninitialized,
         // TODO Replace by isLoading boolean
-        val request: Async<Unit> = Uninitialized
+        val request: Async<Unit> = Uninitialized,
+        val hasAccountCrossSigning: Boolean = false,
+        val accountCrossSigningIsTrusted: Boolean = false
 ) : MvRxState
 
+data class DeviceFullInfo(
+        val deviceInfo: DeviceInfo,
+        val cryptoDeviceInfo: CryptoDeviceInfo?
+)
 class DevicesViewModel @AssistedInject constructor(
         @Assisted initialState: DevicesViewState,
-        private val session: Session,
-        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider)
-    : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvents>(initialState), VerificationService.Listener {
+        private val session: Session
+) : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvents>(initialState), VerificationService.Listener {
 
     @AssistedInject.Factory
     interface Factory {
@@ -74,16 +88,76 @@ class DevicesViewModel @AssistedInject constructor(
     private var _currentDeviceId: String? = null
     private var _currentSession: String? = null
 
-    init {
-        refreshDevicesList()
-        session.cryptoService().verificationService().addListener(this)
+    private val refreshPublisher: PublishSubject<Unit> = PublishSubject.create()
 
-        session.rx().liveUserCryptoDevices(session.myUserId)
-                .execute {
+    init {
+
+        setState {
+            copy(
+                    hasAccountCrossSigning = session.cryptoService().crossSigningService().getMyCrossSigningKeys() != null,
+                    accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified(),
+                    myDeviceId = session.sessionParams.credentials.deviceId ?: ""
+            )
+        }
+
+        Observable.combineLatest<List<CryptoDeviceInfo>, List<DeviceInfo>, List<DeviceFullInfo>>(
+                session.rx().liveUserCryptoDevices(session.myUserId),
+                session.rx().liveMyDeviceInfo(),
+                BiFunction { cryptoList, infoList ->
+                    infoList
+                            .sortedByDescending { it.lastSeenTs }
+                            .map { deviceInfo ->
+                                val cryptoDeviceInfo = cryptoList.firstOrNull { it.deviceId == deviceInfo.deviceId }
+                                DeviceFullInfo(deviceInfo, cryptoDeviceInfo)
+                            }
+                }
+        )
+                .distinct()
+                .execute { async ->
                     copy(
-                            cryptoDevices = it
+                            devices = async
                     )
                 }
+
+        session.rx().liveCrossSigningInfo(session.myUserId)
+                .execute {
+                    copy(
+                            hasAccountCrossSigning = it.invoke()?.getOrNull() != null,
+                            accountCrossSigningIsTrusted = it.invoke()?.getOrNull()?.isTrusted() == true
+                    )
+                }
+        session.cryptoService().verificationService().addListener(this)
+
+//        session.rx().liveMyDeviceInfo()
+//                .execute {
+//                    copy(
+//                            devices = it
+//                    )
+//                }
+
+        session.rx().liveUserCryptoDevices(session.myUserId)
+                .distinct()
+                .throttleLast(5_000, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    // If we have a new crypto device change, we might want to trigger refresh of device info
+                    session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
+                }.disposeOnClear()
+
+//        session.rx().liveUserCryptoDevices(session.myUserId)
+//                .execute {
+//                    copy(
+//                            cryptoDevices = it
+//                    )
+//                }
+
+        refreshPublisher.throttleFirst(4_000, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
+                    session.cryptoService().downloadKeys(listOf(session.myUserId), true, NoOpMatrixCallback())
+                }
+                .disposeOnClear()
+        // then force download
+        queryRefreshDevicesList()
     }
 
     override fun onCleared() {
@@ -93,7 +167,7 @@ class DevicesViewModel @AssistedInject constructor(
 
     override fun transactionUpdated(tx: VerificationTransaction) {
         if (tx.state == VerificationTxState.Verified) {
-            refreshDevicesList()
+            queryRefreshDevicesList()
         }
     }
 
@@ -102,91 +176,66 @@ class DevicesViewModel @AssistedInject constructor(
      * The devices list is the list of the devices where the user is logged in.
      * It can be any mobile devices, and any browsers.
      */
-    private fun refreshDevicesList() {
-        if (!session.sessionParams.credentials.deviceId.isNullOrEmpty()) {
-            // display something asap
-            val localKnown = session.cryptoService().getUserDevices(session.myUserId).map {
-                DeviceInfo(
-                        user_id = session.myUserId,
-                        deviceId = it.deviceId,
-                        displayName = it.displayName()
-                )
-            }
-
-            setState {
-                copy(
-                        // Keep known list if we have it, and let refresh go in backgroung
-                        devices = this.devices.takeIf { it is Success } ?: Success(localKnown)
-                )
-            }
-
-            session.cryptoService().getDevicesList(object : MatrixCallback<DevicesListResponse> {
-                override fun onSuccess(data: DevicesListResponse) {
-                    setState {
-                        copy(
-                                myDeviceId = session.sessionParams.credentials.deviceId ?: "",
-                                devices = Success(data.devices.orEmpty())
-                        )
-                    }
-                }
-
-                override fun onFailure(failure: Throwable) {
-                    setState {
-                        copy(
-                                devices = Fail(failure)
-                        )
-                    }
-                }
-            })
-
-            // Put cached state
-            setState {
-                copy(
-                        myDeviceId = session.sessionParams.credentials.deviceId ?: "",
-                        cryptoDevices = Success(session.cryptoService().getUserDevices(session.myUserId))
-                )
-            }
-
-            // then force download
-            session.cryptoService().downloadKeys(listOf(session.myUserId), true, object : MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>> {
-                override fun onSuccess(data: MXUsersDevicesMap<CryptoDeviceInfo>) {
-                    setState {
-                        copy(
-                                cryptoDevices = Success(session.cryptoService().getUserDevices(session.myUserId))
-                        )
-                    }
-                }
-            })
-        } else {
-            // Should not happen
-        }
+    private fun queryRefreshDevicesList() {
+        refreshPublisher.onNext(Unit)
     }
 
     override fun handle(action: DevicesAction) {
         return when (action) {
-            is DevicesAction.Retry          -> refreshDevicesList()
-            is DevicesAction.Delete         -> handleDelete(action)
-            is DevicesAction.Password       -> handlePassword(action)
-            is DevicesAction.Rename         -> handleRename(action)
-            is DevicesAction.PromptRename   -> handlePromptRename(action)
-            is DevicesAction.VerifyMyDevice -> handleVerify(action)
+            is DevicesAction.Refresh                -> queryRefreshDevicesList()
+            is DevicesAction.Delete                 -> handleDelete(action)
+            is DevicesAction.Password               -> handlePassword(action)
+            is DevicesAction.Rename                 -> handleRename(action)
+            is DevicesAction.PromptRename           -> handlePromptRename(action)
+            is DevicesAction.VerifyMyDevice         -> handleInteractiveVerification(action)
+            is DevicesAction.CompleteSecurity       -> handleCompleteSecurity()
+            is DevicesAction.MarkAsManuallyVerified -> handleVerifyManually(action)
+            is DevicesAction.VerifyMyDeviceManually -> handleShowDeviceCryptoInfo(action)
         }
     }
 
-    private fun handleVerify(action: DevicesAction.VerifyMyDevice) {
+    private fun handleInteractiveVerification(action: DevicesAction.VerifyMyDevice) {
         val txID = session.cryptoService()
                 .verificationService()
-                .requestKeyVerification(supportedVerificationMethodsProvider.provide(), session.myUserId, listOf(action.deviceId))
+                .beginKeyVerification(VerificationMethod.SAS, session.myUserId, action.deviceId, null)
         _viewEvents.post(DevicesViewEvents.ShowVerifyDevice(
                 session.myUserId,
-                txID.transactionId
+                txID
         ))
     }
 
+    private fun handleShowDeviceCryptoInfo(action: DevicesAction.VerifyMyDeviceManually) = withState { state ->
+        state.devices.invoke()
+                ?.firstOrNull { it.cryptoDeviceInfo?.deviceId == action.deviceId }
+                ?.let {
+                    _viewEvents.post(DevicesViewEvents.ShowManuallyVerify(it.cryptoDeviceInfo!!))
+                }
+    }
+
+    private fun handleVerifyManually(action: DevicesAction.MarkAsManuallyVerified) = withState { state ->
+        viewModelScope.launch {
+            if (state.hasAccountCrossSigning) {
+                awaitCallback<Unit> {
+                    tryThis { session.cryptoService().crossSigningService().trustDevice(action.cryptoDeviceInfo.deviceId, it) }
+                }
+            } else {
+                // legacy
+                session.cryptoService().setDeviceVerification(
+                        DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
+                        action.cryptoDeviceInfo.userId,
+                        action.cryptoDeviceInfo.deviceId)
+            }
+        }
+    }
+
+    private fun handleCompleteSecurity() {
+        _viewEvents.post(DevicesViewEvents.SelfVerification(session))
+    }
+
     private fun handlePromptRename(action: DevicesAction.PromptRename) = withState { state ->
-        val info = state.devices.invoke()?.firstOrNull { it.deviceId == action.deviceId }
+        val info = state.devices.invoke()?.firstOrNull { it.deviceInfo.deviceId == action.deviceId }
         if (info != null) {
-            _viewEvents.post(DevicesViewEvents.PromptRenameDevice(info))
+            _viewEvents.post(DevicesViewEvents.PromptRenameDevice(info.deviceInfo))
         }
     }
 
@@ -199,7 +248,7 @@ class DevicesViewModel @AssistedInject constructor(
                     )
                 }
                 // force settings update
-                refreshDevicesList()
+                queryRefreshDevicesList()
             }
 
             override fun onFailure(failure: Throwable) {
@@ -270,7 +319,7 @@ class DevicesViewModel @AssistedInject constructor(
                     )
                 }
                 // force settings update
-                refreshDevicesList()
+                queryRefreshDevicesList()
             }
         })
     }
@@ -299,7 +348,7 @@ class DevicesViewModel @AssistedInject constructor(
                     )
                 }
                 // force settings update
-                refreshDevicesList()
+                queryRefreshDevicesList()
             }
 
             override fun onFailure(failure: Throwable) {

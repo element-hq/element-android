@@ -15,7 +15,7 @@ androidExtensions {
 }
 
 ext.versionMajor = 0
-ext.versionMinor = 19
+ext.versionMinor = 20
 ext.versionPatch = 0
 
 static def getGitTimestamp() {
@@ -104,13 +104,13 @@ ext.abiVersionCodes = ["armeabi-v7a": 1, "arm64-v8a": 2, "x86": 3, "x86_64": 4].
 def buildNumber = System.env.BUILDKITE_BUILD_NUMBER as Integer ?: 0
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "im.vector.riotx"
         // Set to API 19 because motionLayout is min API 18.
         // In the future we may consider using an alternative of MotionLayout to support API 16. But for security reason, maybe not.
         minSdkVersion 19
-        targetSdkVersion 28
+        targetSdkVersion 29
         multiDexEnabled true
 
         // `develop` branch will have version code from timestamp, to ensure each build from CI has a incremented versionCode.
@@ -235,6 +235,15 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    sourceSets {
+        androidTest {
+            java.srcDirs += "src/sharedTest/java"
+        }
+        test {
+            java.srcDirs += "src/sharedTest/java"
+        }
+    }
 }
 
 dependencies {
@@ -250,6 +259,7 @@ dependencies {
     def daggerVersion = '2.25.4'
     def autofill_version = "1.0.0"
     def work_version = '2.3.3'
+    def arch_version = '2.1.0'
 
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-rx")
@@ -378,10 +388,18 @@ dependencies {
     // TESTS
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.amshove.kluent:kluent-android:1.44'
+    // Plant Timber tree for test
+    testImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
 
+    androidTestImplementation 'androidx.test:core:1.2.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'org.amshove.kluent:kluent-android:1.44'
+    androidTestImplementation "androidx.arch.core:core-testing:$arch_version"
+    // Plant Timber tree for test
+    androidTestImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
 }
 
 if (getGradle().getStartParameter().getTaskRequests().toString().contains("Gplay")) {

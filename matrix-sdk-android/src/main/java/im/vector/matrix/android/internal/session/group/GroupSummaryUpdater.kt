@@ -69,13 +69,13 @@ internal class GroupSummaryUpdater @Inject constructor(
 
         val workData = WorkerParamsFactory.toData(getGroupDataWorkerParams)
 
-        val sendWork = workManagerProvider.matrixOneTimeWorkRequestBuilder<GetGroupDataWorker>()
+        val getGroupWork = workManagerProvider.matrixOneTimeWorkRequestBuilder<GetGroupDataWorker>()
                 .setInputData(workData)
                 .setConstraints(WorkManagerProvider.workConstraints)
                 .build()
 
         workManagerProvider.workManager
-                .beginUniqueWork(GET_GROUP_DATA_WORKER, ExistingWorkPolicy.APPEND, sendWork)
+                .beginUniqueWork(GET_GROUP_DATA_WORKER, ExistingWorkPolicy.APPEND, getGroupWork)
                 .enqueue()
     }
 

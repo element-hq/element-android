@@ -18,14 +18,20 @@ package im.vector.matrix.android.internal.crypto.store.db
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
+import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.crypto.model.MXDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
+import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper2
+import im.vector.matrix.android.internal.crypto.store.db.mapper.CrossSigningKeysMapper
 import im.vector.matrix.android.internal.crypto.store.db.model.CrossSigningInfoEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.CryptoMetadataEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.DeviceInfoEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.GossipingEventEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.IncomingGossipingRequestEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.KeyInfoEntityFields
+import im.vector.matrix.android.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntityFields
+import im.vector.matrix.android.internal.crypto.store.db.model.OlmInboundGroupSessionEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.OutgoingGossipingRequestEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.TrustLevelEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.UserEntityFields
@@ -33,11 +39,14 @@ import im.vector.matrix.android.internal.di.SerializeNulls
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
 import timber.log.Timber
+import javax.inject.Inject
 
-internal object RealmCryptoStoreMigration : RealmMigration {
+internal class RealmCryptoStoreMigration @Inject constructor(private val crossSigningKeysMapper: CrossSigningKeysMapper) : RealmMigration {
 
     // Version 1L added Cross Signing info persistence
-    const val CRYPTO_STORE_SCHEMA_VERSION = 3L
+    companion object {
+        const val CRYPTO_STORE_SCHEMA_VERSION = 6L
+    }
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.v("Migrating Realm Crypto from $oldVersion to $newVersion")
@@ -45,6 +54,9 @@ internal object RealmCryptoStoreMigration : RealmMigration {
         if (oldVersion <= 0) migrateTo1(realm)
         if (oldVersion <= 1) migrateTo2(realm)
         if (oldVersion <= 2) migrateTo3(realm)
+        if (oldVersion <= 3) migrateTo4(realm)
+        if (oldVersion <= 4) migrateTo5(realm)
+        if (oldVersion <= 5) migrateTo6(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -192,5 +204,74 @@ internal object RealmCryptoStoreMigration : RealmMigration {
         realm.schema.get("CryptoMetadataEntity")
                 ?.addField(CryptoMetadataEntityFields.KEY_BACKUP_RECOVERY_KEY, String::class.java)
                 ?.addField(CryptoMetadataEntityFields.KEY_BACKUP_RECOVERY_KEY_VERSION, String::class.java)
+    }
+
+    private fun migrateTo4(realm: DynamicRealm) {
+        Timber.d("Updating KeyInfoEntity table")
+        val keyInfoEntities = realm.where("KeyInfoEntity").findAll()
+        try {
+            keyInfoEntities.forEach {
+                val stringSignatures = it.getString(KeyInfoEntityFields.SIGNATURES)
+                val objectSignatures: Map<String, Map<String, String>>? = deserializeFromRealm(stringSignatures)
+                val jsonSignatures = crossSigningKeysMapper.serializeSignatures(objectSignatures)
+                it.setString(KeyInfoEntityFields.SIGNATURES, jsonSignatures)
+            }
+        } catch (failure: Throwable) {
+        }
+
+        // Migrate frozen classes
+        val inboundGroupSessions = realm.where("OlmInboundGroupSessionEntity").findAll()
+        inboundGroupSessions.forEach { dynamicObject ->
+            dynamicObject.getString(OlmInboundGroupSessionEntityFields.OLM_INBOUND_GROUP_SESSION_DATA)?.let { serializedObject ->
+                try {
+                    deserializeFromRealm<OlmInboundGroupSessionWrapper?>(serializedObject)?.let { oldFormat ->
+                        val newFormat = oldFormat.exportKeys()?.let {
+                            OlmInboundGroupSessionWrapper2(it)
+                        }
+                        dynamicObject.setString(OlmInboundGroupSessionEntityFields.OLM_INBOUND_GROUP_SESSION_DATA, serializeForRealm(newFormat))
+                    }
+                } catch (failure: Throwable) {
+                    Timber.e(failure, "## OlmInboundGroupSessionEntity migration failed")
+                }
+            }
+        }
+    }
+
+    private fun migrateTo5(realm: DynamicRealm) {
+        realm.schema.create("MyDeviceLastSeenInfoEntity")
+                .addField(MyDeviceLastSeenInfoEntityFields.DEVICE_ID, String::class.java)
+                .addPrimaryKey(MyDeviceLastSeenInfoEntityFields.DEVICE_ID)
+                .addField(MyDeviceLastSeenInfoEntityFields.DISPLAY_NAME, String::class.java)
+                .addField(MyDeviceLastSeenInfoEntityFields.LAST_SEEN_IP, String::class.java)
+                .addField(MyDeviceLastSeenInfoEntityFields.LAST_SEEN_TS, Long::class.java)
+                .setNullable(MyDeviceLastSeenInfoEntityFields.LAST_SEEN_TS, true)
+
+        val now = System.currentTimeMillis()
+        realm.schema.get("DeviceInfoEntity")
+                ?.addField(DeviceInfoEntityFields.FIRST_TIME_SEEN_LOCAL_TS, Long::class.java)
+                ?.setNullable(DeviceInfoEntityFields.FIRST_TIME_SEEN_LOCAL_TS, true)
+                ?.transform { deviceInfoEntity ->
+                    tryThis {
+                        deviceInfoEntity.setLong(DeviceInfoEntityFields.FIRST_TIME_SEEN_LOCAL_TS, now)
+                    }
+                }
+    }
+
+    // Fixes duplicate devices in UserEntity#devices
+    private fun migrateTo6(realm: DynamicRealm) {
+        val userEntities = realm.where("UserEntity").findAll()
+        userEntities.forEach {
+            try {
+                val deviceList = it.getList(UserEntityFields.DEVICES.`$`)
+                        ?: return@forEach
+                val distinct = deviceList.distinctBy { it.getString(DeviceInfoEntityFields.DEVICE_ID) }
+                if (distinct.size != deviceList.size) {
+                    deviceList.clear()
+                    deviceList.addAll(distinct)
+                }
+            } catch (failure: Throwable) {
+                Timber.w(failure, "Crypto Data base migration error for migrateTo6")
+            }
+        }
     }
 }

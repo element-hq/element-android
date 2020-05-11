@@ -58,10 +58,22 @@
             android:id="@+id/messageContentMergedCreationStub"
             style="@style/TimelineContentStubBaseParams"
             android:layout="@layout/item_timeline_event_merged_room_creation_stub"
-            tools:layout_marginTop="160dp"
+            tools:layout_marginTop="240dp"
             tools:visibility="visible" />
 
     </FrameLayout>
+
+    <ImageView
+        android:id="@+id/messageE2EDecoration"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        android:layout_toStartOf="@id/viewStubContainer"
+        android:visibility="gone"
+        tools:src="@drawable/ic_shield_warning"
+        tools:visibility="visible" />
+
 
     <im.vector.riotx.core.ui.views.ReadReceiptsView
         android:id="@+id/readReceiptsView"

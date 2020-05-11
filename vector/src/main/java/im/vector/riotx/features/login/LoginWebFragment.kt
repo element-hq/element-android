@@ -31,9 +31,14 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.activityViewModel
+import im.vector.matrix.android.api.auth.LOGIN_FALLBACK_PATH
+import im.vector.matrix.android.api.auth.REGISTER_FALLBACK_PATH
+import im.vector.matrix.android.api.auth.SSO_FALLBACK_PATH
+import im.vector.matrix.android.api.auth.SSO_REDIRECT_URL_PARAM
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.appendParamToUrl
 import im.vector.riotx.core.utils.AssetReader
 import im.vector.riotx.features.signout.soft.SoftLogoutAction
 import im.vector.riotx.features.signout.soft.SoftLogoutViewModel
@@ -123,14 +128,24 @@ class LoginWebFragment @Inject constructor(
         val url = buildString {
             append(state.homeServerUrl?.trim { it == '/' })
             if (state.signMode == SignMode.SignIn) {
-                append("/_matrix/static/client/login/")
+                if (state.loginMode == LoginMode.Sso) {
+                    append(SSO_FALLBACK_PATH)
+                    // We do not want to deal with the result, so let the fallback login page to handle it for us
+                    appendParamToUrl(SSO_REDIRECT_URL_PARAM,
+                            buildString {
+                                append(state.homeServerUrl?.trim { it == '/' })
+                                append(LOGIN_FALLBACK_PATH)
+                            })
+                } else {
+                    append(LOGIN_FALLBACK_PATH)
+                }
                 state.deviceId?.takeIf { it.isNotBlank() }?.let {
                     // But https://github.com/matrix-org/synapse/issues/5755
-                    append("?device_id=$it")
+                    appendParamToUrl("device_id", it)
                 }
             } else {
                 // MODE_REGISTER
-                append("/_matrix/static/client/register/")
+                append(REGISTER_FALLBACK_PATH)
             }
         }
 

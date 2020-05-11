@@ -57,7 +57,7 @@ internal object NetworkModule {
     @Provides
     @JvmStatic
     fun providesCurlLoggingInterceptor(): CurlLoggingInterceptor {
-        return CurlLoggingInterceptor(HttpLoggingInterceptor.Logger.DEFAULT)
+        return CurlLoggingInterceptor()
     }
 
     @MatrixScope
@@ -72,8 +72,8 @@ internal object NetworkModule {
                              okReplayInterceptor: OkReplayInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
                 .addNetworkInterceptor(stethoInterceptor)
                 .addInterceptor(timeoutInterceptor)
                 .addInterceptor(userAgentInterceptor)

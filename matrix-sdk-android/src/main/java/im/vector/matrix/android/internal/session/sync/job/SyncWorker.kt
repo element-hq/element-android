@@ -35,6 +35,10 @@ import javax.inject.Inject
 
 private const val DEFAULT_LONG_POOL_TIMEOUT = 0L
 
+/**
+ * Possible previous worker: None
+ * Possible next worker    : None
+ */
 internal class SyncWorker(context: Context,
                           workerParameters: WorkerParameters
 ) : CoroutineWorker(context, workerParameters) {
@@ -53,7 +57,10 @@ internal class SyncWorker(context: Context,
 
     override suspend fun doWork(): Result {
         Timber.i("Sync work starting")
-        val params = WorkerParamsFactory.fromData<Params>(inputData) ?: return Result.success()
+        val params = WorkerParamsFactory.fromData<Params>(inputData)
+                ?: return Result.success()
+                        .also { Timber.e("Unable to parse work parameters") }
+
         val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
         sessionComponent.inject(this)
         return runCatching {
@@ -76,7 +83,6 @@ internal class SyncWorker(context: Context,
     }
 
     companion object {
-
         private const val BG_SYNC_WORK_NAME = "BG_SYNCP"
 
         fun requireBackgroundSync(workManagerProvider: WorkManagerProvider, sessionId: String, serverTimeout: Long = 0) {

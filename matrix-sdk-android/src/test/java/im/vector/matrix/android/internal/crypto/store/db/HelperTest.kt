@@ -16,11 +16,12 @@
 
 package im.vector.matrix.android.internal.crypto.store.db
 
+import im.vector.matrix.android.MatrixTest
 import im.vector.matrix.android.internal.util.md5
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class HelperTest {
+class HelperTest: MatrixTest {
 
     @Test
     fun testHash_ok() {

@@ -20,7 +20,7 @@ import android.content.Context
 import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import androidx.core.content.edit
 import im.vector.riotx.features.settings.VectorPreferences
 

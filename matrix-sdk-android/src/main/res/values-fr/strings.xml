@@ -7,8 +7,8 @@
     <string name="notice_room_invite_no_invitee">invitation de %s</string>
     <string name="notice_room_invite">%1$s a invité %2$s</string>
     <string name="notice_room_invite_you">%1$s vous a invité</string>
-    <string name="notice_room_join">%1$s a rejoint la discussion</string>
-    <string name="notice_room_leave">%1$s est parti</string>
+    <string name="notice_room_join">%1$s a rejoint le salon</string>
+    <string name="notice_room_leave">%1$s est parti du salon</string>
     <string name="notice_room_reject">%1$s a rejeté l’invitation</string>
     <string name="notice_room_kick">%1$s a expulsé %2$s</string>
     <string name="notice_room_unban">%1$s a révoqué le bannissement de %2$s</string>
@@ -177,7 +177,7 @@
     <string name="notice_room_invite_with_reason">%1$s a invité %2$s. Raison : %3$s</string>
     <string name="notice_room_invite_you_with_reason">%1$s vous a invité. Raison : %2$s</string>
     <string name="notice_room_join_with_reason">%1$s a rejoint le salon. Raison : %2$s</string>
-    <string name="notice_room_leave_with_reason">%1$s est parti. Raison : %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s est parti du salon. Raison : %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s a refusé l’invitation. Raison : %2$s</string>
     <string name="notice_room_kick_with_reason">%1$s a expulsé %2$s. Raison : %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s a révoqué le bannissement de %2$s. Raison : %3$s</string>
@@ -201,5 +201,13 @@
 
     <string name="notice_room_canonical_alias_set">%1$s a défini %2$s comme adresse principale pour ce salon.</string>
     <string name="notice_room_canonical_alias_unset">%1$s a supprimé l’adresse principale de ce salon.</string>
+
+    <string name="notice_room_guest_access_can_join">%1$s a autorisé les visiteurs à rejoindre le salon.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s a empêché les visiteurs de rejoindre le salon.</string>
+
+    <string name="notice_end_to_end_ok">%1$s a activé le chiffrement de bout en bout.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s a activé le chiffrement de bout en bout (algorithme %2$s inconnu).</string>
+
+    <string name="key_verification_request_fallback_message">%s demande à vérifier votre clé, mais votre client ne supporte pas la vérification de clés dans les discussions. Vous devrez utiliser l’ancienne vérification de clés pour vérifier les clés.</string>
 
 </resources>

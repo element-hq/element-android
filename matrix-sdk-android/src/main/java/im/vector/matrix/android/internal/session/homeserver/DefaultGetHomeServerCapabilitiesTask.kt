@@ -51,14 +51,22 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
             apiCall = capabilitiesAPI.getUploadCapabilities()
         }
 
+        val capabilities = runCatching {
+            executeRequest<GetCapabilitiesResult>(eventBus) {
+                apiCall = capabilitiesAPI.getCapabilities()
+            }
+        }.getOrNull()
+
         // TODO Add other call here (get version, etc.)
 
-        insertInDb(uploadCapabilities)
+        insertInDb(capabilities, uploadCapabilities)
     }
 
-    private suspend fun insertInDb(getUploadCapabilitiesResult: GetUploadCapabilitiesResult) {
+    private suspend fun insertInDb(getCapabilitiesResult: GetCapabilitiesResult?, getUploadCapabilitiesResult: GetUploadCapabilitiesResult) {
         monarchy.awaitTransaction { realm ->
             val homeServerCapabilitiesEntity = HomeServerCapabilitiesEntity.getOrCreate(realm)
+
+            homeServerCapabilitiesEntity.canChangePassword = getCapabilitiesResult.canChangePassword()
 
             homeServerCapabilitiesEntity.maxUploadFileSize = getUploadCapabilitiesResult.maxUploadSize
                     ?: HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN

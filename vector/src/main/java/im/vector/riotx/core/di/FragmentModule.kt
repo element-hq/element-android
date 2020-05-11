@@ -26,10 +26,13 @@ import im.vector.riotx.features.attachments.preview.AttachmentsPreviewFragment
 import im.vector.riotx.features.createdirect.CreateDirectRoomDirectoryUsersFragment
 import im.vector.riotx.features.createdirect.CreateDirectRoomKnownUsersFragment
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
+import im.vector.riotx.features.crypto.quads.SharedSecuredStorageKeyFragment
+import im.vector.riotx.features.crypto.quads.SharedSecuredStoragePassphraseFragment
 import im.vector.riotx.features.crypto.recover.BootstrapAccountPasswordFragment
 import im.vector.riotx.features.crypto.recover.BootstrapConclusionFragment
 import im.vector.riotx.features.crypto.recover.BootstrapConfirmPassphraseFragment
 import im.vector.riotx.features.crypto.recover.BootstrapEnterPassphraseFragment
+import im.vector.riotx.features.crypto.recover.BootstrapMigrateBackupFragment
 import im.vector.riotx.features.crypto.recover.BootstrapSaveRecoveryKeyFragment
 import im.vector.riotx.features.crypto.recover.BootstrapWaitingFragment
 import im.vector.riotx.features.crypto.verification.cancel.VerificationCancelFragment
@@ -80,6 +83,7 @@ import im.vector.riotx.features.settings.VectorSettingsNotificationPreferenceFra
 import im.vector.riotx.features.settings.VectorSettingsNotificationsTroubleshootFragment
 import im.vector.riotx.features.settings.VectorSettingsPreferencesFragment
 import im.vector.riotx.features.settings.VectorSettingsSecurityPrivacyFragment
+import im.vector.riotx.features.settings.account.deactivation.DeactivateAccountFragment
 import im.vector.riotx.features.settings.crosssigning.CrossSigningSettingsFragment
 import im.vector.riotx.features.settings.devices.VectorSettingsDevicesFragment
 import im.vector.riotx.features.settings.devtools.AccountDataFragment
@@ -444,4 +448,24 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(BootstrapAccountPasswordFragment::class)
     fun bindBootstrapAccountPasswordFragment(fragment: BootstrapAccountPasswordFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(BootstrapMigrateBackupFragment::class)
+    fun bindBootstrapMigrateBackupFragment(fragment: BootstrapMigrateBackupFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(DeactivateAccountFragment::class)
+    fun bindDeactivateAccountFragment(fragment: DeactivateAccountFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SharedSecuredStoragePassphraseFragment::class)
+    fun bindSharedSecuredStoragePassphraseFragment(fragment: SharedSecuredStoragePassphraseFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SharedSecuredStorageKeyFragment::class)
+    fun bindSharedSecuredStorageKeyFragment(fragment: SharedSecuredStorageKeyFragment): Fragment
 }

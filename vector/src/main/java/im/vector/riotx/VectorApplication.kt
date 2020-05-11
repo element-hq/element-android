@@ -56,6 +56,7 @@ import im.vector.riotx.features.version.VersionProvider
 import im.vector.riotx.push.fcm.FcmHelper
 import timber.log.Timber
 import java.text.SimpleDateFormat
+import java.util.concurrent.Executors
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
@@ -146,7 +147,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
 
     override fun providesMatrixConfiguration() = MatrixConfiguration(BuildConfig.FLAVOR_DESCRIPTION)
 
-    override fun getWorkManagerConfiguration() = androidx.work.Configuration.Builder().build()
+    override fun getWorkManagerConfiguration() = androidx.work.Configuration.Builder().setExecutor(Executors.newCachedThreadPool()).build()
 
     override fun injector(): VectorComponent {
         return vectorComponent
@@ -171,7 +172,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
         MultiDex.install(this)
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration?) {
+    override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         vectorConfiguration.onConfigurationChanged()
     }

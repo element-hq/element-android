@@ -35,6 +35,7 @@ import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
@@ -91,15 +92,16 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                 .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
-                        is HomeActivitySharedAction.OpenDrawer -> drawerLayout.openDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.OpenGroup  -> {
+                        is HomeActivitySharedAction.OpenDrawer                 -> drawerLayout.openDrawer(GravityCompat.START)
+                        is HomeActivitySharedAction.CloseDrawer                -> drawerLayout.closeDrawer(GravityCompat.START)
+                        is HomeActivitySharedAction.OpenGroup                  -> {
                             drawerLayout.closeDrawer(GravityCompat.START)
                             replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java)
                         }
                         is HomeActivitySharedAction.PromptForSecurityBootstrap -> {
-                            BootstrapBottomSheet().apply { isCancelable = false }.show(supportFragmentManager, "BootstrapBottomSheet")
+                            BootstrapBottomSheet.show(supportFragmentManager, true)
                         }
-                    }
+                    }.exhaustive
                 }
                 .disposeOnDestroy()
 
@@ -109,6 +111,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         }
         if (intent.getBooleanExtra(EXTRA_ACCOUNT_CREATION, false)) {
             sharedActionViewModel.post(HomeActivitySharedAction.PromptForSecurityBootstrap)
+            sharedActionViewModel.isAccountCreation = true
             intent.removeExtra(EXTRA_ACCOUNT_CREATION)
         }
 
@@ -163,27 +166,52 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
                 .getMyCrossSigningKeys()
         val crossSigningEnabledOnAccount = myCrossSigningKeys != null
 
-        if (crossSigningEnabledOnAccount && myCrossSigningKeys?.isTrusted() == false) {
+        if (!crossSigningEnabledOnAccount && !sharedActionViewModel.isAccountCreation) {
+            // Do not propose for SSO accounts, because we do not support yet confirming account credentials using SSO
+            if (session.getHomeServerCapabilities().canChangePassword) {
+                // We need to ask
+                promptSecurityEvent(
+                        session,
+                        R.string.upgrade_security,
+                        R.string.security_prompt_text
+                ) {
+                    it.navigator.upgradeSessionSecurity(it)
+                }
+            } else {
+                // Do not do it again
+                sharedActionViewModel.hasDisplayedCompleteSecurityPrompt = true
+            }
+        } else if (myCrossSigningKeys?.isTrusted() == false) {
             // We need to ask
-            sharedActionViewModel.hasDisplayedCompleteSecurityPrompt = true
-            popupAlertManager.postVectorAlert(
-                    VerificationVectorAlert(
-                            uid = "completeSecurity",
-                            title = getString(R.string.complete_security),
-                            description = getString(R.string.crosssigning_verify_this_session),
-                            iconId = R.drawable.ic_shield_warning
-                    ).apply {
-                        matrixItem = session.getUser(session.myUserId)?.toMatrixItem()
-                        colorInt = ContextCompat.getColor(this@HomeActivity, R.color.riotx_positive_accent)
-                        contentAction = Runnable {
-                            (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
-                                it.navigator.waitSessionVerification(it)
-                            }
-                        }
-                        dismissedAction = Runnable {}
-                    }
-            )
+            promptSecurityEvent(
+                    session,
+                    R.string.crosssigning_verify_this_session,
+                    R.string.confirm_your_identity
+            ) {
+                it.navigator.waitSessionVerification(it)
+            }
         }
+    }
+
+    private fun promptSecurityEvent(session: Session, titleRes: Int, descRes: Int, action: ((VectorBaseActivity) -> Unit)) {
+        sharedActionViewModel.hasDisplayedCompleteSecurityPrompt = true
+        popupAlertManager.postVectorAlert(
+                VerificationVectorAlert(
+                        uid = "upgradeSecurity",
+                        title = getString(titleRes),
+                        description = getString(descRes),
+                        iconId = R.drawable.ic_shield_warning
+                ).apply {
+                    matrixItem = session.getUser(session.myUserId)?.toMatrixItem()
+                    colorInt = ContextCompat.getColor(this@HomeActivity, R.color.riotx_positive_accent)
+                    contentAction = Runnable {
+                        (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
+                            action(it)
+                        }
+                    }
+                    dismissedAction = Runnable {}
+                }
+        )
     }
 
     override fun onNewIntent(intent: Intent?) {

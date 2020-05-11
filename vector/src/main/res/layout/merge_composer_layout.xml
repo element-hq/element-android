@@ -39,6 +39,13 @@
         tools:ignore="MissingConstraints"
         tools:src="@tools:sample/avatars" />
 
+    <ImageView
+        android:id="@+id/composer_shield"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:ignore="MissingConstraints"
+        tools:src="@drawable/ic_shield_black" />
+
     <TextView
         android:id="@+id/composer_related_message_sender"
         android:layout_width="0dp"

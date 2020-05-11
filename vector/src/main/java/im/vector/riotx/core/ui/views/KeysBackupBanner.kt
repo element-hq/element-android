@@ -17,7 +17,7 @@
 package im.vector.riotx.core.ui.views
 
 import android.content.Context
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
@@ -159,7 +159,7 @@ class KeysBackupBanner @JvmOverloads constructor(
         render(state, true)
     }
 
-    // PRIVATE METHODS *****************************************************************************************************************************************
+    // PRIVATE METHODS ****************************************************************************************************************************************
 
     private fun setupView() {
         inflate(context, R.layout.view_keys_backup_banner, this)

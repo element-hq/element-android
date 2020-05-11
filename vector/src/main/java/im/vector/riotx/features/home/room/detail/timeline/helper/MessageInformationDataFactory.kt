@@ -18,19 +18,24 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.helper
 
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.ReferencesAggregatedContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.session.room.timeline.hasBeenEdited
+import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.session.room.VerificationState
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.extensions.localDateTime
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.getColorFromUserId
+import im.vector.riotx.features.home.room.detail.timeline.item.E2EDecoration
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.riotx.features.home.room.detail.timeline.item.PollResponseData
 import im.vector.riotx.features.home.room.detail.timeline.item.ReactionInfoData
@@ -72,6 +77,8 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
             textColor = colorProvider.getColor(getColorFromUserId(event.root.senderId))
         }
 
+        val room = event.root.roomId?.let { session.getRoom(it) }
+        val e2eDecoration = getE2EDecoration(room, event)
         return MessageInformationData(
                 eventId = eventId,
                 senderId = event.root.senderId ?: "",
@@ -111,8 +118,59 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                             ?: VerificationState.REQUEST
                     ReferencesInfoData(verificationState)
                 },
-                sentByMe = event.root.senderId == session.myUserId
+                sentByMe = event.root.senderId == session.myUserId,
+                e2eDecoration = e2eDecoration
         )
+    }
+
+    private fun getE2EDecoration(room: Room?, event: TimelineEvent): E2EDecoration {
+        return if (
+                event.root.sendState == SendState.SYNCED
+                && room?.isEncrypted() == true
+                // is user verified
+                && session.cryptoService().crossSigningService().getUserCrossSigningKeys(event.root.senderId ?: "")?.isTrusted() == true) {
+            val ts = room.roomSummary()?.encryptionEventTs ?: 0
+            val eventTs = event.root.originServerTs ?: 0
+            if (event.isEncrypted()) {
+                // Do not decorate failed to decrypt, or redaction (we lost sender device info)
+                if (event.root.getClearType() == EventType.ENCRYPTED || event.root.isRedacted()) {
+                    E2EDecoration.NONE
+                } else {
+                    val sendingDevice = event.root.content
+                            .toModel<EncryptedEventContent>()
+                            ?.deviceId
+                            ?.let { deviceId ->
+                                session.cryptoService().getDeviceInfo(event.root.senderId ?: "", deviceId)
+                            }
+                    when {
+                        sendingDevice == null                            -> {
+                            // For now do not decorate this with warning
+                            // maybe it's a deleted session
+                            E2EDecoration.NONE
+                        }
+                        sendingDevice.trustLevel == null                 -> {
+                            E2EDecoration.WARN_SENT_BY_UNKNOWN
+                        }
+                        sendingDevice.trustLevel?.isVerified().orFalse() -> {
+                            E2EDecoration.NONE
+                        }
+                        else                                             -> {
+                            E2EDecoration.WARN_SENT_BY_UNVERIFIED
+                        }
+                    }
+                }
+            } else {
+                if (EventType.isStateEvent(event.root.type)) {
+                    // Do not warn for state event, they are always in clear
+                    E2EDecoration.NONE
+                } else {
+                    // If event is in clear after the room enabled encryption we should warn
+                    if (eventTs > ts) E2EDecoration.WARN_IN_CLEAR else E2EDecoration.NONE
+                }
+            }
+        } else {
+            E2EDecoration.NONE
+        }
     }
 
     /**

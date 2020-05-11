@@ -29,6 +29,8 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
+import okio.buffer
+import okio.sink
 import timber.log.Timber
 import java.io.File
 import java.text.SimpleDateFormat
@@ -256,6 +258,61 @@ fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
 
         context.startActivity(sendIntent)
     }
+}
+
+fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String?): Boolean {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        val externalContentUri: Uri
+        val values = ContentValues()
+        when {
+            mediaMimeType?.startsWith("image/") == true -> {
+                externalContentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                values.put(MediaStore.Images.Media.TITLE, title)
+                values.put(MediaStore.Images.Media.DISPLAY_NAME, title)
+                values.put(MediaStore.Images.Media.MIME_TYPE, mediaMimeType)
+                values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis())
+                values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
+            }
+            mediaMimeType?.startsWith("video/") == true -> {
+                externalContentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                values.put(MediaStore.Video.Media.TITLE, title)
+                values.put(MediaStore.Video.Media.DISPLAY_NAME, title)
+                values.put(MediaStore.Video.Media.MIME_TYPE, mediaMimeType)
+                values.put(MediaStore.Video.Media.DATE_ADDED, System.currentTimeMillis())
+                values.put(MediaStore.Video.Media.DATE_TAKEN, System.currentTimeMillis())
+            }
+            mediaMimeType?.startsWith("audio/") == true -> {
+                externalContentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+                values.put(MediaStore.Audio.Media.TITLE, title)
+                values.put(MediaStore.Audio.Media.DISPLAY_NAME, title)
+                values.put(MediaStore.Audio.Media.MIME_TYPE, mediaMimeType)
+                values.put(MediaStore.Audio.Media.DATE_ADDED, System.currentTimeMillis())
+                values.put(MediaStore.Audio.Media.DATE_TAKEN, System.currentTimeMillis())
+            }
+            else                                        -> {
+                externalContentUri = MediaStore.Downloads.EXTERNAL_CONTENT_URI
+                values.put(MediaStore.Downloads.TITLE, title)
+                values.put(MediaStore.Downloads.DISPLAY_NAME, title)
+                values.put(MediaStore.Downloads.MIME_TYPE, mediaMimeType)
+                values.put(MediaStore.Downloads.DATE_ADDED, System.currentTimeMillis())
+                values.put(MediaStore.Downloads.DATE_TAKEN, System.currentTimeMillis())
+            }
+        }
+        context.contentResolver.insert(externalContentUri, values)?.let { uri ->
+            context.contentResolver.openOutputStream(uri)?.use { outputStream ->
+                outputStream.sink().buffer().write(file.inputStream().use { it.readBytes() })
+                return true
+            }
+        }
+    } else {
+        @Suppress("DEPRECATION")
+        Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).also { mediaScanIntent ->
+            mediaScanIntent.data = Uri.fromFile(file)
+            context.sendBroadcast(mediaScanIntent)
+        }
+        return true
+    }
+    return false
 }
 
 /**

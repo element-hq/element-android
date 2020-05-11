@@ -33,6 +33,7 @@ import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import org.matrix.olm.OlmManager
 import java.io.InputStream
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.Executors
 import javax.inject.Inject
 
 data class MatrixConfiguration(
@@ -61,7 +62,7 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
         Monarchy.init(context)
         DaggerMatrixComponent.factory().create(context, matrixConfiguration).inject(this)
         if (context.applicationContext !is Configuration.Provider) {
-            WorkManager.initialize(context, Configuration.Builder().build())
+            WorkManager.initialize(context, Configuration.Builder().setExecutor(Executors.newCachedThreadPool()).build())
         }
         ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
     }

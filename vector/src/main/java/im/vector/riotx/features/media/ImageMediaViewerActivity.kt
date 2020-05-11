@@ -21,10 +21,12 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
+import androidx.core.net.toUri
 import androidx.core.transition.addListener
 import androidx.core.view.ViewCompat
 import androidx.core.view.isInvisible
@@ -36,15 +38,23 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.github.piasy.biv.indicator.progresspie.ProgressPieIndicator
 import com.github.piasy.biv.view.GlideImageViewFactory
+import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.file.FileService
+import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.glide.GlideApp
+import im.vector.riotx.core.intent.getMimeTypeFromUri
 import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.core.utils.shareMedia
 import kotlinx.android.synthetic.main.activity_image_media_viewer.*
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 class ImageMediaViewerActivity : VectorBaseActivity() {
 
+    @Inject lateinit var session: Session
     @Inject lateinit var imageContentRenderer: ImageContentRenderer
 
     private lateinit var mediaData: ImageContentRenderer.Data
@@ -56,10 +66,17 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(im.vector.riotx.R.layout.activity_image_media_viewer)
-        mediaData = intent.getParcelableExtra(EXTRA_MEDIA_DATA)
+
+        if (intent.hasExtra(EXTRA_MEDIA_DATA)) {
+            mediaData = intent.getParcelableExtra(EXTRA_MEDIA_DATA)!!
+        } else {
+            finish()
+        }
+
         intent.extras?.getString(EXTRA_SHARED_TRANSITION_NAME)?.let {
             ViewCompat.setTransitionName(imageTransitionView, it)
         }
+
         if (mediaData.url.isNullOrEmpty()) {
             supportFinishAfterTransition()
             return
@@ -101,6 +118,33 @@ class ImageMediaViewerActivity : VectorBaseActivity() {
                 imageContentRenderer.render(mediaData, imageMediaViewerImageView)
             }
         }
+    }
+
+    override fun getMenuRes() = R.menu.vector_media_viewer
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.mediaViewerShareAction -> {
+                onShareActionClicked()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun onShareActionClicked() {
+        session.downloadFile(
+                FileService.DownloadMode.FOR_EXTERNAL_SHARE,
+                mediaData.eventId,
+                mediaData.filename,
+                mediaData.url,
+                mediaData.elementToDecrypt,
+                object : MatrixCallback<File> {
+                    override fun onSuccess(data: File) {
+                        shareMedia(this@ImageMediaViewerActivity, data, getMimeTypeFromUri(this@ImageMediaViewerActivity, data.toUri()))
+                    }
+                }
+        )
     }
 
     private fun configureToolbar(toolbar: Toolbar, mediaData: ImageContentRenderer.Data) {

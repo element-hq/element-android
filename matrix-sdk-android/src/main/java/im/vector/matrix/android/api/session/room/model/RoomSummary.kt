@@ -46,10 +46,10 @@ data class RoomSummary constructor(
         val readMarkerId: String? = null,
         val userDrafts: List<UserDraft> = emptyList(),
         val isEncrypted: Boolean,
+        val encryptionEventTs: Long?,
         val inviterId: String? = null,
         val typingRoomMemberIds: List<String> = emptyList(),
         val breadcrumbsIndex: Int = NOT_IN_BREADCRUMBS,
-        // TODO Plug it
         val roomEncryptionTrustLevel: RoomEncryptionTrustLevel? = null
 ) {
 
