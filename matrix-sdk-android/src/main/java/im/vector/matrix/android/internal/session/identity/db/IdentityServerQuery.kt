@@ -47,7 +47,7 @@ internal fun IdentityServerEntity.Companion.setUrl(realm: Realm,
 
 internal fun IdentityServerEntity.Companion.setToken(realm: Realm,
                                                      newToken: String?) {
-    getOrCreate(realm).apply {
+    get(realm)?.apply {
         token = newToken
     }
 }
@@ -55,7 +55,7 @@ internal fun IdentityServerEntity.Companion.setToken(realm: Realm,
 internal fun IdentityServerEntity.Companion.setHashDetails(realm: Realm,
                                                            pepper: String,
                                                            algorithms: List<String>) {
-    getOrCreate(realm).apply {
+    get(realm)?.apply {
         hashLookupPepper = pepper
         hashLookupAlgorithm = RealmList<String>().apply { addAll(algorithms) }
     }

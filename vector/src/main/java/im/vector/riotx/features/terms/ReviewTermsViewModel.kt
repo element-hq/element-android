@@ -16,9 +16,7 @@
 package im.vector.riotx.features.terms
 
 import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
@@ -29,33 +27,8 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.terms.GetTermsResponse
 import im.vector.riotx.core.extensions.exhaustive
-import im.vector.riotx.core.platform.VectorViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.core.platform.VectorViewModelAction
 import timber.log.Timber
-
-data class Term(
-        val url: String,
-        val name: String,
-        val version: String? = null,
-        val accepted: Boolean = false
-)
-
-data class ReviewTermsViewState(
-        val termsList: Async<List<Term>> = Uninitialized,
-        val acceptingTerms: Async<Unit> = Uninitialized
-) : MvRxState
-
-sealed class ReviewTermsAction : VectorViewModelAction {
-    data class LoadTerms(val preferredLanguageCode: String) : ReviewTermsAction()
-    data class MarkTermAsAccepted(val url: String, val accepted: Boolean) : ReviewTermsAction()
-    object Accept : ReviewTermsAction()
-}
-
-sealed class ReviewTermsViewEvents : VectorViewEvents {
-    data class Failure(val throwable: Throwable, val finish: Boolean) : ReviewTermsViewEvents()
-    object Success : ReviewTermsViewEvents()
-}
 
 class ReviewTermsViewModel @AssistedInject constructor(
         @Assisted initialState: ReviewTermsViewState,
