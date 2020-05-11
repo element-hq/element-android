@@ -16,12 +16,12 @@
 
 package im.vector.matrix.android.api.session.identity
 
-sealed class IdentityServiceError(cause: Throwable? = null) : Throwable(cause = cause) {
-    object OutdatedIdentityServer : IdentityServiceError(null)
-    object OutdatedHomeServer : IdentityServiceError(null)
-    object NoIdentityServerConfigured : IdentityServiceError(null)
-    object TermsNotSignedException : IdentityServiceError(null)
-    object BulkLookupSha256NotSupported : IdentityServiceError(null)
-    object BindingError : IdentityServiceError(null)
-    object NoCurrentBindingError : IdentityServiceError(null)
+sealed class IdentityServiceError : Throwable() {
+    object OutdatedIdentityServer : IdentityServiceError()
+    object OutdatedHomeServer : IdentityServiceError()
+    object NoIdentityServerConfigured : IdentityServiceError()
+    object TermsNotSignedException : IdentityServiceError()
+    object BulkLookupSha256NotSupported : IdentityServiceError()
+    object BindingError : IdentityServiceError()
+    object NoCurrentBindingError : IdentityServiceError()
 }

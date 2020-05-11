@@ -102,7 +102,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
                     copy(
                             isVerifyingServer = false,
                             errorMessageId = if (failure is IdentityServiceError.OutdatedIdentityServer) {
-                                R.string.settings_discovery_outdated_identity_server
+                                R.string.identity_server_error_outdated_identity_server
                             } else {
                                 R.string.settings_discovery_bad_identity_server
                             }

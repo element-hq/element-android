@@ -1738,7 +1738,6 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="settings_discovery_enter_identity_server">Enter a new identity server</string>
     <string name="settings_discovery_bad_identity_server">Could not connect to identity server</string>
-    <string name="settings_discovery_outdated_identity_server">This identity server does not support API V2</string>
     <string name="settings_discovery_please_enter_server">Please enter the identity server url</string>
     <string name="settings_discovery_no_terms_title">Identity server has no terms of services</string>
     <string name="settings_discovery_no_terms">The identity server you have chosen does not have any terms of services. Only continue if you trust the owner of the service</string>
@@ -2405,4 +2404,12 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="open_terms_of">Open terms of %s</string>
     <string name="disconnect_identity_server_dialog_content">Disconnect from the identity server %s?</string>
+    <string name="identity_server_error_outdated_identity_server">This identity server is outdated. RiotX support only API V2.</string>
+    <string name="identity_server_error_outdated_home_server">This operation is not possible. The homeserver is outdated.</string>
+    <string name="identity_server_error_no_identity_server_configured">Please first configure an identity server.</string>
+    <string name="identity_server_error_terms_not_signed">Please first accepts the terms of the identity server in the settings.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">For your privacy, RiotX only supports sending hashed user emails and phone number.</string>
+    <string name="identity_server_error_binding_error">The association has failed.</string>
+    <string name="identity_server_error_no_current_binding_error">The is no current association with this identifier.</string>
+
 </resources>
