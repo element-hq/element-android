@@ -15,21 +15,22 @@
  */
 package im.vector.matrix.android.internal.session.widgets
 
+import im.vector.matrix.android.internal.session.openid.RequestOpenIdTokenResponse
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 
 internal interface WidgetsAPI {
+
     /**
      * register to the server
      *
      * @param requestOpenIdTokenResponse the body content (Ref: https://github.com/matrix-org/matrix-doc/pull/1961)
      */
-
-    //TODO Require work on RequestOpenIdTokenResponse from Benoit
     @POST("register")
-    //fun register(@Body requestOpenIdTokenResponse: RequestOpenIdTokenResponse, @Query("v") version: String?): Call<RegisterWidgetResponse>
+    fun register(@Body requestOpenIdTokenResponse: RequestOpenIdTokenResponse, @Query("v") version: String?): Call<RegisterWidgetResponse>
 
     @GET("account")
     fun validateToken(@Query("scalar_token") scalarToken: String?, @Query("v") version: String?): Call<Unit>

@@ -16,5 +16,33 @@
 
 package im.vector.matrix.android.internal.session.widgets.token
 
-internal class ScalarTokenStore {
+import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.internal.database.model.ScalarTokenEntity
+import im.vector.matrix.android.internal.database.query.where
+import im.vector.matrix.android.internal.util.awaitTransaction
+import im.vector.matrix.android.internal.util.fetchCopyMap
+import javax.inject.Inject
+
+internal class ScalarTokenStore @Inject constructor(private val monarchy: Monarchy) {
+
+    fun getToken(apiUrl: String): String? {
+        return monarchy.fetchCopyMap({ realm ->
+            ScalarTokenEntity.where(realm, apiUrl).findFirst()
+        }, { scalarToken, _ ->
+            scalarToken.serverUrl
+        })
+    }
+
+    suspend fun setToken(apiUrl: String, token: String) {
+        monarchy.awaitTransaction { realm ->
+            val scalarTokenEntity = ScalarTokenEntity(apiUrl, token)
+            realm.insertOrUpdate(scalarTokenEntity)
+        }
+    }
+
+    suspend fun clearToken(apiUrl: String) {
+        monarchy.awaitTransaction { realm ->
+            ScalarTokenEntity.where(realm, apiUrl).findFirst()?.deleteFromRealm()
+        }
+    }
 }

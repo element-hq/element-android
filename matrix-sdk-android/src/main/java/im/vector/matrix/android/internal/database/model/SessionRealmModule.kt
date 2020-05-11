@@ -54,6 +54,7 @@ import io.realm.annotations.RealmModule
             HomeServerCapabilitiesEntity::class,
             RoomMemberSummaryEntity::class,
             CurrentStateEventEntity::class,
-            UserAccountDataEntity::class
+            UserAccountDataEntity::class,
+            ScalarTokenEntity::class
         ])
 internal class SessionRealmModule

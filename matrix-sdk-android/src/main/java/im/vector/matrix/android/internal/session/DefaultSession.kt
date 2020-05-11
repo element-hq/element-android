@@ -55,6 +55,7 @@ import im.vector.matrix.android.internal.session.room.timeline.TimelineEventDecr
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import im.vector.matrix.android.internal.session.sync.job.SyncWorker
+import im.vector.matrix.android.internal.session.widgets.WidgetManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -99,6 +100,7 @@ internal class DefaultSession @Inject constructor(
         private val accountService: Lazy<AccountService>,
         private val timelineEventDecryptor: TimelineEventDecryptor,
         private val integrationManager: IntegrationManager,
+        private val widgetManager: WidgetManager,
         private val shieldTrustUpdater: ShieldTrustUpdater)
     : Session,
         RoomService by roomService.get(),
@@ -136,6 +138,7 @@ internal class DefaultSession @Inject constructor(
         timelineEventDecryptor.start()
         shieldTrustUpdater.start()
         integrationManager.start()
+        widgetManager.start()
     }
 
     override fun requireBackgroundSync() {
@@ -179,6 +182,7 @@ internal class DefaultSession @Inject constructor(
         eventBus.unregister(this)
         shieldTrustUpdater.stop()
         integrationManager.stop()
+        widgetManager.stop()
     }
 
     override fun getSyncStateLive(): LiveData<SyncState> {
