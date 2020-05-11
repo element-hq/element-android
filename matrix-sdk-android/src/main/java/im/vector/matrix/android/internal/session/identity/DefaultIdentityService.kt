@@ -118,7 +118,7 @@ internal class DefaultIdentityService @Inject constructor(
         return NoOpCancellable
     }
 
-    override fun getCurrentIdentityServer(): String? {
+    override fun getCurrentIdentityServerUrl(): String? {
         return identityServiceStore.getIdentityServerDetails()?.identityServerUrl
     }
 
@@ -177,7 +177,7 @@ internal class DefaultIdentityService @Inject constructor(
         }
 
         return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
-            val current = getCurrentIdentityServer()
+            val current = getCurrentIdentityServerUrl()
             when (urlCandidate) {
                 current ->
                     // Nothing to do

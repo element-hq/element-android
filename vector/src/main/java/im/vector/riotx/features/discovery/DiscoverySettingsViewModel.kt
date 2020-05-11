@@ -58,7 +58,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
     private val identityServerManagerListener = object : IdentityServiceListener {
         override fun onIdentityServerChange() = withState { state ->
-            val identityServerUrl = identityService.getCurrentIdentityServer()
+            val identityServerUrl = identityService.getCurrentIdentityServerUrl()
             val currentIS = state.identityServer()
             setState {
                 copy(identityServer = Success(identityServerUrl))
@@ -69,7 +69,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
     init {
         setState {
-            copy(identityServer = Success(identityService.getCurrentIdentityServer()))
+            copy(identityServer = Success(identityService.getCurrentIdentityServerUrl()))
         }
         startListenToIdentityManager()
         observeThreePids()

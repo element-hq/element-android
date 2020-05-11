@@ -79,6 +79,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
     private val mPasswordPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)!!
     }
+    private val mIdentityServerPreference by lazy {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)!!
+    }
 
     // Local contacts
     private val mContactSettingsCategory by lazy {
@@ -168,11 +171,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_HOME_SERVER_PREFERENCE_KEY)!!
                 .summary = session.sessionParams.homeServerConnectionConfig.homeServerUri.toString()
 
-        // identity server
-        // TODO Handle refresh of the value
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)!!
-                .summary = session.identityService().getCurrentIdentityServer() ?: getString(R.string.identity_server_not_defined)
-
         refreshEmailsList()
         refreshPhoneNumbersList()
         // Contacts
@@ -239,6 +237,13 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
             false
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // Refresh identity server summary
+        mIdentityServerPreference.summary = session.identityService().getCurrentIdentityServerUrl() ?: getString(R.string.identity_server_not_defined)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

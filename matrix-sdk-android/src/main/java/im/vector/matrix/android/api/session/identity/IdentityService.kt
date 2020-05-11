@@ -29,7 +29,10 @@ interface IdentityService {
      */
     fun getDefaultIdentityServer(callback: MatrixCallback<String?>): Cancelable
 
-    fun getCurrentIdentityServer(): String?
+    /**
+     * Return the current identity server URL used by this account. Returns null if no identity server is configured.
+     */
+    fun getCurrentIdentityServerUrl(): String?
 
     /**
      * Check if the identity server is valid
