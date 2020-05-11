@@ -67,7 +67,6 @@ internal class DefaultSignOutTask @Inject constructor(
             identityDisconnectTask.execute(Unit)
         }
 
-
         Timber.d("SignOut: cleanup session...")
         cleanupSession.handle()
     }
