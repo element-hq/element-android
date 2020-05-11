@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.session.homeserver
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Versions
 import im.vector.matrix.android.api.auth.data.isLoginAndRegistrationSupportedBySdk
-import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
 import im.vector.matrix.android.internal.database.model.HomeServerCapabilitiesEntity
 import im.vector.matrix.android.internal.database.query.getOrCreate
@@ -50,9 +49,11 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
             return
         }
 
-        val uploadCapabilities = executeRequest<GetUploadCapabilitiesResult>(eventBus) {
-            apiCall = capabilitiesAPI.getUploadCapabilities()
-        }
+        val uploadCapabilities = runCatching {
+            executeRequest<GetUploadCapabilitiesResult>(eventBus) {
+                apiCall = capabilitiesAPI.getUploadCapabilities()
+            }
+        }.getOrNull()
 
         val capabilities = runCatching {
             executeRequest<GetCapabilitiesResult>(eventBus) {
@@ -66,22 +67,27 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
             }
         }.getOrNull()
 
-
         insertInDb(capabilities, uploadCapabilities, versions)
     }
 
     private suspend fun insertInDb(getCapabilitiesResult: GetCapabilitiesResult?,
-                                   getUploadCapabilitiesResult: GetUploadCapabilitiesResult,
+                                   getUploadCapabilitiesResult: GetUploadCapabilitiesResult?,
                                    getVersionResult: Versions?) {
         monarchy.awaitTransaction { realm ->
             val homeServerCapabilitiesEntity = HomeServerCapabilitiesEntity.getOrCreate(realm)
 
-            homeServerCapabilitiesEntity.canChangePassword = getCapabilitiesResult.canChangePassword()
+            if (getCapabilitiesResult != null) {
+                homeServerCapabilitiesEntity.canChangePassword = getCapabilitiesResult.canChangePassword()
+            }
 
-            homeServerCapabilitiesEntity.maxUploadFileSize = getUploadCapabilitiesResult.maxUploadSize
-                    ?: HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN
+            if (getUploadCapabilitiesResult != null) {
+                homeServerCapabilitiesEntity.maxUploadFileSize = getUploadCapabilitiesResult.maxUploadSize
+                        ?: HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN
+            }
 
-            homeServerCapabilitiesEntity.lastVersionIdentityServerSupported = getVersionResult?.isLoginAndRegistrationSupportedBySdk().orFalse()
+            if (getVersionResult != null) {
+                homeServerCapabilitiesEntity.lastVersionIdentityServerSupported = getVersionResult.isLoginAndRegistrationSupportedBySdk()
+            }
 
             homeServerCapabilitiesEntity.lastUpdatedTimestamp = Date().time
         }
