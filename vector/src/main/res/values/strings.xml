@@ -2404,4 +2404,5 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="choose_locale_loading_locales">Loading available languages…</string>
 
     <string name="open_terms_of">Open terms of %s</string>
+    <string name="disconnect_identity_server_dialog_content">Disconnect from the identity server %s?</string>
 </resources>

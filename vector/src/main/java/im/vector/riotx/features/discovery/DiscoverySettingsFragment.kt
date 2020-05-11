@@ -158,17 +158,18 @@ class DiscoverySettingsFragment @Inject constructor(
             val pidList = state.emailList().orEmpty() + state.phoneNumbersList().orEmpty()
             val hasBoundIds = pidList.any { it.isShared() == SharedState.SHARED }
 
-            if (hasBoundIds) {
-                // we should prompt
-                AlertDialog.Builder(requireActivity())
-                        .setTitle(R.string.disconnect_identity_server)
-                        .setMessage(getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer()))
-                        .setPositiveButton(R.string._continue) { _, _ -> viewModel.handle(DiscoverySettingsAction.ChangeIdentityServer(null)) }
-                        .setNegativeButton(R.string.cancel, null)
-                        .show()
+            val message = if (hasBoundIds) {
+                getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer())
             } else {
-                viewModel.handle(DiscoverySettingsAction.ChangeIdentityServer(null))
+                getString(R.string.disconnect_identity_server_dialog_content, state.identityServer())
             }
+
+            AlertDialog.Builder(requireActivity())
+                    .setTitle(R.string.disconnect_identity_server)
+                    .setMessage(message)
+                    .setPositiveButton(R.string.disconnect) { _, _ -> viewModel.handle(DiscoverySettingsAction.ChangeIdentityServer(null)) }
+                    .setNegativeButton(R.string.cancel, null)
+                    .show()
         }
     }
 
