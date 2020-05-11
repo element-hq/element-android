@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Improve notification accessibility with ticker text (#1226)
 
 Bugfix 🐛:
  - Sometimes the same device appears twice in the list of devices of a user (#1329)
