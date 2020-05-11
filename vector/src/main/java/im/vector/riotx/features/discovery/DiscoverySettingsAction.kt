@@ -23,7 +23,8 @@ sealed class DiscoverySettingsAction : VectorViewModelAction {
     object RetrieveBinding : DiscoverySettingsAction()
     object Refresh : DiscoverySettingsAction()
 
-    data class ChangeIdentityServer(val url: String?) : DiscoverySettingsAction()
+    object DisconnectIdentityServer : DiscoverySettingsAction()
+    data class ChangeIdentityServer(val url: String) : DiscoverySettingsAction()
     data class RevokeThreePid(val threePid: ThreePid) : DiscoverySettingsAction()
     data class ShareThreePid(val threePid: ThreePid) : DiscoverySettingsAction()
     data class FinalizeBind3pid(val threePid: ThreePid) : DiscoverySettingsAction()

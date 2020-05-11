@@ -167,7 +167,7 @@ class DiscoverySettingsFragment @Inject constructor(
             AlertDialog.Builder(requireActivity())
                     .setTitle(R.string.disconnect_identity_server)
                     .setMessage(message)
-                    .setPositiveButton(R.string.disconnect) { _, _ -> viewModel.handle(DiscoverySettingsAction.ChangeIdentityServer(null)) }
+                    .setPositiveButton(R.string.disconnect) { _, _ -> viewModel.handle(DiscoverySettingsAction.DisconnectIdentityServer) }
                     .setNegativeButton(R.string.cancel, null)
                     .show()
         }

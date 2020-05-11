@@ -43,11 +43,18 @@ interface IdentityService {
 
     /**
      * Update the identity server url.
-     * @param url the new url. Set to null to disconnect from the identity server
-     * @param callback will notify the user is change successful. The String will be the final url of the identity server, or null.
-     * The SDK can append "https://" for instance.
+     * If successful, any previous identity server will be disconnected.
+     * In case of error, any previous identity server will remain configured.
+     * @param url the new url.
+     * @param callback will notify the user if change is successful. The String will be the final url of the identity server.
+     * The SDK can prepend "https://" for instance.
      */
-    fun setNewIdentityServer(url: String?, callback: MatrixCallback<String?>): Cancelable
+    fun setNewIdentityServer(url: String, callback: MatrixCallback<String>): Cancelable
+
+    /**
+     * Disconnect (logout) from the current identity server
+     */
+    fun disconnect(callback: MatrixCallback<Unit>): Cancelable
 
     /**
      * This will ask the identity server to send an email or an SMS to let the user confirm he owns the ThreePid

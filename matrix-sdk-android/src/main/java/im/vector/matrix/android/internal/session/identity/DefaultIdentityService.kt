@@ -183,46 +183,45 @@ internal class DefaultIdentityService @Inject constructor(
         }
     }
 
-    override fun setNewIdentityServer(url: String?, callback: MatrixCallback<String?>): Cancelable {
-        val urlCandidate = url?.let { param ->
-            buildString {
-                if (!param.startsWith("http")) {
-                    append("https://")
-                }
-                append(param)
+    override fun disconnect(callback: MatrixCallback<Unit>): Cancelable {
+        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+            identityDisconnectTask.execute(Unit)
+
+            identityServiceStore.setUrl(null)
+            updateIdentityAPI(null)
+            updateAccountData(null)
+        }
+    }
+
+    override fun setNewIdentityServer(url: String, callback: MatrixCallback<String>): Cancelable {
+        val urlCandidate = buildString {
+            if (!url.startsWith("http")) {
+                append("https://")
             }
+            append(url)
         }
 
         return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
             val current = getCurrentIdentityServerUrl()
-            when (urlCandidate) {
-                current ->
-                    // Nothing to do
-                    Timber.d("Same URL, nothing to do")
-                null    -> {
-                    // Disconnect previous one if any
-                    identityServiceStore.getIdentityServerDetails()?.let {
-                        if (it.identityServerUrl != null && it.token != null) {
-                            // Disconnect, ignoring any error
-                            runCatching {
-                                identityDisconnectTask.execute(Unit)
-                            }
-                        }
-                    }
-                    identityServiceStore.setUrl(null)
-                    updateIdentityAPI(null)
-                    updateAccountData(null)
+            if (urlCandidate == current) {
+                // Nothing to do
+                Timber.d("Same URL, nothing to do")
+            } else {
+                // Disconnect previous one if any, first, because the token will change.
+                // In case of error when configuring the new identity server, this is not a big deal,
+                // we will ask for a new token on the previous Identity server
+                runCatching {
+                    identityDisconnectTask.execute(Unit)
                 }
-                else    -> {
-                    // Try to get a token
-                    val token = getNewIdentityServerToken(urlCandidate)
 
-                    identityServiceStore.setUrl(urlCandidate)
-                    identityServiceStore.setToken(token)
-                    updateIdentityAPI(urlCandidate)
+                // Try to get a token
+                val token = getNewIdentityServerToken(urlCandidate)
 
-                    updateAccountData(urlCandidate)
-                }
+                identityServiceStore.setUrl(urlCandidate)
+                identityServiceStore.setToken(token)
+                updateIdentityAPI(urlCandidate)
+
+                updateAccountData(urlCandidate)
             }
             urlCandidate
         }
@@ -329,7 +328,7 @@ internal class DefaultIdentityService @Inject constructor(
 
 private fun Throwable.isInvalidToken(): Boolean {
     return this is Failure.ServerError
-            && this.httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED /* 401 */
+            && httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED /* 401 */
 }
 
 private fun Throwable.isTermsNotSigned(): Boolean {

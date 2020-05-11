@@ -91,15 +91,42 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
     override fun handle(action: DiscoverySettingsAction) {
         when (action) {
-            DiscoverySettingsAction.Refresh                 -> refreshPendingEmailBindings()
-            DiscoverySettingsAction.RetrieveBinding         -> retrieveBinding()
-            is DiscoverySettingsAction.ChangeIdentityServer -> changeIdentityServer(action)
-            is DiscoverySettingsAction.RevokeThreePid       -> revokeThreePid(action)
-            is DiscoverySettingsAction.ShareThreePid        -> shareThreePid(action)
-            is DiscoverySettingsAction.FinalizeBind3pid     -> finalizeBind3pid(action, true)
-            is DiscoverySettingsAction.SubmitMsisdnToken    -> submitMsisdnToken(action)
-            is DiscoverySettingsAction.CancelBinding        -> cancelBinding(action)
+            DiscoverySettingsAction.Refresh                  -> refreshPendingEmailBindings()
+            DiscoverySettingsAction.RetrieveBinding          -> retrieveBinding()
+            DiscoverySettingsAction.DisconnectIdentityServer -> disconnectIdentityServer()
+            is DiscoverySettingsAction.ChangeIdentityServer  -> changeIdentityServer(action)
+            is DiscoverySettingsAction.RevokeThreePid        -> revokeThreePid(action)
+            is DiscoverySettingsAction.ShareThreePid         -> shareThreePid(action)
+            is DiscoverySettingsAction.FinalizeBind3pid      -> finalizeBind3pid(action, true)
+            is DiscoverySettingsAction.SubmitMsisdnToken     -> submitMsisdnToken(action)
+            is DiscoverySettingsAction.CancelBinding         -> cancelBinding(action)
         }.exhaustive
+    }
+
+    private fun disconnectIdentityServer() {
+        setState {
+            copy(
+                    identityServer = Loading()
+            )
+        }
+
+        session.identityService().disconnect(object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                setState {
+                    copy(
+                            identityServer = Success(null)
+                    )
+                }
+            }
+
+            override fun onFailure(failure: Throwable) {
+                setState {
+                    copy(
+                            identityServer = Fail(failure)
+                    )
+                }
+            }
+        })
     }
 
     private fun changeIdentityServer(action: DiscoverySettingsAction.ChangeIdentityServer) {
