@@ -165,4 +165,48 @@
     <string name="event_status_sending_message">Sendante mesaĝon…</string>
     <string name="clear_timeline_send_queue">Vakigi sendan atendovicon</string>
 
-    </resources>
+    <string name="notice_requested_voip_conference">%1$s petis grupan vokon</string>
+    <string name="notice_voip_started">Grupa voko komenciĝis</string>
+    <string name="notice_voip_finished">Grupa voko finiĝis</string>
+
+    <string name="notice_avatar_changed_too">(ankaŭ profilbildo ŝanĝiĝis)</string>
+    <string name="notice_room_name_removed">%1$s forigis nomon de la ĉambro</string>
+    <string name="notice_room_topic_removed">%1$s forigis temon de la ĉambro</string>
+    <string name="notice_room_invite_no_invitee_with_reason">Invito de %1$s. Kialo: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s invitis uzanton %2$s. Kialo: %3$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s invitis vin. Kialo: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s aliĝis al la ĉambro. Kialo: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s foriris de la ĉambro. Kialo: %2$s</string>
+    <string name="notice_room_reject_with_reason">%1$s rifuzis la inviton. Kialo: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s forpelis uzanton %2$s. Kialo: %3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s malforbaris uzanton %2$s. Kialo: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s forbaris uzanton %2$s. Kialo: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s sendis inviton al la ĉambro al %2$s. Kialo: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s nuligis la inviton al la ĉambro al %2$s. Kialo: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s akceptis la inviton por %2$s. Kialo: %3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s nuligis la inviton al %2$s. Kialo: %3$s</string>
+
+    <plurals name="notice_room_aliases_added">
+	<item quantity="one">%1$s aldonis %2$s kiel adreson por ĉi tiu ĉambro.</item>
+	<item quantity="other">%1$s aldonis %2$s kiel adresojn por ĉi tiu ĉambro.</item>
+</plurals>
+
+    <plurals name="notice_room_aliases_removed">
+	<item quantity="one">%1$s forigis %2$s kiel adreson por ĉi tiu ĉambro.</item>
+	<item quantity="other">%1$s forigis %2$s kiel adresojn por ĉi tiu ĉambro.</item>
+</plurals>
+
+    <string name="notice_room_aliases_added_and_removed">%1$s aldonis %2$s kaj forigis %3$s kiel adresojn por ĉi tiu ĉambro.</string>
+
+    <string name="notice_room_canonical_alias_set">%1$s agordis la ĉefadreson por ĉi tiu ĉambro al %2$s.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s forigis la ĉefadreson de ĉi tiu ĉambro.</string>
+
+    <string name="notice_room_guest_access_can_join">%1$s permesis al gastoj aliĝi al la ĉambro.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s malpermesis al gastoj aliĝi al la ĉambro.</string>
+
+    <string name="notice_end_to_end_ok">%1$s ŝaltis tutvojan ĉifradon.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s ŝaltis tutvojan ĉifradon (kun nerekonita algoritmo %2$s).</string>
+
+    <string name="key_verification_request_fallback_message">%s petas kontrolon de via ŝlosilo, sed via kliento ne subtenas kontrolon de ŝlosiloj en la babilujo. Vi devos uzi malnovecan kontrolon de ŝlosiloj.</string>
+
+</resources>
