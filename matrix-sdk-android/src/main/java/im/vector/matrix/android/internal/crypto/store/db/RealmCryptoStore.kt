@@ -38,7 +38,7 @@ import im.vector.matrix.android.internal.crypto.OutgoingSecretRequest
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
-import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
+import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
@@ -58,7 +58,6 @@ import im.vector.matrix.android.internal.crypto.store.db.model.DeviceInfoEntityF
 import im.vector.matrix.android.internal.crypto.store.db.model.GossipingEventEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.IncomingGossipingRequestEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.IncomingGossipingRequestEntityFields
-import im.vector.matrix.android.internal.crypto.store.db.model.KeyInfoEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
@@ -81,7 +80,6 @@ import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.matrix.android.internal.session.SessionScope
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import io.realm.RealmList
 import io.realm.Sort
 import io.realm.kotlin.where
 import org.matrix.olm.OlmAccount
@@ -110,7 +108,7 @@ internal class RealmCryptoStore @Inject constructor(
     private val olmSessionsToRelease = HashMap<String, OlmSessionWrapper>()
 
     // Cache for InboundGroupSession, to release them properly
-    private val inboundGroupSessionToRelease = HashMap<String, OlmInboundGroupSessionWrapper>()
+    private val inboundGroupSessionToRelease = HashMap<String, OlmInboundGroupSessionWrapper2>()
 
     private val newSessionListeners = ArrayList<NewSessionListener>()
 
@@ -233,29 +231,6 @@ internal class RealmCryptoStore @Inject constructor(
             }
         }
         return olmAccount!!
-    }
-
-    override fun storeUserDevice(userId: String?, deviceInfo: CryptoDeviceInfo?) {
-        if (userId == null || deviceInfo == null) {
-            return
-        }
-
-        doRealmTransaction(realmConfiguration) { realm ->
-            val user = UserEntity.getOrCreate(realm, userId)
-
-            // Create device info
-            val deviceInfoEntity = CryptoMapper.mapToEntity(deviceInfo)
-            realm.insertOrUpdate(deviceInfoEntity)
-//            val deviceInfoEntity = DeviceInfoEntity.getOrCreate(it, userId, deviceInfo.deviceId).apply {
-//                deviceId = deviceInfo.deviceId
-//                identityKey = deviceInfo.identityKey()
-//                putDeviceInfo(deviceInfo)
-//            }
-
-            if (!user.devices.contains(deviceInfoEntity)) {
-                user.devices.add(deviceInfoEntity)
-            }
-        }
     }
 
     override fun getUserDevice(userId: String, deviceId: String): CryptoDeviceInfo? {
@@ -656,7 +631,7 @@ internal class RealmCryptoStore @Inject constructor(
                 .toMutableSet()
     }
 
-    override fun storeInboundGroupSessions(sessions: List<OlmInboundGroupSessionWrapper>) {
+    override fun storeInboundGroupSessions(sessions: List<OlmInboundGroupSessionWrapper2>) {
         if (sessions.isEmpty()) {
             return
         }
@@ -694,7 +669,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getInboundGroupSession(sessionId: String, senderKey: String): OlmInboundGroupSessionWrapper? {
+    override fun getInboundGroupSession(sessionId: String, senderKey: String): OlmInboundGroupSessionWrapper2? {
         val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionId, senderKey)
 
         // If not in cache (or not found), try to read it from realm
@@ -714,10 +689,10 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     /**
-     * Note: the result will be only use to export all the keys and not to use the OlmInboundGroupSessionWrapper,
+     * Note: the result will be only use to export all the keys and not to use the OlmInboundGroupSessionWrapper2,
      * so there is no need to use or update `inboundGroupSessionToRelease` for native memory management
      */
-    override fun getInboundGroupSessions(): MutableList<OlmInboundGroupSessionWrapper> {
+    override fun getInboundGroupSessions(): MutableList<OlmInboundGroupSessionWrapper2> {
         return doWithRealm(realmConfiguration) {
             it.where<OlmInboundGroupSessionEntity>()
                     .findAll()
@@ -789,7 +764,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers: List<OlmInboundGroupSessionWrapper>) {
+    override fun markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers: List<OlmInboundGroupSessionWrapper2>) {
         if (olmInboundGroupSessionWrappers.isEmpty()) {
             return
         }
@@ -812,7 +787,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun inboundGroupSessionsToBackup(limit: Int): List<OlmInboundGroupSessionWrapper> {
+    override fun inboundGroupSessionsToBackup(limit: Int): List<OlmInboundGroupSessionWrapper2> {
         return doWithRealm(realmConfiguration) {
             it.where<OlmInboundGroupSessionEntity>()
                     .equalTo(OlmInboundGroupSessionEntityFields.BACKED_UP, false)
@@ -1278,7 +1253,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun setDeviceTrust(userId: String, deviceId: String, crossSignedVerified: Boolean, locallyVerified: Boolean) {
+    override fun setDeviceTrust(userId: String, deviceId: String, crossSignedVerified: Boolean, locallyVerified: Boolean?) {
         doRealmTransaction(realmConfiguration) { realm ->
             realm.where(DeviceInfoEntity::class.java)
                     .equalTo(DeviceInfoEntityFields.PRIMARY_KEY, DeviceInfoEntity.createPrimaryKey(userId, deviceId))
@@ -1291,7 +1266,7 @@ internal class RealmCryptoStore @Inject constructor(
                                 deviceInfoEntity.trustLevelEntity = it
                             }
                         } else {
-                            trustEntity.locallyVerified = locallyVerified
+                            locallyVerified?.let { trustEntity.locallyVerified = it  }
                             trustEntity.crossSignedVerified = crossSignedVerified
                         }
                     }
@@ -1423,22 +1398,21 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     private fun addOrUpdateCrossSigningInfo(realm: Realm, userId: String, info: MXCrossSigningInfo?): CrossSigningInfoEntity? {
-        var existing = CrossSigningInfoEntity.get(realm, userId)
         if (info == null) {
             // Delete known if needed
-            existing?.deleteFromRealm()
+            CrossSigningInfoEntity.get(realm, userId)?.deleteFromRealm()
+            return null
             // TODO notify, we might need to untrust things?
         } else {
             // Just override existing, caller should check and untrust id needed
-            existing = CrossSigningInfoEntity.getOrCreate(realm, userId)
-            // existing.crossSigningKeys.forEach { it.deleteFromRealm() }
-            val xkeys = RealmList<KeyInfoEntity>()
-            info.crossSigningKeys.forEach { cryptoCrossSigningKey ->
-                val keyEntity = crossSigningKeysMapper.map(cryptoCrossSigningKey)
-                xkeys.add(keyEntity)
-            }
-            existing.crossSigningKeys = xkeys
+            val existing = CrossSigningInfoEntity.getOrCreate(realm, userId)
+            existing.crossSigningKeys.forEach { it.deleteFromRealm() }
+            existing.crossSigningKeys.addAll(
+                    info.crossSigningKeys.map {
+                        crossSigningKeysMapper.map(it)
+                    }
+            )
+            return existing
         }
-        return existing
     }
 }

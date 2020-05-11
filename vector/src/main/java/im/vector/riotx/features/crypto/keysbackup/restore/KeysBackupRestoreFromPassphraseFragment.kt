@@ -15,7 +15,6 @@
  */
 package im.vector.riotx.features.crypto.keysbackup.restore
 
-import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableString
@@ -70,7 +69,7 @@ class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBase
             mPassphraseInputLayout.error = newValue
         })
 
-        helperTextWithLink.text = spannableStringForHelperText(context!!)
+        helperTextWithLink.text = spannableStringForHelperText()
 
         viewModel.showPasswordMode.observe(viewLifecycleOwner, Observer {
             val shouldBeVisible = it ?: false
@@ -87,9 +86,9 @@ class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBase
         }
     }
 
-    private fun spannableStringForHelperText(context: Context): SpannableString {
-        val clickableText = context.getString(R.string.keys_backup_restore_use_recovery_key)
-        val helperText = context.getString(R.string.keys_backup_restore_with_passphrase_helper_with_link, clickableText)
+    private fun spannableStringForHelperText(): SpannableString {
+        val clickableText = getString(R.string.keys_backup_restore_use_recovery_key)
+        val helperText = getString(R.string.keys_backup_restore_with_passphrase_helper_with_link, clickableText)
 
         val spanString = SpannableString(helperText)
 
@@ -117,7 +116,7 @@ class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBase
     fun onRestoreBackup() {
         val value = viewModel.passphrase.value
         if (value.isNullOrBlank()) {
-            viewModel.passphraseErrorText.value = context?.getString(R.string.passphrase_empty_error_message)
+            viewModel.passphraseErrorText.value = getString(R.string.passphrase_empty_error_message)
         } else {
             viewModel.recoverKeys(sharedViewModel)
         }

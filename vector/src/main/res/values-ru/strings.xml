@@ -632,7 +632,7 @@
     <string name="encryption_never_send_to_unverified_devices_title">Шифровать только для проверенных сессий</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Не отправлять зашифрованные сообщения непроверенным сессиям с этой сессии.</string>
 
-    <string name="encryption_information_not_verified">НЕ проверено</string>
+    <string name="encryption_information_not_verified">Не проверено</string>
     <string name="encryption_information_verified">Проверено</string>
     <string name="encryption_information_blocked">В черном списке</string>
 
@@ -1450,12 +1450,12 @@
     <plurals name="notification_compat_summary_line_for_room">
         <item quantity="one">%1$s: 1 сообщение</item>
         <item quantity="few">%1$s: %2$d сообщения</item>
-        <item quantity="many">%1$s: %2$d сообщения</item>
+        <item quantity="many">%1$s: %2$d сообщений</item>
     </plurals>
     <plurals name="notification_compat_summary_title">
         <item quantity="one">%d оповещение</item>
         <item quantity="few">%d оповещения</item>
-        <item quantity="many">%d оповещения</item>
+        <item quantity="many">%d оповещений</item>
     </plurals>
 
     <string name="notification_unknown_new_event">Новое событие</string>

@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.ReferencesAggregatedContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.api.session.room.timeline.hasBeenEdited
@@ -123,7 +124,9 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
     }
 
     private fun getE2EDecoration(room: Room?, event: TimelineEvent): E2EDecoration {
-        return if (room?.isEncrypted() == true
+        return if (
+                event.root.sendState == SendState.SYNCED
+                && room?.isEncrypted() == true
                 // is user verified
                 && session.cryptoService().crossSigningService().getUserCrossSigningKeys(event.root.senderId ?: "")?.isTrusted() == true) {
             val ts = room.roomSummary()?.encryptionEventTs ?: 0

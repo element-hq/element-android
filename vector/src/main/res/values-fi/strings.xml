@@ -2052,4 +2052,27 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="room_profile_leaving_room">Poistutaan huoneesta…</string>
 
     <string name="login_signup_username_hint">Käyttäjätunnus</string>
+    <string name="notification_initial_sync">Synkronoidaan tietoja ensimmäistä kertaa…</string>
+
+    <string name="settings_developer_mode">Kehittäjämoodi</string>
+    <string name="settings_developer_mode_summary">Kehittäjämoodi aktivoi piilotettuja ominaisuuksia, mutta voi tehdä sovelluksesta epävakaan. Vain kehittäjille!</string>
+    <string name="settings_rageshake">Raivoravistus</string>
+    <string name="settings_rageshake_detection_threshold">Tunnistusraja</string>
+    <string name="settings_rageshake_detection_threshold_summary">Ravista puhelintasi testataksesi tunnistusrajan</string>
+    <string name="rageshake_detected">Ravistus tunnistettu!</string>
+    <string name="autocomplete_limited_results">Näytetään vain ensimmäiset tulokset, kirjoita lisää kirjaimia…</string>
+
+    <string name="settings_developer_mode_fail_fast_summary">RiotX voi kaatuilla tavallista useammin odottamattomien virheiden vuoksi</string>
+
+    <string name="command_description_shrug">Lisää ¯\\_(ツ)_/¯ tavallisen viestin alkuun</string>
+
+    <string name="login_error_threepid_denied">Käyttämäsi sähköpostipalvelun ei ole sallittu rekisteröityä tälle palvelimelle</string>
+
+    <string name="verification_sas_match">Täsmäävät</string>
+    <string name="verification_sas_do_not_match">Eivät täsmää</string>
+    <string name="verify_user_sas_emoji_help_text">Vahvista käyttäjä tarkastamalla että seuraavat emojit vastaavat täysin heidän ruudullaan näkyviä.</string>
+    <string name="verify_user_sas_emoji_security_tip">Jos haluat kovaa tietoturvaa, käytä jotain toista luotettavaa viestintävälinettä tai tee toisen henkilön ollessa paikalla.</string>
+    <string name="verification_conclusion_not_secure">Ei turvallinen</string>
+    <string name="sent_a_video">Video.</string>
+    <string name="sent_an_image">Kuva.</string>
 </resources>

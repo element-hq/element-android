@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.detail.timeline.factory
 
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.create.RoomCreateContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.crypto.model.event.EncryptionEventContent
@@ -43,6 +44,9 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
     private val collapsedEventIds = linkedSetOf<Long>()
     private val mergeItemCollapseStates = HashMap<Long, Boolean>()
 
+    /**
+     * Note: nextEvent is an older event than event
+     */
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
                items: List<TimelineEvent>,
@@ -52,7 +56,8 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
                callback: TimelineEventController.Callback?,
                requestModelBuild: () -> Unit)
             : BasedMergedItem<*>? {
-        return if (nextEvent?.root?.getClearType() == EventType.STATE_ROOM_CREATE && event.isRoomConfiguration()) {
+        return if (nextEvent?.root?.getClearType() == EventType.STATE_ROOM_CREATE
+                && event.isRoomConfiguration(nextEvent.root.getClearContent()?.toModel<RoomCreateContent>()?.creator)) {
             // It's the first item before room.create
             // Collapse all room configuration events
             buildRoomCreationMergedSummary(currentPosition, items, event, eventIdToHighlight, requestModelBuild, callback)
@@ -127,7 +132,7 @@ class MergedHeaderItemFactory @Inject constructor(private val sessionHolder: Act
         val mergedEvents = ArrayList<TimelineEvent>().also { it.add(event) }
         var hasEncryption = false
         var encryptionAlgorithm: String? = null
-        while (prevEvent != null && prevEvent.isRoomConfiguration()) {
+        while (prevEvent != null && prevEvent.isRoomConfiguration(null)) {
             if (prevEvent.root.getClearType() == EventType.STATE_ROOM_ENCRYPTION) {
                 hasEncryption = true
                 encryptionAlgorithm = prevEvent.root.getClearContent()?.toModel<EncryptionEventContent>()?.algorithm

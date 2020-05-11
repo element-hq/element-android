@@ -6,8 +6,8 @@
     <string name="notice_room_invite_no_invitee">%s meghívója</string>
     <string name="notice_room_invite">%1$s meghívta: %2$s</string>
     <string name="notice_room_invite_you">%1$s meghívott</string>
-    <string name="notice_room_join">%1$s csatlakozott</string>
-    <string name="notice_room_leave">%1$s kilépett</string>
+    <string name="notice_room_join">%1$s belépett a szobába</string>
+    <string name="notice_room_leave">%1$s kilépett a szobából</string>
     <string name="notice_room_reject">%1$s elutasította a meghívást</string>
     <string name="notice_room_kick">%1$s kidobta: %2$s</string>
     <string name="notice_room_unban">%1$s feloldotta %2$s tiltását</string>
@@ -175,8 +175,8 @@
     <string name="notice_room_invite_no_invitee_with_reason">%1$s meghívója. Ok: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s meghívta őt: %2$s. Ok: %3$s</string>
     <string name="notice_room_invite_you_with_reason">%1$s meghívott. Ok: %2$s</string>
-    <string name="notice_room_join_with_reason">%1$s csatlakozott. Ok: %2$s</string>
-    <string name="notice_room_leave_with_reason">%1$s kilépett. Ok: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s belépett a szobába. Mert: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s kilépett a szobából. Ok: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s visszautasította a meghívót. Ok: %2$s</string>
     <string name="notice_room_kick_with_reason">%1$s kirúgta őt: %2$s. Ok: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s visszaengedte őt: %2$s. Ok: %3$s</string>

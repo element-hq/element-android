@@ -2222,7 +2222,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 
     <string name="refresh">Frissítés</string>
 
-    <string name="new_session">Ismeretlen bejelentkezés. Ez te vagy\?</string>
+    <string name="new_session">Új bejelentkezés. Ez te vagy\?</string>
     <string name="new_session_review">A megtekintéshez és ellenőrzéshez koppints</string>
     <string name="verify_new_session_notice">Az új munkamenet ellenőrzéséhez használd ezt, amivel hozzáférést adsz a titkosított üzenetekhez.</string>
     <string name="verify_new_session_was_not_me">Nem én voltam</string>
@@ -2353,4 +2353,33 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="error_adding_media_file_to_gallery">A média fájlt nem sikerült hozzáadni a Galériához</string>
     <string name="change_password_summary">Új fiók jelszó beállítása…</string>
 
+    <string name="riot_desktop_web">Riot Web
+\nRiot Desktop</string>
+    <string name="riot_ios_android">Riot iOS
+\nRiot X for Android</string>
+    <string name="or_other_mx_capabale_client">vagy másik eszközök közötti hitelesítésre alkalmas Matrix kliensre</string>
+    <string name="use_latest_riot">A Riot legújabb kliensét használd a többi eszközödön:</string>
+    <string name="command_description_discard_session">A jelenlegi csoport munkamenet törlését kikényszeríti a titkosított szobában</string>
+    <string name="command_description_discard_session_not_handled">Csak a titkosított szobákban támogatott</string>
+    <string name="enter_secret_storage_passphrase_or_key">Használd ezt: %1$s vagy ezt: %2$s a továbblépéshez.</string>
+    <string name="use_recovery_key">Használd a Visszaállítási Kulcsot</string>
+    <string name="enter_secret_storage_input_key">Válaszd ki a Visszaállítási Kulcsot, add meg kézzel vagy másold be a vágólapról</string>
+    <string name="keys_backup_recovery_key_error_decrypt">Ezzel a Visszaállítási Kulccsal a mentést nem lehet visszafejteni: kérlek ellenőrizd, hogy a visszaállítási kulcsot jól adtad-e meg.</string>
+    <string name="failed_to_access_secure_storage">A biztonsági tárolóhoz nem sikerült hozzáférni</string>
+
+    <string name="unencrypted">Titkosítatlan</string>
+    <string name="encrypted_unverified">Ellenőrizetlen eszközzel titkosította</string>
+    <string name="review_logins">Tekintsd át hol vagy bejelentkezve</string>
+    <string name="verify_other_sessions">Ellenőrizd minden munkamenetedet, hogy a fiókod és az üzeneteid biztonságban legyenek</string>
+    <string name="verify_this_session">Ellenőrizd ezt az új bejelentkezést ami hozzáfér a fiókodhoz: %1$s</string>
+
+    <string name="cross_signing_verify_by_text">Manuális szöveges ellenőrzés</string>
+    <string name="crosssigning_verify_session">Belépés ellenőrzése</string>
+    <string name="cross_signing_verify_by_emoji">Közös ellenőrzés Emodzsival</string>
+    <string name="mark_as_verified">Megbízhatónak jelölés</string>
+
+    <string name="error_empty_field_choose_user_name">Kérlek válasz felhasználói nevet.</string>
+    <string name="error_empty_field_choose_password">Kérlek válassz jelszót.</string>
+    <string name="external_link_confirmation_title">Ezt a hivatkozást ellenőrizd le még egyszer</string>
+    <string name="create_room_dm_failure">A közvetlen üzenetedet nem sikerült elkészíteni. Ellenőrizd azokat a felhasználókat akiket meg szeretnél hívni és próbáld újra.</string>
 </resources>

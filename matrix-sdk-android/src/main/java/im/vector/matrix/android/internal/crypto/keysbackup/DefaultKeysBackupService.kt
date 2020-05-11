@@ -66,7 +66,7 @@ import im.vector.matrix.android.internal.crypto.keysbackup.tasks.UpdateKeysBacku
 import im.vector.matrix.android.internal.crypto.keysbackup.util.computeRecoveryKey
 import im.vector.matrix.android.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 import im.vector.matrix.android.internal.crypto.model.ImportRoomKeysResult
-import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
+import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.store.SavedKeyBackupKeyInfo
 import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
@@ -1318,7 +1318,7 @@ internal class DefaultKeysBackupService @Inject constructor(
 
     @VisibleForTesting
     @WorkerThread
-    fun encryptGroupSession(olmInboundGroupSessionWrapper: OlmInboundGroupSessionWrapper): KeyBackupData {
+    fun encryptGroupSession(olmInboundGroupSessionWrapper: OlmInboundGroupSessionWrapper2): KeyBackupData {
         // Gather information for each key
         val device = cryptoStore.deviceWithIdentityKey(olmInboundGroupSessionWrapper.senderKey!!)
 

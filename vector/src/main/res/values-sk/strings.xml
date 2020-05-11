@@ -7,7 +7,7 @@
     <string name="dark_theme">Tmavý vzhľad</string>
     <string name="black_them">Čierny vzhľad</string>
 
-    <string name="notification_sync_in_progress">Synchronizácia…</string>
+    <string name="notification_sync_in_progress">Prebieha synchronizácia…</string>
     <string name="notification_listening_for_events">Spracovanie udalostí</string>
 
     <string name="title_activity_home">Správy</string>
@@ -1306,4 +1306,27 @@ Objavte skutočne výkonné možnosti otvorenej spolupráce s Riot.im!</string>
     <string name="error_empty_field_enter_user_name">Prosím zadajte meno používateľa.</string>
     <string name="title_activity_verify_device">Overiť zariadenie</string>
 
+    <string name="resources_script">Latn</string>
+
+    <string name="none">Žiadny</string>
+    <string name="revoke">Zrušiť</string>
+    <string name="disconnect">Odpojiť sa</string>
+    <string name="review">Náhlad</string>
+    <string name="decline">Odmietnuť</string>
+
+    <string name="people_no_identity_server">Nebol nakonfigurovaný overovací server.</string>
+
+    <string name="call_failed_no_ice_title">Hovor zlyhal kvôli zle nakonfigurovanému serveru</string>
+    <string name="call_failed_no_ice_description">Prosím, požiadajte administrátora vášho homeserveru (%1$s) o konfiguráciu TURN serveru, aby hovory fungovali spoľahlivo. 
+\n 
+\nPrípadně môžete skúsiť použiť verejný server %2$s, ale nebude tak spoľahlivý a bude zdielať vašu IP adresu s týmto serverom. V nastaveniach sa to dá zmeniť.</string>
+    <string name="call_failed_no_ice_use_alt">Skúste použiť %s</string>
+    <string name="call_failed_dont_ask_again">Viac sa nepýtať</string>
+
+    <string name="auth_add_email_message_2">Nastavte e-mail na obnovenie účtu a voliteľne aby ho neskôr ľudia, ktorí vás poznajú, mohli nájsť.</string>
+    <string name="auth_add_phone_message_2">Nastavte telefónne číslo, aby neskôr bolo voliteľne k nájdeniu ľuďmi, ktorí Vás poznajú.</string>
+    <string name="auth_add_email_phone_message_2">Nastavte e-mail na obnovenie účtu. Použite e-mail alebo telefónne číslo voliteľne neskôr, aby ich našli ľudia, ktorí vás poznajú.</string>
+    <string name="auth_add_email_and_phone_message_2">Nastavte e-mail na obnovenie účtu. Použite e-mail alebo telefónne číslo voliteľne neskôr, aby ich našli ľudia, ktorí vás poznajú.</string>
+    <string name="login_error_no_homeserver_found">Toto nie je platná adresa Matrix serveru</string>
+    <string name="login_error_homeserver_not_found">Homeserver nie je dostupný na tomto URL, prosím, preverte</string>
 </resources>

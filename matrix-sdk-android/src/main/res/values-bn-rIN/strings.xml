@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="summary_user_sent_image">%1$s একটি ফটো পাঠিয়েছে।</string>
+    <string name="summary_user_sent_sticker">%1$s একটি স্তিকার পাঠিয়েছে।</string>
+
+    <string name="notice_room_invite_no_invitee">%s এর আমন্ত্রণ</string>
+    <string name="notice_room_invite">%1$s %2$s কে আমন্ত্রণ করেছে</string>
+    <string name="notice_room_invite_you">%1$s আপনাকে আমন্ত্রণ করেছে</string>
+    <string name="notice_room_join">%1$s রুম এ যোগ দিয়েছে</string>
+    <string name="notice_room_leave">%1$s রুম ছেড়ে দিয়েছে</string>
+    <string name="notice_room_reject">%1$s আমন্ত্রণ টি বাতিল করেছে</string>
+    <string name="notice_room_kick">%1$s %2$s কে কিক করেছে</string>
+    <string name="notice_room_unban">%1$s %2$s কে নিষিদ্ধ তালিকা থেকে মুক্ত করেছে</string>
+    <string name="notice_room_ban">%1$s %2$s কে নিষিদ্ধ করেছে</string>
+    <string name="notice_room_withdraw">%1$s %2$s এর আমন্ত্রণ ফেরত নিয়েছে</string>
+    <string name="notice_avatar_url_changed">%1$s নিজের অবতার পরিবর্তন করেছে</string>
+    <string name="notice_display_name_set">%1$s নিজের প্রদর্শন নাম %2$s রেখেছে</string>
+    <string name="notice_display_name_changed_from">%1$s নিজের প্রদর্শন নাম %2$s থেকে %3$s তে পরিবর্তন করেছে</string>
+    <string name="notice_display_name_removed">%1$s নিজের প্রদর্শন নাম মুছে দিয়েছে (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s বিষয় টি এতে পরিবর্তন করেছে: %2$s</string>
+    <string name="notice_room_name_changed">%1$s রুম এর নাম এতে পরিবর্তন করেছে: %2$s</string>
+    <string name="notice_placed_video_call">%s একটি ভিডিও কল স্থাপন করেছিল।</string>
+    <string name="notice_placed_voice_call">%s একটি ভয়েস কল দিয়েছে।</string>
+</resources>

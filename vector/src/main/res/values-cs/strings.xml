@@ -2210,7 +2210,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 
     <string name="refresh">Obnovit</string>
 
-    <string name="new_session">Neověřené přihlášení. Byli jste to Vy\?</string>
+    <string name="new_session">Nové přihlášení. Byli jste to Vy\?</string>
     <string name="new_session_review">Klepněte pro přehled &amp; ověření</string>
     <string name="verify_new_session_notice">Použijte tuto relaci k ověření relace nové, a tím ji udělíte přístup k zašifrovaným zprávám.</string>
     <string name="verify_new_session_was_not_me">To jsem nebyl(a) já</string>
