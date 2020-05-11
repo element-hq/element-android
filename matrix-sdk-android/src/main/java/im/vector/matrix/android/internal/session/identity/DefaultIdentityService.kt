@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
 import im.vector.matrix.android.api.session.identity.FoundThreePid
 import im.vector.matrix.android.api.session.identity.IdentityService
 import im.vector.matrix.android.api.session.identity.IdentityServiceError
@@ -75,7 +76,8 @@ internal class DefaultIdentityService @Inject constructor(
         private val submitTokenForBindingTask: IdentitySubmitTokenForBindingTask,
         private val unbindThreePidsTask: UnbindThreePidsTask,
         private val identityApiProvider: IdentityApiProvider,
-        private val accountDataDataSource: AccountDataDataSource
+        private val accountDataDataSource: AccountDataDataSource,
+        private val homeServerCapabilitiesService: HomeServerCapabilitiesService
 ) : IdentityService {
 
     private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
@@ -123,6 +125,11 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     override fun startBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
+        if (homeServerCapabilitiesService.getHomeServerCapabilities().lastVersionIdentityServerSupported.not()) {
+            callback.onFailure(IdentityServiceError.OutdatedHomeServer)
+            return NoOpCancellable
+        }
+
         return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
             identityRequestTokenForBindingTask.execute(IdentityRequestTokenForBindingTask.Params(threePid, false))
         }
@@ -141,6 +148,11 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     override fun finalizeBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
+        if (homeServerCapabilitiesService.getHomeServerCapabilities().lastVersionIdentityServerSupported.not()) {
+            callback.onFailure(IdentityServiceError.OutdatedHomeServer)
+            return NoOpCancellable
+        }
+
         return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
             bindThreePidsTask.execute(BindThreePidsTask.Params(threePid))
         }
@@ -153,6 +165,11 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     override fun unbindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
+        if (homeServerCapabilitiesService.getHomeServerCapabilities().lastVersionIdentityServerSupported.not()) {
+            callback.onFailure(IdentityServiceError.OutdatedHomeServer)
+            return NoOpCancellable
+        }
+
         return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
             unbindThreePidsTask.execute(UnbindThreePidsTask.Params(threePid))
         }

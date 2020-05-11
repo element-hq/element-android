@@ -17,6 +17,9 @@
 package im.vector.matrix.android.internal.session.homeserver
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.auth.data.Versions
+import im.vector.matrix.android.api.auth.data.isLoginAndRegistrationSupportedBySdk
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
 import im.vector.matrix.android.internal.database.model.HomeServerCapabilitiesEntity
 import im.vector.matrix.android.internal.database.query.getOrCreate
@@ -57,12 +60,19 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
             }
         }.getOrNull()
 
-        // TODO Add other call here (get version, etc.)
+        val versions = runCatching {
+            executeRequest<Versions>(null) {
+                apiCall = capabilitiesAPI.getVersions()
+            }
+        }.getOrNull()
 
-        insertInDb(capabilities, uploadCapabilities)
+
+        insertInDb(capabilities, uploadCapabilities, versions)
     }
 
-    private suspend fun insertInDb(getCapabilitiesResult: GetCapabilitiesResult?, getUploadCapabilitiesResult: GetUploadCapabilitiesResult) {
+    private suspend fun insertInDb(getCapabilitiesResult: GetCapabilitiesResult?,
+                                   getUploadCapabilitiesResult: GetUploadCapabilitiesResult,
+                                   getVersionResult: Versions?) {
         monarchy.awaitTransaction { realm ->
             val homeServerCapabilitiesEntity = HomeServerCapabilitiesEntity.getOrCreate(realm)
 
@@ -70,6 +80,8 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
 
             homeServerCapabilitiesEntity.maxUploadFileSize = getUploadCapabilitiesResult.maxUploadSize
                     ?: HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN
+
+            homeServerCapabilitiesEntity.lastVersionIdentityServerSupported = getVersionResult?.isLoginAndRegistrationSupportedBySdk().orFalse()
 
             homeServerCapabilitiesEntity.lastUpdatedTimestamp = Date().time
         }

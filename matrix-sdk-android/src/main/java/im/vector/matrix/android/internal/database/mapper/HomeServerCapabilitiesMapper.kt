@@ -27,14 +27,16 @@ internal object HomeServerCapabilitiesMapper {
     fun map(entity: HomeServerCapabilitiesEntity): HomeServerCapabilities {
         return HomeServerCapabilities(
                 canChangePassword = entity.canChangePassword,
-                maxUploadFileSize = entity.maxUploadFileSize
+                maxUploadFileSize = entity.maxUploadFileSize,
+                lastVersionIdentityServerSupported = entity.lastVersionIdentityServerSupported
         )
     }
 
     fun map(domain: HomeServerCapabilities): HomeServerCapabilitiesEntity {
         return HomeServerCapabilitiesEntity(
                 canChangePassword = domain.canChangePassword,
-                maxUploadFileSize = domain.maxUploadFileSize
+                maxUploadFileSize = domain.maxUploadFileSize,
+                lastVersionIdentityServerSupported = domain.lastVersionIdentityServerSupported
         )
     }
 }
