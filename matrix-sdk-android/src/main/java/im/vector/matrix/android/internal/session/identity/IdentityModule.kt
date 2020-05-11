@@ -25,8 +25,7 @@ import im.vector.matrix.android.internal.di.IdentityDatabase
 import im.vector.matrix.android.internal.di.SessionFilesDirectory
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.di.UserMd5
-import im.vector.matrix.android.internal.network.AccessTokenInterceptor
-import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
+import im.vector.matrix.android.internal.network.httpclient.addAccessTokenInterceptor
 import im.vector.matrix.android.internal.network.token.AccessTokenProvider
 import im.vector.matrix.android.internal.session.SessionModule
 import im.vector.matrix.android.internal.session.SessionScope
@@ -48,21 +47,7 @@ internal abstract class IdentityModule {
         @AuthenticatedIdentity
         fun providesOkHttpClient(@Unauthenticated okHttpClient: OkHttpClient,
                                  @AuthenticatedIdentity accessTokenProvider: AccessTokenProvider): OkHttpClient {
-            // TODO Create an helper because there is code duplication
-            return okHttpClient.newBuilder()
-                    .apply {
-                        // Remove the previous CurlLoggingInterceptor, to add it after the accessTokenInterceptor
-                        val existingCurlInterceptors = interceptors().filterIsInstance<CurlLoggingInterceptor>()
-                        interceptors().removeAll(existingCurlInterceptors)
-
-                        addInterceptor(AccessTokenInterceptor(accessTokenProvider))
-
-                        // Re add eventually the curl logging interceptors
-                        existingCurlInterceptors.forEach {
-                            addInterceptor(it)
-                        }
-                    }
-                    .build()
+            return okHttpClient.addAccessTokenInterceptor(accessTokenProvider)
         }
 
         @JvmStatic
