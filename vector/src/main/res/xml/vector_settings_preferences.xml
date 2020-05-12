@@ -21,6 +21,15 @@
             android:title="@string/settings_theme"
             app:iconSpaceReserved="false" />
 
+        <im.vector.riotx.core.preference.VectorListPreference
+            android:defaultValue="start"
+            android:entries="@array/bubble_style_entries"
+            android:entryValues="@array/bubble_style_values"
+            android:key="BUBBLE_STYLE_KEY"
+            android:summary="%s"
+            android:title="@string/bubble_style"
+            app:iconSpaceReserved="false" />
+
         <im.vector.riotx.core.preference.VectorPreference
             android:dialogTitle="@string/font_size"
             android:key="SETTINGS_INTERFACE_TEXT_SIZE_KEY"

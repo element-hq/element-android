@@ -3,4 +3,9 @@
 
     <string name="redacted_stub_text">(Gelöschte Nachricht)</string>
 
+    <string name="bubble_style">Nachrichtblasen</string>
+    <string name="bubble_style_none">Keine</string>
+    <string name="bubble_style_start">Selbe Seite</string>
+    <string name="bubble_style_both">Beide Seiten</string>
+
 </resources>

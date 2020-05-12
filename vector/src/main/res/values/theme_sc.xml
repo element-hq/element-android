@@ -203,6 +203,9 @@
         <item name="snackbarButtonStyle">@style/VectorSnackBarButton</item>
         <!-- Style to use for message text within a SnackBar in this theme. -->
         <item name="snackbarTextViewStyle">@style/VectorSnackBarText</item>
+
+        <item name="sc_message_bg_incoming">@color/background_floating_sc</item>
+        <item name="sc_message_bg_outgoing">@color/accent_sc_alpha25</item>
     </style>
 
     <style name="AppTheme.SC" parent="AppTheme.Base.SC" />

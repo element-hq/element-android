@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="bubble_style_entries" translatable="false">
+        <item>@string/bubble_style_none</item>
+        <item>@string/bubble_style_start</item>
+        <item>@string/bubble_style_both</item>
+    </string-array>
+    <string-array name="bubble_style_values" translatable="false">
+        <item>none</item>
+        <item>start</item>
+        <item>both</item>
+    </string-array>
+
+</resources>

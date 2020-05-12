@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="VectorStylesSC">
+
+        <attr name="sc_message_bg_incoming" format="color" />
+        <attr name="sc_message_bg_outgoing" format="color" />
+
+    </declare-styleable>
+
+</resources>

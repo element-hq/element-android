@@ -28,6 +28,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.preference.VectorListPreference
 import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.features.configuration.VectorConfiguration
+import im.vector.riotx.features.themes.BubbleThemeUtils
 import im.vector.riotx.features.themes.ThemeUtils
 import javax.inject.Inject
 
@@ -65,6 +66,11 @@ class VectorSettingsPreferencesFragment @Inject constructor(
             } else {
                 false
             }
+        }
+        findPreference<VectorListPreference>(BubbleThemeUtils.BUBBLE_STYLE_KEY)!!
+                .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
+            BubbleThemeUtils.invalidateBubbleStyle()
+            true
         }
 
         // Url preview

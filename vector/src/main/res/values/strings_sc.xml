@@ -3,4 +3,9 @@
 
     <string name="redacted_stub_text">(Deleted message)</string>
 
+    <string name="bubble_style">Message bubbles</string>
+    <string name="bubble_style_none">None</string>
+    <string name="bubble_style_start">Same side</string>
+    <string name="bubble_style_both">Both sides</string>
+
 </resources>
