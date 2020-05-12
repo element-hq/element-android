@@ -29,8 +29,8 @@ import im.vector.matrix.android.internal.network.httpclient.addAccessTokenInterc
 import im.vector.matrix.android.internal.network.token.AccessTokenProvider
 import im.vector.matrix.android.internal.session.SessionModule
 import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.session.identity.db.IdentityRealmModule
 import im.vector.matrix.android.internal.session.identity.data.IdentityStore
+import im.vector.matrix.android.internal.session.identity.db.IdentityRealmModule
 import im.vector.matrix.android.internal.session.identity.db.RealmIdentityStore
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
@@ -64,8 +64,6 @@ internal abstract class IdentityModule {
                         realmKeysUtils.configureEncryption(this, SessionModule.getKeyAlias(userMd5))
                     }
                     .modules(IdentityRealmModule())
-                    // TODO Handle migration properly
-                    .deleteRealmIfMigrationNeeded()
                     .build()
         }
     }
