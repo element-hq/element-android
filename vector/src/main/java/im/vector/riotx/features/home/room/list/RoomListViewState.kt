@@ -84,7 +84,8 @@ enum class RoomCategory(@StringRes val titleRes: Int) {
     INVITE(R.string.invitations_header),
     FAVOURITE(R.string.bottom_action_favourites),
     DIRECT(R.string.bottom_action_people_x),
-    GROUP(R.string.bottom_action_rooms),
+    //GROUP(R.string.bottom_action_rooms),
+    GROUP(R.string.normal_priority_header),
     LOW_PRIORITY(R.string.low_priority_header),
     SERVER_NOTICE(R.string.system_alerts_header)
 }

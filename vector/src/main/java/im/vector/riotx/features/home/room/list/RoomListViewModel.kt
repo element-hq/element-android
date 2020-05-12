@@ -236,7 +236,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                         tags.contains(RoomTag.ROOM_TAG_SERVER_NOTICE) -> serverNotices.add(room)
                         tags.contains(RoomTag.ROOM_TAG_FAVOURITE)     -> favourites.add(room)
                         tags.contains(RoomTag.ROOM_TAG_LOW_PRIORITY)  -> lowPriorities.add(room)
-                        room.isDirect                                 -> directChats.add(room)
+                        //room.isDirect                                 -> directChats.add(room)
                         else                                          -> groupRooms.add(room)
                     }
                 }
