@@ -5,7 +5,7 @@ Features ✨:
  - Add Direct Shortcuts (#652)
 
 Improvements 🙌:
- -  - Invite member(s) to an existing room (#1276)
+ - Invite member(s) to an existing room (#1276)
  - Improve notification accessibility with ticker text (#1226)
 
 Bugfix 🐛:
