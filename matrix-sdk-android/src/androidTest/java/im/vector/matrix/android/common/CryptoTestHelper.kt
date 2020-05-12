@@ -246,7 +246,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         assertNotNull(eventWireContent.get("session_id"))
         assertNotNull(eventWireContent.get("sender_key"))
 
-        assertEquals(senderSession.sessionParams.credentials.deviceId, eventWireContent.get("device_id"))
+        assertEquals(senderSession.sessionParams.deviceId, eventWireContent.get("device_id"))
 
         assertNotNull(event.eventId)
         assertEquals(roomId, event.roomId)

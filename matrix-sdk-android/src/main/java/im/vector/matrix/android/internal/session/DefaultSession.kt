@@ -242,6 +242,6 @@ internal class DefaultSession @Inject constructor(
 
     // For easy debugging
     override fun toString(): String {
-        return "$myUserId - ${sessionParams.credentials.deviceId}"
+        return "$myUserId - ${sessionParams.deviceId}"
     }
 }

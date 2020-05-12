@@ -835,7 +835,7 @@ class KeysBackupTest : InstrumentedTest {
         assertTrue(signature.valid)
         assertNotNull(signature.device)
         assertEquals(cryptoTestData.firstSession.cryptoService().getMyDevice().deviceId, signature.deviceId)
-        assertEquals(signature.device!!.deviceId, cryptoTestData.firstSession.sessionParams.credentials.deviceId)
+        assertEquals(signature.device!!.deviceId, cryptoTestData.firstSession.sessionParams.deviceId)
 
         stateObserver.stopAndCheckStates(null)
         cryptoTestData.cleanUp(mTestHelper)
@@ -997,7 +997,7 @@ class KeysBackupTest : InstrumentedTest {
             keysBackup.backupAllGroupSessions(null, it)
         }
 
-        val oldDeviceId = cryptoTestData.firstSession.sessionParams.credentials.deviceId!!
+        val oldDeviceId = cryptoTestData.firstSession.sessionParams.deviceId!!
         val oldKeyBackupVersion = keysBackup.currentBackupVersion
         val aliceUserId = cryptoTestData.firstSession.myUserId
 

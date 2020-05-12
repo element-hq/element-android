@@ -579,7 +579,7 @@ class SASTest : InstrumentedTest {
                 requestID!!,
                 cryptoTestData.roomId,
                 bobSession.myUserId,
-                bobSession.sessionParams.credentials.deviceId!!,
+                bobSession.sessionParams.deviceId!!,
                 null)
 
         bobVerificationService.beginKeyVerificationInDMs(
@@ -587,7 +587,7 @@ class SASTest : InstrumentedTest {
                 requestID!!,
                 cryptoTestData.roomId,
                 aliceSession.myUserId,
-                aliceSession.sessionParams.credentials.deviceId!!,
+                aliceSession.sessionParams.deviceId!!,
                 null)
 
         // we should reach SHOW SAS on both

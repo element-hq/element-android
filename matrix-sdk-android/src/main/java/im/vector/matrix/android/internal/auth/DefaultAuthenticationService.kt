@@ -23,7 +23,6 @@ import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.LoginFlowResult
-import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.auth.data.Versions
 import im.vector.matrix.android.api.auth.data.isLoginAndRegistrationSupportedBySdk
 import im.vector.matrix.android.api.auth.data.isSupportedBySdk
@@ -33,6 +32,7 @@ import im.vector.matrix.android.api.auth.wellknown.WellknownResult
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.util.NoOpCancellable
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 import im.vector.matrix.android.internal.auth.data.RiotConfig
@@ -87,8 +87,15 @@ internal class DefaultAuthenticationService @Inject constructor(
         }
     }
 
-    override fun getSession(sessionParams: SessionParams): Session? {
-        return sessionManager.getOrCreateSession(sessionParams)
+    override fun getLoginFlowOfSession(sessionId: String, callback: MatrixCallback<LoginFlowResult>): Cancelable {
+        val homeServerConnectionConfig = sessionParamsStore.get(sessionId)?.homeServerConnectionConfig
+
+        return if (homeServerConnectionConfig == null) {
+            callback.onFailure(IllegalStateException("Session not found"))
+            NoOpCancellable
+        } else {
+            getLoginFlow(homeServerConnectionConfig, callback)
+        }
     }
 
     override fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<LoginFlowResult>): Cancelable {

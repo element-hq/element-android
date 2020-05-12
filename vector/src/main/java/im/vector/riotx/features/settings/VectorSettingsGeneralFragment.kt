@@ -169,7 +169,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
         // home server
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_HOME_SERVER_PREFERENCE_KEY)!!
-                .summary = session.sessionParams.homeServerConnectionConfig.homeServerUri.toString()
+                .summary = session.sessionParams.homeServerUrl
 
         refreshEmailsList()
         refreshPhoneNumbersList()

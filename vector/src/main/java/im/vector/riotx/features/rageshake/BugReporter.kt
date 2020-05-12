@@ -212,7 +212,7 @@ class BugReporter @Inject constructor(
 
                 activeSessionHolder.getSafeActiveSession()?.let { session ->
                     userId = session.myUserId
-                    deviceId = session.sessionParams.credentials.deviceId ?: "undefined"
+                    deviceId = session.sessionParams.deviceId ?: "undefined"
                     olmVersion = session.cryptoService().getCryptoVersion(context, true)
                 }
 

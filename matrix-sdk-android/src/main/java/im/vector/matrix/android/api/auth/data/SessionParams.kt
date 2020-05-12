@@ -21,7 +21,48 @@ package im.vector.matrix.android.api.auth.data
  * You don't have to manually instantiate it.
  */
 data class SessionParams(
+        /**
+         * Please consider using shortcuts instead
+         */
         val credentials: Credentials,
+
+        /**
+         * Please consider using shortcuts instead
+         */
         val homeServerConnectionConfig: HomeServerConnectionConfig,
+
+        /**
+         * Set to false if the current token is not valid anymore. Application should not have to use this info.
+         */
         val isTokenValid: Boolean
-)
+) {
+    /*
+     * Shortcuts. Usually the application should only need to use these shortcuts
+     */
+
+    /**
+     * The userId of the session (Ex: "@user:domain.org")
+     */
+    val userId = credentials.userId
+
+    /**
+     * The deviceId of the session (Ex: "ABCDEFGH")
+     */
+    val deviceId = credentials.deviceId
+
+    /**
+     * The current homeserver Url. It can be different that the homeserver url entered
+     * during login phase, because a redirection may have occurred
+     */
+    val homeServerUrl = homeServerConnectionConfig.homeServerUri.toString()
+
+    /**
+     * The current homeserver host
+     */
+    val homeServerHost = homeServerConnectionConfig.homeServerUri.host
+
+    /**
+     * The default identity server url if any, returned by the homeserver during login phase
+     */
+    val defaultIdentityServerUrl = homeServerConnectionConfig.identityServerUri?.toString()
+}

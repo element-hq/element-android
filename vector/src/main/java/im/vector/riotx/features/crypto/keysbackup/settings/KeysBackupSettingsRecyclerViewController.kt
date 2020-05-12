@@ -197,7 +197,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(private val s
                             endIconResourceId(R.drawable.e2e_warning)
                         } else {
                             if (isSignatureValid) {
-                                if (session.sessionParams.credentials.deviceId == it.deviceId) {
+                                if (session.sessionParams.deviceId == it.deviceId) {
                                     description(stringProvider.getString(R.string.keys_backup_settings_valid_signature_from_this_device))
                                     endIconResourceId(R.drawable.e2e_verified)
                                 } else {

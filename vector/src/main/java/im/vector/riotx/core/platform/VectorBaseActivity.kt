@@ -229,8 +229,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
                 handleInvalidToken(globalError)
             is GlobalError.ConsentNotGivenError ->
                 consentNotGivenHelper.displayDialog(globalError.consentUri,
-                        activeSessionHolder.getActiveSession().sessionParams.homeServerConnectionConfig.homeServerUri.host
-                                ?: "")
+                        activeSessionHolder.getActiveSession().sessionParams.homeServerHost ?: "")
         }
     }
 
