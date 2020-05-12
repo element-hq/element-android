@@ -21,5 +21,5 @@ import im.vector.riotx.core.platform.VectorViewEvents
 sealed class InviteUsersToRoomViewEvents  : VectorViewEvents {
     object Loading : InviteUsersToRoomViewEvents()
     data class Failure(val throwable: Throwable) : InviteUsersToRoomViewEvents()
-    object Success : InviteUsersToRoomViewEvents()
+    data class Success(val successMessage: String) : InviteUsersToRoomViewEvents()
 }

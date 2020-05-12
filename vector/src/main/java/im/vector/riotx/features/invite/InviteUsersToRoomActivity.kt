@@ -24,7 +24,6 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
-import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
@@ -102,7 +101,7 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
     private fun renderInviteEvents(viewEvent: InviteUsersToRoomViewEvents) {
         when (viewEvent) {
             is InviteUsersToRoomViewEvents.Loading -> renderInviteLoading()
-            is InviteUsersToRoomViewEvents.Success -> renderInvitationSuccess()
+            is InviteUsersToRoomViewEvents.Success -> renderInvitationSuccess(viewEvent.successMessage)
             is InviteUsersToRoomViewEvents.Failure -> renderInviteFailure(viewEvent.throwable)
         }
     }
@@ -125,8 +124,8 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
                 .show()
     }
 
-    private fun renderInvitationSuccess() = withState(viewModel) {
-        toast(R.string.invitations_sent_successfully)
+    private fun renderInvitationSuccess(successMessage: String) {
+        toast(successMessage)
         finish()
     }
 

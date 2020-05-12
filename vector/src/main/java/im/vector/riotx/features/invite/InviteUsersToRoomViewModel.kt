@@ -24,12 +24,15 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.rx.rx
+import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.core.resources.StringProvider
 import io.reactivex.Observable
 
 class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
                                                              initialState: InviteUsersToRoomViewState,
-                                                             session: Session)
+                                                             session: Session,
+                                                             val stringProvider: StringProvider)
     : VectorViewModel<InviteUsersToRoomViewState, InviteUsersToRoomAction, InviteUsersToRoomViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -61,7 +64,17 @@ class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
             room.rx().invite(user.userId, null)
         }.subscribe(
                 {
-                    _viewEvents.post(InviteUsersToRoomViewEvents.Success)
+                    val successMessage = when (selectedUsers.size) {
+                        1    -> stringProvider.getString(R.string.invitation_sent_to_one_user,
+                                selectedUsers.first().displayName)
+                        2    -> stringProvider.getString(R.string.invitations_sent_to_two_users,
+                                selectedUsers.first().displayName,
+                                selectedUsers.last().displayName)
+                        else -> stringProvider.getString(R.string.invitations_sent_to_three_and_more_users,
+                                selectedUsers.first().displayName,
+                                selectedUsers.size - 1)
+                    }
+                    _viewEvents.post(InviteUsersToRoomViewEvents.Success(successMessage))
                 },
                 {
                     _viewEvents.post(InviteUsersToRoomViewEvents.Failure(it))
