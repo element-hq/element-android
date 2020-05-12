@@ -146,7 +146,8 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
             promptCompleteSecurityIfNeeded()
         }
 
-        shortcutsHandler.observeRoomsAndBuildShortcuts(context = this)
+        shortcutsHandler.observeRoomsAndBuildShortcuts()
+                .disposeOnDestroy()
     }
 
     private fun promptCompleteSecurityIfNeeded() {

@@ -2,7 +2,7 @@ Changes in RiotX 0.20.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- - Add Direct Shortcuts
+ - Add Direct Shortcuts (#652)
 
 Improvements 🙌:
  -

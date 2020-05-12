@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.home
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
@@ -28,6 +27,7 @@ import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -36,15 +36,25 @@ private const val adaptiveIconSizeDp = 108
 private const val adaptiveIconOuterSidesDp = 18
 
 class ShortcutsHandler @Inject constructor(
+        private val context: Context,
         private val homeRoomListStore: HomeRoomListDataSource,
         private val avatarRenderer: AvatarRenderer,
         private val dimensionConverter: DimensionConverter
 ) {
+    private val adaptiveIconSize = dimensionConverter.dpToPx(adaptiveIconSizeDp)
+    private val adaptiveIconOuterSides = dimensionConverter.dpToPx(adaptiveIconOuterSidesDp)
+    private val iconSize by lazy {
+        if (useAdaptiveIcon) {
+            adaptiveIconSize - adaptiveIconOuterSides
+        } else {
+            dimensionConverter.dpToPx(72)
+        }
+    }
 
-    @SuppressLint("CheckResult")
-    fun observeRoomsAndBuildShortcuts(context: Context) {
-        homeRoomListStore
+    fun observeRoomsAndBuildShortcuts(): Disposable {
+        return homeRoomListStore
                 .observe()
+                .distinct()
                 .observeOn(Schedulers.computation())
                 .subscribe { rooms ->
                     val shortcuts = rooms
@@ -52,16 +62,7 @@ class ShortcutsHandler @Inject constructor(
                             .take(n = 4) // Android only allows us to create 4 shortcuts
                             .map { room ->
                                 val intent = RoomDetailActivity.shortcutIntent(context, room.roomId)
-
-                                val adaptiveIconSize = dimensionConverter.dpToPx(adaptiveIconSizeDp)
-                                val adaptiveIconOuterSides = dimensionConverter.dpToPx(adaptiveIconOuterSidesDp)
-                                val size = if (useAdaptiveIcon) {
-                                    adaptiveIconSize - adaptiveIconOuterSides
-                                } else {
-                                    dimensionConverter.dpToPx(72)
-                                }
-
-                                val bitmap = avatarRenderer.shortcutDrawable(context, GlideApp.with(context), room.toMatrixItem(), size)
+                                val bitmap = avatarRenderer.shortcutDrawable(context, GlideApp.with(context), room.toMatrixItem(), iconSize)
 
                                 ShortcutInfoCompat.Builder(context, room.roomId)
                                         .setShortLabel(room.displayName)
