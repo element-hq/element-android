@@ -25,7 +25,7 @@ Missing features (list not exhaustive):
 - Add email or phone to account (not P1, can be done on Riot-Web)
 - List email and phone of the account (could be done in a dedicated PR)
 - Search contact (not P1)
-- Logout from identity server when user sign out or deactivate his account (pending question in the issue).
+- Logout from identity server when user sign out or deactivate his account.
 
 ## Related MSCs
 The list can be found here: https://matrix.org/blog/2019/09/27/privacy-improvements-in-synapse-1-4-and-riot-1-4
@@ -69,8 +69,8 @@ The list can be found here: https://matrix.org/blog/2019/09/27/privacy-improveme
 - Look up pepper can be updated if it is rotated on the identity server
 - Invitation using 3PID can be done (See #548) (not done yet)
 - Homeserver access-token will never be sent to an identity server
-- When user sign-out: logout from the identity server if any?
-- When user deactivate account: logout from the identity server if any?
+- When user sign-out: logout from the identity server if any.
+- When user deactivate account: logout from the identity server if any.
 
 ## Screens
 

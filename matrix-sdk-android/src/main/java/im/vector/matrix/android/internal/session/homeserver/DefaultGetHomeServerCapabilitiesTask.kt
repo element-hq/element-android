@@ -49,15 +49,15 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
             return
         }
 
-        val uploadCapabilities = runCatching {
-            executeRequest<GetUploadCapabilitiesResult>(eventBus) {
-                apiCall = capabilitiesAPI.getUploadCapabilities()
-            }
-        }.getOrNull()
-
         val capabilities = runCatching {
             executeRequest<GetCapabilitiesResult>(eventBus) {
                 apiCall = capabilitiesAPI.getCapabilities()
+            }
+        }.getOrNull()
+
+        val uploadCapabilities = runCatching {
+            executeRequest<GetUploadCapabilitiesResult>(eventBus) {
+                apiCall = capabilitiesAPI.getUploadCapabilities()
             }
         }.getOrNull()
 

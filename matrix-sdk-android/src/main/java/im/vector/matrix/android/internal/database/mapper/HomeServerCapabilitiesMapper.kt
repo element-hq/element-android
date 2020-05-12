@@ -31,12 +31,4 @@ internal object HomeServerCapabilitiesMapper {
                 lastVersionIdentityServerSupported = entity.lastVersionIdentityServerSupported
         )
     }
-
-    fun map(domain: HomeServerCapabilities): HomeServerCapabilitiesEntity {
-        return HomeServerCapabilitiesEntity(
-                canChangePassword = domain.canChangePassword,
-                maxUploadFileSize = domain.maxUploadFileSize,
-                lastVersionIdentityServerSupported = domain.lastVersionIdentityServerSupported
-        )
-    }
 }
