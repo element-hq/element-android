@@ -23,7 +23,7 @@
             android:layout_height="@dimen/layout_touch_size"
             android:scaleType="center"
             android:src="@drawable/ic_settings_x"
-            android:tint="@color/riotx_accent"
+            android:tint="?colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

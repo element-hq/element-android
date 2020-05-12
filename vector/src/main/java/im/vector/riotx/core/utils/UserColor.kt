@@ -16,14 +16,18 @@
 
 package im.vector.riotx.core.utils
 
+import android.content.Context
 import androidx.annotation.ColorRes
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.ColorProvider
+import im.vector.riotx.features.themes.ThemeUtils
 import org.billcarsonfr.jsonviewer.JSonViewerStyleProvider
 import kotlin.math.abs
 
 @ColorRes
-fun getColorFromUserId(userId: String?): Int {
+fun getColorFromUserId(userId: String?, context: Context? = null): Int {
+    if (ThemeUtils.isScTheme(context)) return R.color.username_sc_1;
+
     var hash = 0
 
     userId?.toList()?.map { chr -> hash = (hash shl 5) - hash + chr.toInt() }

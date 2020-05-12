@@ -464,7 +464,7 @@ class RoomDetailFragment @Inject constructor(
         // switch to expanded bar
         composerLayout.composerRelatedMessageTitle.apply {
             text = event.getDisambiguatedDisplayName()
-            setTextColor(ContextCompat.getColor(requireContext(), getColorFromUserId(event.root.senderId)))
+            setTextColor(ContextCompat.getColor(requireContext(), getColorFromUserId(event.root.senderId, context)))
         }
 
         val messageContent: MessageContent? = event.getLastMessageContent()

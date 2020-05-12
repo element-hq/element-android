@@ -16,11 +16,14 @@
 
 package im.vector.riotx.features.home
 
+import android.content.Context
 import androidx.annotation.ColorRes
 import im.vector.riotx.R
+import im.vector.riotx.features.themes.ThemeUtils
 
 @ColorRes
-fun getColorFromRoomId(roomId: String?): Int {
+fun getColorFromRoomId(roomId: String?, context: Context? = null): Int {
+    if (ThemeUtils.isScTheme(context)) return R.color.avatar_fill_sc_1;
     return when ((roomId?.toList()?.sumBy { it.toInt() } ?: 0) % 3) {
         1    -> R.color.riotx_avatar_fill_2
         2    -> R.color.riotx_avatar_fill_3

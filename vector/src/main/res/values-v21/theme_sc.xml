@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.SC.v21" parent="AppTheme.Base.SC">
+        <item name="android:statusBarColor">@color/background_black_sc</item>
+        <item name="android:navigationBarColor">@color/background_black_sc</item>
+
+        <!-- enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+
+        <!-- specify shared element enter and exit transitions -->
+        <item name="android:windowSharedElementEnterTransition">@transition/image_preview_transition</item>
+        <item name="android:windowSharedElementExitTransition">@transition/image_preview_transition</item>
+    </style>
+
+    <style name="AppTheme.SC" parent="AppTheme.SC.v21" />
+
+</resources>

@@ -41,8 +41,11 @@ object ThemeUtils {
     private const val THEME_LIGHT_VALUE = "light"
     private const val THEME_BLACK_VALUE = "black"
     private const val THEME_STATUS_VALUE = "status"
+    private const val THEME_SC_VALUE = "sc"
 
     private val mColorByAttr = HashMap<Int, Int>()
+
+    private var mIsScTheme = false;
 
     /**
      * Provides the selected application theme
@@ -56,6 +59,19 @@ object ThemeUtils {
     }
 
     /**
+     * Whether this is SC theme.
+     *
+     * @param context the context
+     * @return true if SC theme is active, false otherwise
+     */
+    fun isScTheme(context: Context?): Boolean {
+        if (context != null) {
+            mIsScTheme = THEME_SC_VALUE.equals(getApplicationTheme(context));
+        }
+        return mIsScTheme;
+    }
+
+    /**
      * Update the application theme
      *
      * @param aTheme the new theme
@@ -65,6 +81,7 @@ object ThemeUtils {
             THEME_DARK_VALUE   -> context.setTheme(R.style.AppTheme_Dark)
             THEME_BLACK_VALUE  -> context.setTheme(R.style.AppTheme_Black)
             THEME_STATUS_VALUE -> context.setTheme(R.style.AppTheme_Status)
+            THEME_SC_VALUE     -> context.setTheme(R.style.AppTheme_SC)
             else               -> context.setTheme(R.style.AppTheme_Light)
         }
 
@@ -82,6 +99,7 @@ object ThemeUtils {
             THEME_DARK_VALUE   -> activity.setTheme(otherThemes.dark)
             THEME_BLACK_VALUE  -> activity.setTheme(otherThemes.black)
             THEME_STATUS_VALUE -> activity.setTheme(otherThemes.status)
+            THEME_SC_VALUE     -> activity.setTheme(otherThemes.sc)
         }
 
         mColorByAttr.clear()
@@ -185,6 +203,18 @@ object ThemeUtils {
                     R.drawable.divider_horizontal_light      -> R.drawable.divider_horizontal_black
                     else                                     -> {
                         Timber.w("Warning, missing case for wanted drawable in black theme")
+                        resourceId
+                    }
+                }
+            }
+            THEME_SC_VALUE -> {
+                return when (resourceId) {
+                    R.drawable.bg_search_edit_text_light     -> R.drawable.bg_search_edit_text_sc
+                    R.drawable.bg_unread_notification_light  -> R.drawable.bg_unread_notification_sc
+                    R.drawable.vector_label_background_light -> R.drawable.vector_label_background_sc
+                    R.drawable.divider_horizontal_light      -> R.drawable.divider_horizontal_sc
+                    else                                     -> {
+                        Timber.w("Warning, missing case for wanted drawable in sc theme")
                         resourceId
                     }
                 }

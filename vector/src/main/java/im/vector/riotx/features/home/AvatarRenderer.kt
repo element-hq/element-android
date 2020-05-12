@@ -83,8 +83,8 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     @AnyThread
     fun getPlaceholderDrawable(context: Context, matrixItem: MatrixItem): Drawable {
         val avatarColor = when (matrixItem) {
-            is MatrixItem.UserItem -> ContextCompat.getColor(context, getColorFromUserId(matrixItem.id))
-            else                   -> ContextCompat.getColor(context, getColorFromRoomId(matrixItem.id))
+            is MatrixItem.UserItem -> ContextCompat.getColor(context, getColorFromUserId(matrixItem.id, context))
+            else                   -> ContextCompat.getColor(context, getColorFromRoomId(matrixItem.id, context))
         }
         return TextDrawable.builder()
                 .beginConfig()

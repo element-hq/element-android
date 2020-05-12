@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="accent_sc">#8BC34A</color>
+    <color name="accent_sc_alpha25">#3F8BC34A</color>
+    <color name="direct_chat_ring_color_sc">#689F38</color>
+
+    <color name="avatar_fill_sc_1">@color/accent_sc</color>
+    <color name="username_sc_1">@color/accent_sc</color>
+
+    <color name="text_color_primary_sc">#ffffff</color>
+    <color name="text_color_secondary_sc">#b3ffffff</color>
+    <color name="text_color_tertiary_sc">#80ffffff</color>
+    <color name="text_color_disabled_sc">#80ffffff</color>
+
+    <color name="background_sc">#ff000000</color>
+    <color name="background_dark_sc">#ff212121</color>
+    <color name="background_black_sc">#ff000000</color>
+    <color name="background_floating_sc">#42ffffff</color>
+
+    <color name="list_divider_color_sc">#80ffffff</color>
+</resources>
