@@ -70,7 +70,8 @@ class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
                         2    -> stringProvider.getString(R.string.invitations_sent_to_two_users,
                                 selectedUsers.first().displayName,
                                 selectedUsers.last().displayName)
-                        else -> stringProvider.getString(R.string.invitations_sent_to_three_and_more_users,
+                        else -> stringProvider.getQuantityString(R.plurals.invitations_sent_to_one_and_more_users,
+                                selectedUsers.size - 1,
                                 selectedUsers.first().displayName,
                                 selectedUsers.size - 1)
                     }
