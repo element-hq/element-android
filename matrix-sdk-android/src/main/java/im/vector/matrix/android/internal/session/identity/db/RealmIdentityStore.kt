@@ -19,27 +19,30 @@ package im.vector.matrix.android.internal.session.identity.db
 import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.internal.di.IdentityDatabase
 import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.session.identity.data.IdentityPendingBinding
+import im.vector.matrix.android.internal.session.identity.data.IdentityData
+import im.vector.matrix.android.internal.session.identity.data.IdentityStore
 import im.vector.matrix.android.internal.session.identity.model.IdentityHashDetailResponse
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import javax.inject.Inject
 
 @SessionScope
-internal class RealmIdentityServiceStore @Inject constructor(
+internal class RealmIdentityStore @Inject constructor(
         @IdentityDatabase
         private val realmConfiguration: RealmConfiguration
-) : IdentityServiceStore {
+) : IdentityStore {
 
-    override fun getIdentityServerDetails(): IdentityServerEntity? {
+    override fun getIdentityData(): IdentityData? {
         return Realm.getInstance(realmConfiguration).use { realm ->
-            IdentityServerEntity.get(realm)?.let { realm.copyFromRealm(it) }
+            IdentityDataEntity.get(realm)?.let { IdentityMapper.map(it) }
         }
     }
 
     override fun setUrl(url: String?) {
         Realm.getInstance(realmConfiguration).use {
             it.executeTransaction { realm ->
-                IdentityServerEntity.setUrl(realm, url)
+                IdentityDataEntity.setUrl(realm, url)
             }
         }
     }
@@ -47,7 +50,7 @@ internal class RealmIdentityServiceStore @Inject constructor(
     override fun setToken(token: String?) {
         Realm.getInstance(realmConfiguration).use {
             it.executeTransaction { realm ->
-                IdentityServerEntity.setToken(realm, token)
+                IdentityDataEntity.setToken(realm, token)
             }
         }
     }
@@ -55,26 +58,26 @@ internal class RealmIdentityServiceStore @Inject constructor(
     override fun setHashDetails(hashDetailResponse: IdentityHashDetailResponse) {
         Realm.getInstance(realmConfiguration).use {
             it.executeTransaction { realm ->
-                IdentityServerEntity.setHashDetails(realm, hashDetailResponse.pepper, hashDetailResponse.algorithms)
+                IdentityDataEntity.setHashDetails(realm, hashDetailResponse.pepper, hashDetailResponse.algorithms)
             }
         }
     }
 
-    override fun storePendingBinding(threePid: ThreePid, clientSecret: String, sendAttempt: Int, sid: String) {
+    override fun storePendingBinding(threePid: ThreePid, data: IdentityPendingBinding) {
         Realm.getInstance(realmConfiguration).use {
             it.executeTransaction { realm ->
                 IdentityPendingBindingEntity.getOrCreate(realm, threePid).let { entity ->
-                    entity.clientSecret = clientSecret
-                    entity.sendAttempt = sendAttempt
-                    entity.sid = sid
+                    entity.clientSecret = data.clientSecret
+                    entity.sendAttempt = data.sendAttempt
+                    entity.sid = data.sid
                 }
             }
         }
     }
 
-    override fun getPendingBinding(threePid: ThreePid): IdentityPendingBindingEntity? {
+    override fun getPendingBinding(threePid: ThreePid): IdentityPendingBinding? {
         return Realm.getInstance(realmConfiguration).use { realm ->
-            IdentityPendingBindingEntity.get(realm, threePid)?.let { realm.copyFromRealm(it) }
+            IdentityPendingBindingEntity.get(realm, threePid)?.let { IdentityMapper.map(it) }
         }
     }
 

@@ -20,8 +20,8 @@ import im.vector.matrix.android.api.session.identity.IdentityServiceError
 import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.api.session.identity.toMedium
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.identity.db.IdentityServiceStore
-import im.vector.matrix.android.internal.session.identity.db.getIdentityServerUrlWithoutProtocol
+import im.vector.matrix.android.internal.session.identity.data.IdentityStore
+import im.vector.matrix.android.internal.session.identity.data.getIdentityServerUrlWithoutProtocol
 import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
@@ -33,10 +33,10 @@ internal abstract class UnbindThreePidsTask : Task<UnbindThreePidsTask.Params, B
 }
 
 internal class DefaultUnbindThreePidsTask @Inject constructor(private val profileAPI: ProfileAPI,
-                                                              private val identityServiceStore: IdentityServiceStore,
+                                                              private val identityStore: IdentityStore,
                                                               private val eventBus: EventBus) : UnbindThreePidsTask() {
     override suspend fun execute(params: Params): Boolean {
-        val identityServerUrlWithoutProtocol = identityServiceStore.getIdentityServerUrlWithoutProtocol()
+        val identityServerUrlWithoutProtocol = identityStore.getIdentityServerUrlWithoutProtocol()
                 ?: throw IdentityServiceError.NoIdentityServerConfigured
 
         return executeRequest<UnbindThreePidResponse>(eventBus) {

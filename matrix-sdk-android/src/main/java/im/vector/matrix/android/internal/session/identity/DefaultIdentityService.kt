@@ -38,7 +38,7 @@ import im.vector.matrix.android.internal.di.AuthenticatedIdentity
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.session.SessionScope
-import im.vector.matrix.android.internal.session.identity.db.IdentityServiceStore
+import im.vector.matrix.android.internal.session.identity.data.IdentityStore
 import im.vector.matrix.android.internal.session.identity.todelete.AccountDataDataSource
 import im.vector.matrix.android.internal.session.identity.todelete.observeNotNull
 import im.vector.matrix.android.internal.session.openid.GetOpenIdTokenTask
@@ -58,9 +58,9 @@ import javax.net.ssl.HttpsURLConnection
 
 @SessionScope
 internal class DefaultIdentityService @Inject constructor(
-        private val identityServiceStore: IdentityServiceStore,
+        private val identityStore: IdentityStore,
         private val getOpenIdTokenTask: GetOpenIdTokenTask,
-        private val bulkLookupTask: BulkLookupTask,
+        private val identityBulkLookupTask: IdentityBulkLookupTask,
         private val identityRegisterTask: IdentityRegisterTask,
         private val identityPingTask: IdentityPingTask,
         private val identityDisconnectTask: IdentityDisconnectTask,
@@ -95,16 +95,16 @@ internal class DefaultIdentityService @Inject constructor(
                 }
 
         // Init identityApi
-        updateIdentityAPI(identityServiceStore.getIdentityServerDetails()?.identityServerUrl)
+        updateIdentityAPI(identityStore.getIdentityData()?.identityServerUrl)
     }
 
     private fun notifyIdentityServerUrlChange(baseUrl: String?) {
         // This is maybe not a real change (echo of account data we are just setting)
-        if (identityServiceStore.getIdentityServerDetails()?.identityServerUrl == baseUrl) {
+        if (identityStore.getIdentityData()?.identityServerUrl == baseUrl) {
             Timber.d("Echo of local identity server url change, or no change")
         } else {
             // Url has changed, we have to reset our store, update internal configuration and notify listeners
-            identityServiceStore.setUrl(baseUrl)
+            identityStore.setUrl(baseUrl)
             updateIdentityAPI(baseUrl)
             listeners.toList().forEach { tryThis { it.onIdentityServerChange() } }
         }
@@ -121,7 +121,7 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     override fun getCurrentIdentityServerUrl(): String? {
-        return identityServiceStore.getIdentityServerDetails()?.identityServerUrl
+        return identityStore.getIdentityData()?.identityServerUrl
     }
 
     override fun startBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
@@ -137,7 +137,7 @@ internal class DefaultIdentityService @Inject constructor(
 
     override fun cancelBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
         return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
-            identityServiceStore.deletePendingBinding(threePid)
+            identityStore.deletePendingBinding(threePid)
         }
     }
 
@@ -187,7 +187,7 @@ internal class DefaultIdentityService @Inject constructor(
         return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
             identityDisconnectTask.execute(Unit)
 
-            identityServiceStore.setUrl(null)
+            identityStore.setUrl(null)
             updateIdentityAPI(null)
             updateAccountData(null)
         }
@@ -217,8 +217,8 @@ internal class DefaultIdentityService @Inject constructor(
                 // Try to get a token
                 val token = getNewIdentityServerToken(urlCandidate)
 
-                identityServiceStore.setUrl(urlCandidate)
-                identityServiceStore.setToken(token)
+                identityStore.setUrl(urlCandidate)
+                identityStore.setToken(token)
                 updateIdentityAPI(urlCandidate)
 
                 updateAccountData(urlCandidate)
@@ -261,7 +261,7 @@ internal class DefaultIdentityService @Inject constructor(
             threePids.associateWith { threePid ->
                 // If not in lookup result, check if there is a pending binding
                 if (lookupResult.firstOrNull { it.threePid == threePid } == null) {
-                    if (identityServiceStore.getPendingBinding(threePid) == null) {
+                    if (identityStore.getPendingBinding(threePid) == null) {
                         SharedState.NOT_SHARED
                     } else {
                         SharedState.BINDING_IN_PROGRESS
@@ -277,12 +277,12 @@ internal class DefaultIdentityService @Inject constructor(
         ensureToken()
 
         return try {
-            bulkLookupTask.execute(BulkLookupTask.Params(threePids))
+            identityBulkLookupTask.execute(IdentityBulkLookupTask.Params(threePids))
         } catch (throwable: Throwable) {
             // Refresh token?
             when {
                 throwable.isInvalidToken() && canRetry -> {
-                    identityServiceStore.setToken(null)
+                    identityStore.setToken(null)
                     lookUpInternal(false, threePids)
                 }
                 throwable.isTermsNotSigned()           -> throw IdentityServiceError.TermsNotSignedException
@@ -292,13 +292,13 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     private suspend fun ensureToken() {
-        val entity = identityServiceStore.getIdentityServerDetails() ?: throw IdentityServiceError.NoIdentityServerConfigured
-        val url = entity.identityServerUrl ?: throw IdentityServiceError.NoIdentityServerConfigured
+        val identityData = identityStore.getIdentityData() ?: throw IdentityServiceError.NoIdentityServerConfigured
+        val url = identityData.identityServerUrl ?: throw IdentityServiceError.NoIdentityServerConfigured
 
-        if (entity.token == null) {
+        if (identityData.token == null) {
             // Try to get a token
             val token = getNewIdentityServerToken(url)
-            identityServiceStore.setToken(token)
+            identityStore.setToken(token)
         }
     }
 

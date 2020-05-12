@@ -30,8 +30,8 @@ import im.vector.matrix.android.internal.network.token.AccessTokenProvider
 import im.vector.matrix.android.internal.session.SessionModule
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.identity.db.IdentityRealmModule
-import im.vector.matrix.android.internal.session.identity.db.IdentityServiceStore
-import im.vector.matrix.android.internal.session.identity.db.RealmIdentityServiceStore
+import im.vector.matrix.android.internal.session.identity.data.IdentityStore
+import im.vector.matrix.android.internal.session.identity.db.RealmIdentityStore
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
 import java.io.File
@@ -75,7 +75,7 @@ internal abstract class IdentityModule {
     abstract fun bindAccessTokenProvider(provider: IdentityAccessTokenProvider): AccessTokenProvider
 
     @Binds
-    abstract fun bindIdentityServiceStore(store: RealmIdentityServiceStore): IdentityServiceStore
+    abstract fun bindIdentityStore(store: RealmIdentityStore): IdentityStore
 
     @Binds
     abstract fun bindIdentityPingTask(task: DefaultIdentityPingTask): IdentityPingTask
@@ -90,7 +90,7 @@ internal abstract class IdentityModule {
     abstract fun bindIdentitySubmitTokenForBindingTask(task: DefaultIdentitySubmitTokenForBindingTask): IdentitySubmitTokenForBindingTask
 
     @Binds
-    abstract fun bindBulkLookupTask(task: DefaultBulkLookupTask): BulkLookupTask
+    abstract fun bindIdentityBulkLookupTask(task: DefaultIdentityBulkLookupTask): IdentityBulkLookupTask
 
     @Binds
     abstract fun bindIdentityDisconnectTask(task: DefaultIdentityDisconnectTask): IdentityDisconnectTask

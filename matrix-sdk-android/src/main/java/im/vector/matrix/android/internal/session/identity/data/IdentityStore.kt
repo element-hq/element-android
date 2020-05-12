@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.identity.db
+package im.vector.matrix.android.internal.session.identity.data
 
 import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.internal.session.identity.model.IdentityHashDetailResponse
 
-internal interface IdentityServiceStore {
+internal interface IdentityStore {
 
-    fun getIdentityServerDetails(): IdentityServerEntity?
+    fun getIdentityData(): IdentityData?
 
     fun setUrl(url: String?)
 
@@ -32,16 +32,13 @@ internal interface IdentityServiceStore {
     /**
      * Store details about a current binding
      */
-    fun storePendingBinding(threePid: ThreePid,
-                            clientSecret: String,
-                            sendAttempt: Int,
-                            sid: String)
+    fun storePendingBinding(threePid: ThreePid, data: IdentityPendingBinding)
 
-    fun getPendingBinding(threePid: ThreePid): IdentityPendingBindingEntity?
+    fun getPendingBinding(threePid: ThreePid): IdentityPendingBinding?
 
     fun deletePendingBinding(threePid: ThreePid)
 }
 
-internal fun IdentityServiceStore.getIdentityServerUrlWithoutProtocol(): String? {
-    return getIdentityServerDetails()?.identityServerUrl?.substringAfter("://")
+internal fun IdentityStore.getIdentityServerUrlWithoutProtocol(): String? {
+    return getIdentityData()?.identityServerUrl?.substringAfter("://")
 }

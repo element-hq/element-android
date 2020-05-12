@@ -21,7 +21,8 @@ import im.vector.matrix.android.api.session.identity.ThreePid
 import im.vector.matrix.android.api.session.identity.getCountryCode
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.identity.db.IdentityServiceStore
+import im.vector.matrix.android.internal.session.identity.data.IdentityPendingBinding
+import im.vector.matrix.android.internal.session.identity.data.IdentityStore
 import im.vector.matrix.android.internal.session.identity.model.IdentityRequestTokenForEmailBody
 import im.vector.matrix.android.internal.session.identity.model.IdentityRequestTokenForMsisdnBody
 import im.vector.matrix.android.internal.session.identity.model.IdentityRequestTokenResponse
@@ -39,21 +40,21 @@ internal interface IdentityRequestTokenForBindingTask : Task<IdentityRequestToke
 
 internal class DefaultIdentityRequestTokenForBindingTask @Inject constructor(
         private val identityApiProvider: IdentityApiProvider,
-        private val identityServiceStore: IdentityServiceStore,
+        private val identityStore: IdentityStore,
         @UserId private val userId: String
 ) : IdentityRequestTokenForBindingTask {
 
     override suspend fun execute(params: IdentityRequestTokenForBindingTask.Params) {
         val identityAPI = getIdentityApiAndEnsureTerms(identityApiProvider, userId)
 
-        val pendingBindingEntity = identityServiceStore.getPendingBinding(params.threePid)
+        val identityPendingBinding = identityStore.getPendingBinding(params.threePid)
 
-        if (params.sendAgain && pendingBindingEntity == null) {
+        if (params.sendAgain && identityPendingBinding == null) {
             throw IdentityServiceError.NoCurrentBindingError
         }
 
-        val clientSecret = pendingBindingEntity?.clientSecret ?: UUID.randomUUID().toString()
-        val sendAttempt = pendingBindingEntity?.sendAttempt?.inc() ?: 1
+        val clientSecret = identityPendingBinding?.clientSecret ?: UUID.randomUUID().toString()
+        val sendAttempt = identityPendingBinding?.sendAttempt?.inc() ?: 1
 
         val tokenResponse = executeRequest<IdentityRequestTokenResponse>(null) {
             apiCall = when (params.threePid) {
@@ -73,11 +74,14 @@ internal class DefaultIdentityRequestTokenForBindingTask @Inject constructor(
             }
         }
 
-        // Store client secret and sid
-        identityServiceStore.storePendingBinding(
+        // Store client secret, send attempt and sid
+        identityStore.storePendingBinding(
                 params.threePid,
-                clientSecret,
-                sendAttempt,
-                tokenResponse.sid)
+                IdentityPendingBinding(
+                        clientSecret = clientSecret,
+                        sendAttempt = sendAttempt,
+                        sid = tokenResponse.sid
+                )
+        )
     }
 }

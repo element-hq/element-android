@@ -24,17 +24,17 @@ import io.realm.kotlin.where
 /**
  * Only one object can be stored at a time
  */
-internal fun IdentityServerEntity.Companion.get(realm: Realm): IdentityServerEntity? {
-    return realm.where<IdentityServerEntity>().findFirst()
+internal fun IdentityDataEntity.Companion.get(realm: Realm): IdentityDataEntity? {
+    return realm.where<IdentityDataEntity>().findFirst()
 }
 
-private fun IdentityServerEntity.Companion.getOrCreate(realm: Realm): IdentityServerEntity {
+private fun IdentityDataEntity.Companion.getOrCreate(realm: Realm): IdentityDataEntity {
     return get(realm) ?: realm.createObject()
 }
 
-internal fun IdentityServerEntity.Companion.setUrl(realm: Realm,
-                                                   url: String?) {
-    realm.where<IdentityServerEntity>().findAll().deleteAllFromRealm()
+internal fun IdentityDataEntity.Companion.setUrl(realm: Realm,
+                                                 url: String?) {
+    realm.where<IdentityDataEntity>().findAll().deleteAllFromRealm()
     // Delete all pending binding if any
     IdentityPendingBindingEntity.deleteAll(realm)
 
@@ -45,16 +45,16 @@ internal fun IdentityServerEntity.Companion.setUrl(realm: Realm,
     }
 }
 
-internal fun IdentityServerEntity.Companion.setToken(realm: Realm,
-                                                     newToken: String?) {
+internal fun IdentityDataEntity.Companion.setToken(realm: Realm,
+                                                   newToken: String?) {
     get(realm)?.apply {
         token = newToken
     }
 }
 
-internal fun IdentityServerEntity.Companion.setHashDetails(realm: Realm,
-                                                           pepper: String,
-                                                           algorithms: List<String>) {
+internal fun IdentityDataEntity.Companion.setHashDetails(realm: Realm,
+                                                         pepper: String,
+                                                         algorithms: List<String>) {
     get(realm)?.apply {
         hashLookupPepper = pepper
         hashLookupAlgorithm = RealmList<String>().apply { addAll(algorithms) }

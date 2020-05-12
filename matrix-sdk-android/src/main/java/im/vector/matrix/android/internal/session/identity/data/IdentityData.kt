@@ -14,16 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.identity.db
+package im.vector.matrix.android.internal.session.identity.data
 
-import io.realm.annotations.RealmModule
-
-/**
- * Realm module for identity server classes
- */
-@RealmModule(library = true,
-        classes = [
-            IdentityDataEntity::class,
-            IdentityPendingBindingEntity::class
-        ])
-internal class IdentityRealmModule
+internal data class IdentityData(
+        val identityServerUrl: String?,
+        val token: String?,
+        val hashLookupPepper: String?,
+        val hashLookupAlgorithm: List<String>
+)

@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.identity.db
+package im.vector.matrix.android.internal.session.identity.data
 
-import io.realm.annotations.RealmModule
-
-/**
- * Realm module for identity server classes
- */
-@RealmModule(library = true,
-        classes = [
-            IdentityDataEntity::class,
-            IdentityPendingBindingEntity::class
-        ])
-internal class IdentityRealmModule
+internal data class IdentityPendingBinding(
+        /* Managed by Riot */
+        val clientSecret: String,
+        /* Managed by Riot */
+        val sendAttempt: Int,
+        /* Provided by the identity server */
+        val sid: String
+)

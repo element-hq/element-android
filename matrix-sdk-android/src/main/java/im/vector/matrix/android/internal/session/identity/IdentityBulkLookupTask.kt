@@ -26,7 +26,7 @@ import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachmen
 import im.vector.matrix.android.internal.crypto.tools.withOlmUtility
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
-import im.vector.matrix.android.internal.session.identity.db.IdentityServiceStore
+import im.vector.matrix.android.internal.session.identity.data.IdentityStore
 import im.vector.matrix.android.internal.session.identity.model.IdentityHashDetailResponse
 import im.vector.matrix.android.internal.session.identity.model.IdentityLookUpParams
 import im.vector.matrix.android.internal.session.identity.model.IdentityLookUpResponse
@@ -34,27 +34,27 @@ import im.vector.matrix.android.internal.task.Task
 import java.util.Locale
 import javax.inject.Inject
 
-internal interface BulkLookupTask : Task<BulkLookupTask.Params, List<FoundThreePid>> {
+internal interface IdentityBulkLookupTask : Task<IdentityBulkLookupTask.Params, List<FoundThreePid>> {
     data class Params(
             val threePids: List<ThreePid>
     )
 }
 
-internal class DefaultBulkLookupTask @Inject constructor(
+internal class DefaultIdentityBulkLookupTask @Inject constructor(
         private val identityApiProvider: IdentityApiProvider,
-        private val identityServiceStore: IdentityServiceStore,
+        private val identityStore: IdentityStore,
         @UserId private val userId: String
-) : BulkLookupTask {
+) : IdentityBulkLookupTask {
 
-    override suspend fun execute(params: BulkLookupTask.Params): List<FoundThreePid> {
+    override suspend fun execute(params: IdentityBulkLookupTask.Params): List<FoundThreePid> {
         val identityAPI = getIdentityApiAndEnsureTerms(identityApiProvider, userId)
-        val entity = identityServiceStore.getIdentityServerDetails() ?: throw IdentityServiceError.NoIdentityServerConfigured
-        val pepper = entity.hashLookupPepper
+        val identityData = identityStore.getIdentityData() ?: throw IdentityServiceError.NoIdentityServerConfigured
+        val pepper = identityData.hashLookupPepper
         val hashDetailResponse = if (pepper == null) {
             // We need to fetch the hash details first
             fetchAndStoreHashDetails(identityAPI)
         } else {
-            IdentityHashDetailResponse(pepper, entity.hashLookupAlgorithm.toList())
+            IdentityHashDetailResponse(pepper, identityData.hashLookupAlgorithm)
         }
 
         if (hashDetailResponse.algorithms.contains("sha256").not()) {
@@ -97,7 +97,7 @@ internal class DefaultBulkLookupTask @Inject constructor(
                 if (!failure.error.newLookupPepper.isNullOrEmpty()) {
                     // Store it and use it right now
                     hashDetailResponse.copy(pepper = failure.error.newLookupPepper)
-                            .also { identityServiceStore.setHashDetails(it) }
+                            .also { identityStore.setHashDetails(it) }
                             .let { lookUpInternal(identityAPI, hashedAddresses, it, false /* Avoid infinite loop */) }
                 } else {
                     // Retrieve the new hash details
@@ -122,7 +122,7 @@ internal class DefaultBulkLookupTask @Inject constructor(
         return executeRequest<IdentityHashDetailResponse>(null) {
             apiCall = identityAPI.hashDetails()
         }
-                .also { identityServiceStore.setHashDetails(it) }
+                .also { identityStore.setHashDetails(it) }
     }
 
     private fun handleSuccess(threePids: List<ThreePid>, hashedAddresses: List<String>, identityLookUpResponse: IdentityLookUpResponse): List<FoundThreePid> {

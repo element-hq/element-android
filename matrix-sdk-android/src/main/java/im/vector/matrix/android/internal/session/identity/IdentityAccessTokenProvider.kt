@@ -17,11 +17,11 @@
 package im.vector.matrix.android.internal.session.identity
 
 import im.vector.matrix.android.internal.network.token.AccessTokenProvider
-import im.vector.matrix.android.internal.session.identity.db.IdentityServiceStore
+import im.vector.matrix.android.internal.session.identity.data.IdentityStore
 import javax.inject.Inject
 
 internal class IdentityAccessTokenProvider @Inject constructor(
-        private val identityServiceStore: IdentityServiceStore
+        private val identityStore: IdentityStore
 ) : AccessTokenProvider {
-    override fun getToken() = identityServiceStore.getIdentityServerDetails()?.token
+    override fun getToken() = identityStore.getIdentityData()?.token
 }
