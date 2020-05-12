@@ -296,4 +296,147 @@
     <string name="room_info_room_topic">Temo de ĉambro</string>
 
     <string name="settings_call_category">Vokoj</string>
-    </resources>
+    <string name="notification_sync_init">Pravalorigante servon</string>
+    <plurals name="room_details_selected">
+	<item quantity="one">1 elektita</item>
+	<item quantity="other">%d elektitaj</item>
+</plurals>
+    <string name="malformed_id">Misformita identigilo. Ĝi devus esti retpoŝtadreso aŭ identigilo de Matrix, kiel «@lokaparto:mallokaparto»</string>
+    <string name="room_details_people_invited_group_name">INVITITA</string>
+    <string name="room_details_people_present_group_name">ALIĜINTA</string>
+
+    <string name="room_event_action_report_prompt_reason">Kialo pro raporto de ĉi tiu enhavo</string>
+    <string name="room_event_action_report_prompt_ignore_user">Ĉu vi volas kaŝi ĉiujn mesaĝojn de ĉi tiu uzanto\?
+\n
+\nRimarku, ke tia ago reekigos la aplikaĵon kaj eble daŭros iom da tempo.</string>
+    <string name="room_event_action_cancel_upload">Nuligi alŝuton</string>
+    <string name="room_event_action_cancel_download">Nuligi elŝuton</string>
+
+    <string name="search_hint">Serĉi</string>
+    <string name="search_members_hint">Filtri ĉambranojn</string>
+    <string name="search_no_results">Neniuj rezultoj</string>
+    <string name="tab_title_search_rooms">ĈAMBROJ</string>
+    <string name="tab_title_search_messages">MESAĜOJ</string>
+    <string name="room_recents_favourites">ELSTARIGITAJ</string>
+    <string name="room_recents_conversations">ĈAMBROJ</string>
+    <string name="room_recents_invites">INVITOJ</string>
+    <string name="room_recents_start_chat">Komenci babilon</string>
+    <string name="room_recents_create_room">Krei ĉambron</string>
+    <string name="room_recents_join_room">Aliĝi al ĉambro</string>
+    <string name="room_recents_join_room_title">Aliĝi al ĉambro</string>
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 ĉambro</item>
+	<item quantity="other">%d ĉambroj</item>
+</plurals>
+    <string name="room_settings_all_messages">Ĉiuj mesaĝoj</string>
+    <string name="room_settings_mention_only">Nur mencioj</string>
+    <string name="room_settings_mute">Silentigi</string>
+    <string name="room_settings_favourite">Elstarigi</string>
+    <string name="room_settings_forget">Forgesi</string>
+    <string name="room_sliding_menu_messages">Mesaĝoj</string>
+    <string name="room_sliding_menu_settings">Agordoj</string>
+    <string name="room_sliding_menu_version">Versio</string>
+    <string name="room_sliding_menu_version_x">Versio %s</string>
+    <string name="settings_invited_to_room">Kiam mi estas invitita al ĉambro</string>
+    <string name="settings_call_invitations">Invitoj al vokoj</string>
+    <string name="settings_messages_sent_by_bot">Mesaĝoj senditaj de roboto</string>
+
+    <string name="settings_background_sync">Fona spegulado</string>
+    <string name="settings_background_fdroid_sync_mode">Reĝimo de fona spegulado (eksperimenta)</string>
+    <string name="settings_background_fdroid_sync_mode_battery">Optimumigita por baterio</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">Riot spegulos fone, per maniero konservanta la limigitajn rimedojn de la aparato (ĉefe la baterion).
+\nDepende de la stato de la rimedoj de via aparato, la spegulado povus esti prokrastita de la operaciumo.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">Optimumigita por tujeco</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Riot spegulos fone, ripete, je preciza tempo (agordebla).
+\nĈi tio influos uzadon de baterio kaj radiilo, kaj aperigos ĉiaman sciigon pri tio, ke Riot aŭskultas okazojn.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">Neniu fona spegulado</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">Vi sciiĝos pri envenaj mesaĝoj dum la aplikaĵo estas fone.</string>
+    <string name="settings_background_sync_update_error">Malsukcesis ĝisdatigi agordojn.</string>
+
+
+    <string name="settings_start_on_boot">Ruliĝi je eko de sistemo</string>
+    <string name="settings_enable_background_sync">Ŝalti fonan speguladon</string>
+    <string name="settings_set_sync_timeout">Tempolimo de petoj por spegulado</string>
+    <string name="settings_set_workmanager_delay">Preferata intertempo de spegulado</string>
+    <string name="settings_set_workmanager_delay_summary">%s
+\nLa spegulado povas esti prokrastita, depende de la rimedoj (baterio) aŭ la stato de la aparato (dormeto).</string>
+    <string name="settings_set_sync_delay">Prokrasto inter ĉiu spegulado</string>
+    <string name="settings_second">sekundo</string>
+    <string name="settings_seconds">sekundoj</string>
+
+    <string name="settings_version">Versio</string>
+    <string name="settings_olm_version">Versio de olm</string>
+    <string name="settings_app_term_conditions">Uzokondiĉoj</string>
+    <string name="settings_copyright">Kopirajto</string>
+    <string name="settings_privacy_policy">Privateca politiko</string>
+    <string name="settings_clear_cache">Vakigi kaŝmemoron</string>
+    <string name="settings_clear_media_cache">Vakigi kaŝmemoron de vidaŭdaĵoj</string>
+
+    <string name="settings_user_settings">Agordoj de uzanto</string>
+    <string name="settings_notifications">Sciigoj</string>
+    <string name="settings_ignored_users">Malatentataj uzantoj</string>
+    <string name="settings_other">Aliaj</string>
+    <string name="settings_advanced">Altnivelaj</string>
+    <string name="settings_integrations">Kunigoj</string>
+    <string name="settings_integrations_summary">Uzu kunigilon por administri robotojn, pontojn, fenestraĵojn kaj glumarkarojn.
+\nKunigiloj ricevas datumojn pri agordoj kaj povas modifi fenestraĵojn, sendi invitojn al ĉambroj, kaj agordi povnivelojn laŭ via rajtigo.</string>
+    <string name="settings_cryptography">Ĉifroteĥnikaro</string>
+    <string name="settings_cryptography_manage_keys">Administrado de ĉifraj ŝlasiloj</string>
+    <string name="settings_notifications_targets">Celoj de sciigoj</string>
+    <string name="settings_contact">Lokaj kontaktoj</string>
+    <string name="settings_devices_list">Salutaĵoj</string>
+    <string name="settings_send_typing_notifs">Sendi sciigojn pri tajpado</string>
+    <string name="settings_send_markdown">MarkDown-formatado</string>
+    <string name="settings_send_markdown_summary">Formati mesaĝojn per la sintakso de MarkDown antaŭ sendo. Tio ebligas altnivelan formatadon, ekzemple uzon de steletoj por montri kursivan tekston.</string>
+    <string name="conference_call_warning_title">Averto!</string>
+    <string name="conference_call_warning_message">Grupa vokado ankoraŭ estas programata kaj eble ne estos dependebla.</string>
+
+    <string name="markdown_has_been_enabled">MarkDown ŝaltiĝis.</string>
+    <string name="markdown_has_been_disabled">MarkDown malŝaltiĝis.</string>
+
+    <string name="notification_silent">Silente</string>
+    <string name="notification_noisy">Laŭte</string>
+
+    <string name="encrypted_message">Ĉifrita mesaĝo</string>
+
+    <string name="create">Krei</string>
+    <string name="create_community">Krei komunumon</string>
+    <string name="community_name">Nomo de komunumo</string>
+    <string name="community_name_hint">Ekzemplo</string>
+    <string name="community_id">Identigilo de komunumo</string>
+    <string name="community_id_hint">ekzemplo</string>
+
+    <string name="group_details_home">Hejmo</string>
+    <string name="joined">Aliĝintaj</string>
+    <string name="invited">Invititaj</string>
+    <string name="login_signup">Registriĝi</string>
+    <string name="login_signin">Saluti</string>
+    <string name="login_signin_sso">Pluiĝi per ununura saluto</string>
+
+    <string name="login_reset_password_success_notice">Via pasvorto estas restarigita.</string>
+    <string name="login_reset_password_success_notice_2">Vi adiaŭis ĉiujn viajn salutaĵojn kaj ne plu ricevados pasivajn sciigojn. Por reŝalti sciigojn, resalutu per ĉiu via aparato.</string>
+    <string name="login_reset_password_success_submit">Reen al salutejo</string>
+
+    <string name="login_reset_password_cancel_confirmation_title">Averto</string>
+    <string name="login_reset_password_cancel_confirmation_content">Via pasvorto ankoraŭ ne ŝanĝiĝis.
+\n
+\nĈu haltigi la ŝanĝan procedon\?</string>
+
+    <string name="login_set_email_title">Agordi retpoŝtadreson</string>
+    <string name="unencrypted">Neĉifrita</string>
+    <string name="encrypted_unverified">Ĉifrita de nekonata aparato</string>
+    <string name="cross_signing_verify_by_text">Mane kontroli per teksto</string>
+    <string name="crosssigning_verify_session">Kontroli saluton</string>
+    <string name="cross_signing_verify_by_emoji">Interage kontroli per bildsignoj</string>
+    <string name="confirm_your_identity">Konfirmu vian identecon per kontrolo de ĉi tiu saluto el unu el viaj aliaj salutaĵoj, donante al ĝi aliron al viaj ĉifritaj mesaĝoj.</string>
+    <string name="mark_as_verified">Marki fidata</string>
+
+    <string name="error_empty_field_choose_user_name">Bonvolu elekti uzantonomon.</string>
+    <string name="error_empty_field_choose_password">Bonvolu elekti pasvorton.</string>
+    <string name="external_link_confirmation_title">Bone kontrolu ĉi tiun ligilon</string>
+    <string name="external_link_confirmation_message">La ligilo %1$s kondukas vin al alia retejo: %2$s.
+\n
+\nĈu vi certe volas daŭrigi\?</string>
+
+    <string name="create_room_dm_failure">Ni ne povis krei vian rektan babilon. Bonvolu kontroli la invitotajn uzantojn kaj reprovi.</string>
+</resources>
