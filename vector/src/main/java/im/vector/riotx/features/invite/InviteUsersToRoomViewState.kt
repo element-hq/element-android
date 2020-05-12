@@ -14,8 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.createdirect
+package im.vector.riotx.features.invite
 
-import im.vector.riotx.core.platform.VectorViewEvents
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.Uninitialized
 
-sealed class CreateDirectRoomViewEvents : VectorViewEvents
+data class InviteUsersToRoomViewState(
+        val roomId: String,
+        val inviteState: Async<Unit> = Uninitialized
+) : MvRxState {
+
+    constructor(args: InviteUsersToRoomArgs) : this(roomId = args.roomId)
+}

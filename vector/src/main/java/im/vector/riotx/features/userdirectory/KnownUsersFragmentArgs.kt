@@ -14,8 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.createdirect
+package im.vector.riotx.features.userdirectory
 
-import im.vector.riotx.core.platform.VectorViewEvents
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
-sealed class CreateDirectRoomViewEvents : VectorViewEvents
+@Parcelize
+data class KnownUsersFragmentArgs(
+        val title: String,
+        val menuResId: Int,
+        val excludedUserIds: Set<String>? = null
+) : Parcelable

@@ -1,22 +1,20 @@
 /*
+ * Copyright (c) 2020 New Vector Ltd
  *
- *  * Copyright 2019 New Vector Ltd
- *  *
- *  * Licensed under the Apache License, Version 2.0 (the "License");
- *  * you may not use this file except in compliance with the License.
- *  * You may obtain a copy of the License at
- *  *
- *  *     http://www.apache.org/licenses/LICENSE-2.0
- *  *
- *  * Unless required by applicable law or agreed to in writing, software
- *  * distributed under the License is distributed on an "AS IS" BASIS,
- *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  * See the License for the specific language governing permissions and
- *  * limitations under the License.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-package im.vector.riotx.features.createdirect
+package im.vector.riotx.features.userdirectory
 
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Fail
@@ -41,7 +39,7 @@ class DirectoryUsersController @Inject constructor(private val session: Session,
                                                    private val stringProvider: StringProvider,
                                                    private val errorFormatter: ErrorFormatter) : EpoxyController() {
 
-    private var state: CreateDirectRoomViewState? = null
+    private var state: UserDirectoryViewState? = null
 
     var callback: Callback? = null
 
@@ -49,7 +47,7 @@ class DirectoryUsersController @Inject constructor(private val session: Session,
         requestModelBuild()
     }
 
-    fun setData(state: CreateDirectRoomViewState) {
+    fun setData(state: UserDirectoryViewState) {
         this.state = state
         requestModelBuild()
     }
@@ -110,7 +108,7 @@ class DirectoryUsersController @Inject constructor(private val session: Session,
                 continue
             }
             val isSelected = selectedUsers.contains(user.userId)
-            createDirectRoomUserItem {
+            userDirectoryUserItem {
                 id(user.userId)
                 selected(isSelected)
                 matrixItem(user.toMatrixItem())

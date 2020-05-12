@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.createdirect
+package im.vector.riotx.features.userdirectory
 
+import im.vector.matrix.android.api.session.user.model.User
 import im.vector.riotx.core.platform.VectorSharedAction
 
-sealed class CreateDirectRoomSharedAction : VectorSharedAction {
-    object OpenUsersDirectory : CreateDirectRoomSharedAction()
-    object Close : CreateDirectRoomSharedAction()
-    object GoBack : CreateDirectRoomSharedAction()
+sealed class UserDirectorySharedAction : VectorSharedAction {
+    object OpenUsersDirectory : UserDirectorySharedAction()
+    object Close : UserDirectorySharedAction()
+    object GoBack : UserDirectorySharedAction()
+    data class OnMenuItemSelected(val itemId: Int, val selectedUsers: Set<User>) : UserDirectorySharedAction()
 }

@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.createdirect
+package im.vector.riotx.features.invite
 
-import im.vector.riotx.core.platform.VectorViewEvents
+import im.vector.matrix.android.api.session.user.model.User
+import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class CreateDirectRoomViewEvents : VectorViewEvents
+sealed class InviteUsersToRoomAction : VectorViewModelAction {
+    data class InviteSelectedUsers(val selectedUsers: Set<User>) : InviteUsersToRoomAction()
+}

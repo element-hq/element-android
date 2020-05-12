@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.createdirect
+package im.vector.riotx.features.invite
 
 import im.vector.riotx.core.platform.VectorViewEvents
 
-sealed class CreateDirectRoomViewEvents : VectorViewEvents
+sealed class InviteUsersToRoomViewEvents  : VectorViewEvents {
+    object Loading : InviteUsersToRoomViewEvents()
+    data class Failure(val throwable: Throwable) : InviteUsersToRoomViewEvents()
+    data class Success(val successMessage: String) : InviteUsersToRoomViewEvents()
+}
