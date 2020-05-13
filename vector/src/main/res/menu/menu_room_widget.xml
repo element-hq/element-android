@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_refresh"
+        android:icon="@drawable/ic_refresh_cw"
+        android:iconTint="?attr/vctr_icon_tint_on_dark_action_bar_color"
+        android:title="@string/room_widget_reload"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_widget_open_ext"
+        android:iconTint="?attr/vctr_icon_tint_on_dark_action_bar_color"
+        android:title="@string/room_widget_open_in_browser"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_close"
+        android:icon="@drawable/ic_close_round"
+        android:iconTint="@color/vector_error_color"
+        android:title="@string/delete"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_revoke"
+        android:title="@string/room_widget_revoke_access"
+        app:showAsAction="never" />
+
+</menu>
