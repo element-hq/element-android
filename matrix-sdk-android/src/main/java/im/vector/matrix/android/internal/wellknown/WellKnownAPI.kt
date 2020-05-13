@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.matrix.android.internal.auth.wellknown
+package im.vector.matrix.android.internal.wellknown
 
 import im.vector.matrix.android.api.auth.data.WellKnown
 import retrofit2.Call

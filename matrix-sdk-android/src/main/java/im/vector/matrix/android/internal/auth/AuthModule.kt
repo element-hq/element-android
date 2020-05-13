@@ -25,8 +25,8 @@ import im.vector.matrix.android.internal.auth.db.AuthRealmMigration
 import im.vector.matrix.android.internal.auth.db.AuthRealmModule
 import im.vector.matrix.android.internal.auth.db.RealmPendingSessionStore
 import im.vector.matrix.android.internal.auth.db.RealmSessionParamsStore
-import im.vector.matrix.android.internal.auth.wellknown.DefaultDirectLoginTask
-import im.vector.matrix.android.internal.auth.wellknown.DirectLoginTask
+import im.vector.matrix.android.internal.auth.login.DefaultDirectLoginTask
+import im.vector.matrix.android.internal.auth.login.DirectLoginTask
 import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.di.AuthDatabase
 import im.vector.matrix.android.internal.wellknown.WellknownModule

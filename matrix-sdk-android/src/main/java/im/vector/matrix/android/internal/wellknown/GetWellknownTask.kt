@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.auth.wellknown
+package im.vector.matrix.android.internal.wellknown
 
 import android.util.MalformedJsonException
 import dagger.Lazy

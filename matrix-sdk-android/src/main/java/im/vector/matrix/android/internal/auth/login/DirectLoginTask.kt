@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.auth.wellknown
+package im.vector.matrix.android.internal.auth.login
 
 import dagger.Lazy
 import im.vector.matrix.android.api.auth.data.Credentials

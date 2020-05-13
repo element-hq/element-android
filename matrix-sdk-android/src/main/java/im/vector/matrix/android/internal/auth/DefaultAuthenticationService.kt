@@ -39,8 +39,8 @@ import im.vector.matrix.android.internal.auth.data.RiotConfig
 import im.vector.matrix.android.internal.auth.db.PendingSessionData
 import im.vector.matrix.android.internal.auth.login.DefaultLoginWizard
 import im.vector.matrix.android.internal.auth.registration.DefaultRegistrationWizard
-import im.vector.matrix.android.internal.auth.wellknown.DirectLoginTask
-import im.vector.matrix.android.internal.auth.wellknown.GetWellknownTask
+import im.vector.matrix.android.internal.auth.login.DirectLoginTask
+import im.vector.matrix.android.internal.wellknown.GetWellknownTask
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.executeRequest
