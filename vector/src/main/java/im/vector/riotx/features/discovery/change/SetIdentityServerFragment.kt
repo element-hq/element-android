@@ -18,25 +18,22 @@ package im.vector.riotx.features.discovery.change
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
-import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
-import butterknife.BindView
-import butterknife.OnTextChanged
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.textfield.TextInputLayout
+import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.exhaustive
+import im.vector.riotx.core.extensions.toReducedUrl
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.discovery.DiscoverySharedViewModel
 import im.vector.riotx.features.terms.ReviewTermsActivity
+import kotlinx.android.synthetic.main.fragment_set_identity_server.*
 import javax.inject.Inject
 
 class SetIdentityServerFragment @Inject constructor(
@@ -45,47 +42,26 @@ class SetIdentityServerFragment @Inject constructor(
 
     override fun getLayoutResId() = R.layout.fragment_set_identity_server
 
-    override fun getMenuRes() = R.menu.menu_submit
-
-    @BindView(R.id.discovery_identity_server_enter_til)
-    lateinit var mKeyInputLayout: TextInputLayout
-
-    @BindView(R.id.discovery_identity_server_enter_edittext)
-    lateinit var mKeyTextEdit: EditText
-
-    @BindView(R.id.discovery_identity_server_loading)
-    lateinit var mProgressBar: ProgressBar
-
     private val viewModel by fragmentViewModel(SetIdentityServerViewModel::class)
 
     lateinit var sharedViewModel: DiscoverySharedViewModel
 
     override fun invalidate() = withState(viewModel) { state ->
-        if (state.isVerifyingServer) {
-            mKeyTextEdit.isEnabled = false
-            mProgressBar.isVisible = true
+        if (state.defaultIdentityServerUrl.isNullOrEmpty()) {
+            // No default
+            identityServerSetDefaultNotice.isVisible = false
+            identityServerSetDefaultSubmit.isVisible = false
+            identityServerSetDefaultAlternative.setText(R.string.identity_server_set_alternative_notice_no_default)
         } else {
-            mKeyTextEdit.isEnabled = true
-            mProgressBar.isVisible = false
-        }
-        val newText = state.newIdentityServerUrl ?: ""
-        if (newText != mKeyTextEdit.text.toString()) {
-            mKeyTextEdit.setText(newText)
-        }
-        mKeyInputLayout.error = state.errorMessageId?.let { getString(it) }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_submit -> {
-                withState(viewModel) { state ->
-                    if (!state.isVerifyingServer) {
-                        viewModel.handle(SetIdentityServerAction.DoChangeIdentityServerUrl)
-                    }
-                }
-                true
-            }
-            else               -> super.onOptionsItemSelected(item)
+            identityServerSetDefaultNotice.text = getString(
+                    R.string.identity_server_set_default_notice,
+                    state.homeServerUrl.toReducedUrl(),
+                    state.defaultIdentityServerUrl.toReducedUrl()
+            )
+            identityServerSetDefaultNotice.isVisible = true
+            identityServerSetDefaultSubmit.isVisible = true
+            identityServerSetDefaultSubmit.text = getString(R.string.identity_server_set_default_submit, state.defaultIdentityServerUrl.toReducedUrl())
+            identityServerSetDefaultAlternative.setText(R.string.identity_server_set_alternative_notice)
         }
     }
 
@@ -94,20 +70,35 @@ class SetIdentityServerFragment @Inject constructor(
 
         sharedViewModel = activityViewModelProvider.get(DiscoverySharedViewModel::class.java)
 
-        mKeyTextEdit.setOnEditorActionListener { _, actionId, _ ->
+        identityServerSetDefaultAlternativeTextInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                withState(viewModel) { state ->
-                    if (!state.isVerifyingServer) {
-                        viewModel.handle(SetIdentityServerAction.DoChangeIdentityServerUrl)
-                    }
-                }
+                viewModel.handle(SetIdentityServerAction.UseCustomIdentityServer(identityServerSetDefaultAlternativeTextInput.text.toString()))
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
         }
 
+        identityServerSetDefaultAlternativeTextInput
+                .textChanges()
+                .subscribe {
+                    identityServerSetDefaultAlternativeTil.error = null
+                    identityServerSetDefaultAlternativeSubmit.isEnabled = it.isNotEmpty()
+                }
+                .disposeOnDestroyView()
+
+        identityServerSetDefaultSubmit.debouncedClicks {
+            viewModel.handle(SetIdentityServerAction.UseDefaultIdentityServer)
+        }
+
+        identityServerSetDefaultAlternativeSubmit.debouncedClicks {
+            viewModel.handle(SetIdentityServerAction.UseCustomIdentityServer(identityServerSetDefaultAlternativeTextInput.text.toString()))
+        }
+
         viewModel.observeViewEvents {
             when (it) {
+                is SetIdentityServerViewEvents.Loading       -> showLoading(it.message)
+                is SetIdentityServerViewEvents.Failure       -> identityServerSetDefaultAlternativeTil.error = getString(it.errorMessageId)
+                is SetIdentityServerViewEvents.OtherFailure  -> showFailure(it.failure)
                 is SetIdentityServerViewEvents.NoTerms       -> {
                     AlertDialog.Builder(requireActivity())
                             .setTitle(R.string.settings_discovery_no_terms_title)
@@ -117,21 +108,23 @@ class SetIdentityServerFragment @Inject constructor(
                             }
                             .setNegativeButton(R.string.cancel, null)
                             .show()
+                    Unit
                 }
-
-                is SetIdentityServerViewEvents.TermsAccepted -> {
-                    processIdentityServerChange()
-                }
-
+                is SetIdentityServerViewEvents.TermsAccepted -> processIdentityServerChange()
                 is SetIdentityServerViewEvents.ShowTerms     -> {
                     navigator.openTerms(
                             this,
                             TermsService.ServiceType.IdentityService,
-                            SetIdentityServerViewModel.sanitatizeBaseURL(it.newIdentityServer),
+                            SetIdentityServerViewModel.sanitatizeBaseURL(it.identityServerUrl),
                             null)
                 }
-            }
+            }.exhaustive
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.identity_server)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -146,21 +139,9 @@ class SetIdentityServerFragment @Inject constructor(
     }
 
     private fun processIdentityServerChange() {
-        withState(viewModel) { state ->
-            if (state.newIdentityServerUrl != null) {
-                sharedViewModel.requestChangeToIdentityServer(state.newIdentityServerUrl)
-                parentFragmentManager.popBackStack()
-            }
+        viewModel.currentWantedUrl?.let {
+            sharedViewModel.requestChangeToIdentityServer(it)
+            parentFragmentManager.popBackStack()
         }
-    }
-
-    @OnTextChanged(R.id.discovery_identity_server_enter_edittext)
-    fun onTextEditChange(s: Editable?) {
-        s?.toString()?.let { viewModel.handle(SetIdentityServerAction.UpdateIdentityServerUrl(it)) }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.identity_server)
     }
 }

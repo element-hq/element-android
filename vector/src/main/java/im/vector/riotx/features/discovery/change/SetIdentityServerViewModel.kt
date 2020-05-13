@@ -49,7 +49,8 @@ class SetIdentityServerViewModel @AssistedInject constructor(
             val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
 
             return SetIdentityServerState(
-                    newIdentityServerUrl = session.identityService().getDefaultIdentityServer()
+                    homeServerUrl = session.sessionParams.homeServerUrl,
+                    defaultIdentityServerUrl = session.identityService().getDefaultIdentityServer()
             )
         }
 
@@ -68,36 +69,37 @@ class SetIdentityServerViewModel @AssistedInject constructor(
         }
     }
 
-    val userLanguage = stringProvider.getString(R.string.resources_language)
+    var currentWantedUrl: String? = null
+        private set
+
+    private val userLanguage = stringProvider.getString(R.string.resources_language)
 
     override fun handle(action: SetIdentityServerAction) {
         when (action) {
-            is SetIdentityServerAction.UpdateIdentityServerUrl -> updateIdentityServerUrl(action)
-            SetIdentityServerAction.DoChangeIdentityServerUrl  -> doChangeIdentityServerUrl()
+            SetIdentityServerAction.UseDefaultIdentityServer   -> useDefault()
+            is SetIdentityServerAction.UseCustomIdentityServer -> usedCustomIdentityServerUrl(action)
         }.exhaustive
     }
 
-    private fun updateIdentityServerUrl(action: SetIdentityServerAction.UpdateIdentityServerUrl) {
-        setState {
-            copy(
-                    newIdentityServerUrl = action.url,
-                    errorMessageId = null
-            )
-        }
+    private fun useDefault() = withState { state ->
+        state.defaultIdentityServerUrl?.let { doChangeIdentityServerUrl(it) }
     }
 
-    private fun doChangeIdentityServerUrl() = withState {
-        var baseUrl: String? = it.newIdentityServerUrl
-        if (baseUrl.isNullOrBlank()) {
-            setState {
-                copy(errorMessageId = R.string.settings_discovery_please_enter_server)
-            }
-            return@withState
+    private fun usedCustomIdentityServerUrl(action: SetIdentityServerAction.UseCustomIdentityServer) {
+        doChangeIdentityServerUrl(action.url)
+    }
+
+    private fun doChangeIdentityServerUrl(url: String) {
+        var baseUrl = url
+        if (baseUrl.isEmpty()) {
+            _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.settings_discovery_please_enter_server))
+            return
         }
         baseUrl = sanitatizeBaseURL(baseUrl)
-        setState {
-            copy(isVerifyingServer = true)
-        }
+
+        currentWantedUrl = baseUrl
+
+        _viewEvents.post(SetIdentityServerViewEvents.Loading())
 
         // First ping the identity server v2 API
         mxSession.identityService().isValidIdentityServer(baseUrl, object : MatrixCallback<Unit> {
@@ -107,15 +109,11 @@ class SetIdentityServerViewModel @AssistedInject constructor(
             }
 
             override fun onFailure(failure: Throwable) {
-                setState {
-                    copy(
-                            isVerifyingServer = false,
-                            errorMessageId = if (failure is IdentityServiceError.OutdatedIdentityServer) {
-                                R.string.identity_server_error_outdated_identity_server
-                            } else {
-                                R.string.settings_discovery_bad_identity_server
-                            }
-                    )
+                if (failure is IdentityServiceError.OutdatedIdentityServer) {
+                    _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.identity_server_error_outdated_identity_server))
+                } else {
+                    _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.settings_discovery_bad_identity_server))
+                    _viewEvents.post(SetIdentityServerViewEvents.OtherFailure(failure))
                 }
             }
         })
@@ -127,9 +125,6 @@ class SetIdentityServerViewModel @AssistedInject constructor(
                 object : MatrixCallback<GetTermsResponse> {
                     override fun onSuccess(data: GetTermsResponse) {
                         // has all been accepted?
-                        setState {
-                            copy(isVerifyingServer = false)
-                        }
                         val resp = data.serverResponse
                         val tos = resp.getLocalizedTerms(userLanguage)
                         if (tos.isEmpty()) {
@@ -147,19 +142,11 @@ class SetIdentityServerViewModel @AssistedInject constructor(
 
                     override fun onFailure(failure: Throwable) {
                         if (failure is Failure.OtherServerError && failure.httpCode == 404) {
-                            setState {
-                                copy(isVerifyingServer = false)
-                            }
                             // 404: Same as NoTerms
-                            // TODO Handle the case where identity
                             _viewEvents.post(SetIdentityServerViewEvents.NoTerms)
                         } else {
-                            setState {
-                                copy(
-                                        isVerifyingServer = false,
-                                        errorMessageId = R.string.settings_discovery_bad_identity_server
-                                )
-                            }
+                            _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.settings_discovery_bad_identity_server))
+                            _viewEvents.post(SetIdentityServerViewEvents.OtherFailure(failure))
                         }
                     }
                 })

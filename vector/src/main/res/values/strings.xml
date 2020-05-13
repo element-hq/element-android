@@ -1736,7 +1736,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="settings_discovery_confirm_mail_not_clicked">We sent you a confirm email to %s, please first check your email and click on the confirmation link</string>
     <string name="settings_discovery_mail_pending">Pending</string>
 
-    <string name="settings_discovery_enter_identity_server">Enter a new identity server</string>
+    <string name="settings_discovery_enter_identity_server">Enter an identity server URL</string>
     <string name="settings_discovery_bad_identity_server">Could not connect to identity server</string>
     <string name="settings_discovery_please_enter_server">Please enter the identity server url</string>
     <string name="settings_discovery_no_terms_title">Identity server has no terms of services</string>
@@ -2411,5 +2411,11 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="identity_server_error_bulk_sha256_not_supported">For your privacy, RiotX only supports sending hashed user emails and phone number.</string>
     <string name="identity_server_error_binding_error">The association has failed.</string>
     <string name="identity_server_error_no_current_binding_error">The is no current association with this identifier.</string>
+
+    <string name="identity_server_set_default_notice">Your homeserver (%1$s) proposes to use %2$s for your identity server</string>
+    <string name="identity_server_set_default_submit">Use %1$s</string>
+    <string name="identity_server_set_alternative_notice">Alternatively, you can enter any other identity server URL</string>
+    <string name="identity_server_set_alternative_notice_no_default">Enter the URL of an identity server</string>
+    <string name="identity_server_set_alternative_submit">Submit</string>
 
 </resources>

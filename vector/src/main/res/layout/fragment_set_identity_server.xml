@@ -3,51 +3,75 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?riotx_background">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/identityServerSetDefaultNotice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?riotx_text_primary"
+            android:textSize="16sp"
+            android:visibility="gone"
+            tools:text="@string/identity_server_set_default_notice"
+            tools:visibility="visible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/identityServerSetDefaultSubmit"
+            style="@style/VectorButtonStyleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/identity_server_set_default_submit"
+            android:textAllCaps="false"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/identityServerSetDefaultAlternative"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?riotx_text_primary"
+            android:textSize="16sp"
+            tools:text="@string/identity_server_set_alternative_notice" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/discovery_identity_server_enter_til"
+            android:id="@+id/identityServerSetDefaultAlternativeTil"
             style="@style/VectorTextInputLayout"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            app:errorEnabled="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/discovery_identity_server_enter_edittext"
+                android:id="@+id/identityServerSetDefaultAlternativeTextInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/settings_discovery_enter_identity_server"
                 android:imeOptions="actionDone"
                 android:inputType="textUri"
-                android:maxLines="3"
-                android:textColor="?android:textColorPrimary"
-                tools:text="vector.im" />
+                android:maxLines="1"
+                android:textColor="?riotx_text_primary" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
-        <ProgressBar
-            android:id="@+id/discovery_identity_server_loading"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/identityServerSetDefaultAlternativeSubmit"
+            style="@style/VectorButtonStyleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/discovery_identity_server_enter_til"
-            tools:visibility="visible" />
+            android:layout_gravity="end"
+            android:text="@string/identity_server_set_alternative_submit"
+            android:textAllCaps="false" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </ScrollView>

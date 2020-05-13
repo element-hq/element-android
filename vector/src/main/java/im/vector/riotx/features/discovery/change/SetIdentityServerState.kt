@@ -16,12 +16,10 @@
 
 package im.vector.riotx.features.discovery.change
 
-import androidx.annotation.StringRes
 import com.airbnb.mvrx.MvRxState
 
 data class SetIdentityServerState(
-        // At first, will contain the default identity server url if any
-        val newIdentityServerUrl: String? = null,
-        @StringRes val errorMessageId: Int? = null,
-        val isVerifyingServer: Boolean = false
+        val homeServerUrl: String = "",
+        // Will contain the default identity server url if any
+        val defaultIdentityServerUrl: String? = null
 ) : MvRxState
