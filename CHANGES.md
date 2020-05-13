@@ -7,7 +7,7 @@ Features ✨:
 Improvements 🙌:
  - Invite member(s) to an existing room (#1276)
  - Improve notification accessibility with ticker text (#1226)
- - Support homeserver discovery from MXID (#476)
+ - Support homeserver discovery from MXID (DISABLED: waiting for design) (#476)
 
 Bugfix 🐛:
  - Sometimes the same device appears twice in the list of devices of a user (#1329)
