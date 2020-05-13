@@ -23,8 +23,6 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import im.vector.riotx.features.attachments.preview.AttachmentsPreviewFragment
-import im.vector.riotx.features.createdirect.CreateDirectRoomDirectoryUsersFragment
-import im.vector.riotx.features.createdirect.CreateDirectRoomKnownUsersFragment
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
 import im.vector.riotx.features.crypto.quads.SharedSecuredStorageKeyFragment
 import im.vector.riotx.features.crypto.quads.SharedSecuredStoragePassphraseFragment
@@ -63,6 +61,8 @@ import im.vector.riotx.features.login.LoginSplashFragment
 import im.vector.riotx.features.login.LoginWaitForEmailFragment
 import im.vector.riotx.features.login.LoginWebFragment
 import im.vector.riotx.features.login.terms.LoginTermsFragment
+import im.vector.riotx.features.userdirectory.KnownUsersFragment
+import im.vector.riotx.features.userdirectory.UserDirectoryFragment
 import im.vector.riotx.features.qrcode.QrCodeScannerFragment
 import im.vector.riotx.features.reactions.EmojiChooserFragment
 import im.vector.riotx.features.reactions.EmojiSearchResultFragment
@@ -227,13 +227,13 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(CreateDirectRoomDirectoryUsersFragment::class)
-    fun bindCreateDirectRoomDirectoryUsersFragment(fragment: CreateDirectRoomDirectoryUsersFragment): Fragment
+    @FragmentKey(UserDirectoryFragment::class)
+    fun bindUserDirectoryFragment(fragment: UserDirectoryFragment): Fragment
 
     @Binds
     @IntoMap
-    @FragmentKey(CreateDirectRoomKnownUsersFragment::class)
-    fun bindCreateDirectRoomKnownUsersFragment(fragment: CreateDirectRoomKnownUsersFragment): Fragment
+    @FragmentKey(KnownUsersFragment::class)
+    fun bindKnownUsersFragment(fragment: KnownUsersFragment): Fragment
 
     @Binds
     @IntoMap

@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.auth.data.LoginFlowResult
 import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.auth.login.LoginWizard
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
+import im.vector.matrix.android.api.auth.wellknown.WellknownResult
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
 
@@ -30,7 +31,6 @@ import im.vector.matrix.android.api.util.Cancelable
  * This interface defines methods to authenticate or to create an account to a matrix server.
  */
 interface AuthenticationService {
-
     /**
      * Request the supported login flows for this homeserver.
      * This is the first method to call to be able to get a wizard to login or the create an account
@@ -88,5 +88,21 @@ interface AuthenticationService {
      */
     fun createSessionFromSso(homeServerConnectionConfig: HomeServerConnectionConfig,
                              credentials: Credentials,
+                             callback: MatrixCallback<Session>): Cancelable
+
+    /**
+     * Perform a wellknown request, using the domain from the matrixId
+     */
+    fun getWellKnownData(matrixId: String,
+                         callback: MatrixCallback<WellknownResult>): Cancelable
+
+    /**
+     * Authenticate with a matrixId and a password
+     * Usually call this after a successful call to getWellKnownData()
+     */
+    fun directAuthentication(homeServerConnectionConfig: HomeServerConnectionConfig,
+                             matrixId: String,
+                             password: String,
+                             initialDeviceName: String,
                              callback: MatrixCallback<Session>): Cancelable
 }

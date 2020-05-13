@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.login
+package im.vector.riotx.features.userdirectory
 
-import im.vector.riotx.core.platform.VectorSharedActionViewModel
-import javax.inject.Inject
+import im.vector.riotx.core.platform.VectorViewEvents
 
-class LoginSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<LoginNavigation>()
+/**
+ * Transient events for invite users to room screen
+ */
+sealed class UserDirectoryViewEvents : VectorViewEvents

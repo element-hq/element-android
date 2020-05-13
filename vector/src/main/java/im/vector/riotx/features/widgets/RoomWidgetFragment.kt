@@ -38,7 +38,7 @@ import im.vector.riotx.features.webview.WebViewEventListener
 import im.vector.riotx.features.widgets.webview.clearAfterWidget
 import im.vector.riotx.features.widgets.webview.setupForWidget
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_widget.*
+import kotlinx.android.synthetic.main.fragment_room_widget.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -54,7 +54,7 @@ class WidgetFragment @Inject constructor(
     private val fragmentArgs: WidgetArgs by args()
     private val viewModel: RoomWidgetViewModel by fragmentViewModel()
 
-    override fun getLayoutResId() = R.layout.fragment_widget
+    override fun getLayoutResId() = R.layout.fragment_room_widget
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

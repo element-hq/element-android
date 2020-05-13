@@ -18,7 +18,4 @@ package im.vector.riotx.features.createdirect
 
 import im.vector.riotx.core.platform.VectorViewEvents
 
-/**
- * Transient events for create direct room screen
- */
 sealed class CreateDirectRoomViewEvents : VectorViewEvents

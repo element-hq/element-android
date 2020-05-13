@@ -23,10 +23,26 @@ import im.vector.riotx.core.platform.VectorViewEvents
 /**
  * Transient events for Login
  */
-sealed class LoginViewEvents: VectorViewEvents {
+sealed class LoginViewEvents : VectorViewEvents {
     data class Loading(val message: CharSequence? = null) : LoginViewEvents()
     data class Failure(val throwable: Throwable) : LoginViewEvents()
 
     data class RegistrationFlowResult(val flowResult: FlowResult, val isRegistrationStarted: Boolean) : LoginViewEvents()
     object OutdatedHomeserver : LoginViewEvents()
+
+    // Navigation event
+
+    object OpenServerSelection : LoginViewEvents()
+    object OnServerSelectionDone : LoginViewEvents()
+    object OnLoginFlowRetrieved : LoginViewEvents()
+    object OnSignModeSelected : LoginViewEvents()
+    object OnForgetPasswordClicked : LoginViewEvents()
+    object OnResetPasswordSendThreePidDone : LoginViewEvents()
+    object OnResetPasswordMailConfirmationSuccess : LoginViewEvents()
+    object OnResetPasswordMailConfirmationSuccessDone : LoginViewEvents()
+
+    data class OnSendEmailSuccess(val email: String) : LoginViewEvents()
+    data class OnSendMsisdnSuccess(val msisdn: String) : LoginViewEvents()
+
+    data class OnWebLoginError(val errorCode: Int, val description: String, val failingUrl: String) : LoginViewEvents()
 }

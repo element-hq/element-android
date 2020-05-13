@@ -17,6 +17,7 @@
 package im.vector.riotx.features.roomprofile.members
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
@@ -42,6 +43,18 @@ class RoomMemberListFragment @Inject constructor(
     private val roomProfileArgs: RoomProfileArgs by args()
 
     override fun getLayoutResId() = R.layout.fragment_room_setting_generic
+
+    override fun getMenuRes() = R.menu.menu_room_member_list
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_room_member_list_add_member -> {
+                navigator.openInviteUsersToRoom(requireContext(), roomProfileArgs.roomId)
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

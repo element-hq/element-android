@@ -348,12 +348,19 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                         globalLastMessageTimestamp = lastMessageTimestamp
                     }
 
+                    val tickerText = if (roomEventGroupInfo.isDirect) {
+                        stringProvider.getString(R.string.notification_ticker_text_dm, events.last().senderName, events.last().description)
+                    } else {
+                        stringProvider.getString(R.string.notification_ticker_text_group, roomName, events.last().senderName, events.last().description)
+                    }
+
                     val notification = notificationUtils.buildMessagesListNotification(
                             style,
                             roomEventGroupInfo,
                             largeBitmap,
                             lastMessageTimestamp,
-                            myUserDisplayName)
+                            myUserDisplayName,
+                            tickerText)
 
                     // is there an id for this room?
                     notificationUtils.showNotificationMessage(roomId, ROOM_MESSAGES_NOTIFICATION_ID, notification)

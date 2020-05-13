@@ -1406,7 +1406,7 @@ internal class RealmCryptoStore @Inject constructor(
         } else {
             // Just override existing, caller should check and untrust id needed
             val existing = CrossSigningInfoEntity.getOrCreate(realm, userId)
-            existing.crossSigningKeys.forEach { it.deleteFromRealm() }
+            existing.crossSigningKeys.deleteAllFromRealm()
             existing.crossSigningKeys.addAll(
                     info.crossSigningKeys.map {
                         crossSigningKeysMapper.map(it)

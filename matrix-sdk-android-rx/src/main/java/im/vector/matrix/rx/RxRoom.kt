@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -95,6 +96,10 @@ class RxRoom(private val room: Room) {
 
     fun liveNotificationState(): Observable<RoomNotificationState> {
         return room.getLiveRoomNotificationState().asObservable()
+    }
+
+    fun invite(userId: String, reason: String? = null): Completable = completableBuilder<Unit> {
+        room.invite(userId, reason, it)
     }
 }
 
