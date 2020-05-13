@@ -37,7 +37,7 @@
     <string name="ongoing_conference_call_voice">Sprache</string>
     <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">Das Gespräch kann nicht gestartet werden, bitte später erneut versuchen</string>
-    <string name="missing_permissions_warning">Aufgrund fehlender Berechtigungen stehen einige Funktionen eventuell nicht zur Verfügung</string>
+    <string name="missing_permissions_warning">Aufgrund fehlender Berechtigungen stehen einige Funktionen eventuell nicht zur Verfügung…</string>
     <string name="missing_permissions_to_start_conf_call">Ihnen fehlt das Recht, ein Konferenzgespräch in diesem Raum zu starten</string>
     <string name="missing_permissions_title_to_start_conf_call">Kann Gespräch nicht starten</string>
     <string name="device_information">Sitzungsinformationen</string>
