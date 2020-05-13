@@ -25,6 +25,7 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.call.CallsListener
 import im.vector.matrix.android.api.session.room.model.call.CallAnswerContent
+import im.vector.matrix.android.api.session.room.model.call.CallHangupContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.riotx.core.extensions.exhaustive
@@ -51,6 +52,7 @@ sealed class VectorCallViewActions : VectorViewModelAction {
 sealed class VectorCallViewEvents : VectorViewEvents {
 
     data class CallAnswered(val content: CallAnswerContent) : VectorCallViewEvents()
+    data class CallHangup(val content: CallHangupContent) : VectorCallViewEvents()
 }
 
 class VectorCallViewModel @AssistedInject constructor(
@@ -69,6 +71,14 @@ class VectorCallViewModel @AssistedInject constructor(
 
         override fun onCallInviteReceived(signalingRoomId: String, callInviteContent: CallInviteContent) {
 
+        }
+
+        override fun onCallHangupReceived(callHangupContent: CallHangupContent) {
+            withState { state ->
+                if (callHangupContent.callId == state.callId) {
+                    _viewEvents.post(VectorCallViewEvents.CallHangup(callHangupContent))
+                }
+            }
         }
     }
 

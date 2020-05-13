@@ -17,6 +17,7 @@
 package im.vector.matrix.android.api.session.call
 
 import im.vector.matrix.android.api.session.room.model.call.CallAnswerContent
+import im.vector.matrix.android.api.session.room.model.call.CallHangupContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 
 interface CallsListener {
@@ -43,5 +44,7 @@ interface CallsListener {
     fun onCallInviteReceived(signalingRoomId: String, callInviteContent: CallInviteContent)
 
     fun onCallAnswerReceived(callAnswerContent: CallAnswerContent)
+
+    fun onCallHangupReceived(callHangupContent: CallHangupContent)
 
 }

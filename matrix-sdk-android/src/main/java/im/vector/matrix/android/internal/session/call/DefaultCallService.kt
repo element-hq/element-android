@@ -30,6 +30,7 @@ import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.call.CallAnswerContent
 import im.vector.matrix.android.api.session.room.model.call.CallCandidatesContent
+import im.vector.matrix.android.api.session.room.model.call.CallHangupContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.SessionScope
@@ -145,6 +146,19 @@ internal class DefaultCallService @Inject constructor(
                 event.getClearContent().toModel<CallInviteContent>()?.let {
                     onCallInvite(event.roomId ?: "", it)
                 }
+            }
+            EventType.CALL_HANGUP -> {
+                event.getClearContent().toModel<CallHangupContent>()?.let {
+                    onCallHangup(it)
+                }
+            }
+        }
+    }
+
+    private fun onCallHangup(hangup: CallHangupContent) {
+        callListeners.forEach {
+            tryThis {
+                it.onCallHangupReceived(hangup)
             }
         }
     }

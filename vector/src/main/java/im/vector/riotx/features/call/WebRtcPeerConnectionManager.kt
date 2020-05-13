@@ -28,6 +28,7 @@ import androidx.core.content.ContextCompat
 import im.vector.matrix.android.api.session.call.CallsListener
 import im.vector.matrix.android.api.session.call.EglUtils
 import im.vector.matrix.android.api.session.room.model.call.CallAnswerContent
+import im.vector.matrix.android.api.session.room.model.call.CallHangupContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
@@ -72,6 +73,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     var phoneAccountHandle: PhoneAccountHandle? = null
+    var localMediaStream: MediaStream? = null
 
     init {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -239,7 +241,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     }
             )
 
-            val localMediaStream = peerConnectionFactory?.createLocalMediaStream("ARDAMS") // magic value?
+            localMediaStream = peerConnectionFactory?.createLocalMediaStream("ARDAMS") // magic value?
             localMediaStream?.addTrack(localVideoTrack)
             localMediaStream?.addTrack(audioTrack)
 
@@ -315,13 +317,15 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     fun close() {
         executor.execute {
-            peerConnectionFactory?.stopAecDump()
-            peerConnectionFactory = null
+            // Do not dispose peer connection (https://bugs.chromium.org/p/webrtc/issues/detail?id=7543)
+            peerConnection?.close()
+            peerConnection?.removeStream(localMediaStream)
+            peerConnection = null
             audioSource?.dispose()
             videoSource?.dispose()
-            peerConnection?.dispose()
-            peerConnection = null
             videoCapturer?.dispose()
+            peerConnectionFactory?.stopAecDump()
+            peerConnectionFactory = null
         }
     }
 
@@ -366,6 +370,10 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     override fun onCallAnswerReceived(callAnswerContent: CallAnswerContent) {
+    }
+
+    override fun onCallHangupReceived(callHangupContent: CallHangupContent) {
+        close()
     }
 }
 

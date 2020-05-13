@@ -348,6 +348,9 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
                 peerConnectionManager.answerReceived("", sdp)
 //                peerConnection?.setRemoteDescription(object : SdpObserverAdapter() {}, sdp)
             }
+            is VectorCallViewEvents.CallHangup -> {
+                finish()
+            }
         }
     }
 
@@ -423,6 +426,7 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
     }
 
     override fun removeRemoteVideoStream(mediaStream: MediaStream) {
+
     }
 
     override fun onDisconnect() {
