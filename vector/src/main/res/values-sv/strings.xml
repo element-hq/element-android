@@ -219,4 +219,18 @@
     <string name="auth_user_name_placeholder">Användarnamn</string>
     <string name="auth_add_email_message_2">Sätt en e-postadress för kontoåterförvärv, och senare för att valfritt vara upptäckbar av folk som som känner dig.</string>
     <string name="auth_add_phone_message_2">Sätt ett telefonnummer som folk som känner dig kan använda för att hitta dig.</string>
+    <string name="auth_add_email_phone_message_2">Sätt en e-postadress för kontoåterförvärv. Senare kan e-postadresser och telefonnummer valfritt användas för att vara upptäckbar av folk som känner dig.</string>
+    <string name="auth_add_email_and_phone_message_2">Sätt en e-postadress för kontoåterförvärv. Senare kan e-postadresser och telefonnummer valfritt användas för att vara upptäckbar av folk som känner dig.</string>
+    <string name="auth_email_placeholder">E-postadress</string>
+    <string name="auth_opt_email_placeholder">E-postadress (valfritt)</string>
+    <string name="auth_phone_number_placeholder">Telefonnummer</string>
+    <string name="auth_opt_phone_number_placeholder">Telefonnummer (valfritt)</string>
+    <string name="auth_repeat_password_placeholder">Repetera lösenordet</string>
+    <string name="auth_repeat_new_password_placeholder">Bekräfta ditt nya lösenord</string>
+    <string name="auth_invalid_login_param">Fel användarnamn och/eller lösenord</string>
+    <string name="auth_invalid_user_name">Användarnamn får endast innehålla bokstäver, siffror, punkter, bindestreck och understreck</string>
+    <string name="auth_invalid_password">Lösenordet är för kort (minst 6 tecken)</string>
+    <string name="auth_missing_password">Lösenord saknas</string>
+    <string name="auth_invalid_email">Det här ser inte ut som en giltig e-postadress</string>
+    <string name="auth_invalid_phone">Det här ser inte ut som ett giltigt telefonnummer</string>
     </resources>
