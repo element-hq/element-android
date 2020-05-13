@@ -1336,7 +1336,7 @@ Dieser Fehler ist außerhalb von Riot passiert. Es gibt kein Google-Konto auf de
     <string name="keys_backup_activate">Schlüssel-Sicherung verwenden</string>
     <string name="are_you_sure">Sind Sie sicher\?</string>
     <string name="backup">Sicherung</string>
-    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Alle verschlüsselten Nachrichten gehen verloren wenn Sie sich ausloggen, ohne diese vorher zu sichern.</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Alle verschlüsselten Nachrichten gehen verloren, wenn Sie sich ausloggen, ohne diese vorher zu sichern.</string>
 
     <string name="stay">Bleiben</string>
     <string name="abort">Abbrechen</string>
