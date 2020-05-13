@@ -37,7 +37,7 @@
     <string name="ongoing_conference_call_voice">Sprache</string>
     <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">Das Gespräch kann nicht gestartet werden, bitte später erneut versuchen</string>
-    <string name="missing_permissions_warning">Aufgrund fehlender Berechtigungen stehen eventuell manche Funktionen nicht zur Verfügung…</string>
+    <string name="missing_permissions_warning">Aufgrund fehlender Berechtigungen stehen einige Funktionen eventuell nicht zur Verfügung</string>
     <string name="missing_permissions_to_start_conf_call">Ihnen fehlt das Recht, ein Konferenzgespräch in diesem Raum zu starten</string>
     <string name="missing_permissions_title_to_start_conf_call">Kann Gespräch nicht starten</string>
     <string name="device_information">Sitzungsinformationen</string>
@@ -1287,15 +1287,15 @@ Dieser Fehler ist außerhalb von Riot passiert. Es gibt kein Google-Konto auf de
     <string name="keys_backup_restore_is_getting_backup_version">Rufe Backup-Version ab…</string>
     <string name="keys_backup_restore_with_passphrase">Nutzen Sie Ihre Wiederherstellungspassphrase, um Ihren verschlüsselten Chatverlauf lesen zu können</string>
     <string name="keys_backup_restore_use_recovery_key">nutzen Sie Ihren Wiederherstellungsschlüssel</string>
-    <string name="keys_backup_restore_with_passphrase_helper_with_link">Wen du deine Wiederherstellungspassphrase nicht weißt, kannst du %s.</string>
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">Wenn Sie Ihre Wiederherstellungspassphrase nicht wissen, können Sie %s.</string>
 
     <string name="keys_backup_restore_with_recovery_key">Nutzen Sie Ihren Wiederherstellungsschlüssel, um Ihren verschlüsselten Chatverlauf lesen zu können</string>
-    <string name="keys_backup_restore_with_key_helper">Wiederherstellungsschlüssel verloren\? Du kannst einen neuen in den Einstellungen einrichten.</string>
-    <string name="keys_backup_passphrase_error_decrypt">Sicherung konnte mit dieser Passphrase nicht entschlüsselt werden. Bitte stelle sicher, dass du die korrekte Wiederherstellungspassphrase eingegeben hast.</string>
-    <string name="network_error_please_check_and_retry">Netzwerkfehler: Bitte überprüfe deine Verbindung und versuche es erneut.</string>
+    <string name="keys_backup_restore_with_key_helper">Haben Sie Ihren Wiederherstellungsschlüssel verloren\? Sie können einen neuen in den Einstellungen einrichten.</string>
+    <string name="keys_backup_passphrase_error_decrypt">Sicherung konnte mit dieser Passphrase nicht entschlüsselt werden. Bitte stellen Sie sicher, dass Sie die korrekte Wiederherstellungspassphrase eingegeben haben.</string>
+    <string name="network_error_please_check_and_retry">Netzwerkfehler: Bitte überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.</string>
 
-    <string name="keys_backup_recovery_code_empty_error_message">Bitte gib deinen Wiederherstellungsschlüssel ein</string>
-    <string name="keys_backup_recovery_code_error_decrypt">Sicherung konnte mit diesem Wiederherstellungsschlüssel nicht entschlüsselt werden. Bitte stelle sicher, dass du den korrekten Wiederherstellungsschlüssel eingegeben hast.</string>
+    <string name="keys_backup_recovery_code_empty_error_message">Bitte geben Sie Ihren Wiederherstellungsschlüssel ein</string>
+    <string name="keys_backup_recovery_code_error_decrypt">Sicherung konnte mit diesem Wiederherstellungsschlüssel nicht entschlüsselt werden. Bitte stellen Sie sicher, dass Sie den korrekten Wiederherstellungsschlüssel eingegeben haben.</string>
 
     <string name="keys_backup_restore_success_title">Sicherung wiederhergestellt %s !</string>
     <string name="keys_backup_restore_success_description">%1$d Sitzungsschlüssel wurde(n) wiederhergestellt und %2$d vorher unbekannte(r) Schlüssel wurde(n) hinzugefügt</string>
