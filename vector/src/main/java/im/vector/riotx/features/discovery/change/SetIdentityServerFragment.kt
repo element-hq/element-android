@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AlertDialog
+import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -31,13 +32,16 @@ import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.toReducedUrl
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.resources.ColorProvider
+import im.vector.riotx.core.utils.colorizeMatchingText
 import im.vector.riotx.features.discovery.DiscoverySharedViewModel
 import im.vector.riotx.features.terms.ReviewTermsActivity
 import kotlinx.android.synthetic.main.fragment_set_identity_server.*
 import javax.inject.Inject
 
 class SetIdentityServerFragment @Inject constructor(
-        val viewModelFactory: SetIdentityServerViewModel.Factory
+        val viewModelFactory: SetIdentityServerViewModel.Factory,
+        val colorProvider: ColorProvider
 ) : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_set_identity_server
@@ -58,6 +62,9 @@ class SetIdentityServerFragment @Inject constructor(
                     state.homeServerUrl.toReducedUrl(),
                     state.defaultIdentityServerUrl.toReducedUrl()
             )
+                    .toSpannable()
+                    .colorizeMatchingText(state.defaultIdentityServerUrl.toReducedUrl(), colorProvider.getColorFromAttribute(R.attr.riotx_text_primary_body_contrast))
+
             identityServerSetDefaultNotice.isVisible = true
             identityServerSetDefaultSubmit.isVisible = true
             identityServerSetDefaultSubmit.text = getString(R.string.identity_server_set_default_submit, state.defaultIdentityServerUrl.toReducedUrl())
