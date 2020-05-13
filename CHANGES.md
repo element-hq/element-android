@@ -10,6 +10,7 @@ Improvements 🙌:
  - Support homeserver discovery from MXID (DISABLED: waiting for design) (#476)
 
 Bugfix 🐛:
+ - Fix | Verify Manually by Text crashes if private SSK not known (#1337)
  - Sometimes the same device appears twice in the list of devices of a user (#1329)
 
 Translations 🗣:
