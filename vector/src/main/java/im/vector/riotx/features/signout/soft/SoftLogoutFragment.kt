@@ -30,7 +30,7 @@ import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.features.login.AbstractLoginFragment
 import im.vector.riotx.features.login.LoginAction
 import im.vector.riotx.features.login.LoginMode
-import im.vector.riotx.features.login.LoginNavigation
+import im.vector.riotx.features.login.LoginViewEvents
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import javax.inject.Inject
 
@@ -94,7 +94,7 @@ class SoftLogoutFragment @Inject constructor(
     }
 
     override fun signinFallbackSubmit() {
-        loginSharedActionViewModel.post(LoginNavigation.OnSignModeSelected)
+        loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnSignModeSelected))
     }
 
     override fun clearData() {
@@ -124,7 +124,7 @@ class SoftLogoutFragment @Inject constructor(
     }
 
     override fun forgetPasswordClicked() {
-        loginSharedActionViewModel.post(LoginNavigation.OnForgetPasswordClicked)
+        loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnForgetPasswordClicked))
     }
 
     override fun revealPasswordClicked() {

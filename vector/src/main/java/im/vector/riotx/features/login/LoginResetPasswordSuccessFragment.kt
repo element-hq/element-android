@@ -29,7 +29,7 @@ class LoginResetPasswordSuccessFragment @Inject constructor() : AbstractLoginFra
 
     @OnClick(R.id.resetPasswordSuccessSubmit)
     fun submit() {
-        loginSharedActionViewModel.post(LoginNavigation.OnResetPasswordMailConfirmationSuccessDone)
+        loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnResetPasswordMailConfirmationSuccessDone))
     }
 
     override fun resetViewModel() {

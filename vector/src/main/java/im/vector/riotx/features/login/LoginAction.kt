@@ -58,4 +58,6 @@ sealed class LoginAction : VectorViewModelAction {
 
     // For the soft logout case
     data class SetupSsoForSessionRecovery(val homeServerUrl: String, val deviceId: String) : LoginAction()
+
+    data class PostViewEvent(val viewEvent: LoginViewEvents) : LoginAction()
 }

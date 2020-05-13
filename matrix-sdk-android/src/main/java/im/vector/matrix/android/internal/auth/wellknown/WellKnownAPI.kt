@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package im.vector.matrix.android.internal.auth.wellknown
 
-package im.vector.riotx.features.login
+import im.vector.matrix.android.api.auth.data.WellKnown
+import retrofit2.Call
+import retrofit2.http.GET
+import retrofit2.http.Path
 
-import im.vector.riotx.core.platform.VectorSharedActionViewModel
-import javax.inject.Inject
-
-class LoginSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<LoginNavigation>()
+internal interface WellKnownAPI {
+    @GET("https://{domain}/.well-known/matrix/client")
+    fun getWellKnown(@Path("domain") domain: String): Call<WellKnown>
+}
