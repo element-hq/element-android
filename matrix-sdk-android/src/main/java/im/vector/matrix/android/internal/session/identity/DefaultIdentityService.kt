@@ -21,6 +21,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
@@ -77,7 +78,8 @@ internal class DefaultIdentityService @Inject constructor(
         private val unbindThreePidsTask: UnbindThreePidsTask,
         private val identityApiProvider: IdentityApiProvider,
         private val accountDataDataSource: AccountDataDataSource,
-        private val homeServerCapabilitiesService: HomeServerCapabilitiesService
+        private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
+        private val sessionParams: SessionParams
 ) : IdentityService {
 
     private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
@@ -114,10 +116,15 @@ internal class DefaultIdentityService @Inject constructor(
         lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
     }
 
-    override fun getDefaultIdentityServer(callback: MatrixCallback<String?>): Cancelable {
-        // TODO Use Wellknown request, but waiting for PR about Wellknown to be merged
-        callback.onSuccess(null)
-        return NoOpCancellable
+    /**
+     * First return the identity server provided during login phase.
+     * If null, provide the one in wellknown configuration of the homeserver
+     * Else return null
+     */
+    override fun getDefaultIdentityServer(): String? {
+        return sessionParams.defaultIdentityServerUrl
+                ?.takeIf { it.isNotEmpty() }
+                ?: homeServerCapabilitiesService.getHomeServerCapabilities().defaultIdentityServerUrl
     }
 
     override fun getCurrentIdentityServerUrl(): String? {

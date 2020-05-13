@@ -27,6 +27,7 @@ import im.vector.matrix.android.api.session.identity.IdentityServiceError
 import im.vector.matrix.android.api.session.terms.GetTermsResponse
 import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.riotx.R
+import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
@@ -43,6 +44,14 @@ class SetIdentityServerViewModel @AssistedInject constructor(
     }
 
     companion object : MvRxViewModelFactory<SetIdentityServerViewModel, SetIdentityServerState> {
+
+        override fun initialState(viewModelContext: ViewModelContext): SetIdentityServerState? {
+            val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
+
+            return SetIdentityServerState(
+                    newIdentityServerUrl = session.identityService().getDefaultIdentityServer()
+            )
+        }
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: SetIdentityServerState): SetIdentityServerViewModel? {

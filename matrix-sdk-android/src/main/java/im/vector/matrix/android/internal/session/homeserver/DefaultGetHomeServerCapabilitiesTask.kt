@@ -19,9 +19,12 @@ package im.vector.matrix.android.internal.session.homeserver
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.auth.data.Versions
 import im.vector.matrix.android.api.auth.data.isLoginAndRegistrationSupportedBySdk
+import im.vector.matrix.android.api.auth.wellknown.WellknownResult
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
+import im.vector.matrix.android.internal.auth.wellknown.GetWellknownTask
 import im.vector.matrix.android.internal.database.model.HomeServerCapabilitiesEntity
 import im.vector.matrix.android.internal.database.query.getOrCreate
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
@@ -34,7 +37,10 @@ internal interface GetHomeServerCapabilitiesTask : Task<Unit, Unit>
 internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
         private val capabilitiesAPI: CapabilitiesAPI,
         private val monarchy: Monarchy,
-        private val eventBus: EventBus
+        private val eventBus: EventBus,
+        private val getWellknownTask: GetWellknownTask,
+        @UserId
+        private val userId: String
 ) : GetHomeServerCapabilitiesTask {
 
     override suspend fun execute(params: Unit) {
@@ -67,12 +73,17 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
             }
         }.getOrNull()
 
-        insertInDb(capabilities, uploadCapabilities, versions)
+        val wellknownResult = runCatching {
+            getWellknownTask.execute(GetWellknownTask.Params(userId))
+        }.getOrNull()
+
+        insertInDb(capabilities, uploadCapabilities, versions, wellknownResult)
     }
 
     private suspend fun insertInDb(getCapabilitiesResult: GetCapabilitiesResult?,
                                    getUploadCapabilitiesResult: GetUploadCapabilitiesResult?,
-                                   getVersionResult: Versions?) {
+                                   getVersionResult: Versions?,
+                                   getWellknownResult: WellknownResult?) {
         monarchy.awaitTransaction { realm ->
             val homeServerCapabilitiesEntity = HomeServerCapabilitiesEntity.getOrCreate(realm)
 
@@ -87,6 +98,10 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
 
             if (getVersionResult != null) {
                 homeServerCapabilitiesEntity.lastVersionIdentityServerSupported = getVersionResult.isLoginAndRegistrationSupportedBySdk()
+            }
+
+            if (getWellknownResult != null && getWellknownResult is WellknownResult.Prompt) {
+                homeServerCapabilitiesEntity.defaultIdentityServerUrl = getWellknownResult.identityServerUrl
             }
 
             homeServerCapabilitiesEntity.lastUpdatedTimestamp = Date().time

@@ -28,7 +28,11 @@ data class HomeServerCapabilities(
         /**
          * Last version identity server and binding supported
          */
-        val lastVersionIdentityServerSupported: Boolean = false
+        val lastVersionIdentityServerSupported: Boolean = false,
+        /**
+         * Default identity server url, provided in Wellknown
+         */
+        val defaultIdentityServerUrl: String? = null
 ) {
     companion object {
         const val MAX_UPLOAD_FILE_SIZE_UNKNOWN = -1L

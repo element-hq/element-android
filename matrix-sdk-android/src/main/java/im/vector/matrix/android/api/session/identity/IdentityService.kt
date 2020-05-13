@@ -24,10 +24,11 @@ import im.vector.matrix.android.api.util.Cancelable
  */
 interface IdentityService {
     /**
-     * Return the default identity server of the homeserver (using Wellknown request).
+     * Return the default identity server of the user, which may have been provided at login time by the homeserver,
+     * or by the Well-known setup of the homeserver
      * It may be different from the current configured identity server
      */
-    fun getDefaultIdentityServer(callback: MatrixCallback<String?>): Cancelable
+    fun getDefaultIdentityServer(): String?
 
     /**
      * Return the current identity server URL used by this account. Returns null if no identity server is configured.
