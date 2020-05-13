@@ -26,15 +26,14 @@ import im.vector.matrix.android.internal.auth.db.AuthRealmModule
 import im.vector.matrix.android.internal.auth.db.RealmPendingSessionStore
 import im.vector.matrix.android.internal.auth.db.RealmSessionParamsStore
 import im.vector.matrix.android.internal.auth.wellknown.DefaultDirectLoginTask
-import im.vector.matrix.android.internal.auth.wellknown.DefaultGetWellknownTask
 import im.vector.matrix.android.internal.auth.wellknown.DirectLoginTask
-import im.vector.matrix.android.internal.auth.wellknown.GetWellknownTask
 import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.di.AuthDatabase
+import im.vector.matrix.android.internal.wellknown.WellknownModule
 import io.realm.RealmConfiguration
 import java.io.File
 
-@Module
+@Module(includes = [WellknownModule::class])
 internal abstract class AuthModule {
 
     @Module
@@ -73,9 +72,6 @@ internal abstract class AuthModule {
 
     @Binds
     abstract fun bindSessionCreator(creator: DefaultSessionCreator): SessionCreator
-
-    @Binds
-    abstract fun bindGetWellknownTask(task: DefaultGetWellknownTask): GetWellknownTask
 
     @Binds
     abstract fun bindDirectLoginTask(task: DefaultDirectLoginTask): DirectLoginTask
