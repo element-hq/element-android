@@ -42,7 +42,8 @@ data class Credentials(
         @Json(name = "refresh_token") val refreshToken: String?,
         /**
          * The server_name of the homeserver on which the account has been registered.
-         * @Deprecated. Clients should extract the server_name from user_id (by splitting at the first colon) if they require it. Note also that homeserver is not spelt this way.
+         * @Deprecated. Clients should extract the server_name from user_id (by splitting at the first colon)
+         * if they require it. Note also that homeserver is not spelt this way.
          */
         @Json(name = "home_server") val homeServer: String,
         /**
