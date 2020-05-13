@@ -1244,7 +1244,7 @@ Um sicherzustellen, dass du nichts verpasst, lass deine Updates einfach aktivier
     <string name="recovery_key">Wiederherstellungsschlüssel</string>
     <string name="unexpected_error">Unerwarteter Fehler</string>
     <string name="keys_backup_setup_backup_started_title">Sicherung gestartet</string>
-    <string name="keys_backup_setup_skip_title">Bist du sicher?</string>
+    <string name="keys_backup_setup_skip_title">Sind Sie sicher\?</string>
     <string name="keys_backup_restore_key_enter_hint">Wiederherstellungsschlüssel eingeben</string>
 
     <string name="keys_backup_restore_setup_recovery_key">Nachrichtenwiederherstellung</string>
@@ -1282,7 +1282,7 @@ Dieser Fehler ist außerhalb von Riot passiert. Es gibt kein Google-Konto auf de
     <string name="keys_backup_setup_backup_started_message">Deine Verschlüsselungsschlüssel werden nun im Hintergrund auf deinem Heimserver gesichert. Die initiale Sicherung kann mehrere Minuten dauern.</string>
 
 
-    <string name="keys_backup_setup_skip_msg">Du kannst den Zugang zu deinen Nachrichten verlieren, wenn du dich abmeldest oder das Gerät verlierst.</string>
+    <string name="keys_backup_setup_skip_msg">Sie können den Zugang zu Ihren Nachrichten verlieren wenn Sie sich abmeldest oder das Gerät verlieren.</string>
 
     <string name="keys_backup_restore_is_getting_backup_version">Rufe Backupversion ab…</string>
     <string name="keys_backup_restore_with_passphrase">Nutze deine Wiederherstellungspassphrase um deinen sicheren Chatverlauf zu entschlüsseln</string>
