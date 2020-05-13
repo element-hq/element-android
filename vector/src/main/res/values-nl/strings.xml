@@ -1616,7 +1616,7 @@
     <string name="reply">Beantwoorden</string>
 
     <string name="global_retry">Opnieuw proberen</string>
-    <string name="room_list_empty">Betreed een kamer om de applicatie te gebruiken</string>
+    <string name="room_list_empty">Betreed een kamer om de applicatie te gebruiken.</string>
     <string name="send_you_invite">Heeft je een uitnodiging gestuurd</string>
     <string name="invited_by">Uitgenodigd door %s</string>
 
