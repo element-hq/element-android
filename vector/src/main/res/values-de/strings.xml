@@ -633,7 +633,7 @@ Achtung: Diese Datei wird vielleicht gelöscht, wenn die App deinstalliert wird.
     <string name="encryption_never_send_to_unverified_devices_title">Nur zu verifizierten Sitzungen verschlüsseln</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Von dieser Sitzung aus keine verschlüsselten Nachrichten an nicht-verifizierte Sitzungen senden.</string>
 
-    <string name="encryption_information_not_verified">NICHT verifiziert</string>
+    <string name="encryption_information_not_verified">Nicht verifiziert</string>
     <string name="encryption_information_verified">Verifiziert</string>
     <string name="encryption_information_blocked">Auf der Blockierliste</string>
 
@@ -1043,7 +1043,7 @@ Beachte: Diese Aktion wird die App neu starten und einige Zeit brauchen.</string
     <string name="unknown_error">Entschuldige, ein Fehler trat auf</string>
 
     <string name="room_sliding_menu_version_x">Version %s</string>
-    <string name="status_theme">Status.im Design</string>
+    <string name="status_theme">Status.im-Design</string>
 
     <string name="encryption_export_notice">Bitte eine Passphrase erstellen um exportierte Schlüssel zu verschlüsseln. Du musst dieselbe Passphrase eingeben um die Schlüssel importieren zu können.</string>
     <string name="passphrase_create_passphrase">Erzeuge Passphrase</string>
