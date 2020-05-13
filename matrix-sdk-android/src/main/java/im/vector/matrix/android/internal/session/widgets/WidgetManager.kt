@@ -101,7 +101,7 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
     fun createWidget(roomId: String, widgetId: String, content: Content, callback: MatrixCallback<Widget>): Cancelable {
         return taskExecutor.executorScope.launchToCallback(callback = callback) {
             if (!hasPermissionsToHandleWidgets(roomId)) {
-                throw CreateWidgetFailure.NotEnoughtPower
+                throw WidgetManagementFailure.NotEnoughPower
             }
             val params = CreateWidgetTask.Params(
                     roomId = roomId,
@@ -112,8 +112,22 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
             try {
                 getRoomWidgets(roomId, widgetId = QueryStringValue.Equals(widgetId, QueryStringValue.Case.INSENSITIVE)).first()
             } catch (failure: Throwable) {
-                throw CreateWidgetFailure.CreationFailed
+                throw WidgetManagementFailure.CreationFailed
             }
+        }
+    }
+
+    fun destroyWidget(roomId: String, widgetId: String, callback: MatrixCallback<Unit>): Cancelable {
+        return taskExecutor.executorScope.launchToCallback(callback = callback) {
+            if (!hasPermissionsToHandleWidgets(roomId)) {
+                throw WidgetManagementFailure.NotEnoughPower
+            }
+            val params = CreateWidgetTask.Params(
+                    roomId = roomId,
+                    widgetId = widgetId,
+                    content = emptyMap()
+            )
+            createWidgetTask.execute(params)
         }
     }
 

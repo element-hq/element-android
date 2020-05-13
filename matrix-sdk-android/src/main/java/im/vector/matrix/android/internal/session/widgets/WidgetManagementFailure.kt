@@ -18,7 +18,7 @@ package im.vector.matrix.android.internal.session.widgets
 
 import im.vector.matrix.android.api.failure.Failure
 
-sealed class CreateWidgetFailure : Failure.FeatureFailure() {
-    object NotEnoughtPower : CreateWidgetFailure()
-    object CreationFailed : CreateWidgetFailure()
+sealed class WidgetManagementFailure : Failure.FeatureFailure() {
+    object NotEnoughPower : WidgetManagementFailure()
+    object CreationFailed : WidgetManagementFailure()
 }

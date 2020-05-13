@@ -29,4 +29,28 @@ data class WidgetContent(
         @Json(name = "name") val name: String? = null,
         @Json(name = "data") val data: JsonDict = emptyMap(),
         @Json(name = "waitForIframeLoad") val waitForIframeLoad: Boolean = false
-)
+) {
+
+    /**
+     * @return the human name
+     */
+    fun getHumanName(): String {
+        return if (!name.isNullOrBlank()) {
+            "$name widget"
+        } else if (!type.isNullOrBlank()) {
+            when {
+                type.contains("widget") -> {
+                    type
+                }
+                id != null              -> {
+                    "$type $id"
+                }
+                else                    -> {
+                    "$type widget"
+                }
+            }
+        } else {
+            "Widget $id"
+        }
+    }
+}

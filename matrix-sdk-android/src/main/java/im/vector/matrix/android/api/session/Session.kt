@@ -40,6 +40,7 @@ import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.UserService
+import im.vector.matrix.android.api.session.widgets.WidgetService
 
 /**
  * This interface defines interactions with a session.
@@ -61,7 +62,8 @@ interface Session :
         HomeServerCapabilitiesService,
         SecureStorageService,
         AccountDataService,
-        AccountService {
+        AccountService,
+        WidgetService {
 
     /**
      * The params associated to the session

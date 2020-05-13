@@ -44,6 +44,7 @@ import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.UserService
+import im.vector.matrix.android.api.session.widgets.WidgetService
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.crypto.crosssigning.ShieldTrustUpdater
@@ -88,6 +89,7 @@ internal class DefaultSession @Inject constructor(
         private val fileService: Lazy<FileService>,
         private val secureStorageService: Lazy<SecureStorageService>,
         private val profileService: Lazy<ProfileService>,
+        private val widgetService: Lazy<WidgetService>,
         private val syncThreadProvider: Provider<SyncThread>,
         private val contentUrlResolver: ContentUrlResolver,
         private val syncTokenStore: SyncTokenStore,
@@ -117,7 +119,8 @@ internal class DefaultSession @Inject constructor(
         HomeServerCapabilitiesService by homeServerCapabilitiesService.get(),
         ProfileService by profileService.get(),
         AccountDataService by accountDataService.get(),
-        AccountService by accountService.get() {
+        AccountService by accountService.get(),
+        WidgetService by widgetService.get() {
 
     override val sharedSecretStorageService: SharedSecretStorageService
         get() = _sharedSecretStorageService.get()
