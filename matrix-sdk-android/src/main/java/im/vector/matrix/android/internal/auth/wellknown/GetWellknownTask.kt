@@ -23,10 +23,10 @@ import im.vector.matrix.android.api.auth.data.WellKnown
 import im.vector.matrix.android.api.auth.wellknown.WellknownResult
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.internal.di.Unauthenticated
-import im.vector.matrix.android.internal.identity.IdentityPingApi
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.homeserver.CapabilitiesAPI
+import im.vector.matrix.android.internal.session.identity.IdentityAuthAPI
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.isValidUrl
 import okhttp3.OkHttpClient
@@ -119,7 +119,7 @@ internal class DefaultGetWellknownTask @Inject constructor(
 
         try {
             executeRequest<Unit>(null) {
-                apiCall = capabilitiesAPI.getVersions()
+                apiCall = capabilitiesAPI.ping()
             }
         } catch (throwable: Throwable) {
             return WellknownResult.FailError
@@ -153,7 +153,7 @@ internal class DefaultGetWellknownTask @Inject constructor(
      */
     private suspend fun validateIdentityServer(identityServerBaseUrl: String): Boolean {
         val identityPingApi = retrofitFactory.create(okHttpClient, identityServerBaseUrl)
-                .create(IdentityPingApi::class.java)
+                .create(IdentityAuthAPI::class.java)
 
         return try {
             executeRequest<Unit>(null) {

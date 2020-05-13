@@ -101,6 +101,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
                 .observe()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
+                    hideWaitingView()
                     observer(it)
                 }
                 .disposeOnDestroy()

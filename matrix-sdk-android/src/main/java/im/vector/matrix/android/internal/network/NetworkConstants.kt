@@ -28,12 +28,8 @@ internal object NetworkConstants {
     const val URI_API_MEDIA_PREFIX_PATH_R0 = "$URI_API_MEDIA_PREFIX_PATH/r0/"
 
     // Identity server
-    const val URI_IDENTITY_PATH = "_matrix/identity/api/v1/"
-
     const val URI_IDENTITY_PREFIX_PATH = "_matrix/identity/v2"
     const val URI_IDENTITY_PATH_V2 = "$URI_IDENTITY_PREFIX_PATH/"
-
-    const val URI_API_PREFIX_IDENTITY = "_matrix/identity/api/v1"
 
     // TODO Ganfra, use correct value
     const val URI_INTEGRATION_MANAGER_PATH = "TODO/"
