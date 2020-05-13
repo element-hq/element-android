@@ -46,14 +46,14 @@ internal class DefaultSessionCreator @Inject constructor(
         val sessionParams = SessionParams(
                 credentials = credentials,
                 homeServerConnectionConfig = homeServerConnectionConfig.copy(
-                        homeServerUri = credentials.wellKnown?.homeServer?.baseURL
+                        homeServerUri = credentials.discoveryInformation?.homeServer?.baseURL
                                 // remove trailing "/"
                                 ?.trim { it == '/' }
                                 ?.takeIf { it.isNotBlank() }
                                 ?.also { Timber.d("Overriding homeserver url to $it") }
                                 ?.let { Uri.parse(it) }
                                 ?: homeServerConnectionConfig.homeServerUri,
-                        identityServerUri = credentials.wellKnown?.identityServer?.baseURL
+                        identityServerUri = credentials.discoveryInformation?.identityServer?.baseURL
                                 // remove trailing "/"
                                 ?.trim { it == '/' }
                                 ?.takeIf { it.isNotBlank() }

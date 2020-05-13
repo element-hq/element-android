@@ -2,19 +2,22 @@ Changes in RiotX 0.20.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Add Direct Shortcuts (#652)
 
 Improvements 🙌:
- -
+ - Invite member(s) to an existing room (#1276)
+ - Improve notification accessibility with ticker text (#1226)
+ - Support homeserver discovery from MXID (DISABLED: waiting for design) (#476)
 
 Bugfix 🐛:
  - Fix | Verify Manually by Text crashes if private SSK not known (#1337)
+ - Sometimes the same device appears twice in the list of devices of a user (#1329)
 
 Translations 🗣:
  -
 
 SDK API changes ⚠️:
- -
+ - excludedUserIds parameter add to to UserService.getPagedUsersLive() function
 
 Build 🧱:
  -

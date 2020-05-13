@@ -61,9 +61,10 @@ interface UserService {
     /**
      * Observe a live [PagedList] of users sorted alphabetically. You can filter the users.
      * @param filter the filter. It will look into userId and displayName.
+     * @param excludedUserIds userId list which will be excluded from the result list.
      * @return a Livedata of users
      */
-    fun getPagedUsersLive(filter: String? = null): LiveData<PagedList<User>>
+    fun getPagedUsersLive(filter: String? = null, excludedUserIds: Set<String>? = null): LiveData<PagedList<User>>
 
     /**
      * Get list of ignored users
