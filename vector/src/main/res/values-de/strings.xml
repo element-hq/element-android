@@ -1282,14 +1282,14 @@ Dieser Fehler ist außerhalb von Riot passiert. Es gibt kein Google-Konto auf de
     <string name="keys_backup_setup_backup_started_message">Deine Verschlüsselungsschlüssel werden nun im Hintergrund auf deinem Heimserver gesichert. Die initiale Sicherung kann mehrere Minuten dauern.</string>
 
 
-    <string name="keys_backup_setup_skip_msg">Sie können den Zugang zu Ihren Nachrichten verlieren wenn Sie sich abmeldest oder das Gerät verlieren.</string>
+    <string name="keys_backup_setup_skip_msg">Sie verlieren möglicherweise den Zugang zu Ihren Nachrichten, wenn Sie sich abmelden oder das Gerät verlieren.</string>
 
-    <string name="keys_backup_restore_is_getting_backup_version">Rufe Backupversion ab…</string>
-    <string name="keys_backup_restore_with_passphrase">Nutze deine Wiederherstellungspassphrase um deinen sicheren Chatverlauf zu entschlüsseln</string>
-    <string name="keys_backup_restore_use_recovery_key">nutze deinen Wiederherstellungsschlüssel</string>
+    <string name="keys_backup_restore_is_getting_backup_version">Rufe Backup-Version ab…</string>
+    <string name="keys_backup_restore_with_passphrase">Nutzen Sie Ihre Wiederherstellungspassphrase, um Ihren verschlüsselten Chatverlauf lesen zu können</string>
+    <string name="keys_backup_restore_use_recovery_key">nutzen Sie Ihren Wiederherstellungsschlüssel</string>
     <string name="keys_backup_restore_with_passphrase_helper_with_link">Wen du deine Wiederherstellungspassphrase nicht weißt, kannst du %s.</string>
 
-    <string name="keys_backup_restore_with_recovery_key">Nutze deinen Wiederherstellungsschlüssel um deinen verschlüsselten Chatverlauf zu entschlüsseln</string>
+    <string name="keys_backup_restore_with_recovery_key">Nutzen Sie Ihren Wiederherstellungsschlüssel, um Ihren verschlüsselten Chatverlauf lesen zu können</string>
     <string name="keys_backup_restore_with_key_helper">Wiederherstellungsschlüssel verloren\? Du kannst einen neuen in den Einstellungen einrichten.</string>
     <string name="keys_backup_passphrase_error_decrypt">Sicherung konnte mit dieser Passphrase nicht entschlüsselt werden. Bitte stelle sicher, dass du die korrekte Wiederherstellungspassphrase eingegeben hast.</string>
     <string name="network_error_please_check_and_retry">Netzwerkfehler: Bitte überprüfe deine Verbindung und versuche es erneut.</string>
@@ -2313,7 +2313,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="bootstrap_loading_text">Dies könnte einige Sekunden dauern, gedulde dich bitte.</string>
     <string name="bootstrap_loading_title">Wiederherstellung einrichten.</string>
     <string name="your_recovery_key">Dein Wiederherstellungsschlüssel</string>
-    <string name="bootstrap_finish_title">Du bist fertig!</string>
+    <string name="bootstrap_finish_title">Geschafft!</string>
     <string name="keep_it_safe">Bewahre es sicher auf</string>
     <string name="finish">Abschließen</string>
 
@@ -2359,7 +2359,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="encryption_enabled_tile_description">Nachrichten in diesem Raum sind Ende-zu-Ende verschlüsselt. Erfahre mehr &amp; verifiziere Benutzer in deren Profil.</string>
     <string name="encryption_unknown_algorithm_tile_description">Die Verschlüsselung in diesem Raum wird nicht unterstützt</string>
 
-    <string name="qr_code_scanned_verif_waiting">Warte auf %s...</string>
+    <string name="qr_code_scanned_verif_waiting">Warte auf %s…</string>
 
     <string name="set_recovery_passphrase">%s setzen</string>
     <string name="settings_troubleshoot_title">Fehlerbehebung</string>
@@ -2372,7 +2372,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 
     <string name="security_prompt_text">Verifiziere dich &amp; andere, um eure Chats zu schützen</string>
 
-    <string name="bootstrap_enter_recovery">Gebe deinen %s ein um fortzufahren.</string>
+    <string name="bootstrap_enter_recovery">Geben Sie zum Fortfahren Ihren %s ein</string>
     <string name="use_file">Datei benutzen</string>
 
     <string name="bootstrap_invalid_recovery_key">Dies ist kein gültiger Wiederherstellungsschlüssel</string>
