@@ -150,7 +150,7 @@ class CommonTestHelper(context: Context) {
         timeline.dispose()
 
         // Check that all events has been created
-        assertEquals(nbOfMessages.toLong(), sentEvents.size.toLong())
+        assertEquals("Message number do not match ${sentEvents}", nbOfMessages.toLong(), sentEvents.size.toLong())
 
         return sentEvents
     }

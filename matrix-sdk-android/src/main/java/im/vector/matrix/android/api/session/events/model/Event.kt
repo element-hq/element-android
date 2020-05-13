@@ -83,6 +83,9 @@ data class Event(
     var mCryptoError: MXCryptoError.ErrorType? = null
 
     @Transient
+    var mCryptoErrorReason: String? = null
+
+    @Transient
     var sendState: SendState = SendState.UNKNOWN
 
     /**
@@ -182,6 +185,7 @@ data class Event(
         if (redacts != other.redacts) return false
         if (mxDecryptionResult != other.mxDecryptionResult) return false
         if (mCryptoError != other.mCryptoError) return false
+        if (mCryptoErrorReason != other.mCryptoErrorReason) return false
         if (sendState != other.sendState) return false
 
         return true
@@ -200,6 +204,7 @@ data class Event(
         result = 31 * result + (redacts?.hashCode() ?: 0)
         result = 31 * result + (mxDecryptionResult?.hashCode() ?: 0)
         result = 31 * result + (mCryptoError?.hashCode() ?: 0)
+        result = 31 * result + (mCryptoErrorReason?.hashCode() ?: 0)
         result = 31 * result + sendState.hashCode()
         return result
     }

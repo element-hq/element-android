@@ -38,6 +38,7 @@ import im.vector.matrix.android.internal.crypto.store.db.model.OlmSessionEntityF
 import im.vector.matrix.android.internal.crypto.store.db.model.OutgoingGossipingRequestEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.TrustLevelEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.UserEntityFields
+import im.vector.matrix.android.internal.crypto.store.db.model.WithHeldSessionEntityFields
 import im.vector.matrix.android.internal.di.SerializeNulls
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
@@ -52,7 +53,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
         // 0, 1, 2: legacy Riot-Android
         // 3: migrate to RiotX schema
         // 4, 5, 6, 7, 8, 9: migrations from RiotX (which was previously 1, 2, 3, 4, 5, 6)
-        const val CRYPTO_STORE_SCHEMA_VERSION = 9L
+        const val CRYPTO_STORE_SCHEMA_VERSION = 10L
     }
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
@@ -67,6 +68,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
         if (oldVersion <= 6) migrateTo7(realm)
         if (oldVersion <= 7) migrateTo8(realm)
         if (oldVersion <= 8) migrateTo9(realm)
+        if (oldVersion <= 9) migrateTo10(realm)
     }
 
     private fun migrateTo1Legacy(realm: DynamicRealm) {
@@ -415,5 +417,19 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                 Timber.w(failure, "Crypto Data base migration error for migrateTo9")
             }
         }
+    }
+
+    // Version 10L added WithHeld Keys Info (MSC2399)
+    private fun migrateTo10(realm: DynamicRealm) {
+        Timber.d("Step 9 -> 10")
+        realm.schema.create("WithHeldSessionEntity")
+                .addField(WithHeldSessionEntityFields.ROOM_ID, String::class.java)
+                .addField(WithHeldSessionEntityFields.ALGORITHM, String::class.java)
+                .addField(WithHeldSessionEntityFields.SESSION_ID, String::class.java)
+                .addIndex(WithHeldSessionEntityFields.SESSION_ID)
+                .addField(WithHeldSessionEntityFields.SENDER_KEY, String::class.java)
+                .addIndex(WithHeldSessionEntityFields.SENDER_KEY)
+                .addField(WithHeldSessionEntityFields.CODE_STRING, String::class.java)
+                .addField(WithHeldSessionEntityFields.REASON, String::class.java)
     }
 }

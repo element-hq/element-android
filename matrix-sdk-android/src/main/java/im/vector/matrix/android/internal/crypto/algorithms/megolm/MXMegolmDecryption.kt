@@ -30,10 +30,12 @@ import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestManager
 import im.vector.matrix.android.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import im.vector.matrix.android.internal.crypto.actions.MessageEncrypter
 import im.vector.matrix.android.internal.crypto.algorithms.IMXDecrypting
+import im.vector.matrix.android.internal.crypto.algorithms.IMXWithHeldExtension
 import im.vector.matrix.android.internal.crypto.keysbackup.DefaultKeysBackupService
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.crypto.model.event.RoomKeyContent
+import im.vector.matrix.android.internal.crypto.model.event.RoomKeyWithHeldContent
 import im.vector.matrix.android.internal.crypto.model.rest.ForwardedRoomKeyContent
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
@@ -53,7 +55,7 @@ internal class MXMegolmDecryption(private val userId: String,
                                   private val sendToDeviceTask: SendToDeviceTask,
                                   private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                   private val cryptoCoroutineScope: CoroutineScope
-) : IMXDecrypting {
+) : IMXDecrypting, IMXWithHeldExtension {
 
     var newSessionListener: NewSessionListener? = null
 
@@ -61,7 +63,7 @@ internal class MXMegolmDecryption(private val userId: String,
      * Events which we couldn't decrypt due to unknown sessions / indexes: map from
      * senderKey|sessionId to timelines to list of MatrixEvents.
      */
-    private var pendingEvents: MutableMap<String /* senderKey|sessionId */, MutableMap<String /* timelineId */, MutableList<Event>>> = HashMap()
+//    private var pendingEvents: MutableMap<String /* senderKey|sessionId */, MutableMap<String /* timelineId */, MutableList<Event>>> = HashMap()
 
     @Throws(MXCryptoError::class)
     override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
@@ -113,9 +115,21 @@ internal class MXMegolmDecryption(private val userId: String,
                             if (throwable is MXCryptoError.OlmError) {
                                 // TODO Check the value of .message
                                 if (throwable.olmException.message == "UNKNOWN_MESSAGE_INDEX") {
-                                    addEventToPendingList(event, timeline)
+                                    //addEventToPendingList(event, timeline)
+                                    // The session might has been partially withheld (and only pass ratcheted)
+                                    val withHeldInfo = cryptoStore.getWithHeldMegolmSession(event.roomId, encryptedEventContent.sessionId)
+                                    if (withHeldInfo != null) {
+                                        if (requestKeysOnFail) {
+                                            requestKeysForEvent(event, true)
+                                        }
+                                        // Encapsulate as withHeld exception
+                                        throw MXCryptoError.Base(MXCryptoError.ErrorType.KEYS_WITHHELD,
+                                                withHeldInfo.code?.value ?: "",
+                                                withHeldInfo.reason)
+                                    }
+
                                     if (requestKeysOnFail) {
-                                        requestKeysForEvent(event)
+                                        requestKeysForEvent(event, false)
                                     }
                                 }
 
@@ -128,10 +142,25 @@ internal class MXMegolmDecryption(private val userId: String,
                                         detailedReason)
                             }
                             if (throwable is MXCryptoError.Base) {
-                                if (throwable.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
-                                    addEventToPendingList(event, timeline)
-                                    if (requestKeysOnFail) {
-                                        requestKeysForEvent(event)
+                                if (
+                                /** if the session is unknown*/
+                                        throwable.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID
+                                ) {
+                                    val withHeldInfo = cryptoStore.getWithHeldMegolmSession(event.roomId, encryptedEventContent.sessionId)
+                                    if (withHeldInfo != null) {
+                                        if (requestKeysOnFail) {
+                                            requestKeysForEvent(event, true)
+                                        }
+                                        // Encapsulate as withHeld exception
+                                        throw MXCryptoError.Base(MXCryptoError.ErrorType.KEYS_WITHHELD,
+                                                withHeldInfo.code?.value ?: "",
+                                                withHeldInfo.reason)
+                                    } else {
+                                        // This is un-used in riotX SDK, not sure if needed
+                                        //addEventToPendingList(event, timeline)
+                                        if (requestKeysOnFail) {
+                                            requestKeysForEvent(event, false)
+                                        }
                                     }
                                 }
                             }
@@ -147,12 +176,12 @@ internal class MXMegolmDecryption(private val userId: String,
      *
      * @param event the event
      */
-    override fun requestKeysForEvent(event: Event) {
+    override fun requestKeysForEvent(event: Event, withHeld: Boolean) {
         val sender = event.senderId ?: return
         val encryptedEventContent = event.content.toModel<EncryptedEventContent>()
         val senderDevice = encryptedEventContent?.deviceId ?: return
 
-        val recipients = if (event.senderId == userId) {
+        val recipients = if (event.senderId == userId || withHeld) {
             mapOf(
                     userId to listOf("*")
             )
@@ -176,25 +205,25 @@ internal class MXMegolmDecryption(private val userId: String,
         outgoingGossipingRequestManager.sendRoomKeyRequest(requestBody, recipients)
     }
 
-    /**
-     * Add an event to the list of those we couldn't decrypt the first time we
-     * saw them.
-     *
-     * @param event      the event to try to decrypt later
-     * @param timelineId the timeline identifier
-     */
-    private fun addEventToPendingList(event: Event, timelineId: String) {
-        val encryptedEventContent = event.content.toModel<EncryptedEventContent>() ?: return
-        val pendingEventsKey = "${encryptedEventContent.senderKey}|${encryptedEventContent.sessionId}"
-
-        val timeline = pendingEvents.getOrPut(pendingEventsKey) { HashMap() }
-        val events = timeline.getOrPut(timelineId) { ArrayList() }
-
-        if (event !in events) {
-            Timber.v("## CRYPTO | addEventToPendingList() : add Event ${event.eventId} in room id ${event.roomId}")
-            events.add(event)
-        }
-    }
+//    /**
+//     * Add an event to the list of those we couldn't decrypt the first time we
+//     * saw them.
+//     *
+//     * @param event      the event to try to decrypt later
+//     * @param timelineId the timeline identifier
+//     */
+//    private fun addEventToPendingList(event: Event, timelineId: String) {
+//        val encryptedEventContent = event.content.toModel<EncryptedEventContent>() ?: return
+//        val pendingEventsKey = "${encryptedEventContent.senderKey}|${encryptedEventContent.sessionId}"
+//
+//        val timeline = pendingEvents.getOrPut(pendingEventsKey) { HashMap() }
+//        val events = timeline.getOrPut(timelineId) { ArrayList() }
+//
+//        if (event !in events) {
+//            Timber.v("## CRYPTO | addEventToPendingList() : add Event ${event.eventId} in room id ${event.roomId}")
+//            events.add(event)
+//        }
+//    }
 
     /**
      * Handle a key event.
@@ -347,6 +376,12 @@ internal class MXMegolmDecryption(private val userId: String,
                             sendToDeviceTask.execute(sendToDeviceParams)
                         }
                     }
+        }
+    }
+
+    override fun onRoomKeyWithHeldEvent(withHeldInfo: RoomKeyWithHeldContent) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            cryptoStore.addWithHeldMegolmSession(withHeldInfo)
         }
     }
 }

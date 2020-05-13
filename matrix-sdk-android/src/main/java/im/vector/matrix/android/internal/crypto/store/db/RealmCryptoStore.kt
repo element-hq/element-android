@@ -31,6 +31,7 @@ import im.vector.matrix.android.internal.crypto.GossipingRequestState
 import im.vector.matrix.android.internal.crypto.IncomingRoomKeyRequest
 import im.vector.matrix.android.internal.crypto.IncomingSecretShareRequest
 import im.vector.matrix.android.internal.crypto.IncomingShareRequestCommon
+import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.crypto.NewSessionListener
 import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestState
 import im.vector.matrix.android.internal.crypto.OutgoingRoomKeyRequest
@@ -40,6 +41,8 @@ import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
+import im.vector.matrix.android.internal.crypto.model.event.RoomKeyWithHeldContent
+import im.vector.matrix.android.internal.crypto.model.event.WithHeldCode
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.model.toEntity
@@ -69,6 +72,7 @@ import im.vector.matrix.android.internal.crypto.store.db.model.OutgoingGossiping
 import im.vector.matrix.android.internal.crypto.store.db.model.TrustLevelEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.UserEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.UserEntityFields
+import im.vector.matrix.android.internal.crypto.store.db.model.WithHeldSessionEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.createPrimaryKey
 import im.vector.matrix.android.internal.crypto.store.db.query.delete
 import im.vector.matrix.android.internal.crypto.store.db.query.get
@@ -1425,6 +1429,34 @@ internal class RealmCryptoStore @Inject constructor(
                     }
             )
             return existing
+        }
+    }
+
+    override fun addWithHeldMegolmSession(withHeldContent: RoomKeyWithHeldContent) {
+        val roomId = withHeldContent.roomId ?: return
+        val sessionId = withHeldContent.sessionId ?: return
+        if (withHeldContent.algorithm != MXCRYPTO_ALGORITHM_MEGOLM) return
+        doRealmTransaction(realmConfiguration) { realm ->
+            WithHeldSessionEntity.getOrCreate(realm, roomId, sessionId)?.let {
+                it.code = withHeldContent.code
+                it.senderKey = withHeldContent.senderKey
+                it.reason = withHeldContent.reason
+            }
+        }
+    }
+
+    override fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent? {
+        return doWithRealm(realmConfiguration) { realm ->
+            WithHeldSessionEntity.get(realm, roomId, sessionId)?.let {
+                RoomKeyWithHeldContent(
+                        roomId = roomId,
+                        sessionId = sessionId,
+                        algorithm = it.algorithm,
+                        codeString = it.codeString,
+                        reason = it.reason,
+                        senderKey = it.senderKey
+                )
+            }
         }
     }
 }

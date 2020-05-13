@@ -285,5 +285,9 @@ class KeyShareTests : InstrumentedTest {
                 keysBackupService.getKeyBackupRecoveryKeyInfo()?.recoveryKey == creationInfo.recoveryKey
             }
         }
+
+
+        mTestHelper.signOutAndClose(aliceSession1)
+        mTestHelper.signOutAndClose(aliceSession2)
     }
 }

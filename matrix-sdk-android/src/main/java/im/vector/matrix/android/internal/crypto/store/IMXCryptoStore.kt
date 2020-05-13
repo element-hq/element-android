@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2016 OpenMarket Ltd
  * Copyright 2018 New Vector Ltd
@@ -32,6 +33,7 @@ import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
+import im.vector.matrix.android.internal.crypto.model.event.RoomKeyWithHeldContent
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.store.db.model.KeysBackupDataEntity
@@ -415,6 +417,9 @@ internal interface IMXCryptoStore {
     fun clearOtherUserTrust()
 
     fun updateUsersTrust(check: (String) -> Boolean)
+
+    fun addWithHeldMegolmSession(withHeldContent: RoomKeyWithHeldContent)
+    fun getWithHeldMegolmSession(roomId: String, sessionId: String) : RoomKeyWithHeldContent?
 
     // Dev tools
 

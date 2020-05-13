@@ -2501,4 +2501,9 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="room_settings_topic_hint">Topic</string>
     <string name="room_settings_save_success">You changed room settings successfully</string>
 
+    <string name="notice_crypto_unable_to_decrypt_final">You cannot access this message</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly">Waiting for this message, this may take a while</string>
+    <string name="crypto_error_withheld_blacklisted">You have been blocked</string>
+    <string name="crypto_error_withheld_unverified">Session not trusted by sender</string>
+    <string name="crypto_error_withheld_generic">Sender purposely did not send the keys</string>
 </resources>
