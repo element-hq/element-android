@@ -28,7 +28,6 @@ import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.editorActionEvents
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.extensions.tryThis
@@ -80,37 +79,10 @@ class BootstrapMigrateBackupFragment @Inject constructor(
                 .disposeOnDestroyView()
 
         // sharedViewModel.observeViewEvents {}
-        bootstrapMigrateContinueButton.clicks()
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    submit()
-                }
-                .disposeOnDestroyView()
-
-        bootstrapMigrateShowPassword.clicks()
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    sharedViewModel.handle(BootstrapActions.TogglePasswordVisibility)
-                }
-                .disposeOnDestroyView()
-
-        bootstrapMigrateForgotPassphrase.clicks()
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    sharedViewModel.handle(BootstrapActions.HandleForgotBackupPassphrase)
-                }
-                .disposeOnDestroyView()
-
-        bootstrapMigrateUseFile.clicks()
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    startImportTextFromFileIntent(this, IMPORT_FILE_REQ)
-                }
-                .disposeOnDestroyView()
+        bootstrapMigrateContinueButton.debouncedClicks { submit() }
+        bootstrapMigrateShowPassword.debouncedClicks { sharedViewModel.handle(BootstrapActions.TogglePasswordVisibility) }
+        bootstrapMigrateForgotPassphrase.debouncedClicks { sharedViewModel.handle(BootstrapActions.HandleForgotBackupPassphrase) }
+        bootstrapMigrateUseFile.debouncedClicks { startImportTextFromFileIntent(this, IMPORT_FILE_REQ) }
     }
 
     private fun submit() = withState(sharedViewModel) { state ->

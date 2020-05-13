@@ -22,7 +22,6 @@ import android.view.inputmethod.EditorInfo
 import androidx.core.text.toSpannable
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.editorActionEvents
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
@@ -37,7 +36,7 @@ import javax.inject.Inject
 
 class SharedSecuredStoragePassphraseFragment @Inject constructor(
         private val colorProvider: ColorProvider
-): VectorBaseFragment() {
+) : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_ssss_access_from_passphrase
 
@@ -83,29 +82,9 @@ class SharedSecuredStoragePassphraseFragment @Inject constructor(
             }
         }
 
-        ssss_passphrase_submit.clicks()
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    submit()
-                }
-                .disposeOnDestroyView()
-
-        ssss_passphrase_use_key.clicks()
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    sharedViewModel.handle(SharedSecureStorageAction.UseKey)
-                }
-                .disposeOnDestroyView()
-
-        ssss_view_show_password.clicks()
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    sharedViewModel.handle(SharedSecureStorageAction.TogglePasswordVisibility)
-                }
-                .disposeOnDestroyView()
+        ssss_passphrase_submit.debouncedClicks { submit() }
+        ssss_passphrase_use_key.debouncedClicks { sharedViewModel.handle(SharedSecureStorageAction.UseKey) }
+        ssss_view_show_password.debouncedClicks { sharedViewModel.handle(SharedSecureStorageAction.TogglePasswordVisibility) }
     }
 
     fun submit() {

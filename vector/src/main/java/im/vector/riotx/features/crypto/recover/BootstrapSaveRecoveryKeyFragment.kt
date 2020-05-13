@@ -25,19 +25,16 @@ import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.view.clicks
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.colorizeMatchingText
 import im.vector.riotx.core.utils.startSharePlainTextIntent
 import im.vector.riotx.core.utils.toast
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_bootstrap_save_key.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class BootstrapSaveRecoveryKeyFragment @Inject constructor(
@@ -56,29 +53,13 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
                 .colorizeMatchingText(getString(R.string.recovery_passphrase), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
                 .colorizeMatchingText(getString(R.string.message_key), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
 
-        recoverySave.clickableView.clicks()
-                .debounce(600, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    downloadRecoveryKey()
-                }
-                .disposeOnDestroyView()
+        // TODO: previous debouncing window was 600ms, check with Valere why
+        recoverySave.clickableView.debouncedClicks { downloadRecoveryKey() }
 
-        recoveryCopy.clickableView.clicks()
-                .debounce(600, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    shareRecoveryKey()
-                }
-                .disposeOnDestroyView()
+        // TODO: previous debouncing window was 600ms, check with Valere why
+        recoveryCopy.clickableView.debouncedClicks { shareRecoveryKey() }
 
-        recoveryContinue.clickableView.clicks()
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    sharedViewModel.handle(BootstrapActions.GoToCompleted)
-                }
-                .disposeOnDestroyView()
+        recoveryContinue.clickableView.debouncedClicks { sharedViewModel.handle(BootstrapActions.GoToCompleted) }
     }
 
     private fun downloadRecoveryKey() = withState(sharedViewModel) { _ ->

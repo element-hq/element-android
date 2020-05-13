@@ -22,7 +22,6 @@ import android.view.inputmethod.EditorInfo
 import androidx.core.text.toSpannable
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.editorActionEvents
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
@@ -75,21 +74,8 @@ class BootstrapAccountPasswordFragment @Inject constructor(
                 }
                 .disposeOnDestroyView()
 
-        ssss_view_show_password.clicks()
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    sharedViewModel.handle(BootstrapActions.TogglePasswordVisibility)
-                }
-                .disposeOnDestroyView()
-
-        bootstrapPasswordButton.clicks()
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    submit()
-                }
-                .disposeOnDestroyView()
+        ssss_view_show_password.debouncedClicks { sharedViewModel.handle(BootstrapActions.TogglePasswordVisibility) }
+        bootstrapPasswordButton.debouncedClicks { submit() }
 
         withState(sharedViewModel) { state ->
             (state.step as? BootstrapStep.AccountPassword)?.failure?.let {
