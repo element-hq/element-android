@@ -163,7 +163,7 @@
         android:layout_marginRight="8dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textColor="@color/riotx_accent"
+        android:textColor="?colorAccent"
         android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
