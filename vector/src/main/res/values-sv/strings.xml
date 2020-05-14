@@ -233,4 +233,49 @@
     <string name="auth_missing_password">Lösenord saknas</string>
     <string name="auth_invalid_email">Det här ser inte ut som en giltig e-postadress</string>
     <string name="auth_invalid_phone">Det här ser inte ut som ett giltigt telefonnummer</string>
+    <string name="auth_email_already_defined">Den här e-postadressen är redan definierad.</string>
+    <string name="auth_missing_email">E-postadress saknas</string>
+    <string name="auth_missing_phone">Telefonnummer saknas</string>
+    <string name="auth_missing_email_or_phone">E-postadress eller telefonnummer saknas</string>
+    <string name="auth_invalid_token">Felaktig token</string>
+    <string name="auth_password_dont_match">Lösenorden matchar inte</string>
+    <string name="auth_forgot_password">Glömt lösenordet\?</string>
+    <string name="auth_use_server_options">Använd anpassade server-inställningar (avancerat)</string>
+    <string name="auth_email_validation_message">Vänligen kolla din e-post för att fortsätta med registreringen</string>
+    <string name="auth_threepid_warning_message">Registrering med e-postadress och telefonnummer samtidigt så stöds inte än, fram tills API:t finns. Endast telefonnumret kommer användas.
+\n
+\nDu kan lägga till ett telefonnummer till din profil i inställningarna.</string>
+    <string name="auth_recaptcha_message">Denna hemserver skulle vilja verifiera att du inte är en robot</string>
+    <string name="auth_username_in_use">Användarnamnet är upptagen</string>
+    <string name="auth_home_server">Hemserver:</string>
+    <string name="auth_identity_server">Identitetsserver:</string>
+    <string name="auth_reset_password_next_step_button">Jag har verifierat min e-postadress</string>
+    <string name="auth_reset_password_message">För att återställa ditt lösenord, skriv in e-postadressen länkad till ditt konto:</string>
+    <string name="auth_reset_password_missing_email">Du måste skriva in e-postadressen länkad till ditt konto.</string>
+    <string name="auth_reset_password_missing_password">Du måste skriva in ett nytt lösenord.</string>
+    <string name="auth_reset_password_email_validation_message">Ett e-brev har skickats till %s. När du har följt länken i det, klicka nedan.</string>
+    <string name="auth_reset_password_error_unauthorized">Misslyckades att verifiera e-postadressen: se till att du klickade på länken i e-brevet</string>
+    <string name="auth_reset_password_success_message">Ditt lösenord har blivit återställt.
+\n
+\nDu har loggats ut ur alla sessioner och kommer inte längre motta pushnotifikationer. För att återaktivera notifikationer, logga in igen på varje enhet.</string>
+    <string name="auth_accept_policies">Vänligen granska och acceptera villkoren för denna hemserver:</string>
+
+    <string name="login_error_must_start_http">URLen måste börja med http[s]://</string>
+    <string name="login_error_network_error">Kan inte logga in: Nätverksfel</string>
+    <string name="login_error_unable_login">Kan inte logga in</string>
+    <string name="login_error_registration_network_error">Kan inte registrera: Nätverksfel</string>
+    <string name="login_error_unable_register">Kan inte registrera</string>
+    <string name="login_error_unable_register_mail_ownership">Kan inte registrera: fel vid med e-postägandeskap</string>
+    <string name="login_error_invalid_home_server">Vänligen skriv in en giltig URL</string>
+    <string name="login_error_unknown_host">Den här URLen kan inte nås, vänligen kolla den</string>
+    <string name="login_error_no_homeserver_found">Det här är inte en giltig Matrixserveradress</string>
+    <string name="login_error_homeserver_not_found">Kan inte nå en hemserver på den här URLen, vänligen kolla den</string>
+    <string name="login_error_ssl_handshake">Din enhet använder ett utdaterat TLS-protokoll, sårbart för anfall, så för din säkerhets skull så kommer du inte kunna ansluta</string>
+    <string name="login_mobile_device">Mobil</string>
+
+    <string name="login_error_forbidden">Felaktigt användarnamn/lösenord</string>
+    <string name="login_error_unknown_token">Den åtkomsttoken du specificerade kändes inte igen</string>
+    <string name="login_error_bad_json">Felformaterad JSON</string>
+    <string name="login_error_not_json">Innehöll inte giltig JSON</string>
+    <string name="login_error_limit_exceeded">För många förfrågningar har skickats</string>
     </resources>
