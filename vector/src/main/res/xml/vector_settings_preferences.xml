@@ -24,6 +24,7 @@
         <im.vector.riotx.core.preference.VectorPreference
             android:dialogTitle="@string/font_size"
             android:key="SETTINGS_INTERFACE_TEXT_SIZE_KEY"
+            android:persistent="false"
             android:title="@string/font_size" />
 
     </im.vector.riotx.core.preference.VectorPreferenceCategory>

@@ -8,7 +8,7 @@ Improvements 🙌:
  - Better connectivity lost indicator when airplane mode is on
 
 Bugfix 🐛:
- -
+ - Fix issues with FontScale switch (#69, #645)
 
 Translations 🗣:
  -

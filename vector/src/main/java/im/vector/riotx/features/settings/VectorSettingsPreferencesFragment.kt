@@ -24,6 +24,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.restart
 import im.vector.riotx.core.preference.VectorListPreference
 import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.features.configuration.VectorConfiguration
@@ -137,7 +138,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
         selectedLanguagePreference.summary = VectorLocale.localeToLocalisedString(VectorLocale.applicationLocale)
 
         // Text size
-        textSizePreference.summary = FontScale.getFontScaleDescription(activity!!)
+        textSizePreference.summary = getString(FontScale.getFontScaleValue(activity!!).nameResId)
 
         textSizePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.let { displayTextSizeSelection(it) }
@@ -160,19 +161,18 @@ class VectorSettingsPreferencesFragment @Inject constructor(
 
         val childCount = linearLayout.childCount
 
-        val scaleText = FontScale.getFontScaleDescription(activity)
+        val index = FontScale.getFontScaleValue(activity).index
 
         for (i in 0 until childCount) {
             val v = linearLayout.getChildAt(i)
 
             if (v is CheckedTextView) {
-                v.isChecked = v.text == scaleText
+                v.isChecked = i == index
 
                 v.setOnClickListener {
                     dialog.dismiss()
-                    FontScale.updateFontScale(activity, v.text.toString())
-                    activity.startActivity(activity.intent)
-                    activity.finish()
+                    FontScale.updateFontScale(activity, i)
+                    activity.restart()
                 }
             }
         }
