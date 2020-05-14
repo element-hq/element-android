@@ -50,10 +50,13 @@ object VectorLocale {
     var applicationLocale = defaultLocale
         private set
 
+    lateinit var context: Context
+
     /**
      * Init this object
      */
     fun init(context: Context) {
+        this.context = context
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
 
         if (preferences.contains(APPLICATION_LOCALE_LANGUAGE_KEY)) {
@@ -70,7 +73,7 @@ object VectorLocale {
                 applicationLocale = defaultLocale
             }
 
-            saveApplicationLocale(context, applicationLocale)
+            saveApplicationLocale(applicationLocale)
         }
 
         // init the known locales in background
@@ -82,7 +85,7 @@ object VectorLocale {
     /**
      * Save the new application locale.
      */
-    fun saveApplicationLocale(context: Context, locale: Locale) {
+    fun saveApplicationLocale(locale: Locale) {
         applicationLocale = locale
 
         PreferenceManager.getDefaultSharedPreferences(context).edit {

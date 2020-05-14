@@ -24,12 +24,10 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.features.configuration.VectorConfiguration
 import im.vector.riotx.features.settings.VectorLocale
 
 class LocalePickerViewModel @AssistedInject constructor(
-        @Assisted initialState: LocalePickerViewState,
-        private val vectorConfiguration: VectorConfiguration
+        @Assisted initialState: LocalePickerViewState
 ) : VectorViewModel<LocalePickerViewState, LocalePickerAction, LocalePickerViewEvents>(initialState) {
 
     @AssistedInject.Factory
@@ -37,13 +35,15 @@ class LocalePickerViewModel @AssistedInject constructor(
         fun create(initialState: LocalePickerViewState): LocalePickerViewModel
     }
 
-    companion object : MvRxViewModelFactory<LocalePickerViewModel, LocalePickerViewState> {
-
-        override fun initialState(viewModelContext: ViewModelContext): LocalePickerViewState? {
-            return LocalePickerViewState(
+    init {
+        setState {
+            copy(
                     locales = VectorLocale.supportedLocales
             )
         }
+    }
+
+    companion object : MvRxViewModelFactory<LocalePickerViewModel, LocalePickerViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: LocalePickerViewState): LocalePickerViewModel? {
@@ -62,7 +62,7 @@ class LocalePickerViewModel @AssistedInject constructor(
     }
 
     private fun handleSelectLocale(action: LocalePickerAction.SelectLocale) {
-        vectorConfiguration.updateApplicationLocale(action.locale)
+        VectorLocale.saveApplicationLocale(action.locale)
         _viewEvents.post(LocalePickerViewEvents.RestartActivity)
     }
 }

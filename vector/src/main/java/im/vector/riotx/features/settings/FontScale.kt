@@ -80,7 +80,7 @@ object FontScale {
      *
      * @param fontScaleValue the font scale value to store
      */
-    fun saveFontScaleValue(context: Context, fontScaleValue: FontScaleValue) {
+    private fun saveFontScaleValue(context: Context, fontScaleValue: FontScaleValue) {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit { putString(APPLICATION_FONT_SCALE_KEY, fontScaleValue.preferenceValue) }
     }
