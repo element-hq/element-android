@@ -19,28 +19,30 @@ package im.vector.riotx.features.settings.locale
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.features.settings.VectorLocale
+import kotlinx.coroutines.Job
+import java.util.Locale
 
 class LocalePickerViewModel @AssistedInject constructor(
         @Assisted initialState: LocalePickerViewState
-) : VectorViewModel<LocalePickerViewState, LocalePickerAction, LocalePickerViewEvents>(initialState) {
+) : VectorViewModel<LocalePickerViewState, LocalePickerAction, LocalePickerViewEvents>(initialState),
+        VectorLocale.Listener {
 
     @AssistedInject.Factory
     interface Factory {
         fun create(initialState: LocalePickerViewState): LocalePickerViewModel
     }
 
+    private var loadingJob: Job? = null
+
     init {
-        setState {
-            copy(
-                    locales = VectorLocale.supportedLocales
-            )
-        }
+        loadingJob = VectorLocale.loadLocales(this)
     }
 
     companion object : MvRxViewModelFactory<LocalePickerViewModel, LocalePickerViewState> {
@@ -64,5 +66,18 @@ class LocalePickerViewModel @AssistedInject constructor(
     private fun handleSelectLocale(action: LocalePickerAction.SelectLocale) {
         VectorLocale.saveApplicationLocale(action.locale)
         _viewEvents.post(LocalePickerViewEvents.RestartActivity)
+    }
+
+    override fun onLoaded(locales: List<Locale>) {
+        setState {
+            copy(
+                    locales = Success(locales)
+            )
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        loadingJob?.cancel()
     }
 }

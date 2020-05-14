@@ -2395,5 +2395,6 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="choose_locale_current_locale_title">Current language</string>
     <string name="choose_locale_other_locales_title">Other available languages</string>
+    <string name="choose_locale_loading_locales">Loading available languages…</string>
 
 </resources>

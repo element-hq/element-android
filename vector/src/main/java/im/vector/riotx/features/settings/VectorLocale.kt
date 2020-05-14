@@ -24,7 +24,9 @@ import androidx.preference.PreferenceManager
 import im.vector.riotx.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.Locale
 
@@ -40,9 +42,9 @@ object VectorLocale {
     private val defaultLocale = Locale("en", "US")
 
     /**
-     * The supported application languages
+     * The cache of supported application languages
      */
-    val supportedLocales = mutableListOf<Locale>()
+    private val supportedLocales = mutableListOf<Locale>()
 
     /**
      * Provides the current application locale
@@ -74,11 +76,6 @@ object VectorLocale {
             }
 
             saveApplicationLocale(applicationLocale)
-        }
-
-        // init the known locales in background
-        GlobalScope.launch(Dispatchers.IO) {
-            initApplicationLocales(context)
         }
     }
 
@@ -167,11 +164,9 @@ object VectorLocale {
     }
 
     /**
-     * Provides the supported application locales list
-     *
-     * @param context the context
+     * Init the supported application locales list
      */
-    private fun initApplicationLocales(context: Context) {
+    private fun initApplicationLocales() {
         val knownLocalesSet = HashSet<Triple<String, String, String>>()
 
         try {
@@ -261,5 +256,21 @@ object VectorLocale {
             }
             append("]")
         }
+    }
+
+    fun loadLocales(listener: Listener): Job {
+        return GlobalScope.launch(Dispatchers.Main) {
+            if (supportedLocales.isEmpty()) {
+                // init the known locales in background
+                withContext(Dispatchers.IO) {
+                    initApplicationLocales()
+                }
+            }
+            listener.onLoaded(supportedLocales)
+        }
+    }
+
+    interface Listener {
+        fun onLoaded(locales: List<Locale>)
     }
 }
