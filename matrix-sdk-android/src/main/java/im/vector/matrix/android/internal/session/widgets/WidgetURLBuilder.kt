@@ -32,7 +32,7 @@ internal class DefaultWidgetURLBuilder @Inject constructor(private val integrati
                                                            private val stringProvider: StringProvider
 ) : IntegrationManager.Listener, WidgetURLBuilder {
 
-    private var currentConfig: IntegrationManagerConfig? = null
+    private var currentConfig = integrationManager.getPreferredConfig()
     private var whiteListedUrls: List<String> = emptyList()
 
     fun start() {
@@ -53,11 +53,10 @@ internal class DefaultWidgetURLBuilder @Inject constructor(private val integrati
         if (currentConfig != preferredConfig) {
             currentConfig = preferredConfig
             val defaultWhiteList = stringProvider.getStringArray(R.array.integrations_widgets_urls).asList()
-            whiteListedUrls = when (preferredConfig?.kind) {
+            whiteListedUrls = when (preferredConfig.kind) {
                 IntegrationManagerConfig.Kind.DEFAULT    -> defaultWhiteList
                 IntegrationManagerConfig.Kind.ACCOUNT    -> defaultWhiteList + preferredConfig.apiUrl
                 IntegrationManagerConfig.Kind.HOMESERVER -> listOf(preferredConfig.apiUrl)
-                else                                     -> emptyList()
             }
         }
     }

@@ -109,8 +109,8 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
         accountDataDataSource
                 .getLiveAccountDataEvent(UserAccountData.TYPE_WIDGETS)
                 .observeNotNull(lifecycleOwner) {
-                    val integrationManager = it.getOrNull()?.asIntegrationManagerWidgetContent()
-                    val config = integrationManager?.extractIntegrationManagerConfig()
+                    val integrationManagerContent = it.getOrNull()?.asIntegrationManagerWidgetContent()
+                    val config = integrationManagerContent?.extractIntegrationManagerConfig()
                     val accountConfig = currentConfigs.firstOrNull { currentConfig ->
                         currentConfig.kind == IntegrationManagerConfig.Kind.ACCOUNT
                     }
@@ -133,8 +133,9 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
         }
     }
 
-    fun getPreferredConfig(): IntegrationManagerConfig? {
-        return getOrderedConfigs().firstOrNull()
+    fun getPreferredConfig(): IntegrationManagerConfig {
+        // This can't be null as we should have at least the default one registered
+        return getOrderedConfigs().first()
     }
 
     /**
