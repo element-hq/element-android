@@ -17,8 +17,9 @@
 package im.vector.matrix.android.internal.session.integrationmanager
 
 import im.vector.matrix.android.api.auth.data.WellKnown
+import javax.inject.Inject
 
-internal class IntegrationManagerConfigExtractor {
+internal class IntegrationManagerConfigExtractor @Inject constructor() {
 
     fun extract(wellKnown: WellKnown): List<IntegrationManagerConfig> {
         val managers = ArrayList<IntegrationManagerConfig>()
@@ -33,7 +34,8 @@ internal class IntegrationManagerConfigExtractor {
                                 && uiUrl!!.startsWith("https://")) {
                             managers.add(IntegrationManagerConfig(
                                     apiUrl = apiUrl,
-                                    uiUrl = uiUrl
+                                    uiUrl = uiUrl,
+                                    kind = IntegrationManagerConfig.Kind.HOMESERVER
                             ))
                         }
                     }

@@ -21,12 +21,18 @@ import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.widgets.WidgetPostAPIMediator
 import im.vector.matrix.android.api.session.widgets.WidgetService
+import im.vector.matrix.android.api.session.widgets.WidgetURLBuilder
 import im.vector.matrix.android.api.util.Cancelable
 import javax.inject.Inject
 import javax.inject.Provider
 
 internal class DefaultWidgetService @Inject constructor(private val widgetManager: WidgetManager,
+                                                        private val widgetURLBuilder: Provider<WidgetURLBuilder>,
                                                         private val widgetPostAPIMediator: Provider<WidgetPostAPIMediator>) : WidgetService {
+
+    override fun getWidgetURLBuilder(): WidgetURLBuilder {
+        return widgetURLBuilder.get()
+    }
 
     override fun getWidgetPostAPIMediator(): WidgetPostAPIMediator {
         return widgetPostAPIMediator.get()

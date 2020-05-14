@@ -21,6 +21,7 @@ import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.api.session.widgets.WidgetPostAPIMediator
 import im.vector.matrix.android.api.session.widgets.WidgetService
+import im.vector.matrix.android.api.session.widgets.WidgetURLBuilder
 import im.vector.matrix.android.internal.session.widgets.token.DefaultGetScalarTokenTask
 import im.vector.matrix.android.internal.session.widgets.token.GetScalarTokenTask
 import retrofit2.Retrofit
@@ -39,6 +40,9 @@ internal abstract class WidgetModule {
 
     @Binds
     abstract fun bindWidgetService(widgetService: DefaultWidgetService): WidgetService
+
+    @Binds
+    abstract fun bindWidgetURLBuilder(widgetURLBuilder: DefaultWidgetURLBuilder): WidgetURLBuilder
 
     @Binds
     abstract fun bindWidgetPostAPIMediator(widgetPostMessageAPIProvider: DefaultWidgetPostAPIMediator): WidgetPostAPIMediator

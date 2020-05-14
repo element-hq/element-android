@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Widget urls -->
+    <string name="integrations_ui_url" translatable="false">"https://scalar.vector.im/"</string>
+    <string name="integrations_rest_url" translatable="false">"https://scalar.vector.im/api"</string>
+    <string name="integrations_jitsi_widget_url" translatable="false">"https://scalar.vector.im/api/widgets/jitsi.html"</string>
+
+    <string-array name="integrations_widgets_urls" translatable="false">
+        <item>https://scalar.vector.im/_matrix/integrations/v1</item>
+        <item>https://scalar.vector.im/api</item>
+        <item>https://scalar-staging.vector.im/_matrix/integrations/v1</item>
+        <item>https://scalar-staging.vector.im/api</item>
+        <item>https://scalar-staging.riot.im/scalar/api</item>
+    </string-array>
+
+</resources>

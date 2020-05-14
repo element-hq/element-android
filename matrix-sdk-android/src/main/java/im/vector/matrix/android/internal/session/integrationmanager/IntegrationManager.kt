@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.integrationmanager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
+import im.vector.matrix.android.R
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -33,6 +34,7 @@ import im.vector.matrix.android.internal.session.user.accountdata.AccountDataDat
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.util.StringProvider
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -50,8 +52,10 @@ import javax.inject.Inject
  */
 @SessionScope
 internal class IntegrationManager @Inject constructor(private val taskExecutor: TaskExecutor,
+                                                      private val stringProvider: StringProvider,
                                                       private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-                                                      private val accountDataDataSource: AccountDataDataSource) {
+                                                      private val accountDataDataSource: AccountDataDataSource,
+                                                      private val configExtractor: IntegrationManagerConfigExtractor) {
 
     interface Listener {
         fun onIsEnabledChanged(enabled: Boolean) {
@@ -67,13 +71,22 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
         }
     }
 
-    private var currentConfig: IntegrationManagerConfig? = null
+    private val currentConfigs = ArrayList<IntegrationManagerConfig>()
     private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
     private val lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(lifecycleOwner)
 
     private val listeners = HashSet<Listener>()
     fun addListener(listener: Listener) = synchronized(listeners) { listeners.add(listener) }
     fun removeListener(listener: Listener) = synchronized(listeners) { listeners.remove(listener) }
+
+    init {
+        val defaultConfig = IntegrationManagerConfig(
+                uiUrl = stringProvider.getString(R.string.integrations_ui_url),
+                apiUrl = stringProvider.getString(R.string.integrations_rest_url),
+                kind = IntegrationManagerConfig.Kind.DEFAULT
+        )
+        currentConfigs.add(defaultConfig)
+    }
 
     fun start() {
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
@@ -98,8 +111,11 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
                 .observeNotNull(lifecycleOwner) {
                     val integrationManager = it.getOrNull()?.asIntegrationManagerWidgetContent()
                     val config = integrationManager?.extractIntegrationManagerConfig()
-                    if (config != null && config != currentConfig) {
-                        currentConfig = config
+                    val accountConfig = currentConfigs.firstOrNull { currentConfig ->
+                        currentConfig.kind == IntegrationManagerConfig.Kind.ACCOUNT
+                    }
+                    if (config != null && accountConfig == null) {
+                        currentConfigs.add(config)
                         notifyConfigurationChanged(config)
                     }
                 }
@@ -107,6 +123,18 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
 
     fun stop() {
         lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
+    }
+
+    fun hasConfig() = currentConfigs.isNotEmpty()
+
+    fun getOrderedConfigs(): List<IntegrationManagerConfig> {
+        return currentConfigs.sortedBy {
+            it.kind
+        }
+    }
+
+    fun getPreferredConfig(): IntegrationManagerConfig? {
+        return getOrderedConfigs().firstOrNull()
     }
 
     /**
@@ -250,13 +278,7 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
             //nop
         }
     }
-
      */
-
-    fun getConfig(): IntegrationManagerConfig? {
-        val accountWidgets = accountDataDataSource.getAccountDataEvent(UserAccountData.TYPE_WIDGETS) ?: return null
-        return accountWidgets.asIntegrationManagerWidgetContent()?.extractIntegrationManagerConfig()
-    }
 
     private fun WidgetContent.extractIntegrationManagerConfig(): IntegrationManagerConfig? {
         if (url.isNullOrBlank()) {
@@ -265,7 +287,8 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
         val integrationManagerData = data.toModel<IntegrationManagerWidgetData>()
         return IntegrationManagerConfig(
                 uiUrl = url,
-                apiUrl = integrationManagerData?.apiUrl ?: url
+                apiUrl = integrationManagerData?.apiUrl ?: url,
+                kind = IntegrationManagerConfig.Kind.ACCOUNT
         )
     }
 

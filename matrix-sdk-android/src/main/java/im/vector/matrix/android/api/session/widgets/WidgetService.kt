@@ -24,6 +24,8 @@ import im.vector.matrix.android.internal.session.widgets.Widget
 
 interface WidgetService {
 
+    fun getWidgetURLBuilder(): WidgetURLBuilder
+
     fun getWidgetPostAPIMediator(): WidgetPostAPIMediator
 
     fun getRoomWidgets(

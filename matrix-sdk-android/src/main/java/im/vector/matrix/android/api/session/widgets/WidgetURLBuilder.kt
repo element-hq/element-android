@@ -13,18 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.matrix.android.internal.session.integrationmanager
 
-data class IntegrationManagerConfig(
-        val uiUrl: String,
-        val apiUrl: String,
-        val kind: Kind
-) {
+package im.vector.matrix.android.api.session.widgets
 
-    // Order matters, first is preferred
-    enum class Kind {
-        ACCOUNT,
-        HOMESERVER,
-        DEFAULT
-    }
+interface WidgetURLBuilder {
+    /**
+     * Takes care of fetching a scalar token if required and build the final url.
+     */
+    suspend fun build(baseUrl: String, params: Map<String, String> = emptyMap(), forceFetchScalarToken: Boolean = false): String
+
 }
