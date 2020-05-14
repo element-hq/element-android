@@ -17,9 +17,10 @@
 package im.vector.riotx.features.settings.locale
 
 import com.airbnb.mvrx.MvRxState
+import im.vector.riotx.features.settings.VectorLocale
 import java.util.Locale
 
 data class LocalePickerViewState(
-        val currentLocale: Locale = Locale.getDefault(),
+        val currentLocale: Locale = VectorLocale.applicationLocale,
         val locales: List<Locale> = emptyList()
 ) : MvRxState

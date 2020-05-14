@@ -60,7 +60,7 @@ class LocalePickerController @Inject constructor(
                 title(stringProvider.getString(R.string.choose_locale_other_locales_title))
             }
             list
-                    .filter { it != data.currentLocale }
+                    .filter { it.toString() != data.currentLocale.toString() }
                     .forEach {
                         localeItem {
                             id(it.toString())
