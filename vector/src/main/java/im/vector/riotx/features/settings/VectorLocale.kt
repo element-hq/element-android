@@ -42,8 +42,7 @@ object VectorLocale {
     /**
      * The supported application languages
      */
-    var supportedLocales = ArrayList<Locale>()
-        private set
+    val supportedLocales = mutableListOf<Locale>()
 
     /**
      * Provides the current application locale
@@ -195,9 +194,7 @@ object VectorLocale {
             )
         }
 
-        supportedLocales.clear()
-
-        knownLocalesSet.mapTo(supportedLocales) { (language, country, script) ->
+        val list = knownLocalesSet.map { (language, country, script) ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 Locale.Builder()
                         .setLanguage(language)
@@ -208,9 +205,11 @@ object VectorLocale {
                 Locale(language, country)
             }
         }
+                // sort by human display names
+                .sortedBy { localeToLocalisedString(it).toLowerCase(it) }
 
-        // sort by human display names
-        supportedLocales.sortWith(Comparator { lhs, rhs -> localeToLocalisedString(lhs).compareTo(localeToLocalisedString(rhs)) })
+        supportedLocales.clear()
+        supportedLocales.addAll(list)
     }
 
     /**

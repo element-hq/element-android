@@ -61,7 +61,6 @@ class LocalePickerController @Inject constructor(
             }
             list
                     .filter { it != data.currentLocale }
-                    .sortedBy { VectorLocale.localeToLocalisedString(it).toLowerCase(it) }
                     .forEach {
                         localeItem {
                             id(it.toString())
