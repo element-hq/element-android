@@ -1,4 +1,6 @@
-<View xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="20dp"
-    android:background="@drawable/redacted_background" />
+    android:textColor="?vctr_default_text_hint_color"
+    android:text="@string/redacted_stub_text"
+    android:textStyle="italic" />
