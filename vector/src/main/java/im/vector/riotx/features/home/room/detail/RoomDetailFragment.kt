@@ -1217,7 +1217,8 @@ class RoomDetailFragment @Inject constructor(
             is EventSharedAction.Copy                       -> {
                 // I need info about the current selected message :/
                 copyToClipboard(requireContext(), action.content, false)
-                showSnackWithMessage(getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
+                //showSnackWithMessage(getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
+                context?.toast(getString(R.string.copied_to_clipboard))
             }
             is EventSharedAction.Redact                     -> {
                 promptConfirmationToRedactEvent(action)
@@ -1261,7 +1262,8 @@ class RoomDetailFragment @Inject constructor(
             is EventSharedAction.CopyPermalink              -> {
                 val permalink = PermalinkFactory.createPermalink(roomDetailArgs.roomId, action.eventId)
                 copyToClipboard(requireContext(), permalink, false)
-                showSnackWithMessage(getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
+                //showSnackWithMessage(getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT)
+                context?.toast(getString(R.string.copied_to_clipboard))
             }
             is EventSharedAction.Resend                     -> {
                 roomDetailViewModel.handle(RoomDetailAction.ResendMessage(action.eventId))
