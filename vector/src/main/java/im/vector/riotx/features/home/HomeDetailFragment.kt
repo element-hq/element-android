@@ -79,6 +79,7 @@ class HomeDetailFragment @Inject constructor(
         withState(viewModel) {
             // Update the navigation view if needed (for when we restore the tabs)
             bottomNavigationView.selectedItemId = it.displayMode.toMenuId()
+            bottomNavigationView.visibility = if (bottomNavigationView.selectedItemId != R.id.bottom_action_home) View.VISIBLE else View.GONE
         }
 
         viewModel.selectSubscribe(this, HomeDetailViewState::groupSummary) { groupSummary ->
