@@ -18,7 +18,6 @@ package im.vector.riotx.features.settings
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.widget.CheckedTextView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
@@ -129,21 +128,6 @@ class VectorSettingsPreferencesFragment @Inject constructor(
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                REQUEST_LOCALE -> {
-                    activity?.let {
-                        startActivity(it.intent)
-                        it.finish()
-                    }
-                }
-            }
-        }
-    }
-
     // ==============================================================================================================
     // user interface management
     // ==============================================================================================================
@@ -151,12 +135,6 @@ class VectorSettingsPreferencesFragment @Inject constructor(
     private fun setUserInterfacePreferences() {
         // Selected language
         selectedLanguagePreference.summary = VectorLocale.localeToLocalisedString(VectorLocale.applicationLocale)
-
-        selectedLanguagePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            notImplemented()
-            // TODO startActivityForResult(LanguagePickerActivity.getIntent(activity), REQUEST_LOCALE)
-            true
-        }
 
         // Text size
         textSizePreference.summary = FontScale.getFontScaleDescription(activity!!)
@@ -198,9 +176,5 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 }
             }
         }
-    }
-
-    companion object {
-        private const val REQUEST_LOCALE = 777
     }
 }

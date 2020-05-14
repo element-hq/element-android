@@ -61,8 +61,6 @@ import im.vector.riotx.features.login.LoginSplashFragment
 import im.vector.riotx.features.login.LoginWaitForEmailFragment
 import im.vector.riotx.features.login.LoginWebFragment
 import im.vector.riotx.features.login.terms.LoginTermsFragment
-import im.vector.riotx.features.userdirectory.KnownUsersFragment
-import im.vector.riotx.features.userdirectory.UserDirectoryFragment
 import im.vector.riotx.features.qrcode.QrCodeScannerFragment
 import im.vector.riotx.features.reactions.EmojiChooserFragment
 import im.vector.riotx.features.reactions.EmojiSearchResultFragment
@@ -92,9 +90,12 @@ import im.vector.riotx.features.settings.devtools.IncomingKeyRequestListFragment
 import im.vector.riotx.features.settings.devtools.KeyRequestsFragment
 import im.vector.riotx.features.settings.devtools.OutgoingKeyRequestListFragment
 import im.vector.riotx.features.settings.ignored.VectorSettingsIgnoredUsersFragment
+import im.vector.riotx.features.settings.locale.LocalePickerFragment
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
 import im.vector.riotx.features.share.IncomingShareFragment
 import im.vector.riotx.features.signout.soft.SoftLogoutFragment
+import im.vector.riotx.features.userdirectory.KnownUsersFragment
+import im.vector.riotx.features.userdirectory.UserDirectoryFragment
 
 @Module
 interface FragmentModule {
@@ -108,6 +109,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(RoomListFragment::class)
     fun bindRoomListFragment(fragment: RoomListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LocalePickerFragment::class)
+    fun bindLocalePickerFragment(fragment: LocalePickerFragment): Fragment
 
     @Binds
     @IntoMap

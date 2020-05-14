@@ -30,7 +30,6 @@ import javax.inject.Inject
 /**
  * Handle locale configuration change, such as theme, font size and locale chosen by the user
  */
-
 class VectorConfiguration @Inject constructor(private val context: Context) {
 
     // TODO Import mLanguageReceiver From Riot?
@@ -98,7 +97,6 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
      *
      * @param locale
      */
-    // TODO Call from LanguagePickerActivity
     fun updateApplicationLocale(locale: Locale) {
         updateApplicationSettings(locale, FontScale.getFontScalePrefValue(context), ThemeUtils.getApplicationTheme(context))
     }

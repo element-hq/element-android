@@ -19,9 +19,8 @@ package im.vector.riotx.features.settings
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
-import androidx.preference.PreferenceManager
 import androidx.core.content.edit
-import im.vector.riotx.BuildConfig
+import androidx.preference.PreferenceManager
 import im.vector.riotx.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -75,7 +74,7 @@ object VectorLocale {
             saveApplicationLocale(context, applicationLocale)
         }
 
-        // init the known locales in background, using kotlin coroutines
+        // init the known locales in background
         GlobalScope.launch(Dispatchers.IO) {
             initApplicationLocales(context)
         }
@@ -144,6 +143,7 @@ object VectorLocale {
         } else {
             val resources = context.resources
             val conf = resources.configuration
+
             @Suppress("DEPRECATION")
             val savedLocale = conf.locale
             @Suppress("DEPRECATION")
@@ -235,22 +235,29 @@ object VectorLocale {
                 append(locale.getDisplayCountry(locale))
                 append(")")
             }
+        }
+    }
 
-            // In debug mode, also display information about the locale in the current locale.
-            if (BuildConfig.DEBUG) {
-                append("\n[")
-                append(locale.displayLanguage)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && locale.script != "Latn") {
-                    append(" - ")
-                    append(locale.displayScript)
-                }
-                if (locale.displayCountry.isNotEmpty()) {
-                    append(" (")
-                    append(locale.displayCountry)
-                    append(")")
-                }
-                append("]")
+    /**
+     * Information about the locale in the current locale
+     *
+     * @param locale the locale to get info from
+     * @return the string
+     */
+    fun localeToLocalisedStringInfo(locale: Locale): String {
+        return buildString {
+            append("[")
+            append(locale.displayLanguage)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && locale.script != "Latn") {
+                append(" - ")
+                append(locale.displayScript)
             }
+            if (locale.displayCountry.isNotEmpty()) {
+                append(" (")
+                append(locale.displayCountry)
+                append(")")
+            }
+            append("]")
         }
     }
 }

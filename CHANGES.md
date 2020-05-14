@@ -2,7 +2,7 @@ Changes in RiotX 0.21.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Switch language support (#41)
 
 Improvements 🙌:
  - Better connectivity lost indicator when airplane mode is on
