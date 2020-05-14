@@ -109,7 +109,7 @@ android {
         applicationId "de.spiritcroc.riotx"
         // Set to API 19 because motionLayout is min API 18.
         // In the future we may consider using an alternative of MotionLayout to support API 16. But for security reason, maybe not.
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 29
         multiDexEnabled true
 
