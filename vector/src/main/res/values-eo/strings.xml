@@ -216,7 +216,7 @@
 \n
 \nĈu vi volas iujn aldoni nun\?</string>
 
-    <string name="go_on_with">Pluiĝi per…</string>
+    <string name="go_on_with">pluiĝi per…</string>
     <string name="error_no_external_application_found">Pardonu, troviĝis neniu ekstera aplikaĵo por ĉi tiu ago.</string>
 
     <string name="auth_login">Saluti</string>
@@ -241,7 +241,7 @@
     <string name="auth_missing_password">Mankas pasvorto</string>
     <string name="auth_invalid_email">Ĉi tio ne ŝajnas esti valida retpoŝtadreso</string>
     <string name="auth_invalid_phone">Ĉi tio ne ŝajnas esti valida telefonnumero</string>
-    <string name="auth_email_already_defined">Ĉi tiu retpoŝtadreso jam estas difinita</string>
+    <string name="auth_email_already_defined">Ĉi tiu retpoŝtadreso jam estas difinita.</string>
     <string name="auth_missing_email">Mankas retpoŝtadreso</string>
     <string name="auth_missing_phone">Mankas telefonnumero</string>
     <string name="auth_missing_email_or_phone">Mankas retpoŝtadreso aŭ telefonnumero</string>
@@ -439,4 +439,77 @@
 \nĈu vi certe volas daŭrigi\?</string>
 
     <string name="create_room_dm_failure">Ni ne povis krei vian rektan babilon. Bonvolu kontroli la invitotajn uzantojn kaj reprovi.</string>
-</resources>
+<string name="send_bug_report_logs_description">Por diagnozi problemojn, protokolo de ĉi tiu kliento sendiĝos kune kun ĉi tiu erar-raporto. Ĉi tiu erar-raporto, inkluzive la protokolon kaj la ekrankopion, ne estos publike videbla. Se vi preferus sendi nur la ĉi-supran tekston, bonvolu malmarki:</string>
+    <string name="send_bug_report_alert_message">Ŝajnas, ke vi kolere skuas la telefonon. Ĉu vi volas malfermi la erar-raportilon\?</string>
+    <string name="send_bug_report_app_crashed">La aplikaĵo lastatempe fiaskis. Ĉu vi volas malfermi la fiasko-raportilon\?</string>
+    <string name="send_bug_report_rage_shake">Kolere skuu por raporti eraron</string>
+
+    <string name="login_error_invalid_home_server">Bonvolu enigi validan URL-on</string>
+    <string name="login_error_unknown_host">La URL ne estas atingebla, bonvolu kontroli ĝin</string>
+    <string name="login_error_no_homeserver_found">Ĉi tio ne estas valida adreso de servilo de Matrix</string>
+    <string name="login_error_homeserver_not_found">Ne povas atingi hejmservilon je ĉi tiu URL, bonvolu kontroli ĝin</string>
+    <string name="login_error_ssl_handshake">Via aparato uzas eksdatan sekurecan protokolon TLS, neŝirmatan kontraŭ atakoj; por via sekureco vi ne povos konektiĝi</string>
+    <string name="login_error_bad_json">Misformita JSON</string>
+    <string name="login_error_not_json">Ne enhavis valdiajn JSON-datumojn</string>
+    <string name="login_error_limit_exceeded">Tro multaj petoj sendiĝis</string>
+    <string name="login_error_user_in_use">Ĉi tiu uzantonomo jam estas uzata</string>
+    <string name="login_error_login_email_not_yet">La retpoŝt-ligilo, kiu ankoraŭ ne estas klakita</string>
+
+    <string name="e2e_need_log_in_again">"Vi  bezonas resaluti por generi tutvoje ĉifrajn ŝlosilojn por ĉi tiu salutaĵo kaj sendi la publikan ŝlosilon al via hejmservilo.
+\nĈi tio necesas nur unufoje.
+\nPardonu la maloportunon."</string>
+
+    <string name="e2e_re_request_encryption_key">Repeti ĉifrajn ŝlosilojn de aliaj viaj salutaĵoj.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Peto de ŝlosilo sendiĝis.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Peto sendiĝis.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Bonvolu ruli Rioton sur alia aparato kiu scipovas malĉifri la mesaĝon, por ke ĝi povu sendi al vi la ŝlosilojn al ĉi tiu salutaĵo.</string>
+
+    <string name="incoming_call">Envena voko</string>
+    <string name="incoming_video_call">Envena vidvoko</string>
+    <string name="incoming_voice_call">Envena voĉvoko</string>
+    <string name="call_in_progress">Voko progresas…</string>
+    <string name="video_call_in_progress">Vidvoko progresas…</string>
+
+    <string name="call_error_camera_init_failed">Ne povas iniciati la filmilon</string>
+    <string name="media_picker_both_capture_title">Foti aŭ filmi</string>
+    <string name="media_picker_cannot_record_video">Ne povas filmi</string>
+
+    <string name="permissions_rationale_popup_title">Informoj</string>
+    <string name="permissions_rationale_msg_storage">Riot bezonas permeson aliri viajn fotojn kaj filmojn, por sendi kaj konservi kunsendaĵojn.
+\n
+\nBonvolu permesi aliron per la sekva ŝprucpeto, por povi sendi dosierojn el via telefono.</string>
+    <string name="permissions_rationale_msg_camera">Riot bezonas permeson aliri vian filmilon por foti kaj vidvoki.</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nBonvolu permesi aliron per la sekva ŝprucpeto, por ebligi la vokon."</string>
+    <string name="permissions_rationale_msg_record_audio">Riot bezonas permeson aliri vian mikrofonon por fari voĉvokojn.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nBonvolu permesi aliron per la sekva ŝprucpeto, por ebligi la vokon."</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot bezonsa premeson aliri viajn filmilon kaj mikrofonon por fari vidvokojn.
+\n
+\nBonvolu permesi aliron per la sekva ŝprucpeto, por ebligi la vokon.</string>
+    <string name="permissions_rationale_msg_contacts">Riot povas kontroli vian adresaron por trovi aliajn uzantojn de Matrix per iliaj retpoŝtadresoj kaj telefonnumeroj. Se vi konsentas kunhavi vian adresaron por tiu celo, bonvolu permesi aliron per la sekva ŝprucpeto.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot povas kontroli vian adresaron por trovi aliajn uzantojn de Matrix per iliaj retpoŝtadresoj kaj telefonnumeroj.
+\n
+\nĈu vi konsentas kunhavi vian adresaron por tiu celo\?</string>
+
+    <string name="permissions_action_not_performed_missing_permissions">Pardonu. Ago ne efektiviĝis, pro mankantaj permesoj</string>
+
+    <string name="media_slider_saved">Konservite</string>
+    <string name="media_slider_saved_message">Ĉu konservi al elŝutujo\?</string>
+    <string name="yes">JES</string>
+    <string name="no">NE</string>
+    <string name="_continue">Daŭrigi</string>
+
+    <string name="remove">Forigi</string>
+    <string name="join">Aliĝi</string>
+    <string name="preview">Antaŭrigardi</string>
+    <string name="reject">Rifuzi</string>
+
+    <string name="list_members">Listigi ĉambranojn</string>
+    <string name="room_sync_in_progress">Spegulante…</string>
+    <string name="room_preview_invitation_format">Vi estis invitita al ĉi tiu ĉambro de %s</string>
+    </resources>
