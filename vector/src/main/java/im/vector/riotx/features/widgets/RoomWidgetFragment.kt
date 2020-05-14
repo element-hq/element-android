@@ -16,24 +16,14 @@
 
 package im.vector.riotx.features.widgets
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
-import android.view.ViewGroup
-import android.webkit.CookieManager
-import android.webkit.PermissionRequest
-import android.webkit.WebChromeClient
-import android.webkit.WebSettings
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.fragments.roomwidgets.WebviewPermissionUtils
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.themes.ThemeUtils
-import im.vector.riotx.features.webview.VectorWebViewClient
 import im.vector.riotx.features.webview.WebViewEventListener
 import im.vector.riotx.features.widgets.webview.clearAfterWidget
 import im.vector.riotx.features.widgets.webview.setupForWidget
@@ -47,7 +37,7 @@ data class WidgetArgs(
         val widgetId: String
 ) : Parcelable
 
-class WidgetFragment @Inject constructor(
+class RoomWidgetFragment @Inject constructor(
         private val viewModelFactory: RoomWidgetViewModel.Factory
 ) : VectorBaseFragment(), RoomWidgetViewModel.Factory by viewModelFactory, WebViewEventListener {
 
@@ -87,7 +77,6 @@ class WidgetFragment @Inject constructor(
     }
 
     override fun onPageStarted(url: String) {
-
     }
 
     override fun onPageFinished(url: String) {
@@ -95,7 +84,5 @@ class WidgetFragment @Inject constructor(
     }
 
     override fun onPageError(url: String, errorCode: Int, description: String) {
-
     }
-
 }

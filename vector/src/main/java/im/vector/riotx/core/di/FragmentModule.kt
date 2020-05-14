@@ -95,7 +95,7 @@ import im.vector.riotx.features.settings.ignored.VectorSettingsIgnoredUsersFragm
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
 import im.vector.riotx.features.share.IncomingShareFragment
 import im.vector.riotx.features.signout.soft.SoftLogoutFragment
-import im.vector.riotx.features.widgets.WidgetFragment
+import im.vector.riotx.features.widgets.RoomWidgetFragment
 
 @Module
 interface FragmentModule {
@@ -472,6 +472,6 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(WidgetFragment::class)
-    fun bindWidgetFragment(fragment: WidgetFragment): Fragment
+    @FragmentKey(RoomWidgetFragment::class)
+    fun bindWidgetFragment(fragment: RoomWidgetFragment): Fragment
 }
