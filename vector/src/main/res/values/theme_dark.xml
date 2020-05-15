@@ -218,7 +218,7 @@
         <item name="snackbarTextViewStyle">@style/VectorSnackBarText</item>
 
         <item name="sc_message_bg_incoming">#FF465561</item>
-        <item name="sc_message_bg_outgoing">#FF1A2027</item>
+        <item name="sc_message_bg_outgoing">#ff343b47</item>
     </style>
 
     <style name="AppTheme.Dark" parent="AppTheme.Base.Dark" />
