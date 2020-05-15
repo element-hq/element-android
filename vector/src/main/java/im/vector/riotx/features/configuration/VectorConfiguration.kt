@@ -38,7 +38,7 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
         if (Locale.getDefault().toString() != VectorLocale.applicationLocale.toString()) {
             Timber.v("## onConfigurationChanged(): the locale has been updated to ${Locale.getDefault()}")
             Timber.v("## onConfigurationChanged(): restore the expected value ${VectorLocale.applicationLocale}")
-            updateApplicationSettings(VectorLocale.applicationLocale,
+            updateApplicationSettings(Locale.getDefault(),
                                       FontScale.getFontScalePrefValue(context),
                                       ThemeUtils.getApplicationTheme(context))
         }
