@@ -32,8 +32,8 @@ import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.observeEvent
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.utils.ensureProtocol
 import im.vector.riotx.features.discovery.change.SetIdentityServerFragment
-import im.vector.riotx.features.discovery.change.SetIdentityServerViewModel
 import im.vector.riotx.features.terms.ReviewTermsActivity
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import javax.inject.Inject
@@ -108,7 +108,7 @@ class DiscoverySettingsFragment @Inject constructor(
             navigator.openTerms(
                     this,
                     TermsService.ServiceType.IdentityService,
-                    SetIdentityServerViewModel.sanitatizeBaseURL(state.identityServer() ?: ""),
+                    state.identityServer()?.ensureProtocol() ?: "",
                     null)
         }
     }

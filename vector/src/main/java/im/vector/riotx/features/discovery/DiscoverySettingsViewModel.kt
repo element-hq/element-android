@@ -77,7 +77,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
     private fun observeThreePids() {
         session.rx()
-                .liveThreePIds()
+                .liveThreePIds(true)
                 .subscribe {
                     retrieveBinding(it)
                 }

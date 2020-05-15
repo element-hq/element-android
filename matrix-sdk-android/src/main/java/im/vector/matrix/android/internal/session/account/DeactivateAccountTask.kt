@@ -22,6 +22,7 @@ import im.vector.matrix.android.internal.session.cleanup.CleanupSession
 import im.vector.matrix.android.internal.session.identity.IdentityDisconnectTask
 import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
+import timber.log.Timber
 import javax.inject.Inject
 
 internal interface DeactivateAccountTask : Task<DeactivateAccountTask.Params, Unit> {
@@ -47,9 +48,8 @@ internal class DefaultDeactivateAccountTask @Inject constructor(
         }
 
         // Logout from identity server if any, ignoring errors
-        runCatching {
-            identityDisconnectTask.execute(Unit)
-        }
+        runCatching { identityDisconnectTask.execute(Unit) }
+                .onFailure { Timber.w(it, "Unable to disconnect identity server") }
 
         cleanupSession.handle()
     }

@@ -63,9 +63,9 @@ internal class DefaultSignOutTask @Inject constructor(
         }
 
         // Logout from identity server if any
-        runCatching {
-            identityDisconnectTask.execute(Unit)
-        }
+        runCatching { identityDisconnectTask.execute(Unit) }
+                .onFailure { Timber.w(it, "Unable to disconnect identity server") }
+
 
         Timber.d("SignOut: cleanup session...")
         cleanupSession.handle()

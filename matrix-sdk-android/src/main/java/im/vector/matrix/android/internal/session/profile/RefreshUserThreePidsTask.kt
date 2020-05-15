@@ -20,7 +20,6 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.UserThreePidEntity
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
-import im.vector.matrix.android.internal.util.awaitTransaction
 import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
@@ -38,7 +37,7 @@ internal class DefaultRefreshUserThreePidsTask @Inject constructor(private val p
 
         Timber.d("Get ${accountThreePidsResponse.threePids?.size} threePids")
         // Store the list in DB
-        monarchy.awaitTransaction { realm ->
+        monarchy.writeAsync { realm ->
             realm.where(UserThreePidEntity::class.java).findAll().deleteAllFromRealm()
             accountThreePidsResponse.threePids?.forEach {
                 val entity = UserThreePidEntity(

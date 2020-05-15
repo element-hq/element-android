@@ -48,17 +48,16 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bootstrapSaveText.text = getString(R.string.bootstrap_save_key_description, getString(R.string.message_key), getString(R.string.recovery_passphrase))
+        val messageKey = getString(R.string.message_key)
+        val recoveryPassphrase = getString(R.string.recovery_passphrase)
+        val color = colorProvider.getColorFromAttribute(R.attr.vctr_toolbar_link_text_color)
+        bootstrapSaveText.text = getString(R.string.bootstrap_save_key_description, messageKey, recoveryPassphrase)
                 .toSpannable()
-                .colorizeMatchingText(getString(R.string.recovery_passphrase), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
-                .colorizeMatchingText(getString(R.string.message_key), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
+                .colorizeMatchingText(messageKey, color)
+                .colorizeMatchingText(recoveryPassphrase, color)
 
-        // TODO: previous debouncing window was 600ms, check with Valere why
         recoverySave.clickableView.debouncedClicks { downloadRecoveryKey() }
-
-        // TODO: previous debouncing window was 600ms, check with Valere why
         recoveryCopy.clickableView.debouncedClicks { shareRecoveryKey() }
-
         recoveryContinue.clickableView.debouncedClicks { sharedViewModel.handle(BootstrapActions.GoToCompleted) }
     }
 

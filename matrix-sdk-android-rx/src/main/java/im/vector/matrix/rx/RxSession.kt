@@ -95,8 +95,8 @@ class RxSession(private val session: Session) {
         return session.getPagedUsersLive(filter, excludedUserIds).asObservable()
     }
 
-    fun liveThreePIds(): Observable<List<ThreePid>> {
-        return session.getThreePidsLive().asObservable()
+    fun liveThreePIds(refreshData: Boolean): Observable<List<ThreePid>> {
+        return session.getThreePidsLive(refreshData).asObservable()
                 .startWithCallable { session.getThreePids() }
     }
 

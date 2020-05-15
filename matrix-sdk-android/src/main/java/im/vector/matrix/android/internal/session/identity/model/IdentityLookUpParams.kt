@@ -34,14 +34,12 @@ internal data class IdentityLookUpParams(
         /**
          * Required. The algorithm the client is using to encode the addresses. This should be one of the available options from /hash_details.
          */
-        @JvmField
         @Json(name = "algorithm")
         val algorithm: String,
 
         /**
          * Required. The pepper from /hash_details. This is required even when the algorithm does not make use of it.
          */
-        @JvmField
         @Json(name = "pepper")
         val pepper: String
 )

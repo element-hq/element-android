@@ -63,6 +63,7 @@ interface ProfileService {
 
     /**
      * Get the current user 3Pids Live
+     * @param refreshData set to true to fetch data from the homeserver
      */
-    fun getThreePidsLive(): LiveData<List<ThreePid>>
+    fun getThreePidsLive(refreshData: Boolean): LiveData<List<ThreePid>>
 }

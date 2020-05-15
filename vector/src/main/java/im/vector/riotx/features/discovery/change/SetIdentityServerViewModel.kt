@@ -31,6 +31,7 @@ import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.core.utils.ensureProtocol
 
 class SetIdentityServerViewModel @AssistedInject constructor(
         @Assisted initialState: SetIdentityServerState,
@@ -59,14 +60,6 @@ class SetIdentityServerViewModel @AssistedInject constructor(
             val fragment: SetIdentityServerFragment = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.viewModelFactory.create(state)
         }
-
-        fun sanitatizeBaseURL(baseUrl: String): String {
-            var baseUrl1 = baseUrl
-            if (!baseUrl1.startsWith("http://") && !baseUrl1.startsWith("https://")) {
-                baseUrl1 = "https://$baseUrl1"
-            }
-            return baseUrl1
-        }
     }
 
     var currentWantedUrl: String? = null
@@ -90,14 +83,11 @@ class SetIdentityServerViewModel @AssistedInject constructor(
     }
 
     private fun doChangeIdentityServerUrl(url: String) {
-        var baseUrl = url
-        if (baseUrl.isEmpty()) {
+        if (url.isEmpty()) {
             _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.settings_discovery_please_enter_server))
             return
         }
-        baseUrl = sanitatizeBaseURL(baseUrl)
-
-        currentWantedUrl = baseUrl
+        val baseUrl = url.ensureProtocol().also { currentWantedUrl = it }
 
         _viewEvents.post(SetIdentityServerViewEvents.Loading())
 

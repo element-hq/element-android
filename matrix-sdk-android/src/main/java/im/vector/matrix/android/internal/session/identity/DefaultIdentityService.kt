@@ -50,6 +50,7 @@ import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAcco
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
 import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.android.internal.util.ensureProtocol
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -201,12 +202,7 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     override fun setNewIdentityServer(url: String, callback: MatrixCallback<String>): Cancelable {
-        val urlCandidate = buildString {
-            if (!url.startsWith("http")) {
-                append("https://")
-            }
-            append(url)
-        }
+        val urlCandidate = url.ensureProtocol()
 
         return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
             val current = getCurrentIdentityServerUrl()
@@ -217,9 +213,8 @@ internal class DefaultIdentityService @Inject constructor(
                 // Disconnect previous one if any, first, because the token will change.
                 // In case of error when configuring the new identity server, this is not a big deal,
                 // we will ask for a new token on the previous Identity server
-                runCatching {
-                    identityDisconnectTask.execute(Unit)
-                }
+                runCatching { identityDisconnectTask.execute(Unit) }
+                        .onFailure { Timber.w(it, "Unable to disconnect identity server") }
 
                 // Try to get a token
                 val token = getNewIdentityServerToken(urlCandidate)

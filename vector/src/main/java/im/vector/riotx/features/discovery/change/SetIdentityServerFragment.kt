@@ -122,7 +122,7 @@ class SetIdentityServerFragment @Inject constructor(
                     navigator.openTerms(
                             this,
                             TermsService.ServiceType.IdentityService,
-                            SetIdentityServerViewModel.sanitatizeBaseURL(it.identityServerUrl),
+                            it.identityServerUrl,
                             null)
                 }
             }.exhaustive

@@ -88,11 +88,13 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
         )
     }
 
-    override fun getThreePidsLive(): LiveData<List<ThreePid>> {
-        // Force a refresh of the values
-        refreshUserThreePidsTask
-                .configureWith()
-                .executeBy(taskExecutor)
+    override fun getThreePidsLive(refreshData: Boolean): LiveData<List<ThreePid>> {
+        if (refreshData) {
+            // Force a refresh of the values
+            refreshUserThreePidsTask
+                    .configureWith()
+                    .executeBy(taskExecutor)
+        }
 
         return monarchy.findAllMappedWithChanges(
                 { it.where<UserThreePidEntity>() },

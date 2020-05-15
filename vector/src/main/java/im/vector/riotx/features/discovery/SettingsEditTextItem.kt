@@ -15,6 +15,7 @@
  */
 package im.vector.riotx.features.discovery
 
+import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
@@ -37,6 +38,20 @@ abstract class SettingsEditTextItem : EpoxyModelWithHolder<SettingsEditTextItem.
     @EpoxyAttribute
     var interactionListener: Listener? = null
 
+    private val textChangeListener: (text: CharSequence?, start: Int, count: Int, after: Int) -> Unit = { code, _, _, _ ->
+        code?.let { interactionListener?.onCodeChange(it.toString()) }
+    }
+
+    private val editorActionListener = object : TextView.OnEditorActionListener {
+        override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                interactionListener?.onValidate()
+                return true
+            }
+            return false
+        }
+    }
+
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.textView.setTextOrHide(descriptionText)
@@ -49,16 +64,8 @@ abstract class SettingsEditTextItem : EpoxyModelWithHolder<SettingsEditTextItem.
             holder.textInputLayout.error = errorText
         }
 
-        holder.editText.doOnTextChanged { code, _, _, _ ->
-            code?.let { interactionListener?.onCodeChange(it.toString()) }
-        }
-        holder.editText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                interactionListener?.onValidate()
-                return@setOnEditorActionListener true
-            }
-            return@setOnEditorActionListener false
-        }
+        holder.editText.doOnTextChanged(textChangeListener)
+        holder.editText.setOnEditorActionListener(editorActionListener)
     }
 
     class Holder : VectorEpoxyHolder() {
