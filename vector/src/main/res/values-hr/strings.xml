@@ -1,2 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="resources_country_code">HR</string>
+    <string name="resources_script">Latn</string>
+
+    <string name="light_theme">Svijetla tema</string>
+    <string name="dark_theme">Tamna tema</string>
+    <string name="black_them">Crna tema</string>
+    <string name="status_theme">Tema Status.im-a</string>
+
+    <string name="notification_sync_init">Inicijalizacija servisa</string>
+    <string name="notification_sync_in_progress">Sinkronizacija u tijeku…</string>
+    </resources>
