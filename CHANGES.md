@@ -1,4 +1,4 @@
-Changes in RiotX 0.20.0 (2020-XX-XX)
+Changes in RiotX 0.20.0 (2020-05-15)
 ===================================================
 
 Features ✨:
@@ -15,17 +15,8 @@ Bugfix 🐛:
  - Random Crashes while doing sth with cross signing keys (#1364)
  - Crash | crash while restoring key backup (#1366)
 
-Translations 🗣:
- -
-
 SDK API changes ⚠️:
- - excludedUserIds parameter add to to UserService.getPagedUsersLive() function
-
-Build 🧱:
- -
-
-Other changes:
- -
+ - excludedUserIds parameter added to the UserService.getPagedUsersLive() function
 
 Changes in RiotX 0.19.0 (2020-05-04)
 ===================================================
