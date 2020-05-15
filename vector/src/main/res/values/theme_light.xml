@@ -217,7 +217,7 @@
         <!-- Style to use for message text within a SnackBar in this theme. -->
         <item name="snackbarTextViewStyle">@style/VectorSnackBarText</item>
 
-        <item name="sc_message_bg_incoming">#FF999999</item>
+        <item name="sc_message_bg_incoming">#FFEEEEEE</item>
         <item name="sc_message_bg_outgoing">#FFC7C7C7</item>
     </style>
 

@@ -151,6 +151,9 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 
         <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.Status</item>
+
+        <item name="sc_message_bg_incoming">#FFFFFFFF</item>
+        <item name="sc_message_bg_outgoing">#FFE4E8ED</item>
     </style>
 
     <style name="AppTheme.Status" parent="AppTheme.Base.Status" />
