@@ -197,8 +197,8 @@
     <string name="option_send_voice">Sendi voĉon</string>
 
     <string name="start_new_chat_prompt_msg">Ĉu vi certe volas komenci novan babilon kun %s\?</string>
-    <string name="start_voice_call_prompt_msg">Ĉu vi certe volas komenci novan voĉvokon kun %s\?</string>
-    <string name="start_video_call_prompt_msg">Ĉu vi certe volas komenci novan vidvokon kun %s\?</string>
+    <string name="start_voice_call_prompt_msg">Ĉu vi certe volas komenci novan voĉvokon\?</string>
+    <string name="start_video_call_prompt_msg">Ĉu vi certe volas komenci novan vidvokon\?</string>
     <string name="call_failed_no_ice_title">Voko malsukcesis pro misagordita servilo</string>
     <string name="call_failed_no_ice_description">Bonvolu peti de la administranto de via hejmservilo (%1$s) agordon de TURN-servilo, por dependebla funkciigo de vokoj.
 \n

@@ -1706,7 +1706,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="settings_discovery_bad_identity_server">Konnte keine Verbindung zum Heimserver herstellen</string>
     <string name="resources_script">Latn</string>
 
-    <string name="call_failed_no_ice_description">Bitte fragen Sie den Administrator Ihres Home-Servers nach der Einrichtung eines TURN-Servers, damit Anrufe zuverlässig funktionieren.
+    <string name="call_failed_no_ice_description">Bitte fragen Sie den Administrator Ihres Home-Servers (%1$s) nach der Einrichtung eines TURN-Servers, damit Anrufe zuverlässig funktionieren.
 \n 
 \nAlternativ können Sie einen öffentlichen Server auf %2$s nutzen. Dies wird jedoch weniger zuverlässig sein und Ihre IP-Adresse gegenüber diesem Server preisgeben. Sie können dies auch in den Einstellungen anpassen.</string>
     <string name="login_error_no_homeserver_found">Dies ist keine Adresse eines Matrixservers</string>
