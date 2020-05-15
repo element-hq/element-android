@@ -18,6 +18,7 @@ package im.vector.riotx.features.themes
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import android.util.TypedValue
 import android.view.Menu
@@ -35,6 +36,7 @@ import timber.log.Timber
 object ThemeUtils {
     // preference key
     const val APPLICATION_THEME_KEY = "APPLICATION_THEME_KEY"
+    const val APPLICATION_DARK_THEME_KEY = "APPLICATION_DARK_THEME_KEY"
 
     // the theme possible values
     private const val THEME_DARK_VALUE = "dark"
@@ -57,8 +59,11 @@ object ThemeUtils {
      * @return the selected application theme
      */
     fun getApplicationTheme(context: Context): String {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(APPLICATION_THEME_KEY, THEME_LIGHT_VALUE)!!
+        val currentNightMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        return when (currentNightMode) {
+            Configuration.UI_MODE_NIGHT_YES -> PreferenceManager.getDefaultSharedPreferences(context).getString(APPLICATION_DARK_THEME_KEY, THEME_DARK_VALUE)!!
+            else -> PreferenceManager.getDefaultSharedPreferences(context).getString(APPLICATION_THEME_KEY, THEME_LIGHT_VALUE)!!
+        }
     }
 
     /**

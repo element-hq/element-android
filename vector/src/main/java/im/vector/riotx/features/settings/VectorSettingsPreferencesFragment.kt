@@ -55,7 +55,22 @@ class VectorSettingsPreferencesFragment @Inject constructor(
         findPreference<VectorListPreference>(ThemeUtils.APPLICATION_THEME_KEY)!!
                 .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             if (newValue is String) {
-                vectorConfiguration.updateApplicationTheme(newValue)
+                //vectorConfiguration.updateApplicationTheme(newValue)
+                // Restart the Activity
+                activity?.let {
+                    // Note: recreate does not apply the color correctly
+                    it.startActivity(it.intent)
+                    it.finish()
+                }
+                true
+            } else {
+                false
+            }
+        }
+        findPreference<VectorListPreference>(ThemeUtils.APPLICATION_DARK_THEME_KEY)!!
+                .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            if (newValue is String) {
+                //vectorConfiguration.updateApplicationTheme(newValue)
                 // Restart the Activity
                 activity?.let {
                     // Note: recreate does not apply the color correctly

@@ -65,12 +65,14 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
      *
      * @param theme the new theme
      */
+    /*
     fun updateApplicationTheme(theme: String) {
         ThemeUtils.setApplicationTheme(context, theme)
         updateApplicationSettings(VectorLocale.applicationLocale,
                                   FontScale.getFontScalePrefValue(context),
                                   theme)
     }
+    */
 
     /**
      * Init the configuration from the saved one

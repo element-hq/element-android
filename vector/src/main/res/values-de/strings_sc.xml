@@ -3,6 +3,7 @@
 
     <string name="redacted_stub_text">(Gelöschte Nachricht)</string>
 
+    <string name="settings_dark_theme">Nacht-Design</string>
     <string name="sc_theme">SC Schwarz</string>
     <string name="sc_dark_theme">SC Dunkel</string>
     <string name="sc_colored_theme">SC Schwarz, bunte Blasen</string>

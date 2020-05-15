@@ -22,6 +22,15 @@
             app:iconSpaceReserved="false" />
 
         <im.vector.riotx.core.preference.VectorListPreference
+            android:defaultValue="dark"
+            android:entries="@array/theme_entries"
+            android:entryValues="@array/theme_values"
+            android:key="APPLICATION_DARK_THEME_KEY"
+            android:summary="%s"
+            android:title="@string/settings_dark_theme"
+            app:iconSpaceReserved="false" />
+
+        <im.vector.riotx.core.preference.VectorListPreference
             android:defaultValue="start"
             android:entries="@array/bubble_style_entries"
             android:entryValues="@array/bubble_style_values"
