@@ -2075,7 +2075,7 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="verification_conclusion_not_secure">Ei turvallinen</string>
     <string name="sent_a_video">Video.</string>
     <string name="sent_an_image">Kuva.</string>
-<string name="command_description_verify">Pyyntö annetun käyttäjä-ID:n vahvistamiseksi</string>
+    <string name="command_description_verify">Pyyntö annetun käyttäjä-ID:n vahvistamiseksi</string>
     <string name="verification_conclusion_compromised">Johonkin näistä on mahdollisesti murtauduttu:
 \n
 \n - Kotipalvelimesi
@@ -2162,9 +2162,9 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="settings_active_sessions_unverified_device_desc">Vahvista tämä istunto jotta se merkitään luotetuksi ja se saa pääsyn salattuihin viesteihin. Jos et ole kirjautunut tähän istuntoon, tunnuksesi on saattanut vuotaa hyökkääjälle:</string>
 
     <plurals name="settings_active_sessions_count">
-	<item quantity="one">%d käynnissä oleva istunto</item>
-	<item quantity="other">%d käynnissä olevaa istuntoa</item>
-</plurals>
+        <item quantity="one">%d käynnissä oleva istunto</item>
+        <item quantity="other">%d käynnissä olevaa istuntoa</item>
+    </plurals>
 
     <string name="crosssigning_verify_this_session">Varmenna tämä kirjautuminen</string>
     <string name="crosssigning_other_user_not_trust">Muut käyttäjät eivät välttämättä luota siihen</string>
@@ -2197,13 +2197,13 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
 
     <string name="settings_dev_tools">Kehittäjän työkalut</string>
     <plurals name="poll_info">
-	<item quantity="one">%d ääni</item>
-	<item quantity="other">%d ääntä</item>
-</plurals>
+        <item quantity="one">%d ääni</item>
+        <item quantity="other">%d ääntä</item>
+    </plurals>
     <plurals name="poll_info_final">
-	<item quantity="one">%d ääni - lopulliset tulokset</item>
-	<item quantity="other">%d ääntä - lopulliset tulokset</item>
-</plurals>
+        <item quantity="one">%d ääni - lopulliset tulokset</item>
+        <item quantity="other">%d ääntä - lopulliset tulokset</item>
+    </plurals>
     <string name="command_description_poll">Luo yksinkertaisen äänestyksen</string>
     <string name="verification_use_passphrase">Jos et pääse käsiksi olemassaolevaan istuntoon</string>
 
@@ -2213,9 +2213,9 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="message_action_item_redact">Poista…</string>
     <string name="share_confirm_room">Haluatko lähettää tämän liitteen %1$s\?:lle\?</string>
     <plurals name="send_images_with_original_size">
-	<item quantity="one">Lähetä kuva alkuperäisessä koossa</item>
-	<item quantity="other">Lähetä kuvat alkuperäisessä koossa</item>
-</plurals>
+        <item quantity="one">Lähetä kuva alkuperäisessä koossa</item>
+        <item quantity="other">Lähetä kuvat alkuperäisessä koossa</item>
+    </plurals>
 
     <string name="delete_event_dialog_title">Vahvista poisto</string>
     <string name="delete_event_dialog_content">Haluatko varmasti poistaa tämän tapahtuman\? Huomaa, että jos poistat huoneen nimen tai otsikon muutostapahtuman, se voi perua muutoksen.</string>
@@ -2288,4 +2288,4 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="delete_event_dialog_reason_hint">Syy poistoon</string>
 
     <string name="message_key">Viestin avain</string>
-    </resources>
+</resources>

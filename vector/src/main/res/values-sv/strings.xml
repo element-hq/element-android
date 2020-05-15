@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resources_language">sv</string>
+<resources>
+    <string name="resources_language">sv</string>
     <string name="resources_country_code">SE</string>
     <string name="resources_script">Latn</string>
 
@@ -141,9 +142,9 @@
     <string name="no_room_placeholder">Inga rum</string>
     <string name="no_public_room_placeholder">Inga publika rum tillgängliga</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">1 användare</item>
-	<item quantity="other">%d användare</item>
-</plurals>
+        <item quantity="one">1 användare</item>
+        <item quantity="other">%d användare</item>
+    </plurals>
 
     <string name="groups_invite_header">Bjud in</string>
     <string name="groups_header">Gemenskaper</string>
@@ -278,4 +279,4 @@
     <string name="login_error_bad_json">Felformaterad JSON</string>
     <string name="login_error_not_json">Innehöll inte giltig JSON</string>
     <string name="login_error_limit_exceeded">För många förfrågningar har skickats</string>
-    </resources>
+</resources>

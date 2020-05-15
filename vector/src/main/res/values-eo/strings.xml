@@ -99,7 +99,7 @@
     <string name="title_activity_verify_device">Kontroli salutaĵon</string>
 
     <string name="encryption_information_verify_device">Kontroli aparaton</string>
-<string name="resources_script">Latn</string>
+    <string name="resources_script">Latn</string>
 
     <string name="status_theme">Haŭto de Status.im</string>
 
@@ -160,9 +160,9 @@
     <string name="no_room_placeholder">Neniuj ĉambroj</string>
     <string name="no_public_room_placeholder">Neniuj publikaj ĉambroj disponeblas</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">1 uzanto</item>
-	<item quantity="other">%d uzantoj</item>
-</plurals>
+        <item quantity="one">1 uzanto</item>
+        <item quantity="other">%d uzantoj</item>
+    </plurals>
 
     <string name="groups_invite_header">Inviti</string>
     <string name="groups_header">Komunumoj</string>
@@ -298,9 +298,9 @@
     <string name="settings_call_category">Vokoj</string>
     <string name="notification_sync_init">Pravalorigante servon</string>
     <plurals name="room_details_selected">
-	<item quantity="one">1 elektita</item>
-	<item quantity="other">%d elektitaj</item>
-</plurals>
+        <item quantity="one">1 elektita</item>
+        <item quantity="other">%d elektitaj</item>
+    </plurals>
     <string name="malformed_id">Misformita identigilo. Ĝi devus esti retpoŝtadreso aŭ identigilo de Matrix, kiel «@lokaparto:mallokaparto»</string>
     <string name="room_details_people_invited_group_name">INVITITA</string>
     <string name="room_details_people_present_group_name">ALIĜINTA</string>
@@ -325,9 +325,9 @@
     <string name="room_recents_join_room">Aliĝi al ĉambro</string>
     <string name="room_recents_join_room_title">Aliĝi al ĉambro</string>
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 ĉambro</item>
-	<item quantity="other">%d ĉambroj</item>
-</plurals>
+        <item quantity="one">1 ĉambro</item>
+        <item quantity="other">%d ĉambroj</item>
+    </plurals>
     <string name="room_settings_all_messages">Ĉiuj mesaĝoj</string>
     <string name="room_settings_mention_only">Nur mencioj</string>
     <string name="room_settings_mute">Silentigi</string>
@@ -439,7 +439,7 @@
 \nĈu vi certe volas daŭrigi\?</string>
 
     <string name="create_room_dm_failure">Ni ne povis krei vian rektan babilon. Bonvolu kontroli la invitotajn uzantojn kaj reprovi.</string>
-<string name="send_bug_report_logs_description">Por diagnozi problemojn, protokolo de ĉi tiu kliento sendiĝos kune kun ĉi tiu erar-raporto. Ĉi tiu erar-raporto, inkluzive la protokolon kaj la ekrankopion, ne estos publike videbla. Se vi preferus sendi nur la ĉi-supran tekston, bonvolu malmarki:</string>
+    <string name="send_bug_report_logs_description">Por diagnozi problemojn, protokolo de ĉi tiu kliento sendiĝos kune kun ĉi tiu erar-raporto. Ĉi tiu erar-raporto, inkluzive la protokolon kaj la ekrankopion, ne estos publike videbla. Se vi preferus sendi nur la ĉi-supran tekston, bonvolu malmarki:</string>
     <string name="send_bug_report_alert_message">Ŝajnas, ke vi kolere skuas la telefonon. Ĉu vi volas malfermi la erar-raportilon\?</string>
     <string name="send_bug_report_app_crashed">La aplikaĵo lastatempe fiaskis. Ĉu vi volas malfermi la fiasko-raportilon\?</string>
     <string name="send_bug_report_rage_shake">Kolere skuu por raporti eraron</string>
@@ -512,4 +512,4 @@
     <string name="list_members">Listigi ĉambranojn</string>
     <string name="room_sync_in_progress">Spegulante…</string>
     <string name="room_preview_invitation_format">Vi estis invitita al ĉi tiu ĉambro de %s</string>
-    </resources>
+</resources>

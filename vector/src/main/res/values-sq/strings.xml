@@ -2278,7 +2278,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="auth_invalid_login_param_space_in_password">Emër përdoruesi dhe/ose fjalëkalim i pasaktë. Fjalëkalimi i dhënë fillon ose mbaron me hapësirë, ju lutemi, kontrollojeni.</string>
 
-<string name="settings_rageshake"/>
+    <string name="settings_rageshake" />
     <string name="bootstrap_crosssigning_progress_initializing">Po publikohen kyçe të krijuar identiteti</string>
     <string name="room_message_placeholder">Mesazh…</string>
 

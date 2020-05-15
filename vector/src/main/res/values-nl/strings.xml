@@ -1605,7 +1605,7 @@
     <string name="identity_server_not_defined">U gebruikt geen identiteitsserver</string>
     <string name="identity_server_not_defined_for_password_reset">Er is geen identiteitsserver geconfigureerd. Dit is vereist om uw wachtwoord opnieuw in te stellen.</string>
 
-<string name="security_warning_identity_server">Vorige versies van Riot hadden een veiligheidsfout die er voor kon zorgen dat je Identiteits Server (%1$s) toegang tot je account had. Indien je %2$s vertrouwt, dan kun je dit negeren; anders log je uit en weer in.
+    <string name="security_warning_identity_server">Vorige versies van Riot hadden een veiligheidsfout die er voor kon zorgen dat je Identiteits Server (%1$s) toegang tot je account had. Indien je %2$s vertrouwt, dan kun je dit negeren; anders log je uit en weer in.
 \n
 \nLees meer details hier:
 \nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
@@ -1660,4 +1660,4 @@
     <string name="create_room_name_hint">Gespreksnaam</string>
     <string name="create_room_public_title">Publiek</string>
     <string name="create_room_public_description">Iedereen zal dit gesprek kunnen toetreden</string>
-    </resources>
+</resources>

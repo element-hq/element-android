@@ -19,7 +19,7 @@
 
     <string name="message_reply_to_prefix">Responde al</string>
 
-<string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_message">%1$s: %2$s</string>
     <string name="notice_display_name_set">%1$s ŝanĝis sian vidigan nomon al %2$s</string>
     <string name="notice_display_name_changed_from">%1$s ŝanĝis sian vidigan nomon de %2$s al %3$s</string>
     <string name="notice_display_name_removed">%1$s forigis sian vidigan nomon (%2$s)</string>
@@ -73,9 +73,9 @@
     <string name="room_displayname_two_members">%1$s kaj %2$s</string>
 
     <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s kaj 1 alia</item>
-	<item quantity="other">%1$s kaj %2$d aliaj</item>
-</plurals>
+        <item quantity="one">%1$s kaj 1 alia</item>
+        <item quantity="other">%1$s kaj %2$d aliaj</item>
+    </plurals>
 
     <string name="room_displayname_empty_room">Malplena ĉambro</string>
 
@@ -187,14 +187,14 @@
     <string name="notice_room_withdraw_with_reason">%1$s nuligis la inviton al %2$s. Kialo: %3$s</string>
 
     <plurals name="notice_room_aliases_added">
-	<item quantity="one">%1$s aldonis %2$s kiel adreson por ĉi tiu ĉambro.</item>
-	<item quantity="other">%1$s aldonis %2$s kiel adresojn por ĉi tiu ĉambro.</item>
-</plurals>
+        <item quantity="one">%1$s aldonis %2$s kiel adreson por ĉi tiu ĉambro.</item>
+        <item quantity="other">%1$s aldonis %2$s kiel adresojn por ĉi tiu ĉambro.</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_removed">
-	<item quantity="one">%1$s forigis %2$s kiel adreson por ĉi tiu ĉambro.</item>
-	<item quantity="other">%1$s forigis %2$s kiel adresojn por ĉi tiu ĉambro.</item>
-</plurals>
+        <item quantity="one">%1$s forigis %2$s kiel adreson por ĉi tiu ĉambro.</item>
+        <item quantity="other">%1$s forigis %2$s kiel adresojn por ĉi tiu ĉambro.</item>
+    </plurals>
 
     <string name="notice_room_aliases_added_and_removed">%1$s aldonis %2$s kaj forigis %3$s kiel adresojn por ĉi tiu ĉambro.</string>
 

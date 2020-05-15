@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="summary_message">%1$s: %2$s</string>
+<resources>
+    <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s saatis pildi.</string>
     <string name="summary_user_sent_sticker">%1$s saatis kleepsu.</string>
 
@@ -77,9 +78,9 @@
     <string name="room_displayname_two_members">%1$s ja %2$s</string>
 
     <plurals name="room_displayname_three_and_more_members">
-	<item quantity="one">%1$s ja üks muu</item>
-	<item quantity="other">%1$s ja %2$d muud</item>
-</plurals>
+        <item quantity="one">%1$s ja üks muu</item>
+        <item quantity="other">%1$s ja %2$d muud</item>
+    </plurals>
 
     <string name="room_displayname_empty_room">Tühi jututuba</string>
 
@@ -184,4 +185,4 @@
     <string name="notice_end_to_end_ok">%1$s lülitas sisse läbiva krüptimise.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s lülitas sisse läbiva krüptimise (tundmatu algoritm %2$s).</string>
 
-    </resources>
+</resources>
