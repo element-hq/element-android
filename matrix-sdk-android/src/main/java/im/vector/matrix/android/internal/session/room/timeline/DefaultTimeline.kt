@@ -36,6 +36,7 @@ import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
 import im.vector.matrix.android.internal.database.query.FilterContent
+import im.vector.matrix.android.internal.database.query.UnsignedContent
 import im.vector.matrix.android.internal.database.query.findAllInRoomWithSendStates
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.database.query.whereInRoom
@@ -727,6 +728,9 @@ internal class DefaultTimeline(
             not().like(TimelineEventEntityFields.ROOT.CONTENT, FilterContent.EDIT_TYPE)
             not().like(TimelineEventEntityFields.ROOT.CONTENT, FilterContent.RESPONSE_TYPE)
         }
+        if (settings.filterRedacted) {
+            not().like(TimelineEventEntityFields.ROOT.UNSIGNED_DATA, UnsignedContent.REDACTED_TYPE)
+        }
         return this
     }
 
@@ -737,13 +741,19 @@ internal class DefaultTimeline(
             } else {
                 true
             }
+            if (!filterType) return@filter false
+
             val filterEdits = if (settings.filterEdits && it.root.type == EventType.MESSAGE) {
                 val messageContent = it.root.content.toModel<MessageContent>()
                 messageContent?.relatesTo?.type != RelationType.REPLACE
             } else {
                 true
             }
-            filterType && filterEdits
+            if (!filterEdits) return@filter false
+
+            val filterRedacted = settings.filterRedacted && it.root.isRedacted()
+
+            filterRedacted
         }
     }
 

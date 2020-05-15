@@ -72,6 +72,12 @@
 
         <im.vector.riotx.core.preference.VectorSwitchPreference
             android:defaultValue="true"
+            android:key="SETTINGS_SHOW_REDACTED_KEY"
+            android:summary="@string/settings_show_redacted_summary"
+            android:title="@string/settings_show_redacted" />
+
+        <im.vector.riotx.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
             android:key="SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY"
             android:summary="@string/settings_show_join_leave_messages_summary"
             android:title="@string/settings_show_join_leave_messages"

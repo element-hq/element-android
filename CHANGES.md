@@ -6,6 +6,7 @@ Features ✨:
 
 Improvements 🙌:
  - Better connectivity lost indicator when airplane mode is on
+ - Add a setting to hide redacted events (#951)
 
 Bugfix 🐛:
  - Fix issues with FontScale switch (#69, #645)

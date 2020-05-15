@@ -1564,6 +1564,8 @@ Why choose Riot.im?
     <string name="reactions">Reactions</string>
 
     <string name="event_redacted">Message deleted</string>
+    <string name="settings_show_redacted">Show removed messages</string>
+    <string name="settings_show_redacted_summary">Show a placeholder for removed messages</string>
     <string name="event_redacted_by_user_reason">Event deleted by user</string>
     <string name="event_redacted_by_admin_reason">Event moderated by room admin</string>
     <string name="last_edited_info_message">Last edited by %1$s on %2$s</string>

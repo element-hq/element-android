@@ -88,6 +88,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY = "SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY"
         private const val SETTINGS_12_24_TIMESTAMPS_KEY = "SETTINGS_12_24_TIMESTAMPS_KEY"
         private const val SETTINGS_SHOW_READ_RECEIPTS_KEY = "SETTINGS_SHOW_READ_RECEIPTS_KEY"
+        private const val SETTINGS_SHOW_REDACTED_KEY = "SETTINGS_SHOW_REDACTED_KEY"
         private const val SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY = "SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY"
         private const val SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY = "SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY"
         private const val SETTINGS_VIBRATE_ON_MENTION_KEY = "SETTINGS_VIBRATE_ON_MENTION_KEY"
@@ -623,6 +624,15 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun showReadReceipts(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SHOW_READ_RECEIPTS_KEY, true)
+    }
+
+    /**
+     * Tells if the redacted message should be shown
+     *
+     * @return true if the redacted should be shown
+     */
+    fun showRedactedMessages(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SHOW_REDACTED_KEY, true)
     }
 
     /**
