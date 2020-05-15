@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.room.timeline
 
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -71,6 +72,7 @@ internal class DefaultTimeline(
         private val realmConfiguration: RealmConfiguration,
         private val taskExecutor: TaskExecutor,
         private val contextOfEventTask: GetContextOfEventTask,
+        private val fetchNextTokenAndPaginateTask: FetchNextTokenAndPaginateTask,
         private val paginationTask: PaginationTask,
         private val timelineEventMapper: TimelineEventMapper,
         private val settings: TimelineSettings,
@@ -519,50 +521,44 @@ internal class DefaultTimeline(
      * This has to be called on TimelineThread as it accesses realm live results
      */
     private fun executePaginationTask(direction: Timeline.Direction, limit: Int) {
-        val token = getTokenLive(direction)
+        val currentChunk = getLiveChunk()
+        val token = if (direction == Timeline.Direction.BACKWARDS) currentChunk?.prevToken else currentChunk?.nextToken
         if (token == null) {
-            val currentChunk = getLiveChunk()
-            if (direction == Timeline.Direction.FORWARDS && currentChunk?.hasBeenALastForwardChunk() == true) {
+            if (direction == Timeline.Direction.FORWARDS && currentChunk?.hasBeenALastForwardChunk().orFalse()) {
                 // We are in the case that next event exists, but we do not know the next token.
                 // Fetch (again) the last event to get a nextToken
-                currentChunk.timelineEvents.lastOrNull()?.eventId?.let { fetchEvent(it) }
-            }
-            updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
-            return
-        }
-        val params = PaginationTask.Params(roomId = roomId,
-                from = token,
-                direction = direction.toPaginationDirection(),
-                limit = limit)
-
-        Timber.v("Should fetch $limit items $direction")
-        cancelableBag += paginationTask
-                .configureWith(params) {
-                    this.callback = object : MatrixCallback<TokenChunkEventPersistor.Result> {
-                        override fun onSuccess(data: TokenChunkEventPersistor.Result) {
-                            when (data) {
-                                TokenChunkEventPersistor.Result.SUCCESS           -> {
-                                    Timber.v("Success fetching $limit items $direction from pagination request")
-                                }
-                                TokenChunkEventPersistor.Result.REACHED_END       -> {
-                                    postSnapshot()
-                                }
-                                TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE ->
-                                    // Database won't be updated, so we force pagination request
-                                    BACKGROUND_HANDLER.post {
-                                        executePaginationTask(direction, limit)
-                                    }
+                val lastKnownEventId = nonFilteredEvents.firstOrNull()?.eventId
+                if (lastKnownEventId == null) {
+                    updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
+                } else {
+                    val params = FetchNextTokenAndPaginateTask.Params(
+                            roomId = roomId,
+                            limit = limit,
+                            lastKnownEventId = lastKnownEventId
+                    )
+                    cancelableBag += fetchNextTokenAndPaginateTask
+                            .configureWith(params) {
+                                this.callback = createPaginationCallback(limit, direction)
                             }
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
-                            postSnapshot()
-                            Timber.v("Failure fetching $limit items $direction from pagination request")
-                        }
-                    }
+                            .executeBy(taskExecutor)
                 }
-                .executeBy(taskExecutor)
+            } else {
+                updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
+            }
+        } else {
+            val params = PaginationTask.Params(
+                    roomId = roomId,
+                    from = token,
+                    direction = direction.toPaginationDirection(),
+                    limit = limit
+            )
+            Timber.v("Should fetch $limit items $direction")
+            cancelableBag += paginationTask
+                    .configureWith(params) {
+                        this.callback = createPaginationCallback(limit, direction)
+                    }
+                    .executeBy(taskExecutor)
+        }
     }
 
     // For debug purpose only
@@ -741,6 +737,32 @@ internal class DefaultTimeline(
         builtEventsIdMap.clear()
         backwardsState.set(State())
         forwardsState.set(State())
+    }
+
+    private fun createPaginationCallback(limit: Int, direction: Timeline.Direction): MatrixCallback<TokenChunkEventPersistor.Result> {
+        return object : MatrixCallback<TokenChunkEventPersistor.Result> {
+            override fun onSuccess(data: TokenChunkEventPersistor.Result) {
+                when (data) {
+                    TokenChunkEventPersistor.Result.SUCCESS           -> {
+                        Timber.v("Success fetching $limit items $direction from pagination request")
+                    }
+                    TokenChunkEventPersistor.Result.REACHED_END       -> {
+                        postSnapshot()
+                    }
+                    TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE ->
+                        // Database won't be updated, so we force pagination request
+                        BACKGROUND_HANDLER.post {
+                            executePaginationTask(direction, limit)
+                        }
+                }
+            }
+
+            override fun onFailure(failure: Throwable) {
+                updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
+                postSnapshot()
+                Timber.v("Failure fetching $limit items $direction from pagination request")
+            }
+        }
     }
 
 // Extension methods ***************************************************************************

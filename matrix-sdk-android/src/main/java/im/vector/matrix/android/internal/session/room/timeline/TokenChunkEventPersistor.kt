@@ -230,21 +230,9 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
         val chunksToDelete = ArrayList<ChunkEntity>()
         chunks.forEach {
             if (it != currentChunk) {
-                if (direction == PaginationDirection.FORWARDS && it.hasBeenALastForwardChunk()) {
-                    // Maybe it was a trick to get a nextToken
-                    if (receivedChunk.events.size == 1) {
-                        Timber.d("Receiving a new nextToken")
-                        it.nextToken = receivedChunk.end
-                        chunksToDelete.add(currentChunk)
-                    } else {
-                        Timber.d("Do not merge $it")
-                        chunksToDelete.add(it)
-                    }
-                } else {
-                    Timber.d("Merge $it")
-                    currentChunk.merge(roomId, it, direction)
-                    chunksToDelete.add(it)
-                }
+                Timber.d("Merge $it")
+                currentChunk.merge(roomId, it, direction)
+                chunksToDelete.add(it)
             }
         }
         val shouldUpdateSummary = chunksToDelete.isNotEmpty() && currentChunk.isLastForward && direction == PaginationDirection.FORWARDS
