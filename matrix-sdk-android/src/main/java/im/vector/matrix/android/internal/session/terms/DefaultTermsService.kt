@@ -33,9 +33,9 @@ import im.vector.matrix.android.internal.session.openid.GetOpenIdTokenTask
 import im.vector.matrix.android.internal.session.sync.model.accountdata.AcceptedTermsContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
+import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.GlobalScope
 import okhttp3.OkHttpClient
 import javax.inject.Inject
 
@@ -48,12 +48,13 @@ internal class DefaultTermsService @Inject constructor(
         private val getOpenIdTokenTask: GetOpenIdTokenTask,
         private val identityRegisterTask: IdentityRegisterTask,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val taskExecutor: TaskExecutor
 ) : TermsService {
     override fun getTerms(serviceType: TermsService.ServiceType,
                           baseUrl: String,
                           callback: MatrixCallback<GetTermsResponse>): Cancelable {
-        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
             val sep = if (baseUrl.endsWith("/")) "" else "/"
 
             val url = when (serviceType) {
@@ -74,7 +75,7 @@ internal class DefaultTermsService @Inject constructor(
                               agreedUrls: List<String>,
                               token: String?,
                               callback: MatrixCallback<Unit>): Cancelable {
-        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
             val sep = if (baseUrl.endsWith("/")) "" else "/"
 
             val url = when (serviceType) {

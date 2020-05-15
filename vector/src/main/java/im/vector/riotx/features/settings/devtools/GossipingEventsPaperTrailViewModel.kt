@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.settings.devtools
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
@@ -31,7 +32,6 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.riotx.core.platform.EmptyAction
 import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 data class GossipingEventsPaperTrailState(
@@ -50,7 +50,7 @@ class GossipingEventsPaperTrailViewModel @AssistedInject constructor(@Assisted i
         setState {
             copy(events = Loading())
         }
-        GlobalScope.launch {
+        viewModelScope.launch {
             session.cryptoService().getGossipingEventsTrail().let {
                 val sorted = it.sortedByDescending { it.ageLocalTs }
                 setState {

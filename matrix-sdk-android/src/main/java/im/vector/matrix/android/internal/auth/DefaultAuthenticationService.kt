@@ -38,9 +38,8 @@ import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 import im.vector.matrix.android.internal.auth.data.RiotConfig
 import im.vector.matrix.android.internal.auth.db.PendingSessionData
 import im.vector.matrix.android.internal.auth.login.DefaultLoginWizard
-import im.vector.matrix.android.internal.auth.registration.DefaultRegistrationWizard
 import im.vector.matrix.android.internal.auth.login.DirectLoginTask
-import im.vector.matrix.android.internal.wellknown.GetWellknownTask
+import im.vector.matrix.android.internal.auth.registration.DefaultRegistrationWizard
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.executeRequest
@@ -50,7 +49,7 @@ import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.exhaustive
 import im.vector.matrix.android.internal.util.toCancelable
-import kotlinx.coroutines.GlobalScope
+import im.vector.matrix.android.internal.wellknown.GetWellknownTask
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -101,7 +100,7 @@ internal class DefaultAuthenticationService @Inject constructor(
     override fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<LoginFlowResult>): Cancelable {
         pendingSessionData = null
 
-        return GlobalScope.launch(coroutineDispatchers.main) {
+        return taskExecutor.executorScope.launch(coroutineDispatchers.main) {
             pendingSessionStore.delete()
 
             val result = runCatching {
@@ -253,7 +252,8 @@ internal class DefaultAuthenticationService @Inject constructor(
                                 retrofitFactory,
                                 coroutineDispatchers,
                                 sessionCreator,
-                                pendingSessionStore
+                                pendingSessionStore,
+                                taskExecutor.executorScope
                         ).also {
                             currentRegistrationWizard = it
                         }
@@ -273,7 +273,8 @@ internal class DefaultAuthenticationService @Inject constructor(
                                 retrofitFactory,
                                 coroutineDispatchers,
                                 sessionCreator,
-                                pendingSessionStore
+                                pendingSessionStore,
+                                taskExecutor.executorScope
                         ).also {
                             currentLoginWizard = it
                         }
@@ -290,7 +291,7 @@ internal class DefaultAuthenticationService @Inject constructor(
         pendingSessionData = pendingSessionData?.homeServerConnectionConfig
                 ?.let { PendingSessionData(it) }
                 .also {
-                    GlobalScope.launch(coroutineDispatchers.main) {
+                    taskExecutor.executorScope.launch(coroutineDispatchers.main) {
                         if (it == null) {
                             // Should not happen
                             pendingSessionStore.delete()
@@ -307,7 +308,7 @@ internal class DefaultAuthenticationService @Inject constructor(
 
         pendingSessionData = null
 
-        GlobalScope.launch(coroutineDispatchers.main) {
+        taskExecutor.executorScope.launch(coroutineDispatchers.main) {
             pendingSessionStore.delete()
         }
     }
@@ -315,7 +316,7 @@ internal class DefaultAuthenticationService @Inject constructor(
     override fun createSessionFromSso(homeServerConnectionConfig: HomeServerConnectionConfig,
                                       credentials: Credentials,
                                       callback: MatrixCallback<Session>): Cancelable {
-        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
             createSessionFromSso(credentials, homeServerConnectionConfig)
         }
     }

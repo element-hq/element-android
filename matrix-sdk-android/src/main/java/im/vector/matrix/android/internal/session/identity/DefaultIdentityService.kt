@@ -48,10 +48,10 @@ import im.vector.matrix.android.internal.session.profile.UnbindThreePidsTask
 import im.vector.matrix.android.internal.session.sync.model.accountdata.IdentityServerContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
+import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.ensureProtocol
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import timber.log.Timber
@@ -80,7 +80,8 @@ internal class DefaultIdentityService @Inject constructor(
         private val identityApiProvider: IdentityApiProvider,
         private val accountDataDataSource: AccountDataDataSource,
         private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
-        private val sessionParams: SessionParams
+        private val sessionParams: SessionParams,
+        private val taskExecutor: TaskExecutor
 ) : IdentityService {
 
     private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
@@ -138,19 +139,19 @@ internal class DefaultIdentityService @Inject constructor(
             return NoOpCancellable
         }
 
-        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
             identityRequestTokenForBindingTask.execute(IdentityRequestTokenForBindingTask.Params(threePid, false))
         }
     }
 
     override fun cancelBindThreePid(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
-        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
             identityStore.deletePendingBinding(threePid)
         }
     }
 
     override fun sendAgainValidationCode(threePid: ThreePid, callback: MatrixCallback<Unit>): Cancelable {
-        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
             identityRequestTokenForBindingTask.execute(IdentityRequestTokenForBindingTask.Params(threePid, true))
         }
     }
@@ -161,13 +162,13 @@ internal class DefaultIdentityService @Inject constructor(
             return NoOpCancellable
         }
 
-        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
             bindThreePidsTask.execute(BindThreePidsTask.Params(threePid))
         }
     }
 
     override fun submitValidationToken(threePid: ThreePid, code: String, callback: MatrixCallback<Unit>): Cancelable {
-        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
             submitTokenForBindingTask.execute(IdentitySubmitTokenForBindingTask.Params(threePid, code))
         }
     }
@@ -178,13 +179,13 @@ internal class DefaultIdentityService @Inject constructor(
             return NoOpCancellable
         }
 
-        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
             unbindThreePidsTask.execute(UnbindThreePidsTask.Params(threePid))
         }
     }
 
     override fun isValidIdentityServer(url: String, callback: MatrixCallback<Unit>): Cancelable {
-        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
             val api = retrofitFactory.create(unauthenticatedOkHttpClient, url).create(IdentityAuthAPI::class.java)
 
             identityPingTask.execute(IdentityPingTask.Params(api))
@@ -192,7 +193,7 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     override fun disconnect(callback: MatrixCallback<Unit>): Cancelable {
-        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
             identityDisconnectTask.execute(Unit)
 
             identityStore.setUrl(null)
@@ -204,7 +205,7 @@ internal class DefaultIdentityService @Inject constructor(
     override fun setNewIdentityServer(url: String, callback: MatrixCallback<String>): Cancelable {
         val urlCandidate = url.ensureProtocol()
 
-        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
             val current = getCurrentIdentityServerUrl()
             if (urlCandidate == current) {
                 // Nothing to do
@@ -246,7 +247,7 @@ internal class DefaultIdentityService @Inject constructor(
             return NoOpCancellable
         }
 
-        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
             lookUpInternal(true, threePids)
         }
     }
@@ -257,7 +258,7 @@ internal class DefaultIdentityService @Inject constructor(
             return NoOpCancellable
         }
 
-        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
             val lookupResult = lookUpInternal(true, threePids)
 
             threePids.associateWith { threePid ->

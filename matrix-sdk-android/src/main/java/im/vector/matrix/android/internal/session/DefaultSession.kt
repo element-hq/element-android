@@ -56,9 +56,9 @@ import im.vector.matrix.android.internal.session.room.timeline.TimelineEventDecr
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import im.vector.matrix.android.internal.session.sync.job.SyncWorker
+import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -103,8 +103,9 @@ internal class DefaultSession @Inject constructor(
         private val timelineEventDecryptor: TimelineEventDecryptor,
         private val shieldTrustUpdater: ShieldTrustUpdater,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val defaultIdentityService: DefaultIdentityService)
-    : Session,
+        private val defaultIdentityService: DefaultIdentityService,
+        private val taskExecutor: TaskExecutor
+) : Session,
         RoomService by roomService.get(),
         RoomDirectoryService by roomDirectoryService.get(),
         GroupService by groupService.get(),
@@ -183,7 +184,7 @@ internal class DefaultSession @Inject constructor(
         isOpen = false
         eventBus.unregister(this)
         shieldTrustUpdater.stop()
-        GlobalScope.launch(coroutineDispatchers.main) {
+        taskExecutor.executorScope.launch(coroutineDispatchers.main) {
             // This has to be done on main thread
             defaultIdentityService.stop()
         }
@@ -216,7 +217,7 @@ internal class DefaultSession @Inject constructor(
         if (globalError is GlobalError.InvalidToken
                 && globalError.softLogout) {
             // Mark the token has invalid
-            GlobalScope.launch(Dispatchers.IO) {
+            taskExecutor.executorScope.launch(Dispatchers.IO) {
                 sessionParamsStore.setTokenInvalid(sessionId)
             }
         }
