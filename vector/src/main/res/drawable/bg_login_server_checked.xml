@@ -5,8 +5,8 @@
 
     <stroke
         android:width="1.2dp"
-        android:color="@color/riotx_accent" />
+        android:color="@color/accent_sc" />
 
-    <solid android:color="@color/white" />
+    <solid android:color="@color/black" />
 
 </shape>

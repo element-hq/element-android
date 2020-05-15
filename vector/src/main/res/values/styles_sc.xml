@@ -34,4 +34,8 @@
         <item name="android:textColorLink">@color/riotx_links</item>
     </style>
 
+    <style name="VectorButtonStyleOutlined.SC">
+        <item name="strokeColor">@color/accent_sc</item>
+    </style>
+
 </resources>

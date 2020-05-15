@@ -61,8 +61,8 @@ object ThemeUtils {
     fun getApplicationTheme(context: Context): String {
         val currentNightMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         return when (currentNightMode) {
-            Configuration.UI_MODE_NIGHT_YES -> PreferenceManager.getDefaultSharedPreferences(context).getString(APPLICATION_DARK_THEME_KEY, THEME_DARK_VALUE)!!
-            else -> PreferenceManager.getDefaultSharedPreferences(context).getString(APPLICATION_THEME_KEY, THEME_LIGHT_VALUE)!!
+            Configuration.UI_MODE_NIGHT_YES -> PreferenceManager.getDefaultSharedPreferences(context).getString(APPLICATION_DARK_THEME_KEY, THEME_SC_DARK_COLORED_VALUE)!!
+            else -> PreferenceManager.getDefaultSharedPreferences(context).getString(APPLICATION_THEME_KEY, THEME_SC_DARK_COLORED_VALUE)!!
         }
     }
 

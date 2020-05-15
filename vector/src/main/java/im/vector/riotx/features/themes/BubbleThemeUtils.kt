@@ -16,7 +16,7 @@ object BubbleThemeUtils {
 
     fun getBubbleStyle(context: Context): String {
         if (mBubbleStyle == "") {
-            mBubbleStyle = PreferenceManager.getDefaultSharedPreferences(context).getString(BUBBLE_STYLE_KEY, BUBBLE_STYLE_START)!!
+            mBubbleStyle = PreferenceManager.getDefaultSharedPreferences(context).getString(BUBBLE_STYLE_KEY, BUBBLE_STYLE_BOTH)!!
         }
         return mBubbleStyle
     }
