@@ -17,6 +17,7 @@
 package im.vector.riotx.features.login
 
 import android.content.Context
+import android.net.Uri
 import androidx.fragment.app.FragmentActivity
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
@@ -29,19 +30,24 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.AuthenticationService
+import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.LoginFlowResult
 import im.vector.matrix.android.api.auth.login.LoginWizard
 import im.vector.matrix.android.api.auth.registration.FlowResult
 import im.vector.matrix.android.api.auth.registration.RegistrationResult
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
 import im.vector.matrix.android.api.auth.registration.Stage
+import im.vector.matrix.android.api.auth.wellknown.WellknownResult
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
+import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.configureAndStart
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.notifications.PushRuleTriggerListener
 import im.vector.riotx.features.session.SessionListener
 import im.vector.riotx.features.signout.soft.SoftLogoutActivity
@@ -51,14 +57,16 @@ import java.util.concurrent.CancellationException
 /**
  *
  */
-class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginViewState,
-                                                 private val applicationContext: Context,
-                                                 private val authenticationService: AuthenticationService,
-                                                 private val activeSessionHolder: ActiveSessionHolder,
-                                                 private val pushRuleTriggerListener: PushRuleTriggerListener,
-                                                 private val homeServerConnectionConfigFactory: HomeServerConnectionConfigFactory,
-                                                 private val sessionListener: SessionListener,
-                                                 private val reAuthHelper: ReAuthHelper)
+class LoginViewModel @AssistedInject constructor(
+        @Assisted initialState: LoginViewState,
+        private val applicationContext: Context,
+        private val authenticationService: AuthenticationService,
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val pushRuleTriggerListener: PushRuleTriggerListener,
+        private val homeServerConnectionConfigFactory: HomeServerConnectionConfigFactory,
+        private val sessionListener: SessionListener,
+        private val reAuthHelper: ReAuthHelper,
+        private val stringProvider: StringProvider)
     : VectorViewModel<LoginViewState, LoginAction, LoginViewEvents>(initialState) {
 
     @AssistedInject.Factory
@@ -108,7 +116,8 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             is LoginAction.RegisterAction             -> handleRegisterAction(action)
             is LoginAction.ResetAction                -> handleResetAction(action)
             is LoginAction.SetupSsoForSessionRecovery -> handleSetupSsoForSessionRecovery(action)
-        }
+            is LoginAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
+        }.exhaustive
     }
 
     private fun handleSetupSsoForSessionRecovery(action: LoginAction.SetupSsoForSessionRecovery) {
@@ -320,11 +329,12 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
             )
         }
 
-        if (action.signMode == SignMode.SignUp) {
-            startRegistrationFlow()
-        } else if (action.signMode == SignMode.SignIn) {
-            startAuthenticationFlow()
-        }
+        when (action.signMode) {
+            SignMode.SignUp             -> startRegistrationFlow()
+            SignMode.SignIn             -> startAuthenticationFlow()
+            SignMode.SignInWithMatrixId -> _viewEvents.post(LoginViewEvents.OnSignModeSelected)
+            SignMode.Unknown            -> Unit
+        }.exhaustive
     }
 
     private fun handleUpdateServerType(action: LoginAction.UpdateServerType) {
@@ -365,6 +375,8 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                                 resetPasswordEmail = action.email
                         )
                     }
+
+                    _viewEvents.post(LoginViewEvents.OnResetPasswordSendThreePidDone)
                 }
 
                 override fun onFailure(failure: Throwable) {
@@ -405,6 +417,8 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
                                 resetPasswordEmail = null
                         )
                     }
+
+                    _viewEvents.post(LoginViewEvents.OnResetPasswordMailConfirmationSuccess)
                 }
 
                 override fun onFailure(failure: Throwable) {
@@ -421,10 +435,78 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
 
     private fun handleLoginOrRegister(action: LoginAction.LoginOrRegister) = withState { state ->
         when (state.signMode) {
-            SignMode.SignIn -> handleLogin(action)
-            SignMode.SignUp -> handleRegisterWith(action)
-            else            -> error("Developer error, invalid sign mode")
+            SignMode.Unknown            -> error("Developer error, invalid sign mode")
+            SignMode.SignIn             -> handleLogin(action)
+            SignMode.SignUp             -> handleRegisterWith(action)
+            SignMode.SignInWithMatrixId -> handleDirectLogin(action)
+        }.exhaustive
+    }
+
+    private fun handleDirectLogin(action: LoginAction.LoginOrRegister) {
+        setState {
+            copy(
+                    asyncLoginAction = Loading()
+            )
         }
+
+        authenticationService.getWellKnownData(action.username, object : MatrixCallback<WellknownResult> {
+            override fun onSuccess(data: WellknownResult) {
+                when (data) {
+                    is WellknownResult.Prompt          ->
+                        onWellknownSuccess(action, data)
+                    is WellknownResult.InvalidMatrixId -> {
+                        setState {
+                            copy(
+                                    asyncLoginAction = Uninitialized
+                            )
+                        }
+                        _viewEvents.post(LoginViewEvents.Failure(Exception(stringProvider.getString(R.string.login_signin_matrix_id_error_invalid_matrix_id))))
+                    }
+                    else                               -> {
+                        setState {
+                            copy(
+                                    asyncLoginAction = Uninitialized
+                            )
+                        }
+                        _viewEvents.post(LoginViewEvents.Failure(Exception(stringProvider.getString(R.string.autodiscover_well_known_error))))
+                    }
+                }.exhaustive
+            }
+
+            override fun onFailure(failure: Throwable) {
+                setState {
+                    copy(
+                            asyncLoginAction = Fail(failure)
+                    )
+                }
+            }
+        })
+    }
+
+    private fun onWellknownSuccess(action: LoginAction.LoginOrRegister, wellKnownPrompt: WellknownResult.Prompt) {
+        val homeServerConnectionConfig = HomeServerConnectionConfig(
+                homeServerUri = Uri.parse(wellKnownPrompt.homeServerUrl),
+                identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
+        )
+
+        authenticationService.directAuthentication(
+                homeServerConnectionConfig,
+                action.username,
+                action.password,
+                action.initialDeviceName,
+                object : MatrixCallback<Session> {
+                    override fun onSuccess(data: Session) {
+                        onSessionCreated(data)
+                    }
+
+                    override fun onFailure(failure: Throwable) {
+                        setState {
+                            copy(
+                                    asyncLoginAction = Fail(failure)
+                            )
+                        }
+                    }
+                })
     }
 
     private fun handleLogin(action: LoginAction.LoginOrRegister) {
@@ -477,6 +559,8 @@ class LoginViewModel @AssistedInject constructor(@Assisted initialState: LoginVi
     private fun startAuthenticationFlow() {
         // Ensure Wizard is ready
         loginWizard
+
+        _viewEvents.post(LoginViewEvents.OnSignModeSelected)
     }
 
     private fun onFlowResponse(flowResult: FlowResult) {

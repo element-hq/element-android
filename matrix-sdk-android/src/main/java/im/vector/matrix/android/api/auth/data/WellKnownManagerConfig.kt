@@ -16,6 +16,6 @@
 package im.vector.matrix.android.api.auth.data
 
 data class WellKnownManagerConfig(
-        val apiUrl : String,
+        val apiUrl: String,
         val uiUrl: String
 )

@@ -51,7 +51,7 @@ class KeysBackupRestoreFromKeyViewModel @Inject constructor(
             try {
                 sharedViewModel.recoverUsingBackupPass(recoveryKey)
             } catch (failure: Throwable) {
-                recoveryCodeErrorText.value = stringProvider.getString(R.string.keys_backup_recovery_code_error_decrypt)
+                recoveryCodeErrorText.postValue(stringProvider.getString(R.string.keys_backup_recovery_code_error_decrypt))
             }
         }
     }

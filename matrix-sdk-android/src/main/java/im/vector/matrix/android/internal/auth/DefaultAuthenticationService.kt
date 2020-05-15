@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.auth.data.isLoginAndRegistrationSupportedByS
 import im.vector.matrix.android.api.auth.data.isSupportedBySdk
 import im.vector.matrix.android.api.auth.login.LoginWizard
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
+import im.vector.matrix.android.api.auth.wellknown.WellknownResult
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
@@ -38,11 +39,16 @@ import im.vector.matrix.android.internal.auth.data.RiotConfig
 import im.vector.matrix.android.internal.auth.db.PendingSessionData
 import im.vector.matrix.android.internal.auth.login.DefaultLoginWizard
 import im.vector.matrix.android.internal.auth.registration.DefaultRegistrationWizard
+import im.vector.matrix.android.internal.auth.wellknown.DirectLoginTask
+import im.vector.matrix.android.internal.auth.wellknown.GetWellknownTask
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.android.internal.util.exhaustive
 import im.vector.matrix.android.internal.util.toCancelable
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -59,7 +65,10 @@ internal class DefaultAuthenticationService @Inject constructor(
         private val sessionParamsStore: SessionParamsStore,
         private val sessionManager: SessionManager,
         private val sessionCreator: SessionCreator,
-        private val pendingSessionStore: PendingSessionStore
+        private val pendingSessionStore: PendingSessionStore,
+        private val getWellknownTask: GetWellknownTask,
+        private val directLoginTask: DirectLoginTask,
+        private val taskExecutor: TaskExecutor
 ) : AuthenticationService {
 
     private var pendingSessionData: PendingSessionData? = pendingSessionStore.getPendingSessionData()
@@ -148,27 +157,71 @@ internal class DefaultAuthenticationService @Inject constructor(
         val authAPI = buildAuthAPI(homeServerConnectionConfig)
 
         // Ok, try to get the config.json file of a RiotWeb client
-        val riotConfig = executeRequest<RiotConfig>(null) {
-            apiCall = authAPI.getRiotConfig()
-        }
-
-        if (riotConfig.defaultHomeServerUrl?.isNotBlank() == true) {
-            // Ok, good sign, we got a default hs url
-            val newHomeServerConnectionConfig = homeServerConnectionConfig.copy(
-                    homeServerUri = Uri.parse(riotConfig.defaultHomeServerUrl)
-            )
-
-            val newAuthAPI = buildAuthAPI(newHomeServerConnectionConfig)
-
-            val versions = executeRequest<Versions>(null) {
-                apiCall = newAuthAPI.versions()
+        return runCatching {
+            executeRequest<RiotConfig>(null) {
+                apiCall = authAPI.getRiotConfig()
             }
-
-            return getLoginFlowResult(newAuthAPI, versions, riotConfig.defaultHomeServerUrl)
-        } else {
-            // Config exists, but there is no default homeserver url (ex: https://riot.im/app)
-            throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
         }
+                .map { riotConfig ->
+                    if (riotConfig.defaultHomeServerUrl?.isNotBlank() == true) {
+                        // Ok, good sign, we got a default hs url
+                        val newHomeServerConnectionConfig = homeServerConnectionConfig.copy(
+                                homeServerUri = Uri.parse(riotConfig.defaultHomeServerUrl)
+                        )
+
+                        val newAuthAPI = buildAuthAPI(newHomeServerConnectionConfig)
+
+                        val versions = executeRequest<Versions>(null) {
+                            apiCall = newAuthAPI.versions()
+                        }
+
+                        getLoginFlowResult(newAuthAPI, versions, riotConfig.defaultHomeServerUrl)
+                    } else {
+                        // Config exists, but there is no default homeserver url (ex: https://riot.im/app)
+                        throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
+                    }
+                }
+                .fold(
+                        {
+                            it
+                        },
+                        {
+                            if (it is Failure.OtherServerError
+                                    && it.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
+                                // Try with wellknown
+                                getWellknownLoginFlowInternal(homeServerConnectionConfig)
+                            } else {
+                                throw it
+                            }
+                        }
+                )
+    }
+
+    private suspend fun getWellknownLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
+        val domain = homeServerConnectionConfig.homeServerUri.host
+                ?: throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
+
+        // Create a fake userId, for the getWellknown task
+        val fakeUserId = "@alice:$domain"
+        val wellknownResult = getWellknownTask.execute(GetWellknownTask.Params(fakeUserId))
+
+        return when (wellknownResult) {
+            is WellknownResult.Prompt -> {
+                val newHomeServerConnectionConfig = homeServerConnectionConfig.copy(
+                        homeServerUri = Uri.parse(wellknownResult.homeServerUrl),
+                        identityServerUri = wellknownResult.identityServerUrl?.let { Uri.parse(it) }
+                )
+
+                val newAuthAPI = buildAuthAPI(newHomeServerConnectionConfig)
+
+                val versions = executeRequest<Versions>(null) {
+                    apiCall = newAuthAPI.versions()
+                }
+
+                getLoginFlowResult(newAuthAPI, versions, wellknownResult.homeServerUrl)
+            }
+            else                      -> throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
+        }.exhaustive
     }
 
     private suspend fun getLoginFlowResult(authAPI: AuthAPI, versions: Versions, homeServerUrl: String): LoginFlowResult {
@@ -258,6 +311,26 @@ internal class DefaultAuthenticationService @Inject constructor(
         return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
             createSessionFromSso(credentials, homeServerConnectionConfig)
         }
+    }
+
+    override fun getWellKnownData(matrixId: String, callback: MatrixCallback<WellknownResult>): Cancelable {
+        return getWellknownTask
+                .configureWith(GetWellknownTask.Params(matrixId)) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun directAuthentication(homeServerConnectionConfig: HomeServerConnectionConfig,
+                                      matrixId: String,
+                                      password: String,
+                                      initialDeviceName: String,
+                                      callback: MatrixCallback<Session>): Cancelable {
+        return directLoginTask
+                .configureWith(DirectLoginTask.Params(homeServerConnectionConfig, matrixId, password, initialDeviceName)) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
     }
 
     private suspend fun createSessionFromSso(credentials: Credentials,

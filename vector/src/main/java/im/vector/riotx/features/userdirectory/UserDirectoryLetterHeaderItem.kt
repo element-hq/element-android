@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.createdirect
+package im.vector.riotx.features.userdirectory
 
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
@@ -23,8 +23,8 @@ import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 
-@EpoxyModelClass(layout = R.layout.item_create_direct_room_letter_header)
-abstract class CreateDirectRoomLetterHeaderItem : VectorEpoxyModel<CreateDirectRoomLetterHeaderItem.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_user_directory_letter_header)
+abstract class UserDirectoryLetterHeaderItem : VectorEpoxyModel<UserDirectoryLetterHeaderItem.Holder>() {
 
     @EpoxyAttribute var letter: String = ""
 
@@ -33,6 +33,6 @@ abstract class CreateDirectRoomLetterHeaderItem : VectorEpoxyModel<CreateDirectR
     }
 
     class Holder : VectorEpoxyHolder() {
-        val letterView by bind<TextView>(R.id.createDirectRoomLetterView)
+        val letterView by bind<TextView>(R.id.userDirectoryLetterView)
     }
 }

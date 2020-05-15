@@ -39,6 +39,7 @@ import im.vector.riotx.features.home.room.detail.timeline.reactions.ViewReaction
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.home.room.list.RoomListModule
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
+import im.vector.riotx.features.invite.InviteUsersToRoomActivity
 import im.vector.riotx.features.invite.VectorInviteView
 import im.vector.riotx.features.link.LinkHandlerActivity
 import im.vector.riotx.features.login.LoginActivity
@@ -116,6 +117,7 @@ interface ScreenComponent {
     fun inject(activity: DebugMenuActivity)
     fun inject(activity: SharedSecureStorageActivity)
     fun inject(activity: BigImageViewerActivity)
+    fun inject(activity: InviteUsersToRoomActivity)
 
     /* ==========================================================================================
      * BottomSheets

@@ -165,14 +165,6 @@ internal interface IMXCryptoStore {
     fun saveOlmAccount()
 
     /**
-     * Store a device for a user.
-     *
-     * @param userId the user's id.
-     * @param device the device to store.
-     */
-    fun storeUserDevice(userId: String?, deviceInfo: CryptoDeviceInfo?)
-
-    /**
      * Retrieve a device for a user.
      *
      * @param deviceId the device id.
@@ -415,7 +407,7 @@ internal interface IMXCryptoStore {
     fun getKeyBackupRecoveryKeyInfo() : SavedKeyBackupKeyInfo?
 
     fun setUserKeysAsTrusted(userId: String, trusted: Boolean = true)
-    fun setDeviceTrust(userId: String, deviceId: String, crossSignedVerified: Boolean, locallyVerified: Boolean)
+    fun setDeviceTrust(userId: String, deviceId: String, crossSignedVerified: Boolean, locallyVerified: Boolean?)
 
     fun clearOtherUserTrust()
 
