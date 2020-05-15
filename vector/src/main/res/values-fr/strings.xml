@@ -1560,7 +1560,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="send_suggestion_sent">Merci, la suggestion a bien été envoyée</string>
     <string name="send_suggestion_failed">Échec d’envoi de la suggestion (%s)</string>
 
-    <string name="settings_labs_show_hidden_events_in_timeline">Afficher les évènements cachés dans l’historique</string>
+    <string name="settings_labs_show_hidden_events_in_timeline">Afficher les évènements cachés dans les discussions</string>
 
     <string name="store_riotx_title">RiotX − Client Matrix nouvelle génération</string>
     <string name="store_riotx_short_description">Un client pour Matrix plus rapide et plus léger utilisant les derniers frameworks Android</string>
@@ -1600,7 +1600,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
 
     <string name="room_directory_search_hint">Nom ou identifiant (#exemple:matrix.org)</string>
 
-    <string name="labs_swipe_to_reply_in_timeline">Activer le balayement pour répondre dans l’historique</string>
+    <string name="labs_swipe_to_reply_in_timeline">Activer le balayement pour répondre dans les discussions</string>
 
     <string name="link_copied_to_clipboard">Lien copié dans le presse-papiers</string>
 
@@ -2102,7 +2102,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="command_description_rainbow">Envoie le message fourni coloré comme un arc-en-ciel</string>
     <string name="command_description_rainbow_emote">Envoie la réaction fournie colorée comme un arc-en-ciel</string>
 
-    <string name="settings_category_timeline">Historique</string>
+    <string name="settings_category_timeline">Discussions</string>
 
     <string name="settings_category_composer">Éditeur de messages</string>
 
