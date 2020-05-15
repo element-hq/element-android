@@ -13,10 +13,10 @@
     <color name="text_color_tertiary_sc">#80ffffff</color>
     <color name="text_color_disabled_sc">#80ffffff</color>
 
-    <color name="background_sc">#ff000000</color>
+    <color name="background_sc">#ff303030</color>
     <color name="background_dark_sc">#ff212121</color>
     <color name="background_black_sc">#ff000000</color>
-    <color name="background_floating_sc">#42ffffff</color>
+    <color name="background_floating_sc">#ff424242</color>
 
     <color name="list_divider_color_sc">#80ffffff</color>
 </resources>

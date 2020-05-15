@@ -97,6 +97,9 @@
         <item>@string/black_them</item>
         <item>@string/status_theme</item>
         <item>@string/sc_theme</item>
+        <item>@string/sc_dark_theme</item>
+        <item>@string/sc_colored_theme</item>
+        <item>@string/sc_dark_colored_theme</item>
     </string-array>
 
     <string-array name="theme_values">
@@ -105,6 +108,9 @@
         <item>black</item>
         <item>status</item>
         <item>sc</item>
+        <item>sc_dark</item>
+        <item>sc_colored</item>
+        <item>sc_dark_colored</item>
     </string-array>
 
     <!-- Info area -->

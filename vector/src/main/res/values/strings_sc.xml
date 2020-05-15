@@ -3,6 +3,11 @@
 
     <string name="redacted_stub_text">(Deleted message)</string>
 
+    <string name="sc_theme">SC Black</string>
+    <string name="sc_dark_theme">SC Dark</string>
+    <string name="sc_colored_theme">SC Black, colored bubbles</string>
+    <string name="sc_dark_colored_theme">SC Dark, colored bubbles</string>
+
     <string name="bubble_style">Message bubbles</string>
     <string name="bubble_style_none">None</string>
     <string name="bubble_style_start">Same side</string>

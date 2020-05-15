@@ -26,16 +26,25 @@ import im.vector.riotx.R
 sealed class ActivityOtherThemes(@StyleRes val dark: Int,
                                  @StyleRes val black: Int,
                                  @StyleRes val status: Int,
-                                 @StyleRes val sc: Int) {
+                                 @StyleRes val sc: Int,
+                                 @StyleRes val sc_dark: Int,
+                                 @StyleRes val sc_colored: Int,
+                                 @StyleRes val sc_dark_colored: Int) {
 
     object Default : ActivityOtherThemes(
             R.style.AppTheme_Dark,
             R.style.AppTheme_Black,
             R.style.AppTheme_Status,
-            R.style.AppTheme_SC
+            R.style.AppTheme_SC,
+            R.style.AppTheme_SC_Dark,
+            R.style.AppTheme_SC_Colored,
+            R.style.AppTheme_SC_Dark_Colored
     )
 
     object AttachmentsPreview : ActivityOtherThemes(
+            R.style.AppTheme_AttachmentsPreview,
+            R.style.AppTheme_AttachmentsPreview,
+            R.style.AppTheme_AttachmentsPreview,
             R.style.AppTheme_AttachmentsPreview,
             R.style.AppTheme_AttachmentsPreview,
             R.style.AppTheme_AttachmentsPreview,

@@ -5,6 +5,24 @@
         <item name="android:windowLightStatusBar">false</item>
     </style>
 
+    <style name="AppTheme.SC.Dark.v23" parent="AppTheme.SC.Dark.v21">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Colored.v23" parent="AppTheme.SC.Colored.v21">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="AppTheme.SC.Dark.Colored.v23" parent="AppTheme.SC.Dark.Colored.v21">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
     <style name="AppTheme.SC" parent="AppTheme.SC.v23"/>
+
+    <style name="AppTheme.SC.Dark" parent="AppTheme.SC.Dark.v23"/>
+
+    <style name="AppTheme.SC.Colored" parent="AppTheme.SC.Colored.v23"/>
+
+    <style name="AppTheme.SC.Dark.Colored" parent="AppTheme.SC.Dark.Colored.v23"/>
 
 </resources>

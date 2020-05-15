@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="VectorButtonStyle.SC">
+        <item name="backgroundTint">@color/button_background_tint_selector_sc</item>
+    </style>
+
+    <style name="VectorAlertDialogStyleDark.SC">
+        <item name="buttonBarButtonStyle">@style/VectorAlertDialogButtonStyle.SC</item>
+    </style>
+
+    <style name="VectorAlertDialogButtonStyle.SC">
+        <item name="android:textColor">@color/accent_sc</item>
+    </style>
+
+    <style name="Vector.TabView.SC" parent="Vector.TabView.Dark">
+        <item name="android:background">@drawable/vector_tabbar_background_sc</item>
+        <item name="background">@drawable/vector_tabbar_background_sc</item>
+    </style>
+
+    <!-- custom action bar -->
+    <style name="Vector.Styled.ActionBar.SC">
+        <item name="android:background">@color/background_dark_sc</item>
+        <item name="background">@color/background_dark_sc</item>
+    </style>
+
+    <!-- BottomSheet theming -->
+    <style name="Vector.BottomSheet.SC" parent="Vector.BottomSheet.Dark">
+        <item name="android:textColorPrimary">@color/text_color_primary_sc</item>
+        <item name="android:textColorSecondary">@color/text_color_secondary_sc</item>
+        <!-- Default color for text View -->
+        <item name="android:textColorTertiary">@color/text_color_tertiary_sc</item>
+        <item name="android:textColorLink">@color/riotx_links</item>
+    </style>
+
+</resources>

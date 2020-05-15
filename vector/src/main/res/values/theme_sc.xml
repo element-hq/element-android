@@ -4,8 +4,8 @@
     <!-- SC THEME COLORS -->
     <style name="AppTheme.Base.SC" parent="AppTheme.Base.Black">
         <!-- Riotx attribute for palette -->
-        <item name="riotx_background">@color/background_sc</item>
-        <item name="riotx_base">@color/background_sc</item>
+        <item name="riotx_background">@color/background_black_sc</item>
+        <item name="riotx_base">?riotx_background</item>
         <item name="riotx_base_text_icon_primary">@color/text_color_primary_sc</item>
         <item name="riotx_base_text_icon_secondary">@color/text_color_secondary_sc</item>
         <item name="riotx_search_background_mobile">@color/background_dark_sc</item>
@@ -28,7 +28,7 @@
         <item name="riotx_fab_label_bg">@color/background_floating_sc</item>
         <item name="riotx_fab_label_color">#ff808080</item><!-- TODO: this is used on light background for motion_fab_menu_merge / style:VectorLabel -->
         <item name="riotx_touch_guard_bg">@color/background_black_sc</item>
-        <item name="riotx_attachment_selector_background">@color/background_sc</item>
+        <item name="riotx_attachment_selector_background">?riotx_background</item>
         <item name="riotx_attachment_selector_border">@color/background_dark_sc</item>
 
         <item name="riotx_keys_backup_banner_accent_color">@color/background_floating_sc</item>
@@ -163,10 +163,7 @@
         <item name="vctr_widget_banner_background">@color/background_floating_sc</item>
 
         <!-- activities background -->
-        <item name="android:windowBackground">@color/background_sc</item>
-
-        <!-- TODO from here, also add chat colors -->
-
+        <item name="android:windowBackground">?riotx_background</item>
 
         <!-- custom action bar -->
         <item name="android:actionBarStyle">@style/Vector.Styled.ActionBar.SC</item>
@@ -205,40 +202,32 @@
         <item name="snackbarTextViewStyle">@style/VectorSnackBarText</item>
 
         <item name="sc_message_bg_incoming">@color/background_floating_sc</item>
+        <item name="sc_message_bg_outgoing">@color/background_sc</item>
+    </style>
+
+    <style name="AppTheme.Base.SC.Dark">
+        <item name="riotx_background">@color/background_dark_sc</item>
+        <item name="riotx_header_panel_background">@color/background_sc</item>
+    </style>
+
+
+    <style name="AppTheme.Base.SC.Colored">
+        <item name="sc_message_bg_incoming">@color/background_floating_sc</item>
         <item name="sc_message_bg_outgoing">@color/accent_sc_alpha25</item>
     </style>
 
+    <style name="AppTheme.Base.SC.Dark.Colored">
+        <item name="sc_message_bg_incoming">@color/background_floating_sc</item>
+        <item name="sc_message_bg_outgoing">@color/accent_sc_alpha25</item>
+    </style>
+
+
     <style name="AppTheme.SC" parent="AppTheme.Base.SC" />
 
-    <style name="VectorButtonStyle.SC">
-        <item name="backgroundTint">@color/button_background_tint_selector_sc</item>
-    </style>
+    <style name="AppTheme.SC.Dark" parent="AppTheme.Base.SC.Dark" />
 
-    <style name="VectorAlertDialogStyleDark.SC">
-        <item name="buttonBarButtonStyle">@style/VectorAlertDialogButtonStyle.SC</item>
-    </style>
+    <style name="AppTheme.SC.Colored" parent="AppTheme.Base.SC.Colored" />
 
-    <style name="VectorAlertDialogButtonStyle.SC">
-        <item name="android:textColor">@color/accent_sc</item>
-    </style>
+    <style name="AppTheme.SC.Dark.Colored" parent="AppTheme.Base.SC.Dark.Colored" />
 
-    <style name="Vector.TabView.SC" parent="Vector.TabView.Dark">
-        <item name="android:background">@drawable/vector_tabbar_background_sc</item>
-        <item name="background">@drawable/vector_tabbar_background_sc</item>
-    </style>
-
-    <!-- custom action bar -->
-    <style name="Vector.Styled.ActionBar.SC">
-        <item name="android:background">@color/background_dark_sc</item>
-        <item name="background">@color/background_dark_sc</item>
-    </style>
-
-    <!-- BottomSheet theming -->
-    <style name="Vector.BottomSheet.SC" parent="Vector.BottomSheet.Dark">
-        <item name="android:textColorPrimary">@color/text_color_primary_sc</item>
-        <item name="android:textColorSecondary">@color/text_color_secondary_sc</item>
-        <!-- Default color for text View -->
-        <item name="android:textColorTertiary">@color/text_color_tertiary_sc</item>
-        <item name="android:textColorLink">@color/riotx_links</item>
-    </style>
 </resources>

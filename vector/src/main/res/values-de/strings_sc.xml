@@ -3,6 +3,11 @@
 
     <string name="redacted_stub_text">(Gelöschte Nachricht)</string>
 
+    <string name="sc_theme">SC Schwarz</string>
+    <string name="sc_dark_theme">SC Dunkel</string>
+    <string name="sc_colored_theme">SC Schwarz, bunte Blasen</string>
+    <string name="sc_dark_colored_theme">SC Dunkel, bunte Blasen</string>
+
     <string name="bubble_style">Nachrichtblasen</string>
     <string name="bubble_style_none">Keine</string>
     <string name="bubble_style_start">Selbe Seite</string>

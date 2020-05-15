@@ -42,6 +42,9 @@ object ThemeUtils {
     private const val THEME_BLACK_VALUE = "black"
     private const val THEME_STATUS_VALUE = "status"
     private const val THEME_SC_VALUE = "sc"
+    private const val THEME_SC_DARK_VALUE = "sc_dark"
+    private const val THEME_SC_COLORED_VALUE = "sc_colored"
+    private const val THEME_SC_DARK_COLORED_VALUE = "sc_dark_colored"
 
     private val mColorByAttr = HashMap<Int, Int>()
 
@@ -66,7 +69,10 @@ object ThemeUtils {
      */
     fun isScTheme(context: Context?): Boolean {
         if (context != null) {
-            mIsScTheme = THEME_SC_VALUE.equals(getApplicationTheme(context));
+            mIsScTheme = when (getApplicationTheme(context)) {
+                THEME_SC_VALUE, THEME_SC_DARK_VALUE, THEME_SC_COLORED_VALUE, THEME_SC_DARK_COLORED_VALUE -> true
+                else -> false
+            }
         }
         return mIsScTheme;
     }
@@ -82,6 +88,9 @@ object ThemeUtils {
             THEME_BLACK_VALUE  -> context.setTheme(R.style.AppTheme_Black)
             THEME_STATUS_VALUE -> context.setTheme(R.style.AppTheme_Status)
             THEME_SC_VALUE     -> context.setTheme(R.style.AppTheme_SC)
+            THEME_SC_DARK_VALUE     -> context.setTheme(R.style.AppTheme_SC_Dark)
+            THEME_SC_COLORED_VALUE     -> context.setTheme(R.style.AppTheme_SC_Colored)
+            THEME_SC_DARK_COLORED_VALUE     -> context.setTheme(R.style.AppTheme_SC_Dark_Colored)
             else               -> context.setTheme(R.style.AppTheme_Light)
         }
 
@@ -100,6 +109,9 @@ object ThemeUtils {
             THEME_BLACK_VALUE  -> activity.setTheme(otherThemes.black)
             THEME_STATUS_VALUE -> activity.setTheme(otherThemes.status)
             THEME_SC_VALUE     -> activity.setTheme(otherThemes.sc)
+            THEME_SC_DARK_VALUE     -> activity.setTheme(otherThemes.sc_dark)
+            THEME_SC_COLORED_VALUE     -> activity.setTheme(otherThemes.sc_colored)
+            THEME_SC_DARK_COLORED_VALUE     -> activity.setTheme(otherThemes.sc_dark_colored)
         }
 
         mColorByAttr.clear()
@@ -207,7 +219,7 @@ object ThemeUtils {
                     }
                 }
             }
-            THEME_SC_VALUE -> {
+            THEME_SC_VALUE, THEME_SC_DARK_VALUE, THEME_SC_COLORED_VALUE, THEME_SC_DARK_COLORED_VALUE -> {
                 return when (resourceId) {
                     R.drawable.bg_search_edit_text_light     -> R.drawable.bg_search_edit_text_sc
                     R.drawable.bg_unread_notification_light  -> R.drawable.bg_unread_notification_sc

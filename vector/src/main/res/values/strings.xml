@@ -13,7 +13,6 @@
     <string name="dark_theme">Dark Theme</string>
     <string name="black_them">Black Theme</string>
     <string name="status_theme">Status.im Theme</string>
-    <string name="sc_theme">SC Theme</string>
 
     <!-- permanent notification subtitle -->
     <string name="notification_sync_init">Initializing service</string>
