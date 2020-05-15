@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Better connectivity lost indicator when airplane mode is on
 
 Bugfix 🐛:
  -
