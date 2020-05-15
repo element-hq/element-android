@@ -5,8 +5,8 @@
     <string name="notice_room_invite_no_invitee">%s 的邀请</string>
     <string name="notice_room_invite">%1$s 邀请了 %2$s</string>
     <string name="notice_room_invite_you">%1$s 邀请了您</string>
-    <string name="notice_room_join">%1$s 加入了</string>
-    <string name="notice_room_leave">%1$s 离开了</string>
+    <string name="notice_room_join">%1$s 加入了聊天室</string>
+    <string name="notice_room_leave">%1$s 离开了聊天室</string>
     <string name="notice_room_reject">%1$s 拒绝了邀请</string>
     <string name="notice_room_kick">%1$s 移除了 %2$s</string>
     <string name="notice_room_unban">%1$s 解封了 %2$s</string>
@@ -173,8 +173,8 @@
     <string name="notice_room_invite_no_invitee_with_reason">%1$s 的邀请。理由：%2$s</string>
     <string name="notice_room_invite_with_reason">%1$s 邀请了 %2$s。理由：%3$s</string>
     <string name="notice_room_invite_you_with_reason">%1$s 邀请了您。理由：%2$s</string>
-    <string name="notice_room_join_with_reason">%1$s 已加入。理由：%2$s</string>
-    <string name="notice_room_leave_with_reason">%1$s 已离开。理由：%2$s</string>
+    <string name="notice_room_join_with_reason">%1$s 加入了聊天室。理由：%2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s 离开了聊天室。理由：%2$s</string>
     <string name="notice_room_reject_with_reason">%1$s 已拒绝邀请。理由：%2$s</string>
     <string name="notice_room_kick_with_reason">%1$s 踢走了 %2$s。理由：%3$s</string>
     <string name="notice_room_unban_with_reason">%1$s 取消封锁了 %2$s。理由：%3$s</string>
