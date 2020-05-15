@@ -279,4 +279,7 @@
     <string name="login_error_bad_json">Felformaterad JSON</string>
     <string name="login_error_not_json">Innehöll inte giltig JSON</string>
     <string name="login_error_limit_exceeded">För många förfrågningar har skickats</string>
-</resources>
+<string name="login_error_user_in_use">Det här användarnamnet är upptaget</string>
+    <string name="login_error_login_email_not_yet">E-postlänken har inte klickats på än</string>
+
+    </resources>
