@@ -16,7 +16,7 @@
             android:layout_gravity="center"
             android:layout_margin="4dp"
             android:src="@drawable/ic_poll"
-            android:tint="@color/riotx_accent" />
+            android:tint="?colorAccent" />
 
         <TextView
             android:id="@+id/pollLabelText"

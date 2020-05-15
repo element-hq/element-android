@@ -7,10 +7,11 @@
 
     <style name="VectorAlertDialogStyleDark.SC">
         <item name="buttonBarButtonStyle">@style/VectorAlertDialogButtonStyle.SC</item>
+        <item name="colorSecondary">@color/accent_sc</item>
     </style>
 
     <style name="VectorAlertDialogButtonStyle.SC">
-        <item name="android:textColor">@color/accent_sc</item>
+        <item name="android:textColor">?colorAccent</item>
     </style>
 
     <style name="Vector.TabView.SC" parent="Vector.TabView.Dark">

@@ -21,6 +21,7 @@ import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
+import im.vector.riotx.R
 import im.vector.riotx.features.themes.ThemeUtils
 import javax.inject.Inject
 
@@ -28,6 +29,8 @@ class ColorProvider @Inject constructor(private val context: Context) {
 
     @ColorInt
     fun getColor(@ColorRes colorRes: Int): Int {
+        if (colorRes == R.color.riotx_accent)
+            return getColorFromAttribute(R.attr.colorAccent)
         return ContextCompat.getColor(context, colorRes)
     }
 

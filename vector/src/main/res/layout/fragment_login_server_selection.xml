@@ -126,7 +126,7 @@
                     android:padding="16dp"
                     android:text="@string/login_server_modular_learn_more"
                     android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
-                    android:textColor="@color/riotx_accent"
+                    android:textColor="?colorAccent"
                     app:layout_constraintBottom_toBottomOf="@+id/loginServerChoiceModularText"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/loginServerChoiceModularText" />

@@ -52,7 +52,7 @@
                 android:layout_marginTop="4dp"
                 android:text="@string/login_server_modular_learn_more"
                 android:textAppearance="@style/TextAppearance.Vector.Login.Text"
-                android:textColor="@color/riotx_accent" />
+                android:textColor="?colorAccent" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/loginServerUrlFormHomeServerUrlTil"

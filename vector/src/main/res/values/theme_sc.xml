@@ -53,6 +53,7 @@
 
         <!-- Keep color accent for legacy widget-->
         <item name="colorAccent">@color/accent_sc</item>
+        <item name="android:colorAccent">@color/accent_sc</item>
 
         <item name="materialButtonStyle">@style/VectorButtonStyle.SC</item>
         <item name="toolbarStyle">@style/VectorToolbarStyle</item>
@@ -229,5 +230,8 @@
     <style name="AppTheme.SC.Colored" parent="AppTheme.Base.SC.Colored" />
 
     <style name="AppTheme.SC.Dark.Colored" parent="AppTheme.Base.SC.Dark.Colored" />
+
+
+    <style name="AppTheme.AttachmentsPreview.SC" parent="AppTheme.Base.SC"/>
 
 </resources>

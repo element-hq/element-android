@@ -37,6 +37,7 @@ import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.ui.views.KeysBackupBanner
 import im.vector.riotx.features.home.room.list.RoomListFragment
 import im.vector.riotx.features.home.room.list.RoomListParams
@@ -118,7 +119,7 @@ class HomeDetailFragment @Inject constructor(
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
                     matrixItem = user
-                    colorInt = ContextCompat.getColor(requireActivity(), R.color.riotx_accent)
+                    colorInt = ColorProvider(requireActivity()).getColor(R.color.riotx_accent)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity)
                                 ?.navigator
@@ -146,7 +147,7 @@ class HomeDetailFragment @Inject constructor(
                         iconId = R.drawable.ic_shield_warning
                 ).apply {
                     matrixItem = user
-                    colorInt = ContextCompat.getColor(requireActivity(), R.color.riotx_accent)
+                    colorInt = ColorProvider(requireActivity()).getColor(R.color.riotx_accent)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
                             // mark as ignored to avoid showing it again

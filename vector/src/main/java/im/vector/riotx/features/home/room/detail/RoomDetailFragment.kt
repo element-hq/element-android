@@ -743,11 +743,7 @@ class RoomDetailFragment @Inject constructor(
                 it.setTextColor(ThemeUtils.getColor(requireContext(), R.attr.vctr_toolbar_secondary_text_color))
                 it.setTypeface(null, Typeface.NORMAL)
             } else {
-                if (ThemeUtils.isScTheme(context)) {
-                    it.setTextColor(ContextCompat.getColor(requireContext(), R.color.accent_sc))
-                } else {
-                    it.setTextColor(ContextCompat.getColor(requireContext(), R.color.riotx_accent))
-                }
+                it.setTextColor(ColorProvider(requireContext()).getColor(R.color.riotx_accent))
                 it.setTypeface(null, Typeface.BOLD)
             }
         }

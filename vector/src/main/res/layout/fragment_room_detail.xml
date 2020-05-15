@@ -158,7 +158,7 @@
         android:contentDescription="@string/a11y_jump_to_bottom"
         android:src="@drawable/chevron_down"
         app:backgroundTint="#FFFFFF"
-        app:badgeBackgroundColor="@color/riotx_accent"
+        app:badgeBackgroundColor="?colorAccent"
         app:badgeTextColor="@color/white"
         app:badgeTextPadding="2dp"
         app:badgeTextSize="10sp"

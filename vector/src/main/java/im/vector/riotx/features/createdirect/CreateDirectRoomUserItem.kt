@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
+import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.features.home.AvatarRenderer
 
 @EpoxyModelClass(layout = R.layout.item_create_direct_room_user)
@@ -56,7 +57,7 @@ abstract class CreateDirectRoomUserItem : VectorEpoxyModel<CreateDirectRoomUserI
     private fun renderSelection(holder: Holder, isSelected: Boolean) {
         if (isSelected) {
             holder.avatarCheckedImageView.visibility = View.VISIBLE
-            val backgroundColor = ContextCompat.getColor(holder.view.context, R.color.riotx_accent)
+            val backgroundColor = ColorProvider(holder.view.context).getColor(R.color.riotx_accent)
             val backgroundDrawable = TextDrawable.builder().buildRound("", backgroundColor)
             holder.avatarImageView.setImageDrawable(backgroundDrawable)
         } else {

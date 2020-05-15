@@ -45,9 +45,9 @@ sealed class ActivityOtherThemes(@StyleRes val dark: Int,
             R.style.AppTheme_AttachmentsPreview,
             R.style.AppTheme_AttachmentsPreview,
             R.style.AppTheme_AttachmentsPreview,
-            R.style.AppTheme_AttachmentsPreview,
-            R.style.AppTheme_AttachmentsPreview,
-            R.style.AppTheme_AttachmentsPreview,
-            R.style.AppTheme_AttachmentsPreview
+            R.style.AppTheme_AttachmentsPreview_SC,
+            R.style.AppTheme_AttachmentsPreview_SC,
+            R.style.AppTheme_AttachmentsPreview_SC,
+            R.style.AppTheme_AttachmentsPreview_SC
     )
 }
