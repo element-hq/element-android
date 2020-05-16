@@ -17,6 +17,7 @@ androidExtensions {
 ext.versionMajor = 0
 ext.versionMinor = 19
 ext.versionPatch = 0
+ext.scVersion = 1
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -33,7 +34,7 @@ static def generateVersionCodeFromTimestamp() {
 def generateVersionCodeFromVersionName() {
     // plus 4_000_000 for compatibility reason with the previous way the Version Code was computed
     // Note that the result will be multiplied by 10 when adding the digit for the arch
-    return (versionMajor * 1_00_00 + versionMinor * 1_00 + versionPatch) + 4_000_000
+    return (versionMajor * 1_00_00 + versionMinor * 1_00 + versionPatch + scVersion) + 4_000_000
 }
 
 def getVersionCode() {
@@ -203,7 +204,7 @@ android {
         gplay {
             dimension "store"
 
-            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}"
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}.sc.${scVersion}${getGplayVersionSuffix()}"
 
             resValue "bool", "isGplay", "true"
             buildConfigField "boolean", "ALLOW_FCM_USE", "true"
@@ -214,7 +215,7 @@ android {
         fdroid {
             dimension "store"
 
-            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getFdroidVersionSuffix()}"
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}.sc.${scVersion}${getFdroidVersionSuffix()}"
 
             resValue "bool", "isGplay", "false"
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"
