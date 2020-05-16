@@ -282,4 +282,8 @@
 <string name="login_error_user_in_use">Det här användarnamnet är upptaget</string>
     <string name="login_error_login_email_not_yet">E-postlänken har inte klickats på än</string>
 
+    <string name="e2e_need_log_in_again">Du behöver logga in igen för att generera nycklar för ände-till-ände-kryptering för den här sessionen och skicka den publika nyckeln till hemservern.
+\nDet här behövs bara en gång.
+\nUrsäkta för besväret.</string>
+
     </resources>
