@@ -19,9 +19,10 @@ package im.vector.riotx.features.home.room.detail.timeline.item
 import android.content.res.ColorStateList
 import android.text.method.MovementMethod
 import android.view.Gravity
+import android.view.View
 import android.widget.FrameLayout
+import android.widget.RelativeLayout
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.content.ContextCompat
 import androidx.core.text.PrecomputedTextCompat
 import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
@@ -71,14 +72,15 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
                 null)
         holder.messageView.setTextFuture(textFuture)
 
-        var bubbleStyle = if (incomingMessage || outgoingMessage) BubbleThemeUtils.getBubbleStyle(holder.messageView.context) else BUBBLE_STYLE_NONE
+        val bubbleStyle = if (incomingMessage || outgoingMessage) BubbleThemeUtils.getBubbleStyle(holder.messageView.context) else BUBBLE_STYLE_NONE
+        val reverseBubble = outgoingMessage && bubbleStyle == BUBBLE_STYLE_BOTH
         when (bubbleStyle) {
             BUBBLE_STYLE_NONE -> {
                 holder.messageView.background = null
                 holder.messageView.setPadding(0, 0, 0, 0)
             }
             BUBBLE_STYLE_START, BUBBLE_STYLE_BOTH -> {
-                holder.messageView.setBackgroundResource(R.drawable.msg_bubble_incoming)
+                holder.messageView.setBackgroundResource(if (reverseBubble) R.drawable.msg_bubble_outgoing else R.drawable.msg_bubble_incoming)
                 var tintColor = ColorStateList(
                         arrayOf(intArrayOf(0)),
                         intArrayOf(ThemeUtils.getColor(holder.messageView.context,
@@ -96,8 +98,10 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             }
         }
         if (holder.messageView.layoutParams is FrameLayout.LayoutParams) {
-            (holder.messageView.layoutParams as FrameLayout.LayoutParams).gravity =
-                    if (outgoingMessage && bubbleStyle == BUBBLE_STYLE_BOTH) Gravity.END else Gravity.START
+            //(holder.messageView.layoutParams as FrameLayout.LayoutParams).gravity =
+            //        if (outgoingMessage && bubbleStyle == BUBBLE_STYLE_BOTH) Gravity.END else Gravity.START
+            val defaultReverse = holder.messageView.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL;
+            (holder.messageView.parent.parent as RelativeLayout).layoutDirection = if (reverseBubble != defaultReverse) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
         }
     }
 
