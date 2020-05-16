@@ -286,4 +286,9 @@
 \nDet här behövs bara en gång.
 \nUrsäkta för besväret.</string>
 
+    <string name="e2e_re_request_encryption_key">Efterfråga krypteringsnycklarna igen från dina andra sessioner.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Nyckelförfrågan har skickats.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Förfrågan har skickats</string>
     </resources>
