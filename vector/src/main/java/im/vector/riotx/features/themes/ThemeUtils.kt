@@ -28,6 +28,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.preference.PreferenceManager
 import im.vector.riotx.R
+import im.vector.riotx.features.configuration.VectorConfiguration
 import timber.log.Timber
 
 /**
@@ -50,7 +51,26 @@ object ThemeUtils {
 
     private val mColorByAttr = HashMap<Int, Int>()
 
-    private var mIsScTheme = false;
+    private var mIsScTheme = false
+    private var mUseDarkTheme = false
+    private var mThemeInitialized = false
+
+    fun shouldUseDarkTheme(context: Context): Boolean {
+        val currentNightMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        return currentNightMode == Configuration.UI_MODE_NIGHT_YES
+    }
+
+    fun useDarkTheme(context: Context): Boolean {
+        if (!mThemeInitialized) {
+            mThemeInitialized = true
+            mUseDarkTheme = shouldUseDarkTheme(context)
+        }
+        return mUseDarkTheme
+    }
+
+    fun invalidateNightMode() {
+        mThemeInitialized = false;
+    }
 
     /**
      * Provides the selected application theme
@@ -59,11 +79,29 @@ object ThemeUtils {
      * @return the selected application theme
      */
     fun getApplicationTheme(context: Context): String {
-        val currentNightMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        return when (currentNightMode) {
-            Configuration.UI_MODE_NIGHT_YES -> PreferenceManager.getDefaultSharedPreferences(context).getString(APPLICATION_DARK_THEME_KEY, THEME_SC_DARK_COLORED_VALUE)!!
-            else -> PreferenceManager.getDefaultSharedPreferences(context).getString(APPLICATION_THEME_KEY, THEME_SC_DARK_COLORED_VALUE)!!
-        }
+        return if (useDarkTheme(context)) getApplicationDarkTheme(context) else getApplicationLightTheme(context)
+    }
+
+
+    /**
+     * Provides the selected application theme for light system design
+     *
+     * @param context the context
+     * @return the selected application theme for light system design
+     */
+    fun getApplicationLightTheme(context: Context): String {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(APPLICATION_THEME_KEY, THEME_SC_DARK_COLORED_VALUE)!!
+    }
+
+
+    /**
+     * Provides the selected application theme for night system design
+     *
+     * @param context the context
+     * @return the selected application theme for night system design
+     */
+    fun getApplicationDarkTheme(context: Context): String {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(APPLICATION_DARK_THEME_KEY, THEME_SC_DARK_COLORED_VALUE)!!
     }
 
     /**
@@ -87,7 +125,8 @@ object ThemeUtils {
      *
      * @param aTheme the new theme
      */
-    fun setApplicationTheme(context: Context, aTheme: String) {
+    fun setApplicationTheme(context: Context, aLightTheme: String, aDarkTheme: String) {
+        val aTheme = if (useDarkTheme(context)) aDarkTheme else aLightTheme
         when (aTheme) {
             THEME_DARK_VALUE   -> context.setTheme(R.style.AppTheme_Dark)
             THEME_BLACK_VALUE  -> context.setTheme(R.style.AppTheme_Black)
