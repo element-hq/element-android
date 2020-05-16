@@ -32,4 +32,83 @@
 
 <string name="sign_out_bottom_sheet_warning_no_backup">Kui sa logid nüüd välja, siis sa kaotad ligipääsu kõikidele krüptitud sõnumitele</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Parasjagu varundan võtmeid. Kui sa logid nüüd välja, siis sa kaotad ligipääsu kõikidele oma krüptitud sõnumitele.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Turvaline võtmete varundus peaks olema aktiivne kõikides sinu sessioonides, sest see hoiab ära krüptitud sõnumitele ligipääsu kadumise.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Ma ei vaja oma krüptitud sõnumeid</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Varundan võtmeid…</string>
+    <string name="keys_backup_activate">Kasuta varundatud võtmeid</string>
+    <string name="are_you_sure">Kas sa oled kindel\?</string>
+    <string name="backup">Varunda</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Kui sa enne väljalogimist ei varunda oma võtmeid, siis sa kaotad ligipääsu oma krüptitud sõnumitele.</string>
+
+    <string name="dialog_title_third_party_licences">Kolmandate osapoolte litsentsid</string>
+
+    <string name="loading">Laeme…</string>
+
+    <string name="ok">Sobib</string>
+    <string name="cancel">Tühista</string>
+    <string name="save">Salvesta</string>
+    <string name="leave">Lahku</string>
+    <string name="stay">Jää</string>
+    <string name="send">Saada</string>
+    <string name="copy">Kopeeri</string>
+    <string name="resend">Saada uuesti</string>
+    <string name="redact">Eemalda</string>
+    <string name="quote">Tsiteeri</string>
+    <string name="download">Lae alla</string>
+    <string name="share">Jaga</string>
+    <string name="speak">Räägi</string>
+    <string name="clear">Eemalda</string>
+    <string name="later">Hiljem</string>
+    <string name="forward">Edasta</string>
+    <string name="permalink">Püsiviide</string>
+    <string name="view_source">Lähtekood</string>
+    <string name="view_decrypted_source">Näita dekrüptitud lähtekoodi</string>
+    <string name="delete">Kustuta</string>
+    <string name="rename">Muuda nime</string>
+    <string name="none">Ei midagi</string>
+    <string name="revoke">Tunnista kehtetuks</string>
+    <string name="disconnect">Katkesta ühendus</string>
+    <string name="report_content">Teata kahtlasest sisust</string>
+    <string name="active_call">Kõne on käsil</string>
+    <string name="ongoing_conference_call">Konverentsikõne on käsil.
+\nLiitu kas %1$s või %2$s</string>
+    <string name="ongoing_conference_call_voice">häälkõnega</string>
+    <string name="ongoing_conference_call_video">videokõnega</string>
+    <string name="cannot_start_call">Kõne alustamine ei õnnestunud, palun proovi hiljem uuesti</string>
+    <string name="missing_permissions_warning">Puuduolevate õiguste tõttu mõned funktsionaalsused ei toimi…</string>
+    <string name="missing_permissions_error">Puuduolevate õiguste tõttu seda toimingut ei saa teha.</string>
+    <string name="missing_permissions_to_start_conf_call">Konverentsikõne alustamiseks selles jututoas on teil vaja õigusi</string>
+    <string name="missing_permissions_title_to_start_conf_call">Kõne algatamine ei õnnestu</string>
+    <string name="device_information">Sessiooniteave</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Konverentsikõned ei ole krüptitud jututubades toetatud</string>
+    <string name="call_anyway">Helista siiski</string>
+    <string name="send_anyway">Saada ikkagi</string>
+    <string name="or">või</string>
+    <string name="invite">Kutsu</string>
+    <string name="offline">Võrgust väljas</string>
+    <string name="accept">Võta vastu</string>
+    <string name="skip">Jäta vahele</string>
+    <string name="done">Valmis</string>
+    <string name="abort">Katkesta</string>
+    <string name="ignore">Eira</string>
+    <string name="review">Vaata üle</string>
+    <string name="decline">Keeldu</string>
+
+    <string name="action_exit">Välju</string>
+    <string name="actions">Tegevused</string>
+    <string name="action_sign_out">Logi välja</string>
+    <string name="action_sign_out_confirmation_simple">Kas sa oled kindel et soovid välja logida\?</string>
+    <string name="action_voice_call">Häälkõne</string>
+    <string name="action_video_call">Videokõne</string>
+    <string name="action_global_search">Üldine otsing</string>
+    <string name="action_mark_all_as_read">Märgi kõik loetuks</string>
+    <string name="action_historical">Ajalugu</string>
+    <string name="action_quick_reply">Kiirvastus</string>
+    <string name="action_mark_room_read">Märgi loetuks</string>
+    <string name="action_open">Ava</string>
+    <string name="action_close">Sulge</string>
+    <string name="copied_to_clipboard">Kopeeritud lõikelauale</string>
+    <string name="disable">Lülita välja</string>
+
+    <string name="dialog_title_confirmation">Kinnitus</string>
     </resources>
