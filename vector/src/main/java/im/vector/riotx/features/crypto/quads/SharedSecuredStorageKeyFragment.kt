@@ -23,7 +23,6 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.editorActionEvents
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.extensions.tryThis
@@ -33,7 +32,6 @@ import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.startImportTextFromFileIntent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_ssss_access_from_key.*
-import kotlinx.android.synthetic.main.fragment_ssss_access_from_passphrase.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -67,13 +65,7 @@ class SharedSecuredStorageKeyFragment @Inject constructor(
                 }
                 .disposeOnDestroyView()
 
-        ssss_key_use_file.clicks()
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    startImportTextFromFileIntent(this, IMPORT_FILE_REQ)
-                }
-                .disposeOnDestroyView()
+        ssss_key_use_file.debouncedClicks { startImportTextFromFileIntent(this, IMPORT_FILE_REQ) }
 
         sharedViewModel.observeViewEvents {
             when (it) {
@@ -83,13 +75,7 @@ class SharedSecuredStorageKeyFragment @Inject constructor(
             }
         }
 
-        ssss_key_submit.clicks()
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    submit()
-                }
-                .disposeOnDestroyView()
+        ssss_key_submit.debouncedClicks { submit() }
     }
 
     fun submit() {

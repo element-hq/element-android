@@ -13,14 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.matrix.android.internal.auth.wellknown
 
-import im.vector.matrix.android.api.auth.data.WellKnown
-import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Path
+package im.vector.matrix.android.internal.network.token
 
-internal interface WellKnownAPI {
-    @GET("https://{domain}/.well-known/matrix/client")
-    fun getWellKnown(@Path("domain") domain: String): Call<WellKnown>
+internal interface AccessTokenProvider {
+    fun getToken(): String?
 }

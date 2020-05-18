@@ -30,6 +30,7 @@ import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
+import im.vector.matrix.android.api.session.identity.IdentityService
 import im.vector.matrix.android.api.session.profile.ProfileService
 import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
@@ -39,6 +40,7 @@ import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageSer
 import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.sync.SyncState
+import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.session.user.UserService
 
 /**
@@ -54,6 +56,7 @@ interface Session :
         SignOutService,
         FilterService,
         FileService,
+        TermsService,
         ProfileService,
         PushRuleService,
         PushersService,
@@ -77,7 +80,7 @@ interface Session :
      * Useful shortcut to get access to the userId
      */
     val myUserId: String
-        get() = sessionParams.credentials.userId
+        get() = sessionParams.userId
 
     /**
      * The sessionId
@@ -144,6 +147,11 @@ interface Session :
      * Returns the cryptoService associated with the session
      */
     fun cryptoService(): CryptoService
+
+    /**
+     * Returns the identity service associated with the session
+     */
+    fun identityService(): IdentityService
 
     /**
      * Add a listener to the session.

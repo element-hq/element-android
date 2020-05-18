@@ -2,6 +2,7 @@ Changes in RiotX 0.21.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:
+ - Identity server support (#607)
  - Switch language support (#41)
 
 Improvements 🙌:

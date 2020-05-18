@@ -23,8 +23,10 @@ import android.view.View
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.view.ViewCompat
+import androidx.fragment.app.Fragment
 import im.vector.matrix.android.api.session.crypto.verification.IncomingSasVerificationTransaction
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
@@ -52,6 +54,7 @@ import im.vector.riotx.features.roomprofile.RoomProfileActivity
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.SharedData
+import im.vector.riotx.features.terms.ReviewTermsActivity
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -205,6 +208,11 @@ class DefaultNavigator @Inject constructor(
                     }
                     activity.startActivity(intent, options?.toBundle())
                 }
+    }
+
+    override fun openTerms(fragment: Fragment, serviceType: TermsService.ServiceType, baseUrl: String, token: String?, requestCode: Int) {
+        val intent = ReviewTermsActivity.intent(fragment.requireContext(), serviceType, baseUrl, token)
+        fragment.startActivityForResult(intent, requestCode)
     }
 
     private fun startActivity(context: Context, intent: Intent, buildTask: Boolean) {

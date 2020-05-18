@@ -41,6 +41,8 @@ import im.vector.riotx.features.crypto.verification.emoji.VerificationEmojiCodeF
 import im.vector.riotx.features.crypto.verification.qrconfirmation.VerificationQRWaitingFragment
 import im.vector.riotx.features.crypto.verification.qrconfirmation.VerificationQrScannedByOtherFragment
 import im.vector.riotx.features.crypto.verification.request.VerificationRequestFragment
+import im.vector.riotx.features.discovery.DiscoverySettingsFragment
+import im.vector.riotx.features.discovery.change.SetIdentityServerFragment
 import im.vector.riotx.features.grouplist.GroupListFragment
 import im.vector.riotx.features.home.HomeDetailFragment
 import im.vector.riotx.features.home.HomeDrawerFragment
@@ -96,6 +98,7 @@ import im.vector.riotx.features.share.IncomingShareFragment
 import im.vector.riotx.features.signout.soft.SoftLogoutFragment
 import im.vector.riotx.features.userdirectory.KnownUsersFragment
 import im.vector.riotx.features.userdirectory.UserDirectoryFragment
+import im.vector.riotx.features.terms.ReviewTermsFragment
 
 @Module
 interface FragmentModule {
@@ -474,4 +477,19 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(SharedSecuredStorageKeyFragment::class)
     fun bindSharedSecuredStorageKeyFragment(fragment: SharedSecuredStorageKeyFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SetIdentityServerFragment::class)
+    fun bindSetIdentityServerFragment(fragment: SetIdentityServerFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(DiscoverySettingsFragment::class)
+    fun bindDiscoverySettingsFragment(fragment: DiscoverySettingsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(ReviewTermsFragment::class)
+    fun bindReviewTermsFragment(fragment: ReviewTermsFragment): Fragment
 }

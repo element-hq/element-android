@@ -45,7 +45,7 @@ class PushersManager @Inject constructor(
                 profileTag,
                 localeProvider.current().language,
                 appNameProvider.getAppName(),
-                currentSession.sessionParams.credentials.deviceId ?: "MOBILE",
+                currentSession.sessionParams.deviceId ?: "MOBILE",
                 stringProvider.getString(R.string.pusher_http_url),
                 append = false,
                 withEventIdOnly = true

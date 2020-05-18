@@ -73,7 +73,7 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
                 .execute {
                     copy(
                             cryptoDeviceInfo = it,
-                            isMine = it.invoke()?.deviceId == session.sessionParams.credentials.deviceId
+                            isMine = it.invoke()?.deviceId == session.sessionParams.deviceId
                     )
                 }
 

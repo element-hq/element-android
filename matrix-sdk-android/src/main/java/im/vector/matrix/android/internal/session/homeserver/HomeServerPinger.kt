@@ -35,7 +35,7 @@ internal class HomeServerPinger @Inject constructor(private val taskExecutor: Ta
     suspend fun canReachHomeServer(): Boolean {
         return try {
             executeRequest<Unit>(null) {
-                apiCall = capabilitiesAPI.getVersions()
+                apiCall = capabilitiesAPI.ping()
             }
             true
         } catch (throwable: Throwable) {

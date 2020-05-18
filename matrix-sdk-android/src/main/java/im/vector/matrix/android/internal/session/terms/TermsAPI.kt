@@ -13,22 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.matrix.android.internal.identity
 
-import im.vector.matrix.android.internal.network.NetworkConstants
+package im.vector.matrix.android.internal.session.terms
+
+import im.vector.matrix.android.internal.network.HttpHeaders
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.POST
+import retrofit2.http.Url
 
-internal interface IdentityPingApi {
+internal interface TermsAPI {
+    /**
+     * This request does not require authentication
+     */
+    @GET
+    fun getTerms(@Url url: String): Call<TermsResponse>
 
     /**
-     * https://matrix.org/docs/spec/client_server/r0.4.0.html#server-discovery
-     * Simple ping call to check if server alive
-     *
-     * Ref: https://matrix.org/docs/spec/identity_service/unstable#status-check
-     *
-     * @return 200 in case of success
+     * This request requires authentication
      */
-    @GET(NetworkConstants.URI_API_PREFIX_IDENTITY)
-    fun ping(): Call<Unit>
+    @POST
+    fun agreeToTerms(@Url url: String, @Body params: AcceptTermsBody, @Header(HttpHeaders.Authorization) token: String): Call<Unit>
 }

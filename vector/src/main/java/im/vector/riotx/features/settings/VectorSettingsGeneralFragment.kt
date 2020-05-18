@@ -79,6 +79,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
     private val mPasswordPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)!!
     }
+    private val mIdentityServerPreference by lazy {
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)!!
+    }
 
     // Local contacts
     private val mContactSettingsCategory by lazy {
@@ -130,6 +133,10 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
             // Unfortunately, this is not supported in lib v7
             // it.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+            it.setOnPreferenceClickListener {
+                notImplemented()
+                true
+            }
 
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 notImplemented()
@@ -162,11 +169,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
         // home server
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_HOME_SERVER_PREFERENCE_KEY)!!
-                .summary = session.sessionParams.homeServerConnectionConfig.homeServerUri.toString()
-
-        // identity server
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY)!!
-                .summary = session.sessionParams.homeServerConnectionConfig.identityServerUri.toString()
+                .summary = session.sessionParams.homeServerUrl
 
         refreshEmailsList()
         refreshPhoneNumbersList()
@@ -234,6 +237,13 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
             false
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // Refresh identity server summary
+        mIdentityServerPreference.summary = session.identityService().getCurrentIdentityServerUrl() ?: getString(R.string.identity_server_not_defined)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

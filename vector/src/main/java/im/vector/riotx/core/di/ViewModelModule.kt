@@ -26,6 +26,7 @@ import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreFromK
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreFromPassphraseViewModel
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreSharedViewModel
 import im.vector.riotx.features.crypto.keysbackup.setup.KeysBackupSetupSharedViewModel
+import im.vector.riotx.features.discovery.DiscoverySharedViewModel
 import im.vector.riotx.features.home.HomeSharedActionViewModel
 import im.vector.riotx.features.home.room.detail.RoomDetailSharedActionViewModel
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageSharedActionViewModel
@@ -118,4 +119,9 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(RoomProfileSharedActionViewModel::class)
     fun bindRoomProfileSharedActionViewModel(viewModel: RoomProfileSharedActionViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DiscoverySharedViewModel::class)
+    fun bindDiscoverySharedViewModel(viewModel: DiscoverySharedViewModel): ViewModel
 }

@@ -81,9 +81,9 @@ import im.vector.matrix.android.internal.crypto.verification.qrcode.generateShar
 import im.vector.matrix.android.internal.di.DeviceId
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.UUID
@@ -104,7 +104,8 @@ internal class DefaultVerificationService @Inject constructor(
         private val verificationTransportRoomMessageFactory: VerificationTransportRoomMessageFactory,
         private val verificationTransportToDeviceFactory: VerificationTransportToDeviceFactory,
         private val crossSigningService: CrossSigningService,
-        private val cryptoCoroutineScope: CoroutineScope
+        private val cryptoCoroutineScope: CoroutineScope,
+        private val taskExecutor: TaskExecutor
 ) : DefaultVerificationTransaction.Listener, VerificationService {
 
     private val uiHandler = Handler(Looper.getMainLooper())
@@ -161,7 +162,7 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     fun onRoomEvent(event: Event) {
-        GlobalScope.launch(coroutineDispatchers.crypto) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             when (event.getClearType()) {
                 EventType.KEY_VERIFICATION_START  -> {
                     onRoomStartRequestReceived(event)
@@ -301,7 +302,7 @@ internal class DefaultVerificationService @Inject constructor(
         // We don't want to block here
         val otherDeviceId = validRequestInfo.fromDevice
 
-        GlobalScope.launch {
+        cryptoCoroutineScope.launch {
             if (checkKeysAreDownloaded(senderId, otherDeviceId) == null) {
                 Timber.e("## Verification device $otherDeviceId is not known")
             }
@@ -340,7 +341,7 @@ internal class DefaultVerificationService @Inject constructor(
         }
 
         // We don't want to block here
-        GlobalScope.launch {
+        taskExecutor.executorScope.launch {
             if (checkKeysAreDownloaded(senderId, validRequestInfo.fromDevice) == null) {
                 Timber.e("## SAS Verification device ${validRequestInfo.fromDevice} is not known")
             }
