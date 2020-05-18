@@ -35,16 +35,15 @@ import im.vector.matrix.android.internal.database.query.findAllInRoomWithSendSta
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
-import im.vector.matrix.android.internal.session.room.timeline.DefaultTimeline
+import im.vector.matrix.android.internal.session.room.timeline.TimelineInput
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
 internal class LocalEchoRepository @Inject constructor(private val monarchy: Monarchy,
                                                        private val roomSummaryUpdater: RoomSummaryUpdater,
-                                                       private val eventBus: EventBus,
+                                                       private val timelineInput: TimelineInput,
                                                        private val timelineEventMapper: TimelineEventMapper) {
 
     suspend fun createLocalEcho(event: Event) {
@@ -68,7 +67,7 @@ internal class LocalEchoRepository @Inject constructor(private val monarchy: Mon
             }
         }
         val timelineEvent = timelineEventMapper.map(timelineEventEntity)
-        eventBus.post(DefaultTimeline.OnLocalEchoCreated(roomId = roomId, timelineEvent = timelineEvent))
+        timelineInput.onLocalEchoCreated(roomId = roomId, timelineEvent = timelineEvent)
         monarchy.awaitTransaction { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return@awaitTransaction
             roomEntity.sendingTimelineEvents.add(0, timelineEventEntity)

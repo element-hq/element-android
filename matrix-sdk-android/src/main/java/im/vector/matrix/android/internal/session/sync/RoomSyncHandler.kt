@@ -46,8 +46,8 @@ import im.vector.matrix.android.internal.session.mapWithProgress
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberEventHandler
 import im.vector.matrix.android.internal.session.room.read.FullyReadContent
-import im.vector.matrix.android.internal.session.room.timeline.DefaultTimeline
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
+import im.vector.matrix.android.internal.session.room.timeline.TimelineInput
 import im.vector.matrix.android.internal.session.room.typing.TypingEventContent
 import im.vector.matrix.android.internal.session.sync.model.InvitedRoomSync
 import im.vector.matrix.android.internal.session.sync.model.RoomSync
@@ -56,7 +56,6 @@ import im.vector.matrix.android.internal.session.sync.model.RoomSyncEphemeral
 import im.vector.matrix.android.internal.session.sync.model.RoomsSyncResponse
 import io.realm.Realm
 import io.realm.kotlin.createObject
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -66,7 +65,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                                    private val roomFullyReadHandler: RoomFullyReadHandler,
                                                    private val cryptoService: DefaultCryptoService,
                                                    private val roomMemberEventHandler: RoomMemberEventHandler,
-                                                   private val eventBus: EventBus) {
+                                                   private val timelineInput: TimelineInput) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
@@ -277,7 +276,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             }
         }
         // posting new events to timeline if any is registered
-        eventBus.post(DefaultTimeline.OnNewTimelineEvents(roomId = roomId, eventIds = eventIds))
+        timelineInput.onNewTimelineEvents(roomId = roomId, eventIds = eventIds)
         return chunkEntity
     }
 

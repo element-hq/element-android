@@ -33,11 +33,10 @@ import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.fetchCopyMap
-import org.greenrobot.eventbus.EventBus
 
 internal class DefaultTimelineService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                   private val monarchy: Monarchy,
-                                                                  private val eventBus: EventBus,
+                                                                  private val timelineInput: TimelineInput,
                                                                   private val taskExecutor: TaskExecutor,
                                                                   private val contextOfEventTask: GetContextOfEventTask,
                                                                   private val eventDecryptor: TimelineEventDecryptor,
@@ -62,7 +61,7 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
                 timelineEventMapper = timelineEventMapper,
                 settings = settings,
                 hiddenReadReceipts = TimelineHiddenReadReceipts(readReceiptsSummaryMapper, roomId, settings),
-                eventBus = eventBus,
+                timelineInput = timelineInput,
                 eventDecryptor = eventDecryptor
         )
     }
@@ -70,10 +69,10 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
     override fun getTimeLineEvent(eventId: String): TimelineEvent? {
         return monarchy
                 .fetchCopyMap({
-                                  TimelineEventEntity.where(it, roomId = roomId, eventId = eventId).findFirst()
-                              }, { entity, _ ->
-                                  timelineEventMapper.map(entity)
-                              })
+                    TimelineEventEntity.where(it, roomId = roomId, eventId = eventId).findFirst()
+                }, { entity, _ ->
+                    timelineEventMapper.map(entity)
+                })
     }
 
     override fun getTimeLineEventLive(eventId: String): LiveData<Optional<TimelineEvent>> {

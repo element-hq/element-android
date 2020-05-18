@@ -52,9 +52,6 @@ import io.realm.RealmConfiguration
 import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 import java.util.Collections
 import java.util.UUID
@@ -75,12 +72,12 @@ internal class DefaultTimeline(
         private val timelineEventMapper: TimelineEventMapper,
         private val settings: TimelineSettings,
         private val hiddenReadReceipts: TimelineHiddenReadReceipts,
-        private val eventBus: EventBus,
+        private val timelineInput: TimelineInput,
         private val eventDecryptor: TimelineEventDecryptor
-) : Timeline, TimelineHiddenReadReceipts.Delegate {
-
-    data class OnNewTimelineEvents(val roomId: String, val eventIds: List<String>)
-    data class OnLocalEchoCreated(val roomId: String, val timelineEvent: TimelineEvent)
+) :
+        Timeline,
+        TimelineHiddenReadReceipts.Delegate,
+        TimelineInput.Listener {
 
     companion object {
         val BACKGROUND_HANDLER = createBackgroundHandler("TIMELINE_DB_THREAD")
@@ -165,7 +162,7 @@ internal class DefaultTimeline(
     override fun start() {
         if (isStarted.compareAndSet(false, true)) {
             Timber.v("Start timeline for roomId: $roomId and eventId: $initialEventId")
-            eventBus.register(this)
+            timelineInput.listeners.add(this)
             BACKGROUND_HANDLER.post {
                 eventDecryptor.start()
                 val realm = Realm.getInstance(realmConfiguration)
@@ -206,7 +203,7 @@ internal class DefaultTimeline(
     override fun dispose() {
         if (isStarted.compareAndSet(true, false)) {
             isReady.set(false)
-            eventBus.unregister(this)
+            timelineInput.listeners.remove(this)
             Timber.v("Dispose timeline for roomId: $roomId and eventId: $initialEventId")
             cancelableBag.cancel()
             BACKGROUND_HANDLER.removeCallbacksAndMessages(null)
@@ -324,22 +321,20 @@ internal class DefaultTimeline(
         postSnapshot()
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onNewTimelineEvents(onNewTimelineEvents: OnNewTimelineEvents) {
-        if (isLive && onNewTimelineEvents.roomId == roomId) {
+    override fun onNewTimelineEvents(roomId: String, eventIds: List<String>) {
+        if (isLive && roomId == roomId) {
             listeners.forEach {
-                it.onNewTimelineEvents(onNewTimelineEvents.eventIds)
+                it.onNewTimelineEvents(eventIds)
             }
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLocalEchoCreated(onLocalEchoCreated: OnLocalEchoCreated) {
-        if (isLive && onLocalEchoCreated.roomId == roomId) {
+    override fun onLocalEchoCreated(roomId: String, timelineEvent: TimelineEvent) {
+        if (isLive && roomId == roomId) {
             listeners.forEach {
-                it.onNewTimelineEvents(listOf(onLocalEchoCreated.timelineEvent.eventId))
+                it.onNewTimelineEvents(listOf(timelineEvent.eventId))
             }
-            inMemorySendingEvents.add(0, onLocalEchoCreated.timelineEvent)
+            inMemorySendingEvents.add(0, timelineEvent)
             postSnapshot()
         }
     }
