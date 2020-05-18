@@ -15,6 +15,7 @@
  */
 package im.vector.riotx.features.terms
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
@@ -23,11 +24,12 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.terms.GetTermsResponse
+import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class ReviewTermsViewModel @AssistedInject constructor(
@@ -94,27 +96,28 @@ class ReviewTermsViewModel @AssistedInject constructor(
 
         val agreedUrls = acceptedTerms.map { it.url }
 
-        session.agreeToTerms(
-                termsArgs.type,
-                termsArgs.baseURL,
-                agreedUrls,
-                termsArgs.token,
-                object : MatrixCallback<Unit> {
-                    override fun onSuccess(data: Unit) {
-                        _viewEvents.post(ReviewTermsViewEvents.Success)
-                    }
-
-                    override fun onFailure(failure: Throwable) {
-                        Timber.e(failure, "Failed to agree to terms")
-                        setState {
-                            copy(
-                                    acceptingTerms = Uninitialized
-                            )
-                        }
-                        _viewEvents.post(ReviewTermsViewEvents.Failure(failure, false))
-                    }
+        viewModelScope.launch {
+            try {
+                awaitCallback<Unit> {
+                    session.agreeToTerms(
+                            termsArgs.type,
+                            termsArgs.baseURL,
+                            agreedUrls,
+                            termsArgs.token,
+                            it
+                    )
                 }
-        )
+                _viewEvents.post(ReviewTermsViewEvents.Success)
+            } catch (failure: Throwable) {
+                Timber.e(failure, "Failed to agree to terms")
+                setState {
+                    copy(
+                            acceptingTerms = Uninitialized
+                    )
+                }
+                _viewEvents.post(ReviewTermsViewEvents.Failure(failure, false))
+            }
+        }
     }
 
     private fun loadTerms(action: ReviewTermsAction.LoadTerms) = withState { state ->
@@ -126,8 +129,11 @@ class ReviewTermsViewModel @AssistedInject constructor(
             copy(termsList = Loading())
         }
 
-        session.getTerms(termsArgs.type, termsArgs.baseURL, object : MatrixCallback<GetTermsResponse> {
-            override fun onSuccess(data: GetTermsResponse) {
+        viewModelScope.launch {
+            try {
+                val data = awaitCallback<GetTermsResponse> {
+                    session.getTerms(termsArgs.type, termsArgs.baseURL, it)
+                }
                 val terms = data.serverResponse.getLocalizedTerms(action.preferredLanguageCode).map {
                     Term(it.localizedUrl ?: "",
                             it.localizedName ?: "",
@@ -141,9 +147,7 @@ class ReviewTermsViewModel @AssistedInject constructor(
                             termsList = Success(terms)
                     )
                 }
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (failure: Throwable) {
                 Timber.e(failure, "Failed to agree to terms")
                 setState {
                     copy(
@@ -152,6 +156,6 @@ class ReviewTermsViewModel @AssistedInject constructor(
                 }
                 _viewEvents.post(ReviewTermsViewEvents.Failure(failure, true))
             }
-        })
+        }
     }
 }

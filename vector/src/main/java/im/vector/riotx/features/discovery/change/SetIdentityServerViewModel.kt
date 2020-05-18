@@ -15,23 +15,25 @@
  */
 package im.vector.riotx.features.discovery.change
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.identity.IdentityServiceError
 import im.vector.matrix.android.api.session.terms.GetTermsResponse
 import im.vector.matrix.android.api.session.terms.TermsService
+import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.riotx.R
 import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.ensureProtocol
+import kotlinx.coroutines.launch
 
 class SetIdentityServerViewModel @AssistedInject constructor(
         @Assisted initialState: SetIdentityServerState,
@@ -91,14 +93,15 @@ class SetIdentityServerViewModel @AssistedInject constructor(
 
         _viewEvents.post(SetIdentityServerViewEvents.Loading())
 
-        // First ping the identity server v2 API
-        mxSession.identityService().isValidIdentityServer(baseUrl, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
+        viewModelScope.launch {
+            try {
+                // First ping the identity server v2 API
+                awaitCallback<Unit> {
+                    mxSession.identityService().isValidIdentityServer(baseUrl, it)
+                }
                 // Ok, next step
                 checkTerms(baseUrl)
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (failure: Throwable) {
                 if (failure is IdentityServiceError.OutdatedIdentityServer) {
                     _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.identity_server_error_outdated_identity_server))
                 } else {
@@ -106,39 +109,37 @@ class SetIdentityServerViewModel @AssistedInject constructor(
                     _viewEvents.post(SetIdentityServerViewEvents.OtherFailure(failure))
                 }
             }
-        })
+        }
     }
 
-    private fun checkTerms(baseUrl: String) {
-        mxSession.getTerms(TermsService.ServiceType.IdentityService,
-                baseUrl,
-                object : MatrixCallback<GetTermsResponse> {
-                    override fun onSuccess(data: GetTermsResponse) {
-                        // has all been accepted?
-                        val resp = data.serverResponse
-                        val tos = resp.getLocalizedTerms(userLanguage)
-                        if (tos.isEmpty()) {
-                            // prompt do not define policy
-                            _viewEvents.post(SetIdentityServerViewEvents.NoTerms)
-                        } else {
-                            val shouldPrompt = tos.any { !data.alreadyAcceptedTermUrls.contains(it.localizedUrl) }
-                            if (shouldPrompt) {
-                                _viewEvents.post(SetIdentityServerViewEvents.ShowTerms(baseUrl))
-                            } else {
-                                _viewEvents.post(SetIdentityServerViewEvents.TermsAccepted)
-                            }
-                        }
-                    }
+    private suspend fun checkTerms(baseUrl: String) {
+        try {
+            val data = awaitCallback<GetTermsResponse> {
+                mxSession.getTerms(TermsService.ServiceType.IdentityService, baseUrl, it)
+            }
 
-                    override fun onFailure(failure: Throwable) {
-                        if (failure is Failure.OtherServerError && failure.httpCode == 404) {
-                            // 404: Same as NoTerms
-                            _viewEvents.post(SetIdentityServerViewEvents.NoTerms)
-                        } else {
-                            _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.settings_discovery_bad_identity_server))
-                            _viewEvents.post(SetIdentityServerViewEvents.OtherFailure(failure))
-                        }
-                    }
-                })
+            // has all been accepted?
+            val resp = data.serverResponse
+            val tos = resp.getLocalizedTerms(userLanguage)
+            if (tos.isEmpty()) {
+                // prompt do not define policy
+                _viewEvents.post(SetIdentityServerViewEvents.NoTerms)
+            } else {
+                val shouldPrompt = tos.any { !data.alreadyAcceptedTermUrls.contains(it.localizedUrl) }
+                if (shouldPrompt) {
+                    _viewEvents.post(SetIdentityServerViewEvents.ShowTerms(baseUrl))
+                } else {
+                    _viewEvents.post(SetIdentityServerViewEvents.TermsAccepted)
+                }
+            }
+        } catch (failure: Throwable) {
+            if (failure is Failure.OtherServerError && failure.httpCode == 404) {
+                // 404: Same as NoTerms
+                _viewEvents.post(SetIdentityServerViewEvents.NoTerms)
+            } else {
+                _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.settings_discovery_bad_identity_server))
+                _viewEvents.post(SetIdentityServerViewEvents.OtherFailure(failure))
+            }
+        }
     }
 }

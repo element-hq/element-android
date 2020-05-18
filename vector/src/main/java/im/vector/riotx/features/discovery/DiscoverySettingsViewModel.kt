@@ -15,6 +15,7 @@
  */
 package im.vector.riotx.features.discovery
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -25,15 +26,16 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.identity.IdentityServiceError
 import im.vector.matrix.android.api.session.identity.IdentityServiceListener
 import im.vector.matrix.android.api.session.identity.SharedState
 import im.vector.matrix.android.api.session.identity.ThreePid
+import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
+import kotlinx.coroutines.launch
 
 class DiscoverySettingsViewModel @AssistedInject constructor(
         @Assisted initialState: DiscoverySettingsState,
@@ -104,72 +106,47 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     }
 
     private fun disconnectIdentityServer() {
-        setState {
-            copy(
-                    identityServer = Loading()
-            )
+        setState { copy(identityServer = Loading()) }
+
+        viewModelScope.launch {
+            try {
+                awaitCallback<Unit> { session.identityService().disconnect(it) }
+                setState { copy(identityServer = Success(null)) }
+            } catch (failure: Throwable) {
+                setState { copy(identityServer = Fail(failure)) }
+            }
         }
-
-        session.identityService().disconnect(object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                setState {
-                    copy(
-                            identityServer = Success(null)
-                    )
-                }
-            }
-
-            override fun onFailure(failure: Throwable) {
-                setState {
-                    copy(
-                            identityServer = Fail(failure)
-                    )
-                }
-            }
-        })
     }
 
     private fun changeIdentityServer(action: DiscoverySettingsAction.ChangeIdentityServer) {
-        setState {
-            copy(
-                    identityServer = Loading()
-            )
-        }
+        setState { copy(identityServer = Loading()) }
 
-        session.identityService().setNewIdentityServer(action.url, object : MatrixCallback<String?> {
-            override fun onSuccess(data: String?) {
-                setState {
-                    copy(
-                            identityServer = Success(data)
-                    )
+        viewModelScope.launch {
+            try {
+                val data = awaitCallback<String?> {
+                    session.identityService().setNewIdentityServer(action.url, it)
                 }
+                setState { copy(identityServer = Success(data)) }
                 retrieveBinding()
+            } catch (failure: Throwable) {
+                setState { copy(identityServer = Fail(failure)) }
             }
-
-            override fun onFailure(failure: Throwable) {
-                setState {
-                    copy(
-                            identityServer = Fail(failure)
-                    )
-                }
-            }
-        })
+        }
     }
 
     private fun shareThreePid(action: DiscoverySettingsAction.ShareThreePid) = withState { state ->
         if (state.identityServer() == null) return@withState
         changeThreePidState(action.threePid, Loading())
 
-        identityService.startBindThreePid(action.threePid, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
+        viewModelScope.launch {
+            try {
+                awaitCallback<Unit> { identityService.startBindThreePid(action.threePid, it) }
                 changeThreePidState(action.threePid, Success(SharedState.BINDING_IN_PROGRESS))
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (failure: Throwable) {
                 _viewEvents.post(DiscoverySettingsViewEvents.Failure(failure))
                 changeThreePidState(action.threePid, Fail(failure))
             }
-        })
+        }
     }
 
     private fun changeThreePidState(threePid: ThreePid, state: Async<SharedState>) {
@@ -238,16 +215,15 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
         if (state.emailList() == null) return@withState
         changeThreePidState(threePid, Loading())
 
-        identityService.unbindThreePid(threePid, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
+        viewModelScope.launch {
+            try {
+                awaitCallback<Unit> { identityService.unbindThreePid(threePid, it) }
                 changeThreePidState(threePid, Success(SharedState.NOT_SHARED))
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (failure: Throwable) {
                 _viewEvents.post(DiscoverySettingsViewEvents.Failure(failure))
                 changeThreePidState(threePid, Fail(failure))
             }
-        })
+        }
     }
 
     private fun revokeMsisdn(threePid: ThreePid.Msisdn) = withState { state ->
@@ -255,29 +231,27 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
         if (state.phoneNumbersList() == null) return@withState
         changeThreePidState(threePid, Loading())
 
-        identityService.unbindThreePid(threePid, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
+        viewModelScope.launch {
+            try {
+                awaitCallback<Unit> { identityService.unbindThreePid(threePid, it) }
                 changeThreePidState(threePid, Success(SharedState.NOT_SHARED))
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (failure: Throwable) {
                 _viewEvents.post(DiscoverySettingsViewEvents.Failure(failure))
                 changeThreePidState(threePid, Fail(failure))
             }
-        })
+        }
     }
 
     private fun cancelBinding(action: DiscoverySettingsAction.CancelBinding) {
-        identityService.cancelBindThreePid(action.threePid, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
+        viewModelScope.launch {
+            try {
+                awaitCallback<Unit> { identityService.cancelBindThreePid(action.threePid, it) }
                 changeThreePidState(action.threePid, Success(SharedState.NOT_SHARED))
                 changeThreePidSubmitState(action.threePid, Uninitialized)
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (failure: Throwable) {
                 // This could never fail
             }
-        })
+        }
     }
 
     private fun startListenToIdentityManager() {
@@ -305,32 +279,32 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
             )
         }
 
-        identityService.getShareStatus(threePids,
-                object : MatrixCallback<Map<ThreePid, SharedState>> {
-                    override fun onSuccess(data: Map<ThreePid, SharedState>) {
-                        setState {
-                            copy(
-                                    emailList = Success(data.filter { it.key is ThreePid.Email }.toPidInfoList()),
-                                    phoneNumbersList = Success(data.filter { it.key is ThreePid.Msisdn }.toPidInfoList()),
-                                    termsNotSigned = false
-                            )
-                        }
-                    }
+        viewModelScope.launch {
+            try {
+                val data = awaitCallback<Map<ThreePid, SharedState>> {
+                    identityService.getShareStatus(threePids, it)
+                }
+                setState {
+                    copy(
+                            emailList = Success(data.filter { it.key is ThreePid.Email }.toPidInfoList()),
+                            phoneNumbersList = Success(data.filter { it.key is ThreePid.Msisdn }.toPidInfoList()),
+                            termsNotSigned = false
+                    )
+                }
+            } catch (failure: Throwable) {
+                if (failure !is IdentityServiceError.TermsNotSignedException) {
+                    _viewEvents.post(DiscoverySettingsViewEvents.Failure(failure))
+                }
 
-                    override fun onFailure(failure: Throwable) {
-                        if (failure !is IdentityServiceError.TermsNotSignedException) {
-                            _viewEvents.post(DiscoverySettingsViewEvents.Failure(failure))
-                        }
-
-                        setState {
-                            copy(
-                                    emailList = Success(emails.map { PidInfo(it, Fail(failure)) }),
-                                    phoneNumbersList = Success(msisdns.map { PidInfo(it, Fail(failure)) }),
-                                    termsNotSigned = failure is IdentityServiceError.TermsNotSignedException
-                            )
-                        }
-                    }
-                })
+                setState {
+                    copy(
+                            emailList = Success(emails.map { PidInfo(it, Fail(failure)) }),
+                            phoneNumbersList = Success(msisdns.map { PidInfo(it, Fail(failure)) }),
+                            termsNotSigned = failure is IdentityServiceError.TermsNotSignedException
+                    )
+                }
+            }
+        }
     }
 
     private fun Map<ThreePid, SharedState>.toPidInfoList(): List<PidInfo> {
@@ -347,19 +321,17 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
         changeThreePidSubmitState(action.threePid, Loading())
 
-        identityService.submitValidationToken(action.threePid,
-                action.code,
-                object : MatrixCallback<Unit> {
-                    override fun onSuccess(data: Unit) {
-                        changeThreePidSubmitState(action.threePid, Uninitialized)
-                        finalizeBind3pid(DiscoverySettingsAction.FinalizeBind3pid(action.threePid), true)
-                    }
-
-                    override fun onFailure(failure: Throwable) {
-                        changeThreePidSubmitState(action.threePid, Fail(failure))
-                    }
+        viewModelScope.launch {
+            try {
+                awaitCallback<Unit> {
+                    identityService.submitValidationToken(action.threePid, action.code, it)
                 }
-        )
+                changeThreePidSubmitState(action.threePid, Uninitialized)
+                finalizeBind3pid(DiscoverySettingsAction.FinalizeBind3pid(action.threePid), true)
+            } catch (failure: Throwable) {
+                changeThreePidSubmitState(action.threePid, Fail(failure))
+            }
+        }
     }
 
     private fun finalizeBind3pid(action: DiscoverySettingsAction.FinalizeBind3pid, fromUser: Boolean) = withState { state ->
@@ -374,13 +346,12 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
         changeThreePidSubmitState(action.threePid, Loading())
 
-        identityService.finalizeBindThreePid(threePid, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
+        viewModelScope.launch {
+            try {
+                awaitCallback<Unit> { identityService.finalizeBindThreePid(threePid, it) }
                 changeThreePidSubmitState(action.threePid, Uninitialized)
                 changeThreePidState(action.threePid, Success(SharedState.SHARED))
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (failure: Throwable) {
                 // If this is not from user (user did not click to "Continue", but this is a refresh when Fragment is resumed), do no display the error
                 if (fromUser) {
                     changeThreePidSubmitState(action.threePid, Fail(failure))
@@ -388,7 +359,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                     changeThreePidSubmitState(action.threePid, Uninitialized)
                 }
             }
-        })
+        }
     }
 
     private fun refreshPendingEmailBindings() = withState { state ->
