@@ -282,6 +282,7 @@ dependencies {
     implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.7.0"
 
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
 
     // Log
