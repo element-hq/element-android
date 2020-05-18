@@ -63,7 +63,8 @@ class SetIdentityServerFragment @Inject constructor(
                     state.defaultIdentityServerUrl.toReducedUrl()
             )
                     .toSpannable()
-                    .colorizeMatchingText(state.defaultIdentityServerUrl.toReducedUrl(), colorProvider.getColorFromAttribute(R.attr.riotx_text_primary_body_contrast))
+                    .colorizeMatchingText(state.defaultIdentityServerUrl.toReducedUrl(),
+                            colorProvider.getColorFromAttribute(R.attr.riotx_text_primary_body_contrast))
 
             identityServerSetDefaultNotice.isVisible = true
             identityServerSetDefaultSubmit.isVisible = true
