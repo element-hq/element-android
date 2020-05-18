@@ -19,9 +19,9 @@ package im.vector.matrix.android.internal.session.room.directory
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsParams
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsResponse
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface GetPublicRoomTask : Task<GetPublicRoomTask.Params, PublicRoomsResponse> {
@@ -33,11 +33,11 @@ internal interface GetPublicRoomTask : Task<GetPublicRoomTask.Params, PublicRoom
 
 internal class DefaultGetPublicRoomTask @Inject constructor(
         private val roomAPI: RoomAPI,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetPublicRoomTask {
 
     override suspend fun execute(params: GetPublicRoomTask.Params): PublicRoomsResponse {
-        return executeRequest(eventBus) {
+        return executeRequest(globalErrorReceiver) {
             apiCall = roomAPI.publicRooms(params.server, params.publicRoomsParams)
         }
     }

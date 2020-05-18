@@ -22,9 +22,9 @@ import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadBody
 import im.vector.matrix.android.internal.crypto.model.rest.KeysUploadResponse
 import im.vector.matrix.android.internal.crypto.model.rest.RestDeviceInfo
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.convertToUTF8
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -40,7 +40,7 @@ internal interface UploadKeysTask : Task<UploadKeysTask.Params, KeysUploadRespon
 
 internal class DefaultUploadKeysTask @Inject constructor(
         private val cryptoApi: CryptoApi,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : UploadKeysTask {
 
     override suspend fun execute(params: UploadKeysTask.Params): KeysUploadResponse {
@@ -53,7 +53,7 @@ internal class DefaultUploadKeysTask @Inject constructor(
 
         Timber.i("## Uploading device keys -> $body")
 
-        return executeRequest(eventBus) {
+        return executeRequest(globalErrorReceiver) {
             apiCall = if (encodedDeviceId.isBlank()) {
                 cryptoApi.uploadKeys(body)
             } else {

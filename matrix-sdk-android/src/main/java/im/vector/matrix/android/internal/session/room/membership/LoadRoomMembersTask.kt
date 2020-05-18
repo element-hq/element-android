@@ -26,6 +26,7 @@ import im.vector.matrix.android.internal.database.query.copyToRealmOrIgnore
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
@@ -33,7 +34,6 @@ import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
 import io.realm.kotlin.createObject
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Unit> {
@@ -50,7 +50,7 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
         private val syncTokenStore: SyncTokenStore,
         private val roomSummaryUpdater: RoomSummaryUpdater,
         private val roomMemberEventHandler: RoomMemberEventHandler,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : LoadRoomMembersTask {
 
     override suspend fun execute(params: LoadRoomMembersTask.Params) {
@@ -58,7 +58,7 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
             return
         }
         val lastToken = syncTokenStore.getLastToken()
-        val response = executeRequest<RoomMembersResponse>(eventBus) {
+        val response = executeRequest<RoomMembersResponse>(globalErrorReceiver) {
             apiCall = roomAPI.getMembers(params.roomId, lastToken, null, params.excludeMembership?.value)
         }
         insertInDb(response, params.roomId)

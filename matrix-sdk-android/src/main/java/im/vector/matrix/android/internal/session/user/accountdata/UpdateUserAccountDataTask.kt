@@ -18,12 +18,12 @@ package im.vector.matrix.android.internal.session.user.accountdata
 
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.session.sync.model.accountdata.AcceptedTermsContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.BreadcrumbsContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.IdentityServerContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
 import im.vector.matrix.android.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Params, Unit> {
@@ -82,11 +82,11 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
 internal class DefaultUpdateUserAccountDataTask @Inject constructor(
         private val accountDataApi: AccountDataAPI,
         @UserId private val userId: String,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : UpdateUserAccountDataTask {
 
     override suspend fun execute(params: UpdateUserAccountDataTask.Params) {
-        return executeRequest(eventBus) {
+        return executeRequest(globalErrorReceiver) {
             apiCall = accountDataApi.setAccountData(userId, params.type, params.getData())
         }
     }

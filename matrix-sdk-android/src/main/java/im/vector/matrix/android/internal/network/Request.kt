@@ -18,16 +18,16 @@ package im.vector.matrix.android.internal.network
 
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.shouldBeRetried
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
-import org.greenrobot.eventbus.EventBus
 import retrofit2.Call
 import java.io.IOException
 
-internal suspend inline fun <DATA> executeRequest(eventBus: EventBus?,
-                                                  block: Request<DATA>.() -> Unit) = Request<DATA>(eventBus).apply(block).execute()
+internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
+                                                  block: Request<DATA>.() -> Unit) = Request<DATA>(globalErrorReceiver).apply(block).execute()
 
-internal class Request<DATA>(private val eventBus: EventBus?) {
+internal class Request<DATA>(private val globalErrorReceiver: GlobalErrorReceiver?) {
 
     var isRetryable = false
     var initialDelay: Long = 100L
@@ -44,7 +44,7 @@ internal class Request<DATA>(private val eventBus: EventBus?) {
                 response.body()
                         ?: throw IllegalStateException("The request returned a null body")
             } else {
-                throw response.toFailure(eventBus)
+                throw response.toFailure(globalErrorReceiver)
             }
         } catch (exception: Throwable) {
             if (isRetryable && currentRetryCount++ < maxRetryCount && exception.shouldBeRetried()) {

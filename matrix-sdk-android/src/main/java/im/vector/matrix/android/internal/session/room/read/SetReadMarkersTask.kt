@@ -26,13 +26,13 @@ import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.sync.ReadReceiptHandler
 import im.vector.matrix.android.internal.session.sync.RoomFullyReadHandler
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.Realm
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.collections.set
@@ -57,7 +57,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
         private val roomFullyReadHandler: RoomFullyReadHandler,
         private val readReceiptHandler: ReadReceiptHandler,
         @UserId private val userId: String,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : SetReadMarkersTask {
 
     override suspend fun execute(params: SetReadMarkersTask.Params) {
@@ -95,7 +95,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
             updateDatabase(params.roomId, markers, shouldUpdateRoomSummary)
         }
         if (markers.isNotEmpty()) {
-            executeRequest<Unit>(eventBus) {
+            executeRequest<Unit>(globalErrorReceiver) {
                 isRetryable = true
                 apiCall = roomAPI.sendReadMarker(params.roomId, markers)
             }

@@ -52,17 +52,14 @@ import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.session.identity.DefaultIdentityService
+import im.vector.matrix.android.internal.session.network.GlobalErrorHandler
 import im.vector.matrix.android.internal.session.room.timeline.TimelineEventDecryptor
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import im.vector.matrix.android.internal.session.sync.job.SyncWorker
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider
@@ -71,7 +68,7 @@ import javax.inject.Provider
 internal class DefaultSession @Inject constructor(
         override val sessionParams: SessionParams,
         private val workManagerProvider: WorkManagerProvider,
-        private val eventBus: EventBus,
+        private val globalErrorHandler: GlobalErrorHandler,
         @SessionId
         override val sessionId: String,
         private val liveEntityObservers: Set<@JvmSuppressWildcards LiveEntityObserver>,
@@ -121,7 +118,8 @@ internal class DefaultSession @Inject constructor(
         HomeServerCapabilitiesService by homeServerCapabilitiesService.get(),
         ProfileService by profileService.get(),
         AccountDataService by accountDataService.get(),
-        AccountService by accountService.get() {
+        AccountService by accountService.get(),
+        GlobalErrorHandler.Listener {
 
     override val sharedSecretStorageService: SharedSecretStorageService
         get() = _sharedSecretStorageService.get()
@@ -138,7 +136,7 @@ internal class DefaultSession @Inject constructor(
         assert(!isOpen)
         isOpen = true
         liveEntityObservers.forEach { it.start() }
-        eventBus.register(this)
+        globalErrorHandler.listener = this
         timelineEventDecryptor.start()
         shieldTrustUpdater.start()
         defaultIdentityService.start()
@@ -182,7 +180,7 @@ internal class DefaultSession @Inject constructor(
         liveEntityObservers.forEach { it.dispose() }
         cryptoService.get().close()
         isOpen = false
-        eventBus.unregister(this)
+        globalErrorHandler.listener = null
         shieldTrustUpdater.stop()
         taskExecutor.executorScope.launch(coroutineDispatchers.main) {
             // This has to be done on main thread
@@ -212,16 +210,7 @@ internal class DefaultSession @Inject constructor(
         workManagerProvider.cancelAllWorks()
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onGlobalError(globalError: GlobalError) {
-        if (globalError is GlobalError.InvalidToken
-                && globalError.softLogout) {
-            // Mark the token has invalid
-            taskExecutor.executorScope.launch(Dispatchers.IO) {
-                sessionParamsStore.setTokenInvalid(sessionId)
-            }
-        }
-
+    override fun onGlobalError(globalError: GlobalError) {
         sessionListeners.dispatchGlobalError(globalError)
     }
 

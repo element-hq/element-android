@@ -18,8 +18,8 @@ package im.vector.matrix.android.internal.session.pushers
 import im.vector.matrix.android.api.pushrules.RuleKind
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface RemovePushRuleTask : Task<RemovePushRuleTask.Params, Unit> {
@@ -31,11 +31,11 @@ internal interface RemovePushRuleTask : Task<RemovePushRuleTask.Params, Unit> {
 
 internal class DefaultRemovePushRuleTask @Inject constructor(
         private val pushRulesApi: PushRulesApi,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : RemovePushRuleTask {
 
     override suspend fun execute(params: RemovePushRuleTask.Params) {
-        return executeRequest(eventBus) {
+        return executeRequest(globalErrorReceiver) {
             apiCall = pushRulesApi.deleteRule(params.kind.value, params.pushRule.ruleId)
         }
     }

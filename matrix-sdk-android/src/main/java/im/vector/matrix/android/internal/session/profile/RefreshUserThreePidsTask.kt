@@ -19,8 +19,8 @@ package im.vector.matrix.android.internal.session.profile
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.internal.database.model.UserThreePidEntity
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -28,10 +28,10 @@ internal abstract class RefreshUserThreePidsTask : Task<Unit, Unit>
 
 internal class DefaultRefreshUserThreePidsTask @Inject constructor(private val profileAPI: ProfileAPI,
                                                                    private val monarchy: Monarchy,
-                                                                   private val eventBus: EventBus) : RefreshUserThreePidsTask() {
+                                                                   private val globalErrorReceiver: GlobalErrorReceiver) : RefreshUserThreePidsTask() {
 
     override suspend fun execute(params: Unit) {
-        val accountThreePidsResponse = executeRequest<AccountThreePidsResponse>(eventBus) {
+        val accountThreePidsResponse = executeRequest<AccountThreePidsResponse>(globalErrorReceiver) {
             apiCall = profileAPI.getThreePIDs()
         }
 

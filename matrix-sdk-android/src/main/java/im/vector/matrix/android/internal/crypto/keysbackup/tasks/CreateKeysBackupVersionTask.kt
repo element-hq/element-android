@@ -20,19 +20,19 @@ import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.CreateKeysBackupVersionBody
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersion
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface CreateKeysBackupVersionTask : Task<CreateKeysBackupVersionBody, KeysVersion>
 
 internal class DefaultCreateKeysBackupVersionTask @Inject constructor(
         private val roomKeysApi: RoomKeysApi,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : CreateKeysBackupVersionTask {
 
     override suspend fun execute(params: CreateKeysBackupVersionBody): KeysVersion {
-        return executeRequest(eventBus) {
+        return executeRequest(globalErrorReceiver) {
             apiCall = roomKeysApi.createKeysBackupVersion(params)
         }
     }

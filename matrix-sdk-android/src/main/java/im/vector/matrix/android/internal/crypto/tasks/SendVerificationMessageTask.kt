@@ -19,11 +19,11 @@ import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.send.LocalEchoUpdater
 import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface SendVerificationMessageTask : Task<SendVerificationMessageTask.Params, String> {
@@ -37,7 +37,7 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
         private val localEchoUpdater: LocalEchoUpdater,
         private val encryptEventTask: DefaultEncryptEventTask,
         private val roomAPI: RoomAPI,
-        private val eventBus: EventBus) : SendVerificationMessageTask {
+        private val globalErrorReceiver: GlobalErrorReceiver) : SendVerificationMessageTask {
 
     override suspend fun execute(params: SendVerificationMessageTask.Params): String {
         val event = handleEncryption(params)
@@ -45,7 +45,7 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
 
         try {
             localEchoUpdater.updateSendState(localId, SendState.SENDING)
-            val executeRequest = executeRequest<SendResponse>(eventBus) {
+            val executeRequest = executeRequest<SendResponse>(globalErrorReceiver) {
                 apiCall = roomAPI.send(
                         localId,
                         roomId = event.roomId ?: "",

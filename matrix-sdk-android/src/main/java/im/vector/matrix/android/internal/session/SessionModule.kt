@@ -61,6 +61,8 @@ import im.vector.matrix.android.internal.network.token.AccessTokenProvider
 import im.vector.matrix.android.internal.network.token.HomeserverAccessTokenProvider
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.homeserver.DefaultHomeServerCapabilitiesService
+import im.vector.matrix.android.internal.session.network.GlobalErrorHandler
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
 import im.vector.matrix.android.internal.session.room.create.RoomCreateEventLiveObserver
 import im.vector.matrix.android.internal.session.room.prune.EventsPruner
@@ -227,6 +229,9 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindSession(session: DefaultSession): Session
+
+    @Binds
+    abstract fun bindGlobalErrorHandler(handler: GlobalErrorHandler): GlobalErrorReceiver
 
     @Binds
     abstract fun bindNetworkConnectivityChecker(networkConnectivityChecker: DefaultNetworkConnectivityChecker): NetworkConnectivityChecker

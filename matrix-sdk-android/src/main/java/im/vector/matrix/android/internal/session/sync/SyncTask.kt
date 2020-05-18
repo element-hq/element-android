@@ -22,10 +22,10 @@ import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.DefaultInitialSyncProgressService
 import im.vector.matrix.android.internal.session.filter.FilterRepository
 import im.vector.matrix.android.internal.session.homeserver.GetHomeServerCapabilitiesTask
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.session.sync.model.SyncResponse
 import im.vector.matrix.android.internal.session.user.UserStore
 import im.vector.matrix.android.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -44,7 +44,7 @@ internal class DefaultSyncTask @Inject constructor(
         private val getHomeServerCapabilitiesTask: GetHomeServerCapabilitiesTask,
         private val userStore: UserStore,
         private val syncTaskSequencer: SyncTaskSequencer,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : SyncTask {
 
     override suspend fun execute(params: SyncTask.Params) = syncTaskSequencer.post {
@@ -74,7 +74,7 @@ internal class DefaultSyncTask @Inject constructor(
         // Maybe refresh the home server capabilities data we know
         getHomeServerCapabilitiesTask.execute(Unit)
 
-        val syncResponse = executeRequest<SyncResponse>(eventBus) {
+        val syncResponse = executeRequest<SyncResponse>(globalErrorReceiver) {
             apiCall = syncAPI.sync(requestParams)
         }
         syncResponseHandler.handleResponse(syncResponse, token)

@@ -29,6 +29,7 @@ import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.read.SetReadMarkersTask
 import im.vector.matrix.android.internal.session.user.accountdata.DirectChatsHelper
@@ -37,7 +38,6 @@ import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.TimeoutCancellationException
-import org.greenrobot.eventbus.EventBus
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -53,7 +53,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
         private val realmConfiguration: RealmConfiguration,
         private val crossSigningService: CrossSigningService,
         private val deviceListManager: DeviceListManager,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : CreateRoomTask {
 
     override suspend fun execute(params: CreateRoomParams): String {
@@ -63,7 +63,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
             params
         }
 
-        val createRoomResponse = executeRequest<CreateRoomResponse>(eventBus) {
+        val createRoomResponse = executeRequest<CreateRoomResponse>(globalErrorReceiver) {
             apiCall = roomAPI.createRoom(createRoomParams)
         }
         val roomId = createRoomResponse.roomId

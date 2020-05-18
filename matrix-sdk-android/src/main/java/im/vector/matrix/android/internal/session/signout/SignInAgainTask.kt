@@ -21,8 +21,8 @@ import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface SignInAgainTask : Task<SignInAgainTask.Params, Unit> {
@@ -35,11 +35,11 @@ internal class DefaultSignInAgainTask @Inject constructor(
         private val signOutAPI: SignOutAPI,
         private val sessionParams: SessionParams,
         private val sessionParamsStore: SessionParamsStore,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : SignInAgainTask {
 
     override suspend fun execute(params: SignInAgainTask.Params) {
-        val newCredentials = executeRequest<Credentials>(eventBus) {
+        val newCredentials = executeRequest<Credentials>(globalErrorReceiver) {
             apiCall = signOutAPI.loginAgain(
                     PasswordLoginParams.userIdentifier(
                             // Reuse the same userId

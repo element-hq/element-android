@@ -21,8 +21,8 @@ import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.cleanup.CleanupSession
 import im.vector.matrix.android.internal.session.identity.IdentityDisconnectTask
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import java.net.HttpURLConnection
 import javax.inject.Inject
@@ -35,7 +35,7 @@ internal interface SignOutTask : Task<SignOutTask.Params, Unit> {
 
 internal class DefaultSignOutTask @Inject constructor(
         private val signOutAPI: SignOutAPI,
-        private val eventBus: EventBus,
+        private val globalErrorReceiver: GlobalErrorReceiver,
         private val identityDisconnectTask: IdentityDisconnectTask,
         private val cleanupSession: CleanupSession
 ) : SignOutTask {
@@ -45,7 +45,7 @@ internal class DefaultSignOutTask @Inject constructor(
         if (params.signOutFromHomeserver) {
             Timber.d("SignOut: send request...")
             try {
-                executeRequest<Unit>(eventBus) {
+                executeRequest<Unit>(globalErrorReceiver) {
                     apiCall = signOutAPI.signOut()
                 }
             } catch (throwable: Throwable) {

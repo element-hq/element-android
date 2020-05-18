@@ -18,9 +18,9 @@ package im.vector.matrix.android.internal.session.room.timeline
 
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.filter.FilterRepository
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface GetContextOfEventTask : Task<GetContextOfEventTask.Params, TokenChunkEventPersistor.Result> {
@@ -35,12 +35,12 @@ internal class DefaultGetContextOfEventTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val filterRepository: FilterRepository,
         private val tokenChunkEventPersistor: TokenChunkEventPersistor,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetContextOfEventTask {
 
     override suspend fun execute(params: GetContextOfEventTask.Params): TokenChunkEventPersistor.Result {
         val filter = filterRepository.getRoomFilter()
-        val response = executeRequest<EventContextResponse>(eventBus) {
+        val response = executeRequest<EventContextResponse>(globalErrorReceiver) {
             // We are limiting the response to the event with eventId to be sure we don't have any issue with potential merging process.
             apiCall = roomAPI.getContextOfEvent(params.roomId, params.eventId, 0, filter)
         }

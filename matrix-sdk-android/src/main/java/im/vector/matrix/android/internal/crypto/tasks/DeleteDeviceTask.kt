@@ -21,8 +21,8 @@ import im.vector.matrix.android.api.failure.toRegistrationFlowResponse
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.rest.DeleteDeviceParams
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface DeleteDeviceTask : Task<DeleteDeviceTask.Params, Unit> {
@@ -33,12 +33,12 @@ internal interface DeleteDeviceTask : Task<DeleteDeviceTask.Params, Unit> {
 
 internal class DefaultDeleteDeviceTask @Inject constructor(
         private val cryptoApi: CryptoApi,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : DeleteDeviceTask {
 
     override suspend fun execute(params: DeleteDeviceTask.Params) {
         try {
-            executeRequest<Unit>(eventBus) {
+            executeRequest<Unit>(globalErrorReceiver) {
                 apiCall = cryptoApi.deleteDevice(params.deviceId, DeleteDeviceParams())
             }
         } catch (throwable: Throwable) {

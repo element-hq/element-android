@@ -19,8 +19,8 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.rest.SignatureUploadResponse
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface UploadSignaturesTask : Task<UploadSignaturesTask.Params, Unit> {
@@ -31,12 +31,12 @@ internal interface UploadSignaturesTask : Task<UploadSignaturesTask.Params, Unit
 
 internal class DefaultUploadSignaturesTask @Inject constructor(
         private val cryptoApi: CryptoApi,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : UploadSignaturesTask {
 
     override suspend fun execute(params: UploadSignaturesTask.Params) {
         try {
-            val response = executeRequest<SignatureUploadResponse>(eventBus) {
+            val response = executeRequest<SignatureUploadResponse>(globalErrorReceiver) {
                 this.isRetryable = true
                 this.maxRetryCount = 10
                 this.apiCall = cryptoApi.uploadSignatures(params.signatures)

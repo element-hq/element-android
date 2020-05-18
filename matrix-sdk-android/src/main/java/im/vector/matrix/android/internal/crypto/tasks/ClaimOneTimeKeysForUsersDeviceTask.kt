@@ -22,8 +22,8 @@ import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.rest.KeysClaimBody
 import im.vector.matrix.android.internal.crypto.model.rest.KeysClaimResponse
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -36,13 +36,13 @@ internal interface ClaimOneTimeKeysForUsersDeviceTask : Task<ClaimOneTimeKeysFor
 
 internal class DefaultClaimOneTimeKeysForUsersDevice @Inject constructor(
         private val cryptoApi: CryptoApi,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : ClaimOneTimeKeysForUsersDeviceTask {
 
     override suspend fun execute(params: ClaimOneTimeKeysForUsersDeviceTask.Params): MXUsersDevicesMap<MXKey> {
         val body = KeysClaimBody(oneTimeKeys = params.usersDevicesKeyTypesMap.map)
 
-        val keysClaimResponse = executeRequest<KeysClaimResponse>(eventBus) {
+        val keysClaimResponse = executeRequest<KeysClaimResponse>(globalErrorReceiver) {
             apiCall = cryptoApi.claimOneTimeKeysForUsersDevices(body)
         }
         val map = MXUsersDevicesMap<MXKey>()

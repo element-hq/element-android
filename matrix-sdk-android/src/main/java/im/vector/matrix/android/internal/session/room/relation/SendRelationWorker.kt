@@ -25,12 +25,12 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.relation.ReactionContent
 import im.vector.matrix.android.api.session.room.model.relation.ReactionInfo
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.session.room.send.SendResponse
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -47,7 +47,7 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters) : 
     ) : SessionWorkerParams
 
     @Inject lateinit var roomAPI: RoomAPI
-    @Inject lateinit var eventBus: EventBus
+    @Inject lateinit var globalErrorReceiver: GlobalErrorReceiver
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
@@ -88,7 +88,7 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters) : 
     }
 
     private suspend fun sendRelation(roomId: String, relationType: String, relatedEventId: String, localEvent: Event) {
-        executeRequest<SendResponse>(eventBus) {
+        executeRequest<SendResponse>(globalErrorReceiver) {
             apiCall = roomAPI.sendRelation(
                     roomId = roomId,
                     parent_id = relatedEventId,

@@ -19,8 +19,8 @@ package im.vector.matrix.android.internal.crypto.keysbackup.tasks
 import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeyBackupData
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface GetRoomSessionDataTask : Task<GetRoomSessionDataTask.Params, KeyBackupData> {
@@ -33,11 +33,11 @@ internal interface GetRoomSessionDataTask : Task<GetRoomSessionDataTask.Params, 
 
 internal class DefaultGetRoomSessionDataTask @Inject constructor(
         private val roomKeysApi: RoomKeysApi,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetRoomSessionDataTask {
 
     override suspend fun execute(params: GetRoomSessionDataTask.Params): KeyBackupData {
-        return executeRequest(eventBus) {
+        return executeRequest(globalErrorReceiver) {
             apiCall = roomKeysApi.getRoomSessionData(
                     params.roomId,
                     params.sessionId,

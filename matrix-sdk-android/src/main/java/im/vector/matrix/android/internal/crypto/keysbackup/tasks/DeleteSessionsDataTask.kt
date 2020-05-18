@@ -18,8 +18,8 @@ package im.vector.matrix.android.internal.crypto.keysbackup.tasks
 
 import im.vector.matrix.android.internal.crypto.keysbackup.api.RoomKeysApi
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface DeleteSessionsDataTask : Task<DeleteSessionsDataTask.Params, Unit> {
@@ -30,11 +30,11 @@ internal interface DeleteSessionsDataTask : Task<DeleteSessionsDataTask.Params, 
 
 internal class DefaultDeleteSessionsDataTask @Inject constructor(
         private val roomKeysApi: RoomKeysApi,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : DeleteSessionsDataTask {
 
     override suspend fun execute(params: DeleteSessionsDataTask.Params) {
-        return executeRequest(eventBus) {
+        return executeRequest(globalErrorReceiver) {
             apiCall = roomKeysApi.deleteSessionsData(params.version)
         }
     }

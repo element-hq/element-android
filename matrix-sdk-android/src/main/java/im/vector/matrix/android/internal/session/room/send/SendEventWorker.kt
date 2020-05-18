@@ -24,11 +24,11 @@ import im.vector.matrix.android.api.failure.shouldBeRetried
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.worker.SessionWorkerParams
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -49,7 +49,7 @@ internal class SendEventWorker(context: Context,
 
     @Inject lateinit var localEchoUpdater: LocalEchoUpdater
     @Inject lateinit var roomAPI: RoomAPI
-    @Inject lateinit var eventBus: EventBus
+    @Inject lateinit var globalErrorReceiver: GlobalErrorReceiver
 
     override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData<Params>(inputData)
@@ -86,7 +86,7 @@ internal class SendEventWorker(context: Context,
 
     private suspend fun sendEvent(event: Event) {
         localEchoUpdater.updateSendState(event.eventId!!, SendState.SENDING)
-        executeRequest<SendResponse>(eventBus) {
+        executeRequest<SendResponse>(globalErrorReceiver) {
             apiCall = roomAPI.send(
                     event.eventId,
                     event.roomId!!,

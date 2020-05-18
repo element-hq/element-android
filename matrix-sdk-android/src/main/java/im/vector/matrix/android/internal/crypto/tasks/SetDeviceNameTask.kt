@@ -19,8 +19,8 @@ package im.vector.matrix.android.internal.crypto.tasks
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.rest.UpdateDeviceInfoBody
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface SetDeviceNameTask : Task<SetDeviceNameTask.Params, Unit> {
@@ -34,14 +34,14 @@ internal interface SetDeviceNameTask : Task<SetDeviceNameTask.Params, Unit> {
 
 internal class DefaultSetDeviceNameTask @Inject constructor(
         private val cryptoApi: CryptoApi,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : SetDeviceNameTask {
 
     override suspend fun execute(params: SetDeviceNameTask.Params) {
         val body = UpdateDeviceInfoBody(
                 displayName = params.deviceName
         )
-        return executeRequest(eventBus) {
+        return executeRequest(globalErrorReceiver) {
             apiCall = cryptoApi.updateDeviceInfo(params.deviceId, body)
         }
     }

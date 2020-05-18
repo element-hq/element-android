@@ -25,8 +25,8 @@ import im.vector.matrix.android.internal.crypto.model.rest.UploadSigningKeysBody
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import im.vector.matrix.android.internal.crypto.model.toRest
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface UploadSigningKeysTask : Task<UploadSigningKeysTask.Params, Unit> {
@@ -45,7 +45,7 @@ data class UploadSigningKeys(val failures: Map<String, Any>?) : Failure.FeatureF
 
 internal class DefaultUploadSigningKeysTask @Inject constructor(
         private val cryptoApi: CryptoApi,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : UploadSigningKeysTask {
     override suspend fun execute(params: UploadSigningKeysTask.Params) {
         val uploadQuery = UploadSigningKeysBody(
@@ -56,7 +56,7 @@ internal class DefaultUploadSigningKeysTask @Inject constructor(
         )
         try {
             // Make a first request to start user-interactive authentication
-            val request = executeRequest<KeysQueryResponse>(eventBus) {
+            val request = executeRequest<KeysQueryResponse>(globalErrorReceiver) {
                 apiCall = cryptoApi.uploadSigningKeys(uploadQuery)
             }
             if (request.failures?.isNotEmpty() == true) {
@@ -71,7 +71,7 @@ internal class DefaultUploadSigningKeysTask @Inject constructor(
                     && params.userPasswordAuth.session.isNullOrEmpty()
             ) {
                 // Retry with authentication
-                val req = executeRequest<KeysQueryResponse>(eventBus) {
+                val req = executeRequest<KeysQueryResponse>(globalErrorReceiver) {
                     apiCall = cryptoApi.uploadSigningKeys(
                             uploadQuery.copy(auth = params.userPasswordAuth.copy(session = registrationFlowResponse.session))
                     )

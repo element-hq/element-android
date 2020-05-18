@@ -18,8 +18,8 @@ package im.vector.matrix.android.internal.session.pushers
 import im.vector.matrix.android.api.pushrules.RuleKind
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface UpdatePushRuleActionsTask : Task<UpdatePushRuleActionsTask.Params, Unit> {
@@ -32,13 +32,13 @@ internal interface UpdatePushRuleActionsTask : Task<UpdatePushRuleActionsTask.Pa
 
 internal class DefaultUpdatePushRuleActionsTask @Inject constructor(
         private val pushRulesApi: PushRulesApi,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : UpdatePushRuleActionsTask {
 
     override suspend fun execute(params: UpdatePushRuleActionsTask.Params) {
         if (params.oldPushRule.enabled != params.newPushRule.enabled) {
             // First change enabled state
-            executeRequest<Unit>(eventBus) {
+            executeRequest<Unit>(globalErrorReceiver) {
                 apiCall = pushRulesApi.updateEnableRuleStatus(params.kind.value, params.newPushRule.ruleId, params.newPushRule.enabled)
             }
         }
@@ -47,7 +47,7 @@ internal class DefaultUpdatePushRuleActionsTask @Inject constructor(
             // Also ensure the actions are up to date
             val body = mapOf("actions" to params.newPushRule.actions)
 
-            executeRequest<Unit>(eventBus) {
+            executeRequest<Unit>(globalErrorReceiver) {
                 apiCall = pushRulesApi.updateRuleActions(params.kind.value, params.newPushRule.ruleId, body)
             }
         }

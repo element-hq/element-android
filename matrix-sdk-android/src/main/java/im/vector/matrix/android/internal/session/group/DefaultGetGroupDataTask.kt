@@ -24,9 +24,9 @@ import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.group.model.GroupRooms
 import im.vector.matrix.android.internal.session.group.model.GroupSummaryResponse
 import im.vector.matrix.android.internal.session.group.model.GroupUsers
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface GetGroupDataTask : Task<GetGroupDataTask.Params, Unit> {
@@ -37,18 +37,18 @@ internal interface GetGroupDataTask : Task<GetGroupDataTask.Params, Unit> {
 internal class DefaultGetGroupDataTask @Inject constructor(
         private val groupAPI: GroupAPI,
         private val monarchy: Monarchy,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetGroupDataTask {
 
     override suspend fun execute(params: GetGroupDataTask.Params) {
         val groupId = params.groupId
-        val groupSummary = executeRequest<GroupSummaryResponse>(eventBus) {
+        val groupSummary = executeRequest<GroupSummaryResponse>(globalErrorReceiver) {
             apiCall = groupAPI.getSummary(groupId)
         }
-        val groupRooms = executeRequest<GroupRooms>(eventBus) {
+        val groupRooms = executeRequest<GroupRooms>(globalErrorReceiver) {
             apiCall = groupAPI.getRooms(groupId)
         }
-        val groupUsers = executeRequest<GroupUsers>(eventBus) {
+        val groupUsers = executeRequest<GroupUsers>(globalErrorReceiver) {
             apiCall = groupAPI.getUsers(groupId)
         }
         insertInDb(groupSummary, groupRooms, groupUsers, groupId)

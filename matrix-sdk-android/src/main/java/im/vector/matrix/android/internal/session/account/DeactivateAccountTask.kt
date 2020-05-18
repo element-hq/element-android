@@ -20,8 +20,8 @@ import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.cleanup.CleanupSession
 import im.vector.matrix.android.internal.session.identity.IdentityDisconnectTask
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -34,7 +34,7 @@ internal interface DeactivateAccountTask : Task<DeactivateAccountTask.Params, Un
 
 internal class DefaultDeactivateAccountTask @Inject constructor(
         private val accountAPI: AccountAPI,
-        private val eventBus: EventBus,
+        private val globalErrorReceiver: GlobalErrorReceiver,
         @UserId private val userId: String,
         private val identityDisconnectTask: IdentityDisconnectTask,
         private val cleanupSession: CleanupSession
@@ -43,7 +43,7 @@ internal class DefaultDeactivateAccountTask @Inject constructor(
     override suspend fun execute(params: DeactivateAccountTask.Params) {
         val deactivateAccountParams = DeactivateAccountParams.create(userId, params.password, params.eraseAllData)
 
-        executeRequest<Unit>(eventBus) {
+        executeRequest<Unit>(globalErrorReceiver) {
             apiCall = accountAPI.deactivate(deactivateAccountParams)
         }
 

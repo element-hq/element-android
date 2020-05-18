@@ -18,8 +18,8 @@ package im.vector.matrix.android.internal.session.pushers
 import im.vector.matrix.android.api.pushrules.RuleKind
 import im.vector.matrix.android.api.pushrules.rest.PushRule
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.network.GlobalErrorReceiver
 import im.vector.matrix.android.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface AddPushRuleTask : Task<AddPushRuleTask.Params, Unit> {
@@ -31,11 +31,11 @@ internal interface AddPushRuleTask : Task<AddPushRuleTask.Params, Unit> {
 
 internal class DefaultAddPushRuleTask @Inject constructor(
         private val pushRulesApi: PushRulesApi,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : AddPushRuleTask {
 
     override suspend fun execute(params: AddPushRuleTask.Params) {
-        return executeRequest(eventBus) {
+        return executeRequest(globalErrorReceiver) {
             apiCall = pushRulesApi.addRule(params.kind.value, params.pushRule.ruleId, params.pushRule)
         }
     }
