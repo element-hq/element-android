@@ -28,7 +28,7 @@ data class RoomEventFilter(
         /**
          * The maximum number of events to return.
          */
-        @Json(name = "limit") var limit: Int? = null,
+        @Json(name = "limit") val limit: Int? = null,
         /**
          * A list of sender IDs to exclude. If this list is absent then no senders are excluded. A matching sender will
          * be excluded even if it is listed in the 'senders' filter.
