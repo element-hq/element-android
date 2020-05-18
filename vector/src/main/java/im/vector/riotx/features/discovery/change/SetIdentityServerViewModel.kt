@@ -34,6 +34,7 @@ import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.ensureProtocol
 import kotlinx.coroutines.launch
+import java.net.UnknownHostException
 
 class SetIdentityServerViewModel @AssistedInject constructor(
         @Assisted initialState: SetIdentityServerState,
@@ -77,16 +78,16 @@ class SetIdentityServerViewModel @AssistedInject constructor(
     }
 
     private fun useDefault() = withState { state ->
-        state.defaultIdentityServerUrl?.let { doChangeIdentityServerUrl(it) }
+        state.defaultIdentityServerUrl?.let { doChangeIdentityServerUrl(it, true) }
     }
 
     private fun usedCustomIdentityServerUrl(action: SetIdentityServerAction.UseCustomIdentityServer) {
-        doChangeIdentityServerUrl(action.url)
+        doChangeIdentityServerUrl(action.url, false)
     }
 
-    private fun doChangeIdentityServerUrl(url: String) {
+    private fun doChangeIdentityServerUrl(url: String, isDefault: Boolean) {
         if (url.isEmpty()) {
-            _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.settings_discovery_please_enter_server))
+            _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.settings_discovery_please_enter_server, isDefault))
             return
         }
         val baseUrl = url.ensureProtocol().also { currentWantedUrl = it }
@@ -102,11 +103,13 @@ class SetIdentityServerViewModel @AssistedInject constructor(
                 // Ok, next step
                 checkTerms(baseUrl)
             } catch (failure: Throwable) {
-                if (failure is IdentityServiceError.OutdatedIdentityServer) {
-                    _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.identity_server_error_outdated_identity_server))
-                } else {
-                    _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.settings_discovery_bad_identity_server))
-                    _viewEvents.post(SetIdentityServerViewEvents.OtherFailure(failure))
+                when {
+                    failure is IdentityServiceError.OutdatedIdentityServer                              ->
+                        _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.identity_server_error_outdated_identity_server, isDefault))
+                    failure is Failure.NetworkConnection && failure.ioException is UnknownHostException ->
+                        _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.settings_discovery_bad_identity_server, isDefault))
+                    else                                                                                ->
+                        _viewEvents.post(SetIdentityServerViewEvents.OtherFailure(failure))
                 }
             }
         }
@@ -137,7 +140,6 @@ class SetIdentityServerViewModel @AssistedInject constructor(
                 // 404: Same as NoTerms
                 _viewEvents.post(SetIdentityServerViewEvents.NoTerms)
             } else {
-                _viewEvents.post(SetIdentityServerViewEvents.Failure(R.string.settings_discovery_bad_identity_server))
                 _viewEvents.post(SetIdentityServerViewEvents.OtherFailure(failure))
             }
         }

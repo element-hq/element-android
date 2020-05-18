@@ -104,7 +104,7 @@ class SetIdentityServerFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is SetIdentityServerViewEvents.Loading       -> showLoading(it.message)
-                is SetIdentityServerViewEvents.Failure       -> identityServerSetDefaultAlternativeTil.error = getString(it.errorMessageId)
+                is SetIdentityServerViewEvents.Failure       -> handleFailure(it)
                 is SetIdentityServerViewEvents.OtherFailure  -> showFailure(it.failure)
                 is SetIdentityServerViewEvents.NoTerms       -> {
                     AlertDialog.Builder(requireActivity())
@@ -126,6 +126,21 @@ class SetIdentityServerFragment @Inject constructor(
                             null)
                 }
             }.exhaustive
+        }
+    }
+
+    private fun handleFailure(failure: SetIdentityServerViewEvents.Failure) {
+        val message = getString(failure.errorMessageId)
+        if (failure.forDefault) {
+            // Display the error in a dialog
+            AlertDialog.Builder(requireActivity())
+                    .setTitle(R.string.dialog_title_error)
+                    .setMessage(message)
+                    .setPositiveButton(R.string.ok, null)
+                    .show()
+        } else {
+            // Display the error inlined
+            identityServerSetDefaultAlternativeTil.error = message
         }
     }
 

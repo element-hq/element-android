@@ -21,7 +21,7 @@ import im.vector.riotx.core.platform.VectorViewEvents
 
 sealed class SetIdentityServerViewEvents : VectorViewEvents {
     data class Loading(val message: CharSequence? = null) : SetIdentityServerViewEvents()
-    data class Failure(@StringRes val errorMessageId: Int) : SetIdentityServerViewEvents()
+    data class Failure(@StringRes val errorMessageId: Int, val forDefault: Boolean) : SetIdentityServerViewEvents()
     data class OtherFailure(val failure: Throwable) : SetIdentityServerViewEvents()
 
     data class ShowTerms(val identityServerUrl: String) : SetIdentityServerViewEvents()
