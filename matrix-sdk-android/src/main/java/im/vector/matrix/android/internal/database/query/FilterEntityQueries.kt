@@ -35,7 +35,7 @@ internal fun FilterEntity.Companion.get(realm: Realm): FilterEntity? {
 internal fun FilterEntity.Companion.getOrCreate(realm: Realm): FilterEntity {
     return get(realm) ?: realm.createObject<FilterEntity>()
             .apply {
-                filterBodyJson = FilterFactory.createDefaultFilterBody().toJSONString()
+                filterBodyJson = FilterFactory.createDefaultFilter().toJSONString()
                 roomEventFilterJson = FilterFactory.createDefaultRoomFilter().toJSONString()
                 filterId = ""
             }
