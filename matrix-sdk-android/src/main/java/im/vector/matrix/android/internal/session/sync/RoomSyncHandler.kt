@@ -166,7 +166,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     roomSync.timeline.prevToken,
                     roomSync.timeline.limited,
                     syncLocalTimestampMillis,
-                    !isInitialSync
+                    isInitialSync
             )
             roomEntity.addOrUpdate(chunkEntity)
         }
@@ -264,7 +264,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                      prevToken: String? = null,
                                      isLimited: Boolean = true,
                                      syncLocalTimestampMillis: Long,
-                                     decryptOnTheFly: Boolean): ChunkEntity {
+                                     isInitialSync: Boolean): ChunkEntity {
         val lastChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomEntity.roomId)
         val chunkEntity = if (!isLimited && lastChunk != null) {
             lastChunk
@@ -284,7 +284,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             }
             eventIds.add(event.eventId)
 
-            if (event.isEncrypted() && decryptOnTheFly) {
+            if (event.isEncrypted() && !isInitialSync) {
                 decryptIfNeeded(event, roomId)
             }
 
