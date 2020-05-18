@@ -15,12 +15,16 @@
  */
 package im.vector.matrix.android.internal.crypto.crosssigning
 
-data class SessionToCryptoRoomMembersUpdate(
-        val roomId: String,
-        val isDirect: Boolean,
-        val userIds: List<String>
-)
+import im.vector.matrix.android.internal.session.SessionScope
+import javax.inject.Inject
 
-data class CryptoToSessionUserTrustChange(
-        val userIds: List<String>
-)
+@SessionScope
+internal class ShieldTrustUpdaterInput @Inject constructor() {
+    var listener: Listener? = null
+
+    internal interface Listener {
+        fun onSessionToCryptoRoomMembersUpdate(roomId: String, isDirect: Boolean, userIds: List<String>)
+
+        fun onCryptoToSessionUserTrustChange(userIds: List<String>)
+    }
+}

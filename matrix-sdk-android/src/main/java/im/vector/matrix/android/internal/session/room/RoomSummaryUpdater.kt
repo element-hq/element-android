@@ -26,7 +26,7 @@ import im.vector.matrix.android.api.session.room.model.RoomAliasesContent
 import im.vector.matrix.android.api.session.room.model.RoomCanonicalAliasContent
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
-import im.vector.matrix.android.internal.crypto.crosssigning.SessionToCryptoRoomMembersUpdate
+import im.vector.matrix.android.internal.crypto.crosssigning.ShieldTrustUpdaterInput
 import im.vector.matrix.android.internal.database.mapper.ContentMapper
 import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
 import im.vector.matrix.android.internal.database.model.EventEntity
@@ -47,7 +47,6 @@ import im.vector.matrix.android.internal.session.sync.RoomSyncHandler
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncSummary
 import im.vector.matrix.android.internal.session.sync.model.RoomSyncUnreadNotifications
 import io.realm.Realm
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -56,7 +55,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         private val roomDisplayNameResolver: RoomDisplayNameResolver,
         private val roomAvatarResolver: RoomAvatarResolver,
         private val timelineEventDecryptor: Lazy<TimelineEventDecryptor>,
-        private val eventBus: EventBus,
+        private val shieldTrustUpdaterInput: ShieldTrustUpdaterInput,
         private val monarchy: Monarchy) {
 
     companion object {
@@ -162,7 +161,8 @@ internal class RoomSummaryUpdater @Inject constructor(
             roomSummaryEntity.otherMemberIds.clear()
             roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers)
             if (roomSummaryEntity.isEncrypted) {
-                eventBus.post(SessionToCryptoRoomMembersUpdate(roomId, roomSummaryEntity.isDirect, roomSummaryEntity.otherMemberIds.toList() + userId))
+                shieldTrustUpdaterInput.listener
+                        ?.onSessionToCryptoRoomMembersUpdate(roomId, roomSummaryEntity.isDirect, roomSummaryEntity.otherMemberIds.toList() + userId)
             }
         }
     }

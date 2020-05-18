@@ -21,6 +21,7 @@ import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntityF
 import im.vector.matrix.android.internal.database.model.RoomSummaryEntity
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.di.SessionDatabase
+import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.room.RoomSummaryUpdater
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -29,20 +30,19 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
+@SessionScope
 internal class ShieldTrustUpdater @Inject constructor(
-        private val eventBus: EventBus,
+        private val shieldTrustUpdaterInput: ShieldTrustUpdaterInput,
         private val computeTrustTask: ComputeTrustTask,
         private val taskExecutor: TaskExecutor,
         @SessionDatabase private val sessionRealmConfiguration: RealmConfiguration,
         private val roomSummaryUpdater: RoomSummaryUpdater
-) {
+) : ShieldTrustUpdaterInput.Listener {
 
     companion object {
         private val BACKGROUND_HANDLER = createBackgroundHandler("SHIELD_CRYPTO_DB_THREAD")
@@ -55,7 +55,7 @@ internal class ShieldTrustUpdater @Inject constructor(
 
     fun start() {
         if (isStarted.compareAndSet(false, true)) {
-            eventBus.register(this)
+            shieldTrustUpdaterInput.listener = this
             BACKGROUND_HANDLER.post {
                 backgroundSessionRealm.set(Realm.getInstance(sessionRealmConfiguration))
             }
@@ -64,7 +64,7 @@ internal class ShieldTrustUpdater @Inject constructor(
 
     fun stop() {
         if (isStarted.compareAndSet(true, false)) {
-            eventBus.unregister(this)
+            shieldTrustUpdaterInput.listener = null
             BACKGROUND_HANDLER.post {
                 backgroundSessionRealm.getAndSet(null).also {
                     it?.close()
@@ -73,26 +73,24 @@ internal class ShieldTrustUpdater @Inject constructor(
         }
     }
 
-    @Subscribe
-    fun onRoomMemberChange(update: SessionToCryptoRoomMembersUpdate) {
+    override fun onSessionToCryptoRoomMembersUpdate(roomId: String, isDirect: Boolean, userIds: List<String>) {
         if (!isStarted.get()) {
             return
         }
         taskExecutor.executorScope.launch(BACKGROUND_HANDLER_DISPATCHER) {
-            val updatedTrust = computeTrustTask.execute(ComputeTrustTask.Params(update.userIds, update.isDirect))
+            val updatedTrust = computeTrustTask.execute(ComputeTrustTask.Params(userIds, isDirect))
             // We need to send that back to session base
             backgroundSessionRealm.get()?.executeTransaction { realm ->
-                roomSummaryUpdater.updateShieldTrust(realm, update.roomId, updatedTrust)
+                roomSummaryUpdater.updateShieldTrust(realm, roomId, updatedTrust)
             }
         }
     }
 
-    @Subscribe
-    fun onTrustUpdate(update: CryptoToSessionUserTrustChange) {
+    override fun onCryptoToSessionUserTrustChange(userIds: List<String>) {
         if (!isStarted.get()) {
             return
         }
-        onCryptoDevicesChange(update.userIds)
+        onCryptoDevicesChange(userIds)
     }
 
     private fun onCryptoDevicesChange(users: List<String>) {

@@ -38,7 +38,6 @@ import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.withoutPrefix
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
 import org.matrix.olm.OlmPkSigning
 import org.matrix.olm.OlmUtility
 import timber.log.Timber
@@ -54,7 +53,10 @@ internal class DefaultCrossSigningService @Inject constructor(
         private val taskExecutor: TaskExecutor,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope,
-        private val eventBus: EventBus) : CrossSigningService, DeviceListManager.UserDevicesUpdateListener {
+        private val shieldTrustUpdaterInput: ShieldTrustUpdaterInput
+) :
+        CrossSigningService,
+        DeviceListManager.UserDevicesUpdateListener {
 
     private var olmUtility: OlmUtility? = null
 
@@ -669,7 +671,7 @@ internal class DefaultCrossSigningService @Inject constructor(
                 }
             }
 
-            eventBus.post(CryptoToSessionUserTrustChange(userIds))
+            shieldTrustUpdaterInput.listener?.onCryptoToSessionUserTrustChange(userIds)
         }
     }
 
