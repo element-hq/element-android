@@ -33,7 +33,6 @@ import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.crypto.tasks.SendToDeviceTask
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
 import im.vector.matrix.android.internal.worker.getSessionComponent
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -60,7 +59,6 @@ internal class CancelGossipRequestWorker(context: Context,
 
     @Inject lateinit var sendToDeviceTask: SendToDeviceTask
     @Inject lateinit var cryptoStore: IMXCryptoStore
-    @Inject lateinit var eventBus: EventBus
     @Inject lateinit var credentials: Credentials
 
     override suspend fun doWork(): Result {
