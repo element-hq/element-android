@@ -21,6 +21,5 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 
 data class ReviewTermsViewState(
-        val termsList: Async<List<Term>> = Uninitialized,
-        val acceptingTerms: Async<Unit> = Uninitialized
+        val termsList: Async<List<Term>> = Uninitialized
 ) : MvRxState

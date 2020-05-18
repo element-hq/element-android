@@ -52,6 +52,7 @@ class ReviewTermsActivity : SimpleFragmentActivity() {
 
         reviewTermsViewModel.observeViewEvents {
             when (it) {
+                is ReviewTermsViewEvents.Loading -> Unit
                 is ReviewTermsViewEvents.Failure -> {
                     AlertDialog.Builder(this)
                             .setMessage(errorFormatter.toHumanReadable(it.throwable))

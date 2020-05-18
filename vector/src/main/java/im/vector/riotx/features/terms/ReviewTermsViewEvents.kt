@@ -19,6 +19,7 @@ package im.vector.riotx.features.terms
 import im.vector.riotx.core.platform.VectorViewEvents
 
 sealed class ReviewTermsViewEvents : VectorViewEvents {
+    data class Loading(val message: CharSequence? = null) : ReviewTermsViewEvents()
     data class Failure(val throwable: Throwable, val finish: Boolean) : ReviewTermsViewEvents()
     object Success : ReviewTermsViewEvents()
 }

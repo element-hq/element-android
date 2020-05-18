@@ -58,8 +58,8 @@ class ReviewTermsFragment @Inject constructor(
 
         reviewTermsViewModel.observeViewEvents {
             when (it) {
+                is ReviewTermsViewEvents.Loading -> showLoading(it.message)
                 is ReviewTermsViewEvents.Failure -> {
-                    reviewTermsWaitOverlay.isVisible = false
                     // Dialog is displayed by the Activity
                 }
                 ReviewTermsViewEvents.Success    -> {
@@ -83,29 +83,22 @@ class ReviewTermsFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(reviewTermsViewModel) { state ->
+        termsController.setData(state)
+
         when (state.termsList) {
             is Loading -> {
                 reviewTermsBottomBar.isVisible = false
-                reviewTermsWaitOverlay.isVisible = true
             }
             is Success -> {
-                updateState(state.termsList.invoke())
-                reviewTermsWaitOverlay.isVisible = false
                 reviewTermsBottomBar.isVisible = true
                 reviewTermsAccept.isEnabled = state.termsList.invoke().all { it.accepted }
             }
-            else       -> {
-                reviewTermsWaitOverlay.isVisible = false
-            }
-        }
-
-        if (!reviewTermsWaitOverlay.isVisible) {
-            reviewTermsWaitOverlay.isVisible = state.acceptingTerms is Loading
+            else       -> Unit
         }
     }
 
-    private fun updateState(terms: List<Term>) {
-        termsController.setData(terms)
+    override fun retry() {
+        reviewTermsViewModel.handle(ReviewTermsAction.LoadTerms(getString(R.string.resources_language)))
     }
 
     override fun setChecked(term: Term, isChecked: Boolean) {

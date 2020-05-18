@@ -88,11 +88,7 @@ class ReviewTermsViewModel @AssistedInject constructor(
             return@withState
         }
 
-        setState {
-            copy(
-                    acceptingTerms = Loading()
-            )
-        }
+        _viewEvents.post(ReviewTermsViewEvents.Loading())
 
         val agreedUrls = acceptedTerms.map { it.url }
 
@@ -110,11 +106,6 @@ class ReviewTermsViewModel @AssistedInject constructor(
                 _viewEvents.post(ReviewTermsViewEvents.Success)
             } catch (failure: Throwable) {
                 Timber.e(failure, "Failed to agree to terms")
-                setState {
-                    copy(
-                            acceptingTerms = Uninitialized
-                    )
-                }
                 _viewEvents.post(ReviewTermsViewEvents.Failure(failure, false))
             }
         }

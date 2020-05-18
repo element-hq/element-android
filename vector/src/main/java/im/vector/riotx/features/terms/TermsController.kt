@@ -17,39 +17,65 @@ package im.vector.riotx.features.terms
 
 import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Incomplete
+import com.airbnb.mvrx.Success
 import im.vector.riotx.R
+import im.vector.riotx.core.epoxy.errorWithRetryItem
+import im.vector.riotx.core.epoxy.loadingItem
+import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.features.discovery.settingsSectionTitleItem
 import javax.inject.Inject
 
-class TermsController @Inject constructor() : TypedEpoxyController<List<Term>>() {
+class TermsController @Inject constructor(
+        private val errorFormatter: ErrorFormatter
+) : TypedEpoxyController<ReviewTermsViewState>() {
 
     var description: String? = null
     var listener: Listener? = null
 
-    override fun buildModels(data: List<Term>?) {
-        data?.let {
-            settingsSectionTitleItem {
-                id("header")
-                titleResId(R.string.widget_integration_review_terms)
-            }
-            it.forEach { term ->
-                termItem {
-                    id(term.url)
-                    name(term.name)
-                    description(description)
-                    checked(term.accepted)
+    override fun buildModels(data: ReviewTermsViewState?) {
+        data ?: return
 
-                    clickListener(View.OnClickListener { listener?.review(term) })
-                    checkChangeListener { _, isChecked ->
-                        listener?.setChecked(term, isChecked)
-                    }
+        when (data.termsList) {
+            is Incomplete -> {
+                loadingItem {
+                    id("loading")
+                }
+            }
+            is Fail       -> {
+                errorWithRetryItem {
+                    id("errorRetry")
+                    text(errorFormatter.toHumanReadable(data.termsList.error))
+                    listener { listener?.retry() }
+                }
+            }
+            is Success    -> buildTerms(data.termsList.invoke())
+        }
+    }
+
+    private fun buildTerms(termsList: List<Term>) {
+        settingsSectionTitleItem {
+            id("header")
+            titleResId(R.string.widget_integration_review_terms)
+        }
+        termsList.forEach { term ->
+            termItem {
+                id(term.url)
+                name(term.name)
+                description(description)
+                checked(term.accepted)
+
+                clickListener(View.OnClickListener { listener?.review(term) })
+                checkChangeListener { _, isChecked ->
+                    listener?.setChecked(term, isChecked)
                 }
             }
         }
-        // TODO error mgmt
     }
 
     interface Listener {
+        fun retry()
         fun setChecked(term: Term, isChecked: Boolean)
         fun review(term: Term)
     }
