@@ -64,6 +64,8 @@ import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEvent
 import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
 import im.vector.matrix.android.internal.session.room.typing.DefaultSendTypingTask
 import im.vector.matrix.android.internal.session.room.typing.SendTypingTask
+import im.vector.matrix.android.internal.session.room.uploads.DefaultGetUploadsTask
+import im.vector.matrix.android.internal.session.room.uploads.GetUploadsTask
 import retrofit2.Retrofit
 
 @Module
@@ -156,4 +158,7 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindSendTypingTask(task: DefaultSendTypingTask): SendTypingTask
+
+    @Binds
+    abstract fun bindGetUploadsTask(task: DefaultGetUploadsTask): GetUploadsTask
 }

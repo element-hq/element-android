@@ -32,6 +32,7 @@ import im.vector.matrix.android.internal.session.room.state.DefaultStateService
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineService
 import im.vector.matrix.android.internal.session.room.typing.DefaultTypingService
+import im.vector.matrix.android.internal.session.room.uploads.DefaultUploadsService
 import im.vector.matrix.android.internal.task.TaskExecutor
 import javax.inject.Inject
 
@@ -47,6 +48,7 @@ internal class DefaultRoomFactory @Inject constructor(private val monarchy: Mona
                                                       private val sendServiceFactory: DefaultSendService.Factory,
                                                       private val draftServiceFactory: DefaultDraftService.Factory,
                                                       private val stateServiceFactory: DefaultStateService.Factory,
+                                                      private val uploadsServiceFactory: DefaultUploadsService.Factory,
                                                       private val reportingServiceFactory: DefaultReportingService.Factory,
                                                       private val readServiceFactory: DefaultReadService.Factory,
                                                       private val typingServiceFactory: DefaultTypingService.Factory,
@@ -66,6 +68,7 @@ internal class DefaultRoomFactory @Inject constructor(private val monarchy: Mona
                 sendService = sendServiceFactory.create(roomId),
                 draftService = draftServiceFactory.create(roomId),
                 stateService = stateServiceFactory.create(roomId),
+                uploadsService = uploadsServiceFactory.create(roomId),
                 reportingService = reportingServiceFactory.create(roomId),
                 readService = readServiceFactory.create(roomId),
                 typingService = typingServiceFactory.create(roomId),

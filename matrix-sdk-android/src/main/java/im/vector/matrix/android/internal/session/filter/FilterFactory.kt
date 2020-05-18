@@ -20,6 +20,15 @@ import im.vector.matrix.android.api.session.events.model.EventType
 
 internal object FilterFactory {
 
+    fun createUploadsFilter(numberOfEvents: Int): RoomEventFilter {
+        return RoomEventFilter(
+                limit = numberOfEvents,
+                containsUrl = true,
+                types = listOf(EventType.MESSAGE),
+                lazyLoadMembers = true
+        )
+    }
+
     fun createDefaultFilter(): Filter {
         return FilterUtil.enableLazyLoading(Filter(), true)
     }
