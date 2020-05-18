@@ -23,9 +23,6 @@ import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import im.vector.riotx.R
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.Locale
@@ -258,19 +255,13 @@ object VectorLocale {
         }
     }
 
-    fun loadLocales(listener: Listener): Job {
-        return GlobalScope.launch(Dispatchers.Main) {
-            if (supportedLocales.isEmpty()) {
-                // init the known locales in background
-                withContext(Dispatchers.IO) {
-                    initApplicationLocales()
-                }
+    suspend fun getSupportedLocales(): List<Locale> {
+        if (supportedLocales.isEmpty()) {
+            // init the known locales in background
+            withContext(Dispatchers.IO) {
+                initApplicationLocales()
             }
-            listener.onLoaded(supportedLocales)
         }
-    }
-
-    interface Listener {
-        fun onLoaded(locales: List<Locale>)
+        return supportedLocales
     }
 }
