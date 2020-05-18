@@ -53,6 +53,10 @@ fun isIgnoringBatteryOptimizations(context: Context): Boolean {
             || (context.getSystemService(Context.POWER_SERVICE) as PowerManager?)?.isIgnoringBatteryOptimizations(context.packageName) == true
 }
 
+fun isAirplaneModeOn(context: Context): Boolean {
+    return Settings.Global.getInt(context.contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) != 0
+}
+
 /**
  * display the system dialog for granting this permission. If previously granted, the
  * system will not show it (so you should call this method).
