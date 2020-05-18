@@ -19,13 +19,11 @@ package im.vector.riotx.features.settings
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
-import androidx.preference.PreferenceManager
 import androidx.core.content.edit
-import im.vector.riotx.BuildConfig
+import androidx.preference.PreferenceManager
 import im.vector.riotx.R
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.Locale
 
@@ -41,10 +39,9 @@ object VectorLocale {
     private val defaultLocale = Locale("en", "US")
 
     /**
-     * The supported application languages
+     * The cache of supported application languages
      */
-    var supportedLocales = ArrayList<Locale>()
-        private set
+    private val supportedLocales = mutableListOf<Locale>()
 
     /**
      * Provides the current application locale
@@ -52,10 +49,13 @@ object VectorLocale {
     var applicationLocale = defaultLocale
         private set
 
+    lateinit var context: Context
+
     /**
      * Init this object
      */
     fun init(context: Context) {
+        this.context = context
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
 
         if (preferences.contains(APPLICATION_LOCALE_LANGUAGE_KEY)) {
@@ -72,19 +72,14 @@ object VectorLocale {
                 applicationLocale = defaultLocale
             }
 
-            saveApplicationLocale(context, applicationLocale)
-        }
-
-        // init the known locales in background, using kotlin coroutines
-        GlobalScope.launch(Dispatchers.IO) {
-            initApplicationLocales(context)
+            saveApplicationLocale(applicationLocale)
         }
     }
 
     /**
      * Save the new application locale.
      */
-    fun saveApplicationLocale(context: Context, locale: Locale) {
+    fun saveApplicationLocale(locale: Locale) {
         applicationLocale = locale
 
         PreferenceManager.getDefaultSharedPreferences(context).edit {
@@ -144,6 +139,7 @@ object VectorLocale {
         } else {
             val resources = context.resources
             val conf = resources.configuration
+
             @Suppress("DEPRECATION")
             val savedLocale = conf.locale
             @Suppress("DEPRECATION")
@@ -165,11 +161,9 @@ object VectorLocale {
     }
 
     /**
-     * Provides the supported application locales list
-     *
-     * @param context the context
+     * Init the supported application locales list
      */
-    private fun initApplicationLocales(context: Context) {
+    private fun initApplicationLocales() {
         val knownLocalesSet = HashSet<Triple<String, String, String>>()
 
         try {
@@ -195,9 +189,7 @@ object VectorLocale {
             )
         }
 
-        supportedLocales.clear()
-
-        knownLocalesSet.mapTo(supportedLocales) { (language, country, script) ->
+        val list = knownLocalesSet.map { (language, country, script) ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 Locale.Builder()
                         .setLanguage(language)
@@ -208,9 +200,11 @@ object VectorLocale {
                 Locale(language, country)
             }
         }
+                // sort by human display names
+                .sortedBy { localeToLocalisedString(it).toLowerCase(it) }
 
-        // sort by human display names
-        supportedLocales.sortWith(Comparator { lhs, rhs -> localeToLocalisedString(lhs).compareTo(localeToLocalisedString(rhs)) })
+        supportedLocales.clear()
+        supportedLocales.addAll(list)
     }
 
     /**
@@ -235,22 +229,39 @@ object VectorLocale {
                 append(locale.getDisplayCountry(locale))
                 append(")")
             }
+        }
+    }
 
-            // In debug mode, also display information about the locale in the current locale.
-            if (BuildConfig.DEBUG) {
-                append("\n[")
-                append(locale.displayLanguage)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && locale.script != "Latn") {
-                    append(" - ")
-                    append(locale.displayScript)
-                }
-                if (locale.displayCountry.isNotEmpty()) {
-                    append(" (")
-                    append(locale.displayCountry)
-                    append(")")
-                }
-                append("]")
+    /**
+     * Information about the locale in the current locale
+     *
+     * @param locale the locale to get info from
+     * @return the string
+     */
+    fun localeToLocalisedStringInfo(locale: Locale): String {
+        return buildString {
+            append("[")
+            append(locale.displayLanguage)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && locale.script != "Latn") {
+                append(" - ")
+                append(locale.displayScript)
+            }
+            if (locale.displayCountry.isNotEmpty()) {
+                append(" (")
+                append(locale.displayCountry)
+                append(")")
+            }
+            append("]")
+        }
+    }
+
+    suspend fun getSupportedLocales(): List<Locale> {
+        if (supportedLocales.isEmpty()) {
+            // init the known locales in background
+            withContext(Dispatchers.IO) {
+                initApplicationLocales()
             }
         }
+        return supportedLocales
     }
 }

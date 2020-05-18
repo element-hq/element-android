@@ -179,7 +179,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
             }
         })
 
-        sessionListener = getVectorComponent().sessionListener()
+        sessionListener = vectorComponent.sessionListener()
         sessionListener.globalErrorLiveData.observeEvent(this) {
             handleGlobalError(it)
         }

@@ -33,9 +33,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import im.vector.riotx.R
 import im.vector.riotx.features.notifications.NotificationUtils
-import im.vector.riotx.features.settings.VectorLocale
-import timber.log.Timber
-import java.util.Locale
 
 /**
  * Tells if the application ignores battery optimizations.
@@ -91,24 +88,6 @@ fun copyToClipboard(context: Context, text: CharSequence, showToast: Boolean = t
     clipboard.setPrimaryClip(ClipData.newPlainText("", text))
     if (showToast) {
         context.toast(toastMessage)
-    }
-}
-
-/**
- * Provides the device locale
- *
- * @return the device locale
- */
-fun getDeviceLocale(context: Context): Locale {
-    return try {
-        val packageManager = context.packageManager
-        val resources = packageManager.getResourcesForApplication("android")
-        @Suppress("DEPRECATION")
-        resources.configuration.locale
-    } catch (e: Exception) {
-        Timber.e(e, "## getDeviceLocale() failed")
-        // Fallback to application locale
-        VectorLocale.applicationLocale
     }
 }
 

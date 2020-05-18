@@ -6,6 +6,7 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
 
 <#if createViewEvents>
@@ -38,7 +39,8 @@ class ${viewModelClass} @AssistedInject constructor(@Assisted initialState: ${vi
     }
 
     override fun handle(action: ${actionClass}) {
-		//TODO
-    }
+        when (action) {
 
+        }.exhaustive
+    }
 }

@@ -130,9 +130,9 @@ interface VectorComponent {
 
     fun emojiDataSource(): EmojiDataSource
 
-    fun alertManager() : PopupAlertManager
+    fun alertManager(): PopupAlertManager
 
-    fun reAuthHelper() : ReAuthHelper
+    fun reAuthHelper(): ReAuthHelper
 
     @Component.Factory
     interface Factory {
