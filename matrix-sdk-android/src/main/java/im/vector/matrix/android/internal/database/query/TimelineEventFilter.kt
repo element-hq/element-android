@@ -16,8 +16,22 @@
 
 package im.vector.matrix.android.internal.database.query
 
-internal object FilterContent {
+/**
+ * Query strings used to filter the timeline events regarding the Json raw string of the Event
+ */
+internal object TimelineEventFilter {
+    /**
+     * To apply to Event.content
+     */
+    internal object Content {
+        internal const val EDIT = """{*"m.relates_to"*"rel_type":*"m.replace"*}"""
+        internal const val RESPONSE = """{*"m.relates_to"*"rel_type":*"m.response"*}"""
+    }
 
-    internal const val EDIT_TYPE = """{*"m.relates_to"*"rel_type":*"m.replace"*}"""
-    internal const val RESPONSE_TYPE = """{*"m.relates_to"*"rel_type":*"m.response"*}"""
+    /**
+     * To apply to Event.unsigned
+     */
+    internal object Unsigned {
+        internal const val REDACTED = """{*"redacted_because":*}"""
+    }
 }

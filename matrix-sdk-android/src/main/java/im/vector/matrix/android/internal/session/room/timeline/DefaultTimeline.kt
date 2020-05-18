@@ -35,8 +35,7 @@ import im.vector.matrix.android.internal.database.model.EventAnnotationsSummaryE
 import im.vector.matrix.android.internal.database.model.RoomEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
-import im.vector.matrix.android.internal.database.query.FilterContent
-import im.vector.matrix.android.internal.database.query.UnsignedContent
+import im.vector.matrix.android.internal.database.query.TimelineEventFilter
 import im.vector.matrix.android.internal.database.query.findAllInRoomWithSendStates
 import im.vector.matrix.android.internal.database.query.where
 import im.vector.matrix.android.internal.database.query.whereInRoom
@@ -725,11 +724,11 @@ internal class DefaultTimeline(
             `in`(TimelineEventEntityFields.ROOT.TYPE, settings.allowedTypes.toTypedArray())
         }
         if (settings.filterEdits) {
-            not().like(TimelineEventEntityFields.ROOT.CONTENT, FilterContent.EDIT_TYPE)
-            not().like(TimelineEventEntityFields.ROOT.CONTENT, FilterContent.RESPONSE_TYPE)
+            not().like(TimelineEventEntityFields.ROOT.CONTENT, TimelineEventFilter.Content.EDIT)
+            not().like(TimelineEventEntityFields.ROOT.CONTENT, TimelineEventFilter.Content.RESPONSE)
         }
         if (settings.filterRedacted) {
-            not().like(TimelineEventEntityFields.ROOT.UNSIGNED_DATA, UnsignedContent.REDACTED_TYPE)
+            not().like(TimelineEventEntityFields.ROOT.UNSIGNED_DATA, TimelineEventFilter.Unsigned.REDACTED)
         }
         return this
     }
