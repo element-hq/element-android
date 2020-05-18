@@ -2364,7 +2364,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="riot_ios_android">Riot iOS
 \nRiot X pour Android</string>
     <string name="or_other_mx_capabale_client">ou un autre client Matrix qui prend en charge la signature croisée</string>
-    <string name="use_latest_riot">Utilisez la dernière version de Riot sur vos autre appareils :</string>
+    <string name="use_latest_riot">Utilisez la dernière version de Riot sur vos autres appareils :</string>
     <string name="command_description_discard_session">Force la session de groupe sortante actuelle dans un salon chiffré à être abandonnée</string>
     <string name="command_description_discard_session_not_handled">Seulement pris en charge dans les salons chiffrés</string>
     <string name="enter_secret_storage_passphrase_or_key">Utilisez votre %1$s ou votre %2$s pour continuer.</string>
