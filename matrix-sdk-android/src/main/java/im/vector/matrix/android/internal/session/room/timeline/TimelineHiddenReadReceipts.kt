@@ -25,6 +25,7 @@ import im.vector.matrix.android.internal.database.model.ReadReceiptsSummaryEntit
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
 import im.vector.matrix.android.internal.database.query.FilterContent
+import im.vector.matrix.android.internal.database.query.UnsignedContent
 import im.vector.matrix.android.internal.database.query.whereInRoom
 import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm
@@ -149,16 +150,21 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
      */
     private fun RealmQuery<ReadReceiptsSummaryEntity>.filterReceiptsWithSettings(): RealmQuery<ReadReceiptsSummaryEntity> {
         beginGroup()
+        var needOr = false
         if (settings.filterTypes) {
             not().`in`("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.TYPE}", settings.allowedTypes.toTypedArray())
-        }
-        if (settings.filterTypes && settings.filterEdits) {
-            or()
+            needOr = true
         }
         if (settings.filterEdits) {
+            if (needOr) or()
             like("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.CONTENT}", FilterContent.EDIT_TYPE)
             or()
             like("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.CONTENT}", FilterContent.RESPONSE_TYPE)
+            needOr = true
+        }
+        if (settings.filterRedacted) {
+            if (needOr) or()
+            like("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.UNSIGNED_DATA}", UnsignedContent.REDACTED_TYPE)
         }
         endGroup()
         return this
