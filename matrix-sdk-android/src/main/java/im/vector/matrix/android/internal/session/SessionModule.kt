@@ -49,7 +49,6 @@ import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.di.UserMd5
-import im.vector.matrix.android.internal.eventbus.EventBusTimberLogger
 import im.vector.matrix.android.internal.network.DefaultNetworkConnectivityChecker
 import im.vector.matrix.android.internal.network.FallbackNetworkCallbackStrategy
 import im.vector.matrix.android.internal.network.NetworkCallbackStrategy
@@ -72,7 +71,6 @@ import im.vector.matrix.android.internal.session.user.accountdata.DefaultAccount
 import im.vector.matrix.android.internal.util.md5
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
-import org.greenrobot.eventbus.EventBus
 import retrofit2.Retrofit
 import java.io.File
 import javax.inject.Provider
@@ -190,16 +188,6 @@ internal abstract class SessionModule {
                              retrofitFactory: RetrofitFactory): Retrofit {
             return retrofitFactory
                     .create(okHttpClient, sessionParams.homeServerConnectionConfig.homeServerUri.toString())
-        }
-
-        @JvmStatic
-        @Provides
-        @SessionScope
-        fun providesEventBus(): EventBus {
-            return EventBus
-                    .builder()
-                    .logger(EventBusTimberLogger())
-                    .build()
         }
 
         @JvmStatic
