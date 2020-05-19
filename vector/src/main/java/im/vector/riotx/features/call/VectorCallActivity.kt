@@ -82,7 +82,7 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
 
 //    private var peerConnectionFactory: PeerConnectionFactory? = null
 
-    //private var peerConnection: PeerConnection? = null
+    // private var peerConnection: PeerConnection? = null
 
 //    private var remoteVideoTrack: VideoTrack? = null
 
@@ -152,12 +152,11 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
         fullscreenRenderer.init(rootEglBase!!.eglBaseContext, null)
         fullscreenRenderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)
 
-
-        pipRenderer.setZOrderMediaOverlay(true);
-        pipRenderer.setEnableHardwareScaler(true /* enabled */);
-        fullscreenRenderer.setEnableHardwareScaler(true /* enabled */);
+        pipRenderer.setZOrderMediaOverlay(true)
+        pipRenderer.setEnableHardwareScaler(true /* enabled */)
+        fullscreenRenderer.setEnableHardwareScaler(true /* enabled */)
         // Start with local feed in fullscreen and swap it to the pip when the call is connected.
-        //setSwappedFeeds(true /* isSwappedFeeds */);
+        // setSwappedFeeds(true /* isSwappedFeeds */);
 
         if (isFirstCreation()) {
             peerConnectionManager.createPeerConnectionFactory()
@@ -374,9 +373,9 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
 //        if (requestCode != CAPTURE_PERMISSION_REQUEST_CODE) {
 //            super.onActivityResult(requestCode, resultCode, data)
 //        }
-////        mediaProjectionPermissionResultCode = resultCode;
-////        mediaProjectionPermissionResultData = data;
-////        startCall();
+// //        mediaProjectionPermissionResultCode = resultCode;
+// //        mediaProjectionPermissionResultData = data;
+// //        startCall();
 //    }
 
     companion object {
@@ -426,7 +425,6 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
     }
 
     override fun removeRemoteVideoStream(mediaStream: MediaStream) {
-
     }
 
     override fun onDisconnect() {

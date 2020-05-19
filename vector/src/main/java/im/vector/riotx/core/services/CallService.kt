@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2019 New Vector Ltd
  *
@@ -20,8 +21,10 @@ package im.vector.riotx.core.services
 
 import android.content.Context
 import android.content.Intent
+import android.os.Binder
 import androidx.core.content.ContextCompat
 import im.vector.riotx.core.extensions.vectorComponent
+import im.vector.riotx.features.call.CallConnection
 import im.vector.riotx.features.notifications.NotificationUtils
 import timber.log.Timber
 
@@ -29,6 +32,8 @@ import timber.log.Timber
  * Foreground service to manage calls
  */
 class CallService : VectorService() {
+
+    private val connections = mutableMapOf<String, CallConnection>()
 
     /**
      * call in progress (foreground notification)
@@ -154,6 +159,10 @@ class CallService : VectorService() {
         myStopSelf()
     }
 
+    fun addConnection(callConnection: CallConnection) {
+        connections[callConnection.callId] = callConnection
+    }
+
     companion object {
         private const val NOTIFICATION_ID = 6480
 
@@ -212,6 +221,12 @@ class CallService : VectorService() {
                     }
 
             ContextCompat.startForegroundService(context, intent)
+        }
+    }
+
+    inner class CallServiceBinder : Binder() {
+        fun getCallService(): CallService {
+            return this@CallService
         }
     }
 }

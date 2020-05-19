@@ -51,11 +51,11 @@ internal class DefaultCallService @Inject constructor(
     private val callListeners = ArrayList<CallsListener>()
 
     override fun getTurnServer(callback: MatrixCallback<TurnServer?>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override fun isCallSupportedInRoom(roomId: String): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override fun sendOfferSdp(callId: String, roomId: String, sdp: SessionDescription, callback: MatrixCallback<String>) {

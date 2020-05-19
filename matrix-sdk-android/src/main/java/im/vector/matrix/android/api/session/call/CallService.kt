@@ -22,11 +22,9 @@ import org.webrtc.SessionDescription
 
 interface CallService {
 
-
     fun getTurnServer(callback: MatrixCallback<TurnServer?>)
 
     fun isCallSupportedInRoom(roomId: String) : Boolean
-
 
     /**
      * Send offer SDP to the other participant.
@@ -48,10 +46,7 @@ interface CallService {
      */
     fun sendLocalIceCandidateRemovals(callId: String, roomId: String, candidates: List<IceCandidate>)
 
-
     fun addCallListener(listener: CallsListener)
 
     fun removeCallListener(listener: CallsListener)
-
-
 }

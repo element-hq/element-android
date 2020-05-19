@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.telecom.PhoneAccount
 import android.telecom.PhoneAccountHandle
 import android.telecom.TelecomManager
+import android.telecom.VideoProfile
 import androidx.core.content.ContextCompat
 import im.vector.matrix.android.api.session.call.CallsListener
 import im.vector.matrix.android.api.session.call.EglUtils
@@ -80,8 +81,11 @@ class WebRtcPeerConnectionManager @Inject constructor(
             val componentName = ComponentName(BuildConfig.APPLICATION_ID, VectorConnectionService::class.java.name)
             val appName = context.getString(R.string.app_name)
             phoneAccountHandle = PhoneAccountHandle(componentName, appName)
-            val phoneAccount = PhoneAccount.Builder(phoneAccountHandle, appName)
+            val phoneAccount = PhoneAccount.Builder(phoneAccountHandle, BuildConfig.APPLICATION_ID)
                     .setIcon(Icon.createWithResource(context, R.drawable.riotx_logo))
+                    .setCapabilities(PhoneAccount.CAPABILITY_SELF_MANAGED)
+                    .setCapabilities(PhoneAccount.CAPABILITY_VIDEO_CALLING)
+                    .setCapabilities(PhoneAccount.CAPABILITY_CALL_SUBJECT)
                     .build()
             ContextCompat.getSystemService(context, TelecomManager::class.java)
                     ?.registerPhoneAccount(phoneAccount)
@@ -96,7 +100,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
     // Executor thread is started once and is used for all
     // peer connection API calls to ensure new peer connection factory is
     // created on the same thread as previously destroyed factory.
-    private val executor = Executors.newSingleThreadExecutor();
+    private val executor = Executors.newSingleThreadExecutor()
 
     private val rootEglBase by lazy { EglUtils.rootEglBase }
 
@@ -139,7 +143,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
                         true)
                 val defaultVideoDecoderFactory = DefaultVideoDecoderFactory(eglBaseContext)
 
-
                 Timber.v("## VOIP PeerConnectionFactory.createPeerConnectionFactory ...")
                 peerConnectionFactory = PeerConnectionFactory.builder()
                         .setOptions(options)
@@ -152,7 +155,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     fun createPeerConnection(videoCapturer: VideoCapturer, iceServers: List<PeerConnection.IceServer>) {
         executor.execute {
-            Timber.v("## VOIP PeerConnectionFactory.createPeerConnection ${peerConnectionFactory}...")
+            Timber.v("## VOIP PeerConnectionFactory.createPeerConnection $peerConnectionFactory...")
             // Following instruction here: https://stackoverflow.com/questions/55085726/webrtc-create-peerconnectionfactory-object
             val surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", rootEglBase!!.eglBaseContext)
 
@@ -165,8 +168,8 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 Timber.v("## VOIP Local video track created")
                 listener?.addLocalVideoTrack(it)
 //                localSurfaceRenderer?.get()?.let { surface ->
-////                    it.addSink(surface)
-////                }
+// //                    it.addSink(surface)
+// //                }
             }
 
             // create a local audio track
@@ -282,7 +285,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     peerConnection?.setLocalDescription(object : SdpObserverAdapter() {
                         override fun onSetSuccess() {
                             listener?.sendOffer(sessionDescription)
-                            //callViewModel.handle(VectorCallViewActions.SendOffer(sessionDescription))
+                            // callViewModel.handle(VectorCallViewActions.SendOffer(sessionDescription))
                         }
                     }, sessionDescription)
                 }
@@ -361,10 +364,12 @@ class WebRtcPeerConnectionManager @Inject constructor(
                             Bundle().apply {
                                 putString("MX_CALL_ROOM_ID", signalingRoomId)
                                 putString("MX_CALL_CALL_ID", callInviteContent.callId)
+                                putParcelable(TelecomManager.EXTRA_PHONE_ACCOUNT_HANDLE, phoneAccountHandle)
+                                putInt(TelecomManager.EXTRA_INCOMING_VIDEO_STATE, VideoProfile.STATE_BIDIRECTIONAL)
+                                putInt(TelecomManager.EXTRA_START_CALL_WITH_VIDEO_STATE, VideoProfile.STATE_BIDIRECTIONAL)
                             }
                     )
                 }
-
             }
         }
     }
@@ -376,5 +381,3 @@ class WebRtcPeerConnectionManager @Inject constructor(
         close()
     }
 }
-
-

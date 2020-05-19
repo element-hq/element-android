@@ -46,5 +46,4 @@ interface CallsListener {
     fun onCallAnswerReceived(callAnswerContent: CallAnswerContent)
 
     fun onCallHangupReceived(callHangupContent: CallHangupContent)
-
 }

@@ -24,5 +24,4 @@ internal interface VoipApi {
 
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "voip/turnServer")
     fun getTurnServer(): Call<TurnServer>
-
 }

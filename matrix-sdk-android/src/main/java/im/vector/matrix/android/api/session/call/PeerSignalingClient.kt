@@ -1,4 +1,4 @@
-///*
+// /*
 // * Copyright (c) 2020 New Vector Ltd
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +14,13 @@
 // * limitations under the License.
 // */
 //
-//package im.vector.matrix.android.api.session.call
+// package im.vector.matrix.android.api.session.call
 //
-//import im.vector.matrix.android.api.MatrixCallback
-//import org.webrtc.IceCandidate
-//import org.webrtc.SessionDescription
+// import im.vector.matrix.android.api.MatrixCallback
+// import org.webrtc.IceCandidate
+// import org.webrtc.SessionDescription
 //
-//interface PeerSignalingClient {
+// interface PeerSignalingClient {
 //
 //    val callID: String
 //
@@ -63,4 +63,4 @@
 //         */
 //        fun onRemoteIceCandidatesRemoved(candidates: List<IceCandidate>)
 //    }
-//}
+// }
