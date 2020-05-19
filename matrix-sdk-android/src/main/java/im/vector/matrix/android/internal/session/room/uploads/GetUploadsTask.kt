@@ -52,7 +52,8 @@ internal class DefaultGetUploadsTask @Inject constructor(
 
         return GetUploadsResult(
                 events = chunk.events,
-                nextToken = chunk.end?.takeIf { it != chunk.start }
+                nextToken = chunk.end ?: "",
+                hasMore = chunk.hasMore()
         )
     }
 }

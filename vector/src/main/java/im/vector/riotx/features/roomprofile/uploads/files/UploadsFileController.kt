@@ -17,30 +17,32 @@
 package im.vector.riotx.features.roomprofile.uploads.files
 
 import com.airbnb.epoxy.TypedEpoxyController
+import com.airbnb.epoxy.VisibilityState
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.errorWithRetryItem
 import im.vector.riotx.core.epoxy.loadingItem
+import im.vector.riotx.core.epoxy.noResultItem
 import im.vector.riotx.core.error.ErrorFormatter
-import im.vector.riotx.core.resources.ColorProvider
+import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.roomprofile.uploads.RoomUploadsViewState
 import javax.inject.Inject
 
 class UploadsFileController @Inject constructor(
         private val errorFormatter: ErrorFormatter,
-        colorProvider: ColorProvider
+        private val stringProvider: StringProvider
 ) : TypedEpoxyController<RoomUploadsViewState>() {
 
     interface Listener {
         fun onRetry()
+        fun loadMore()
         fun onOpenClicked(event: Event)
         fun onDownloadClicked(event: Event)
         fun onShareClicked(event: Event)
     }
-
-    private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
 
     var listener: Listener? = null
 
@@ -65,6 +67,20 @@ class UploadsFileController @Inject constructor(
                         listener { listener?.onRetry() }
                     }
                 }
+                is Success -> {
+                    if (data.hasMore) {
+                        // We need to load more items
+                        listener?.loadMore()
+                        loadingItem {
+                            id("loading")
+                        }
+                    } else {
+                        noResultItem {
+                            id("noResult")
+                            text(stringProvider.getString(R.string.uploads_files_no_result))
+                        }
+                    }
+                }
             }
         } else {
             buildFileItems(data.fileEvents)
@@ -72,6 +88,11 @@ class UploadsFileController @Inject constructor(
             if (data.hasMore) {
                 loadingItem {
                     id("loadMore")
+                    onVisibilityStateChanged { _, _, visibilityState ->
+                        if (visibilityState == VisibilityState.VISIBLE) {
+                            listener?.loadMore()
+                        }
+                    }
                 }
             }
         }

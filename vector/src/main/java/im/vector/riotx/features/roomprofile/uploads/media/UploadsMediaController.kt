@@ -18,22 +18,24 @@ package im.vector.riotx.features.roomprofile.uploads.media
 
 import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
+import com.airbnb.epoxy.VisibilityState
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.isImageMessage
 import im.vector.matrix.android.api.session.events.model.isVideoMessage
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
-import im.vector.matrix.android.api.session.room.model.message.MessageImageInfoContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.errorWithRetryItem
+import im.vector.riotx.core.epoxy.noResultItem
 import im.vector.riotx.core.epoxy.squareLoadingItem
 import im.vector.riotx.core.error.ErrorFormatter
-import im.vector.riotx.core.resources.ColorProvider
+import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.media.ImageContentRenderer
 import im.vector.riotx.features.media.VideoContentRenderer
@@ -43,17 +45,16 @@ import javax.inject.Inject
 class UploadsMediaController @Inject constructor(
         private val errorFormatter: ErrorFormatter,
         private val imageContentRenderer: ImageContentRenderer,
-        private val dimensionConverter: DimensionConverter,
-        colorProvider: ColorProvider
+        private val stringProvider: StringProvider,
+        dimensionConverter: DimensionConverter
 ) : TypedEpoxyController<RoomUploadsViewState>() {
 
     interface Listener {
         fun onRetry()
         fun onOpenImageClicked(view: View, mediaData: ImageContentRenderer.Data)
         fun onOpenVideoClicked(view: View, mediaData: VideoContentRenderer.Data)
+        fun loadMore()
     }
-
-    private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
 
     var listener: Listener? = null
 
@@ -80,6 +81,20 @@ class UploadsMediaController @Inject constructor(
                         listener { listener?.onRetry() }
                     }
                 }
+                is Success -> {
+                    if (data.hasMore) {
+                        // We need to load more items
+                        listener?.loadMore()
+                        squareLoadingItem {
+                            id("loading")
+                        }
+                    } else {
+                        noResultItem {
+                            id("noResult")
+                            text(stringProvider.getString(R.string.uploads_media_no_result))
+                        }
+                    }
+                }
             }
         } else {
             buildMediaItems(data.mediaEvents)
@@ -87,6 +102,11 @@ class UploadsMediaController @Inject constructor(
             if (data.hasMore) {
                 squareLoadingItem {
                     id("loadMore")
+                    onVisibilityStateChanged { _, _, visibilityState ->
+                        if (visibilityState == VisibilityState.VISIBLE) {
+                            listener?.loadMore()
+                        }
+                    }
                 }
             }
         }

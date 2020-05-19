@@ -22,7 +22,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -35,6 +35,7 @@ import im.vector.matrix.android.api.session.room.uploads.GetUploadsResult
 import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
+import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
@@ -79,6 +80,7 @@ class RoomUploadsViewModel @AssistedInject constructor(
 
     private fun handleLoadMore() = withState { state ->
         if (state.asyncEventsRequest is Loading) return@withState
+        if (!state.hasMore) return@withState
 
         setState {
             copy(
@@ -100,10 +102,10 @@ class RoomUploadsViewModel @AssistedInject constructor(
 
                 setState {
                     copy(
-                            asyncEventsRequest = Uninitialized,
+                            asyncEventsRequest = Success(Unit),
                             mediaEvents = this.mediaEvents + groupedEvents[true].orEmpty(),
                             fileEvents = this.fileEvents + groupedEvents[false].orEmpty(),
-                            hasMore = result.nextToken != null
+                            hasMore = result.hasMore
                     )
                 }
             } catch (failure: Throwable) {
@@ -120,8 +122,11 @@ class RoomUploadsViewModel @AssistedInject constructor(
     private var token: String? = null
 
     override fun handle(action: RoomUploadsAction) {
-        //   when (action) {
-//
-        //   }.exhaustive
+        when (action) {
+            is RoomUploadsAction.Download -> TODO()
+            is RoomUploadsAction.Share    -> TODO()
+            RoomUploadsAction.Retry       -> handleLoadMore()
+            RoomUploadsAction.LoadMore    -> handleLoadMore()
+        }.exhaustive
     }
 }

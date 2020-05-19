@@ -30,9 +30,9 @@ data class RoomUploadsViewState(
         val mediaEvents: List<Event> = emptyList(),
         val fileEvents: List<Event> = emptyList(),
         // Current pagination request
-        val asyncEventsRequest: Async<List<Event>> = Uninitialized,
+        val asyncEventsRequest: Async<Unit> = Uninitialized,
         // True if more result are available server side
-        val hasMore: Boolean = false
+        val hasMore: Boolean = true
 ) : MvRxState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)

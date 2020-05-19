@@ -24,4 +24,5 @@ sealed class RoomUploadsAction : VectorViewModelAction {
     data class Share(val event: Event) : RoomUploadsAction()
 
     object Retry : RoomUploadsAction()
+    object LoadMore : RoomUploadsAction()
 }

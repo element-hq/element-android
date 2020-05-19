@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
+import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
@@ -45,6 +46,8 @@ class RoomUploadsMediaFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val epoxyVisibilityTracker = EpoxyVisibilityTracker()
+        epoxyVisibilityTracker.attach(recyclerView)
         recyclerView.layoutManager = GridLayoutManager(context, getNumberOfColumns())
         recyclerView.adapter = controller.adapter
         recyclerView.setHasFixedSize(true)
@@ -70,6 +73,10 @@ class RoomUploadsMediaFragment @Inject constructor(
 
     override fun onOpenVideoClicked(view: View, mediaData: VideoContentRenderer.Data) {
         navigator.openVideoViewer(requireActivity(), mediaData)
+    }
+
+    override fun loadMore() {
+        uploadsViewModel.handle(RoomUploadsAction.LoadMore)
     }
 
     override fun onRetry() {

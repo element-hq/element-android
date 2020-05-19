@@ -21,6 +21,8 @@ import im.vector.matrix.android.api.session.events.model.Event
 data class GetUploadsResult(
         // List of fetched Events, most recent first
         val events: List<Event>,
-        // token to get more events, or null if there is no more event to fetch
-        val nextToken: String?
+        // token to get more events
+        val nextToken: String,
+        // True if there are more event to load
+        val hasMore: Boolean
 )
