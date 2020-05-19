@@ -175,7 +175,6 @@ class TimelineBackToPreviousLastForwardTest : InstrumentedTest {
 
             bobTimeline.hasMoreToLoad(Timeline.Direction.FORWARDS).shouldBeFalse()
             bobTimeline.hasMoreToLoad(Timeline.Direction.BACKWARDS).shouldBeFalse()
-
         }
         bobTimeline.dispose()
 
