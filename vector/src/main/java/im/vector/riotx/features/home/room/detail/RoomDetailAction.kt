@@ -75,6 +75,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class DeclineVerificationRequest(val transactionId: String, val otherUserId: String) : RoomDetailAction()
     data class RequestVerification(val userId: String) : RoomDetailAction()
     data class ResumeVerification(val transactionId: String, val otherUserId: String?) : RoomDetailAction()
+    data class TapOnFailedToDecrypt(val eventId: String) : RoomDetailAction()
     data class ReRequestKeys(val eventId: String) : RoomDetailAction()
 
     object SelectStickerAttachment : RoomDetailAction()

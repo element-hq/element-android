@@ -32,6 +32,7 @@ import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.isImageMessage
 import im.vector.matrix.android.api.session.events.model.isTextMessage
@@ -59,6 +60,8 @@ import im.vector.matrix.android.api.session.room.timeline.getTextEditableContent
 import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
+import im.vector.matrix.rx.asObservable
+import im.vector.matrix.android.internal.crypto.model.event.WithHeldCode
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
@@ -259,6 +262,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.RequestVerification              -> handleRequestVerification(action)
             is RoomDetailAction.ResumeVerification               -> handleResumeRequestVerification(action)
             is RoomDetailAction.ReRequestKeys                    -> handleReRequestKeys(action)
+            is RoomDetailAction.TapOnFailedToDecrypt             -> handleTapOnFailedToDecrypt(action)
             is RoomDetailAction.SelectStickerAttachment          -> handleSelectStickerAttachment()
             is RoomDetailAction.OpenIntegrationManager           -> handleOpenIntegrationManager()
             is RoomDetailAction.StartCall                        -> handleStartCall(action)
@@ -1031,6 +1035,19 @@ class RoomDetailViewModel @AssistedInject constructor(
         room.getTimeLineEvent(action.eventId)?.let {
             session.cryptoService().reRequestRoomKeyForEvent(it.root)
             _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.e2e_re_request_encryption_key_dialog_content)))
+        }
+    }
+
+    private fun handleTapOnFailedToDecrypt(action: RoomDetailAction.TapOnFailedToDecrypt) {
+        room.getTimeLineEvent(action.eventId)?.let {
+            val code = when (it.root.mCryptoError) {
+                MXCryptoError.ErrorType.KEYS_WITHHELD -> {
+                    WithHeldCode.fromCode(it.root.mCryptoErrorReason)
+                }
+                else                                  -> null
+            }
+
+            _viewEvents.post(RoomDetailViewEvents.ShowE2EErrorMessage(code))
         }
     }
 

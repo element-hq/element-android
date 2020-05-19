@@ -15,6 +15,8 @@
  */
 package im.vector.riotx.features.home.room.detail.timeline.action
 
+import androidx.lifecycle.viewModelScope
+import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext

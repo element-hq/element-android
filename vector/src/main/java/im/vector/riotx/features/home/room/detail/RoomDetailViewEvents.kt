@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.detail
 
 import androidx.annotation.StringRes
 import im.vector.matrix.android.api.session.widgets.model.Widget
+import im.vector.matrix.android.internal.crypto.model.event.WithHeldCode
 import im.vector.riotx.core.platform.VectorViewEvents
 import im.vector.riotx.features.command.Command
 import java.io.File
@@ -33,6 +34,7 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     data class ActionFailure(val action: RoomDetailAction, val throwable: Throwable) : RoomDetailViewEvents()
 
     data class ShowMessage(val message: String) : RoomDetailViewEvents()
+    data class ShowE2EErrorMessage(val withHeldCode: WithHeldCode?) : RoomDetailViewEvents()
 
     data class NavigateToEvent(val eventId: String) : RoomDetailViewEvents()
 

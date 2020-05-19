@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/mergedUTDTile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="52dp"
+        android:layout_marginBottom="2dp"
+        android:background="@drawable/rounded_rect_shape_8"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/itemVerificationDoneTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:drawableStart="@drawable/ic_clock"
+            android:drawableTint="?riotx_text_secondary"
+            android:drawablePadding="2dp"
+            android:gravity="start"
+            android:textColor="?riotx_text_secondary"
+            android:textSize="15sp"
+            android:text="@string/notice_crypto_unable_to_decrypt_merged" />
+
+
+        <TextView
+            android:id="@+id/itemVerificationDoneDetailTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="12dp"
+            android:textColor="?riotx_text_secondary"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            android:text="@string/notice_crypto_unable_to_decrypt_friendly_desc" />
+
+
+        <TextView
+            android:id="@+id/itemMergedExpandTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="2dp"
+            android:paddingLeft="8dp"
+            android:paddingTop="4dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="4dp"
+            android:visibility="gone"
+            android:text="@string/merged_events_expand"
+            android:textColor="?attr/colorAccent"
+            android:textSize="14sp"
+            android:textStyle="italic" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/itemMergedSeparatorView"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/mergedUTDTile"
+        android:layout_marginTop="4dp"
+        android:background="?attr/riotx_header_panel_background" />
+
+</RelativeLayout>

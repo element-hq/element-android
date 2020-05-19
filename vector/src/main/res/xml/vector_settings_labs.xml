@@ -40,6 +40,10 @@
         android:title="@string/labs_swipe_to_reply_in_timeline" />
 
 
+    <im.vector.riotx.core.preference.VectorSwitchPreference
+        android:defaultValue="true"
+        android:key="SETTINGS_LABS_HIDE_TECHNICAL_E2E_ERRORS"
+        android:title="@string/labs_hide_technical_e2e_in_timeline" />
     <!--</im.vector.riotx.core.preference.VectorPreferenceCategory>-->
 
 </androidx.preference.PreferenceScreen>
