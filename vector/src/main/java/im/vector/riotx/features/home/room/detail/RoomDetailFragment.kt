@@ -46,7 +46,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.airbnb.epoxy.EpoxyModel
-import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
@@ -92,6 +91,7 @@ import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.extensions.showKeyboard
+import im.vector.riotx.core.extensions.trackItemsVisibilityChange
 import im.vector.riotx.core.files.addEntryToDownloadManager
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.intent.getMimeTypeFromUri
@@ -148,7 +148,6 @@ import im.vector.riotx.features.html.PillImageSpan
 import im.vector.riotx.features.invite.VectorInviteView
 import im.vector.riotx.features.media.ImageContentRenderer
 import im.vector.riotx.features.media.VideoContentRenderer
-import im.vector.riotx.features.media.VideoMediaViewerActivity
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.permalink.NavigationInterceptor
 import im.vector.riotx.features.permalink.PermalinkHandler
@@ -539,8 +538,7 @@ class RoomDetailFragment @Inject constructor(
         timelineEventController.callback = this
         timelineEventController.timeline = roomDetailViewModel.timeline
 
-        val epoxyVisibilityTracker = EpoxyVisibilityTracker()
-        epoxyVisibilityTracker.attach(recyclerView)
+        recyclerView.trackItemsVisibilityChange()
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, true)
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager, timelineEventController)

@@ -18,13 +18,13 @@ package im.vector.riotx.features.roomprofile.uploads.files
 
 import android.os.Bundle
 import android.view.View
-import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
+import im.vector.riotx.core.extensions.trackItemsVisibilityChange
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.roomprofile.uploads.RoomUploadsAction
 import im.vector.riotx.features.roomprofile.uploads.RoomUploadsViewModel
@@ -42,8 +42,7 @@ class RoomUploadsFilesFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val epoxyVisibilityTracker = EpoxyVisibilityTracker()
-        epoxyVisibilityTracker.attach(recyclerView)
+        recyclerView.trackItemsVisibilityChange()
         recyclerView.configureWith(controller, showDivider = true)
         controller.listener = this
     }
