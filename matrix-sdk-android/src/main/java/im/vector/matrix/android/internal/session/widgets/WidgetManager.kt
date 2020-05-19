@@ -33,6 +33,9 @@ import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.integrationmanager.IntegrationManager
 import im.vector.matrix.android.internal.session.room.state.StateEventDataSource
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
+import im.vector.matrix.android.internal.session.user.accountdata.AccountDataDataSource
+import im.vector.matrix.android.internal.session.widgets.helper.extractWidgets
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.launchToCallback
 import java.util.HashMap
@@ -40,6 +43,7 @@ import javax.inject.Inject
 
 @SessionScope
 internal class WidgetManager @Inject constructor(private val integrationManager: IntegrationManager,
+                                                 private val accountDataDataSource: AccountDataDataSource,
                                                  private val stateEventDataSource: StateEventDataSource,
                                                  private val taskExecutor: TaskExecutor,
                                                  private val createWidgetTask: CreateWidgetTask,
@@ -96,6 +100,23 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
             }
         }
         return widgets.values.toList()
+    }
+
+    fun getUserWidgets(
+            widgetTypes: Set<String>? = null,
+            excludedTypes: Set<String>? = null
+    ): List<Widget> {
+        val widgetsAccountData = accountDataDataSource.getAccountDataEvent(UserAccountData.TYPE_WIDGETS) ?: return emptyList()
+        return widgetsAccountData.extractWidgets()
+                .filter {
+                    val widgetType = it.type ?: return@filter false
+                    (widgetTypes == null || widgetTypes.contains(widgetType))
+                            && (excludedTypes == null || !excludedTypes.contains(widgetType))
+                }
+                .map {
+                    Widget(it)
+                }
+                .toList()
     }
 
     fun createWidget(roomId: String, widgetId: String, content: Content, callback: MatrixCallback<Widget>): Cancelable {

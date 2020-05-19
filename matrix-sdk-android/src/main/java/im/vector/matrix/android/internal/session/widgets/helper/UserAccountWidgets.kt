@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.widgets
+package im.vector.matrix.android.internal.session.widgets.helper
 
-import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.Content
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.widgets.model.WidgetContent
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 
-data class Widget(
-        private val widgetContent: WidgetContent,
-        private val event: Event? = null
-)
-
+internal fun UserAccountDataEvent.extractWidgets(): Sequence<WidgetContent> {
+    return content.asSequence()
+            .mapNotNull {
+                @Suppress("UNCHECKED_CAST")
+                (it.value as? Content)?.toModel<WidgetContent>()
+            }
+}

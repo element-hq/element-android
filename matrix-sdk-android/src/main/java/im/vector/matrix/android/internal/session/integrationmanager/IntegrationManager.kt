@@ -21,7 +21,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.widgets.model.WidgetContent
 import im.vector.matrix.android.api.util.Cancelable
@@ -32,6 +31,7 @@ import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAcco
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 import im.vector.matrix.android.internal.session.user.accountdata.AccountDataDataSource
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
+import im.vector.matrix.android.internal.session.widgets.helper.extractWidgets
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.StringProvider
@@ -294,11 +294,8 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
     }
 
     private fun UserAccountDataEvent.asIntegrationManagerWidgetContent(): WidgetContent? {
-        return content.asSequence()
-                .mapNotNull {
-                    @Suppress("UNCHECKED_CAST")
-                    (it.value as? Content)?.toModel<WidgetContent>()
-                }.filter {
+        return extractWidgets()
+                .filter {
                     it.type == INTEGRATION_MANAGER_WIDGET
                 }
                 .firstOrNull()

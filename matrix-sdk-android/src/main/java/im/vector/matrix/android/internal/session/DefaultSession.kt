@@ -46,6 +46,7 @@ import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.widgets.WidgetService
+import im.vector.matrix.android.api.session.widgets.WidgetURLBuilder
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.crypto.crosssigning.ShieldTrustUpdater
@@ -58,6 +59,7 @@ import im.vector.matrix.android.internal.session.room.timeline.TimelineEventDecr
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import im.vector.matrix.android.internal.session.sync.job.SyncWorker
+import im.vector.matrix.android.internal.session.widgets.WidgetDependenciesHolder
 import im.vector.matrix.android.internal.session.widgets.WidgetManager
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
@@ -105,13 +107,12 @@ internal class DefaultSession @Inject constructor(
         private val _sharedSecretStorageService: Lazy<SharedSecretStorageService>,
         private val accountService: Lazy<AccountService>,
         private val timelineEventDecryptor: TimelineEventDecryptor,
-        private val integrationManager: IntegrationManager,
-        private val widgetManager: WidgetManager,
-        private val shieldTrustUpdater: ShieldTrustUpdater,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val defaultIdentityService: DefaultIdentityService,
-        private val taskExecutor: TaskExecutor
-) : Session,
+        private val taskExecutor: TaskExecutor,
+        private val widgetDependenciesHolder: WidgetDependenciesHolder,
+        private val shieldTrustUpdater: ShieldTrustUpdater)
+    : Session,
         RoomService by roomService.get(),
         RoomDirectoryService by roomDirectoryService.get(),
         GroupService by groupService.get(),
@@ -148,9 +149,8 @@ internal class DefaultSession @Inject constructor(
         eventBus.register(this)
         timelineEventDecryptor.start()
         shieldTrustUpdater.start()
-        integrationManager.start()
-        widgetManager.start()
         defaultIdentityService.start()
+        widgetDependenciesHolder.start()
     }
 
     override fun requireBackgroundSync() {
@@ -193,11 +193,10 @@ internal class DefaultSession @Inject constructor(
         isOpen = false
         eventBus.unregister(this)
         shieldTrustUpdater.stop()
-        integrationManager.stop()
-        widgetManager.stop()
         taskExecutor.executorScope.launch(coroutineDispatchers.main) {
             // This has to be done on main thread
             defaultIdentityService.stop()
+            widgetDependenciesHolder.stop()
         }
     }
 
