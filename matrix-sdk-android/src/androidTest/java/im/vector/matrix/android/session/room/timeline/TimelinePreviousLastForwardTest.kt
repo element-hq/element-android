@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.common.CommonTestHelper
 import im.vector.matrix.android.common.CryptoTestHelper
+import im.vector.matrix.android.common.checkSendOrder
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
 import org.junit.FixMethodOrder
@@ -85,10 +86,11 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
         // Bob stop to sync
         bobSession.stopSync()
 
+        val firstMessage = "First messages from Alice"
         // Alice sends 30 messages
         val firstMessageFromAliceId = commonTestHelper.sendTextMessage(
                 roomFromAlicePOV,
-                "First messages from Alice",
+                firstMessage,
                 30)
                 .last()
                 .eventId
@@ -106,7 +108,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
 
                 // Ok, we have the 10 last messages from Alice. This will be our future previous lastForward chunk
                 snapshot.size == 10
-                        && snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith("First messages from Alice").orFalse() }
+                        && snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(firstMessage).orFalse() }
             }
 
             bobTimeline.addListener(eventsListener)
@@ -120,10 +122,11 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
         // Bob stop to sync
         bobSession.stopSync()
 
+        val secondMessage = "Second messages from Alice"
         // Alice sends again 30 messages
         commonTestHelper.sendTextMessage(
                 roomFromAlicePOV,
-                "Second messages from Alice",
+                secondMessage,
                 30)
 
         // Bob start to sync
@@ -139,7 +142,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
 
                 // Ok, we have the 10 last messages from Alice. This will be our future previous lastForward chunk
                 snapshot.size == 10
-                        && snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith("Second messages from Alice").orFalse() }
+                        && snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(secondMessage).orFalse() }
             }
 
             bobTimeline.addListener(eventsListener)
@@ -216,6 +219,8 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
                 snapshot.lastOrNull()?.root?.getClearType() == EventType.STATE_ROOM_CREATE
                         // 8 for room creation item 60 message from Alice
                         && snapshot.size == 8 + 60
+                        && snapshot.checkSendOrder(secondMessage, 30, 0)
+                        && snapshot.checkSendOrder(firstMessage, 30, 30)
             }
 
             bobTimeline.addListener(eventsListener)

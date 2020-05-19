@@ -368,3 +368,13 @@ class CommonTestHelper(context: Context) {
         session.close()
     }
 }
+
+fun List<TimelineEvent>.checkSendOrder(baseTextMessage: String, numberOfMessages: Int, startIndex: Int): Boolean {
+    return drop(startIndex)
+            .take(numberOfMessages)
+            .foldRightIndexed(true) { index, timelineEvent, acc ->
+        val body = timelineEvent.root.content.toModel<MessageContent>()?.body
+        val currentMessageSuffix = numberOfMessages - index
+        acc && (body == null || body.startsWith(baseTextMessage) && body.endsWith("#$currentMessageSuffix"))
+    }
+}

@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.common.CommonTestHelper
 import im.vector.matrix.android.common.CryptoTestHelper
+import im.vector.matrix.android.common.checkSendOrder
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
 import org.junit.FixMethodOrder
@@ -58,9 +59,10 @@ class TimelineForwardPaginationTest : InstrumentedTest {
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
 
         // Alice sends X messages
+        val message = "Message from Alice"
         val sentMessages = commonTestHelper.sendTextMessage(
                 roomFromAlicePOV,
-                "Message from Alice",
+                message,
                 numberOfMessagesToSend)
 
         // Alice clear the cache
@@ -85,7 +87,7 @@ class TimelineForwardPaginationTest : InstrumentedTest {
 
                 // Ok, we have the 10 last messages of the initial sync
                 snapshot.size == 10
-                        && snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith("Message from Alice").orFalse() }
+                        && snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(message).orFalse() }
             }
 
             // Open the timeline at last sent message
@@ -163,9 +165,9 @@ class TimelineForwardPaginationTest : InstrumentedTest {
                 snapshot.forEach {
                     Timber.w(" event ${it.root.content}")
                 }
-
                 // 6 for room creation item (backward pagination),and numberOfMessagesToSend (all the message of the room)
                 snapshot.size == 6 + numberOfMessagesToSend
+                        && snapshot.checkSendOrder(message, numberOfMessagesToSend, 0)
             }
 
             aliceTimeline.addListener(aliceEventsListener)

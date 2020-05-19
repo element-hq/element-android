@@ -25,6 +25,7 @@ import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.common.CommonTestHelper
 import im.vector.matrix.android.common.CryptoTestHelper
+import im.vector.matrix.android.common.checkSendOrder
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
 import org.junit.Assert.assertTrue
@@ -90,10 +91,12 @@ class TimelineBackToPreviousLastForwardTest : InstrumentedTest {
         // Bob stop to sync
         bobSession.stopSync()
 
+        val messageRoot = "First messages from Alice"
+
         // Alice sends 30 messages
         commonTestHelper.sendTextMessage(
                 roomFromAlicePOV,
-                "First messages from Alice",
+                messageRoot,
                 30)
 
         // Bob start to sync
@@ -109,7 +112,7 @@ class TimelineBackToPreviousLastForwardTest : InstrumentedTest {
 
                 // Ok, we have the 10 last messages from Alice.
                 snapshot.size == 10
-                        && snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith("First messages from Alice").orFalse() }
+                        && snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(messageRoot).orFalse() }
             }
 
             bobTimeline.addListener(eventsListener)
@@ -159,33 +162,8 @@ class TimelineBackToPreviousLastForwardTest : InstrumentedTest {
                 // Bob can see the first event of the room (so Back pagination has worked)
                 snapshot.lastOrNull()?.root?.getClearType() == EventType.STATE_ROOM_CREATE
                         // 8 for room creation item, and 30 for the forward pagination
-                        && snapshot.size == 8
-            }
-
-            bobTimeline.addListener(eventsListener)
-
-            bobTimeline.paginate(Timeline.Direction.FORWARDS, 50)
-
-            commonTestHelper.await(lock)
-            bobTimeline.removeAllListeners()
-
-            bobTimeline.hasMoreToLoad(Timeline.Direction.FORWARDS).shouldBeTrue()
-            bobTimeline.hasMoreToLoad(Timeline.Direction.BACKWARDS).shouldBeFalse()
-        }
-
-        // Do it again, now we should have a next token, so we can paginate FORWARD
-        run {
-            val lock = CountDownLatch(1)
-            val eventsListener = commonTestHelper.createEventListener(lock) { snapshot ->
-                Timber.e("Bob timeline updated: with ${snapshot.size} events:")
-                snapshot.forEach {
-                    Timber.w(" event ${it.root}")
-                }
-
-                // Bob can see the first event of the room (so Back pagination has worked)
-                snapshot.lastOrNull()?.root?.getClearType() == EventType.STATE_ROOM_CREATE
-                        // 8 for room creation item, and 30 for the forward pagination
-                        && snapshot.size == 8 + 30
+                        && snapshot.size == 38
+                        && snapshot.checkSendOrder(messageRoot, 30, 0)
             }
 
             bobTimeline.addListener(eventsListener)
@@ -197,8 +175,8 @@ class TimelineBackToPreviousLastForwardTest : InstrumentedTest {
 
             bobTimeline.hasMoreToLoad(Timeline.Direction.FORWARDS).shouldBeFalse()
             bobTimeline.hasMoreToLoad(Timeline.Direction.BACKWARDS).shouldBeFalse()
-        }
 
+        }
         bobTimeline.dispose()
 
         cryptoTestData.cleanUp(commonTestHelper)
