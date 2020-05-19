@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.roomprofile.uploads.child
+package im.vector.riotx.core.epoxy
 
-import com.airbnb.mvrx.parentFragmentViewModel
+import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
-import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.roomprofile.uploads.RoomUploadsViewModel
-import javax.inject.Inject
 
-/**
- * A placeholder fragment containing a simple view.
- */
-class RoomUploadsMediaFragment @Inject constructor() : VectorBaseFragment() {
+@EpoxyModelClass(layout = R.layout.item_loading_square)
+abstract class SquareLoadingItem : VectorEpoxyModel<SquareLoadingItem.Holder>() {
 
-    private val uploadsViewModel by parentFragmentViewModel(RoomUploadsViewModel::class)
-
-    override fun getLayoutResId() = R.layout.fragment_generic_recycler
+    class Holder : VectorEpoxyHolder()
 }

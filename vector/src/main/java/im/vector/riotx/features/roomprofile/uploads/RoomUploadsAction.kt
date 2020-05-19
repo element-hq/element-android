@@ -16,6 +16,12 @@
 
 package im.vector.riotx.features.roomprofile.uploads
 
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class RoomUploadsAction : VectorViewModelAction
+sealed class RoomUploadsAction : VectorViewModelAction {
+    data class Download(val event: Event) : RoomUploadsAction()
+    data class Share(val event: Event) : RoomUploadsAction()
+
+    object Retry : RoomUploadsAction()
+}

@@ -17,43 +17,21 @@
 package im.vector.riotx.features.roomprofile.uploads
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import im.vector.riotx.R
-import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.features.roomprofile.uploads.child.RoomUploadsFilesFragment
-import im.vector.riotx.features.roomprofile.uploads.child.RoomUploadsMediaFragment
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import im.vector.riotx.features.roomprofile.uploads.files.RoomUploadsFilesFragment
+import im.vector.riotx.features.roomprofile.uploads.media.RoomUploadsMediaFragment
 
-private val TAB_TITLES = arrayOf(
-        R.string.uploads_title_media,
-        R.string.uploads_title_files
-)
-
-/**
- * A [FragmentPagerAdapter] that returns a fragment corresponding to
- * one of the sections/tabs/pages.
- */
 class RoomUploadsPagerAdapter(
-        fm: FragmentManager,
-        private val stringProvider: StringProvider
-) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+        private val fragment: Fragment
+) : FragmentStateAdapter(fragment) {
 
-    override fun getItem(position: Int): Fragment {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
+    override fun getItemCount() = 2
+
+    override fun createFragment(position: Int): Fragment {
         return if (position == 0) {
-            RoomUploadsMediaFragment()
+            fragment.childFragmentManager.fragmentFactory.instantiate(fragment.requireContext().classLoader, RoomUploadsMediaFragment::class.java.name)
         } else {
-            RoomUploadsFilesFragment()
+            fragment.childFragmentManager.fragmentFactory.instantiate(fragment.requireContext().classLoader, RoomUploadsFilesFragment::class.java.name)
         }
-    }
-
-    override fun getPageTitle(position: Int): CharSequence? {
-        return stringProvider.getString(TAB_TITLES[position])
-    }
-
-    override fun getCount(): Int {
-        // Show 2 total pages.
-        return 2
     }
 }

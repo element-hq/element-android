@@ -14,20 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.roomprofile.uploads.child
+package im.vector.riotx.features.roomprofile.uploads.media
 
-import com.airbnb.mvrx.parentFragmentViewModel
-import im.vector.riotx.R
-import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.features.roomprofile.uploads.RoomUploadsViewModel
-import javax.inject.Inject
-
-/**
- * A placeholder fragment containing a simple view.
- */
-class RoomUploadsFilesFragment @Inject constructor() : VectorBaseFragment() {
-
-    private val uploadsViewModel by parentFragmentViewModel(RoomUploadsViewModel::class)
-
-    override fun getLayoutResId() = R.layout.fragment_generic_recycler
-}
+// Min image size. Size will be adjusted at runtime
+const val IMAGE_SIZE_DP = 120

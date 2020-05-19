@@ -36,4 +36,8 @@ class DimensionConverter @Inject constructor(val resources: Resources) {
                 resources.displayMetrics
         ).toInt()
     }
+
+    fun pdToDp(px: Int): Int {
+        return (px.toFloat() / resources.displayMetrics.density).toInt()
+    }
 }

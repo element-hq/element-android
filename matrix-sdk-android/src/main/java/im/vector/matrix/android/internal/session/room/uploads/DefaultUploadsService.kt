@@ -38,7 +38,9 @@ internal class DefaultUploadsService @AssistedInject constructor(
 
     override fun getUploads(numberOfEvents: Int, since: String?, callback: MatrixCallback<GetUploadsResult>): Cancelable {
         return getUploadsTask
-                .configureWith(GetUploadsTask.Params(roomId, numberOfEvents, since))
+                .configureWith(GetUploadsTask.Params(roomId, numberOfEvents, since)) {
+                    this.callback = callback
+                }
                 .executeBy(taskExecutor)
     }
 }

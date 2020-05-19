@@ -21,6 +21,7 @@ import android.view.View
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.tabs.TabLayoutMediator
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
@@ -45,11 +46,17 @@ class RoomUploadsFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val sectionsPagerAdapter = RoomUploadsPagerAdapter(childFragmentManager, stringProvider)
-        view_pager.adapter = sectionsPagerAdapter
-        tabs.setupWithViewPager(view_pager)
+        val sectionsPagerAdapter = RoomUploadsPagerAdapter(this)
+        roomUploadsViewPager.adapter = sectionsPagerAdapter
 
-        setupToolbar(matrixProfileToolbar)
+        TabLayoutMediator(roomUploadsTabs, roomUploadsViewPager) { tab, position ->
+            when (position) {
+                0 -> tab.text = stringProvider.getString(R.string.uploads_media_title)
+                1 -> tab.text = stringProvider.getString(R.string.uploads_files_title)
+            }
+        }.attach()
+
+        setupToolbar(roomUploadsToolbar)
 
         // Initialize your view, subscribe to viewModel...
     }
@@ -68,8 +75,8 @@ class RoomUploadsFragment @Inject constructor(
 
     private fun renderRoomSummary(state: RoomUploadsViewState) {
         state.roomSummary()?.let {
-            matrixProfileToolbarTitleView.text = it.displayName
-            avatarRenderer.render(it.toMatrixItem(), matrixProfileToolbarAvatarImageView)
+            roomUploadsToolbarTitleView.text = it.displayName
+            avatarRenderer.render(it.toMatrixItem(), roomUploadsToolbarAvatarImageView)
         }
     }
 }

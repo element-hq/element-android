@@ -77,8 +77,8 @@ import im.vector.riotx.features.roomprofile.RoomProfileFragment
 import im.vector.riotx.features.roomprofile.members.RoomMemberListFragment
 import im.vector.riotx.features.roomprofile.settings.RoomSettingsFragment
 import im.vector.riotx.features.roomprofile.uploads.RoomUploadsFragment
-import im.vector.riotx.features.roomprofile.uploads.child.RoomUploadsFilesFragment
-import im.vector.riotx.features.roomprofile.uploads.child.RoomUploadsMediaFragment
+import im.vector.riotx.features.roomprofile.uploads.files.RoomUploadsFilesFragment
+import im.vector.riotx.features.roomprofile.uploads.media.RoomUploadsMediaFragment
 import im.vector.riotx.features.settings.VectorSettingsAdvancedNotificationPreferenceFragment
 import im.vector.riotx.features.settings.VectorSettingsHelpAboutFragment
 import im.vector.riotx.features.settings.VectorSettingsLabsFragment

@@ -27,6 +27,10 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.isPreviewableMessage
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.uploads.GetUploadsResult
 import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.matrix.rx.rx
@@ -90,10 +94,15 @@ class RoomUploadsViewModel @AssistedInject constructor(
 
                 token = result.nextToken
 
+                val groupedEvents = result.events
+                        .filter { it.getClearType() == EventType.MESSAGE && it.getClearContent()?.toModel<MessageContent>() != null }
+                        .groupBy { it.isPreviewableMessage() }
+
                 setState {
                     copy(
                             asyncEventsRequest = Uninitialized,
-                            events = this.events + result.events,
+                            mediaEvents = this.mediaEvents + groupedEvents[true].orEmpty(),
+                            fileEvents = this.fileEvents + groupedEvents[false].orEmpty(),
                             hasMore = result.nextToken != null
                     )
                 }

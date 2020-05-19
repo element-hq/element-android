@@ -65,6 +65,17 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
         STICKER
     }
 
+    /**
+     * For gallery
+     */
+    fun render(data: Data, imageView: ImageView, size: Int) {
+        // a11y
+        imageView.contentDescription = data.filename
+
+        createGlideRequest(data, Mode.THUMBNAIL, imageView, Size(size, size))
+                .into(imageView)
+    }
+
     fun render(data: Data, mode: Mode, imageView: ImageView) {
         val size = processSize(data, mode)
         imageView.layoutParams.width = size.width
