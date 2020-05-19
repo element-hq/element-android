@@ -2447,7 +2447,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 <string name="notification_ticker_text_dm">%1$s: %2$s</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
 
-    <string name="add_members_to_room">Benutzer hinzufügen</string>
+    <string name="add_members_to_room">Nutzer!n hinzufügen</string>
     <string name="invite_users_to_room_action_invite">EINLADUNG</string>
     <string name="inviting_users_to_room">Benutzer werden eingeladen…</string>
     <string name="invite_users_to_room_title">Benutzer einladen</string>
