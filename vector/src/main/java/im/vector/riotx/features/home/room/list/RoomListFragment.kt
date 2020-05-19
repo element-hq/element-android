@@ -142,10 +142,10 @@ class RoomListFragment @Inject constructor(
             else                       -> Unit // No button in this mode
         }
 
-        createChatRoomButton.setOnClickListener {
+        createChatRoomButton.debouncedClicks {
             createDirectChat()
         }
-        createGroupRoomButton.setOnClickListener {
+        createGroupRoomButton.debouncedClicks {
             openRoomDirectory()
         }
 

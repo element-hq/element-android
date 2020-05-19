@@ -25,12 +25,15 @@ import im.vector.matrix.android.internal.auth.db.AuthRealmMigration
 import im.vector.matrix.android.internal.auth.db.AuthRealmModule
 import im.vector.matrix.android.internal.auth.db.RealmPendingSessionStore
 import im.vector.matrix.android.internal.auth.db.RealmSessionParamsStore
+import im.vector.matrix.android.internal.auth.login.DefaultDirectLoginTask
+import im.vector.matrix.android.internal.auth.login.DirectLoginTask
 import im.vector.matrix.android.internal.database.RealmKeysUtils
 import im.vector.matrix.android.internal.di.AuthDatabase
+import im.vector.matrix.android.internal.wellknown.WellknownModule
 import io.realm.RealmConfiguration
 import java.io.File
 
-@Module
+@Module(includes = [WellknownModule::class])
 internal abstract class AuthModule {
 
     @Module
@@ -59,14 +62,17 @@ internal abstract class AuthModule {
     }
 
     @Binds
-    abstract fun bindSessionParamsStore(sessionParamsStore: RealmSessionParamsStore): SessionParamsStore
+    abstract fun bindSessionParamsStore(store: RealmSessionParamsStore): SessionParamsStore
 
     @Binds
-    abstract fun bindPendingSessionStore(pendingSessionStore: RealmPendingSessionStore): PendingSessionStore
+    abstract fun bindPendingSessionStore(store: RealmPendingSessionStore): PendingSessionStore
 
     @Binds
-    abstract fun bindAuthenticationService(authenticationService: DefaultAuthenticationService): AuthenticationService
+    abstract fun bindAuthenticationService(service: DefaultAuthenticationService): AuthenticationService
 
     @Binds
-    abstract fun bindSessionCreator(sessionCreator: DefaultSessionCreator): SessionCreator
+    abstract fun bindSessionCreator(creator: DefaultSessionCreator): SessionCreator
+
+    @Binds
+    abstract fun bindDirectLoginTask(task: DefaultDirectLoginTask): DirectLoginTask
 }

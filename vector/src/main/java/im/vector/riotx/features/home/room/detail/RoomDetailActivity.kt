@@ -44,8 +44,14 @@ class RoomDetailActivity : VectorBaseActivity(), ToolbarConfigurable {
         super.onCreate(savedInstanceState)
         waitingView = waiting_view
         if (isFirstCreation()) {
-            val roomDetailArgs: RoomDetailArgs = intent?.extras?.getParcelable(EXTRA_ROOM_DETAIL_ARGS)
-                    ?: return
+            val roomDetailArgs: RoomDetailArgs? = if (intent?.action == ACTION_ROOM_DETAILS_FROM_SHORTCUT) {
+                RoomDetailArgs(roomId = intent?.extras?.getString(EXTRA_ROOM_ID)!!)
+            } else {
+                intent?.extras?.getParcelable(EXTRA_ROOM_DETAIL_ARGS)
+            }
+
+            if (roomDetailArgs == null) return
+
             currentRoomId = roomDetailArgs.roomId
             replaceFragment(R.id.roomDetailContainer, RoomDetailFragment::class.java, roomDetailArgs)
             replaceFragment(R.id.roomDetailDrawerContainer, BreadcrumbsFragment::class.java)
@@ -110,10 +116,19 @@ class RoomDetailActivity : VectorBaseActivity(), ToolbarConfigurable {
     companion object {
 
         const val EXTRA_ROOM_DETAIL_ARGS = "EXTRA_ROOM_DETAIL_ARGS"
+        const val EXTRA_ROOM_ID = "EXTRA_ROOM_ID"
+        const val ACTION_ROOM_DETAILS_FROM_SHORTCUT = "ROOM_DETAILS_FROM_SHORTCUT"
 
         fun newIntent(context: Context, roomDetailArgs: RoomDetailArgs): Intent {
             return Intent(context, RoomDetailActivity::class.java).apply {
                 putExtra(EXTRA_ROOM_DETAIL_ARGS, roomDetailArgs)
+            }
+        }
+
+        fun shortcutIntent(context: Context, roomId: String): Intent {
+            return Intent(context, RoomDetailActivity::class.java).apply {
+                action = ACTION_ROOM_DETAILS_FROM_SHORTCUT
+                putExtra(EXTRA_ROOM_ID, roomId)
             }
         }
     }

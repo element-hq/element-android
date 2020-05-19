@@ -23,6 +23,7 @@ import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.riotx.R
+import im.vector.riotx.core.utils.isAirplaneModeOn
 import kotlinx.android.synthetic.main.view_sync_state.view.*
 
 class SyncStateView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
@@ -33,10 +34,15 @@ class SyncStateView @JvmOverloads constructor(context: Context, attrs: Attribute
     }
 
     fun render(newState: SyncState) {
-        syncStateProgressBar.visibility = when (newState) {
-            is SyncState.Running -> if (newState.afterPause) View.VISIBLE else View.GONE
-            else                 -> View.GONE
+        syncStateProgressBar.isVisible = newState is SyncState.Running && newState.afterPause
+
+        if (newState == SyncState.NoNetwork) {
+            val isAirplaneModeOn = isAirplaneModeOn(context)
+            syncStateNoNetwork.isVisible = isAirplaneModeOn.not()
+            syncStateNoNetworkAirplane.isVisible = isAirplaneModeOn
+        } else {
+            syncStateNoNetwork.isVisible = false
+            syncStateNoNetworkAirplane.isVisible = false
         }
-        syncStateNoNetwork.isVisible = newState == SyncState.NoNetwork
     }
 }

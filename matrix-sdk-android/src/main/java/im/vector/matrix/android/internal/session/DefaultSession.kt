@@ -43,6 +43,7 @@ import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageSer
 import im.vector.matrix.android.api.session.signout.SignOutService
 import im.vector.matrix.android.api.session.sync.FilterService
 import im.vector.matrix.android.api.session.sync.SyncState
+import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
@@ -50,12 +51,14 @@ import im.vector.matrix.android.internal.crypto.crosssigning.ShieldTrustUpdater
 import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.WorkManagerProvider
+import im.vector.matrix.android.internal.session.identity.DefaultIdentityService
 import im.vector.matrix.android.internal.session.room.timeline.TimelineEventDecryptor
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import im.vector.matrix.android.internal.session.sync.job.SyncWorker
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -82,6 +85,7 @@ internal class DefaultSession @Inject constructor(
         private val signOutService: Lazy<SignOutService>,
         private val pushRuleService: Lazy<PushRuleService>,
         private val pushersService: Lazy<PushersService>,
+        private val termsService: Lazy<TermsService>,
         private val cryptoService: Lazy<DefaultCryptoService>,
         private val fileService: Lazy<FileService>,
         private val secureStorageService: Lazy<SecureStorageService>,
@@ -97,8 +101,11 @@ internal class DefaultSession @Inject constructor(
         private val _sharedSecretStorageService: Lazy<SharedSecretStorageService>,
         private val accountService: Lazy<AccountService>,
         private val timelineEventDecryptor: TimelineEventDecryptor,
-        private val shieldTrustUpdater: ShieldTrustUpdater)
-    : Session,
+        private val shieldTrustUpdater: ShieldTrustUpdater,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val defaultIdentityService: DefaultIdentityService,
+        private val taskExecutor: TaskExecutor
+) : Session,
         RoomService by roomService.get(),
         RoomDirectoryService by roomDirectoryService.get(),
         GroupService by groupService.get(),
@@ -108,6 +115,7 @@ internal class DefaultSession @Inject constructor(
         PushRuleService by pushRuleService.get(),
         PushersService by pushersService.get(),
         FileService by fileService.get(),
+        TermsService by termsService.get(),
         InitialSyncProgressService by initialSyncProgressService.get(),
         SecureStorageService by secureStorageService.get(),
         HomeServerCapabilitiesService by homeServerCapabilitiesService.get(),
@@ -133,6 +141,7 @@ internal class DefaultSession @Inject constructor(
         eventBus.register(this)
         timelineEventDecryptor.start()
         shieldTrustUpdater.start()
+        defaultIdentityService.start()
     }
 
     override fun requireBackgroundSync() {
@@ -175,6 +184,10 @@ internal class DefaultSession @Inject constructor(
         isOpen = false
         eventBus.unregister(this)
         shieldTrustUpdater.stop()
+        taskExecutor.executorScope.launch(coroutineDispatchers.main) {
+            // This has to be done on main thread
+            defaultIdentityService.stop()
+        }
     }
 
     override fun getSyncStateLive(): LiveData<SyncState> {
@@ -204,7 +217,7 @@ internal class DefaultSession @Inject constructor(
         if (globalError is GlobalError.InvalidToken
                 && globalError.softLogout) {
             // Mark the token has invalid
-            GlobalScope.launch(Dispatchers.IO) {
+            taskExecutor.executorScope.launch(Dispatchers.IO) {
                 sessionParamsStore.setTokenInvalid(sessionId)
             }
         }
@@ -218,6 +231,8 @@ internal class DefaultSession @Inject constructor(
 
     override fun cryptoService(): CryptoService = cryptoService.get()
 
+    override fun identityService() = defaultIdentityService
+
     override fun addListener(listener: Session.Listener) {
         sessionListeners.addListener(listener)
     }
@@ -228,6 +243,6 @@ internal class DefaultSession @Inject constructor(
 
     // For easy debugging
     override fun toString(): String {
-        return "$myUserId - ${sessionParams.credentials.deviceId}"
+        return "$myUserId - ${sessionParams.deviceId}"
     }
 }

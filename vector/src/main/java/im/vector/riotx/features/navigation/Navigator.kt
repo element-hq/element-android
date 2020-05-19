@@ -19,10 +19,13 @@ package im.vector.riotx.features.navigation
 import android.app.Activity
 import android.content.Context
 import android.view.View
+import androidx.fragment.app.Fragment
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.SharedData
+import im.vector.riotx.features.terms.ReviewTermsActivity
 
 interface Navigator {
 
@@ -46,6 +49,8 @@ interface Navigator {
 
     fun openCreateDirectRoom(context: Context)
 
+    fun openInviteUsersToRoom(context: Context, roomId: String)
+
     fun openRoomDirectory(context: Context, initialFilter: String = "")
 
     fun openRoomsFiltering(context: Context)
@@ -65,4 +70,10 @@ interface Navigator {
     fun openRoomProfile(context: Context, roomId: String)
 
     fun openBigImageViewer(activity: Activity, sharedElement: View?, matrixItem: MatrixItem)
+
+    fun openTerms(fragment: Fragment,
+                  serviceType: TermsService.ServiceType,
+                  baseUrl: String,
+                  token: String?,
+                  requestCode: Int = ReviewTermsActivity.TERMS_REQUEST_CODE)
 }

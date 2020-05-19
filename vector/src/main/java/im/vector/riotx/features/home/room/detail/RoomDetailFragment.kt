@@ -264,7 +264,7 @@ class RoomDetailFragment @Inject constructor(
         setupNotificationView()
         setupJumpToReadMarkerView()
         setupJumpToBottomView()
-        roomToolbarContentView.setOnClickListener {
+        roomToolbarContentView.debouncedClicks {
             navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
         }
         roomDetailViewModel.subscribe { renderState(it) }
@@ -348,7 +348,7 @@ class RoomDetailFragment @Inject constructor(
 
     private fun setupJumpToBottomView() {
         jumpToBottomView.visibility = View.INVISIBLE
-        jumpToBottomView.setOnClickListener {
+        jumpToBottomView.debouncedClicks {
             roomDetailViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
             jumpToBottomView.visibility = View.INVISIBLE
             if (!roomDetailViewModel.timeline.isLive) {

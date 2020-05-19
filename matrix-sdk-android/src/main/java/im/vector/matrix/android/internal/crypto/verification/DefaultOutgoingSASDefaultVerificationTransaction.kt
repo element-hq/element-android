@@ -121,7 +121,7 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
 //        }
 //
 //        val requestMessage = KeyVerificationRequest(
-//                fromDevice = session.sessionParams.credentials.deviceId ?: "",
+//                fromDevice = session.sessionParams.deviceId ?: "",
 //                methods = listOf(KeyVerificationStart.VERIF_METHOD_SAS),
 //                timestamp = System.currentTimeMillis().toInt(),
 //                transactionId = transactionId

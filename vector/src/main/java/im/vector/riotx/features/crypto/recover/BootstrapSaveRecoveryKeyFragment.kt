@@ -25,19 +25,16 @@ import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.view.clicks
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.colorizeMatchingText
 import im.vector.riotx.core.utils.startSharePlainTextIntent
 import im.vector.riotx.core.utils.toast
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_bootstrap_save_key.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class BootstrapSaveRecoveryKeyFragment @Inject constructor(
@@ -51,34 +48,17 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bootstrapSaveText.text = getString(R.string.bootstrap_save_key_description, getString(R.string.message_key), getString(R.string.recovery_passphrase))
+        val messageKey = getString(R.string.message_key)
+        val recoveryPassphrase = getString(R.string.recovery_passphrase)
+        val color = colorProvider.getColorFromAttribute(R.attr.vctr_toolbar_link_text_color)
+        bootstrapSaveText.text = getString(R.string.bootstrap_save_key_description, messageKey, recoveryPassphrase)
                 .toSpannable()
-                .colorizeMatchingText(getString(R.string.recovery_passphrase), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
-                .colorizeMatchingText(getString(R.string.message_key), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
+                .colorizeMatchingText(messageKey, color)
+                .colorizeMatchingText(recoveryPassphrase, color)
 
-        recoverySave.clickableView.clicks()
-                .debounce(600, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    downloadRecoveryKey()
-                }
-                .disposeOnDestroyView()
-
-        recoveryCopy.clickableView.clicks()
-                .debounce(600, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    shareRecoveryKey()
-                }
-                .disposeOnDestroyView()
-
-        recoveryContinue.clickableView.clicks()
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    sharedViewModel.handle(BootstrapActions.GoToCompleted)
-                }
-                .disposeOnDestroyView()
+        recoverySave.clickableView.debouncedClicks { downloadRecoveryKey() }
+        recoveryCopy.clickableView.debouncedClicks { shareRecoveryKey() }
+        recoveryContinue.clickableView.debouncedClicks { sharedViewModel.handle(BootstrapActions.GoToCompleted) }
     }
 
     private fun downloadRecoveryKey() = withState(sharedViewModel) { _ ->

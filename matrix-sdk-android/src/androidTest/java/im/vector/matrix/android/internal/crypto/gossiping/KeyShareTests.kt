@@ -148,7 +148,7 @@ class KeyShareTests : InstrumentedTest {
 
         // Mark the device as trusted
         aliceSession.cryptoService().setDeviceVerification(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true), aliceSession.myUserId,
-                aliceSession2.sessionParams.credentials.deviceId ?: "")
+                aliceSession2.sessionParams.deviceId ?: "")
 
         // Re request
         aliceSession2.cryptoService().reRequestRoomKeyForEvent(receivedEvent.root)
@@ -253,12 +253,12 @@ class KeyShareTests : InstrumentedTest {
         })
 
         val txId: String = "m.testVerif12"
-        aliceVerificationService2.beginKeyVerification(VerificationMethod.SAS, aliceSession1.myUserId, aliceSession1.sessionParams.credentials.deviceId
+        aliceVerificationService2.beginKeyVerification(VerificationMethod.SAS, aliceSession1.myUserId, aliceSession1.sessionParams.deviceId
                 ?: "", txId)
 
         mTestHelper.waitWithLatch { latch ->
             mTestHelper.retryPeriodicallyWithLatch(latch) {
-                aliceSession1.cryptoService().getDeviceInfo(aliceSession1.myUserId, aliceSession2.sessionParams.credentials.deviceId ?: "")?.isVerified == true
+                aliceSession1.cryptoService().getDeviceInfo(aliceSession1.myUserId, aliceSession2.sessionParams.deviceId ?: "")?.isVerified == true
             }
         }
 

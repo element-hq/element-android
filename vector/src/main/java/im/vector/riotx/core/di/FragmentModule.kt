@@ -23,8 +23,6 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import im.vector.riotx.features.attachments.preview.AttachmentsPreviewFragment
-import im.vector.riotx.features.createdirect.CreateDirectRoomDirectoryUsersFragment
-import im.vector.riotx.features.createdirect.CreateDirectRoomKnownUsersFragment
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
 import im.vector.riotx.features.crypto.quads.SharedSecuredStorageKeyFragment
 import im.vector.riotx.features.crypto.quads.SharedSecuredStoragePassphraseFragment
@@ -43,6 +41,8 @@ import im.vector.riotx.features.crypto.verification.emoji.VerificationEmojiCodeF
 import im.vector.riotx.features.crypto.verification.qrconfirmation.VerificationQRWaitingFragment
 import im.vector.riotx.features.crypto.verification.qrconfirmation.VerificationQrScannedByOtherFragment
 import im.vector.riotx.features.crypto.verification.request.VerificationRequestFragment
+import im.vector.riotx.features.discovery.DiscoverySettingsFragment
+import im.vector.riotx.features.discovery.change.SetIdentityServerFragment
 import im.vector.riotx.features.grouplist.GroupListFragment
 import im.vector.riotx.features.home.HomeDetailFragment
 import im.vector.riotx.features.home.HomeDrawerFragment
@@ -92,9 +92,13 @@ import im.vector.riotx.features.settings.devtools.IncomingKeyRequestListFragment
 import im.vector.riotx.features.settings.devtools.KeyRequestsFragment
 import im.vector.riotx.features.settings.devtools.OutgoingKeyRequestListFragment
 import im.vector.riotx.features.settings.ignored.VectorSettingsIgnoredUsersFragment
+import im.vector.riotx.features.settings.locale.LocalePickerFragment
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
 import im.vector.riotx.features.share.IncomingShareFragment
 import im.vector.riotx.features.signout.soft.SoftLogoutFragment
+import im.vector.riotx.features.userdirectory.KnownUsersFragment
+import im.vector.riotx.features.userdirectory.UserDirectoryFragment
+import im.vector.riotx.features.terms.ReviewTermsFragment
 
 @Module
 interface FragmentModule {
@@ -108,6 +112,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(RoomListFragment::class)
     fun bindRoomListFragment(fragment: RoomListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LocalePickerFragment::class)
+    fun bindLocalePickerFragment(fragment: LocalePickerFragment): Fragment
 
     @Binds
     @IntoMap
@@ -226,13 +235,13 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(CreateDirectRoomDirectoryUsersFragment::class)
-    fun bindCreateDirectRoomDirectoryUsersFragment(fragment: CreateDirectRoomDirectoryUsersFragment): Fragment
+    @FragmentKey(UserDirectoryFragment::class)
+    fun bindUserDirectoryFragment(fragment: UserDirectoryFragment): Fragment
 
     @Binds
     @IntoMap
-    @FragmentKey(CreateDirectRoomKnownUsersFragment::class)
-    fun bindCreateDirectRoomKnownUsersFragment(fragment: CreateDirectRoomKnownUsersFragment): Fragment
+    @FragmentKey(KnownUsersFragment::class)
+    fun bindKnownUsersFragment(fragment: KnownUsersFragment): Fragment
 
     @Binds
     @IntoMap
@@ -468,4 +477,19 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(SharedSecuredStorageKeyFragment::class)
     fun bindSharedSecuredStorageKeyFragment(fragment: SharedSecuredStorageKeyFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SetIdentityServerFragment::class)
+    fun bindSetIdentityServerFragment(fragment: SetIdentityServerFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(DiscoverySettingsFragment::class)
+    fun bindDiscoverySettingsFragment(fragment: DiscoverySettingsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(ReviewTermsFragment::class)
+    fun bindReviewTermsFragment(fragment: ReviewTermsFragment): Fragment
 }

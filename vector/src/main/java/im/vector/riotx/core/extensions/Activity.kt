@@ -16,6 +16,7 @@
 
 package im.vector.riotx.core.extensions
 
+import android.app.Activity
 import android.os.Parcelable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -58,4 +59,9 @@ fun <T : Fragment> VectorBaseActivity.addFragmentToBackstack(frameId: Int,
 
 fun VectorBaseActivity.hideKeyboard() {
     currentFocus?.hideKeyboard()
+}
+
+fun Activity.restart() {
+    startActivity(intent)
+    finish()
 }

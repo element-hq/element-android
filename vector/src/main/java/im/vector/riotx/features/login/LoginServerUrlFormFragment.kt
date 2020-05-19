@@ -25,6 +25,7 @@ import butterknife.OnClick
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.hideKeyboard
+import im.vector.riotx.core.utils.ensureProtocol
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import kotlinx.android.synthetic.main.fragment_login_server_url_form.*
 import javax.inject.Inject
@@ -96,16 +97,13 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
         cleanupUi()
 
         // Static check of homeserver url, empty, malformed, etc.
-        var serverUrl = loginServerUrlFormHomeServerUrl.text.toString().trim()
+        val serverUrl = loginServerUrlFormHomeServerUrl.text.toString().trim().ensureProtocol()
 
         when {
             serverUrl.isBlank() -> {
                 loginServerUrlFormHomeServerUrlTil.error = getString(R.string.login_error_invalid_home_server)
             }
             else                -> {
-                if (serverUrl.startsWith("http").not()) {
-                    serverUrl = "https://$serverUrl"
-                }
                 loginServerUrlFormHomeServerUrl.setText(serverUrl)
                 loginViewModel.handle(LoginAction.UpdateHomeServer(serverUrl))
             }
@@ -126,7 +124,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
 
         if (state.loginMode != LoginMode.Unknown) {
             // The home server url is valid
-            loginSharedActionViewModel.post(LoginNavigation.OnLoginFlowRetrieved)
+            loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnLoginFlowRetrieved))
         }
     }
 }

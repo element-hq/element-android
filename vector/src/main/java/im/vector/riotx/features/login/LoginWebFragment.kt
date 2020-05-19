@@ -173,7 +173,7 @@ class LoginWebFragment @Inject constructor(
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
                 super.onReceivedError(view, errorCode, description, failingUrl)
 
-                loginSharedActionViewModel.post(LoginNavigation.OnWebLoginError(errorCode, description, failingUrl))
+                loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnWebLoginError(errorCode, description, failingUrl)))
             }
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {

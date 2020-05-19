@@ -20,6 +20,7 @@ import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.cleanup.CleanupSession
+import im.vector.matrix.android.internal.session.identity.IdentityDisconnectTask
 import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
@@ -35,6 +36,7 @@ internal interface SignOutTask : Task<SignOutTask.Params, Unit> {
 internal class DefaultSignOutTask @Inject constructor(
         private val signOutAPI: SignOutAPI,
         private val eventBus: EventBus,
+        private val identityDisconnectTask: IdentityDisconnectTask,
         private val cleanupSession: CleanupSession
 ) : SignOutTask {
 
@@ -59,6 +61,10 @@ internal class DefaultSignOutTask @Inject constructor(
                 }
             }
         }
+
+        // Logout from identity server if any
+        runCatching { identityDisconnectTask.execute(Unit) }
+                .onFailure { Timber.w(it, "Unable to disconnect identity server") }
 
         Timber.d("SignOut: cleanup session...")
         cleanupSession.handle()

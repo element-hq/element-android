@@ -48,10 +48,11 @@ import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
+import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.StringProvider
 import im.vector.matrix.android.internal.worker.WorkerParamsFactory
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.UUID
@@ -66,7 +67,8 @@ internal class VerificationTransportRoomMessage(
         private val userDeviceId: String?,
         private val roomId: String,
         private val localEchoEventFactory: LocalEchoEventFactory,
-        private val tx: DefaultVerificationTransaction?
+        private val tx: DefaultVerificationTransaction?,
+        private val coroutineScope: CoroutineScope
 ) : VerificationTransport {
 
     override fun <T> sendToOther(type: String,
@@ -131,7 +133,7 @@ internal class VerificationTransportRoomMessage(
         }
 
         // TODO listen to DB to get synced info
-        GlobalScope.launch(Dispatchers.Main) {
+        coroutineScope.launch(Dispatchers.Main) {
             workLiveData.observeForever(observer)
         }
     }
@@ -212,7 +214,7 @@ internal class VerificationTransportRoomMessage(
         }
 
         // TODO listen to DB to get synced info
-        GlobalScope.launch(Dispatchers.Main) {
+        coroutineScope.launch(Dispatchers.Main) {
             workLiveData.observeForever(observer)
         }
     }
@@ -265,7 +267,7 @@ internal class VerificationTransportRoomMessage(
         }
 
         // TODO listen to DB to get synced info
-        GlobalScope.launch(Dispatchers.Main) {
+        coroutineScope.launch(Dispatchers.Main) {
             workLiveData.observeForever(observer)
         }
     }
@@ -384,9 +386,19 @@ internal class VerificationTransportRoomMessageFactory @Inject constructor(
         private val userId: String,
         @DeviceId
         private val deviceId: String?,
-        private val localEchoEventFactory: LocalEchoEventFactory) {
+        private val localEchoEventFactory: LocalEchoEventFactory,
+        private val taskExecutor: TaskExecutor
+) {
 
     fun createTransport(roomId: String, tx: DefaultVerificationTransaction?): VerificationTransportRoomMessage {
-        return VerificationTransportRoomMessage(workManagerProvider, stringProvider, sessionId, userId, deviceId, roomId, localEchoEventFactory, tx)
+        return VerificationTransportRoomMessage(workManagerProvider,
+                stringProvider,
+                sessionId,
+                userId,
+                deviceId,
+                roomId,
+                localEchoEventFactory,
+                tx,
+                taskExecutor.executorScope)
     }
 }

@@ -4,8 +4,8 @@
     <string name="summary_user_sent_image">%1$s dërgoi një figurë.</string>
     <string name="notice_room_invite">%1$s ftoi %2$s</string>
     <string name="notice_room_invite_you">%1$s ju ftoi</string>
-    <string name="notice_room_join">%1$s u bë pjesë</string>
-    <string name="notice_room_leave">%1$s iku</string>
+    <string name="notice_room_join">%1$s hyri në dhomë</string>
+    <string name="notice_room_leave">%1$s doli nga dhoma</string>
     <string name="notice_room_reject">%1$s hodhi tej ftesën</string>
     <string name="notice_room_kick">%1$s përzuri %2$s</string>
     <string name="notice_room_ban">%1$s dëboi %2$s</string>
@@ -172,8 +172,8 @@
     <string name="notice_room_invite_no_invitee_with_reason">Ftesë e %1$s. Arsye: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s ftoi %2$s. Arsye: %3$s</string>
     <string name="notice_room_invite_you_with_reason">%1$s ju ftoi. Arsye: %2$s</string>
-    <string name="notice_room_join_with_reason">%1$s erdhi. Arsye: %2$s</string>
-    <string name="notice_room_leave_with_reason">%1$s iku. Arsye: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s erdhi në dhomë. Arsye: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s doli nga dhoma. Arsye: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s hodhi poshtë ftesën. Arsye: %2$s</string>
     <string name="notice_room_kick_with_reason">%1$s përzuri %2$s. Arsye: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s hoqi dëbimin për %2$s. Arsye: %3$s</string>

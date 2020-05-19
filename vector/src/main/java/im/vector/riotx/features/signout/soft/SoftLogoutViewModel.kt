@@ -58,9 +58,9 @@ class SoftLogoutViewModel @AssistedInject constructor(
             val activity: SoftLogoutActivity = (viewModelContext as ActivityViewModelContext).activity()
             val userId = activity.session.myUserId
             return SoftLogoutViewState(
-                    homeServerUrl = activity.session.sessionParams.homeServerConnectionConfig.homeServerUri.toString(),
+                    homeServerUrl = activity.session.sessionParams.homeServerUrl,
                     userId = userId,
-                    deviceId = activity.session.sessionParams.credentials.deviceId ?: "",
+                    deviceId = activity.session.sessionParams.deviceId ?: "",
                     userDisplayName = activity.session.getUser(userId)?.displayName ?: userId,
                     hasUnsavedKeys = activity.session.hasUnsavedKeys()
             )
@@ -81,8 +81,6 @@ class SoftLogoutViewModel @AssistedInject constructor(
     }
 
     private fun getSupportedLoginFlow() {
-        val homeServerConnectionConfig = session.sessionParams.homeServerConnectionConfig
-
         currentTask?.cancel()
         currentTask = null
         authenticationService.cancelPendingLoginOrRegistration()
@@ -93,7 +91,7 @@ class SoftLogoutViewModel @AssistedInject constructor(
             )
         }
 
-        currentTask = authenticationService.getLoginFlow(homeServerConnectionConfig, object : MatrixCallback<LoginFlowResult> {
+        currentTask = authenticationService.getLoginFlowOfSession(session.sessionId, object : MatrixCallback<LoginFlowResult> {
             override fun onFailure(failure: Throwable) {
                 setState {
                     copy(

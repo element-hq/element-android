@@ -48,7 +48,7 @@ internal class SetDeviceVerificationAction @Inject constructor(
 
         if (device.trustLevel != trustLevel) {
             device.trustLevel = trustLevel
-            cryptoStore.storeUserDevice(userId, device)
+            cryptoStore.setDeviceTrust(userId, deviceId, trustLevel.crossSigningVerified, trustLevel.locallyVerified)
         }
     }
 }

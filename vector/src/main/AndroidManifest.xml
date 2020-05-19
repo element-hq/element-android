@@ -85,6 +85,7 @@
         </activity>
         <activity android:name=".features.debug.DebugMenuActivity" />
         <activity android:name="im.vector.riotx.features.createdirect.CreateDirectRoomActivity" />
+        <activity android:name="im.vector.riotx.features.invite.InviteUsersToRoomActivity" />
         <activity android:name=".features.webview.VectorWebViewActivity" />
         <activity android:name=".features.link.LinkHandlerActivity">
             <intent-filter>
@@ -159,6 +160,8 @@
         <activity
             android:name=".features.attachments.preview.AttachmentsPreviewActivity"
             android:theme="@style/AppTheme.AttachmentsPreview" />
+
+        <activity android:name=".features.terms.ReviewTermsActivity" />
 
         <!-- Services -->
 

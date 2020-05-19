@@ -367,7 +367,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 )
                 if (trustResult.isVerified()) {
                     // Sign this device and upload the signature
-                    session.sessionParams.credentials.deviceId?.let { deviceId ->
+                    session.sessionParams.deviceId?.let { deviceId ->
                         session.cryptoService()
                                 .crossSigningService().trustDevice(deviceId, object : MatrixCallback<Unit> {
                                     override fun onFailure(failure: Throwable) {

@@ -53,13 +53,13 @@ class HomeDrawerFragment @Inject constructor(
                 homeDrawerUserIdView.text = user.userId
             }
         }
-        homeDrawerHeaderSettingsView.setOnClickListener {
+        homeDrawerHeaderSettingsView.debouncedClicks {
             sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
             navigator.openSettings(requireActivity())
         }
 
         // Debug menu
-        homeDrawerHeaderDebugView.setOnClickListener {
+        homeDrawerHeaderDebugView.debouncedClicks {
             sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
             navigator.openDebug(requireActivity())
         }

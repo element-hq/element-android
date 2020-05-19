@@ -5,23 +5,23 @@
     <string name="dark_theme">Malhela haŭto</string>
     <string name="black_them">Nigra haŭto</string>
 
-    <string name="notification_sync_in_progress">Sinkroniganta</string>
-    <string name="notification_listening_for_events">Atentanta pri eventoj</string>
+    <string name="notification_sync_in_progress">Spegulante…</string>
+    <string name="notification_listening_for_events">Atentante eventojn</string>
     <string name="notification_noisy_notifications">Laŭtaj sciigoj</string>
     <string name="notification_silent_notifications">Silentaj sciigoj</string>
 
     <string name="title_activity_home">Mesaĝoj</string>
-    <string name="title_activity_room">Babilejo</string>
+    <string name="title_activity_room">Ĉambro</string>
     <string name="resources_country_code">EO</string>
 
     <string name="title_activity_settings">Agordoj</string>
-    <string name="title_activity_bug_report">Cimraporto</string>
-    <string name="title_activity_group_details">Komunumaj detaloj</string>
+    <string name="title_activity_bug_report">Erar-raporto</string>
+    <string name="title_activity_group_details">Detaloj pri komunumo</string>
     <string name="title_activity_choose_sticker">Sendi glumarkon</string>
 
     <string name="dialog_title_third_party_licences">Permesiloj de eksteraj liverantoj</string>
 
-    <string name="loading">Ŝarganta…</string>
+    <string name="loading">Enlegante…</string>
 
     <string name="ok">Bone</string>
     <string name="cancel">Nuligi</string>
@@ -33,7 +33,7 @@
     <string name="redact">Forigi</string>
     <string name="quote">Citi</string>
     <string name="download">Elŝuti</string>
-    <string name="share">Diskonigi</string>
+    <string name="share">Kunhavigi</string>
     <string name="speak">Paroli</string>
     <string name="clear">Forviŝi</string>
     <string name="later">Poste</string>
@@ -43,40 +43,41 @@
     <string name="view_decrypted_source">Vidi malĉifritan fonton</string>
     <string name="delete">Forigi</string>
     <string name="rename">Renomi</string>
-    <string name="title_activity_member_details">Membro-Detaloj</string>
+    <string name="title_activity_member_details">Detaloj pri ano</string>
     <string name="title_activity_historical">Historia</string>
     <string name="report_content">Raporti enhavon</string>
-    <string name="active_call">Aktiva alvoko</string>
-    <string name="send_bug_report">Cimraporto</string>
-    <string name="ongoing_conference_call">Daŭranta telekonferenco.\nAliĝi %1$s aŭ %2$s.</string>
-    <string name="ongoing_conference_call_voice">voĉe</string>
-    <string name="ongoing_conference_call_video">videe</string>
-    <string name="cannot_start_call">Ne eblas ekigi la alvokon, bonvolu provi poste</string>
-    <string name="missing_permissions_title_to_start_conf_call">Ne eblas ekigi alvokon</string>
-    <string name="missing_permissions_warning">Pro mankantaj permesoj, kelkaj ebloj eble mankos…</string>
+    <string name="active_call">Aktiva voko</string>
+    <string name="send_bug_report">Raporti eraron</string>
+    <string name="ongoing_conference_call">Daŭranta grupa voko.
+\nAliĝi kiel %1$s aŭ %2$s.</string>
+    <string name="ongoing_conference_call_voice">Voĉe</string>
+    <string name="ongoing_conference_call_video">Vide</string>
+    <string name="cannot_start_call">Ne eblas ekigi la vokon, bonvolu provi poste</string>
+    <string name="missing_permissions_title_to_start_conf_call">Ne eblas ekigi vokon</string>
+    <string name="missing_permissions_warning">Pro mankantaj permesoj, kelkaj funkcioj eble mankos…</string>
     <string name="missing_permissions_error">Pro mankantaj permesoj, tiu ago ne eblas.</string>
-    <string name="device_information">Aparata informo</string>
+    <string name="device_information">Informoj pri salutaĵo</string>
     <string name="send_anyway">Tamen sendi</string>
     <string name="or">aŭ</string>
     <string name="invite">Inviti</string>
-    <string name="offline">Malinterrete</string>
+    <string name="offline">Eksterrete</string>
 
     <string name="action_exit">Eliri</string>
     <string name="actions">Agoj</string>
-    <string name="action_voice_call">Telefono</string>
-    <string name="action_video_call">videotelefono</string>
+    <string name="action_voice_call">Voĉvoko</string>
+    <string name="action_video_call">Vidvoko</string>
     <string name="action_global_search">Universala serĉo</string>
-    <string name="call_anyway">Tamen alvoki</string>
+    <string name="call_anyway">Tamen voki</string>
     <string name="action_quick_reply">Rapida respondo</string>
     <string name="action_open">Malfermi</string>
     <string name="action_close">Fermi</string>
     <string name="room_message_placeholder_reply_to_encrypted">Sendi ĉifritan respondon…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Sendi respondon (neĉifritan)…</string>
     <string name="bottom_action_people">Homoj</string>
-    <string name="bottom_action_rooms">Babilejoj</string>
+    <string name="bottom_action_rooms">Ĉambroj</string>
     <string name="bottom_action_groups">Komunumoj</string>
 
-    <string name="home_filter_placeholder_home">Filtri nomojn de babilejoj</string>
+    <string name="home_filter_placeholder_home">Filtri nomojn de ĉambroj</string>
     <string name="home_filter_placeholder_people">Filtri homojn</string>
     <string name="home_filter_placeholder_rooms">Filtri nomojn de babilejoj</string>
     <string name="room_details_people">Homoj</string>
@@ -93,9 +94,422 @@
     <string name="rooms">Babilejoj</string>
     <string name="room_jump_to_first_unread">Salti al unua nelegita mesaĝo.</string>
 
-    <string name="title_activity_keys_backup_setup">Ŝlosilo-Sekukopio</string>
-    <string name="title_activity_keys_backup_restore">Usi Ŝlosilo-Sekukopion</string>
-    <string name="title_activity_verify_device">Kontroli aparaton</string>
+    <string name="title_activity_keys_backup_setup">Savkopiado de ŝlosiloj</string>
+    <string name="title_activity_keys_backup_restore">Uzi savkopiadon de ŝlosiloj</string>
+    <string name="title_activity_verify_device">Kontroli salutaĵon</string>
 
     <string name="encryption_information_verify_device">Kontroli aparaton</string>
+    <string name="resources_script">Latn</string>
+
+    <string name="status_theme">Haŭto de Status.im</string>
+
+    <string name="keys_backup_is_not_finished_please_wait">Savkopio de ŝlosiloj ne finiĝis; bonvolu atendi…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Vi perdos viajn ĉifritajn mesaĝojn se vi nun adiaŭos</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Savkopio de ŝlosiloj progresas. Se vi nun adiaŭos, vi perdos aliron al viaj ĉifritaj mesaĝoj.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Sekura savkopiado de ŝlosiloj devus esti aktiva en ĉiuj viaj salutaĵoj por eviti perdon de aliro al viaj ĉifritaj mesaĝoj.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Mi ne volas miajn ĉifritajn mesaĝojn</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Savkopiante ŝlosilojn…</string>
+    <string name="keys_backup_activate">Uzi savkopiadon de ŝolsiloj</string>
+    <string name="are_you_sure">Ĉu vi certas\?</string>
+    <string name="backup">Savkopii</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Vi perdos aliron al viaj ĉifritaj mesaĝoj malse vi savkopios viajn ŝlosilojn antaŭ adiaŭo.</string>
+
+    <string name="stay">Resti</string>
+    <string name="none">Neniu</string>
+    <string name="revoke">Senvalidigi</string>
+    <string name="disconnect">Malkonekti</string>
+    <string name="missing_permissions_to_start_conf_call">Vi bezonas permeson inviti por komenci grupan vokon en ĉi tiu ĉambro</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Grupaj vokoj ne estas subtenataj de ĉifrataj ĉambroj</string>
+    <string name="accept">Akcepti</string>
+    <string name="skip">Preterpasi</string>
+    <string name="done">Finite</string>
+    <string name="abort">Ĉesigi</string>
+    <string name="ignore">Malatenti</string>
+    <string name="review">Kontroli</string>
+    <string name="decline">Rifuzi</string>
+
+    <string name="action_sign_out">Adiaŭi</string>
+    <string name="action_sign_out_confirmation_simple">Ĉu vi certe volas adiaŭi\?</string>
+    <string name="action_mark_all_as_read">Marki ĉion legita</string>
+    <string name="action_historical">Historia</string>
+    <string name="action_mark_room_read">Marki legita</string>
+    <string name="copied_to_clipboard">Kopiiĝis al tondujo</string>
+    <string name="disable">Malŝalti</string>
+
+    <string name="dialog_title_confirmation">Konfirmo</string>
+    <string name="dialog_title_warning">Averto</string>
+    <string name="dialog_title_error">Eraro</string>
+
+    <string name="bottom_action_home">Hejmo</string>
+    <string name="bottom_action_favourites">Elstarigitaj</string>
+    <string name="home_filter_placeholder_favorites">Filtri elstarigitajn</string>
+    <string name="home_filter_placeholder_groups">Filtri nomojn de komunumoj</string>
+
+    <string name="invitations_header">Invitoj</string>
+    <string name="low_priority_header">Malalta prioritato</string>
+    <string name="system_alerts_header">Sistemaj avertoj</string>
+
+    <string name="direct_chats_header">Interparoloj</string>
+    <string name="local_address_book_header">Loka adresaro</string>
+    <string name="no_conversation_placeholder">Neniuj interparoloj</string>
+    <string name="no_contact_access_placeholder">Vi ne permesis al Riot aliron al viaj lokaj kontaktoj</string>
+    <string name="no_result_placeholder">Neniuj rezultoj</string>
+    <string name="people_no_identity_server">Neniu identiga servilo estas agordita.</string>
+
+    <string name="rooms_header">Ĉambroj</string>
+    <string name="no_room_placeholder">Neniuj ĉambroj</string>
+    <string name="no_public_room_placeholder">Neniuj publikaj ĉambroj disponeblas</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 uzanto</item>
+        <item quantity="other">%d uzantoj</item>
+    </plurals>
+
+    <string name="groups_invite_header">Inviti</string>
+    <string name="groups_header">Komunumoj</string>
+    <string name="no_group_placeholder">Neniuj grupoj</string>
+
+    <string name="send_bug_report_include_logs">Sendi protokolon</string>
+    <string name="send_bug_report_include_crash_logs">Sendi protokolon pri fiasko</string>
+    <string name="send_bug_report_include_screenshot">Sendi ekrankopion</string>
+    <string name="send_bug_report_description">Bonvolu priskribi la eraron. Kion vi faris\? Kion vi atendis\? Kio tamen vere okazis\?</string>
+    <string name="send_bug_report_description_in_english">Se tio eblas, bonvolu priskribi per la angla lingvo.</string>
+    <string name="send_bug_report_placeholder">Priskribu vian problemon ĉi tie</string>
+    <string name="send_bug_report_sent">Sukcese sendis la erar-raporton</string>
+    <string name="send_bug_report_failed">Malsukcesis sendi la erar-raporton (%s)</string>
+    <string name="send_bug_report_progress">Progreso (%s%%)</string>
+
+    <string name="send_files_in">Sendi al</string>
+    <string name="read_receipt">Legite</string>
+
+    <string name="join_room">Aliĝi al ĉambro</string>
+    <string name="username">Uzantonomo</string>
+    <string name="create_account">Krei konton</string>
+    <string name="login">Saluti</string>
+    <string name="logout">Adiaŭi</string>
+    <string name="hs_url">URL de hejmservilo</string>
+    <string name="identity_url">URL de identiga servilo</string>
+    <string name="search">Serĉi</string>
+
+    <string name="start_new_chat">Komenci novan babilon</string>
+    <string name="start_voice_call">Komenci voĉvokon</string>
+    <string name="start_video_call">Komenci vidvokon</string>
+
+    <string name="option_send_voice">Sendi voĉon</string>
+
+    <string name="start_new_chat_prompt_msg">Ĉu vi certe volas komenci novan babilon kun %s\?</string>
+    <string name="start_voice_call_prompt_msg">Ĉu vi certe volas komenci novan voĉvokon\?</string>
+    <string name="start_video_call_prompt_msg">Ĉu vi certe volas komenci novan vidvokon\?</string>
+    <string name="call_failed_no_ice_title">Voko malsukcesis pro misagordita servilo</string>
+    <string name="call_failed_no_ice_description">Bonvolu peti de la administranto de via hejmservilo (%1$s) agordon de TURN-servilo, por dependebla funkciigo de vokoj.
+\n
+\nAlternative vi povas provi publikan servilon je %2$s, sed tio ne funkcios same dependeble, kaj montros vian IP-adreson al tiu servilo. Vi ankaŭ povas administri tion en la Agordoj.</string>
+    <string name="call_failed_no_ice_use_alt">Provu uzon de %s</string>
+    <string name="call_failed_dont_ask_again">Ne demandi ree</string>
+
+    <string name="option_send_files">Sendi dosierojn</string>
+    <string name="option_send_sticker">Sendi glumarkon</string>
+    <string name="option_take_photo_video">Foti aŭ filmi</string>
+    <string name="option_take_photo">Foti</string>
+    <string name="option_take_video">Filmi</string>
+
+    <string name="no_sticker_application_dialog_content">Vi havas neniujn ŝaltitajn glumarkarojn.
+\n
+\nĈu vi volas iujn aldoni nun\?</string>
+
+    <string name="go_on_with">pluiĝi per…</string>
+    <string name="error_no_external_application_found">Pardonu, troviĝis neniu ekstera aplikaĵo por ĉi tiu ago.</string>
+
+    <string name="auth_login">Saluti</string>
+    <string name="auth_login_sso">Saluti per ununura saluto</string>
+    <string name="auth_register">Krei konton</string>
+    <string name="auth_skip">Preterpasi</string>
+    <string name="auth_send_reset_email">Sendi restarigan retleteron</string>
+    <string name="auth_return_to_login">Reiri al salutejo</string>
+    <string name="auth_user_id_placeholder">Retpoŝtadreso aŭ uzantonomo</string>
+    <string name="auth_password_placeholder">Pasvorto</string>
+    <string name="auth_new_password_placeholder">Nova pasvorto</string>
+    <string name="auth_user_name_placeholder">Uzantonomo</string>
+    <string name="auth_email_placeholder">Retpoŝtadreso</string>
+    <string name="auth_opt_email_placeholder">Retpoŝtadreso (malnepra)</string>
+    <string name="auth_phone_number_placeholder">Telefonnumero</string>
+    <string name="auth_opt_phone_number_placeholder">Telefonnumero (malnepra)</string>
+    <string name="auth_repeat_password_placeholder">Ripetu pasvorton</string>
+    <string name="auth_repeat_new_password_placeholder">Konfirmu vian novan pasvorton</string>
+    <string name="auth_invalid_login_param">Malĝusta uzantonomo kaj/aŭ pasvorto</string>
+    <string name="auth_invalid_user_name">Uzantonomoj povas enhavi nur literojn, ciferojn, punktojn, streketojn, kaj substrekojn</string>
+    <string name="auth_invalid_password">Pasvorto estas tro mallonga (almenaŭ 6 signoj)</string>
+    <string name="auth_missing_password">Mankas pasvorto</string>
+    <string name="auth_invalid_email">Ĉi tio ne ŝajnas esti valida retpoŝtadreso</string>
+    <string name="auth_invalid_phone">Ĉi tio ne ŝajnas esti valida telefonnumero</string>
+    <string name="auth_email_already_defined">Ĉi tiu retpoŝtadreso jam estas difinita.</string>
+    <string name="auth_missing_email">Mankas retpoŝtadreso</string>
+    <string name="auth_missing_phone">Mankas telefonnumero</string>
+    <string name="auth_missing_email_or_phone">Mankas retpoŝtadreso aŭ telefonnumero</string>
+    <string name="auth_password_dont_match">Pasvortoj ne akordas</string>
+    <string name="auth_forgot_password">Ĉu vi forgesis pasvorton\?</string>
+    <string name="auth_use_server_options">Uzi proprajn agordojn pri servilo (altnivela)</string>
+    <string name="auth_email_validation_message">Bonvolu kontroli vian retpoŝton por daŭrigi la registriĝon</string>
+    <string name="auth_threepid_warning_message">Registriĝo per retpoŝtadreso kaj telefonnumero samtempe ankoraŭ ne estas subtenata, ĝis la «API» ekekzistos. Nur la telefonnumero estos konsiderata.
+\n
+\nVi povas aldoni vian retpoŝtadreson al via profilo en agordoj.</string>
+    <string name="auth_recaptcha_message">Ĉi tiu hejmservilo volas certiĝi, ke vi ne estas roboto</string>
+    <string name="auth_username_in_use">Uzantonomo jam uziĝas</string>
+    <string name="auth_home_server">Hejmservilo:</string>
+    <string name="auth_identity_server">Identiga servilo:</string>
+    <string name="auth_reset_password_next_step_button">Mi kontrolis mian retpoŝtadreson</string>
+    <string name="auth_reset_password_message">Por restarigi vian pasvorton, enigu la retpoŝtadreson ligitan al via konto:</string>
+    <string name="auth_reset_password_missing_email">Necesas enigi la retpoŝtadreson ligitan al via konto.</string>
+    <string name="auth_reset_password_missing_password">Necesas enigi novan pasvorton.</string>
+    <string name="auth_reset_password_email_validation_message">Retletero sendiĝis al %s. Vizitinte la enhavitan ligilon, klaku sube.</string>
+    <string name="auth_reset_password_error_unauthorized">Malsukcesis kontroli retpoŝtadreson: certiĝu, ke vi klakis la ligilon en la retletero</string>
+    <string name="auth_reset_password_success_message">Via pasvorto restariĝis.
+\n
+\nVi adiaŭis ĉiujn viajn salutaĵojn kaj ne plu ricevos pasivajn sciigojn. Por reŝalti sciigojn, resalutu ĉiun vian aparaton.</string>
+    <string name="auth_accept_policies">Bonvolu tralegi kaj akcepti la politikojn de ĉi tiu hejmservilo:</string>
+
+    <string name="login_error_must_start_http">URL komenciĝu per http[s]://</string>
+    <string name="login_error_network_error">Ne povas asluti: reta eraro</string>
+    <string name="login_error_unable_login">Ne povas saluti</string>
+    <string name="login_error_registration_network_error">Ne povas registriĝi: reta eraro</string>
+    <string name="login_error_unable_register">Ne povas registriĝi</string>
+    <string name="login_error_unable_register_mail_ownership">Ne povas registriĝi: fiasko pri posedo de retpoŝtadreso</string>
+    <string name="login_error_forbidden">Nevalida uzantonomo/pasvorto</string>
+    <string name="read_receipts_list">Listo de legokonfirmoj</string>
+
+    <string name="groups_list">Listo de grupoj</string>
+
+    <string name="compression_options">Sendi en formato</string>
+    <string name="compression_opt_list_original">Originala</string>
+    <string name="compression_opt_list_large">Granda</string>
+    <string name="compression_opt_list_medium">Meza</string>
+    <string name="compression_opt_list_small">Malgranda</string>
+
+    <string name="attachment_cancel_download">Ĉu nuligi la elŝuton\?</string>
+    <string name="attachment_cancel_upload">Ĉu nuligi la alŝuton\?</string>
+    <string name="attachment_remaining_time_seconds">%d s</string>
+    <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
+
+    <string name="yesterday">Hieraŭ</string>
+    <string name="today">Hodiaŭ</string>
+
+    <string name="room_info_room_name">Nomo de ĉambro</string>
+    <string name="room_info_room_topic">Temo de ĉambro</string>
+
+    <string name="settings_call_category">Vokoj</string>
+    <string name="notification_sync_init">Pravalorigante servon</string>
+    <plurals name="room_details_selected">
+        <item quantity="one">1 elektita</item>
+        <item quantity="other">%d elektitaj</item>
+    </plurals>
+    <string name="malformed_id">Misformita identigilo. Ĝi devus esti retpoŝtadreso aŭ identigilo de Matrix, kiel «@lokaparto:mallokaparto»</string>
+    <string name="room_details_people_invited_group_name">INVITITA</string>
+    <string name="room_details_people_present_group_name">ALIĜINTA</string>
+
+    <string name="room_event_action_report_prompt_reason">Kialo pro raporto de ĉi tiu enhavo</string>
+    <string name="room_event_action_report_prompt_ignore_user">Ĉu vi volas kaŝi ĉiujn mesaĝojn de ĉi tiu uzanto\?
+\n
+\nRimarku, ke tia ago reekigos la aplikaĵon kaj eble daŭros iom da tempo.</string>
+    <string name="room_event_action_cancel_upload">Nuligi alŝuton</string>
+    <string name="room_event_action_cancel_download">Nuligi elŝuton</string>
+
+    <string name="search_hint">Serĉi</string>
+    <string name="search_members_hint">Filtri ĉambranojn</string>
+    <string name="search_no_results">Neniuj rezultoj</string>
+    <string name="tab_title_search_rooms">ĈAMBROJ</string>
+    <string name="tab_title_search_messages">MESAĜOJ</string>
+    <string name="room_recents_favourites">ELSTARIGITAJ</string>
+    <string name="room_recents_conversations">ĈAMBROJ</string>
+    <string name="room_recents_invites">INVITOJ</string>
+    <string name="room_recents_start_chat">Komenci babilon</string>
+    <string name="room_recents_create_room">Krei ĉambron</string>
+    <string name="room_recents_join_room">Aliĝi al ĉambro</string>
+    <string name="room_recents_join_room_title">Aliĝi al ĉambro</string>
+    <plurals name="directory_search_rooms">
+        <item quantity="one">1 ĉambro</item>
+        <item quantity="other">%d ĉambroj</item>
+    </plurals>
+    <string name="room_settings_all_messages">Ĉiuj mesaĝoj</string>
+    <string name="room_settings_mention_only">Nur mencioj</string>
+    <string name="room_settings_mute">Silentigi</string>
+    <string name="room_settings_favourite">Elstarigi</string>
+    <string name="room_settings_forget">Forgesi</string>
+    <string name="room_sliding_menu_messages">Mesaĝoj</string>
+    <string name="room_sliding_menu_settings">Agordoj</string>
+    <string name="room_sliding_menu_version">Versio</string>
+    <string name="room_sliding_menu_version_x">Versio %s</string>
+    <string name="settings_invited_to_room">Kiam mi estas invitita al ĉambro</string>
+    <string name="settings_call_invitations">Invitoj al vokoj</string>
+    <string name="settings_messages_sent_by_bot">Mesaĝoj senditaj de roboto</string>
+
+    <string name="settings_background_sync">Fona spegulado</string>
+    <string name="settings_background_fdroid_sync_mode">Reĝimo de fona spegulado (eksperimenta)</string>
+    <string name="settings_background_fdroid_sync_mode_battery">Optimumigita por baterio</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">Riot spegulos fone, per maniero konservanta la limigitajn rimedojn de la aparato (ĉefe la baterion).
+\nDepende de la stato de la rimedoj de via aparato, la spegulado povus esti prokrastita de la operaciumo.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">Optimumigita por tujeco</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Riot spegulos fone, ripete, je preciza tempo (agordebla).
+\nĈi tio influos uzadon de baterio kaj radiilo, kaj aperigos ĉiaman sciigon pri tio, ke Riot aŭskultas okazojn.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">Neniu fona spegulado</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">Vi sciiĝos pri envenaj mesaĝoj dum la aplikaĵo estas fone.</string>
+    <string name="settings_background_sync_update_error">Malsukcesis ĝisdatigi agordojn.</string>
+
+
+    <string name="settings_start_on_boot">Ruliĝi je eko de sistemo</string>
+    <string name="settings_enable_background_sync">Ŝalti fonan speguladon</string>
+    <string name="settings_set_sync_timeout">Tempolimo de petoj por spegulado</string>
+    <string name="settings_set_workmanager_delay">Preferata intertempo de spegulado</string>
+    <string name="settings_set_workmanager_delay_summary">%s
+\nLa spegulado povas esti prokrastita, depende de la rimedoj (baterio) aŭ la stato de la aparato (dormeto).</string>
+    <string name="settings_set_sync_delay">Prokrasto inter ĉiu spegulado</string>
+    <string name="settings_second">sekundo</string>
+    <string name="settings_seconds">sekundoj</string>
+
+    <string name="settings_version">Versio</string>
+    <string name="settings_olm_version">Versio de olm</string>
+    <string name="settings_app_term_conditions">Uzokondiĉoj</string>
+    <string name="settings_copyright">Kopirajto</string>
+    <string name="settings_privacy_policy">Privateca politiko</string>
+    <string name="settings_clear_cache">Vakigi kaŝmemoron</string>
+    <string name="settings_clear_media_cache">Vakigi kaŝmemoron de vidaŭdaĵoj</string>
+
+    <string name="settings_user_settings">Agordoj de uzanto</string>
+    <string name="settings_notifications">Sciigoj</string>
+    <string name="settings_ignored_users">Malatentataj uzantoj</string>
+    <string name="settings_other">Aliaj</string>
+    <string name="settings_advanced">Altnivelaj</string>
+    <string name="settings_integrations">Kunigoj</string>
+    <string name="settings_integrations_summary">Uzu kunigilon por administri robotojn, pontojn, fenestraĵojn kaj glumarkarojn.
+\nKunigiloj ricevas datumojn pri agordoj kaj povas modifi fenestraĵojn, sendi invitojn al ĉambroj, kaj agordi povnivelojn laŭ via rajtigo.</string>
+    <string name="settings_cryptography">Ĉifroteĥnikaro</string>
+    <string name="settings_cryptography_manage_keys">Administrado de ĉifraj ŝlasiloj</string>
+    <string name="settings_notifications_targets">Celoj de sciigoj</string>
+    <string name="settings_contact">Lokaj kontaktoj</string>
+    <string name="settings_devices_list">Salutaĵoj</string>
+    <string name="settings_send_typing_notifs">Sendi sciigojn pri tajpado</string>
+    <string name="settings_send_markdown">MarkDown-formatado</string>
+    <string name="settings_send_markdown_summary">Formati mesaĝojn per la sintakso de MarkDown antaŭ sendo. Tio ebligas altnivelan formatadon, ekzemple uzon de steletoj por montri kursivan tekston.</string>
+    <string name="conference_call_warning_title">Averto!</string>
+    <string name="conference_call_warning_message">Grupa vokado ankoraŭ estas programata kaj eble ne estos dependebla.</string>
+
+    <string name="markdown_has_been_enabled">MarkDown ŝaltiĝis.</string>
+    <string name="markdown_has_been_disabled">MarkDown malŝaltiĝis.</string>
+
+    <string name="notification_silent">Silente</string>
+    <string name="notification_noisy">Laŭte</string>
+
+    <string name="encrypted_message">Ĉifrita mesaĝo</string>
+
+    <string name="create">Krei</string>
+    <string name="create_community">Krei komunumon</string>
+    <string name="community_name">Nomo de komunumo</string>
+    <string name="community_name_hint">Ekzemplo</string>
+    <string name="community_id">Identigilo de komunumo</string>
+    <string name="community_id_hint">ekzemplo</string>
+
+    <string name="group_details_home">Hejmo</string>
+    <string name="joined">Aliĝintaj</string>
+    <string name="invited">Invititaj</string>
+    <string name="login_signup">Registriĝi</string>
+    <string name="login_signin">Saluti</string>
+    <string name="login_signin_sso">Pluiĝi per ununura saluto</string>
+
+    <string name="login_reset_password_success_notice">Via pasvorto estas restarigita.</string>
+    <string name="login_reset_password_success_notice_2">Vi adiaŭis ĉiujn viajn salutaĵojn kaj ne plu ricevados pasivajn sciigojn. Por reŝalti sciigojn, resalutu per ĉiu via aparato.</string>
+    <string name="login_reset_password_success_submit">Reen al salutejo</string>
+
+    <string name="login_reset_password_cancel_confirmation_title">Averto</string>
+    <string name="login_reset_password_cancel_confirmation_content">Via pasvorto ankoraŭ ne ŝanĝiĝis.
+\n
+\nĈu haltigi la ŝanĝan procedon\?</string>
+
+    <string name="login_set_email_title">Agordi retpoŝtadreson</string>
+    <string name="unencrypted">Neĉifrita</string>
+    <string name="encrypted_unverified">Ĉifrita de nekonata aparato</string>
+    <string name="cross_signing_verify_by_text">Mane kontroli per teksto</string>
+    <string name="crosssigning_verify_session">Kontroli saluton</string>
+    <string name="cross_signing_verify_by_emoji">Interage kontroli per bildsignoj</string>
+    <string name="confirm_your_identity">Konfirmu vian identecon per kontrolo de ĉi tiu saluto el unu el viaj aliaj salutaĵoj, donante al ĝi aliron al viaj ĉifritaj mesaĝoj.</string>
+    <string name="mark_as_verified">Marki fidata</string>
+
+    <string name="error_empty_field_choose_user_name">Bonvolu elekti uzantonomon.</string>
+    <string name="error_empty_field_choose_password">Bonvolu elekti pasvorton.</string>
+    <string name="external_link_confirmation_title">Bone kontrolu ĉi tiun ligilon</string>
+    <string name="external_link_confirmation_message">La ligilo %1$s kondukas vin al alia retejo: %2$s.
+\n
+\nĈu vi certe volas daŭrigi\?</string>
+
+    <string name="create_room_dm_failure">Ni ne povis krei vian rektan babilon. Bonvolu kontroli la invitotajn uzantojn kaj reprovi.</string>
+    <string name="send_bug_report_logs_description">Por diagnozi problemojn, protokolo de ĉi tiu kliento sendiĝos kune kun ĉi tiu erar-raporto. Ĉi tiu erar-raporto, inkluzive la protokolon kaj la ekrankopion, ne estos publike videbla. Se vi preferus sendi nur la ĉi-supran tekston, bonvolu malmarki:</string>
+    <string name="send_bug_report_alert_message">Ŝajnas, ke vi kolere skuas la telefonon. Ĉu vi volas malfermi la erar-raportilon\?</string>
+    <string name="send_bug_report_app_crashed">La aplikaĵo lastatempe fiaskis. Ĉu vi volas malfermi la fiasko-raportilon\?</string>
+    <string name="send_bug_report_rage_shake">Kolere skuu por raporti eraron</string>
+
+    <string name="login_error_invalid_home_server">Bonvolu enigi validan URL-on</string>
+    <string name="login_error_unknown_host">La URL ne estas atingebla, bonvolu kontroli ĝin</string>
+    <string name="login_error_no_homeserver_found">Ĉi tio ne estas valida adreso de servilo de Matrix</string>
+    <string name="login_error_homeserver_not_found">Ne povas atingi hejmservilon je ĉi tiu URL, bonvolu kontroli ĝin</string>
+    <string name="login_error_ssl_handshake">Via aparato uzas eksdatan sekurecan protokolon TLS, neŝirmatan kontraŭ atakoj; por via sekureco vi ne povos konektiĝi</string>
+    <string name="login_error_bad_json">Misformita JSON</string>
+    <string name="login_error_not_json">Ne enhavis valdiajn JSON-datumojn</string>
+    <string name="login_error_limit_exceeded">Tro multaj petoj sendiĝis</string>
+    <string name="login_error_user_in_use">Ĉi tiu uzantonomo jam estas uzata</string>
+    <string name="login_error_login_email_not_yet">La retpoŝt-ligilo, kiu ankoraŭ ne estas klakita</string>
+
+    <string name="e2e_need_log_in_again">"Vi  bezonas resaluti por generi tutvoje ĉifrajn ŝlosilojn por ĉi tiu salutaĵo kaj sendi la publikan ŝlosilon al via hejmservilo.
+\nĈi tio necesas nur unufoje.
+\nPardonu la maloportunon."</string>
+
+    <string name="e2e_re_request_encryption_key">Repeti ĉifrajn ŝlosilojn de aliaj viaj salutaĵoj.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Peto de ŝlosilo sendiĝis.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Peto sendiĝis.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Bonvolu ruli Rioton sur alia aparato kiu scipovas malĉifri la mesaĝon, por ke ĝi povu sendi al vi la ŝlosilojn al ĉi tiu salutaĵo.</string>
+
+    <string name="incoming_call">Envena voko</string>
+    <string name="incoming_video_call">Envena vidvoko</string>
+    <string name="incoming_voice_call">Envena voĉvoko</string>
+    <string name="call_in_progress">Voko progresas…</string>
+    <string name="video_call_in_progress">Vidvoko progresas…</string>
+
+    <string name="call_error_camera_init_failed">Ne povas iniciati la filmilon</string>
+    <string name="media_picker_both_capture_title">Foti aŭ filmi</string>
+    <string name="media_picker_cannot_record_video">Ne povas filmi</string>
+
+    <string name="permissions_rationale_popup_title">Informoj</string>
+    <string name="permissions_rationale_msg_storage">Riot bezonas permeson aliri viajn fotojn kaj filmojn, por sendi kaj konservi kunsendaĵojn.
+\n
+\nBonvolu permesi aliron per la sekva ŝprucpeto, por povi sendi dosierojn el via telefono.</string>
+    <string name="permissions_rationale_msg_camera">Riot bezonas permeson aliri vian filmilon por foti kaj vidvoki.</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nBonvolu permesi aliron per la sekva ŝprucpeto, por ebligi la vokon."</string>
+    <string name="permissions_rationale_msg_record_audio">Riot bezonas permeson aliri vian mikrofonon por fari voĉvokojn.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nBonvolu permesi aliron per la sekva ŝprucpeto, por ebligi la vokon."</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot bezonsa premeson aliri viajn filmilon kaj mikrofonon por fari vidvokojn.
+\n
+\nBonvolu permesi aliron per la sekva ŝprucpeto, por ebligi la vokon.</string>
+    <string name="permissions_rationale_msg_contacts">Riot povas kontroli vian adresaron por trovi aliajn uzantojn de Matrix per iliaj retpoŝtadresoj kaj telefonnumeroj. Se vi konsentas kunhavi vian adresaron por tiu celo, bonvolu permesi aliron per la sekva ŝprucpeto.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot povas kontroli vian adresaron por trovi aliajn uzantojn de Matrix per iliaj retpoŝtadresoj kaj telefonnumeroj.
+\n
+\nĈu vi konsentas kunhavi vian adresaron por tiu celo\?</string>
+
+    <string name="permissions_action_not_performed_missing_permissions">Pardonu. Ago ne efektiviĝis, pro mankantaj permesoj</string>
+
+    <string name="media_slider_saved">Konservite</string>
+    <string name="media_slider_saved_message">Ĉu konservi al elŝutujo\?</string>
+    <string name="yes">JES</string>
+    <string name="no">NE</string>
+    <string name="_continue">Daŭrigi</string>
+
+    <string name="remove">Forigi</string>
+    <string name="join">Aliĝi</string>
+    <string name="preview">Antaŭrigardi</string>
+    <string name="reject">Rifuzi</string>
+
+    <string name="list_members">Listigi ĉambranojn</string>
+    <string name="room_sync_in_progress">Spegulante…</string>
+    <string name="room_preview_invitation_format">Vi estis invitita al ĉi tiu ĉambro de %s</string>
 </resources>

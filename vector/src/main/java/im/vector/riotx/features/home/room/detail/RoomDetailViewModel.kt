@@ -99,11 +99,13 @@ class RoomDetailViewModel @AssistedInject constructor(
     private val timelineSettings = if (userPreferencesProvider.shouldShowHiddenEvents()) {
         TimelineSettings(30,
                 filterEdits = false,
+                filterRedacted = userPreferencesProvider.shouldShowRedactedMessages().not(),
                 filterTypes = false,
                 buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts())
     } else {
         TimelineSettings(30,
                 filterEdits = true,
+                filterRedacted = userPreferencesProvider.shouldShowRedactedMessages().not(),
                 filterTypes = true,
                 allowedTypes = TimelineDisplayableEvents.DISPLAYABLE_TYPES,
                 buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts())

@@ -18,13 +18,13 @@ package im.vector.riotx.features.settings
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.widget.CheckedTextView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import im.vector.riotx.R
+import im.vector.riotx.core.extensions.restart
 import im.vector.riotx.core.preference.VectorListPreference
 import im.vector.riotx.core.preference.VectorPreference
 import im.vector.riotx.features.configuration.VectorConfiguration
@@ -54,13 +54,9 @@ class VectorSettingsPreferencesFragment @Inject constructor(
         findPreference<VectorListPreference>(ThemeUtils.APPLICATION_THEME_KEY)!!
                 .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             if (newValue is String) {
-                vectorConfiguration.updateApplicationTheme(newValue)
+                ThemeUtils.setApplicationTheme(requireContext(), newValue)
                 // Restart the Activity
-                activity?.let {
-                    // Note: recreate does not apply the color correctly
-                    it.startActivity(it.intent)
-                    it.finish()
-                }
+                activity?.restart()
                 true
             } else {
                 false
@@ -129,21 +125,6 @@ class VectorSettingsPreferencesFragment @Inject constructor(
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                REQUEST_LOCALE -> {
-                    activity?.let {
-                        startActivity(it.intent)
-                        it.finish()
-                    }
-                }
-            }
-        }
-    }
-
     // ==============================================================================================================
     // user interface management
     // ==============================================================================================================
@@ -152,14 +133,8 @@ class VectorSettingsPreferencesFragment @Inject constructor(
         // Selected language
         selectedLanguagePreference.summary = VectorLocale.localeToLocalisedString(VectorLocale.applicationLocale)
 
-        selectedLanguagePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            notImplemented()
-            // TODO startActivityForResult(LanguagePickerActivity.getIntent(activity), REQUEST_LOCALE)
-            true
-        }
-
         // Text size
-        textSizePreference.summary = FontScale.getFontScaleDescription(activity!!)
+        textSizePreference.summary = getString(FontScale.getFontScaleValue(activity!!).nameResId)
 
         textSizePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.let { displayTextSizeSelection(it) }
@@ -182,25 +157,20 @@ class VectorSettingsPreferencesFragment @Inject constructor(
 
         val childCount = linearLayout.childCount
 
-        val scaleText = FontScale.getFontScaleDescription(activity)
+        val index = FontScale.getFontScaleValue(activity).index
 
         for (i in 0 until childCount) {
             val v = linearLayout.getChildAt(i)
 
             if (v is CheckedTextView) {
-                v.isChecked = v.text == scaleText
+                v.isChecked = i == index
 
                 v.setOnClickListener {
                     dialog.dismiss()
-                    FontScale.updateFontScale(activity, v.text.toString())
-                    activity.startActivity(activity.intent)
-                    activity.finish()
+                    FontScale.updateFontScale(activity, i)
+                    activity.restart()
                 }
             }
         }
-    }
-
-    companion object {
-        private const val REQUEST_LOCALE = 777
     }
 }

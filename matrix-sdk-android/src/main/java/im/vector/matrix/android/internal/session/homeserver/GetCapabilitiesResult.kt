@@ -53,6 +53,6 @@ internal data class ChangePassword(
 )
 
 // The spec says: If not present, the client should assume that password changes are possible via the API
-internal fun GetCapabilitiesResult?.canChangePassword(): Boolean {
-    return this?.capabilities?.changePassword?.enabled.orTrue()
+internal fun GetCapabilitiesResult.canChangePassword(): Boolean {
+    return capabilities?.changePassword?.enabled.orTrue()
 }

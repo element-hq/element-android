@@ -30,7 +30,6 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.NoOpMatrixCallback
-import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
@@ -48,6 +47,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 data class DevicesViewState(
@@ -65,6 +65,7 @@ data class DeviceFullInfo(
         val deviceInfo: DeviceInfo,
         val cryptoDeviceInfo: CryptoDeviceInfo?
 )
+
 class DevicesViewModel @AssistedInject constructor(
         @Assisted initialState: DevicesViewState,
         private val session: Session
@@ -96,7 +97,7 @@ class DevicesViewModel @AssistedInject constructor(
             copy(
                     hasAccountCrossSigning = session.cryptoService().crossSigningService().getMyCrossSigningKeys() != null,
                     accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified(),
-                    myDeviceId = session.sessionParams.credentials.deviceId ?: ""
+                    myDeviceId = session.sessionParams.deviceId ?: ""
             )
         }
 
@@ -215,8 +216,13 @@ class DevicesViewModel @AssistedInject constructor(
     private fun handleVerifyManually(action: DevicesAction.MarkAsManuallyVerified) = withState { state ->
         viewModelScope.launch {
             if (state.hasAccountCrossSigning) {
-                awaitCallback<Unit> {
-                    tryThis { session.cryptoService().crossSigningService().trustDevice(action.cryptoDeviceInfo.deviceId, it) }
+                try {
+                    awaitCallback<Unit> {
+                        session.cryptoService().crossSigningService().trustDevice(action.cryptoDeviceInfo.deviceId, it)
+                    }
+                } catch (failure: Throwable) {
+                    Timber.e("Failed to manually cross sign device ${action.cryptoDeviceInfo.deviceId} : ${failure.localizedMessage}")
+                    _viewEvents.post(DevicesViewEvents.Failure(failure))
                 }
             } else {
                 // legacy

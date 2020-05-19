@@ -24,7 +24,15 @@ data class HomeServerCapabilities(
         /**
          * Max size of file which can be uploaded to the homeserver in bytes. [MAX_UPLOAD_FILE_SIZE_UNKNOWN] if unknown or not retrieved yet
          */
-        val maxUploadFileSize: Long = MAX_UPLOAD_FILE_SIZE_UNKNOWN
+        val maxUploadFileSize: Long = MAX_UPLOAD_FILE_SIZE_UNKNOWN,
+        /**
+         * Last version identity server and binding supported
+         */
+        val lastVersionIdentityServerSupported: Boolean = false,
+        /**
+         * Default identity server url, provided in Wellknown
+         */
+        val defaultIdentityServerUrl: String? = null
 ) {
     companion object {
         const val MAX_UPLOAD_FILE_SIZE_UNKNOWN = -1L

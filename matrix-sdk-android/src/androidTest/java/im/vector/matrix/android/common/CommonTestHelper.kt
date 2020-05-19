@@ -88,7 +88,8 @@ class CommonTestHelper(context: Context) {
     fun syncSession(session: Session) {
         val lock = CountDownLatch(1)
 
-        session.open()
+        GlobalScope.launch(Dispatchers.Main) { session.open() }
+
         session.startSync(true)
 
         val syncLiveData = runBlocking(Dispatchers.Main) {

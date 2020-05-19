@@ -17,7 +17,7 @@
 package im.vector.riotx.features.login.terms
 
 import im.vector.matrix.android.api.auth.registration.TermPolicies
-import org.matrix.androidsdk.rest.model.login.LocalizedFlowDataLoginTerms
+import im.vector.matrix.android.internal.auth.registration.LocalizedFlowDataLoginTerms
 
 /**
  * This method extract the policies from the login terms parameter, regarding the user language.

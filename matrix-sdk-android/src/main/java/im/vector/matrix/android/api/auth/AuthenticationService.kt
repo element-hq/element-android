@@ -20,9 +20,9 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.auth.data.LoginFlowResult
-import im.vector.matrix.android.api.auth.data.SessionParams
 import im.vector.matrix.android.api.auth.login.LoginWizard
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
+import im.vector.matrix.android.api.auth.wellknown.WellknownResult
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
 
@@ -30,12 +30,16 @@ import im.vector.matrix.android.api.util.Cancelable
  * This interface defines methods to authenticate or to create an account to a matrix server.
  */
 interface AuthenticationService {
-
     /**
      * Request the supported login flows for this homeserver.
      * This is the first method to call to be able to get a wizard to login or the create an account
      */
     fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<LoginFlowResult>): Cancelable
+
+    /**
+     * Request the supported login flows for the corresponding sessionId.
+     */
+    fun getLoginFlowOfSession(sessionId: String, callback: MatrixCallback<LoginFlowResult>): Cancelable
 
     /**
      * Return a LoginWizard, to login to the homeserver. The login flow has to be retrieved first.
@@ -75,18 +79,25 @@ interface AuthenticationService {
     fun getLastAuthenticatedSession(): Session?
 
     /**
-     * Get an authenticated session. You should at least call authenticate one time before.
-     * If you logout, this session will no longer be valid.
-     *
-     * @param sessionParams the sessionParams to open with.
-     * @return the associated session if any, or null
-     */
-    fun getSession(sessionParams: SessionParams): Session?
-
-    /**
      * Create a session after a SSO successful login
      */
     fun createSessionFromSso(homeServerConnectionConfig: HomeServerConnectionConfig,
                              credentials: Credentials,
+                             callback: MatrixCallback<Session>): Cancelable
+
+    /**
+     * Perform a wellknown request, using the domain from the matrixId
+     */
+    fun getWellKnownData(matrixId: String,
+                         callback: MatrixCallback<WellknownResult>): Cancelable
+
+    /**
+     * Authenticate with a matrixId and a password
+     * Usually call this after a successful call to getWellKnownData()
+     */
+    fun directAuthentication(homeServerConnectionConfig: HomeServerConnectionConfig,
+                             matrixId: String,
+                             password: String,
+                             initialDeviceName: String,
                              callback: MatrixCallback<Session>): Cancelable
 }
