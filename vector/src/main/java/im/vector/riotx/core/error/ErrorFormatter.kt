@@ -19,6 +19,7 @@ package im.vector.riotx.core.error
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.failure.isInvalidPassword
+import im.vector.matrix.android.api.session.identity.IdentityServiceError
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
 import java.net.HttpURLConnection
@@ -37,6 +38,7 @@ class DefaultErrorFormatter @Inject constructor(
     override fun toHumanReadable(throwable: Throwable?): String {
         return when (throwable) {
             null                         -> null
+            is IdentityServiceError      -> identityServerError(throwable)
             is Failure.NetworkConnection -> {
                 when {
                     throwable.ioException is SocketTimeoutException ->
@@ -106,5 +108,17 @@ class DefaultErrorFormatter @Inject constructor(
             val delaySeconds = delay.toInt() / 1000 + 1
             stringProvider.getQuantityString(R.plurals.login_error_limit_exceeded_retry_after, delaySeconds, delaySeconds)
         }
+    }
+
+    private fun identityServerError(identityServiceError: IdentityServiceError): String {
+        return stringProvider.getString(when (identityServiceError) {
+            IdentityServiceError.OutdatedIdentityServer       -> R.string.identity_server_error_outdated_identity_server
+            IdentityServiceError.OutdatedHomeServer           -> R.string.identity_server_error_outdated_home_server
+            IdentityServiceError.NoIdentityServerConfigured   -> R.string.identity_server_error_no_identity_server_configured
+            IdentityServiceError.TermsNotSignedException      -> R.string.identity_server_error_terms_not_signed
+            IdentityServiceError.BulkLookupSha256NotSupported -> R.string.identity_server_error_bulk_sha256_not_supported
+            IdentityServiceError.BindingError                 -> R.string.identity_server_error_binding_error
+            IdentityServiceError.NoCurrentBindingError        -> R.string.identity_server_error_no_current_binding_error
+        })
     }
 }

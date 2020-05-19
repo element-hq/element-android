@@ -66,13 +66,13 @@ class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
                 {
                     val successMessage = when (selectedUsers.size) {
                         1    -> stringProvider.getString(R.string.invitation_sent_to_one_user,
-                                selectedUsers.first().displayName)
+                                selectedUsers.first().getBestName())
                         2    -> stringProvider.getString(R.string.invitations_sent_to_two_users,
-                                selectedUsers.first().displayName,
-                                selectedUsers.last().displayName)
+                                selectedUsers.first().getBestName(),
+                                selectedUsers.last().getBestName())
                         else -> stringProvider.getQuantityString(R.plurals.invitations_sent_to_one_and_more_users,
                                 selectedUsers.size - 1,
-                                selectedUsers.first().displayName,
+                                selectedUsers.first().getBestName(),
                                 selectedUsers.size - 1)
                     }
                     _viewEvents.post(InviteUsersToRoomViewEvents.Success(successMessage))

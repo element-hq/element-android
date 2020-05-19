@@ -80,7 +80,7 @@ class DeactivateAccountFragment @Inject constructor(
             viewModel.handle(DeactivateAccountAction.TogglePassword)
         }
 
-        deactivateAccountSubmit.setOnClickListener {
+        deactivateAccountSubmit.debouncedClicks {
             viewModel.handle(DeactivateAccountAction.DeactivateAccount(
                     deactivateAccountPassword.text.toString(),
                     deactivateAccountEraseCheckbox.isChecked))

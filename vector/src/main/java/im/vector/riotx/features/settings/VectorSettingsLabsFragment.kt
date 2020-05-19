@@ -47,7 +47,7 @@ class VectorSettingsLabsFragment @Inject constructor(
 //            useCryptoPref.isChecked = false
 //
 //            useCryptoPref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValueAsVoid ->
-//                if (TextUtils.isEmpty(mSession.sessionParams.credentials.deviceId)) {
+//                if (TextUtils.isEmpty(mSession.sessionParams.deviceId)) {
 //                    activity?.let { activity ->
 //                        AlertDialog.Builder(activity)
 //                                .setMessage(R.string.room_settings_labs_end_to_end_warnings)

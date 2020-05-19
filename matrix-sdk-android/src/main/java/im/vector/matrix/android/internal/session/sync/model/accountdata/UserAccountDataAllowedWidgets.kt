@@ -22,6 +22,6 @@ import im.vector.matrix.android.internal.session.integrationmanager.AllowedWidge
 
 @JsonClass(generateAdapter = true)
 internal data class UserAccountDataAllowedWidgets(
-        @Json(name = "type") override val type: String = ACCOUNT_DATA_TYPE_ALLOWED_WIDGETS,
+        @Json(name = "type") override val type: String = TYPE_ALLOWED_WIDGETS,
         @Json(name = "content") val content: AllowedWidgetsContent
 ) : UserAccountData()

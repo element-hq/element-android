@@ -26,7 +26,6 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.hideKeyboard
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity.*
 import javax.inject.Inject
 
@@ -107,16 +106,5 @@ abstract class SimpleFragmentActivity : VectorBaseActivity() {
             return
         }
         super.onBackPressed()
-    }
-
-    protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(observer: (T) -> Unit) {
-        viewEvents
-                .observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    hideWaitingView()
-                    observer(it)
-                }
-                .disposeOnDestroy()
     }
 }

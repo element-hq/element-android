@@ -50,14 +50,15 @@ import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.eventbus.EventBusTimberLogger
-import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import im.vector.matrix.android.internal.network.DefaultNetworkConnectivityChecker
 import im.vector.matrix.android.internal.network.FallbackNetworkCallbackStrategy
 import im.vector.matrix.android.internal.network.NetworkCallbackStrategy
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.network.PreferredNetworkCallbackStrategy
 import im.vector.matrix.android.internal.network.RetrofitFactory
-import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
+import im.vector.matrix.android.internal.network.httpclient.addAccessTokenInterceptor
+import im.vector.matrix.android.internal.network.token.AccessTokenProvider
+import im.vector.matrix.android.internal.network.token.HomeserverAccessTokenProvider
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.homeserver.DefaultHomeServerCapabilitiesService
 import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
@@ -175,21 +176,8 @@ internal abstract class SessionModule {
         @SessionScope
         @Authenticated
         fun providesOkHttpClient(@Unauthenticated okHttpClient: OkHttpClient,
-                                 accessTokenInterceptor: AccessTokenInterceptor): OkHttpClient {
-            return okHttpClient.newBuilder()
-                    .apply {
-                        // Remove the previous CurlLoggingInterceptor, to add it after the accessTokenInterceptor
-                        val existingCurlInterceptors = interceptors().filterIsInstance<CurlLoggingInterceptor>()
-                        interceptors().removeAll(existingCurlInterceptors)
-
-                        addInterceptor(accessTokenInterceptor)
-
-                        // Re add eventually the curl logging interceptors
-                        existingCurlInterceptors.forEach {
-                            addInterceptor(it)
-                        }
-                    }
-                    .build()
+                                 @Authenticated accessTokenProvider: AccessTokenProvider): OkHttpClient {
+            return okHttpClient.addAccessTokenInterceptor(accessTokenProvider)
         }
 
         @JvmStatic
@@ -232,6 +220,10 @@ internal abstract class SessionModule {
             return matrixConfiguration.cryptoConfig
         }
     }
+
+    @Binds
+    @Authenticated
+    abstract fun bindAccessTokenProvider(provider: HomeserverAccessTokenProvider): AccessTokenProvider
 
     @Binds
     abstract fun bindSession(session: DefaultSession): Session

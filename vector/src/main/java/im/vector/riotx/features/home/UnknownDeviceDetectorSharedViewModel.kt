@@ -67,9 +67,10 @@ class UnknownDeviceDetectorSharedViewModel(
 
     init {
 
-        val currentSessionTs = session.cryptoService().getCryptoDeviceInfo(session.myUserId).firstOrNull {
-            it.deviceId == session.sessionParams.credentials.deviceId
-        }?.firstTimeSeenLocalTs ?: System.currentTimeMillis()
+        val currentSessionTs = session.cryptoService().getCryptoDeviceInfo(session.myUserId)
+                .firstOrNull { it.deviceId == session.sessionParams.deviceId }
+                ?.firstTimeSeenLocalTs
+                ?: System.currentTimeMillis()
         Timber.v("## Detector - Current Session first time seen $currentSessionTs")
 
         ignoredDeviceList.addAll(

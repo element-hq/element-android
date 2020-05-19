@@ -2382,4 +2382,10 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="error_empty_field_choose_password">Kérlek válassz jelszót.</string>
     <string name="external_link_confirmation_title">Ezt a hivatkozást ellenőrizd le még egyszer</string>
     <string name="create_room_dm_failure">A közvetlen üzenetedet nem sikerült elkészíteni. Ellenőrizd azokat a felhasználókat akiket meg szeretnél hívni és próbáld újra.</string>
+    <string name="use_other_session_content_description">Használd a legújabb Riotot a másik eszközödön, úgy mint Riot Web, Asztali Riot, RiotX for Android vagy más eszközök közötti hitelesítést támogató másik Matrix klienst</string>
+    <string name="confirm_your_identity">Erősítsd meg ebben a bejelentkezésben a személyazonosságodat egy másik munkamenetből, hogy hozzáférhess a titkosított üzenetekhez.</string>
+    <string name="external_link_confirmation_message">%1$s hivatkozás egy másik oldalra visz: %2$s.
+\n
+\nFolytatod\?</string>
+
 </resources>

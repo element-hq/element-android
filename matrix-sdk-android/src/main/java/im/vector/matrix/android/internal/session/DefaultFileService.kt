@@ -28,10 +28,10 @@ import im.vector.matrix.android.internal.di.ExternalFilesDirectory
 import im.vector.matrix.android.internal.di.SessionCacheDirectory
 import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.extensions.foldToCallback
+import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import im.vector.matrix.android.internal.util.toCancelable
 import im.vector.matrix.android.internal.util.writeToFile
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -51,7 +51,9 @@ internal class DefaultFileService @Inject constructor(
         private val contentUrlResolver: ContentUrlResolver,
         @Unauthenticated
         private val okHttpClient: OkHttpClient,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers) : FileService {
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val taskExecutor: TaskExecutor
+) : FileService {
 
     /**
      * Download file in the cache folder, and eventually decrypt it
@@ -63,7 +65,7 @@ internal class DefaultFileService @Inject constructor(
                               url: String?,
                               elementToDecrypt: ElementToDecrypt?,
                               callback: MatrixCallback<File>): Cancelable {
-        return GlobalScope.launch(coroutineDispatchers.main) {
+        return taskExecutor.executorScope.launch(coroutineDispatchers.main) {
             withContext(coroutineDispatchers.io) {
                 Try {
                     val folder = File(sessionCacheDirectory, "MF")

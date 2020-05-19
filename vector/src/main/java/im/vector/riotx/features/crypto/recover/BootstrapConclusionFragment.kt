@@ -21,14 +21,11 @@ import android.view.View
 import androidx.core.text.toSpannable
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.view.clicks
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.colorizeMatchingText
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_bootstrap_conclusion.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class BootstrapConclusionFragment @Inject constructor(
@@ -42,13 +39,7 @@ class BootstrapConclusionFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bootstrapConclusionContinue.clickableView.clicks()
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    sharedViewModel.handle(BootstrapActions.Completed)
-                }
-                .disposeOnDestroyView()
+        bootstrapConclusionContinue.clickableView.debouncedClicks { sharedViewModel.handle(BootstrapActions.Completed) }
     }
 
     override fun invalidate() = withState(sharedViewModel) { state ->

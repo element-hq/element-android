@@ -91,7 +91,7 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
     fun start() {
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
         accountDataDataSource
-                .getLiveAccountDataEvent(UserAccountData.ACCOUNT_DATA_TYPE_ALLOWED_WIDGETS)
+                .getLiveAccountDataEvent(UserAccountData.TYPE_ALLOWED_WIDGETS)
                 .observeNotNull(lifecycleOwner) {
                     val allowedWidgetsContent = it.getOrNull()?.content?.toModel<AllowedWidgetsContent>()
                     if (allowedWidgetsContent != null) {
@@ -99,7 +99,7 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
                     }
                 }
         accountDataDataSource
-                .getLiveAccountDataEvent(UserAccountData.ACCOUNT_DATA_TYPE_INTEGRATION_PROVISIONING)
+                .getLiveAccountDataEvent(UserAccountData.TYPE_INTEGRATION_PROVISIONING)
                 .observeNotNull(lifecycleOwner) {
                     val integrationProvisioningContent = it.getOrNull()?.content?.toModel<IntegrationProvisioningContent>()
                     if (integrationProvisioningContent != null) {
@@ -142,7 +142,7 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
      * Returns false if the user as disabled integration manager feature
      */
     fun isIntegrationEnabled(): Boolean {
-        val integrationProvisioningData = accountDataDataSource.getAccountDataEvent(UserAccountData.ACCOUNT_DATA_TYPE_INTEGRATION_PROVISIONING)
+        val integrationProvisioningData = accountDataDataSource.getAccountDataEvent(UserAccountData.TYPE_INTEGRATION_PROVISIONING)
         val integrationProvisioningContent = integrationProvisioningData?.content?.toModel<IntegrationProvisioningContent>()
         return integrationProvisioningContent?.enabled ?: false
     }
@@ -163,7 +163,7 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
     }
 
     fun setWidgetAllowed(stateEventId: String, allowed: Boolean, callback: MatrixCallback<Unit>): Cancelable {
-        val currentAllowedWidgets = accountDataDataSource.getAccountDataEvent(UserAccountData.ACCOUNT_DATA_TYPE_ALLOWED_WIDGETS)
+        val currentAllowedWidgets = accountDataDataSource.getAccountDataEvent(UserAccountData.TYPE_ALLOWED_WIDGETS)
         val currentContent = currentAllowedWidgets?.content?.toModel<AllowedWidgetsContent>()
         val newContent = if (currentContent == null) {
             val allowedWidget = mapOf(stateEventId to allowed)
@@ -183,13 +183,13 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
     }
 
     fun isWidgetAllowed(stateEventId: String): Boolean {
-        val currentAllowedWidgets = accountDataDataSource.getAccountDataEvent(UserAccountData.ACCOUNT_DATA_TYPE_ALLOWED_WIDGETS)
+        val currentAllowedWidgets = accountDataDataSource.getAccountDataEvent(UserAccountData.TYPE_ALLOWED_WIDGETS)
         val currentContent = currentAllowedWidgets?.content?.toModel<AllowedWidgetsContent>()
         return currentContent?.widgets?.get(stateEventId) ?: false
     }
 
     fun setNativeWidgetDomainAllowed(widgetType: String, domain: String, allowed: Boolean, callback: MatrixCallback<Unit>): Cancelable {
-        val currentAllowedWidgets = accountDataDataSource.getAccountDataEvent(UserAccountData.ACCOUNT_DATA_TYPE_ALLOWED_WIDGETS)
+        val currentAllowedWidgets = accountDataDataSource.getAccountDataEvent(UserAccountData.TYPE_ALLOWED_WIDGETS)
         val currentContent = currentAllowedWidgets?.content?.toModel<AllowedWidgetsContent>()
         val newContent = if (currentContent == null) {
             val nativeAllowedWidgets = mapOf(widgetType to mapOf(domain to allowed))
@@ -213,7 +213,7 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
     }
 
     fun isNativeWidgetAllowed(widgetType: String, domain: String?): Boolean {
-        val currentAllowedWidgets = accountDataDataSource.getAccountDataEvent(UserAccountData.ACCOUNT_DATA_TYPE_ALLOWED_WIDGETS)
+        val currentAllowedWidgets = accountDataDataSource.getAccountDataEvent(UserAccountData.TYPE_ALLOWED_WIDGETS)
         val currentContent = currentAllowedWidgets?.content?.toModel<AllowedWidgetsContent>()
         return currentContent?.native?.get(widgetType)?.get(domain) ?: false
     }

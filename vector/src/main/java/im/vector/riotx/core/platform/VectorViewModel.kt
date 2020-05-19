@@ -30,7 +30,7 @@ import io.reactivex.Single
 abstract class VectorViewModel<S : MvRxState, VA : VectorViewModelAction, VE : VectorViewEvents>(initialState: S)
     : BaseMvRxViewModel<S>(initialState, false) {
 
-    interface Factory<S: MvRxState> {
+    interface Factory<S : MvRxState> {
         fun create(state: S): BaseMvRxViewModel<S>
     }
 

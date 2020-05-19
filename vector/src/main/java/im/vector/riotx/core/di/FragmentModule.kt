@@ -41,6 +41,8 @@ import im.vector.riotx.features.crypto.verification.emoji.VerificationEmojiCodeF
 import im.vector.riotx.features.crypto.verification.qrconfirmation.VerificationQRWaitingFragment
 import im.vector.riotx.features.crypto.verification.qrconfirmation.VerificationQrScannedByOtherFragment
 import im.vector.riotx.features.crypto.verification.request.VerificationRequestFragment
+import im.vector.riotx.features.discovery.DiscoverySettingsFragment
+import im.vector.riotx.features.discovery.change.SetIdentityServerFragment
 import im.vector.riotx.features.grouplist.GroupListFragment
 import im.vector.riotx.features.home.HomeDetailFragment
 import im.vector.riotx.features.home.HomeDrawerFragment
@@ -61,8 +63,6 @@ import im.vector.riotx.features.login.LoginSplashFragment
 import im.vector.riotx.features.login.LoginWaitForEmailFragment
 import im.vector.riotx.features.login.LoginWebFragment
 import im.vector.riotx.features.login.terms.LoginTermsFragment
-import im.vector.riotx.features.userdirectory.KnownUsersFragment
-import im.vector.riotx.features.userdirectory.UserDirectoryFragment
 import im.vector.riotx.features.qrcode.QrCodeScannerFragment
 import im.vector.riotx.features.reactions.EmojiChooserFragment
 import im.vector.riotx.features.reactions.EmojiSearchResultFragment
@@ -92,9 +92,13 @@ import im.vector.riotx.features.settings.devtools.IncomingKeyRequestListFragment
 import im.vector.riotx.features.settings.devtools.KeyRequestsFragment
 import im.vector.riotx.features.settings.devtools.OutgoingKeyRequestListFragment
 import im.vector.riotx.features.settings.ignored.VectorSettingsIgnoredUsersFragment
+import im.vector.riotx.features.settings.locale.LocalePickerFragment
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
 import im.vector.riotx.features.share.IncomingShareFragment
 import im.vector.riotx.features.signout.soft.SoftLogoutFragment
+import im.vector.riotx.features.terms.ReviewTermsFragment
+import im.vector.riotx.features.userdirectory.KnownUsersFragment
+import im.vector.riotx.features.userdirectory.UserDirectoryFragment
 import im.vector.riotx.features.widgets.RoomWidgetFragment
 
 @Module
@@ -109,6 +113,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(RoomListFragment::class)
     fun bindRoomListFragment(fragment: RoomListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LocalePickerFragment::class)
+    fun bindLocalePickerFragment(fragment: LocalePickerFragment): Fragment
 
     @Binds
     @IntoMap
@@ -474,4 +483,19 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(RoomWidgetFragment::class)
     fun bindWidgetFragment(fragment: RoomWidgetFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SetIdentityServerFragment::class)
+    fun bindSetIdentityServerFragment(fragment: SetIdentityServerFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(DiscoverySettingsFragment::class)
+    fun bindDiscoverySettingsFragment(fragment: DiscoverySettingsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(ReviewTermsFragment::class)
+    fun bindReviewTermsFragment(fragment: ReviewTermsFragment): Fragment
 }

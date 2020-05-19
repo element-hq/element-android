@@ -20,7 +20,9 @@ import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.integrationmanager.AllowedWidgetsContent
 import im.vector.matrix.android.internal.session.integrationmanager.IntegrationProvisioningContent
+import im.vector.matrix.android.internal.session.sync.model.accountdata.AcceptedTermsContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.BreadcrumbsContent
+import im.vector.matrix.android.internal.session.sync.model.accountdata.IdentityServerContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
 import im.vector.matrix.android.internal.task.Task
 import org.greenrobot.eventbus.EventBus
@@ -31,6 +33,24 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
     interface Params {
         val type: String
         fun getData(): Any
+    }
+
+    data class IdentityParams(override val type: String = UserAccountData.TYPE_IDENTITY_SERVER,
+                              private val identityContent: IdentityServerContent
+    ) : Params {
+
+        override fun getData(): Any {
+            return identityContent
+        }
+    }
+
+    data class AcceptedTermsParams(override val type: String = UserAccountData.TYPE_ACCEPTED_TERMS,
+                                   private val acceptedTermsContent: AcceptedTermsContent
+    ) : Params {
+
+        override fun getData(): Any {
+            return acceptedTermsContent
+        }
     }
 
     // TODO Use [UserAccountDataDirectMessages] class?
@@ -52,7 +72,7 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
         }
     }
 
-    data class AllowedWidgets(override val type: String = UserAccountData.ACCOUNT_DATA_TYPE_ALLOWED_WIDGETS,
+    data class AllowedWidgets(override val type: String = UserAccountData.TYPE_ALLOWED_WIDGETS,
                               private val allowedWidgetsContent: AllowedWidgetsContent) : Params {
 
         override fun getData(): Any {
@@ -60,7 +80,7 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
         }
     }
 
-    data class IntegrationProvisioning(override val type: String = UserAccountData.ACCOUNT_DATA_TYPE_INTEGRATION_PROVISIONING,
+    data class IntegrationProvisioning(override val type: String = UserAccountData.TYPE_INTEGRATION_PROVISIONING,
                                        private val integrationProvisioningContent: IntegrationProvisioningContent) : Params {
 
         override fun getData(): Any {

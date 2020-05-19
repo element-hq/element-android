@@ -209,7 +209,7 @@ class HomeDetailFragment @Inject constructor(
             parentActivity.configure(groupToolbar)
         }
         groupToolbar.title = ""
-        groupToolbarAvatarImageView.setOnClickListener {
+        groupToolbarAvatarImageView.debouncedClicks {
             sharedActionViewModel.post(HomeActivitySharedAction.OpenDrawer)
         }
     }

@@ -1563,6 +1563,9 @@ Why choose Riot.im?
     <string name="message_view_reaction">View Reactions</string>
     <string name="reactions">Reactions</string>
 
+    <string name="event_redacted">Message deleted</string>
+    <string name="settings_show_redacted">Show removed messages</string>
+    <string name="settings_show_redacted_summary">Show a placeholder for removed messages</string>
     <string name="event_redacted_by_user_reason">Event deleted by user</string>
     <string name="event_redacted_by_admin_reason">Event moderated by room admin</string>
     <string name="last_edited_info_message">Last edited by %1$s on %2$s</string>
@@ -1730,14 +1733,16 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="settings_discovery_disconnect_identity_server_info">Disconnecting from your identity server will mean you won’t be discoverable by other users and you won’t be able to invite others by email or phone.</string>
     <string name="settings_discovery_msisdn_title">Discoverable phone numbers</string>
     <string name="settings_discovery_confirm_mail">We sent you a confirm email to %s, check your email and click on the confirmation link</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">We sent you a confirm email to %s, please first check your email and click on the confirmation link</string>
     <string name="settings_discovery_mail_pending">Pending</string>
 
-    <string name="settings_discovery_enter_identity_server">Enter a new identity server</string>
+    <string name="settings_discovery_enter_identity_server">Enter an identity server URL</string>
     <string name="settings_discovery_bad_identity_server">Could not connect to identity server</string>
     <string name="settings_discovery_please_enter_server">Please enter the identity server url</string>
     <string name="settings_discovery_no_terms_title">Identity server has no terms of services</string>
     <string name="settings_discovery_no_terms">The identity server you have chosen does not have any terms of services. Only continue if you trust the owner of the service</string>
     <string name="settings_text_message_sent">A text message has been sent to %s. Please enter the verification code it contains.</string>
+    <string name="settings_text_message_sent_wrong_code">The verification code is not correct.</string>
 
     <string name="settings_discovery_disconnect_with_bound_pid">You are currently sharing email addresses or phone numbers on the identity server %1$s. You will need to reconnect to %2$s to stop sharing them.</string>
     <string name="settings_agree_to_terms">Agree to the identity server (%s) Terms of Service to allow yourself to be discoverable by email address or phone number.</string>
@@ -1938,6 +1943,14 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
         <item quantity="one">Too many requests have been sent. You can retry in %1$d second…</item>
         <item quantity="other">Too many requests have been sent. You can retry in %1$d seconds…</item>
     </plurals>
+
+    <string name="login_connect_using_matrix_id_notice">Alternatively, if you already have an account and you know your Matrix identifier and your password, you can use this method:</string>
+    <string name="login_connect_using_matrix_id_submit">Sign in with my Matrix identifier</string>
+    <string name="login_signin_matrix_id_title">Sign in</string>
+    <string name="login_signin_matrix_id_notice">Enter your identifier and your password</string>
+    <string name="login_signin_matrix_id_hint">User identifier</string>
+    <string name="login_signin_matrix_id_error_invalid_matrix_id">This is not a valid user identifier. Expected format: \'@user:homeserver.org\'</string>
+    <string name="autodiscover_well_known_error">Unable to find a valid homeserver. Please check your identifier</string>
 
     <string name="seen_by">Seen by</string>
 
@@ -2155,6 +2168,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="qr_code_scanned_by_other_no">No</string>
 
     <string name="no_connectivity_to_the_server_indicator">Connectivity to the server has been lost</string>
+    <string name="no_connectivity_to_the_server_indicator_airplane">Airplane mode is on</string>
 
     <string name="settings_dev_tools">Dev Tools</string>
     <string name="settings_account_data">Account Data</string>
@@ -2383,5 +2397,25 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
         <item quantity="other">Invitations sent to %1$s and %2$d more</item>
     </plurals>
     <string name="invite_users_to_room_failure">We could not invite users. Please check the users you want to invite and try again.</string>
+
+    <string name="choose_locale_current_locale_title">Current language</string>
+    <string name="choose_locale_other_locales_title">Other available languages</string>
+    <string name="choose_locale_loading_locales">Loading available languages…</string>
+
+    <string name="open_terms_of">Open terms of %s</string>
+    <string name="disconnect_identity_server_dialog_content">Disconnect from the identity server %s?</string>
+    <string name="identity_server_error_outdated_identity_server">This identity server is outdated. RiotX support only API V2.</string>
+    <string name="identity_server_error_outdated_home_server">This operation is not possible. The homeserver is outdated.</string>
+    <string name="identity_server_error_no_identity_server_configured">Please first configure an identity server.</string>
+    <string name="identity_server_error_terms_not_signed">Please first accepts the terms of the identity server in the settings.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">For your privacy, RiotX only supports sending hashed user emails and phone number.</string>
+    <string name="identity_server_error_binding_error">The association has failed.</string>
+    <string name="identity_server_error_no_current_binding_error">The is no current association with this identifier.</string>
+
+    <string name="identity_server_set_default_notice">Your homeserver (%1$s) proposes to use %2$s for your identity server</string>
+    <string name="identity_server_set_default_submit">Use %1$s</string>
+    <string name="identity_server_set_alternative_notice">Alternatively, you can enter any other identity server URL</string>
+    <string name="identity_server_set_alternative_notice_no_default">Enter the URL of an identity server</string>
+    <string name="identity_server_set_alternative_submit">Submit</string>
 
 </resources>

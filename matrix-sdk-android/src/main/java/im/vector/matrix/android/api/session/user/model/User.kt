@@ -22,6 +22,9 @@ package im.vector.matrix.android.api.session.user.model
  */
 data class User(
         val userId: String,
+        /**
+         * For usage in UI, consider using [getBestName]
+         */
         val displayName: String? = null,
         val avatarUrl: String? = null
 ) {

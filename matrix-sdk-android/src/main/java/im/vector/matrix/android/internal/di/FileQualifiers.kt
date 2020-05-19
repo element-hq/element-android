@@ -20,16 +20,16 @@ import javax.inject.Qualifier
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class SessionFilesDirectory
+internal annotation class SessionFilesDirectory
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class SessionCacheDirectory
+internal annotation class SessionCacheDirectory
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class CacheDirectory
+internal annotation class CacheDirectory
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class ExternalFilesDirectory
+internal annotation class ExternalFilesDirectory

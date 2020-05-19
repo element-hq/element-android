@@ -17,9 +17,14 @@
 package im.vector.matrix.android.internal.session.homeserver
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.auth.data.Versions
+import im.vector.matrix.android.api.auth.data.isLoginAndRegistrationSupportedBySdk
+import im.vector.matrix.android.api.auth.wellknown.WellknownResult
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
+import im.vector.matrix.android.internal.wellknown.GetWellknownTask
 import im.vector.matrix.android.internal.database.model.HomeServerCapabilitiesEntity
 import im.vector.matrix.android.internal.database.query.getOrCreate
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
@@ -32,7 +37,10 @@ internal interface GetHomeServerCapabilitiesTask : Task<Unit, Unit>
 internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
         private val capabilitiesAPI: CapabilitiesAPI,
         private val monarchy: Monarchy,
-        private val eventBus: EventBus
+        private val eventBus: EventBus,
+        private val getWellknownTask: GetWellknownTask,
+        @UserId
+        private val userId: String
 ) : GetHomeServerCapabilitiesTask {
 
     override suspend fun execute(params: Unit) {
@@ -47,29 +55,54 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
             return
         }
 
-        val uploadCapabilities = executeRequest<GetUploadCapabilitiesResult>(eventBus) {
-            apiCall = capabilitiesAPI.getUploadCapabilities()
-        }
-
         val capabilities = runCatching {
             executeRequest<GetCapabilitiesResult>(eventBus) {
                 apiCall = capabilitiesAPI.getCapabilities()
             }
         }.getOrNull()
 
-        // TODO Add other call here (get version, etc.)
+        val uploadCapabilities = runCatching {
+            executeRequest<GetUploadCapabilitiesResult>(eventBus) {
+                apiCall = capabilitiesAPI.getUploadCapabilities()
+            }
+        }.getOrNull()
 
-        insertInDb(capabilities, uploadCapabilities)
+        val versions = runCatching {
+            executeRequest<Versions>(null) {
+                apiCall = capabilitiesAPI.getVersions()
+            }
+        }.getOrNull()
+
+        val wellknownResult = runCatching {
+            getWellknownTask.execute(GetWellknownTask.Params(userId))
+        }.getOrNull()
+
+        insertInDb(capabilities, uploadCapabilities, versions, wellknownResult)
     }
 
-    private suspend fun insertInDb(getCapabilitiesResult: GetCapabilitiesResult?, getUploadCapabilitiesResult: GetUploadCapabilitiesResult) {
+    private suspend fun insertInDb(getCapabilitiesResult: GetCapabilitiesResult?,
+                                   getUploadCapabilitiesResult: GetUploadCapabilitiesResult?,
+                                   getVersionResult: Versions?,
+                                   getWellknownResult: WellknownResult?) {
         monarchy.awaitTransaction { realm ->
             val homeServerCapabilitiesEntity = HomeServerCapabilitiesEntity.getOrCreate(realm)
 
-            homeServerCapabilitiesEntity.canChangePassword = getCapabilitiesResult.canChangePassword()
+            if (getCapabilitiesResult != null) {
+                homeServerCapabilitiesEntity.canChangePassword = getCapabilitiesResult.canChangePassword()
+            }
 
-            homeServerCapabilitiesEntity.maxUploadFileSize = getUploadCapabilitiesResult.maxUploadSize
-                    ?: HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN
+            if (getUploadCapabilitiesResult != null) {
+                homeServerCapabilitiesEntity.maxUploadFileSize = getUploadCapabilitiesResult.maxUploadSize
+                        ?: HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN
+            }
+
+            if (getVersionResult != null) {
+                homeServerCapabilitiesEntity.lastVersionIdentityServerSupported = getVersionResult.isLoginAndRegistrationSupportedBySdk()
+            }
+
+            if (getWellknownResult != null && getWellknownResult is WellknownResult.Prompt) {
+                homeServerCapabilitiesEntity.defaultIdentityServerUrl = getWellknownResult.identityServerUrl
+            }
 
             homeServerCapabilitiesEntity.lastUpdatedTimestamp = Date().time
         }

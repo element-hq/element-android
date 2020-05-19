@@ -71,7 +71,7 @@ class PublicRoomsFragment @Inject constructor(
                 }
                 .disposeOnDestroyView()
 
-        publicRoomsCreateNewRoom.setOnClickListener {
+        publicRoomsCreateNewRoom.debouncedClicks {
             sharedActionViewModel.post(RoomDirectorySharedAction.CreateRoom)
         }
 

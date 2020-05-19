@@ -123,7 +123,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
                                     .joinToString(" ")
                         }
 
-                it.setOnClickListener {
+                it.debouncedClicks {
                     copyToClipboard(activity!!, recoveryKey)
                 }
             }

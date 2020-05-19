@@ -1,4 +1,30 @@
-Changes in RiotX 0.20.0 (2020-XX-XX)
+Changes in RiotX 0.21.0 (2020-XX-XX)
+===================================================
+
+Features ✨:
+ - Identity server support (#607)
+ - Switch language support (#41)
+
+Improvements 🙌:
+ - Better connectivity lost indicator when airplane mode is on
+ - Add a setting to hide redacted events (#951)
+
+Bugfix 🐛:
+ - Fix issues with FontScale switch (#69, #645)
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ -
+
+Build 🧱:
+ -
+
+Other changes:
+ -
+
+Changes in RiotX 0.20.0 (2020-05-15)
 ===================================================
 
 Features ✨:
@@ -13,18 +39,10 @@ Bugfix 🐛:
  - Fix | Verify Manually by Text crashes if private SSK not known (#1337)
  - Sometimes the same device appears twice in the list of devices of a user (#1329)
  - Random Crashes while doing sth with cross signing keys (#1364)
-
-Translations 🗣:
- -
+ - Crash | crash while restoring key backup (#1366)
 
 SDK API changes ⚠️:
- - excludedUserIds parameter add to to UserService.getPagedUsersLive() function
-
-Build 🧱:
- -
-
-Other changes:
- -
+ - excludedUserIds parameter added to the UserService.getPagedUsersLive() function
 
 Changes in RiotX 0.19.0 (2020-05-04)
 ===================================================

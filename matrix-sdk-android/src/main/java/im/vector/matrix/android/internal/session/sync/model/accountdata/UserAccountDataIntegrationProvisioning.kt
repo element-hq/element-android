@@ -22,6 +22,6 @@ import im.vector.matrix.android.internal.session.integrationmanager.IntegrationP
 
 @JsonClass(generateAdapter = true)
 internal data class UserAccountDataIntegrationProvisioning(
-        @Json(name = "type") override val type: String = ACCOUNT_DATA_TYPE_INTEGRATION_PROVISIONING,
+        @Json(name = "type") override val type: String = TYPE_INTEGRATION_PROVISIONING,
         @Json(name = "content") val content: IntegrationProvisioningContent
 ) : UserAccountData()

@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="resources_language">et</string>
+    <string name="resources_country_code">EE</string>
+    <string name="resources_script">Latn</string>
+
+    <string name="light_theme">Hele teema</string>
+    <string name="dark_theme">Tume teema</string>
+    <string name="black_them">Must teema</string>
+    <string name="status_theme">Status.im teema</string>
+
+    <string name="notification_sync_init">Käivitan teenuse</string>
+    <string name="notification_sync_in_progress">Sünkroniseerin…</string>
+    <string name="notification_listening_for_events">Kuulan, kas leidub sündmusi</string>
+    <string name="notification_noisy_notifications">Lärmakad teavitused</string>
+    <string name="notification_silent_notifications">Vaiksed teavitused</string>
+
+    <string name="title_activity_home">Sõnumid</string>
+    <string name="title_activity_room">Jututuba</string>
+    <string name="title_activity_settings">Seadistused</string>
+    <string name="title_activity_member_details">Jututoa liikme üksikasjad</string>
+    <string name="title_activity_historical">Ajalooline</string>
+    <string name="title_activity_bug_report">Veateade</string>
+    <string name="title_activity_group_details">Kogukonna üksikasjad</string>
+    <string name="title_activity_choose_sticker">Saada kleeps</string>
+    <string name="title_activity_keys_backup_setup">Võtmete varundus</string>
+    <string name="title_activity_keys_backup_restore">Kasuta võtmete varundust</string>
+    <string name="title_activity_verify_device">Verifitseeri sessioon</string>
+
+    <string name="keys_backup_is_not_finished_please_wait">Võtmete varundus pole veel valmis, oota natuke…</string>
+    <string name="encrypted_message">Krüptitud sõnum</string>
+
+</resources>

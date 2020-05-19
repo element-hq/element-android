@@ -31,9 +31,9 @@ import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.toOnOff
-import im.vector.riotx.core.utils.getDeviceLocale
 import im.vector.riotx.features.settings.VectorLocale
 import im.vector.riotx.features.settings.VectorPreferences
+import im.vector.riotx.features.settings.locale.SystemLocaleProvider
 import im.vector.riotx.features.themes.ThemeUtils
 import im.vector.riotx.features.version.VersionProvider
 import okhttp3.Call
@@ -58,10 +58,13 @@ import javax.inject.Singleton
  * BugReporter creates and sends the bug reports.
  */
 @Singleton
-class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
-                                      private val versionProvider: VersionProvider,
-                                      private val vectorPreferences: VectorPreferences,
-                                      private val vectorFileLogger: VectorFileLogger) {
+class BugReporter @Inject constructor(
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val versionProvider: VersionProvider,
+        private val vectorPreferences: VectorPreferences,
+        private val vectorFileLogger: VectorFileLogger,
+        private val systemLocaleProvider: SystemLocaleProvider
+) {
     var inMultiWindowMode = false
 
     companion object {
@@ -209,7 +212,7 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
 
                 activeSessionHolder.getSafeActiveSession()?.let { session ->
                     userId = session.myUserId
-                    deviceId = session.sessionParams.credentials.deviceId ?: "undefined"
+                    deviceId = session.sessionParams.deviceId ?: "undefined"
                     olmVersion = session.cryptoService().getCryptoVersion(context, true)
                 }
 
@@ -240,7 +243,7 @@ class BugReporter @Inject constructor(private val activeSessionHolder: ActiveSes
                                     + Build.VERSION.INCREMENTAL + "-" + Build.VERSION.CODENAME)
                             .addFormDataPart("locale", Locale.getDefault().toString())
                             .addFormDataPart("app_language", VectorLocale.applicationLocale.toString())
-                            .addFormDataPart("default_app_language", getDeviceLocale(context).toString())
+                            .addFormDataPart("default_app_language", systemLocaleProvider.getSystemLocale().toString())
                             .addFormDataPart("theme", ThemeUtils.getApplicationTheme(context))
 
                     val buildNumber = context.getString(R.string.build_number)

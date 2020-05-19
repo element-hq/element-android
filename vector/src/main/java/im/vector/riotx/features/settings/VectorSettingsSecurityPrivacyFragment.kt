@@ -340,7 +340,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         showDeviceListPref.isEnabled = devices.size > 0
         showDeviceListPref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
 //        val userId = session.myUserId
-//        val deviceId = session.sessionParams.credentials.deviceId
+//        val deviceId = session.sessionParams.deviceId
 
         // device name
 //        if (null != aMyDeviceInfo) {

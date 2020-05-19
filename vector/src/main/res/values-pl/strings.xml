@@ -2239,4 +2239,14 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="settings_developer_mode_summary">Tryb programisty aktywuje ukryte funkcje i może również spowodować, że aplikacja będzie mniej stabilna. Tylko dla programistów!</string>
     <string name="room_profile_not_encrypted_subtitle">Wiadomości w tym pokoju nie są szyfrowane end-to-end.</string>
     <string name="room_profile_section_more_uploads">Przesłane pliki</string>
+    <string name="settings_key_requests">Prośby o klucze</string>
+
+    <string name="e2e_use_keybackup">Odblokuj historię zaszyfrowanych wiadomości</string>
+
+    <string name="login_mobile_device_riotx">RiotX Android</string>
+
+    <string name="refresh">Odśwież</string>
+
+    <string name="verify_new_session_notice">Użyj tej sesji do weryfikacji nowej, nadając jej dostęp do zaszyfrowanych wiadomości.</string>
+    <string name="verify_new_session_was_not_me">To nie ja</string>
 </resources>

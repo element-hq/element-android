@@ -199,7 +199,7 @@ internal object MXEncryptedAttachments {
                 .replace('_', '/')
     }
 
-    private fun base64ToBase64Url(base64: String): String {
+    internal fun base64ToBase64Url(base64: String): String {
         return base64.replace("\n".toRegex(), "")
                 .replace("\\+".toRegex(), "-")
                 .replace('/', '_')
