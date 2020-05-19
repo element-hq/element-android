@@ -22,7 +22,11 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageWithAttachmentContent
 import im.vector.riotx.R
+import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.epoxy.errorWithRetryItem
 import im.vector.riotx.core.epoxy.loadingItem
 import im.vector.riotx.core.epoxy.noResultItem
@@ -33,15 +37,16 @@ import javax.inject.Inject
 
 class UploadsFileController @Inject constructor(
         private val errorFormatter: ErrorFormatter,
-        private val stringProvider: StringProvider
+        private val stringProvider: StringProvider,
+        private val dateFormatter: VectorDateFormatter
 ) : TypedEpoxyController<RoomUploadsViewState>() {
 
     interface Listener {
         fun onRetry()
         fun loadMore()
         fun onOpenClicked(event: Event)
-        fun onDownloadClicked(event: Event)
-        fun onShareClicked(event: Event)
+        fun onDownloadClicked(event: Event, messageWithAttachmentContent: MessageWithAttachmentContent)
+        fun onShareClicked(event: Event, messageWithAttachmentContent: MessageWithAttachmentContent)
     }
 
     var listener: Listener? = null
@@ -100,21 +105,25 @@ class UploadsFileController @Inject constructor(
 
     private fun buildFileItems(fileEvents: List<Event>) {
         fileEvents.forEach {
+            val messageContent = it.getClearContent()?.toModel<MessageContent>() ?: return@forEach
+            val messageWithAttachmentContent = (messageContent as? MessageWithAttachmentContent) ?: return@forEach
+
             uploadsFileItem {
                 id(it.eventId ?: "")
-                title(it.getClearType())
-                subtitle(it.getSenderKey())
+                title(messageWithAttachmentContent.body)
+                // TODO Resolve user displayName
+                subtitle(stringProvider.getString(R.string.uploads_files_subtitle, it.senderId, dateFormatter.formatRelativeDateTime(it.originServerTs)))
                 listener(object : UploadsFileItem.Listener {
                     override fun onItemClicked() {
                         listener?.onOpenClicked(it)
                     }
 
                     override fun onDownloadClicked() {
-                        listener?.onDownloadClicked(it)
+                        listener?.onDownloadClicked(it, messageWithAttachmentContent)
                     }
 
                     override fun onShareClicked() {
-                        listener?.onShareClicked(it)
+                        listener?.onShareClicked(it, messageWithAttachmentContent)
                     }
                 })
             }

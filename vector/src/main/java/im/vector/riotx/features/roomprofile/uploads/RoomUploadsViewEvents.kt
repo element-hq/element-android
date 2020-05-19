@@ -16,14 +16,12 @@
 
 package im.vector.riotx.features.roomprofile.uploads
 
-import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.model.message.MessageWithAttachmentContent
-import im.vector.riotx.core.platform.VectorViewModelAction
+import im.vector.riotx.core.platform.VectorViewEvents
+import java.io.File
 
-sealed class RoomUploadsAction : VectorViewModelAction {
-    data class Download(val event: Event, val messageContent: MessageWithAttachmentContent) : RoomUploadsAction()
-    data class Share(val event: Event, val messageContent: MessageWithAttachmentContent) : RoomUploadsAction()
+sealed class RoomUploadsViewEvents : VectorViewEvents {
+    data class Failure(val throwable: Throwable) : RoomUploadsViewEvents()
 
-    object Retry : RoomUploadsAction()
-    object LoadMore : RoomUploadsAction()
+    data class FileReadyForSharing(val file: File) : RoomUploadsViewEvents()
+    data class FileReadyForSaving(val file: File, val title: String) : RoomUploadsViewEvents()
 }

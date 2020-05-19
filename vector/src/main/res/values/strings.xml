@@ -1791,6 +1791,8 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="uploads_media_title">MEDIA</string>
     <string name="uploads_media_no_result">There is no media in this room</string>
     <string name="uploads_files_title">FILES</string>
+    <!-- First parameter is a username and second is a date Example: "Matthew at 12:00 on 01/01/01" -->
+    <string name="uploads_files_subtitle">%1$s at %2$s</string>
     <string name="uploads_files_no_result">There is no files in this room</string>
 
     <string name="report_content_spam">"It's spam"</string>

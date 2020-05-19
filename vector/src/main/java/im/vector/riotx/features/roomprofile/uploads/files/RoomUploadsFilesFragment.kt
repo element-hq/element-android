@@ -21,6 +21,7 @@ import android.view.View
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.model.message.MessageWithAttachmentContent
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
@@ -54,7 +55,7 @@ class RoomUploadsFilesFragment @Inject constructor(
     }
 
     override fun onOpenClicked(event: Event) {
-        // TODO
+        TODO()
     }
 
     override fun onRetry() {
@@ -65,12 +66,12 @@ class RoomUploadsFilesFragment @Inject constructor(
         uploadsViewModel.handle(RoomUploadsAction.LoadMore)
     }
 
-    override fun onDownloadClicked(event: Event) {
-        uploadsViewModel.handle(RoomUploadsAction.Download(event))
+    override fun onDownloadClicked(event: Event, messageWithAttachmentContent: MessageWithAttachmentContent) {
+        uploadsViewModel.handle(RoomUploadsAction.Download(event, messageWithAttachmentContent))
     }
 
-    override fun onShareClicked(event: Event) {
-        uploadsViewModel.handle(RoomUploadsAction.Share(event))
+    override fun onShareClicked(event: Event, messageWithAttachmentContent: MessageWithAttachmentContent) {
+        uploadsViewModel.handle(RoomUploadsAction.Share(event, messageWithAttachmentContent))
     }
 
     override fun invalidate() = withState(uploadsViewModel) { state ->

@@ -30,20 +30,23 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.isPreviewableMessage
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.uploads.GetUploadsResult
+import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.extensions.exhaustive
-import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
+import java.io.File
 
 class RoomUploadsViewModel @AssistedInject constructor(
         @Assisted initialState: RoomUploadsViewState,
         private val session: Session
-) : VectorViewModel<RoomUploadsViewState, RoomUploadsAction, EmptyViewEvents>(initialState) {
+) : VectorViewModel<RoomUploadsViewState, RoomUploadsAction, RoomUploadsViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -123,10 +126,50 @@ class RoomUploadsViewModel @AssistedInject constructor(
 
     override fun handle(action: RoomUploadsAction) {
         when (action) {
-            is RoomUploadsAction.Download -> TODO()
-            is RoomUploadsAction.Share    -> TODO()
+            is RoomUploadsAction.Download -> handleDownload(action)
+            is RoomUploadsAction.Share    -> handleShare(action)
             RoomUploadsAction.Retry       -> handleLoadMore()
             RoomUploadsAction.LoadMore    -> handleLoadMore()
         }.exhaustive
+    }
+
+    private fun handleShare(action: RoomUploadsAction.Share) {
+        viewModelScope.launch {
+            try {
+                val file = awaitCallback<File> {
+                    session.downloadFile(
+                            FileService.DownloadMode.FOR_EXTERNAL_SHARE,
+                            action.event.eventId ?: "",
+                            action.messageContent.body,
+                            action.messageContent.getFileUrl(),
+                            action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
+                            it
+                    )
+                }
+                _viewEvents.post(RoomUploadsViewEvents.FileReadyForSharing(file))
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomUploadsViewEvents.Failure(failure))
+            }
+        }
+    }
+
+    private fun handleDownload(action: RoomUploadsAction.Download) {
+        viewModelScope.launch {
+            try {
+                val file = awaitCallback<File> {
+                    session.downloadFile(
+                            FileService.DownloadMode.FOR_EXTERNAL_SHARE,
+                            action.event.eventId ?: "",
+                            action.messageContent.body,
+                            action.messageContent.getFileUrl(),
+                            action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
+                            it)
+
+                }
+                _viewEvents.post(RoomUploadsViewEvents.FileReadyForSaving(file, action.messageContent.body))
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomUploadsViewEvents.Failure(failure))
+            }
+        }
     }
 }
