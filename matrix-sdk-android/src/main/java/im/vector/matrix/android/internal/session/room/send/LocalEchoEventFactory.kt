@@ -35,6 +35,7 @@ import im.vector.matrix.android.api.session.room.model.message.FileInfo
 import im.vector.matrix.android.api.session.room.model.message.ImageInfo
 import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageContentWithFormattedBody
 import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFormat
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
@@ -442,10 +443,8 @@ internal class LocalEchoEventFactory @Inject constructor(
             MessageType.MSGTYPE_TEXT,
             MessageType.MSGTYPE_NOTICE -> {
                 var formattedText: String? = null
-                if (content is MessageTextContent) {
-                    if (content.format == MessageFormat.FORMAT_MATRIX_HTML) {
-                        formattedText = content.formattedBody
-                    }
+                if (content is MessageContentWithFormattedBody) {
+                    formattedText = content.matrixFormattedBody
                 }
                 val isReply = content.isReply() || originalContent.isReply()
                 return if (isReply) {

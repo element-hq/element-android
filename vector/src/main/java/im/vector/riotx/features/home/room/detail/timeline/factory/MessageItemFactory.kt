@@ -31,7 +31,6 @@ import im.vector.matrix.android.api.session.room.model.message.MessageAudioConte
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageEmoteContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
-import im.vector.matrix.android.api.session.room.model.message.MessageFormat
 import im.vector.matrix.android.api.session.room.model.message.MessageImageInfoContent
 import im.vector.matrix.android.api.session.room.model.message.MessageNoticeContent
 import im.vector.matrix.android.api.session.room.model.message.MessageOptionsContent
@@ -351,7 +350,7 @@ class MessageItemFactory @Inject constructor(
                                         highlight: Boolean,
                                         callback: TimelineEventController.Callback?,
                                         attributes: AbsMessageItem.Attributes): VectorEpoxyModel<*>? {
-        val isFormatted = messageContent.formattedBody.takeIf { messageContent.format == MessageFormat.FORMAT_MATRIX_HTML }.isNullOrBlank().not()
+        val isFormatted = messageContent.matrixFormattedBody.isNullOrBlank().not()
         return if (isFormatted) {
             // First detect if the message contains some code block(s) or inline code
             val localFormattedBody = htmlRenderer.get().parse(messageContent.body) as Document
