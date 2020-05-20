@@ -19,17 +19,16 @@ package im.vector.matrix.android.api.session.room.sender
 data class SenderInfo(
         val userId: String,
         /**
-         * Consider using [getDisambiguatedDisplayName]
+         * Consider using [disambiguatedDisplayName]
          */
         val displayName: String?,
         val isUniqueDisplayName: Boolean,
         val avatarUrl: String?
 ) {
-    fun getDisambiguatedDisplayName(): String {
-        return when {
+    val disambiguatedDisplayName: String
+        get() = when {
             displayName.isNullOrBlank() -> userId
             isUniqueDisplayName         -> displayName
-            else                        -> "$displayName (${userId})"
+            else                        -> "$displayName ($userId)"
         }
-    }
 }

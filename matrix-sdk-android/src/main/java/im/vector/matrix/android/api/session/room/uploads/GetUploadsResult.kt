@@ -18,10 +18,9 @@ package im.vector.matrix.android.api.session.room.uploads
 
 data class GetUploadsResult(
         // List of fetched Events, most recent first
-        val events: List<UploadEvent>,
+        val uploadEvents: List<UploadEvent>,
         // token to get more events
         val nextToken: String,
         // True if there are more event to load
         val hasMore: Boolean
 )
-

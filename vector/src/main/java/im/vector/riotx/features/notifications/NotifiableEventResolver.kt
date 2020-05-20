@@ -93,7 +93,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
             // Ok room is not known in store, but we can still display something
             val body = displayableEventFormatter.format(event, false)
             val roomName = stringProvider.getString(R.string.notification_unknown_room_name)
-            val senderDisplayName = event.senderInfo.getDisambiguatedDisplayName()
+            val senderDisplayName = event.senderInfo.disambiguatedDisplayName
 
             val notifiableEvent = NotifiableMessageEvent(
                     eventId = event.root.eventId!!,
@@ -126,7 +126,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
 
             val body = displayableEventFormatter.format(event, false).toString()
             val roomName = room.roomSummary()?.displayName ?: ""
-            val senderDisplayName = event.senderInfo.getDisambiguatedDisplayName()
+            val senderDisplayName = event.senderInfo.disambiguatedDisplayName
 
             val notifiableEvent = NotifiableMessageEvent(
                     eventId = event.root.eventId!!,

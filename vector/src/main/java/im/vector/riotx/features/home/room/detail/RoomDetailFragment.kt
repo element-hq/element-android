@@ -458,7 +458,7 @@ class RoomDetailFragment @Inject constructor(
         autoCompleter.enterSpecialMode()
         // switch to expanded bar
         composerLayout.composerRelatedMessageTitle.apply {
-            text = event.senderInfo.getDisambiguatedDisplayName()
+            text = event.senderInfo.disambiguatedDisplayName
             setTextColor(ContextCompat.getColor(requireContext(), getColorFromUserId(event.root.senderId)))
         }
 

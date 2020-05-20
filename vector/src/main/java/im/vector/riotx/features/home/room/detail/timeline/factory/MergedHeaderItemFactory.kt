@@ -88,7 +88,7 @@ class MergedHeaderItemFactory @Inject constructor(private val avatarRenderer: Av
                 val data = BasedMergedItem.Data(
                         userId = mergedEvent.root.senderId ?: "",
                         avatarUrl = mergedEvent.senderInfo.avatarUrl,
-                        memberName = mergedEvent.senderInfo.getDisambiguatedDisplayName(),
+                        memberName = mergedEvent.senderInfo.disambiguatedDisplayName,
                         localId = mergedEvent.localId,
                         eventId = mergedEvent.root.eventId ?: ""
                 )
@@ -159,7 +159,7 @@ class MergedHeaderItemFactory @Inject constructor(private val avatarRenderer: Av
                         val data = BasedMergedItem.Data(
                                 userId = mergedEvent.root.senderId ?: "",
                                 avatarUrl = mergedEvent.senderInfo.avatarUrl,
-                                memberName = mergedEvent.senderInfo.getDisambiguatedDisplayName(),
+                                memberName = mergedEvent.senderInfo.disambiguatedDisplayName,
                                 localId = mergedEvent.localId,
                                 eventId = mergedEvent.root.eventId ?: ""
                         )

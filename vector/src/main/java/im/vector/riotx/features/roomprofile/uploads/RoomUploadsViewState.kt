@@ -37,4 +37,3 @@ data class RoomUploadsViewState(
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 }
-

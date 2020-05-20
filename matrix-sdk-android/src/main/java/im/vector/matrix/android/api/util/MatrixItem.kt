@@ -156,4 +156,4 @@ fun PublicRoom.toMatrixItem() = MatrixItem.RoomItem(roomId, name ?: getPrimaryAl
 
 fun RoomMemberSummary.toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)
 
-fun SenderInfo.toMatrixItem() = MatrixItem.UserItem(userId, getDisambiguatedDisplayName(), avatarUrl)
+fun SenderInfo.toMatrixItem() = MatrixItem.UserItem(userId, disambiguatedDisplayName, avatarUrl)

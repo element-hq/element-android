@@ -87,14 +87,6 @@ class RoomUploadsFragment @Inject constructor(
         }
     }
 
-    /*
-    override fun onDestroyView() {
-        super.onDestroyView()
-        // Clear your view, unsubscribe...
-    }
-
-     */
-
     override fun invalidate() = withState(viewModel) { state ->
         renderRoomSummary(state)
     }

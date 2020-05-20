@@ -260,6 +260,7 @@ dependencies {
     def autofill_version = "1.0.0"
     def work_version = '2.3.3'
     def arch_version = '2.1.0'
+    def lifecycle_version = '2.2.0'
 
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-rx")
@@ -282,7 +283,7 @@ dependencies {
     implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.7.0"
 
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
 
     // Log

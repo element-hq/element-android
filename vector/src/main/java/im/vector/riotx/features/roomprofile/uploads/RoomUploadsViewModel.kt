@@ -96,7 +96,7 @@ class RoomUploadsViewModel @AssistedInject constructor(
 
                 token = result.nextToken
 
-                val groupedEvents = result.events
+                val groupedUploadEvents = result.uploadEvents
                         .groupBy {
                             it.contentWithAttachmentContent.msgType == MessageType.MSGTYPE_IMAGE
                                     || it.contentWithAttachmentContent.msgType == MessageType.MSGTYPE_VIDEO
@@ -105,13 +105,13 @@ class RoomUploadsViewModel @AssistedInject constructor(
                 setState {
                     copy(
                             asyncEventsRequest = Success(Unit),
-                            mediaEvents = this.mediaEvents + groupedEvents[true].orEmpty(),
-                            fileEvents = this.fileEvents + groupedEvents[false].orEmpty(),
+                            mediaEvents = this.mediaEvents + groupedUploadEvents[true].orEmpty(),
+                            fileEvents = this.fileEvents + groupedUploadEvents[false].orEmpty(),
                             hasMore = result.hasMore
                     )
                 }
             } catch (failure: Throwable) {
-                // TODO Post fail
+                _viewEvents.post(RoomUploadsViewEvents.Failure(failure))
                 setState {
                     copy(
                             asyncEventsRequest = Fail(failure)
@@ -163,7 +163,6 @@ class RoomUploadsViewModel @AssistedInject constructor(
                             action.uploadEvent.contentWithAttachmentContent.getFileUrl(),
                             action.uploadEvent.contentWithAttachmentContent.encryptedFileInfo?.toElementToDecrypt(),
                             it)
-
                 }
                 _viewEvents.post(RoomUploadsViewEvents.FileReadyForSaving(file, action.uploadEvent.contentWithAttachmentContent.body))
             } catch (failure: Throwable) {

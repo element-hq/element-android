@@ -202,7 +202,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 permalink,
                 stringProvider.getString(R.string.message_reply_to_prefix),
                 userLink,
-                originalEvent.senderInfo.getDisambiguatedDisplayName(),
+                originalEvent.senderInfo.disambiguatedDisplayName,
                 body.takeFormatted(),
                 createTextContent(newBodyText, newBodyAutoMarkdown).takeFormatted()
         )
