@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.session.room.uploads
 
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.message.MessageWithAttachmentContent
+import im.vector.matrix.android.api.session.room.sender.SenderInfo
 
 /**
  * Wrapper around on Event.
@@ -27,5 +28,5 @@ data class UploadEvent(
         val root: Event,
         val eventId: String,
         val contentWithAttachmentContent: MessageWithAttachmentContent,
-        val uploadSenderInfo: UploadSenderInfo
+        val senderInfo: SenderInfo
 )

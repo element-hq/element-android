@@ -458,7 +458,7 @@ class RoomDetailFragment @Inject constructor(
         autoCompleter.enterSpecialMode()
         // switch to expanded bar
         composerLayout.composerRelatedMessageTitle.apply {
-            text = event.getDisambiguatedDisplayName()
+            text = event.senderInfo.getDisambiguatedDisplayName()
             setTextColor(ContextCompat.getColor(requireContext(), getColorFromUserId(event.root.senderId)))
         }
 
@@ -477,11 +477,7 @@ class RoomDetailFragment @Inject constructor(
         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
         composerLayout.sendButton.contentDescription = getString(descriptionRes)
 
-        avatarRenderer.render(
-                MatrixItem.UserItem(event.root.senderId
-                        ?: "", event.getDisambiguatedDisplayName(), event.senderAvatar),
-                composerLayout.composerRelatedMessageAvatar
-        )
+        avatarRenderer.render(event.senderInfo.toMatrixItem(), composerLayout.composerRelatedMessageAvatar)
 
         composerLayout.expand {
             if (isAdded) {

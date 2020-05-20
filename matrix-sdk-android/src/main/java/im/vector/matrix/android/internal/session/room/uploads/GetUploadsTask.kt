@@ -20,9 +20,9 @@ import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageWithAttachmentContent
+import im.vector.matrix.android.api.session.room.sender.SenderInfo
 import im.vector.matrix.android.api.session.room.uploads.GetUploadsResult
 import im.vector.matrix.android.api.session.room.uploads.UploadEvent
-import im.vector.matrix.android.api.session.room.uploads.UploadSenderInfo
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.filter.FilterFactory
 import im.vector.matrix.android.internal.session.room.RoomAPI
@@ -60,7 +60,7 @@ internal class DefaultGetUploadsTask @Inject constructor(
 
         var uploadEvents = listOf<UploadEvent>()
 
-        val cacheOfSenderInfos = mutableMapOf<String, UploadSenderInfo>()
+        val cacheOfSenderInfos = mutableMapOf<String, SenderInfo>()
 
         // Get a snapshot of all room members
         monarchy.doWithRealm { realm ->
@@ -74,11 +74,11 @@ internal class DefaultGetUploadsTask @Inject constructor(
 
                 val senderInfo = cacheOfSenderInfos.getOrPut(senderId) {
                     val roomMemberSummaryEntity = roomMemberHelper.getLastRoomMember(senderId)
-                    UploadSenderInfo(
-                            senderId = senderId,
-                            senderName = roomMemberSummaryEntity?.displayName,
+                    SenderInfo(
+                            userId = senderId,
+                            displayName = roomMemberSummaryEntity?.displayName,
                             isUniqueDisplayName = roomMemberHelper.isUniqueDisplayName(roomMemberSummaryEntity?.displayName),
-                            senderAvatar = roomMemberSummaryEntity?.avatarUrl
+                            avatarUrl = roomMemberSummaryEntity?.avatarUrl
                     )
                 }
 
@@ -86,7 +86,7 @@ internal class DefaultGetUploadsTask @Inject constructor(
                         root = event,
                         eventId = eventId,
                         contentWithAttachmentContent = messageWithAttachmentContent,
-                        uploadSenderInfo = senderInfo
+                        senderInfo = senderInfo
                 )
             }
         }

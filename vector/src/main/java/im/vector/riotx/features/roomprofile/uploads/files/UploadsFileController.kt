@@ -109,7 +109,7 @@ class UploadsFileController @Inject constructor(
                 id(uploadEvent.eventId)
                 title(uploadEvent.contentWithAttachmentContent.body)
                 subtitle(stringProvider.getString(R.string.uploads_files_subtitle,
-                        uploadEvent.uploadSenderInfo.getDisambiguatedDisplayName(),
+                        uploadEvent.senderInfo.getDisambiguatedDisplayName(),
                         dateFormatter.formatRelativeDateTime(uploadEvent.root.originServerTs)))
                 listener(object : UploadsFileItem.Listener {
                     override fun onItemClicked() {

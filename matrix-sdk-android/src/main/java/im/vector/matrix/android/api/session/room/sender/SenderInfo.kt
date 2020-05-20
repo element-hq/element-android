@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.room.uploads
+package im.vector.matrix.android.api.session.room.sender
 
-// TODO Maybe use this model for TimelineEvent as well
-data class UploadSenderInfo(
-        val senderId: String,
-        val senderName: String?,
+data class SenderInfo(
+        val userId: String,
+        /**
+         * Consider using [getDisambiguatedDisplayName]
+         */
+        val displayName: String?,
         val isUniqueDisplayName: Boolean,
-        val senderAvatar: String?
+        val avatarUrl: String?
 ) {
     fun getDisambiguatedDisplayName(): String {
         return when {
-            senderName.isNullOrBlank() -> senderId
-            isUniqueDisplayName        -> senderName
-            else                       -> "$senderName (${senderId})"
+            displayName.isNullOrBlank() -> userId
+            isUniqueDisplayName         -> displayName
+            else                        -> "$displayName (${userId})"
         }
     }
 }
