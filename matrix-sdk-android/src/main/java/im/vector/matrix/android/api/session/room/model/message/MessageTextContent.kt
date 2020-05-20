@@ -34,7 +34,7 @@ data class MessageTextContent(
         @Json(name = "body") override val body: String,
 
         /**
-         * The format used in the formatted_body. Currently only org.matrix.custom.html is supported.
+         * The format used in the formatted_body. Currently only "org.matrix.custom.html" is supported.
          */
         @Json(name = "format") val format: String? = null,
 
