@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.session.widgets
 
+import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.events.model.Content
@@ -40,6 +41,18 @@ internal class DefaultWidgetService @Inject constructor(private val widgetManage
 
     override fun getRoomWidgets(roomId: String, widgetId: QueryStringValue, widgetTypes: Set<String>?, excludedTypes: Set<String>?): List<Widget> {
         return widgetManager.getRoomWidgets(roomId, widgetId, widgetTypes, excludedTypes)
+    }
+
+    override fun getRoomWidgetsLive(roomId: String, widgetId: QueryStringValue, widgetTypes: Set<String>?, excludedTypes: Set<String>?): LiveData<List<Widget>> {
+        return widgetManager.getRoomWidgetsLive(roomId, widgetId, widgetTypes, excludedTypes)
+    }
+
+    override fun getUserWidgetsLive(widgetTypes: Set<String>?, excludedTypes: Set<String>?): LiveData<List<Widget>> {
+        return widgetManager.getUserWidgetsLive(widgetTypes, excludedTypes)
+    }
+
+    override fun getUserWidgets(widgetTypes: Set<String>?, excludedTypes: Set<String>?): List<Widget> {
+        return widgetManager.getUserWidgets(widgetTypes, excludedTypes)
     }
 
     override fun createRoomWidget(roomId: String, widgetId: String, content: Content, callback: MatrixCallback<Widget>): Cancelable {

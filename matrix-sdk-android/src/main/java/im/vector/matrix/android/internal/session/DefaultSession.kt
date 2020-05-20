@@ -34,6 +34,7 @@ import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
+import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerService
 import im.vector.matrix.android.api.session.profile.ProfileService
 import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
@@ -46,7 +47,6 @@ import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.session.user.UserService
 import im.vector.matrix.android.api.session.widgets.WidgetService
-import im.vector.matrix.android.api.session.widgets.WidgetURLBuilder
 import im.vector.matrix.android.internal.auth.SessionParamsStore
 import im.vector.matrix.android.internal.crypto.DefaultCryptoService
 import im.vector.matrix.android.internal.crypto.crosssigning.ShieldTrustUpdater
@@ -54,13 +54,11 @@ import im.vector.matrix.android.internal.database.LiveEntityObserver
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.session.identity.DefaultIdentityService
-import im.vector.matrix.android.internal.session.integrationmanager.IntegrationManager
 import im.vector.matrix.android.internal.session.room.timeline.TimelineEventDecryptor
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
 import im.vector.matrix.android.internal.session.sync.job.SyncThread
 import im.vector.matrix.android.internal.session.sync.job.SyncWorker
 import im.vector.matrix.android.internal.session.widgets.WidgetDependenciesHolder
-import im.vector.matrix.android.internal.session.widgets.WidgetManager
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.Dispatchers
@@ -109,6 +107,7 @@ internal class DefaultSession @Inject constructor(
         private val timelineEventDecryptor: TimelineEventDecryptor,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val defaultIdentityService: DefaultIdentityService,
+        private val integrationManagerService: IntegrationManagerService,
         private val taskExecutor: TaskExecutor,
         private val widgetDependenciesHolder: WidgetDependenciesHolder,
         private val shieldTrustUpdater: ShieldTrustUpdater)
@@ -128,8 +127,7 @@ internal class DefaultSession @Inject constructor(
         HomeServerCapabilitiesService by homeServerCapabilitiesService.get(),
         ProfileService by profileService.get(),
         AccountDataService by accountDataService.get(),
-        AccountService by accountService.get(),
-        WidgetService by widgetService.get() {
+        AccountService by accountService.get() {
 
     override val sharedSecretStorageService: SharedSecretStorageService
         get() = _sharedSecretStorageService.get()
@@ -242,6 +240,10 @@ internal class DefaultSession @Inject constructor(
     override fun cryptoService(): CryptoService = cryptoService.get()
 
     override fun identityService() = defaultIdentityService
+
+    override fun widgetService(): WidgetService = widgetService.get()
+
+    override fun integrationManagerService() = integrationManagerService
 
     override fun addListener(listener: Session.Listener) {
         sessionListeners.addListener(listener)

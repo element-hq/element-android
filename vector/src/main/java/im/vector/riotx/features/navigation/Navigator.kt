@@ -76,4 +76,7 @@ interface Navigator {
                   baseUrl: String,
                   token: String?,
                   requestCode: Int = ReviewTermsActivity.TERMS_REQUEST_CODE)
+
+    fun openIntegrationManager(context: Context, integId: String?, integType: String?)
+
 }

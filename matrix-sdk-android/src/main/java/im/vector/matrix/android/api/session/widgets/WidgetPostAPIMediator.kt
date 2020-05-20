@@ -58,10 +58,11 @@ interface WidgetPostAPIMediator {
     /**
      * Send an object response
      *
+     * @param klass the class of the response
      * @param response  the response
      * @param eventData the modular data
      */
-    fun sendObjectResponse(response: JsonDict?, eventData: JsonDict)
+    fun <T> sendObjectResponse(klass: Class<T>, response: T?, eventData: JsonDict)
 
     /**
      * Send success
@@ -82,6 +83,6 @@ interface WidgetPostAPIMediator {
         /**
          * Triggered when a widget is posting
          */
-        fun handleWidgetRequest(data: JsonDict): Boolean
+        fun handleWidgetRequest(eventData: JsonDict): Boolean
     }
 }

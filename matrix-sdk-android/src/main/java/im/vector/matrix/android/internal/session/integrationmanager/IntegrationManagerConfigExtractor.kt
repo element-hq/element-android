@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.integrationmanager
 
 import im.vector.matrix.android.api.auth.data.WellKnown
+import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerConfig
 import javax.inject.Inject
 
 internal class IntegrationManagerConfigExtractor @Inject constructor() {

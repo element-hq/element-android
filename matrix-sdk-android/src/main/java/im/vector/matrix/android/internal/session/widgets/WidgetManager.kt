@@ -19,6 +19,8 @@ package im.vector.matrix.android.internal.session.widgets
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.events.model.Content
@@ -34,8 +36,9 @@ import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.integrationmanager.IntegrationManager
 import im.vector.matrix.android.internal.session.room.state.StateEventDataSource
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 import im.vector.matrix.android.internal.session.user.accountdata.AccountDataDataSource
-import im.vector.matrix.android.internal.session.widgets.helper.extractWidgets
+import im.vector.matrix.android.internal.session.widgets.helper.extractWidgetSequence
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.launchToCallback
 import java.util.HashMap
@@ -66,6 +69,19 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
         lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
     }
 
+    fun getRoomWidgetsLive(
+            roomId: String,
+            widgetId: QueryStringValue = QueryStringValue.NoCondition,
+            widgetTypes: Set<String>? = null,
+            excludedTypes: Set<String>? = null
+    ): LiveData<List<Widget>> {
+        // Get all im.vector.modular.widgets state events in the room
+        val liveWidgetEvents = stateEventDataSource.getStateEventsLive(roomId, setOf(WIDGET_EVENT_TYPE), widgetId)
+        return Transformations.map(liveWidgetEvents) { widgetEvents ->
+            widgetEvents.mapEventsToWidgets(widgetTypes, excludedTypes)
+        }
+    }
+
     fun getRoomWidgets(
             roomId: String,
             widgetId: QueryStringValue = QueryStringValue.NoCondition,
@@ -74,6 +90,12 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
     ): List<Widget> {
         // Get all im.vector.modular.widgets state events in the room
         val widgetEvents: List<Event> = stateEventDataSource.getStateEvents(roomId, setOf(WIDGET_EVENT_TYPE), widgetId)
+        return widgetEvents.mapEventsToWidgets(widgetTypes, excludedTypes)
+    }
+
+    private fun List<Event>.mapEventsToWidgets(widgetTypes: Set<String>? = null,
+                                               excludedTypes: Set<String>? = null): List<Widget> {
+        val widgetEvents = this
         // Widget id -> widget
         val widgets: MutableMap<String, Widget> = HashMap()
         // Order widgetEvents with the last event first
@@ -102,12 +124,27 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
         return widgets.values.toList()
     }
 
+    fun getUserWidgetsLive(
+            widgetTypes: Set<String>? = null,
+            excludedTypes: Set<String>? = null
+    ): LiveData<List<Widget>> {
+        val widgetsAccountData = accountDataDataSource.getLiveAccountDataEvent(UserAccountData.TYPE_WIDGETS)
+        return Transformations.map(widgetsAccountData) {
+            it.getOrNull()?.mapToWidgets(widgetTypes, excludedTypes) ?: emptyList()
+        }
+    }
+
     fun getUserWidgets(
             widgetTypes: Set<String>? = null,
             excludedTypes: Set<String>? = null
     ): List<Widget> {
         val widgetsAccountData = accountDataDataSource.getAccountDataEvent(UserAccountData.TYPE_WIDGETS) ?: return emptyList()
-        return widgetsAccountData.extractWidgets()
+        return widgetsAccountData.mapToWidgets(widgetTypes, excludedTypes)
+    }
+
+    private fun UserAccountDataEvent.mapToWidgets(widgetTypes: Set<String>? = null,
+                                                  excludedTypes: Set<String>? = null): List<Widget> {
+        return extractWidgetSequence()
                 .filter {
                     val widgetType = it.type ?: return@filter false
                     (widgetTypes == null || widgetTypes.contains(widgetType))

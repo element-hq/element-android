@@ -31,6 +31,7 @@ import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.group.GroupService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilitiesService
 import im.vector.matrix.android.api.session.identity.IdentityService
+import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerService
 import im.vector.matrix.android.api.session.profile.ProfileService
 import im.vector.matrix.android.api.session.pushers.PushersService
 import im.vector.matrix.android.api.session.room.RoomDirectoryService
@@ -65,8 +66,7 @@ interface Session :
         HomeServerCapabilitiesService,
         SecureStorageService,
         AccountDataService,
-        AccountService,
-        WidgetService {
+        AccountService {
 
     /**
      * The params associated to the session
@@ -154,6 +154,16 @@ interface Session :
      * Returns the identity service associated with the session
      */
     fun identityService(): IdentityService
+
+    /**
+     * Returns the widget service associated with the session
+     */
+    fun widgetService(): WidgetService
+
+    /**
+     * Returns the integration manager service associated with the session
+     */
+    fun integrationManagerService(): IntegrationManagerService
 
     /**
      * Add a listener to the session.

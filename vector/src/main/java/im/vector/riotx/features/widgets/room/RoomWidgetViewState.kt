@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.widgets
+package im.vector.riotx.features.widgets.room
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
@@ -26,8 +26,17 @@ enum class WidgetStatus {
     WIDGET_ALLOWED
 }
 
+enum class WidgetKind {
+    ROOM,
+    USER,
+    INTEGRATION_MANAGER
+}
+
 data class WidgetViewState(
-        val widgetId: String,
+        val roomId: String,
+        val baseUrl: String,
+        val widgetId: String? = null,
+        val widgetKind: WidgetKind,
         val status: WidgetStatus = WidgetStatus.UNKNOWN,
         val formattedURL: Async<String> = Uninitialized,
         val webviewLoadedUrl: Async<String> = Uninitialized,
@@ -36,5 +45,10 @@ data class WidgetViewState(
         val createdByMe: Boolean = false
 ) : MvRxState {
 
-    constructor(widgetArgs: WidgetArgs) : this(widgetId = widgetArgs.widgetId)
+    constructor(widgetArgs: WidgetArgs) : this(
+            widgetKind = widgetArgs.kind,
+            baseUrl = widgetArgs.baseUrl,
+            roomId = widgetArgs.roomId,
+            widgetId = widgetArgs.widgetId
+    )
 }

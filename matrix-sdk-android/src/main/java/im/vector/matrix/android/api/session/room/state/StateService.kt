@@ -20,6 +20,8 @@ import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.Optional
 
 interface StateService {
@@ -27,7 +29,9 @@ interface StateService {
     /**
      * Update the topic of the room
      */
-    fun updateTopic(topic: String, callback: MatrixCallback<Unit>)
+    fun updateTopic(topic: String, callback: MatrixCallback<Unit>): Cancelable
+
+    fun sendStateEvent(eventType: String, stateKey: String?, body: JsonDict, callback: MatrixCallback<Unit>): Cancelable
 
     fun getStateEvent(eventType: String, stateKey: QueryStringValue = QueryStringValue.NoCondition): Event?
 

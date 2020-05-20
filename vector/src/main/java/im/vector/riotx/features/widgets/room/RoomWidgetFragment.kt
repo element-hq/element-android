@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.widgets
+package im.vector.riotx.features.widgets.room
 
 import android.os.Bundle
 import android.os.Parcelable
@@ -22,6 +22,8 @@ import android.view.View
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import im.vector.matrix.android.api.session.widgets.WidgetPostAPIMediator
+import im.vector.matrix.android.api.util.JsonDict
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.webview.WebViewEventListener
@@ -34,12 +36,15 @@ import javax.inject.Inject
 
 @Parcelize
 data class WidgetArgs(
-        val widgetId: String
+        val baseUrl: String,
+        val kind: WidgetKind,
+        val roomId: String,
+        val widgetId: String? = null
 ) : Parcelable
 
 class RoomWidgetFragment @Inject constructor(
         private val viewModelFactory: RoomWidgetViewModel.Factory
-) : VectorBaseFragment(), RoomWidgetViewModel.Factory by viewModelFactory, WebViewEventListener {
+) : VectorBaseFragment(), RoomWidgetViewModel.Factory by viewModelFactory, WebViewEventListener, WidgetPostAPIMediator.Handler {
 
     private val fragmentArgs: WidgetArgs by args()
     private val viewModel: RoomWidgetViewModel by fragmentViewModel()
@@ -49,10 +54,12 @@ class RoomWidgetFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         widgetWebView.setupForWidget(this)
+        viewModel.getPostAPIMediator().initialize(widgetWebView, this)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        viewModel.getPostAPIMediator().clear()
         widgetWebView.clearAfterWidget()
     }
 
@@ -77,6 +84,7 @@ class RoomWidgetFragment @Inject constructor(
     }
 
     override fun onPageStarted(url: String) {
+
     }
 
     override fun onPageFinished(url: String) {
@@ -84,5 +92,9 @@ class RoomWidgetFragment @Inject constructor(
     }
 
     override fun onPageError(url: String, errorCode: Int, description: String) {
+    }
+
+    override fun handleWidgetRequest(eventData: JsonDict): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

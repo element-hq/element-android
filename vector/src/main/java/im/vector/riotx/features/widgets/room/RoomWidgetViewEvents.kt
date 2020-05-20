@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.widgets
+package im.vector.riotx.features.widgets.room
 
-import im.vector.riotx.core.platform.VectorViewModelAction
+import im.vector.riotx.core.platform.VectorViewEvents
 
-sealed class RoomWidgetAction : VectorViewModelAction
+sealed class RoomWidgetViewEvents : VectorViewEvents

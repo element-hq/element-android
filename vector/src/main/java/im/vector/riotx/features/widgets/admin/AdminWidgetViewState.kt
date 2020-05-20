@@ -14,16 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.widgets
+package im.vector.riotx.features.widgets.admin
 
-import im.vector.matrix.android.api.util.JsonDict
+import com.airbnb.mvrx.MvRxState
 
-// Example of data:
-// {
-//   "event.data": {
-//       "action": "get_widgets",
-//       "room_id": "!byqyNXFYAGirEulaEm:matrix.org",
-//       "_id": "1526370173321-0.55myregve98-1"
-//   }
-// }
-typealias WidgetEventData = Map<String, JsonDict>
+data class AdminWidgetViewState(val boolean: Boolean = false) : MvRxState

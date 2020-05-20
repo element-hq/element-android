@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.widgets
+package im.vector.matrix.android.internal.session.integrationmanager
 
-import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.widgets.model.WidgetContent
+import dagger.Binds
+import dagger.Module
+import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerService
 
-data class Widget(
-        val widgetContent: WidgetContent,
-        val event: Event? = null
-)
+@Module
+internal abstract class IntegrationManagerModule {
 
+    @Binds
+    abstract fun bindIntegrationManagerService(integrationManagerService: DefaultIntegrationManagerService): IntegrationManagerService
+}

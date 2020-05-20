@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.api.session.widgets
 
+import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.events.model.Content
@@ -34,6 +35,23 @@ interface WidgetService {
             widgetTypes: Set<String>? = null,
             excludedTypes: Set<String>? = null
     ): List<Widget>
+
+    fun getRoomWidgetsLive(
+            roomId: String,
+            widgetId: QueryStringValue = QueryStringValue.NoCondition,
+            widgetTypes: Set<String>? = null,
+            excludedTypes: Set<String>? = null
+    ): LiveData<List<Widget>>
+
+    fun getUserWidgets(
+            widgetTypes: Set<String>? = null,
+            excludedTypes: Set<String>? = null
+    ): List<Widget>
+
+    fun getUserWidgetsLive(
+            widgetTypes: Set<String>? = null,
+            excludedTypes: Set<String>? = null
+    ): LiveData<List<Widget>>
 
     fun createRoomWidget(roomId: String, widgetId: String, content: Content, callback: MatrixCallback<Widget>): Cancelable
 

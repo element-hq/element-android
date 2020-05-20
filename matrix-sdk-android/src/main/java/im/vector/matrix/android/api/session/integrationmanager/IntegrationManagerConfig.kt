@@ -13,9 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package im.vector.matrix.android.api.session.integrationmanager
 
-package im.vector.riotx.features.widgets
+data class IntegrationManagerConfig(
+        val uiUrl: String,
+        val apiUrl: String,
+        val kind: Kind
+) {
 
-import im.vector.riotx.core.platform.VectorViewEvents
-
-sealed class RoomWidgetViewEvents : VectorViewEvents
+    // Order matters, first is preferred
+    enum class Kind {
+        ACCOUNT,
+        HOMESERVER,
+        DEFAULT
+    }
+}

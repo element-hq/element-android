@@ -26,6 +26,7 @@ import javax.inject.Inject
 internal interface SendStateTask : Task<SendStateTask.Params, Unit> {
     data class Params(
             val roomId: String,
+            val stateKey: String? = null,
             val eventType: String,
             val body: JsonDict
     )
@@ -38,7 +39,20 @@ internal class DefaultSendStateTask @Inject constructor(
 
     override suspend fun execute(params: SendStateTask.Params) {
         return executeRequest(eventBus) {
-            apiCall = roomAPI.sendStateEvent(params.roomId, params.eventType, params.body)
+            apiCall = if (params.stateKey == null) {
+                roomAPI.sendStateEvent(
+                        roomId = params.roomId,
+                        stateEventType = params.eventType,
+                        params = params.body
+                )
+            } else {
+                roomAPI.sendStateEvent(
+                        roomId = params.roomId,
+                        stateEventType = params.eventType,
+                        stateKey = params.stateKey,
+                        params = params.body
+                )
+            }
         }
     }
 }

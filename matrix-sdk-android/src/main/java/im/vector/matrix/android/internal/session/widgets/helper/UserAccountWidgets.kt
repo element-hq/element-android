@@ -21,7 +21,7 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.widgets.model.WidgetContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 
-internal fun UserAccountDataEvent.extractWidgets(): Sequence<WidgetContent> {
+internal fun UserAccountDataEvent.extractWidgetSequence(): Sequence<WidgetContent> {
     return content.asSequence()
             .mapNotNull {
                 @Suppress("UNCHECKED_CAST")

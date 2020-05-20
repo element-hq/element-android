@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.widgets
+package im.vector.riotx.features.widgets.admin
 
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -22,22 +22,20 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.matrix.android.api.session.Session
 import im.vector.riotx.core.platform.VectorViewModel
 
-class RoomWidgetViewModel @AssistedInject constructor(@Assisted initialState: WidgetViewState,
-                                                      private val session: Session)
-    : VectorViewModel<WidgetViewState, RoomWidgetAction, RoomWidgetViewEvents>(initialState) {
+class AdminWidgetViewModel @AssistedInject constructor(@Assisted initialState: AdminWidgetViewState)
+    : VectorViewModel<AdminWidgetViewState, AdminWidgetAction, AdminWidgetViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
-        fun create(initialState: WidgetViewState): RoomWidgetViewModel
+        fun create(initialState: AdminWidgetViewState): AdminWidgetViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomWidgetViewModel, WidgetViewState> {
+    companion object : MvRxViewModelFactory<AdminWidgetViewModel, AdminWidgetViewState> {
 
         @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: WidgetViewState): RoomWidgetViewModel? {
+        override fun create(viewModelContext: ViewModelContext, state: AdminWidgetViewState): AdminWidgetViewModel? {
             val factory = when (viewModelContext) {
                 is FragmentViewModelContext -> viewModelContext.fragment as? Factory
                 is ActivityViewModelContext -> viewModelContext.activity as? Factory
@@ -46,7 +44,7 @@ class RoomWidgetViewModel @AssistedInject constructor(@Assisted initialState: Wi
         }
     }
 
-    override fun handle(action: RoomWidgetAction) {
-        //TODO
+    override fun handle(action: AdminWidgetAction) {
+
     }
 }

@@ -48,11 +48,30 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
         return if (eventType.isNotEmpty() && userId.isNotEmpty()) {
             val powerLevel = getUserPowerLevel(userId)
             val minimumPowerLevel = powerLevelsContent.events[eventType]
-                                    ?: if (EventType.isStateEvent(eventType)) {
-                                        powerLevelsContent.stateDefault
-                                    } else {
-                                        powerLevelsContent.eventsDefault
-                                    }
+                    ?: if (EventType.isStateEvent(eventType)) {
+                        powerLevelsContent.stateDefault
+                    } else {
+                        powerLevelsContent.eventsDefault
+                    }
+            powerLevel >= minimumPowerLevel
+        } else false
+    }
+
+    /**
+     * Tell if an user can send an event of a certain type
+     *
+     * @param eventType the event type to check for
+     * @param userId          the user id
+     * @return true if the user can send this type of event
+     */
+    fun isAllowedToSend(isState: Boolean, userId: String): Boolean {
+        return if (userId.isNotEmpty()) {
+            val powerLevel = getUserPowerLevel(userId)
+            val minimumPowerLevel = if (isState) {
+                powerLevelsContent.stateDefault
+            } else {
+                powerLevelsContent.eventsDefault
+            }
             powerLevel >= minimumPowerLevel
         } else false
     }

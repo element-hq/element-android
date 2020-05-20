@@ -24,6 +24,8 @@ import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.state.StateService
+import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -55,17 +57,29 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
         return stateEventDataSource.getStateEventsLive(roomId, eventTypes, stateKey)
     }
 
-    override fun updateTopic(topic: String, callback: MatrixCallback<Unit>) {
-        val params = SendStateTask.Params(roomId,
-                EventType.STATE_ROOM_TOPIC,
-                mapOf(
-                        "topic" to topic
-                ))
-
-        sendStateTask
+    override fun sendStateEvent(
+            eventType: String,
+            stateKey: String?,
+            body: JsonDict,
+            callback: MatrixCallback<Unit>
+    ): Cancelable {
+        val params = SendStateTask.Params(
+                roomId = roomId,
+                eventType = eventType,
+                body = body
+        )
+        return sendStateTask
                 .configureWith(params) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
+    }
+
+    override fun updateTopic(topic: String, callback: MatrixCallback<Unit>): Cancelable {
+        return sendStateEvent(
+                eventType = EventType.STATE_ROOM_TOPIC,
+                body = mapOf("topic" to topic),
+                callback = callback
+        )
     }
 }

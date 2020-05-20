@@ -20,7 +20,7 @@ import im.vector.matrix.android.R
 import im.vector.matrix.android.api.session.widgets.WidgetURLBuilder
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.integrationmanager.IntegrationManager
-import im.vector.matrix.android.internal.session.integrationmanager.IntegrationManagerConfig
+import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerConfig
 import im.vector.matrix.android.internal.session.widgets.token.GetScalarTokenTask
 import im.vector.matrix.android.internal.util.StringProvider
 import java.net.URLEncoder

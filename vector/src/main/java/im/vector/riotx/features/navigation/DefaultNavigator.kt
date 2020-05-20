@@ -215,6 +215,10 @@ class DefaultNavigator @Inject constructor(
         fragment.startActivityForResult(intent, requestCode)
     }
 
+    override fun openIntegrationManager(context: Context) {
+        //TODO
+    }
+
     private fun startActivity(context: Context, intent: Intent, buildTask: Boolean) {
         if (buildTask) {
             val stackBuilder = TaskStackBuilder.create(context)

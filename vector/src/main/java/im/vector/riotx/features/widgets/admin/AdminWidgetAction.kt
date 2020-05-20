@@ -13,18 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.matrix.android.internal.session.integrationmanager
 
-data class IntegrationManagerConfig(
-        val uiUrl: String,
-        val apiUrl: String,
-        val kind: Kind
-) {
+package im.vector.riotx.features.widgets.admin
 
-    // Order matters, first is preferred
-    enum class Kind {
-        ACCOUNT,
-        HOMESERVER,
-        DEFAULT
-    }
-}
+import im.vector.riotx.core.platform.VectorViewModelAction
+
+sealed class AdminWidgetAction : VectorViewModelAction

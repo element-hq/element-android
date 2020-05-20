@@ -27,10 +27,10 @@ import timber.log.Timber
 import java.util.HashMap
 import javax.inject.Inject
 
-internal class DefaultWidgetPostAPIMediator @Inject constructor(moshi: Moshi,
+internal class DefaultWidgetPostAPIMediator @Inject constructor(private val moshi: Moshi,
                                                                 private val widgetPostMessageAPIProvider: WidgetPostMessageAPIProvider) : WidgetPostAPIMediator {
 
-    private val adapter = moshi.adapter<JsonDict>(JSON_DICT_PARAMETERIZED_TYPE)
+    private val jsonAdapter = moshi.adapter<JsonDict>(JSON_DICT_PARAMETERIZED_TYPE)
 
     private var handler: WidgetPostAPIMediator.Handler? = null
     private var webView: WebView? = null
@@ -58,7 +58,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(moshi: Moshi,
     fun onWidgetEvent(jsonEventData: String) {
         Timber.d("BRIDGE onWidgetEvent : $jsonEventData")
         try {
-            val dataAsDict = adapter.fromJson(jsonEventData)
+            val dataAsDict = jsonAdapter.fromJson(jsonEventData)
             @Suppress("UNCHECKED_CAST")
             val eventData = (dataAsDict?.get("event.data") as? JsonDict) ?: return
             onWidgetMessage(eventData)
@@ -111,11 +111,12 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(moshi: Moshi,
      * @param response  the response
      * @param eventData the modular data
      */
-    override fun sendObjectResponse(response: JsonDict?, eventData: JsonDict) {
+    override fun <T> sendObjectResponse(klass: Class<T>, response: T?, eventData: JsonDict) {
         var jsString: String? = null
         if (response != null) {
+            val objectAdapter = moshi.adapter(klass)
             try {
-                jsString = "JSON.parse('${adapter.toJson(response)}')"
+                jsString = "JSON.parse('${objectAdapter.toJson(response)}')"
             } catch (e: Exception) {
                 Timber.e(e, "## sendObjectResponse() : toJson failed ")
             }
@@ -130,7 +131,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(moshi: Moshi,
      */
     override fun sendSuccess(eventData: JsonDict) {
         val successResponse = mapOf("success" to true)
-        sendObjectResponse(successResponse, eventData)
+        sendObjectResponse(Map::class.java, successResponse, eventData)
     }
 
     /**
@@ -147,7 +148,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(moshi: Moshi,
         val subMap = HashMap<String, String>()
         subMap["message"] = message
         params["error"] = subMap
-        sendObjectResponse(params, eventData)
+        sendObjectResponse(Map::class.java, params, eventData)
     }
 
     /**

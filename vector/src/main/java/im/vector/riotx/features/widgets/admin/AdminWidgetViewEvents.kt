@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.widgets
+package im.vector.riotx.features.widgets.admin
 
-import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.widgets.model.WidgetContent
+import im.vector.riotx.core.platform.VectorViewEvents
 
-data class Widget(
-        val widgetContent: WidgetContent,
-        val event: Event? = null
-)
-
+sealed class AdminWidgetViewEvents : VectorViewEvents
