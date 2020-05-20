@@ -45,11 +45,12 @@ class VectorDateFormatter @Inject constructor(private val context: Context,
         if (time == null) {
             return ""
         }
-        return DateUtils.getRelativeDateTimeString(context,
-                                                   time,
-                                                   DateUtils.DAY_IN_MILLIS,
-                                                   2 * DateUtils.DAY_IN_MILLIS,
-                                                   DateUtils.FORMAT_SHOW_WEEKDAY
+        return DateUtils.getRelativeDateTimeString(
+                context,
+                time,
+                DateUtils.DAY_IN_MILLIS,
+                2 * DateUtils.DAY_IN_MILLIS,
+                DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_SHOW_TIME
         ).toString()
     }
 }

@@ -12,6 +12,7 @@ Improvements 🙌:
 Bugfix 🐛:
  - After jump to unread, newer messages are never loaded (#1008)
  - Fix issues with FontScale switch (#69, #645)
+ - "Seen by" uses 12h time (#1378)
 
 Translations 🗣:
  -
