@@ -56,6 +56,7 @@ import im.vector.matrix.android.api.session.room.model.relation.ReplyToContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.internal.di.UserId
+import im.vector.matrix.android.internal.extensions.subStringBetween
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
 import im.vector.matrix.android.internal.session.room.send.pills.TextPillsUtils
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -84,6 +85,7 @@ internal class LocalEchoEventFactory @Inject constructor(
 ) {
     // TODO Inject
     private val parser = Parser.builder().build()
+
     // TODO Inject
     private val renderer = HtmlRenderer.builder().build()
 
@@ -102,8 +104,15 @@ internal class LocalEchoEventFactory @Inject constructor(
             val document = parser.parse(source)
             val htmlText = renderer.render(document)
 
-            if (isFormattedTextPertinent(source, htmlText)) {
-                return TextContent(text.toString(), htmlText)
+            // Cleanup extra paragraph
+            val cleanHtmlText = if (htmlText.startsWith("<p>") && htmlText.endsWith("</p>\n")) {
+                htmlText.subStringBetween("<p>", "</p>\n")
+            } else {
+                htmlText
+            }
+
+            if (isFormattedTextPertinent(source, cleanHtmlText)) {
+                return TextContent(text.toString(), cleanHtmlText)
             }
         } else {
             // Try to detect pills
