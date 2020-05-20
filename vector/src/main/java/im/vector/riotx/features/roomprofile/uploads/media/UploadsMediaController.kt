@@ -58,7 +58,9 @@ class UploadsMediaController @Inject constructor(
 
     var listener: Listener? = null
 
-    private val itemSize = dimensionConverter.dpToPx(64)
+    private var idx = 0
+
+    private val itemSize = dimensionConverter.dpToPx(IMAGE_SIZE_DP)
 
     init {
         setData(null)
@@ -101,7 +103,8 @@ class UploadsMediaController @Inject constructor(
 
             if (data.hasMore) {
                 squareLoadingItem {
-                    id("loadMore")
+                    // Always use a different id, because we can be notified several times of visibility state changed
+                    id("loadMore${idx++}")
                     onVisibilityStateChanged { _, _, visibilityState ->
                         if (visibilityState == VisibilityState.VISIBLE) {
                             listener?.loadMore()

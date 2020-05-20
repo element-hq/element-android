@@ -51,6 +51,8 @@ class UploadsFileController @Inject constructor(
 
     var listener: Listener? = null
 
+    private var idx = 0
+
     init {
         setData(null)
     }
@@ -92,7 +94,8 @@ class UploadsFileController @Inject constructor(
 
             if (data.hasMore) {
                 loadingItem {
-                    id("loadMore")
+                    // Always use a different id, because we can be notified several times of visibility state changed
+                    id("loadMore${idx++}")
                     onVisibilityStateChanged { _, _, visibilityState ->
                         if (visibilityState == VisibilityState.VISIBLE) {
                             listener?.loadMore()
