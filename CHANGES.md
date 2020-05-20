@@ -23,7 +23,7 @@ Build 🧱:
  -
 
 Other changes:
- -
+ - support new key agreement method for SAS (#1374)
 
 Changes in RiotX 0.20.0 (2020-05-15)
 ===================================================
