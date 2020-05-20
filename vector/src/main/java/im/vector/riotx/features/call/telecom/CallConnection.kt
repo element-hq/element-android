@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.call
+package im.vector.riotx.features.call.telecom
 
 import android.content.Context
 import android.os.Build
 import android.telecom.Connection
 import android.telecom.DisconnectCause
 import androidx.annotation.RequiresApi
+import im.vector.riotx.features.call.VectorCallViewActions
+import im.vector.riotx.features.call.VectorCallViewModel
+import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import org.webrtc.Camera1Enumerator
 import org.webrtc.Camera2Enumerator
 import org.webrtc.IceCandidate

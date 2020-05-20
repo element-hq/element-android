@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.call
+package im.vector.riotx.features.call.telecom
 
 import android.content.ComponentName
 import android.content.Intent

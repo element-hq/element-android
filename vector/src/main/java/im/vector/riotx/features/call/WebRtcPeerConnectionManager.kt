@@ -18,13 +18,12 @@ package im.vector.riotx.features.call
 
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Icon
 import android.os.Build
-import android.os.Bundle
 import android.telecom.PhoneAccount
 import android.telecom.PhoneAccountHandle
 import android.telecom.TelecomManager
-import android.telecom.VideoProfile
 import androidx.core.content.ContextCompat
 import im.vector.matrix.android.api.session.call.CallsListener
 import im.vector.matrix.android.api.session.call.EglUtils
@@ -33,6 +32,8 @@ import im.vector.matrix.android.api.session.room.model.call.CallHangupContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
+import im.vector.riotx.features.call.service.CallHeadsUpService
+import im.vector.riotx.features.call.telecom.VectorConnectionService
 import org.webrtc.AudioSource
 import org.webrtc.AudioTrack
 import org.webrtc.DefaultVideoDecoderFactory
@@ -356,6 +357,9 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     override fun onCallInviteReceived(signalingRoomId: String, callInviteContent: CallInviteContent) {
+        val callHeadsUpServiceIntent = Intent(context, CallHeadsUpService::class.java)
+        ContextCompat.startForegroundService(context, callHeadsUpServiceIntent)
+        /*
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             ContextCompat.getSystemService(context, TelecomManager::class.java)?.let { telecomManager ->
                 phoneAccountHandle?.let { phoneAccountHandle ->
@@ -372,6 +376,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 }
             }
         }
+         */
     }
 
     override fun onCallAnswerReceived(callAnswerContent: CallAnswerContent) {

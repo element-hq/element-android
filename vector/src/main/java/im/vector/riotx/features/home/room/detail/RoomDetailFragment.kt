@@ -127,7 +127,7 @@ import im.vector.riotx.features.attachments.ContactAttachment
 import im.vector.riotx.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.riotx.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.riotx.features.attachments.toGroupedContentAttachmentData
-import im.vector.riotx.features.call.VectorCallActivity
+import im.vector.riotx.features.call.service.CallHeadsUpService
 import im.vector.riotx.features.command.Command
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.riotx.features.crypto.util.toImageRes
@@ -485,9 +485,13 @@ class RoomDetailFragment @Inject constructor(
             return true
         }
         if (item.itemId == R.id.voip_call) {
+            /*
             VectorCallActivity.newIntent(requireContext(), roomDetailArgs.roomId).let {
                 startActivity(it)
             }
+             */
+            val callHeadsUpServiceIntent = Intent(requireContext(), CallHeadsUpService::class.java)
+            ContextCompat.startForegroundService(requireContext(), callHeadsUpServiceIntent)
             return true
         }
         return super.onOptionsItemSelected(item)

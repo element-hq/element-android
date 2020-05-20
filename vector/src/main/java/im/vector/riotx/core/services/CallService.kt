@@ -24,7 +24,7 @@ import android.content.Intent
 import android.os.Binder
 import androidx.core.content.ContextCompat
 import im.vector.riotx.core.extensions.vectorComponent
-import im.vector.riotx.features.call.CallConnection
+import im.vector.riotx.features.call.telecom.CallConnection
 import im.vector.riotx.features.notifications.NotificationUtils
 import timber.log.Timber
 
