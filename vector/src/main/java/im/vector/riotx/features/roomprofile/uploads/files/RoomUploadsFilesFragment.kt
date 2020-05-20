@@ -18,6 +18,10 @@ package im.vector.riotx.features.roomprofile.uploads.files
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.room.uploads.UploadEvent
@@ -25,31 +29,37 @@ import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.trackItemsVisibilityChange
+import im.vector.riotx.core.platform.StateView
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.features.roomprofile.uploads.RoomUploadsAction
 import im.vector.riotx.features.roomprofile.uploads.RoomUploadsViewModel
-import kotlinx.android.synthetic.main.fragment_generic_recycler.*
+import kotlinx.android.synthetic.main.fragment_generic_state_view_recycler.*
 import javax.inject.Inject
 
 class RoomUploadsFilesFragment @Inject constructor(
         private val controller: UploadsFileController
-) : VectorBaseFragment(), UploadsFileController.Listener {
+) : VectorBaseFragment(),
+        UploadsFileController.Listener,
+        StateView.EventCallback {
 
     private val uploadsViewModel by parentFragmentViewModel(RoomUploadsViewModel::class)
 
-    override fun getLayoutResId() = R.layout.fragment_generic_recycler
+    override fun getLayoutResId() = R.layout.fragment_generic_state_view_recycler
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recyclerView.trackItemsVisibilityChange()
-        recyclerView.configureWith(controller, showDivider = true)
+        genericStateViewListStateView.contentView = genericStateViewListRecycler
+        genericStateViewListStateView.eventCallback = this
+
+        genericStateViewListRecycler.trackItemsVisibilityChange()
+        genericStateViewListRecycler.configureWith(controller, showDivider = true)
         controller.listener = this
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        recyclerView.cleanup()
+        genericStateViewListRecycler.cleanup()
         controller.listener = null
     }
 
@@ -58,7 +68,7 @@ class RoomUploadsFilesFragment @Inject constructor(
         uploadsViewModel.handle(RoomUploadsAction.Share(uploadEvent))
     }
 
-    override fun onRetry() {
+    override fun onRetryClicked() {
         uploadsViewModel.handle(RoomUploadsAction.Retry)
     }
 
@@ -75,6 +85,29 @@ class RoomUploadsFilesFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(uploadsViewModel) { state ->
-        controller.setData(state)
+        if (state.fileEvents.isEmpty()) {
+            when (state.asyncEventsRequest) {
+                is Loading -> {
+                    genericStateViewListStateView.state = StateView.State.Loading
+                }
+                is Fail    -> {
+                    genericStateViewListStateView.state = StateView.State.Error(errorFormatter.toHumanReadable(state.asyncEventsRequest.error))
+                }
+                is Success -> {
+                    if (state.hasMore) {
+                        // We need to load more items
+                        loadMore()
+                    } else {
+                        genericStateViewListStateView.state = StateView.State.Empty(
+                                title = getString(R.string.uploads_files_no_result),
+                                image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_file)
+                        )
+                    }
+                }
+            }
+        } else {
+            genericStateViewListStateView.state = StateView.State.Content
+            controller.setData(state)
+        }
     }
 }

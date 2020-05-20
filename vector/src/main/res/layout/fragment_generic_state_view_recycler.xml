@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<im.vector.riotx.core.platform.StateView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/genericStateViewListStateView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/genericStateViewListRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="always" />
+
+</im.vector.riotx.core.platform.StateView>

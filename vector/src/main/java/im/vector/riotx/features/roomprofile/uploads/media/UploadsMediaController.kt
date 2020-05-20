@@ -19,18 +19,12 @@ package im.vector.riotx.features.roomprofile.uploads.media
 import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.epoxy.VisibilityState
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.uploads.UploadEvent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
-import im.vector.riotx.R
-import im.vector.riotx.core.epoxy.errorWithRetryItem
-import im.vector.riotx.core.epoxy.noResultItem
 import im.vector.riotx.core.epoxy.squareLoadingItem
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.resources.StringProvider
@@ -48,7 +42,6 @@ class UploadsMediaController @Inject constructor(
 ) : TypedEpoxyController<RoomUploadsViewState>() {
 
     interface Listener {
-        fun onRetry()
         fun onOpenImageClicked(view: View, mediaData: ImageContentRenderer.Data)
         fun onOpenVideoClicked(view: View, mediaData: VideoContentRenderer.Data)
         fun loadMore()
@@ -67,46 +60,15 @@ class UploadsMediaController @Inject constructor(
     override fun buildModels(data: RoomUploadsViewState?) {
         data ?: return
 
-        if (data.mediaEvents.isEmpty()) {
-            when (data.asyncEventsRequest) {
-                is Loading -> {
-                    squareLoadingItem {
-                        id("loading")
-                    }
-                }
-                is Fail    -> {
-                    errorWithRetryItem {
-                        id("error")
-                        text(errorFormatter.toHumanReadable(data.asyncEventsRequest.error))
-                        listener { listener?.onRetry() }
-                    }
-                }
-                is Success -> {
-                    if (data.hasMore) {
-                        // We need to load more items
-                        listener?.loadMore()
-                        squareLoadingItem {
-                            id("loading")
-                        }
-                    } else {
-                        noResultItem {
-                            id("noResult")
-                            text(stringProvider.getString(R.string.uploads_media_no_result))
-                        }
-                    }
-                }
-            }
-        } else {
-            buildMediaItems(data.mediaEvents)
+        buildMediaItems(data.mediaEvents)
 
-            if (data.hasMore) {
-                squareLoadingItem {
-                    // Always use a different id, because we can be notified several times of visibility state changed
-                    id("loadMore${idx++}")
-                    onVisibilityStateChanged { _, _, visibilityState ->
-                        if (visibilityState == VisibilityState.VISIBLE) {
-                            listener?.loadMore()
-                        }
+        if (data.hasMore) {
+            squareLoadingItem {
+                // Always use a different id, because we can be notified several times of visibility state changed
+                id("loadMore${idx++}")
+                onVisibilityStateChanged { _, _, visibilityState ->
+                    if (visibilityState == VisibilityState.VISIBLE) {
+                        listener?.loadMore()
                     }
                 }
             }

@@ -18,28 +18,20 @@ package im.vector.riotx.features.roomprofile.uploads.files
 
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.epoxy.VisibilityState
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
 import im.vector.matrix.android.api.session.room.uploads.UploadEvent
 import im.vector.riotx.R
 import im.vector.riotx.core.date.VectorDateFormatter
-import im.vector.riotx.core.epoxy.errorWithRetryItem
 import im.vector.riotx.core.epoxy.loadingItem
-import im.vector.riotx.core.epoxy.noResultItem
-import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.roomprofile.uploads.RoomUploadsViewState
 import javax.inject.Inject
 
 class UploadsFileController @Inject constructor(
-        private val errorFormatter: ErrorFormatter,
         private val stringProvider: StringProvider,
         private val dateFormatter: VectorDateFormatter
 ) : TypedEpoxyController<RoomUploadsViewState>() {
 
     interface Listener {
-        fun onRetry()
         fun loadMore()
         fun onOpenClicked(uploadEvent: UploadEvent)
         fun onDownloadClicked(uploadEvent: UploadEvent)
@@ -57,46 +49,15 @@ class UploadsFileController @Inject constructor(
     override fun buildModels(data: RoomUploadsViewState?) {
         data ?: return
 
-        if (data.fileEvents.isEmpty()) {
-            when (data.asyncEventsRequest) {
-                is Loading -> {
-                    loadingItem {
-                        id("loading")
-                    }
-                }
-                is Fail    -> {
-                    errorWithRetryItem {
-                        id("error")
-                        text(errorFormatter.toHumanReadable(data.asyncEventsRequest.error))
-                        listener { listener?.onRetry() }
-                    }
-                }
-                is Success -> {
-                    if (data.hasMore) {
-                        // We need to load more items
-                        listener?.loadMore()
-                        loadingItem {
-                            id("loading")
-                        }
-                    } else {
-                        noResultItem {
-                            id("noResult")
-                            text(stringProvider.getString(R.string.uploads_files_no_result))
-                        }
-                    }
-                }
-            }
-        } else {
-            buildFileItems(data.fileEvents)
+        buildFileItems(data.fileEvents)
 
-            if (data.hasMore) {
-                loadingItem {
-                    // Always use a different id, because we can be notified several times of visibility state changed
-                    id("loadMore${idx++}")
-                    onVisibilityStateChanged { _, _, visibilityState ->
-                        if (visibilityState == VisibilityState.VISIBLE) {
-                            listener?.loadMore()
-                        }
+        if (data.hasMore) {
+            loadingItem {
+                // Always use a different id, because we can be notified several times of visibility state changed
+                id("loadMore${idx++}")
+                onVisibilityStateChanged { _, _, visibilityState ->
+                    if (visibilityState == VisibilityState.VISIBLE) {
+                        listener?.loadMore()
                     }
                 }
             }
