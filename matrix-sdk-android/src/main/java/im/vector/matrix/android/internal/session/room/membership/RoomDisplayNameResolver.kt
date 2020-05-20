@@ -126,6 +126,7 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
         return name ?: roomId
     }
 
+    /** See [im.vector.matrix.android.api.session.room.timeline.TimelineEvent.getDisambiguatedDisplayName] */
     private fun resolveRoomMemberName(roomMemberSummary: RoomMemberSummaryEntity?,
                                       roomMemberHelper: RoomMemberHelper): String? {
         if (roomMemberSummary == null) return null

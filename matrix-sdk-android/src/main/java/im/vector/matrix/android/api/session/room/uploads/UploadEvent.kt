@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.roomprofile.uploads
+package im.vector.matrix.android.api.session.room.uploads
 
-import im.vector.matrix.android.api.session.room.uploads.UploadEvent
-import im.vector.riotx.core.platform.VectorViewModelAction
+import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.model.message.MessageWithAttachmentContent
 
-sealed class RoomUploadsAction : VectorViewModelAction {
-    data class Download(val uploadEvent: UploadEvent) : RoomUploadsAction()
-    data class Share(val uploadEvent: UploadEvent) : RoomUploadsAction()
-
-    object Retry : RoomUploadsAction()
-    object LoadMore : RoomUploadsAction()
-}
+/**
+ * Wrapper around on Event.
+ * Similar to [im.vector.matrix.android.api.session.room.timeline.TimelineEvent], contains an Event with extra useful data
+ */
+data class UploadEvent(
+        val root: Event,
+        val eventId: String,
+        val contentWithAttachmentContent: MessageWithAttachmentContent,
+        val uploadSenderInfo: UploadSenderInfo
+)

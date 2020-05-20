@@ -27,11 +27,8 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.isPreviewableMessage
-import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.file.FileService
-import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.uploads.GetUploadsResult
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
@@ -100,8 +97,10 @@ class RoomUploadsViewModel @AssistedInject constructor(
                 token = result.nextToken
 
                 val groupedEvents = result.events
-                        .filter { it.getClearType() == EventType.MESSAGE && it.getClearContent()?.toModel<MessageContent>() != null }
-                        .groupBy { it.isPreviewableMessage() }
+                        .groupBy {
+                            it.contentWithAttachmentContent.msgType == MessageType.MSGTYPE_IMAGE
+                                    || it.contentWithAttachmentContent.msgType == MessageType.MSGTYPE_VIDEO
+                        }
 
                 setState {
                     copy(
@@ -139,10 +138,10 @@ class RoomUploadsViewModel @AssistedInject constructor(
                 val file = awaitCallback<File> {
                     session.downloadFile(
                             FileService.DownloadMode.FOR_EXTERNAL_SHARE,
-                            action.event.eventId ?: "",
-                            action.messageContent.body,
-                            action.messageContent.getFileUrl(),
-                            action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
+                            action.uploadEvent.eventId,
+                            action.uploadEvent.contentWithAttachmentContent.body,
+                            action.uploadEvent.contentWithAttachmentContent.getFileUrl(),
+                            action.uploadEvent.contentWithAttachmentContent.encryptedFileInfo?.toElementToDecrypt(),
                             it
                     )
                 }
@@ -159,14 +158,14 @@ class RoomUploadsViewModel @AssistedInject constructor(
                 val file = awaitCallback<File> {
                     session.downloadFile(
                             FileService.DownloadMode.FOR_EXTERNAL_SHARE,
-                            action.event.eventId ?: "",
-                            action.messageContent.body,
-                            action.messageContent.getFileUrl(),
-                            action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
+                            action.uploadEvent.eventId,
+                            action.uploadEvent.contentWithAttachmentContent.body,
+                            action.uploadEvent.contentWithAttachmentContent.getFileUrl(),
+                            action.uploadEvent.contentWithAttachmentContent.encryptedFileInfo?.toElementToDecrypt(),
                             it)
 
                 }
-                _viewEvents.post(RoomUploadsViewEvents.FileReadyForSaving(file, action.messageContent.body))
+                _viewEvents.post(RoomUploadsViewEvents.FileReadyForSaving(file, action.uploadEvent.contentWithAttachmentContent.body))
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomUploadsViewEvents.Failure(failure))
             }

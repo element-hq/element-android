@@ -228,12 +228,3 @@ fun Event.isVideoMessage(): Boolean {
         else                      -> false
     }
 }
-
-fun Event.isPreviewableMessage(): Boolean {
-    return getClearType() == EventType.MESSAGE
-            && when (getClearContent()?.toModel<MessageContent>()?.msgType) {
-        MessageType.MSGTYPE_IMAGE,
-        MessageType.MSGTYPE_VIDEO -> true
-        else                      -> false
-    }
-}

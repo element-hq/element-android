@@ -19,16 +19,16 @@ package im.vector.riotx.features.roomprofile.uploads
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.session.room.uploads.UploadEvent
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
 
 data class RoomUploadsViewState(
         val roomId: String = "",
         val roomSummary: Async<RoomSummary> = Uninitialized,
         // Store cumul of pagination result, grouped by type
-        val mediaEvents: List<Event> = emptyList(),
-        val fileEvents: List<Event> = emptyList(),
+        val mediaEvents: List<UploadEvent> = emptyList(),
+        val fileEvents: List<UploadEvent> = emptyList(),
         // Current pagination request
         val asyncEventsRequest: Async<Unit> = Uninitialized,
         // True if more result are available server side

@@ -16,10 +16,17 @@
 
 package im.vector.matrix.android.internal.session.room.uploads
 
+import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageWithAttachmentContent
 import im.vector.matrix.android.api.session.room.uploads.GetUploadsResult
+import im.vector.matrix.android.api.session.room.uploads.UploadEvent
+import im.vector.matrix.android.api.session.room.uploads.UploadSenderInfo
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.filter.FilterFactory
 import im.vector.matrix.android.internal.session.room.RoomAPI
+import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import im.vector.matrix.android.internal.session.room.timeline.PaginationDirection
 import im.vector.matrix.android.internal.session.room.timeline.PaginationResponse
 import im.vector.matrix.android.internal.session.sync.SyncTokenStore
@@ -39,6 +46,7 @@ internal interface GetUploadsTask : Task<GetUploadsTask.Params, GetUploadsResult
 internal class DefaultGetUploadsTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val tokenStore: SyncTokenStore,
+        private val monarchy: Monarchy,
         private val eventBus: EventBus)
     : GetUploadsTask {
 
@@ -50,8 +58,42 @@ internal class DefaultGetUploadsTask @Inject constructor(
             apiCall = roomAPI.getRoomMessagesFrom(params.roomId, since, PaginationDirection.BACKWARDS.value, params.numberOfEvents, filter)
         }
 
+        var uploadEvents = listOf<UploadEvent>()
+
+        val cacheOfSenderInfos = mutableMapOf<String, UploadSenderInfo>()
+
+        // Get a snapshot of all room members
+        monarchy.doWithRealm { realm ->
+            val roomMemberHelper = RoomMemberHelper(realm, params.roomId)
+
+            uploadEvents = chunk.events.mapNotNull { event ->
+                val eventId = event.eventId ?: return@mapNotNull null
+                val messageContent = event.getClearContent()?.toModel<MessageContent>() ?: return@mapNotNull null
+                val messageWithAttachmentContent = (messageContent as? MessageWithAttachmentContent) ?: return@mapNotNull null
+                val senderId = event.senderId ?: return@mapNotNull null
+
+                val senderInfo = cacheOfSenderInfos.getOrPut(senderId) {
+                    val roomMemberSummaryEntity = roomMemberHelper.getLastRoomMember(senderId)
+                    UploadSenderInfo(
+                            senderId = senderId,
+                            senderName = roomMemberSummaryEntity?.displayName,
+                            isUniqueDisplayName = roomMemberHelper.isUniqueDisplayName(roomMemberSummaryEntity?.displayName),
+                            senderAvatar = roomMemberSummaryEntity?.avatarUrl
+                    )
+                }
+
+                UploadEvent(
+                        root = event,
+                        eventId = eventId,
+                        contentWithAttachmentContent = messageWithAttachmentContent,
+                        uploadSenderInfo = senderInfo
+                )
+            }
+        }
+
+
         return GetUploadsResult(
-                events = chunk.events,
+                events = uploadEvents,
                 nextToken = chunk.end ?: "",
                 hasMore = chunk.hasMore()
         )

@@ -22,13 +22,11 @@ import com.airbnb.epoxy.VisibilityState
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
-import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.events.model.isImageMessage
-import im.vector.matrix.android.api.session.events.model.isVideoMessage
-import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
+import im.vector.matrix.android.api.session.room.uploads.UploadEvent
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.errorWithRetryItem
@@ -115,13 +113,13 @@ class UploadsMediaController @Inject constructor(
         }
     }
 
-    private fun buildMediaItems(mediaEvents: List<Event>) {
-        mediaEvents.forEach { event ->
-            when {
-                event.isImageMessage() -> {
-                    val data = event.toImageContentRendererData() ?: return@forEach
+    private fun buildMediaItems(mediaEvents: List<UploadEvent>) {
+        mediaEvents.forEach { uploadEvent ->
+            when (uploadEvent.contentWithAttachmentContent.msgType) {
+                MessageType.MSGTYPE_IMAGE -> {
+                    val data = uploadEvent.toImageContentRendererData() ?: return@forEach
                     uploadsImageItem {
-                        id(event.eventId ?: "")
+                        id(uploadEvent.eventId)
                         imageContentRenderer(imageContentRenderer)
                         data(data)
                         listener(object : UploadsImageItem.Listener {
@@ -131,10 +129,10 @@ class UploadsMediaController @Inject constructor(
                         })
                     }
                 }
-                event.isVideoMessage() -> {
-                    val data = event.toVideoContentRendererData() ?: return@forEach
+                MessageType.MSGTYPE_VIDEO -> {
+                    val data = uploadEvent.toVideoContentRendererData() ?: return@forEach
                     uploadsVideoItem {
-                        id(event.eventId ?: "")
+                        id(uploadEvent.eventId)
                         imageContentRenderer(imageContentRenderer)
                         data(data)
                         listener(object : UploadsVideoItem.Listener {
@@ -148,11 +146,11 @@ class UploadsMediaController @Inject constructor(
         }
     }
 
-    private fun Event.toImageContentRendererData(): ImageContentRenderer.Data? {
-        val messageContent = getClearContent()?.toModel<MessageImageContent>() ?: return null
+    private fun UploadEvent.toImageContentRendererData(): ImageContentRenderer.Data? {
+        val messageContent = (contentWithAttachmentContent as? MessageImageContent) ?: return null
 
         return ImageContentRenderer.Data(
-                eventId = eventId ?: "",
+                eventId = eventId,
                 filename = messageContent.body,
                 url = messageContent.getFileUrl(),
                 elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
@@ -163,11 +161,11 @@ class UploadsMediaController @Inject constructor(
         )
     }
 
-    private fun Event.toVideoContentRendererData(): VideoContentRenderer.Data? {
-        val messageContent = getClearContent()?.toModel<MessageVideoContent>() ?: return null
+    private fun UploadEvent.toVideoContentRendererData(): VideoContentRenderer.Data? {
+        val messageContent = (contentWithAttachmentContent as? MessageVideoContent) ?: return null
 
         val thumbnailData = ImageContentRenderer.Data(
-                eventId = eventId ?: "",
+                eventId = eventId,
                 filename = messageContent.body,
                 url = messageContent.videoInfo?.thumbnailFile?.url ?: messageContent.videoInfo?.thumbnailUrl,
                 elementToDecrypt = messageContent.videoInfo?.thumbnailFile?.toElementToDecrypt(),
@@ -178,7 +176,7 @@ class UploadsMediaController @Inject constructor(
         )
 
         return VideoContentRenderer.Data(
-                eventId = eventId ?: "",
+                eventId = eventId,
                 filename = messageContent.body,
                 url = messageContent.getFileUrl(),
                 elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),

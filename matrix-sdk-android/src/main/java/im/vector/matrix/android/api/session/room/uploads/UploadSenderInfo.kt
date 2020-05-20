@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.roomprofile.uploads
+package im.vector.matrix.android.api.session.room.uploads
 
-import im.vector.matrix.android.api.session.room.uploads.UploadEvent
-import im.vector.riotx.core.platform.VectorViewModelAction
-
-sealed class RoomUploadsAction : VectorViewModelAction {
-    data class Download(val uploadEvent: UploadEvent) : RoomUploadsAction()
-    data class Share(val uploadEvent: UploadEvent) : RoomUploadsAction()
-
-    object Retry : RoomUploadsAction()
-    object LoadMore : RoomUploadsAction()
+// TODO Maybe use this model for TimelineEvent as well
+data class UploadSenderInfo(
+        val senderId: String,
+        val senderName: String?,
+        val isUniqueDisplayName: Boolean,
+        val senderAvatar: String?
+) {
+    fun getDisambiguatedDisplayName(): String {
+        return when {
+            senderName.isNullOrBlank() -> senderId
+            isUniqueDisplayName        -> senderName
+            else                       -> "$senderName (${senderId})"
+        }
+    }
 }
