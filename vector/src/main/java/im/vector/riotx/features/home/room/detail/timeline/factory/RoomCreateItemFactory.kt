@@ -21,21 +21,21 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.create.RoomCreateContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.R
-import im.vector.riotx.core.resources.ColorProvider
+import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.core.resources.UserPreferencesProvider
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
-import im.vector.riotx.features.home.room.detail.timeline.item.RoomCreateItem
 import im.vector.riotx.features.home.room.detail.timeline.item.RoomCreateItem_
 import me.gujun.android.span.span
 import javax.inject.Inject
 
-class RoomCreateItemFactory @Inject constructor(private val colorProvider: ColorProvider,
-                                                private val stringProvider: StringProvider) {
+class RoomCreateItemFactory @Inject constructor(private val stringProvider: StringProvider,
+                                                private val userPreferencesProvider: UserPreferencesProvider,
+                                                private val noticeItemFactory: NoticeItemFactory) {
 
-    fun create(event: TimelineEvent, callback: TimelineEventController.Callback?): RoomCreateItem? {
-        val createRoomContent = event.root.getClearContent().toModel<RoomCreateContent>()
-                                ?: return null
-        val predecessorId = createRoomContent.predecessor?.roomId ?: return null
+    fun create(event: TimelineEvent, callback: TimelineEventController.Callback?): VectorEpoxyModel<*>? {
+        val createRoomContent = event.root.getClearContent().toModel<RoomCreateContent>() ?: return null
+        val predecessorId = createRoomContent.predecessor?.roomId ?: return defaultRendering(event, callback)
         val roomLink = PermalinkFactory.createPermalink(predecessorId) ?: return null
         val text = span {
             +stringProvider.getString(R.string.room_tombstone_continuation_description)
@@ -47,5 +47,13 @@ class RoomCreateItemFactory @Inject constructor(private val colorProvider: Color
         }
         return RoomCreateItem_()
                 .text(text)
+    }
+
+    private fun defaultRendering(event: TimelineEvent, callback: TimelineEventController.Callback?): VectorEpoxyModel<*>? {
+        return if (userPreferencesProvider.shouldShowHiddenEvents()) {
+            noticeItemFactory.create(event, false, callback)
+        } else {
+            null
+        }
     }
 }

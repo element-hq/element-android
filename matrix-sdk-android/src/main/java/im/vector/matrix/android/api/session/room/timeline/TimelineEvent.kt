@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.api.session.room.timeline
 
+import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.RelationType
@@ -44,6 +45,12 @@ data class TimelineEvent(
         val annotations: EventAnnotationsSummary? = null,
         val readReceipts: List<ReadReceipt> = emptyList()
 ) {
+
+    init {
+        if (BuildConfig.DEBUG) {
+            assert(eventId == root.eventId)
+        }
+    }
 
     val metadata = HashMap<String, Any>()
 

@@ -32,6 +32,7 @@ import im.vector.matrix.android.api.session.room.model.RoomMemberContent
 import im.vector.matrix.android.api.session.room.model.RoomNameContent
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
+import im.vector.matrix.android.api.session.room.model.create.RoomCreateContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.crypto.model.event.EncryptionEventContent
@@ -47,6 +48,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
     fun format(timelineEvent: TimelineEvent): CharSequence? {
         return when (val type = timelineEvent.root.getClearType()) {
             EventType.STATE_ROOM_JOIN_RULES         -> formatJoinRulesEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
+            EventType.STATE_ROOM_CREATE             -> formatRoomCreateEvent(timelineEvent.root)
             EventType.STATE_ROOM_NAME               -> formatRoomNameEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.STATE_ROOM_TOPIC              -> formatRoomTopicEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
             EventType.STATE_ROOM_MEMBER             -> formatRoomMemberEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
@@ -96,6 +98,12 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
 
     private fun formatDebug(event: Event): CharSequence? {
         return "{ \"type\": ${event.getClearType()} }"
+    }
+
+    private fun formatRoomCreateEvent(event: Event): CharSequence? {
+        return event.getClearContent().toModel<RoomCreateContent>()
+                ?.takeIf { it.creator.isNullOrBlank().not() }
+                ?.let { sp.getString(R.string.notice_room_created, it.creator) }
     }
 
     private fun formatRoomNameEvent(event: Event, senderName: String?): CharSequence? {

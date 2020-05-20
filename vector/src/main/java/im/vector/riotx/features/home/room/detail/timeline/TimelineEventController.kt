@@ -35,6 +35,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.epoxy.LoadingItem_
 import im.vector.riotx.core.extensions.localDateTime
+import im.vector.riotx.core.extensions.nextOrNull
 import im.vector.riotx.features.home.room.detail.RoomDetailAction
 import im.vector.riotx.features.home.room.detail.RoomDetailViewState
 import im.vector.riotx.features.home.room.detail.UnreadState
@@ -45,7 +46,6 @@ import im.vector.riotx.features.home.room.detail.timeline.helper.ReadMarkerVisib
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineEventDiffUtilCallback
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineEventVisibilityStateChangedListener
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
-import im.vector.riotx.features.home.room.detail.timeline.helper.nextOrNull
 import im.vector.riotx.features.home.room.detail.timeline.item.BaseEventItem
 import im.vector.riotx.features.home.room.detail.timeline.item.BasedMergedItem
 import im.vector.riotx.features.home.room.detail.timeline.item.DaySeparatorItem
