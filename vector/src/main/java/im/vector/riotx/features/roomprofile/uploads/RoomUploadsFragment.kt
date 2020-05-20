@@ -18,11 +18,11 @@ package im.vector.riotx.features.roomprofile.uploads
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.net.toUri
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
@@ -77,9 +77,9 @@ class RoomUploadsFragment @Inject constructor(
                             mediaMimeType = getMimeTypeFromUri(requireContext(), it.file.toUri())
                     )
                     if (saved) {
-                        Toast.makeText(requireContext(), R.string.media_file_added_to_gallery, Toast.LENGTH_LONG).show()
+                        Snackbar.make(roomUploadsCoordinator, R.string.media_file_added_to_gallery, Snackbar.LENGTH_LONG).show()
                     } else {
-                        Toast.makeText(requireContext(), R.string.error_adding_media_file_to_gallery, Toast.LENGTH_LONG).show()
+                        Snackbar.make(roomUploadsCoordinator, R.string.error_adding_media_file_to_gallery, Snackbar.LENGTH_LONG).show()
                     }
                 }
                 is RoomUploadsViewEvents.Failure             -> showFailure(it.throwable)
