@@ -57,7 +57,7 @@ class RoomUploadsMediaFragment @Inject constructor(
     private fun getNumberOfColumns(): Int {
         val displayMetrics = DisplayMetrics()
         requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-        return dimensionConverter.pdToDp(displayMetrics.widthPixels) / IMAGE_SIZE_DP
+        return dimensionConverter.pxToDp(displayMetrics.widthPixels) / IMAGE_SIZE_DP
     }
 
     override fun onDestroyView() {
