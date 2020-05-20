@@ -350,4 +350,46 @@
 \n
 \nVänligen tillåt åtkomst i nästa pop-up för att kunna skicka filer från din telefon.</string>
     <string name="permissions_rationale_msg_camera">Riot behöver tillstånd att komma åt din kamera för att kunna ta bilder och hålla videosamtal.</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nVänligen ge tillgång i nästa pop-up för att kunna utföra samtalet."</string>
+    <string name="permissions_rationale_msg_record_audio">Riot behöver tillstånd att komma åt din mikrofon för hålla röstsamtal.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nVänligen ge tillgång i nästa pop-up för att kunna utföra samtalet."</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot behöver tillstånd att komma åt din kamera och mikrofon för att kunna utföra videosamtal.
+\n
+\nVänligen ge tillgång i nästa pop-up för att kunna utföra samtalet.</string>
+    <string name="permissions_rationale_msg_contacts">Riot kan kolla i din adressbok för att hitta andra Matrixanvändare baserat på deras e-postadresser och telefonnummer. Om du går med på att dela din adressbok för detta ändamål, vänligen ge tillgång i nästa pop-up.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot kan kolla i din adressbok för att hitta andra Matrixanvändare baserat på deras e-postadresser och telefonnummer.
+\n
+\nVill du dela din adressbok för detta ändamål\?</string>
+
+    <string name="permissions_action_not_performed_missing_permissions">Tyvärr. Handlingen utfördes inte på grund av saknade rättigheter</string>
+
+    <string name="media_slider_saved">Sparad</string>
+    <string name="media_slider_saved_message">Spara till nedladdningar\?</string>
+    <string name="yes">JA</string>
+    <string name="no">NEJ</string>
+    <string name="_continue">Fortsätt</string>
+
+    <string name="remove">Ta bort</string>
+    <string name="join">Gå med</string>
+    <string name="preview">Förhandsvisning</string>
+    <string name="reject">Avslå</string>
+
+    <string name="list_members">Lista medlemmar</string>
+    <string name="open_chat_header">Öppna rubrik</string>
+    <string name="room_sync_in_progress">Synkroniserar…</string>
+    <string name="room_jump_to_first_unread">Hoppa till det första olästa meddelandet.</string>
+
+    <string name="room_preview_invitation_format">Du har blivit inbjuden till det här rummet av %s</string>
+    <string name="room_preview_unlinked_email_warning">Denna inbjudan skickades till %s, vilket inte är associerat med det här kontot.
+\nDu kanske vill logga in på ett annat konto eller lägga till den här e-postadressen till det här kontot.</string>
+    <string name="room_preview_try_join_an_unknown_room">Du försöker komma åt %s. Skulle du vilja gå med för att delta i diskussionen\?</string>
+    <string name="room_preview_try_join_an_unknown_room_default">ett rum</string>
+    <string name="room_preview_room_interactions_disabled">Det här är en förhandsvisning av det här rummet. Rumsinteraktioner har blivit inaktiverade.</string>
+    <string name="invite_no_identity_server_error">Lägg till en identitetsserver i dina inställningar för att utföra den här handlingen.</string>
+    <string name="room_creation_title">Ny chatt</string>
+    <string name="room_creation_add_member">Lägg till medlem</string>
     </resources>
