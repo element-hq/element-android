@@ -39,10 +39,10 @@ import im.vector.matrix.android.internal.crypto.OutgoingSecretRequest
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
 import im.vector.matrix.android.internal.crypto.model.CryptoCrossSigningKey
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
+import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
 import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import im.vector.matrix.android.internal.crypto.model.OlmSessionWrapper
 import im.vector.matrix.android.internal.crypto.model.event.RoomKeyWithHeldContent
-import im.vector.matrix.android.internal.crypto.model.event.WithHeldCode
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.RoomKeyRequestBody
 import im.vector.matrix.android.internal.crypto.model.toEntity
@@ -69,11 +69,13 @@ import im.vector.matrix.android.internal.crypto.store.db.model.OlmSessionEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.OlmSessionEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.OutgoingGossipingRequestEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.OutgoingGossipingRequestEntityFields
+import im.vector.matrix.android.internal.crypto.store.db.model.SharedSessionEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.TrustLevelEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.UserEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.UserEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.WithHeldSessionEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.createPrimaryKey
+import im.vector.matrix.android.internal.crypto.store.db.query.create
 import im.vector.matrix.android.internal.crypto.store.db.query.delete
 import im.vector.matrix.android.internal.crypto.store.db.query.get
 import im.vector.matrix.android.internal.crypto.store.db.query.getById
@@ -1457,6 +1459,42 @@ internal class RealmCryptoStore @Inject constructor(
                         senderKey = it.senderKey
                 )
             }
+        }
+    }
+
+    override fun markedSessionAsShared(roomId: String?, sessionId: String, userId: String, deviceId: String, chainIndex: Int) {
+        doRealmTransaction(realmConfiguration) { realm ->
+            SharedSessionEntity.create(
+                    realm = realm,
+                    roomId = roomId,
+                    sessionId = sessionId,
+                    userId = userId,
+                    deviceId = deviceId,
+                    chainIndex = chainIndex
+            )
+        }
+    }
+
+    override fun wasSessionSharedWithUser(roomId: String?, sessionId: String, userId: String, deviceId: String): IMXCryptoStore.SharedSessionResult {
+        return doWithRealm(realmConfiguration) { realm ->
+            SharedSessionEntity.get(realm, roomId, sessionId, userId, deviceId)?.let {
+                IMXCryptoStore.SharedSessionResult(true, it.chainIndex)
+            } ?: IMXCryptoStore.SharedSessionResult(false, null)
+        }
+    }
+
+    override fun getSharedWithInfo(roomId: String?, sessionId: String): MXUsersDevicesMap<Int> {
+        return doWithRealm(realmConfiguration) { realm ->
+            val result = MXUsersDevicesMap<Int>()
+            SharedSessionEntity.get(realm, roomId, sessionId)
+                    .groupBy { it.userId }
+                    .forEach { (userId, shared) ->
+                        shared.forEach {
+                            result.setObject(userId, it.deviceId, it.chainIndex)
+                        }
+                    }
+
+            result
         }
     }
 }

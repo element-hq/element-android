@@ -28,6 +28,7 @@ import im.vector.matrix.android.internal.crypto.store.db.model.MyDeviceLastSeenI
 import im.vector.matrix.android.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.OlmSessionEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.OutgoingGossipingRequestEntity
+import im.vector.matrix.android.internal.crypto.store.db.model.SharedSessionEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.TrustLevelEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.UserEntity
 import im.vector.matrix.android.internal.crypto.store.db.model.WithHeldSessionEntity
@@ -52,6 +53,7 @@ import io.realm.annotations.RealmModule
             IncomingGossipingRequestEntity::class,
             OutgoingGossipingRequestEntity::class,
             MyDeviceLastSeenInfoEntity::class,
-            WithHeldSessionEntity::class
+            WithHeldSessionEntity::class,
+            SharedSessionEntity::class
         ])
 internal class RealmCryptoStoreModule

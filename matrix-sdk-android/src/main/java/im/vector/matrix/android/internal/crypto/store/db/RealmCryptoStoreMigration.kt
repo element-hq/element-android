@@ -36,6 +36,7 @@ import im.vector.matrix.android.internal.crypto.store.db.model.MyDeviceLastSeenI
 import im.vector.matrix.android.internal.crypto.store.db.model.OlmInboundGroupSessionEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.OlmSessionEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.OutgoingGossipingRequestEntityFields
+import im.vector.matrix.android.internal.crypto.store.db.model.SharedSessionEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.TrustLevelEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.UserEntityFields
 import im.vector.matrix.android.internal.crypto.store.db.model.WithHeldSessionEntityFields
@@ -431,5 +432,18 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                 .addIndex(WithHeldSessionEntityFields.SENDER_KEY)
                 .addField(WithHeldSessionEntityFields.CODE_STRING, String::class.java)
                 .addField(WithHeldSessionEntityFields.REASON, String::class.java)
+
+
+        realm.schema.create("SharedSessionEntity")
+                .addField(SharedSessionEntityFields.ROOM_ID, String::class.java)
+                .addField(SharedSessionEntityFields.ALGORITHM, String::class.java)
+                .addField(SharedSessionEntityFields.SESSION_ID, String::class.java)
+                .addIndex(SharedSessionEntityFields.SESSION_ID)
+                .addField(SharedSessionEntityFields.USER_ID, String::class.java)
+                .addIndex(SharedSessionEntityFields.USER_ID)
+                .addField(SharedSessionEntityFields.DEVICE_ID, String::class.java)
+                .addIndex(SharedSessionEntityFields.DEVICE_ID)
+                .addField(SharedSessionEntityFields.CHAIN_INDEX, Long::class.java)
+                .setNullable(SharedSessionEntityFields.CHAIN_INDEX, true)
     }
 }

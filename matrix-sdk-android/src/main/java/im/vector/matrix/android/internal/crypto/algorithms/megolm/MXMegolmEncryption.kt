@@ -119,7 +119,7 @@ internal class MXMegolmEncryption(
 
         defaultKeysBackupService.maybeBackupKeys()
 
-        return MXOutboundSessionInfo(sessionId)
+        return MXOutboundSessionInfo(sessionId, SharedWithHelper(roomId, sessionId, cryptoStore))
     }
 
     /**
@@ -145,7 +145,7 @@ internal class MXMegolmEncryption(
             val deviceIds = devicesInRoom.getUserDeviceIds(userId)
             for (deviceId in deviceIds!!) {
                 val deviceInfo = devicesInRoom.getObject(userId, deviceId)
-                if (deviceInfo != null && null == safeSession.sharedWithDevices.getObject(userId, deviceId)) {
+                if (deviceInfo != null && !cryptoStore.wasSessionSharedWithUser(roomId, safeSession.sessionId, userId, deviceId).found) {
                     val devices = shareMap.getOrPut(userId) { ArrayList() }
                     devices.add(deviceInfo)
                 }
@@ -247,7 +247,7 @@ internal class MXMegolmEncryption(
         // for dead devices on every message.
         for ((userId, devicesToShareWith) in devicesByUser) {
             for ((deviceId) in devicesToShareWith) {
-                session.sharedWithDevices.setObject(userId, deviceId, chainIndex)
+                session.sharedWithHelper.markedSessionAsShared(userId, deviceId, chainIndex)
             }
         }
 
@@ -382,7 +382,7 @@ internal class MXMegolmEncryption(
                 .also { Timber.w("Device not found") }
 
         // Get the chain index of the key we previously sent this device
-        val chainIndex = outboundSession?.sharedWithDevices?.getObject(userId, deviceId)?.toLong() ?: return false
+        val chainIndex = outboundSession?.sharedWithHelper?.wasSharedWith(userId,deviceId) ?: return false
                 .also { Timber.w("[MXMegolmEncryption] reshareKey : ERROR : Never share megolm with this device") }
 
         val devicesByUser = mapOf(userId to listOf(deviceInfo))
@@ -401,7 +401,7 @@ internal class MXMegolmEncryption(
                 .fold(
                         {
                             // TODO
-                            payloadJson["content"] = it.exportKeys(chainIndex) ?: ""
+                            payloadJson["content"] = it.exportKeys(chainIndex.toLong()) ?: ""
                         },
                         {
                             // TODO

@@ -29,6 +29,8 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.RoomDirectoryVisibility
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.common.CommonTestHelper
+import im.vector.matrix.android.common.CryptoTestHelper
+import im.vector.matrix.android.common.MockOkHttpInterceptor
 import im.vector.matrix.android.common.SessionTestParams
 import im.vector.matrix.android.common.TestConstants
 import im.vector.matrix.android.internal.crypto.GossipingRequestState
@@ -44,6 +46,8 @@ import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
 import junit.framework.TestCase.fail
+import kotlinx.coroutines.delay
+import okhttp3.internal.waitMillis
 import org.junit.Assert
 import org.junit.FixMethodOrder
 import org.junit.Test
@@ -56,6 +60,7 @@ import java.util.concurrent.CountDownLatch
 class KeyShareTests : InstrumentedTest {
 
     private val mTestHelper = CommonTestHelper(context())
+    private val mCryptoTestHelper = CryptoTestHelper(mTestHelper)
 
     @Test
     fun test_DoNotSelfShareIfNotTrusted() {
@@ -234,6 +239,7 @@ class KeyShareTests : InstrumentedTest {
                     }
                     if (tx.state == VerificationTxState.ShortCodeReady) {
                         session1ShortCode = tx.getDecimalCodeRepresentation()
+                        Thread.sleep(500)
                         tx.userHasVerifiedShortCode()
                     }
                 }
@@ -246,6 +252,7 @@ class KeyShareTests : InstrumentedTest {
                 if (tx is SasVerificationTransaction) {
                     if (tx.state == VerificationTxState.ShortCodeReady) {
                         session2ShortCode = tx.getDecimalCodeRepresentation()
+                        Thread.sleep(500)
                         tx.userHasVerifiedShortCode()
                     }
                 }

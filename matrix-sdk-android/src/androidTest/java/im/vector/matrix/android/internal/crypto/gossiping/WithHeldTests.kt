@@ -16,14 +16,18 @@
 
 package im.vector.matrix.android.internal.crypto.gossiping
 
+import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import im.vector.matrix.android.InstrumentedTest
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.common.CommonTestHelper
 import im.vector.matrix.android.common.CryptoTestHelper
+import im.vector.matrix.android.common.MockOkHttpInterceptor
 import im.vector.matrix.android.common.SessionTestParams
 import im.vector.matrix.android.common.TestConstants
+import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 import im.vector.matrix.android.internal.crypto.model.event.WithHeldCode
 import org.junit.Assert
 import org.junit.FixMethodOrder
@@ -122,5 +126,78 @@ class WithHeldTests : InstrumentedTest {
         mTestHelper.signOutAndClose(aliceSession)
         mTestHelper.signOutAndClose(bobSession)
         mTestHelper.signOutAndClose(bobUnverifiedSession)
+    }
+
+
+    @Test
+    fun test_WithHeldNoOlm() {
+        val testData = mCryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
+        val aliceSession = testData.firstSession
+        val bobSession = testData.secondSession!!
+        val aliceInterceptor = mTestHelper.getTestInterceptor(aliceSession)
+
+        // Simulate no OTK
+        aliceInterceptor!!.addRule(MockOkHttpInterceptor.SimpleRule(
+                "/keys/claim",
+                200,
+                """
+                   { "one_time_keys" : {} } 
+                """
+        ))
+        Log.d("#TEST", "Recovery :${aliceSession.sessionParams.credentials.accessToken}")
+
+        val roomAlicePov = aliceSession.getRoom(testData.roomId)!!
+
+        // can we force one-time key shortage??
+
+        val eventId = mTestHelper.sendTextMessage(roomAlicePov, "first message", 1).first().eventId
+
+        // await for bob session to get the message
+        mTestHelper.waitWithLatch { latch ->
+            mTestHelper.retryPeriodicallyWithLatch(latch) {
+                bobSession.getRoom(testData.roomId)?.getTimeLineEvent(eventId) != null
+            }
+        }
+
+        // Previous message should still be undecryptable (partially withheld session)
+        val eventBobPOV = bobSession.getRoom(testData.roomId)?.getTimeLineEvent(eventId)
+        try {
+            // .. might need to wait a bit for stability?
+            bobSession.cryptoService().decryptEvent(eventBobPOV!!.root, "")
+            Assert.fail("This session should not be able to decrypt")
+        } catch (failure: Throwable) {
+            val type = (failure as MXCryptoError.Base).errorType
+            val technicalMessage = failure.technicalMessage
+            Assert.assertEquals("Error should be withheld", MXCryptoError.ErrorType.KEYS_WITHHELD, type)
+            Assert.assertEquals("Cause should be unverified", WithHeldCode.NO_OLM.value, technicalMessage)
+        }
+
+        // Ensure that alice has marked the session to be shared with bob
+        val sessionId = eventBobPOV!!.root.content.toModel<EncryptedEventContent>()!!.sessionId!!
+        val chainIndex = aliceSession.cryptoService().getSharedWithInfo(testData.roomId, sessionId).getObject(bobSession.myUserId, bobSession.sessionParams.credentials.deviceId)
+
+        Assert.assertEquals("Alice should have marked bob's device for this session",  0, chainIndex)
+        // Add a new device for bob
+
+        aliceInterceptor.clearRules()
+        val bobSecondSession = mTestHelper.logIntoAccount(bobSession.myUserId, SessionTestParams(withInitialSync = true))
+        // send a second message
+        val secondMessageId = mTestHelper.sendTextMessage(roomAlicePov, "second message", 1).first().eventId
+
+        // Check that the
+        // await for bob SecondSession session to get the message
+        mTestHelper.waitWithLatch { latch ->
+            mTestHelper.retryPeriodicallyWithLatch(latch) {
+                bobSecondSession.getRoom(testData.roomId)?.getTimeLineEvent(secondMessageId) != null
+            }
+        }
+
+        val chainIndex2 = aliceSession.cryptoService().getSharedWithInfo(testData.roomId, sessionId).getObject(bobSecondSession.myUserId, bobSecondSession.sessionParams.credentials.deviceId)
+
+        Assert.assertEquals("Alice should have marked bob's device for this session",  1, chainIndex2)
+
+        mTestHelper.signOutAndClose(bobSecondSession)
+        testData.cleanUp(mTestHelper)
+
     }
 }

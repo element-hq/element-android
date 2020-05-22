@@ -809,7 +809,7 @@ internal class DefaultCryptoService @Inject constructor(
                     cryptoStore.saveGossipingEvent(event)
                     onSecretSendReceived(event)
                 }
-                EventType.ROOM_KEY_WITHHELD                            -> {
+                EventType.ROOM_KEY_WITHHELD                      -> {
                     onKeyWithHeldReceived(event)
                 }
                 else                                             -> {
@@ -839,7 +839,6 @@ internal class DefaultCryptoService @Inject constructor(
         alg.onRoomKeyEvent(event, keysBackupService)
     }
 
-
     private fun onKeyWithHeldReceived(event: Event) {
         val withHeldContent = event.getClearContent().toModel<RoomKeyWithHeldContent>() ?: return Unit.also {
             Timber.e("## CRYPTO | Malformed onKeyWithHeldReceived() : missing fields")
@@ -852,7 +851,6 @@ internal class DefaultCryptoService @Inject constructor(
             Timber.e("## CRYPTO | onKeyWithHeldReceived() : Unable to handle WithHeldContent for ${withHeldContent.algorithm}")
             return
         }
-
     }
 
     private fun onSecretSendReceived(event: Event) {
@@ -1330,6 +1328,10 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun getGossipingEventsTrail(): List<Event> {
         return cryptoStore.getGossipingEventsTrail()
+    }
+
+    override fun getSharedWithInfo(roomId: String?, sessionId: String): MXUsersDevicesMap<Int> {
+        return cryptoStore.getSharedWithInfo(roomId, sessionId)
     }
 
     /* ==========================================================================================
