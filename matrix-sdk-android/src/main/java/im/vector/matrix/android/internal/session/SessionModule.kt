@@ -52,6 +52,7 @@ import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.eventbus.EventBusTimberLogger
+import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import im.vector.matrix.android.internal.network.DefaultNetworkConnectivityChecker
 import im.vector.matrix.android.internal.network.FallbackNetworkCallbackStrategy
 import im.vector.matrix.android.internal.network.NetworkCallbackStrategy
@@ -59,6 +60,7 @@ import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.network.PreferredNetworkCallbackStrategy
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.httpclient.addAccessTokenInterceptor
+import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
 import im.vector.matrix.android.internal.network.token.AccessTokenProvider
 import im.vector.matrix.android.internal.network.token.HomeserverAccessTokenProvider
 import im.vector.matrix.android.internal.session.call.CallEventObserver
