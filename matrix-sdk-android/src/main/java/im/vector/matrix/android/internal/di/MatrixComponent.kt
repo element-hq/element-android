@@ -27,14 +27,16 @@ import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.auth.AuthModule
 import im.vector.matrix.android.internal.auth.SessionParamsStore
+import im.vector.matrix.android.internal.session.TestInterceptor
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.matrix.olm.OlmManager
 import java.io.File
 
-@Component(modules = [MatrixModule::class, NetworkModule::class, AuthModule::class])
+@Component(modules = [MatrixModule::class, NetworkModule::class, AuthModule::class, NoOpTestModule::class])
 @MatrixScope
 internal interface MatrixComponent {
 
@@ -44,6 +46,9 @@ internal interface MatrixComponent {
 
     @Unauthenticated
     fun okHttpClient(): OkHttpClient
+
+    @MockHttpInterceptor
+    fun testInterceptor(): TestInterceptor?
 
     fun authenticationService(): AuthenticationService
 

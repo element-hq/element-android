@@ -43,6 +43,7 @@ import im.vector.matrix.android.internal.crypto.verification.VerificationMessage
 import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
 import im.vector.matrix.android.internal.di.Authenticated
 import im.vector.matrix.android.internal.di.DeviceId
+import im.vector.matrix.android.internal.di.MockHttpInterceptor
 import im.vector.matrix.android.internal.di.SessionCacheDirectory
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.SessionFilesDirectory
@@ -182,8 +183,26 @@ internal abstract class SessionModule {
         @SessionScope
         @Authenticated
         fun providesOkHttpClient(@Unauthenticated okHttpClient: OkHttpClient,
-                                 @Authenticated accessTokenProvider: AccessTokenProvider): OkHttpClient {
-            return okHttpClient.addAccessTokenInterceptor(accessTokenProvider)
+                                 accessTokenInterceptor: AccessTokenInterceptor,
+                                 @SessionId sessionId: String,
+                                 @MockHttpInterceptor testInterceptor: TestInterceptor?): OkHttpClient {
+            return okHttpClient.newBuilder()
+                    .apply {
+                        // Remove the previous CurlLoggingInterceptor, to add it after the accessTokenInterceptor
+                        val existingCurlInterceptors = interceptors().filterIsInstance<CurlLoggingInterceptor>()
+                        interceptors().removeAll(existingCurlInterceptors)
+
+                        addInterceptor(accessTokenInterceptor)
+                        if (testInterceptor != null) {
+                            testInterceptor.sessionId = sessionId
+                            addInterceptor(testInterceptor)
+                        }
+                        // Re add eventually the curl logging interceptors
+                        existingCurlInterceptors.forEach {
+                            addInterceptor(it)
+                        }
+                    }
+                    .build()
         }
 
         @JvmStatic

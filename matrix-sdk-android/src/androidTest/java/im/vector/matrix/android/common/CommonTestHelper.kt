@@ -36,6 +36,7 @@ import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.api.session.sync.SyncState
+import im.vector.matrix.android.internal.session.TestInterceptor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -57,9 +58,10 @@ class CommonTestHelper(context: Context) {
 
     val matrix: Matrix
 
+    fun getTestInterceptor(session: Session): MockOkHttpInterceptor? = TestNetworkModule.interceptorForSession(session.sessionId) as? MockOkHttpInterceptor
+
     init {
         Matrix.initialize(context, MatrixConfiguration("TestFlavor"))
-
         matrix = Matrix.getInstance(context)
     }
 
