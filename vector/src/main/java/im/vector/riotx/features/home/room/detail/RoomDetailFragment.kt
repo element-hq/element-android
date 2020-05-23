@@ -108,6 +108,7 @@ import im.vector.riotx.core.utils.PERMISSIONS_FOR_WRITING_FILES
 import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_DOWNLOAD_FILE
 import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_INCOMING_URI
 import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_PICK_ATTACHMENT
+import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_SAVE_MEDIA
 import im.vector.riotx.core.utils.TextUtils
 import im.vector.riotx.core.utils.allGranted
 import im.vector.riotx.core.utils.checkPermissions
@@ -116,6 +117,7 @@ import im.vector.riotx.core.utils.copyToClipboard
 import im.vector.riotx.core.utils.createUIHandler
 import im.vector.riotx.core.utils.getColorFromUserId
 import im.vector.riotx.core.utils.isValidUrl
+import im.vector.riotx.core.utils.isWritePermissionRequiredToSaveMedia
 import im.vector.riotx.core.utils.jsonViewerStyler
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import im.vector.riotx.core.utils.saveMedia
@@ -1064,12 +1066,20 @@ class RoomDetailFragment @Inject constructor(
                         launchAttachmentProcess(pendingType)
                     }
                 }
+                PERMISSION_REQUEST_CODE_SAVE_MEDIA -> {
+                    val pendingEventSharedAction = roomDetailViewModel.pendingEventSharedAction
+                    if (pendingEventSharedAction != null) {
+                        roomDetailViewModel.pendingEventSharedAction = null
+                        handleActions(pendingEventSharedAction)
+                    }
+                }
             }
         } else {
             // Reset all pending data
             roomDetailViewModel.pendingAction = null
             roomDetailViewModel.pendingUri = null
             attachmentsHelper.pendingType = null
+            roomDetailViewModel.pendingEventSharedAction = null
         }
     }
 
@@ -1176,30 +1186,39 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun onSaveActionClicked(action: EventSharedAction.Save) {
-        session.downloadFile(
-                FileService.DownloadMode.FOR_EXTERNAL_SHARE,
-                action.eventId,
-                action.messageContent.body,
-                action.messageContent.getFileUrl(),
-                action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
-                object : MatrixCallback<File> {
-                    override fun onSuccess(data: File) {
-                        if (isAdded) {
-                            val saved = saveMedia(
-                                    context = requireContext(),
-                                    file = data,
-                                    title = action.messageContent.body,
-                                    mediaMimeType = getMimeTypeFromUri(requireContext(), data.toUri())
-                            )
-                            if (saved) {
-                                Toast.makeText(requireContext(), R.string.media_file_added_to_gallery, Toast.LENGTH_LONG).show()
-                            } else {
-                                Toast.makeText(requireContext(), R.string.error_adding_media_file_to_gallery, Toast.LENGTH_LONG).show()
+        val havePermissions = if (isWritePermissionRequiredToSaveMedia()) {
+            checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_SAVE_MEDIA)
+        } else {
+            true
+        }
+        if (havePermissions) {
+            session.downloadFile(
+                    FileService.DownloadMode.FOR_EXTERNAL_SHARE,
+                    action.eventId,
+                    action.messageContent.body,
+                    action.messageContent.getFileUrl(),
+                    action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
+                    object : MatrixCallback<File> {
+                        override fun onSuccess(data: File) {
+                            if (isAdded) {
+                                val saved = saveMedia(
+                                        context = requireContext(),
+                                        file = data,
+                                        title = action.messageContent.body,
+                                        mediaMimeType = getMimeTypeFromUri(requireContext(), data.toUri())
+                                )
+                                if (saved) {
+                                    Toast.makeText(requireContext(), R.string.media_file_added_to_gallery, Toast.LENGTH_LONG).show()
+                                } else {
+                                    Toast.makeText(requireContext(), R.string.error_adding_media_file_to_gallery, Toast.LENGTH_LONG).show()
+                                }
                             }
                         }
                     }
-                }
-        )
+            )
+        } else {
+            roomDetailViewModel.pendingEventSharedAction = action
+        }
     }
 
     private fun handleActions(action: EventSharedAction) {

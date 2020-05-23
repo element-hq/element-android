@@ -12,6 +12,7 @@ Improvements 🙌:
 Bugfix 🐛:
  - After jump to unread, newer messages are never loaded (#1008)
  - Fix issues with FontScale switch (#69, #645)
+ - Saved images don't show up in gallery (#1324)
 
 Translations 🗣:
  -

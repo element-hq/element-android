@@ -67,6 +67,7 @@ import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
 import im.vector.riotx.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.riotx.features.home.room.detail.composer.rainbow.RainbowGenerator
+import im.vector.riotx.features.home.room.detail.timeline.action.EventSharedAction
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import im.vector.riotx.features.home.room.typing.TypingHelper
 import im.vector.riotx.features.settings.VectorPreferences
@@ -119,6 +120,8 @@ class RoomDetailViewModel @AssistedInject constructor(
     var pendingAction: RoomDetailAction? = null
     // Slot to keep a pending uri during permission request
     var pendingUri: Uri? = null
+    // Slot to keep a pending event during permission request
+    var pendingEventSharedAction: EventSharedAction? = null
     // Slot to store if we want to prevent preview of attachment
     var preventAttachmentPreview = false
 
