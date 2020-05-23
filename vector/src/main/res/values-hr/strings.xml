@@ -425,7 +425,7 @@
     <string name="room_participants_leave_prompt_title">Napusti sobu</string>
     <string name="room_participants_leave_prompt_msg">Jeste li sigurni da želite napustiti sobu\?</string>
     <string name="room_participants_remove_prompt_msg">Jeste li sigurni da iz ovog ćaskanja želite ukloniti %s\?</string>
-    <string name="room_participants_create">Napravi</string>
+    <string name="room_participants_create">Izradi</string>
 
     <string name="room_participants_online">Na vezi</string>
     <string name="room_participants_offline">Odspojen</string>
@@ -441,8 +441,8 @@
     <string name="room_participants_action_invite">Pozovi</string>
     <string name="room_participants_action_leave">Napusti ovu sobu</string>
     <string name="room_participants_action_remove">Izbaci iz ove sobe</string>
-    <string name="room_participants_action_ban">Zabrani</string>
-    <string name="room_participants_action_unban">Ukloni zabranu</string>
+    <string name="room_participants_action_ban">Zabrani pristup</string>
+    <string name="room_participants_action_unban">Ukloni zabranu pristupa</string>
     <string name="room_participants_action_kick">Izbaci</string>
     <string name="room_participants_action_set_default_power_level">Poništi na običnog korisnika</string>
     <string name="room_participants_action_set_moderator">Učini moderatorom</string>
@@ -777,7 +777,7 @@
     <string name="settings_show_read_receipts">Prikaži potvrde o pročitanim porukama</string>
     <string name="settings_show_read_receipts_summary">Kliknite na potvrde o pročitanim porukama za detaljan prikaz.</string>
     <string name="settings_show_join_leave_messages">Prikaži obavijesti o priključivanjima i napuštanjima</string>
-    <string name="settings_show_join_leave_messages_summary">Ne odnosi se na pozivnice, izbacivanja i zabrane.</string>
+    <string name="settings_show_join_leave_messages_summary">Ne odnosi se na pozivnice, izbacivanja i zabrane pristupa.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Prikaži obavijesti o računu</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Uključuje promjene avatara i imena za prikaz.</string>
     <string name="settings_vibrate_on_mention">Vibriraj kada se spomene korisnika</string>
@@ -903,4 +903,233 @@
     <string name="resource_limit_soft_default">Ovaj poslužitelj je prekoračio jedno od ograničenja sredstava pa se <b>neki korisnici neće moći prijaviti</b>.</string>
     <string name="resource_limit_hard_default">Ovaj je poslužitelj prekoračio jedno od ograničenja sredstava.</string>
 
+    <string name="widget_integration_unable_to_create">Neuspjela izrada grafičkog elementa.</string>
+    <string name="widget_integration_failed_to_send_request">Neuspjelo slanje zahtjeva.</string>
+    <string name="widget_integration_positive_power_level">Razina baterije treba biti pozitivan cijeli broj.</string>
+    <string name="widget_integration_must_be_in_room">Niste u ovoj sobi.</string>
+    <string name="widget_integration_no_permission_in_room">Nemate dozvolu to učiniti u ovoj sobi.</string>
+    <string name="widget_integration_missing_room_id">U zahtjevu nedostaje identitet sobe.</string>
+    <string name="widget_integration_missing_user_id">U zahtjevu nedostaje korisnički identitet.</string>
+    <string name="widget_integration_room_not_visible">Soba %s nije vidljiva.</string>
+    <string name="widget_integration_missing_parameter">Nedostaje obavezan parametar.</string>
+    <string name="widget_integration_invalid_parameter">Parametar je neispravan.</string>
+    <string name="integration_manager_not_configured">Nije podešen upravitelj integracijama.</string>
+    <string name="room_add_matrix_apps">Dodaj Matrix-aplikacije</string>
+    <string name="settings_labs_native_camera">Koristi izvornu kameru</string>
+    <string name="settings_labs_native_camera_summary">Pokreni sistemsku kameru umjesto prilagođenog zaslona za kameru.</string>
+    <string name="settings_labs_keyboard_options_to_send_message">Koristi tipku enter za slanje poruka</string>
+    <string name="settings_labs_enable_send_voice">Šalji glasovne poruke</string>
+    <string name="settings_labs_enable_send_voice_summary">Ova opcija zahtijeva aplikaciju treće strane za snimanje poruka.</string>
+    <string name="widget_integration_review_terms">Za nastavak trebate prihvatiti Uvjete korištenja ovog servisa.</string>
+
+    <string name="you_added_a_new_device">Dodali ste novu sesiju \'%s\' koja zahtijeva ključeve za šifriranje.</string>
+    <string name="you_added_a_new_device_with_info">Nova sesija zahtijeva ključeve za šifriranje. Naziv sesije: %1$s
+\nZadnji puta viđena: %2$s
+\nAko se niste prijavili u drugoj sesiji, zanemarite ovaj zahtjev.</string>
+    <string name="your_unverified_device_requesting">Vaša nepotvrđena sesija \'%s\' zahtijeva ključeve za šifriranje.</string>
+    <string name="your_unverified_device_requesting_with_info">Nepotvrđena sesija zahtijeva ključeve za šifriranje.
+\nNaziv sesije: %1$s
+\nZadnji puta viđena: %2$s
+\nAko se niste prijavili u drugoj sesiji, zanemarite ovaj zahtjev.</string>
+
+    <string name="start_verification">Započni potvrdu</string>
+    <string name="start_verification_short_label">Potvrdi</string>
+    <string name="share_without_verifying">Dijeli bez potvrđivanja</string>
+    <string name="share_without_verifying_short_label">Dijeli</string>
+    <string name="key_share_request">Zahtjev za dijeljenje ključeva</string>
+    <string name="ignore_request">Zanemari zahtjev</string>
+    <string name="ignore_request_short_label">Zanemari</string>
+
+    <string name="conference_call_warning_title">Upozorenje!</string>
+    <string name="conference_call_warning_message">Konferencijsko zvanje je u razvoju i potencijalno nepouzdano.</string>
+
+    <string name="command_error">Naredbena greška</string>
+    <string name="unrecognized_command">Nepoznata naredba: %2</string>
+    <string name="command_problem_with_parameters">Naredba \"%s\" treba više parametara ili su neki parametri netočni.</string>
+    <string name="command_description_emote">Prikazuje radnju</string>
+    <string name="command_description_ban_user">Zabranjuje pristup korisniku s danim identitetom</string>
+    <string name="command_description_unban_user">Uklanja zabranu pristupa korisniku s danim identitetom</string>
+    <string name="command_description_op_user">Definirajte razinu upravljanja korisnika</string>
+    <string name="command_description_deop_user">Degradira korisnika s danim identitetom s razine operatera</string>
+    <string name="command_description_invite_user">Poziva korisnika s danim identitetom u trenutnu sobu</string>
+    <string name="command_description_join_room">Pridružuje Vas u sobu s danim alternativnim nazivom</string>
+    <string name="command_description_part_room">Napusti sobu</string>
+    <string name="command_description_topic">Postavi temu sobe</string>
+    <string name="command_description_kick_user">Izbacuje korisnika s danim identitetom</string>
+    <string name="command_description_nick">Mijenja Vaš nadimak za prikaz</string>
+    <string name="command_description_markdown">Uključi/isključi Markdown</string>
+    <string name="markdown_has_been_enabled">Markdown je omogućen.</string>
+    <string name="markdown_has_been_disabled">Markdown je onemogućen.</string>
+
+    <string name="notification_off">Isključeno</string>
+    <string name="notification_silent">Tiho</string>
+    <string name="notification_noisy">Bučno</string>
+
+    <string name="encrypted_message">Šifrirana poruka</string>
+
+    <string name="create">Formiraj</string>
+    <string name="create_community">Formiraj zajednicu</string>
+    <string name="community_name">Naziv zajednice</string>
+    <string name="community_name_hint">Primjer</string>
+    <string name="community_id">Identitet zajednice</string>
+    <string name="community_id_hint">primjer</string>
+
+    <string name="group_details_people">Osobe</string>
+    <string name="group_details_rooms">Sobe</string>
+    <string name="no_users_placeholder">Nema korisnika</string>
+
+    <string name="rooms">Sobe</string>
+    <string name="joined">Pridružen/a</string>
+    <string name="invited">Pozvan/a</string>
+    <string name="filter_group_members">Izdvoji članove grupe</string>
+    <string name="filter_group_rooms">Izdvoji grupne sobe</string>
+
+    <plurals name="group_members">
+	<item quantity="one">%1 član</item>
+	<item quantity="few">%1 člana</item>
+	<item quantity="other">%1 članova</item>
+</plurals>
+
+    <plurals name="group_rooms">
+	<item quantity="one">%1 soba</item>
+	<item quantity="few">%1 sobe</item>
+	<item quantity="other">%1 soba</item>
+</plurals>
+    <string name="group_no_long_description">Administrator zajednice nije dao dugačak opis ove zajednice.</string>
+
+    <string name="has_been_kicked">Izbačeni ste iz %1$s od strane %2$s</string>
+    <string name="has_been_banned">Korisnik %2$s Vam je zabranio pristup sobi %1$s</string>
+    <string name="reason_colon">Razlog: %1$s</string>
+    <string name="rejoin">Ponovno se pridruži</string>
+    <string name="forget_room">Zaboravi sobu</string>
+
+    <string name="receipt_avatar">Avatar za potvrde</string>
+    <string name="notice_avatar">Obavijesni avatar</string>
+    <string name="avatar">Avatar</string>
+
+    <string name="dialog_user_consent_content">Za nastavak korištenja %1$s kao Vašeg poslužitelja ćete morati pročitati i složiti se s uvjetima korištenja.</string>
+    <string name="dialog_user_consent_submit">Sada pročitaj</string>
+
+    <string name="deactivate_account_title">Deaktiviraj račun</string>
+    <string name="deactivate_account_delete_checkbox">Neka sve poruke koje sam poslao/la budu zaboravljene kada deaktiviram svoj račun (upozorenje: zbog ovoga će budući korisnici imati nepotpun uvid u razgovore)</string>
+    <string name="deactivate_account_prompt_password">Za nastavak unesite Vašu lozinku:</string>
+    <string name="deactivate_account_submit">Deaktiviraj račun</string>
+
+    <string name="error_empty_field_enter_user_name">Unesite korisničko ime.</string>
+    <string name="error_empty_field_your_password">Unesite Vašu lozinku.</string>
+    <string name="room_tombstone_versioned_description">Ova je soba zamijenjena i više nije aktivna</string>
+    <string name="room_tombstone_continuation_link">Razgovor se ovdje nastavlja</string>
+    <string name="room_tombstone_continuation_description">Ova je soba nastavak drugog razgovora</string>
+    <string name="room_tombstone_predecessor_link">Ovdje kliknite kako biste vidjeli starije poruke</string>
+
+    <string name="resource_limit_contact_action">Obratite se administratoru</string>
+
+    <string name="resource_limit_contact_admin">obratite se administratoru Vašeg servisa</string>
+
+    <string name="resource_limit_soft_mau"> Vaš je poslužitelj dosegao svoje ograničenje mjesečno aktivnih korisnika pa se <b>neki korisnici neće moći prijaviti</b>.</string>
+    <string name="resource_limit_hard_mau">Vaš je poslužitelj dosegao svoje ograničenje mjesečno aktivnih korisnika.</string>
+
+    <string name="resource_limit_soft_contact">Molimo %s za povećanje ovog ograničenja.</string>
+    <string name="resource_limit_hard_contact">Molimo %s za nastavak korištenja ovog servisa.</string>
+
+    <string name="settings_lazy_loading_title">Lijeno učitavanje članova soba</string>
+    <string name="settings_lazy_loading_description">Povećaj performanse učitavanjem članova soba tek na prvo otvaranje.</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Vaš poslužitelj ne podržava lijeno učitavanje članova soba. Pokušajte kasnije.</string>
+
+    <string name="unknown_error">Nažalost je došlo do greške</string>
+
+    <string name="merged_events_expand">proširi</string>
+    <string name="merged_events_collapse">sažmi</string>
+
+    <string name="settings_info_area_show">Prikaži ovu informativnu zonu</string>
+    <string name="show_info_area_always">Uvijek</string>
+    <string name="show_info_area_messages_and_errors">Za poruke i greške</string>
+    <string name="show_info_area_only_errors">Samo za greške</string>
+
+    <string name="generic_label">%1$s:</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="plus_x">+%d</string>
+    <string name="x_plus">%d+</string>
+    <string name="no_valid_google_play_services_apk">Nije pronađen valjajući APK Usluga za Google Play. Moguće je da obavijesti neće ispravno raditi.</string>
+
+    <string name="store_title">Riot.im - Komunicirajte onako kako Vama odgovara</string>
+    <string name="store_whats_new">Stalno radimo na izmjenama i poboljšanjima Riot.im-a. Cjelovit dnevnik izmjena je moguće pronaći u %1$s. Kako biste ostali informirani o novostima, imajte omogućeno ažuriranje.</string>
+    <string name="store_short_description">Univerzalna aplikacija za sigurno ćaskanje pod Vašom kontrolom.</string>
+    <string name="passphrase_create_passphrase">Napravi fraza-lozinku</string>
+    <string name="passphrase_confirm_passphrase">Potvrdi fraza-lozinku</string>
+    <string name="passphrase_enter_passphrase">Unesite fraza-lozinku</string>
+    <string name="passphrase_passphrase_does_not_match">Fraza-lozinka se ne podudara</string>
+    <string name="passphrase_empty_error_message">Unesite fraza-lozinku</string>
+    <string name="passphrase_passphrase_too_weak">Fraza-lozinka je preslaba</string>
+
+    <string name="keys_backup_passphrase_not_empty_error_message">Izbrišite fraza-lozinku ako želite da Riot generira ključ za obnavljanje.</string>
+    <string name="sas_incoming_request_notif_title">Zahtjev za potvrdom</string>
+    <string name="sas_incoming_request_notif_content">%s želi potvrditi Vašu sesiju</string>
+
+    <string name="sas_error_m_user">Korisnik je prekinuo potvrdu</string>
+    <string name="sas_error_m_timeout">Isteklo je vrijeme za proces potvrde</string>
+    <string name="sas_error_m_unknown_transaction">Sesija nije upoznata s tom transakcijom</string>
+    <string name="sas_error_m_unknown_method">U sesiji je neodgovarajuća suglasnost ključeva, raspršivanje, MAC ili metoda SAS-a</string>
+    <string name="sas_error_m_mismatched_commitment">Raspršna obveza se ne podudara</string>
+    <string name="sas_error_m_mismatched_sas">SAS se ne podudara</string>
+    <string name="sas_error_m_unexpected_message">Sesija je primila neočekivanu poruku</string>
+    <string name="sas_error_m_invalid_message">Primljena je nevaljana poruka</string>
+    <string name="sas_error_m_key_mismatch">Nepodudaranje u ključevima</string>
+    <string name="sas_error_m_user_error">Nepodudaranje u korisnicima</string>
+    <string name="sas_error_unknown">Nepoznata greška</string>
+
+    <string name="identity_server_not_defined">Ne koristite poslužitelj identiteta</string>
+    <string name="identity_server_not_defined_for_password_reset">Nije podešen poslužitelj identiteta. Potreban je za poništavanje Vaše lozinke.</string>
+
+    <string name="security_warning_identity_server">Prijašnje inačice Riota imale su sigurnosni propust koji bi Vašem poslužitelju identiteta (%1$s) omogućio pristup Vašem računu. Ako vjerujete %2$s, možete ovo zanemariti. U suprotnom se odjavite i ponovno prijavite.
+\n
+\nOvdje možete pronaći više informacija:
+\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
+
+    <string name="error_user_already_logged_in">Čini se da se pokušavate spojiti na drugi poslužitelj. Želite li se odjaviti\?</string>
+
+    <string name="edit">Uredi</string>
+    <string name="reply">Odgovori</string>
+
+    <string name="global_retry">Pokušaj ponovno</string>
+    <string name="room_list_empty">Pridružite se sobi kako biste počeli koristiti aplikaciju.</string>
+    <string name="send_you_invite">Poslana Vam je pozivnica</string>
+    <string name="invited_by">Pozvan/a od %s</string>
+
+    <string name="room_list_catchup_empty_title">Sve ste pročitali!</string>
+    <string name="room_list_catchup_empty_body">Više nemate nepročitanih poruka</string>
+    <string name="room_list_catchup_welcome_title">Dobrodošli!</string>
+    <string name="room_list_catchup_welcome_body">Ovdje pročitajte nepročitane poruke</string>
+    <string name="room_list_people_empty_title">Razgovori</string>
+    <string name="room_list_people_empty_body">Poruke Vaših izravnih razgovora ovdje će biti prikazane</string>
+    <string name="room_list_rooms_empty_title">Sobe</string>
+    <string name="room_list_rooms_empty_body">Ovdje će biti prikazane Vaše sobe</string>
+
+    <string name="title_activity_emoji_reaction_picker">Reakcije</string>
+    <string name="reactions_agree">Složi se</string>
+    <string name="reactions_like">Sviđa mi se</string>
+    <string name="message_add_reaction">Dodaj reakciju</string>
+    <string name="message_view_reaction">Pogledaj reakcije</string>
+    <string name="reactions">Reakcije</string>
+
+    <string name="event_redacted_by_user_reason">Događaj je izbrisao korisnik</string>
+    <string name="event_redacted_by_admin_reason">Sobni administrator je moderirao događaj</string>
+    <string name="last_edited_info_message">%1$s zadnji/a uredio/la dana %2$s</string>
+
+
+    <string name="malformed_message">Nije moguće prikazati izobličen događaj</string>
+    <string name="create_new_room">Izradi novu sobu</string>
+    <string name="error_no_network">Nema mreže. Provjerite Vašu vezu na Internet.</string>
+    <string name="action_change">Promijeni</string>
+    <string name="change_room_directory_network">Promijeni mrežu</string>
+    <string name="please_wait">Pričekajte…</string>
+    <string name="group_all_communities">Sve zajednice</string>
+
+    <string name="room_preview_no_preview">Nije moguće pregledati sobu</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Pregled sobe u koju svatko ima uvid još nije podržan u RiotX-u</string>
+
+    <string name="fab_menu_create_room">Sobe</string>
+    <string name="fab_menu_create_chat">Izravne poruke</string>
+
+    <string name="create_room_title">Nova soba</string>
     </resources>
