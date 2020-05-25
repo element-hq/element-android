@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/eventBaseView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:addStatesFromChildren="true"
+    android:background="?attr/selectableItemBackground">
+
+    <im.vector.riotx.core.platform.CheckableView
+        android:id="@+id/messageSelectedBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/informationBottom"
+        android:layout_alignParentTop="true"
+        android:background="?riotx_highlighted_message_background" />
+
+    <ImageView
+        android:id="@+id/messageAvatarImageView"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        tools:src="@tools:sample/avatars" />
+
+    <!--  spacer so rtl-hack works better with messageMemberNameView  -->
+    <View
+        android:id="@+id/spacer_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/messageTimeView"
+        android:layout_toEndOf="@+id/messageMemberNameView" />
+
+    <im.vector.riotx.core.platform.EllipsizingTextView
+        android:id="@+id/messageMemberNameView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="8dp"
+        android:layout_toEndOf="@+id/messageStartGuideline"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?riotx_text_primary"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        tools:text="@sample/matrix.json/data/displayName" />
+
+    <TextView
+        android:id="@+id/messageTimeView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/messageMemberNameView"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="12sp"
+        tools:text="@tools:sample/date/hhmm" />
+
+    <View
+        android:id="@+id/messageStartGuideline"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:layout_marginStart="52dp" />
+
+    <Space
+        android:id="@+id/decorationSpace"
+        android:layout_width="4dp"
+        android:layout_height="8dp"
+        android:layout_toEndOf="@id/messageStartGuideline"
+        />
+
+    <ImageView
+        android:id="@+id/messageE2EDecoration"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_alignTop="@id/viewStubContainer"
+        android:layout_marginTop="7dp"
+        android:layout_alignEnd="@id/decorationSpace"
+        android:visibility="gone"
+        tools:src="@drawable/ic_shield_warning"
+        tools:visibility="visible" />
+
+    <FrameLayout
+        android:id="@+id/viewStubContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/messageMemberNameView"
+        android:layout_toEndOf="@id/messageStartGuideline"
+        android:addStatesFromChildren="true">
+
+        <ViewStub
+            android:id="@+id/messageContentTextStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:inflatedId="@id/messageTextView"
+            android:layout="@layout/item_timeline_event_text_message_stub"
+            tools:visibility="visible" />
+
+        <ViewStub
+            android:id="@+id/messageContentCodeBlockStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:layout_height="wrap_content"
+            android:layout="@layout/item_timeline_event_code_block_stub"
+            tools:visibility="visible" />
+
+        <ViewStub
+            android:id="@+id/messageContentMediaStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:layout_height="wrap_content"
+            android:inflatedId="@+id/messageContentMedia"
+            android:layout="@layout/item_timeline_event_media_message_stub" />
+
+        <ViewStub
+            android:id="@+id/messageContentFileStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:layout_height="wrap_content"
+            android:layout="@layout/item_timeline_event_file_stub" />
+
+        <ViewStub
+            android:id="@+id/messageContentRedactedStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:layout_height="20dp"
+            android:layout_marginEnd="56dp"
+            android:layout="@layout/item_timeline_event_redacted_stub" />
+
+        <ViewStub
+            android:id="@+id/messagePollStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="56dp"
+            android:layout="@layout/item_timeline_event_poll_stub" />
+
+        <ViewStub
+            android:id="@+id/messageOptionsStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="56dp"
+            android:layout="@layout/item_timeline_event_option_buttons_stub" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/informationBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/viewStubContainer"
+        android:layout_toEndOf="@+id/messageStartGuideline"
+        android:addStatesFromChildren="true"
+        android:orientation="vertical">
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/reactionsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="4dp"
+            app:dividerDrawable="@drawable/reaction_divider"
+            app:flexWrap="wrap"
+            app:showDivider="middle"
+            tools:background="#F0E0F0"
+            tools:layout_height="40dp">
+
+            <!-- ReactionButtons will be added here in the code -->
+            <!--im.vector.riotx.features.reactions.widget.ReactionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" /-->
+
+        </com.google.android.flexbox.FlexboxLayout>
+
+        <im.vector.riotx.core.ui.views.ReadReceiptsView
+            android:id="@+id/readReceiptsView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

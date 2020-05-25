@@ -397,8 +397,6 @@ class MessageItemFactory @Inject constructor(
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
-                .outgoingMessage(informationData.sentByMe)
-                .incomingMessage(!informationData.sentByMe)
                 .movementMethod(createLinkMovementMethod(callback))
     }
 

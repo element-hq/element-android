@@ -51,4 +51,8 @@ abstract class MessageBlockCodeItem : AbsMessageItem<MessageBlockCodeItem.Holder
     companion object {
         private const val STUB_ID = R.id.messageContentCodeBlockStub
     }
+
+    override fun messageBubbleAllowed(): Boolean {
+        return true
+    }
 }

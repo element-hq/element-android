@@ -15,6 +15,7 @@
  */
 package im.vector.riotx.features.home.room.detail.timeline.item
 
+import android.content.Context
 import android.view.View
 import android.view.ViewStub
 import android.widget.RelativeLayout
@@ -47,7 +48,11 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
     override fun bind(holder: H) {
         super.bind(holder)
         holder.leftGuideline.updateLayoutParams<RelativeLayout.LayoutParams> {
-            this.marginStart = leftGuideline
+            if (ignoreMessageGuideline(holder.leftGuideline.context)) {
+                this.marginStart = 0
+            } else {
+                this.marginStart = leftGuideline
+            }
         }
         holder.checkableBackground.isChecked = highlighted
     }
@@ -71,5 +76,9 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
         private fun inflateStub() {
             view.findViewById<ViewStub>(stubId).inflate()
         }
+    }
+
+    open fun ignoreMessageGuideline(context: Context): Boolean {
+        return false
     }
 }

@@ -16,12 +16,7 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.item
 
-import android.content.res.ColorStateList
 import android.text.method.MovementMethod
-import android.view.Gravity
-import android.view.View
-import android.widget.FrameLayout
-import android.widget.RelativeLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
 import androidx.core.widget.TextViewCompat
@@ -29,12 +24,6 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.features.home.room.detail.timeline.tools.findPillsAndProcess
-import im.vector.riotx.features.themes.BubbleThemeUtils
-import im.vector.riotx.features.themes.BubbleThemeUtils.BUBBLE_STYLE_BOTH
-import im.vector.riotx.features.themes.BubbleThemeUtils.BUBBLE_STYLE_NONE
-import im.vector.riotx.features.themes.BubbleThemeUtils.BUBBLE_STYLE_START
-import im.vector.riotx.features.themes.ThemeUtils
-import kotlin.math.round
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
@@ -47,10 +36,6 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     var useBigFont: Boolean = false
     @EpoxyAttribute
     var movementMethod: MovementMethod? = null
-    @EpoxyAttribute
-    var incomingMessage: Boolean = false
-    @EpoxyAttribute
-    var outgoingMessage: Boolean = false
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -71,38 +56,6 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
                 TextViewCompat.getTextMetricsParams(holder.messageView),
                 null)
         holder.messageView.setTextFuture(textFuture)
-
-        val bubbleStyle = if (incomingMessage || outgoingMessage) BubbleThemeUtils.getBubbleStyle(holder.messageView.context) else BUBBLE_STYLE_NONE
-        val reverseBubble = outgoingMessage && bubbleStyle == BUBBLE_STYLE_BOTH
-        when (bubbleStyle) {
-            BUBBLE_STYLE_NONE -> {
-                holder.messageView.background = null
-                holder.messageView.setPadding(0, 0, 0, 0)
-            }
-            BUBBLE_STYLE_START, BUBBLE_STYLE_BOTH -> {
-                holder.messageView.setBackgroundResource(if (reverseBubble) R.drawable.msg_bubble_outgoing else R.drawable.msg_bubble_incoming)
-                var tintColor = ColorStateList(
-                        arrayOf(intArrayOf(0)),
-                        intArrayOf(ThemeUtils.getColor(holder.messageView.context,
-                                if (outgoingMessage) R.attr.sc_message_bg_outgoing else R.attr.sc_message_bg_incoming)
-                        )
-                )
-                holder.messageView.backgroundTintList = tintColor
-                val density = holder.messageView.resources.displayMetrics.density
-                holder.messageView.setPaddingRelative(
-                        round(20*density).toInt(),
-                        round(8*density).toInt(),
-                        round(8*density).toInt(),
-                        round(8*density).toInt()
-                )
-            }
-        }
-        if (holder.messageView.layoutParams is FrameLayout.LayoutParams) {
-            //(holder.messageView.layoutParams as FrameLayout.LayoutParams).gravity =
-            //        if (outgoingMessage && bubbleStyle == BUBBLE_STYLE_BOTH) Gravity.END else Gravity.START
-            val defaultReverse = holder.messageView.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL;
-            (holder.messageView.parent.parent as RelativeLayout).layoutDirection = if (reverseBubble != defaultReverse) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
-        }
     }
 
     override fun getViewType() = STUB_ID
@@ -113,5 +66,9 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
     companion object {
         private const val STUB_ID = R.id.messageContentTextStub
+    }
+
+    override fun messageBubbleAllowed(): Boolean {
+        return true
     }
 }

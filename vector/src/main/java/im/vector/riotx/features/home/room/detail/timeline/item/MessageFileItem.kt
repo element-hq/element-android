@@ -55,6 +55,8 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
         holder.fileImageView.setImageResource(iconRes)
         holder.filenameView.setOnClickListener(clickListener)
         holder.filenameView.paintFlags = (holder.filenameView.paintFlags or Paint.UNDERLINE_TEXT_FLAG)
+        // TODO calculate minimum width
+        holder.viewStubContainer.minimumWidth = 2000
     }
 
     override fun unbind(holder: Holder) {
@@ -63,6 +65,10 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
     }
 
     override fun getViewType() = STUB_ID
+
+    override fun messageBubbleAllowed(): Boolean {
+        return true
+    }
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val progressLayout by bind<ViewGroup>(R.id.messageFileUploadProgressLayout)
