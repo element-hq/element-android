@@ -1132,4 +1132,80 @@
     <string name="fab_menu_create_chat">Izravne poruke</string>
 
     <string name="create_room_title">Nova soba</string>
+    <string name="create_room_action_create">IZRADI</string>
+    <string name="riotx_no_registration_notice">%1%s kako biste otvorili račun.</string>
+    <string name="riotx_no_registration_notice_colored_part">Koristite staru aplikaciju</string>
+
+
+    <string name="message_edits">Uređivanja poruka</string>
+    <string name="no_message_edits_found">Nisu pronađena uređivanja</string>
+
+    <string name="room_filtering_filter_hint">Izdvoji razgovore…</string>
+    <string name="room_filtering_footer_title">Ne možete naći što tražite\?</string>
+    <string name="room_filtering_footer_create_new_room">Izradi novu sobu</string>
+    <string name="room_filtering_footer_create_new_direct_message">Pošalji novu izravnu poruku</string>
+    <string name="room_filtering_footer_open_room_directory">Prikaži popis soba</string>
+
+    <string name="room_directory_search_hint">Ime ili identitet (#primjer:matrix.org)</string>
+
+    <string name="labs_swipe_to_reply_in_timeline">Omogući povlačenje za odgovaranje u vremenskoj crti</string>
+
+    <string name="link_copied_to_clipboard">Poveznica kopirana u spremnik</string>
+
+    <string name="add_by_matrix_id">Dodaj po identitetu u Matrixu</string>
+    <string name="creating_direct_room">Izrađuje se soba…</string>
+    <string name="direct_room_no_known_users">Nema rezultata. Koristite Dodaj po identitetu u Matrixu za pretraživanje poslužitelja.</string>
+    <string name="direct_room_start_search">Počnite tipkati za prikaz rezultata</string>
+    <string name="direct_room_filter_hint">Izdvoji po korisničkom imenu ili identitetu…</string>
+
+    <string name="joining_room">Pridruživanje sobi u tijeku…</string>
+
+    <string name="message_view_edit_history">Prikaži povijest uređivanja</string>
+
+    <string name="terms_of_service">Uvjeti korištenja</string>
+    <string name="review_terms">Pregledaj uvjete</string>
+    <string name="terms_description_for_identity_server">Budite drugima vidljivi</string>
+    <string name="read_at">Pročitano u</string>
+
+
+    <string name="identity_server">Poslužitelj identiteta</string>
+    <string name="disconnect_identity_server">Prekini vezu s poslužiteljem identiteta</string>
+    <string name="add_identity_server">Podesi poslužitelja identiteta</string>
+    <string name="change_identity_server">Promijeni poslužitelja identiteta</string>
+    <string name="settings_discovery_identity_server_info">Trenutno koristite %1$s za otkrivanje i da budete vidljivi postojećim kontaktima koje poznate.</string>
+    <string name="settings_discovery_identity_server_info_none">Trenutno ne koristite poslužitelja identiteta. Niže podesite poslužitelja za otkrivanje i da budete vidljivi postojećim kontaktima koje poznate.</string>
+    <string name="settings_discovery_emails_title">Adrese e-pošte vidljive drugima</string>
+    <string name="settings_discovery_no_mails">Opcije za vidljivost će se prikazati kada dodate e-poštu.</string>
+    <string name="settings_discovery_no_msisdn">Opcije za vidljivost će se prikazati kada dodate telefonski broj.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">Prekidanjem veze s Vašim poslužiteljem identiteta znači da nećete biti vidljivi drugim korisnicima i da ih nećete moći slati pozivnice temeljem e-pošte ili telefona.</string>
+    <string name="settings_discovery_msisdn_title">Vidljivi telefonski brojevi</string>
+    <string name="settings_discovery_confirm_mail">Poslan Vam je potvrdna e-pošta na %s. Provjerite Vašu poštu i kliknite na potvrdnu poveznicu</string>
+    <string name="settings_discovery_mail_pending">Na čekanju</string>
+
+    <string name="settings_discovery_enter_identity_server">Unesite novog poslužitelja identiteta</string>
+    <string name="settings_discovery_bad_identity_server">Nije moguće spojiti se na poslužitelja identiteta</string>
+    <string name="settings_discovery_please_enter_server">Unesite URL poslužitelja identiteta</string>
+    <string name="settings_discovery_no_terms_title">Poslužitelj identiteta nema uvjete korištenja</string>
+    <string name="settings_discovery_no_terms">Odabrani poslužitelj identiteta nema uvjete korištenja. Nastavite samo ako vjerujete vlasniku servisa</string>
+    <string name="settings_text_message_sent">Tekstualna poruka je poslana na %s. Unesite potvrdni kȏd iz poruke.</string>
+
+    <string name="settings_discovery_disconnect_with_bound_pid">Trenutno dijelite adrese e-pošte ili telefonske brojeve s poslužiteljem identiteta %1$s. Ponovno se spojite na %2$s kako biste ih prestali dijeliti.</string>
+    <string name="settings_agree_to_terms">Prihvatite uvjete korištenja poslužitelja identiteta (%s) kako biste bili vidljivi temeljem adrese e-pošte ili telefonskog broja.</string>
+
+    <string name="labs_allow_extended_logging">Omogući opširne zapise.</string>
+    <string name="labs_allow_extended_logging_summary">Opširni zapisi pomažu razvijateljima u vidu detaljnih informacija kada pošaljete Gnjevno drmanje. Čak i kada su omogućeni, aplikacija ne zapisuje sadržaj poruka ili bilo koje druge privatne podatke.</string>
+
+
+    <string name="error_terms_not_accepted">Pokušajte ponovno nakon što prihvatite uvjete korištenja Vašeg poslužitelja.</string>
+
+    <string name="error_network_timeout">Čini se da poslužitelju treba previše vremena za odgovor. Mogući uzroci su loša povezivost ili greška na poslužitelju. Kasnije pokušajte ponovno.</string>
+
+    <string name="send_attachment">Pošalji privitak</string>
+
+    <string name="a11y_open_drawer">Otvori navigacijski pretinac</string>
+    <string name="a11y_create_menu_open">Otvori izbornik za izradu soba</string>
+    <string name="a11y_create_menu_close">Zatvori izbornik za izradu soba…</string>
+    <string name="a11y_create_direct_message">Započni novi izravni razgovor</string>
+    <string name="a11y_create_room">Izradi novu sobu</string>
+    <string name="settings_rageshake">Gnjevno drmanje</string>
     </resources>
