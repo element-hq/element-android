@@ -45,7 +45,7 @@ internal object PushRulesMapper {
 
     private fun fromActionStr(actionsStr: String?): List<Any> {
         try {
-            return actionsStr?.let { moshiActionsAdapter.fromJson(it) } ?: emptyList()
+            return actionsStr?.let { moshiActionsAdapter.fromJson(it) }.orEmpty()
         } catch (e: Throwable) {
             Timber.e(e, "## failed to map push rule actions <$actionsStr>")
             return emptyList()

@@ -49,7 +49,7 @@ internal class TimelineEventMapper @Inject constructor(private val readReceiptsS
                             it.user
                         }?.sortedByDescending {
                             it.originServerTs
-                        } ?: emptyList()
+                        }.orEmpty()
         )
     }
 }

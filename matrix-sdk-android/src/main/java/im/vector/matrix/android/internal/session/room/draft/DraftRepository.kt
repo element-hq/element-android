@@ -143,7 +143,7 @@ class DraftRepository @Inject constructor(private val monarchy: Monarchy) {
                 }
         )
         return Transformations.map(liveData) {
-            it.firstOrNull() ?: emptyList()
+            it.firstOrNull().orEmpty()
         }
     }
 
