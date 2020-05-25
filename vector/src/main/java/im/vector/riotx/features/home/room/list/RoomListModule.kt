@@ -23,5 +23,5 @@ import dagger.Module
 abstract class RoomListModule {
 
     @Binds
-    abstract fun providesRoomListViewModelFactory(roomListViewModelFactory: RoomListViewModelFactory): RoomListViewModel.Factory
+    abstract fun providesRoomListViewModelFactory(factory: RoomListViewModelFactory): RoomListViewModel.Factory
 }

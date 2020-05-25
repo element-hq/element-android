@@ -44,7 +44,7 @@ internal class MXOlmEncryption(
         ensureSession(userIds)
         val deviceInfos = ArrayList<CryptoDeviceInfo>()
         for (userId in userIds) {
-            val devices = cryptoStore.getUserDevices(userId)?.values ?: emptyList()
+            val devices = cryptoStore.getUserDevices(userId)?.values.orEmpty()
             for (device in devices) {
                 val key = device.identityKey()
                 if (key == olmDevice.deviceCurve25519Key) {
