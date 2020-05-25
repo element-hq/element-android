@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- tools:ignore is needed because lint thinks this can be replaced with a merge. Replacing this
      with a merge causes the fullscreen SurfaceView not to be centered. -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:ignore="MergeRootFrame">
 
     <org.webrtc.SurfaceViewRenderer
@@ -20,6 +21,68 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp" />
 
+    <ImageView
+        android:id="@+id/iv_end_call"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/ic_call_end"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/layout_call_actions"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_call_actions"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/bg_call_actions">
+
+        <ImageView
+            android:id="@+id/iv_call_speaker"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_call_speaker_default"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="32dp"/>
+
+        <ImageView
+            android:id="@+id/iv_call_flip_camera"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_call_flip_camera_default"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="32dp"/>
+
+        <ImageView
+            android:id="@+id/iv_call_videocam_off"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_call_videocam_off_default"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_call_mute"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_call_mute_default"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="32dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <FrameLayout
         android:id="@+id/hud_fragment_container"
         android:layout_width="match_parent"
@@ -30,4 +93,4 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </FrameLayout>
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

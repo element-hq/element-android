@@ -53,8 +53,10 @@ import javax.inject.Inject
 
 @Parcelize
 data class CallArgs(
-//        val callId: String? = null,
-        val roomId: String
+        val roomId: String,
+        val participantUserId: String,
+        val isIncomingCall: Boolean,
+        val isVideoCall: Boolean
 ) : Parcelable
 
 class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Listener {
@@ -400,9 +402,9 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
 //            mandatory.add(MediaConstraints.KeyValuePair("googHighpassFilter", "true"))
 //        }
 
-        fun newIntent(context: Context, signalingRoomId: String): Intent {
+        fun newIntent(context: Context, roomId: String, participantUserId: String, isIncomingCall: Boolean, isVideoCall: Boolean): Intent {
             return Intent(context, VectorCallActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, CallArgs(roomId = signalingRoomId))
+                putExtra(MvRx.KEY_ARG, CallArgs(roomId, participantUserId, isIncomingCall, isVideoCall))
             }
         }
     }
