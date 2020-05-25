@@ -19,17 +19,20 @@
 package im.vector.riotx.features.rageshake
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.os.AsyncTask
 import android.os.Build
 import android.view.View
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
 import im.vector.matrix.android.api.Matrix
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
+import im.vector.riotx.core.extensions.getAllChildFragments
 import im.vector.riotx.core.extensions.toOnOff
 import im.vector.riotx.features.settings.VectorLocale
 import im.vector.riotx.features.settings.VectorPreferences
@@ -423,7 +426,7 @@ class BugReporter @Inject constructor(
     /**
      * Send a bug report either with email or with Vector.
      */
-    fun openBugReportScreen(activity: Activity, forSuggestion: Boolean = false) {
+    fun openBugReportScreen(activity: FragmentActivity, forSuggestion: Boolean = false) {
         screenshot = takeScreenshot(activity)
 
         val intent = Intent(activity, BugReportActivity::class.java)
@@ -512,41 +515,64 @@ class BugReporter @Inject constructor(
      *
      * @return the screenshot
      */
-    private fun takeScreenshot(activity: Activity): Bitmap? {
-        // get content view
-        val contentView = activity.findViewById<View>(android.R.id.content)
-        if (contentView == null) {
-            Timber.e("Cannot find content view on $activity. Cannot take screenshot.")
-            return null
-        }
-
+    private fun takeScreenshot(activity: FragmentActivity): Bitmap? {
         // get the root view to snapshot
-        val rootView = contentView.rootView
+        val rootView = activity.window?.decorView?.rootView
         if (rootView == null) {
             Timber.e("Cannot find root view on $activity. Cannot take screenshot.")
             return null
         }
-        // refresh it
+
+        val mainBitmap = getBitmap(rootView)
+
+        if (mainBitmap == null) {
+            Timber.e("Cannot get main screenshot")
+            return null
+        }
+
+        try {
+            val cumulBitmap = Bitmap.createBitmap(mainBitmap.width, mainBitmap.height, Bitmap.Config.ARGB_8888)
+
+            val canvas = Canvas(cumulBitmap)
+            canvas.drawBitmap(mainBitmap, 0f, 0f, null)
+            // Add the dialogs if any
+            getDialogBitmaps(activity).forEach {
+                canvas.drawBitmap(it, 0f, 0f, null)
+            }
+
+            return cumulBitmap
+        } catch (e: Throwable) {
+            Timber.e(e, "Cannot get snapshot of screen: $e")
+        }
+
+        return null
+    }
+
+    private fun getDialogBitmaps(activity: FragmentActivity): List<Bitmap> {
+        return activity.supportFragmentManager.fragments
+                .map { it.getAllChildFragments() }
+                .flatten()
+                .filterIsInstance(DialogFragment::class.java)
+                .mapNotNull { fragment ->
+                    fragment.dialog?.window?.decorView?.rootView?.let { rootView ->
+                        getBitmap(rootView)
+                    }
+                }
+    }
+
+    private fun getBitmap(rootView: View): Bitmap? {
         @Suppress("DEPRECATION")
         rootView.isDrawingCacheEnabled = false
         @Suppress("DEPRECATION")
         rootView.isDrawingCacheEnabled = true
 
-        try {
+        return try {
             @Suppress("DEPRECATION")
-            var bitmap = rootView.drawingCache
-
-            // Make a copy, because if Activity is destroyed, the bitmap will be recycled
-            bitmap = Bitmap.createBitmap(bitmap)
-
-            return bitmap
-        } catch (oom: OutOfMemoryError) {
-            Timber.e(oom, "Cannot get drawing cache for $activity OOM.")
-        } catch (e: Exception) {
-            Timber.e(e, "Cannot get snapshot of screen: $e")
+            rootView.drawingCache
+        } catch (e: Throwable) {
+            Timber.e(e, "Cannot get snapshot of dialog: $e")
+            null
         }
-
-        return null
     }
 
     // ==============================================================================================================
