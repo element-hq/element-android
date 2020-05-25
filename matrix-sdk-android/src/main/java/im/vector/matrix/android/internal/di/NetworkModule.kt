@@ -29,8 +29,6 @@ import im.vector.matrix.android.internal.network.interceptors.FormattedJsonHttpL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okreplay.OkReplayInterceptor
-import java.net.InetSocketAddress
-import java.net.Proxy
 import java.util.concurrent.TimeUnit
 
 @Module
@@ -86,8 +84,8 @@ internal object NetworkModule {
                     if (BuildConfig.LOG_PRIVATE_DATA) {
                         addInterceptor(curlLoggingInterceptor)
                     }
-                    matrixConfiguration.proxyConfig?.let {
-                        proxy(Proxy(it.proxyType, InetSocketAddress(it.hostname, it.port)))
+                    matrixConfiguration.proxy?.let {
+                        proxy(it)
                     }
                 }
                 .addInterceptor(okReplayInterceptor)
