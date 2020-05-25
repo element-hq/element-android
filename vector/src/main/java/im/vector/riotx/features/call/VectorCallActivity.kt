@@ -38,17 +38,14 @@ import im.vector.riotx.core.utils.checkPermissions
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.parcel.Parcelize
-import org.webrtc.Camera1Enumerator
-import org.webrtc.Camera2Enumerator
+import kotlinx.android.synthetic.main.activity_call.*
 import org.webrtc.EglBase
 import org.webrtc.IceCandidate
 import org.webrtc.MediaStream
-import org.webrtc.PeerConnection
 import org.webrtc.RendererCommon
 import org.webrtc.SessionDescription
 import org.webrtc.SurfaceViewRenderer
 import org.webrtc.VideoTrack
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @Parcelize
@@ -69,6 +66,7 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
     }
 
     private val callViewModel: VectorCallViewModel by viewModel()
+    private lateinit var callArgs: CallArgs
 
     @Inject lateinit var peerConnectionManager: WebRtcPeerConnectionManager
 
@@ -114,9 +112,18 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (intent.hasExtra(MvRx.KEY_ARG)) {
+            callArgs = intent.getParcelableExtra(MvRx.KEY_ARG)!!
+        } else {
+            finish()
+        }
+
         rootEglBase = EglUtils.rootEglBase ?: return Unit.also {
             finish()
         }
+
+        iv_end_call.setOnClickListener { callViewModel.handle(VectorCallViewActions.EndCall) }
 
         callViewModel.viewEvents
                 .observe()
@@ -161,8 +168,9 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
         // setSwappedFeeds(true /* isSwappedFeeds */);
 
         if (isFirstCreation()) {
-            peerConnectionManager.createPeerConnectionFactory()
+            //peerConnectionManager.createPeerConnectionFactory()
 
+            /*
             val cameraIterator = if (Camera2Enumerator.isSupported(this)) Camera2Enumerator(this) else Camera1Enumerator(false)
             val frontCamera = cameraIterator.deviceNames
                     ?.firstOrNull { cameraIterator.isFrontFacing(it) }
@@ -170,19 +178,12 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
                     ?: return true
             val videoCapturer = cameraIterator.createCapturer(frontCamera, null)
 
-            val iceServers = ArrayList<PeerConnection.IceServer>().apply {
-                listOf("turn:turn.matrix.org:3478?transport=udp", "turn:turn.matrix.org:3478?transport=tcp", "turns:turn.matrix.org:443?transport=tcp").forEach {
-                    add(
-                            PeerConnection.IceServer.builder(it)
-                                    .setUsername("xxxxx")
-                                    .setPassword("xxxxx")
-                                    .createIceServer()
-                    )
-                }
-            }
+
 
             peerConnectionManager.createPeerConnection(videoCapturer, iceServers)
-            peerConnectionManager.startCall()
+             */
+
+            //peerConnectionManager.startCall()
         }
 //        PeerConnectionFactory.initialize(PeerConnectionFactory
 //                .InitializationOptions.builder(applicationContext)
@@ -322,15 +323,6 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
 //                Timber.v("## VOIP onCreateFailure $p0")
 //            }
 //        }, constraints)
-        iceCandidateSource
-                .buffer(400, TimeUnit.MILLISECONDS)
-                .subscribe {
-                    // omit empty :/
-                    if (it.isNotEmpty()) {
-                        callViewModel.handle(VectorCallViewActions.AddLocalIceCandidate(it))
-                    }
-                }
-                .disposeOnDestroy()
 
         peerConnectionManager.attachViewRenderers(pipRenderer, fullscreenRenderer)
         return false
@@ -433,6 +425,6 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
     }
 
     override fun sendOffer(sessionDescription: SessionDescription) {
-        callViewModel.handle(VectorCallViewActions.SendOffer(sessionDescription))
+
     }
 }

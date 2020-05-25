@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.call
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -27,16 +26,10 @@ import im.vector.matrix.android.api.session.call.CallsListener
 import im.vector.matrix.android.api.session.room.model.call.CallAnswerContent
 import im.vector.matrix.android.api.session.room.model.call.CallHangupContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
-import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.platform.VectorViewModelAction
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.webrtc.IceCandidate
-import org.webrtc.SessionDescription
-import java.util.UUID
 
 data class VectorCallViewState(
         val callId: String? = null,
@@ -45,8 +38,7 @@ data class VectorCallViewState(
 
 sealed class VectorCallViewActions : VectorViewModelAction {
 
-    data class SendOffer(val sdp: SessionDescription) : VectorCallViewActions()
-    data class AddLocalIceCandidate(val iceCandidates: List<IceCandidate>) : VectorCallViewActions()
+    object EndCall : VectorCallViewActions()
 }
 
 sealed class VectorCallViewEvents : VectorViewEvents {
@@ -57,7 +49,8 @@ sealed class VectorCallViewEvents : VectorViewEvents {
 
 class VectorCallViewModel @AssistedInject constructor(
         @Assisted initialState: VectorCallViewState,
-        val session: Session
+        val session: Session,
+        val webRtcPeerConnectionManager: WebRtcPeerConnectionManager
 ) : VectorViewModel<VectorCallViewState, VectorCallViewActions, VectorCallViewEvents>(initialState) {
 
     private val callServiceListener: CallsListener = object : CallsListener {
@@ -90,25 +83,9 @@ class VectorCallViewModel @AssistedInject constructor(
         super.onCleared()
     }
 
-    override fun handle(action: VectorCallViewActions) = withState { state ->
+    override fun handle(action: VectorCallViewActions) = withState {
         when (action) {
-            is VectorCallViewActions.SendOffer            -> {
-                viewModelScope.launch(Dispatchers.IO) {
-                    awaitCallback<String> {
-                        val callId = state.callId ?: UUID.randomUUID().toString().also {
-                            setState {
-                                copy(callId = it)
-                            }
-                        }
-                        session.callService().sendOfferSdp(callId, state.roomId, action.sdp, it)
-                    }
-                }
-            }
-            is VectorCallViewActions.AddLocalIceCandidate -> {
-                viewModelScope.launch {
-                    session.callService().sendLocalIceCandidates(state.callId ?: "", state.roomId, action.iceCandidates)
-                }
-            }
+            VectorCallViewActions.EndCall -> webRtcPeerConnectionManager.endCall()
         }.exhaustive
     }
 

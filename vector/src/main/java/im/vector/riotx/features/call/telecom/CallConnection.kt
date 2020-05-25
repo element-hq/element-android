@@ -21,14 +21,10 @@ import android.os.Build
 import android.telecom.Connection
 import android.telecom.DisconnectCause
 import androidx.annotation.RequiresApi
-import im.vector.riotx.features.call.VectorCallViewActions
 import im.vector.riotx.features.call.VectorCallViewModel
 import im.vector.riotx.features.call.WebRtcPeerConnectionManager
-import org.webrtc.Camera1Enumerator
-import org.webrtc.Camera2Enumerator
 import org.webrtc.IceCandidate
 import org.webrtc.MediaStream
-import org.webrtc.PeerConnection
 import org.webrtc.SessionDescription
 import org.webrtc.VideoTrack
 import timber.log.Timber
@@ -91,7 +87,8 @@ import javax.inject.Inject
     }
 
     private fun startCall() {
-        peerConnectionManager.createPeerConnectionFactory()
+        /*
+        //peerConnectionManager.createPeerConnectionFactory()
         peerConnectionManager.listener = this
 
         val cameraIterator = if (Camera2Enumerator.isSupported(context)) Camera2Enumerator(context) else Camera1Enumerator(false)
@@ -113,7 +110,8 @@ import javax.inject.Inject
         }
 
         peerConnectionManager.createPeerConnection(videoCapturer, iceServers)
-        peerConnectionManager.startCall()
+        //peerConnectionManager.startCall()
+         */
     }
 
     override fun addLocalIceCandidate(candidates: IceCandidate) {
@@ -129,6 +127,6 @@ import javax.inject.Inject
     }
 
     override fun sendOffer(sessionDescription: SessionDescription) {
-        callViewModel.handle(VectorCallViewActions.SendOffer(sessionDescription))
+
     }
 }

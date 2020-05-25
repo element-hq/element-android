@@ -127,6 +127,16 @@ internal class DefaultCallService @Inject constructor(
     override fun sendLocalIceCandidateRemovals(callId: String, roomId: String, candidates: List<IceCandidate>) {
     }
 
+    override fun sendHangup(callId: String, roomId: String) {
+        val eventContent = CallHangupContent(
+                callId = callId,
+                version = 0
+        )
+        createEventAndLocalEcho(type = EventType.CALL_HANGUP, roomId = roomId, content = eventContent.toContent()).let { event ->
+            roomEventSender.sendEvent(event)
+        }
+    }
+
     override fun addCallListener(listener: CallsListener) {
         if (!callListeners.contains(listener)) callListeners.add(listener)
     }

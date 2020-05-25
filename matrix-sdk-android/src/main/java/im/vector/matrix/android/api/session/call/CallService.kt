@@ -46,6 +46,11 @@ interface CallService {
      */
     fun sendLocalIceCandidateRemovals(callId: String, roomId: String, candidates: List<IceCandidate>)
 
+    /**
+     * Send a hangup event
+     */
+    fun sendHangup(callId: String, roomId: String)
+
     fun addCallListener(listener: CallsListener)
 
     fun removeCallListener(listener: CallsListener)
