@@ -23,7 +23,6 @@ import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.BuildConfig
 import im.vector.matrix.android.api.auth.AuthenticationService
-import im.vector.matrix.android.api.crypto.MXCryptoConfig
 import im.vector.matrix.android.internal.SessionManager
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
 import im.vector.matrix.android.internal.crypto.attachments.MXEncryptedAttachments
@@ -32,25 +31,9 @@ import im.vector.matrix.android.internal.network.UserAgentHolder
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import org.matrix.olm.OlmManager
 import java.io.InputStream
-import java.net.Proxy
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
-
-data class MatrixConfiguration(
-        val applicationFlavor: String = "Default-application-flavor",
-        val cryptoConfig: MXCryptoConfig = MXCryptoConfig(),
-        /**
-         * Optional proxy to connect to the matrix servers
-         * You can create one using for instance Proxy(proxyType, InetSocketAddress(hostname, port)
-         */
-        val proxy: Proxy? = null
-) {
-
-    interface Provider {
-        fun providesMatrixConfiguration(): MatrixConfiguration
-    }
-}
 
 /**
  * This is the main entry point to the matrix sdk.
