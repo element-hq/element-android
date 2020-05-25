@@ -396,4 +396,43 @@
 	<item quantity="one">1 aktiv medlem</item>
 	<item quantity="other">%d aktiva medlemmar</item>
 </plurals>
+    <plurals name="room_title_members">
+	<item quantity="one">1 medlem</item>
+	<item quantity="other">%d medlemmar</item>
+</plurals>
+    <string name="room_title_one_member">1 medlem</string>
+
+    <plurals name="format_time_s">
+	<item quantity="one">1s</item>
+	<item quantity="other">%ds</item>
+</plurals>
+    <plurals name="format_time_m">
+	<item quantity="one">1m</item>
+	<item quantity="other">%dm</item>
+</plurals>
+    <plurals name="format_time_h">
+	<item quantity="one">1t</item>
+	<item quantity="other">%dt</item>
+</plurals>
+    <plurals name="format_time_d">
+	<item quantity="one">1d</item>
+	<item quantity="other">%dd</item>
+</plurals>
+
+    <string name="room_participants_leave_prompt_title">Lämna rum</string>
+    <string name="room_participants_leave_prompt_msg">Är du säker på att du vill lämna rummet\?</string>
+    <string name="room_participants_remove_prompt_msg">Är du säker på att du vill ta bort %s från den här chatten\?</string>
+    <string name="room_participants_create">Skapa</string>
+
+    <string name="room_participants_online">Online</string>
+    <string name="room_participants_offline">Offline</string>
+    <string name="room_participants_idle">Inaktiv</string>
+    <string name="room_participants_now">%1$s nu</string>
+    <string name="room_participants_ago">%1$s för %2$s sen</string>
+
+    <string name="room_participants_header_admin_tools">ADMINISTRATIONSVERKTYG</string>
+    <string name="room_participants_header_call">RING</string>
+    <string name="room_participants_header_direct_chats">DIREKTCHATT</string>
+    <string name="room_participants_header_devices">SESSIONER</string>
+
     </resources>
