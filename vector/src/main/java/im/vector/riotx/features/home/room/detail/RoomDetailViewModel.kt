@@ -213,6 +213,8 @@ class RoomDetailViewModel @AssistedInject constructor(
                 }
     }
 
+    fun getOtherUserIds() = room.roomSummary()?.otherMemberIds
+
     override fun handle(action: RoomDetailAction) {
         when (action) {
             is RoomDetailAction.UserIsTyping                     -> handleUserIsTyping(action)
@@ -366,7 +368,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     fun isMenuItemVisible(@IdRes itemId: Int) = when (itemId) {
-        R.id.clear_message_queue ->
+        R.id.clear_message_queue         ->
             /* For now always disable on production, worker cancellation is not working properly */
             timeline.pendingEventCount() > 0 && vectorPreferences.developerMode()
         R.id.resend_all          -> timeline.failedToDeliverEventCount() > 0

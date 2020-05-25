@@ -144,7 +144,7 @@ internal class DefaultCallService @Inject constructor(
             }
             EventType.CALL_INVITE -> {
                 event.getClearContent().toModel<CallInviteContent>()?.let {
-                    onCallInvite(event.roomId ?: "", it)
+                    onCallInvite(event.roomId ?: "", event.senderId ?: "", it)
                 }
             }
             EventType.CALL_HANGUP -> {
@@ -171,10 +171,12 @@ internal class DefaultCallService @Inject constructor(
         }
     }
 
-    private fun onCallInvite(roomId: String, answer: CallInviteContent) {
+    private fun onCallInvite(roomId: String, userId: String, answer: CallInviteContent) {
+        if (userId == this.userId) return
+
         callListeners.forEach {
             tryThis {
-                it.onCallInviteReceived(roomId, answer)
+                it.onCallInviteReceived(roomId, userId, answer)
             }
         }
     }

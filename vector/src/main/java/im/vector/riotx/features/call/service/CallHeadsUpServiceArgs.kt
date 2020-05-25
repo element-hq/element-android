@@ -21,7 +21,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class CallHeadsUpServiceArgs(
-        val callerDisplayName: String,
+        val roomId: String,
+        val participantUserId: String,
         val isIncomingCall: Boolean,
         val isVideoCall: Boolean
 ) : Parcelable

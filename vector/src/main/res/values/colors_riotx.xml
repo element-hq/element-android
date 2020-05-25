@@ -190,5 +190,14 @@
     <color name="riotx_keys_backup_banner_accent_color_light">#FFF8E3</color>
     <color name="riotx_keys_backup_banner_accent_color_dark">#22262E</color>
 
+    <attr name="riotx_call_actions_bg_gradient_start" format="color" />
+    <color name="riotx_call_actions_bg_gradient_start_light">#000000</color>
+    <color name="riotx_call_actions_bg_gradient_start_dark">#000000</color>
+    <color name="riotx_call_actions_bg_gradient_start_black">#000000</color>
+
+    <attr name="riotx_call_actions_bg_gradient_end" format="color" />
+    <color name="riotx_call_actions_bg_gradient_end_light">@android:color/transparent</color>
+    <color name="riotx_call_actions_bg_gradient_end_dark">@android:color/transparent</color>
+    <color name="riotx_call_actions_bg_gradient_end_black">@android:color/transparent</color>
 
 </resources>

@@ -69,7 +69,7 @@ class VectorCallViewModel @AssistedInject constructor(
             }
         }
 
-        override fun onCallInviteReceived(signalingRoomId: String, callInviteContent: CallInviteContent) {
+        override fun onCallInviteReceived(signalingRoomId: String, participantUserId: String, callInviteContent: CallInviteContent) {
         }
 
         override fun onCallHangupReceived(callHangupContent: CallHangupContent) {

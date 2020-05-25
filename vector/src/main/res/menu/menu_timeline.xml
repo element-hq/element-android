@@ -2,6 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/video_call"
+        android:icon="@drawable/ic_videocam"
+        android:title="@string/action_video_call"
+        android:visible="false"
+        app:showAsAction="always"
+        tools:visible="true" />
 
     <item
         android:id="@+id/open_matrix_apps"

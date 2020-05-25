@@ -127,7 +127,7 @@ import im.vector.riotx.features.attachments.ContactAttachment
 import im.vector.riotx.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.riotx.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.riotx.features.attachments.toGroupedContentAttachmentData
-import im.vector.riotx.features.call.service.CallHeadsUpService
+import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.command.Command
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.riotx.features.crypto.util.toImageRes
@@ -197,7 +197,8 @@ class RoomDetailFragment @Inject constructor(
         val roomDetailViewModelFactory: RoomDetailViewModel.Factory,
         private val eventHtmlRenderer: EventHtmlRenderer,
         private val vectorPreferences: VectorPreferences,
-        private val colorProvider: ColorProvider) :
+        private val colorProvider: ColorProvider,
+        private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager) :
         VectorBaseFragment(),
         TimelineEventController.Callback,
         VectorInviteView.Callback,
@@ -484,14 +485,10 @@ class RoomDetailFragment @Inject constructor(
             roomDetailViewModel.handle(RoomDetailAction.ResendAll)
             return true
         }
-        if (item.itemId == R.id.voip_call) {
-            /*
-            VectorCallActivity.newIntent(requireContext(), roomDetailArgs.roomId).let {
-                startActivity(it)
+        if (item.itemId == R.id.voice_call || item.itemId == R.id.video_call) {
+            roomDetailViewModel.getOtherUserIds()?.firstOrNull()?.let {
+                webRtcPeerConnectionManager.startOutgoingCall(requireContext(), roomDetailArgs.roomId, it, item.itemId == R.id.video_call)
             }
-             */
-            val callHeadsUpServiceIntent = Intent(requireContext(), CallHeadsUpService::class.java)
-            ContextCompat.startForegroundService(requireContext(), callHeadsUpServiceIntent)
             return true
         }
         return super.onOptionsItemSelected(item)

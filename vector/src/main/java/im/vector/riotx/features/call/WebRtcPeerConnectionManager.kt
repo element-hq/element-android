@@ -19,21 +19,16 @@ package im.vector.riotx.features.call
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Icon
-import android.os.Build
-import android.telecom.PhoneAccount
-import android.telecom.PhoneAccountHandle
-import android.telecom.TelecomManager
+import android.content.ServiceConnection
+import android.os.IBinder
 import androidx.core.content.ContextCompat
 import im.vector.matrix.android.api.session.call.CallsListener
 import im.vector.matrix.android.api.session.call.EglUtils
 import im.vector.matrix.android.api.session.room.model.call.CallAnswerContent
 import im.vector.matrix.android.api.session.room.model.call.CallHangupContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
-import im.vector.riotx.BuildConfig
-import im.vector.riotx.R
+import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.features.call.service.CallHeadsUpService
-import im.vector.riotx.features.call.telecom.VectorConnectionService
 import org.webrtc.AudioSource
 import org.webrtc.AudioTrack
 import org.webrtc.DefaultVideoDecoderFactory
@@ -62,8 +57,9 @@ import javax.inject.Singleton
  */
 @Singleton
 class WebRtcPeerConnectionManager @Inject constructor(
-        private val context: Context
-) : CallsListener {
+        private val context: Context,
+        private val sessionHolder: ActiveSessionHolder
+        ) : CallsListener {
 
     interface Listener {
         fun addLocalIceCandidate(candidates: IceCandidate)
@@ -74,26 +70,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         fun sendOffer(sessionDescription: SessionDescription)
     }
 
-    var phoneAccountHandle: PhoneAccountHandle? = null
     var localMediaStream: MediaStream? = null
-
-    init {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val componentName = ComponentName(BuildConfig.APPLICATION_ID, VectorConnectionService::class.java.name)
-            val appName = context.getString(R.string.app_name)
-            phoneAccountHandle = PhoneAccountHandle(componentName, appName)
-            val phoneAccount = PhoneAccount.Builder(phoneAccountHandle, BuildConfig.APPLICATION_ID)
-                    .setIcon(Icon.createWithResource(context, R.drawable.riotx_logo))
-                    .setCapabilities(PhoneAccount.CAPABILITY_SELF_MANAGED)
-                    .setCapabilities(PhoneAccount.CAPABILITY_VIDEO_CALLING)
-                    .setCapabilities(PhoneAccount.CAPABILITY_CALL_SUBJECT)
-                    .build()
-            ContextCompat.getSystemService(context, TelecomManager::class.java)
-                    ?.registerPhoneAccount(phoneAccount)
-        } else {
-            // ignore?
-        }
-    }
 
     var listener: Listener? = null
 
@@ -120,6 +97,17 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     var localSurfaceRenderer: WeakReference<SurfaceViewRenderer>? = null
     var remoteSurfaceRenderer: WeakReference<SurfaceViewRenderer>? = null
+
+    var callHeadsUpService: CallHeadsUpService? = null
+
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName?) {
+        }
+
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            callHeadsUpService = (service as? CallHeadsUpService.CallHeadsUpServiceBinder)?.getService()
+        }
+    }
 
     fun createPeerConnectionFactory() {
         executor.execute {
@@ -331,6 +319,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
             peerConnectionFactory?.stopAecDump()
             peerConnectionFactory = null
         }
+        context.stopService(Intent(context, CallHeadsUpService::class.java))
     }
 
     companion object {
@@ -356,27 +345,20 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
     }
 
-    override fun onCallInviteReceived(signalingRoomId: String, callInviteContent: CallInviteContent) {
-        val callHeadsUpServiceIntent = Intent(context, CallHeadsUpService::class.java)
+    fun startOutgoingCall(context: Context, signalingRoomId: String, participantUserId: String, isVideoCall: Boolean) {
+        startHeadsUpService(signalingRoomId, sessionHolder.getActiveSession().myUserId, false, isVideoCall)
+        context.startActivity(VectorCallActivity.newIntent(context, signalingRoomId, participantUserId, false, isVideoCall))
+    }
+
+    override fun onCallInviteReceived(signalingRoomId: String, participantUserId: String, callInviteContent: CallInviteContent) {
+        startHeadsUpService(signalingRoomId, participantUserId, true, callInviteContent.isVideo())
+    }
+
+    private fun startHeadsUpService(roomId: String, participantUserId: String, isIncomingCall: Boolean, isVideoCall: Boolean) {
+        val callHeadsUpServiceIntent = CallHeadsUpService.newInstance(context, roomId, participantUserId, isIncomingCall, isVideoCall)
         ContextCompat.startForegroundService(context, callHeadsUpServiceIntent)
-        /*
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            ContextCompat.getSystemService(context, TelecomManager::class.java)?.let { telecomManager ->
-                phoneAccountHandle?.let { phoneAccountHandle ->
-                    telecomManager.addNewIncomingCall(
-                            phoneAccountHandle,
-                            Bundle().apply {
-                                putString("MX_CALL_ROOM_ID", signalingRoomId)
-                                putString("MX_CALL_CALL_ID", callInviteContent.callId)
-                                putParcelable(TelecomManager.EXTRA_PHONE_ACCOUNT_HANDLE, phoneAccountHandle)
-                                putInt(TelecomManager.EXTRA_INCOMING_VIDEO_STATE, VideoProfile.STATE_BIDIRECTIONAL)
-                                putInt(TelecomManager.EXTRA_START_CALL_WITH_VIDEO_STATE, VideoProfile.STATE_BIDIRECTIONAL)
-                            }
-                    )
-                }
-            }
-        }
-         */
+
+        context.bindService(Intent(context, CallHeadsUpService::class.java), serviceConnection, 0)
     }
 
     override fun onCallAnswerReceived(callAnswerContent: CallAnswerContent) {
