@@ -4,6 +4,7 @@ Changes in RiotX 0.21.0 (2020-XX-XX)
 Features ✨:
  - Identity server support (#607)
  - Switch language support (#41)
+ - Display list of attachments of a room (#860)
 
 Improvements 🙌:
  - Better connectivity lost indicator when airplane mode is on

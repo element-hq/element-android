@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?selectableItemBackground"
+    android:minHeight="64dp">
+
+    <ImageView
+        android:id="@+id/uploadsFileIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:src="@drawable/ic_file"
+        android:tint="?riotx_text_primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <im.vector.riotx.core.platform.EllipsizingTextView
+        android:id="@+id/uploadsFileTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="?riotx_text_primary"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/uploadsFileSubtitle"
+        app:layout_constraintEnd_toStartOf="@+id/uploadsFileActionDownload"
+        app:layout_constraintStart_toEndOf="@+id/uploadsFileIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Filename.file" />
+
+    <im.vector.riotx.core.platform.EllipsizingTextView
+        android:id="@+id/uploadsFileSubtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:ellipsize="end"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/uploadsFileTitle"
+        app:layout_constraintStart_toStartOf="@+id/uploadsFileTitle"
+        app:layout_constraintTop_toBottomOf="@+id/uploadsFileTitle"
+        tools:text="Username at 12:00 on 01/01/01" />
+
+    <ImageView
+        android:id="@+id/uploadsFileActionDownload"
+        android:layout_width="@dimen/layout_touch_size"
+        android:layout_height="@dimen/layout_touch_size"
+        android:scaleType="center"
+        android:src="@drawable/ic_download"
+        android:tint="?colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/uploadsFileActionShare"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/uploadsFileActionShare"
+        android:layout_width="@dimen/layout_touch_size"
+        android:layout_height="@dimen/layout_touch_size"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:scaleType="center"
+        android:src="@drawable/ic_material_share"
+        android:tint="?colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

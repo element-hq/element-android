@@ -76,6 +76,9 @@ import im.vector.riotx.features.roommemberprofile.devices.DeviceTrustInfoActionF
 import im.vector.riotx.features.roomprofile.RoomProfileFragment
 import im.vector.riotx.features.roomprofile.members.RoomMemberListFragment
 import im.vector.riotx.features.roomprofile.settings.RoomSettingsFragment
+import im.vector.riotx.features.roomprofile.uploads.RoomUploadsFragment
+import im.vector.riotx.features.roomprofile.uploads.files.RoomUploadsFilesFragment
+import im.vector.riotx.features.roomprofile.uploads.media.RoomUploadsMediaFragment
 import im.vector.riotx.features.settings.VectorSettingsAdvancedNotificationPreferenceFragment
 import im.vector.riotx.features.settings.VectorSettingsHelpAboutFragment
 import im.vector.riotx.features.settings.VectorSettingsLabsFragment
@@ -96,9 +99,9 @@ import im.vector.riotx.features.settings.locale.LocalePickerFragment
 import im.vector.riotx.features.settings.push.PushGatewaysFragment
 import im.vector.riotx.features.share.IncomingShareFragment
 import im.vector.riotx.features.signout.soft.SoftLogoutFragment
+import im.vector.riotx.features.terms.ReviewTermsFragment
 import im.vector.riotx.features.userdirectory.KnownUsersFragment
 import im.vector.riotx.features.userdirectory.UserDirectoryFragment
-import im.vector.riotx.features.terms.ReviewTermsFragment
 
 @Module
 interface FragmentModule {
@@ -307,6 +310,21 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(RoomMemberListFragment::class)
     fun bindRoomMemberListFragment(fragment: RoomMemberListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomUploadsFragment::class)
+    fun bindRoomUploadsFragment(fragment: RoomUploadsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomUploadsMediaFragment::class)
+    fun bindRoomUploadsMediaFragment(fragment: RoomUploadsMediaFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomUploadsFilesFragment::class)
+    fun bindRoomUploadsFilesFragment(fragment: RoomUploadsFilesFragment): Fragment
 
     @Binds
     @IntoMap

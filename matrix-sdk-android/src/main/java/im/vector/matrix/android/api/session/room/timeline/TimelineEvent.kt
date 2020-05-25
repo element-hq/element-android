@@ -26,6 +26,7 @@ import im.vector.matrix.android.api.session.room.model.ReadReceipt
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageStickerContent
 import im.vector.matrix.android.api.session.room.model.message.isReply
+import im.vector.matrix.android.api.session.room.sender.SenderInfo
 import im.vector.matrix.android.api.util.ContentUtils.extractUsefulTextFromReply
 import im.vector.matrix.android.internal.crypto.model.event.EncryptedEventContent
 
@@ -39,9 +40,7 @@ data class TimelineEvent(
         val localId: Long,
         val eventId: String,
         val displayIndex: Int,
-        val senderName: String?,
-        val isUniqueDisplayName: Boolean,
-        val senderAvatar: String?,
+        val senderInfo: SenderInfo,
         val annotations: EventAnnotationsSummary? = null,
         val readReceipts: List<ReadReceipt> = emptyList()
 ) {
@@ -66,14 +65,6 @@ data class TimelineEvent(
         }
         if (!metadata.containsKey(key)) {
             metadata[key] = data
-        }
-    }
-
-    fun getDisambiguatedDisplayName(): String {
-        return when {
-            senderName.isNullOrBlank() -> root.senderId ?: ""
-            isUniqueDisplayName        -> senderName
-            else                       -> "$senderName (${root.senderId})"
         }
     }
 

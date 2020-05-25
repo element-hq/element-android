@@ -85,12 +85,10 @@ class MergedHeaderItemFactory @Inject constructor(private val avatarRenderer: Av
                 if (!highlighted && mergedEvent.root.eventId == eventIdToHighlight) {
                     highlighted = true
                 }
-                val senderAvatar = mergedEvent.senderAvatar
-                val senderName = mergedEvent.getDisambiguatedDisplayName()
                 val data = BasedMergedItem.Data(
                         userId = mergedEvent.root.senderId ?: "",
-                        avatarUrl = senderAvatar,
-                        memberName = senderName,
+                        avatarUrl = mergedEvent.senderInfo.avatarUrl,
+                        memberName = mergedEvent.senderInfo.disambiguatedDisplayName,
                         localId = mergedEvent.localId,
                         eventId = mergedEvent.root.eventId ?: ""
                 )
@@ -158,12 +156,10 @@ class MergedHeaderItemFactory @Inject constructor(private val avatarRenderer: Av
                         if (!highlighted && mergedEvent.root.eventId == eventIdToHighlight) {
                             highlighted = true
                         }
-                        val senderAvatar = mergedEvent.senderAvatar
-                        val senderName = mergedEvent.getDisambiguatedDisplayName()
                         val data = BasedMergedItem.Data(
                                 userId = mergedEvent.root.senderId ?: "",
-                                avatarUrl = senderAvatar,
-                                memberName = senderName,
+                                avatarUrl = mergedEvent.senderInfo.avatarUrl,
+                                memberName = mergedEvent.senderInfo.disambiguatedDisplayName,
                                 localId = mergedEvent.localId,
                                 eventId = mergedEvent.root.eventId ?: ""
                         )

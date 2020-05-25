@@ -22,7 +22,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Spannable
@@ -30,12 +29,10 @@ import android.view.HapticFeedbackConstants
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.Window
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.text.buildSpannedString
@@ -49,7 +46,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.airbnb.epoxy.EpoxyModel
-import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
@@ -95,6 +91,7 @@ import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.setTextOrHide
 import im.vector.riotx.core.extensions.showKeyboard
+import im.vector.riotx.core.extensions.trackItemsVisibilityChange
 import im.vector.riotx.core.files.addEntryToDownloadManager
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.intent.getMimeTypeFromUri
@@ -150,9 +147,7 @@ import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.PillImageSpan
 import im.vector.riotx.features.invite.VectorInviteView
 import im.vector.riotx.features.media.ImageContentRenderer
-import im.vector.riotx.features.media.ImageMediaViewerActivity
 import im.vector.riotx.features.media.VideoContentRenderer
-import im.vector.riotx.features.media.VideoMediaViewerActivity
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.permalink.NavigationInterceptor
 import im.vector.riotx.features.permalink.PermalinkHandler
@@ -463,7 +458,7 @@ class RoomDetailFragment @Inject constructor(
         autoCompleter.enterSpecialMode()
         // switch to expanded bar
         composerLayout.composerRelatedMessageTitle.apply {
-            text = event.getDisambiguatedDisplayName()
+            text = event.senderInfo.disambiguatedDisplayName
             setTextColor(ContextCompat.getColor(requireContext(), getColorFromUserId(event.root.senderId)))
         }
 
@@ -482,11 +477,7 @@ class RoomDetailFragment @Inject constructor(
         composerLayout.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
         composerLayout.sendButton.contentDescription = getString(descriptionRes)
 
-        avatarRenderer.render(
-                MatrixItem.UserItem(event.root.senderId
-                        ?: "", event.getDisambiguatedDisplayName(), event.senderAvatar),
-                composerLayout.composerRelatedMessageAvatar
-        )
+        avatarRenderer.render(event.senderInfo.toMatrixItem(), composerLayout.composerRelatedMessageAvatar)
 
         composerLayout.expand {
             if (isAdded) {
@@ -543,8 +534,7 @@ class RoomDetailFragment @Inject constructor(
         timelineEventController.callback = this
         timelineEventController.timeline = roomDetailViewModel.timeline
 
-        val epoxyVisibilityTracker = EpoxyVisibilityTracker()
-        epoxyVisibilityTracker.attach(recyclerView)
+        recyclerView.trackItemsVisibilityChange()
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, true)
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager, timelineEventController)
@@ -998,31 +988,14 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onImageMessageClicked(messageImageContent: MessageImageInfoContent, mediaData: ImageContentRenderer.Data, view: View) {
-        // TODO Use navigator
-
-        val intent = ImageMediaViewerActivity.newIntent(vectorBaseActivity, mediaData, ViewCompat.getTransitionName(view))
-        val pairs = ArrayList<Pair<View, String>>()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            requireActivity().window.decorView.findViewById<View>(android.R.id.statusBarBackground)?.let {
-                pairs.add(Pair(it, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME))
-            }
-            requireActivity().window.decorView.findViewById<View>(android.R.id.navigationBarBackground)?.let {
-                pairs.add(Pair(it, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME))
-            }
+        navigator.openImageViewer(requireActivity(), mediaData, view) { pairs ->
+            pairs.add(Pair(roomToolbar, ViewCompat.getTransitionName(roomToolbar) ?: ""))
+            pairs.add(Pair(composerLayout, ViewCompat.getTransitionName(composerLayout) ?: ""))
         }
-        pairs.add(Pair(view, ViewCompat.getTransitionName(view) ?: ""))
-        pairs.add(Pair(roomToolbar, ViewCompat.getTransitionName(roomToolbar) ?: ""))
-        pairs.add(Pair(composerLayout, ViewCompat.getTransitionName(composerLayout) ?: ""))
-
-        val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                requireActivity(), *pairs.toTypedArray()).toBundle()
-        startActivity(intent, bundle)
     }
 
     override fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View) {
-        // TODO Use navigator
-        val intent = VideoMediaViewerActivity.newIntent(vectorBaseActivity, mediaData)
-        startActivity(intent)
+        navigator.openVideoViewer(requireActivity(), mediaData)
     }
 
     override fun onFileMessageClicked(eventId: String, messageFileContent: MessageFileContent) {

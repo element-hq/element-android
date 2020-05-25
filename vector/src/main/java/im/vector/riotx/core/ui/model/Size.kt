@@ -16,5 +16,7 @@
 
 package im.vector.riotx.core.ui.model
 
+import androidx.annotation.Px
+
 // android.util.Size in API 21+
-data class Size(val width: Int, val height: Int)
+data class Size(@Px val width: Int, @Px val height: Int)

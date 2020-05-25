@@ -19,7 +19,6 @@ package im.vector.riotx.features.roomdirectory
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.snackbar.Snackbar
@@ -29,6 +28,7 @@ import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
+import im.vector.riotx.core.extensions.trackItemsVisibilityChange
 import im.vector.riotx.core.platform.VectorBaseFragment
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_public_rooms.*
@@ -107,8 +107,7 @@ class PublicRoomsFragment @Inject constructor(
     }
 
     private fun setupRecyclerView() {
-        val epoxyVisibilityTracker = EpoxyVisibilityTracker()
-        epoxyVisibilityTracker.attach(publicRoomsList)
+        publicRoomsList.trackItemsVisibilityChange()
         publicRoomsList.configureWith(publicRoomsController)
         publicRoomsController.callback = this
     }
