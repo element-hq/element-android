@@ -16,20 +16,22 @@
 
 package im.vector.riotx.features.call.service
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.ContentResolver.SCHEME_ANDROID_RESOURCE
 import android.content.Context
 import android.content.Intent
 import android.media.AudioAttributes
-import android.media.AudioManager
 import android.net.Uri
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import im.vector.riotx.R
+import im.vector.riotx.features.call.VectorCallActivity
 
 class CallHeadsUpService : Service() {
 
@@ -44,37 +46,57 @@ class CallHeadsUpService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        //val callHeadsUpServiceArgs: CallHeadsUpServiceArgs? = intent?.extras?.getParcelable(EXTRA_CALL_HEADS_UP_SERVICE_PARAMS)
+        val callHeadsUpServiceArgs: CallHeadsUpServiceArgs? = intent?.extras?.getParcelable(EXTRA_CALL_HEADS_UP_SERVICE_PARAMS)
 
+        createNotificationChannel()
+
+        val title = callHeadsUpServiceArgs?.participantUserId ?: ""
+        val description = when {
+            callHeadsUpServiceArgs?.isIncomingCall == false -> getString(R.string.call_ring)
+            callHeadsUpServiceArgs?.isVideoCall == true     -> getString(R.string.incoming_video_call)
+            else                                            -> getString(R.string.incoming_voice_call)
+        }
+
+        val actions = if (callHeadsUpServiceArgs?.isIncomingCall == true) createAnswerAndRejectActions() else emptyList()
+
+        createNotification(title, description, actions).also {
+            startForeground(NOTIFICATION_ID, it)
+        }
+
+        return START_STICKY
+    }
+
+    private fun createNotification(title: String, content: String, actions: List<NotificationCompat.Action>): Notification {
+        return NotificationCompat
+                .Builder(applicationContext, CHANNEL_ID)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setSmallIcon(R.drawable.ic_call)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setCategory(NotificationCompat.CATEGORY_CALL)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setDefaults(NotificationCompat.DEFAULT_SOUND or NotificationCompat.DEFAULT_VIBRATE)
+                .setSound(Uri.parse(SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/raw/ring.ogg"))
+                .setVibrate(longArrayOf(1000, 1000))
+                .setFullScreenIntent(PendingIntent.getActivity(applicationContext, 0, Intent(applicationContext, VectorCallActivity::class.java), 0), true)
+                .setOngoing(true)
+                .apply { actions.forEach { addAction(it) } }
+                .build()
+    }
+
+    private fun createAnswerAndRejectActions(): List<NotificationCompat.Action> {
         val answerCallActionReceiver = Intent(applicationContext, CallHeadsUpActionReceiver::class.java).apply {
             putExtra(EXTRA_CALL_ACTION_KEY, CALL_ACTION_ANSWER)
         }
         val rejectCallActionReceiver = Intent(applicationContext, CallHeadsUpActionReceiver::class.java).apply {
             putExtra(EXTRA_CALL_ACTION_KEY, CALL_ACTION_REJECT)
         }
-
         val answerCallPendingIntent = PendingIntent.getBroadcast(applicationContext, CALL_ACTION_ANSWER, answerCallActionReceiver, PendingIntent.FLAG_UPDATE_CURRENT)
         val rejectCallPendingIntent = PendingIntent.getBroadcast(applicationContext, CALL_ACTION_REJECT, rejectCallActionReceiver, PendingIntent.FLAG_UPDATE_CURRENT)
-
-        createNotificationChannel()
-
-        val notification = NotificationCompat
-                .Builder(applicationContext, CHANNEL_ID)
-                .setContentTitle("Title")
-                .setContentText("Content")
-                .setSmallIcon(R.drawable.ic_call_incoming)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(NotificationCompat.CATEGORY_CALL)
-                .addAction(R.drawable.ic_call_incoming, getString(R.string.call_notification_answer), answerCallPendingIntent)
-                .addAction(R.drawable.ic_call_incoming, getString(R.string.call_notification_reject), rejectCallPendingIntent)
-                .setAutoCancel(true)
-                .setSound(Uri.parse("android.resource://" + applicationContext.packageName + "/ring.ogg"))
-                .setFullScreenIntent(answerCallPendingIntent, true)
-                .build()
-
-        startForeground(NOTIFICATION_ID, notification)
-
-        return START_STICKY
+        return listOf(
+                NotificationCompat.Action(R.drawable.ic_call, getString(R.string.call_notification_answer), answerCallPendingIntent),
+                NotificationCompat.Action(R.drawable.vector_notification_reject_invitation, getString(R.string.call_notification_reject), rejectCallPendingIntent)
+        )
     }
 
     private fun createNotificationChannel() {
@@ -83,13 +105,16 @@ class CallHeadsUpService : Service() {
         val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH).apply {
             description = CHANNEL_DESCRIPTION
             setSound(
-                    Uri.parse("android.resource://" + applicationContext.packageName + "/ring.ogg"),
+                    Uri.parse(SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/raw/ring.ogg"),
                     AudioAttributes
                             .Builder()
                             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                            .setLegacyStreamType(AudioManager.STREAM_RING)
+                            .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
                             .build()
-                    )
+            )
+            lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
+            enableVibration(true)
+            enableLights(true)
         }
         applicationContext.getSystemService(NotificationManager::class.java)?.createNotificationChannel(channel)
     }
@@ -108,8 +133,8 @@ class CallHeadsUpService : Service() {
 
         private const val NOTIFICATION_ID = 999
 
-        fun newInstance(context: Context, callerDisplayName: String, isIncomingCall: Boolean, isVideoCall: Boolean): Intent {
-            val args = CallHeadsUpServiceArgs(callerDisplayName, isIncomingCall, isVideoCall)
+        fun newInstance(context: Context, roomId: String, participantUserId: String, isIncomingCall: Boolean, isVideoCall: Boolean): Intent {
+            val args = CallHeadsUpServiceArgs(roomId, participantUserId, isIncomingCall, isVideoCall)
             return Intent(context, CallHeadsUpService::class.java).apply {
                 putExtra(EXTRA_CALL_HEADS_UP_SERVICE_PARAMS, args)
             }

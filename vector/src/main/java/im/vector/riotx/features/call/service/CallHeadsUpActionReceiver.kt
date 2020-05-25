@@ -19,6 +19,7 @@ package im.vector.riotx.features.call.service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import im.vector.riotx.features.settings.VectorLocale.context
 import timber.log.Timber
 
 class CallHeadsUpActionReceiver : BroadcastReceiver() {
@@ -28,16 +29,19 @@ class CallHeadsUpActionReceiver : BroadcastReceiver() {
             CallHeadsUpService.CALL_ACTION_ANSWER -> onCallAnswerClicked()
             CallHeadsUpService.CALL_ACTION_REJECT -> onCallRejectClicked()
         }
-
-        context.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
-        context.stopService(Intent(context, CallHeadsUpService::class.java))
     }
 
     private fun onCallRejectClicked() {
         Timber.d("onCallRejectClicked")
+        stopService()
     }
 
     private fun onCallAnswerClicked() {
         Timber.d("onCallAnswerClicked")
+    }
+
+    private fun stopService() {
+        context.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
+        context.stopService(Intent(context, CallHeadsUpService::class.java))
     }
 }
