@@ -2139,6 +2139,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="crosssigning_verify_this_session">Verify this login</string>
     <string name="crosssigning_other_user_not_trust">Other users may not trust it</string>
+    <!-- WARNING: 'Complete' is a verb here, the title means: "let's complete the security of your account", and should not be understood as "full security" -->
     <string name="complete_security">Complete Security</string>
 
     <string name="verification_open_other_to_verify">Use an existing session to verify this one, granting it access to encrypted messages.</string>
