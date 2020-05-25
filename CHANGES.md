@@ -16,6 +16,7 @@ Bugfix 🐛:
  - Fix issues with FontScale switch (#69, #645)
  - "Seen by" uses 12h time (#1378)
  - Enable markdown (if active) when sending emote (#734)
+ - Screenshots for Rageshake now includes Dialogs such as BottomSheet (#1349)
 
 Translations 🗣:
  -
