@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.widgets.room
+package im.vector.riotx.features.widgets
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
@@ -28,27 +28,30 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.events.model.Content
+import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerService
 import im.vector.matrix.android.internal.session.widgets.WidgetManagementFailure
 import im.vector.riotx.core.platform.VectorViewModel
-import im.vector.riotx.features.widgets.WidgetPostAPIHandler
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.net.ssl.HttpsURLConnection
 
-class RoomWidgetViewModel @AssistedInject constructor(@Assisted val initialState: WidgetViewState,
-                                                      private val widgetPostAPIHandlerFactory: WidgetPostAPIHandler.Factory,
-                                                      private val session: Session)
-    : VectorViewModel<WidgetViewState, RoomWidgetAction, RoomWidgetViewEvents>(initialState), WidgetPostAPIHandler.NavigationCallback {
+class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: WidgetViewState,
+                                                  private val widgetPostAPIHandlerFactory: WidgetPostAPIHandler.Factory,
+                                                  private val session: Session)
+    : VectorViewModel<WidgetViewState, WidgetAction, WidgetViewEvents>(initialState),
+        WidgetPostAPIHandler.NavigationCallback,
+        IntegrationManagerService.Listener {
 
     @AssistedInject.Factory
     interface Factory {
-        fun create(initialState: WidgetViewState): RoomWidgetViewModel
+        fun create(initialState: WidgetViewState): WidgetViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomWidgetViewModel, WidgetViewState> {
+    companion object : MvRxViewModelFactory<WidgetViewModel, WidgetViewState> {
 
         @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: WidgetViewState): RoomWidgetViewModel? {
+        override fun create(viewModelContext: ViewModelContext, state: WidgetViewState): WidgetViewModel? {
             val factory = when (viewModelContext) {
                 is FragmentViewModelContext -> viewModelContext.fragment as? Factory
                 is ActivityViewModelContext -> viewModelContext.activity as? Factory
@@ -59,11 +62,12 @@ class RoomWidgetViewModel @AssistedInject constructor(@Assisted val initialState
 
     private val widgetService = session.widgetService()
     private val integrationManagerService = session.integrationManagerService()
-    private val widgetBuilder = widgetService.getWidgetURLFormatter()
+    private val widgetURLFormatter = widgetService.getWidgetURLFormatter()
     private val postAPIMediator = widgetService.getWidgetPostAPIMediator()
 
     init {
-        if(initialState.widgetKind.isAdmin()) {
+        integrationManagerService.addListener(this)
+        if (initialState.widgetKind.isAdmin()) {
             val widgetPostAPIHandler = widgetPostAPIHandlerFactory.create(initialState.roomId, this)
             postAPIMediator.setHandler(widgetPostAPIHandler)
         }
@@ -82,11 +86,11 @@ class RoomWidgetViewModel @AssistedInject constructor(@Assisted val initialState
 
     fun getPostAPIMediator() = postAPIMediator
 
-    override fun handle(action: RoomWidgetAction) {
+    override fun handle(action: WidgetAction) {
         when (action) {
-            is RoomWidgetAction.OnWebViewLoadingError   -> handleWebViewLoadingError(action.isHttpError, action.errorCode, action.errorDescription)
-            is RoomWidgetAction.OnWebViewLoadingSuccess -> handleWebViewLoadingSuccess(action.url)
-            is RoomWidgetAction.OnWebViewStartedToLoad  -> handleWebViewStartLoading()
+            is WidgetAction.OnWebViewLoadingError   -> handleWebViewLoadingError(action.isHttpError, action.errorCode, action.errorDescription)
+            is WidgetAction.OnWebViewLoadingSuccess -> handleWebViewLoadingSuccess(action.url)
+            is WidgetAction.OnWebViewStartedToLoad  -> handleWebViewStartLoading()
         }
     }
 
@@ -131,17 +135,17 @@ class RoomWidgetViewModel @AssistedInject constructor(@Assisted val initialState
         viewModelScope.launch {
             try {
                 setState { copy(formattedURL = Loading()) }
-                val formattedUrl = widgetBuilder.format(
+                val formattedUrl = widgetURLFormatter.format(
                         baseUrl = initialState.baseUrl,
                         params = initialState.urlParams,
                         forceFetchScalarToken = forceFetchToken,
                         bypassWhitelist = initialState.widgetKind == WidgetKind.INTEGRATION_MANAGER
                 )
                 setState { copy(formattedURL = Success(formattedUrl)) }
-                _viewEvents.post(RoomWidgetViewEvents.LoadFormattedURL(formattedUrl))
+                _viewEvents.post(WidgetViewEvents.LoadFormattedURL(formattedUrl))
             } catch (failure: Throwable) {
                 if (failure is WidgetManagementFailure.TermsNotSignedException) {
-                    _viewEvents.post(RoomWidgetViewEvents.DisplayTerms(failure.baseUrl, failure.token))
+                    _viewEvents.post(WidgetViewEvents.DisplayTerms(failure.baseUrl, failure.token))
                 }
                 setState { copy(formattedURL = Fail(failure)) }
             }
@@ -162,8 +166,10 @@ class RoomWidgetViewModel @AssistedInject constructor(@Assisted val initialState
     private fun handleWebViewLoadingError(isHttpError: Boolean, reason: Int, errorDescription: String) {
         if (isHttpError) {
             // In case of 403, try to refresh the scalar token
-            if (reason == HttpsURLConnection.HTTP_FORBIDDEN) {
-                loadFormattedUrl(true)
+            withState {
+                if (it.formattedURL is Success && reason == HttpsURLConnection.HTTP_FORBIDDEN) {
+                    loadFormattedUrl(true)
+                }
             }
         } else {
             setState { copy(webviewLoadedUrl = Fail(Throwable(errorDescription))) }
@@ -172,14 +178,27 @@ class RoomWidgetViewModel @AssistedInject constructor(@Assisted val initialState
 
     override fun onCleared() {
         super.onCleared()
+        integrationManagerService.removeListener(this)
         postAPIMediator.setHandler(null)
     }
 
+    // IntegrationManagerService.Listener
+
+    override fun onWidgetPermissionsChanged(widgets: Map<String, Boolean>) {
+        refreshPermissionStatus()
+    }
+
+    // WidgetPostAPIHandler.NavigationCallback
+
     override fun close() {
-        _viewEvents.post(RoomWidgetViewEvents.Close)
+        _viewEvents.post(WidgetViewEvents.Close(null))
+    }
+
+    override fun closeWithResult(content: Content) {
+        _viewEvents.post(WidgetViewEvents.Close(content))
     }
 
     override fun openIntegrationManager(integId: String?, integType: String?) {
-        _viewEvents.post(RoomWidgetViewEvents.DisplayIntegrationManager(integId, integType))
+        _viewEvents.post(WidgetViewEvents.DisplayIntegrationManager(integId, integType))
     }
 }

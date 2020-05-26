@@ -21,6 +21,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toContent
@@ -49,6 +50,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
 
     interface NavigationCallback {
         fun close()
+        fun closeWithResult(content: Content)
         fun openIntegrationManager(integId: String?, integType: String?)
     }
 
@@ -70,6 +72,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
             "set_bot_power"            -> setBotPower(eventData).run { true }
             "set_plumbing_state"       -> setPlumbingState(eventData).run { true }
             "set_widget"               -> setWidget(eventData).run { true }
+            "m.sticker"                -> pickStickerData(eventData).run { true }
             else                       -> false
         }
     }
@@ -392,6 +395,23 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         }
         val numberOfJoinedMembers = room.getNumberOfJoinedMembers()
         widgetPostAPIMediator.sendIntegerResponse(numberOfJoinedMembers, eventData)
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun pickStickerData(eventData: JsonDict) {
+        Timber.d("Received request send sticker")
+        val data = eventData["data"]
+        if (data == null) {
+            widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_missing_parameter), eventData)
+            return
+        }
+        val content = (data as? JsonDict)?.get("content") as? Content
+        if (content == null) {
+            widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_missing_parameter), eventData)
+            return
+        }
+        widgetPostAPIMediator.sendSuccess(eventData)
+        navigationCallback.closeWithResult(content)
     }
 
     /**

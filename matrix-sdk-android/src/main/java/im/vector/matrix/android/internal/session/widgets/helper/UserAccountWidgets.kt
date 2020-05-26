@@ -33,7 +33,7 @@ internal fun UserAccountDataEvent.extractWidgetSequence(): Sequence<Widget> {
                 if (content == null) {
                     null
                 } else {
-                    Widget(content, event)
+                    Widget(content, event, event.stateKey)
                 }
             }
 }

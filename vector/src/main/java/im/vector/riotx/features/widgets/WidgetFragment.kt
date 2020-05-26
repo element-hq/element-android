@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.widgets.room
+package im.vector.riotx.features.widgets
 
 import android.app.Activity
 import android.content.Intent
@@ -51,12 +51,12 @@ data class WidgetArgs(
         val urlParams: Map<String, String> = emptyMap()
 ) : Parcelable
 
-class RoomWidgetFragment @Inject constructor(
-        private val viewModelFactory: RoomWidgetViewModel.Factory
-) : VectorBaseFragment(), RoomWidgetViewModel.Factory by viewModelFactory, WebViewEventListener {
+class WidgetFragment @Inject constructor(
+        private val viewModelFactory: WidgetViewModel.Factory
+) : VectorBaseFragment(), WidgetViewModel.Factory by viewModelFactory, WebViewEventListener {
 
     private val fragmentArgs: WidgetArgs by args()
-    private val viewModel: RoomWidgetViewModel by fragmentViewModel()
+    private val viewModel: WidgetViewModel by fragmentViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_room_widget
 
@@ -68,15 +68,10 @@ class RoomWidgetFragment @Inject constructor(
         }
         viewModel.observeViewEvents {
             when (it) {
-                is RoomWidgetViewEvents.DisplayTerms              -> displayTerms(it)
-                is RoomWidgetViewEvents.LoadFormattedURL          -> loadFormattedUrl(it)
-                is RoomWidgetViewEvents.Close                     -> vectorBaseActivity.finish()
-                is RoomWidgetViewEvents.DisplayIntegrationManager -> navigator.openIntegrationManager(
-                        context = vectorBaseActivity,
-                        roomId = fragmentArgs.roomId,
-                        integId = it.integId,
-                        screenId = it.integType
-                )
+                is WidgetViewEvents.DisplayTerms              -> displayTerms(it)
+                is WidgetViewEvents.LoadFormattedURL          -> loadFormattedUrl(it)
+                is WidgetViewEvents.Close                     -> handleClose(it)
+                is WidgetViewEvents.DisplayIntegrationManager -> displayIntegrationManager(it)
             }
         }
     }
@@ -84,7 +79,7 @@ class RoomWidgetFragment @Inject constructor(
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == ReviewTermsActivity.TERMS_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                viewModel.handle(RoomWidgetAction.OnTermsReviewed)
+                viewModel.handle(WidgetAction.OnTermsReviewed)
             } else {
                 vectorBaseActivity.finish()
             }
@@ -169,7 +164,23 @@ class RoomWidgetFragment @Inject constructor(
         }
     }
 
-    private fun displayTerms(displayTerms: RoomWidgetViewEvents.DisplayTerms) {
+    override fun onPageStarted(url: String) {
+        viewModel.handle(WidgetAction.OnWebViewStartedToLoad(url))
+    }
+
+    override fun onPageFinished(url: String) {
+        viewModel.handle(WidgetAction.OnWebViewLoadingSuccess(url))
+    }
+
+    override fun onPageError(url: String, errorCode: Int, description: String) {
+        viewModel.handle(WidgetAction.OnWebViewLoadingError(url, false, errorCode, description))
+    }
+
+    override fun onHttpError(url: String, errorCode: Int, description: String) {
+        viewModel.handle(WidgetAction.OnWebViewLoadingError(url, true, errorCode, description))
+    }
+
+    private fun displayTerms(displayTerms: WidgetViewEvents.DisplayTerms) {
         navigator.openTerms(
                 fragment = this,
                 serviceType = TermsService.ServiceType.IntegrationManager,
@@ -178,7 +189,7 @@ class RoomWidgetFragment @Inject constructor(
         )
     }
 
-    private fun loadFormattedUrl(loadFormattedUrl: RoomWidgetViewEvents.LoadFormattedURL) {
+    private fun loadFormattedUrl(loadFormattedUrl: WidgetViewEvents.LoadFormattedURL) {
         widgetWebView.clearHistory()
         widgetWebView.loadUrl(loadFormattedUrl.formattedURL)
     }
@@ -195,19 +206,20 @@ class RoomWidgetFragment @Inject constructor(
         }
     }
 
-    override fun onPageStarted(url: String) {
-        viewModel.handle(RoomWidgetAction.OnWebViewStartedToLoad(url))
+    private fun displayIntegrationManager(event: WidgetViewEvents.DisplayIntegrationManager) {
+        navigator.openIntegrationManager(
+                context = vectorBaseActivity,
+                roomId = fragmentArgs.roomId,
+                integId = event.integId,
+                screenId = event.integType
+        )
     }
 
-    override fun onPageFinished(url: String) {
-        viewModel.handle(RoomWidgetAction.OnWebViewLoadingSuccess(url))
-    }
-
-    override fun onPageError(url: String, errorCode: Int, description: String) {
-        viewModel.handle(RoomWidgetAction.OnWebViewLoadingError(url, false, errorCode, description))
-    }
-
-    override fun onHttpError(url: String, errorCode: Int, description: String) {
-        viewModel.handle(RoomWidgetAction.OnWebViewLoadingError(url, true, errorCode, description))
+    private fun handleClose(event: WidgetViewEvents.Close) {
+        if (event.content != null) {
+            val intent = WidgetActivity.createResultIntent(event.content)
+            vectorBaseActivity.setResult(Activity.RESULT_OK, intent)
+        }
+        vectorBaseActivity.finish()
     }
 }

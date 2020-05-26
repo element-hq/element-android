@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.widgets.room
+package im.vector.riotx.features.widgets
 
-import im.vector.riotx.core.platform.VectorViewModelAction
+import im.vector.matrix.android.api.session.events.model.Content
+import im.vector.riotx.core.platform.VectorViewEvents
 
-sealed class RoomWidgetAction : VectorViewModelAction {
-    data class OnWebViewStartedToLoad(val url: String) : RoomWidgetAction()
-    data class OnWebViewLoadingError(val url: String, val isHttpError: Boolean, val errorCode: Int, val errorDescription: String) : RoomWidgetAction()
-    data class OnWebViewLoadingSuccess(val url: String) : RoomWidgetAction()
-    object OnTermsReviewed: RoomWidgetAction()
+sealed class WidgetViewEvents : VectorViewEvents {
+    data class Close(val content: Content?): WidgetViewEvents()
+    data class DisplayIntegrationManager(val integId: String?, val integType: String?): WidgetViewEvents()
+    data class LoadFormattedURL(val formattedURL: String): WidgetViewEvents()
+    data class DisplayTerms(val url: String, val token: String): WidgetViewEvents()
 }

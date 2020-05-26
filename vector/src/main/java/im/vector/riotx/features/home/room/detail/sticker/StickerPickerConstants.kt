@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.widgets.admin
+package im.vector.riotx.features.home.room.detail.sticker
 
-import com.airbnb.mvrx.MvRxState
-
-data class AdminWidgetViewState(val boolean: Boolean = false) : MvRxState
+object StickerPickerConstants {
+    const val WIDGET_NAME = "m.stickerpicker"
+    const val STICKER_PICKER_REQUEST_CODE = 16000
+}

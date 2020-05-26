@@ -17,6 +17,7 @@
 package im.vector.riotx.features.attachments
 
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import im.vector.matrix.android.api.session.room.model.message.MessageStickerContent
 import im.vector.riotx.multipicker.entity.MultiPickerAudioType
 import im.vector.riotx.multipicker.entity.MultiPickerBaseType
 import im.vector.riotx.multipicker.entity.MultiPickerContactType

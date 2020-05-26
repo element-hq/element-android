@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.widgets
 
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerConfig
+import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerService
 import im.vector.matrix.android.api.session.widgets.WidgetURLFormatter
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.integrationmanager.IntegrationManager
@@ -30,9 +31,9 @@ import javax.inject.Inject
 internal class DefaultWidgetURLFormatter @Inject constructor(private val integrationManager: IntegrationManager,
                                                              private val getScalarTokenTask: GetScalarTokenTask,
                                                              private val stringProvider: StringProvider
-) : IntegrationManager.Listener, WidgetURLFormatter {
+) : IntegrationManagerService.Listener, WidgetURLFormatter {
 
-    private var currentConfig = integrationManager.getPreferredConfig()
+    private lateinit var currentConfig: IntegrationManagerConfig
     private var whiteListedUrls: List<String> = emptyList()
 
     fun start() {
@@ -50,7 +51,7 @@ internal class DefaultWidgetURLFormatter @Inject constructor(private val integra
 
     private fun setupWithConfiguration() {
         val preferredConfig = integrationManager.getPreferredConfig()
-        if (currentConfig != preferredConfig) {
+        if (!this::currentConfig.isInitialized || preferredConfig != currentConfig) {
             currentConfig = preferredConfig
             val defaultWhiteList = stringProvider.getStringArray(R.array.integrations_widgets_urls).asList()
             whiteListedUrls = when (preferredConfig.kind) {

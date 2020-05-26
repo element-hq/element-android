@@ -23,6 +23,7 @@ import im.vector.matrix.android.R
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerConfig
+import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerService
 import im.vector.matrix.android.api.session.widgets.model.WidgetContent
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.NoOpCancellable
@@ -59,27 +60,14 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
                                                       private val accountDataDataSource: AccountDataDataSource,
                                                       private val configExtractor: IntegrationManagerConfigExtractor) {
 
-    interface Listener {
-        fun onIsEnabledChanged(enabled: Boolean) {
-            //No-op
-        }
-
-        fun onConfigurationChanged(config: IntegrationManagerConfig) {
-            //No-op
-        }
-
-        fun onWidgetPermissionsChanged(widgets: Map<String, Boolean>) {
-            //No-op
-        }
-    }
 
     private val currentConfigs = ArrayList<IntegrationManagerConfig>()
     private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
     private val lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(lifecycleOwner)
 
-    private val listeners = HashSet<Listener>()
-    fun addListener(listener: Listener) = synchronized(listeners) { listeners.add(listener) }
-    fun removeListener(listener: Listener) = synchronized(listeners) { listeners.remove(listener) }
+    private val listeners = HashSet<IntegrationManagerService.Listener>()
+    fun addListener(listener: IntegrationManagerService.Listener) = synchronized(listeners) { listeners.add(listener) }
+    fun removeListener(listener: IntegrationManagerService.Listener) = synchronized(listeners) { listeners.remove(listener) }
 
     init {
         val defaultConfig = IntegrationManagerConfig(

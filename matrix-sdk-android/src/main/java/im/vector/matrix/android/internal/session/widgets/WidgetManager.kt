@@ -27,6 +27,7 @@ import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerService
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.android.api.session.widgets.WidgetService
@@ -51,7 +52,7 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
                                                  private val stateEventDataSource: StateEventDataSource,
                                                  private val taskExecutor: TaskExecutor,
                                                  private val createWidgetTask: CreateWidgetTask,
-                                                 @UserId private val userId: String) : IntegrationManager.Listener {
+                                                 @UserId private val userId: String) : IntegrationManagerService.Listener {
 
     private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
     private val lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(lifecycleOwner)
@@ -114,7 +115,7 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
             }
             // widgetEvent.stateKey = widget id
             if (widgetEvent.stateKey != null && !widgets.containsKey(widgetEvent.stateKey)) {
-                val widget = Widget(widgetContent, widgetEvent)
+                val widget = Widget(widgetContent, widgetEvent, widgetEvent.stateKey)
                 widgets[widgetEvent.stateKey] = widget
             }
         }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.widgets.room
+package im.vector.riotx.features.widgets
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState

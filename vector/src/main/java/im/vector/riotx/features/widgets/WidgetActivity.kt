@@ -19,22 +19,34 @@ package im.vector.riotx.features.widgets
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.widget.Toolbar
+import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
-import im.vector.riotx.features.widgets.room.RoomWidgetFragment
-import im.vector.riotx.features.widgets.room.WidgetArgs
+import java.io.Serializable
 
 class WidgetActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     companion object {
 
+        private const val EXTRA_RESULT = "EXTRA_RESULT"
         private const val EXTRA_FRAGMENT_ARGS = "EXTRA_FRAGMENT_ARGS"
 
         fun newIntent(context: Context, args: WidgetArgs): Intent {
             return Intent(context, WidgetActivity::class.java).apply {
                 putExtra(EXTRA_FRAGMENT_ARGS, args)
+            }
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        fun getOutput(intent: Intent): Content? {
+            return intent.extras?.getSerializable(EXTRA_RESULT) as? Content
+        }
+
+        fun createResultIntent(content: Content): Intent {
+            return Intent().apply {
+                putExtra(EXTRA_RESULT, content as Serializable)
             }
         }
     }
@@ -45,7 +57,7 @@ class WidgetActivity : VectorBaseActivity(), ToolbarConfigurable {
         if (isFirstCreation()) {
             val fragmentArgs: WidgetArgs = intent?.extras?.getParcelable(EXTRA_FRAGMENT_ARGS)
                     ?: return
-            addFragment(R.id.simpleFragmentContainer, RoomWidgetFragment::class.java, fragmentArgs)
+            addFragment(R.id.simpleFragmentContainer, WidgetFragment::class.java, fragmentArgs)
         }
     }
 

@@ -24,6 +24,14 @@ import javax.inject.Inject
 
 internal class DefaultIntegrationManagerService @Inject constructor(private val integrationManager: IntegrationManager) : IntegrationManagerService {
 
+    override fun addListener(listener: IntegrationManagerService.Listener) {
+        integrationManager.addListener(listener)
+    }
+
+    override fun removeListener(listener: IntegrationManagerService.Listener) {
+        integrationManager.removeListener(listener)
+    }
+
     override fun getOrderedConfigs(): List<IntegrationManagerConfig> {
         return integrationManager.getOrderedConfigs()
     }

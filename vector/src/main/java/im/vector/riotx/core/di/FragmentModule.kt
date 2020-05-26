@@ -102,8 +102,7 @@ import im.vector.riotx.features.signout.soft.SoftLogoutFragment
 import im.vector.riotx.features.terms.ReviewTermsFragment
 import im.vector.riotx.features.userdirectory.KnownUsersFragment
 import im.vector.riotx.features.userdirectory.UserDirectoryFragment
-import im.vector.riotx.features.widgets.admin.AdminWidgetFragment
-import im.vector.riotx.features.widgets.room.RoomWidgetFragment
+import im.vector.riotx.features.widgets.WidgetFragment
 
 @Module
 interface FragmentModule {
@@ -515,11 +514,7 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(RoomWidgetFragment::class)
-    fun bindRoomWidgetFragment(fragment: RoomWidgetFragment): Fragment
+    @FragmentKey(WidgetFragment::class)
+    fun bindWidgetFragment(fragment: WidgetFragment): Fragment
 
-    @Binds
-    @IntoMap
-    @FragmentKey(AdminWidgetFragment::class)
-    fun bindAdminWidgetFragment(fragment: AdminWidgetFragment): Fragment
 }

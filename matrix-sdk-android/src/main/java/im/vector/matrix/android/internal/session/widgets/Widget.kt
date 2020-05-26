@@ -21,6 +21,7 @@ import im.vector.matrix.android.api.session.widgets.model.WidgetContent
 
 data class Widget(
         val widgetContent: WidgetContent,
-        val event: Event? = null
+        val event: Event? = null,
+        val widgetId: String? = null
 )
 

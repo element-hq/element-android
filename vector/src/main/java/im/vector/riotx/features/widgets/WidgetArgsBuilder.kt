@@ -16,9 +16,8 @@
 
 package im.vector.riotx.features.widgets
 
+import im.vector.matrix.android.internal.session.widgets.Widget
 import im.vector.riotx.core.di.ActiveSessionHolder
-import im.vector.riotx.features.widgets.room.WidgetArgs
-import im.vector.riotx.features.widgets.room.WidgetKind
 import javax.inject.Inject
 
 class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSessionHolder) {
@@ -35,7 +34,28 @@ class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSes
                         "screen" to screenId,
                         "integ_id" to integId,
                         "room_id" to roomId
-                ).filterValues { it != null } as Map<String, String>
+                ).filterNotNull()
         )
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun buildStickerPickerArgs(roomId: String, widget: Widget): WidgetArgs {
+        val widgetId = widget.widgetId
+        val baseUrl = widget.widgetContent.url ?: throw IllegalStateException()
+        return WidgetArgs(
+                baseUrl = baseUrl,
+                kind = WidgetKind.USER,
+                roomId = roomId,
+                widgetId = widgetId,
+                urlParams = mapOf(
+                        "widgetId" to widgetId,
+                        "room_id" to roomId
+                ).filterNotNull()
+        )
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun Map<String, String?>.filterNotNull(): Map<String, String>{
+        return filterValues { it != null } as Map<String, String>
     }
 }

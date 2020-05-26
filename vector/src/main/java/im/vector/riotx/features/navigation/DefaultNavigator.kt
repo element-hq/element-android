@@ -31,6 +31,7 @@ import im.vector.matrix.android.api.session.crypto.verification.IncomingSasVerif
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.util.MatrixItem
+import im.vector.matrix.android.internal.session.widgets.Widget
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.error.fatalError
@@ -45,6 +46,7 @@ import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.debug.DebugMenuActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailArgs
+import im.vector.riotx.features.home.room.detail.sticker.StickerPickerConstants
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.invite.InviteUsersToRoomActivity
 import im.vector.riotx.features.media.BigImageViewerActivity
@@ -66,6 +68,7 @@ import im.vector.riotx.features.widgets.WidgetActivity
 import im.vector.riotx.features.widgets.WidgetArgsBuilder
 import javax.inject.Inject
 import javax.inject.Singleton
+
 @Singleton
 class DefaultNavigator @Inject constructor(
         private val sessionHolder: ActiveSessionHolder,
@@ -222,6 +225,12 @@ class DefaultNavigator @Inject constructor(
     override fun openTerms(fragment: Fragment, serviceType: TermsService.ServiceType, baseUrl: String, token: String?, requestCode: Int) {
         val intent = ReviewTermsActivity.intent(fragment.requireContext(), serviceType, baseUrl, token)
         fragment.startActivityForResult(intent, requestCode)
+    }
+
+    override fun openStickerPicker(fragment: Fragment, roomId: String, widget: Widget, requestCode: Int) {
+        val widgetArgs = widgetArgsBuilder.buildStickerPickerArgs(roomId, widget)
+        val intent = WidgetActivity.newIntent(fragment.requireContext(), widgetArgs)
+        fragment.startActivityForResult(intent, StickerPickerConstants.STICKER_PICKER_REQUEST_CODE)
     }
 
     override fun openIntegrationManager(context: Context, roomId: String, integId: String?, screenId: String?) {

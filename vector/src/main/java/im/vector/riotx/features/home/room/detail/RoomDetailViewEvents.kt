@@ -17,6 +17,7 @@
 package im.vector.riotx.features.home.room.detail
 
 import androidx.annotation.StringRes
+import im.vector.matrix.android.internal.session.widgets.Widget
 import im.vector.riotx.core.platform.VectorViewEvents
 import im.vector.riotx.features.command.Command
 import java.io.File
@@ -48,6 +49,10 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     ) : RoomDetailViewEvents()
 
     abstract class SendMessageResult : RoomDetailViewEvents()
+
+    object DisplayPromptForIntegrationManager: RoomDetailViewEvents()
+
+    data class OpenStickerPicker(val widget: Widget): RoomDetailViewEvents()
 
     object MessageSent : SendMessageResult()
     data class JoinRoomCommandSuccess(val roomId: String) : SendMessageResult()

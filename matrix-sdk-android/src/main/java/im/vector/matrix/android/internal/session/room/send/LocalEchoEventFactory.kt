@@ -23,6 +23,7 @@ import androidx.exifinterface.media.ExifInterface
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
+import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.LocalEcho
@@ -56,6 +57,7 @@ import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultC
 import im.vector.matrix.android.api.session.room.model.relation.ReplyToContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
+import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.extensions.subStringBetween
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
@@ -95,7 +97,7 @@ internal class LocalEchoEventFactory @Inject constructor(
             return createFormattedTextEvent(roomId, createTextContent(text, autoMarkdown), msgType)
         }
         val content = MessageTextContent(msgType = msgType, body = text.toString())
-        return createEvent(roomId, content)
+        return createMessageEvent(roomId, content)
     }
 
     private fun createTextContent(text: CharSequence, autoMarkdown: Boolean): TextContent {
@@ -129,7 +131,7 @@ internal class LocalEchoEventFactory @Inject constructor(
             text != htmlText && htmlText != "<p>${text.trim()}</p>\n"
 
     fun createFormattedTextEvent(roomId: String, textContent: TextContent, msgType: String): Event {
-        return createEvent(roomId, textContent.toMessageTextContent(msgType))
+        return createMessageEvent(roomId, textContent.toMessageTextContent(msgType))
     }
 
     fun createReplaceTextEvent(roomId: String,
@@ -138,7 +140,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                                newBodyAutoMarkdown: Boolean,
                                msgType: String,
                                compatibilityText: String): Event {
-        return createEvent(roomId,
+        return createMessageEvent(roomId,
                 MessageTextContent(
                         msgType = msgType,
                         body = compatibilityText,
@@ -153,7 +155,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                                 pollEventId: String,
                                 optionIndex: Int,
                                 optionLabel: String): Event {
-        return createEvent(roomId,
+        return createMessageEvent(roomId,
                 MessagePollResponseContent(
                         body = optionLabel,
                         relatesTo = RelationDefaultContent(
@@ -175,7 +177,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 append(it.value)
             }
         }
-        return createEvent(
+        return createMessageEvent(
                 roomId,
                 MessageOptionsContent(
                         body = compatLabel,
@@ -211,7 +213,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         //
         val replyFallback = buildReplyFallback(body, originalEvent.root.senderId ?: "", newBodyText)
 
-        return createEvent(roomId,
+        return createMessageEvent(roomId,
                 MessageTextContent(
                         msgType = msgType,
                         body = compatibilityText,
@@ -280,7 +282,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 ),
                 url = attachment.queryUri.toString()
         )
-        return createEvent(roomId, content)
+        return createMessageEvent(roomId, content)
     }
 
     private fun createVideoEvent(roomId: String, attachment: ContentAttachmentData): Event {
@@ -316,7 +318,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 ),
                 url = attachment.queryUri.toString()
         )
-        return createEvent(roomId, content)
+        return createMessageEvent(roomId, content)
     }
 
     private fun createAudioEvent(roomId: String, attachment: ContentAttachmentData): Event {
@@ -329,7 +331,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 ),
                 url = attachment.queryUri.toString()
         )
-        return createEvent(roomId, content)
+        return createMessageEvent(roomId, content)
     }
 
     private fun createFileEvent(roomId: String, attachment: ContentAttachmentData): Event {
@@ -342,18 +344,22 @@ internal class LocalEchoEventFactory @Inject constructor(
                 ),
                 url = attachment.queryUri.toString()
         )
-        return createEvent(roomId, content)
+        return createMessageEvent(roomId, content)
     }
 
-    private fun createEvent(roomId: String, content: Any? = null): Event {
+    private fun createMessageEvent(roomId: String, content: Any? = null): Event {
+        return createEvent(roomId, EventType.MESSAGE, content.toContent())
+    }
+
+    fun createEvent(roomId: String, type: String, content: Content?): Event {
         val localId = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
                 senderId = userId,
                 eventId = localId,
-                type = EventType.MESSAGE,
-                content = content.toContent(),
+                type = type,
+                content = content,
                 unsignedData = UnsignedData(age = null, transactionId = localId)
         )
     }
@@ -410,7 +416,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 formattedBody = replyFormatted,
                 relatesTo = RelationDefaultContent(null, null, ReplyToContent(eventId))
         )
-        return createEvent(roomId, content)
+        return createMessageEvent(roomId, content)
     }
 
     private fun buildReplyFallback(body: TextContent, originalSenderId: String?, newBodyText: String): String {
