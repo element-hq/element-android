@@ -28,10 +28,10 @@ import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.identity.IdentityAuthAPI
 import im.vector.matrix.android.internal.session.identity.IdentityRegisterTask
-import im.vector.matrix.android.internal.session.identity.todelete.AccountDataDataSource
 import im.vector.matrix.android.internal.session.openid.GetOpenIdTokenTask
 import im.vector.matrix.android.internal.session.sync.model.accountdata.AcceptedTermsContent
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
+import im.vector.matrix.android.internal.session.user.accountdata.AccountDataDataSource
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.launchToCallback
