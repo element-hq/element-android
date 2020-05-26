@@ -19,10 +19,21 @@ package im.vector.riotx.features.call.service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import im.vector.riotx.core.di.HasVectorInjector
+import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.settings.VectorLocale.context
 import timber.log.Timber
 
 class CallHeadsUpActionReceiver : BroadcastReceiver() {
+
+    private lateinit var peerConnectionManager: WebRtcPeerConnectionManager
+
+    init {
+        val appContext = context.applicationContext
+        if (appContext is HasVectorInjector) {
+            peerConnectionManager = appContext.injector().webRtcPeerConnectionManager()
+        }
+    }
 
     override fun onReceive(context: Context, intent: Intent?) {
         when (intent?.getIntExtra(CallHeadsUpService.EXTRA_CALL_ACTION_KEY, 0)) {
@@ -33,15 +44,10 @@ class CallHeadsUpActionReceiver : BroadcastReceiver() {
 
     private fun onCallRejectClicked() {
         Timber.d("onCallRejectClicked")
-        stopService()
+        peerConnectionManager.endCall()
     }
 
     private fun onCallAnswerClicked() {
         Timber.d("onCallAnswerClicked")
-    }
-
-    private fun stopService() {
-        context.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
-        context.stopService(Intent(context, CallHeadsUpService::class.java))
     }
 }

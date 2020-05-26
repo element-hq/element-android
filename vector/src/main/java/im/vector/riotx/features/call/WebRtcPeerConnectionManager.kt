@@ -122,39 +122,37 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     private fun createPeerConnectionFactory() {
-        executor.execute {
-            if (peerConnectionFactory == null) {
-                Timber.v("## VOIP createPeerConnectionFactory")
-                val eglBaseContext = rootEglBase?.eglBaseContext ?: return@execute Unit.also {
-                    Timber.e("## VOIP No EGL BASE")
-                }
-
-                Timber.v("## VOIP PeerConnectionFactory.initialize")
-                PeerConnectionFactory.initialize(PeerConnectionFactory
-                        .InitializationOptions.builder(context.applicationContext)
-                        .createInitializationOptions()
-                )
-
-                val options = PeerConnectionFactory.Options()
-                val defaultVideoEncoderFactory = DefaultVideoEncoderFactory(
-                        eglBaseContext,
-                        /* enableIntelVp8Encoder */
-                        true,
-                        /* enableH264HighProfile */
-                        true)
-                val defaultVideoDecoderFactory = DefaultVideoDecoderFactory(eglBaseContext)
-
-                Timber.v("## VOIP PeerConnectionFactory.createPeerConnectionFactory ...")
-                peerConnectionFactory = PeerConnectionFactory.builder()
-                        .setOptions(options)
-                        .setVideoEncoderFactory(defaultVideoEncoderFactory)
-                        .setVideoDecoderFactory(defaultVideoDecoderFactory)
-                        .createPeerConnectionFactory()
+        if (peerConnectionFactory == null) {
+            Timber.v("## VOIP createPeerConnectionFactory")
+            val eglBaseContext = rootEglBase?.eglBaseContext ?: return Unit.also {
+                Timber.e("## VOIP No EGL BASE")
             }
+
+            Timber.v("## VOIP PeerConnectionFactory.initialize")
+            PeerConnectionFactory.initialize(PeerConnectionFactory
+                    .InitializationOptions.builder(context.applicationContext)
+                    .createInitializationOptions()
+            )
+
+            val options = PeerConnectionFactory.Options()
+            val defaultVideoEncoderFactory = DefaultVideoEncoderFactory(
+                    eglBaseContext,
+                    /* enableIntelVp8Encoder */
+                    true,
+                    /* enableH264HighProfile */
+                    true)
+            val defaultVideoDecoderFactory = DefaultVideoDecoderFactory(eglBaseContext)
+
+            Timber.v("## VOIP PeerConnectionFactory.createPeerConnectionFactory ...")
+            peerConnectionFactory = PeerConnectionFactory.builder()
+                    .setOptions(options)
+                    .setVideoEncoderFactory(defaultVideoEncoderFactory)
+                    .setVideoDecoderFactory(defaultVideoDecoderFactory)
+                    .createPeerConnectionFactory()
         }
     }
 
-    private fun createPeerConnection() {
+    private fun createPeerConnection(observer: PeerConnectionObserverAdapter) {
         val iceServers = ArrayList<PeerConnection.IceServer>().apply {
             listOf("turn:turn.matrix.org:3478?transport=udp", "turn:turn.matrix.org:3478?transport=tcp", "turns:turn.matrix.org:443?transport=tcp").forEach {
                 add(
@@ -166,40 +164,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
             }
         }
         Timber.v("## VOIP creating peer connection... ")
-        peerConnection = peerConnectionFactory?.createPeerConnection(
-                iceServers,
-                object : PeerConnectionObserverAdapter() {
-                    override fun onIceCandidate(p0: IceCandidate?) {
-                        Timber.v("## VOIP onIceCandidate local $p0")
-                        p0?.let { iceCandidateSource.onNext(it) }
-                    }
-
-                    override fun onAddStream(mediaStream: MediaStream?) {
-                        Timber.v("## VOIP onAddStream remote $mediaStream")
-                        mediaStream?.videoTracks?.firstOrNull()?.let {
-                            listener?.addRemoteVideoTrack(it)
-                            remoteVideoTrack = it
-                        }
-                    }
-
-                    override fun onRemoveStream(mediaStream: MediaStream?) {
-                        mediaStream?.let {
-                            listener?.removeRemoteVideoStream(it)
-                        }
-                        remoteSurfaceRenderer?.get()?.let {
-                            remoteVideoTrack?.removeSink(it)
-                        }
-                        remoteVideoTrack = null
-                    }
-
-                    override fun onIceConnectionChange(p0: PeerConnection.IceConnectionState?) {
-                        Timber.v("## VOIP onIceConnectionChange $p0")
-                        if (p0 == PeerConnection.IceConnectionState.DISCONNECTED) {
-                            listener?.onDisconnect()
-                        }
-                    }
-                }
-        )
+        peerConnection = peerConnectionFactory?.createPeerConnection(iceServers, observer)
     }
 
     // TODO REMOVE THIS FUNCTION
@@ -244,8 +209,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
 //                    }
 //                    .disposeOnDestroy()
 
-
-
             localMediaStream = peerConnectionFactory?.createLocalMediaStream("ARDAMS") // magic value?
             localMediaStream?.addTrack(localVideoTrack)
             localMediaStream?.addTrack(audioTrack)
@@ -260,6 +223,8 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     fun answerReceived(callId: String, answerSdp: SessionDescription) {
+        this.callId = callId
+
         executor.execute {
             Timber.v("## answerReceived $callId")
             peerConnection?.setRemoteDescription(object : SdpObserverAdapter() {}, answerSdp)
@@ -268,50 +233,84 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     private fun startCall() {
         createPeerConnectionFactory()
-        createPeerConnection()
+        createPeerConnection(object : PeerConnectionObserverAdapter() {
+            override fun onIceCandidate(p0: IceCandidate?) {
+                Timber.v("## VOIP onIceCandidate local $p0")
+                p0?.let { iceCandidateSource.onNext(it) }
+            }
+
+            override fun onAddStream(mediaStream: MediaStream?) {
+                Timber.v("## VOIP onAddStream remote $mediaStream")
+                mediaStream?.videoTracks?.firstOrNull()?.let {
+                    listener?.addRemoteVideoTrack(it)
+                    remoteVideoTrack = it
+                }
+            }
+
+            override fun onRemoveStream(mediaStream: MediaStream?) {
+                mediaStream?.let {
+                    listener?.removeRemoteVideoStream(it)
+                }
+                remoteSurfaceRenderer?.get()?.let {
+                    remoteVideoTrack?.removeSink(it)
+                }
+                remoteVideoTrack = null
+            }
+
+            override fun onIceConnectionChange(p0: PeerConnection.IceConnectionState?) {
+                Timber.v("## VOIP onIceConnectionChange $p0")
+                if (p0 == PeerConnection.IceConnectionState.DISCONNECTED) {
+                    listener?.onDisconnect()
+                }
+            }
+        })
 
         iceCandidateDisposable = iceCandidateSource
                 .buffer(400, TimeUnit.MILLISECONDS)
                 .subscribe {
                     // omit empty :/
                     if (it.isNotEmpty()) {
+                        Timber.v("## Sending local ice candidates to callId: $callId roomId: $signalingRoomId")
                         sessionHolder
                                 .getActiveSession()
                                 .callService()
                                 .sendLocalIceCandidates(callId ?: "", signalingRoomId ?: "", it)
                     }
                 }
+    }
 
-        executor.execute {
-            val constraints = MediaConstraints()
-            constraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"))
-            constraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveVideo", "true"))
+    private fun sendSdpOffer() {
+        val constraints = MediaConstraints()
+        constraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"))
+        constraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveVideo", "true"))
 
-            Timber.v("## VOIP creating offer...")
-            peerConnection?.createOffer(object : SdpObserver {
-                override fun onSetFailure(p0: String?) {
-                    Timber.v("## VOIP onSetFailure $p0")
-                }
+        Timber.v("## VOIP creating offer...")
+        peerConnection?.createOffer(object : SdpObserver {
+            override fun onSetFailure(p0: String?) {
+                Timber.v("## VOIP onSetFailure $p0")
+            }
 
-                override fun onSetSuccess() {
-                    Timber.v("## VOIP onSetSuccess")
-                }
+            override fun onSetSuccess() {
+                Timber.v("## VOIP onSetSuccess")
+            }
 
-                override fun onCreateSuccess(sessionDescription: SessionDescription) {
-                    Timber.v("## VOIP onCreateSuccess $sessionDescription")
-                    peerConnection?.setLocalDescription(object : SdpObserverAdapter() {
-                        override fun onSetSuccess() {
-                            callId = UUID.randomUUID().toString()
-                            sessionHolder.getActiveSession().callService().sendOfferSdp(callId!!, signalingRoomId!!, sessionDescription, object : MatrixCallback<String> {})
-                        }
-                    }, sessionDescription)
-                }
+            override fun onCreateSuccess(sessionDescription: SessionDescription) {
+                Timber.v("## VOIP onCreateSuccess $sessionDescription will set local description")
+                peerConnection?.setLocalDescription(object : SdpObserverAdapter() {
+                    override fun onSetSuccess() {
+                        Timber.v("## setLocalDescription success")
+                        callId = UUID.randomUUID().toString()
+                        Timber.v("## sending offer to callId: $callId roomId: $signalingRoomId")
+                        sessionHolder.getActiveSession().callService().sendOfferSdp(callId ?: "", signalingRoomId
+                                ?: "", sessionDescription, object : MatrixCallback<String> {})
+                    }
+                }, sessionDescription)
+            }
 
-                override fun onCreateFailure(p0: String?) {
-                    Timber.v("## VOIP onCreateFailure $p0")
-                }
-            }, constraints)
-        }
+            override fun onCreateFailure(p0: String?) {
+                Timber.v("## VOIP onCreateFailure $p0")
+            }
+        }, constraints)
     }
 
     fun attachViewRenderers(localViewRenderer: SurfaceViewRenderer, remoteViewRenderer: SurfaceViewRenderer) {
@@ -339,7 +338,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         executor.execute {
             // Do not dispose peer connection (https://bugs.chromium.org/p/webrtc/issues/detail?id=7543)
             peerConnection?.close()
-            peerConnection?.removeStream(localMediaStream)
+            localMediaStream?.let { peerConnection?.removeStream(it) }
             peerConnection = null
             audioSource?.dispose()
             videoSource?.dispose()
@@ -377,13 +376,19 @@ class WebRtcPeerConnectionManager @Inject constructor(
     fun startOutgoingCall(context: Context, signalingRoomId: String, participantUserId: String, isVideoCall: Boolean) {
         this.signalingRoomId = signalingRoomId
         this.participantUserId = participantUserId
+
         startHeadsUpService(signalingRoomId, sessionHolder.getActiveSession().myUserId, false, isVideoCall)
         context.startActivity(VectorCallActivity.newIntent(context, signalingRoomId, participantUserId, false, isVideoCall))
 
         startCall()
+        sendSdpOffer()
     }
 
     override fun onCallInviteReceived(signalingRoomId: String, participantUserId: String, callInviteContent: CallInviteContent) {
+        this.callId = callInviteContent.callId
+        this.signalingRoomId = signalingRoomId
+        this.participantUserId = participantUserId
+
         startHeadsUpService(signalingRoomId, participantUserId, true, callInviteContent.isVideo())
 
         startCall()
@@ -399,8 +404,8 @@ class WebRtcPeerConnectionManager @Inject constructor(
     fun endCall() {
         if (callId != null && signalingRoomId != null) {
             sessionHolder.getActiveSession().callService().sendHangup(callId!!, signalingRoomId!!)
-            close()
         }
+        close()
     }
 
     override fun onCallAnswerReceived(callAnswerContent: CallAnswerContent) {
