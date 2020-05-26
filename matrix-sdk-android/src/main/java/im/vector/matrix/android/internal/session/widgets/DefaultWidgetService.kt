@@ -25,7 +25,6 @@ import im.vector.matrix.android.api.session.widgets.WidgetService
 import im.vector.matrix.android.api.session.widgets.WidgetURLFormatter
 import im.vector.matrix.android.api.util.Cancelable
 import javax.inject.Inject
-import javax.inject.Provider
 
 internal class DefaultWidgetService @Inject constructor(private val widgetManager: WidgetManager,
                                                         private val widgetURLFormatter: WidgetURLFormatter,
@@ -56,11 +55,11 @@ internal class DefaultWidgetService @Inject constructor(private val widgetManage
     }
 
     override fun createRoomWidget(roomId: String, widgetId: String, content: Content, callback: MatrixCallback<Widget>): Cancelable {
-        return widgetManager.createWidget(roomId, widgetId, content, callback)
+        return widgetManager.createRoomWidget(roomId, widgetId, content, callback)
     }
 
     override fun destroyRoomWidget(roomId: String, widgetId: String, callback: MatrixCallback<Unit>): Cancelable {
-        return widgetManager.destroyWidget(roomId, widgetId, callback)
+        return widgetManager.destroyRoomWidget(roomId, widgetId, callback)
     }
 
     override fun hasPermissionsToHandleWidgets(roomId: String): Boolean {

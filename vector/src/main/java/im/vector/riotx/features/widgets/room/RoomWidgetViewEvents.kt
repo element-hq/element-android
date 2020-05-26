@@ -19,6 +19,8 @@ package im.vector.riotx.features.widgets.room
 import im.vector.riotx.core.platform.VectorViewEvents
 
 sealed class RoomWidgetViewEvents : VectorViewEvents {
+    object Close: RoomWidgetViewEvents()
+    data class DisplayIntegrationManager(val integId: String?, val integType: String?): RoomWidgetViewEvents()
     data class LoadFormattedURL(val formattedURL: String): RoomWidgetViewEvents()
     data class DisplayTerms(val url: String, val token: String): RoomWidgetViewEvents()
 }

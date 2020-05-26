@@ -68,11 +68,19 @@ class RoomWidgetFragment @Inject constructor(
         }
         viewModel.observeViewEvents {
             when (it) {
-                is RoomWidgetViewEvents.DisplayTerms     -> displayTerms(it)
-                is RoomWidgetViewEvents.LoadFormattedURL -> loadFormattedUrl(it)
+                is RoomWidgetViewEvents.DisplayTerms              -> displayTerms(it)
+                is RoomWidgetViewEvents.LoadFormattedURL          -> loadFormattedUrl(it)
+                is RoomWidgetViewEvents.Close                     -> vectorBaseActivity.finish()
+                is RoomWidgetViewEvents.DisplayIntegrationManager -> navigator.openIntegrationManager(
+                        context = vectorBaseActivity,
+                        roomId = fragmentArgs.roomId,
+                        integId = it.integId,
+                        screenId = it.integType
+                )
             }
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == ReviewTermsActivity.TERMS_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
@@ -169,7 +177,6 @@ class RoomWidgetFragment @Inject constructor(
                 token = displayTerms.token
         )
     }
-
 
     private fun loadFormattedUrl(loadFormattedUrl: RoomWidgetViewEvents.LoadFormattedURL) {
         widgetWebView.clearHistory()

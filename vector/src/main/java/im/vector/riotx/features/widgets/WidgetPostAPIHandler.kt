@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.widgets
 
-import android.content.Context
 import android.text.TextUtils
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -31,22 +30,26 @@ import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.android.api.session.widgets.WidgetPostAPIMediator
 import im.vector.matrix.android.api.util.JsonDict
+import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
-import im.vector.riotx.features.navigation.Navigator
 import timber.log.Timber
 import java.util.ArrayList
 import java.util.HashMap
 
 class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roomId: String,
-                                                       private val context: Context,
-                                                       private val navigator: Navigator,
+                                                       @Assisted private val navigationCallback: NavigationCallback,
                                                        private val stringProvider: StringProvider,
                                                        private val session: Session) : WidgetPostAPIMediator.Handler {
 
     @AssistedInject.Factory
     interface Factory {
-        fun create(roomId: String): WidgetPostAPIHandler
+        fun create(roomId: String, navigationCallback: NavigationCallback): WidgetPostAPIHandler
+    }
+
+    interface NavigationCallback {
+        fun close()
+        fun openIntegrationManager(integId: String?, integType: String?)
     }
 
     private val widgetPostAPIMediator = session.widgetService().getWidgetPostAPIMediator()
@@ -57,18 +60,22 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
             "integration_manager_open" -> handleIntegrationManagerOpenAction(eventData).run { true }
             "bot_options"              -> getBotOptions(eventData).run { true }
             "can_send_event"           -> canSendEvent(eventData).run { true }
-            //"close_scalar"             -> finish().run { true }
+            "close_scalar"             -> handleCloseScalar().run { true }
             "get_membership_count"     -> getMembershipCount(eventData).run { true }
             "get_widgets"              -> getWidgets(eventData).run { true }
-            //"invite"                   -> inviteUser(eventData).run { true }
+            "invite"                   -> inviteUser(eventData).run { true }
             "join_rules_state"         -> getJoinRules(eventData).run { true }
             "membership_state"         -> getMembershipState(eventData).run { true }
             "set_bot_options"          -> setBotOptions(eventData).run { true }
             "set_bot_power"            -> setBotPower(eventData).run { true }
             "set_plumbing_state"       -> setPlumbingState(eventData).run { true }
-            //"set_widget"               -> setWidget(eventData).run { true }
+            "set_widget"               -> setWidget(eventData).run { true }
             else                       -> false
         }
+    }
+
+    private fun handleCloseScalar() {
+        navigationCallback.close()
     }
 
     private fun handleIntegrationManagerOpenAction(eventData: JsonDict) {
@@ -91,7 +98,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
                     // Add "type_" as a prefix
                     integType?.let { integType = "type_$integType" }
                 }
-        navigator.openIntegrationManager(context, roomId, integId, integType)
+        navigationCallback.openIntegrationManager(integId, integType)
     }
 
     /**
@@ -213,6 +220,79 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     }
 
     /**
+     * Set a new widget
+     *
+     * @param eventData the modular data
+     */
+    private fun setWidget(eventData: JsonDict) {
+        val userWidget = eventData["userWidget"] as Boolean?
+        if (userWidget == true) {
+            Timber.d("Received request to set widget for user")
+        } else {
+            if (checkRoomId(eventData)) {
+                return
+            }
+            Timber.d("Received request to set widget in room $roomId")
+        }
+        val widgetId = eventData["widget_id"] as String?
+        val widgetType = eventData["type"] as String?
+        val widgetUrl = eventData["url"] as String?
+
+        // optional
+        val widgetName = eventData["name"] as String?
+        // optional
+        val widgetData = eventData["data"]
+        if (widgetId == null) {
+            widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_unable_to_create), eventData)
+            return
+        }
+
+        val widgetEventContent = HashMap<String, Any>()
+
+        if (null != widgetUrl) {
+            if (null == widgetType) {
+                widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_unable_to_create), eventData)
+                return
+            }
+
+            widgetEventContent["type"] = widgetType
+            widgetEventContent["url"] = widgetUrl
+
+            if (null != widgetName) {
+                widgetEventContent["name"] = widgetName
+            }
+
+            if (null != widgetData) {
+                widgetEventContent["data"] = widgetData
+            }
+        }
+
+        if (userWidget == true) {
+            val addUserWidgetBody = mapOf(
+                    widgetId to mapOf(
+                            "content" to widgetEventContent,
+                            "state_key" to widgetId,
+                            "id" to widgetId,
+                            "sender" to session.myUserId,
+                            "type" to "m.widget"
+                    )
+            )
+            session.updateAccountData(
+                    type = UserAccountData.TYPE_WIDGETS,
+                    content = addUserWidgetBody,
+                    callback = createWidgetAPICallback(eventData)
+            )
+        } else {
+            session.widgetService().createRoomWidget(
+                    roomId = roomId,
+                    widgetId = widgetId,
+                    content = widgetEventContent,
+                    callback = createWidgetAPICallback(eventData)
+            )
+        }
+    }
+
+    /**
      * Update the 'plumbing state"
      *
      * @param eventData the modular data
@@ -232,7 +312,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
                 eventType = EventType.PLUMBING,
                 stateKey = null,
                 body = params,
-                callback = WidgetAPICallback(widgetPostAPIMediator, eventData, stringProvider)
+                callback = createWidgetAPICallback(eventData)
         )
     }
 
@@ -255,7 +335,8 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
                 eventType = EventType.BOT_OPTIONS,
                 stateKey = stateKey,
                 body = content,
-                callback = WidgetAPICallback(widgetPostAPIMediator, eventData, stringProvider))
+                callback = createWidgetAPICallback(eventData)
+        )
     }
 
     /**
@@ -277,6 +358,26 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         } else {
             Timber.e("## setBotPower() : Power level must be positive integer.")
             widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_positive_power_level), eventData)
+        }
+    }
+
+    /**
+     * Invite an user to this room
+     *
+     * @param eventData the modular data
+     */
+    private fun inviteUser(eventData: JsonDict) {
+        if (checkRoomId(eventData) || checkUserId(eventData)) {
+            return
+        }
+        val userId = eventData["user_id"] as String
+        val description = "Received request to invite $userId into room $roomId"
+        Timber.d(description)
+        val member = room.getRoomMember(userId)
+        if (member != null && member.membership == Membership.JOIN) {
+            widgetPostAPIMediator.sendSuccess(eventData)
+        } else {
+            room.invite(userId = userId, callback = createWidgetAPICallback(eventData))
         }
     }
 
@@ -331,6 +432,10 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         }
         // OK
         return false
+    }
+
+    private fun createWidgetAPICallback(eventData: JsonDict): WidgetAPICallback {
+        return WidgetAPICallback(widgetPostAPIMediator, eventData, stringProvider)
     }
 }
 

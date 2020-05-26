@@ -25,6 +25,10 @@ import im.vector.matrix.android.internal.session.widgets.Widget
 
 interface WidgetService {
 
+    companion object {
+        const val WIDGET_EVENT_TYPE = "im.vector.modular.widgets"
+    }
+
     fun getWidgetURLFormatter(): WidgetURLFormatter
 
     fun getWidgetPostAPIMediator(): WidgetPostAPIMediator

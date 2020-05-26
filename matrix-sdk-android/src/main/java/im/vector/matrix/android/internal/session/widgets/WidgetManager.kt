@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
+import im.vector.matrix.android.api.session.widgets.WidgetService
 import im.vector.matrix.android.api.session.widgets.model.WidgetContent
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.di.UserId
@@ -52,10 +53,6 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
                                                  private val createWidgetTask: CreateWidgetTask,
                                                  @UserId private val userId: String) : IntegrationManager.Listener {
 
-    companion object {
-        const val WIDGET_EVENT_TYPE = "im.vector.modular.widgets"
-    }
-
     private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
     private val lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(lifecycleOwner)
 
@@ -76,7 +73,7 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
             excludedTypes: Set<String>? = null
     ): LiveData<List<Widget>> {
         // Get all im.vector.modular.widgets state events in the room
-        val liveWidgetEvents = stateEventDataSource.getStateEventsLive(roomId, setOf(WIDGET_EVENT_TYPE), widgetId)
+        val liveWidgetEvents = stateEventDataSource.getStateEventsLive(roomId, setOf(WidgetService.WIDGET_EVENT_TYPE), widgetId)
         return Transformations.map(liveWidgetEvents) { widgetEvents ->
             widgetEvents.mapEventsToWidgets(widgetTypes, excludedTypes)
         }
@@ -89,7 +86,7 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
             excludedTypes: Set<String>? = null
     ): List<Widget> {
         // Get all im.vector.modular.widgets state events in the room
-        val widgetEvents: List<Event> = stateEventDataSource.getStateEvents(roomId, setOf(WIDGET_EVENT_TYPE), widgetId)
+        val widgetEvents: List<Event> = stateEventDataSource.getStateEvents(roomId, setOf(WidgetService.WIDGET_EVENT_TYPE), widgetId)
         return widgetEvents.mapEventsToWidgets(widgetTypes, excludedTypes)
     }
 
@@ -153,7 +150,7 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
                 .toList()
     }
 
-    fun createWidget(roomId: String, widgetId: String, content: Content, callback: MatrixCallback<Widget>): Cancelable {
+    fun createRoomWidget(roomId: String, widgetId: String, content: Content, callback: MatrixCallback<Widget>): Cancelable {
         return taskExecutor.executorScope.launchToCallback(callback = callback) {
             if (!hasPermissionsToHandleWidgets(roomId)) {
                 throw WidgetManagementFailure.NotEnoughPower
@@ -172,7 +169,7 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
         }
     }
 
-    fun destroyWidget(roomId: String, widgetId: String, callback: MatrixCallback<Unit>): Cancelable {
+    fun destroyRoomWidget(roomId: String, widgetId: String, callback: MatrixCallback<Unit>): Cancelable {
         return taskExecutor.executorScope.launchToCallback(callback = callback) {
             if (!hasPermissionsToHandleWidgets(roomId)) {
                 throw WidgetManagementFailure.NotEnoughPower

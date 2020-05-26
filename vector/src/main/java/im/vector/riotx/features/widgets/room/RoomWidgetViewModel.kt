@@ -38,7 +38,7 @@ import javax.net.ssl.HttpsURLConnection
 class RoomWidgetViewModel @AssistedInject constructor(@Assisted val initialState: WidgetViewState,
                                                       private val widgetPostAPIHandlerFactory: WidgetPostAPIHandler.Factory,
                                                       private val session: Session)
-    : VectorViewModel<WidgetViewState, RoomWidgetAction, RoomWidgetViewEvents>(initialState) {
+    : VectorViewModel<WidgetViewState, RoomWidgetAction, RoomWidgetViewEvents>(initialState), WidgetPostAPIHandler.NavigationCallback {
 
     @AssistedInject.Factory
     interface Factory {
@@ -64,7 +64,7 @@ class RoomWidgetViewModel @AssistedInject constructor(@Assisted val initialState
 
     init {
         if(initialState.widgetKind.isAdmin()) {
-            val widgetPostAPIHandler = widgetPostAPIHandlerFactory.create(initialState.roomId)
+            val widgetPostAPIHandler = widgetPostAPIHandlerFactory.create(initialState.roomId, this)
             postAPIMediator.setHandler(widgetPostAPIHandler)
         }
         refreshPermissionStatus()
@@ -173,5 +173,13 @@ class RoomWidgetViewModel @AssistedInject constructor(@Assisted val initialState
     override fun onCleared() {
         super.onCleared()
         postAPIMediator.setHandler(null)
+    }
+
+    override fun close() {
+        _viewEvents.post(RoomWidgetViewEvents.Close)
+    }
+
+    override fun openIntegrationManager(integId: String?, integType: String?) {
+        _viewEvents.post(RoomWidgetViewEvents.DisplayIntegrationManager(integId, integType))
     }
 }
