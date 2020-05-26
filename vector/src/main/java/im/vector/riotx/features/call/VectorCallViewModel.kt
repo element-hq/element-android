@@ -103,8 +103,8 @@ class VectorCallViewModel @AssistedInject constructor(
         }
 
         override fun initialState(viewModelContext: ViewModelContext): VectorCallViewState? {
-            val args: CallArgs = viewModelContext.args()
-            return VectorCallViewState(roomId = args.roomId)
+            //val args: CallArgs = viewModelContext.args()
+            return VectorCallViewState()
         }
     }
 }

@@ -17,10 +17,13 @@
 package im.vector.riotx.features.call
 
 import android.app.KeyguardManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.os.Parcelable
 import android.view.View
 import android.view.Window
@@ -35,6 +38,7 @@ import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
 import im.vector.riotx.core.utils.allGranted
 import im.vector.riotx.core.utils.checkPermissions
+import im.vector.riotx.features.call.service.CallHeadsUpService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.parcel.Parcelize
@@ -88,6 +92,19 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
 
     private val iceCandidateSource: PublishSubject<IceCandidate> = PublishSubject.create()
 
+
+
+    var callHeadsUpService: CallHeadsUpService? = null
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName?) {
+            finish()
+        }
+
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            callHeadsUpService = (service as? CallHeadsUpService.CallHeadsUpServiceBinder)?.getService()
+        }
+    }
+
     override fun doBeforeSetContentView() {
         // Set window styles for fullscreen-window size. Needs to be done before adding content.
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -112,6 +129,8 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        bindService(Intent(this, CallHeadsUpService::class.java), serviceConnection, 0)
 
         if (intent.hasExtra(MvRx.KEY_ARG)) {
             callArgs = intent.getParcelableExtra(MvRx.KEY_ARG)!!
@@ -340,8 +359,8 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
     private fun handleViewEvents(event: VectorCallViewEvents?) {
         when (event) {
             is VectorCallViewEvents.CallAnswered -> {
-                val sdp = SessionDescription(SessionDescription.Type.ANSWER, event.content.answer.sdp)
-                peerConnectionManager.answerReceived("", sdp)
+                //val sdp = SessionDescription(SessionDescription.Type.ANSWER, event.content.answer.sdp)
+                //peerConnectionManager.answerReceived("", sdp)
 //                peerConnection?.setRemoteDescription(object : SdpObserverAdapter() {}, sdp)
             }
             is VectorCallViewEvents.CallHangup -> {

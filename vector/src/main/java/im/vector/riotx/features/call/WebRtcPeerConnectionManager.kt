@@ -94,6 +94,9 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     private var peerConnection: PeerConnection? = null
 
+    private var localViewRenderer: SurfaceViewRenderer? = null
+    private var remoteViewRenderer: SurfaceViewRenderer? = null
+
     private var remoteVideoTrack: VideoTrack? = null
     private var localVideoTrack: VideoTrack? = null
 
@@ -185,7 +188,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
             localVideoTrack = peerConnectionFactory?.createVideoTrack("ARDAMSv0", videoSource)?.also {
                 Timber.v("## VOIP Local video track created")
-                listener?.addLocalVideoTrack(it)
 //                localSurfaceRenderer?.get()?.let { surface ->
 // //                    it.addSink(surface)
 // //                }
@@ -226,15 +228,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
     }
 
-    fun answerReceived(callId: String, answerSdp: SessionDescription) {
-        this.callId = callId
-
-        executor.execute {
-            Timber.v("## answerReceived $callId")
-            peerConnection?.setRemoteDescription(object : SdpObserverAdapter() {}, answerSdp)
-        }
-    }
-
     private fun startCall() {
         createPeerConnectionFactory()
         createPeerConnection(object : PeerConnectionObserverAdapter() {
@@ -246,8 +239,16 @@ class WebRtcPeerConnectionManager @Inject constructor(
             override fun onAddStream(mediaStream: MediaStream?) {
                 Timber.v("## VOIP onAddStream remote $mediaStream")
                 mediaStream?.videoTracks?.firstOrNull()?.let {
-                    listener?.addRemoteVideoTrack(it)
                     remoteVideoTrack = it
+                    remoteSurfaceRenderer?.get()?.let { surface ->
+                        it.setEnabled(true)
+                        it.addSink(surface)
+                    }
+                    mediaStream.videoTracks?.firstOrNull()?.let { videoTrack ->
+                        remoteVideoTrack = videoTrack
+                        remoteVideoTrack?.setEnabled(true)
+                        remoteVideoTrack?.addSink(remoteViewRenderer)
+                    }
                 }
             }
 
@@ -318,8 +319,13 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     fun attachViewRenderers(localViewRenderer: SurfaceViewRenderer, remoteViewRenderer: SurfaceViewRenderer) {
+        this.localViewRenderer = localViewRenderer
+        this.remoteViewRenderer = remoteViewRenderer
         audioSource = peerConnectionFactory?.createAudioSource(DEFAULT_AUDIO_CONSTRAINTS)
         audioTrack = peerConnectionFactory?.createAudioTrack(AUDIO_TRACK_ID, audioSource)
+
+        localViewRenderer.setMirror(true)
+        localVideoTrack?.addSink(localViewRenderer)
 
         localMediaStream = peerConnectionFactory?.createLocalMediaStream("ARDAMS") // magic value?
 
@@ -429,6 +435,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         this.isVideoCall = callInviteContent.isVideo()
 
         startHeadsUpService(signalingRoomId, participantUserId, true, callInviteContent.isVideo())
+        context.startActivity(VectorCallActivity.newIntent(context, signalingRoomId, participantUserId, false, callInviteContent.isVideo()))
 
         startCall()
     }
@@ -448,6 +455,13 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     override fun onCallAnswerReceived(callAnswerContent: CallAnswerContent) {
+        this.callId = callAnswerContent.callId
+
+        executor.execute {
+            Timber.v("## answerReceived $callId")
+            val sdp = SessionDescription(SessionDescription.Type.ANSWER, callAnswerContent.answer.sdp)
+            peerConnection?.setRemoteDescription(object : SdpObserverAdapter() {}, sdp)
+        }
     }
 
     override fun onCallHangupReceived(callHangupContent: CallHangupContent) {
