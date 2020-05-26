@@ -611,7 +611,7 @@ internal class DefaultVerificationService @Inject constructor(
 
         if (validCancelReq == null) {
             // ignore
-            Timber.e("## SAS Received invalid key request")
+            Timber.e("## SAS Received invalid cancel request")
             // TODO should we cancel?
             return
         }

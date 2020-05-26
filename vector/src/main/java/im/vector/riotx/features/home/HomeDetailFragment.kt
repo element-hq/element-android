@@ -123,12 +123,12 @@ class HomeDetailFragment @Inject constructor(
                                 ?.navigator
                                 ?.requestSessionVerification(requireContext(), newest.deviceId ?: "")
                         unknownDeviceDetectorSharedViewModel.handle(
-                                UnknownDeviceDetectorSharedViewModel.Action.IgnoreDevice(newest.deviceId?.let { listOf(it) } ?: emptyList())
+                                UnknownDeviceDetectorSharedViewModel.Action.IgnoreDevice(newest.deviceId?.let { listOf(it) }.orEmpty())
                         )
                     }
                     dismissedAction = Runnable {
                         unknownDeviceDetectorSharedViewModel.handle(
-                                UnknownDeviceDetectorSharedViewModel.Action.IgnoreDevice(newest.deviceId?.let { listOf(it) } ?: emptyList())
+                                UnknownDeviceDetectorSharedViewModel.Action.IgnoreDevice(newest.deviceId?.let { listOf(it) }.orEmpty())
                         )
                     }
                 }

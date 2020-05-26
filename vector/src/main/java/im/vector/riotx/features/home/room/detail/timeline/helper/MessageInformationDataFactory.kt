@@ -64,16 +64,14 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
 
         val showInformation =
                 addDaySeparator
-                        || event.senderAvatar != nextEvent?.senderAvatar
-                        || event.getDisambiguatedDisplayName() != nextEvent?.getDisambiguatedDisplayName()
+                        || event.senderInfo.avatarUrl != nextEvent?.senderInfo?.avatarUrl
+                        || event.senderInfo.disambiguatedDisplayName != nextEvent?.senderInfo?.disambiguatedDisplayName
                         || (nextEvent.root.getClearType() != EventType.MESSAGE && nextEvent.root.getClearType() != EventType.ENCRYPTED)
                         || isNextMessageReceivedMoreThanOneHourAgo
                         || isTileTypeMessage(nextEvent)
 
         val time = dateFormatter.formatMessageHour(date)
-        val avatarUrl = event.senderAvatar
-        val memberName = event.getDisambiguatedDisplayName()
-        val formattedMemberName = span(memberName) {
+        val formattedMemberName = span(event.senderInfo.disambiguatedDisplayName) {
             textColor = colorProvider.getColor(getColorFromUserId(event.root.senderId))
         }
 
@@ -85,7 +83,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 sendState = event.root.sendState,
                 time = time,
                 ageLocalTS = event.root.ageLocalTs,
-                avatarUrl = avatarUrl,
+                avatarUrl = event.senderInfo.avatarUrl,
                 memberName = formattedMemberName,
                 showInformation = showInformation,
                 orderedReactionList = event.annotations?.reactionsSummary

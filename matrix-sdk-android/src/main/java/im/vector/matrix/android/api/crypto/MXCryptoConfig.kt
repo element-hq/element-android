@@ -19,11 +19,11 @@ package im.vector.matrix.android.api.crypto
 /**
  * Class to define the parameters used to customize or configure the end-to-end crypto.
  */
-data class MXCryptoConfig(
+data class MXCryptoConfig constructor(
         // Tell whether the encryption of the event content is enabled for the invited members.
         // SDK clients can disable this by settings it to false.
         // Note that the encryption for the invited members will be blocked if the history visibility is "joined".
-        var enableEncryptionForInvitedMembers: Boolean = true,
+        val enableEncryptionForInvitedMembers: Boolean = true,
 
         /**
          * If set to true, the SDK will automatically ignore room key request (gossiping)
@@ -31,6 +31,5 @@ data class MXCryptoConfig(
          * If set to false, the request will be forwarded to the application layer; in this
          * case the application can decide to prompt the user.
          */
-        var discardRoomKeyRequestsFromUntrustedDevices : Boolean = true
-
+        val discardRoomKeyRequestsFromUntrustedDevices: Boolean = true
 )

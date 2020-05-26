@@ -111,7 +111,7 @@ internal class DefaultReadService @AssistedInject constructor(
                 { readReceiptsSummaryMapper.map(it) }
         )
         return Transformations.map(liveRealmData) {
-            it.firstOrNull() ?: emptyList()
+            it.firstOrNull().orEmpty()
         }
     }
 

@@ -20,12 +20,21 @@ import im.vector.matrix.android.api.session.events.model.EventType
 
 internal object FilterFactory {
 
-    fun createDefaultFilterBody(): FilterBody {
-        return FilterUtil.enableLazyLoading(FilterBody(), true)
+    fun createUploadsFilter(numberOfEvents: Int): RoomEventFilter {
+        return RoomEventFilter(
+                limit = numberOfEvents,
+                containsUrl = true,
+                types = listOf(EventType.MESSAGE),
+                lazyLoadMembers = true
+        )
     }
 
-    fun createRiotFilterBody(): FilterBody {
-        return FilterBody(
+    fun createDefaultFilter(): Filter {
+        return FilterUtil.enableLazyLoading(Filter(), true)
+    }
+
+    fun createRiotFilter(): Filter {
+        return Filter(
                 room = RoomFilter(
                         timeline = createRiotTimelineFilter(),
                         state = createRiotStateFilter()

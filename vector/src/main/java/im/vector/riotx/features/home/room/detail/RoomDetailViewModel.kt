@@ -117,8 +117,10 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     // Slot to keep a pending action during permission request
     var pendingAction: RoomDetailAction? = null
+
     // Slot to keep a pending uri during permission request
     var pendingUri: Uri? = null
+
     // Slot to store if we want to prevent preview of attachment
     var preventAttachmentPreview = false
 
@@ -391,7 +393,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.SendEmote                -> {
-                            room.sendTextMessage(slashCommandResult.message, msgType = MessageType.MSGTYPE_EMOTE)
+                            room.sendTextMessage(slashCommandResult.message, msgType = MessageType.MSGTYPE_EMOTE, autoMarkdown = action.autoMarkdown)
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }

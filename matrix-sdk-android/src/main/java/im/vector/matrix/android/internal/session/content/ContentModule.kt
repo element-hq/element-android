@@ -25,8 +25,8 @@ import im.vector.matrix.android.api.session.content.ContentUrlResolver
 internal abstract class ContentModule {
 
     @Binds
-    abstract fun bindContentUploadStateTracker(contentUploadStateTracker: DefaultContentUploadStateTracker): ContentUploadStateTracker
+    abstract fun bindContentUploadStateTracker(tracker: DefaultContentUploadStateTracker): ContentUploadStateTracker
 
     @Binds
-    abstract fun bindContentUrlResolver(contentUrlResolver: DefaultContentUrlResolver): ContentUrlResolver
+    abstract fun bindContentUrlResolver(resolver: DefaultContentUrlResolver): ContentUrlResolver
 }

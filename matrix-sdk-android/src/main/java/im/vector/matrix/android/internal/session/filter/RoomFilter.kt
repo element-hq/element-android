@@ -24,12 +24,37 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class RoomFilter(
+        /**
+         * A list of room IDs to exclude. If this list is absent then no rooms are excluded.
+         * A matching room will be excluded even if it is listed in the 'rooms' filter.
+         * This filter is applied before the filters in ephemeral, state, timeline or account_data
+         */
         @Json(name = "not_rooms") val notRooms: List<String>? = null,
+        /**
+         * A list of room IDs to include. If this list is absent then all rooms are included.
+         * This filter is applied before the filters in ephemeral, state, timeline or account_data
+         */
         @Json(name = "rooms") val rooms: List<String>? = null,
+        /**
+         * The events that aren't recorded in the room history, e.g. typing and receipts, to include for rooms.
+         */
         @Json(name = "ephemeral") val ephemeral: RoomEventFilter? = null,
+        /**
+         * Include rooms that the user has left in the sync, default false
+         */
         @Json(name = "include_leave") val includeLeave: Boolean? = null,
+        /**
+         * The state events to include for rooms.
+         * Developer remark: StateFilter is exactly the same than RoomEventFilter
+         */
         @Json(name = "state") val state: RoomEventFilter? = null,
+        /**
+         * The message and state update events to include for rooms.
+         */
         @Json(name = "timeline") val timeline: RoomEventFilter? = null,
+        /**
+         * The per user account data to include for rooms.
+         */
         @Json(name = "account_data") val accountData: RoomEventFilter? = null
 ) {
 

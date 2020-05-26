@@ -34,6 +34,7 @@ import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.state.StateService
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.api.session.room.typing.TypingService
+import im.vector.matrix.android.api.session.room.uploads.UploadsService
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
@@ -54,6 +55,7 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
                                                private val sendService: SendService,
                                                private val draftService: DraftService,
                                                private val stateService: StateService,
+                                               private val uploadsService: UploadsService,
                                                private val reportingService: ReportingService,
                                                private val readService: ReadService,
                                                private val typingService: TypingService,
@@ -68,6 +70,7 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
         SendService by sendService,
         DraftService by draftService,
         StateService by stateService,
+        UploadsService by uploadsService,
         ReportingService by reportingService,
         ReadService by readService,
         TypingService by typingService,

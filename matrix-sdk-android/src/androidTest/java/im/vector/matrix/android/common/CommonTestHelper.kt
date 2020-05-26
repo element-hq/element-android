@@ -28,10 +28,10 @@ import im.vector.matrix.android.api.auth.data.LoginFlowResult
 import im.vector.matrix.android.api.auth.registration.RegistrationResult
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.LocalEcho
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
@@ -117,7 +117,7 @@ class CommonTestHelper(context: Context) {
      */
     fun sendTextMessage(room: Room, message: String, nbOfMessages: Int): List<TimelineEvent> {
         val sentEvents = ArrayList<TimelineEvent>(nbOfMessages)
-        val latch = CountDownLatch(nbOfMessages)
+        val latch = CountDownLatch(1)
         val timelineListener = object : Timeline.Listener {
             override fun onTimelineFailure(throwable: Throwable) {
             }
@@ -128,7 +128,7 @@ class CommonTestHelper(context: Context) {
 
             override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
                 val newMessages = snapshot
-                        .filter { LocalEcho.isLocalEchoId(it.eventId).not() }
+                        .filter { it.root.sendState == SendState.SYNCED }
                         .filter { it.root.getClearType() == EventType.MESSAGE }
                         .filter { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(message) == true }
 
@@ -144,7 +144,8 @@ class CommonTestHelper(context: Context) {
         for (i in 0 until nbOfMessages) {
             room.sendTextMessage(message + " #" + (i + 1))
         }
-        await(latch)
+        // Wait 3 second more per message
+        await(latch, timeout = TestConstants.timeOutMillis + 3_000L * nbOfMessages)
         timeline.removeListener(timelineListener)
         timeline.dispose()
 
@@ -292,6 +293,24 @@ class CommonTestHelper(context: Context) {
         return requestFailure!!
     }
 
+    fun createEventListener(latch: CountDownLatch, predicate: (List<TimelineEvent>) -> Boolean): Timeline.Listener {
+        return object : Timeline.Listener {
+            override fun onTimelineFailure(throwable: Throwable) {
+                // noop
+            }
+
+            override fun onNewTimelineEvents(eventIds: List<String>) {
+                // noop
+            }
+
+            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
+                if (predicate(snapshot)) {
+                    latch.countDown()
+                }
+            }
+        }
+    }
+
     /**
      * Await for a latch and ensure the result is true
      *
@@ -348,5 +367,15 @@ class CommonTestHelper(context: Context) {
     fun signOutAndClose(session: Session) {
         doSync<Unit> { session.signOut(true, it) }
         session.close()
+    }
+}
+
+fun List<TimelineEvent>.checkSendOrder(baseTextMessage: String, numberOfMessages: Int, startIndex: Int): Boolean {
+    return drop(startIndex)
+            .take(numberOfMessages)
+            .foldRightIndexed(true) { index, timelineEvent, acc ->
+        val body = timelineEvent.root.content.toModel<MessageContent>()?.body
+        val currentMessageSuffix = numberOfMessages - index
+        acc && (body == null || body.startsWith(baseTextMessage) && body.endsWith("#$currentMessageSuffix"))
     }
 }

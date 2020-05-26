@@ -262,7 +262,7 @@ internal class DefaultCryptoService @Inject constructor(
 
                         override fun onSuccess(data: DevicesListResponse) {
                             // Save in local DB
-                            cryptoStore.saveMyDevicesInfo(data.devices ?: emptyList())
+                            cryptoStore.saveMyDevicesInfo(data.devices.orEmpty())
                             callback.onSuccess(data)
                         }
                     }
@@ -446,7 +446,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
-        return cryptoStore.getUserDeviceList(userId) ?: emptyList()
+        return cryptoStore.getUserDeviceList(userId).orEmpty()
     }
 
     override fun getLiveCryptoDeviceInfo(): LiveData<List<CryptoDeviceInfo>> {

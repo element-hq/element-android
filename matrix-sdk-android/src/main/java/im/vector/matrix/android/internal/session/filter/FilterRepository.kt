@@ -21,12 +21,12 @@ internal interface FilterRepository {
     /**
      * Return true if the filterBody has changed, or need to be sent to the server
      */
-    suspend fun storeFilter(filterBody: FilterBody, roomEventFilter: RoomEventFilter): Boolean
+    suspend fun storeFilter(filter: Filter, roomEventFilter: RoomEventFilter): Boolean
 
     /**
      * Set the filterId of this filter
      */
-    suspend fun storeFilterId(filterBody: FilterBody, filterId: String)
+    suspend fun storeFilterId(filter: Filter, filterId: String)
 
     /**
      * Return filter json or filter id

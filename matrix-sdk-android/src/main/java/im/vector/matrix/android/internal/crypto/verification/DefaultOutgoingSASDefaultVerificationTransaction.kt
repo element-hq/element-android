@@ -193,18 +193,7 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
 
         if (accepted!!.commitment.equals(otherCommitment)) {
             getSAS().setTheirPublicKey(otherKey)
-            // (Note: In all of the following HKDF is as defined in RFC 5869, and uses the previously agreed-on hash function as the hash function,
-            // the shared secret as the input keying material, no salt, and with the input parameter set to the concatenation of:
-            // - the string “MATRIX_KEY_VERIFICATION_SAS”,
-            // - the Matrix ID of the user who sent the m.key.verification.start message,
-            // - the device ID of the device that sent the m.key.verification.start message,
-            // - the Matrix ID of the user who sent the m.key.verification.accept message,
-            // - he device ID of the device that sent the m.key.verification.accept message
-            // - the transaction ID.
-            val sasInfo = "MATRIX_KEY_VERIFICATION_SAS$userId$deviceId$otherUserId$otherDeviceId$transactionId"
-            // decimal: generate five bytes by using HKDF.
-            // emoji: generate six bytes by using HKDF.
-            shortCodeBytes = getSAS().generateShortCode(sasInfo, 6)
+            shortCodeBytes = calculateSASBytes()
             state = VerificationTxState.ShortCodeReady
         } else {
             // bad commitment
@@ -212,14 +201,45 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
         }
     }
 
+    private fun calculateSASBytes(): ByteArray {
+        when (accepted?.keyAgreementProtocol) {
+            KEY_AGREEMENT_V1 -> {
+                // (Note: In all of the following HKDF is as defined in RFC 5869, and uses the previously agreed-on hash function as the hash function,
+                // the shared secret as the input keying material, no salt, and with the input parameter set to the concatenation of:
+                // - the string “MATRIX_KEY_VERIFICATION_SAS”,
+                // - the Matrix ID of the user who sent the m.key.verification.start message,
+                // - the device ID of the device that sent the m.key.verification.start message,
+                // - the Matrix ID of the user who sent the m.key.verification.accept message,
+                // - he device ID of the device that sent the m.key.verification.accept message
+                // - the transaction ID.
+                val sasInfo =  "MATRIX_KEY_VERIFICATION_SAS$userId$deviceId$otherUserId$otherDeviceId$transactionId"
+
+                // decimal: generate five bytes by using HKDF.
+                // emoji: generate six bytes by using HKDF.
+                return getSAS().generateShortCode(sasInfo, 6)
+            }
+            KEY_AGREEMENT_V2 -> {
+                // Adds the SAS public key, and separate by |
+                val sasInfo =  "MATRIX_KEY_VERIFICATION_SAS|$userId|$deviceId|${getSAS().publicKey}|$otherUserId|$otherDeviceId|$otherKey|$transactionId"
+                return getSAS().generateShortCode(sasInfo, 6)
+            }
+            else             -> {
+                // Protocol has been checked earlier
+                throw IllegalArgumentException()
+            }
+        }
+    }
+
     override fun onKeyVerificationMac(vMac: ValidVerificationInfoMac) {
         Timber.v("## SAS O: onKeyVerificationMac id:$transactionId")
+        // There is starting to be a huge amount of state / race here :/
         if (state != VerificationTxState.OnKeyReceived
                 && state != VerificationTxState.ShortCodeReady
                 && state != VerificationTxState.ShortCodeAccepted
+                && state != VerificationTxState.KeySent
                 && state != VerificationTxState.SendingMac
                 && state != VerificationTxState.MacSent) {
-            Timber.e("## SAS O: received key from invalid state $state")
+            Timber.e("## SAS O: received mac from invalid state $state")
             cancel(CancelCode.UnexpectedMessage)
             return
         }

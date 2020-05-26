@@ -35,6 +35,7 @@ import im.vector.matrix.android.api.session.room.model.message.FileInfo
 import im.vector.matrix.android.api.session.room.model.message.ImageInfo
 import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageContentWithFormattedBody
 import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFormat
 import im.vector.matrix.android.api.session.room.model.message.MessageImageContent
@@ -56,6 +57,7 @@ import im.vector.matrix.android.api.session.room.model.relation.ReplyToContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.internal.di.UserId
+import im.vector.matrix.android.internal.extensions.subStringBetween
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
 import im.vector.matrix.android.internal.session.room.send.pills.TextPillsUtils
 import im.vector.matrix.android.internal.task.TaskExecutor
@@ -84,6 +86,7 @@ internal class LocalEchoEventFactory @Inject constructor(
 ) {
     // TODO Inject
     private val parser = Parser.builder().build()
+
     // TODO Inject
     private val renderer = HtmlRenderer.builder().build()
 
@@ -102,8 +105,15 @@ internal class LocalEchoEventFactory @Inject constructor(
             val document = parser.parse(source)
             val htmlText = renderer.render(document)
 
-            if (isFormattedTextPertinent(source, htmlText)) {
-                return TextContent(text.toString(), htmlText)
+            // Cleanup extra paragraph
+            val cleanHtmlText = if (htmlText.startsWith("<p>") && htmlText.endsWith("</p>\n")) {
+                htmlText.subStringBetween("<p>", "</p>\n")
+            } else {
+                htmlText
+            }
+
+            if (isFormattedTextPertinent(source, cleanHtmlText)) {
+                return TextContent(text.toString(), cleanHtmlText)
             }
         } else {
             // Try to detect pills
@@ -192,7 +202,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 permalink,
                 stringProvider.getString(R.string.message_reply_to_prefix),
                 userLink,
-                originalEvent.getDisambiguatedDisplayName(),
+                originalEvent.senderInfo.disambiguatedDisplayName,
                 body.takeFormatted(),
                 createTextContent(newBodyText, newBodyAutoMarkdown).takeFormatted()
         )
@@ -433,10 +443,8 @@ internal class LocalEchoEventFactory @Inject constructor(
             MessageType.MSGTYPE_TEXT,
             MessageType.MSGTYPE_NOTICE -> {
                 var formattedText: String? = null
-                if (content is MessageTextContent) {
-                    if (content.format == MessageFormat.FORMAT_MATRIX_HTML) {
-                        formattedText = content.formattedBody
-                    }
+                if (content is MessageContentWithFormattedBody) {
+                    formattedText = content.matrixFormattedBody
                 }
                 val isReply = content.isReply() || originalContent.isReply()
                 return if (isReply) {

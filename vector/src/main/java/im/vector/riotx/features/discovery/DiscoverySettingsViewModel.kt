@@ -151,8 +151,8 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
     private fun changeThreePidState(threePid: ThreePid, state: Async<SharedState>) {
         setState {
-            val currentMails = emailList() ?: emptyList()
-            val phones = phoneNumbersList() ?: emptyList()
+            val currentMails = emailList().orEmpty()
+            val phones = phoneNumbersList().orEmpty()
             copy(
                     emailList = Success(
                             currentMails.map {
@@ -178,8 +178,8 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
     private fun changeThreePidSubmitState(threePid: ThreePid, submitState: Async<Unit>) {
         setState {
-            val currentMails = emailList() ?: emptyList()
-            val phones = phoneNumbersList() ?: emptyList()
+            val currentMails = emailList().orEmpty()
+            val phones = phoneNumbersList().orEmpty()
             copy(
                     emailList = Success(
                             currentMails.map {

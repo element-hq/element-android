@@ -42,6 +42,7 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
                                                                   private val contextOfEventTask: GetContextOfEventTask,
                                                                   private val eventDecryptor: TimelineEventDecryptor,
                                                                   private val paginationTask: PaginationTask,
+                                                                  private val fetchNextTokenAndPaginateTask: FetchNextTokenAndPaginateTask,
                                                                   private val timelineEventMapper: TimelineEventMapper,
                                                                   private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper
 ) : TimelineService {
@@ -63,7 +64,8 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
                 settings = settings,
                 hiddenReadReceipts = TimelineHiddenReadReceipts(readReceiptsSummaryMapper, roomId, settings),
                 eventBus = eventBus,
-                eventDecryptor = eventDecryptor
+                eventDecryptor = eventDecryptor,
+                fetchNextTokenAndPaginateTask = fetchNextTokenAndPaginateTask
         )
     }
 

@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.session.room.timeline
 
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -71,6 +72,7 @@ internal class DefaultTimeline(
         private val realmConfiguration: RealmConfiguration,
         private val taskExecutor: TaskExecutor,
         private val contextOfEventTask: GetContextOfEventTask,
+        private val fetchNextTokenAndPaginateTask: FetchNextTokenAndPaginateTask,
         private val paginationTask: PaginationTask,
         private val timelineEventMapper: TimelineEventMapper,
         private val settings: TimelineSettings,
@@ -383,7 +385,7 @@ internal class DefaultTimeline(
     }
 
     /**
-     * This has to be called on TimelineThread as it access realm live results
+     * This has to be called on TimelineThread as it accesses realm live results
      * @return true if createSnapshot should be posted
      */
     private fun paginateInternal(startDisplayIndex: Int?,
@@ -446,7 +448,7 @@ internal class DefaultTimeline(
     }
 
     /**
-     * This has to be called on TimelineThread as it access realm live results
+     * This has to be called on TimelineThread as it accesses realm live results
      */
     private fun handleInitialLoad() {
         var shouldFetchInitialEvent = false
@@ -478,7 +480,7 @@ internal class DefaultTimeline(
     }
 
     /**
-     * This has to be called on TimelineThread as it access realm live results
+     * This has to be called on TimelineThread as it accesses realm live results
      */
     private fun handleUpdates(results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet) {
         // If changeSet has deletion we are having a gap, so we clear everything
@@ -516,68 +518,90 @@ internal class DefaultTimeline(
     }
 
     /**
-     * This has to be called on TimelineThread as it access realm live results
+     * This has to be called on TimelineThread as it accesses realm live results
      */
     private fun executePaginationTask(direction: Timeline.Direction, limit: Int) {
-        val token = getTokenLive(direction)
+        val currentChunk = getLiveChunk()
+        val token = if (direction == Timeline.Direction.BACKWARDS) currentChunk?.prevToken else currentChunk?.nextToken
         if (token == null) {
-            updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
-            return
-        }
-        val params = PaginationTask.Params(roomId = roomId,
-                from = token,
-                direction = direction.toPaginationDirection(),
-                limit = limit)
-
-        Timber.v("Should fetch $limit items $direction")
-        cancelableBag += paginationTask
-                .configureWith(params) {
-                    this.callback = object : MatrixCallback<TokenChunkEventPersistor.Result> {
-                        override fun onSuccess(data: TokenChunkEventPersistor.Result) {
-                            when (data) {
-                                TokenChunkEventPersistor.Result.SUCCESS           -> {
-                                    Timber.v("Success fetching $limit items $direction from pagination request")
-                                }
-                                TokenChunkEventPersistor.Result.REACHED_END       -> {
-                                    postSnapshot()
-                                }
-                                TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE ->
-                                    // Database won't be updated, so we force pagination request
-                                    BACKGROUND_HANDLER.post {
-                                        executePaginationTask(direction, limit)
-                                    }
+            if (direction == Timeline.Direction.FORWARDS && currentChunk?.hasBeenALastForwardChunk().orFalse()) {
+                // We are in the case that next event exists, but we do not know the next token.
+                // Fetch (again) the last event to get a nextToken
+                val lastKnownEventId = nonFilteredEvents.firstOrNull()?.eventId
+                if (lastKnownEventId == null) {
+                    updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
+                } else {
+                    val params = FetchNextTokenAndPaginateTask.Params(
+                            roomId = roomId,
+                            limit = limit,
+                            lastKnownEventId = lastKnownEventId
+                    )
+                    cancelableBag += fetchNextTokenAndPaginateTask
+                            .configureWith(params) {
+                                this.callback = createPaginationCallback(limit, direction)
                             }
-                        }
+                            .executeBy(taskExecutor)
+                }
+            } else {
+                updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
+            }
+        } else {
+            val params = PaginationTask.Params(
+                    roomId = roomId,
+                    from = token,
+                    direction = direction.toPaginationDirection(),
+                    limit = limit
+            )
+            Timber.v("Should fetch $limit items $direction")
+            cancelableBag += paginationTask
+                    .configureWith(params) {
+                        this.callback = createPaginationCallback(limit, direction)
+                    }
+                    .executeBy(taskExecutor)
+        }
+    }
 
-                        override fun onFailure(failure: Throwable) {
-                            updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
-                            postSnapshot()
-                            Timber.v("Failure fetching $limit items $direction from pagination request")
+    // For debug purpose only
+    private fun dumpAndLogChunks() {
+        val liveChunk = getLiveChunk()
+        Timber.w("Live chunk: $liveChunk")
+
+        Realm.getInstance(realmConfiguration).use { realm ->
+            ChunkEntity.where(realm, roomId).findAll()
+                    .also { Timber.w("Found ${it.size} chunks") }
+                    .forEach {
+                        Timber.w("")
+                        Timber.w("ChunkEntity: $it")
+                        Timber.w("prevToken: ${it.prevToken}")
+                        Timber.w("nextToken: ${it.nextToken}")
+                        Timber.w("isLastBackward: ${it.isLastBackward}")
+                        Timber.w("isLastForward: ${it.isLastForward}")
+                        it.timelineEvents.forEach { tle ->
+                            Timber.w("   TLE: ${tle.root?.content}")
                         }
                     }
-                }
-                .executeBy(taskExecutor)
+        }
     }
 
     /**
-     * This has to be called on TimelineThread as it access realm live results
+     * This has to be called on TimelineThread as it accesses realm live results
      */
-
     private fun getTokenLive(direction: Timeline.Direction): String? {
         val chunkEntity = getLiveChunk() ?: return null
         return if (direction == Timeline.Direction.BACKWARDS) chunkEntity.prevToken else chunkEntity.nextToken
     }
 
     /**
-     * This has to be called on TimelineThread as it access realm live results
+     * This has to be called on TimelineThread as it accesses realm live results
+     * Return the current Chunk
      */
     private fun getLiveChunk(): ChunkEntity? {
         return nonFilteredEvents.firstOrNull()?.chunk?.firstOrNull()
     }
 
     /**
-     * This has to be called on TimelineThread as it access realm live results
-     * @return number of items who have been added
+     * This has to be called on TimelineThread as it accesses realm live results
+     * @return the number of items who have been added
      */
     private fun buildTimelineEvents(startDisplayIndex: Int?,
                                     direction: Timeline.Direction,
@@ -618,6 +642,8 @@ internal class DefaultTimeline(
         }
         val time = System.currentTimeMillis() - start
         Timber.v("Built ${offsetResults.size} items from db in $time ms")
+        // For the case where wo reach the lastForward chunk
+        updateLoadingStates(filteredEvents)
         return offsetResults.size
     }
 
@@ -628,7 +654,7 @@ internal class DefaultTimeline(
     )
 
     /**
-     * This has to be called on TimelineThread as it access realm live results
+     * This has to be called on TimelineThread as it accesses realm live results
      */
     private fun getOffsetResults(startDisplayIndex: Int,
                                  direction: Timeline.Direction,
@@ -711,6 +737,32 @@ internal class DefaultTimeline(
         builtEventsIdMap.clear()
         backwardsState.set(State())
         forwardsState.set(State())
+    }
+
+    private fun createPaginationCallback(limit: Int, direction: Timeline.Direction): MatrixCallback<TokenChunkEventPersistor.Result> {
+        return object : MatrixCallback<TokenChunkEventPersistor.Result> {
+            override fun onSuccess(data: TokenChunkEventPersistor.Result) {
+                when (data) {
+                    TokenChunkEventPersistor.Result.SUCCESS           -> {
+                        Timber.v("Success fetching $limit items $direction from pagination request")
+                    }
+                    TokenChunkEventPersistor.Result.REACHED_END       -> {
+                        postSnapshot()
+                    }
+                    TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE ->
+                        // Database won't be updated, so we force pagination request
+                        BACKGROUND_HANDLER.post {
+                            executePaginationTask(direction, limit)
+                        }
+                }
+            }
+
+            override fun onFailure(failure: Throwable) {
+                updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
+                postSnapshot()
+                Timber.v("Failure fetching $limit items $direction from pagination request")
+            }
+        }
     }
 
 // Extension methods ***************************************************************************

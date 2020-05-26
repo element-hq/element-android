@@ -382,7 +382,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     fun getUnknownDeviceDismissedList(): List<String> {
         return tryThis {
             defaultPrefs.getStringSet(SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST, null)?.toList()
-        } ?: emptyList()
+        }.orEmpty()
     }
 
     /**

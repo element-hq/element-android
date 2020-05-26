@@ -47,7 +47,7 @@ internal object CryptoInfoMapper {
         return CryptoCrossSigningKey(
                 userId = keyInfo.userId,
                 usages = keyInfo.usages,
-                keys = keyInfo.keys ?: emptyMap(),
+                keys = keyInfo.keys.orEmpty(),
                 signatures = keyInfo.signatures,
                 trustLevel = null
         )

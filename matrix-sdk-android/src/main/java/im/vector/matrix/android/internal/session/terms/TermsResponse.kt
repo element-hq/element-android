@@ -44,7 +44,7 @@ data class TermsResponse(
                         version = tos[VERSION] as? String
                 )
             }
-        }?.filterNotNull() ?: emptyList()
+        }?.filterNotNull().orEmpty()
     }
 
     private companion object {

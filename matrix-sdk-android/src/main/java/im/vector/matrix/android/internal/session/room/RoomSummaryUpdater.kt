@@ -131,7 +131,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                 ?.canonicalAlias
 
         val roomAliases = ContentMapper.map(lastAliasesEvent?.content).toModel<RoomAliasesContent>()?.aliases
-                ?: emptyList()
+               .orEmpty()
         roomSummaryEntity.aliases.clear()
         roomSummaryEntity.aliases.addAll(roomAliases)
         roomSummaryEntity.flatAliases = roomAliases.joinToString(separator = "|", prefix = "|")

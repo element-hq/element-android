@@ -19,10 +19,13 @@ package im.vector.riotx.features.navigation
 import android.app.Activity
 import android.content.Context
 import android.view.View
+import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.util.MatrixItem
+import im.vector.riotx.features.media.ImageContentRenderer
+import im.vector.riotx.features.media.VideoContentRenderer
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.SharedData
 import im.vector.riotx.features.terms.ReviewTermsActivity
@@ -78,5 +81,9 @@ interface Navigator {
                   requestCode: Int = ReviewTermsActivity.TERMS_REQUEST_CODE)
 
     fun openIntegrationManager(context: Context, roomId: String, integId: String?, screenId: String?)
+
+    fun openImageViewer(activity: Activity, mediaData: ImageContentRenderer.Data, view: View, options: ((MutableList<Pair<View, String>>) -> Unit)?)
+
+    fun openVideoViewer(activity: Activity, mediaData: VideoContentRenderer.Data)
 
 }

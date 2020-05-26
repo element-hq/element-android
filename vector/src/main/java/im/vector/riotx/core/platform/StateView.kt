@@ -21,6 +21,7 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
+import androidx.core.view.isVisible
 import im.vector.riotx.R
 import kotlinx.android.synthetic.main.view_state.view.*
 
@@ -31,6 +32,7 @@ class StateView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         object Content : State()
         object Loading : State()
         data class Empty(val title: CharSequence? = null, val image: Drawable? = null, val message: CharSequence? = null) : State()
+
         data class Error(val message: CharSequence? = null) : State()
     }
 
@@ -59,34 +61,21 @@ class StateView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     }
 
     private fun update(newState: State) {
+        progressBar.isVisible = newState is State.Loading
+        errorView.isVisible = newState is State.Error
+        emptyView.isVisible = newState is State.Empty
+        contentView?.isVisible = newState is State.Content
+
         when (newState) {
-            is State.Content -> {
-                progressBar.visibility = View.INVISIBLE
-                errorView.visibility = View.INVISIBLE
-                emptyView.visibility = View.INVISIBLE
-                contentView?.visibility = View.VISIBLE
-            }
-            is State.Loading -> {
-                progressBar.visibility = View.VISIBLE
-                errorView.visibility = View.INVISIBLE
-                emptyView.visibility = View.INVISIBLE
-                contentView?.visibility = View.INVISIBLE
-            }
+            is State.Content -> Unit
+            is State.Loading -> Unit
             is State.Empty   -> {
-                progressBar.visibility = View.INVISIBLE
-                errorView.visibility = View.INVISIBLE
-                emptyView.visibility = View.VISIBLE
                 emptyImageView.setImageDrawable(newState.image)
                 emptyMessageView.text = newState.message
                 emptyTitleView.text = newState.title
-                contentView?.visibility = View.INVISIBLE
             }
             is State.Error   -> {
-                progressBar.visibility = View.INVISIBLE
-                errorView.visibility = View.VISIBLE
-                emptyView.visibility = View.INVISIBLE
                 errorMessageView.text = newState.message
-                contentView?.visibility = View.INVISIBLE
             }
         }
     }
