@@ -86,7 +86,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
 class RoomDetailViewModel @AssistedInject constructor(
-        @Assisted initialState: RoomDetailViewState,
+        @Assisted private val initialState: RoomDetailViewState,
         userPreferencesProvider: UserPreferencesProvider,
         private val vectorPreferences: VectorPreferences,
         private val stringProvider: StringProvider,
@@ -160,11 +160,26 @@ class RoomDetailViewModel @AssistedInject constructor(
         observeDrafts()
         observeUnreadState()
         observeMyRoomMember()
+        observeActiveRoomWidgets()
         room.getRoomSummaryLive()
         room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, NoOpMatrixCallback())
         room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         // Inform the SDK that the room is displayed
         session.onRoomDisplayed(initialState.roomId)
+    }
+
+    private fun observeActiveRoomWidgets() {
+        session.rx()
+                .liveRoomWidgets(
+                        roomId = initialState.roomId,
+                        widgetId = QueryStringValue.NoCondition
+                )
+                .map { widgets ->
+                    widgets.filter { it.isActive }
+                }
+                .execute {
+                    copy(activeRoomWidgets = it)
+                }
     }
 
     private fun observeMyRoomMember() {

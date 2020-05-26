@@ -23,5 +23,8 @@ data class Widget(
         val widgetContent: WidgetContent,
         val event: Event? = null,
         val widgetId: String? = null
-)
+) {
+
+    val isActive = widgetContent.type != null && widgetContent.url != null
+}
 

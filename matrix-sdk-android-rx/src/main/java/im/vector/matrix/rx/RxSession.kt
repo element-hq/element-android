@@ -17,6 +17,7 @@
 package im.vector.matrix.rx
 
 import androidx.paging.PagedList
+import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.api.session.group.GroupSummaryQueryParams
@@ -35,6 +36,7 @@ import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.store.PrivateKeysInfo
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
+import im.vector.matrix.android.internal.session.widgets.Widget
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -149,6 +151,13 @@ class RxSession(private val session: Session) {
         return session.getLiveAccountDataEvents(types).asObservable()
                 .startWithCallable {
                     session.getAccountDataEvents(types)
+                }
+    }
+
+    fun liveRoomWidgets(roomId: String, widgetId: QueryStringValue, widgetTypes: Set<String>? = null, excludedTypes: Set<String>? = null): Observable<List<Widget>> {
+        return session.widgetService().getRoomWidgetsLive(roomId, widgetId, widgetTypes, excludedTypes).asObservable()
+                .startWithCallable {
+                    session.widgetService().getRoomWidgets(roomId, widgetId, widgetTypes, excludedTypes)
                 }
     }
 }
