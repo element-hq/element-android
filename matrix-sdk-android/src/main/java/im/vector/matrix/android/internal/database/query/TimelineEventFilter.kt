@@ -29,6 +29,13 @@ internal object TimelineEventFilter {
     }
 
     /**
+     * To apply to Event.decryptionResultJson
+     */
+    internal object DecryptedContent {
+        internal const val URL = """{*"file":*"url":*}"""
+    }
+
+    /**
      * To apply to Event.unsigned
      */
     internal object Unsigned {
