@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home.room.detail
 
+import android.util.SparseArray
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
@@ -63,6 +64,7 @@ data class RoomDetailViewState(
         val syncState: SyncState = SyncState.Idle,
         val highlightedEventId: String? = null,
         val unreadState: UnreadState = UnreadState.Unknown,
+        val menuItemsVisibility: SparseArray<Boolean> = SparseArray(4),
         val canShowJumpToReadMarker: Boolean = true
 ) : MvRxState {
 

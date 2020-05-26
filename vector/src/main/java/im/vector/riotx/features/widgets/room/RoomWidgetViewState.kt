@@ -29,12 +29,17 @@ enum class WidgetStatus {
 enum class WidgetKind {
     ROOM,
     USER,
-    INTEGRATION_MANAGER
+    INTEGRATION_MANAGER;
+
+    fun isAdmin(): Boolean {
+        return this == USER || this == INTEGRATION_MANAGER
+    }
 }
 
 data class WidgetViewState(
         val roomId: String,
         val baseUrl: String,
+        val urlParams: Map<String, String> = emptyMap(),
         val widgetId: String? = null,
         val widgetKind: WidgetKind,
         val status: WidgetStatus = WidgetStatus.UNKNOWN,
@@ -49,6 +54,7 @@ data class WidgetViewState(
             widgetKind = widgetArgs.kind,
             baseUrl = widgetArgs.baseUrl,
             roomId = widgetArgs.roomId,
-            widgetId = widgetArgs.widgetId
+            widgetId = widgetArgs.widgetId,
+            urlParams = widgetArgs.urlParams
     )
 }

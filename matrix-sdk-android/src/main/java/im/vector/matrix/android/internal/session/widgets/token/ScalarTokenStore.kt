@@ -29,7 +29,7 @@ internal class ScalarTokenStore @Inject constructor(private val monarchy: Monarc
         return monarchy.fetchCopyMap({ realm ->
             ScalarTokenEntity.where(realm, apiUrl).findFirst()
         }, { scalarToken, _ ->
-            scalarToken.serverUrl
+            scalarToken.token
         })
     }
 

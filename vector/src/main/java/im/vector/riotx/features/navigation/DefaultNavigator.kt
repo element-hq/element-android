@@ -55,6 +55,8 @@ import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.SharedData
 import im.vector.riotx.features.terms.ReviewTermsActivity
+import im.vector.riotx.features.widgets.WidgetActivity
+import im.vector.riotx.features.widgets.WidgetArgsBuilder
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -62,6 +64,7 @@ import javax.inject.Singleton
 class DefaultNavigator @Inject constructor(
         private val sessionHolder: ActiveSessionHolder,
         private val vectorPreferences: VectorPreferences,
+        private val widgetArgsBuilder: WidgetArgsBuilder,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider
 ) : Navigator {
 
@@ -215,8 +218,9 @@ class DefaultNavigator @Inject constructor(
         fragment.startActivityForResult(intent, requestCode)
     }
 
-    override fun openIntegrationManager(context: Context) {
-        //TODO
+    override fun openIntegrationManager(context: Context, roomId: String, integId: String?, screenId: String?) {
+        val widgetArgs = widgetArgsBuilder.buildIntegrationManagerArgs(roomId, integId, screenId)
+        context.startActivity(WidgetActivity.newIntent(context, widgetArgs))
     }
 
     private fun startActivity(context: Context, intent: Intent, buildTask: Boolean) {

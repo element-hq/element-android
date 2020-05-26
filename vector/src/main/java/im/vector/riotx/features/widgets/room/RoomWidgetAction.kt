@@ -20,6 +20,7 @@ import im.vector.riotx.core.platform.VectorViewModelAction
 
 sealed class RoomWidgetAction : VectorViewModelAction {
     data class OnWebViewStartedToLoad(val url: String) : RoomWidgetAction()
-    data class OnWebViewLoadingError(val url: String) : RoomWidgetAction()
+    data class OnWebViewLoadingError(val url: String, val isHttpError: Boolean, val errorCode: Int, val errorDescription: String) : RoomWidgetAction()
     data class OnWebViewLoadingSuccess(val url: String) : RoomWidgetAction()
+    object OnTermsReviewed: RoomWidgetAction()
 }

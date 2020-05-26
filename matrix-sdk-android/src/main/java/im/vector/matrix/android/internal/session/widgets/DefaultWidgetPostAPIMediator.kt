@@ -23,7 +23,9 @@ import com.squareup.moshi.Moshi
 import im.vector.matrix.android.api.session.widgets.WidgetPostAPIMediator
 import im.vector.matrix.android.api.util.JSON_DICT_PARAMETERIZED_TYPE
 import im.vector.matrix.android.api.util.JsonDict
+import im.vector.matrix.android.internal.util.createUIHandler
 import timber.log.Timber
+import java.lang.reflect.Type
 import java.util.HashMap
 import javax.inject.Inject
 
@@ -35,22 +37,28 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
     private var handler: WidgetPostAPIMediator.Handler? = null
     private var webView: WebView? = null
 
-    override fun initialize(webView: WebView, handler: WidgetPostAPIMediator.Handler) {
+    private val uiHandler = createUIHandler()
+
+    override fun setWebView(webView: WebView) {
         this.webView = webView
-        this.handler = handler
-        webView.addJavascriptInterface(this, "WidgetPostAPIMediator")
+        webView.addJavascriptInterface(this, "Android")
     }
 
-    override fun clear() {
-        handler = null
-        webView?.removeJavascriptInterface("WidgetPostAPIMediator")
+    override fun clearWebView() {
+        webView?.removeJavascriptInterface("Android")
         webView = null
+    }
+
+    override fun setHandler(handler: WidgetPostAPIMediator.Handler?) {
+        this.handler = handler
     }
 
     override fun injectAPI() {
         val js = widgetPostMessageAPIProvider.get()
-        if (null != js) {
-            webView?.loadUrl("javascript:$js")
+        if (js != null) {
+            uiHandler.post {
+                webView?.loadUrl("javascript:$js")
+            }
         }
     }
 
@@ -111,10 +119,10 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
      * @param response  the response
      * @param eventData the modular data
      */
-    override fun <T> sendObjectResponse(klass: Class<T>, response: T?, eventData: JsonDict) {
+    override fun <T> sendObjectResponse(type: Type, response: T?, eventData: JsonDict) {
         var jsString: String? = null
         if (response != null) {
-            val objectAdapter = moshi.adapter(klass)
+            val objectAdapter = moshi.adapter<T>(type)
             try {
                 jsString = "JSON.parse('${objectAdapter.toJson(response)}')"
             } catch (e: Exception) {
@@ -157,7 +165,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
      * @param jsString  the response data
      * @param eventData the modular data
      */
-    private fun sendResponse(jsString: String, eventData: JsonDict) {
+    private fun sendResponse(jsString: String, eventData: JsonDict) = uiHandler.post {
         try {
             val functionLine = "sendResponseFromRiotAndroid('" + eventData["_id"] + "' , " + jsString + ");"
             Timber.v("BRIDGE sendResponse: $functionLine")

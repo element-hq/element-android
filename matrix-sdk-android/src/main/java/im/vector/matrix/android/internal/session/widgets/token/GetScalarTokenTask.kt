@@ -17,19 +17,22 @@
 package im.vector.matrix.android.internal.session.widgets.token
 
 import im.vector.matrix.android.api.failure.Failure
+import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.openid.GetOpenIdTokenTask
 import im.vector.matrix.android.internal.session.widgets.RegisterWidgetResponse
+import im.vector.matrix.android.internal.session.widgets.WidgetManagementFailure
 import im.vector.matrix.android.internal.session.widgets.WidgetsAPI
 import im.vector.matrix.android.internal.session.widgets.WidgetsAPIProvider
 import im.vector.matrix.android.internal.task.Task
-import java.net.HttpURLConnection
 import javax.inject.Inject
+import javax.net.ssl.HttpsURLConnection
 
 internal interface GetScalarTokenTask : Task<GetScalarTokenTask.Params, String> {
 
     data class Params(
-            val serverUrl: String
+            val serverUrl: String,
+            val forceRefresh: Boolean = false
     )
 }
 
@@ -41,11 +44,16 @@ internal class DefaultGetScalarTokenTask @Inject constructor(private val widgets
 
     override suspend fun execute(params: GetScalarTokenTask.Params): String {
         val widgetsAPI = widgetsAPIProvider.get(params.serverUrl)
-        val scalarToken = scalarTokenStore.getToken(params.serverUrl)
-        return if (scalarToken == null) {
+        return if (params.forceRefresh) {
+            scalarTokenStore.clearToken(params.serverUrl)
             getNewScalarToken(widgetsAPI, params.serverUrl)
         } else {
-            validateToken(widgetsAPI, params.serverUrl, scalarToken)
+            val scalarToken = scalarTokenStore.getToken(params.serverUrl)
+            if (scalarToken == null) {
+                getNewScalarToken(widgetsAPI, params.serverUrl)
+            } else {
+                validateToken(widgetsAPI, params.serverUrl, scalarToken)
+            }
         }
     }
 
@@ -65,19 +73,21 @@ internal class DefaultGetScalarTokenTask @Inject constructor(private val widgets
 
     private suspend fun validateToken(widgetsAPI: WidgetsAPI, serverUrl: String, scalarToken: String): String {
         return try {
-            widgetsAPI.validateToken(scalarToken, WIDGET_API_VERSION)
+            executeRequest<Unit>(null) {
+                apiCall = widgetsAPI.validateToken(scalarToken, WIDGET_API_VERSION)
+            }
             scalarToken
         } catch (failure: Throwable) {
-            if (failure.isScalarTokenError()) {
-                scalarTokenStore.clearToken(serverUrl)
-                getNewScalarToken(widgetsAPI, serverUrl)
+            if (failure is Failure.ServerError && failure.httpCode == HttpsURLConnection.HTTP_FORBIDDEN) {
+                if (failure.error.code == MatrixError.M_TERMS_NOT_SIGNED) {
+                    throw WidgetManagementFailure.TermsNotSignedException(serverUrl, scalarToken)
+                } else {
+                    scalarTokenStore.clearToken(serverUrl)
+                    getNewScalarToken(widgetsAPI, serverUrl)
+                }
             } else {
                 throw failure
             }
         }
-    }
-
-    private fun Throwable.isScalarTokenError(): Boolean {
-        return this is Failure.ServerError && this.httpCode == HttpURLConnection.HTTP_FORBIDDEN
     }
 }

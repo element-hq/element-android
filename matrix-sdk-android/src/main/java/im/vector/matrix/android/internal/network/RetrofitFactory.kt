@@ -28,8 +28,14 @@ import javax.inject.Inject
 class RetrofitFactory @Inject constructor(private val moshi: Moshi) {
 
     fun create(okHttpClient: Lazy<OkHttpClient>, baseUrl: String): Retrofit {
+        // ensure trailing /
+        val safeBaseUrl = if (!baseUrl.endsWith("/")) {
+            "$baseUrl/"
+        } else {
+            baseUrl
+        }
         return Retrofit.Builder()
-                .baseUrl(baseUrl)
+                .baseUrl(safeBaseUrl)
                 .callFactory(object : Call.Factory {
                     override fun newCall(request: Request): Call {
                         return okHttpClient.get().newCall(request)

@@ -17,20 +17,20 @@
 package im.vector.matrix.android.internal.session.widgets
 
 import im.vector.matrix.android.R
-import im.vector.matrix.android.api.session.widgets.WidgetURLBuilder
+import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerConfig
+import im.vector.matrix.android.api.session.widgets.WidgetURLFormatter
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.integrationmanager.IntegrationManager
-import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerConfig
 import im.vector.matrix.android.internal.session.widgets.token.GetScalarTokenTask
 import im.vector.matrix.android.internal.util.StringProvider
 import java.net.URLEncoder
 import javax.inject.Inject
 
 @SessionScope
-internal class DefaultWidgetURLBuilder @Inject constructor(private val integrationManager: IntegrationManager,
-                                                           private val getScalarTokenTask: GetScalarTokenTask,
-                                                           private val stringProvider: StringProvider
-) : IntegrationManager.Listener, WidgetURLBuilder {
+internal class DefaultWidgetURLFormatter @Inject constructor(private val integrationManager: IntegrationManager,
+                                                             private val getScalarTokenTask: GetScalarTokenTask,
+                                                             private val stringProvider: StringProvider
+) : IntegrationManager.Listener, WidgetURLFormatter {
 
     private var currentConfig = integrationManager.getPreferredConfig()
     private var whiteListedUrls: List<String> = emptyList()
@@ -64,13 +64,13 @@ internal class DefaultWidgetURLBuilder @Inject constructor(private val integrati
     /**
      * Takes care of fetching a scalar token if required and build the final url.
      */
-    override suspend fun build(baseUrl: String, params: Map<String, String>, forceFetchScalarToken: Boolean): String {
-        return if (isScalarUrl(baseUrl) || forceFetchScalarToken) {
-            val taskParams = GetScalarTokenTask.Params(baseUrl)
+    override suspend fun format(baseUrl: String, params: Map<String, String>, forceFetchScalarToken: Boolean, bypassWhitelist: Boolean): String {
+        return if (bypassWhitelist || isWhiteListed(baseUrl)) {
+            val taskParams = GetScalarTokenTask.Params(currentConfig.apiUrl, forceFetchScalarToken)
             val scalarToken = getScalarTokenTask.execute(taskParams)
             buildString {
                 append(baseUrl)
-                append("scalar_token", scalarToken)
+                appendParamToUrl("scalar_token", scalarToken)
                 appendParamsToUrl(params)
             }
         } else {
@@ -81,7 +81,7 @@ internal class DefaultWidgetURLBuilder @Inject constructor(private val integrati
         }
     }
 
-    private fun isScalarUrl(url: String): Boolean {
+    private fun isWhiteListed(url: String): Boolean {
         val allowed: List<String> = whiteListedUrls
         for (allowedUrl in allowed) {
             if (url.startsWith(allowedUrl)) {

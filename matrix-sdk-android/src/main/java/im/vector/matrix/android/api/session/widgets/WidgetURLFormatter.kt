@@ -16,10 +16,16 @@
 
 package im.vector.matrix.android.api.session.widgets
 
-interface WidgetURLBuilder {
+interface WidgetURLFormatter {
     /**
      * Takes care of fetching a scalar token if required and build the final url.
+     * This methods can throw, you should take care of handling failure.
      */
-    suspend fun build(baseUrl: String, params: Map<String, String> = emptyMap(), forceFetchScalarToken: Boolean = false): String
+    suspend fun format(
+            baseUrl: String,
+            params: Map<String, String> = emptyMap(),
+            forceFetchScalarToken: Boolean = false,
+            bypassWhitelist: Boolean
+    ): String
 
 }

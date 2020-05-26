@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 internal class WidgetDependenciesHolder @Inject constructor(private val integrationManager: IntegrationManager,
                                                             private val widgetManager: WidgetManager,
-                                                            private val widgetURLBuilder: DefaultWidgetURLBuilder) {
+                                                            private val widgetURLBuilder: DefaultWidgetURLFormatter) {
 
     fun start() {
         integrationManager.start()
@@ -30,8 +30,8 @@ internal class WidgetDependenciesHolder @Inject constructor(private val integrat
     }
 
     fun stop() {
-        integrationManager.stop()
-        widgetManager.stop()
         widgetURLBuilder.stop()
+        widgetManager.stop()
+        integrationManager.stop()
     }
 }

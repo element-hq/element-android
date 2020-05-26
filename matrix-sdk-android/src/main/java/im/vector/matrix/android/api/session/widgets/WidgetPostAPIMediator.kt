@@ -18,20 +18,27 @@ package im.vector.matrix.android.api.session.widgets
 
 import android.webkit.WebView
 import im.vector.matrix.android.api.util.JsonDict
+import java.lang.reflect.Type
 
 interface WidgetPostAPIMediator {
 
     /**
-     * This initialize the mediator and configure the webview.
+     * This initialize the webview to handle.
      * It will add a JavaScript Interface.
-     * Please call [clear] method when finished to clean the provided webview
+     * Please call [clearWebView] method when finished to clean the provided webview
      */
-    fun initialize(webView: WebView, handler: Handler)
+    fun setWebView(webView: WebView)
+
+    /**
+     * Set handler to communicate with the widgetPostAPIMediator.
+     * Please remove the reference by passing null when finished.
+     */
+    fun setHandler(handler: Handler?)
 
     /**
      * This clear the mediator by removing the JavaScript Interface and cleaning references.
      */
-    fun clear()
+    fun clearWebView()
 
     /**
      * Inject the necessary javascript into the configured WebView.
@@ -62,7 +69,7 @@ interface WidgetPostAPIMediator {
      * @param response  the response
      * @param eventData the modular data
      */
-    fun <T> sendObjectResponse(klass: Class<T>, response: T?, eventData: JsonDict)
+    fun <T> sendObjectResponse(type: Type, response: T?, eventData: JsonDict)
 
     /**
      * Send success

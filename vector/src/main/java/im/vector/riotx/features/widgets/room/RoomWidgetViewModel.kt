@@ -28,10 +28,15 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.internal.session.widgets.WidgetManagementFailure
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.features.widgets.WidgetPostAPIHandler
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import javax.net.ssl.HttpsURLConnection
 
 class RoomWidgetViewModel @AssistedInject constructor(@Assisted val initialState: WidgetViewState,
+                                                      private val widgetPostAPIHandlerFactory: WidgetPostAPIHandler.Factory,
                                                       private val session: Session)
     : VectorViewModel<WidgetViewState, RoomWidgetAction, RoomWidgetViewEvents>(initialState) {
 
@@ -54,76 +59,119 @@ class RoomWidgetViewModel @AssistedInject constructor(@Assisted val initialState
 
     private val widgetService = session.widgetService()
     private val integrationManagerService = session.integrationManagerService()
-    private val widgetBuilder = widgetService.getWidgetURLBuilder()
+    private val widgetBuilder = widgetService.getWidgetURLFormatter()
     private val postAPIMediator = widgetService.getWidgetPostAPIMediator()
 
     init {
+        if(initialState.widgetKind.isAdmin()) {
+            val widgetPostAPIHandler = widgetPostAPIHandlerFactory.create(initialState.roomId)
+            postAPIMediator.setHandler(widgetPostAPIHandler)
+        }
         refreshPermissionStatus()
+        observePermissionStatus()
+    }
+
+    private fun observePermissionStatus() {
+        selectSubscribe(WidgetViewState::status) {
+            Timber.v("Widget status: $it")
+            if (it == WidgetStatus.WIDGET_ALLOWED) {
+                loadFormattedUrl()
+            }
+        }
     }
 
     fun getPostAPIMediator() = postAPIMediator
 
     override fun handle(action: RoomWidgetAction) {
         when (action) {
-            is RoomWidgetAction.OnWebViewLoadingError   -> handleWebViewLoadingError(action.url)
+            is RoomWidgetAction.OnWebViewLoadingError   -> handleWebViewLoadingError(action.isHttpError, action.errorCode, action.errorDescription)
             is RoomWidgetAction.OnWebViewLoadingSuccess -> handleWebViewLoadingSuccess(action.url)
-            is RoomWidgetAction.OnWebViewStartedToLoad  -> handleWebViewStartLoading(action.url)
+            is RoomWidgetAction.OnWebViewStartedToLoad  -> handleWebViewStartLoading()
         }
     }
 
     private fun refreshPermissionStatus() {
-        if (initialState.widgetKind == WidgetKind.USER || initialState.widgetKind == WidgetKind.INTEGRATION_MANAGER) {
-            onWidgetAllowed()
+        if (initialState.widgetKind.isAdmin()) {
+            setWidgetStatus(WidgetStatus.WIDGET_ALLOWED)
         } else {
             val widgetId = initialState.widgetId
             if (widgetId == null) {
-                setState { copy(status = WidgetStatus.WIDGET_NOT_ALLOWED) }
+                setWidgetStatus(WidgetStatus.WIDGET_NOT_ALLOWED)
                 return
             }
             val roomWidget = widgetService.getRoomWidgets(initialState.roomId, widgetId = QueryStringValue.Equals(widgetId, QueryStringValue.Case.SENSITIVE)).firstOrNull()
             if (roomWidget == null) {
-                setState { copy(status = WidgetStatus.WIDGET_NOT_ALLOWED) }
+                setWidgetStatus(WidgetStatus.WIDGET_NOT_ALLOWED)
                 return
             }
             if (roomWidget.event?.senderId == session.myUserId) {
-                onWidgetAllowed()
+                setWidgetStatus(WidgetStatus.WIDGET_ALLOWED)
             } else {
                 val stateEventId = roomWidget.event?.eventId
                 // This should not happen
                 if (stateEventId == null) {
-                    setState { copy(status = WidgetStatus.WIDGET_NOT_ALLOWED) }
+                    setWidgetStatus(WidgetStatus.WIDGET_NOT_ALLOWED)
                     return
                 }
                 val isAllowed = integrationManagerService.isWidgetAllowed(stateEventId)
                 if (!isAllowed) {
-                    setState { copy(status = WidgetStatus.WIDGET_NOT_ALLOWED) }
+                    setWidgetStatus(WidgetStatus.WIDGET_NOT_ALLOWED)
                 } else {
-                    onWidgetAllowed()
+                    setWidgetStatus(WidgetStatus.WIDGET_ALLOWED)
                 }
             }
         }
     }
 
-    private fun onWidgetAllowed() {
-        setState {
-            copy(status = WidgetStatus.WIDGET_ALLOWED, formattedURL = Loading())
-        }
+    private fun setWidgetStatus(widgetStatus: WidgetStatus) {
+        setState { copy(status = widgetStatus) }
+    }
+
+    private fun loadFormattedUrl(forceFetchToken: Boolean = false) {
         viewModelScope.launch {
             try {
-                val formattedUrl = widgetBuilder.build(initialState.baseUrl)
+                setState { copy(formattedURL = Loading()) }
+                val formattedUrl = widgetBuilder.format(
+                        baseUrl = initialState.baseUrl,
+                        params = initialState.urlParams,
+                        forceFetchScalarToken = forceFetchToken,
+                        bypassWhitelist = initialState.widgetKind == WidgetKind.INTEGRATION_MANAGER
+                )
                 setState { copy(formattedURL = Success(formattedUrl)) }
+                _viewEvents.post(RoomWidgetViewEvents.LoadFormattedURL(formattedUrl))
             } catch (failure: Throwable) {
+                if (failure is WidgetManagementFailure.TermsNotSignedException) {
+                    _viewEvents.post(RoomWidgetViewEvents.DisplayTerms(failure.baseUrl, failure.token))
+                }
                 setState { copy(formattedURL = Fail(failure)) }
             }
         }
     }
 
-    private fun handleWebViewStartLoading(url: String) {
+    private fun handleWebViewStartLoading() {
+        setState { copy(webviewLoadedUrl = Loading()) }
     }
 
     private fun handleWebViewLoadingSuccess(url: String) {
+        if (initialState.widgetKind.isAdmin()) {
+            postAPIMediator.injectAPI()
+        }
+        setState { copy(webviewLoadedUrl = Success(url)) }
     }
 
-    private fun handleWebViewLoadingError(url: String) {
+    private fun handleWebViewLoadingError(isHttpError: Boolean, reason: Int, errorDescription: String) {
+        if (isHttpError) {
+            // In case of 403, try to refresh the scalar token
+            if (reason == HttpsURLConnection.HTTP_FORBIDDEN) {
+                loadFormattedUrl(true)
+            }
+        } else {
+            setState { copy(webviewLoadedUrl = Fail(Throwable(errorDescription))) }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        postAPIMediator.setHandler(null)
     }
 }

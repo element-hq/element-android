@@ -4,6 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
+        android:id="@+id/open_matrix_apps"
+        android:title="@string/room_add_matrix_apps"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/resend_all"
         android:icon="@drawable/ic_refresh_cw"
         android:title="@string/room_prompt_resend"

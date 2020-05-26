@@ -434,18 +434,24 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.clear_message_queue) {
-            // This a temporary option during dev as it is not super stable
-            // Cancel all pending actions in room queue and post a dummy
-            // Then mark all sending events as undelivered
-            roomDetailViewModel.handle(RoomDetailAction.ClearSendQueue)
-            return true
+        return when (item.itemId) {
+            R.id.clear_message_queue -> {
+                // This a temporary option during dev as it is not super stable
+                // Cancel all pending actions in room queue and post a dummy
+                // Then mark all sending events as undelivered
+                roomDetailViewModel.handle(RoomDetailAction.ClearSendQueue)
+                true
+            }
+            R.id.resend_all          -> {
+                roomDetailViewModel.handle(RoomDetailAction.ResendAll)
+                true
+            }
+            R.id.open_matrix_apps    -> {
+                navigator.openIntegrationManager(requireContext(), roomDetailArgs.roomId, null, null)
+                true
+            }
+            else                     -> super.onOptionsItemSelected(item)
         }
-        if (item.itemId == R.id.resend_all) {
-            roomDetailViewModel.handle(RoomDetailAction.ResendAll)
-            return true
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun renderRegularMode(text: String) {

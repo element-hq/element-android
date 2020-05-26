@@ -79,7 +79,8 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
         return sendStateEvent(
                 eventType = EventType.STATE_ROOM_TOPIC,
                 body = mapOf("topic" to topic),
-                callback = callback
+                callback = callback,
+                stateKey = null
         )
     }
 }

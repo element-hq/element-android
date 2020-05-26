@@ -21,4 +21,5 @@ import im.vector.matrix.android.api.failure.Failure
 sealed class WidgetManagementFailure : Failure.FeatureFailure() {
     object NotEnoughPower : WidgetManagementFailure()
     object CreationFailed : WidgetManagementFailure()
+    data class TermsNotSignedException(val baseUrl: String, val token: String) : WidgetManagementFailure()
 }
