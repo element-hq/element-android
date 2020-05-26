@@ -202,13 +202,12 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
             return
         }
         Timber.d("Received request to get widget in room $roomId")
-        val roomWidgets = session.widgetService().getRoomWidgets(roomId)
         val responseData = ArrayList<JsonDict>()
-        for (widget in roomWidgets) {
+        val allWidgets = session.widgetService().getRoomWidgets(roomId) + session.widgetService().getUserWidgets()
+        for (widget in allWidgets) {
             val map = widget.event.toContent()
             responseData.add(map)
         }
-        // TODO ADD USER WIDGETS
         Timber.d("## getWidgets() returns $responseData")
         widgetPostAPIMediator.sendObjectResponse(List::class.java, responseData, eventData)
     }

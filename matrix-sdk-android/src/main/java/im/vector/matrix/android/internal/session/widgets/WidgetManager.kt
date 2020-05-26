@@ -146,12 +146,9 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
                                                   excludedTypes: Set<String>? = null): List<Widget> {
         return extractWidgetSequence()
                 .filter {
-                    val widgetType = it.type ?: return@filter false
+                    val widgetType = it.widgetContent.type ?: return@filter false
                     (widgetTypes == null || widgetTypes.contains(widgetType))
                             && (excludedTypes == null || !excludedTypes.contains(widgetType))
-                }
-                .map {
-                    Widget(it)
                 }
                 .toList()
     }

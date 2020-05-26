@@ -16,15 +16,24 @@
 
 package im.vector.matrix.android.internal.session.widgets.helper
 
-import im.vector.matrix.android.api.session.events.model.Content
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.widgets.model.WidgetContent
+import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
+import im.vector.matrix.android.internal.session.widgets.Widget
 
-internal fun UserAccountDataEvent.extractWidgetSequence(): Sequence<WidgetContent> {
+internal fun UserAccountDataEvent.extractWidgetSequence(): Sequence<Widget> {
     return content.asSequence()
             .mapNotNull {
                 @Suppress("UNCHECKED_CAST")
-                (it.value as? Content)?.toModel<WidgetContent>()
+                (it.value as? JsonDict)?.toModel<Event>()
+            }.mapNotNull { event ->
+                val content = event.content?.toModel<WidgetContent>()
+                if (content == null) {
+                    null
+                } else {
+                    Widget(content, event)
+                }
             }
 }
