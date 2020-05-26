@@ -123,7 +123,10 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
             finish()
         }
 
-        iv_end_call.setOnClickListener { callViewModel.handle(VectorCallViewActions.EndCall) }
+        iv_end_call.setOnClickListener {
+            callViewModel.handle(VectorCallViewActions.EndCall)
+            finish()
+        }
 
         callViewModel.viewEvents
                 .observe()

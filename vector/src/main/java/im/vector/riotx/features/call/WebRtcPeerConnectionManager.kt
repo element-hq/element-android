@@ -23,6 +23,7 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import androidx.core.content.ContextCompat
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.session.call.CallsListener
 import im.vector.matrix.android.api.session.call.EglUtils
 import im.vector.matrix.android.api.session.room.model.call.CallAnswerContent
@@ -34,6 +35,8 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import org.webrtc.AudioSource
 import org.webrtc.AudioTrack
+import org.webrtc.Camera1Enumerator
+import org.webrtc.Camera2Enumerator
 import org.webrtc.DefaultVideoDecoderFactory
 import org.webrtc.DefaultVideoEncoderFactory
 import org.webrtc.IceCandidate
@@ -111,6 +114,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
     private var callId: String? = null
     private var signalingRoomId: String? = null
     private var participantUserId: String? = null
+    private var isVideoCall: Boolean? = null
 
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -314,11 +318,43 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     fun attachViewRenderers(localViewRenderer: SurfaceViewRenderer, remoteViewRenderer: SurfaceViewRenderer) {
+        audioSource = peerConnectionFactory?.createAudioSource(DEFAULT_AUDIO_CONSTRAINTS)
+        audioTrack = peerConnectionFactory?.createAudioTrack(AUDIO_TRACK_ID, audioSource)
+
+        localMediaStream = peerConnectionFactory?.createLocalMediaStream("ARDAMS") // magic value?
+
+        if (isVideoCall == true) {
+            val cameraIterator = if (Camera2Enumerator.isSupported(context)) Camera2Enumerator(context) else Camera1Enumerator(false)
+            val frontCamera = cameraIterator.deviceNames
+                    ?.firstOrNull { cameraIterator.isFrontFacing(it) }
+                    ?: cameraIterator.deviceNames?.first()
+
+            val videoCapturer = cameraIterator.createCapturer(frontCamera, null)
+
+            videoSource = peerConnectionFactory?.createVideoSource(videoCapturer.isScreencast)
+            val surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", rootEglBase!!.eglBaseContext)
+            Timber.v("## VOIP Local video source created")
+            videoCapturer.initialize(surfaceTextureHelper, context.applicationContext, videoSource!!.capturerObserver)
+            videoCapturer.startCapture(1280, 720, 30)
+            localVideoTrack = peerConnectionFactory?.createVideoTrack("ARDAMSv0", videoSource)?.also {
+                Timber.v("## VOIP Local video track created")
+                localSurfaceRenderer?.get()?.let { surface ->
+                    it.addSink(surface)
+                }
+            }
+            localMediaStream?.addTrack(localVideoTrack)
+        }
+
         localVideoTrack?.addSink(localViewRenderer)
         remoteVideoTrack?.let {
             it.setEnabled(true)
             it.addSink(remoteViewRenderer)
         }
+        localMediaStream?.addTrack(audioTrack)
+
+        Timber.v("## VOIP add local stream to peer connection")
+        peerConnection?.addStream(localMediaStream)
+
         localSurfaceRenderer = WeakReference(localViewRenderer)
         remoteSurfaceRenderer = WeakReference(remoteViewRenderer)
     }
@@ -337,12 +373,13 @@ class WebRtcPeerConnectionManager @Inject constructor(
     fun close() {
         executor.execute {
             // Do not dispose peer connection (https://bugs.chromium.org/p/webrtc/issues/detail?id=7543)
-            peerConnection?.close()
+            tryThis { audioSource?.dispose() }
+            tryThis { videoSource?.dispose() }
+            tryThis { videoCapturer?.stopCapture() }
+            tryThis { videoCapturer?.dispose() }
             localMediaStream?.let { peerConnection?.removeStream(it) }
+            peerConnection?.close()
             peerConnection = null
-            audioSource?.dispose()
-            videoSource?.dispose()
-            videoCapturer?.dispose()
             peerConnectionFactory?.stopAecDump()
             peerConnectionFactory = null
         }
@@ -376,6 +413,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
     fun startOutgoingCall(context: Context, signalingRoomId: String, participantUserId: String, isVideoCall: Boolean) {
         this.signalingRoomId = signalingRoomId
         this.participantUserId = participantUserId
+        this.isVideoCall = isVideoCall
 
         startHeadsUpService(signalingRoomId, sessionHolder.getActiveSession().myUserId, false, isVideoCall)
         context.startActivity(VectorCallActivity.newIntent(context, signalingRoomId, participantUserId, false, isVideoCall))
@@ -388,6 +426,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         this.callId = callInviteContent.callId
         this.signalingRoomId = signalingRoomId
         this.participantUserId = participantUserId
+        this.isVideoCall = callInviteContent.isVideo()
 
         startHeadsUpService(signalingRoomId, participantUserId, true, callInviteContent.isVideo())
 
