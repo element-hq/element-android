@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="resources_country_code">HR</string>
+<resources>
+    <string name="resources_country_code">HR</string>
     <string name="resources_script">Latn</string>
 
     <string name="light_theme">Svijetla tema</string>
@@ -141,10 +142,10 @@
     <string name="no_room_placeholder">Nema soba</string>
     <string name="no_public_room_placeholder">Nema javnih soba</string>
     <plurals name="public_room_nb_users">
-	<item quantity="one">%d korisnik</item>
-	<item quantity="few">%d korisnika</item>
-	<item quantity="other">%d korisnika</item>
-</plurals>
+        <item quantity="one">%d korisnik</item>
+        <item quantity="few">%d korisnika</item>
+        <item quantity="other">%d korisnika</item>
+    </plurals>
 
     <string name="groups_invite_header">Pozovi</string>
     <string name="groups_header">Zajednice</string>
@@ -294,10 +295,10 @@
     <string name="groups_list">Popis grupa</string>
 
     <plurals name="membership_changes">
-	<item quantity="one">%d promjena u članstvu</item>
-	<item quantity="few">%d promjene u članstvu</item>
-	<item quantity="other">%d promjena u članstvu</item>
-</plurals>
+        <item quantity="one">%d promjena u članstvu</item>
+        <item quantity="few">%d promjene u članstvu</item>
+        <item quantity="other">%d promjena u članstvu</item>
+    </plurals>
 
     <string name="compression_options">Pošalji kao</string>
     <string name="compression_opt_list_original">Izvorno</string>
@@ -390,37 +391,37 @@
     <string name="room_creation_title">Novo ćaskanje</string>
     <string name="room_creation_add_member">Dodaj člana</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">%d aktivan član</item>
-	<item quantity="few">%d aktivna člana</item>
-	<item quantity="other">%d aktivnih članova</item>
-</plurals>
+        <item quantity="one">%d aktivan član</item>
+        <item quantity="few">%d aktivna člana</item>
+        <item quantity="other">%d aktivnih članova</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">%d član</item>
-	<item quantity="few">%d člana</item>
-	<item quantity="other">%d članova</item>
-</plurals>
+        <item quantity="one">%d član</item>
+        <item quantity="few">%d člana</item>
+        <item quantity="other">%d članova</item>
+    </plurals>
     <string name="room_title_one_member">1 član</string>
 
     <plurals name="format_time_s">
-	<item quantity="one">%d s</item>
-	<item quantity="few">%d s</item>
-	<item quantity="other">%d s</item>
-</plurals>
+        <item quantity="one">%d s</item>
+        <item quantity="few">%d s</item>
+        <item quantity="other">%d s</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">%d m</item>
-	<item quantity="few">%d m</item>
-	<item quantity="other">%d m</item>
-</plurals>
+        <item quantity="one">%d m</item>
+        <item quantity="few">%d m</item>
+        <item quantity="other">%d m</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">%d h</item>
-	<item quantity="few">%d h</item>
-	<item quantity="other">%d h</item>
-</plurals>
+        <item quantity="one">%d h</item>
+        <item quantity="few">%d h</item>
+        <item quantity="other">%d h</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">%d d</item>
-	<item quantity="few">%d d</item>
-	<item quantity="other">%d d</item>
-</plurals>
+        <item quantity="one">%d d</item>
+        <item quantity="few">%d d</item>
+        <item quantity="other">%d d</item>
+    </plurals>
 
     <string name="room_participants_leave_prompt_title">Napusti sobu</string>
     <string name="room_participants_leave_prompt_msg">Jeste li sigurni da želite napustiti sobu\?</string>
@@ -484,10 +485,10 @@
     <string name="room_message_file_not_found">Datoteka nije pronađena</string>
     <string name="room_do_not_have_permission_to_post">Nemate dopuštenje pisati u ovu sobu</string>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">%d nova poruka</item>
-	<item quantity="few">%d nove poruke</item>
-	<item quantity="other">%d novih poruka</item>
-</plurals>
+        <item quantity="one">%d nova poruka</item>
+        <item quantity="few">%d nove poruke</item>
+        <item quantity="other">%d novih poruka</item>
+    </plurals>
 
     <string name="ssl_trust">Vjeruj</string>
     <string name="ssl_do_not_trust">Ne vjeruj</string>
@@ -501,10 +502,10 @@
     <string name="room_details_files">Datoteke</string>
     <string name="room_details_settings">Postavke</string>
     <plurals name="room_details_selected">
-	<item quantity="one">%d označen</item>
-	<item quantity="few">%d označena</item>
-	<item quantity="other">%d označenih</item>
-</plurals>
+        <item quantity="one">%d označen</item>
+        <item quantity="few">%d označena</item>
+        <item quantity="other">%d označenih</item>
+    </plurals>
     <string name="malformed_id">Izobličeni identitet. Trebalo bi se raditi o adresi e-pošte ili identitetu u Matrixu poput \'@lokalni_dio:domena\'</string>
     <string name="room_details_people_invited_group_name">POZVANI</string>
     <string name="room_details_people_present_group_name">PRIDRUŽILI SE</string>
@@ -538,15 +539,15 @@
 
     <string name="directory_search_results_title">Pregledaj popis</string>
     <plurals name="directory_search_rooms">
-	<item quantity="one">%d soba</item>
-	<item quantity="few">%d sobe</item>
-	<item quantity="other">%d soba</item>
-</plurals>
+        <item quantity="one">%d soba</item>
+        <item quantity="few">%d sobe</item>
+        <item quantity="other">%d soba</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">Pronađena %1$s soba za %2$s</item>
-	<item quantity="few">Pronađene %1$s sobe za %2$s</item>
-	<item quantity="other">Pronađeno %1$s soba za %2$s</item>
-</plurals>
+        <item quantity="one">Pronađena %1$s soba za %2$s</item>
+        <item quantity="few">Pronađene %1$s sobe za %2$s</item>
+        <item quantity="other">Pronađeno %1$s soba za %2$s</item>
+    </plurals>
     <string name="directory_searching_title">Pretražujem popis…</string>
 
     <string name="room_settings_all_messages_noisy">Sve poruke (bučno)</string>
@@ -582,10 +583,10 @@
 \nJeste li sigurni\?</string>
 
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">Jeste li sigurni da želite izbaciti ovog korisnika iz razgovora\?</item>
-	<item quantity="few">Jeste li sigurni da želite izbaciti ove korisnike iz razgovora\?</item>
-	<item quantity="other">Jeste li sigurni da želite izbaciti ove korisnike iz razgovora\?</item>
-</plurals>
+        <item quantity="one">Jeste li sigurni da želite izbaciti ovog korisnika iz razgovora\?</item>
+        <item quantity="few">Jeste li sigurni da želite izbaciti ove korisnike iz razgovora\?</item>
+        <item quantity="other">Jeste li sigurni da želite izbaciti ove korisnike iz razgovora\?</item>
+    </plurals>
     <string name="room_participants_ban_prompt_msg">Jeste li sigurni da želite zabraniti korisniku pristup ovom razgovoru\?</string>
     <string name="room_participants_invite_prompt_msg">Jeste li sigurni da želite pozvati %s u ovoj razgovor\?</string>
     <string name="people_search_invite_by_id_dialog_description">Unesite jednu ili više adresa e-pošte ili identitet u Matrixu</string>
@@ -985,16 +986,16 @@
     <string name="filter_group_rooms">Izdvoji grupne sobe</string>
 
     <plurals name="group_members">
-	<item quantity="one">%1 član</item>
-	<item quantity="few">%1 člana</item>
-	<item quantity="other">%1 članova</item>
-</plurals>
+        <item quantity="one">%1 član</item>
+        <item quantity="few">%1 člana</item>
+        <item quantity="other">%1 članova</item>
+    </plurals>
 
     <plurals name="group_rooms">
-	<item quantity="one">%1 soba</item>
-	<item quantity="few">%1 sobe</item>
-	<item quantity="other">%1 soba</item>
-</plurals>
+        <item quantity="one">%1 soba</item>
+        <item quantity="few">%1 sobe</item>
+        <item quantity="other">%1 soba</item>
+    </plurals>
     <string name="group_no_long_description">Administrator zajednice nije dao dugačak opis ove zajednice.</string>
 
     <string name="has_been_kicked">Izbačeni ste iz %1$s od strane %2$s</string>
@@ -1208,4 +1209,4 @@
     <string name="a11y_create_direct_message">Započni novi izravni razgovor</string>
     <string name="a11y_create_room">Izradi novu sobu</string>
     <string name="settings_rageshake">Gnjevno drmanje</string>
-    </resources>
+</resources>

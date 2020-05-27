@@ -2444,7 +2444,7 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 \nWillst du wirklich fortfahren\?</string>
 
     <string name="create_room_dm_failure">Konnte Direktnachricht nicht erzeugen. Prüfe die Nutzer, die du einladen willst und versuche es erneut.</string>
-<string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
 
     <string name="add_members_to_room">Nutzer!n hinzufügen</string>
@@ -2454,9 +2454,9 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
     <string name="invitation_sent_to_one_user">Einladung gesendet an %1$s</string>
     <string name="invitations_sent_to_two_users">Einladungen gesendet an %1$s und %2$s</string>
     <plurals name="invitations_sent_to_one_and_more_users">
-	<item quantity="one">Einladungen gesendet an %1$s und einen weiteren Benutzer</item>
-	<item quantity="other">Einladungen gesendet an %1$s und %2$d weitere Benutzer</item>
-</plurals>
+        <item quantity="one">Einladungen gesendet an %1$s und einen weiteren Benutzer</item>
+        <item quantity="other">Einladungen gesendet an %1$s und %2$d weitere Benutzer</item>
+    </plurals>
     <string name="invite_users_to_room_failure">Wir konnten den Benutzer nicht einladen. Bitte überprüfe den Benutzernamen, welchen du einladen möchtest und versuche es erneut.</string>
 
 </resources>

@@ -94,7 +94,7 @@
         <item quantity="one">1 používateľ</item>
         <item quantity="few">%d používatelia</item>
         <item quantity="many">%d používateľov</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="send_bug_report_include_logs">Odoslať záznamy</string>
@@ -788,7 +788,7 @@ Môžete to urobiť teraz, alebo to môžete urobiť neskôr v časti Nastavenia
         <item quantity="one">1 zmena stavu</item>
         <item quantity="few">%d zmeny stavu</item>
         <item quantity="many">%d zmien stavu</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="list_members">Zobraziť členov</string>
@@ -798,57 +798,57 @@ Môžete to urobiť teraz, alebo to môžete urobiť neskôr v časti Nastavenia
         <item quantity="one">1 aktívny člen</item>
         <item quantity="few">%d aktívni členovia</item>
         <item quantity="many">%d aktívnych členov</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">1 člen</item>
         <item quantity="few">%d členovia</item>
         <item quantity="many">%d členov</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="room_new_messages_notification">
         <item quantity="one">1 nová správa</item>
         <item quantity="few">%d nové správy</item>
         <item quantity="many">%d nových správ</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <plurals name="directory_search_rooms">
         <item quantity="one">1 miestnosť</item>
         <item quantity="few">%d miestnosti</item>
         <item quantity="many">%d miestností</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="directory_search_rooms_for">
         <item quantity="one">Nájdená %1$s miestnosť pre %2$s</item>
         <item quantity="few">Nájdené %1$s miestnosti pre %2$s</item>
         <item quantity="many">Nájdených %1$s miestností pre %2$s</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">1 neprečítaná správa</item>
         <item quantity="few">%d neprečítané správy</item>
         <item quantity="many">%d neprečítaných správ</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
         <item quantity="one">1 neprečítaná správa</item>
         <item quantity="few">%d neprečítané správy</item>
         <item quantity="many">%d neprečítaných správ</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 miestnosť</item>
-	<item quantity="few">%d miestnosti</item>
-	<item quantity="other">%d miestností</item>
-</plurals>
+        <item quantity="one">1 miestnosť</item>
+        <item quantity="few">%d miestnosti</item>
+        <item quantity="other">%d miestností</item>
+    </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s v %2$s</string>
 
     <plurals name="active_widgets">
         <item quantity="one">1 aktívny widget</item>
         <item quantity="few">%d aktívne widgety</item>
         <item quantity="many">%d aktívnych widgetov</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <!-- Widget Integration Manager -->
@@ -927,25 +927,25 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
     <string name="missing_permissions_error">Túto akciu nie je možné vykonať, pretože neboli udelené všetky potrebné oprávnenia.</string>
     <string name="send_bug_report_description_in_english">Ak je to možné, prosím popis napíšte v angličtine.</string>
     <plurals name="format_time_s">
-	<item quantity="one">1 sekunda</item>
-	<item quantity="few">%d sekundy</item>
-	<item quantity="other">%d sekúnd</item>
-</plurals>
+        <item quantity="one">1 sekunda</item>
+        <item quantity="few">%d sekundy</item>
+        <item quantity="other">%d sekúnd</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1 minúta</item>
-	<item quantity="few">%d minúty</item>
-	<item quantity="other">%d minút</item>
-</plurals>
+        <item quantity="one">1 minúta</item>
+        <item quantity="few">%d minúty</item>
+        <item quantity="other">%d minút</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1 hodina</item>
-	<item quantity="few">%d hodiny</item>
-	<item quantity="other">%d hodín</item>
-</plurals>
+        <item quantity="one">1 hodina</item>
+        <item quantity="few">%d hodiny</item>
+        <item quantity="other">%d hodín</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1 deň</item>
-	<item quantity="few">%d dni</item>
-	<item quantity="other">%d dní</item>
-</plurals>
+        <item quantity="one">1 deň</item>
+        <item quantity="few">%d dni</item>
+        <item quantity="other">%d dní</item>
+    </plurals>
 
     <string name="room_participants_now">teraz %1$s</string>
     <string name="room_participants_ago">%1$s pred %2$s</string>
@@ -963,7 +963,7 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
         <item quantity="one">1 vybratý</item>
         <item quantity="few">%d vybratí</item>
         <item quantity="many">%d vybratých</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="settings_preview_media_before_sending">Zobraziť náhľad médií pred odoslaním</string>
 
@@ -988,14 +988,14 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
         <item quantity="one">1 člen</item>
         <item quantity="few">%d členovia</item>
         <item quantity="many">%d členov</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <plurals name="group_rooms">
         <item quantity="one">1 miestnosť</item>
         <item quantity="few">%d miestnosti</item>
         <item quantity="many">%d miestností</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="room_tombstone_versioned_description">Táto miestnosť bola nahradená inou a nie je viac aktívna</string>
     <string name="room_tombstone_continuation_link">Konverzácia pokračuje tu</string>
@@ -1059,10 +1059,10 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
 
     <string name="room_participants_action_kick">Vykázať</string>
     <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">Ste si istí, že chcete z miestnosti vykázať tohto používateľa\?</item>
-	<item quantity="few">Ste si istí, že chcete z miestnosti vykázať týchto používateľov\?</item>
-	<item quantity="other">Ste si istí, že chcete z miestnosti vykázať týchto používateľov\?</item>
-</plurals>
+        <item quantity="one">Ste si istí, že chcete z miestnosti vykázať tohto používateľa\?</item>
+        <item quantity="few">Ste si istí, že chcete z miestnosti vykázať týchto používateľov\?</item>
+        <item quantity="other">Ste si istí, že chcete z miestnosti vykázať týchto používateľov\?</item>
+    </plurals>
     <string name="reason_hint">Dôvod</string>
 
     <string name="settings_notification_troubleshoot">Riešiť problémy s oznámeniami</string>
@@ -1306,5 +1306,5 @@ Aby ste nič nezmeškali, nevypínajte prosím automatické aktualizácie."</str
     <string name="auth_add_email_and_phone_message_2">Nastavte e-mail na obnovenie účtu. Neskôr môžete použiť e-mail alebo telefónne číslo, aby vás pomocou nich mohli ľudia, ktorí vás poznajú, nájsť.</string>
     <string name="login_error_no_homeserver_found">Toto nie je platná adresa Matrix serveru</string>
     <string name="login_error_homeserver_not_found">Domovský server je nedostupný na tejto URL adrese, preverte to prosím</string>
-<string name="room_member_profile_sessions_section_title">Relácie</string>
-    </resources>
+    <string name="room_member_profile_sessions_section_title">Relácie</string>
+</resources>

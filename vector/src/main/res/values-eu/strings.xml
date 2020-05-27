@@ -2350,7 +2350,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="error_adding_media_file_to_gallery">Ezin izan da multimedia fitxategia galeriara gehitu</string>
     <string name="change_password_summary">Ezarri kontuaren pasahitz berria…</string>
 
-<string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
 
     <string name="use_other_session_content_description">Erabili azken Riot bertsioa zure beste gailuetan, Riot Web, Riot Desktop, Riot iOS, RiotX Android plataformarako, edo zeharka sinatzeko gaitasuna duen beste Matrix bezero bat</string>
@@ -2396,9 +2396,9 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="invitation_sent_to_one_user">Gonbidapena bidali zaio %1$s erabiltzaileari</string>
     <string name="invitations_sent_to_two_users">Gonbidapena bidali zaie %1$s eta %2$s erabiltzaileei</string>
     <plurals name="invitations_sent_to_one_and_more_users">
-	<item quantity="one">Gonbidapena bidali zaie %1$s eta beste bati</item>
-	<item quantity="other">Gonbidapena bidali zaie %1$s eta beste %2$s erabiltzaileei</item>
-</plurals>
+        <item quantity="one">Gonbidapena bidali zaie %1$s eta beste bati</item>
+        <item quantity="other">Gonbidapena bidali zaie %1$s eta beste %2$s erabiltzaileei</item>
+    </plurals>
     <string name="invite_users_to_room_failure">Ezin izan ditugu erabiltzaile horiek gonbidatu. Egiaztatu gonbidatu nahi dituzun erabiltzaileak eta saiatu berriro.</string>
 
 </resources>

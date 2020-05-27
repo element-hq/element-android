@@ -2393,7 +2393,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="verify_other_sessions">Vérifiez toutes les sessions pour vous assurer que votre compte et vos messages sont en sécurité</string>
     <string name="verify_this_session">Vérifiez la nouvelle connexion accédant à votre compte : %1$s</string>
 
-<string name="notification_ticker_text_dm">%1$s : %2$s</string>
+    <string name="notification_ticker_text_dm">%1$s : %2$s</string>
     <string name="notification_ticker_text_group">%1$s : %2$s %3$s</string>
 
     <string name="add_members_to_room">Ajouter des membres</string>
@@ -2403,9 +2403,9 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="invitation_sent_to_one_user">Invitation envoyée à %1$s</string>
     <string name="invitations_sent_to_two_users">Invitations envoyées à %1$s et %2$s</string>
     <plurals name="invitations_sent_to_one_and_more_users">
-	<item quantity="one">Invitations envoyées à %1$s et un·e autre</item>
-	<item quantity="other">Invitations envoyées à %1$s et %2$d autres</item>
-</plurals>
+        <item quantity="one">Invitations envoyées à %1$s et un·e autre</item>
+        <item quantity="other">Invitations envoyées à %1$s et %2$d autres</item>
+    </plurals>
     <string name="invite_users_to_room_failure">Nous n’avons pas pu inviter les utilisateurs. Vérifiez les utilisateurs que vous souhaitez inviter et réessayez.</string>
 
 </resources>

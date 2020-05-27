@@ -512,36 +512,36 @@
     <string name="list_members">Listigi ĉambranojn</string>
     <string name="room_sync_in_progress">Spegulante…</string>
     <string name="room_preview_invitation_format">Vi estis invitita al ĉi tiu ĉambro de %s</string>
-<string name="call_error_answered_elsewhere">voko estas respondita aliloke</string>
+    <string name="call_error_answered_elsewhere">voko estas respondita aliloke</string>
 
     <string name="room_creation_title">Nova babilo</string>
     <string name="room_creation_add_member">Aldoni ĉambranon</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">1 aktiva ĉambrano</item>
-	<item quantity="other">%d aktivaj ĉambranoj</item>
-</plurals>
+        <item quantity="one">1 aktiva ĉambrano</item>
+        <item quantity="other">%d aktivaj ĉambranoj</item>
+    </plurals>
     <plurals name="room_title_members">
-	<item quantity="one">1 ĉambrano</item>
-	<item quantity="other">%d ĉambranoj</item>
-</plurals>
+        <item quantity="one">1 ĉambrano</item>
+        <item quantity="other">%d ĉambranoj</item>
+    </plurals>
     <string name="room_title_one_member">1 ĉambrano</string>
 
     <plurals name="format_time_s">
-	<item quantity="one">1s</item>
-	<item quantity="other">%ds</item>
-</plurals>
+        <item quantity="one">1s</item>
+        <item quantity="other">%ds</item>
+    </plurals>
     <plurals name="format_time_m">
-	<item quantity="one">1m</item>
-	<item quantity="other">%dm</item>
-</plurals>
+        <item quantity="one">1m</item>
+        <item quantity="other">%dm</item>
+    </plurals>
     <plurals name="format_time_h">
-	<item quantity="one">1h</item>
-	<item quantity="other">%dh</item>
-</plurals>
+        <item quantity="one">1h</item>
+        <item quantity="other">%dh</item>
+    </plurals>
     <plurals name="format_time_d">
-	<item quantity="one">1t</item>
-	<item quantity="other">%dt</item>
-</plurals>
+        <item quantity="one">1t</item>
+        <item quantity="other">%dt</item>
+    </plurals>
 
     <string name="room_participants_leave_prompt_title">Foriri de ĉambro</string>
     <string name="room_participants_leave_prompt_msg">Ĉu vi certe volas foriri de la ĉambro\?</string>
@@ -590,9 +590,9 @@
     <string name="room_message_file_not_found">Dosiero ne troviĝis</string>
     <string name="room_do_not_have_permission_to_post">Vi ne havas permeson mesaĝi en ĉi tiu ĉambro</string>
     <plurals name="room_new_messages_notification">
-	<item quantity="one">1 nova mesaĝo</item>
-	<item quantity="other">%d novaj mesaĝoj</item>
-</plurals>
+        <item quantity="one">1 nova mesaĝo</item>
+        <item quantity="other">%d novaj mesaĝoj</item>
+    </plurals>
 
     <string name="ssl_trust">Fidi</string>
     <string name="ssl_do_not_trust">Ne fidi</string>
@@ -604,4 +604,4 @@
 
     <string name="settings_troubleshoot_test_account_settings_title">Agordoj de konto.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Sciigoj estas ŝaltitaj por via konto.</string>
-    </resources>
+</resources>

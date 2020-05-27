@@ -78,7 +78,7 @@
         <item quantity="one">%1$s a 1 ďalší</item>
         <item quantity="few">%1$s a %2$d ďalší</item>
         <item quantity="many">%1$s a %2$d ďalších</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
 
@@ -188,17 +188,17 @@
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s prijal pozvanie od používateľa %2$s. Dôvod: %3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s odoprel/a pozvánku používateľa %2$s. Dôvod: %3$s</string>
 
-<plurals name="notice_room_aliases_added">
-	<item quantity="one">%1$s pridal/a adresu %2$s pre túto miestnosť.</item>
-	<item quantity="few">%1$s pridal/a adresy %2$s pre túto miestnosť.</item>
-	<item quantity="other">%1$s pridal/a adresy %2$s pre túto miestnosť.</item>
-</plurals>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s pridal/a adresu %2$s pre túto miestnosť.</item>
+        <item quantity="few">%1$s pridal/a adresy %2$s pre túto miestnosť.</item>
+        <item quantity="other">%1$s pridal/a adresy %2$s pre túto miestnosť.</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_removed">
-	<item quantity="one">%1$s odstránil/a adresu %2$s pre túto miestnosť.</item>
-	<item quantity="few">%1$s odstránil/a adresy %2$s pre túto miestnosť.</item>
-	<item quantity="other">%1$s odstránil/a adresy %2$s pre túto miestnosť.</item>
-</plurals>
+        <item quantity="one">%1$s odstránil/a adresu %2$s pre túto miestnosť.</item>
+        <item quantity="few">%1$s odstránil/a adresy %2$s pre túto miestnosť.</item>
+        <item quantity="other">%1$s odstránil/a adresy %2$s pre túto miestnosť.</item>
+    </plurals>
 
     <string name="notice_room_aliases_added_and_removed">%1$s pridal/a adresu %2$s a odstránil/a adresu %3$s pre túto miestnosť.</string>
 
@@ -206,4 +206,4 @@
     <string name="notice_room_canonical_alias_unset">%1$s odstránil/a hlavnú adresu pre túto miestnosť.</string>
 
     <string name="notice_room_guest_access_can_join">%1$s povolil/a hosťom///návštevníkom prístup do tejto miestnosti.</string>
-    </resources>
+</resources>
