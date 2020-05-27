@@ -233,12 +233,14 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable {
         if (vectorUncaughtExceptionHandler.didAppCrash(this)) {
             vectorUncaughtExceptionHandler.clearAppCrashStatus(this)
 
+/*
             AlertDialog.Builder(this)
                     .setMessage(R.string.send_bug_report_app_crashed)
                     .setCancelable(false)
                     .setPositiveButton(R.string.yes) { _, _ -> bugReporter.openBugReportScreen(this) }
                     .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile(this) }
                     .show()
+*/
         } else {
             showDisclaimerDialog(this)
         }
