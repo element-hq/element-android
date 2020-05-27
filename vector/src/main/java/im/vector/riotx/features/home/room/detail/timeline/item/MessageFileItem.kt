@@ -27,6 +27,8 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.riotx.R
 import im.vector.riotx.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
+import kotlin.math.max
+import kotlin.math.round
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
@@ -55,8 +57,6 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
         holder.fileImageView.setImageResource(iconRes)
         holder.filenameView.setOnClickListener(clickListener)
         holder.filenameView.paintFlags = (holder.filenameView.paintFlags or Paint.UNDERLINE_TEXT_FLAG)
-        // TODO calculate minimum width
-        holder.viewStubContainer.minimumWidth = 2000
     }
 
     override fun unbind(holder: Holder) {
@@ -68,6 +68,20 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
 
     override fun messageBubbleAllowed(): Boolean {
         return true
+    }
+
+    override fun getViewStubMinimumWidth(holder: Holder, contentInBubble: Boolean, showInformation: Boolean): Int {
+        val superVal = super.getViewStubMinimumWidth(holder, contentInBubble, showInformation)
+
+        // Guess text width for name and time
+        val paint = Paint()
+        paint.textSize = holder.filenameView.textSize
+        val density = holder.filenameView.resources.displayMetrics.density
+        // On first call, holder.fileImageView.width is not initialized yet
+        val imageWidth = holder.fileImageView.resources.getDimensionPixelSize(R.dimen.chat_avatar_size)
+        val minimumWidthWithText = round(paint.measureText(filename.toString())).toInt() + imageWidth + 32*density.toInt()
+        val absoluteMinimumWidth = imageWidth*3
+        return max(max(absoluteMinimumWidth, minimumWidthWithText), superVal)
     }
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {

@@ -115,15 +115,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                 holder.bubbleMemberNameView.setOnLongClickListener(null)
             }
         }
-        if (contentInBubble && attributes.informationData.showInformation) {
-            // Guess text width for name and time
-            val text = holder.bubbleMemberNameView.text.toString() + " " + holder.bubbleTimeView.text.toString()
-            val paint = Paint()
-            paint.textSize = max(holder.bubbleMemberNameView.textSize, holder.bubbleTimeView.textSize)
-            holder.viewStubContainer.minimumWidth = round(paint.measureText(text)).toInt()
-        } else {
-            holder.viewStubContainer.minimumWidth = 0
-        }
+        holder.viewStubContainer.minimumWidth = getViewStubMinimumWidth(holder, contentInBubble, attributes.informationData.showInformation)
         updateMessageBubble(holder)
     }
 
@@ -162,6 +154,18 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
 
     open fun messageBubbleAllowed(): Boolean {
         return false
+    }
+
+    open fun getViewStubMinimumWidth(holder: H, contentInBubble: Boolean, showInformation: Boolean): Int {
+        return if (contentInBubble && attributes.informationData.showInformation) {
+            // Guess text width for name and time
+            val text = holder.bubbleMemberNameView.text.toString() + " " + holder.bubbleTimeView.text.toString()
+            val paint = Paint()
+            paint.textSize = max(holder.bubbleMemberNameView.textSize, holder.bubbleTimeView.textSize)
+            round(paint.measureText(text)).toInt()
+        } else {
+            0
+        }
     }
 
     fun infoInBubbles(context: Context): Boolean {
