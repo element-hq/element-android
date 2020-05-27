@@ -2017,9 +2017,24 @@
 
     <string name="create_room_encryption_title">Включено шифрование</string>
     <string name="verification_conclusion_warning">Недоверительный вход</string>
-    <string name="room_profile_section_more_uploads">Отправленные файлы</string>
+    <string name="room_profile_section_more_uploads">Вложения</string>
     <string name="cross_signing_verify_by_emoji">Интерактивная проверка по отсебятинам</string>
     <string name="error_empty_field_choose_user_name">Пожалуйста, выберите имя пользователя.</string>
     <string name="error_empty_field_choose_password">Пожалуйста, выберите пароль.</string>
-<string name="message_action_item_redact">Скрыть…</string>
+<string name="message_action_item_redact">Удалить…</string>
+    <string name="seen_by">Просмотрено</string>
+
+    <string name="room_profile_section_security_learn_more">Узнать больше</string>
+    <string name="room_profile_section_more_settings">Настройки комнаты</string>
+    <string name="room_profile_section_more_notifications">Уведомления</string>
+    <plurals name="room_profile_section_more_member_list">
+	<item quantity="one">Один участник</item>
+	<item quantity="few">участника</item>
+	<item quantity="many">участников</item>
+</plurals>
+    <string name="room_profile_section_more_leave">Покинуть комнату</string>
+    <string name="room_member_power_level_admins">Администраторы</string>
+    <string name="room_member_power_level_moderators">Модераторы</string>
+    <string name="room_member_power_level_users">Пользователи</string>
+
     </resources>
