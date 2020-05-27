@@ -609,7 +609,7 @@
     <string name="settings_notification_troubleshoot">Rješavanje problema s obavijestima</string>
     <string name="settings_troubleshoot_diagnostic">Tehnička dijagnostika u rješavanju problema</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Pokreni testove</string>
-    <string name="settings_troubleshoot_diagnostic_running_status">Izvršavanje... (%1$d od %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Izvršavanje… (%1$d od %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_success_status">Osnovna dijagnostika je uredna. Ako i dalje ne dobivate obavijesti, pošaljite izvješće o grešci kako bi se mogao utvrditi problem.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Jedan ili više testova nije uspjelo pa pokušajte s predloženim ispravkom/ama.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Jedan ili više testova nije uspjelo, pošaljite izvješće o grešci kako bi se mogao utvrditi problem.</string>
@@ -945,7 +945,7 @@
     <string name="conference_call_warning_message">Konferencijsko zvanje je u razvoju i potencijalno nepouzdano.</string>
 
     <string name="command_error">Naredbena greška</string>
-    <string name="unrecognized_command">Nepoznata naredba: %2</string>
+    <string name="unrecognized_command">Nepoznata naredba: %s</string>
     <string name="command_problem_with_parameters">Naredba \"%s\" treba više parametara ili su neki parametri netočni.</string>
     <string name="command_description_emote">Prikazuje radnju</string>
     <string name="command_description_ban_user">Zabranjuje pristup korisniku s danim identitetom</string>
@@ -1134,7 +1134,7 @@
 
     <string name="create_room_title">Nova soba</string>
     <string name="create_room_action_create">IZRADI</string>
-    <string name="riotx_no_registration_notice">%1%s kako biste otvorili račun.</string>
+    <string name="riotx_no_registration_notice">%1$s kako biste otvorili račun.</string>
     <string name="riotx_no_registration_notice_colored_part">Koristite staru aplikaciju</string>
 
 
