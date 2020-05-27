@@ -104,6 +104,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             if (attributes.informationData.showInformation /* && contentInBubble && attributes.informationData.sentByMe */) {
                 holder.bubbleTimeView.visibility = View.VISIBLE
                 holder.bubbleTimeView.text = attributes.informationData.time
+                holder.bubbleMemberNameView.visibility = View.VISIBLE
                 holder.bubbleMemberNameView.setOnClickListener(_memberNameClickListener)
                 holder.bubbleMemberNameView.text = attributes.informationData.memberName
                 holder.bubbleMemberNameView.setOnLongClickListener(attributes.itemLongClickListener)
