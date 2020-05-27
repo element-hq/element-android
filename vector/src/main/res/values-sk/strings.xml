@@ -176,7 +176,7 @@ Emailovú adresu si môžete k účtu pridať neskôr cez nastavenia.</string>
     <string name="auth_reset_password_error_unauthorized">Nepodarilo sa overiť emailovú adresu: Uistite sa, že ste správne klikli na odkaz v emailovej správe</string>
     <string name="auth_reset_password_success_message">Vaše heslo bolo obnovené.
 \n
-\nBoli ste odhlásení na všetkych zariadeniach a nebudete viac dostávať okamžité oznámenia. Oznámenia znovu povolíte tak, že sa opätovne prihlásite na každom zariadení.</string>
+\nBoli ste odhlásení na všetkých reláciach a nebudete viac dostávať okamžité oznámenia. Oznámenia znovu povolíte tak, že sa opätovne prihlásite na každom zariadení.</string>
 
     <string name="login_error_must_start_http">URL adresa musí začínať http[s]://</string>
     <string name="login_error_network_error">Nie je možné sa prihlásiť: Chyba siete</string>
@@ -195,7 +195,7 @@ Emailovú adresu si môžete k účtu pridať neskôr cez nastavenia.</string>
     <string name="login_error_user_in_use">Toto používateľské meno sa už používa</string>
     <string name="login_error_login_email_not_yet">Zatiaľ ste neklikli na odkaz zaslaný emailom</string>
 
-    <string name="e2e_need_log_in_again">Mali by ste sa znovu prihlásiť, čo vygeneruje šifrovacie kľúče E2E pre toto zariadenie a odošle zodpovedajúci verejný kľúč na domovský server.
+    <string name="e2e_need_log_in_again">Mali by ste sa znovu prihlásiť, čo vygeneruje šifrovacie kľúče E2E pre túto reláciu a odošle zodpovedajúci verejný kľúč domovskému serveru.
 \nToto je potrebné urobiť len raz. 
 \nOspravedlňujeme sa za spôsobené ťažkosti.</string>
 
@@ -243,15 +243,15 @@ Prosím, povoľte prístup na nasledujúcej obrazovke.</string>
     <string name="permissions_rationale_msg_camera">Aby ste mohli fotiť obrázky a videá a tiež uskutočňovať video hovory, Riot potrebuje prístup k fotoaparátu.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
-\nProsím, povoľte prístup na nasledujúcej obrazovke."</string>
+\nProsím, povoľte prístup na nasledujúcej obrazovke, aby ste mohli uskutočniť hovor."</string>
     <string name="permissions_rationale_msg_record_audio">Aby ste mohli uskutočňovať audio hovory, Riot potrebuje prístup k mikrofónu vašeho zariadenia.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
-\nProsím, povoľte prístup na nasledujúcej obrazovke."</string>
+\nProsím, povoľte prístup na nasledujúcej obrazovke, aby ste mohli uskutočniť hovor."</string>
     <string name="permissions_rationale_msg_camera_and_audio">Aby ste mohli uskutočňovať video hovory, Riot potrebuje prístup k fotoaparátu a mikrofónu vašeho zariadenia.
 
 Prosím, povoľte prístup na nasledujúcich obrazovkách.</string>
-    <string name="permissions_rationale_msg_contacts">Aby ste mohli na Matrixe nájsť vašich známych podľa telefónneho čísla alebo emailovej adresy, Riot potrebuje prístup k vašim kontaktom. Prosím, povoľte prístup na nasledujúcej obrazovke.</string>
+    <string name="permissions_rationale_msg_contacts">Aby ste mohli na Matrixe nájsť vašich známych podľa telefónneho čísla alebo emailovej adresy, Riot potrebuje prístup k vašim kontaktom. Ak si prajete zdieľať váš zoznam kontaktov za týmto účelom, prosím, povoľte prístup na nasledujúcej obrazovke.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Aby ste mohli na Matrixe nájsť vašich známych podľa telefónneho čísla alebo emailovej adresy, Riot potrebuje prístup k vašim kontaktom.
 
 Chcete aplikácii Riot povoliť prístup k vašim kontaktom?</string>
@@ -331,7 +331,7 @@ Ste si istí?</string>
     <string name="room_message_placeholder_not_encrypted">Odoslať správu (nešifrovanú)…</string>
     <string name="room_offline_notification">Spojenie so serverom bolo prerušené.</string>
     <string name="room_unsent_messages_notification">Neodoslané správy. %1$s alebo %2$s teraz?</string>
-    <string name="room_unknown_devices_messages_notification">Správa nebola odoslaná kvôli prítomným neznámym zariadeniam. %1$s alebo %2$s teraz\?</string>
+    <string name="room_unknown_devices_messages_notification">Správa nebola odoslaná kvôli prítomnosti neznámych zariadení. %1$s alebo %2$s teraz\?</string>
     <string name="room_prompt_resend">Znovu odoslať všetky</string>
     <string name="room_prompt_cancel">Zrušiť všetky</string>
     <string name="room_resend_unsent_messages">Znovu odoslať neodoslané správy</string>
@@ -631,7 +631,7 @@ Pozor: tento súbor môže byť automaticky zmazaný po odinštalovaní aplikác
     <string name="encryption_information_block">Pridať na čiernu listinu</string>
     <string name="encryption_information_unblock">Odstrániť z čiernej listiny</string>
 
-    <string name="encryption_information_verify_device">Overiť relácie</string>
+    <string name="encryption_information_verify_device">Overiť reláciu</string>
     <string name="encryption_information_verify_device_warning">Ak chcete overiť, či táto relácia je skutočne dôveryhodná, kontaktujte jeho vlastníka iným spôsobom (napr. osobne alebo cez telefón) a opýtajte sa ho, či kľúč, ktorý má zobrazený v Nastaveniach, sa zhoduje s kľúčom zobrazeným nižšie:</string>
     <string name="encryption_information_verify_device_warning2">Ak sa kľúče zhodujú, stlačte tlačidlo Overiť nižšie. Ak sa nezhodujú, niekto ďalší odpočúva toto zariadenie a mali by ste ho pridať na čiernu listinu.</string>
     <string name="encryption_information_verify_key_match">Overil som, kľúče sa zhodujú</string>
@@ -645,7 +645,7 @@ Môžete to urobiť teraz, alebo to môžete urobiť neskôr v časti Nastavenia
 \nZnamená to, že príslušnosť týchto relácií k ich údajným používateľom nemôže byť garantovaná.
 \nOdporúčame vám prejsť procesom overenia pre všetky relácie, aby ste si potvrdili, že skutočne patria ich pravým vlastníkom. Ale ak chcete, môžete tiež správu znova poslať bez overovania.
 \n
-\nNeznáme zariadenia:</string>
+\nNeznáme relácie:</string>
 
     <string name="select_room_directory">Vyberte adresár miestností</string>
     <string name="directory_server_fail_to_retrieve_server">Server môže byť nedostupný alebo preťažený</string>
@@ -684,7 +684,7 @@ Môžete to urobiť teraz, alebo to môžete urobiť neskôr v časti Nastavenia
     <string name="room_add_matrix_apps">Pridať Matrix aplikácie</string>
 
     <!-- share keys -->
-    <string name="you_added_a_new_device">Pridali/a ste novú reláciu \'%s\', ktorá požaduje šifrovacie kľúče.</string>
+    <string name="you_added_a_new_device">Pridali ste novú reláciu \'%s\', ktorá požaduje šifrovacie kľúče.</string>
     <string name="your_unverified_device_requesting">Vaša neoverená relácia \'%s\' požaduje šifrovacie kľúče.</string>
     <string name="start_verification">Spustiť overenie</string>
     <string name="share_without_verifying">Zdieľať bez overenia</string>
@@ -1281,7 +1281,7 @@ Aby ste nič nezmeškali, nevypínajte prosím automatické aktualizácie."</str
 
     <string name="notification_silent">Tiché</string>
     <string name="error_empty_field_enter_user_name">Prosím zadajte meno používateľa.</string>
-    <string name="title_activity_verify_device">Overiť relácie</string>
+    <string name="title_activity_verify_device">Overiť reláciu</string>
 
     <string name="resources_script">Latn</string>
 
@@ -1305,6 +1305,6 @@ Aby ste nič nezmeškali, nevypínajte prosím automatické aktualizácie."</str
     <string name="auth_add_email_phone_message_2">Nastavte e-mail na obnovenie účtu. Neskôr môžete použiť e-mail alebo telefónne číslo, aby vás pomocou nich mohli ľudia, ktorí vás poznajú, nájsť.</string>
     <string name="auth_add_email_and_phone_message_2">Nastavte e-mail na obnovenie účtu. Neskôr môžete použiť e-mail alebo telefónne číslo, aby vás pomocou nich mohli ľudia, ktorí vás poznajú, nájsť.</string>
     <string name="login_error_no_homeserver_found">Toto nie je platná adresa Matrix serveru</string>
-    <string name="login_error_homeserver_not_found">Domovský server nie je dostupný na tomto URL, preverte to prosím</string>
+    <string name="login_error_homeserver_not_found">Domovský server je nedostupný na tejto URL adrese, preverte to prosím</string>
 <string name="room_member_profile_sessions_section_title">Relácie</string>
     </resources>
