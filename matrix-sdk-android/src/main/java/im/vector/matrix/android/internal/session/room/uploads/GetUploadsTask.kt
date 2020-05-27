@@ -22,7 +22,6 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageWithAttachmentContent
-import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.sender.SenderInfo
 import im.vector.matrix.android.api.session.room.uploads.GetUploadsResult
 import im.vector.matrix.android.api.session.room.uploads.UploadEvent
@@ -76,8 +75,6 @@ internal class DefaultGetUploadsTask @Inject constructor(
             monarchy.doWithRealm { realm ->
                 eventsFromRealm = EventEntity.whereType(realm, EventType.ENCRYPTED, params.roomId)
                         .like(EventEntityFields.DECRYPTION_RESULT_JSON, TimelineEventFilter.DecryptedContent.URL)
-                        // FIXME Send event are stored twice in the DB. This is not normal. Keep only synced events
-                        .like(EventEntityFields.SEND_STATE_STR, SendState.SYNCED.name)
                         .findAll()
                         .map { it.asDomain() }
                         // Exclude stickers

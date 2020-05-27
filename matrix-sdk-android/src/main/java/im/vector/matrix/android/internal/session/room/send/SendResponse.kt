@@ -21,5 +21,8 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class SendResponse(
+        /**
+         * A unique identifier for the event.
+         */
         @Json(name = "event_id") val eventId: String
 )
