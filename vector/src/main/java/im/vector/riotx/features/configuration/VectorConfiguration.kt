@@ -48,7 +48,7 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
             needsSettingsUpdate = true
         }
         if (needsSettingsUpdate) {
-            updateApplicationSettings(Locale.getDefault(),
+            updateApplicationSettings(VectorLocale.applicationLocale,
                     FontScale.getFontScalePrefValue(context),
                     ThemeUtils.getApplicationLightTheme(context),
                     ThemeUtils.getApplicationDarkTheme(context))
