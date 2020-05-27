@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.autofill.HintConstants
+import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
 import butterknife.OnClick
 import com.airbnb.mvrx.Fail
@@ -53,6 +54,9 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
 
     private var passwordShown = false
     private var isSignupMode = false
+    // Temporary patch for https://github.com/vector-im/riotX-android/issues/1410,
+    // waiting for https://github.com/matrix-org/synapse/issues/7576
+    private var isNumericOnlyUserIdForbidden = false
 
     override fun getLayoutResId() = R.layout.fragment_login
 
@@ -99,6 +103,10 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
         var error = 0
         if (login.isEmpty()) {
             loginFieldTil.error = getString(if (isSignupMode) R.string.error_empty_field_choose_user_name else R.string.error_empty_field_enter_user_name)
+            error++
+        }
+        if (isSignupMode && isNumericOnlyUserIdForbidden && login.isDigitsOnly()) {
+            loginFieldTil.error = "The homeserver does not accept username with only digits."
             error++
         }
         if (password.isEmpty()) {
@@ -227,6 +235,7 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
 
     override fun updateWithState(state: LoginViewState) {
         isSignupMode = state.signMode == SignMode.SignUp
+        isNumericOnlyUserIdForbidden = state.serverType == ServerType.MatrixOrg
 
         setupUi(state)
         setupAutoFill(state)
