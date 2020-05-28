@@ -1,4 +1,4 @@
-Changes in RiotX 0.21.0 (2020-XX-XX)
+Changes in RiotX 0.21.0 (2020-05-28)
 ===================================================
 
 Features ✨:
@@ -19,14 +19,8 @@ Bugfix 🐛:
  - Enable markdown (if active) when sending emote (#734)
  - Screenshots for Rageshake now includes Dialogs such as BottomSheet (#1349)
 
-Translations 🗣:
- -
-
 SDK API changes ⚠️:
  - initialize with proxy configuration
-
-Build 🧱:
- -
 
 Other changes:
  - support new key agreement method for SAS (#1374)
