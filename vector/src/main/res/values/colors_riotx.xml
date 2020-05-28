@@ -175,6 +175,11 @@
     <color name="riotx_attachment_selector_border_dark">#FF22262E</color>
     <color name="riotx_attachment_selector_border_black">#FF090A0C</color>
 
+    <attr name="riotx_room_active_widgets_banner" format="color" />
+    <color name="riotx_room_active_widgets_banner_light">#EBEFF5</color>
+    <color name="riotx_room_active_widgets_banner_dark">#27303A</color>
+    <color name="riotx_room_active_widgets_banner_black">#27303A</color>
+
     <!-- (color from RiotWeb) -->
     <attr name="riotx_keys_backup_banner_accent_color" format="color" />
     <color name="riotx_keys_backup_banner_accent_color_light">#FFF8E3</color>

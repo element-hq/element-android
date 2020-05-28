@@ -154,7 +154,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         val canSend = if (powerLevelsContent == null) {
             false
         } else {
-            PowerLevelsHelper(powerLevelsContent).isAllowedToSend(eventType, session.myUserId)
+            PowerLevelsHelper(powerLevelsContent).isAllowedToSend(isState, eventType, session.myUserId)
         }
         if (canSend) {
             Timber.d("## canSendEvent() returns true")

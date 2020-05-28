@@ -147,6 +147,7 @@ import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformatio
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.riotx.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
+import im.vector.riotx.features.home.room.detail.widget.RoomWidgetsBannerView
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.PillImageSpan
 import im.vector.riotx.features.invite.VectorInviteView
@@ -199,7 +200,7 @@ class RoomDetailFragment @Inject constructor(
         VectorInviteView.Callback,
         JumpToReadMarkerView.Callback,
         AttachmentTypeSelectorView.Callback,
-        AttachmentsHelper.Callback {
+        AttachmentsHelper.Callback, RoomWidgetsBannerView.Callback {
 
     companion object {
 
@@ -264,6 +265,8 @@ class RoomDetailFragment @Inject constructor(
         setupNotificationView()
         setupJumpToReadMarkerView()
         setupJumpToBottomView()
+        setupWidgetsBannerView()
+
         roomToolbarContentView.debouncedClicks {
             navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
         }
@@ -311,6 +314,10 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
+    private fun setupWidgetsBannerView() {
+        roomWidgetsBannerView.callback = this
+    }
+
     private fun openStickerPicker(event: RoomDetailViewEvents.OpenStickerPicker) {
         navigator.openStickerPicker(this, roomDetailArgs.roomId, event.widget)
     }
@@ -323,7 +330,7 @@ class RoomDetailFragment @Inject constructor(
         val v: View = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_no_sticker_pack, null)
         builder
                 .setView(v)
-                .setPositiveButton(R.string.yes) { _, _->
+                .setPositiveButton(R.string.yes) { _, _ ->
                     // Open integration manager, to the sticker installation page
                     navigator.openIntegrationManager(
                             context = requireContext(),
@@ -719,6 +726,7 @@ class RoomDetailFragment @Inject constructor(
         val summary = state.asyncRoomSummary()
         val inviter = state.asyncInviter()
         if (summary?.membership == Membership.JOIN) {
+            roomWidgetsBannerView.render(state.activeRoomWidgets())
             scrollOnHighlightedEventCallback.timeline = roomDetailViewModel.timeline
             timelineEventController.update(state)
             inviteView.visibility = View.GONE
@@ -1454,5 +1462,9 @@ class RoomDetailFragment @Inject constructor(
         super.onContactAttachmentReady(contactAttachment)
         val formattedContact = contactAttachment.toHumanReadable()
         roomDetailViewModel.handle(RoomDetailAction.SendMessage(formattedContact, false))
+    }
+
+    override fun onViewWidgetsClicked() {
+        Toast.makeText(requireContext(), "Show widgets", Toast.LENGTH_SHORT).show()
     }
 }

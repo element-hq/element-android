@@ -17,7 +17,6 @@
 
 package im.vector.matrix.android.api.session.room.powerlevels
 
-import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 
 /**
@@ -44,34 +43,15 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
      * @param userId          the user id
      * @return true if the user can send this type of event
      */
-    fun isAllowedToSend(eventType: String, userId: String): Boolean {
-        return if (eventType.isNotEmpty() && userId.isNotEmpty()) {
+    fun isAllowedToSend(isState: Boolean, eventType: String?, userId: String): Boolean {
+        return if (userId.isNotEmpty()) {
             val powerLevel = getUserPowerLevel(userId)
             val minimumPowerLevel = powerLevelsContent.events[eventType]
-                    ?: if (EventType.isStateEvent(eventType)) {
+                    ?: if (isState) {
                         powerLevelsContent.stateDefault
                     } else {
                         powerLevelsContent.eventsDefault
                     }
-            powerLevel >= minimumPowerLevel
-        } else false
-    }
-
-    /**
-     * Tell if an user can send an event of a certain type
-     *
-     * @param eventType the event type to check for
-     * @param userId          the user id
-     * @return true if the user can send this type of event
-     */
-    fun isAllowedToSend(isState: Boolean, userId: String): Boolean {
-        return if (userId.isNotEmpty()) {
-            val powerLevel = getUserPowerLevel(userId)
-            val minimumPowerLevel = if (isState) {
-                powerLevelsContent.stateDefault
-            } else {
-                powerLevelsContent.eventsDefault
-            }
             powerLevel >= minimumPowerLevel
         } else false
     }

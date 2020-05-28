@@ -92,7 +92,7 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
     }
 
     private fun subscribeToWidget() {
-        asyncSubscribe(WidgetViewState::asyncWidget){
+        asyncSubscribe(WidgetViewState::asyncWidget) {
             setState { copy(widgetName = it.name) }
         }
     }
@@ -113,7 +113,7 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
                 .mapOptional { it.content.toModel<PowerLevelsContent>() }
                 .unwrap()
                 .map {
-                    PowerLevelsHelper(it).isAllowedToSend(true, session.myUserId)
+                    PowerLevelsHelper(it).isAllowedToSend(true, null, session.myUserId)
                 }.subscribe {
                     setState { copy(canManageWidgets = it) }
                 }.disposeOnClear()

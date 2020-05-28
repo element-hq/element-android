@@ -1116,6 +1116,7 @@
         <item quantity="one">1 active widget</item>
         <item quantity="other">%d active widgets</item>
     </plurals>
+    <string name="active_widget_view_action">"VIEW"</string>
 
 
     <string name="room_widget_activity_title">Widget</string>

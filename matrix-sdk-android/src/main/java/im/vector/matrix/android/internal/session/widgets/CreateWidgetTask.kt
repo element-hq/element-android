@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.session.widgets
 
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Content
+import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.widgets.WidgetService
 import im.vector.matrix.android.internal.database.awaitNotEmptyResult
 import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
@@ -48,14 +49,14 @@ internal class DefaultCreateWidgetTask @Inject constructor(private val monarchy:
         executeRequest<Unit>(eventBus) {
             apiCall = roomAPI.sendStateEvent(
                     roomId = params.roomId,
-                    stateEventType = WidgetService.WIDGET_EVENT_TYPE,
+                    stateEventType = EventType.STATE_ROOM_WIDGET_LEGACY,
                     stateKey = params.widgetId,
                     params = params.content
             )
         }
         awaitNotEmptyResult(monarchy.realmConfiguration, 30_000L) {
             CurrentStateEventEntity
-                    .whereStateKey(it, params.roomId, type = WidgetService.WIDGET_EVENT_TYPE, stateKey = params.widgetId)
+                    .whereStateKey(it, params.roomId, type = EventType.STATE_ROOM_WIDGET_LEGACY, stateKey = params.widgetId)
                     .and()
                     .equalTo(CurrentStateEventEntityFields.ROOT.SENDER, userId)
         }

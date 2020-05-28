@@ -20,14 +20,11 @@ import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.events.model.Content
+import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.session.widgets.Widget
 
 interface WidgetService {
-
-    companion object {
-        const val WIDGET_EVENT_TYPE = "im.vector.modular.widgets"
-    }
 
     fun getWidgetURLFormatter(): WidgetURLFormatter
 
