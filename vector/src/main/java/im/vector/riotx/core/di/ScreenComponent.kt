@@ -63,6 +63,8 @@ import im.vector.riotx.features.share.IncomingShareActivity
 import im.vector.riotx.features.signout.soft.SoftLogoutActivity
 import im.vector.riotx.features.terms.ReviewTermsActivity
 import im.vector.riotx.features.ui.UiStateRepository
+import im.vector.riotx.features.widgets.WidgetActivity
+import im.vector.riotx.features.widgets.permissions.RoomWidgetPermissionBottomSheet
 
 @Component(
         dependencies = [
@@ -120,6 +122,7 @@ interface ScreenComponent {
     fun inject(activity: BigImageViewerActivity)
     fun inject(activity: InviteUsersToRoomActivity)
     fun inject(activity: ReviewTermsActivity)
+    fun inject(widgetActivity: WidgetActivity)
 
     /* ==========================================================================================
      * BottomSheets
@@ -134,6 +137,7 @@ interface ScreenComponent {
     fun inject(bottomSheet: DeviceVerificationInfoBottomSheet)
     fun inject(bottomSheet: DeviceListBottomSheet)
     fun inject(bottomSheet: BootstrapBottomSheet)
+    fun inject(bottomSheet: RoomWidgetPermissionBottomSheet)
 
     /* ==========================================================================================
      * Others
@@ -142,6 +146,7 @@ interface ScreenComponent {
     fun inject(view: VectorInviteView)
     fun inject(preference: UserAvatarPreference)
     fun inject(button: ReactionButton)
+
 
     /* ==========================================================================================
      * Factory

@@ -329,7 +329,7 @@ class RoomDetailFragment @Inject constructor(
                             context = requireContext(),
                             roomId = roomDetailArgs.roomId,
                             integId = null,
-                            screenId = "type_${StickerPickerConstants.WIDGET_NAME}"
+                            screen = StickerPickerConstants.WIDGET_NAME
                     )
                 }
                 .setNegativeButton(R.string.no, null)

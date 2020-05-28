@@ -87,7 +87,7 @@ interface Navigator {
                   widget: Widget,
                   requestCode: Int = StickerPickerConstants.STICKER_PICKER_REQUEST_CODE)
 
-    fun openIntegrationManager(context: Context, roomId: String, integId: String?, screenId: String?)
+    fun openIntegrationManager(context: Context, roomId: String, integId: String?, screen: String?)
 
     fun openImageViewer(activity: Activity, mediaData: ImageContentRenderer.Data, view: View, options: ((MutableList<Pair<View, String>>) -> Unit)?)
 

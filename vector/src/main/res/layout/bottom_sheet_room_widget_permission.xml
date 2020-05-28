@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:layout_marginBottom="8dp"
+        android:text="@string/room_widget_permission_title"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/bottom_sheet_widget_permission_h2_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:layout_marginBottom="8dp"
+        android:text="@string/room_widget_permission_added_by"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:orientation="horizontal">
+
+        <im.vector.view.VectorCircularImageView
+            android:id="@+id/bottom_sheet_widget_permission_owner_avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            tools:src="@tools:sample/avatars" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/bottom_sheet_widget_permission_owner_display_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="User name" />
+
+            <TextView
+                android:id="@+id/bottom_sheet_widget_permission_owner_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="14sp"
+                tools:text="\@foo:matrix.org" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/bottom_sheet_widget_permission_shared_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginTop="@dimen/layout_vertical_margin_big"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:layout_marginBottom="8dp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textSize="16sp"
+        tools:text="@string/room_widget_permission_shared_info_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_vertical_margin_big"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/bottom_sheet_widget_permission_decline_button"
+            style="@style/VectorButtonStyleDestructive"
+            android:layout_marginEnd="@dimen/layout_vertical_margin"
+            android:layout_marginRight="@dimen/layout_vertical_margin"
+            android:text="@string/decline"
+            android:textAllCaps="true"/>
+
+        <Button
+            android:id="@+id/bottom_sheet_widget_permission_continue_button"
+            style="@style/VectorButtonStylePositive"
+            android:layout_marginEnd="@dimen/layout_vertical_margin"
+            android:layout_marginRight="@dimen/layout_vertical_margin"
+            android:minWidth="160dp"
+            android:text="@string/_continue"
+            android:textAllCaps="true" />
+
+    </LinearLayout>
+
+</LinearLayout>

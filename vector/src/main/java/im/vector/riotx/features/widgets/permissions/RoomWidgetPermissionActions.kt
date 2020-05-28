@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.widgets
+package im.vector.riotx.features.widgets.permissions
 
-import im.vector.matrix.android.api.session.events.model.Content
-import im.vector.riotx.core.platform.VectorViewEvents
+import im.vector.riotx.core.platform.VectorViewModelAction
 
-sealed class WidgetViewEvents : VectorViewEvents {
-    data class Close(val content: Content? = null) : WidgetViewEvents()
-    data class DisplayIntegrationManager(val integId: String?, val integType: String?) : WidgetViewEvents()
-    data class LoadFormattedURL(val formattedURL: String) : WidgetViewEvents()
-    data class DisplayTerms(val url: String, val token: String) : WidgetViewEvents()
+sealed class RoomWidgetPermissionActions : VectorViewModelAction {
+    object AllowWidget: RoomWidgetPermissionActions()
+    object BlockWidget: RoomWidgetPermissionActions()
 }

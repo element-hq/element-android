@@ -20,19 +20,25 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AlertDialog
+import androidx.core.view.forEach
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
-import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.riotx.R
+import im.vector.riotx.core.platform.OnBackPressed
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import im.vector.riotx.features.terms.ReviewTermsActivity
 import im.vector.riotx.features.webview.WebViewEventListener
 import im.vector.riotx.features.widgets.webview.clearAfterWidget
@@ -51,17 +57,16 @@ data class WidgetArgs(
         val urlParams: Map<String, String> = emptyMap()
 ) : Parcelable
 
-class WidgetFragment @Inject constructor(
-        private val viewModelFactory: WidgetViewModel.Factory
-) : VectorBaseFragment(), WidgetViewModel.Factory by viewModelFactory, WebViewEventListener {
+class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventListener, OnBackPressed {
 
     private val fragmentArgs: WidgetArgs by args()
-    private val viewModel: WidgetViewModel by fragmentViewModel()
+    private val viewModel: WidgetViewModel by activityViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_room_widget
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
         widgetWebView.setupForWidget(this)
         if (fragmentArgs.kind.isAdmin()) {
             viewModel.getPostAPIMediator().setWebView(widgetWebView)
@@ -70,7 +75,6 @@ class WidgetFragment @Inject constructor(
             when (it) {
                 is WidgetViewEvents.DisplayTerms              -> displayTerms(it)
                 is WidgetViewEvents.LoadFormattedURL          -> loadFormattedUrl(it)
-                is WidgetViewEvents.Close                     -> handleClose(it)
                 is WidgetViewEvents.DisplayIntegrationManager -> displayIntegrationManager(it)
             }
         }
@@ -108,6 +112,59 @@ class WidgetFragment @Inject constructor(
             it.pauseTimers()
             it.onPause()
         }
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) = withState(viewModel) { state ->
+        val widget = state.asyncWidget()
+        menu.findItem(R.id.action_edit)?.isVisible = state.widgetKind != WidgetKind.INTEGRATION_MANAGER
+        if (widget == null) {
+            menu.findItem(R.id.action_refresh)?.isVisible = false
+            menu.findItem(R.id.action_widget_open_ext)?.isVisible = false
+            menu.findItem(R.id.action_delete)?.isVisible = false
+            menu.findItem(R.id.action_revoke)?.isVisible = false
+        } else {
+            menu.findItem(R.id.action_refresh)?.isVisible = true
+            menu.findItem(R.id.action_widget_open_ext)?.isVisible = true
+            menu.findItem(R.id.action_delete)?.isVisible = state.canManageWidgets && widget.isAddedByMe
+            menu.findItem(R.id.action_revoke)?.isVisible = state.status == WidgetStatus.WIDGET_ALLOWED && !widget.isAddedByMe
+        }
+        super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = withState(viewModel) { state ->
+        when (item.itemId) {
+            R.id.action_edit            -> {
+                navigator.openIntegrationManager(requireContext(), state.roomId, state.widgetId, state.widgetKind.screenId)
+                return@withState true
+            }
+            R.id.action_delete          -> {
+                viewModel.handle(WidgetAction.DeleteWidget)
+                return@withState true
+            }
+            R.id.action_refresh         -> if (state.formattedURL.complete) {
+                widgetWebView.reload()
+                return@withState true
+            }
+            R.id.action_widget_open_ext -> if (state.formattedURL.complete) {
+                openUrlInExternalBrowser(requireContext(), state.formattedURL.invoke())
+                return@withState true
+            }
+            R.id.action_revoke          -> if (state.status == WidgetStatus.WIDGET_ALLOWED) {
+                viewModel.handle(WidgetAction.RevokeWidget)
+                return@withState true
+            }
+        }
+        return@withState super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed(toolbarButton: Boolean): Boolean = withState(viewModel) { state ->
+        if (state.formattedURL.complete) {
+            if (widgetWebView.canGoBack()) {
+                widgetWebView.goBack()
+                return@withState true
+            }
+        }
+        return@withState false
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -211,15 +268,21 @@ class WidgetFragment @Inject constructor(
                 context = vectorBaseActivity,
                 roomId = fragmentArgs.roomId,
                 integId = event.integId,
-                screenId = event.integType
+                screen = event.integType
         )
     }
 
-    private fun handleClose(event: WidgetViewEvents.Close) {
-        if (event.content != null) {
-            val intent = WidgetActivity.createResultIntent(event.content)
-            vectorBaseActivity.setResult(Activity.RESULT_OK, intent)
-        }
-        vectorBaseActivity.finish()
+    fun deleteWidget() {
+        AlertDialog.Builder(requireContext())
+                .setMessage(R.string.widget_delete_message_confirmation)
+                .setPositiveButton(R.string.remove) { _, _ ->
+                    viewModel.handle(WidgetAction.DeleteWidget)
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
+    }
+
+    fun revokeWidget() {
+        viewModel.handle(WidgetAction.RevokeWidget)
     }
 }

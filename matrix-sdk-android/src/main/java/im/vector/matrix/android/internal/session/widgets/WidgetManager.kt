@@ -31,7 +31,6 @@ import im.vector.matrix.android.api.session.integrationmanager.IntegrationManage
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.android.api.session.widgets.WidgetService
-import im.vector.matrix.android.api.session.widgets.model.WidgetContent
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.SessionScope
@@ -40,6 +39,7 @@ import im.vector.matrix.android.internal.session.room.state.StateEventDataSource
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 import im.vector.matrix.android.internal.session.user.accountdata.AccountDataDataSource
+import im.vector.matrix.android.internal.session.widgets.helper.WidgetFactory
 import im.vector.matrix.android.internal.session.widgets.helper.extractWidgetSequence
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.launchToCallback
@@ -52,6 +52,7 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
                                                  private val stateEventDataSource: StateEventDataSource,
                                                  private val taskExecutor: TaskExecutor,
                                                  private val createWidgetTask: CreateWidgetTask,
+                                                 private val widgetFactory: WidgetFactory,
                                                  @UserId private val userId: String) : IntegrationManagerService.Listener {
 
     private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
@@ -104,19 +105,16 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
         }
         // Create each widget from its latest im.vector.modular.widgets state event
         for (widgetEvent in sortedWidgetEvents) { // Filter widget types if required
-            val widgetContent = widgetEvent.content.toModel<WidgetContent>()
-            if (widgetContent?.url == null) continue
-            val widgetType = widgetContent.type ?: continue
+            val widget = widgetFactory.create(widgetEvent) ?: continue
+            val widgetType = widget.widgetContent.type ?: continue
             if (widgetTypes != null && !widgetTypes.contains(widgetType)) {
                 continue
             }
             if (excludedTypes != null && excludedTypes.contains(widgetType)) {
                 continue
             }
-            // widgetEvent.stateKey = widget id
-            if (widgetEvent.stateKey != null && !widgets.containsKey(widgetEvent.stateKey)) {
-                val widget = Widget(widgetContent, widgetEvent, widgetEvent.stateKey)
-                widgets[widgetEvent.stateKey] = widget
+            if (!widgets.containsKey(widget.widgetId)) {
+                widgets[widget.widgetId] = widget
             }
         }
         return widgets.values.toList()
@@ -142,7 +140,7 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
 
     private fun UserAccountDataEvent.mapToWidgets(widgetTypes: Set<String>? = null,
                                                   excludedTypes: Set<String>? = null): List<Widget> {
-        return extractWidgetSequence()
+        return extractWidgetSequence(widgetFactory)
                 .filter {
                     val widgetType = it.widgetContent.type ?: return@filter false
                     (widgetTypes == null || widgetTypes.contains(widgetType))

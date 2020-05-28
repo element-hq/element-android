@@ -17,14 +17,20 @@
 package im.vector.matrix.android.internal.session.widgets
 
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.sender.SenderInfo
 import im.vector.matrix.android.api.session.widgets.model.WidgetContent
 
 data class Widget(
         val widgetContent: WidgetContent,
-        val event: Event? = null,
-        val widgetId: String? = null
+        val event: Event,
+        val widgetId: String,
+        val senderInfo: SenderInfo?,
+        val isAddedByMe: Boolean
 ) {
 
     val isActive = widgetContent.type != null && widgetContent.url != null
+
+    val name = widgetContent.getHumanName()
+
 }
 

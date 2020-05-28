@@ -33,7 +33,7 @@ import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAcco
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
 import im.vector.matrix.android.internal.session.user.accountdata.AccountDataDataSource
 import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAccountDataTask
-import im.vector.matrix.android.internal.session.widgets.Widget
+import im.vector.matrix.android.internal.session.widgets.helper.WidgetFactory
 import im.vector.matrix.android.internal.session.widgets.helper.extractWidgetSequence
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
@@ -58,7 +58,8 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
                                                       private val stringProvider: StringProvider,
                                                       private val updateUserAccountDataTask: UpdateUserAccountDataTask,
                                                       private val accountDataDataSource: AccountDataDataSource,
-                                                      private val configExtractor: IntegrationManagerConfigExtractor) {
+                                                      private val configExtractor: IntegrationManagerConfigExtractor,
+                                                      private val widgetFactory: WidgetFactory) {
 
 
     private val currentConfigs = ArrayList<IntegrationManagerConfig>()
@@ -284,7 +285,7 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
     }
 
     private fun UserAccountDataEvent.asIntegrationManagerWidgetContent(): WidgetContent? {
-        return extractWidgetSequence()
+        return extractWidgetSequence(widgetFactory)
                 .filter {
                     it.widgetContent.type == INTEGRATION_MANAGER_WIDGET
                 }

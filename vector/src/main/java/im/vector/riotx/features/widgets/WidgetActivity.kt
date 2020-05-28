@@ -16,26 +16,35 @@
 
 package im.vector.riotx.features.widgets
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isVisible
+import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.viewModel
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.riotx.R
+import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.features.widgets.permissions.RoomWidgetPermissionBottomSheet
+import kotlinx.android.synthetic.main.activity_widget.*
 import java.io.Serializable
+import javax.inject.Inject
 
-class WidgetActivity : VectorBaseActivity(), ToolbarConfigurable {
+class WidgetActivity : VectorBaseActivity(), ToolbarConfigurable, WidgetViewModel.Factory {
 
     companion object {
 
+        private const val WIDGET_FRAGMENT_TAG = "WIDGET_FRAGMENT_TAG"
+        private const val WIDGET_PERMISSION_FRAGMENT_TAG = "WIDGET_PERMISSION_FRAGMENT_TAG"
         private const val EXTRA_RESULT = "EXTRA_RESULT"
-        private const val EXTRA_FRAGMENT_ARGS = "EXTRA_FRAGMENT_ARGS"
 
         fun newIntent(context: Context, args: WidgetArgs): Intent {
             return Intent(context, WidgetActivity::class.java).apply {
-                putExtra(EXTRA_FRAGMENT_ARGS, args)
+                putExtra(MvRx.KEY_ARG, args)
             }
         }
 
@@ -51,14 +60,76 @@ class WidgetActivity : VectorBaseActivity(), ToolbarConfigurable {
         }
     }
 
-    override fun getLayoutRes() = R.layout.activity_simple
+    @Inject lateinit var viewModelFactory: WidgetViewModel.Factory
+    private val viewModel: WidgetViewModel by viewModel()
+
+    override fun getLayoutRes() = R.layout.activity_widget
+
+    override fun getMenuRes() = R.menu.menu_widget
+
+    override fun getTitleRes() = R.string.room_widget_activity_title
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun initUiAndData() {
-        if (isFirstCreation()) {
-            val fragmentArgs: WidgetArgs = intent?.extras?.getParcelable(EXTRA_FRAGMENT_ARGS)
-                    ?: return
-            addFragment(R.id.simpleFragmentContainer, WidgetFragment::class.java, fragmentArgs)
+        val widgetArgs: WidgetArgs = intent?.extras?.getParcelable(MvRx.KEY_ARG)
+                ?: return
+
+        configure(toolbar)
+        toolbar.isVisible = widgetArgs.kind.nameRes != 0
+        viewModel.observeViewEvents {
+            when (it) {
+                is WidgetViewEvents.Close -> handleClose(it)
+            }
         }
+
+        viewModel.selectSubscribe(this, WidgetViewState::status) { ws ->
+            when (ws) {
+                WidgetStatus.UNKNOWN            -> {
+                }
+                WidgetStatus.WIDGET_NOT_ALLOWED -> {
+                    val dFrag = supportFragmentManager.findFragmentByTag(WIDGET_PERMISSION_FRAGMENT_TAG) as? RoomWidgetPermissionBottomSheet
+                    if (dFrag != null && dFrag.dialog?.isShowing == true && !dFrag.isRemoving) {
+                        return@selectSubscribe
+                    } else {
+                        RoomWidgetPermissionBottomSheet
+                                .newInstance(widgetArgs).apply {
+                                    onFinish = { accepted ->
+                                        if (!accepted) finish()
+                                    }
+                                }
+                                .show(supportFragmentManager, WIDGET_PERMISSION_FRAGMENT_TAG)
+                    }
+                }
+                WidgetStatus.WIDGET_ALLOWED     -> {
+                    if (supportFragmentManager.findFragmentByTag(WIDGET_FRAGMENT_TAG) == null) {
+                        addFragment(R.id.fragmentContainer, WidgetFragment::class.java, widgetArgs, WIDGET_FRAGMENT_TAG)
+                    }
+                }
+            }
+        }
+
+        viewModel.selectSubscribe(this, WidgetViewState::widgetName) { name ->
+            supportActionBar?.title = name
+        }
+
+        viewModel.selectSubscribe(this, WidgetViewState::canManageWidgets) {
+            invalidateOptionsMenu()
+        }
+    }
+
+    override fun create(initialState: WidgetViewState): WidgetViewModel {
+        return viewModelFactory.create(initialState)
+    }
+
+    private fun handleClose(event: WidgetViewEvents.Close) {
+        if (event.content != null) {
+            val intent = createResultIntent(event.content)
+            setResult(Activity.RESULT_OK, intent)
+        }
+        finish()
     }
 
     override fun configure(toolbar: Toolbar) {

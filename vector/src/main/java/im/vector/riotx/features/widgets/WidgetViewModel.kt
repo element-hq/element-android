@@ -29,15 +29,26 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.Content
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerService
+import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
+import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.android.internal.session.widgets.WidgetManagementFailure
+import im.vector.matrix.android.internal.util.awaitCallback
+import im.vector.matrix.rx.mapOptional
+import im.vector.matrix.rx.rx
+import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.features.widgets.permissions.WidgetPermissionsHelper
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.net.ssl.HttpsURLConnection
 
 class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: WidgetViewState,
                                                   private val widgetPostAPIHandlerFactory: WidgetPostAPIHandler.Factory,
+                                                  private val stringProvider: StringProvider,
                                                   private val session: Session)
     : VectorViewModel<WidgetViewState, WidgetAction, WidgetViewEvents>(initialState),
         WidgetPostAPIHandler.NavigationCallback,
@@ -60,6 +71,7 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
         }
     }
 
+    private val room = session.getRoom(initialState.roomId)
     private val widgetService = session.widgetService()
     private val integrationManagerService = session.integrationManagerService()
     private val widgetURLFormatter = widgetService.getWidgetURLFormatter()
@@ -71,11 +83,57 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
             val widgetPostAPIHandler = widgetPostAPIHandlerFactory.create(initialState.roomId, this)
             postAPIMediator.setHandler(widgetPostAPIHandler)
         }
+        setupName()
         refreshPermissionStatus()
-        observePermissionStatus()
+        subscribeToPermissionStatus()
+        observePowerLevel()
+        observeWidgetIfNeeded()
+        subscribeToWidget()
     }
 
-    private fun observePermissionStatus() {
+    private fun subscribeToWidget() {
+        asyncSubscribe(WidgetViewState::asyncWidget){
+            setState { copy(widgetName = it.name) }
+        }
+    }
+
+    private fun setupName() {
+        val nameRes = initialState.widgetKind.nameRes
+        if (nameRes != 0) {
+            val name = stringProvider.getString(nameRes)
+            setState { copy(widgetName = name) }
+        }
+    }
+
+    private fun observePowerLevel() {
+        if (room == null) {
+            return
+        }
+        room.rx().liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
+                .mapOptional { it.content.toModel<PowerLevelsContent>() }
+                .unwrap()
+                .map {
+                    PowerLevelsHelper(it).isAllowedToSend(true, session.myUserId)
+                }.subscribe {
+                    setState { copy(canManageWidgets = it) }
+                }.disposeOnClear()
+    }
+
+    private fun observeWidgetIfNeeded() {
+        if (initialState.widgetKind != WidgetKind.ROOM) {
+            return
+        }
+        val widgetId = initialState.widgetId ?: return
+        session.rx()
+                .liveRoomWidgets(initialState.roomId, QueryStringValue.Equals(widgetId))
+                .filter { it.isNotEmpty() }
+                .map { it.first() }
+                .execute {
+                    copy(asyncWidget = it)
+                }
+    }
+
+    private fun subscribeToPermissionStatus() {
         selectSubscribe(WidgetViewState::status) {
             Timber.v("Widget status: $it")
             if (it == WidgetStatus.WIDGET_ALLOWED) {
@@ -91,6 +149,26 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
             is WidgetAction.OnWebViewLoadingError   -> handleWebViewLoadingError(action.isHttpError, action.errorCode, action.errorDescription)
             is WidgetAction.OnWebViewLoadingSuccess -> handleWebViewLoadingSuccess(action.url)
             is WidgetAction.OnWebViewStartedToLoad  -> handleWebViewStartLoading()
+            WidgetAction.DeleteWidget               -> handleDeleteWidget()
+            WidgetAction.RevokeWidget               -> handleRevokeWidget()
+            WidgetAction.OnTermsReviewed            -> refreshPermissionStatus()
+        }
+    }
+
+    private fun handleRevokeWidget() {
+        viewModelScope.launch {
+            val widgetId = initialState.widgetId ?: return@launch
+            WidgetPermissionsHelper(integrationManagerService, widgetService).changePermission(initialState.roomId, widgetId, false)
+            _viewEvents.post(WidgetViewEvents.Close())
+        }
+    }
+
+    private fun handleDeleteWidget() {
+        viewModelScope.launch {
+            val widgetId = initialState.widgetId ?: return@launch
+            awaitCallback<Unit> {
+                widgetService.destroyRoomWidget(initialState.roomId, widgetId, it)
+            }
         }
     }
 
@@ -108,10 +186,10 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
                 setWidgetStatus(WidgetStatus.WIDGET_NOT_ALLOWED)
                 return
             }
-            if (roomWidget.event?.senderId == session.myUserId) {
+            if (roomWidget.event.senderId == session.myUserId) {
                 setWidgetStatus(WidgetStatus.WIDGET_ALLOWED)
             } else {
-                val stateEventId = roomWidget.event?.eventId
+                val stateEventId = roomWidget.event.eventId
                 // This should not happen
                 if (stateEventId == null) {
                     setWidgetStatus(WidgetStatus.WIDGET_NOT_ALLOWED)
@@ -177,18 +255,18 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
     }
 
     override fun onCleared() {
-        super.onCleared()
         integrationManagerService.removeListener(this)
         postAPIMediator.setHandler(null)
+        super.onCleared()
     }
 
-    // IntegrationManagerService.Listener
+// IntegrationManagerService.Listener
 
     override fun onWidgetPermissionsChanged(widgets: Map<String, Boolean>) {
         refreshPermissionStatus()
     }
 
-    // WidgetPostAPIHandler.NavigationCallback
+// WidgetPostAPIHandler.NavigationCallback
 
     override fun close() {
         _viewEvents.post(WidgetViewEvents.Close(null))

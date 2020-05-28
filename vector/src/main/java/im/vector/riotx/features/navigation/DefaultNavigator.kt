@@ -233,8 +233,8 @@ class DefaultNavigator @Inject constructor(
         fragment.startActivityForResult(intent, StickerPickerConstants.STICKER_PICKER_REQUEST_CODE)
     }
 
-    override fun openIntegrationManager(context: Context, roomId: String, integId: String?, screenId: String?) {
-        val widgetArgs = widgetArgsBuilder.buildIntegrationManagerArgs(roomId, integId, screenId)
+    override fun openIntegrationManager(context: Context, roomId: String, integId: String?, screen: String?) {
+        val widgetArgs = widgetArgsBuilder.buildIntegrationManagerArgs(roomId, integId, screen)
         context.startActivity(WidgetActivity.newIntent(context, widgetArgs))
     }
 

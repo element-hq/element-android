@@ -23,15 +23,20 @@ import javax.inject.Inject
 class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSessionHolder) {
 
     @Suppress("UNCHECKED_CAST")
-    fun buildIntegrationManagerArgs(roomId: String, integId: String?, screenId: String?): WidgetArgs {
+    fun buildIntegrationManagerArgs(roomId: String, integId: String?, screen: String?): WidgetArgs {
         val session = sessionHolder.getActiveSession()
         val integrationManagerConfig = session.integrationManagerService().getPreferredConfig()
+        val normalizedScreen = when {
+            screen == null             -> null
+            screen.startsWith("type_") -> screen
+            else                       -> "type_$screen"
+        }
         return WidgetArgs(
                 baseUrl = integrationManagerConfig.uiUrl,
                 kind = WidgetKind.INTEGRATION_MANAGER,
                 roomId = roomId,
                 urlParams = mapOf(
-                        "screen" to screenId,
+                        "screen" to normalizedScreen,
                         "integ_id" to integId,
                         "room_id" to roomId
                 ).filterNotNull()
@@ -44,7 +49,7 @@ class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSes
         val baseUrl = widget.widgetContent.url ?: throw IllegalStateException()
         return WidgetArgs(
                 baseUrl = baseUrl,
-                kind = WidgetKind.USER,
+                kind = WidgetKind.STICKER_PICKER,
                 roomId = roomId,
                 widgetId = widgetId,
                 urlParams = mapOf(
@@ -55,7 +60,7 @@ class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSes
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun Map<String, String?>.filterNotNull(): Map<String, String>{
+    private fun Map<String, String?>.filterNotNull(): Map<String, String> {
         return filterValues { it != null } as Map<String, String>
     }
 }
