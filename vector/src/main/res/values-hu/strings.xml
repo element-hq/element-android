@@ -1686,7 +1686,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="settings_discovery_confirm_mail">Megerősítő levelet küldtünk ide: %s, ellenőrizd az e-mailedet és kattints a megerősítő hivatkozásra</string>
     <string name="settings_discovery_mail_pending">Várakozás</string>
 
-    <string name="settings_discovery_enter_identity_server">Add meg az új azonosítási szervert</string>
+    <string name="settings_discovery_enter_identity_server">Add meg az azonosítási szerver URL-jét</string>
     <string name="settings_discovery_bad_identity_server">Az azonosítási szerverhez nem lehet csatlakozni</string>
     <string name="settings_discovery_please_enter_server">Kérlek add meg az azonosítási szerver url-jét</string>
     <string name="settings_discovery_no_terms_title">Az azonosítási szervernek nincsen felhasználási feltétele</string>
@@ -2402,5 +2402,15 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
         <item quantity="other">Meghívó elküldve neki: %1$s és még %2$d helyre</item>
     </plurals>
     <string name="invite_users_to_room_failure">Felhasználókat nem tudtuk meghívni. Ellenőrizd azokat a felhasználókat akiket meg szeretnél hívni és próbáld újra.</string>
+
+<string name="event_redacted">Üzenet törölve</string>
+    <string name="settings_show_redacted_summary">Helykitöltő mutatása a törölt szövegek helyett</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Megerősítő levelet küldtünk ide: %s, először ellenőrizd az e-mailedet és kattints a megerősítő hivatkozásra</string>
+    <string name="uploads_media_title">MÉDIA</string>
+    <string name="uploads_files_title">FÁJLOK</string>
+    <string name="uploads_files_subtitle">%1$s itt: %2$s</string>
+    <string name="login_signin_matrix_id_title">Bejelentkezés</string>
+    <string name="disconnect_identity_server_dialog_content">Lecsatlakozol erről az azonosítási szerverről: %s\?</string>
+    <string name="identity_server_set_alternative_submit">Küldés</string>
 
 </resources>
