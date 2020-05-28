@@ -35,7 +35,7 @@ data class CallAnswerContent(
         /**
          * Required. The version of the VoIP specification this messages adheres to. This specification is version 0.
          */
-        @Json(name = "version") val version: Int
+        @Json(name = "version") val version: Int = 0
 ) {
 
     @JsonClass(generateAdapter = true)
@@ -43,7 +43,7 @@ data class CallAnswerContent(
             /**
              * Required. The type of session description. Must be 'answer'.
              */
-            @Json(name = "type") val type: String,
+            @Json(name = "type") val type: SdpType = SdpType.ANSWER,
             /**
              * Required. The SDP text of the session description.
              */

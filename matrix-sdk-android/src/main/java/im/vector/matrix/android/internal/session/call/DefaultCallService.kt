@@ -61,12 +61,8 @@ internal class DefaultCallService @Inject constructor(
     override fun sendOfferSdp(callId: String, roomId: String, sdp: SessionDescription, callback: MatrixCallback<String>) {
         val eventContent = CallInviteContent(
                 callId = callId,
-                version = 0,
                 lifetime = CALL_TIMEOUT_MS,
-                offer = CallInviteContent.Offer(
-                        type = sdp.type.canonicalForm(),
-                        sdp = sdp.description
-                )
+                offer = CallInviteContent.Offer(sdp = sdp.description)
         )
 
         createEventAndLocalEcho(type = EventType.CALL_INVITE, roomId = roomId, content = eventContent.toContent()).let { event ->
@@ -83,11 +79,7 @@ internal class DefaultCallService @Inject constructor(
     override fun sendAnswerSdp(callId: String, roomId: String, sdp: SessionDescription, callback: MatrixCallback<String>) {
         val eventContent = CallAnswerContent(
                 callId = callId,
-                version = 0,
-                answer = CallAnswerContent.Answer(
-                        type = sdp.type.canonicalForm(),
-                        sdp = sdp.description
-                )
+                answer = CallAnswerContent.Answer(sdp = sdp.description)
         )
 
         createEventAndLocalEcho(type = EventType.CALL_INVITE, roomId = roomId, content = eventContent.toContent()).let { event ->
@@ -104,7 +96,6 @@ internal class DefaultCallService @Inject constructor(
     override fun sendLocalIceCandidates(callId: String, roomId: String, candidates: List<IceCandidate>) {
         val eventContent = CallCandidatesContent(
                 callId = callId,
-                version = 0,
                 candidates = candidates.map {
                     CallCandidatesContent.Candidate(
                             sdpMid = it.sdpMid,
@@ -128,11 +119,7 @@ internal class DefaultCallService @Inject constructor(
     }
 
     override fun sendHangup(callId: String, roomId: String) {
-        val eventContent = CallHangupContent(
-                callId = callId,
-                version = 0,
-                reason = null
-        )
+        val eventContent = CallHangupContent(callId = callId)
         createEventAndLocalEcho(type = EventType.CALL_HANGUP, roomId = roomId, content = eventContent.toContent()).let { event ->
             roomEventSender.sendEvent(event)
         }
@@ -146,7 +133,7 @@ internal class DefaultCallService @Inject constructor(
         callListeners.remove(listener)
     }
 
-    fun onCallEvent(event: Event) {
+    internal fun onCallEvent(event: Event) {
         when (event.getClearType()) {
             EventType.CALL_ANSWER -> {
                 event.getClearContent().toModel<CallAnswerContent>()?.let {

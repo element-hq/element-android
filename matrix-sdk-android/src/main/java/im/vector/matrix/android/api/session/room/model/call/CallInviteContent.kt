@@ -31,24 +31,24 @@ data class CallInviteContent(
         /**
          * Required. The session description object
          */
-        @Json(name = "version") val version: Int?,
+        @Json(name = "offer") val offer: Offer?,
         /**
          * Required. The version of the VoIP specification this message adheres to. This specification is version 0.
          */
-        @Json(name = "lifetime") val lifetime: Int?,
+        @Json(name = "version") val version: Int? = 0,
         /**
          * Required. The time in milliseconds that the invite is valid for.
          * Once the invite age exceeds this value, clients should discard it.
          * They should also no longer show the call as awaiting an answer in the UI.
          */
-        @Json(name = "offer") val offer: Offer?
+        @Json(name = "lifetime") val lifetime: Int?
 ) {
     @JsonClass(generateAdapter = true)
     data class Offer(
             /**
              * Required. The type of session description. Must be 'offer'.
              */
-            @Json(name = "type") val type: String?,
+            @Json(name = "type") val type: SdpType? = SdpType.OFFER,
             /**
              * Required. The SDP text of the session description.
              */

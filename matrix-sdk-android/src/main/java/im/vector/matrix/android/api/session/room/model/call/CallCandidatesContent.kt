@@ -36,7 +36,7 @@ data class CallCandidatesContent(
         /**
          * Required. The version of the VoIP specification this messages adheres to. This specification is version 0.
          */
-        @Json(name = "version") val version: Int
+        @Json(name = "version") val version: Int = 0
 ) {
 
     @JsonClass(generateAdapter = true)

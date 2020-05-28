@@ -32,11 +32,19 @@ data class CallHangupContent(
         /**
          * Required. The version of the VoIP specification this message adheres to. This specification is version 0.
          */
-        @Json(name = "version") val version: Int,
+        @Json(name = "version") val version: Int = 0,
         /**
          * Optional error reason for the hangup. This should not be provided when the user naturally ends or rejects the call.
          * When there was an error in the call negotiation, this should be `ice_failed` for when ICE negotiation fails
          * or `invite_timeout` for when the other party did not answer in time. One of: ["ice_failed", "invite_timeout"]
          */
-        @Json(name = "reason") val reason: String?
-)
+        @Json(name = "reason") val reason: Reason? = null
+) {
+    enum class Reason {
+        @Json(name = "ice_failed")
+        ICE_FAILED,
+
+        @Json(name = "invite_timeout")
+        INVITE_TIMEOUT
+    }
+}
