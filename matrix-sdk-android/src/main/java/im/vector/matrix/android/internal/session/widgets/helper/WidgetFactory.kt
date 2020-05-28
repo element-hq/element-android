@@ -53,17 +53,21 @@ internal class WidgetFactory @Inject constructor(@SessionDatabase private val re
             }
         }
         val isAddedByMe = widgetEvent.senderId == userId
-        val computedUrl = widgetContent.computeURL()
+        val computedUrl = widgetContent.computeURL(widgetEvent.roomId)
         return Widget(widgetContent, widgetEvent, widgetId, senderInfo, isAddedByMe, computedUrl)
     }
 
-    private fun WidgetContent.computeURL(): String? {
+    private fun WidgetContent.computeURL(roomId: String?): String? {
         var computedUrl = url ?: return null
         val myUser = userDataSource.getUser(userId)
         computedUrl = computedUrl
                 .replace("\$matrix_user_id", userId)
                 .replace("\$matrix_display_name", myUser?.displayName ?: userId)
                 .replace("\$matrix_avatar_url", myUser?.avatarUrl ?: "")
+
+        if (roomId != null) {
+            computedUrl = computedUrl.replace("\$matrix_room_id", roomId)
+        }
         for ((key, value) in data) {
             if (value is String) {
                 computedUrl = computedUrl.replace("$$key", URLEncoder.encode(value, "utf-8"))
