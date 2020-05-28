@@ -32,6 +32,7 @@ import androidx.annotation.IdRes
 import androidx.core.view.children
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.riotx.R
+import im.vector.riotx.core.ui.views.ReadReceiptsView
 import im.vector.riotx.core.utils.DebouncedClickListener
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.timeline.MessageColorProvider
@@ -116,7 +117,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             }
         }
         holder.viewStubContainer.minimumWidth = getViewStubMinimumWidth(holder, contentInBubble, attributes.informationData.showInformation)
-        updateMessageBubble(holder)
     }
 
     abstract class Holder(@IdRes stubId: Int) : AbsBaseMessageItem.Holder(stubId) {
@@ -127,7 +127,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         val bubbleView by bind<View>(R.id.bubbleView)
         val bubbleMemberNameView by bind<TextView>(R.id.bubbleMessageMemberNameView)
         val bubbleTimeView by bind<TextView>(R.id.bubbleMessageTimeView)
-        val informationBottom by bind<LinearLayout>(R.id.informationBottom)
         val viewStubContainer by bind<FrameLayout>(R.id.viewStubContainer)
     }
 
@@ -152,10 +151,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         return infoInBubbles(context) && attributes.informationData.sentByMe
     }
 
-    open fun messageBubbleAllowed(context: Context): Boolean {
-        return false
-    }
-
     open fun getViewStubMinimumWidth(holder: H, contentInBubble: Boolean, showInformation: Boolean): Int {
         return if (contentInBubble && attributes.informationData.showInformation) {
             // Guess text width for name and time
@@ -168,13 +163,16 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         }
     }
 
-    fun infoInBubbles(context: Context): Boolean {
+    private fun infoInBubbles(context: Context): Boolean {
         return messageBubbleAllowed(context) && BubbleThemeUtils.getBubbleStyle(context) == BubbleThemeUtils.BUBBLE_STYLE_BOTH
     }
 
-    fun updateMessageBubble(holder: H) {
-        val bubbleStyle = if (messageBubbleAllowed(holder.eventBaseView.context)) BubbleThemeUtils.getBubbleStyle(holder.eventBaseView.context) else BubbleThemeUtils.BUBBLE_STYLE_NONE
-        val reverseBubble = attributes.informationData.sentByMe && bubbleStyle == BubbleThemeUtils.BUBBLE_STYLE_BOTH
+    override fun shouldReverseBubble(): Boolean {
+        return attributes.informationData.sentByMe
+    }
+
+    override fun setBubbleLayout(holder: H, bubbleStyle: String, bubbleStyleSetting: String, reverseBubble: Boolean) {
+        super.setBubbleLayout(holder, bubbleStyle, bubbleStyleSetting, reverseBubble)
 
         //val bubbleView = holder.eventBaseView
         val bubbleView = holder.bubbleView
@@ -232,32 +230,16 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             }
         }
 
-        val defaultRtl = holder.eventBaseView.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL;
-        val shouldRtl = reverseBubble != defaultRtl
+        val defaultDirection = holder.eventBaseView.resources.configuration.layoutDirection;
+        val defaultRtl = defaultDirection == View.LAYOUT_DIRECTION_RTL
+        val reverseDirection = if (defaultRtl) View.LAYOUT_DIRECTION_LTR else View.LAYOUT_DIRECTION_RTL
         /*
         holder.eventBaseView.layoutDirection = if (shouldRtl) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
         setRtl(shouldRtl)
          */
         (holder.bubbleView.layoutParams as FrameLayout.LayoutParams).gravity = if (reverseBubble) Gravity.END else Gravity.START
         //holder.informationBottom.layoutDirection = if (shouldRtl) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
-        setFlatRtl(holder.informationBottom, if (shouldRtl) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR,
-                holder.eventBaseView.resources.configuration.layoutDirection, 2)
-    }
-
-    /*
-    open fun setRtl(rtl: Boolean) {
-        // TODO subclass overrides?
-    }
-     */
-
-    fun setFlatRtl(layout: ViewGroup, direction: Int, childDirection: Int, depth: Int = 1) {
-        layout.layoutDirection = direction
-        for (child in layout.children) {
-            if (depth > 1 && child is ViewGroup) {
-                setFlatRtl(child, direction, childDirection, depth-1)
-            } else {
-                child.layoutDirection = childDirection
-            }
-        }
+        setFlatRtl(holder.reactionsContainer, if (reverseBubble) reverseDirection else defaultDirection,
+                holder.eventBaseView.resources.configuration.layoutDirection)
     }
 }

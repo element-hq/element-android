@@ -235,6 +235,17 @@
 
         </com.google.android.flexbox.FlexboxLayout>
 
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/informationBottom2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/informationBottom"
+        android:layout_toEndOf="@id/messageStartGuideline"
+        android:orientation="vertical">
+
         <im.vector.riotx.core.ui.views.ReadReceiptsView
             android:id="@+id/readReceiptsView"
             android:layout_width="wrap_content"
