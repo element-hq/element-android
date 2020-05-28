@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
+import com.airbnb.epoxy.EpoxyVisibilityTracker
 import im.vector.riotx.R
 import im.vector.riotx.features.themes.ThemeUtils
 
@@ -61,3 +62,5 @@ fun RecyclerView.configureWith(epoxyController: EpoxyController,
 fun RecyclerView.cleanup() {
     adapter = null
 }
+
+fun RecyclerView.trackItemsVisibilityChange() = EpoxyVisibilityTracker().attach(this)

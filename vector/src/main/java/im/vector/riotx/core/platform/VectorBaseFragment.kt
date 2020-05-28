@@ -39,6 +39,7 @@ import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util.assertMainThread
 import com.google.android.material.snackbar.Snackbar
+import com.jakewharton.rxbinding3.view.clicks
 import im.vector.riotx.R
 import im.vector.riotx.core.di.DaggerScreenComponent
 import im.vector.riotx.core.di.HasScreenInjector
@@ -49,6 +50,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
 
@@ -246,6 +248,18 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
                     dismissLoadingDialog()
                     observer(it)
                 }
+                .disposeOnDestroyView()
+    }
+
+    /* ==========================================================================================
+     * Views
+     * ========================================================================================== */
+
+    protected fun View.debouncedClicks(onClicked: () -> Unit) {
+        clicks()
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { onClicked() }
                 .disposeOnDestroyView()
     }
 

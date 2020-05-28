@@ -29,6 +29,7 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView.ORIENTATION
 import com.github.piasy.biv.view.BigImageView
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.internal.crypto.attachments.ElementToDecrypt
+import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.glide.GlideRequest
@@ -63,6 +64,18 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
         FULL_SIZE,
         THUMBNAIL,
         STICKER
+    }
+
+    /**
+     * For gallery
+     */
+    fun render(data: Data, imageView: ImageView, size: Int) {
+        // a11y
+        imageView.contentDescription = data.filename
+
+        createGlideRequest(data, Mode.THUMBNAIL, imageView, Size(size, size))
+                .placeholder(R.drawable.ic_image)
+                .into(imageView)
     }
 
     fun render(data: Data, mode: Mode, imageView: ImageView) {

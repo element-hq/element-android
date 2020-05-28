@@ -45,7 +45,7 @@ class DisplayableEventFormatter @Inject constructor(
             return stringProvider.getString(R.string.encrypted_message)
         }
 
-        val senderName = timelineEvent.getDisambiguatedDisplayName()
+        val senderName = timelineEvent.senderInfo.disambiguatedDisplayName
 
         when (timelineEvent.root.getClearType()) {
             EventType.MESSAGE -> {

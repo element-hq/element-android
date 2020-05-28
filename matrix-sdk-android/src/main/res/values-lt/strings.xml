@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s išsiuntė atvaizdą.</string>
+    <string name="summary_user_sent_sticker">%1$s išsiuntė lipduką.</string>
+
+    <string name="notice_room_invite_no_invitee">%s pakvietimas</string>
+</resources>

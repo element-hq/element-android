@@ -256,7 +256,11 @@ fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
         sendIntent.type = mediaMimeType
         sendIntent.putExtra(Intent.EXTRA_STREAM, mediaUri)
 
-        context.startActivity(sendIntent)
+        try {
+            context.startActivity(sendIntent)
+        } catch (activityNotFoundException: ActivityNotFoundException) {
+            context.toast(R.string.error_no_external_application_found)
+        }
     }
 }
 

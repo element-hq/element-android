@@ -50,14 +50,15 @@ import im.vector.matrix.android.internal.di.Unauthenticated
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.di.UserMd5
 import im.vector.matrix.android.internal.eventbus.EventBusTimberLogger
-import im.vector.matrix.android.internal.network.AccessTokenInterceptor
 import im.vector.matrix.android.internal.network.DefaultNetworkConnectivityChecker
 import im.vector.matrix.android.internal.network.FallbackNetworkCallbackStrategy
 import im.vector.matrix.android.internal.network.NetworkCallbackStrategy
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.network.PreferredNetworkCallbackStrategy
 import im.vector.matrix.android.internal.network.RetrofitFactory
-import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
+import im.vector.matrix.android.internal.network.httpclient.addAccessTokenInterceptor
+import im.vector.matrix.android.internal.network.token.AccessTokenProvider
+import im.vector.matrix.android.internal.network.token.HomeserverAccessTokenProvider
 import im.vector.matrix.android.internal.session.group.GroupSummaryUpdater
 import im.vector.matrix.android.internal.session.homeserver.DefaultHomeServerCapabilitiesService
 import im.vector.matrix.android.internal.session.room.EventRelationsAggregationUpdater
@@ -175,21 +176,8 @@ internal abstract class SessionModule {
         @SessionScope
         @Authenticated
         fun providesOkHttpClient(@Unauthenticated okHttpClient: OkHttpClient,
-                                 accessTokenInterceptor: AccessTokenInterceptor): OkHttpClient {
-            return okHttpClient.newBuilder()
-                    .apply {
-                        // Remove the previous CurlLoggingInterceptor, to add it after the accessTokenInterceptor
-                        val existingCurlInterceptors = interceptors().filterIsInstance<CurlLoggingInterceptor>()
-                        interceptors().removeAll(existingCurlInterceptors)
-
-                        addInterceptor(accessTokenInterceptor)
-
-                        // Re add eventually the curl logging interceptors
-                        existingCurlInterceptors.forEach {
-                            addInterceptor(it)
-                        }
-                    }
-                    .build()
+                                 @Authenticated accessTokenProvider: AccessTokenProvider): OkHttpClient {
+            return okHttpClient.addAccessTokenInterceptor(accessTokenProvider)
         }
 
         @JvmStatic
@@ -234,43 +222,47 @@ internal abstract class SessionModule {
     }
 
     @Binds
+    @Authenticated
+    abstract fun bindAccessTokenProvider(provider: HomeserverAccessTokenProvider): AccessTokenProvider
+
+    @Binds
     abstract fun bindSession(session: DefaultSession): Session
 
     @Binds
-    abstract fun bindNetworkConnectivityChecker(networkConnectivityChecker: DefaultNetworkConnectivityChecker): NetworkConnectivityChecker
+    abstract fun bindNetworkConnectivityChecker(checker: DefaultNetworkConnectivityChecker): NetworkConnectivityChecker
 
     @Binds
     @IntoSet
-    abstract fun bindGroupSummaryUpdater(groupSummaryUpdater: GroupSummaryUpdater): LiveEntityObserver
+    abstract fun bindGroupSummaryUpdater(updater: GroupSummaryUpdater): LiveEntityObserver
 
     @Binds
     @IntoSet
-    abstract fun bindEventsPruner(eventsPruner: EventsPruner): LiveEntityObserver
+    abstract fun bindEventsPruner(pruner: EventsPruner): LiveEntityObserver
 
     @Binds
     @IntoSet
-    abstract fun bindEventRelationsAggregationUpdater(eventRelationsAggregationUpdater: EventRelationsAggregationUpdater): LiveEntityObserver
+    abstract fun bindEventRelationsAggregationUpdater(updater: EventRelationsAggregationUpdater): LiveEntityObserver
 
     @Binds
     @IntoSet
-    abstract fun bindRoomTombstoneEventLiveObserver(roomTombstoneEventLiveObserver: RoomTombstoneEventLiveObserver): LiveEntityObserver
+    abstract fun bindRoomTombstoneEventLiveObserver(observer: RoomTombstoneEventLiveObserver): LiveEntityObserver
 
     @Binds
     @IntoSet
-    abstract fun bindRoomCreateEventLiveObserver(roomCreateEventLiveObserver: RoomCreateEventLiveObserver): LiveEntityObserver
+    abstract fun bindRoomCreateEventLiveObserver(observer: RoomCreateEventLiveObserver): LiveEntityObserver
 
     @Binds
     @IntoSet
-    abstract fun bindVerificationMessageLiveObserver(verificationMessageLiveObserver: VerificationMessageLiveObserver): LiveEntityObserver
+    abstract fun bindVerificationMessageLiveObserver(observer: VerificationMessageLiveObserver): LiveEntityObserver
 
     @Binds
-    abstract fun bindInitialSyncProgressService(initialSyncProgressService: DefaultInitialSyncProgressService): InitialSyncProgressService
+    abstract fun bindInitialSyncProgressService(service: DefaultInitialSyncProgressService): InitialSyncProgressService
 
     @Binds
-    abstract fun bindSecureStorageService(secureStorageService: DefaultSecureStorageService): SecureStorageService
+    abstract fun bindSecureStorageService(service: DefaultSecureStorageService): SecureStorageService
 
     @Binds
-    abstract fun bindHomeServerCapabilitiesService(homeServerCapabilitiesService: DefaultHomeServerCapabilitiesService): HomeServerCapabilitiesService
+    abstract fun bindHomeServerCapabilitiesService(service: DefaultHomeServerCapabilitiesService): HomeServerCapabilitiesService
 
     @Binds
     abstract fun bindAccountDataService(service: DefaultAccountDataService): AccountDataService

@@ -468,14 +468,19 @@ class SASTest : InstrumentedTest {
 
         val aliceSASLatch = CountDownLatch(1)
         val aliceListener = object : VerificationService.Listener {
+            var matchOnce = true
             override fun transactionUpdated(tx: VerificationTransaction) {
                 val uxState = (tx as OutgoingSasVerificationTransaction).uxState
+                Log.v("TEST", "== aliceState ${uxState.name}")
                 when (uxState) {
                     OutgoingSasVerificationTransaction.UxState.SHOW_SAS -> {
                         tx.userHasVerifiedShortCode()
                     }
                     OutgoingSasVerificationTransaction.UxState.VERIFIED -> {
-                        aliceSASLatch.countDown()
+                        if (matchOnce) {
+                            matchOnce = false
+                            aliceSASLatch.countDown()
+                        }
                     }
                     else                                                -> Unit
                 }
@@ -485,14 +490,23 @@ class SASTest : InstrumentedTest {
 
         val bobSASLatch = CountDownLatch(1)
         val bobListener = object : VerificationService.Listener {
+            var acceptOnce = true
+            var matchOnce = true
             override fun transactionUpdated(tx: VerificationTransaction) {
                 val uxState = (tx as IncomingSasVerificationTransaction).uxState
+                Log.v("TEST", "== bobState ${uxState.name}")
                 when (uxState) {
                     IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT -> {
-                        tx.performAccept()
+                        if (acceptOnce) {
+                            acceptOnce = false
+                            tx.performAccept()
+                        }
                     }
                     IncomingSasVerificationTransaction.UxState.SHOW_SAS    -> {
-                        tx.userHasVerifiedShortCode()
+                        if (matchOnce) {
+                            matchOnce = false
+                            tx.userHasVerifiedShortCode()
+                        }
                     }
                     IncomingSasVerificationTransaction.UxState.VERIFIED    -> {
                         bobSASLatch.countDown()
@@ -579,7 +593,7 @@ class SASTest : InstrumentedTest {
                 requestID!!,
                 cryptoTestData.roomId,
                 bobSession.myUserId,
-                bobSession.sessionParams.credentials.deviceId!!,
+                bobSession.sessionParams.deviceId!!,
                 null)
 
         bobVerificationService.beginKeyVerificationInDMs(
@@ -587,7 +601,7 @@ class SASTest : InstrumentedTest {
                 requestID!!,
                 cryptoTestData.roomId,
                 aliceSession.myUserId,
-                aliceSession.sessionParams.credentials.deviceId!!,
+                aliceSession.sessionParams.deviceId!!,
                 null)
 
         // we should reach SHOW SAS on both

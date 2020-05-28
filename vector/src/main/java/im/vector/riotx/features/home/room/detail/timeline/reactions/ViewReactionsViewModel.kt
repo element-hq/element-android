@@ -111,7 +111,7 @@ class ViewReactionsViewModel @AssistedInject constructor(@Assisted
                                 event.root.eventId!!,
                                 summary.key,
                                 event.root.senderId ?: "",
-                                event.getDisambiguatedDisplayName(),
+                                event.senderInfo.disambiguatedDisplayName,
                                 dateFormatter.formatRelativeDateTime(event.root.originServerTs)
 
                         )

@@ -220,3 +220,11 @@ fun Event.isImageMessage(): Boolean {
         else                      -> false
     }
 }
+
+fun Event.isVideoMessage(): Boolean {
+    return getClearType() == EventType.MESSAGE
+            && when (getClearContent()?.toModel<MessageContent>()?.msgType) {
+        MessageType.MSGTYPE_VIDEO -> true
+        else                      -> false
+    }
+}

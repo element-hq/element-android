@@ -80,5 +80,12 @@ fun <T : Fragment> VectorBaseFragment.addChildFragmentToBackstack(frameId: Int, 
     }
 }
 
+/**
+ * Return a list of all child Fragments, recursively
+ */
+fun Fragment.getAllChildFragments(): List<Fragment> {
+    return listOf(this) + childFragmentManager.fragments.map { it.getAllChildFragments() }.flatten()
+}
+
 // Define a missing constant
 const val POP_BACK_STACK_EXCLUSIVE = 0

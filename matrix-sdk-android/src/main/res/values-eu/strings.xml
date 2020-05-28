@@ -7,8 +7,8 @@
     <string name="notice_room_invite_no_invitee">%s erabiltzailearen gonbidapena</string>
     <string name="notice_room_invite">%1$s erabiltzaileak %2$s gonbidatu du</string>
     <string name="notice_room_invite_you">%1$s erabiltzaileak gonbidatu zaitu</string>
-    <string name="notice_room_join">%1$s elkartu da</string>
-    <string name="notice_room_leave">%1$s atera da</string>
+    <string name="notice_room_join">%1$s gelara elkartu da</string>
+    <string name="notice_room_leave">%1$s gelatik atera da</string>
     <string name="notice_room_reject">%1$s erabiltzaileak gonbidapena baztertu du</string>
     <string name="notice_room_kick">%1$s erabiltzaileak %2$s kanporatu du</string>
     <string name="notice_room_unban">%1$s erabiltzaileak debekua kendu dio %2$s erabiltzaileari</string>
@@ -176,8 +176,8 @@
     <string name="notice_room_invite_no_invitee_with_reason">%1$s erabiltzailearen gonbidapena. Arrazoia: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s erabiltzaileak %2$s gonbidatu du. Arrazoia: %3$s</string>
     <string name="notice_room_invite_you_with_reason">%1$s erabiltzaileak gonbidatu zaitu. Arrazoia: %2$s</string>
-    <string name="notice_room_join_with_reason">%1$s elkartu da. Arrazoia: %2$s</string>
-    <string name="notice_room_leave_with_reason">%1$s atera da. Arrazoia: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s gelara elkartu da. Arrazoia: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s gelatik atera da. Arrazoia: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s erabiltzaileak gonbidapena baztertu du. Arrazoia: %2$s</string>
     <string name="notice_room_kick_with_reason">%1$s erabiltzaileak %2$s kanporatu du. Arrazoia: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s erabiltzaileak debekua kendu dio %2$s erabiltzaileari. Arrazoia: %3$s</string>

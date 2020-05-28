@@ -2347,4 +2347,19 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 \nJeni i sigurt se doni të vazhdohet\?</string>
 
     <string name="create_room_dm_failure">S’e krijuam dot DM-në tuaj. Ju lutemi, kontrolloni përdoruesit që doni të ftoni dhe riprovoni.</string>
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
+
+    <string name="add_members_to_room">Shtoni anëtarë</string>
+    <string name="invite_users_to_room_action_invite">FTONI</string>
+    <string name="inviting_users_to_room">Po ftohen përdorues…</string>
+    <string name="invite_users_to_room_title">Ftoni Përdorues</string>
+    <string name="invitation_sent_to_one_user">Ftesa u dërgua te %1$s</string>
+    <string name="invitations_sent_to_two_users">Ftesa u dërgua te %1$s dhe %2$s</string>
+    <plurals name="invitations_sent_to_one_and_more_users">
+        <item quantity="one">U dërguan ftesa te %1$s dhe një tjetër</item>
+        <item quantity="other">U dërguan ftesa te %1$s dhe %2$s të tjerë</item>
+    </plurals>
+    <string name="invite_users_to_room_failure">S’ftuam dot përdorues. Ju lutemi, kontrolloni përdoruesit që doni të ftoni dhe riprovoni.</string>
+
 </resources>

@@ -78,7 +78,7 @@ internal open class OutgoingGossipingRequestEntity(
             GossipRequestType.KEY    -> {
                 OutgoingRoomKeyRequest(
                         requestBody = getRequestedKeyInfo(),
-                        recipients = getRecipients() ?: emptyMap(),
+                        recipients = getRecipients().orEmpty(),
                         requestId = requestId ?: "",
                         state = requestState
                 )
@@ -86,7 +86,7 @@ internal open class OutgoingGossipingRequestEntity(
             GossipRequestType.SECRET -> {
                 OutgoingSecretRequest(
                         secretName = getRequestedSecretName(),
-                        recipients = getRecipients() ?: emptyMap(),
+                        recipients = getRecipients().orEmpty(),
                         requestId = requestId ?: "",
                         state = requestState
                 )

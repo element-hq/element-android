@@ -279,4 +279,160 @@
     <string name="login_error_bad_json">Felformaterad JSON</string>
     <string name="login_error_not_json">Innehöll inte giltig JSON</string>
     <string name="login_error_limit_exceeded">För många förfrågningar har skickats</string>
+    <string name="login_error_user_in_use">Det här användarnamnet är upptaget</string>
+    <string name="login_error_login_email_not_yet">E-postlänken har inte klickats på än</string>
+
+    <string name="e2e_need_log_in_again">Du behöver logga in igen för att generera nycklar för ände-till-ände-kryptering för den här sessionen och skicka den publika nyckeln till hemservern.
+\nDet här behövs bara en gång.
+\nUrsäkta för besväret.</string>
+
+    <string name="e2e_re_request_encryption_key">Efterfråga krypteringsnycklarna igen från dina andra sessioner.</string>
+
+    <string name="e2e_re_request_encryption_key_sent">Nyckelförfrågan har skickats.</string>
+
+    <string name="e2e_re_request_encryption_key_dialog_title">Förfrågan har skickats</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Vänligen öppna Riot på en annan enhet som kan dekryptera meddelandet så att den kan skicka nycklarna till den här sessionen.</string>
+
+    <string name="read_receipts_list">Läskvittolista</string>
+
+    <string name="groups_list">Grupplista</string>
+
+    <plurals name="membership_changes">
+        <item quantity="one">1 medlemsskapsändring</item>
+        <item quantity="other">%s medlemsskapsändringar</item>
+    </plurals>
+
+    <string name="compression_options">Skicka som</string>
+    <string name="compression_opt_list_original">Original</string>
+    <string name="compression_opt_list_large">Stor</string>
+    <string name="compression_opt_list_medium">Medium</string>
+    <string name="compression_opt_list_small">Liten</string>
+
+    <string name="attachment_cancel_download">Avbryt nedladdningen\?</string>
+    <string name="attachment_cancel_upload">Avbryt uppladdningen\?</string>
+    <string name="attachment_remaining_time_seconds">%d s</string>
+    <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
+
+    <string name="yesterday">Igår</string>
+    <string name="today">Idag</string>
+
+    <string name="room_info_room_name">Rumsnamn</string>
+    <string name="room_info_room_topic">Rumsämne</string>
+
+    <string name="settings_call_category">Samtal</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Använd förvald Riot-ringsignal för inkommande samtal</string>
+    <string name="settings_call_ringtone_use_default_stun">Tillåt reservassistansserver för samtal</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Kommer att använda %s som reserv när din hemserver inte erbjuder en (din IP-adress kommer att delas under samtalet).</string>
+    <string name="settings_call_ringtone_title">Ringsignal för inkommande samtal</string>
+    <string name="settings_call_ringtone_dialog_title">Välj ringsignal för samtal:</string>
+
+    <string name="call">Ring</string>
+    <string name="call_connected">Samtal anslutet</string>
+    <string name="call_connecting">Samtal ansluter…</string>
+    <string name="call_ended">Samtal avslutat</string>
+    <string name="call_ring">Ringer…</string>
+    <string name="incoming_call">Inkommande samtal</string>
+    <string name="incoming_video_call">Inkommande videosamtal</string>
+    <string name="incoming_voice_call">Inkommande röstsamtal</string>
+    <string name="call_in_progress">Samtal pågår…</string>
+    <string name="video_call_in_progress">Videosamtal pågår…</string>
+
+    <string name="call_error_user_not_responding">Den andra parten svarade inte.</string>
+    <string name="call_error_ice_failed">Mediaanslutning misslyckades</string>
+    <string name="call_error_camera_init_failed">Kan inte initialisera kameran</string>
+    <string name="call_error_answered_elsewhere">samtal besvarat någon annanstans</string>
+
+    <string name="media_picker_both_capture_title">Ta en bild eller en video</string>
+    <string name="media_picker_cannot_record_video">Kan inte spela in video</string>
+
+    <string name="permissions_rationale_popup_title">Information</string>
+    <string name="permissions_rationale_msg_storage">Riot behöver tillstånd att komma åt ditt foto- och videobibliotek för att skicka och spara bilagor.
+\n
+\nVänligen tillåt åtkomst i nästa pop-up för att kunna skicka filer från din telefon.</string>
+    <string name="permissions_rationale_msg_camera">Riot behöver tillstånd att komma åt din kamera för att kunna ta bilder och hålla videosamtal.</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nVänligen ge tillgång i nästa pop-up för att kunna utföra samtalet."</string>
+    <string name="permissions_rationale_msg_record_audio">Riot behöver tillstånd att komma åt din mikrofon för hålla röstsamtal.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nVänligen ge tillgång i nästa pop-up för att kunna utföra samtalet."</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Riot behöver tillstånd att komma åt din kamera och mikrofon för att kunna utföra videosamtal.
+\n
+\nVänligen ge tillgång i nästa pop-up för att kunna utföra samtalet.</string>
+    <string name="permissions_rationale_msg_contacts">Riot kan kolla i din adressbok för att hitta andra Matrixanvändare baserat på deras e-postadresser och telefonnummer. Om du går med på att dela din adressbok för detta ändamål, vänligen ge tillgång i nästa pop-up.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Riot kan kolla i din adressbok för att hitta andra Matrixanvändare baserat på deras e-postadresser och telefonnummer.
+\n
+\nVill du dela din adressbok för detta ändamål\?</string>
+
+    <string name="permissions_action_not_performed_missing_permissions">Tyvärr. Handlingen utfördes inte på grund av saknade rättigheter</string>
+
+    <string name="media_slider_saved">Sparad</string>
+    <string name="media_slider_saved_message">Spara till nedladdningar\?</string>
+    <string name="yes">JA</string>
+    <string name="no">NEJ</string>
+    <string name="_continue">Fortsätt</string>
+
+    <string name="remove">Ta bort</string>
+    <string name="join">Gå med</string>
+    <string name="preview">Förhandsvisning</string>
+    <string name="reject">Avslå</string>
+
+    <string name="list_members">Lista medlemmar</string>
+    <string name="open_chat_header">Öppna rubrik</string>
+    <string name="room_sync_in_progress">Synkroniserar…</string>
+    <string name="room_jump_to_first_unread">Hoppa till det första olästa meddelandet.</string>
+
+    <string name="room_preview_invitation_format">Du har blivit inbjuden till det här rummet av %s</string>
+    <string name="room_preview_unlinked_email_warning">Denna inbjudan skickades till %s, vilket inte är associerat med det här kontot.
+\nDu kanske vill logga in på ett annat konto eller lägga till den här e-postadressen till det här kontot.</string>
+    <string name="room_preview_try_join_an_unknown_room">Du försöker komma åt %s. Skulle du vilja gå med för att delta i diskussionen\?</string>
+    <string name="room_preview_try_join_an_unknown_room_default">ett rum</string>
+    <string name="room_preview_room_interactions_disabled">Det här är en förhandsvisning av det här rummet. Rumsinteraktioner har blivit inaktiverade.</string>
+    <string name="invite_no_identity_server_error">Lägg till en identitetsserver i dina inställningar för att utföra den här handlingen.</string>
+    <string name="room_creation_title">Ny chatt</string>
+    <string name="room_creation_add_member">Lägg till medlem</string>
+    <plurals name="room_header_active_members_count">
+        <item quantity="one">1 aktiv medlem</item>
+        <item quantity="other">%d aktiva medlemmar</item>
+    </plurals>
+    <plurals name="room_title_members">
+        <item quantity="one">1 medlem</item>
+        <item quantity="other">%d medlemmar</item>
+    </plurals>
+    <string name="room_title_one_member">1 medlem</string>
+
+    <plurals name="format_time_s">
+        <item quantity="one">1s</item>
+        <item quantity="other">%ds</item>
+    </plurals>
+    <plurals name="format_time_m">
+        <item quantity="one">1m</item>
+        <item quantity="other">%dm</item>
+    </plurals>
+    <plurals name="format_time_h">
+        <item quantity="one">1t</item>
+        <item quantity="other">%dt</item>
+    </plurals>
+    <plurals name="format_time_d">
+        <item quantity="one">1d</item>
+        <item quantity="other">%dd</item>
+    </plurals>
+
+    <string name="room_participants_leave_prompt_title">Lämna rum</string>
+    <string name="room_participants_leave_prompt_msg">Är du säker på att du vill lämna rummet\?</string>
+    <string name="room_participants_remove_prompt_msg">Är du säker på att du vill ta bort %s från den här chatten\?</string>
+    <string name="room_participants_create">Skapa</string>
+
+    <string name="room_participants_online">Online</string>
+    <string name="room_participants_offline">Offline</string>
+    <string name="room_participants_idle">Inaktiv</string>
+    <string name="room_participants_now">%1$s nu</string>
+    <string name="room_participants_ago">%1$s för %2$s sen</string>
+
+    <string name="room_participants_header_admin_tools">ADMINISTRATIONSVERKTYG</string>
+    <string name="room_participants_header_call">RING</string>
+    <string name="room_participants_header_direct_chats">DIREKTCHATT</string>
+    <string name="room_participants_header_devices">SESSIONER</string>
+
 </resources>

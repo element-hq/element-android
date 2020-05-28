@@ -91,7 +91,7 @@ class KnownUsersFragment @Inject constructor(
     }
 
     private fun setupAddByMatrixIdView() {
-        addByMatrixId.setOnClickListener {
+        addByMatrixId.debouncedClicks {
             sharedActionViewModel.post(UserDirectorySharedAction.OpenUsersDirectory)
         }
     }
@@ -122,7 +122,7 @@ class KnownUsersFragment @Inject constructor(
     }
 
     private fun setupCloseView() {
-        knownUsersClose.setOnClickListener {
+        knownUsersClose.debouncedClicks {
             requireActivity().finish()
         }
     }

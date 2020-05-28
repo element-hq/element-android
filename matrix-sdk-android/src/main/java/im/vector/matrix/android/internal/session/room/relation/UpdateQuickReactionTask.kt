@@ -48,7 +48,7 @@ internal class DefaultUpdateQuickReactionTask @Inject constructor(private val mo
         monarchy.doWithRealm { realm ->
             res = updateQuickReaction(realm, params.reaction, params.oppositeReaction, params.eventId)
         }
-        return UpdateQuickReactionTask.Result(res?.first, res?.second ?: emptyList())
+        return UpdateQuickReactionTask.Result(res?.first, res?.second.orEmpty())
     }
 
     private fun updateQuickReaction(realm: Realm, reaction: String, oppositeReaction: String, eventId: String): Pair<String?, List<String>?> {

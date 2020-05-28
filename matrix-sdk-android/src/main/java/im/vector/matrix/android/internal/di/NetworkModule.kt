@@ -21,6 +21,7 @@ import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.BuildConfig
+import im.vector.matrix.android.api.MatrixConfiguration
 import im.vector.matrix.android.internal.network.TimeOutInterceptor
 import im.vector.matrix.android.internal.network.UserAgentInterceptor
 import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
@@ -64,7 +65,8 @@ internal object NetworkModule {
     @Provides
     @JvmStatic
     @Unauthenticated
-    fun providesOkHttpClient(stethoInterceptor: StethoInterceptor,
+    fun providesOkHttpClient(matrixConfiguration: MatrixConfiguration,
+                             stethoInterceptor: StethoInterceptor,
                              timeoutInterceptor: TimeOutInterceptor,
                              userAgentInterceptor: UserAgentInterceptor,
                              httpLoggingInterceptor: HttpLoggingInterceptor,
@@ -81,6 +83,9 @@ internal object NetworkModule {
                 .apply {
                     if (BuildConfig.LOG_PRIVATE_DATA) {
                         addInterceptor(curlLoggingInterceptor)
+                    }
+                    matrixConfiguration.proxy?.let {
+                        proxy(it)
                     }
                 }
                 .addInterceptor(okReplayInterceptor)

@@ -164,16 +164,16 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() 
     @OnClick(R.id.keys_backup_setup_step2_button)
     fun doNext() {
         when {
-            viewModel.passphrase.value.isNullOrEmpty() -> {
+            viewModel.passphrase.value.isNullOrEmpty()                      -> {
                 viewModel.passphraseError.value = context?.getString(R.string.passphrase_empty_error_message)
             }
             viewModel.passphrase.value != viewModel.confirmPassphrase.value -> {
                 viewModel.confirmPassphraseError.value = context?.getString(R.string.passphrase_passphrase_does_not_match)
             }
-            viewModel.passwordStrength.value?.score ?: 0 < 4 -> {
+            viewModel.passwordStrength.value?.score ?: 0 < 4                -> {
                 viewModel.passphraseError.value = context?.getString(R.string.passphrase_passphrase_too_weak)
             }
-            else -> {
+            else                                                            -> {
                 viewModel.megolmBackupCreationInfo = null
 
                 viewModel.prepareRecoveryKey(activity!!, viewModel.passphrase.value)
@@ -190,7 +190,7 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() 
 
                 viewModel.prepareRecoveryKey(activity!!, null)
             }
-            else -> {
+            else                                       -> {
                 // User has entered a passphrase but want to skip this step.
                 viewModel.passphraseError.value = context?.getString(R.string.keys_backup_passphrase_not_empty_error_message)
             }

@@ -52,7 +52,7 @@ object ThemeUtils {
      */
     fun getApplicationTheme(context: Context): String {
         return PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(APPLICATION_THEME_KEY, THEME_LIGHT_VALUE)!!
+                .getString(APPLICATION_THEME_KEY, THEME_LIGHT_VALUE) ?: THEME_LIGHT_VALUE
     }
 
     /**

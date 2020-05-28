@@ -32,6 +32,7 @@ import im.vector.matrix.android.api.session.room.model.RoomMemberContent
 import im.vector.matrix.android.api.session.room.model.RoomNameContent
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
+import im.vector.matrix.android.api.session.room.model.create.RoomCreateContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.crypto.model.event.EncryptionEventContent
@@ -46,19 +47,20 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
 
     fun format(timelineEvent: TimelineEvent): CharSequence? {
         return when (val type = timelineEvent.root.getClearType()) {
-            EventType.STATE_ROOM_JOIN_RULES         -> formatJoinRulesEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
-            EventType.STATE_ROOM_NAME               -> formatRoomNameEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
-            EventType.STATE_ROOM_TOPIC              -> formatRoomTopicEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
-            EventType.STATE_ROOM_MEMBER             -> formatRoomMemberEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
-            EventType.STATE_ROOM_ALIASES            -> formatRoomAliasesEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
-            EventType.STATE_ROOM_CANONICAL_ALIAS    -> formatRoomCanonicalAliasEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
-            EventType.STATE_ROOM_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
-            EventType.STATE_ROOM_GUEST_ACCESS       -> formatRoomGuestAccessEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
-            EventType.STATE_ROOM_ENCRYPTION         -> formatRoomEncryptionEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
-            EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(timelineEvent.getDisambiguatedDisplayName())
+            EventType.STATE_ROOM_JOIN_RULES         -> formatJoinRulesEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_CREATE             -> formatRoomCreateEvent(timelineEvent.root)
+            EventType.STATE_ROOM_NAME               -> formatRoomNameEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_TOPIC              -> formatRoomTopicEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_MEMBER             -> formatRoomMemberEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_ALIASES            -> formatRoomAliasesEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_CANONICAL_ALIAS    -> formatRoomCanonicalAliasEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_GUEST_ACCESS       -> formatRoomGuestAccessEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_ENCRYPTION         -> formatRoomEncryptionEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
-            EventType.CALL_ANSWER                   -> formatCallEvent(timelineEvent.root, timelineEvent.getDisambiguatedDisplayName())
+            EventType.CALL_ANSWER                   -> formatCallEvent(type, timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.MESSAGE,
             EventType.REACTION,
             EventType.KEY_VERIFICATION_START,
@@ -85,7 +87,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             EventType.STATE_ROOM_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(event, senderName)
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
-            EventType.CALL_ANSWER                   -> formatCallEvent(event, senderName)
+            EventType.CALL_ANSWER                   -> formatCallEvent(type, event, senderName)
             EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(senderName)
             else                                    -> {
                 Timber.v("Type $type not handled by this formatter")
@@ -96,6 +98,12 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
 
     private fun formatDebug(event: Event): CharSequence? {
         return "{ \"type\": ${event.getClearType()} }"
+    }
+
+    private fun formatRoomCreateEvent(event: Event): CharSequence? {
+        return event.getClearContent().toModel<RoomCreateContent>()
+                ?.takeIf { it.creator.isNullOrBlank().not() }
+                ?.let { sp.getString(R.string.notice_room_created, it.creator) }
     }
 
     private fun formatRoomNameEvent(event: Event, senderName: String?): CharSequence? {
@@ -132,9 +140,9 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
         return sp.getString(R.string.notice_made_future_room_visibility, senderName, formattedVisibility)
     }
 
-    private fun formatCallEvent(event: Event, senderName: String?): CharSequence? {
-        return when {
-            EventType.CALL_INVITE == event.type -> {
+    private fun formatCallEvent(type: String, event: Event, senderName: String?): CharSequence? {
+        return when (type) {
+            EventType.CALL_INVITE -> {
                 val content = event.getClearContent().toModel<CallInviteContent>() ?: return null
                 val isVideoCall = content.offer.sdp == CallInviteContent.Offer.SDP_VIDEO
                 return if (isVideoCall) {
@@ -143,9 +151,9 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
                     sp.getString(R.string.notice_placed_voice_call, senderName)
                 }
             }
-            EventType.CALL_ANSWER == event.type -> sp.getString(R.string.notice_answered_call, senderName)
-            EventType.CALL_HANGUP == event.type -> sp.getString(R.string.notice_ended_call, senderName)
-            else                                -> null
+            EventType.CALL_ANSWER -> sp.getString(R.string.notice_answered_call, senderName)
+            EventType.CALL_HANGUP -> sp.getString(R.string.notice_ended_call, senderName)
+            else                  -> null
         }
     }
 

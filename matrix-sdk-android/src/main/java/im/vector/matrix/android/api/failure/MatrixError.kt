@@ -39,7 +39,10 @@ data class MatrixError(
         // For M_LIMIT_EXCEEDED
         @Json(name = "retry_after_ms") val retryAfterMillis: Long? = null,
         // For M_UNKNOWN_TOKEN
-        @Json(name = "soft_logout") val isSoftLogout: Boolean = false
+        @Json(name = "soft_logout") val isSoftLogout: Boolean = false,
+        // For M_INVALID_PEPPER
+        // {"error": "pepper does not match 'erZvr'", "lookup_pepper": "pQgMS", "algorithm": "sha256", "errcode": "M_INVALID_PEPPER"}
+        @Json(name = "lookup_pepper") val newLookupPepper: String? = null
 ) {
 
     companion object {
@@ -128,6 +131,11 @@ data class MatrixError(
         const val M_CANNOT_LEAVE_SERVER_NOTICE_ROOM = "M_CANNOT_LEAVE_SERVER_NOTICE_ROOM"
         /** (Not documented yet) */
         const val M_WRONG_ROOM_KEYS_VERSION = "M_WRONG_ROOM_KEYS_VERSION"
+
+        const val M_TERMS_NOT_SIGNED = "M_TERMS_NOT_SIGNED"
+
+        // For identity service
+        const val M_INVALID_PEPPER = "M_INVALID_PEPPER"
 
         // Possible value for "limit_type"
         const val LIMIT_TYPE_MAU = "monthly_active_user"

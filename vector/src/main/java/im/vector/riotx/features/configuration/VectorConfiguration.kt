@@ -30,46 +30,14 @@ import javax.inject.Inject
 /**
  * Handle locale configuration change, such as theme, font size and locale chosen by the user
  */
-
 class VectorConfiguration @Inject constructor(private val context: Context) {
 
-    // TODO Import mLanguageReceiver From Riot?
     fun onConfigurationChanged() {
         if (Locale.getDefault().toString() != VectorLocale.applicationLocale.toString()) {
             Timber.v("## onConfigurationChanged(): the locale has been updated to ${Locale.getDefault()}")
             Timber.v("## onConfigurationChanged(): restore the expected value ${VectorLocale.applicationLocale}")
-            updateApplicationSettings(VectorLocale.applicationLocale,
-                                      FontScale.getFontScalePrefValue(context),
-                                      ThemeUtils.getApplicationTheme(context))
+            Locale.setDefault(VectorLocale.applicationLocale)
         }
-    }
-
-    private fun updateApplicationSettings(locale: Locale, textSize: String, theme: String) {
-        VectorLocale.saveApplicationLocale(context, locale)
-        FontScale.saveFontScale(context, textSize)
-        Locale.setDefault(locale)
-
-        val config = Configuration(context.resources.configuration)
-        @Suppress("DEPRECATION")
-        config.locale = locale
-        config.fontScale = FontScale.getFontScale(context)
-        @Suppress("DEPRECATION")
-        context.resources.updateConfiguration(config, context.resources.displayMetrics)
-
-        ThemeUtils.setApplicationTheme(context, theme)
-        // TODO PhoneNumberUtils.onLocaleUpdate()
-    }
-
-    /**
-     * Update the application theme
-     *
-     * @param theme the new theme
-     */
-    fun updateApplicationTheme(theme: String) {
-        ThemeUtils.setApplicationTheme(context, theme)
-        updateApplicationSettings(VectorLocale.applicationLocale,
-                                  FontScale.getFontScalePrefValue(context),
-                                  theme)
     }
 
     /**
@@ -78,29 +46,19 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
     fun initConfiguration() {
         VectorLocale.init(context)
         val locale = VectorLocale.applicationLocale
-        val fontScale = FontScale.getFontScale(context)
+        val fontScale = FontScale.getFontScaleValue(context)
         val theme = ThemeUtils.getApplicationTheme(context)
 
         Locale.setDefault(locale)
         val config = Configuration(context.resources.configuration)
         @Suppress("DEPRECATION")
         config.locale = locale
-        config.fontScale = fontScale
+        config.fontScale = fontScale.scale
         @Suppress("DEPRECATION")
         context.resources.updateConfiguration(config, context.resources.displayMetrics)
 
         // init the theme
         ThemeUtils.setApplicationTheme(context, theme)
-    }
-
-    /**
-     * Update the application locale
-     *
-     * @param locale
-     */
-    // TODO Call from LanguagePickerActivity
-    fun updateApplicationLocale(locale: Locale) {
-        updateApplicationSettings(locale, FontScale.getFontScalePrefValue(context), ThemeUtils.getApplicationTheme(context))
     }
 
     /**
@@ -115,7 +73,7 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
             val resources = context.resources
             val locale = VectorLocale.applicationLocale
             val configuration = resources.configuration
-            configuration.fontScale = FontScale.getFontScale(context)
+            configuration.fontScale = FontScale.getFontScaleValue(context).scale
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 configuration.setLocale(locale)
@@ -142,10 +100,9 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
      * Compute the locale status value
      * @return the local status value
      */
-    // TODO Create data class for this
     fun getHash(): String {
         return (VectorLocale.applicationLocale.toString()
-                + "_" + FontScale.getFontScalePrefValue(context)
+                + "_" + FontScale.getFontScaleValue(context).preferenceValue
                 + "_" + ThemeUtils.getApplicationTheme(context))
     }
 }

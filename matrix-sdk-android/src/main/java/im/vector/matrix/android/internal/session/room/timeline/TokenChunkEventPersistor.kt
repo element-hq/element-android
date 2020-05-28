@@ -35,7 +35,7 @@ import im.vector.matrix.android.internal.database.query.copyToRealmOrIgnore
 import im.vector.matrix.android.internal.database.query.create
 import im.vector.matrix.android.internal.database.query.find
 import im.vector.matrix.android.internal.database.query.findAllIncludingEvents
-import im.vector.matrix.android.internal.database.query.findLastLiveChunkFromRoom
+import im.vector.matrix.android.internal.database.query.findLastForwardChunkOfRoom
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.database.query.latestEvent
 import im.vector.matrix.android.internal.database.query.where
@@ -149,7 +149,7 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
                     }
                             ?: ChunkEntity.create(realm, prevToken, nextToken)
 
-                    if (receivedChunk.events.isEmpty() && receivedChunk.end == receivedChunk.start) {
+                    if (receivedChunk.events.isEmpty() && !receivedChunk.hasMore()) {
                         handleReachEnd(realm, roomId, direction, currentChunk)
                     } else {
                         handlePagination(realm, roomId, direction, receivedChunk, currentChunk)
@@ -169,10 +169,10 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
     private fun handleReachEnd(realm: Realm, roomId: String, direction: PaginationDirection, currentChunk: ChunkEntity) {
         Timber.v("Reach end of $roomId")
         if (direction == PaginationDirection.FORWARDS) {
-            val currentLiveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId)
-            if (currentChunk != currentLiveChunk) {
+            val currentLastForwardChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId)
+            if (currentChunk != currentLastForwardChunk) {
                 currentChunk.isLastForward = true
-                currentLiveChunk?.deleteOnCascade()
+                currentLastForwardChunk?.deleteOnCascade()
                 RoomSummaryEntity.where(realm, roomId).findFirst()?.apply {
                     latestPreviewableEvent = TimelineEventEntity.latestEvent(
                             realm,
@@ -224,10 +224,13 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
 
             currentChunk.addTimelineEvent(roomId, eventEntity, direction, roomMemberContentsByUser)
         }
+        // Find all the chunks which contain at least one event from the list of eventIds
         val chunks = ChunkEntity.findAllIncludingEvents(realm, eventIds)
+        Timber.d("Found ${chunks.size} chunks containing at least one of the eventIds")
         val chunksToDelete = ArrayList<ChunkEntity>()
         chunks.forEach {
             if (it != currentChunk) {
+                Timber.d("Merge $it")
                 currentChunk.merge(roomId, it, direction)
                 chunksToDelete.add(it)
             }
@@ -246,6 +249,8 @@ internal class TokenChunkEventPersistor @Inject constructor(private val monarchy
             )
             roomSummaryEntity.latestPreviewableEvent = latestPreviewableEvent
         }
-        RoomEntity.where(realm, roomId).findFirst()?.addOrUpdate(currentChunk)
+        if (currentChunk.isValid) {
+            RoomEntity.where(realm, roomId).findFirst()?.addOrUpdate(currentChunk)
+        }
     }
 }

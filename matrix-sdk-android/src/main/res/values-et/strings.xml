@@ -185,4 +185,24 @@
     <string name="notice_end_to_end_ok">%1$s lülitas sisse läbiva krüptimise.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s lülitas sisse läbiva krüptimise (tundmatu algoritm %2$s).</string>
 
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s lisas %2$s selle jututoa aadressiks.</item>
+        <item quantity="other">%1$s lisas %2$s selle jututoa aadressideks.</item>
+    </plurals>
+
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s eemaldas %2$s kui selle jututoa aadressi.</item>
+        <item quantity="other">%1$s eemaldas %2$s selle jututoa aadresside hulgast.</item>
+    </plurals>
+
+    <string name="notice_room_aliases_added_and_removed">%1$s lisas %2$s ja eemaldas %3$s selle jututoa aadresside loendist.</string>
+
+    <string name="notice_room_canonical_alias_set">%1$s seadistas selle jututoa põhiaadressiks %2$s.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s eemaldas selle jututoa põhiaadressi.</string>
+
+    <string name="notice_room_guest_access_can_join">%1$s lubas külalistel selle jututoaga liituda.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s seadistas, et külalised ei või selle jututoaga liituda.</string>
+
+    <string name="key_verification_request_fallback_message">%s soovib verifitseerida sinu võtmeid, kuid sinu kasutatav klient ei oska vestluse-sisest verifitseerimist teha. Sa pead kasutama traditsioonilist verifitseerimislahendust.</string>
+
 </resources>

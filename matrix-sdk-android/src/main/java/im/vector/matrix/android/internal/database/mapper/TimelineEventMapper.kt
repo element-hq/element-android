@@ -18,7 +18,7 @@ package im.vector.matrix.android.internal.database.mapper
 
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.ReadReceipt
-
+import im.vector.matrix.android.api.session.room.sender.SenderInfo
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import javax.inject.Inject
@@ -41,15 +41,18 @@ internal class TimelineEventMapper @Inject constructor(private val readReceiptsS
                 annotations = timelineEventEntity.annotations?.asDomain(),
                 localId = timelineEventEntity.localId,
                 displayIndex = timelineEventEntity.displayIndex,
-                senderName = timelineEventEntity.senderName,
-                isUniqueDisplayName = timelineEventEntity.isUniqueDisplayName,
-                senderAvatar = timelineEventEntity.senderAvatar,
+                senderInfo = SenderInfo(
+                        userId = timelineEventEntity.root?.sender ?: "",
+                        displayName = timelineEventEntity.senderName,
+                        isUniqueDisplayName = timelineEventEntity.isUniqueDisplayName,
+                        avatarUrl = timelineEventEntity.senderAvatar
+                ),
                 readReceipts = readReceipts
                         ?.distinctBy {
                             it.user
                         }?.sortedByDescending {
                             it.originServerTs
-                        } ?: emptyList()
+                        }.orEmpty()
         )
     }
 }

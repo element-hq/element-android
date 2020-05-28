@@ -30,4 +30,254 @@
     <string name="keys_backup_is_not_finished_please_wait">Võtmete varundus pole veel valmis, oota natuke…</string>
     <string name="encrypted_message">Krüptitud sõnum</string>
 
+    <string name="sign_out_bottom_sheet_warning_no_backup">Kui sa logid nüüd välja, siis sa kaotad ligipääsu kõikidele krüptitud sõnumitele</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Parasjagu varundan võtmeid. Kui sa logid nüüd välja, siis sa kaotad ligipääsu kõikidele oma krüptitud sõnumitele.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Turvaline võtmete varundus peaks olema aktiivne kõikides sinu sessioonides, sest see hoiab ära krüptitud sõnumitele ligipääsu kadumise.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Ma ei vaja oma krüptitud sõnumeid</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Varundan võtmeid…</string>
+    <string name="keys_backup_activate">Kasuta varundatud võtmeid</string>
+    <string name="are_you_sure">Kas sa oled kindel\?</string>
+    <string name="backup">Varunda</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Kui sa enne väljalogimist ei varunda oma võtmeid, siis sa kaotad ligipääsu oma krüptitud sõnumitele.</string>
+
+    <string name="dialog_title_third_party_licences">Kolmandate osapoolte litsentsid</string>
+
+    <string name="loading">Laeme…</string>
+
+    <string name="ok">Sobib</string>
+    <string name="cancel">Tühista</string>
+    <string name="save">Salvesta</string>
+    <string name="leave">Lahku</string>
+    <string name="stay">Jää</string>
+    <string name="send">Saada</string>
+    <string name="copy">Kopeeri</string>
+    <string name="resend">Saada uuesti</string>
+    <string name="redact">Eemalda</string>
+    <string name="quote">Tsiteeri</string>
+    <string name="download">Lae alla</string>
+    <string name="share">Jaga</string>
+    <string name="speak">Räägi</string>
+    <string name="clear">Eemalda</string>
+    <string name="later">Hiljem</string>
+    <string name="forward">Edasta</string>
+    <string name="permalink">Püsiviide</string>
+    <string name="view_source">Lähtekood</string>
+    <string name="view_decrypted_source">Näita dekrüptitud lähtekoodi</string>
+    <string name="delete">Kustuta</string>
+    <string name="rename">Muuda nime</string>
+    <string name="none">Ei midagi</string>
+    <string name="revoke">Tunnista kehtetuks</string>
+    <string name="disconnect">Katkesta ühendus</string>
+    <string name="report_content">Teata kahtlasest sisust</string>
+    <string name="active_call">Kõne on käsil</string>
+    <string name="ongoing_conference_call">Konverentsikõne on käsil.
+\nLiitu kas %1$s või %2$s</string>
+    <string name="ongoing_conference_call_voice">häälkõnega</string>
+    <string name="ongoing_conference_call_video">videokõnega</string>
+    <string name="cannot_start_call">Kõne alustamine ei õnnestunud, palun proovi hiljem uuesti</string>
+    <string name="missing_permissions_warning">Puuduolevate õiguste tõttu mõned funktsionaalsused ei toimi…</string>
+    <string name="missing_permissions_error">Puuduolevate õiguste tõttu seda toimingut ei saa teha.</string>
+    <string name="missing_permissions_to_start_conf_call">Konverentsikõne alustamiseks selles jututoas on teil vaja õigusi</string>
+    <string name="missing_permissions_title_to_start_conf_call">Kõne algatamine ei õnnestu</string>
+    <string name="device_information">Sessiooniteave</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Konverentsikõned ei ole krüptitud jututubades toetatud</string>
+    <string name="call_anyway">Helista siiski</string>
+    <string name="send_anyway">Saada ikkagi</string>
+    <string name="or">või</string>
+    <string name="invite">Kutsu</string>
+    <string name="offline">Võrgust väljas</string>
+    <string name="accept">Võta vastu</string>
+    <string name="skip">Jäta vahele</string>
+    <string name="done">Valmis</string>
+    <string name="abort">Katkesta</string>
+    <string name="ignore">Eira</string>
+    <string name="review">Vaata üle</string>
+    <string name="decline">Keeldu</string>
+
+    <string name="action_exit">Välju</string>
+    <string name="actions">Tegevused</string>
+    <string name="action_sign_out">Logi välja</string>
+    <string name="action_sign_out_confirmation_simple">Kas sa oled kindel et soovid välja logida\?</string>
+    <string name="action_voice_call">Häälkõne</string>
+    <string name="action_video_call">Videokõne</string>
+    <string name="action_global_search">Üldine otsing</string>
+    <string name="action_mark_all_as_read">Märgi kõik loetuks</string>
+    <string name="action_historical">Ajalugu</string>
+    <string name="action_quick_reply">Kiirvastus</string>
+    <string name="action_mark_room_read">Märgi loetuks</string>
+    <string name="action_open">Ava</string>
+    <string name="action_close">Sulge</string>
+    <string name="copied_to_clipboard">Kopeeritud lõikelauale</string>
+    <string name="disable">Lülita välja</string>
+
+    <string name="dialog_title_confirmation">Kinnitus</string>
+    <string name="dialog_title_warning">Hoiatus</string>
+    <string name="dialog_title_error">Viga</string>
+
+    <string name="bottom_action_home">Kodu</string>
+    <string name="bottom_action_favourites">Lemmikud</string>
+    <string name="bottom_action_people">Inimesed</string>
+    <string name="bottom_action_rooms">Jututoad</string>
+    <string name="bottom_action_groups">Kogukonnad</string>
+
+    <string name="home_filter_placeholder_home">Filtreeri jututubasid</string>
+    <string name="home_filter_placeholder_favorites">Filtreeri lemmikuid</string>
+    <string name="home_filter_placeholder_people">Filtreeri inimesi</string>
+    <string name="home_filter_placeholder_rooms">Filtreeri jututubasid</string>
+    <string name="home_filter_placeholder_groups">Filtreeri kogukondasid</string>
+
+    <string name="invitations_header">Kutsed</string>
+    <string name="low_priority_header">Madal prioriteet</string>
+    <string name="system_alerts_header">Süsteemi hoiatused</string>
+
+    <string name="direct_chats_header">Vestlused</string>
+    <string name="local_address_book_header">Kohalik aadressiraamat</string>
+    <string name="user_directory_header">Kasutajate kataloog</string>
+    <string name="matrix_only_filter">Vaid need, kellel on Matrixi konto</string>
+    <string name="no_conversation_placeholder">Vestlusi ei leidu</string>
+    <string name="no_contact_access_placeholder">Sa pole Riot\'ile andnud ligipääsu kohalikele kontaktidele</string>
+    <string name="no_result_placeholder">Tulemusi ei ole</string>
+    <string name="people_no_identity_server">Isikutuvastusserver ei ole seadistatud.</string>
+
+    <string name="rooms_header">Jututoad</string>
+    <string name="rooms_directory_header">Jututubade loend</string>
+    <string name="no_room_placeholder">Jututube ei leidu</string>
+    <string name="no_public_room_placeholder">Avalikke jututube ei leidu</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 kasutaja</item>
+        <item quantity="other">%d kasutajat</item>
+    </plurals>
+
+    <string name="groups_invite_header">Kutse</string>
+    <string name="groups_header">Kogukonnad</string>
+    <string name="no_group_placeholder">Gruppe ei leidu</string>
+
+    <string name="send_bug_report_include_logs">Saada logikirjed</string>
+    <string name="send_bug_report_include_crash_logs">Saada kokkujooksmise logikirjed</string>
+    <string name="send_bug_report_include_screenshot">Saada ekraanipilt</string>
+    <string name="send_bug_report">Teata veast</string>
+    <string name="send_bug_report_description">Palun kirjelda viga. Mida sa tegid\? Mida sa eeldasid, et juhtub\? Mis tegelikult juhtus\?</string>
+    <string name="send_bug_report_description_in_english">Kui võimalik, siis palun koosta kirjeldus inglise keeles.</string>
+    <string name="send_bug_report_placeholder">Kirjelda siin tekkinud probleemi</string>
+    <string name="send_bug_report_logs_description">Vigade põhjuse leidmiseks sadetakse koos veakirjeldusega ka selle seadme logikirjed. See veakirjeldus, sealhulgas logikirjed ja ekraanipilt, ei saa olema avalikult leitav. Kui sa siiski soovid saata vaid ülalpool näidatud teksti, siis palun eemalda järgnev valik:</string>
+    <string name="send_bug_report_alert_message">Ma märkan, et pahameelega raputad oma telefoni. Kas sa tahaksid saata veateate\?</string>
+    <string name="send_bug_report_app_crashed">See rakendus jooksis viimati kokku. Kas sa tahaksid saata selle kohta veateate\?</string>
+    <string name="send_bug_report_rage_shake">Veateate saatmiseks raputa väga kõvasti</string>
+
+    <string name="send_bug_report_sent">Veateate saatmine õnnestus</string>
+    <string name="send_bug_report_failed">Veateate saatmine ei õnnestunud (%s)</string>
+    <string name="send_bug_report_progress">Saatmise kulg (%s%%)</string>
+
+    <string name="send_files_in">Saada</string>
+    <string name="read_receipt">Loetud</string>
+
+    <string name="join_room">Liitu jututoaga</string>
+    <string name="username">Kasutajanimi</string>
+    <string name="create_account">Loo konto</string>
+    <string name="login">Logi sisse</string>
+    <string name="logout">Logi välja</string>
+    <string name="hs_url">Koduserveri aadress</string>
+    <string name="identity_url">Isikutuvastusserveri aadress</string>
+    <string name="search">Otsi</string>
+
+    <string name="start_new_chat">Alusta uut vestlust</string>
+    <string name="start_voice_call">Algata häälkõne</string>
+    <string name="start_video_call">Algata videokõne</string>
+
+    <string name="option_send_voice">Edasta häält</string>
+
+    <string name="start_new_chat_prompt_msg">Kas oled kindel, et soovid alustada vestlust kasutajaga %s\?</string>
+    <string name="start_voice_call_prompt_msg">Kas oled kindel, et soovid algatada häälkõnet\?</string>
+    <string name="start_video_call_prompt_msg">Kas oled kindel, et soovid algatada videokõnet\?</string>
+    <string name="call_failed_no_ice_title">Kõne ebaõnnestus valesti seadistatud serveri tõttu</string>
+    <string name="call_failed_no_ice_description">Palun teavita oma koduserveri (%1$s) haldurit, et kõnede korrektseks toimimiseks peaks ta seadistama TURN serveri.
+\n
+\nAlternatiivina võid sa kasutada avalikku TURN serverit %2$s, kuid see ei pruugi olla sama töökindel ning sa jagad oma IP-aadressi selle serveriga. TURN-serveri kasutamist võid sa määrata ka seadistustes.</string>
+    <string name="call_failed_no_ice_use_alt">Proovi kasutada serverit %s</string>
+    <string name="call_failed_dont_ask_again">Ära küsi minult uuesti</string>
+
+    <string name="option_send_files">Saada faile</string>
+    <string name="option_send_sticker">Saada kleepse</string>
+    <string name="option_take_photo_video">Tee foto või video</string>
+    <string name="option_take_photo">Tee foto</string>
+    <string name="option_take_video">Tee video</string>
+
+    <string name="no_sticker_application_dialog_content">Sul ei ole hetkel ühtegi kleepsupakki kasutusel.
+\n
+\nKas lisame nüüd mõne\?</string>
+
+    <string name="go_on_with">kasuta rakendust…</string>
+    <string name="error_no_external_application_found">Vabandust, aga selle tegevuse jaoks ei leidu ühtegi välist rakendust.</string>
+
+    <string name="auth_login">Logi sisse</string>
+    <string name="auth_register">Loo konto</string>
+    <string name="auth_submit">Saada</string>
+    <string name="auth_skip">Jäta vahele</string>
+    <string name="auth_send_reset_email">Ligipääsu taastamiseks saada e-kiri</string>
+    <string name="auth_return_to_login">Mine tagasi sisselogimisekraani juurde</string>
+    <string name="auth_user_id_placeholder">E-posti aadress või kasutajanimi</string>
+    <string name="auth_password_placeholder">Salasõna</string>
+    <string name="auth_new_password_placeholder">Uus salasõna</string>
+    <string name="auth_user_name_placeholder">Kasutajanimi</string>
+    <string name="auth_add_email_message_2">Seadista oma e-posti aadress taastamaks vajadusel ligipääsu oma kontole. Hiljem saad soovi korral teda kasutada ka selleks, et teised kasutajad saaks sind leida.</string>
+    <string name="auth_add_phone_message_2">Seadista oma telefoninumber. Hiljem saad soovi korral teda kasutada ka selleks, et teised kasutajad saaks sind leida.</string>
+    <string name="auth_add_email_phone_message_2">Seadista oma e-posti aadress taastamaks vajadusel ligipääsu oma kontole. Hiljem saad soovi korral e-posti aadressi või telefoninumbrit kasutada ka selleks, et teised kasutajad saaks sind leida.</string>
+    <string name="auth_add_email_and_phone_message_2">Seadista oma e-posti aadress taastamaks vajadusel ligipääsu oma kontole. Hiljem saad soovi korral e-posti aadressi või telefoninumbrit kasutada ka selleks, et teised kasutajad saaks sind leida.</string>
+    <string name="auth_email_placeholder">E-posti aadress</string>
+    <string name="auth_opt_email_placeholder">E-posti aadress (soovi korral)</string>
+    <string name="auth_phone_number_placeholder">Telefoninumber</string>
+    <string name="auth_opt_phone_number_placeholder">Telefoninumber (soovi korral)</string>
+    <string name="auth_repeat_password_placeholder">Korda salasõna</string>
+    <string name="auth_repeat_new_password_placeholder">Kinnitage oma uus salasõna</string>
+    <string name="auth_invalid_login_param">Vale kasutajanimi ja/või salasõna</string>
+    <string name="auth_invalid_user_name">Kasutajanimi võib sisaldada vaid tähti, numbreid, punkte, sidekriipse ja alakriipse</string>
+    <string name="auth_invalid_password">Salasõna on liiga lühike (nõutav on vähemalt 6 tähemärki)</string>
+    <string name="auth_missing_password">Salasõna puudub</string>
+    <string name="auth_invalid_email">See ei tundu olema e-posti aadressi moodi</string>
+    <string name="auth_invalid_phone">See ei tundu olema telefoninumbri moodi</string>
+    <string name="auth_email_already_defined">Selline e-posti aadress on juba kasutusel.</string>
+    <string name="auth_missing_email">E-posti aadress on puudu</string>
+    <string name="auth_missing_phone">Telefoninumber on puudu</string>
+    <string name="auth_missing_email_or_phone">E-posti aadress või telefoninumber on puudu</string>
+    <string name="auth_invalid_token">Mittekehtiv tunnusluba</string>
+    <string name="auth_password_dont_match">Salasõnad ei klapi omavahel</string>
+    <string name="auth_forgot_password">Kas unustasid oma salasõna\?</string>
+    <string name="auth_use_server_options">Kohandatud serveriseadistused</string>
+    <string name="auth_email_validation_message">Registreerimise jätkamiseks palun vaata oma e-posti</string>
+    <string name="auth_threepid_warning_message">Registreerimine kasutades korraga nii e-posti aadressi kui ka telefoninumbrit ei ole senise API versiooni puhul veel võimalik. Hetkel läheb arvesse vaid telefoninumber.
+\n
+\nSa võid hiljem lisada e-posti aadressi oma kasutajaprofiili seadetest.</string>
+    <string name="auth_recaptcha_message">See koduserver soovib olla kindel, et sa ei ole robot</string>
+    <string name="auth_username_in_use">Selline kasutajanimi on juba olemas</string>
+    <string name="auth_home_server">Koduserver:</string>
+    <string name="auth_identity_server">Isikutuvastusserver:</string>
+    <string name="auth_reset_password_next_step_button">Ma olen verifitseerinud oma e-posti aadressi</string>
+    <string name="auth_reset_password_message">Salasõna taastamiseks sisesta sinu kontoga seotud e-posti aadress:</string>
+    <string name="auth_reset_password_missing_email">Sinu kontoga seotud e-posti aadress peab olema sisestatud.</string>
+    <string name="auth_reset_password_missing_password">Uus salasõna peab olema sisestatud.</string>
+    <string name="auth_reset_password_email_validation_message">Saatsime e-kirja %s aadressile. Kui oled avanud selles kirjas leidunud lingi, siis palun vajuta järgnevat nuppu.</string>
+    <string name="auth_reset_password_error_unauthorized">E-posti aadressi verifitseerimine ei õnnestunud. Palun kontrolli, et sa avasid kirjas leidunud lingi</string>
+    <string name="auth_reset_password_success_message">Sinu salasõna on vahetatud.
+\n
+\nSa oled välja logitud kõikidest oma seni kasutusel olnud sessioonidest ega saa enam teateid ega sõnumeid. Nende uuesti lugemiseks palun logi igas seadmes tagasi Matrix\'i võrku.</string>
+    <string name="auth_accept_policies">Palun loe läbi ja nõustu koduserveri kasutusjuhendiga:</string>
+
+    <string name="login_error_must_start_http">Serveri aadressi alguses peab olema kas https:// või http://</string>
+    <string name="login_error_network_error">Sisselogimine ei õnnestu: võrguühenduse viga</string>
+    <string name="login_error_unable_login">Ei õnnestu sisse logida</string>
+    <string name="login_error_registration_network_error">Registreerimine ei õnnestu: võrguühenduse viga</string>
+    <string name="login_error_unable_register">Registreerimine ei õnnestu</string>
+    <string name="login_error_unable_register_mail_ownership">Registreerimine ei õnnestu: ei saanud kindlaks teha, et oled e-posti aadressi omanik</string>
+    <string name="login_error_invalid_home_server">Palun sisesta korrektne URL</string>
+    <string name="login_error_unknown_host">See aadress ei ole leitav, palun kontrolli tema õigsust</string>
+    <string name="login_error_no_homeserver_found">See ei ole toimiv Matrix\'i serveri aadress</string>
+    <string name="login_error_homeserver_not_found">Sellel aadressil ei leidu koduserverit, palun kontrolli aadressi õigsust</string>
+    <string name="login_error_ssl_handshake">Sinu seade kasutab aegunud versiooni TLS-protokollist ning seal leiduvate turvanõrkuste tõttu ja sinu turvalisuse tagamiseks ühendust serveriga ei algatata</string>
+    <string name="login_mobile_device">Mobiiltelefon</string>
+
+    <string name="login_error_forbidden">Vigane kasutajanimi või salasõna</string>
+    <string name="login_error_bad_json">Vigane JSON</string>
+    <string name="login_error_not_json">Ei sisaldanud korrektset JSON\'it</string>
+    <string name="login_error_limit_exceeded">Liiga palju samaaegseid sisselogimispäringuid</string>
+    <string name="login_error_user_in_use">See kasutajanimi on juba kasutusel</string>
 </resources>

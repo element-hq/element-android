@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.crypto.tools
 import org.matrix.olm.OlmPkDecryption
 import org.matrix.olm.OlmPkEncryption
 import org.matrix.olm.OlmPkSigning
+import org.matrix.olm.OlmUtility
 
 fun <T> withOlmEncryption(block: (OlmPkEncryption) -> T): T {
     val olmPkEncryption = OlmPkEncryption()
@@ -44,5 +45,14 @@ fun <T> withOlmSigning(block: (OlmPkSigning) -> T): T {
         return block(olmPkSigning)
     } finally {
         olmPkSigning.releaseSigning()
+    }
+}
+
+fun <T> withOlmUtility(block: (OlmUtility) -> T): T {
+    val olmUtility = OlmUtility()
+    try {
+        return block(olmUtility)
+    } finally {
+        olmUtility.releaseUtility()
     }
 }

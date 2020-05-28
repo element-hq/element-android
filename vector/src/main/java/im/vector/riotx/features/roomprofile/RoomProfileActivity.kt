@@ -27,6 +27,7 @@ import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.roomprofile.members.RoomMemberListFragment
 import im.vector.riotx.features.roomprofile.settings.RoomSettingsFragment
+import im.vector.riotx.features.roomprofile.uploads.RoomUploadsFragment
 
 class RoomProfileActivity : VectorBaseActivity(), ToolbarConfigurable {
 
@@ -66,7 +67,7 @@ class RoomProfileActivity : VectorBaseActivity(), ToolbarConfigurable {
     }
 
     private fun openRoomUploads() {
-        notImplemented("Open room uploads")
+        addFragmentToBackstack(R.id.simpleFragmentContainer, RoomUploadsFragment::class.java, roomProfileArgs)
     }
 
     private fun openRoomSettings() {

@@ -19,12 +19,17 @@ package im.vector.riotx.features.navigation
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.view.View
+import android.view.Window
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.TaskStackBuilder
+import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
+import androidx.fragment.app.Fragment
 import im.vector.matrix.android.api.session.crypto.verification.IncomingSasVerificationTransaction
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
+import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
@@ -43,6 +48,10 @@ import im.vector.riotx.features.home.room.detail.RoomDetailArgs
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.invite.InviteUsersToRoomActivity
 import im.vector.riotx.features.media.BigImageViewerActivity
+import im.vector.riotx.features.media.ImageContentRenderer
+import im.vector.riotx.features.media.ImageMediaViewerActivity
+import im.vector.riotx.features.media.VideoContentRenderer
+import im.vector.riotx.features.media.VideoMediaViewerActivity
 import im.vector.riotx.features.roomdirectory.RoomDirectoryActivity
 import im.vector.riotx.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.riotx.features.roomdirectory.roompreview.RoomPreviewActivity
@@ -52,6 +61,7 @@ import im.vector.riotx.features.roomprofile.RoomProfileActivity
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.SharedData
+import im.vector.riotx.features.terms.ReviewTermsActivity
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -205,6 +215,34 @@ class DefaultNavigator @Inject constructor(
                     }
                     activity.startActivity(intent, options?.toBundle())
                 }
+    }
+
+    override fun openTerms(fragment: Fragment, serviceType: TermsService.ServiceType, baseUrl: String, token: String?, requestCode: Int) {
+        val intent = ReviewTermsActivity.intent(fragment.requireContext(), serviceType, baseUrl, token)
+        fragment.startActivityForResult(intent, requestCode)
+    }
+
+    override fun openImageViewer(activity: Activity, mediaData: ImageContentRenderer.Data, view: View, options: ((MutableList<Pair<View, String>>) -> Unit)?) {
+        val intent = ImageMediaViewerActivity.newIntent(activity, mediaData, ViewCompat.getTransitionName(view))
+        val pairs = ArrayList<Pair<View, String>>()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            activity.window.decorView.findViewById<View>(android.R.id.statusBarBackground)?.let {
+                pairs.add(Pair(it, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME))
+            }
+            activity.window.decorView.findViewById<View>(android.R.id.navigationBarBackground)?.let {
+                pairs.add(Pair(it, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME))
+            }
+        }
+        pairs.add(Pair(view, ViewCompat.getTransitionName(view) ?: ""))
+        options?.invoke(pairs)
+
+        val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, *pairs.toTypedArray()).toBundle()
+        activity.startActivity(intent, bundle)
+    }
+
+    override fun openVideoViewer(activity: Activity, mediaData: VideoContentRenderer.Data) {
+        val intent = VideoMediaViewerActivity.newIntent(activity, mediaData)
+        activity.startActivity(intent)
     }
 
     private fun startActivity(context: Context, intent: Intent, buildTask: Boolean) {

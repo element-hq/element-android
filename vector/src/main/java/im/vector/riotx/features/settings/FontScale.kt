@@ -17,7 +17,7 @@
 package im.vector.riotx.features.settings
 
 import android.content.Context
-import android.content.res.Configuration
+import androidx.annotation.StringRes
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import im.vector.riotx.R
@@ -29,124 +29,59 @@ object FontScale {
     // Key for the SharedPrefs
     private const val APPLICATION_FONT_SCALE_KEY = "APPLICATION_FONT_SCALE_KEY"
 
-    // Possible values for the SharedPrefs
-    private const val FONT_SCALE_TINY = "FONT_SCALE_TINY"
-    private const val FONT_SCALE_SMALL = "FONT_SCALE_SMALL"
-    private const val FONT_SCALE_NORMAL = "FONT_SCALE_NORMAL"
-    private const val FONT_SCALE_LARGE = "FONT_SCALE_LARGE"
-    private const val FONT_SCALE_LARGER = "FONT_SCALE_LARGER"
-    private const val FONT_SCALE_LARGEST = "FONT_SCALE_LARGEST"
-    private const val FONT_SCALE_HUGE = "FONT_SCALE_HUGE"
-
-    private val fontScaleToPrefValue = mapOf(
-            0.70f to FONT_SCALE_TINY,
-            0.85f to FONT_SCALE_SMALL,
-            1.00f to FONT_SCALE_NORMAL,
-            1.15f to FONT_SCALE_LARGE,
-            1.30f to FONT_SCALE_LARGER,
-            1.45f to FONT_SCALE_LARGEST,
-            1.60f to FONT_SCALE_HUGE
+    data class FontScaleValue(
+            val index: Int,
+            // Possible values for the SharedPrefs
+            val preferenceValue: String,
+            val scale: Float,
+            @StringRes
+            val nameResId: Int
     )
 
-    private val prefValueToNameResId = mapOf(
-            FONT_SCALE_TINY to R.string.tiny,
-            FONT_SCALE_SMALL to R.string.small,
-            FONT_SCALE_NORMAL to R.string.normal,
-            FONT_SCALE_LARGE to R.string.large,
-            FONT_SCALE_LARGER to R.string.larger,
-            FONT_SCALE_LARGEST to R.string.largest,
-            FONT_SCALE_HUGE to R.string.huge
+    private val fontScaleValues = listOf(
+            FontScaleValue(0, "FONT_SCALE_TINY", 0.70f, R.string.tiny),
+            FontScaleValue(1, "FONT_SCALE_SMALL", 0.85f, R.string.small),
+            FontScaleValue(2, "FONT_SCALE_NORMAL", 1.00f, R.string.normal),
+            FontScaleValue(3, "FONT_SCALE_LARGE", 1.15f, R.string.large),
+            FontScaleValue(4, "FONT_SCALE_LARGER", 1.30f, R.string.larger),
+            FontScaleValue(5, "FONT_SCALE_LARGEST", 1.45f, R.string.largest),
+            FontScaleValue(6, "FONT_SCALE_HUGE", 1.60f, R.string.huge)
     )
+
+    private val normalFontScaleValue = fontScaleValues[2]
 
     /**
      * Get the font scale value from SharedPrefs. Init the SharedPrefs if necessary
      *
-     * @return the font scale
+     * @return the font scale value
      */
-    fun getFontScalePrefValue(context: Context): String {
+    fun getFontScaleValue(context: Context): FontScaleValue {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        var scalePreferenceValue: String
 
-        if (APPLICATION_FONT_SCALE_KEY !in preferences) {
+        return if (APPLICATION_FONT_SCALE_KEY !in preferences) {
             val fontScale = context.resources.configuration.fontScale
 
-            scalePreferenceValue = FONT_SCALE_NORMAL
-
-            if (fontScaleToPrefValue.containsKey(fontScale)) {
-                scalePreferenceValue = fontScaleToPrefValue[fontScale] as String
-            }
-
-            preferences.edit {
-                putString(APPLICATION_FONT_SCALE_KEY, scalePreferenceValue)
-            }
+            (fontScaleValues.firstOrNull { it.scale == fontScale } ?: normalFontScaleValue)
+                    .also { preferences.edit { putString(APPLICATION_FONT_SCALE_KEY, it.preferenceValue) } }
         } else {
-            scalePreferenceValue = preferences.getString(APPLICATION_FONT_SCALE_KEY, FONT_SCALE_NORMAL)!!
+            val pref = preferences.getString(APPLICATION_FONT_SCALE_KEY, null)
+            fontScaleValues.firstOrNull { it.preferenceValue == pref } ?: normalFontScaleValue
         }
+    }
 
-        return scalePreferenceValue
+    fun updateFontScale(context: Context, index: Int) {
+        fontScaleValues.getOrNull(index)?.let {
+            saveFontScaleValue(context, it)
+        }
     }
 
     /**
-     * Provides the font scale value
+     * Store the font scale vale
      *
-     * @return the font scale
+     * @param fontScaleValue the font scale value to store
      */
-    fun getFontScale(context: Context): Float {
-        val fontScale = getFontScalePrefValue(context)
-
-        if (fontScaleToPrefValue.containsValue(fontScale)) {
-            for ((key, value) in fontScaleToPrefValue) {
-                if (value == fontScale) {
-                    return key
-                }
-            }
-        }
-
-        return 1.0f
-    }
-
-    /**
-     * Provides the font scale description
-     *
-     * @return the font description
-     */
-    fun getFontScaleDescription(context: Context): String {
-        val fontScale = getFontScalePrefValue(context)
-
-        return if (prefValueToNameResId.containsKey(fontScale)) {
-            context.getString(prefValueToNameResId[fontScale] as Int)
-        } else context.getString(R.string.normal)
-    }
-
-    /**
-     * Update the font size from the locale description.
-     *
-     * @param fontScaleDescription the font scale description
-     */
-    fun updateFontScale(context: Context, fontScaleDescription: String) {
-        for ((key, value) in prefValueToNameResId) {
-            if (context.getString(value) == fontScaleDescription) {
-                saveFontScale(context, key)
-            }
-        }
-
-        val config = Configuration(context.resources.configuration)
-        config.fontScale = getFontScale(context)
-        @Suppress("DEPRECATION")
-        context.resources.updateConfiguration(config, context.resources.displayMetrics)
-    }
-
-    /**
-     * Save the new font scale
-     *
-     * @param scaleValue the text scale
-     */
-    fun saveFontScale(context: Context, scaleValue: String) {
-        if (scaleValue.isNotEmpty()) {
-            PreferenceManager.getDefaultSharedPreferences(context)
-                    .edit {
-                        putString(APPLICATION_FONT_SCALE_KEY, scaleValue)
-                    }
-        }
+    private fun saveFontScaleValue(context: Context, fontScaleValue: FontScaleValue) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit { putString(APPLICATION_FONT_SCALE_KEY, fontScaleValue.preferenceValue) }
     }
 }

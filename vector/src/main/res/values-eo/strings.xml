@@ -512,4 +512,96 @@
     <string name="list_members">Listigi ĉambranojn</string>
     <string name="room_sync_in_progress">Spegulante…</string>
     <string name="room_preview_invitation_format">Vi estis invitita al ĉi tiu ĉambro de %s</string>
+    <string name="call_error_answered_elsewhere">voko estas respondita aliloke</string>
+
+    <string name="room_creation_title">Nova babilo</string>
+    <string name="room_creation_add_member">Aldoni ĉambranon</string>
+    <plurals name="room_header_active_members_count">
+        <item quantity="one">1 aktiva ĉambrano</item>
+        <item quantity="other">%d aktivaj ĉambranoj</item>
+    </plurals>
+    <plurals name="room_title_members">
+        <item quantity="one">1 ĉambrano</item>
+        <item quantity="other">%d ĉambranoj</item>
+    </plurals>
+    <string name="room_title_one_member">1 ĉambrano</string>
+
+    <plurals name="format_time_s">
+        <item quantity="one">1s</item>
+        <item quantity="other">%ds</item>
+    </plurals>
+    <plurals name="format_time_m">
+        <item quantity="one">1m</item>
+        <item quantity="other">%dm</item>
+    </plurals>
+    <plurals name="format_time_h">
+        <item quantity="one">1h</item>
+        <item quantity="other">%dh</item>
+    </plurals>
+    <plurals name="format_time_d">
+        <item quantity="one">1t</item>
+        <item quantity="other">%dt</item>
+    </plurals>
+
+    <string name="room_participants_leave_prompt_title">Foriri de ĉambro</string>
+    <string name="room_participants_leave_prompt_msg">Ĉu vi certe volas foriri de la ĉambro\?</string>
+    <string name="room_participants_remove_prompt_msg">Ĉu vi certe volas forigi ĉambranon %s de ĉi tiu babilo\?</string>
+    <string name="room_participants_create">Krei</string>
+
+    <string name="room_participants_online">Enrete</string>
+    <string name="room_participants_offline">Eksetrrete</string>
+    <string name="room_participants_idle">Senage</string>
+    <string name="room_participants_now">%1$s nun</string>
+    <string name="room_participants_ago">%1$s antaŭ %2$s</string>
+
+    <string name="room_participants_action_invite">Inviti</string>
+    <string name="room_participants_action_leave">Foriri de ĉi tiu ĉambro</string>
+    <string name="room_participants_action_remove">Forigi de ĉi tiu ĉambro</string>
+    <string name="room_participants_action_ban">Forbari</string>
+    <string name="room_participants_action_unban">Malforbari</string>
+    <string name="room_participants_action_kick">Forpeli</string>
+    <string name="room_participants_action_set_default_power_level">Reigi normala uzanto</string>
+    <string name="room_participants_action_set_moderator">Igi reguligisto</string>
+    <string name="room_participants_action_set_admin">Igi administranto</string>
+    <string name="room_participants_action_ignore">Kaŝi ĉiujn mesaĝojn de ĉi tiu uzanto</string>
+    <string name="room_participants_action_unignore">Remontri ĉiujn mesaĝojn de ĉi tiu uzanto</string>
+    <string name="room_participants_action_unignore_prompt">Ĉu remontri ĉiujn mesaĝojn de ĉi tiu uzanto\?
+\n
+\nRimarku, ke tiu ĉi ago reekigos la aplikaĵon, kio povas daŭri ioman temon.</string>
+    <string name="room_participants_invite_search_another_user">Identigilo de uzanto, nomo, aŭ retpoŝtadreso</string>
+    <string name="room_participants_action_mention">Mencii</string>
+    <string name="room_participants_action_devices_list">Montri liston de salutaĵoj</string>
+    <string name="room_participants_power_level_prompt">Vi ne povos malfari ĉi tiun ŝanĝon, ĉar vi donas al la uzanto la saman povnivelon, kiun havas vi mem.
+\nĈu vi certas\?</string>
+
+    <string name="reason_hint">Kialo</string>
+
+    <string name="room_menu_search">Serĉi</string>
+    <string name="room_one_user_is_typing">%s tajpas…</string>
+    <string name="room_two_users_are_typing">%1$s kaj %2$s tajpas…</string>
+    <string name="room_many_users_are_typing">%1$s kaj %2$s kaj aliaj tajpas…</string>
+    <string name="room_message_placeholder_encrypted">Sendi ĉifritan mesaĝon…</string>
+    <string name="room_message_placeholder_not_encrypted">Sendi mesaĝon (neĉifritan)…</string>
+    <string name="room_offline_notification">Konekto al la servilo perdiĝis.</string>
+    <string name="room_prompt_resend">Ĉiujn resendi</string>
+    <string name="room_prompt_cancel">Ĉiujn nuligi</string>
+    <string name="room_resend_unsent_messages">Resendi nesenditajn mesaĝojn</string>
+    <string name="room_delete_unsent_messages">Forigi nesenditajn mesaĝojn</string>
+    <string name="room_message_file_not_found">Dosiero ne troviĝis</string>
+    <string name="room_do_not_have_permission_to_post">Vi ne havas permeson mesaĝi en ĉi tiu ĉambro</string>
+    <plurals name="room_new_messages_notification">
+        <item quantity="one">1 nova mesaĝo</item>
+        <item quantity="other">%d novaj mesaĝoj</item>
+    </plurals>
+
+    <string name="ssl_trust">Fidi</string>
+    <string name="ssl_do_not_trust">Ne fidi</string>
+    <string name="ssl_logout_account">Adiaŭi</string>
+    <string name="ssl_remain_offline">Malatenti</string>
+    <string name="ssl_fingerprint_hash">Fingrospuro (%s):</string>
+    <string name="room_details_title">Detaloj pri ĉambro</string>
+    <string name="open_settings">Malfermi agordojn</string>
+
+    <string name="settings_troubleshoot_test_account_settings_title">Agordoj de konto.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Sciigoj estas ŝaltitaj por via konto.</string>
 </resources>

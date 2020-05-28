@@ -43,10 +43,10 @@ internal class DefaultSaveFilterTask @Inject constructor(
     override suspend fun execute(params: SaveFilterTask.Params) {
         val filterBody = when (params.filterPreset) {
             FilterService.FilterPreset.RiotFilter -> {
-                FilterFactory.createRiotFilterBody()
+                FilterFactory.createRiotFilter()
             }
             FilterService.FilterPreset.NoFilter   -> {
-                FilterFactory.createDefaultFilterBody()
+                FilterFactory.createDefaultFilter()
             }
         }
         val roomFilter = when (params.filterPreset) {

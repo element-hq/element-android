@@ -81,30 +81,30 @@ internal object FilterUtil {
     } */
 
     /**
-     * Compute a new filterBody to enable or disable the lazy loading
+     * Compute a new filter to enable or disable the lazy loading
      *
      *
-     * If lazy loading is on, the filterBody will looks like
+     * If lazy loading is on, the filter will looks like
      * {"room":{"state":{"lazy_load_members":true})}
      *
-     * @param filterBody     filterBody to patch
+     * @param filter filter to patch
      * @param useLazyLoading true to enable lazy loading
      */
-    fun enableLazyLoading(filterBody: FilterBody, useLazyLoading: Boolean): FilterBody {
+    fun enableLazyLoading(filter: Filter, useLazyLoading: Boolean): Filter {
         if (useLazyLoading) {
             // Enable lazy loading
-            return filterBody.copy(
-                    room = filterBody.room?.copy(
-                            state = filterBody.room.state?.copy(lazyLoadMembers = true)
+            return filter.copy(
+                    room = filter.room?.copy(
+                            state = filter.room.state?.copy(lazyLoadMembers = true)
                                     ?: RoomEventFilter(lazyLoadMembers = true)
                     )
                             ?: RoomFilter(state = RoomEventFilter(lazyLoadMembers = true))
             )
         } else {
-            val newRoomEventFilter = filterBody.room?.state?.copy(lazyLoadMembers = null)?.takeIf { it.hasData() }
-            val newRoomFilter = filterBody.room?.copy(state = newRoomEventFilter)?.takeIf { it.hasData() }
+            val newRoomEventFilter = filter.room?.state?.copy(lazyLoadMembers = null)?.takeIf { it.hasData() }
+            val newRoomFilter = filter.room?.copy(state = newRoomEventFilter)?.takeIf { it.hasData() }
 
-            return filterBody.copy(
+            return filter.copy(
                     room = newRoomFilter
             )
         }

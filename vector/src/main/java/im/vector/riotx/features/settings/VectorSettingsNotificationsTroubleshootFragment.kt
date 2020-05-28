@@ -71,11 +71,11 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
                 layoutManager.orientation)
         mRecyclerView.addItemDecoration(dividerItemDecoration)
 
-        mSummaryButton.setOnClickListener {
+        mSummaryButton.debouncedClicks {
             bugReporter.openBugReportScreen(activity!!)
         }
 
-        mRunButton.setOnClickListener {
+        mRunButton.debouncedClicks {
             testManager?.retry()
         }
         startUI()
