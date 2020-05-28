@@ -751,7 +751,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * @return true if the rage shake is used
      */
     fun useRageshake(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, true)
+        return false; //defaultPrefs.getBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, false)
     }
 
     /**
