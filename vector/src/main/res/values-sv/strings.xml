@@ -322,7 +322,7 @@
     <string name="settings_call_category">Samtal</string>
     <string name="settings_call_ringtone_use_riot_ringtone">Använd förvald Riot-ringsignal för inkommande samtal</string>
     <string name="settings_call_ringtone_use_default_stun">Tillåt reservassistansserver för samtal</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">Kommer att använda %s som reserv när din hemserver inte erbjuder en (din IP-adress kommer att delas under samtalet).</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Kommer att använda %s som reserv när din hemserver inte erbjuder en (din IP-adress kommer att delas under samtalet)</string>
     <string name="settings_call_ringtone_title">Ringsignal för inkommande samtal</string>
     <string name="settings_call_ringtone_dialog_title">Välj ringsignal för samtal:</string>
 
@@ -435,4 +435,106 @@
     <string name="room_participants_header_direct_chats">DIREKTCHATT</string>
     <string name="room_participants_header_devices">SESSIONER</string>
 
-</resources>
+<string name="room_participants_action_invite">Bjud in</string>
+    <string name="room_participants_action_leave">Lämna det här rummet</string>
+    <string name="room_participants_action_remove">Ta bort från det här rummet</string>
+    <string name="room_participants_action_ban">Banna</string>
+    <string name="room_participants_action_unban">Avbanna</string>
+    <string name="room_participants_action_kick">Kasta ut</string>
+    <string name="room_participants_action_set_default_power_level">Återställ till vanlig användare</string>
+    <string name="room_participants_action_set_moderator">Gör till moderator</string>
+    <string name="room_participants_action_set_admin">Gör till administratör</string>
+    <string name="room_participants_action_ignore">Dölj alla meddelanden från den här användaren</string>
+    <string name="search_members_hint">Filtrera rumsmedlemmar</string>
+    <string name="tab_title_search_rooms">RUM</string>
+    <string name="room_recents_conversations">RUM</string>
+    <plurals name="directory_search_rooms">
+	<item quantity="one">1 rum</item>
+	<item quantity="other">%d rum</item>
+</plurals>
+    <plurals name="directory_search_rooms_for">
+	<item quantity="one">%1$s rum hittat för %2$s</item>
+	<item quantity="other">%1$s rum hittade för %2$s</item>
+</plurals>
+    <string name="room_settings_direct_chat">Direktchatt</string>
+    <string name="settings_pin_missed_notifications">Fäst rum med missade notifikationer</string>
+    <string name="settings_pin_unread_messages">Fäst rum med olästa meddelanden</string>
+    <string name="settings_data_save_mode_summary">Datasparningsläge använder ett specifikt filter så att närvarouppdateringar och skrivnotifikationer filtreras ut.</string>
+
+    <string name="failed_to_load_timeline_position">%s försökte ladda en specifik punkt i det här rummets tidslinje, men kunde inte hitta den.</string>
+
+    <string name="directory_server_type_homeserver">Skriv en hemserver att visa listan över publika rum från</string>
+    <string name="directory_server_all_rooms_on_server">Alla rum på %s-servern</string>
+    <string name="directory_server_native_rooms">Alla %s-rum på Matrix</string>
+
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">1 rum</item>
+	<item quantity="other">%d rum</item>
+</plurals>
+
+    <string name="group_details_rooms">Rum</string>
+    <string name="rooms">Rum</string>
+    <string name="filter_group_members">Filtrera gruppmedlemmar</string>
+    <string name="filter_group_rooms">Filtrera grupprum</string>
+
+    <plurals name="group_rooms">
+	<item quantity="one">1 rum</item>
+	<item quantity="other">%d rum</item>
+</plurals>
+    <string name="deactivate_account_content">Detta kommer att göra ditt konto permanent oanvändbart. Du kommer inte kunna logga in, och ingen kommer kunna registrera sig med samma användar-ID. Detta kommer att få ditt konto att lämna alla rum det är med i, och det kommer att ta bort din kontoinformation från din identitetsserver. <b>Den här handlingen går inte att ångra</b>.
+\n
+\nAtt inaktivera ditt konto <b>får oss normalt inte att glömma meddelanden du har skickat</b>. Om du skulle vilja att vi glömmer dina meddelanden, markera rutan nedan.
+\n
+\nMeddelandesynlighet I Matrix är likt e-post. Att vi glömmer dina meddelanden betyder att meddelanden du har skickat inte kommer delas med nya eller oregistrerade användare, men registrerade användare som redan har tillgång till dessa meddelanden kommer fortfarande ha tillgång till deras exemplar.</string>
+    <string name="settings_lazy_loading_title">Ladda rumsmedlemmar endast vid behov</string>
+    <string name="settings_lazy_loading_description">Öka prestandan genom att bara ladda rumsmedlemmar när du kollar på dem för första gången.</string>
+    <string name="room_list_catchup_empty_title">Du är ikapp!</string>
+    <string name="room_list_catchup_empty_body">Du har inga olästa meddelanden kvar</string>
+    <string name="room_list_rooms_empty_title">Rum</string>
+    <string name="room_list_rooms_empty_body">Dina rum kommer att visas här</string>
+
+    <string name="create_new_room">Skapa ett nytt rum</string>
+    <string name="fab_menu_create_room">Rum</string>
+    <string name="fab_menu_create_chat">Direktmeddelanden</string>
+
+    <string name="alpha_disclaimer_content_line_2_gplay">Den senaste funktionslistan finns alltid i %1$s, och om du skulle hitta buggar, vänligen skicka en rapport från menyn på toppen av Hem, så fixar vi dem så fort vi kan.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store-beskrivningen</string>
+    <string name="alpha_disclaimer_content_line_2_fdroid">Om du skulle hitta buggar, vänligen skicka en rapport från menyn på toppen av Hem, så fixar vi dem så fort vi kan.</string>
+
+    <string name="send_suggestion">Ge ett förslag</string>
+    <string name="send_suggestion_content">Vänligen skriv ditt förslag nedan.</string>
+    <string name="send_suggestion_report_placeholder">Beskriv ditt förslag här</string>
+    <string name="send_suggestion_sent">Tack, ditt förslag har skickats framgångsrikt</string>
+    <string name="send_suggestion_failed">Förslaget misslyckades att skickas (%s)</string>
+
+    <string name="store_riotx_full_description">RiotX är en ny klient för Matrix-protokollet (Matrix.org): ett öppet nätverk för säker, decentraliserad kommunikation. RiotX är en komplett omskrivning av klienten Riot för Android, baserat på en komplett omskrivning av Matrix-SDK:t för Android.
+\n
+\nVarning: Detta är en betaversion. RiotX är för närvarande under aktiv utveckling och innehåller begränsningar och (vi hoppas inte alltför många) buggar. All feedback är välkommen!
+\n
+\nRiotX stöder: • Logga in med ett existerande konto • Skapa rum och gå med i publika rum • Acceptera och neka inbjudningar • Lista användares rum • Visa rumsdetaljer • Skicka textmeddelanden • Skicka bilagor • Läsa och skriva meddelanden i krypterade rum • Krypto: säkerhetskopiering av E2E-nycklar, avancerad enhetsverifiering, nyckeldelningsförfrågan och -svar • Pushnotifikationer • Ljust, mörkt eller svart tema
+\n
+\nInte alla funktioner i Riot är implementerade i RiotX än. Huvudsakligen saknade (vilka kommer snart!) funktioner: • Rumsinställningar (lista rumsmedlemmar, o.s.v.) • Röstsamtal • Widgets • …</string>
+
+    <string name="bottom_action_people_x">Direktmeddelanden</string>
+
+    <string name="room_filtering_filter_hint">Filtrera konversationer…</string>
+    <string name="room_filtering_footer_title">Kan du inte hitta det du letar efter\?</string>
+    <string name="room_filtering_footer_create_new_room">Skapa ett nytt rum</string>
+    <string name="room_filtering_footer_create_new_direct_message">Skicka ett nytt direktmeddelande</string>
+    <string name="room_filtering_footer_open_room_directory">Se rumskatalogen</string>
+
+    <string name="direct_room_filter_hint">Filtrera efter användarnamn eller ID…</string>
+
+    <string name="a11y_create_direct_message">Skapa en ny direktkonversation</string>
+    <string name="a11y_create_room">Skapa ett nytt rum</string>
+    <string name="reaction_search_type_hint">Skriv nyckelord för att hitta en reaktion.</string>
+
+    <string name="autodiscover_well_known_error">Kan inte hitta en giltig hemserver. Vänligen kontrollera din identifierare</string>
+
+    <string name="room_list_sharing_header_recent_rooms">Nyliga rum</string>
+    <string name="room_list_sharing_header_other_rooms">Andra rum</string>
+
+    <string name="enter_secret_storage_invalid">Kan inte hitta hemligheter i lagringen</string>
+    <string name="settings_when_rooms_are_upgraded">När rum uppgraderas</string>
+    <string name="command_description_discard_session_not_handled">Stöds endast I krypterade rum</string>
+    </resources>
