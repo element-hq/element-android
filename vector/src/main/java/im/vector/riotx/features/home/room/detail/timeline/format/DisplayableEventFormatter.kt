@@ -29,13 +29,12 @@ import me.gujun.android.span.span
 import javax.inject.Inject
 
 class DisplayableEventFormatter @Inject constructor(
-//        private val sessionHolder: ActiveSessionHolder,
         private val stringProvider: StringProvider,
         private val colorProvider: ColorProvider,
         private val noticeEventFormatter: NoticeEventFormatter
 ) {
 
-    fun format(timelineEvent: TimelineEvent, appendAuthor: Boolean): CharSequence {
+    fun format(timelineEvent: TimelineEvent, prependAuthor: Boolean): CharSequence {
         if (timelineEvent.root.isRedacted()) {
             return noticeEventFormatter.formatRedactedEvent(timelineEvent.root)
         }
@@ -55,32 +54,31 @@ class DisplayableEventFormatter @Inject constructor(
                 timelineEvent.getLastMessageContent()?.let { messageContent ->
                     when (messageContent.msgType) {
                         MessageType.MSGTYPE_VERIFICATION_REQUEST -> {
-                            return simpleFormat(senderName, stringProvider.getString(R.string.verification_request), appendAuthor)
+                            return simpleFormat(senderName, stringProvider.getString(R.string.verification_request), prependAuthor)
                         }
                         MessageType.MSGTYPE_IMAGE                -> {
-                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_an_image), appendAuthor)
+                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_an_image), prependAuthor)
                         }
                         MessageType.MSGTYPE_AUDIO                -> {
-                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_an_audio_file), appendAuthor)
+                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_an_audio_file), prependAuthor)
                         }
                         MessageType.MSGTYPE_VIDEO                -> {
-                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_a_video), appendAuthor)
+                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_a_video), prependAuthor)
                         }
                         MessageType.MSGTYPE_FILE                 -> {
-                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_a_file), appendAuthor)
+                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_a_file), prependAuthor)
                         }
                         MessageType.MSGTYPE_TEXT                 -> {
-                            if (messageContent.isReply()) {
+                            return if (messageContent.isReply()) {
                                 // Skip reply prefix, and show important
                                 // TODO add a reply image span ?
-                                return simpleFormat(senderName, timelineEvent.getTextEditableContent()
-                                        ?: messageContent.body, appendAuthor)
+                                simpleFormat(senderName, timelineEvent.getTextEditableContent() ?: messageContent.body, prependAuthor)
                             } else {
-                                return simpleFormat(senderName, messageContent.body, appendAuthor)
+                                simpleFormat(senderName, messageContent.body, prependAuthor)
                             }
                         }
                         else                                     -> {
-                            return simpleFormat(senderName, messageContent.body, appendAuthor)
+                            return simpleFormat(senderName, messageContent.body, prependAuthor)
                         }
                     }
                 }
@@ -96,8 +94,8 @@ class DisplayableEventFormatter @Inject constructor(
         return span { }
     }
 
-    private fun simpleFormat(senderName: String, body: CharSequence, appendAuthor: Boolean): CharSequence {
-        return if (appendAuthor) {
+    private fun simpleFormat(senderName: String, body: CharSequence, prependAuthor: Boolean): CharSequence {
+        return if (prependAuthor) {
             span {
                 text = senderName
                 textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_primary)
