@@ -428,14 +428,14 @@ class WebRtcPeerConnectionManager @Inject constructor(
         sendSdpOffer()
     }
 
-    override fun onCallInviteReceived(signalingRoomId: String, participantUserId: String, callInviteContent: CallInviteContent) {
+    override fun onCallInviteReceived(signalingRoomId: String, fromUserId: String, callInviteContent: CallInviteContent) {
         this.callId = callInviteContent.callId
         this.signalingRoomId = signalingRoomId
-        this.participantUserId = participantUserId
+        this.participantUserId = fromUserId
         this.isVideoCall = callInviteContent.isVideo()
 
-        startHeadsUpService(signalingRoomId, participantUserId, true, callInviteContent.isVideo())
-        context.startActivity(VectorCallActivity.newIntent(context, signalingRoomId, participantUserId, false, callInviteContent.isVideo()))
+        startHeadsUpService(signalingRoomId, fromUserId, true, callInviteContent.isVideo())
+        context.startActivity(VectorCallActivity.newIntent(context, signalingRoomId, fromUserId, false, callInviteContent.isVideo()))
 
         startCall()
     }

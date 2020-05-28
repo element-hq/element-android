@@ -48,7 +48,7 @@ internal class DefaultCallService @Inject constructor(
         private val roomEventSender: RoomEventSender
 ) : CallService {
 
-    private val callListeners = ArrayList<CallsListener>()
+    private val callListeners = mutableSetOf<CallsListener>()
 
     override fun getTurnServer(callback: MatrixCallback<TurnServer?>) {
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
@@ -126,7 +126,7 @@ internal class DefaultCallService @Inject constructor(
     }
 
     override fun addCallListener(listener: CallsListener) {
-        if (!callListeners.contains(listener)) callListeners.add(listener)
+        callListeners.add(listener)
     }
 
     override fun removeCallListener(listener: CallsListener) {
@@ -154,7 +154,7 @@ internal class DefaultCallService @Inject constructor(
     }
 
     private fun onCallHangup(hangup: CallHangupContent) {
-        callListeners.forEach {
+        callListeners.toList().forEach {
             tryThis {
                 it.onCallHangupReceived(hangup)
             }
@@ -162,19 +162,20 @@ internal class DefaultCallService @Inject constructor(
     }
 
     private fun onCallAnswer(answer: CallAnswerContent) {
-        callListeners.forEach {
+        callListeners.toList().forEach {
             tryThis {
                 it.onCallAnswerReceived(answer)
             }
         }
     }
 
-    private fun onCallInvite(roomId: String, userId: String, answer: CallInviteContent) {
-        if (userId == this.userId) return
+    private fun onCallInvite(roomId: String, fromUserId: String, invite: CallInviteContent) {
+        // Ignore the invitation from current user
+        if (fromUserId == userId) return
 
-        callListeners.forEach {
+        callListeners.toList().forEach {
             tryThis {
-                it.onCallInviteReceived(roomId, userId, answer)
+                it.onCallInviteReceived(roomId, fromUserId, invite)
             }
         }
     }
