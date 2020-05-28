@@ -38,7 +38,7 @@
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:orientation="horizontal">
 
-        <im.vector.view.VectorCircularImageView
+        <ImageView
             android:id="@+id/bottom_sheet_widget_permission_owner_avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"

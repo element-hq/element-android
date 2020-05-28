@@ -25,12 +25,12 @@ data class Widget(
         val event: Event,
         val widgetId: String,
         val senderInfo: SenderInfo?,
-        val isAddedByMe: Boolean
+        val isAddedByMe: Boolean,
+        val computedUrl: String?
 ) {
 
-    val isActive = widgetContent.type != null && widgetContent.url != null
+    val isActive = widgetContent.type != null && computedUrl != null
 
     val name = widgetContent.getHumanName()
-
 }
 

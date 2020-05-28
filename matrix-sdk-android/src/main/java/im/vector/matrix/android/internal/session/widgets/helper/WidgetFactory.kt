@@ -23,12 +23,15 @@ import im.vector.matrix.android.api.session.widgets.model.WidgetContent
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
+import im.vector.matrix.android.internal.session.user.UserDataSource
 import im.vector.matrix.android.internal.session.widgets.Widget
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import java.net.URLEncoder
 import javax.inject.Inject
 
 internal class WidgetFactory @Inject constructor(@SessionDatabase private val realmConfiguration: RealmConfiguration,
+                                                 private val userDataSource: UserDataSource,
                                                  @UserId private val userId: String) {
 
     fun create(widgetEvent: Event): Widget? {
@@ -50,6 +53,22 @@ internal class WidgetFactory @Inject constructor(@SessionDatabase private val re
             }
         }
         val isAddedByMe = widgetEvent.senderId == userId
-        return Widget(widgetContent, widgetEvent, widgetId, senderInfo, isAddedByMe)
+        val computedUrl = widgetContent.computeURL()
+        return Widget(widgetContent, widgetEvent, widgetId, senderInfo, isAddedByMe, computedUrl)
+    }
+
+    private fun WidgetContent.computeURL(): String? {
+        var computedUrl = url ?: return null
+        val myUser = userDataSource.getUser(userId)
+        computedUrl = computedUrl
+                .replace("\$matrix_user_id", userId)
+                .replace("\$matrix_display_name", myUser?.displayName ?: userId)
+                .replace("\$matrix_avatar_url", myUser?.avatarUrl ?: "")
+        for ((key, value) in data) {
+            if (value is String) {
+                computedUrl = computedUrl.replace("$$key", URLEncoder.encode(value, "utf-8"))
+            }
+        }
+        return computedUrl
     }
 }

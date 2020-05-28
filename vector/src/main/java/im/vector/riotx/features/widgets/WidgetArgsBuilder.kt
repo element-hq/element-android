@@ -46,7 +46,7 @@ class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSes
     @Suppress("UNCHECKED_CAST")
     fun buildStickerPickerArgs(roomId: String, widget: Widget): WidgetArgs {
         val widgetId = widget.widgetId
-        val baseUrl = widget.widgetContent.url ?: throw IllegalStateException()
+        val baseUrl = widget.computedUrl ?: throw IllegalStateException()
         return WidgetArgs(
                 baseUrl = baseUrl,
                 kind = WidgetKind.STICKER_PICKER,
@@ -56,6 +56,17 @@ class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSes
                         "widgetId" to widgetId,
                         "room_id" to roomId
                 ).filterNotNull()
+        )
+    }
+
+    fun buildRoomWidgetArgs(roomId: String, widget: Widget): WidgetArgs {
+        val widgetId = widget.widgetId
+        val baseUrl = widget.computedUrl?: throw IllegalStateException()
+        return WidgetArgs(
+                baseUrl = baseUrl,
+                kind = WidgetKind.ROOM,
+                roomId = roomId,
+                widgetId = widgetId
         )
     }
 

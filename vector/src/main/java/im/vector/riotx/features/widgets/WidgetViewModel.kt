@@ -168,6 +168,7 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
             val widgetId = initialState.widgetId ?: return@launch
             awaitCallback<Unit> {
                 widgetService.destroyRoomWidget(initialState.roomId, widgetId, it)
+                _viewEvents.post(WidgetViewEvents.Close())
             }
         }
     }

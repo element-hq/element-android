@@ -238,6 +238,12 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(WidgetActivity.newIntent(context, widgetArgs))
     }
 
+    override fun openRoomWidget(context: Context, roomId: String, widget: Widget) {
+        val widgetArgs = widgetArgsBuilder.buildRoomWidgetArgs(roomId, widget)
+        context.startActivity(WidgetActivity.newIntent(context, widgetArgs))
+    }
+
+
     override fun openImageViewer(activity: Activity, mediaData: ImageContentRenderer.Data, view: View, options: ((MutableList<Pair<View, String>>) -> Unit)?) {
         val intent = ImageMediaViewerActivity.newIntent(activity, mediaData, ViewCompat.getTransitionName(view))
         val pairs = ArrayList<Pair<View, String>>()

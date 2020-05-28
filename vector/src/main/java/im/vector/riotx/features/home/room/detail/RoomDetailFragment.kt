@@ -148,6 +148,7 @@ import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.riotx.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.riotx.features.home.room.detail.widget.RoomWidgetsBannerView
+import im.vector.riotx.features.home.room.detail.widget.RoomWidgetsBottomSheet
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.PillImageSpan
 import im.vector.riotx.features.invite.VectorInviteView
@@ -1465,6 +1466,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onViewWidgetsClicked() {
-        Toast.makeText(requireContext(), "Show widgets", Toast.LENGTH_SHORT).show()
+        RoomWidgetsBottomSheet.newInstance()
+                .show(childFragmentManager, "ROOM_WIDGETS_BOTTOM_SHEET")
     }
 }

@@ -27,7 +27,7 @@ class StickerPickerActionHandler @Inject constructor(private val session: Sessio
     suspend fun handle(): RoomDetailViewEvents = withContext(Dispatchers.Default) {
         // Search for the sticker picker widget in the user account
         val stickerWidget = session.widgetService().getUserWidgets(setOf(StickerPickerConstants.WIDGET_NAME)).firstOrNull()
-        if (stickerWidget == null || stickerWidget.widgetContent.url.isNullOrBlank()) {
+        if (stickerWidget == null || stickerWidget.computedUrl.isNullOrBlank()) {
             RoomDetailViewEvents.DisplayPromptForIntegrationManager
         } else {
             RoomDetailViewEvents.OpenStickerPicker(

@@ -89,6 +89,8 @@ interface Navigator {
 
     fun openIntegrationManager(context: Context, roomId: String, integId: String?, screen: String?)
 
+    fun openRoomWidget(context: Context, roomId: String, widget: Widget)
+
     fun openImageViewer(activity: Activity, mediaData: ImageContentRenderer.Data, view: View, options: ((MutableList<Pair<View, String>>) -> Unit)?)
 
     fun openVideoViewer(activity: Activity, mediaData: VideoContentRenderer.Data)

@@ -20,19 +20,15 @@ import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerService
 import im.vector.matrix.android.api.session.widgets.WidgetService
 import im.vector.matrix.android.internal.util.awaitCallback
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class WidgetPermissionsHelper(private val integrationManagerService: IntegrationManagerService,
                               private val widgetService: WidgetService) {
 
     suspend fun changePermission(roomId: String, widgetId: String, allow: Boolean) {
-        val widget = withContext(Dispatchers.Default) {
-            widgetService.getRoomWidgets(
-                    roomId = roomId,
-                    widgetId = QueryStringValue.Equals(widgetId, QueryStringValue.Case.SENSITIVE)
-            ).firstOrNull()
-        }
+        val widget = widgetService.getRoomWidgets(
+                roomId = roomId,
+                widgetId = QueryStringValue.Equals(widgetId, QueryStringValue.Case.SENSITIVE)
+        ).firstOrNull()
         val eventId = widget?.event?.eventId ?: return
         awaitCallback<Unit> {
             integrationManagerService.setWidgetAllowed(eventId, allow, it)

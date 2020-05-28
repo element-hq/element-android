@@ -36,6 +36,7 @@ import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceipt
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
+import im.vector.riotx.features.home.room.detail.widget.RoomWidgetsBottomSheet
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.home.room.list.RoomListModule
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
@@ -138,6 +139,7 @@ interface ScreenComponent {
     fun inject(bottomSheet: DeviceListBottomSheet)
     fun inject(bottomSheet: BootstrapBottomSheet)
     fun inject(bottomSheet: RoomWidgetPermissionBottomSheet)
+    fun inject(bottomSheet: RoomWidgetsBottomSheet)
 
     /* ==========================================================================================
      * Others
@@ -146,7 +148,6 @@ interface ScreenComponent {
     fun inject(view: VectorInviteView)
     fun inject(preference: UserAvatarPreference)
     fun inject(button: ReactionButton)
-
 
     /* ==========================================================================================
      * Factory

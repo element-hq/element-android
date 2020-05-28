@@ -15,8 +15,8 @@
  */
 package im.vector.riotx.features.widgets.permissions
 
+import android.content.DialogInterface
 import android.os.Build
-import android.os.Parcelable
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.BulletSpan
@@ -34,10 +34,9 @@ import im.vector.riotx.core.extensions.withArgs
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.widgets.WidgetArgs
-import kotlinx.android.parcel.Parcelize
 import javax.inject.Inject
 
-class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
+class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomWidgetPermissionViewModel.Factory {
 
     override fun getLayoutResId(): Int = R.layout.bottom_sheet_room_widget_permission
 
@@ -56,11 +55,18 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
     lateinit var authorAvatarView: ImageView
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var viewModelFactory: RoomWidgetPermissionViewModel.Factory
 
     var onFinish: ((Boolean) -> Unit)? = null
 
+    override val showExpanded = true
+
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
+    }
+
+    override fun create(initialState: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel {
+        return viewModelFactory.create(initialState)
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -115,6 +121,11 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
         //optimistic dismiss
         dismiss()
         onFinish?.invoke(true)
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        onFinish?.invoke(false)
     }
 
     companion object {

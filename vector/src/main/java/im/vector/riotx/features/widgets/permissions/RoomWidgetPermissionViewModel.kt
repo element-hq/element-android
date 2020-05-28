@@ -51,7 +51,7 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
                 .map {
                     val widget = it.first()
                     val domain = try {
-                        URL(widget.widgetContent.url).host
+                        URL(widget.computedUrl).host
                     } catch (e: Throwable) {
                         null
                     }
