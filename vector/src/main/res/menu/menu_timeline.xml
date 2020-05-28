@@ -2,11 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <item
         android:id="@+id/video_call"
         android:icon="@drawable/ic_videocam"
         android:title="@string/action_video_call"
         android:visible="false"
+        app:iconTint="@color/riotx_accent"
         app:showAsAction="always"
         tools:visible="true" />
 
@@ -20,6 +22,7 @@
         android:icon="@drawable/ic_phone"
         android:title="@string/call"
         android:visible="false"
+        app:iconTint="@color/riotx_accent"
         app:showAsAction="always"
         tools:visible="true" />
 
