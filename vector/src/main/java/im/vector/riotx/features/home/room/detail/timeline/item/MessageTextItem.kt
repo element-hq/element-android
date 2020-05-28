@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.item
 
+import android.content.Context
 import android.text.method.MovementMethod
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
@@ -68,7 +69,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         private const val STUB_ID = R.id.messageContentTextStub
     }
 
-    override fun messageBubbleAllowed(): Boolean {
+    override fun messageBubbleAllowed(context: Context): Boolean {
         return true
     }
 }

@@ -152,7 +152,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         return infoInBubbles(context) && attributes.informationData.sentByMe
     }
 
-    open fun messageBubbleAllowed(): Boolean {
+    open fun messageBubbleAllowed(context: Context): Boolean {
         return false
     }
 
@@ -169,11 +169,11 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
     }
 
     fun infoInBubbles(context: Context): Boolean {
-        return messageBubbleAllowed() && BubbleThemeUtils.getBubbleStyle(context) == BubbleThemeUtils.BUBBLE_STYLE_BOTH
+        return messageBubbleAllowed(context) && BubbleThemeUtils.getBubbleStyle(context) == BubbleThemeUtils.BUBBLE_STYLE_BOTH
     }
 
     fun updateMessageBubble(holder: H) {
-        val bubbleStyle = if (messageBubbleAllowed()) BubbleThemeUtils.getBubbleStyle(holder.eventBaseView.context) else BubbleThemeUtils.BUBBLE_STYLE_NONE
+        val bubbleStyle = if (messageBubbleAllowed(holder.eventBaseView.context)) BubbleThemeUtils.getBubbleStyle(holder.eventBaseView.context) else BubbleThemeUtils.BUBBLE_STYLE_NONE
         val reverseBubble = attributes.informationData.sentByMe && bubbleStyle == BubbleThemeUtils.BUBBLE_STYLE_BOTH
 
         //val bubbleView = holder.eventBaseView

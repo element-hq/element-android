@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.item
 
+import android.content.Context
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -52,7 +53,7 @@ abstract class MessageBlockCodeItem : AbsMessageItem<MessageBlockCodeItem.Holder
         private const val STUB_ID = R.id.messageContentCodeBlockStub
     }
 
-    override fun messageBubbleAllowed(): Boolean {
+    override fun messageBubbleAllowed(context: Context): Boolean {
         return true
     }
 }

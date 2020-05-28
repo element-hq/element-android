@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.item
 
+import android.content.Context
 import android.graphics.Paint
 import android.view.View
 import android.view.ViewGroup
@@ -66,7 +67,7 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
 
     override fun getViewType() = STUB_ID
 
-    override fun messageBubbleAllowed(): Boolean {
+    override fun messageBubbleAllowed(context: Context): Boolean {
         return true
     }
 

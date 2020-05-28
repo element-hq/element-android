@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.item
 
+import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -70,7 +71,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
 
     override fun getViewType() = STUB_ID
 
-    override fun messageBubbleAllowed(): Boolean {
+    override fun messageBubbleAllowed(context: Context): Boolean {
         return true
     }
 
