@@ -24,6 +24,8 @@ object TimelineDisplayableEvents {
 
     val DISPLAYABLE_TYPES = listOf(
             EventType.MESSAGE,
+            EventType.STATE_ROOM_WIDGET_LEGACY,
+            EventType.STATE_ROOM_WIDGET,
             EventType.STATE_ROOM_NAME,
             EventType.STATE_ROOM_TOPIC,
             EventType.STATE_ROOM_MEMBER,

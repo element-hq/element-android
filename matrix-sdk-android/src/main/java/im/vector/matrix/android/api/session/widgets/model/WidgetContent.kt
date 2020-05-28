@@ -31,6 +31,8 @@ data class WidgetContent(
         @Json(name = "waitForIframeLoad") val waitForIframeLoad: Boolean = false
 ) {
 
+    fun isActive() = type != null && url != null
+
     /**
      * @return the human name
      */

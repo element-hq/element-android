@@ -29,7 +29,7 @@ data class Widget(
         val computedUrl: String?
 ) {
 
-    val isActive = widgetContent.type != null && computedUrl != null
+    val isActive = widgetContent.isActive()
 
     val name = widgetContent.getHumanName()
 }

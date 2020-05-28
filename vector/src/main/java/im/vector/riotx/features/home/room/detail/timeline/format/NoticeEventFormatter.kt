@@ -34,6 +34,7 @@ import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.matrix.android.api.session.room.model.create.RoomCreateContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.api.session.widgets.model.WidgetContent
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.crypto.model.event.EncryptionEventContent
 import im.vector.riotx.R
@@ -58,6 +59,8 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             EventType.STATE_ROOM_GUEST_ACCESS       -> formatRoomGuestAccessEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_ENCRYPTION         -> formatRoomEncryptionEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_WIDGET,
+            EventType.STATE_ROOM_WIDGET_LEGACY      -> formatWidgetEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER                   -> formatCallEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
@@ -75,6 +78,18 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
                 Timber.v("Type $type not handled by this formatter")
                 null
             }
+        }
+    }
+
+    private fun formatWidgetEvent(event: Event, disambiguatedDisplayName: String): CharSequence? {
+        val widgetContent: WidgetContent = event.getClearContent().toModel() ?: return null
+        val previousWidgetContent: WidgetContent? = event.prevContent.toModel()
+        return if (widgetContent.isActive()) {
+            val name = widgetContent.getHumanName()
+            sp.getString(R.string.event_formatter_widget_added, name, disambiguatedDisplayName)
+        } else {
+            val name = previousWidgetContent?.getHumanName() ?: sp.getString(R.string.room_widget_activity_title)
+            sp.getString(R.string.event_formatter_widget_removed, name, disambiguatedDisplayName)
         }
     }
 
