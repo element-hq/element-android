@@ -2029,6 +2029,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="sent_an_image">Image.</string>
     <string name="sent_an_audio_file">Audio</string>
     <string name="sent_a_file">File</string>
+    <string name="send_a_sticker">Sticker</string>
 
     <string name="verification_request_waiting">Waiting…</string>
     <string name="verification_request_other_cancelled">%s cancelled</string>
