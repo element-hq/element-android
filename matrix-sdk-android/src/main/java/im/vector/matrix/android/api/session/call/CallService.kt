@@ -25,14 +25,17 @@ interface CallService {
     fun getTurnServer(callback: MatrixCallback<TurnServer?>)
 
     /**
+     * Start a call
      * Send offer SDP to the other participant.
+     * @param callId a callId that the caller can create, it will be used to identify the call for other methods
      */
-    fun sendOfferSdp(callId: String, roomId: String, sdp: SessionDescription, callback: MatrixCallback<String>)
+    fun startCall(callId: String, roomId: String, sdp: SessionDescription, callback: MatrixCallback<String>)
 
     /**
+     * Accept an incoming call
      * Send answer SDP to the other participant.
      */
-    fun sendAnswerSdp(callId: String, roomId: String, sdp: SessionDescription, callback: MatrixCallback<String>)
+    fun pickUp(callId: String, roomId: String, sdp: SessionDescription, callback: MatrixCallback<String>)
 
     /**
      * Send Ice candidate to the other participant.
@@ -47,7 +50,7 @@ interface CallService {
     /**
      * Send a hangup event
      */
-    fun sendHangup(callId: String, roomId: String)
+    fun hangup(callId: String, roomId: String)
 
     fun addCallListener(listener: CallsListener)
 

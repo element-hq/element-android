@@ -304,9 +304,10 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 peerConnection?.setLocalDescription(object : SdpObserverAdapter() {
                     override fun onSetSuccess() {
                         Timber.v("## setLocalDescription success")
-                        callId = UUID.randomUUID().toString()
-                        Timber.v("## sending offer to callId: $callId roomId: $signalingRoomId")
-                        sessionHolder.getActiveSession().callService().sendOfferSdp(callId ?: "", signalingRoomId
+                        val id = UUID.randomUUID().toString()
+                        callId = id
+                        Timber.v("## sending offer to callId: $id roomId: $signalingRoomId")
+                        sessionHolder.getActiveSession().callService().startCall(id, signalingRoomId
                                 ?: "", sessionDescription, object : MatrixCallback<String> {})
                     }
                 }, sessionDescription)
@@ -449,7 +450,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     fun endCall() {
         if (callId != null && signalingRoomId != null) {
-            sessionHolder.getActiveSession().callService().sendHangup(callId!!, signalingRoomId!!)
+            sessionHolder.getActiveSession().callService().hangup(callId!!, signalingRoomId!!)
         }
         close()
     }

@@ -54,7 +54,7 @@ internal class DefaultCallService @Inject constructor(
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun sendOfferSdp(callId: String, roomId: String, sdp: SessionDescription, callback: MatrixCallback<String>) {
+    override fun startCall(callId: String, roomId: String, sdp: SessionDescription, callback: MatrixCallback<String>) {
         val eventContent = CallInviteContent(
                 callId = callId,
                 lifetime = CALL_TIMEOUT_MS,
@@ -72,7 +72,7 @@ internal class DefaultCallService @Inject constructor(
         }
     }
 
-    override fun sendAnswerSdp(callId: String, roomId: String, sdp: SessionDescription, callback: MatrixCallback<String>) {
+    override fun pickUp(callId: String, roomId: String, sdp: SessionDescription, callback: MatrixCallback<String>) {
         val eventContent = CallAnswerContent(
                 callId = callId,
                 answer = CallAnswerContent.Answer(sdp = sdp.description)
@@ -114,7 +114,7 @@ internal class DefaultCallService @Inject constructor(
     override fun sendLocalIceCandidateRemovals(callId: String, roomId: String, candidates: List<IceCandidate>) {
     }
 
-    override fun sendHangup(callId: String, roomId: String) {
+    override fun hangup(callId: String, roomId: String) {
         val eventContent = CallHangupContent(callId = callId)
         createEventAndLocalEcho(type = EventType.CALL_HANGUP, roomId = roomId, content = eventContent.toContent()).let { event ->
             roomEventSender.sendEvent(event)
