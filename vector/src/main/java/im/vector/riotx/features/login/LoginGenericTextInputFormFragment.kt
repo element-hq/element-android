@@ -217,7 +217,7 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
             TextInputFormFragmentMode.SetEmail      -> {
                 if (throwable.is401()) {
                     // This is normal use case, we go to the mail waiting screen
-                    loginSharedActionViewModel.post(LoginNavigation.OnSendEmailSuccess(loginViewModel.currentThreePid ?: ""))
+                    loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnSendEmailSuccess(loginViewModel.currentThreePid ?: "")))
                 } else {
                     loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
                 }
@@ -225,7 +225,7 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
             TextInputFormFragmentMode.SetMsisdn     -> {
                 if (throwable.is401()) {
                     // This is normal use case, we go to the enter code screen
-                    loginSharedActionViewModel.post(LoginNavigation.OnSendMsisdnSuccess(loginViewModel.currentThreePid ?: ""))
+                    loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnSendMsisdnSuccess(loginViewModel.currentThreePid ?: "")))
                 } else {
                     loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
                 }

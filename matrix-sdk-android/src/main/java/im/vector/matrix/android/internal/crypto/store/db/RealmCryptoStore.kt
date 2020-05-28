@@ -233,29 +233,6 @@ internal class RealmCryptoStore @Inject constructor(
         return olmAccount!!
     }
 
-    override fun storeUserDevice(userId: String?, deviceInfo: CryptoDeviceInfo?) {
-        if (userId == null || deviceInfo == null) {
-            return
-        }
-
-        doRealmTransaction(realmConfiguration) { realm ->
-            val user = UserEntity.getOrCreate(realm, userId)
-
-            // Create device info
-            val deviceInfoEntity = CryptoMapper.mapToEntity(deviceInfo)
-            realm.insertOrUpdate(deviceInfoEntity)
-//            val deviceInfoEntity = DeviceInfoEntity.getOrCreate(it, userId, deviceInfo.deviceId).apply {
-//                deviceId = deviceInfo.deviceId
-//                identityKey = deviceInfo.identityKey()
-//                putDeviceInfo(deviceInfo)
-//            }
-
-            if (!user.devices.contains(deviceInfoEntity)) {
-                user.devices.add(deviceInfoEntity)
-            }
-        }
-    }
-
     override fun getUserDevice(userId: String, deviceId: String): CryptoDeviceInfo? {
         return doWithRealm(realmConfiguration) {
             it.where<DeviceInfoEntity>()
@@ -1276,7 +1253,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun setDeviceTrust(userId: String, deviceId: String, crossSignedVerified: Boolean, locallyVerified: Boolean) {
+    override fun setDeviceTrust(userId: String, deviceId: String, crossSignedVerified: Boolean, locallyVerified: Boolean?) {
         doRealmTransaction(realmConfiguration) { realm ->
             realm.where(DeviceInfoEntity::class.java)
                     .equalTo(DeviceInfoEntityFields.PRIMARY_KEY, DeviceInfoEntity.createPrimaryKey(userId, deviceId))
@@ -1289,7 +1266,7 @@ internal class RealmCryptoStore @Inject constructor(
                                 deviceInfoEntity.trustLevelEntity = it
                             }
                         } else {
-                            trustEntity.locallyVerified = locallyVerified
+                            locallyVerified?.let { trustEntity.locallyVerified = it  }
                             trustEntity.crossSignedVerified = crossSignedVerified
                         }
                     }
@@ -1429,7 +1406,7 @@ internal class RealmCryptoStore @Inject constructor(
         } else {
             // Just override existing, caller should check and untrust id needed
             val existing = CrossSigningInfoEntity.getOrCreate(realm, userId)
-            existing.crossSigningKeys.forEach { it.deleteFromRealm() }
+            existing.crossSigningKeys.deleteAllFromRealm()
             existing.crossSigningKeys.addAll(
                     info.crossSigningKeys.map {
                         crossSigningKeysMapper.map(it)

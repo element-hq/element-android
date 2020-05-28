@@ -1090,6 +1090,8 @@
     <string name="notification_new_invitation">New Invitation</string>
     <string name="notification_sender_me">Me</string>
     <string name="notification_inline_reply_failed">** Failed to send - please open room</string>
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
 
     <!-- historical -->
     <string name="historical_placeholder">Search for historical</string>
@@ -2370,4 +2372,17 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="external_link_confirmation_message">The link %1$s is taking you to another site: %2$s.\n\nAre you sure you want to continue?</string>
 
     <string name="create_room_dm_failure">"We couldn't create your DM. Please check the users you want to invite and try again."</string>
+
+    <string name="add_members_to_room">Add members</string>
+    <string name="invite_users_to_room_action_invite">INVITE</string>
+    <string name="inviting_users_to_room">Inviting users…</string>
+    <string name="invite_users_to_room_title">Invite Users</string>
+    <string name="invitation_sent_to_one_user">Invitation sent to %1$s</string>
+    <string name="invitations_sent_to_two_users">Invitations sent to %1$s and %2$s</string>
+    <plurals name="invitations_sent_to_one_and_more_users">
+        <item quantity="one">Invitations sent to %1$s and one more</item>
+        <item quantity="other">Invitations sent to %1$s and %2$d more</item>
+    </plurals>
+    <string name="invite_users_to_room_failure">We could not invite users. Please check the users you want to invite and try again.</string>
+
 </resources>

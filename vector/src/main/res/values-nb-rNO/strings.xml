@@ -723,4 +723,12 @@
     <string name="send_files_in">Send inn i</string>
     <string name="hs_url">Hjemmetjener URL</string>
     <string name="start_new_chat">Start ny chat</string>
+    <string name="start_voice_call">Start lydsamtale</string>
+    <string name="start_video_call">Start videosamtale</string>
+
+    <string name="option_send_voice">Send lydopptak</string>
+
+    <string name="start_new_chat_prompt_msg">Er du sikker på du vil starte en samtale med %s\?</string>
+    <string name="start_voice_call_prompt_msg">Er du sikker på du vil starte en lydsamtale\?</string>
+    <string name="start_video_call_prompt_msg">Er du sikker på du vil starte en videosamtale\?</string>
 </resources>

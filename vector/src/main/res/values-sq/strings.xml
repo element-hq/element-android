@@ -592,7 +592,7 @@
     <string name="encryption_import_import">Importo</string>
     <string name="passphrase_enter_passphrase">Jepni frazëkalimin</string>
     <string name="encryption_never_send_to_unverified_devices_title">Fshehtëzoje vetëm për sesione të verifikuar</string>
-    <string name="encryption_information_not_verified">JO i verifikuar</string>
+    <string name="encryption_information_not_verified">Jo i Verifikuar</string>
     <string name="encryption_information_verified">I verifikuar</string>
     <string name="encryption_information_blocked">Në Listë të Zezë</string>
 
@@ -916,8 +916,8 @@
     <string name="encryption_information_unverify">Hiqi verifikimin</string>
     <string name="encryption_information_unblock">Hiqe nga listë e zezë</string>
 
-    <string name="encryption_information_verify_device_warning">Që të verifikoni se këtij sesioni mund t’i zihet besë, ju lutemi, lidhuni me të zotët e saj përmes ndonjë rruge tjetër (p.sh., personalisht, ose përmes një thirrjeje telefonike) dhe pyetini nëse përputhet apo jo kyçi që shohin te Rregullime të tyret të Përdoruesit për këtë sesion me kyçin më poshtë:</string>
-    <string name="encryption_information_verify_device_warning2">Nëse përputhet, shtypni butonin e verifikimit më poshtë. Nëse jo, atëherë dikush tjetër po e përgjon këtë sesion dhe duhet ta kaloni në listë të zezë. Në të ardhmen, ky proces verifikimi do të jetë më i sofistikuar.</string>
+    <string name="encryption_information_verify_device_warning">Ripohojeni duke krahasuar sa vijon me Rregullimet e Përdoruesit te sesioni juaj tjetër:</string>
+    <string name="encryption_information_verify_device_warning2">Nëse s’përputhen, siguria e komunikimeve tuaja mund të jetë komprometuar.</string>
     <string name="directory_server_placeholder">URL Shërbyesi Home</string>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">1 dhomë</item>
@@ -2147,7 +2147,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     </plurals>
     <string name="poll_item_selected_aria">Mundësi e Përzgjedhur</string>
     <string name="command_description_poll">Krijoni një pyetësor të thjeshtë</string>
-    <string name="verification_cannot_access_other_session">Përdorni metodë rimarrjesh</string>
+    <string name="verification_cannot_access_other_session">Përdorni Frazëkalim Rikthimesh ose Kyç</string>
     <string name="verification_use_passphrase">Nëse s’hyni dot në një sesion ekzistues</string>
 
     <string name="new_signin">Hyrje e Re</string>
@@ -2182,7 +2182,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="refresh">Rifreskoje</string>
 
-    <string name="new_session">Sesion i Ri</string>
+    <string name="new_session">Hyrje e re. Ju qetë\?</string>
     <string name="new_session_review">Prekeni, që ta shqyrtoni &amp; verifikoni</string>
     <string name="verify_new_session_notice">Përdoreni këtë sesion që të verifikoni atë të riun tuaj, duke i akorduar hyrje te mesazhe të fshehtëzuar.</string>
     <string name="verify_new_session_was_not_me">Ky s’qeshë unë</string>
@@ -2204,7 +2204,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="verify_cancelled_notice">Verifikoni pajisjet tuaja që prej Rregullimeve.</string>
     <string name="verification_cancelled">Verifikimi u Anulua</string>
 
-    <string name="recovery_passphrase">Fjalëkalim Mesazhesh</string>
+    <string name="recovery_passphrase">Frazëkalim Rikthimesh</string>
     <string name="message_key">Kyç Mesazhesh</string>
     <string name="account_password">Fjalëkalim Llogarie</string>
 
@@ -2278,4 +2278,73 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="auth_invalid_login_param_space_in_password">Emër përdoruesi dhe/ose fjalëkalim i pasaktë. Fjalëkalimi i dhënë fillon ose mbaron me hapësirë, ju lutemi, kontrollojeni.</string>
 
+    <string name="settings_rageshake" />
+    <string name="bootstrap_crosssigning_progress_initializing">Po publikohen kyçe të krijuar identiteti</string>
+    <string name="room_message_placeholder">Mesazh…</string>
+
+    <string name="upgrade_security">Ka të gatshëm përmirësim fshehtëzimi</string>
+    <string name="security_prompt_text">Verifikoni veten &amp; të tjerët, që t’i mbani bisedat tuaja të sigurta</string>
+
+    <string name="bootstrap_enter_recovery">Që të vazhdohet, jepni %s tuaj</string>
+    <string name="use_file">Përdor Kartelë</string>
+
+    <string name="enter_backup_passphrase">Jepni %s</string>
+    <string name="backup_recovery_passphrase">Frazëkalim Rikthimesh</string>
+    <string name="bootstrap_invalid_recovery_key">S’është kyç rimarrjesh i vlefshëm</string>
+    <string name="recovery_key_empty_error_message">Ju lutemi, jepni një kyç rimarrjesh</string>
+
+    <string name="bootstrap_progress_checking_backup">Po kontrollohet Kyç kopjeruajtjeje</string>
+    <string name="bootstrap_progress_checking_backup_with_info">Po kontrollohet Kyç kopjeruajtjeje (%s)</string>
+    <string name="bootstrap_progress_generating_ssss">Po prodhohet kyç SSSS nga frazëkalim</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">Po prodhohet kyç SSSS prej frazëkalimi (%s)</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">Po prodhohet kyç SSSS nga kyç rimarrjesh</string>
+    <string name="bootstrap_progress_storing_in_sss">Po depozitohet e fshehtë kopjeruajtjeje kyçesh në SSSS</string>
+    <string name="new_session_review_with_info">%1$s (%2$s)</string>
+
+    <string name="bootstrap_migration_enter_backup_password">Që të vazhdohet, jepni Frazëkalim Kopjeruajtje Kyçesh.</string>
+    <string name="bootstrap_migration_use_recovery_key">përdorni kyçin tuaj të rimarrjeve të Kopjeruajtjes së Kyçeve</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">S’dihet Frazëkalimi juaj i Kopjeruajtjes së Kyçeve, mundeni të %s.</string>
+    <string name="bootstrap_migration_backup_recovery_key">Kyç rimarrjesh Kopjeruajtjesh Kyçesh</string>
+
+    <string name="settings_security_prevent_screenshots_title">Pengo foto ekrani të aplikacionit</string>
+    <string name="settings_security_prevent_screenshots_summary">Aktivizimi i këtij rregullimi shton FLAG_SECURE te krejt Veprimtaritë. Që ndryshimi të hyjë në fuqi, rinisni aplikacionin.</string>
+
+    <string name="media_file_added_to_gallery">Te Galeria u shtua kartelë media</string>
+    <string name="error_adding_media_file_to_gallery">S’u shtua dot kartelë media te Galeria</string>
+    <string name="change_password_summary">Caktoni një fjalëkalim të ri llogarie…</string>
+
+    <string name="use_other_session_content_description">Përdorni Riot-in më të ri në pajisjet tuaja të tjera, Riot Web, Riot Desktop, Riot iOS, RiotX për Android, ose ose një tjetër klient Matrix i aftë për &lt;em&gt;cross-signing&lt;/em</string>
+    <string name="riot_desktop_web">Riot Web
+\nRiot Desktop</string>
+    <string name="riot_ios_android">Riot iOS
+\nRiot X për Android</string>
+    <string name="or_other_mx_capabale_client">ose një tjetër klient Matrix i aftë për &lt;em&gt;cross-signing&lt;/em</string>
+    <string name="use_latest_riot">Përdorni Riot-in më të ri në pajisjet tuaja të tjera:</string>
+    <string name="command_description_discard_session_not_handled">Mbulohet vetëm për dhoma të fshehtëzuara</string>
+    <string name="enter_secret_storage_passphrase_or_key">Përdorni %1$s tuaj ose përdorni %2$s tuaj që të vazhdohet.</string>
+    <string name="use_recovery_key">Përdorni Kyçin Rimarrjesh</string>
+    <string name="enter_secret_storage_input_key">Përzgjidhni Kyçin tuaj të Rimarrjeve, ose jepeni dorazi duke e shtypur ose duke e ngjitur prej të papastrës tuaj</string>
+    <string name="keys_backup_recovery_key_error_decrypt">Kopjeruajtja s’u shfshehtëzua dot me këtë Kyç Rimarrjesh: ju lutemi, verifikoni se keni dhënë Kyçin e saktë të Rimarrjeve.</string>
+    <string name="failed_to_access_secure_storage">S’u arrit të hyhet në depozitë të sigurt</string>
+
+    <string name="unencrypted">Të pafshehtëzuara</string>
+    <string name="encrypted_unverified">Fshehtëzuar nga një pajisje e paverifikuar</string>
+    <string name="review_logins">Shqyrtojini kur të jeni i futur</string>
+    <string name="verify_other_sessions">Verifikoni krejt sesionet tuaj që të siguroheni se llogaria &amp; mesazhet tuaja janë të sigurt</string>
+    <string name="verify_this_session">Verifikoni kredencialet e reja për hyrje te llogaria juaj: %1$s</string>
+
+    <string name="cross_signing_verify_by_text">Verifikojeni Dorazi përmes Teksti</string>
+    <string name="crosssigning_verify_session">Verifikoni kredenciale hyrjeje</string>
+    <string name="cross_signing_verify_by_emoji">Verifikojeni Në Mënyrë Interaktive përmes Emoji-sh</string>
+    <string name="confirm_your_identity">Ripohoni identitetin tuaj duke verifikuar këto kredenciale hyrjesh prej një nga sesionet tuaj të tjerë, duke i akorduar hyrje te mesazhet e fshehtëzuar.</string>
+    <string name="mark_as_verified">Vërini shenjë si i Besuar</string>
+
+    <string name="error_empty_field_choose_user_name">Ju lutemi, zgjidhni një emër përdoruesi.</string>
+    <string name="error_empty_field_choose_password">Ju lutemi, zgjidhni një fjalëkalim.</string>
+    <string name="external_link_confirmation_title">Kontrollojeni edhe një herë këtë lidhje</string>
+    <string name="external_link_confirmation_message">Lidhja %1$s po ju shpie te një tjetër sajt: %2$s.
+\n
+\nJeni i sigurt se doni të vazhdohet\?</string>
+
+    <string name="create_room_dm_failure">S’e krijuam dot DM-në tuaj. Ju lutemi, kontrolloni përdoruesit që doni të ftoni dhe riprovoni.</string>
 </resources>

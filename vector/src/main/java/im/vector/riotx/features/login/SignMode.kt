@@ -21,5 +21,7 @@ enum class SignMode {
     // Account creation
     SignUp,
     // Login
-    SignIn
+    SignIn,
+    // Login directly with matrix Id
+    SignInWithMatrixId
 }

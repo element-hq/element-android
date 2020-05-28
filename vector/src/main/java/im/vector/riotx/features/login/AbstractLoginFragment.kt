@@ -38,7 +38,6 @@ import javax.net.ssl.HttpsURLConnection
 abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
 
     protected val loginViewModel: LoginViewModel by activityViewModel()
-    protected lateinit var loginSharedActionViewModel: LoginSharedActionViewModel
 
     private var isResetPasswordStarted = false
 
@@ -56,8 +55,6 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        loginSharedActionViewModel = activityViewModelProvider.get(LoginSharedActionViewModel::class.java)
 
         loginViewModel.observeViewEvents {
             handleLoginViewEvents(it)

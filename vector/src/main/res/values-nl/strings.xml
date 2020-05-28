@@ -1605,4 +1605,59 @@
     <string name="identity_server_not_defined">U gebruikt geen identiteitsserver</string>
     <string name="identity_server_not_defined_for_password_reset">Er is geen identiteitsserver geconfigureerd. Dit is vereist om uw wachtwoord opnieuw in te stellen.</string>
 
+    <string name="security_warning_identity_server">Vorige versies van Riot hadden een veiligheidsfout die er voor kon zorgen dat je Identiteits Server (%1$s) toegang tot je account had. Indien je %2$s vertrouwt, dan kun je dit negeren; anders log je uit en weer in.
+\n
+\nLees meer details hier:
+\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
+
+    <string name="error_user_already_logged_in">Het lijkt er op dat je probeert verbinding te maken met een andere thuisserver. Wil je uitloggen\?</string>
+
+    <string name="edit">Bewerken</string>
+    <string name="reply">Beantwoorden</string>
+
+    <string name="global_retry">Opnieuw proberen</string>
+    <string name="room_list_empty">Betreed een kamer om de applicatie te gebruiken.</string>
+    <string name="send_you_invite">Heeft je een uitnodiging gestuurd</string>
+    <string name="invited_by">Uitgenodigd door %s</string>
+
+    <string name="room_list_catchup_empty_title">Je bent helemaal bij!</string>
+    <string name="room_list_catchup_empty_body">Je hebt geen ongelezen berichten meer</string>
+    <string name="room_list_catchup_welcome_title">Welkom thuis!</string>
+    <string name="room_list_catchup_welcome_body">Ongelezen berichten inhalen</string>
+    <string name="room_list_people_empty_title">Gesprekken</string>
+    <string name="room_list_people_empty_body">Je directe gesprekken zullen hier worden weergegeven</string>
+    <string name="room_list_rooms_empty_title">Kamers</string>
+    <string name="room_list_rooms_empty_body">Je kamers zullen hier worden weergegeven</string>
+
+    <string name="title_activity_emoji_reaction_picker">Reacties</string>
+    <string name="reactions_agree">Bevestigen</string>
+    <string name="reactions_like">Leuk vinden</string>
+    <string name="message_add_reaction">Reactie Toevoegen</string>
+    <string name="message_view_reaction">Reacties Bekijken</string>
+    <string name="reactions">Reacties</string>
+
+    <string name="event_redacted_by_user_reason">Gebeurtenis verwijderd door gebruiker</string>
+    <string name="event_redacted_by_admin_reason">Gebeurtenis gemodereerd door gesprek beheerder</string>
+    <string name="last_edited_info_message">Laatst bewerkt door %1$s op %2$s</string>
+
+
+    <string name="malformed_message">Niet correcte gebeurtenis, kan niet weergeven</string>
+    <string name="create_new_room">Maak een nieuw gesprek aan</string>
+    <string name="error_no_network">Geen netwerk. Controleer uw internet verbinding.</string>
+    <string name="action_change">Wijzigen</string>
+    <string name="change_room_directory_network">Wijzig netwerk</string>
+    <string name="please_wait">Even wachten…</string>
+    <string name="group_all_communities">Alle Gemeenschappen</string>
+
+    <string name="room_preview_no_preview">Dit gesprek kan niet worden voorvertoond</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">De voorvertoning van wereld-leesbare gesprekken zijn nog niet ondersteund in RiotX</string>
+
+    <string name="fab_menu_create_room">Gesprekken</string>
+    <string name="fab_menu_create_chat">Directe Berichten</string>
+
+    <string name="create_room_title">Nieuw Gesprek</string>
+    <string name="create_room_action_create">AANMAKEN</string>
+    <string name="create_room_name_hint">Gespreksnaam</string>
+    <string name="create_room_public_title">Publiek</string>
+    <string name="create_room_public_description">Iedereen zal dit gesprek kunnen toetreden</string>
 </resources>

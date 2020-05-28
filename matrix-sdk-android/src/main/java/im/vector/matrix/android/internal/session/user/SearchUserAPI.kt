@@ -16,7 +16,7 @@
 
 package im.vector.matrix.android.internal.session.user
 
-import im.vector.matrix.android.internal.network.NetworkConstants.URI_API_PREFIX_PATH_R0
+import im.vector.matrix.android.internal.network.NetworkConstants
 import im.vector.matrix.android.internal.session.user.model.SearchUsersParams
 import im.vector.matrix.android.internal.session.user.model.SearchUsersResponse
 import retrofit2.Call
@@ -30,6 +30,6 @@ internal interface SearchUserAPI {
      *
      * @param searchUsersParams the search params.
      */
-    @POST(URI_API_PREFIX_PATH_R0 + "user_directory/search")
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user_directory/search")
     fun searchUsers(@Body searchUsersParams: SearchUsersParams): Call<SearchUsersResponse>
 }

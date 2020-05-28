@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.createdirect
+package im.vector.riotx.features.userdirectory
 
 import android.os.Bundle
 import android.view.View
@@ -29,22 +29,22 @@ import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.setupAsSearch
 import im.vector.riotx.core.extensions.showKeyboard
 import im.vector.riotx.core.platform.VectorBaseFragment
-import kotlinx.android.synthetic.main.fragment_create_direct_room_directory_users.*
+import kotlinx.android.synthetic.main.fragment_create_direct_room_directory_users.recyclerView
+import kotlinx.android.synthetic.main.fragment_user_directory.*
 import javax.inject.Inject
 
-class CreateDirectRoomDirectoryUsersFragment @Inject constructor(
+class UserDirectoryFragment @Inject constructor(
         private val directRoomController: DirectoryUsersController
 ) : VectorBaseFragment(), DirectoryUsersController.Callback {
 
-    override fun getLayoutResId() = R.layout.fragment_create_direct_room_directory_users
+    override fun getLayoutResId() = R.layout.fragment_user_directory
+    private val viewModel: UserDirectoryViewModel by activityViewModel()
 
-    private val viewModel: CreateDirectRoomViewModel by activityViewModel()
-
-    private lateinit var sharedActionViewModel: CreateDirectRoomSharedActionViewModel
+    private lateinit var sharedActionViewModel: UserDirectorySharedActionViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedActionViewModel = activityViewModelProvider.get(CreateDirectRoomSharedActionViewModel::class.java)
+        sharedActionViewModel = activityViewModelProvider.get(UserDirectorySharedActionViewModel::class.java)
         setupRecyclerView()
         setupSearchByMatrixIdView()
         setupCloseView()
@@ -62,19 +62,19 @@ class CreateDirectRoomDirectoryUsersFragment @Inject constructor(
     }
 
     private fun setupSearchByMatrixIdView() {
-        createDirectRoomSearchById.setupAsSearch(searchIconRes = 0)
-        createDirectRoomSearchById
+        userDirectorySearchById.setupAsSearch(searchIconRes = 0)
+        userDirectorySearchById
                 .textChanges()
                 .subscribe {
-                    viewModel.handle(CreateDirectRoomAction.SearchDirectoryUsers(it.toString()))
+                    viewModel.handle(UserDirectoryAction.SearchDirectoryUsers(it.toString()))
                 }
                 .disposeOnDestroyView()
-        createDirectRoomSearchById.showKeyboard(andRequestFocus = true)
+        userDirectorySearchById.showKeyboard(andRequestFocus = true)
     }
 
     private fun setupCloseView() {
-        createDirectRoomClose.setOnClickListener {
-            sharedActionViewModel.post(CreateDirectRoomSharedAction.GoBack)
+        userDirectoryClose.setOnClickListener {
+            sharedActionViewModel.post(UserDirectorySharedAction.GoBack)
         }
     }
 
@@ -84,12 +84,12 @@ class CreateDirectRoomDirectoryUsersFragment @Inject constructor(
 
     override fun onItemClick(user: User) {
         view?.hideKeyboard()
-        viewModel.handle(CreateDirectRoomAction.SelectUser(user))
-        sharedActionViewModel.post(CreateDirectRoomSharedAction.GoBack)
+        viewModel.handle(UserDirectoryAction.SelectUser(user))
+        sharedActionViewModel.post(UserDirectorySharedAction.GoBack)
     }
 
     override fun retryDirectoryUsersRequest() {
-        val currentSearch = createDirectRoomSearchById.text.toString()
-        viewModel.handle(CreateDirectRoomAction.SearchDirectoryUsers(currentSearch))
+        val currentSearch = userDirectorySearchById.text.toString()
+        viewModel.handle(UserDirectoryAction.SearchDirectoryUsers(currentSearch))
     }
 }

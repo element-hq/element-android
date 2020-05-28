@@ -37,6 +37,12 @@ import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.extensions.addFragmentToBackstack
 import im.vector.riotx.core.platform.SimpleFragmentActivity
 import im.vector.riotx.core.platform.WaitingViewData
+import im.vector.riotx.features.userdirectory.KnownUsersFragment
+import im.vector.riotx.features.userdirectory.KnownUsersFragmentArgs
+import im.vector.riotx.features.userdirectory.UserDirectoryFragment
+import im.vector.riotx.features.userdirectory.UserDirectorySharedAction
+import im.vector.riotx.features.userdirectory.UserDirectorySharedActionViewModel
+import im.vector.riotx.features.userdirectory.UserDirectoryViewModel
 import kotlinx.android.synthetic.main.activity.*
 import java.net.HttpURLConnection
 import javax.inject.Inject
@@ -44,7 +50,8 @@ import javax.inject.Inject
 class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private val viewModel: CreateDirectRoomViewModel by viewModel()
-    private lateinit var sharedActionViewModel: CreateDirectRoomSharedActionViewModel
+    private lateinit var sharedActionViewModel: UserDirectorySharedActionViewModel
+    @Inject lateinit var userDirectoryViewModelFactory: UserDirectoryViewModel.Factory
     @Inject lateinit var createDirectRoomViewModelFactory: CreateDirectRoomViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
 
@@ -56,23 +63,37 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         toolbar.visibility = View.GONE
-        sharedActionViewModel = viewModelProvider.get(CreateDirectRoomSharedActionViewModel::class.java)
+        sharedActionViewModel = viewModelProvider.get(UserDirectorySharedActionViewModel::class.java)
         sharedActionViewModel
                 .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
-                        CreateDirectRoomSharedAction.OpenUsersDirectory ->
-                            addFragmentToBackstack(R.id.container, CreateDirectRoomDirectoryUsersFragment::class.java)
-                        CreateDirectRoomSharedAction.Close              -> finish()
-                        CreateDirectRoomSharedAction.GoBack             -> onBackPressed()
+                        UserDirectorySharedAction.OpenUsersDirectory ->
+                            addFragmentToBackstack(R.id.container, UserDirectoryFragment::class.java)
+                        UserDirectorySharedAction.Close           -> finish()
+                        UserDirectorySharedAction.GoBack          -> onBackPressed()
+                        is UserDirectorySharedAction.OnMenuItemSelected -> onMenuItemSelected(sharedAction)
                     }
                 }
                 .disposeOnDestroy()
         if (isFirstCreation()) {
-            addFragment(R.id.container, CreateDirectRoomKnownUsersFragment::class.java)
+            addFragment(
+                    R.id.container,
+                    KnownUsersFragment::class.java,
+                    KnownUsersFragmentArgs(
+                            title = getString(R.string.fab_menu_create_chat),
+                            menuResId = R.menu.vector_create_direct_room
+                    )
+            )
         }
         viewModel.selectSubscribe(this, CreateDirectRoomViewState::createAndInviteState) {
             renderCreateAndInviteState(it)
+        }
+    }
+
+    private fun onMenuItemSelected(action: UserDirectorySharedAction.OnMenuItemSelected) {
+        if (action.itemId == R.id.action_create_direct_room) {
+            viewModel.handle(CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(action.selectedUsers))
         }
     }
 

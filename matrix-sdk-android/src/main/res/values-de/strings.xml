@@ -179,8 +179,8 @@
     <string name="notice_room_invite_no_invitee_with_reason">%1$s\'s Einladung. Grund: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s hat %2$s eingeladen. Grund: %3$s</string>
     <string name="notice_room_invite_you_with_reason">%1$s hat dich eingeladen. Grund: %2$s</string>
-    <string name="notice_room_join_with_reason">%1$s beigetreten. Grund: %2$s</string>
-    <string name="notice_room_leave_with_reason">%1$s ging. Grund: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s ist dem Raum beigetreten. Grund: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s hat den Raum verlassen. Grund: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s hat die Einladung abgelehnt. Grund: %2$s</string>
     <string name="notice_room_kick_with_reason">%1$s hat %2$s gekickt. Grund: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s hat Sperre von %2$s aufgehoben. Grund: %3$s</string>

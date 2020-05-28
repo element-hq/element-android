@@ -1,22 +1,20 @@
 /*
+ * Copyright (c) 2020 New Vector Ltd
  *
- *  * Copyright 2019 New Vector Ltd
- *  *
- *  * Licensed under the Apache License, Version 2.0 (the "License");
- *  * you may not use this file except in compliance with the License.
- *  * You may obtain a copy of the License at
- *  *
- *  *     http://www.apache.org/licenses/LICENSE-2.0
- *  *
- *  * Unless required by applicable law or agreed to in writing, software
- *  * distributed under the License is distributed on an "AS IS" BASIS,
- *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  * See the License for the specific language governing permissions and
- *  * limitations under the License.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-package im.vector.riotx.features.createdirect
+package im.vector.riotx.features.userdirectory
 
 import android.view.View
 import android.widget.ImageView
@@ -32,8 +30,8 @@ import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.features.home.AvatarRenderer
 
-@EpoxyModelClass(layout = R.layout.item_create_direct_room_user)
-abstract class CreateDirectRoomUserItem : VectorEpoxyModel<CreateDirectRoomUserItem.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_known_user)
+abstract class UserDirectoryUserItem : VectorEpoxyModel<UserDirectoryUserItem.Holder>() {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
@@ -67,9 +65,9 @@ abstract class CreateDirectRoomUserItem : VectorEpoxyModel<CreateDirectRoomUserI
     }
 
     class Holder : VectorEpoxyHolder() {
-        val userIdView by bind<TextView>(R.id.createDirectRoomUserID)
-        val nameView by bind<TextView>(R.id.createDirectRoomUserName)
-        val avatarImageView by bind<ImageView>(R.id.createDirectRoomUserAvatar)
-        val avatarCheckedImageView by bind<ImageView>(R.id.createDirectRoomUserAvatarChecked)
+        val userIdView by bind<TextView>(R.id.knownUserID)
+        val nameView by bind<TextView>(R.id.knownUserName)
+        val avatarImageView by bind<ImageView>(R.id.knownUserAvatar)
+        val avatarCheckedImageView by bind<ImageView>(R.id.knownUserAvatarChecked)
     }
 }

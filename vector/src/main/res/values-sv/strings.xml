@@ -1,0 +1,282 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="resources_language">sv</string>
+    <string name="resources_country_code">SE</string>
+    <string name="resources_script">Latn</string>
+
+    <string name="light_theme">Ljust tema</string>
+    <string name="dark_theme">Mörkt tema</string>
+    <string name="black_them">Svart tema</string>
+    <string name="status_theme">Status.im-tema</string>
+
+    <string name="notification_sync_init">Initialiserar tjänst</string>
+    <string name="notification_sync_in_progress">Synkroniserar…</string>
+    <string name="notification_listening_for_events">Lyssnar efter händelser</string>
+    <string name="notification_noisy_notifications">Högljudda notifikationer</string>
+    <string name="notification_silent_notifications">Tysta notifikationer</string>
+
+    <string name="title_activity_home">Meddelanden</string>
+    <string name="title_activity_room">Rum</string>
+    <string name="title_activity_settings">Inställningar</string>
+    <string name="title_activity_member_details">Medlemsdetaljer</string>
+    <string name="title_activity_historical">Historisk</string>
+    <string name="title_activity_bug_report">Buggrapport</string>
+    <string name="title_activity_group_details">Gemenskapsdetaljer</string>
+    <string name="title_activity_choose_sticker">Skicka ett klistermärke</string>
+    <string name="title_activity_keys_backup_setup">Säkerhetskopiering av nycklar</string>
+    <string name="title_activity_keys_backup_restore">Använd säkerhetskopiering av nycklar</string>
+    <string name="title_activity_verify_device">Verifiera session</string>
+
+    <string name="keys_backup_is_not_finished_please_wait">Säkerhetskopiering av nycklar är inte färdig, vänligen vänta…</string>
+    <string name="sign_out_bottom_sheet_warning_no_backup">Du kommer att förlora dina krypterade meddelanden om du loggar ut nu</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Säkerhetskopiering av nycklar pågår. Om du loggar ut nu så kommer du att förlora åtkomst till dina krypterade meddelanden.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Säker säkerhetskopiering av nycklar bör vara aktivt i alla dina sessioner för att förhindra att du förlorar åtkomst till dina krypterade meddelanden.</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Jag vill inte ha mina krypterade meddelanden</string>
+    <string name="sign_out_bottom_sheet_backing_up_keys">Säkerhetskopierar nycklar…</string>
+    <string name="keys_backup_activate">Använd säkerhetskopiering av nycklar</string>
+    <string name="are_you_sure">Är du säker\?</string>
+    <string name="backup">Säkerhetskopiera</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Du kommer att förlora åtkomst till dina krypterade meddelanden om du inte säkerhetskopierar dina nycklar innan du loggar ut.</string>
+
+    <string name="dialog_title_third_party_licences">Tredjepartslicenser</string>
+
+    <string name="loading">Laddar…</string>
+
+    <string name="ok">OK</string>
+    <string name="cancel">Avbryt</string>
+    <string name="save">Spara</string>
+    <string name="leave">Lämna</string>
+    <string name="stay">Stanna</string>
+    <string name="send">Skicka</string>
+    <string name="copy">Kopiera</string>
+    <string name="resend">Skicka igen</string>
+    <string name="redact">Ta bort</string>
+    <string name="quote">Citat</string>
+    <string name="download">Ladda ner</string>
+    <string name="share">Dela</string>
+    <string name="speak">Prata</string>
+    <string name="clear">Rensa</string>
+    <string name="later">Senare</string>
+    <string name="forward">Vidarebefordra</string>
+    <string name="permalink">Permanent länk</string>
+    <string name="view_source">Visa källa</string>
+    <string name="view_decrypted_source">Visa avkrypterad källa</string>
+    <string name="delete">Radera</string>
+    <string name="rename">Döp om</string>
+    <string name="none">Ingen</string>
+    <string name="revoke">Återkalla</string>
+    <string name="disconnect">Koppla ifrån</string>
+    <string name="report_content">Rapportera innehåll</string>
+    <string name="active_call">Aktivt samtal</string>
+    <string name="ongoing_conference_call">Pågående gruppsamtal.
+\nAnslut som %1$s eller %2$s</string>
+    <string name="ongoing_conference_call_voice">Röst</string>
+    <string name="ongoing_conference_call_video">Video</string>
+    <string name="cannot_start_call">Kan inte starta samtalet, vänligen försök senare</string>
+    <string name="missing_permissions_warning">På grund av saknade rättigheter, så kan vissa funktioner saknas…</string>
+    <string name="missing_permissions_error">På grund av saknade rättigheter så kan denna handling inte utföras.</string>
+    <string name="missing_permissions_to_start_conf_call">Du behöver ha rätt att bjuda in för att starta ett gruppsamtal i detta rum</string>
+    <string name="missing_permissions_title_to_start_conf_call">Kan inte starta samtal</string>
+    <string name="device_information">Sessionsinformation</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Gruppsamtal stöds inte i krypterade rum</string>
+    <string name="call_anyway">Ring ändå</string>
+    <string name="send_anyway">Skicka ändå</string>
+    <string name="or">eller</string>
+    <string name="invite">Bjud in</string>
+    <string name="offline">Bortkopplad</string>
+    <string name="accept">Godkänn</string>
+    <string name="skip">Hoppa över</string>
+    <string name="done">Färdig</string>
+    <string name="abort">Avbryt</string>
+    <string name="ignore">Ignorera</string>
+    <string name="review">Granska</string>
+    <string name="decline">Avslå</string>
+
+    <string name="action_exit">Avsluta</string>
+    <string name="actions">Handlingar</string>
+    <string name="action_sign_out">Logga ut</string>
+    <string name="action_sign_out_confirmation_simple">Är du säker på att du vill logga ut\?</string>
+    <string name="action_voice_call">Röstsamtal</string>
+    <string name="action_video_call">Videosamtal</string>
+    <string name="action_global_search">Global sökning</string>
+    <string name="action_mark_all_as_read">Markera alla som skickade</string>
+    <string name="action_historical">Historisk</string>
+    <string name="action_quick_reply">Snabbsvar</string>
+    <string name="action_mark_room_read">Markera som läst</string>
+    <string name="action_open">Öppna</string>
+    <string name="action_close">Stäng</string>
+    <string name="copied_to_clipboard">Kopierat till klippbordet</string>
+    <string name="disable">Stäng av</string>
+
+    <string name="dialog_title_confirmation">Bekräftelse</string>
+    <string name="dialog_title_warning">Varning</string>
+    <string name="dialog_title_error">Fel</string>
+
+    <string name="bottom_action_home">Hem</string>
+    <string name="bottom_action_favourites">Favoriter</string>
+    <string name="bottom_action_people">Personer</string>
+    <string name="bottom_action_rooms">Rum</string>
+    <string name="bottom_action_groups">Gemenskaper</string>
+
+    <string name="home_filter_placeholder_home">Filtrera rumsnamn</string>
+    <string name="home_filter_placeholder_favorites">Filtrera favoriter</string>
+    <string name="home_filter_placeholder_people">Filtrera personer</string>
+    <string name="home_filter_placeholder_rooms">Filtrera rumsnamn</string>
+    <string name="home_filter_placeholder_groups">Filtrera gemenskapsnamn</string>
+
+    <string name="invitations_header">Inbjudningar</string>
+    <string name="low_priority_header">Låg prioritet</string>
+    <string name="system_alerts_header">Systemvarningar</string>
+
+    <string name="direct_chats_header">Konversationer</string>
+    <string name="local_address_book_header">Lokal adressbok</string>
+    <string name="user_directory_header">Användarkatalog</string>
+    <string name="matrix_only_filter">Bara Matrix-kontakter</string>
+    <string name="no_conversation_placeholder">Inga konversationer</string>
+    <string name="no_contact_access_placeholder">Du gav inte Riot tillgång till dina lokala kontakter</string>
+    <string name="no_result_placeholder">Inga resultat</string>
+    <string name="people_no_identity_server">Ingen identitetsserver konfigurerad.</string>
+
+    <string name="rooms_header">Rum</string>
+    <string name="rooms_directory_header">Rumskatalog</string>
+    <string name="no_room_placeholder">Inga rum</string>
+    <string name="no_public_room_placeholder">Inga publika rum tillgängliga</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">1 användare</item>
+        <item quantity="other">%d användare</item>
+    </plurals>
+
+    <string name="groups_invite_header">Bjud in</string>
+    <string name="groups_header">Gemenskaper</string>
+    <string name="no_group_placeholder">Inga grupper</string>
+
+    <string name="send_bug_report_include_logs">Skicka loggar</string>
+    <string name="send_bug_report_include_crash_logs">Skicka kraschloggar</string>
+    <string name="send_bug_report_include_screenshot">Skicka skärmdump</string>
+    <string name="send_bug_report">Rapportera bugg</string>
+    <string name="send_bug_report_description">Vänligen beskriv buggen. Vad gjorde du\? Vad förväntade du dig skulle hända\? Vad hände istället\?</string>
+    <string name="send_bug_report_description_in_english">Om möjligt, skriv vänligen beskrivningen på engelska.</string>
+    <string name="send_bug_report_placeholder">Beskriv ditt problem här</string>
+    <string name="send_bug_report_logs_description">För att diagnostisera problemet kommer loggar från den här klienten att skickas med den här buggrapporten. Denna buggrapport, inklusive loggarna och skärmdumpen, kommer att vara publikt synlig. Om du skulle föredra att endast skicka texten ovan, vänligen avmarkera:</string>
+    <string name="send_bug_report_alert_message">Du verkar skaka din telefon i frustration. Vill du skicka en buggrapport\?</string>
+    <string name="send_bug_report_app_crashed">Appen kraschade senaste gången. Vill du skicka en buggrapport\?</string>
+    <string name="send_bug_report_rage_shake">Raseriskaka för att rapportera bugg</string>
+
+    <string name="send_bug_report_sent">Buggrapporten har skickats framgångsrikt</string>
+    <string name="send_bug_report_failed">Sändning av buggrapporten misslyckades (%s)</string>
+    <string name="send_bug_report_progress">Framsteg (%s%%)</string>
+
+    <string name="send_files_in">Skicka in i</string>
+    <string name="read_receipt">Läs</string>
+
+    <string name="join_room">Gå med i rummet</string>
+    <string name="username">Användarnamn</string>
+    <string name="create_account">Skapa konto</string>
+    <string name="login">Logga in</string>
+    <string name="logout">Logga ut</string>
+    <string name="hs_url">URL för hemserver</string>
+    <string name="identity_url">URL för identitetsserver</string>
+    <string name="search">Sök</string>
+
+    <string name="start_new_chat">Starta ny chatt</string>
+    <string name="start_voice_call">Starta röstsamtal</string>
+    <string name="start_video_call">Starta videosamtal</string>
+
+    <string name="option_send_voice">Skicka röst</string>
+
+    <string name="start_new_chat_prompt_msg">Är du säker på att du vill skapa en ny chatt med %s\?</string>
+    <string name="start_voice_call_prompt_msg">Är du säker på att du vill starta ett röstsamtal\?</string>
+    <string name="start_video_call_prompt_msg">Är du säker på att du vill skapa ett videosamtal\?</string>
+    <string name="call_failed_no_ice_title">Samtal misslyckades p.g.a. felkonfigurerad server</string>
+    <string name="call_failed_no_ice_description">Vänligen be administratören för din hemserver (%1$s) att konfigurera en TURN-server för att samtal ska funka pålitligt.
+\n
+\nAlternativt så kan du försöka använda den publika servern på %2$s, men detta kommer inte att vara lika pålitligt, och kommer att dela din IP-adress med den servern. Du kan också hantera detta i inställningarna.</string>
+    <string name="call_failed_no_ice_use_alt">Försök med %s</string>
+    <string name="call_failed_dont_ask_again">Fråga mig inte igen</string>
+
+    <string name="option_send_files">Skicka filer</string>
+    <string name="option_send_sticker">Skicka klistermärke</string>
+    <string name="option_take_photo_video">Ta foto eller video</string>
+    <string name="option_take_photo">Ta ett foto</string>
+    <string name="option_take_video">Ta en video</string>
+
+    <string name="no_sticker_application_dialog_content">Du har för närvarande inga klistermärkespaket aktiva.
+\n
+\nLägg till några nu\?</string>
+
+    <string name="go_on_with">fortsätt med…</string>
+    <string name="error_no_external_application_found">Tyvärr har ingen extern applikation hittats som kan fullfölja denna handling.</string>
+
+    <string name="auth_login">Logga in</string>
+    <string name="auth_login_sso">Logga in med externt konto</string>
+    <string name="auth_register">Skapa konto</string>
+    <string name="auth_submit">Skicka in</string>
+    <string name="auth_skip">Hoppa över</string>
+    <string name="auth_send_reset_email">Skicka e-brev för återställning</string>
+    <string name="auth_return_to_login">Gå tillbaka till inloggningsskärmen</string>
+    <string name="auth_user_id_placeholder">E-postadress eller användarnamn</string>
+    <string name="auth_password_placeholder">Lösenord</string>
+    <string name="auth_new_password_placeholder">Nytt lösenord</string>
+    <string name="auth_user_name_placeholder">Användarnamn</string>
+    <string name="auth_add_email_message_2">Sätt en e-postadress för kontoåterförvärv, och senare för att valfritt vara upptäckbar av folk som som känner dig.</string>
+    <string name="auth_add_phone_message_2">Sätt ett telefonnummer som folk som känner dig kan använda för att hitta dig.</string>
+    <string name="auth_add_email_phone_message_2">Sätt en e-postadress för kontoåterförvärv. Senare kan e-postadresser och telefonnummer valfritt användas för att vara upptäckbar av folk som känner dig.</string>
+    <string name="auth_add_email_and_phone_message_2">Sätt en e-postadress för kontoåterförvärv. Senare kan e-postadresser och telefonnummer valfritt användas för att vara upptäckbar av folk som känner dig.</string>
+    <string name="auth_email_placeholder">E-postadress</string>
+    <string name="auth_opt_email_placeholder">E-postadress (valfritt)</string>
+    <string name="auth_phone_number_placeholder">Telefonnummer</string>
+    <string name="auth_opt_phone_number_placeholder">Telefonnummer (valfritt)</string>
+    <string name="auth_repeat_password_placeholder">Repetera lösenordet</string>
+    <string name="auth_repeat_new_password_placeholder">Bekräfta ditt nya lösenord</string>
+    <string name="auth_invalid_login_param">Fel användarnamn och/eller lösenord</string>
+    <string name="auth_invalid_user_name">Användarnamn får endast innehålla bokstäver, siffror, punkter, bindestreck och understreck</string>
+    <string name="auth_invalid_password">Lösenordet är för kort (minst 6 tecken)</string>
+    <string name="auth_missing_password">Lösenord saknas</string>
+    <string name="auth_invalid_email">Det här ser inte ut som en giltig e-postadress</string>
+    <string name="auth_invalid_phone">Det här ser inte ut som ett giltigt telefonnummer</string>
+    <string name="auth_email_already_defined">Den här e-postadressen är redan definierad.</string>
+    <string name="auth_missing_email">E-postadress saknas</string>
+    <string name="auth_missing_phone">Telefonnummer saknas</string>
+    <string name="auth_missing_email_or_phone">E-postadress eller telefonnummer saknas</string>
+    <string name="auth_invalid_token">Felaktig token</string>
+    <string name="auth_password_dont_match">Lösenorden matchar inte</string>
+    <string name="auth_forgot_password">Glömt lösenordet\?</string>
+    <string name="auth_use_server_options">Använd anpassade server-inställningar (avancerat)</string>
+    <string name="auth_email_validation_message">Vänligen kolla din e-post för att fortsätta med registreringen</string>
+    <string name="auth_threepid_warning_message">Registrering med e-postadress och telefonnummer samtidigt så stöds inte än, fram tills API:t finns. Endast telefonnumret kommer användas.
+\n
+\nDu kan lägga till ett telefonnummer till din profil i inställningarna.</string>
+    <string name="auth_recaptcha_message">Denna hemserver skulle vilja verifiera att du inte är en robot</string>
+    <string name="auth_username_in_use">Användarnamnet är upptagen</string>
+    <string name="auth_home_server">Hemserver:</string>
+    <string name="auth_identity_server">Identitetsserver:</string>
+    <string name="auth_reset_password_next_step_button">Jag har verifierat min e-postadress</string>
+    <string name="auth_reset_password_message">För att återställa ditt lösenord, skriv in e-postadressen länkad till ditt konto:</string>
+    <string name="auth_reset_password_missing_email">Du måste skriva in e-postadressen länkad till ditt konto.</string>
+    <string name="auth_reset_password_missing_password">Du måste skriva in ett nytt lösenord.</string>
+    <string name="auth_reset_password_email_validation_message">Ett e-brev har skickats till %s. När du har följt länken i det, klicka nedan.</string>
+    <string name="auth_reset_password_error_unauthorized">Misslyckades att verifiera e-postadressen: se till att du klickade på länken i e-brevet</string>
+    <string name="auth_reset_password_success_message">Ditt lösenord har blivit återställt.
+\n
+\nDu har loggats ut ur alla sessioner och kommer inte längre motta pushnotifikationer. För att återaktivera notifikationer, logga in igen på varje enhet.</string>
+    <string name="auth_accept_policies">Vänligen granska och acceptera villkoren för denna hemserver:</string>
+
+    <string name="login_error_must_start_http">URLen måste börja med http[s]://</string>
+    <string name="login_error_network_error">Kan inte logga in: Nätverksfel</string>
+    <string name="login_error_unable_login">Kan inte logga in</string>
+    <string name="login_error_registration_network_error">Kan inte registrera: Nätverksfel</string>
+    <string name="login_error_unable_register">Kan inte registrera</string>
+    <string name="login_error_unable_register_mail_ownership">Kan inte registrera: fel vid med e-postägandeskap</string>
+    <string name="login_error_invalid_home_server">Vänligen skriv in en giltig URL</string>
+    <string name="login_error_unknown_host">Den här URLen kan inte nås, vänligen kolla den</string>
+    <string name="login_error_no_homeserver_found">Det här är inte en giltig Matrixserveradress</string>
+    <string name="login_error_homeserver_not_found">Kan inte nå en hemserver på den här URLen, vänligen kolla den</string>
+    <string name="login_error_ssl_handshake">Din enhet använder ett utdaterat TLS-protokoll, sårbart för anfall, så för din säkerhets skull så kommer du inte kunna ansluta</string>
+    <string name="login_mobile_device">Mobil</string>
+
+    <string name="login_error_forbidden">Felaktigt användarnamn/lösenord</string>
+    <string name="login_error_unknown_token">Den åtkomsttoken du specificerade kändes inte igen</string>
+    <string name="login_error_bad_json">Felformaterad JSON</string>
+    <string name="login_error_not_json">Innehöll inte giltig JSON</string>
+    <string name="login_error_limit_exceeded">För många förfrågningar har skickats</string>
+</resources>

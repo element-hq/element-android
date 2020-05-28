@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_invite_users_to_room_invite"
+        android:title="@string/invite_users_to_room_action_invite"
+        app:showAsAction="always" />
+
+</menu>

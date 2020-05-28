@@ -19,13 +19,13 @@ package im.vector.matrix.android.internal.crypto.keysbackup
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.common.CommonTestHelper
 import im.vector.matrix.android.common.CryptoTestData
-import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper
+import im.vector.matrix.android.internal.crypto.model.OlmInboundGroupSessionWrapper2
 
 /**
  * Data class to store result of [KeysBackupTestHelper.createKeysBackupScenarioWithPassword]
  */
 data class KeysBackupScenarioData(val cryptoTestData: CryptoTestData,
-                                  val aliceKeys: List<OlmInboundGroupSessionWrapper>,
+                                  val aliceKeys: List<OlmInboundGroupSessionWrapper2>,
                                   val prepareKeysBackupDataResult: PrepareKeysBackupDataResult,
                                   val aliceSession2: Session) {
     fun cleanUp(testHelper: CommonTestHelper) {

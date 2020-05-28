@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.session.user.accountdata
 import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
@@ -34,15 +33,4 @@ interface AccountDataAPI {
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/account_data/{type}")
     fun setAccountData(@Path("userId") userId: String, @Path("type") type: String, @Body params: Any): Call<Unit>
-
-    /**
-     * Gets a bearer token from the homeserver that the user can
-     * present to a third party in order to prove their ownership
-     * of the Matrix account they are logged into.
-     *
-     * @param userId the user id
-     * @param body   the body content
-     */
-    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/openid/request_token")
-    fun openIdToken(@Path("userId") userId: String, @Body body: Map<Any, Any>): Call<Map<Any, Any>>
 }

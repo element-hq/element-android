@@ -378,7 +378,7 @@ Er du sikker?</string>
 
     <string name="start_new_chat_prompt_msg">Er du sikker på, at du ønsker at starte en ny chat med %s?</string>
     <string name="start_voice_call_prompt_msg">Er du sikker på, at du ønsker at starte et opkald?</string>
-    <string name="start_video_call_prompt_msg">Er du sikker på, at du ønsker at du ønsker at starte et videoopkald?</string>
+    <string name="start_video_call_prompt_msg">Er du sikker på, at du ønsker at starte et videoopkald\?</string>
 
     <string name="groups_invite_header">Inviter</string>
     <string name="groups_list">Liste over grupper</string>

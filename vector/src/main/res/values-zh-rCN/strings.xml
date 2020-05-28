@@ -210,9 +210,7 @@
     <string name="auth_recaptcha_message">此主服务器想确认您不是机器人</string>
     <string name="auth_reset_password_email_validation_message">一封电子邮件已发送至 %s。点击了其中的链接后，请点击下面。</string>
     <string name="auth_reset_password_error_unauthorized">电子邮箱地址验证失败：请确保您已点击邮件中的链接</string>
-    <string name="auth_reset_password_success_message">密码已重设。
-
-您已从所有设备注销并且不再接受推送通知。要重新启用通知，请重新在相应设备上登录。</string>
+    <string name="auth_reset_password_success_message">密码已重置。 您已从所有设备注销并且不再接受推送通知。要重新启用通知，请重新在相应设备上登录。</string>
 
     <string name="compression_opt_list_original">原始</string>
     <string name="attachment_remaining_time_seconds">%d 秒</string>
@@ -519,7 +517,7 @@
 这只会发生一次。
 请谅解由此造成的不便。</string>
     <string name="read_receipts_list">已读标签清单</string>
-    <string name="compression_options">"发送为 "</string>
+    <string name="compression_options">发送为</string>
     <string name="permissions_rationale_msg_contacts">Riot 需要访问您的通讯录，才能根据电子邮箱地址和手机号码查找其他 Matrix 用户。
 
 请在接下来的弹出窗口中授权允许访问。</string>
@@ -888,7 +886,7 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="e2e_re_request_encryption_key_sent">已发送密钥共享请求。</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">已请求</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">请在可解密此消息的设备上启动 Riot，以便其将密钥发送至当前设备。</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">请在其他可解密此消息的设备上启动 Riot，以便其将密钥发送至当前设备。</string>
 
     <string name="lock_screen_hint">在此输入…</string>
 

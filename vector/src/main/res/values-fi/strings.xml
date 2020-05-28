@@ -2075,4 +2075,217 @@ Jotta et menetä mitään, automaattiset päivitykset kannattaa pitää käytös
     <string name="verification_conclusion_not_secure">Ei turvallinen</string>
     <string name="sent_a_video">Video.</string>
     <string name="sent_an_image">Kuva.</string>
+    <string name="command_description_verify">Pyyntö annetun käyttäjä-ID:n vahvistamiseksi</string>
+    <string name="verification_conclusion_compromised">Johonkin näistä on mahdollisesti murtauduttu:
+\n
+\n - Kotipalvelimesi
+\n - Varmentamasi toisen käyttäjän kotipalvelin
+\n - Sinun tai toisen käyttäjän Internet-yhteys
+\n - Sinun tai toisen käyttäjän käyttämä laite</string>
+
+    <string name="sent_an_audio_file">Äänitiedosto</string>
+    <string name="sent_a_file">Tiedosto</string>
+
+    <string name="verification_sent">Varmennus lähetetty</string>
+    <string name="verification_request">Varmennuspyyntö</string>
+
+
+    <string name="verification_verify_device">Varmenna istunto</string>
+    <string name="verification_verify_device_manually">Varmenna manuaalisesti</string>
+
+    <string name="verification_scan_notice">Lue koodi toisen käyttäjän laitteesta varmentaaksenne toisenne tietoturvallisesti</string>
+    <string name="verification_scan_their_code">Lue toisen käyttäjän koodi</string>
+    <string name="verification_scan_emoji_title">Lukeminen ei onnistu</string>
+    <string name="verification_scan_emoji_subtitle">Vertailkaa emojeilla jos et ole toisen käyttäjän luona</string>
+
+    <string name="verification_no_scan_emoji_title">Varmenna vertaamalla emojeja</string>
+
+    <string name="verify_by_emoji_title">Varmenna emojeilla</string>
+    <string name="verify_by_emoji_description">Jos koodin lukeminen ei onnistu, varmenna vertaamalla lyhyttä sarjaa emojeja.</string>
+
+    <string name="a13n_qr_code_description">QR-koodi</string>
+
+    <string name="verification_verify_user">Varmenna %s</string>
+    <string name="verification_verified_user">Varmennettu %s</string>
+    <string name="verification_request_waiting_for">Odotetaan käyttäjää %s…</string>
+    <string name="verification_request_alert_description">Varmenna %s tarkistamalla teidän kummankin laitteella näkyvä koodi.
+\n
+\nJos mahdollista, tehkää tämä kummankin ollessa paikalla parhaan tietoturvan saavuttamiseksi.</string>
+    <string name="room_profile_not_encrypted_subtitle">Huoneessa olevat viesti eivät ole salattu osapuolten välisellä salauksella.</string>
+    <string name="room_profile_encrypted_subtitle">Huoneen viestit ovat salattu osapuolten välisellä salauksella.
+\n
+\nViestisi salataan niin, että vain sinä ja vastaanottaja pystytte avaamaan ne henkilökohtaisilla salausavaimillanne.</string>
+    <string name="room_profile_section_security">Tietoturva</string>
+    <string name="room_profile_section_more">Lisää</string>
+    <string name="room_profile_section_more_settings">Huoneen asetukset</string>
+    <string name="room_profile_section_more_uploads">Tiedostojen lähetys</string>
+    <string name="room_member_power_level_admins">Ylläpitäjät</string>
+    <string name="room_member_power_level_moderators">Moderaattorit</string>
+    <string name="room_member_power_level_users">Käyttäjät</string>
+
+    <string name="room_member_power_level_admin_in">Ylläpitäjä %1$s:ssä</string>
+    <string name="room_member_power_level_moderator_in">Moderaattori %1$s:ssä</string>
+    <string name="room_member_jump_to_read_receipt">Siirry lukukuittaukseen</string>
+
+    <string name="rendering_event_error_type_of_event_not_handled">RiotX ei osaa käsitellä tapahtumia joiden tyyppi on \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">RiotX ei osaa käsitellä viestejä joiden tyyppi on \'%1$s\'</string>
+    <string name="rendering_event_error_exception">RiotX ei osannut piirtää tapahtuman jonka tunniste on \'%1$s\' sisältöä</string>
+
+    <string name="room_list_sharing_header_recent_rooms">Viimeaikaiset huoneet</string>
+    <string name="room_list_sharing_header_other_rooms">Muut huoneet</string>
+
+    <string name="command_description_rainbow">Lähettää annetun viestin väritettynä sateenkaaren väreillä</string>
+    <string name="room_settings_enable_encryption">Ota käyttöön osapuolten välinen salaus</string>
+    <string name="room_settings_enable_encryption_warning">Salausta ei voi enää poistaa käytöstä sen jälkeen kun se on otettu käyttöön.</string>
+
+    <string name="room_settings_enable_encryption_dialog_title">Otetaanko salaus käyttöön\?</string>
+    <string name="room_settings_enable_encryption_dialog_content">Salausta ei voi ottaa pois käytöstä sen jälkeen kun se on otettu käyttöön. Salattuja viestejä ei pysty lukemaan edes palvelin, vain ainoastaan huoneessa olijat. Salauksen käyttöönotto voi estää bottien ja siltojen toiminnan huoneessa.</string>
+    <string name="room_settings_enable_encryption_dialog_submit">Ota salaus käyttöön</string>
+
+    <string name="verification_request_notice">Salauksen mahdollistamiseksi varmenna %s tarkastamalla kertakäyttöinen koodi.</string>
+    <string name="verification_request_start_notice">Tee tämä toisen käyttäjän ollessa läsnä tai käyttäkää toista viestintävälinettä tietoturvan varmistamiseksi.</string>
+
+    <string name="verification_emoji_notice">Verratkaa emojeja ja varmistakaa että ne ovat samassa järjestyksessä kummallakin.</string>
+    <string name="verification_code_notice">Vertaa koodia joka näkyy toisen käyttäjän ruudulla.</string>
+    <string name="verification_conclusion_ok_notice">Tämän käyttäjän kanssa käyty viestintä on nyt päästä päähän salattu ja sitä ei pysty kukaan ulkopuolinen vakoilemaan.</string>
+    <string name="verification_conclusion_ok_self_notice">Istuntosi on nyt vahvistettu. Sillä on pääsy salattuihin viesteihisi ja muut käyttäjät näkevät sen luotettuna.</string>
+
+
+    <string name="settings_active_sessions_list">Aktiiviset istunnot</string>
+    <string name="settings_active_sessions_show_all">Näytä kaikki istunnot</string>
+    <string name="settings_active_sessions_manage">Istuntojen hallinta</string>
+    <string name="settings_active_sessions_signout_device">Kirjaudu ulos tästä istunnosta</string>
+
+    <string name="settings_failed_to_get_crypto_device_info">Ei salaukseen liittyvää tietoa</string>
+
+    <string name="settings_active_sessions_verified_device_desc">Istunto on luotettu, koska olet vahvistanut sen:</string>
+    <string name="settings_active_sessions_unverified_device_desc">Vahvista tämä istunto jotta se merkitään luotetuksi ja se saa pääsyn salattuihin viesteihin. Jos et ole kirjautunut tähän istuntoon, tunnuksesi on saattanut vuotaa hyökkääjälle:</string>
+
+    <plurals name="settings_active_sessions_count">
+        <item quantity="one">%d käynnissä oleva istunto</item>
+        <item quantity="other">%d käynnissä olevaa istuntoa</item>
+    </plurals>
+
+    <string name="crosssigning_verify_this_session">Varmenna tämä kirjautuminen</string>
+    <string name="crosssigning_other_user_not_trust">Muut käyttäjät eivät välttämättä luota siihen</string>
+    <string name="verification_open_other_to_verify">Käytä olemassaolevaa istuntoa tämän istunnon varmentamiseksi jotta se saa oikeudet salattuihin viesteihin.</string>
+
+
+    <string name="verification_profile_verify">Varmenna</string>
+    <string name="verification_profile_verified">Varmennettu</string>
+    <string name="verification_profile_warning">Varoitus</string>
+
+    <string name="room_member_profile_failed_to_get_devices">Ei saatu istuntoja</string>
+    <string name="room_member_profile_sessions_section_title">Istunnot</string>
+    <string name="trusted">Luotettu</string>
+    <string name="not_trusted">Ei luotettu</string>
+
+    <string name="verification_profile_device_verified_because">"Tämä istunto on luotettu salattuun viestintään koska  %1$s (%2$s) varmisti sen:"</string>
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) kirjautui sisään uuteen istuntoon:</string>
+    <string name="verification_profile_device_untrust_info">Tämän käyttäjän kanssa käyty viestintä merkitään virheiksi kunnes käyttäjä luottaa tähän istuntoon. Voit vaihtoehtoisesti käsin varmentaa sen.</string>
+
+
+    <string name="reset_cross_signing">Nollaa avaimet</string>
+
+    <string name="a11y_qr_code_for_verification">QR-koodi</string>
+
+    <string name="qr_code_scanned_by_other_notice">Melkein valmis! Näkyykä %s:lla sama kilven kuva\?</string>
+    <string name="qr_code_scanned_by_other_yes">Kyllä</string>
+    <string name="qr_code_scanned_by_other_no">Ei</string>
+
+    <string name="no_connectivity_to_the_server_indicator">Yhteys kotipalvelimeen on poikki</string>
+
+    <string name="settings_dev_tools">Kehittäjän työkalut</string>
+    <plurals name="poll_info">
+        <item quantity="one">%d ääni</item>
+        <item quantity="other">%d ääntä</item>
+    </plurals>
+    <plurals name="poll_info_final">
+        <item quantity="one">%d ääni - lopulliset tulokset</item>
+        <item quantity="other">%d ääntä - lopulliset tulokset</item>
+    </plurals>
+    <string name="command_description_poll">Luo yksinkertaisen äänestyksen</string>
+    <string name="verification_use_passphrase">Jos et pääse käsiksi olemassaolevaan istuntoon</string>
+
+    <string name="new_signin">Uusi sisäänkirjautuminen</string>
+
+    <string name="enter_secret_storage_passphrase_warning">Varoitus:</string>
+    <string name="message_action_item_redact">Poista…</string>
+    <string name="share_confirm_room">Haluatko lähettää tämän liitteen %1$s\?:lle\?</string>
+    <plurals name="send_images_with_original_size">
+        <item quantity="one">Lähetä kuva alkuperäisessä koossa</item>
+        <item quantity="other">Lähetä kuvat alkuperäisessä koossa</item>
+    </plurals>
+
+    <string name="delete_event_dialog_title">Vahvista poisto</string>
+    <string name="delete_event_dialog_content">Haluatko varmasti poistaa tämän tapahtuman\? Huomaa, että jos poistat huoneen nimen tai otsikon muutostapahtuman, se voi perua muutoksen.</string>
+    <string name="delete_event_dialog_reason_checkbox">Anna syy</string>
+    <string name="event_redacted_by_user_reason_with_reason">Käyttäjä poistanut tapahtuman, syynä: %1$s</string>
+    <string name="event_redacted_by_admin_reason_with_reason">Tapahtuma moderoitu huoneen ylläpitäjän toimesta, syynä: %1$s</string>
+
+    <string name="keys_backup_restore_success_title_already_up_to_date">Avaimet ovat jo ajan tasalla!</string>
+
+    <string name="login_mobile_device_riotx">RiotX Android</string>
+
+    <string name="settings_key_requests">Avainpyynnöt</string>
+
+    <string name="refresh">Päivitä</string>
+
+    <string name="new_session">Uusi kirjautuminen. Olitko se sinä\?</string>
+    <string name="new_session_review">Paina tarkastellaksesi ja varmentaaksesi</string>
+    <string name="verify_new_session_was_not_me">En ollut</string>
+    <string name="verify_new_session_compromized">Tilillesi saatetaan olla murtauduttu</string>
+
+    <string name="verify_cancel_self_verification_from_untrusted">Jos perut, et voi lukea salattuja viestejäsi tällä laitteella eivätkä muut käyttäjät luota siihen</string>
+    <string name="verify_cancel_self_verification_from_trusted">Jos perut, et voi lukea salattuja viestejäsi uudella laitteellasi eivätkä muut käyttäjät luota siihen</string>
+    <string name="verify_cancelled_notice">Varmenna laitteesi ohjelman asetuksista.</string>
+    <string name="verification_cancelled">Vahvistus peruttu</string>
+
+    <string name="recovery_passphrase">Palautussalasana</string>
+    <string name="account_password">Tilin salasana</string>
+
+    <string name="set_recovery_passphrase">Aseta %s</string>
+    <string name="confirm_recovery_passphrase">Vahvista %s</string>
+
+    <string name="enter_account_password">Anna %s jatkaaksesi.</string>
+
+    <string name="bootstrap_info_text">Pura ja salaa salatut viestit ja luottamukset asettamalla %s</string>
+    <string name="bootstrap_info_confirm_text">Anna %s uudestaan vahvistaaksesi sen.</string>
+    <string name="bootstrap_dont_reuse_pwd">Älä käytä tilisi salasanaa muualla.</string>
+
+
+    <string name="bootstrap_loading_text">Odota hetki, kiitos.</string>
+    <string name="bootstrap_loading_title">Alustetaan palautusta.</string>
+    <string name="your_recovery_key">Palautusavaimesi</string>
+    <string name="bootstrap_finish_title">Valmista!</string>
+    <string name="keep_it_safe">Pidä se turvassa</string>
+    <string name="finish">Lopeta</string>
+
+    <string name="bootstrap_save_key_description">Käytä %1$s:tä turvaverkkona jos onnistut unohtamaan %2$s:n.</string>
+
+    <string name="bootstrap_crosssigning_progress_initializing">Julkaistaan luodut identiteettiavaimet</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">Luodaan salausavain salasanasta</string>
+    <string name="bootstrap_crosssigning_progress_default_key">Määritetään SSSS-oletusavain</string>
+    <string name="bootstrap_crosssigning_progress_save_msk">Synkronoidaan pääavain</string>
+    <string name="bootstrap_crosssigning_progress_save_usk">Synkronoidaan käyttäjän avain</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">Synkronoidaan allekirjoitusavain</string>
+    <string name="bootstrap_crosssigning_progress_key_backup">Alustetaan avainten varmuuskopiointi</string>
+
+
+    <string name="bootstrap_cross_signing_success">%2$s ja %1$s asetettu.
+\n
+\nPidä ne tallessa. Tarvitset ne salattujen viestiesi ja tietojesi avaamiseen, jos suljet kaikki istuntosi.</string>
+
+    <string name="bootstrap_crosssigning_print_it">Tulosta se jos mahdollista ja säilytä tuloste turvallisessa paikassa</string>
+    <string name="bootstrap_crosssigning_save_usb">Tallenna se muistitikulle tai varmuuskopiolevylle talteen</string>
+    <string name="bootstrap_crosssigning_save_cloud">Kopioi se henkilökohtaiseen pilvitallennustilaasi</string>
+
+    <string name="auth_flow_not_supported">Tätä ei pysty tekemään kännykällä</string>
+
+    <string name="room_member_power_level_custom">Mukautettu</string>
+    <string name="room_member_power_level_custom_in">Mukautettu (%1$d) %2$s:ssä</string>
+
+    <string name="delete_event_dialog_reason_hint">Syy poistoon</string>
+
+    <string name="message_key">Viestin avain</string>
 </resources>
