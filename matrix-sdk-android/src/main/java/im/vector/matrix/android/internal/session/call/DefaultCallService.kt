@@ -54,10 +54,6 @@ internal class DefaultCallService @Inject constructor(
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun isCallSupportedInRoom(roomId: String): Boolean {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
-    }
-
     override fun sendOfferSdp(callId: String, roomId: String, sdp: SessionDescription, callback: MatrixCallback<String>) {
         val eventContent = CallInviteContent(
                 callId = callId,

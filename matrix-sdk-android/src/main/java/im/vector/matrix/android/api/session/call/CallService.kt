@@ -24,8 +24,6 @@ interface CallService {
 
     fun getTurnServer(callback: MatrixCallback<TurnServer?>)
 
-    fun isCallSupportedInRoom(roomId: String) : Boolean
-
     /**
      * Send offer SDP to the other participant.
      */
