@@ -57,13 +57,8 @@ internal class DefaultCallEventsObserverTask @Inject constructor(
                 Timber.w("Event with no room id ${event.eventId}")
             }
             decryptIfNeeded(event)
-            when (event.getClearType()) {
-                EventType.CALL_INVITE,
-                EventType.CALL_CANDIDATES,
-                EventType.CALL_HANGUP,
-                EventType.CALL_ANSWER -> {
-                    callService.onCallEvent(event)
-                }
+            if (EventType.isCallEvent(event.getClearType())) {
+                callService.onCallEvent(event)
             }
         }
         Timber.v("$realm : $userId")
