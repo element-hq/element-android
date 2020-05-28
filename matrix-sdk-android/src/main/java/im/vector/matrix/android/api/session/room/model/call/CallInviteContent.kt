@@ -19,37 +19,38 @@ package im.vector.matrix.android.api.session.room.model.call
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+/**
+ * This event is sent by the caller when they wish to establish a call.
+ */
 @JsonClass(generateAdapter = true)
 data class CallInviteContent(
-
         /**
-         * A unique identifier for the call.
+         * Required. A unique identifier for the call.
          */
         @Json(name = "call_id") val callId: String?,
         /**
-         *  The session description object
+         * Required. The session description object
          */
         @Json(name = "version") val version: Int?,
         /**
-         * The version of the VoIP specification this message adheres to. This specification is version 0.
+         * Required. The version of the VoIP specification this message adheres to. This specification is version 0.
          */
         @Json(name = "lifetime") val lifetime: Int?,
         /**
-         *  The time in milliseconds that the invite is valid for.
-         *  Once the invite age exceeds this value, clients should discard it.
-         *  They should also no longer show the call as awaiting an answer in the UI.
+         * Required. The time in milliseconds that the invite is valid for.
+         * Once the invite age exceeds this value, clients should discard it.
+         * They should also no longer show the call as awaiting an answer in the UI.
          */
         @Json(name = "offer") val offer: Offer?
 ) {
-
     @JsonClass(generateAdapter = true)
     data class Offer(
             /**
-             * The type of session description (offer, answer)
+             * Required. The type of session description. Must be 'offer'.
              */
             @Json(name = "type") val type: String?,
             /**
-             *  The SDP text of the session description.
+             * Required. The SDP text of the session description.
              */
             @Json(name = "sdp") val sdp: String?
     ) {

@@ -130,7 +130,8 @@ internal class DefaultCallService @Inject constructor(
     override fun sendHangup(callId: String, roomId: String) {
         val eventContent = CallHangupContent(
                 callId = callId,
-                version = 0
+                version = 0,
+                reason = null
         )
         createEventAndLocalEcho(type = EventType.CALL_HANGUP, roomId = roomId, content = eventContent.toContent()).let { event ->
             roomEventSender.sendEvent(event)
