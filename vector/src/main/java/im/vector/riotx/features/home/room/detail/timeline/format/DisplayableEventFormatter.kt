@@ -53,45 +53,35 @@ class DisplayableEventFormatter @Inject constructor(
             EventType.MESSAGE -> {
                 timelineEvent.getLastMessageContent()?.let { messageContent ->
                     when (messageContent.msgType) {
-                        MessageType.MSGTYPE_VERIFICATION_REQUEST -> {
-                            return simpleFormat(senderName, stringProvider.getString(R.string.verification_request), prependAuthor)
-                        }
-                        MessageType.MSGTYPE_IMAGE                -> {
-                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_an_image), prependAuthor)
-                        }
-                        MessageType.MSGTYPE_AUDIO                -> {
-                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_an_audio_file), prependAuthor)
-                        }
-                        MessageType.MSGTYPE_VIDEO                -> {
-                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_a_video), prependAuthor)
-                        }
-                        MessageType.MSGTYPE_FILE                 -> {
-                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_a_file), prependAuthor)
-                        }
-                        MessageType.MSGTYPE_TEXT                 -> {
-                            return if (messageContent.isReply()) {
+                        MessageType.MSGTYPE_VERIFICATION_REQUEST ->
+                            simpleFormat(senderName, stringProvider.getString(R.string.verification_request), prependAuthor)
+                        MessageType.MSGTYPE_IMAGE                ->
+                            simpleFormat(senderName, stringProvider.getString(R.string.sent_an_image), prependAuthor)
+                        MessageType.MSGTYPE_AUDIO                ->
+                            simpleFormat(senderName, stringProvider.getString(R.string.sent_an_audio_file), prependAuthor)
+                        MessageType.MSGTYPE_VIDEO                ->
+                            simpleFormat(senderName, stringProvider.getString(R.string.sent_a_video), prependAuthor)
+                        MessageType.MSGTYPE_FILE                 ->
+                            simpleFormat(senderName, stringProvider.getString(R.string.sent_a_file), prependAuthor)
+                        MessageType.MSGTYPE_TEXT                 ->
+                            if (messageContent.isReply()) {
                                 // Skip reply prefix, and show important
                                 // TODO add a reply image span ?
                                 simpleFormat(senderName, timelineEvent.getTextEditableContent() ?: messageContent.body, prependAuthor)
                             } else {
                                 simpleFormat(senderName, messageContent.body, prependAuthor)
                             }
-                        }
-                        else                                     -> {
-                            return simpleFormat(senderName, messageContent.body, prependAuthor)
-                        }
+                        else                                     ->
+                            simpleFormat(senderName, messageContent.body, prependAuthor)
                     }
-                }
+                } ?: span { }
             }
-            else              -> {
-                return span {
+            else              ->
+                span {
                     text = noticeEventFormatter.format(timelineEvent) ?: ""
                     textStyle = "italic"
                 }
-            }
         }
-
-        return span { }
     }
 
     private fun simpleFormat(senderName: String, body: CharSequence, prependAuthor: Boolean): CharSequence {
