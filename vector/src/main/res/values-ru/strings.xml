@@ -1591,7 +1591,7 @@
 
     <string name="room_preview_no_preview">Эту комнату нельзя предварительно просмотреть</string>
     <string name="fab_menu_create_room">Комнаты</string>
-    <string name="fab_menu_create_chat">Личная переписка</string>
+    <string name="fab_menu_create_chat">Тет-а-тет</string>
 
     <string name="create_room_title">Новая комната</string>
     <string name="create_room_action_create">СОЗДАТЬ</string>
@@ -1656,7 +1656,7 @@
 
     <string name="room_preview_world_readable_room_not_supported_yet">Предварительный просмотр открытой комнаты в RiotX пока не поддерживается</string>
 
-    <string name="bottom_action_people_x">Личная переписка</string>
+    <string name="bottom_action_people_x">Тет-а-тет</string>
 
     <string name="send_file_step_idle">Ждите…</string>
     <string name="send_file_step_encrypting_thumbnail">Шифрование миниатюры…</string>
@@ -2017,8 +2017,24 @@
 
     <string name="create_room_encryption_title">Включено шифрование</string>
     <string name="verification_conclusion_warning">Недоверительный вход</string>
-    <string name="room_profile_section_more_uploads">Отправленные файлы</string>
+    <string name="room_profile_section_more_uploads">Вложения</string>
     <string name="cross_signing_verify_by_emoji">Интерактивная проверка по отсебятинам</string>
     <string name="error_empty_field_choose_user_name">Пожалуйста, выберите имя пользователя.</string>
     <string name="error_empty_field_choose_password">Пожалуйста, выберите пароль.</string>
+    <string name="message_action_item_redact">Удалить…</string>
+    <string name="seen_by">Просмотрено</string>
+
+    <string name="room_profile_section_security_learn_more">Узнать больше</string>
+    <string name="room_profile_section_more_settings">Настройки комнаты</string>
+    <string name="room_profile_section_more_notifications">Уведомления</string>
+    <plurals name="room_profile_section_more_member_list">
+        <item quantity="one">Один участник</item>
+        <item quantity="few">участника</item>
+        <item quantity="many">участников</item>
+    </plurals>
+    <string name="room_profile_section_more_leave">Покинуть комнату</string>
+    <string name="room_member_power_level_admins">Администраторы</string>
+    <string name="room_member_power_level_moderators">Модераторы</string>
+    <string name="room_member_power_level_users">Пользователи</string>
+
 </resources>

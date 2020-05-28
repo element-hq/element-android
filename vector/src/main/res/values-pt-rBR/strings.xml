@@ -1255,4 +1255,15 @@ Para garantir que você não perca nada, mantenha suas atualizações ativadas."
 
     <string name="settings_cryptography_manage_keys">Gerenciamento de Chaves de Criptografia</string>
     <string name="settings_send_message_with_enter">Enviar mensagem com a tecla enter</string>
+    <string name="resources_script">Nota para tradutores: os únicos valores possíveis são: Latn ou Cyrl</string>
+
+    <string name="title_activity_verify_device">Verificar sessão</string>
+
+    <string name="none">Nenhum</string>
+    <string name="revoke">Revogar</string>
+    <string name="disconnect">Desconectar</string>
+    <string name="review">Revisar</string>
+    <string name="decline">Negar</string>
+
+    <string name="action_mark_room_read">Marcar como lido</string>
 </resources>

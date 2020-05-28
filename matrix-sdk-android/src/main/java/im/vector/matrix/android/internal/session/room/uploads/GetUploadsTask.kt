@@ -17,12 +17,19 @@
 package im.vector.matrix.android.internal.session.room.uploads
 
 import com.zhuinden.monarchy.Monarchy
+import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageWithAttachmentContent
 import im.vector.matrix.android.api.session.room.sender.SenderInfo
 import im.vector.matrix.android.api.session.room.uploads.GetUploadsResult
 import im.vector.matrix.android.api.session.room.uploads.UploadEvent
+import im.vector.matrix.android.internal.database.mapper.asDomain
+import im.vector.matrix.android.internal.database.model.EventEntity
+import im.vector.matrix.android.internal.database.model.EventEntityFields
+import im.vector.matrix.android.internal.database.query.TimelineEventFilter
+import im.vector.matrix.android.internal.database.query.whereType
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.filter.FilterFactory
 import im.vector.matrix.android.internal.session.room.RoomAPI
@@ -38,6 +45,7 @@ internal interface GetUploadsTask : Task<GetUploadsTask.Params, GetUploadsResult
 
     data class Params(
             val roomId: String,
+            val isRoomEncrypted: Boolean,
             val numberOfEvents: Int,
             val since: String?
     )
@@ -51,11 +59,42 @@ internal class DefaultGetUploadsTask @Inject constructor(
     : GetUploadsTask {
 
     override suspend fun execute(params: GetUploadsTask.Params): GetUploadsResult {
-        val since = params.since ?: tokenStore.getLastToken() ?: throw IllegalStateException("No token available")
+        val result: GetUploadsResult
+        val events: List<Event>
 
-        val filter = FilterFactory.createUploadsFilter(params.numberOfEvents).toJSONString()
-        val chunk = executeRequest<PaginationResponse>(eventBus) {
-            apiCall = roomAPI.getRoomMessagesFrom(params.roomId, since, PaginationDirection.BACKWARDS.value, params.numberOfEvents, filter)
+        if (params.isRoomEncrypted) {
+            // Get a chunk of events from cache for e2e rooms
+
+            result = GetUploadsResult(
+                    uploadEvents = emptyList(),
+                    nextToken = "",
+                    hasMore = false
+            )
+
+            var eventsFromRealm = emptyList<Event>()
+            monarchy.doWithRealm { realm ->
+                eventsFromRealm = EventEntity.whereType(realm, EventType.ENCRYPTED, params.roomId)
+                        .like(EventEntityFields.DECRYPTION_RESULT_JSON, TimelineEventFilter.DecryptedContent.URL)
+                        .findAll()
+                        .map { it.asDomain() }
+                        // Exclude stickers
+                        .filter { it.getClearType() != EventType.STICKER }
+            }
+            events = eventsFromRealm
+        } else {
+            val since = params.since ?: tokenStore.getLastToken() ?: throw IllegalStateException("No token available")
+
+            val filter = FilterFactory.createUploadsFilter(params.numberOfEvents).toJSONString()
+            val chunk = executeRequest<PaginationResponse>(eventBus) {
+                apiCall = roomAPI.getRoomMessagesFrom(params.roomId, since, PaginationDirection.BACKWARDS.value, params.numberOfEvents, filter)
+            }
+
+            result = GetUploadsResult(
+                    uploadEvents = emptyList(),
+                    nextToken = chunk.end ?: "",
+                    hasMore = chunk.hasMore()
+            )
+            events = chunk.events
         }
 
         var uploadEvents = listOf<UploadEvent>()
@@ -66,7 +105,7 @@ internal class DefaultGetUploadsTask @Inject constructor(
         monarchy.doWithRealm { realm ->
             val roomMemberHelper = RoomMemberHelper(realm, params.roomId)
 
-            uploadEvents = chunk.events.mapNotNull { event ->
+            uploadEvents = events.mapNotNull { event ->
                 val eventId = event.eventId ?: return@mapNotNull null
                 val messageContent = event.getClearContent()?.toModel<MessageContent>() ?: return@mapNotNull null
                 val messageWithAttachmentContent = (messageContent as? MessageWithAttachmentContent) ?: return@mapNotNull null
@@ -91,10 +130,6 @@ internal class DefaultGetUploadsTask @Inject constructor(
             }
         }
 
-        return GetUploadsResult(
-                uploadEvents = uploadEvents,
-                nextToken = chunk.end ?: "",
-                hasMore = chunk.hasMore()
-        )
+        return result.copy(uploadEvents = uploadEvents)
     }
 }

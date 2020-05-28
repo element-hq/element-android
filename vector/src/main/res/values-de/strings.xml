@@ -1336,7 +1336,7 @@ Dieser Fehler ist außerhalb von Riot passiert. Es gibt kein Google-Konto auf de
     <string name="keys_backup_activate">Schlüssel-Sicherung verwenden</string>
     <string name="are_you_sure">Sind Sie sicher\?</string>
     <string name="backup">Sicherung</string>
-    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Alle verschlüsselten Nachrichten gehen verloren, wenn Sie sich ausloggen, ohne diese vorher zu sichern.</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Alle verschlüsselten Nachrichten gehen verloren, wenn Du dich ausloggst ohne eine Sicherung der Schlüssel gemacht zu haben.</string>
 
     <string name="stay">Bleiben</string>
     <string name="abort">Abbrechen</string>
@@ -2444,4 +2444,19 @@ Verwahre deinen Wiederherstellungsschlüssel an einem sehr sicheren Ort wie eine
 \nWillst du wirklich fortfahren\?</string>
 
     <string name="create_room_dm_failure">Konnte Direktnachricht nicht erzeugen. Prüfe die Nutzer, die du einladen willst und versuche es erneut.</string>
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
+
+    <string name="add_members_to_room">Nutzer!n hinzufügen</string>
+    <string name="invite_users_to_room_action_invite">EINLADEN</string>
+    <string name="inviting_users_to_room">Benutzer werden eingeladen…</string>
+    <string name="invite_users_to_room_title">Benutzer einladen</string>
+    <string name="invitation_sent_to_one_user">Einladung gesendet an %1$s</string>
+    <string name="invitations_sent_to_two_users">Einladungen gesendet an %1$s und %2$s</string>
+    <plurals name="invitations_sent_to_one_and_more_users">
+        <item quantity="one">Einladungen gesendet an %1$s und einen weiteren Benutzer</item>
+        <item quantity="other">Einladungen gesendet an %1$s und %2$d weitere Benutzer</item>
+    </plurals>
+    <string name="invite_users_to_room_failure">Wir konnten den Benutzer nicht einladen. Bitte überprüfe den Benutzernamen, welchen du einladen möchtest und versuche es erneut.</string>
+
 </resources>

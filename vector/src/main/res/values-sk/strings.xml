@@ -38,12 +38,12 @@
     <string name="ongoing_conference_call">Prebiehajúci konferenčný hovor.
 \nPripojte sa ako %1$s alebo %2$s</string>
     <string name="ongoing_conference_call_voice">audio</string>
-    <string name="ongoing_conference_call_video">video</string>
+    <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">Nie je možné začať hovor. Prosím, skúste to neskôr</string>
     <string name="missing_permissions_warning">Pretože neboli udelené všetky potrebné oprávnenia, niektoré funkcie môžu byť nedostupné…</string>
     <string name="missing_permissions_to_start_conf_call">Aby ste mohli začať hovor, musíte mať právo pozývať používateľov do miestnosti</string>
     <string name="missing_permissions_title_to_start_conf_call">Nie je možné začať konferenciu</string>
-    <string name="device_information">Informácie o zariadení</string>
+    <string name="device_information">Informácie o relácií</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Konferenčné hovory nie sú podporované v šifrovaných miestnostiach</string>
     <string name="send_anyway">Napriek tomu odoslať</string>
     <string name="or">alebo</string>
@@ -175,8 +175,8 @@ Emailovú adresu si môžete k účtu pridať neskôr cez nastavenia.</string>
     <string name="auth_reset_password_email_validation_message">Na adresu %s bola odoslaná správa. Potom, čo prejdete na odkaz z tejto správy, pokračujte kliknutím nižšie.</string>
     <string name="auth_reset_password_error_unauthorized">Nepodarilo sa overiť emailovú adresu: Uistite sa, že ste správne klikli na odkaz v emailovej správe</string>
     <string name="auth_reset_password_success_message">Vaše heslo bolo obnovené.
-
-Boli ste odhlásení na všetkych zariadeniach a nebudete viac dostávať okamžité oznámenia. Oznámenia znovu povolíte tak, že sa opätovne prihlásite na každom zariadení.</string>
+\n
+\nBoli ste odhlásení na všetkých reláciach a nebudete viac dostávať okamžité oznámenia. Oznámenia znovu povolíte tak, že sa opätovne prihlásite na každom zariadení.</string>
 
     <string name="login_error_must_start_http">URL adresa musí začínať http[s]://</string>
     <string name="login_error_network_error">Nie je možné sa prihlásiť: Chyba siete</string>
@@ -195,9 +195,9 @@ Boli ste odhlásení na všetkych zariadeniach a nebudete viac dostávať okamž
     <string name="login_error_user_in_use">Toto používateľské meno sa už používa</string>
     <string name="login_error_login_email_not_yet">Zatiaľ ste neklikli na odkaz zaslaný emailom</string>
 
-    <string name="e2e_need_log_in_again">Mali by ste sa znovu prihlásiť, čo vygeneruje šifrovacie kľúče E2E pre toto zariadenie a odošle zodpovedajúci verejný kľúč na domovský server.
-Toto je potrebné urobiť len raz.
-Ospravedlňujeme sa za spôsobené ťažkosti.</string>
+    <string name="e2e_need_log_in_again">Mali by ste sa znovu prihlásiť, čo vygeneruje šifrovacie kľúče E2E pre túto reláciu a odošle zodpovedajúci verejný kľúč domovskému serveru.
+\nToto je potrebné urobiť len raz. 
+\nOspravedlňujeme sa za spôsobené ťažkosti.</string>
 
     <string name="read_receipts_list">Zoznam potvrdení o prečítaní</string>
 
@@ -241,19 +241,17 @@ Ospravedlňujeme sa za spôsobené ťažkosti.</string>
 
 Prosím, povoľte prístup na nasledujúcej obrazovke.</string>
     <string name="permissions_rationale_msg_camera">Aby ste mohli fotiť obrázky a videá a tiež uskutočňovať video hovory, Riot potrebuje prístup k fotoaparátu.</string>
-    <string name="permissions_rationale_msg_camera_explanation">
-
-Prosím, povoľte prístup na nasledujúcej obrazovke.</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nProsím, povoľte prístup na nasledujúcej obrazovke, aby ste mohli uskutočniť hovor."</string>
     <string name="permissions_rationale_msg_record_audio">Aby ste mohli uskutočňovať audio hovory, Riot potrebuje prístup k mikrofónu vašeho zariadenia.</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">
-
-Prosím, povoľte prístup na nasledujúcej obrazovke.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nProsím, povoľte prístup na nasledujúcej obrazovke, aby ste mohli uskutočniť hovor."</string>
     <string name="permissions_rationale_msg_camera_and_audio">Aby ste mohli uskutočňovať video hovory, Riot potrebuje prístup k fotoaparátu a mikrofónu vašeho zariadenia.
 
 Prosím, povoľte prístup na nasledujúcich obrazovkách.</string>
-    <string name="permissions_rationale_msg_contacts">Aby ste mohli na Matrixe nájsť vašich známych podľa telefónneho čísla alebo emailovej adresy, Riot potrebuje prístup k vašim kontaktom.
-
-Prosím, povoľte prístup na nasledujúcej obrazovke.</string>
+    <string name="permissions_rationale_msg_contacts">Aby ste mohli na Matrixe nájsť vašich známych podľa telefónneho čísla alebo emailovej adresy, Riot potrebuje prístup k vašim kontaktom. Ak si prajete zdieľať váš zoznam kontaktov za týmto účelom, prosím, povoľte prístup na nasledujúcej obrazovke.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Aby ste mohli na Matrixe nájsť vašich známych podľa telefónneho čísla alebo emailovej adresy, Riot potrebuje prístup k vašim kontaktom.
 
 Chcete aplikácii Riot povoliť prístup k vašim kontaktom?</string>
@@ -296,7 +294,7 @@ Chcete aplikácii Riot povoliť prístup k vašim kontaktom?</string>
     <string name="room_participants_header_admin_tools">NÁSTROJE SPRÁVCU</string>
     <string name="room_participants_header_call">HOVOR</string>
     <string name="room_participants_header_direct_chats">PRIAME KONVERZÁCIE</string>
-    <string name="room_participants_header_devices">ZARIADENIA</string>
+    <string name="room_participants_header_devices">RELÁCIE</string>
 
     <string name="room_participants_action_invite">Pozvať</string>
     <string name="room_participants_action_leave">Opustiť túto miestnosť</string>
@@ -310,7 +308,7 @@ Chcete aplikácii Riot povoliť prístup k vašim kontaktom?</string>
     <string name="room_participants_action_unignore">Zobraziť všetky správy od tohoto používateľa</string>
     <string name="room_participants_invite_search_another_user">Používateľské ID, meno alebo emailová adresa</string>
     <string name="room_participants_action_mention">Zmieniť sa</string>
-    <string name="room_participants_action_devices_list">Zobraziť zoznam zariadení</string>
+    <string name="room_participants_action_devices_list">Zobraziť zoznam relácií</string>
     <string name="room_participants_power_level_prompt">Túto zmenu nebudete môcť vrátiť späť pretože tomuto používateľovi udeľujete rovnakú úroveň moci, akú máte vy.
 Ste si istí?</string>
 
@@ -333,7 +331,7 @@ Ste si istí?</string>
     <string name="room_message_placeholder_not_encrypted">Odoslať správu (nešifrovanú)…</string>
     <string name="room_offline_notification">Spojenie so serverom bolo prerušené.</string>
     <string name="room_unsent_messages_notification">Neodoslané správy. %1$s alebo %2$s teraz?</string>
-    <string name="room_unknown_devices_messages_notification">Neodoslaná správa kvôli nájdeným neznámym zariadeniam. %1$s alebo %2$s teraz?</string>
+    <string name="room_unknown_devices_messages_notification">Správa nebola odoslaná kvôli prítomnosti neznámych zariadení. %1$s alebo %2$s teraz\?</string>
     <string name="room_prompt_resend">Znovu odoslať všetky</string>
     <string name="room_prompt_cancel">Zrušiť všetky</string>
     <string name="room_resend_unsent_messages">Znovu odoslať neodoslané správy</string>
@@ -416,7 +414,7 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
 
     <string name="settings_notification_ringtone">Zvuk oznámení</string>
     <string name="settings_enable_all_notif">Povoliť oznámenia pre tento účet</string>
-    <string name="settings_enable_this_device">Povoliť oznámenia pre toto zariadenie</string>
+    <string name="settings_enable_this_device">Povoliť oznámenia pre túto reláciu</string>
     <string name="settings_turn_screen_on">Rozsvietiť obrazovku na 3 sekundy</string>
 
     <string name="settings_containing_my_display_name">Správy obsahujúce moje zobrazované meno</string>
@@ -431,7 +429,7 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="settings_background_sync">Synchronizácia na pozadí</string>
     <string name="settings_enable_background_sync">Povoliť synchronizáciu na pozadí</string>
     <string name="settings_set_sync_timeout">Časový limit požiadavky na synchronizáciu</string>
-    <string name="settings_set_sync_delay">Prestávka medzi jednotlivými požiadavkami na synchronizáciu</string>
+    <string name="settings_set_sync_delay">Oneskorenie medzi jednotlivými synchronizáciami</string>
     <string name="settings_second">sekunda</string>
     <string name="settings_seconds">sekúnd</string>
 
@@ -458,16 +456,16 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="settings_home_display">Úvodná obrazovka</string>
     <string name="settings_pin_missed_notifications">Pripnúť miestnosti so zmeškanými oznámeniami</string>
     <string name="settings_pin_unread_messages">Pripnúť miestnosti s neprečítanými správami</string>
-    <string name="settings_devices_list">Zariadenia</string>
+    <string name="settings_devices_list">Relácie</string>
     <string name="settings_always_show_timestamps">Zobraziť časovú značku pre všetky správy</string>
     <string name="settings_12_24_timestamps">Pri zobrazovaní časových značiek používať 12 hodinový formát</string>
 
     <string name="settings_data_save_mode">Režim šetrenia údajov</string>
 
-    <string name="devices_details_dialog_title">Podrobnosti o zariadení</string>
+    <string name="devices_details_dialog_title">Informácie o relácií</string>
     <string name="devices_details_id_title">ID</string>
-    <string name="devices_details_name_title">Názov</string>
-    <string name="devices_details_device_name">Názov zariadenia</string>
+    <string name="devices_details_name_title">Verejné meno</string>
+    <string name="devices_details_device_name">Aktualizovať verejné meno</string>
     <string name="devices_details_last_seen_title">Naposledy videné</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_text">Táto operácia si vyžaduje dodatočné overenie.
@@ -559,8 +557,8 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="room_settings_labs_end_to_end">E2E šifrovanie</string>
     <string name="room_settings_labs_end_to_end_is_active">E2E šifrovanie je povolené</string>
     <string name="room_settings_labs_end_to_end_warnings">Ak si želáte povoliť šifrovanie, musíte sa odhlásiť a následne prihlásiť znovu.</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">Šifrovať len známym zariadeniam</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">Z tohoto zariadenia nikdy v tejto miestnosti neposielať šifrované správy na neoverené zariadenia.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Šifrovať len známym reláciam</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Nikdy neposielajte šifrované správy neovereným reláciam v tejto miestnosti z tejto relácie.</string>
 
     <string name="room_settings_addresses_no_local_addresses">Pre túto miestnosť nie sú žiadne lokálne adresy</string>
     <string name="room_settings_addresses_add_new_address">Nová adresa (napr. #foo:matrix.org)</string>
@@ -596,11 +594,11 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="encryption_information_session_id">ID relácie</string>
     <string name="encryption_information_decryption_error">Chyba dešifrovania</string>
 
-    <string name="encryption_information_sender_device_information">Informácie o zariadení odosielateľa</string>
-    <string name="encryption_information_device_name">Názov zariadenia</string>
-    <string name="encryption_information_name">Názov</string>
-    <string name="encryption_information_device_id">ID zariadenia</string>
-    <string name="encryption_information_device_key">Kľúč zariadenia</string>
+    <string name="encryption_information_sender_device_information">Informácie o relácií odosielateľa</string>
+    <string name="encryption_information_device_name">Verejné meno</string>
+    <string name="encryption_information_name">Verejné meno</string>
+    <string name="encryption_information_device_id">ID</string>
+    <string name="encryption_information_device_key">Kľúč relácie</string>
     <string name="encryption_information_verification">Overenie</string>
     <string name="encryption_information_ed25519_fingerprint">Odtlačok prsta Ed25519</string>
 
@@ -618,14 +616,14 @@ Pozor: tento súbor môže byť automaticky zmazaný po odinštalovaní aplikác
     <string name="encryption_import_room_keys">Importovať kľúče miestností</string>
     <string name="encryption_import_room_keys_summary">Importovať kľúče z lokálneho súboru</string>
     <string name="encryption_import_import">Importovať</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Šifrovať len známym zariadeniam</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Z tohoto zariadenia nikdy neposielať šifrované správy na neoverené zariadenia.</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Šifrovať len známym reláciam</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Nikdy neposielať šifrované správy neovereným reláciam z tejto relácie.</string>
 
-    <string name="encryption_information_not_verified">NE-overené</string>
+    <string name="encryption_information_not_verified">Neoverené</string>
     <string name="encryption_information_verified">Overené</string>
     <string name="encryption_information_blocked">Na čiernej listine</string>
 
-    <string name="encryption_information_unknown_device">Neznáme zariadenie</string>
+    <string name="encryption_information_unknown_device">neznáma relácia</string>
     <string name="encryption_information_none">Žiadne</string>
 
     <string name="encryption_information_verify">Overiť</string>
@@ -633,21 +631,21 @@ Pozor: tento súbor môže byť automaticky zmazaný po odinštalovaní aplikác
     <string name="encryption_information_block">Pridať na čiernu listinu</string>
     <string name="encryption_information_unblock">Odstrániť z čiernej listiny</string>
 
-    <string name="encryption_information_verify_device">Overiť zariadenie</string>
-    <string name="encryption_information_verify_device_warning">Ak chcete overiť, či toto zariadenie je skutočne dôverihodné, kontaktujte jeho vlastníka iným spôsobom (napr. osobne alebo cez telefón) a opýtajte sa ho, či kľúč, ktorý má pre toto zariadenie zobrazený v nastaveniach sa zhoduje s kľúčom zobrazeným nižšie:</string>
-    <string name="encryption_information_verify_device_warning2">Ak sa kľúče zhodujú, stlačte tlačidlo Overiť nižšie. Ak sa nezhodujú, niekto ďalší odpočúva toto zariadenie a mali by ste ho pridať na čiernu listinu. V budúcnosti plánujeme tento proces overovania zariadení zjednodušiť.</string>
+    <string name="encryption_information_verify_device">Overiť reláciu</string>
+    <string name="encryption_information_verify_device_warning">Ak chcete overiť, či táto relácia je skutočne dôveryhodná, kontaktujte jeho vlastníka iným spôsobom (napr. osobne alebo cez telefón) a opýtajte sa ho, či kľúč, ktorý má zobrazený v Nastaveniach, sa zhoduje s kľúčom zobrazeným nižšie:</string>
+    <string name="encryption_information_verify_device_warning2">Ak sa kľúče zhodujú, stlačte tlačidlo Overiť nižšie. Ak sa nezhodujú, niekto ďalší odpočúva toto zariadenie a mali by ste ho pridať na čiernu listinu.</string>
     <string name="encryption_information_verify_key_match">Overil som, kľúče sa zhodujú</string>
 
     <string name="e2e_enabling_on_app_update">Riot od teraz podporuje E2E šifrovanie. Ak si ho želáte povoliť, musíte sa teraz odhlásiť a následne prihlásiť znovu.
 
 Môžete to urobiť teraz, alebo to môžete urobiť neskôr v časti Nastavenia.</string>
 
-    <string name="unknown_devices_alert_title">V miestnosti sú neznáme zariadenia</string>
-    <string name="unknown_devices_alert_message">V tejto miestnosti sa nachádzajú neznáme zariadenia, ktoré ste ešte neoverili.
-Znamená to, že príslušnosť týchto zariadení k ich údajným používateľom nemôže byť garantovaná.
-Odporúčame vám prejsť procesom overenia pre všetky tieto zariadenia aby ste si potvrdili, že skutočne patria ich pravým vlastníkom, ak si to však želáte, môžete tiež znovu poslať správu bez overovania.
-
-Neznáme zariadenia:</string>
+    <string name="unknown_devices_alert_title">V miestnosti sú neznáme relácie</string>
+    <string name="unknown_devices_alert_message">V tejto miestnosti sa nachádzajú neznáme relácie, ktoré neboli overené.
+\nZnamená to, že príslušnosť týchto relácií k ich údajným používateľom nemôže byť garantovaná.
+\nOdporúčame vám prejsť procesom overenia pre všetky relácie, aby ste si potvrdili, že skutočne patria ich pravým vlastníkom. Ale ak chcete, môžete tiež správu znova poslať bez overovania.
+\n
+\nNeznáme relácie:</string>
 
     <string name="select_room_directory">Vyberte adresár miestností</string>
     <string name="directory_server_fail_to_retrieve_server">Server môže byť nedostupný alebo preťažený</string>
@@ -686,8 +684,8 @@ Neznáme zariadenia:</string>
     <string name="room_add_matrix_apps">Pridať Matrix aplikácie</string>
 
     <!-- share keys -->
-    <string name="you_added_a_new_device">Pridali ste nové zariadenie nazvané \'%s\', ktoré žiada o šifrovacie kľúče.</string>
-    <string name="your_unverified_device_requesting">Vaše neoverené zariadenie nazvané \'%s\' žiada o šifrovacie kľúče.</string>
+    <string name="you_added_a_new_device">Pridali ste novú reláciu \'%s\', ktorá požaduje šifrovacie kľúče.</string>
+    <string name="your_unverified_device_requesting">Vaša neoverená relácia \'%s\' požaduje šifrovacie kľúče.</string>
     <string name="start_verification">Spustiť overenie</string>
     <string name="share_without_verifying">Zdieľať bez overenia</string>
     <string name="ignore_request">Ignorovať žiadosť</string>
@@ -840,10 +838,9 @@ Neznáme zariadenia:</string>
         <item quantity="other" />
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-        <item quantity="one">1 miestnosti</item>
-        <item quantity="few">%d miestnostiach</item>
-        <item quantity="many">%d miestnostiach</item>
-        <item quantity="other" />
+        <item quantity="one">1 miestnosť</item>
+        <item quantity="few">%d miestnosti</item>
+        <item quantity="other">%d miestností</item>
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s v %2$s</string>
 
@@ -914,9 +911,9 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
     <string name="e2e_re_request_encryption_key_dialog_title">Žiadosť odoslaná</string>
     <string name="lock_screen_hint">Píšte sem…</string>
 
-    <string name="e2e_re_request_encryption_key"><u>Znovu požiadať o šifrovacie kľúče</u> z vašich ostatných zariadení.</string>
+    <string name="e2e_re_request_encryption_key">Znovu požiadať o šifrovacie kľúče z vašich ostatných relácií.<u>Znovu požiadať o šifrovacie kľúče</u> z vašich ostatných zariadení.</string>
 
-    <string name="e2e_re_request_encryption_key_dialog_content">Prosím spustite Riot na inom zariadení, ktoré je schopné dešifrovať túto správu, čím sa automaticky spustí prenos chýbajúcich kľúčov na toto zariadenie.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Prosím spustite Riot na inom zariadení, ktoré je schopné dešifrovať túto správu, čím sa automaticky spustí prenos chýbajúcich kľúčov na túto reláciu.</string>
 
     <string name="option_send_voice">Odoslať hlasovú správu</string>
 
@@ -930,28 +927,24 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
     <string name="missing_permissions_error">Túto akciu nie je možné vykonať, pretože neboli udelené všetky potrebné oprávnenia.</string>
     <string name="send_bug_report_description_in_english">Ak je to možné, prosím popis napíšte v angličtine.</string>
     <plurals name="format_time_s">
-        <item quantity="one">1s</item>
-        <item quantity="few">%ds</item>
-        <item quantity="many">%ds</item>
-        <item quantity="other" />
+        <item quantity="one">1 sekunda</item>
+        <item quantity="few">%d sekundy</item>
+        <item quantity="other">%d sekúnd</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">1m</item>
-        <item quantity="few">%dm</item>
-        <item quantity="many">%dm</item>
-        <item quantity="other" />
+        <item quantity="one">1 minúta</item>
+        <item quantity="few">%d minúty</item>
+        <item quantity="other">%d minút</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">1h</item>
-        <item quantity="few">%dh</item>
-        <item quantity="many">%dh</item>
-        <item quantity="other" />
+        <item quantity="one">1 hodina</item>
+        <item quantity="few">%d hodiny</item>
+        <item quantity="other">%d hodín</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="one">1d</item>
-        <item quantity="few">%dd</item>
-        <item quantity="many">%dd</item>
-        <item quantity="other" />
+        <item quantity="one">1 deň</item>
+        <item quantity="few">%d dni</item>
+        <item quantity="other">%d dní</item>
     </plurals>
 
     <string name="room_participants_now">teraz %1$s</string>
@@ -1066,10 +1059,9 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
 
     <string name="room_participants_action_kick">Vykázať</string>
     <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Ste si istí, že chcete z miestnosti vykázať tohoto používateľa?</item>
-        <item quantity="few">Ste si istí, že chcete z miestnosti vykázať týchto používateľov?</item>
-        <item quantity="many">Ste si istí, že chcete z miestnosti vykázať týchto používateľov?</item>
-        <item quantity="other" />
+        <item quantity="one">Ste si istí, že chcete z miestnosti vykázať tohto používateľa\?</item>
+        <item quantity="few">Ste si istí, že chcete z miestnosti vykázať týchto používateľov\?</item>
+        <item quantity="other">Ste si istí, že chcete z miestnosti vykázať týchto používateľov\?</item>
     </plurals>
     <string name="reason_hint">Dôvod</string>
 
@@ -1077,7 +1069,7 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="settings_troubleshoot_diagnostic">Diagnostika problémov</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Spustiť testovanie</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Priebeh diagnostiky… (%1$d z %2$d)</string>
-    <string name="settings_troubleshoot_diagnostic_success_status">Podľa vykonanej diagnostiky je všetko v poriadku. Ak sa vám stále nezobrazujú oznámenia, prosím nahláste nám chybu, aby sme sa mohli pokúsiť vypátrať príčinu.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Podľa vykonanej diagnostiky je všetko v poriadku. Ak sa vám stále nezobrazujú oznámenia, chybu nám prosím nahláste, aby sme sa mohli pokúsiť vypátrať príčinu.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Jeden alebo viac testov zlyhalo, prosím skúste odporúčané opravy.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Jeden alebo viac testov zlyhalo, prosím nahláste nám chybu, aby sme sa mohli pokúsiť vypátrať príčinu.</string>
 
@@ -1093,10 +1085,10 @@ Prosím, skontrolujte systémové nastavenia.</string>
 Prosím, skontrolujte nastavenia účtu.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Povoliť</string>
 
-    <string name="settings_troubleshoot_test_device_settings_title">Nastavenia zariadenia.</string>
-    <string name="settings_troubleshoot_test_device_settings_success">Oznámenia sú povolené pre toto zariadenie.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Oznámenia nie sú povolené pre toto zariadenie.
-Prosím, skontrolujte nastavenia Riot.</string>
+    <string name="settings_troubleshoot_test_device_settings_title">Nastavenia relácií.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Oznámenia sú povolené pre túto reláciu.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Oznámenia nie sú povolené pre túto reláciu.
+\nProsím, skontrolujte nastavenia Riotu.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Povoliť</string>
 
     <string name="settings_troubleshoot_test_play_services_title">Kontrola aplikácii Služby Google Play</string>
@@ -1182,36 +1174,21 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
 Podrobný zoznam zmien (anglicky) nájdete na adrese: %1$s.
 Aby ste nič nezmeškali, nevypínajte prosím automatické aktualizácie."</string>
     <string name="store_short_description">Univerzálna a bezpečná aplikácia na okamžitú komunikáciu úplne pod vašou kontrolou.</string>
-    <string name="store_full_description">Riot.im je jednoduché a elegantné prostredie určené na vzájomnú spoluprácu, ktoré združuje vaše rôzne konverzácie a integrácie do jedinej aplikácii.
-
-Postavený nad skupinovými konverzáciami, Riot.im vám umožňuje zdieľať správy, obrázky, videá aj akékoľvek súbory - pracovať s vlastnými nástrojmi a pristupovať ku všetkým vašim komunitám pod jednou strechou. S jednou jedinou totožnosťou si vystačíte pre všetky vaše tímy: nie je potrebné prepínať sa medzi viacerými účtami, môžete komunikovať s ľuďmi s rôznych organizácií vo verejných alebo súkromných miestnostiach: od profesionálnych projektov až po školské výlety, Riot.im sa stane centrom všetkych vašich diskusií!
-
-Už teraz so E2E šifrovaním!
-
-Hlavné vlastnosti:
-
-• Okamžité zdieľanie správ, obrázkov, videí a akýchkoľvek ďalších typov súborov v skupinách ľubovoľnej veľkosti
-• Audio a video 1-1 aj konferenčné hovory založené na WebRTC
-• End-to-end encryption (E2E šifrovanie) s využitím knižnice Olm (https://matrix.org/git/olm)
-• Zistite, kto číta vaše správy s potvrdeniami o prečítaní
-• Komunikácia s používateľmi kdekoľvek v ekosystéme Matrix.org - nie len používateľmi Riot.im!
-• Vyhľadávanie a pozývanie používateľov zadaním ich emailovej adresy
-• Aktívne diskusie vo verejných hosťom prístupných miestnostiach
-• Vysoká škálovateľnosť: podporuje stovky miestností a tisíce používateľov
-• Kompletne synchronizovaná história konverzácií naprieč vašimi zariadeniami a prehliadačmi internetu
-• Podrobne nastaviteľné oznámenia synchronizované so všetkými vašimi zariadeniami
-• Nekonečná história konverzácii s možnosťou vyhľadávania
-• Trvalé odkazy na jednotlivé správy
-• Kompletné vyhľadávanie v obsahu správ
-• Podpora pre jazyky RTL ako napr. Arabčina
-
-Pre vývojárov:
-• Riot.im je matrix klient postavený nad otvoreným štandardom a ekosystémom Matrix.org, tak že vzájomná kompatibilita s ostatnými matrix aplikáciami, servermi a integráciami je samozrejmosťou
-• Zverejnený ako open-source pod liberálnou licenciou Apache License - zdrojový kód získate z https://github.com/vector-im/vector-android. Pull requests welcome!
-• Triviálne rozšíriteľný cez otvorené rozhranie Matrix klient-server (https://matrix.org/docs/spec)
-• Spustite si vlastný server! Môžete sa pripojiť k predvolenému serveru matrix.org alebo spustiť si vlastný Domovský server Matrix (napr. https://matrix.org/docs/projects/server/synapse.html)
-
-Objavte skutočne výkonné možnosti otvorenej spolupráce s Riot.im!</string>
+    <string name="store_full_description">Četovacia aplikácia, pod vašou kontrolou a úplne flexibilná. Riot vám umožňuje komunikovať presne tak, ako to vy chcete. Vytvorená pre [matrix] - štandard pre otvorenú, decentralizovanú komunikáciu.
+\n
+\nZaložte si bezplatný účet u matrix.org, založte si svoj server na https://modular.im alebo použite iný Matrix server.
+\n
+\nPrečo si vybrať Riot.im\?
+\n
+\n• KOMPLETNÁ KOMUNIKÁCIA: Vytvárajte miestnosti pre vaše týmy, priateľov či komunity - akokoľvek chcete! Píšte si, zdieľajte súbory, pridávajte widgety a uskutočňujte hlasové hovory či video-hovory - všetko bezplatne.
+\n
+\n• INTEGRÁCIE: Používajte Riot.im s nástrojmi, ktoré poznáte a s obľubou používate. S Riot.im môžete taktiež komunikovať s používateľmi a skupinami na iných četovacích platformách.
+\n
+\n• SÚKROMNÝ A ZABEZPEČENÝ: Udržte si svoje konverzácie tajné. Špičkové end-to-end šifrovanie zaručí, že súkromné konverzácie ostanú súkromnými.
+\n
+\n• OTVORENÝ, NIE UZAMKNUTÝ: Open source a stavané na Matrixe. Staňte sa vlastníkom svojich dát, že si založíte vlastný server alebo si vyberiete ten, ktorému dôverujete.
+\n
+\n• VŠADE, KDE STE: Zostaňte v kontakte kdekoľvek ste s plne synchronizovanou históriou správ naprieč všetkými vašimi zariadeniami alebo online na https://riot.im.</string>
 
     <string name="notification_sync_init">Inicializácia služby</string>
     <string name="title_activity_keys_backup_setup">Zálohovanie kľúčov</string>
@@ -1257,7 +1234,7 @@ Objavte skutočne výkonné možnosti otvorenej spolupráce s Riot.im!</string>
 \nV zariadení nemáte nastavený účet Google. Prosím, pridajte si účet cez správcu účtov. Konfigurácia Riot nemá vplyv na zobrazenie tejto chyby.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Pridať účet</string>
 
-    <string name="settings_notification_privacy_no_background_sync">Aplikácia sa <b>ne</b>potrebuje pripájať k domovskému serveru, keď beží na pozadí, čo môže predĺžiť výdrž batérie.</string>
+    <string name="settings_notification_privacy_no_background_sync">Aplikácia sa <b>nepotrebuje</b> pripájať k domovskému serveru, keď beží na pozadí, čo môže predĺžiť výdrž batérie</string>
     <string name="settings_noisy_notifications_preferences">Nastaviť hlučné oznámenia</string>
     <string name="settings_call_notifications_preferences">Nastaviť oznámenia prichádzajúceho hovoru</string>
     <string name="settings_silent_notifications_preferences">Nastaviť tiché oznámenia</string>
@@ -1304,7 +1281,7 @@ Objavte skutočne výkonné možnosti otvorenej spolupráce s Riot.im!</string>
 
     <string name="notification_silent">Tiché</string>
     <string name="error_empty_field_enter_user_name">Prosím zadajte meno používateľa.</string>
-    <string name="title_activity_verify_device">Overiť zariadenie</string>
+    <string name="title_activity_verify_device">Overiť reláciu</string>
 
     <string name="resources_script">Latn</string>
 
@@ -1314,19 +1291,20 @@ Objavte skutočne výkonné možnosti otvorenej spolupráce s Riot.im!</string>
     <string name="review">Náhlad</string>
     <string name="decline">Odmietnuť</string>
 
-    <string name="people_no_identity_server">Nebol nakonfigurovaný overovací server.</string>
+    <string name="people_no_identity_server">Nebol nakonfigurovaný server totožnosti.</string>
 
     <string name="call_failed_no_ice_title">Hovor zlyhal kvôli zle nakonfigurovanému serveru</string>
-    <string name="call_failed_no_ice_description">Prosím, požiadajte administrátora vášho homeserveru (%1$s) o konfiguráciu TURN serveru, aby hovory fungovali spoľahlivo. 
+    <string name="call_failed_no_ice_description">Prosím, požiadajte administrátora vášho domovského serveru (%1$s) o konfiguráciu TURN serveru, aby hovory fungovali spoľahlivo. 
 \n 
-\nPrípadně môžete skúsiť použiť verejný server %2$s, ale nebude tak spoľahlivý a bude zdielať vašu IP adresu s týmto serverom. V nastaveniach sa to dá zmeniť.</string>
+\nPrípadne môžete skúsiť použiť verejný server %2$s, ale nebude tak spoľahlivý a bude zdieľať vašu IP adresu s daným serverom. Môžete si to taktiež upraviť v Nastaveniach.</string>
     <string name="call_failed_no_ice_use_alt">Skúste použiť %s</string>
     <string name="call_failed_dont_ask_again">Viac sa nepýtať</string>
 
     <string name="auth_add_email_message_2">Nastavte e-mail na obnovenie účtu a voliteľne aby ho neskôr ľudia, ktorí vás poznajú, mohli nájsť.</string>
     <string name="auth_add_phone_message_2">Nastavte telefónne číslo, aby neskôr bolo voliteľne k nájdeniu ľuďmi, ktorí Vás poznajú.</string>
-    <string name="auth_add_email_phone_message_2">Nastavte e-mail na obnovenie účtu. Použite e-mail alebo telefónne číslo voliteľne neskôr, aby ich našli ľudia, ktorí vás poznajú.</string>
-    <string name="auth_add_email_and_phone_message_2">Nastavte e-mail na obnovenie účtu. Použite e-mail alebo telefónne číslo voliteľne neskôr, aby ich našli ľudia, ktorí vás poznajú.</string>
+    <string name="auth_add_email_phone_message_2">Nastavte e-mail na obnovenie účtu. Neskôr môžete použiť e-mail alebo telefónne číslo, aby vás pomocou nich mohli ľudia, ktorí vás poznajú, nájsť.</string>
+    <string name="auth_add_email_and_phone_message_2">Nastavte e-mail na obnovenie účtu. Neskôr môžete použiť e-mail alebo telefónne číslo, aby vás pomocou nich mohli ľudia, ktorí vás poznajú, nájsť.</string>
     <string name="login_error_no_homeserver_found">Toto nie je platná adresa Matrix serveru</string>
-    <string name="login_error_homeserver_not_found">Homeserver nie je dostupný na tomto URL, prosím, preverte</string>
+    <string name="login_error_homeserver_not_found">Domovský server je nedostupný na tejto URL adrese, preverte to prosím</string>
+    <string name="room_member_profile_sessions_section_title">Relácie</string>
 </resources>

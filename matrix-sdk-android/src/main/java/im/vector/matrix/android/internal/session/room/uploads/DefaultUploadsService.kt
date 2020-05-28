@@ -19,6 +19,7 @@ package im.vector.matrix.android.internal.session.room.uploads
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.room.uploads.GetUploadsResult
 import im.vector.matrix.android.api.session.room.uploads.UploadsService
 import im.vector.matrix.android.api.util.Cancelable
@@ -28,7 +29,8 @@ import im.vector.matrix.android.internal.task.configureWith
 internal class DefaultUploadsService @AssistedInject constructor(
         @Assisted private val roomId: String,
         private val taskExecutor: TaskExecutor,
-        private val getUploadsTask: GetUploadsTask
+        private val getUploadsTask: GetUploadsTask,
+        private val cryptoService: CryptoService
 ) : UploadsService {
 
     @AssistedInject.Factory
@@ -38,7 +40,7 @@ internal class DefaultUploadsService @AssistedInject constructor(
 
     override fun getUploads(numberOfEvents: Int, since: String?, callback: MatrixCallback<GetUploadsResult>): Cancelable {
         return getUploadsTask
-                .configureWith(GetUploadsTask.Params(roomId, numberOfEvents, since)) {
+                .configureWith(GetUploadsTask.Params(roomId, cryptoService.isRoomEncrypted(roomId), numberOfEvents, since)) {
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)

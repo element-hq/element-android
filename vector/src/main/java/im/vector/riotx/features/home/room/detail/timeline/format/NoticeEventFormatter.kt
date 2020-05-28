@@ -63,7 +63,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             EventType.STATE_ROOM_WIDGET_LEGACY      -> formatWidgetEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
-            EventType.CALL_ANSWER                   -> formatCallEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.CALL_ANSWER                   -> formatCallEvent(type, timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.MESSAGE,
             EventType.REACTION,
             EventType.KEY_VERIFICATION_START,
@@ -102,7 +102,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             EventType.STATE_ROOM_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(event, senderName)
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
-            EventType.CALL_ANSWER                   -> formatCallEvent(event, senderName)
+            EventType.CALL_ANSWER                   -> formatCallEvent(type, event, senderName)
             EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(senderName)
             else                                    -> {
                 Timber.v("Type $type not handled by this formatter")
@@ -155,9 +155,9 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
         return sp.getString(R.string.notice_made_future_room_visibility, senderName, formattedVisibility)
     }
 
-    private fun formatCallEvent(event: Event, senderName: String?): CharSequence? {
-        return when {
-            EventType.CALL_INVITE == event.type -> {
+    private fun formatCallEvent(type: String, event: Event, senderName: String?): CharSequence? {
+        return when (type) {
+            EventType.CALL_INVITE -> {
                 val content = event.getClearContent().toModel<CallInviteContent>() ?: return null
                 val isVideoCall = content.offer.sdp == CallInviteContent.Offer.SDP_VIDEO
                 return if (isVideoCall) {
@@ -166,9 +166,9 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
                     sp.getString(R.string.notice_placed_voice_call, senderName)
                 }
             }
-            EventType.CALL_ANSWER == event.type -> sp.getString(R.string.notice_answered_call, senderName)
-            EventType.CALL_HANGUP == event.type -> sp.getString(R.string.notice_ended_call, senderName)
-            else                                -> null
+            EventType.CALL_ANSWER -> sp.getString(R.string.notice_answered_call, senderName)
+            EventType.CALL_HANGUP -> sp.getString(R.string.notice_ended_call, senderName)
+            else                  -> null
         }
     }
 
