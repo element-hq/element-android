@@ -89,7 +89,7 @@ internal class MxCallImpl(
                 callId = callId,
                 answer = CallAnswerContent.Answer(sdp = sdp.description)
         )
-                .let { createEventAndLocalEcho(type = EventType.CALL_INVITE, roomId = roomId, content = it.toContent()) }
+                .let { createEventAndLocalEcho(type = EventType.CALL_ANSWER, roomId = roomId, content = it.toContent()) }
                 .also { roomEventSender.sendEvent(it) }
     }
 

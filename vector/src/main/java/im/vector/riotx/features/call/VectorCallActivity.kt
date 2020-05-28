@@ -417,6 +417,7 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
 
         fun newIntent(context: Context, mxCall: MxCallDetail): Intent {
             return Intent(context, VectorCallActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 putExtra(MvRx.KEY_ARG, CallArgs(mxCall.roomId, mxCall.otherUserId, !mxCall.isOutgoing, mxCall.isVideoCall))
             }
         }

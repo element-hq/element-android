@@ -281,7 +281,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
     private fun sendSdpOffer() {
         val constraints = MediaConstraints()
         constraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"))
-        constraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveVideo", "true"))
+        constraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveVideo", if (currentCall?.isVideoCall == true) "true" else "false"))
 
         Timber.v("## VOIP creating offer...")
         peerConnection?.createOffer(object : SdpObserver {
@@ -429,9 +429,10 @@ class WebRtcPeerConnectionManager @Inject constructor(
         currentCall = mxCall
 
         startHeadsUpService(mxCall)
-        context.startActivity(VectorCallActivity.newIntent(context, mxCall))
-
         startCall()
+
+        val sdp = SessionDescription(SessionDescription.Type.OFFER, callInviteContent.offer?.sdp)
+        peerConnection?.setRemoteDescription(object : SdpObserverAdapter() {}, sdp)
     }
 
     private fun startHeadsUpService(mxCall: MxCallDetail) {
@@ -439,6 +440,57 @@ class WebRtcPeerConnectionManager @Inject constructor(
         ContextCompat.startForegroundService(context, callHeadsUpServiceIntent)
 
         context.bindService(Intent(context, CallHeadsUpService::class.java), serviceConnection, 0)
+    }
+
+    fun answerCall() {
+        if (currentCall != null) {
+            val constraints = MediaConstraints().apply {
+                mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"))
+                mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveVideo", if (currentCall?.isVideoCall == true) "true" else "false"))
+            }
+
+            peerConnection?.createAnswer(object : SdpObserver {
+                override fun onCreateSuccess(sessionDescription: SessionDescription) {
+                    Timber.v("## createAnswer onCreateSuccess")
+
+                    val sdp = SessionDescription(sessionDescription.type, sessionDescription.description)
+
+                    peerConnection?.setLocalDescription(object : SdpObserver {
+                        override fun onSetSuccess() {
+                            currentCall?.accept(sdp)
+
+                            currentCall?.let {
+                                context.startActivity(VectorCallActivity.newIntent(context, it))
+                            }
+                        }
+
+                        override fun onCreateSuccess(localSdp: SessionDescription) {}
+
+                        override fun onSetFailure(p0: String?) {
+                            endCall()
+                        }
+
+                        override fun onCreateFailure(p0: String?) {
+                            endCall()
+                        }
+                    }, sdp)
+                }
+
+                override fun onSetSuccess() {
+                    Timber.v("## createAnswer onSetSuccess")
+                }
+
+                override fun onSetFailure(error: String) {
+                    Timber.v("answerCall.onSetFailure failed: $error")
+                    endCall()
+                }
+
+                override fun onCreateFailure(error: String) {
+                    Timber.v("answerCall.onCreateFailure failed: $error")
+                    endCall()
+                }
+            }, constraints)
+        }
     }
 
     fun endCall() {

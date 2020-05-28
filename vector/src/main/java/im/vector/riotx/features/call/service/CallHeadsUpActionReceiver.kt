@@ -49,5 +49,6 @@ class CallHeadsUpActionReceiver : BroadcastReceiver() {
 
     private fun onCallAnswerClicked() {
         Timber.d("onCallAnswerClicked")
+        peerConnectionManager.answerCall()
     }
 }
