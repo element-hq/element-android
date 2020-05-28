@@ -41,7 +41,7 @@ interface CallsListener {
 //     */
 //    fun onCallHangUp(peerSignalingClient: PeerSignalingClient)
 
-    fun onCallInviteReceived(signalingRoomId: String, fromUserId: String, callInviteContent: CallInviteContent)
+    fun onCallInviteReceived(mxCall: MxCall, callInviteContent: CallInviteContent)
 
     fun onCallAnswerReceived(callAnswerContent: CallAnswerContent)
 

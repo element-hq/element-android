@@ -17,40 +17,15 @@
 package im.vector.matrix.android.api.session.call
 
 import im.vector.matrix.android.api.MatrixCallback
-import org.webrtc.IceCandidate
-import org.webrtc.SessionDescription
 
 interface CallService {
 
     fun getTurnServer(callback: MatrixCallback<TurnServer?>)
 
     /**
-     * Start a call
-     * Send offer SDP to the other participant.
-     * @param callId a callId that the caller can create, it will be used to identify the call for other methods
+     * Create an outgoing call
      */
-    fun startCall(callId: String, roomId: String, sdp: SessionDescription, callback: MatrixCallback<String>)
-
-    /**
-     * Accept an incoming call
-     * Send answer SDP to the other participant.
-     */
-    fun pickUp(callId: String, roomId: String, sdp: SessionDescription, callback: MatrixCallback<String>)
-
-    /**
-     * Send Ice candidate to the other participant.
-     */
-    fun sendLocalIceCandidates(callId: String, roomId: String, candidates: List<IceCandidate>)
-
-    /**
-     * Send removed ICE candidates to the other participant.
-     */
-    fun sendLocalIceCandidateRemovals(callId: String, roomId: String, candidates: List<IceCandidate>)
-
-    /**
-     * Send a hangup event
-     */
-    fun hangup(callId: String, roomId: String)
+    fun createOutgoingCall(roomId: String, otherUserId: String, isVideoCall: Boolean): MxCall
 
     fun addCallListener(listener: CallsListener)
 

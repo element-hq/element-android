@@ -20,24 +20,20 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.session.call.CallService
 import im.vector.matrix.android.api.session.call.CallsListener
+import im.vector.matrix.android.api.session.call.MxCall
 import im.vector.matrix.android.api.session.call.TurnServer
-import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.events.model.LocalEcho
-import im.vector.matrix.android.api.session.events.model.UnsignedData
-import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.call.CallAnswerContent
-import im.vector.matrix.android.api.session.room.model.call.CallCandidatesContent
 import im.vector.matrix.android.api.session.room.model.call.CallHangupContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.session.call.model.MxCallImpl
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.send.RoomEventSender
-import org.webrtc.IceCandidate
-import org.webrtc.SessionDescription
+import java.util.UUID
 import javax.inject.Inject
 
 @SessionScope
@@ -54,71 +50,17 @@ internal class DefaultCallService @Inject constructor(
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun startCall(callId: String, roomId: String, sdp: SessionDescription, callback: MatrixCallback<String>) {
-        val eventContent = CallInviteContent(
-                callId = callId,
-                lifetime = CALL_TIMEOUT_MS,
-                offer = CallInviteContent.Offer(sdp = sdp.description)
+    override fun createOutgoingCall(roomId: String, otherUserId: String, isVideoCall: Boolean): MxCall {
+        return MxCallImpl(
+                callId = UUID.randomUUID().toString(),
+                isOutgoing = true,
+                roomId = roomId,
+                userId = userId,
+                otherUserId = otherUserId,
+                isVideoCall = isVideoCall,
+                localEchoEventFactory = localEchoEventFactory,
+                roomEventSender = roomEventSender
         )
-
-        createEventAndLocalEcho(type = EventType.CALL_INVITE, roomId = roomId, content = eventContent.toContent()).let { event ->
-            roomEventSender.sendEvent(event)
-//            sendEventTask
-//                    .configureWith(
-//                            SendEventTask.Params(event = event, cryptoService = cryptoService)
-//                    ) {
-//                        this.callback = callback
-//                    }.executeBy(taskExecutor)
-        }
-    }
-
-    override fun pickUp(callId: String, roomId: String, sdp: SessionDescription, callback: MatrixCallback<String>) {
-        val eventContent = CallAnswerContent(
-                callId = callId,
-                answer = CallAnswerContent.Answer(sdp = sdp.description)
-        )
-
-        createEventAndLocalEcho(type = EventType.CALL_INVITE, roomId = roomId, content = eventContent.toContent()).let { event ->
-            roomEventSender.sendEvent(event)
-//            sendEventTask
-//                    .configureWith(
-//                            SendEventTask.Params(event = event, cryptoService = cryptoService)
-//                    ) {
-//                        this.callback = callback
-//                    }.executeBy(taskExecutor)
-        }
-    }
-
-    override fun sendLocalIceCandidates(callId: String, roomId: String, candidates: List<IceCandidate>) {
-        val eventContent = CallCandidatesContent(
-                callId = callId,
-                candidates = candidates.map {
-                    CallCandidatesContent.Candidate(
-                            sdpMid = it.sdpMid,
-                            sdpMLineIndex = it.sdpMLineIndex.toString(),
-                            candidate = it.sdp
-                    )
-                }
-        )
-        createEventAndLocalEcho(type = EventType.CALL_CANDIDATES, roomId = roomId, content = eventContent.toContent()).let { event ->
-            roomEventSender.sendEvent(event)
-//            sendEventTask
-//                    .configureWith(
-//                            SendEventTask.Params(event = event, cryptoService = cryptoService)
-//                    ) {
-//                        this.callback = callback
-//                    }.executeBy(taskExecutor)
-        }
-    }
-
-    override fun sendLocalIceCandidateRemovals(callId: String, roomId: String, candidates: List<IceCandidate>) {
-    }
-
-    override fun hangup(callId: String, roomId: String) {
-        val eventContent = CallHangupContent(callId = callId)
-        createEventAndLocalEcho(type = EventType.CALL_HANGUP, roomId = roomId, content = eventContent.toContent()).let { event ->
-            roomEventSender.sendEvent(event)
-        }
     }
 
     override fun addCallListener(listener: CallsListener) {
@@ -137,8 +79,18 @@ internal class DefaultCallService @Inject constructor(
                 }
             }
             EventType.CALL_INVITE -> {
-                event.getClearContent().toModel<CallInviteContent>()?.let {
-                    onCallInvite(event.roomId ?: "", event.senderId ?: "", it)
+                event.getClearContent().toModel<CallInviteContent>()?.let { content ->
+                    val incomingCall = MxCallImpl(
+                            callId = content.callId ?: return@let,
+                            isOutgoing = false,
+                            roomId = event.roomId ?: return@let,
+                            userId = userId,
+                            otherUserId = event.senderId ?: return@let,
+                            isVideoCall = content.isVideo(),
+                            localEchoEventFactory = localEchoEventFactory,
+                            roomEventSender = roomEventSender
+                    )
+                    onCallInvite(incomingCall, content)
                 }
             }
             EventType.CALL_HANGUP -> {
@@ -165,28 +117,14 @@ internal class DefaultCallService @Inject constructor(
         }
     }
 
-    private fun onCallInvite(roomId: String, fromUserId: String, invite: CallInviteContent) {
+    private fun onCallInvite(incomingCall: MxCall, invite: CallInviteContent) {
         // Ignore the invitation from current user
-        if (fromUserId == userId) return
+        if (incomingCall.otherUserId == userId) return
 
         callListeners.toList().forEach {
             tryThis {
-                it.onCallInviteReceived(roomId, fromUserId, invite)
+                it.onCallInviteReceived(incomingCall, invite)
             }
-        }
-    }
-
-    private fun createEventAndLocalEcho(localId: String = LocalEcho.createLocalEchoId(), type: String, roomId: String, content: Content): Event {
-        return Event(
-                roomId = roomId,
-                originServerTs = System.currentTimeMillis(),
-                senderId = userId,
-                eventId = localId,
-                type = type,
-                content = content,
-                unsignedData = UnsignedData(age = null, transactionId = localId)
-        ).also {
-            localEchoEventFactory.createLocalEcho(it)
         }
     }
 

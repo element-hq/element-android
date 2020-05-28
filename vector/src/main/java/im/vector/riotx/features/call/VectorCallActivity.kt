@@ -32,6 +32,7 @@ import butterknife.BindView
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import im.vector.matrix.android.api.session.call.EglUtils
+import im.vector.matrix.android.api.session.call.MxCallDetail
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.platform.VectorBaseActivity
@@ -91,8 +92,6 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
 //    private var remoteVideoTrack: VideoTrack? = null
 
     private val iceCandidateSource: PublishSubject<IceCandidate> = PublishSubject.create()
-
-
 
     var callHeadsUpService: CallHeadsUpService? = null
     private val serviceConnection = object : ServiceConnection {
@@ -363,7 +362,7 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
                 //peerConnectionManager.answerReceived("", sdp)
 //                peerConnection?.setRemoteDescription(object : SdpObserverAdapter() {}, sdp)
             }
-            is VectorCallViewEvents.CallHangup -> {
+            is VectorCallViewEvents.CallHangup   -> {
                 finish()
             }
         }
@@ -416,9 +415,9 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
 //            mandatory.add(MediaConstraints.KeyValuePair("googHighpassFilter", "true"))
 //        }
 
-        fun newIntent(context: Context, roomId: String, participantUserId: String, isIncomingCall: Boolean, isVideoCall: Boolean): Intent {
+        fun newIntent(context: Context, mxCall: MxCallDetail): Intent {
             return Intent(context, VectorCallActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, CallArgs(roomId, participantUserId, isIncomingCall, isVideoCall))
+                putExtra(MvRx.KEY_ARG, CallArgs(mxCall.roomId, mxCall.otherUserId, !mxCall.isOutgoing, mxCall.isVideoCall))
             }
         }
     }
@@ -447,6 +446,5 @@ class VectorCallActivity : VectorBaseActivity(), WebRtcPeerConnectionManager.Lis
     }
 
     override fun sendOffer(sessionDescription: SessionDescription) {
-
     }
 }

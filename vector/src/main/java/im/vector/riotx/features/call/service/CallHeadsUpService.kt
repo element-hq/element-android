@@ -30,6 +30,7 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import im.vector.matrix.android.api.session.call.MxCallDetail
 import im.vector.riotx.R
 import im.vector.riotx.features.call.VectorCallActivity
 
@@ -50,7 +51,7 @@ class CallHeadsUpService : Service() {
 
         createNotificationChannel()
 
-        val title = callHeadsUpServiceArgs?.participantUserId ?: ""
+        val title = callHeadsUpServiceArgs?.otherUserId ?: ""
         val description = when {
             callHeadsUpServiceArgs?.isIncomingCall == false -> getString(R.string.call_ring)
             callHeadsUpServiceArgs?.isVideoCall == true     -> getString(R.string.incoming_video_call)
@@ -133,8 +134,8 @@ class CallHeadsUpService : Service() {
 
         private const val NOTIFICATION_ID = 999
 
-        fun newInstance(context: Context, roomId: String, participantUserId: String, isIncomingCall: Boolean, isVideoCall: Boolean): Intent {
-            val args = CallHeadsUpServiceArgs(roomId, participantUserId, isIncomingCall, isVideoCall)
+        fun newInstance(context: Context, mxCall: MxCallDetail): Intent {
+            val args = CallHeadsUpServiceArgs(mxCall.roomId, mxCall.otherUserId, !mxCall.isOutgoing, mxCall.isVideoCall)
             return Intent(context, CallHeadsUpService::class.java).apply {
                 putExtra(EXTRA_CALL_HEADS_UP_SERVICE_PARAMS, args)
             }

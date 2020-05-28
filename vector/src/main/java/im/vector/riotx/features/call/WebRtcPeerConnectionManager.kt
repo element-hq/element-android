@@ -22,10 +22,11 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import androidx.core.content.ContextCompat
-import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.session.call.CallsListener
 import im.vector.matrix.android.api.session.call.EglUtils
+import im.vector.matrix.android.api.session.call.MxCall
+import im.vector.matrix.android.api.session.call.MxCallDetail
 import im.vector.matrix.android.api.session.room.model.call.CallAnswerContent
 import im.vector.matrix.android.api.session.room.model.call.CallHangupContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
@@ -53,7 +54,6 @@ import org.webrtc.VideoSource
 import org.webrtc.VideoTrack
 import timber.log.Timber
 import java.lang.ref.WeakReference
-import java.util.UUID
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -114,10 +114,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     var callHeadsUpService: CallHeadsUpService? = null
 
-    private var callId: String? = null
-    private var signalingRoomId: String? = null
-    private var participantUserId: String? = null
-    private var isVideoCall: Boolean? = null
+    private var currentCall: MxCall? = null
 
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -275,11 +272,8 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 .subscribe {
                     // omit empty :/
                     if (it.isNotEmpty()) {
-                        Timber.v("## Sending local ice candidates to callId: $callId roomId: $signalingRoomId")
-                        sessionHolder
-                                .getActiveSession()
-                                .callService()
-                                .sendLocalIceCandidates(callId ?: "", signalingRoomId ?: "", it)
+                        Timber.v("## Sending local ice candidates to call")
+                        currentCall?.sendLocalIceCandidates(it)
                     }
                 }
     }
@@ -304,11 +298,8 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 peerConnection?.setLocalDescription(object : SdpObserverAdapter() {
                     override fun onSetSuccess() {
                         Timber.v("## setLocalDescription success")
-                        val id = UUID.randomUUID().toString()
-                        callId = id
-                        Timber.v("## sending offer to callId: $id roomId: $signalingRoomId")
-                        sessionHolder.getActiveSession().callService().startCall(id, signalingRoomId
-                                ?: "", sessionDescription, object : MatrixCallback<String> {})
+                        Timber.v("## sending offer")
+                        currentCall?.offerSdp(sessionDescription)
                     }
                 }, sessionDescription)
             }
@@ -330,7 +321,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
         localMediaStream = peerConnectionFactory?.createLocalMediaStream("ARDAMS") // magic value?
 
-        if (isVideoCall == true) {
+        if (currentCall?.isVideoCall == true) {
             val cameraIterator = if (Camera2Enumerator.isSupported(context)) Camera2Enumerator(context) else Camera1Enumerator(false)
             val frontCamera = cameraIterator.deviceNames
                     ?.firstOrNull { cameraIterator.isFrontFacing(it) }
@@ -417,55 +408,55 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
     }
 
-    fun startOutgoingCall(context: Context, signalingRoomId: String, participantUserId: String, isVideoCall: Boolean) {
-        this.signalingRoomId = signalingRoomId
-        this.participantUserId = participantUserId
-        this.isVideoCall = isVideoCall
+    fun startOutgoingCall(context: Context, signalingRoomId: String, otherUserId: String, isVideoCall: Boolean) {
+        val createdCall = sessionHolder.getSafeActiveSession()?.callService()?.createOutgoingCall(signalingRoomId, otherUserId, isVideoCall) ?: return
+        currentCall = createdCall
 
-        startHeadsUpService(signalingRoomId, sessionHolder.getActiveSession().myUserId, false, isVideoCall)
-        context.startActivity(VectorCallActivity.newIntent(context, signalingRoomId, participantUserId, false, isVideoCall))
+        startHeadsUpService(createdCall)
+        context.startActivity(VectorCallActivity.newIntent(context, createdCall))
 
         startCall()
         sendSdpOffer()
     }
 
-    override fun onCallInviteReceived(signalingRoomId: String, fromUserId: String, callInviteContent: CallInviteContent) {
-        this.callId = callInviteContent.callId
-        this.signalingRoomId = signalingRoomId
-        this.participantUserId = fromUserId
-        this.isVideoCall = callInviteContent.isVideo()
+    override fun onCallInviteReceived(mxCall: MxCall, callInviteContent: CallInviteContent) {
+        // TODO What if a call is currently active?
+        if (currentCall != null) {
+            Timber.w("TODO: Automatically reject incoming call?")
+            return
+        }
 
-        startHeadsUpService(signalingRoomId, fromUserId, true, callInviteContent.isVideo())
-        context.startActivity(VectorCallActivity.newIntent(context, signalingRoomId, fromUserId, false, callInviteContent.isVideo()))
+        currentCall = mxCall
+
+        startHeadsUpService(mxCall)
+        context.startActivity(VectorCallActivity.newIntent(context, mxCall))
 
         startCall()
     }
 
-    private fun startHeadsUpService(roomId: String, participantUserId: String, isIncomingCall: Boolean, isVideoCall: Boolean) {
-        val callHeadsUpServiceIntent = CallHeadsUpService.newInstance(context, roomId, participantUserId, isIncomingCall, isVideoCall)
+    private fun startHeadsUpService(mxCall: MxCallDetail) {
+        val callHeadsUpServiceIntent = CallHeadsUpService.newInstance(context, mxCall)
         ContextCompat.startForegroundService(context, callHeadsUpServiceIntent)
 
         context.bindService(Intent(context, CallHeadsUpService::class.java), serviceConnection, 0)
     }
 
     fun endCall() {
-        if (callId != null && signalingRoomId != null) {
-            sessionHolder.getActiveSession().callService().hangup(callId!!, signalingRoomId!!)
-        }
+        currentCall?.hangUp()
+        currentCall = null
         close()
     }
 
     override fun onCallAnswerReceived(callAnswerContent: CallAnswerContent) {
-        this.callId = callAnswerContent.callId
-
         executor.execute {
-            Timber.v("## answerReceived $callId")
+            Timber.v("## answerReceived")
             val sdp = SessionDescription(SessionDescription.Type.ANSWER, callAnswerContent.answer.sdp)
             peerConnection?.setRemoteDescription(object : SdpObserverAdapter() {}, sdp)
         }
     }
 
     override fun onCallHangupReceived(callHangupContent: CallHangupContent) {
+        currentCall = null
         close()
     }
 }

@@ -23,6 +23,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.call.CallsListener
+import im.vector.matrix.android.api.session.call.MxCall
 import im.vector.matrix.android.api.session.room.model.call.CallAnswerContent
 import im.vector.matrix.android.api.session.room.model.call.CallHangupContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
@@ -62,7 +63,7 @@ class VectorCallViewModel @AssistedInject constructor(
             }
         }
 
-        override fun onCallInviteReceived(signalingRoomId: String, fromUserId: String, callInviteContent: CallInviteContent) {
+        override fun onCallInviteReceived(mxCall: MxCall, callInviteContent: CallInviteContent) {
         }
 
         override fun onCallHangupReceived(callHangupContent: CallHangupContent) {
