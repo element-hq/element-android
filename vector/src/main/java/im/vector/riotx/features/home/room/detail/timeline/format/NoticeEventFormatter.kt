@@ -68,6 +68,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_POWER_LEVELS       -> formatRoomPowerLevels(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.CALL_INVITE,
+            EventType.CALL_CANDIDATES,
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER                   -> formatCallEvent(type, timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.MESSAGE,
@@ -237,7 +238,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
 
     private fun formatCallEvent(type: String, event: Event, senderName: String?): CharSequence? {
         return when (type) {
-            EventType.CALL_INVITE -> {
+            EventType.CALL_INVITE     -> {
                 val content = event.getClearContent().toModel<CallInviteContent>() ?: return null
                 val isVideoCall = content.offer?.sdp == CallInviteContent.Offer.SDP_VIDEO
                 return if (isVideoCall) {

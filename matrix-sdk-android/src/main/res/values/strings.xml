@@ -42,7 +42,7 @@
     <string name="notice_placed_video_call">%s placed a video call.</string>
     <string name="notice_placed_video_call_by_you">You placed a video call.</string>
     <string name="notice_placed_voice_call">%s placed a voice call.</string>
-    <string name="notice_placed_voice_call_by_you">You placed a voice call.</string>
+    <string name="notice_call_candidates">%s sent data to setup the call.</string>
     <string name="notice_answered_call">%s answered the call.</string>
     <string name="notice_answered_call_by_you">You answered the call.</string>
     <string name="notice_ended_call">%s ended the call.</string>
