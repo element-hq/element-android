@@ -158,18 +158,27 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
     private fun handleRevokeWidget() {
         viewModelScope.launch {
             val widgetId = initialState.widgetId ?: return@launch
-            WidgetPermissionsHelper(integrationManagerService, widgetService).changePermission(initialState.roomId, widgetId, false)
-            _viewEvents.post(WidgetViewEvents.Close())
+            try {
+                WidgetPermissionsHelper(integrationManagerService, widgetService).changePermission(initialState.roomId, widgetId, false)
+                _viewEvents.post(WidgetViewEvents.Close())
+            } catch (failure: Throwable) {
+                _viewEvents.post(WidgetViewEvents.Failure(failure))
+            }
         }
     }
 
     private fun handleDeleteWidget() {
         viewModelScope.launch {
             val widgetId = initialState.widgetId ?: return@launch
-            awaitCallback<Unit> {
-                widgetService.destroyRoomWidget(initialState.roomId, widgetId, it)
-                _viewEvents.post(WidgetViewEvents.Close())
+            try {
+                awaitCallback<Unit> {
+                    widgetService.destroyRoomWidget(initialState.roomId, widgetId, it)
+                    _viewEvents.post(WidgetViewEvents.Close())
+                }
+            } catch (failure: Throwable) {
+                _viewEvents.post(WidgetViewEvents.Failure(failure))
             }
+
         }
     }
 

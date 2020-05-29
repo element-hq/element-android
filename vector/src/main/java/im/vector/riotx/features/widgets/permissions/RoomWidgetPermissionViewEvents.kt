@@ -16,10 +16,8 @@
 
 package im.vector.riotx.features.widgets.permissions
 
-import im.vector.riotx.core.platform.VectorViewModelAction
+import im.vector.riotx.core.platform.VectorViewEvents
 
-sealed class RoomWidgetPermissionActions : VectorViewModelAction {
-    object AllowWidget: RoomWidgetPermissionActions()
-    object BlockWidget: RoomWidgetPermissionActions()
-    object DoClose: RoomWidgetPermissionActions()
+sealed class RoomWidgetPermissionViewEvents : VectorViewEvents {
+    object Close : RoomWidgetPermissionViewEvents()
 }

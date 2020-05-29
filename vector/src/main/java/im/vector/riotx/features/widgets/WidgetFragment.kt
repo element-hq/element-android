@@ -24,7 +24,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.forEach
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
@@ -76,6 +75,7 @@ class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventL
                 is WidgetViewEvents.DisplayTerms              -> displayTerms(it)
                 is WidgetViewEvents.LoadFormattedURL          -> loadFormattedUrl(it)
                 is WidgetViewEvents.DisplayIntegrationManager -> displayIntegrationManager(it)
+                is WidgetViewEvents.Failure                   -> displayErrorDialog(it.throwable)
             }
         }
     }

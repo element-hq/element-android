@@ -30,11 +30,14 @@ import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.widgets.permissions.RoomWidgetPermissionBottomSheet
+import im.vector.riotx.features.widgets.permissions.RoomWidgetPermissionViewEvents
+import im.vector.riotx.features.widgets.permissions.RoomWidgetPermissionViewModel
+import im.vector.riotx.features.widgets.permissions.RoomWidgetPermissionViewState
 import kotlinx.android.synthetic.main.activity_widget.*
 import java.io.Serializable
 import javax.inject.Inject
 
-class WidgetActivity : VectorBaseActivity(), ToolbarConfigurable, WidgetViewModel.Factory {
+class WidgetActivity : VectorBaseActivity(), ToolbarConfigurable, WidgetViewModel.Factory, RoomWidgetPermissionViewModel.Factory {
 
     companion object {
 
@@ -61,7 +64,10 @@ class WidgetActivity : VectorBaseActivity(), ToolbarConfigurable, WidgetViewMode
     }
 
     @Inject lateinit var viewModelFactory: WidgetViewModel.Factory
+    @Inject lateinit var permissionsViewModelFactory: RoomWidgetPermissionViewModel.Factory
+
     private val viewModel: WidgetViewModel by viewModel()
+    private val permissionViewModel: RoomWidgetPermissionViewModel by viewModel()
 
     override fun getLayoutRes() = R.layout.activity_widget
 
@@ -85,6 +91,12 @@ class WidgetActivity : VectorBaseActivity(), ToolbarConfigurable, WidgetViewMode
             }
         }
 
+        permissionViewModel.observeViewEvents {
+            when (it) {
+                is RoomWidgetPermissionViewEvents.Close -> finish()
+            }
+        }
+
         viewModel.selectSubscribe(this, WidgetViewState::status) { ws ->
             when (ws) {
                 WidgetStatus.UNKNOWN            -> {
@@ -95,11 +107,7 @@ class WidgetActivity : VectorBaseActivity(), ToolbarConfigurable, WidgetViewMode
                         return@selectSubscribe
                     } else {
                         RoomWidgetPermissionBottomSheet
-                                .newInstance(widgetArgs).apply {
-                                    onFinish = { accepted ->
-                                        if (!accepted) finish()
-                                    }
-                                }
+                                .newInstance(widgetArgs)
                                 .show(supportFragmentManager, WIDGET_PERMISSION_FRAGMENT_TAG)
                     }
                 }
@@ -122,6 +130,10 @@ class WidgetActivity : VectorBaseActivity(), ToolbarConfigurable, WidgetViewMode
 
     override fun create(initialState: WidgetViewState): WidgetViewModel {
         return viewModelFactory.create(initialState)
+    }
+
+    override fun create(initialState: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel {
+        return permissionsViewModelFactory.create(initialState)
     }
 
     private fun handleClose(event: WidgetViewEvents.Close) {

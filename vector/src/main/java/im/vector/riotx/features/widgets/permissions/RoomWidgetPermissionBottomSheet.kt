@@ -25,7 +25,7 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.OnClick
 import com.airbnb.mvrx.MvRx
-import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
@@ -36,11 +36,11 @@ import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.widgets.WidgetArgs
 import javax.inject.Inject
 
-class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomWidgetPermissionViewModel.Factory {
+class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     override fun getLayoutResId(): Int = R.layout.bottom_sheet_room_widget_permission
 
-    private val viewModel: RoomWidgetPermissionViewModel by fragmentViewModel()
+    private val viewModel: RoomWidgetPermissionViewModel by activityViewModel()
 
     @BindView(R.id.bottom_sheet_widget_permission_shared_info)
     lateinit var sharedInfoTextView: TextView
@@ -55,18 +55,11 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment(), R
     lateinit var authorAvatarView: ImageView
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
-    @Inject lateinit var viewModelFactory: RoomWidgetPermissionViewModel.Factory
-
-    var onFinish: ((Boolean) -> Unit)? = null
 
     override val showExpanded = true
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
-    }
-
-    override fun create(initialState: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel {
-        return viewModelFactory.create(initialState)
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -112,7 +105,6 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment(), R
         viewModel.handle(RoomWidgetPermissionActions.BlockWidget)
         //optimistic dismiss
         dismiss()
-        onFinish?.invoke(false)
     }
 
     @OnClick(R.id.bottom_sheet_widget_permission_continue_button)
@@ -120,12 +112,11 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment(), R
         viewModel.handle(RoomWidgetPermissionActions.AllowWidget)
         //optimistic dismiss
         dismiss()
-        onFinish?.invoke(true)
     }
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
-        onFinish?.invoke(false)
+        viewModel.handle(RoomWidgetPermissionActions.DoClose)
     }
 
     companion object {

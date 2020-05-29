@@ -27,14 +27,14 @@ import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
 import im.vector.riotx.R
-import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.net.URL
 
 class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val initialState: RoomWidgetPermissionViewState,
                                                                 private val session: Session)
-    : VectorViewModel<RoomWidgetPermissionViewState, RoomWidgetPermissionActions, EmptyViewEvents>(initialState) {
+    : VectorViewModel<RoomWidgetPermissionViewState, RoomWidgetPermissionActions, RoomWidgetPermissionViewEvents>(initialState) {
 
     private val widgetService = session.widgetService()
     private val integrationManagerService = session.integrationManagerService()
@@ -86,20 +86,33 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
 
     private fun handleRevokeWidget() = withState { state ->
         viewModelScope.launch {
-            if (state.permissionData()?.isWebviewWidget.orFalse()) {
-                WidgetPermissionsHelper(integrationManagerService, widgetService).changePermission(state.roomId, state.widgetId, false)
-            } else {
-                //TODO JITSI
+            try {
+                if (state.permissionData()?.isWebviewWidget.orFalse()) {
+                    WidgetPermissionsHelper(integrationManagerService, widgetService).changePermission(state.roomId, state.widgetId, false)
+                } else {
+                    //TODO JITSI
+                }
+            } catch (failure: Throwable) {
+                Timber.v("Failure revoking widget: ${state.widgetId}")
+            } finally {
+                // We send close event in every situation
+                _viewEvents.post(RoomWidgetPermissionViewEvents.Close)
             }
         }
     }
 
     private fun handleAllowWidget() = withState { state ->
         viewModelScope.launch {
-            if (state.permissionData()?.isWebviewWidget.orFalse()) {
-                WidgetPermissionsHelper(integrationManagerService, widgetService).changePermission(state.roomId, state.widgetId, true)
-            } else {
-                //TODO JITSI
+            try {
+                if (state.permissionData()?.isWebviewWidget.orFalse()) {
+                    WidgetPermissionsHelper(integrationManagerService, widgetService).changePermission(state.roomId, state.widgetId, true)
+                } else {
+                    //TODO JITSI
+                }
+            } catch (failure: Throwable) {
+                Timber.v("Failure allowing widget: ${state.widgetId}")
+                // We send close event only when it's failed
+                _viewEvents.post(RoomWidgetPermissionViewEvents.Close)
             }
         }
     }
