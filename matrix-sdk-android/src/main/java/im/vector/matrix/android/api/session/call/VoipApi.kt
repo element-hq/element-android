@@ -20,6 +20,7 @@ import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
 import retrofit2.http.GET
 
+// TODO Move to internal
 internal interface VoipApi {
 
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "voip/turnServer")

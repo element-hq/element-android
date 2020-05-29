@@ -369,8 +369,8 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     fun isMenuItemVisible(@IdRes itemId: Int) = when (itemId) {
-        R.id.clear_message_queue         ->
-            /* For now always disable on production, worker cancellation is not working properly */
+        R.id.clear_message_queue ->
+            // For now always disable when not in developer mode, worker cancellation is not working properly
             timeline.pendingEventCount() > 0 && vectorPreferences.developerMode()
         R.id.resend_all          -> timeline.failedToDeliverEventCount() > 0
         R.id.clear_all           -> timeline.failedToDeliverEventCount() > 0
