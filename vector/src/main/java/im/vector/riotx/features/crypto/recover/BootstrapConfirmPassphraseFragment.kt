@@ -31,7 +31,6 @@ import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.colorizeMatchingText
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_bootstrap_enter_passphrase.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -63,8 +62,7 @@ class BootstrapConfirmPassphraseFragment @Inject constructor(
         }
 
         ssss_passphrase_enter_edittext.editorActionEvents()
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .subscribe {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
                         submit()
@@ -96,13 +94,15 @@ class BootstrapConfirmPassphraseFragment @Inject constructor(
             return@withState
         }
         val passphrase = ssss_passphrase_enter_edittext.text?.toString()
-        if (passphrase.isNullOrBlank()) {
-            ssss_passphrase_enter_til.error = getString(R.string.passphrase_empty_error_message)
-        } else if (passphrase != state.passphrase) {
-            ssss_passphrase_enter_til.error = getString(R.string.passphrase_passphrase_does_not_match)
-        } else {
-            view?.hideKeyboard()
-            sharedViewModel.handle(BootstrapActions.DoInitialize(passphrase))
+        when {
+            passphrase.isNullOrBlank()     ->
+                ssss_passphrase_enter_til.error = getString(R.string.passphrase_empty_error_message)
+            passphrase != state.passphrase ->
+                ssss_passphrase_enter_til.error = getString(R.string.passphrase_passphrase_does_not_match)
+            else                           -> {
+                view?.hideKeyboard()
+                sharedViewModel.handle(BootstrapActions.DoInitialize(passphrase))
+            }
         }
     }
 

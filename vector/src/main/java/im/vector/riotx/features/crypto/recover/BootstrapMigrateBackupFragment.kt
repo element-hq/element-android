@@ -39,7 +39,6 @@ import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.colorizeMatchingText
 import im.vector.riotx.core.utils.startImportTextFromFileIntent
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_bootstrap_enter_passphrase.bootstrapDescriptionText
 import kotlinx.android.synthetic.main.fragment_bootstrap_migrate_backup.*
 import java.util.concurrent.TimeUnit
@@ -57,12 +56,11 @@ class BootstrapMigrateBackupFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         withState(sharedViewModel) {
-            // set initial value (usefull when coming back)
+            // set initial value (useful when coming back)
             bootstrapMigrateEditText.setText(it.passphrase ?: "")
         }
         bootstrapMigrateEditText.editorActionEvents()
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .subscribe {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
                         submit()

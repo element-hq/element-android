@@ -30,7 +30,6 @@ import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.colorizeMatchingText
 import im.vector.riotx.features.settings.VectorLocale
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_bootstrap_enter_passphrase.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -53,12 +52,11 @@ class BootstrapEnterPassphraseFragment @Inject constructor(
 
         ssss_passphrase_enter_edittext.hint = getString(R.string.passphrase_enter_passphrase)
         withState(sharedViewModel) {
-            // set initial value (usefull when coming back)
+            // set initial value (useful when coming back)
             ssss_passphrase_enter_edittext.setText(it.passphrase ?: "")
         }
         ssss_passphrase_enter_edittext.editorActionEvents()
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .subscribe {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
                         submit()

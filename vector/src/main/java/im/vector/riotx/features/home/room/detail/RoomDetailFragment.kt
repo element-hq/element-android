@@ -262,7 +262,6 @@ class RoomDetailFragment @Inject constructor(
         roomToolbarContentView.debouncedClicks {
             navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
         }
-        roomDetailViewModel.subscribe { renderState(it) }
 
         sharedActionViewModel
                 .observe()
@@ -672,7 +671,7 @@ class RoomDetailFragment @Inject constructor(
         inviteView.callback = this
     }
 
-    private fun renderState(state: RoomDetailViewState) {
+    override fun invalidate() = withState(roomDetailViewModel) { state ->
         renderRoomSummary(state)
         val summary = state.asyncRoomSummary()
         val inviter = state.asyncInviter()

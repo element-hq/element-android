@@ -30,7 +30,6 @@ import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.colorizeMatchingText
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_bootstrap_enter_account_password.*
 import kotlinx.android.synthetic.main.fragment_bootstrap_enter_passphrase.bootstrapDescriptionText
 import kotlinx.android.synthetic.main.fragment_bootstrap_enter_passphrase.ssss_view_show_password
@@ -56,8 +55,7 @@ class BootstrapAccountPasswordFragment @Inject constructor(
         bootstrapAccountPasswordEditText.hint = getString(R.string.account_password)
 
         bootstrapAccountPasswordEditText.editorActionEvents()
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .subscribe {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
                         submit()
@@ -98,8 +96,6 @@ class BootstrapAccountPasswordFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(sharedViewModel) { state ->
-        super.invalidate()
-
         if (state.step is BootstrapStep.AccountPassword) {
             val isPasswordVisible = state.step.isPasswordVisible
             bootstrapAccountPasswordEditText.showPassword(isPasswordVisible, updateCursor = false)

@@ -32,7 +32,6 @@ import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.features.MainActivity
 import im.vector.riotx.features.MainActivityArgs
 import im.vector.riotx.features.login.LoginActivity
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_login.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -57,18 +56,11 @@ class SoftLogoutActivity : LoginActivity() {
     override fun initUiAndData() {
         super.initUiAndData()
 
-        softLogoutViewModel
-                .subscribe(this) {
-                    updateWithState(it)
-                }
+        softLogoutViewModel.subscribe(this) {
+            updateWithState(it)
+        }
 
-        softLogoutViewModel.viewEvents
-                .observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    handleSoftLogoutViewEvents(it)
-                }
-                .disposeOnDestroy()
+        softLogoutViewModel.observeViewEvents { handleSoftLogoutViewEvents(it) }
     }
 
     private fun handleSoftLogoutViewEvents(softLogoutViewEvents: SoftLogoutViewEvents) {
