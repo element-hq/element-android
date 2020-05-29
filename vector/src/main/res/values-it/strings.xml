@@ -1737,7 +1737,7 @@
     <string name="settings_discovery_confirm_mail">Abbiamo inviato un\'email di conferma a %s, controlla l\'email e clicca sul link di conferma</string>
     <string name="settings_discovery_mail_pending">In attesa</string>
 
-    <string name="settings_discovery_enter_identity_server">Inserisci un nuovo Identity Server</string>
+    <string name="settings_discovery_enter_identity_server">Inserisci un URL di server di identità</string>
     <string name="settings_discovery_bad_identity_server">Impossibile connettersi all\'Identity Server</string>
     <string name="settings_discovery_please_enter_server">Inserisci l\'URL dell\'Identity Server</string>
     <string name="settings_discovery_no_terms_title">L\'Identity Server non ha reso noti i propri termini di servizio</string>
@@ -2452,5 +2452,47 @@
         <item quantity="other">Inviti spediti a %1$s e ad altri %2$d</item>
     </plurals>
     <string name="invite_users_to_room_failure">Impossibile invitare gli utenti. Controlla gli utenti che vuoi invitare e riprova.</string>
+
+<string name="event_redacted">Messaggio eliminato</string>
+    <string name="settings_show_redacted">Mostra messaggi rimossi</string>
+    <string name="settings_show_redacted_summary">Mostra un segnaposto per i messaggi rimossi</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Ti abbiamo inviato un\'email di conferma a %s, prima controlla la tua posta e clicca sul link di conferma</string>
+    <string name="settings_text_message_sent_wrong_code">Il codice di verifica non è corretto.</string>
+
+    <string name="uploads_media_title">MEDIA</string>
+    <string name="uploads_media_no_result">Non ci sono file multimediali in questa stanza</string>
+    <string name="uploads_files_title">FILE</string>
+    <string name="uploads_files_subtitle">%1$s alle %2$s</string>
+    <string name="uploads_files_no_result">Non ci sono file in questa stanza</string>
+
+    <string name="login_connect_using_matrix_id_notice">In alternativa, se hai già un account e conosci il tuo identificativo e password di Matrix, puoi usare questo metodo:</string>
+    <string name="login_connect_using_matrix_id_submit">Accedi con il mio identificativo di Matrix</string>
+    <string name="login_signin_matrix_id_title">Accedi</string>
+    <string name="login_signin_matrix_id_notice">Inserisci il tuo identificativo e la password</string>
+    <string name="login_signin_matrix_id_hint">Identificativo utente</string>
+    <string name="login_signin_matrix_id_error_invalid_matrix_id">Non è un identificativo valido. Formato previsto: \'@utente:homeserver.org\'</string>
+    <string name="autodiscover_well_known_error">Impossibile trovare un homeserver valido. Controlla il tuo identificativo</string>
+
+    <string name="no_connectivity_to_the_server_indicator_airplane">Modalità aereo attiva</string>
+
+    <string name="choose_locale_current_locale_title">Lingua attuale</string>
+    <string name="choose_locale_other_locales_title">Altre lingue disponibili</string>
+    <string name="choose_locale_loading_locales">Caricamento lingue disponibili…</string>
+
+    <string name="open_terms_of">Apri condizioni di %s</string>
+    <string name="disconnect_identity_server_dialog_content">Disconnettere dal server di identitià %s\?</string>
+    <string name="identity_server_error_outdated_identity_server">Questo server di identità è obsoleto. RiotX supporta solo API V2.</string>
+    <string name="identity_server_error_outdated_home_server">Questa operazione non è possibile. L\'homeserver è obsoleto.</string>
+    <string name="identity_server_error_no_identity_server_configured">Prima configura un server di identità.</string>
+    <string name="identity_server_error_terms_not_signed">Prima accetta le condizioni del server di identità nelle impostazioni.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Per la tua privacy, RiotX supporta solo l\'invio di email utente e numeri di telefono in formato hash.</string>
+    <string name="identity_server_error_binding_error">L\'associamento è fallito.</string>
+    <string name="identity_server_error_no_current_binding_error">Non c\'è alcun associamento attuale con questo identificativo.</string>
+
+    <string name="identity_server_set_default_notice">Il tuo homeserver (%1$s) propone di usare %2$s come tuo server di identità</string>
+    <string name="identity_server_set_default_submit">Usa %1$s</string>
+    <string name="identity_server_set_alternative_notice">In alternativa, puoi inserire un qualsiasi altro URL di server di identità</string>
+    <string name="identity_server_set_alternative_notice_no_default">Inserisci l\'URL di un server di identità</string>
+    <string name="identity_server_set_alternative_submit">Invia</string>
 
 </resources>
