@@ -154,7 +154,12 @@ class RxSession(private val session: Session) {
                 }
     }
 
-    fun liveRoomWidgets(roomId: String, widgetId: QueryStringValue, widgetTypes: Set<String>? = null, excludedTypes: Set<String>? = null): Observable<List<Widget>> {
+    fun liveRoomWidgets(
+            roomId: String,
+            widgetId: QueryStringValue,
+            widgetTypes: Set<String>? = null,
+            excludedTypes: Set<String>? = null
+    ): Observable<List<Widget>> {
         return session.widgetService().getRoomWidgetsLive(roomId, widgetId, widgetTypes, excludedTypes).asObservable()
                 .startWithCallable {
                     session.widgetService().getRoomWidgets(roomId, widgetId, widgetTypes, excludedTypes)

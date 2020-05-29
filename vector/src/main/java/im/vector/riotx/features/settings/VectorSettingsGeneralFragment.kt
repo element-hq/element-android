@@ -213,7 +213,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
         (findPreference(VectorPreferences.SETTINGS_ALLOW_INTEGRATIONS_KEY) as? VectorSwitchPreference)?.let {
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                //Disable it while updating the state, will be re-enabled by the account data listener.
+                // Disable it while updating the state, will be re-enabled by the account data listener.
                 it.isEnabled = false
                 session.integrationManagerService().setIntegrationEnabled(newValue as Boolean, NoOpMatrixCallback())
                 true

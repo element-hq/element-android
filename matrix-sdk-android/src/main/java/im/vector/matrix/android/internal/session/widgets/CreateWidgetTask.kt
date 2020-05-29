@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.session.widgets
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.api.session.widgets.WidgetService
 import im.vector.matrix.android.internal.database.awaitNotEmptyResult
 import im.vector.matrix.android.internal.database.model.CurrentStateEventEntity
 import im.vector.matrix.android.internal.database.model.CurrentStateEventEntityFields

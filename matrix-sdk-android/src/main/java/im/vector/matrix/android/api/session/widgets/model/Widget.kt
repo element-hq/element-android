@@ -18,7 +18,6 @@ package im.vector.matrix.android.api.session.widgets.model
 
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.sender.SenderInfo
-import im.vector.matrix.android.api.session.widgets.model.WidgetContent
 
 data class Widget(
         val widgetContent: WidgetContent,
@@ -34,4 +33,3 @@ data class Widget(
 
     val name = widgetContent.getHumanName()
 }
-

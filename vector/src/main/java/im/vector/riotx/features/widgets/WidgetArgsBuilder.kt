@@ -61,7 +61,7 @@ class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSes
 
     fun buildRoomWidgetArgs(roomId: String, widget: Widget): WidgetArgs {
         val widgetId = widget.widgetId
-        val baseUrl = widget.computedUrl?: throw IllegalStateException()
+        val baseUrl = widget.computedUrl ?: throw IllegalStateException()
         return WidgetArgs(
                 baseUrl = baseUrl,
                 kind = WidgetKind.ROOM,

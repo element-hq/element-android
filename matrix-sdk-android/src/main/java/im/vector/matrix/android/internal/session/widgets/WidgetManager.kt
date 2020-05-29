@@ -75,7 +75,11 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
             excludedTypes: Set<String>? = null
     ): LiveData<List<Widget>> {
         // Get all im.vector.modular.widgets state events in the room
-        val liveWidgetEvents = stateEventDataSource.getStateEventsLive(roomId, setOf(EventType.STATE_ROOM_WIDGET, EventType.STATE_ROOM_WIDGET_LEGACY), widgetId)
+        val liveWidgetEvents = stateEventDataSource.getStateEventsLive(
+                roomId = roomId,
+                eventTypes = setOf(EventType.STATE_ROOM_WIDGET, EventType.STATE_ROOM_WIDGET_LEGACY),
+                stateKey = widgetId
+        )
         return Transformations.map(liveWidgetEvents) { widgetEvents ->
             widgetEvents.mapEventsToWidgets(widgetTypes, excludedTypes)
         }
@@ -88,7 +92,11 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
             excludedTypes: Set<String>? = null
     ): List<Widget> {
         // Get all im.vector.modular.widgets state events in the room
-        val widgetEvents: List<Event> = stateEventDataSource.getStateEvents(roomId, setOf(EventType.STATE_ROOM_WIDGET, EventType.STATE_ROOM_WIDGET_LEGACY), widgetId)
+        val widgetEvents: List<Event> = stateEventDataSource.getStateEvents(
+                roomId = roomId,
+                eventTypes = setOf(EventType.STATE_ROOM_WIDGET, EventType.STATE_ROOM_WIDGET_LEGACY),
+                stateKey = widgetId
+        )
         return widgetEvents.mapEventsToWidgets(widgetTypes, excludedTypes)
     }
 
@@ -183,7 +191,11 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
     }
 
     fun hasPermissionsToHandleWidgets(roomId: String): Boolean {
-        val powerLevelsEvent = stateEventDataSource.getStateEvent(roomId, EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
+        val powerLevelsEvent = stateEventDataSource.getStateEvent(
+                roomId = roomId,
+                eventType = EventType.STATE_ROOM_POWER_LEVELS,
+                stateKey = QueryStringValue.NoCondition
+        )
         val powerLevelsContent = powerLevelsEvent?.content?.toModel<PowerLevelsContent>() ?: return false
         return PowerLevelsHelper(powerLevelsContent).isAllowedToSend(true, null, userId)
     }

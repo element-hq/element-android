@@ -32,12 +32,11 @@ object WebviewPermissionUtils {
         AlertDialog.Builder(context)
                 .setTitle(title)
                 .setMultiChoiceItems(
-                        request.resources.map { webPermissionToHumanReadable(it, context) }.toTypedArray()
-                        , null
+                        request.resources.map { webPermissionToHumanReadable(it, context) }.toTypedArray(), null
                 ) { _, which, isChecked ->
                     allowedPermissions[which] = allowedPermissions[which].first to isChecked
                 }
-                .setPositiveButton(R.string.room_widget_resource_grant_permission) { _, _->
+                .setPositiveButton(R.string.room_widget_resource_grant_permission) { _, _ ->
                     request.grant(allowedPermissions.mapNotNull { perm ->
                         perm.first.takeIf { perm.second }
                     }.toTypedArray())
@@ -56,5 +55,4 @@ object WebviewPermissionUtils {
             else                                          -> permission
         }
     }
-
 }

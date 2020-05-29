@@ -20,7 +20,6 @@ import im.vector.matrix.android.api.pushrules.ContainsDisplayNameCondition
 import im.vector.matrix.android.api.pushrules.EventMatchCondition
 import im.vector.matrix.android.api.pushrules.RoomMemberCountCondition
 import im.vector.matrix.android.api.pushrules.SenderNotificationPermissionCondition
-import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel

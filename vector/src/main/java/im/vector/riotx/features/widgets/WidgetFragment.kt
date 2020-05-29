@@ -171,7 +171,7 @@ class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventL
         Timber.v("Invalidate state: $state")
         when (state.status) {
             WidgetStatus.UNKNOWN            -> {
-                //Hide all?
+                // Hide all?
                 widgetWebView.isVisible = false
             }
             WidgetStatus.WIDGET_NOT_ALLOWED -> {
@@ -211,7 +211,7 @@ class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventL
                         }
                     }
                     is Fail       -> {
-                        //we need to show Error
+                        // we need to show Error
                         widgetWebView.isInvisible = true
                         widgetProgressBar.isVisible = false
                         setStateError(state.formattedURL.error.message)

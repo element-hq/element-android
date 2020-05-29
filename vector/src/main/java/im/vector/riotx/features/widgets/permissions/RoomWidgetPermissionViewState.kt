@@ -40,5 +40,3 @@ data class RoomWidgetPermissionViewState(
             val widgetDomain: String? = null
     )
 }
-
-

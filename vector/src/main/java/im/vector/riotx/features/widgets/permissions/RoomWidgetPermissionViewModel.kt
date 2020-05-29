@@ -55,8 +55,8 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
                     } catch (e: Throwable) {
                         null
                     }
-                    //TODO check from widget urls the perms that should be shown?
-                    //For now put all
+                    // TODO check from widget urls the perms that should be shown?
+                    // For now put all
                     val infoShared = listOf(
                             R.string.room_widget_permission_display_name,
                             R.string.room_widget_permission_avatar_url,
@@ -91,7 +91,7 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
                 if (state.permissionData()?.isWebviewWidget.orFalse()) {
                     WidgetPermissionsHelper(integrationManagerService, widgetService).changePermission(state.roomId, widgetId, false)
                 } else {
-                    //TODO JITSI
+                    // TODO JITSI
                 }
             } catch (failure: Throwable) {
                 Timber.v("Failure revoking widget: ${state.widgetId}")
@@ -109,7 +109,7 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
                 if (state.permissionData()?.isWebviewWidget.orFalse()) {
                     WidgetPermissionsHelper(integrationManagerService, widgetService).changePermission(state.roomId, widgetId, true)
                 } else {
-                    //TODO JITSI
+                    // TODO JITSI
                 }
             } catch (failure: Throwable) {
                 Timber.v("Failure allowing widget: ${state.widgetId}")

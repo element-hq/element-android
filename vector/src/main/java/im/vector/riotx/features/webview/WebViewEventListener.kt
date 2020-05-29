@@ -23,8 +23,8 @@ interface WebViewEventListener {
      *
      * @param url The url about to be rendered.
      */
-    fun pageWillStart(url: String){
-        //NO-OP
+    fun pageWillStart(url: String) {
+        // NO-OP
     }
 
     /**
@@ -32,8 +32,8 @@ interface WebViewEventListener {
      *
      * @param url The rendering url.
      */
-    fun onPageStarted(url: String){
-        //NO-OP
+    fun onPageStarted(url: String) {
+        // NO-OP
     }
 
     /**
@@ -41,8 +41,8 @@ interface WebViewEventListener {
      *
      * @param url The finished url.
      */
-    fun onPageFinished(url: String){
-        //NO-OP
+    fun onPageFinished(url: String) {
+        // NO-OP
     }
 
     /**
@@ -52,8 +52,8 @@ interface WebViewEventListener {
      * @param errorCode   The error code.
      * @param description The error description.
      */
-    fun onPageError(url: String, errorCode: Int, description: String){
-        //NO-OP
+    fun onPageError(url: String, errorCode: Int, description: String) {
+        // NO-OP
     }
 
     /**
@@ -63,8 +63,8 @@ interface WebViewEventListener {
      * @param errorCode   The error code.
      * @param description The error description.
      */
-    fun onHttpError(url: String, errorCode: Int, description: String){
-        //NO-OP
+    fun onHttpError(url: String, errorCode: Int, description: String) {
+        // NO-OP
     }
 
     /**
@@ -73,7 +73,7 @@ interface WebViewEventListener {
      * @param url The url about to be rendered.
      * @return true if the method needs to manage some custom handling
      */
-    fun shouldOverrideUrlLoading(url: String): Boolean{
+    fun shouldOverrideUrlLoading(url: String): Boolean {
         return false
     }
 }

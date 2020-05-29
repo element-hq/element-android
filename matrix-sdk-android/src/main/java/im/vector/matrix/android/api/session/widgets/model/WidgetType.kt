@@ -34,7 +34,7 @@ sealed class WidgetType(open val preferred: String, open val legacy: String) {
         return type == preferred || type == legacy
     }
 
-    fun values(): Set<String>{
+    fun values(): Set<String> {
         return setOf(preferred, legacy)
     }
 

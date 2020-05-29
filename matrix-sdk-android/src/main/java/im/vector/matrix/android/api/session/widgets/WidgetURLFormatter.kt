@@ -27,5 +27,4 @@ interface WidgetURLFormatter {
             forceFetchScalarToken: Boolean = false,
             bypassWhitelist: Boolean
     ): String
-
 }

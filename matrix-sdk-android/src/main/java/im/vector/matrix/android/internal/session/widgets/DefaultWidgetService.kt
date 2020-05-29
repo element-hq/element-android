@@ -29,7 +29,8 @@ import javax.inject.Inject
 
 internal class DefaultWidgetService @Inject constructor(private val widgetManager: WidgetManager,
                                                         private val widgetURLFormatter: WidgetURLFormatter,
-                                                        private val widgetPostAPIMediator: WidgetPostAPIMediator) : WidgetService {
+                                                        private val widgetPostAPIMediator: WidgetPostAPIMediator)
+    : WidgetService {
 
     override fun getWidgetURLFormatter(): WidgetURLFormatter {
         return widgetURLFormatter
@@ -39,27 +40,52 @@ internal class DefaultWidgetService @Inject constructor(private val widgetManage
         return widgetPostAPIMediator
     }
 
-    override fun getRoomWidgets(roomId: String, widgetId: QueryStringValue, widgetTypes: Set<String>?, excludedTypes: Set<String>?): List<Widget> {
+    override fun getRoomWidgets(
+            roomId: String,
+            widgetId: QueryStringValue,
+            widgetTypes: Set<String>?,
+            excludedTypes: Set<String>?
+    ): List<Widget> {
         return widgetManager.getRoomWidgets(roomId, widgetId, widgetTypes, excludedTypes)
     }
 
-    override fun getRoomWidgetsLive(roomId: String, widgetId: QueryStringValue, widgetTypes: Set<String>?, excludedTypes: Set<String>?): LiveData<List<Widget>> {
+    override fun getRoomWidgetsLive(
+            roomId: String,
+            widgetId: QueryStringValue,
+            widgetTypes: Set<String>?,
+            excludedTypes: Set<String>?
+    ): LiveData<List<Widget>> {
         return widgetManager.getRoomWidgetsLive(roomId, widgetId, widgetTypes, excludedTypes)
     }
 
-    override fun getUserWidgetsLive(widgetTypes: Set<String>?, excludedTypes: Set<String>?): LiveData<List<Widget>> {
+    override fun getUserWidgetsLive(
+            widgetTypes: Set<String>?,
+            excludedTypes: Set<String>?
+    ): LiveData<List<Widget>> {
         return widgetManager.getUserWidgetsLive(widgetTypes, excludedTypes)
     }
 
-    override fun getUserWidgets(widgetTypes: Set<String>?, excludedTypes: Set<String>?): List<Widget> {
+    override fun getUserWidgets(
+            widgetTypes: Set<String>?,
+            excludedTypes: Set<String>?
+    ): List<Widget> {
         return widgetManager.getUserWidgets(widgetTypes, excludedTypes)
     }
 
-    override fun createRoomWidget(roomId: String, widgetId: String, content: Content, callback: MatrixCallback<Widget>): Cancelable {
+    override fun createRoomWidget(
+            roomId: String,
+            widgetId: String,
+            content: Content,
+            callback: MatrixCallback<Widget>
+    ): Cancelable {
         return widgetManager.createRoomWidget(roomId, widgetId, content, callback)
     }
 
-    override fun destroyRoomWidget(roomId: String, widgetId: String, callback: MatrixCallback<Unit>): Cancelable {
+    override fun destroyRoomWidget(
+            roomId: String,
+            widgetId: String,
+            callback: MatrixCallback<Unit>
+    ): Cancelable {
         return widgetManager.destroyRoomWidget(roomId, widgetId, callback)
     }
 

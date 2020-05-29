@@ -113,5 +113,3 @@ internal class DefaultWidgetURLFormatter @Inject constructor(private val integra
         return this
     }
 }
-
-

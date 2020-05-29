@@ -57,7 +57,6 @@ import im.vector.matrix.android.api.session.room.model.relation.RelationDefaultC
 import im.vector.matrix.android.api.session.room.model.relation.ReplyToContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
-import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.extensions.subStringBetween
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor

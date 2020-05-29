@@ -178,7 +178,6 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
             } catch (failure: Throwable) {
                 _viewEvents.post(WidgetViewEvents.Failure(failure))
             }
-
         }
     }
 
@@ -191,7 +190,10 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
                 setWidgetStatus(WidgetStatus.WIDGET_NOT_ALLOWED)
                 return
             }
-            val roomWidget = widgetService.getRoomWidgets(initialState.roomId, widgetId = QueryStringValue.Equals(widgetId, QueryStringValue.Case.SENSITIVE)).firstOrNull()
+            val roomWidget = widgetService.getRoomWidgets(
+                    roomId = initialState.roomId,
+                    widgetId = QueryStringValue.Equals(widgetId, QueryStringValue.Case.SENSITIVE)
+            ).firstOrNull()
             if (roomWidget == null) {
                 setWidgetStatus(WidgetStatus.WIDGET_NOT_ALLOWED)
                 return

@@ -25,5 +25,4 @@ internal open class ScalarTokenEntity(
 ) : RealmObject() {
 
     companion object
-
 }

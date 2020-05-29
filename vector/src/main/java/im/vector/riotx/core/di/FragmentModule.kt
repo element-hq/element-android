@@ -516,5 +516,4 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(WidgetFragment::class)
     fun bindWidgetFragment(fragment: WidgetFragment): Fragment
-
 }

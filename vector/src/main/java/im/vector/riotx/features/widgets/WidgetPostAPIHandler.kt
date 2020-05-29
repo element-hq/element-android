@@ -357,7 +357,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         val level = eventData["level"] as Int
         if (level >= 0) {
             // TODO
-            //room.updateUserPowerLevels(userId, level, WidgetApiCallback(eventData, description))
+            // room.updateUserPowerLevels(userId, level, WidgetApiCallback(eventData, description))
         } else {
             Timber.e("## setBotPower() : Power level must be positive integer.")
             widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_positive_power_level), eventData)
@@ -458,5 +458,3 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         return WidgetAPICallback(widgetPostAPIMediator, eventData, stringProvider)
     }
 }
-
-

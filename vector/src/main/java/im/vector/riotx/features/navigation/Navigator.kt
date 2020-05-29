@@ -94,5 +94,4 @@ interface Navigator {
     fun openImageViewer(activity: Activity, mediaData: ImageContentRenderer.Data, view: View, options: ((MutableList<Pair<View, String>>) -> Unit)?)
 
     fun openVideoViewer(activity: Activity, mediaData: VideoContentRenderer.Data)
-
 }

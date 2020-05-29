@@ -18,21 +18,20 @@ package im.vector.matrix.android.api.session.integrationmanager
 
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.session.integrationmanager.IntegrationManager
 
 interface IntegrationManagerService {
 
     interface Listener {
         fun onIsEnabledChanged(enabled: Boolean) {
-            //No-op
+            // No-op
         }
 
         fun onConfigurationChanged(configs: List<IntegrationManagerConfig>) {
-            //No-op
+            // No-op
         }
 
         fun onWidgetPermissionsChanged(widgets: Map<String, Boolean>) {
-            //No-op
+            // No-op
         }
     }
 
