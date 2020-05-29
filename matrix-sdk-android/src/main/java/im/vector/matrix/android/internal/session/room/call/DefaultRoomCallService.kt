@@ -33,8 +33,6 @@ internal class DefaultRoomCallService @AssistedInject constructor(
     }
 
     override fun canStartCall(): Boolean {
-        return roomGetter.getRoom(roomId)?.roomSummary()?.let {
-            it.isDirect && it.joinedMembersCount == 2
-        }.orFalse()
+        return roomGetter.getRoom(roomId)?.roomSummary()?.canStartCall.orFalse()
     }
 }

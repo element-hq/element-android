@@ -489,9 +489,20 @@ class RoomDetailFragment @Inject constructor(
             roomDetailViewModel.getOtherUserIds()?.firstOrNull()?.let {
                 webRtcPeerConnectionManager.startOutgoingCall(requireContext(), roomDetailArgs.roomId, it, item.itemId == R.id.video_call)
             }
-            return true
+            R.id.resend_all          -> {
+                roomDetailViewModel.handle(RoomDetailAction.ResendAll)
+                true
+            }
+            R.id.voice_call,
+            R.id.video_call          -> {
+                roomDetailViewModel.getOtherUserIds()?.firstOrNull()?.let {
+                    // TODO CALL We should check/ask for permission here first
+                    webRtcPeerConnectionManager.startOutgoingCall(requireContext(), roomDetailArgs.roomId, it, item.itemId == R.id.video_call)
+                }
+                true
+            }
+            else                     -> super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun displayDisabledIntegrationDialog() {

@@ -30,6 +30,7 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.MatrixPatterns
 import im.vector.matrix.android.api.NoOpMatrixCallback
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
@@ -121,8 +122,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private var timelineEvents = PublishRelay.create<List<TimelineEvent>>()
-    var timeline = room.createTimeline(eventId, timelineSettings)
-        private set
+    val timeline = room.createTimeline(eventId, timelineSettings)
 
     // Slot to keep a pending action during permission request
     var pendingAction: RoomDetailAction? = null
@@ -135,6 +135,7 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private var trackUnreadMessages = AtomicBoolean(false)
     private var mostRecentDisplayedEvent: TimelineEvent? = null
+    private var canDoCall = false
 
     @AssistedInject.Factory
     interface Factory {
@@ -1002,6 +1003,8 @@ class RoomDetailViewModel @AssistedInject constructor(
                 .execute { async ->
                     val typingRoomMembers =
                             typingHelper.toTypingRoomMembers(async.invoke()?.typingRoomMemberIds.orEmpty(), room)
+
+                    canDoCall = async.invoke()?.canStartCall.orFalse()
 
                     copy(
                             asyncRoomSummary = async,
