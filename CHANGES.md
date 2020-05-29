@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Switch theme is not fully taken into account without restarting the app
 
 Translations 🗣:
  -
