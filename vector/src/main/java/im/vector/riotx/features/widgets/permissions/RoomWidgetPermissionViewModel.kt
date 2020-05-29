@@ -44,7 +44,7 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
     }
 
     private fun observeWidget() {
-        val widgetId = initialState.widgetId
+        val widgetId = initialState.widgetId ?: return
         session.rx()
                 .liveRoomWidgets(initialState.roomId, QueryStringValue.Equals(widgetId))
                 .filter { it.isNotEmpty() }
@@ -87,8 +87,9 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
     private fun handleRevokeWidget() = withState { state ->
         viewModelScope.launch {
             try {
+                val widgetId = state.widgetId ?: return@launch
                 if (state.permissionData()?.isWebviewWidget.orFalse()) {
-                    WidgetPermissionsHelper(integrationManagerService, widgetService).changePermission(state.roomId, state.widgetId, false)
+                    WidgetPermissionsHelper(integrationManagerService, widgetService).changePermission(state.roomId, widgetId, false)
                 } else {
                     //TODO JITSI
                 }
@@ -104,8 +105,9 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
     private fun handleAllowWidget() = withState { state ->
         viewModelScope.launch {
             try {
+                val widgetId = state.widgetId ?: return@launch
                 if (state.permissionData()?.isWebviewWidget.orFalse()) {
-                    WidgetPermissionsHelper(integrationManagerService, widgetService).changePermission(state.roomId, state.widgetId, true)
+                    WidgetPermissionsHelper(integrationManagerService, widgetService).changePermission(state.roomId, widgetId, true)
                 } else {
                     //TODO JITSI
                 }

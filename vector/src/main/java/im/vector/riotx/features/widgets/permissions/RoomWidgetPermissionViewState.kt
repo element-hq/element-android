@@ -24,13 +24,13 @@ import im.vector.riotx.features.widgets.WidgetArgs
 
 data class RoomWidgetPermissionViewState(
         val roomId: String,
-        val widgetId: String,
+        val widgetId: String?,
         val permissionData: Async<WidgetPermissionData> = Uninitialized
 ) : MvRxState {
 
     constructor(widgetArgs: WidgetArgs) : this(
             roomId = widgetArgs.roomId,
-            widgetId = widgetArgs.widgetId!!
+            widgetId = widgetArgs.widgetId
     )
 
     data class WidgetPermissionData(
