@@ -18,8 +18,6 @@ package im.vector.riotx.core.utils
 
 import androidx.annotation.ColorRes
 import im.vector.riotx.R
-import im.vector.riotx.core.resources.ColorProvider
-import org.billcarsonfr.jsonviewer.JSonViewerStyleProvider
 import kotlin.math.abs
 
 @ColorRes
@@ -38,15 +36,4 @@ fun getColorFromUserId(userId: String?): Int {
         7    -> R.color.riotx_username_8
         else -> R.color.riotx_username_1
     }
-}
-
-fun jsonViewerStyler(colorProvider: ColorProvider): JSonViewerStyleProvider {
-    return JSonViewerStyleProvider(
-            keyColor = colorProvider.getColor(R.color.riotx_accent),
-            secondaryColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary),
-            stringColor = colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color),
-            baseColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_primary),
-            booleanColor = colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color),
-            numberColor = colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color)
-    )
 }

@@ -110,10 +110,10 @@ import im.vector.riotx.core.utils.allGranted
 import im.vector.riotx.core.utils.checkPermissions
 import im.vector.riotx.core.utils.colorizeMatchingText
 import im.vector.riotx.core.utils.copyToClipboard
+import im.vector.riotx.core.utils.createJSonViewerStyleProvider
 import im.vector.riotx.core.utils.createUIHandler
 import im.vector.riotx.core.utils.getColorFromUserId
 import im.vector.riotx.core.utils.isValidUrl
-import im.vector.riotx.core.utils.jsonViewerStyler
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import im.vector.riotx.core.utils.saveMedia
 import im.vector.riotx.core.utils.shareMedia
@@ -1207,14 +1207,14 @@ class RoomDetailFragment @Inject constructor(
                 JSonViewerDialog.newInstance(
                         action.content,
                         -1,
-                        jsonViewerStyler(colorProvider)
+                        createJSonViewerStyleProvider(colorProvider)
                 ).show(childFragmentManager, "JSON_VIEWER")
             }
             is EventSharedAction.ViewDecryptedSource        -> {
                 JSonViewerDialog.newInstance(
                         action.content,
                         -1,
-                        jsonViewerStyler(colorProvider)
+                        createJSonViewerStyleProvider(colorProvider)
                 ).show(childFragmentManager, "JSON_VIEWER")
             }
             is EventSharedAction.QuickReact                 -> {
