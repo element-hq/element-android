@@ -17,6 +17,7 @@
 package im.vector.riotx.features.home.room.detail.sticker
 
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.widgets.model.WidgetType
 import im.vector.riotx.features.home.room.detail.RoomDetailViewEvents
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -26,7 +27,7 @@ class StickerPickerActionHandler @Inject constructor(private val session: Sessio
 
     suspend fun handle(): RoomDetailViewEvents = withContext(Dispatchers.Default) {
         // Search for the sticker picker widget in the user account
-        val stickerWidget = session.widgetService().getUserWidgets(setOf(StickerPickerConstants.WIDGET_NAME)).firstOrNull()
+        val stickerWidget = session.widgetService().getUserWidgets(WidgetType.StickerPicker.values()).firstOrNull { it.isActive }
         if (stickerWidget == null || stickerWidget.computedUrl.isNullOrBlank()) {
             RoomDetailViewEvents.DisplayPromptForIntegrationManager
         } else {

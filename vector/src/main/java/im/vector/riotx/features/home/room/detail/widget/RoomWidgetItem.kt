@@ -20,7 +20,7 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
-import im.vector.matrix.android.internal.session.widgets.Widget
+import im.vector.matrix.android.api.session.widgets.model.Widget
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 

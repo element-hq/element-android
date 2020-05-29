@@ -24,7 +24,7 @@ import androidx.fragment.app.Fragment
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.util.MatrixItem
-import im.vector.matrix.android.internal.session.widgets.Widget
+import im.vector.matrix.android.api.session.widgets.model.Widget
 import im.vector.riotx.features.home.room.detail.sticker.StickerPickerConstants
 import im.vector.riotx.features.media.ImageContentRenderer
 import im.vector.riotx.features.media.VideoContentRenderer
@@ -83,9 +83,9 @@ interface Navigator {
                   requestCode: Int = ReviewTermsActivity.TERMS_REQUEST_CODE)
 
     fun openStickerPicker(fragment: Fragment,
-                  roomId: String,
-                  widget: Widget,
-                  requestCode: Int = StickerPickerConstants.STICKER_PICKER_REQUEST_CODE)
+                          roomId: String,
+                          widget: Widget,
+                          requestCode: Int = StickerPickerConstants.STICKER_PICKER_REQUEST_CODE)
 
     fun openIntegrationManager(context: Context, roomId: String, integId: String?, screen: String?)
 

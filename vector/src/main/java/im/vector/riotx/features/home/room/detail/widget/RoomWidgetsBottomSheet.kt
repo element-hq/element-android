@@ -21,13 +21,15 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.matrix.android.internal.session.widgets.Widget
+import im.vector.matrix.android.api.session.widgets.model.Widget
+import im.vector.matrix.android.api.session.widgets.model.WidgetType
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.core.resources.ColorProvider
+import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import im.vector.riotx.features.home.room.detail.RoomDetailViewModel
 import im.vector.riotx.features.home.room.detail.RoomDetailViewState
 import im.vector.riotx.features.navigation.Navigator
@@ -73,8 +75,13 @@ class RoomWidgetsBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomWidget
     }
 
     override fun didSelectWidget(widget: Widget) = withState(roomDetailViewModel) {
-        navigator.openRoomWidget(requireContext(), it.roomId, widget)
-        dismiss()
+        if (widget.type == WidgetType.Jitsi) {
+            openUrlInExternalBrowser(requireContext(), widget.computedUrl)
+            dismiss()
+        } else {
+            navigator.openRoomWidget(requireContext(), it.roomId, widget)
+            dismiss()
+        }
     }
 
     companion object {

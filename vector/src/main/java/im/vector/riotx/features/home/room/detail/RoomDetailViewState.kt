@@ -27,7 +27,7 @@ import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.model.User
 import im.vector.matrix.android.api.util.MatrixItem
-import im.vector.matrix.android.internal.session.widgets.Widget
+import im.vector.matrix.android.api.session.widgets.model.Widget
 
 /**
  * Describes the current send mode:

@@ -17,6 +17,5 @@
 package im.vector.riotx.features.home.room.detail.sticker
 
 object StickerPickerConstants {
-    const val WIDGET_NAME = "m.stickerpicker"
     const val STICKER_PICKER_REQUEST_CODE = 16000
 }

@@ -31,7 +31,7 @@ import im.vector.matrix.android.api.session.crypto.verification.IncomingSasVerif
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.util.MatrixItem
-import im.vector.matrix.android.internal.session.widgets.Widget
+import im.vector.matrix.android.api.session.widgets.model.Widget
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.error.fatalError

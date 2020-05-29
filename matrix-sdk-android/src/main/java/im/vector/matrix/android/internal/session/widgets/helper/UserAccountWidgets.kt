@@ -20,7 +20,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
-import im.vector.matrix.android.internal.session.widgets.Widget
+import im.vector.matrix.android.api.session.widgets.model.Widget
 
 internal fun UserAccountDataEvent.extractWidgetSequence(widgetFactory: WidgetFactory): Sequence<Widget> {
     return content.asSequence()

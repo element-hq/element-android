@@ -17,7 +17,7 @@
 package im.vector.riotx.features.home.room.detail
 
 import androidx.annotation.StringRes
-import im.vector.matrix.android.internal.session.widgets.Widget
+import im.vector.matrix.android.api.session.widgets.model.Widget
 import im.vector.riotx.core.platform.VectorViewEvents
 import im.vector.riotx.features.command.Command
 import java.io.File

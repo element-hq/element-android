@@ -20,9 +20,9 @@ import androidx.annotation.StringRes
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.internal.session.widgets.Widget
+import im.vector.matrix.android.api.session.widgets.model.Widget
+import im.vector.matrix.android.api.session.widgets.model.WidgetType
 import im.vector.riotx.R
-import im.vector.riotx.features.home.room.detail.sticker.StickerPickerConstants
 
 enum class WidgetStatus {
     UNKNOWN,
@@ -31,14 +31,13 @@ enum class WidgetStatus {
 }
 
 enum class WidgetKind(@StringRes val nameRes: Int, val screenId: String?) {
-    ROOM(R.string.room_widget_activity_title,null),
-    STICKER_PICKER(R.string.title_activity_choose_sticker, StickerPickerConstants.WIDGET_NAME),
+    ROOM(R.string.room_widget_activity_title, null),
+    STICKER_PICKER(R.string.title_activity_choose_sticker, WidgetType.StickerPicker.preferred),
     INTEGRATION_MANAGER(0, null);
 
     fun isAdmin(): Boolean {
         return this == STICKER_PICKER || this == INTEGRATION_MANAGER
     }
-
 }
 
 data class WidgetViewState(

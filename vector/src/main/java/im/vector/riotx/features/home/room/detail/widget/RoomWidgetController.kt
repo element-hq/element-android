@@ -17,7 +17,7 @@
 package im.vector.riotx.features.home.room.detail.widget
 
 import com.airbnb.epoxy.TypedEpoxyController
-import im.vector.matrix.android.internal.session.widgets.Widget
+import im.vector.matrix.android.api.session.widgets.model.Widget
 import javax.inject.Inject
 
 /**

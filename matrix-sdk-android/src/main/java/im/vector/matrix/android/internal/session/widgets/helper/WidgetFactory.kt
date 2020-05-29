@@ -19,12 +19,13 @@ package im.vector.matrix.android.internal.session.widgets.helper
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.sender.SenderInfo
+import im.vector.matrix.android.api.session.widgets.model.Widget
 import im.vector.matrix.android.api.session.widgets.model.WidgetContent
+import im.vector.matrix.android.api.session.widgets.model.WidgetType
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.room.membership.RoomMemberHelper
 import im.vector.matrix.android.internal.session.user.UserDataSource
-import im.vector.matrix.android.internal.session.widgets.Widget
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import java.net.URLEncoder
@@ -38,6 +39,7 @@ internal class WidgetFactory @Inject constructor(@SessionDatabase private val re
         val widgetContent = widgetEvent.content.toModel<WidgetContent>()
         if (widgetContent?.url == null) return null
         val widgetId = widgetEvent.stateKey ?: return null
+        val type = widgetContent.type ?: return null
         val senderInfo = if (widgetEvent.senderId == null || widgetEvent.roomId == null) {
             null
         } else {
@@ -54,7 +56,15 @@ internal class WidgetFactory @Inject constructor(@SessionDatabase private val re
         }
         val isAddedByMe = widgetEvent.senderId == userId
         val computedUrl = widgetContent.computeURL(widgetEvent.roomId)
-        return Widget(widgetContent, widgetEvent, widgetId, senderInfo, isAddedByMe, computedUrl)
+        return Widget(
+                widgetContent = widgetContent,
+                event = widgetEvent,
+                widgetId = widgetId,
+                senderInfo = senderInfo,
+                isAddedByMe = isAddedByMe,
+                computedUrl = computedUrl,
+                type = WidgetType.fromString(type)
+        )
     }
 
     private fun WidgetContent.computeURL(roomId: String?): String? {

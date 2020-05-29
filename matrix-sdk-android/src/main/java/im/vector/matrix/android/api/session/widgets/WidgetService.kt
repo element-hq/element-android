@@ -20,9 +20,8 @@ import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.events.model.Content
-import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.session.widgets.Widget
+import im.vector.matrix.android.api.session.widgets.model.Widget
 
 interface WidgetService {
 

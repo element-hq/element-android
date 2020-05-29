@@ -23,6 +23,7 @@ import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.widgets.WidgetPostAPIMediator
 import im.vector.matrix.android.api.session.widgets.WidgetService
 import im.vector.matrix.android.api.session.widgets.WidgetURLFormatter
+import im.vector.matrix.android.api.session.widgets.model.Widget
 import im.vector.matrix.android.api.util.Cancelable
 import javax.inject.Inject
 

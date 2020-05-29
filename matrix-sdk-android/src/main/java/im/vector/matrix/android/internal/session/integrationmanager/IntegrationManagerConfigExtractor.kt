@@ -17,13 +17,12 @@
 package im.vector.matrix.android.internal.session.integrationmanager
 
 import im.vector.matrix.android.api.auth.data.WellKnown
-import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerConfig
+import im.vector.matrix.android.internal.database.model.WellknownIntegrationManagerConfigEntity
 import javax.inject.Inject
 
 internal class IntegrationManagerConfigExtractor @Inject constructor() {
 
-    fun extract(wellKnown: WellKnown): List<IntegrationManagerConfig> {
-        val managers = ArrayList<IntegrationManagerConfig>()
+    fun extract(wellKnown: WellKnown): WellknownIntegrationManagerConfigEntity? {
         wellKnown.integrations?.get("managers")?.let {
             (it as? List<*>)?.let { configs ->
                 configs.forEach { config ->
@@ -33,16 +32,16 @@ internal class IntegrationManagerConfigExtractor @Inject constructor() {
                         if (apiUrl != null
                                 && apiUrl.startsWith("https://")
                                 && uiUrl!!.startsWith("https://")) {
-                            managers.add(IntegrationManagerConfig(
+
+                            return WellknownIntegrationManagerConfigEntity(
                                     apiUrl = apiUrl,
-                                    uiUrl = uiUrl,
-                                    kind = IntegrationManagerConfig.Kind.HOMESERVER
-                            ))
+                                    uiUrl = uiUrl
+                            )
                         }
                     }
                 }
             }
         }
-        return managers
+        return null
     }
 }

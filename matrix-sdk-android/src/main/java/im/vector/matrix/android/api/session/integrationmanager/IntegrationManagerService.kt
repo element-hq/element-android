@@ -27,7 +27,7 @@ interface IntegrationManagerService {
             //No-op
         }
 
-        fun onConfigurationChanged(config: IntegrationManagerConfig) {
+        fun onConfigurationChanged(configs: List<IntegrationManagerConfig>) {
             //No-op
         }
 

@@ -19,14 +19,19 @@ package im.vector.matrix.android.internal.session.integrationmanager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
+import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.R
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.auth.wellknown.WellknownResult
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerConfig
 import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerService
 import im.vector.matrix.android.api.session.widgets.model.WidgetContent
+import im.vector.matrix.android.api.session.widgets.model.WidgetType
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.NoOpCancellable
+import im.vector.matrix.android.internal.database.model.WellknownIntegrationManagerConfigEntity
+import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.extensions.observeNotNull
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
@@ -38,6 +43,9 @@ import im.vector.matrix.android.internal.session.widgets.helper.extractWidgetSeq
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.StringProvider
+import im.vector.matrix.android.internal.util.awaitTransaction
+import im.vector.matrix.android.internal.wellknown.GetWellknownTask
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -54,13 +62,15 @@ import javax.inject.Inject
  *
  */
 @SessionScope
-internal class IntegrationManager @Inject constructor(private val taskExecutor: TaskExecutor,
+internal class IntegrationManager @Inject constructor(@UserId private val userId: String,
+                                                      private val taskExecutor: TaskExecutor,
+                                                      private val monarchy: Monarchy,
                                                       private val stringProvider: StringProvider,
                                                       private val updateUserAccountDataTask: UpdateUserAccountDataTask,
                                                       private val accountDataDataSource: AccountDataDataSource,
+                                                      private val getWellknownTask: GetWellknownTask,
                                                       private val configExtractor: IntegrationManagerConfigExtractor,
                                                       private val widgetFactory: WidgetFactory) {
-
 
     private val currentConfigs = ArrayList<IntegrationManagerConfig>()
     private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
@@ -80,7 +90,9 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
     }
 
     fun start() {
+        refreshWellknown()
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
+        observeWellknownConfig()
         accountDataDataSource
                 .getLiveAccountDataEvent(UserAccountData.TYPE_ALLOWED_WIDGETS)
                 .observeNotNull(lifecycleOwner) {
@@ -102,13 +114,7 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
                 .observeNotNull(lifecycleOwner) {
                     val integrationManagerContent = it.getOrNull()?.asIntegrationManagerWidgetContent()
                     val config = integrationManagerContent?.extractIntegrationManagerConfig()
-                    val accountConfig = currentConfigs.firstOrNull { currentConfig ->
-                        currentConfig.kind == IntegrationManagerConfig.Kind.ACCOUNT
-                    }
-                    if (config != null && accountConfig == null) {
-                        currentConfigs.add(config)
-                        notifyConfigurationChanged(config)
-                    }
+                    updateCurrentConfigs(IntegrationManagerConfig.Kind.ACCOUNT, config)
                 }
     }
 
@@ -209,12 +215,11 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
         return currentContent?.native?.get(widgetType)?.get(domain) ?: false
     }
 
-    private fun notifyConfigurationChanged(config: IntegrationManagerConfig) {
-        Timber.v("On configuration changed : $config")
+    private fun notifyConfigurationChanged() {
         synchronized(listeners) {
             listeners.forEach {
                 try {
-                    it.onConfigurationChanged(config)
+                    it.onConfigurationChanged(currentConfigs)
                 } catch (t: Throwable) {
                     Timber.e(t, "Failed to notify listener")
                 }
@@ -248,30 +253,6 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
         }
     }
 
-    /*
-    private fun getStoreWellknownIM(): List<IntegrationManagerConfig> {
-        val prefs = context.getSharedPreferences(PREFS_IM, Context.MODE_PRIVATE)
-        return prefs.getString(WELLKNOWN_KEY, null)?.let {
-            try {
-                Gson().fromJson<List<WellKnownManagerConfig>>(it,
-                        object : TypeToken<List<WellKnownManagerConfig>>() {}.type)
-            } catch (any: Throwable) {
-                emptyList<WellKnownManagerConfig>()
-            }
-        } ?: emptyList<WellKnownManagerConfig>()
-    }
-
-    private fun setStoreWellknownIM(list: List<WellKnownManagerConfig>) {
-        val prefs = context.getSharedPreferences(PREFS_IM, Context.MODE_PRIVATE)
-        try {
-            val serialized = Gson().toJson(list)
-            prefs.edit().putString(WELLKNOWN_KEY, serialized).apply()
-        } catch (any: Throwable) {
-            //nop
-        }
-    }
-     */
-
     private fun WidgetContent.extractIntegrationManagerConfig(): IntegrationManagerConfig? {
         if (url.isNullOrBlank()) {
             return null
@@ -287,14 +268,50 @@ internal class IntegrationManager @Inject constructor(private val taskExecutor: 
     private fun UserAccountDataEvent.asIntegrationManagerWidgetContent(): WidgetContent? {
         return extractWidgetSequence(widgetFactory)
                 .filter {
-                    it.widgetContent.type == INTEGRATION_MANAGER_WIDGET
+                    WidgetType.IntegrationManager == it.type
                 }
                 .firstOrNull()?.widgetContent
     }
 
-    companion object {
-        private const val INTEGRATION_MANAGER_WIDGET = "m.integration_manager"
-        private const val PREFS_IM = "IntegrationManager.Storage"
-        private const val WELLKNOWN_KEY = "WellKnown"
+    private fun refreshWellknown() {
+        taskExecutor.executorScope.launch {
+            val params = GetWellknownTask.Params(matrixId = userId)
+            val wellknownResult = try {
+                getWellknownTask.execute(params)
+            } catch (failure: Throwable) {
+                Timber.v("Get wellknown failed: $failure")
+                null
+            }
+            if (wellknownResult != null && wellknownResult is WellknownResult.Prompt) {
+                val config = configExtractor.extract(wellknownResult.wellKnown) ?: return@launch
+                Timber.v("Extracted config: $config")
+                monarchy.awaitTransaction {
+                    it.insertOrUpdate(config)
+                }
+            }
+        }
+    }
+
+    private fun observeWellknownConfig() {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { it.where(WellknownIntegrationManagerConfigEntity::class.java) },
+                { IntegrationManagerConfig(it.uiUrl, it.apiUrl, IntegrationManagerConfig.Kind.HOMESERVER) }
+        )
+        liveData.observeNotNull(lifecycleOwner) {
+            val config = it.firstOrNull()
+            updateCurrentConfigs(IntegrationManagerConfig.Kind.HOMESERVER, config)
+        }
+    }
+
+    private fun updateCurrentConfigs(kind: IntegrationManagerConfig.Kind, config: IntegrationManagerConfig?) {
+        val hasBeenRemoved = currentConfigs.removeAll { currentConfig ->
+            currentConfig.kind == kind
+        }
+        if (config != null) {
+            currentConfigs.add(config)
+        }
+        if (hasBeenRemoved || config != null) {
+            notifyConfigurationChanged()
+        }
     }
 }

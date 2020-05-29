@@ -19,7 +19,7 @@ package im.vector.riotx.features.widgets.permissions
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.internal.session.widgets.Widget
+import im.vector.matrix.android.api.session.widgets.model.Widget
 import im.vector.riotx.features.widgets.WidgetArgs
 
 data class RoomWidgetPermissionViewState(

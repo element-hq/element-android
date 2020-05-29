@@ -14,23 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.widgets
+package im.vector.matrix.android.internal.database.model
 
-import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.room.sender.SenderInfo
-import im.vector.matrix.android.api.session.widgets.model.WidgetContent
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 
-data class Widget(
-        val widgetContent: WidgetContent,
-        val event: Event,
-        val widgetId: String,
-        val senderInfo: SenderInfo?,
-        val isAddedByMe: Boolean,
-        val computedUrl: String?
-) {
+internal open class WellknownIntegrationManagerConfigEntity(
+        @PrimaryKey var id: Long = 0,
+        var apiUrl: String = "",
+        var uiUrl: String = ""
+) : RealmObject() {
 
-    val isActive = widgetContent.isActive()
-
-    val name = widgetContent.getHumanName()
+    companion object
 }
-

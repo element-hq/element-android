@@ -98,13 +98,11 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
     }
 
     private val integrationServiceListener = object : IntegrationManagerService.Listener {
-        override fun onConfigurationChanged(config: IntegrationManagerConfig) {
-            super.onConfigurationChanged(config)
+        override fun onConfigurationChanged(configs: List<IntegrationManagerConfig>) {
             refreshIntegrationManagerSettings()
         }
 
         override fun onIsEnabledChanged(enabled: Boolean) {
-            super.onIsEnabledChanged(enabled)
             refreshIntegrationManagerSettings()
         }
     }

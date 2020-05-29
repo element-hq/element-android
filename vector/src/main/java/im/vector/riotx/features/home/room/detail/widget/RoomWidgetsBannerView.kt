@@ -20,7 +20,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.RelativeLayout
-import im.vector.matrix.android.internal.session.widgets.Widget
+import im.vector.matrix.android.api.session.widgets.model.Widget
 import im.vector.riotx.R
 import kotlinx.android.synthetic.main.view_room_widgets_banner.view.*
 

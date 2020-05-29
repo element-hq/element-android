@@ -45,7 +45,7 @@ internal class DefaultWidgetURLFormatter @Inject constructor(private val integra
         integrationManager.removeListener(this)
     }
 
-    override fun onConfigurationChanged(config: IntegrationManagerConfig) {
+    override fun onConfigurationChanged(configs: List<IntegrationManagerConfig>) {
         setupWithConfiguration()
     }
 

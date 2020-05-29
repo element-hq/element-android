@@ -36,7 +36,7 @@ import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.store.PrivateKeysInfo
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
-import im.vector.matrix.android.internal.session.widgets.Widget
+import im.vector.matrix.android.api.session.widgets.model.Widget
 import io.reactivex.Observable
 import io.reactivex.Single
 
