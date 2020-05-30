@@ -1077,7 +1077,7 @@
     <string name="resource_limit_soft_contact">Пожалуйста %s для увеличения этого лимита.</string>
     <string name="resource_limit_hard_contact">Пожалуйста, %s, чтобы продолжить пользоваться этим сервисом.</string>
 
-    <string name="settings_lazy_loading_title">Ленивая подгрузка собеседников</string>
+    <string name="settings_lazy_loading_title">Ленивая подгрузка участников</string>
     <string name="settings_lazy_loading_description">Увеличить производительность за счёт загрузки собеседников только при первом просмотре.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Ваш сервер не поддерживает ленивую подгрузку собеседников. Попробуйте позже.</string>
 
@@ -1202,10 +1202,10 @@
     <string name="settings_troubleshoot_test_battery_quickfix">Игнорировать оптимизацию</string>
 
     <string name="settings_inline_url_preview_summary">Предпросмотр ссылок в чате, когда ваш домашний сервер поддерживает эту функцию.</string>
-    <string name="settings_send_typing_notifs_summary">Позволя пользователи знают, что вы печатаете.</string>
-    <string name="settings_send_markdown_summary">Форматировать сообщения, используя markdown. Для расширенного форматирования, например, звездочки для курсивного текста.</string>
+    <string name="settings_send_typing_notifs_summary">Показывать другим пользователям, что вы печатаете.</string>
+    <string name="settings_send_markdown_summary">Форматировать сообщения, используя markdown. Например, позволяет использовать звездочки для выделения текста курсивом.</string>
     <string name="settings_show_read_receipts">Показывать уведомления о прочтении</string>
-    <string name="settings_show_read_receipts_summary">Нажмите на уведомление оп прочтении для получения подробного списка.</string>
+    <string name="settings_show_read_receipts_summary">Нажмите на уведомление о прочтении для подробного списка.</string>
     <string name="settings_show_join_leave_messages">Показывать события о вступлении/выходе</string>
     <string name="settings_show_avatar_display_name_changes_messages">Показывать события аккаунта</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Включает изменения аватара и отображаемого имени.</string>
@@ -1224,21 +1224,21 @@
     <string name="store_title">Riot.im — общайся по-своему</string>
     <string name="store_short_description">Универсальное приложение для безопасного общения, полностью находящееся под вашим контролем.</string>
     <string name="settings_show_join_leave_messages_summary">Не влияет на приглашения, исключения и запреты.</string>
-    <string name="store_full_description">"Приложение для чата, под вашим контролем и полностью гибкое. Riot позволяет вам общаться так, как вы хотите. Сделано на [matrix] — стандарт для открытого, децентрализованного общения.
-
-Получите бесплатную учетную запись на matrix.org, собственный сервер по адресу https://modular.im или используйте другой сервер Matrix.
-
-Почему стоит выбрать Riot.im?
-
-• ПОЛНАЯ СВЯЗЬ: создавайте комнаты для команд, друзей, сообщест — как хотите! Общайтесь, обменивайтесь файлами, добавляйте виджеты и совершайте голосовые и видеозвонки — и все это бесплатно.
-
-• МОЩНЫЕ ИНТЕГРАЦИИ: Используйте Riot.im с инструментами, которые знаете и любите. С Riot.im вы можете даже общаться с пользователями и группами других приложений.
-
-• ЧАСТНЫЕ И БЕЗОПАСНЫЕ: держите ваши разговоры в тайне. Современное сквозное шифрование гарантирует, что частное общение остается частным.
-
-• ОТКРЫТО, НЕ ЗАКРЫТО: Исходный код открыт, построено на Matrix. Владейте данными, используя собственный сервер или выбирайте тот, которому доверяете.
-
-• Везде, где вы находитесь: оставайтесь на связи, где бы вы ни находились, с полностью синхронизированной историей сообщений на всех ваших устройствах и в Интернете по адресу https://riot.im."</string>
+    <string name="store_full_description">Приложение для чата, под вашим контролем и полностью гибкое. Riot позволяет вам общаться так, как вы хотите. Сделано для [matrix] — стандарта для открытого децентрализованного общения.
+\n
+\nВы можете создать бесплатную учетную запись на matrix.org, завести собственный сервер по адресу https://modular.im или использовать другой сервер Matrix.
+\n
+\nПочему стоит выбрать Riot.im\?
+\n
+\n• ПОЛНОЦЕННАЯ СВЯЗЬ: создавайте комнаты для команд, друзей, сообществ — как хотите! Общайтесь, обменивайтесь файлами, добавляйте виджеты и совершайте голосовые и видеозвонки — и всё это бесплатно.
+\n
+\n• МОЩНЫЕ ИНТЕГРАЦИИ: Используйте Riot.im с инструментами, которые знаете и любите. С Riot.im вы можете даже общаться с пользователями и группами других приложений.
+\n
+\n• ЧАСТНЫЕ И БЕЗОПАСНЫЕ: держите ваши разговоры в тайне. Современное сквозное шифрование гарантирует, что частное общение остается частным.
+\n
+\n• ОТКРЫТО, НЕ ЗАКРЫТО: Открытый исходный код, построено на Matrix. Владейте данными, используя собственный сервер или выбирайте тот, которому доверяете.
+\n
+\n• ГДЕ БЫ ВЫ НИ БЫЛИ: оставайтесь на связи где угодно, с полностью синхронизированной историей сообщений на всех ваших устройствах и в Интернете по адресу https://riot.im.</string>
 
     <string name="title_activity_keys_backup_setup">Резервное копирование ключей</string>
     <string name="title_activity_keys_backup_restore">Используйте резервную копию ключа</string>
@@ -1276,9 +1276,9 @@
     <string name="keys_backup_no_session_error">Matrix сессия недоступна</string>
 
     <string name="keys_backup_setup_step1_title">Никогда не теряйте зашифрованных сообщений</string>
-    <string name="keys_backup_setup_step1_description">Сообщения в зашифрованных комнатах защищены сквозным шифрованием. Только вы и получатель(и) имеют ключи для чтения этих сообщений.
-
-Надежно сохраните резервную копию ключей, чтобы не потерять их.</string>
+    <string name="keys_backup_setup_step1_description">Сообщения в зашифрованных комнатах защищены сквозным шифрованием. Ключи для прочтения этих сообщений есть только у вас и получателя(ей).
+\n
+\nНадёжно сохраните резервную копию ключей, чтобы не потерять их.</string>
     <string name="keys_backup_setup_step2_button_title">Установите Заклинание</string>
     <string name="keys_backup_setup_step3_copy_button_title">Сохраните ключ восстановления</string>
     <string name="keys_backup_setup_step3_button_title">Готово</string>
@@ -1563,7 +1563,7 @@
     <string name="room_list_people_empty_title">Беседа</string>
     <string name="room_list_people_empty_body">Здесь будут отображаться ваши диалоги</string>
     <string name="room_list_rooms_empty_title">Комнаты</string>
-    <string name="room_list_rooms_empty_body">Ваши комнаты будут отображаться здесь</string>
+    <string name="room_list_rooms_empty_body">Здесь будут отображаться ваши комнаты</string>
 
     <string name="title_activity_emoji_reaction_picker">Отсебятины</string>
     <string name="reactions_agree">Принять</string>
@@ -1618,7 +1618,7 @@
     <string name="quick_reactions">Быстрое реагирование</string>
 
     <string name="settings_general_title">Общее</string>
-    <string name="settings_preferences">Установки</string>
+    <string name="settings_preferences">Параметры</string>
     <string name="settings_security_and_privacy">Безопасность &amp; Конфиденциальность</string>
     <string name="settings_expert">Профессионал</string>
     <string name="settings_push_rules">Пуш-Правила</string>
@@ -1645,13 +1645,13 @@
 
     <string name="store_riotx_title">RiotX - Matrix клиент следующего поколения</string>
     <string name="store_riotx_short_description">Быстрый и легкий клиент для Matrix с новейшими фреймворками Android</string>
-    <string name="store_riotx_full_description">RiotX - это новый клиент для матричного протокола (Matrix.org): открытой сети для безопасной децентрализованной связи. RiotX - это полная перезапись Riot Android клиента, основанная на полной перезаписи Matrix Android SDK. 
+    <string name="store_riotx_full_description">RiotX - это новый клиент для протокола Matrix (Matrix.org): открытой сети для безопасного децентрализованного общения. RiotX - это переписанный с нуля клиент Riot для Android, основанный на полностью переписанном Matrix Android SDK.
 \n 
-\nОговорка: Это бета-версия. В настоящее время RiotX находится в активной разработке и содержит ограничения и (надеемся, не слишком много) ошибки. Мы будем рады любым отзывам! 
+\nПредупреждение: это бета-версия. В настоящее время RiotX находится в активной разработке и содержит ограничения и ошибки (надеемся, не слишком много). Мы будем рады любым отзывам!
 \n 
-\nПоддержка RiotX: - Войти в существующую учетную запись - Создать комнату и присоединиться к общедоступным комнатам - Принять и отклонить приглашения - Список комнат пользователей - Просмотр сведений о комнате - Отправить текстовые сообщения - Отправить вложение - Читать и писать сообщения в зашифрованных комнатах - Криптография: Резервное копирование клавиш E2E, предварительная проверка устройства, запрос и ответ на общий доступ к ключам - Нажмите уведомление - Светлые и черные темы 
+\nRiotX поддерживает: • Вход в существующую учетную запись • Создание и вход в публичные комнаты • Принятие и отклонение приглашений • Просмотр списка комнат • Просмотр сведений о комнате • Отправку текстовых сообщений • Отправку файлов • Чтение и отправку сообщений в зашифрованных комнатах • Криптографию: резервное копирование ключей E2E, улучшенную проверку устройств, запрос и ответ на запрос ключей • Пуш-уведомления • Светлые, тёмные и черные темы
 \n 
-\nНе все функции Riot пока реализованы в RiotX. Основные отсутствующие (и скоро появятся!) свойства: - Настройки комнат (список членов комнат и т.д.) - Вызовы - Виджеты - .…</string>
+\nНе все функции Riot пока реализованы в RiotX. Основные отсутствующие возможности (скоро появятся!): • Настройки комнаты (список участников и т.п.) • Звонки • Виджеты • …</string>
 
     <string name="room_preview_world_readable_room_not_supported_yet">Предварительный просмотр открытой комнаты в RiotX пока не поддерживается</string>
 
@@ -1753,7 +1753,7 @@
     <string name="settings_background_fdroid_sync_mode_disabled_description">Вы не будете уведомлены о входящих сообщениях, когда приложение находится в фоновом режиме.</string>
     <string name="settings_set_workmanager_delay_summary">%s
 \nСинхронизация может быть отложена в зависимости от ресурсов (батареи) или состояния устройства (спящий режим).</string>
-    <string name="settings_discovery_manage">Управляйте настройками обнаружения.</string>
+    <string name="settings_discovery_manage">Изменить настройки обнаружения.</string>
     <string name="encryption_information_device_name_with_warning">Публичное имя (видимое для людей, с которыми вы общаетесь)</string>
     <string name="device_name_warning">Публичное имя сессии видны людям, с которыми вы общаетесь</string>
     <string name="identity_server_not_defined">Вы не используете какой-либо сервер идентификации</string>
@@ -1771,7 +1771,7 @@
     <string name="settings_discovery_msisdn_title">Доступные номера телефонов</string>
     <string name="settings_discovery_mail_pending">В ожидании</string>
 
-    <string name="settings_discovery_enter_identity_server">Введите новый сервер идентификации</string>
+    <string name="settings_discovery_enter_identity_server">Введите адрес сервера идентификации</string>
     <string name="settings_discovery_bad_identity_server">Не удалось подключиться к серверу идентификации</string>
     <string name="settings_discovery_please_enter_server">Пожалуйста, введите URL сервера идентификации</string>
     <string name="settings_discovery_no_terms_title">Сервер идентификации не имеет условий предоставления услуг</string>
@@ -2089,4 +2089,22 @@
 
     <string name="encryption_enabled">Шифрование включено</string>
     <string name="encryption_not_enabled">Шифрование не включено</string>
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
+
+    <string name="settings_show_redacted">Показывать удалённые сообщения</string>
+    <string name="settings_show_redacted_summary">Показывать заглушку на месте удалённых сообщений</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Мы отправили письмо для подтверждения на %s, проверьте почту и нажмите на ссылку для подтверждения</string>
+    <string name="settings_text_message_sent_wrong_code">Код подтверждения неверный.</string>
+
+    <string name="error_terms_not_accepted">Попробуйте снова после принятия условий обслуживания на вашем домашнем сервере.</string>
+
+    <string name="error_network_timeout">Похоже, сервер долгое время не отвечает, что может быть вызвано плохим соединением или ошибкой на сервере. Попробуйте снова через некоторое время.</string>
+
+    <string name="room_list_sharing_header_recent_rooms">Недавние комнаты</string>
+    <string name="room_list_sharing_header_other_rooms">Прочие комнаты</string>
+
+    <string name="change_password_summary">Сменить пароль учётной записи…</string>
+
+    <string name="command_description_discard_session_not_handled">Поддерживается только в зашифрованных комнатах</string>
     </resources>
