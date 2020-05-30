@@ -7,8 +7,8 @@
     <string name="notice_room_invite_no_invitee">%s приглашение</string>
     <string name="notice_room_invite">%1$s пригласил(а) %2$s</string>
     <string name="notice_room_invite_you">%1$s пригласил(а) вас</string>
-    <string name="notice_room_join">%1$s присоединился(лась)</string>
-    <string name="notice_room_leave">%1$s покинул(а)</string>
+    <string name="notice_room_join">%1$s вошёл(ла) в комнату</string>
+    <string name="notice_room_leave">%1$s покинул(а) комнату</string>
     <string name="notice_room_reject">%1$s отклонил(а) приглашение</string>
     <string name="notice_room_kick">%1$s выгнан %2$s</string>
     <string name="notice_room_unban">%1$s разблокировал(а) %2$s</string>
@@ -90,7 +90,7 @@
         <item quantity="one">%1$s и 1 другой</item>
         <item quantity="few">%1$s и %2$d другие</item>
         <item quantity="many">%1$s и %2$d других</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
 
@@ -189,8 +189,8 @@
     <string name="notice_room_invite_no_invitee_with_reason">Приглашение %1$s. Причина: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s приглашен %2$s. Причина: %3$s</string>
     <string name="notice_room_invite_you_with_reason">%1$s пригласил вас. Причина: %2$s</string>
-    <string name="notice_room_join_with_reason">%1$s присоединился. Причина: %2$s</string>
-    <string name="notice_room_leave_with_reason">Осталось %1$s. Причина: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s присоединился(лась). Причина: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s покинул(а) комнату. Причина: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s отклонил приглашение. Причина: %2$s</string>
     <string name="notice_room_kick_with_reason">%1$s выгнали %2$s. Причина: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s разблокировано %2$s. Причина: %3$s</string>
@@ -199,5 +199,31 @@
     <string name="notice_room_third_party_revoked_invite_with_reason">%1$s отозвал приглашение %2$s присоединиться к комнате. Причина: %3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s принял приглашение для %2$s. Причина: %3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s отозвал приглашение %2$s. Причина: %3$s</string>
+
+<string name="notice_room_created">%1$s создал(а) комнату</string>
+    <plurals name="notice_room_aliases_added">
+	<item quantity="one">%1$s добавил(а) адрес %2$s для комнаты.</item>
+	<item quantity="few">%1$s добавил(а) адреса %2$s для комнаты.</item>
+	<item quantity="many">%1$s добавил(а) адреса %2$s для комнаты.</item>
+</plurals>
+
+    <plurals name="notice_room_aliases_removed">
+	<item quantity="one">%1$s удалил(а) адрес %2$s для комнаты.</item>
+	<item quantity="few">%1$s удалил(а) адреса %2$s для комнаты.</item>
+	<item quantity="many">%1$s удалил(а) адреса %2$s для комнаты.</item>
+</plurals>
+
+    <string name="notice_room_aliases_added_and_removed">%1$s добавил(а) адреса %2$s и удалил(а) %3$s для комнаты.</string>
+
+    <string name="notice_room_canonical_alias_set">%1$s сделал(а) %2$s главным адресом комнаты.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s удалил(а) главный адрес комнаты.</string>
+
+    <string name="notice_room_guest_access_can_join">%1$s разрешил(а) гостям входить в комнату.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s запретил(а) гостям входить в комнату.</string>
+
+    <string name="notice_end_to_end_ok">%1$s включил(а) сквозное шифрование.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s включил(а) сквозное шифрование (неизвестный алгоритм %2$s).</string>
+
+    <string name="key_verification_request_fallback_message">%s запрашивает подтверждение вашего ключа, но ваш клиент не поддерживает подтверждение в чате. Используйте устаревшую проверку для сверки ключей.</string>
 
 </resources>
