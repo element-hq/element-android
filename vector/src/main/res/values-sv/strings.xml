@@ -537,4 +537,52 @@
     <string name="enter_secret_storage_invalid">Kan inte hitta hemligheter i lagringen</string>
     <string name="settings_when_rooms_are_upgraded">När rum uppgraderas</string>
     <string name="command_description_discard_session_not_handled">Stöds endast I krypterade rum</string>
+    <string name="room_participants_invite_search_another_user">Användar-ID, namn eller e-postadress</string>
+    <string name="settings_profile_picture">Profilbild</string>
+    <string name="settings_display_name">Visningsnamn</string>
+    <string name="settings_add_3pid_confirm_password_title">Bekräfta ditt lösenord</string>
+    <string name="settings_containing_my_display_name">Meddelanden som innehåller mitt visningsnamn</string>
+    <string name="settings_user_settings">Användarinställningar</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Innehåller ändringar av avatar eller visningsnamn.</string>
+    <string name="devices_delete_dialog_text">Den här handlingen kräver extra autentisering.
+\nFör att fortsätta, skriv in ditt lösenord.</string>
+    <string name="devices_delete_pswd">Lösenord:</string>
+    <string name="settings_password">Lösenord</string>
+    <string name="settings_change_password">Byt lösenord</string>
+    <string name="settings_old_password">Nuvarande lösenord</string>
+    <string name="settings_new_password">Nytt lösenord</string>
+    <string name="settings_confirm_password">Bekräfta nytt lösenord</string>
+    <string name="settings_change_password_submit">Uppdatera lösenordet</string>
+    <string name="settings_fail_to_update_password">Misslyckades att uppdatera lösenordet</string>
+    <string name="settings_fail_to_update_password_invalid_current_password">Lösenordet är ogiltigt</string>
+    <string name="settings_password_updated">Ditt lösenord har uppdaterats</string>
+    <string name="settings_without_flair">Du är för närvarande inte medlem in någon gemenskap.</string>
+
+    <string name="encryption_information_verify_device_warning">Bekräfta genom att jämföra följande nyckel med användarinställningarna i din andra session:</string>
+    <string name="room_widget_permission_display_name">Ditt visningsnamn</string>
+    <string name="deactivate_account_prompt_password">För att fortsätta, skriv in ditt lösenord:</string>
+    <string name="error_empty_field_your_password">Vänligen skriv in ditt lösenord.</string>
+    <string name="keys_backup_setup_step2_text_description">Vi kommer att lagra en krypterad kopia av dina nycklar på din hemserver. Skydda din säkerhetskopia med en lösenfras för att hålla den säker.
+\n
+\nFör maximal säkerhet så bör denna skilja sig från ditt kontolösenord.</string>
+    <string name="keys_backup_setup_step3_text_line2">Din återställningsnyckel är ett skyddsnät - du kan använda den för att återfå åtkomst till dina krypterade meddelanden om du skulle glömma din lösenfras.
+\nLagra din återställningsnyckel på något säkert ställe, t.ex. en lösenordshanterare (eller ett kassaskåp)</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Lagra din återställningsnyckel på något säkert ställe, t.ex. en lösenordshanterare (eller ett kassaskåp)</string>
+    <string name="new_recovery_method_popup_description">En ny säker säkerhetskopia för meddelandenycklar har hittats.
+\n
+\nOm det inte var du som satte upp den nya återställningsmetoden så kan det vara en angripare som försöker komma åt ditt konto. Ändra ditt kontolösenord och sätt en ny återställningsmetod omedelbart i inställningarna.</string>
+    <string name="identity_server_not_defined_for_password_reset">Ingen identitetsserver är konfigurerad, vilket krävs för att återställa ditt lösenord.</string>
+
+    <string name="change_room_directory_network">Byt nätverk</string>
+    <string name="group_all_communities">Alla gemenskaper</string>
+
+    <string name="settings_general_title">Allmänt</string>
+    <string name="settings_preferences">Alternativ</string>
+    <string name="store_riotx_title">RiotX - Nästa generations Matrix-klient</string>
+    <string name="store_riotx_short_description">En snabbare och lättviktigare klient för Matrix som använder de senaste Android-ramverken</string>
+    <string name="room_directory_search_hint">Namn eller ID (#example:matrix.org)</string>
+
+    <string name="verify_cancel_other">Du kommer inte att verifiera %1$s (%2$s) om du avbryter nu. Börja igen i hens användarprofil.</string>
+
+    <string name="encryption_enabled_tile_description">Meddelanden i det här rummet är ände-till-ände-krypterade. Lär dig mer och verifiera användare i deras profiler.</string>
     </resources>
