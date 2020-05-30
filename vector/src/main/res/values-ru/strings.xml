@@ -1641,7 +1641,7 @@
     <string name="send_suggestion_sent">Спасибо, предложение было успешно отправлено</string>
     <string name="send_suggestion_failed">Предложение не было отправлено (%s)</string>
 
-    <string name="settings_labs_show_hidden_events_in_timeline">Показать скрытые события в временной шкале</string>
+    <string name="settings_labs_show_hidden_events_in_timeline">Показать скрытые события в ленте сообщений</string>
 
     <string name="store_riotx_title">RiotX - Matrix клиент следующего поколения</string>
     <string name="store_riotx_short_description">Быстрый и легкий клиент для Matrix с новейшими фреймворками Android</string>
@@ -1683,7 +1683,7 @@
 
     <string name="room_directory_search_hint">Имя или ID (#example:matrix.org)</string>
 
-    <string name="labs_swipe_to_reply_in_timeline">Включить свайп, для ответа по хронологии</string>
+    <string name="labs_swipe_to_reply_in_timeline">Включить жест смахивания для ответа в ленте сообщений</string>
 
     <string name="link_copied_to_clipboard">Ссылка скопирована в буфер обмена</string>
 
@@ -2075,4 +2075,18 @@
     <string name="backup_recovery_passphrase">Целебное Заклинание</string>
     <string name="crosssigning_verify_session">Проверка входа</string>
     <string name="confirm_your_identity">Подтвердите свою личность и получите доступ к зашифрованным сообщениям, сличив сей вход с другим сеансом.</string>
+    <string name="settings_category_timeline">Лента сообщений</string>
+
+    <string name="message_key">Билет</string>
+    <string name="generate_message_key">Сгенерировать билет</string>
+
+    <string name="bootstrap_crosssigning_print_it">Распечатайте его и храните в безопасном месте</string>
+    <string name="bootstrap_skip_text">Уготовка целебного заклинания способствует доверию, позволяет защитить и разблокировать зашифрованные сообщения.
+\n
+\nЕжели вы не желаете уготовить заклинание, тогда вы можете наместо его сотворить билет.</string>
+    <string name="bootstrap_skip_text_no_gen_key">Уготовка целебного заклинания способствует доверию, позволяет защитить и разблокировать зашифрованные сообщения.</string>
+
+
+    <string name="encryption_enabled">Шифрование включено</string>
+    <string name="encryption_not_enabled">Шифрование не включено</string>
     </resources>
