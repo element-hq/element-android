@@ -1785,7 +1785,7 @@
     <string name="settings_discovery_disconnect_with_bound_pid">В настоящее время вы делитесь адресами электронной почты или телефонными номерами на сервере идентификации %1$s. Вам нужно повторно подключиться к %2$s, чтобы прекратить делиться ими.</string>
     <string name="settings_agree_to_terms">Примите Условия обслуживания сервера идентификации (%s), чтобы разрешить обнаружение по адресу электронной почты или номеру телефона.</string>
     <string name="labs_allow_extended_logging">Включить подробные логи.</string>
-    <string name="send_attachment">Отправить вложенное</string>
+    <string name="send_attachment">Отправить вложение</string>
 
     <string name="a11y_open_drawer">Откройте навигационный ящик</string>
     <string name="a11y_create_menu_open">Открыть меню создания комнаты</string>
@@ -1846,7 +1846,7 @@
     <string name="labs_allow_extended_logging_summary">Подробные логи помогут разработчикам, предоставив больше информации, когда вы отправляете RageShake. Даже когда они разрешены, приложение не логирует ваши сообщения и другие приватные данные.</string>
 
 
-    <string name="a11y_create_menu_close">Закройте меню создания комнаты…</string>
+    <string name="a11y_create_menu_close">Отменить создание комнаты…</string>
     <string name="a11y_jump_to_bottom">Вниз</string>
 
     <string name="attachment_type_contact">Контакт</string>
@@ -2130,4 +2130,14 @@
 
     <string name="verification_sas_match">Они совпадают</string>
     <string name="verification_sas_do_not_match">Они не совпадают</string>
+    <string name="a11y_close_keys_backup_banner">Закрыть окно бэкапа ключей</string>
+    <string name="one_user_read">%s прочитано</string>
+    <string name="error_handling_incoming_share">Не удалось обработать данные</string>
+
+    <string name="permissions_rationale_msg_keys_backup_export">Riot требуются права для сохранения ваших ключей E2E на диске.
+\n
+\nПожалуйста, разрешите доступ в следующем всплывающем окне, экспорта ключей вручную.</string>
+
+    <string name="no_network_indicator">Нет подключения к сети</string>
+
     </resources>
