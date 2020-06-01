@@ -19,27 +19,36 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-suspend fun <T> awaitTransaction(config: RealmConfiguration, transaction: suspend (realm: Realm) -> T) = withContext(Dispatchers.Default) {
-    Realm.getInstance(config).use { bgRealm ->
-        bgRealm.beginTransaction()
-        val result: T
-        try {
-            val start = System.currentTimeMillis()
-            result = transaction(bgRealm)
-            if (isActive) {
-                bgRealm.commitTransaction()
-                val end = System.currentTimeMillis()
-                val time = end - start
-                Timber.v("Execute transaction in $time millis")
-            }
-        } finally {
-            if (bgRealm.isInTransaction) {
-                bgRealm.cancelTransaction()
+// TODO: Make this more of a global realm (or database) thing.
+private val realmSemaphore = Semaphore(1)
+
+suspend fun <T> awaitTransaction(config: RealmConfiguration, transaction: suspend (realm: Realm) -> T): T {
+    return realmSemaphore.withPermit {
+        withContext(Dispatchers.IO) {
+            Realm.getInstance(config).use { bgRealm ->
+                bgRealm.beginTransaction()
+                val result: T
+                try {
+                    val start = System.currentTimeMillis()
+                    result = transaction(bgRealm)
+                    if (isActive) {
+                        bgRealm.commitTransaction()
+                        val end = System.currentTimeMillis()
+                        val time = end - start
+                        Timber.v("Execute transaction in $time millis")
+                    }
+                } finally {
+                    if (bgRealm.isInTransaction) {
+                        bgRealm.cancelTransaction()
+                    }
+                }
+                result
             }
         }
-        result
     }
 }
