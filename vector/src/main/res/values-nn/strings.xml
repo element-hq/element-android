@@ -80,13 +80,13 @@
     <string name="dialog_title_warning">Åtvaring</string>
 
     <string name="bottom_action_home">Heim</string>
-    <string name="bottom_action_favourites">Favorittar</string>
+    <string name="bottom_action_favourites">Yndlingar</string>
     <string name="bottom_action_people">Folk</string>
     <string name="bottom_action_rooms">Rom</string>
     <string name="bottom_action_groups">Samfund</string>
 
     <string name="home_filter_placeholder_home">Filtrer romnamn</string>
-    <string name="home_filter_placeholder_favorites">Filtrer favorittar</string>
+    <string name="home_filter_placeholder_favorites">Filtrer yndlingar</string>
     <string name="home_filter_placeholder_people">Filtrer folk</string>
     <string name="home_filter_placeholder_rooms">Filtrer romnamn</string>
     <string name="home_filter_placeholder_groups">Filtrer felleskap</string>
@@ -442,7 +442,7 @@
 
     <string name="room_recents_join">VERT MED</string>
     <string name="room_recents_directory">UTVAL</string>
-    <string name="room_recents_favourites">FAVORITTAR</string>
+    <string name="room_recents_favourites">YNDLINGAR</string>
     <string name="room_recents_conversations">ROM</string>
     <string name="room_recents_low_priority">LÅGRETT</string>
     <string name="room_recents_invites">INNBJODINGAR</string>
