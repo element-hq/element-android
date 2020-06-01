@@ -23,10 +23,6 @@ import android.telecom.DisconnectCause
 import androidx.annotation.RequiresApi
 import im.vector.riotx.features.call.VectorCallViewModel
 import im.vector.riotx.features.call.WebRtcPeerConnectionManager
-import org.webrtc.IceCandidate
-import org.webrtc.MediaStream
-import org.webrtc.SessionDescription
-import org.webrtc.VideoTrack
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -34,7 +30,7 @@ import javax.inject.Inject
         private val context: Context,
         private val roomId: String,
         val callId: String
-) : Connection(), WebRtcPeerConnectionManager.Listener {
+) : Connection() {
 
     @Inject lateinit var peerConnectionManager: WebRtcPeerConnectionManager
     @Inject lateinit var callViewModel: VectorCallViewModel
@@ -112,21 +108,5 @@ import javax.inject.Inject
         peerConnectionManager.createPeerConnection(videoCapturer, iceServers)
         //peerConnectionManager.startCall()
          */
-    }
-
-    override fun addLocalIceCandidate(candidates: IceCandidate) {
-    }
-
-    override fun addRemoteVideoTrack(videoTrack: VideoTrack) {
-    }
-
-    override fun addLocalVideoTrack(videoTrack: VideoTrack) {
-    }
-
-    override fun removeRemoteVideoStream(mediaStream: MediaStream) {
-    }
-
-    override fun sendOffer(sessionDescription: SessionDescription) {
-
     }
 }

@@ -69,18 +69,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         private val sessionHolder: ActiveSessionHolder
 ) : CallsListener {
 
-    interface Listener {
-        fun addLocalIceCandidate(candidates: IceCandidate)
-        fun addRemoteVideoTrack(videoTrack: VideoTrack)
-        fun addLocalVideoTrack(videoTrack: VideoTrack)
-        fun removeRemoteVideoStream(mediaStream: MediaStream)
-        fun onDisconnect()
-        fun sendOffer(sessionDescription: SessionDescription)
-    }
-
     var localMediaStream: MediaStream? = null
-
-    var listener: Listener? = null
 
     // *Comments copied from webrtc demo app*
     // Executor thread is started once and is used for all
@@ -102,7 +91,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     private var videoSource: VideoSource? = null
     private var audioSource: AudioSource? = null
-    private var audioTrack: AudioTrack? = null
+    private var localAudioTrack: AudioTrack? = null
 
     private var videoCapturer: VideoCapturer? = null
 
@@ -171,60 +160,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
         peerConnection = peerConnectionFactory?.createPeerConnection(iceServers, observer)
     }
 
-    // TODO REMOVE THIS FUNCTION
-    private fun createPeerConnection(videoCapturer: VideoCapturer) {
-        executor.execute {
-            Timber.v("## VOIP PeerConnectionFactory.createPeerConnection $peerConnectionFactory...")
-            // Following instruction here: https://stackoverflow.com/questions/55085726/webrtc-create-peerconnectionfactory-object
-            val surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", rootEglBase!!.eglBaseContext)
-
-            videoSource = peerConnectionFactory?.createVideoSource(videoCapturer.isScreencast)
-            Timber.v("## VOIP Local video source created")
-            videoCapturer.initialize(surfaceTextureHelper, context.applicationContext, videoSource!!.capturerObserver)
-            videoCapturer.startCapture(1280, 720, 30)
-
-            localVideoTrack = peerConnectionFactory?.createVideoTrack("ARDAMSv0", videoSource)?.also {
-                Timber.v("## VOIP Local video track created")
-//                localSurfaceRenderer?.get()?.let { surface ->
-// //                    it.addSink(surface)
-// //                }
-            }
-
-            // create a local audio track
-            Timber.v("## VOIP create local audio track")
-            audioSource = peerConnectionFactory?.createAudioSource(DEFAULT_AUDIO_CONSTRAINTS)
-            audioTrack = peerConnectionFactory?.createAudioTrack(AUDIO_TRACK_ID, audioSource)
-
-//            pipRenderer.setMirror(true)
-//            localVideoTrack?.addSink(pipRenderer)
-//
-
-//            val iceCandidateSource: PublishSubject<IceCandidate> = PublishSubject.create()
-//
-//            iceCandidateSource
-//                    .buffer(400, TimeUnit.MILLISECONDS)
-//                    .subscribe {
-//                        // omit empty :/
-//                        if (it.isNotEmpty()) {
-//                            listener.addLocalIceCandidate()
-//                            callViewModel.handle(VectorCallViewActions.AddLocalIceCandidate(it))
-//                        }
-//                    }
-//                    .disposeOnDestroy()
-
-            localMediaStream = peerConnectionFactory?.createLocalMediaStream("ARDAMS") // magic value?
-            localMediaStream?.addTrack(localVideoTrack)
-            localMediaStream?.addTrack(audioTrack)
-
-//            val constraints = MediaConstraints()
-//            constraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"))
-//            constraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveVideo", "true"))
-
-            Timber.v("## VOIP add local stream to peer connection")
-            peerConnection?.addStream(localMediaStream)
-        }
-    }
-
     private fun startCall() {
         createPeerConnectionFactory()
         createPeerConnection(object : PeerConnectionObserverAdapter() {
@@ -244,15 +179,12 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     mediaStream.videoTracks?.firstOrNull()?.let { videoTrack ->
                         remoteVideoTrack = videoTrack
                         remoteVideoTrack?.setEnabled(true)
-                        remoteVideoTrack?.addSink(remoteViewRenderer)
+                        remoteViewRenderer?.let { remoteVideoTrack?.addSink(it) }
                     }
                 }
             }
 
             override fun onRemoveStream(mediaStream: MediaStream?) {
-                mediaStream?.let {
-                    listener?.removeRemoteVideoStream(it)
-                }
                 remoteSurfaceRenderer?.get()?.let {
                     remoteVideoTrack?.removeSink(it)
                 }
@@ -262,7 +194,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
             override fun onIceConnectionChange(p0: PeerConnection.IceConnectionState?) {
                 Timber.v("## VOIP onIceConnectionChange $p0")
                 if (p0 == PeerConnection.IceConnectionState.DISCONNECTED) {
-                    listener?.onDisconnect()
+                    endCall()
                 }
             }
         })
@@ -313,8 +245,12 @@ class WebRtcPeerConnectionManager @Inject constructor(
     fun attachViewRenderers(localViewRenderer: SurfaceViewRenderer, remoteViewRenderer: SurfaceViewRenderer) {
         this.localViewRenderer = localViewRenderer
         this.remoteViewRenderer = remoteViewRenderer
+        this.localSurfaceRenderer = WeakReference(localViewRenderer)
+        this.remoteSurfaceRenderer = WeakReference(remoteViewRenderer)
+
         audioSource = peerConnectionFactory?.createAudioSource(DEFAULT_AUDIO_CONSTRAINTS)
-        audioTrack = peerConnectionFactory?.createAudioTrack(AUDIO_TRACK_ID, audioSource)
+        localAudioTrack = peerConnectionFactory?.createAudioTrack(AUDIO_TRACK_ID, audioSource)
+        localAudioTrack?.setEnabled(true)
 
         localViewRenderer.setMirror(true)
         localVideoTrack?.addSink(localViewRenderer)
@@ -334,27 +270,27 @@ class WebRtcPeerConnectionManager @Inject constructor(
             Timber.v("## VOIP Local video source created")
             videoCapturer.initialize(surfaceTextureHelper, context.applicationContext, videoSource!!.capturerObserver)
             videoCapturer.startCapture(1280, 720, 30)
-            localVideoTrack = peerConnectionFactory?.createVideoTrack("ARDAMSv0", videoSource)?.also {
-                Timber.v("## VOIP Local video track created")
-                localSurfaceRenderer?.get()?.let { surface ->
-                    it.addSink(surface)
-                }
+            localVideoTrack = peerConnectionFactory?.createVideoTrack("ARDAMSv0", videoSource)
+            Timber.v("## VOIP Local video track created")
+            localSurfaceRenderer?.get()?.let { surface ->
+                localVideoTrack?.addSink(surface)
             }
+            localVideoTrack?.setEnabled(true)
+
+            localVideoTrack?.addSink(localViewRenderer)
             localMediaStream?.addTrack(localVideoTrack)
+            remoteVideoTrack?.let {
+                it.setEnabled(true)
+                it.addSink(remoteViewRenderer)
+            }
         }
 
-        localVideoTrack?.addSink(localViewRenderer)
-        remoteVideoTrack?.let {
-            it.setEnabled(true)
-            it.addSink(remoteViewRenderer)
-        }
-        localMediaStream?.addTrack(audioTrack)
+        localMediaStream?.addTrack(localAudioTrack)
 
         Timber.v("## VOIP add local stream to peer connection")
         peerConnection?.addStream(localMediaStream)
 
-        localSurfaceRenderer = WeakReference(localViewRenderer)
-        remoteSurfaceRenderer = WeakReference(remoteViewRenderer)
+        startCall()
     }
 
     fun detachRenderers() {
