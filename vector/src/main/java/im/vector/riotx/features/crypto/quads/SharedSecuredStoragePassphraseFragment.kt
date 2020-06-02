@@ -29,6 +29,7 @@ import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.colorizeMatchingText
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_ssss_access_from_passphrase.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -58,6 +59,7 @@ class SharedSecuredStoragePassphraseFragment @Inject constructor(
 
         ssss_passphrase_enter_edittext.editorActionEvents()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
                         submit()

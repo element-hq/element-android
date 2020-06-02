@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.startImportTextFromFileIntent
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_ssss_access_from_key.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -44,6 +45,7 @@ class SharedSecuredStorageKeyFragment @Inject constructor() : VectorBaseFragment
 
         ssss_key_enter_edittext.editorActionEvents()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
                         submit()

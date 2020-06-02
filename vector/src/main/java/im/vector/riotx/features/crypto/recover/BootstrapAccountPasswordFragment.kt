@@ -30,6 +30,7 @@ import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.colorizeMatchingText
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_bootstrap_enter_account_password.*
 import kotlinx.android.synthetic.main.fragment_bootstrap_enter_passphrase.bootstrapDescriptionText
 import kotlinx.android.synthetic.main.fragment_bootstrap_enter_passphrase.ssss_view_show_password
@@ -56,6 +57,7 @@ class BootstrapAccountPasswordFragment @Inject constructor(
 
         bootstrapAccountPasswordEditText.editorActionEvents()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
                         submit()
