@@ -20,9 +20,6 @@ import android.os.Build
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.BulletSpan
-import android.widget.ImageView
-import android.widget.TextView
-import butterknife.BindView
 import butterknife.OnClick
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.activityViewModel

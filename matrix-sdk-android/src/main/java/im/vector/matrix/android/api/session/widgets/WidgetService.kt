@@ -23,7 +23,6 @@ import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.session.widgets.model.Widget
 
-
 /**
  * This is the entry point to manage widgets. You can grab an instance of this service through an active session.
  */

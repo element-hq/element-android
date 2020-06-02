@@ -40,7 +40,6 @@ import im.vector.matrix.android.internal.session.widgets.helper.WidgetFactory
 import im.vector.matrix.android.internal.session.widgets.helper.extractWidgetSequence
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
-import im.vector.matrix.android.internal.util.StringProvider
 import timber.log.Timber
 import javax.inject.Inject
 

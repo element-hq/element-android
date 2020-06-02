@@ -16,7 +16,6 @@
 
 package im.vector.riotx.features.home.room.detail
 
-import android.util.SparseArray
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
