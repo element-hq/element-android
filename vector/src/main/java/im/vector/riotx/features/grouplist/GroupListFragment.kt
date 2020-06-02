@@ -22,6 +22,7 @@ import android.view.View
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.session.group.model.GroupSummary
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
@@ -50,7 +51,6 @@ class GroupListFragment @Inject constructor(
         groupController.callback = this
         stateView.contentView = groupListView
         groupListView.configureWith(groupController)
-        viewModel.subscribe { renderState(it) }
         viewModel.observeViewEvents {
             when (it) {
                 is GroupListViewEvents.OpenGroupSummary -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup)
@@ -64,7 +64,7 @@ class GroupListFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    private fun renderState(state: GroupListViewState) {
+    override fun invalidate() = withState(viewModel) { state ->
         when (state.asyncGroups) {
             is Incomplete -> stateView.state = StateView.State.Loading
             is Success    -> stateView.state = StateView.State.Content

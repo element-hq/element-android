@@ -58,7 +58,7 @@ class SharedSecuredStoragePassphraseFragment @Inject constructor(
                 .colorizeMatchingText(key, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
 
         ssss_passphrase_enter_edittext.editorActionEvents()
-                .debounce(300, TimeUnit.MILLISECONDS)
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {

@@ -32,6 +32,7 @@ import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
@@ -99,7 +100,6 @@ class RoomListFragment @Inject constructor(
         setupCreateRoomButton()
         setupRecyclerView()
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
-        roomListViewModel.subscribe { renderState(it) }
         roomListViewModel.observeViewEvents {
             when (it) {
                 is RoomListViewEvents.Loading    -> showLoading(it.message)
@@ -243,7 +243,7 @@ class RoomListFragment @Inject constructor(
         }
     }
 
-    private fun renderState(state: RoomListViewState) {
+    override fun invalidate() = withState(roomListViewModel) { state ->
         when (state.asyncFilteredRooms) {
             is Incomplete -> renderLoading()
             is Success    -> renderSuccess(state)

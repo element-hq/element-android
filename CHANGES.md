@@ -6,10 +6,10 @@ Features ✨:
  - Send stickers (#51)
 
 Improvements 🙌:
- -
+ - New wording for notice when current user is the sender
 
 Bugfix 🐛:
- -
+ - Switch theme is not fully taken into account without restarting the app
 
 Translations 🗣:
  -

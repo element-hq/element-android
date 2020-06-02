@@ -54,7 +54,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
         findPreference<VectorListPreference>(ThemeUtils.APPLICATION_THEME_KEY)!!
                 .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             if (newValue is String) {
-                ThemeUtils.setApplicationTheme(requireContext(), newValue)
+                ThemeUtils.setApplicationTheme(requireContext().applicationContext, newValue)
                 // Restart the Activity
                 activity?.restart()
                 true

@@ -19,6 +19,7 @@ package im.vector.riotx.features.home.room.breadcrumbs
 import android.os.Bundle
 import android.view.View
 import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
@@ -42,8 +43,6 @@ class BreadcrumbsFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         sharedActionViewModel = activityViewModelProvider.get(RoomDetailSharedActionViewModel::class.java)
-
-        breadcrumbsViewModel.subscribe { renderState(it) }
     }
 
     override fun onDestroyView() {
@@ -57,8 +56,7 @@ class BreadcrumbsFragment @Inject constructor(
         breadcrumbsController.listener = this
     }
 
-    // TODO Use invalidate() ?
-    private fun renderState(state: BreadcrumbsViewState) {
+    override fun invalidate() = withState(breadcrumbsViewModel) { state ->
         breadcrumbsController.update(state)
     }
 
