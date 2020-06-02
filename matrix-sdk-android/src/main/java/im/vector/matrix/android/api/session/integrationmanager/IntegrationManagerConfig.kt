@@ -20,7 +20,7 @@ package im.vector.matrix.android.api.session.integrationmanager
  */
 data class IntegrationManagerConfig(
         val uiUrl: String,
-        val apiUrl: String,
+        val restUrl: String,
         val kind: Kind
 ) {
 

@@ -20,9 +20,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.R
 import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.auth.wellknown.WellknownResult
+import im.vector.matrix.android.api.MatrixConfiguration
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerConfig
 import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerService
@@ -31,7 +30,6 @@ import im.vector.matrix.android.api.session.widgets.model.WidgetType
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.NoOpCancellable
 import im.vector.matrix.android.internal.database.model.WellknownIntegrationManagerConfigEntity
-import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.extensions.observeNotNull
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountData
@@ -43,9 +41,6 @@ import im.vector.matrix.android.internal.session.widgets.helper.extractWidgetSeq
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.util.StringProvider
-import im.vector.matrix.android.internal.util.awaitTransaction
-import im.vector.matrix.android.internal.wellknown.GetWellknownTask
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -62,14 +57,11 @@ import javax.inject.Inject
  *
  */
 @SessionScope
-internal class IntegrationManager @Inject constructor(@UserId private val userId: String,
+internal class IntegrationManager @Inject constructor(matrixConfiguration: MatrixConfiguration,
                                                       private val taskExecutor: TaskExecutor,
                                                       private val monarchy: Monarchy,
-                                                      private val stringProvider: StringProvider,
                                                       private val updateUserAccountDataTask: UpdateUserAccountDataTask,
                                                       private val accountDataDataSource: AccountDataDataSource,
-                                                      private val getWellknownTask: GetWellknownTask,
-                                                      private val configExtractor: IntegrationManagerConfigExtractor,
                                                       private val widgetFactory: WidgetFactory) {
 
     private val currentConfigs = ArrayList<IntegrationManagerConfig>()
@@ -82,8 +74,8 @@ internal class IntegrationManager @Inject constructor(@UserId private val userId
 
     init {
         val defaultConfig = IntegrationManagerConfig(
-                uiUrl = stringProvider.getString(R.string.integrations_ui_url),
-                apiUrl = stringProvider.getString(R.string.integrations_rest_url),
+                uiUrl = matrixConfiguration.integrationUIUrl,
+                restUrl = matrixConfiguration.integrationRestUrl,
                 kind = IntegrationManagerConfig.Kind.DEFAULT
         )
         currentConfigs.add(defaultConfig)
@@ -259,7 +251,7 @@ internal class IntegrationManager @Inject constructor(@UserId private val userId
         val integrationManagerData = data.toModel<IntegrationManagerWidgetData>()
         return IntegrationManagerConfig(
                 uiUrl = url,
-                apiUrl = integrationManagerData?.apiUrl ?: url,
+                restUrl = integrationManagerData?.apiUrl ?: url,
                 kind = IntegrationManagerConfig.Kind.ACCOUNT
         )
     }

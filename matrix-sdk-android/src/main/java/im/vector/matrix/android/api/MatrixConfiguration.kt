@@ -22,6 +22,8 @@ import java.net.Proxy
 data class MatrixConfiguration(
         val applicationFlavor: String = "Default-application-flavor",
         val cryptoConfig: MXCryptoConfig = MXCryptoConfig(),
+        val integrationUIUrl: String = "https://scalar.vector.im/",
+        val integrationRestUrl: String = "https://scalar.vector.im/api",
         /**
          * Optional proxy to connect to the matrix servers
          * You can create one using for instance Proxy(proxyType, InetSocketAddress(hostname, port)

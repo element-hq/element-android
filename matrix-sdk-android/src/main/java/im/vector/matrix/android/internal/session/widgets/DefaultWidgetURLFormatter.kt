@@ -56,8 +56,8 @@ internal class DefaultWidgetURLFormatter @Inject constructor(private val integra
             val defaultWhiteList = stringProvider.getStringArray(R.array.integrations_widgets_urls).asList()
             whiteListedUrls = when (preferredConfig.kind) {
                 IntegrationManagerConfig.Kind.DEFAULT    -> defaultWhiteList
-                IntegrationManagerConfig.Kind.ACCOUNT    -> defaultWhiteList + preferredConfig.apiUrl
-                IntegrationManagerConfig.Kind.HOMESERVER -> listOf(preferredConfig.apiUrl)
+                IntegrationManagerConfig.Kind.ACCOUNT    -> defaultWhiteList + preferredConfig.restUrl
+                IntegrationManagerConfig.Kind.HOMESERVER -> listOf(preferredConfig.restUrl)
             }
         }
     }
@@ -67,7 +67,7 @@ internal class DefaultWidgetURLFormatter @Inject constructor(private val integra
      */
     override suspend fun format(baseUrl: String, params: Map<String, String>, forceFetchScalarToken: Boolean, bypassWhitelist: Boolean): String {
         return if (bypassWhitelist || isWhiteListed(baseUrl)) {
-            val taskParams = GetScalarTokenTask.Params(currentConfig.apiUrl, forceFetchScalarToken)
+            val taskParams = GetScalarTokenTask.Params(currentConfig.restUrl, forceFetchScalarToken)
             val scalarToken = getScalarTokenTask.execute(taskParams)
             buildString {
                 append(baseUrl)
