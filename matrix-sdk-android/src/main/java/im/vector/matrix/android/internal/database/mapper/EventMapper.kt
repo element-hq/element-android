@@ -19,7 +19,6 @@ package im.vector.matrix.android.internal.database.mapper
 import com.squareup.moshi.JsonDataException
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.events.model.Event
-import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.UnsignedData
 import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.internal.crypto.algorithms.olm.OlmDecryptionResult
@@ -37,9 +36,8 @@ internal object EventMapper {
         eventEntity.eventId = event.eventId ?: "$$roomId-${System.currentTimeMillis()}-${event.hashCode()}"
         eventEntity.roomId = event.roomId ?: roomId
         eventEntity.content = ContentMapper.map(event.content)
-        val resolvedPrevContent = event.prevContent ?: event.unsignedData?.prevContent
-        eventEntity.prevContent = ContentMapper.map(resolvedPrevContent)
-        eventEntity.isUseless = event.type == EventType.STATE_ROOM_MEMBER && eventEntity.content == eventEntity.prevContent
+        eventEntity.prevContent = ContentMapper.map(event.resolvedPrevContent())
+        eventEntity.isUseless = IsUselessResolver.isUseless(event)
         eventEntity.stateKey = event.stateKey
         eventEntity.type = event.type
         eventEntity.sender = event.senderId
