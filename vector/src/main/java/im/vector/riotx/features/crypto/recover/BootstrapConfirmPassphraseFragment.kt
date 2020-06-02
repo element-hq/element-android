@@ -63,7 +63,7 @@ class BootstrapConfirmPassphraseFragment @Inject constructor(
         }
 
         ssss_passphrase_enter_edittext.editorActionEvents()
-                .debounce(300, TimeUnit.MILLISECONDS)
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
@@ -96,13 +96,15 @@ class BootstrapConfirmPassphraseFragment @Inject constructor(
             return@withState
         }
         val passphrase = ssss_passphrase_enter_edittext.text?.toString()
-        if (passphrase.isNullOrBlank()) {
-            ssss_passphrase_enter_til.error = getString(R.string.passphrase_empty_error_message)
-        } else if (passphrase != state.passphrase) {
-            ssss_passphrase_enter_til.error = getString(R.string.passphrase_passphrase_does_not_match)
-        } else {
-            view?.hideKeyboard()
-            sharedViewModel.handle(BootstrapActions.DoInitialize(passphrase))
+        when {
+            passphrase.isNullOrBlank()     ->
+                ssss_passphrase_enter_til.error = getString(R.string.passphrase_empty_error_message)
+            passphrase != state.passphrase ->
+                ssss_passphrase_enter_til.error = getString(R.string.passphrase_passphrase_does_not_match)
+            else                           -> {
+                view?.hideKeyboard()
+                sharedViewModel.handle(BootstrapActions.DoInitialize(passphrase))
+            }
         }
     }
 

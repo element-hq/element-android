@@ -58,7 +58,6 @@ class DeviceTrustInfoActionFragment @Inject constructor(
 
     override fun invalidate() = withState(viewModel) {
         epoxyController.setData(it)
-        super.invalidate()
     }
 
     override fun onVerifyManually(device: CryptoDeviceInfo) {

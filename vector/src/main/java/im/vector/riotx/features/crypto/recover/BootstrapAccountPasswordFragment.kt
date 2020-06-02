@@ -56,7 +56,7 @@ class BootstrapAccountPasswordFragment @Inject constructor(
         bootstrapAccountPasswordEditText.hint = getString(R.string.account_password)
 
         bootstrapAccountPasswordEditText.editorActionEvents()
-                .debounce(300, TimeUnit.MILLISECONDS)
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
@@ -98,8 +98,6 @@ class BootstrapAccountPasswordFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(sharedViewModel) { state ->
-        super.invalidate()
-
         if (state.step is BootstrapStep.AccountPassword) {
             val isPasswordVisible = state.step.isPasswordVisible
             bootstrapAccountPasswordEditText.showPassword(isPasswordVisible, updateCursor = false)
