@@ -1823,6 +1823,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="room_list_quick_actions_settings">"Settings"</string>
     <string name="room_list_quick_actions_leave">"Leave the room"</string>
     <string name="notice_member_no_changes">"%1$s made no changes"</string>
+    <string name="notice_member_no_changes_by_you">"You made no changes"</string>
     <string name="command_description_spoiler">Sends the given message as a spoiler</string>
     <string name="spoiler">Spoiler</string>
     <string name="reaction_search_type_hint">Type keywords to find a reaction.</string>
@@ -1833,7 +1834,9 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
 
     <string name="room_join_rules_public">%1$s made the room public to whoever knows the link.</string>
+    <string name="room_join_rules_public_by_you">You made the room public to whoever knows the link.</string>
     <string name="room_join_rules_invite">%1$s made the room invite only.</string>
+    <string name="room_join_rules_invite_by_you">You made the room invite only.</string>
     <string name="timeline_unread_messages">Unread messages</string>
 
     <string name="login_splash_title">Liberate your communication</string>
@@ -2302,6 +2305,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="encryption_unknown_algorithm_tile_description">The encryption used by this room is not supported</string>
 
     <string name="room_created_summary_item">%s created and configured the room.</string>
+    <string name="room_created_summary_item_by_you">You created and configured the room.</string>
 
     <string name="qr_code_scanned_self_verif_notice">Almost there! Is the other device showing the same shield?</string>
     <string name="qr_code_scanned_verif_waiting_notice">Almost there! Waiting for confirmation…</string>
