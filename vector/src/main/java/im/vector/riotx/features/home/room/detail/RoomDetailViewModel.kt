@@ -100,12 +100,14 @@ class RoomDetailViewModel @AssistedInject constructor(
         TimelineSettings(30,
                 filterEdits = false,
                 filterRedacted = userPreferencesProvider.shouldShowRedactedMessages().not(),
+                filterUseless = false,
                 filterTypes = false,
                 buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts())
     } else {
         TimelineSettings(30,
                 filterEdits = true,
                 filterRedacted = userPreferencesProvider.shouldShowRedactedMessages().not(),
+                filterUseless = true,
                 filterTypes = true,
                 allowedTypes = TimelineDisplayableEvents.DISPLAYABLE_TYPES,
                 buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts())
