@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.api.session.widgets.model
 
+import android.annotation.SuppressLint
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.util.JsonDict
@@ -33,26 +34,8 @@ data class WidgetContent(
 
     fun isActive() = type != null && url != null
 
-    /**
-     * @return the human name
-     */
+    @SuppressLint("DefaultLocale")
     fun getHumanName(): String {
-        return if (!name.isNullOrBlank()) {
-            "$name widget"
-        } else if (!type.isNullOrBlank()) {
-            when {
-                type.contains("widget") -> {
-                    type
-                }
-                id != null              -> {
-                    "$type $id"
-                }
-                else                    -> {
-                    "$type widget"
-                }
-            }
-        } else {
-            "Widget $id"
-        }
+        return (name ?: type ?: "").capitalize()
     }
 }

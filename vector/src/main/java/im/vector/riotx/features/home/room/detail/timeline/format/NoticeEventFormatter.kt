@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.format
 
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -86,9 +87,13 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
         val previousWidgetContent: WidgetContent? = event.prevContent.toModel()
         return if (widgetContent.isActive()) {
             val name = widgetContent.getHumanName()
-            sp.getString(R.string.event_formatter_widget_added, name, disambiguatedDisplayName)
+            if (previousWidgetContent?.isActive().orFalse()) {
+                sp.getString(R.string.event_formatter_widget_modified, name, disambiguatedDisplayName)
+            } else {
+                sp.getString(R.string.event_formatter_widget_added, name, disambiguatedDisplayName)
+            }
         } else {
-            val name = previousWidgetContent?.getHumanName() ?: sp.getString(R.string.room_widget_activity_title)
+            val name = previousWidgetContent?.getHumanName()
             sp.getString(R.string.event_formatter_widget_removed, name, disambiguatedDisplayName)
         }
     }
