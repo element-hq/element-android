@@ -346,7 +346,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         return createMessageEvent(roomId, content)
     }
 
-    private fun createMessageEvent(roomId: String, content: Any? = null): Event {
+    private fun createMessageEvent(roomId: String, content: MessageContent? = null): Event {
         return createEvent(roomId, EventType.MESSAGE, content.toContent())
     }
 

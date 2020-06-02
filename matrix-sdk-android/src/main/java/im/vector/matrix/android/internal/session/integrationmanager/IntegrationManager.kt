@@ -90,7 +90,6 @@ internal class IntegrationManager @Inject constructor(@UserId private val userId
     }
 
     fun start() {
-        refreshWellknown()
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
         observeWellknownConfig()
         accountDataDataSource
@@ -209,7 +208,7 @@ internal class IntegrationManager @Inject constructor(@UserId private val userId
                 .executeBy(taskExecutor)
     }
 
-    fun isNativeWidgetAllowed(widgetType: String, domain: String?): Boolean {
+    fun isNativeWidgetDomainAllowed(widgetType: String, domain: String?): Boolean {
         val currentAllowedWidgets = accountDataDataSource.getAccountDataEvent(UserAccountData.TYPE_ALLOWED_WIDGETS)
         val currentContent = currentAllowedWidgets?.content?.toModel<AllowedWidgetsContent>()
         return currentContent?.native?.get(widgetType)?.get(domain) ?: false
@@ -271,25 +270,6 @@ internal class IntegrationManager @Inject constructor(@UserId private val userId
                     WidgetType.IntegrationManager == it.type
                 }
                 .firstOrNull()?.widgetContent
-    }
-
-    private fun refreshWellknown() {
-        taskExecutor.executorScope.launch {
-            val params = GetWellknownTask.Params(matrixId = userId)
-            val wellknownResult = try {
-                getWellknownTask.execute(params)
-            } catch (failure: Throwable) {
-                Timber.v("Get wellknown failed: $failure")
-                null
-            }
-            if (wellknownResult != null && wellknownResult is WellknownResult.Prompt) {
-                val config = configExtractor.extract(wellknownResult.wellKnown) ?: return@launch
-                Timber.v("Extracted config: $config")
-                monarchy.awaitTransaction {
-                    it.insertOrUpdate(config)
-                }
-            }
-        }
     }
 
     private fun observeWellknownConfig() {

@@ -34,7 +34,7 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerService
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
-import im.vector.matrix.android.internal.session.widgets.WidgetManagementFailure
+import im.vector.matrix.android.api.session.widgets.WidgetManagementFailure
 import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.matrix.rx.mapOptional
 import im.vector.matrix.rx.rx

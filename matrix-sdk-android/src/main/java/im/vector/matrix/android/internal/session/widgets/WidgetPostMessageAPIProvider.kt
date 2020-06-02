@@ -20,7 +20,7 @@ import android.content.Context
 import timber.log.Timber
 import javax.inject.Inject
 
-class WidgetPostMessageAPIProvider @Inject constructor(private val context: Context) {
+internal class WidgetPostMessageAPIProvider @Inject constructor(private val context: Context) {
 
     private var postMessageAPIString: String? = null
 

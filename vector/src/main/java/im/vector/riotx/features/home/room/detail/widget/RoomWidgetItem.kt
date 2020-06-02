@@ -22,17 +22,19 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.matrix.android.api.session.widgets.model.Widget
 import im.vector.riotx.R
+import im.vector.riotx.core.epoxy.ClickListener
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
+import im.vector.riotx.core.epoxy.onClick
 
 @EpoxyModelClass(layout = R.layout.item_room_widget)
 abstract class RoomWidgetItem : EpoxyModelWithHolder<RoomWidgetItem.Holder>() {
 
     @EpoxyAttribute lateinit var widget: Widget
-    @EpoxyAttribute var widgetClicked: (() -> Unit)? = null
+    @EpoxyAttribute var widgetClicked: ClickListener? = null
 
     override fun bind(holder: Holder) {
         holder.widgetName.text = widget.name
-        holder.view.setOnClickListener { widgetClicked?.invoke() }
+        holder.view.onClick(widgetClicked)
     }
 
     class Holder : VectorEpoxyHolder() {

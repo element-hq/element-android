@@ -66,7 +66,6 @@ data class RoomDetailViewState(
         val syncState: SyncState = SyncState.Idle,
         val highlightedEventId: String? = null,
         val unreadState: UnreadState = UnreadState.Unknown,
-        val menuItemsVisibility: SparseArray<Boolean> = SparseArray(4),
         val canShowJumpToReadMarker: Boolean = true
 ) : MvRxState {
 

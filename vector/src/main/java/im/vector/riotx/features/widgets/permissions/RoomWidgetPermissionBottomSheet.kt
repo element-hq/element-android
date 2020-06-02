@@ -34,6 +34,7 @@ import im.vector.riotx.core.extensions.withArgs
 import im.vector.riotx.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.widgets.WidgetArgs
+import kotlinx.android.synthetic.main.bottom_sheet_room_widget_permission.*
 import javax.inject.Inject
 
 class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
@@ -41,18 +42,6 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
     override fun getLayoutResId(): Int = R.layout.bottom_sheet_room_widget_permission
 
     private val viewModel: RoomWidgetPermissionViewModel by activityViewModel()
-
-    @BindView(R.id.bottom_sheet_widget_permission_shared_info)
-    lateinit var sharedInfoTextView: TextView
-
-    @BindView(R.id.bottom_sheet_widget_permission_owner_id)
-    lateinit var authorIdText: TextView
-
-    @BindView(R.id.bottom_sheet_widget_permission_owner_display_name)
-    lateinit var authorNameText: TextView
-
-    @BindView(R.id.bottom_sheet_widget_permission_owner_avatar)
-    lateinit var authorAvatarView: ImageView
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
 
@@ -65,10 +54,10 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
     override fun invalidate() = withState(viewModel) { state ->
         super.invalidate()
         val permissionData = state.permissionData() ?: return@withState
-        authorIdText.text = permissionData.widget.senderInfo?.userId ?: ""
-        authorNameText.text = permissionData.widget.senderInfo?.disambiguatedDisplayName
+        widgetPermissionOwnerId.text = permissionData.widget.senderInfo?.userId ?: ""
+        widgetPermissionOwnerDisplayName.text = permissionData.widget.senderInfo?.disambiguatedDisplayName
         permissionData.widget.senderInfo?.toMatrixItem()?.also {
-            avatarRenderer.render(it, authorAvatarView)
+            avatarRenderer.render(it, widgetPermissionOwnerAvatar)
         }
 
         val domain = permissionData.widgetDomain ?: ""
@@ -96,18 +85,17 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
             }
         }
         infoBuilder.append("\n")
-
-        sharedInfoTextView.text = infoBuilder
+        widgetPermissionSharedInfo.text = infoBuilder
     }
 
-    @OnClick(R.id.bottom_sheet_widget_permission_decline_button)
+    @OnClick(R.id.widgetPermissionDecline)
     fun doDecline() {
         viewModel.handle(RoomWidgetPermissionActions.BlockWidget)
         // optimistic dismiss
         dismiss()
     }
 
-    @OnClick(R.id.bottom_sheet_widget_permission_continue_button)
+    @OnClick(R.id.widgetPermissionContinue)
     fun doAccept() {
         viewModel.handle(RoomWidgetPermissionActions.AllowWidget)
         // optimistic dismiss

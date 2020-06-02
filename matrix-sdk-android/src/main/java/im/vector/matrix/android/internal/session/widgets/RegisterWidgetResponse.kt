@@ -20,6 +20,6 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class RegisterWidgetResponse(
+internal data class RegisterWidgetResponse(
         @Json(name = "scalar_token") val scalarToken: String?
 )

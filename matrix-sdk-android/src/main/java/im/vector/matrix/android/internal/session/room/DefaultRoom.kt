@@ -118,6 +118,7 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
             else                                   -> {
                 val params = SendStateTask.Params(
                         roomId = roomId,
+                        stateKey = null,
                         eventType = EventType.STATE_ROOM_ENCRYPTION,
                         body = mapOf(
                                 "algorithm" to algorithm

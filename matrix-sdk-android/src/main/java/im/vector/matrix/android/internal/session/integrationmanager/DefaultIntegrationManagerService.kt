@@ -60,7 +60,7 @@ internal class DefaultIntegrationManagerService @Inject constructor(private val 
         return integrationManager.setNativeWidgetDomainAllowed(widgetType, domain, allowed, callback)
     }
 
-    override fun isNativeWidgetAllowed(widgetType: String, domain: String?): Boolean {
-        return integrationManager.isNativeWidgetAllowed(widgetType, domain)
+    override fun isNativeWidgetDomainAllowed(widgetType: String, domain: String): Boolean {
+        return integrationManager.isNativeWidgetDomainAllowed(widgetType, domain)
     }
 }

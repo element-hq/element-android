@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.widgets
+package im.vector.matrix.android.api.session.widgets
 
 import im.vector.matrix.android.api.failure.Failure
 

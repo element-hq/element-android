@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class AllowedWidgetsContent(
+internal data class AllowedWidgetsContent(
         /**
          * Map of stateEventId to Allowed
          */

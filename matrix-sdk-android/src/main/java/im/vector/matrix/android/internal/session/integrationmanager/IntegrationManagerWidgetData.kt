@@ -20,6 +20,6 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class IntegrationManagerWidgetData(
+internal data class IntegrationManagerWidgetData(
         @Json(name = "api_url") val apiUrl: String? = null
 )

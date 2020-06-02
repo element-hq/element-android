@@ -80,9 +80,11 @@ class WidgetActivity : VectorBaseActivity(), ToolbarConfigurable, WidgetViewMode
     }
 
     override fun initUiAndData() {
-        val widgetArgs: WidgetArgs = intent?.extras?.getParcelable(MvRx.KEY_ARG)
-                ?: return
-
+        val widgetArgs: WidgetArgs? = intent?.extras?.getParcelable(MvRx.KEY_ARG)
+        if (widgetArgs == null) {
+            finish()
+            return
+        }
         configure(toolbar)
         toolbar.isVisible = widgetArgs.kind.nameRes != 0
         viewModel.observeViewEvents {

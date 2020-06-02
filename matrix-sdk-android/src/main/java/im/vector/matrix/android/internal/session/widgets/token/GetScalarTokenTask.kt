@@ -21,7 +21,7 @@ import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.openid.GetOpenIdTokenTask
 import im.vector.matrix.android.internal.session.widgets.RegisterWidgetResponse
-import im.vector.matrix.android.internal.session.widgets.WidgetManagementFailure
+import im.vector.matrix.android.api.session.widgets.WidgetManagementFailure
 import im.vector.matrix.android.internal.session.widgets.WidgetsAPI
 import im.vector.matrix.android.internal.session.widgets.WidgetsAPIProvider
 import im.vector.matrix.android.internal.task.Task

@@ -26,7 +26,7 @@ import javax.inject.Inject
 internal interface SendStateTask : Task<SendStateTask.Params, Unit> {
     data class Params(
             val roomId: String,
-            val stateKey: String? = null,
+            val stateKey: String?,
             val eventType: String,
             val body: JsonDict
     )

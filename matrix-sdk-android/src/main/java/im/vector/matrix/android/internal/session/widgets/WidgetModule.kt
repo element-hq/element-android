@@ -39,13 +39,13 @@ internal abstract class WidgetModule {
     }
 
     @Binds
-    abstract fun bindWidgetService(widgetService: DefaultWidgetService): WidgetService
+    abstract fun bindWidgetService(service: DefaultWidgetService): WidgetService
 
     @Binds
-    abstract fun bindWidgetURLBuilder(widgetURLBuilder: DefaultWidgetURLFormatter): WidgetURLFormatter
+    abstract fun bindWidgetURLBuilder(formatter: DefaultWidgetURLFormatter): WidgetURLFormatter
 
     @Binds
-    abstract fun bindWidgetPostAPIMediator(widgetPostMessageAPIProvider: DefaultWidgetPostAPIMediator): WidgetPostAPIMediator
+    abstract fun bindWidgetPostAPIMediator(mediator: DefaultWidgetPostAPIMediator): WidgetPostAPIMediator
 
     @Binds
     abstract fun bindCreateWidgetTask(task: DefaultCreateWidgetTask): CreateWidgetTask

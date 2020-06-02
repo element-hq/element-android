@@ -24,5 +24,5 @@ import im.vector.matrix.android.api.session.integrationmanager.IntegrationManage
 internal abstract class IntegrationManagerModule {
 
     @Binds
-    abstract fun bindIntegrationManagerService(integrationManagerService: DefaultIntegrationManagerService): IntegrationManagerService
+    abstract fun bindIntegrationManagerService(service: DefaultIntegrationManagerService): IntegrationManagerService
 }

@@ -17,17 +17,18 @@
         android:layout_marginBottom="8dp"
         android:text="@string/room_widget_permission_title"
         android:textSize="20sp"
+        android:textColor="?riotx_text_primary"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/bottom_sheet_widget_permission_h2_text"
+        android:id="@+id/widgetPermissionHeader2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginBottom="8dp"
         android:text="@string/room_widget_permission_added_by"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?riotx_text_secondary"
         android:textSize="16sp" />
 
     <LinearLayout
@@ -39,7 +40,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/bottom_sheet_widget_permission_owner_avatar"
+            android:id="@+id/widgetPermissionOwnerAvatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
@@ -54,33 +55,35 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/bottom_sheet_widget_permission_owner_display_name"
+                android:id="@+id/widgetPermissionOwnerDisplayName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:textColor="?riotx_text_primary"
                 tools:text="User name" />
 
             <TextView
-                android:id="@+id/bottom_sheet_widget_permission_owner_id"
+                android:id="@+id/widgetPermissionOwnerId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textSize="14sp"
+                android:textColor="?riotx_text_secondary"
                 tools:text="\@foo:matrix.org" />
         </LinearLayout>
     </LinearLayout>
 
     <TextView
-        android:id="@+id/bottom_sheet_widget_permission_shared_info"
+        android:id="@+id/widgetPermissionSharedInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginTop="@dimen/layout_vertical_margin_big"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginBottom="8dp"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?riotx_text_secondary"
         android:textSize="16sp"
         tools:text="@string/room_widget_permission_shared_info_title" />
 
@@ -91,16 +94,16 @@
         android:gravity="end"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/bottom_sheet_widget_permission_decline_button"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/widgetPermissionDecline"
             style="@style/VectorButtonStyleDestructive"
             android:layout_marginEnd="@dimen/layout_vertical_margin"
             android:layout_marginRight="@dimen/layout_vertical_margin"
             android:text="@string/decline"
             android:textAllCaps="true"/>
 
-        <Button
-            android:id="@+id/bottom_sheet_widget_permission_continue_button"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/widgetPermissionContinue"
             style="@style/VectorButtonStylePositive"
             android:layout_marginEnd="@dimen/layout_vertical_margin"
             android:layout_marginRight="@dimen/layout_vertical_margin"

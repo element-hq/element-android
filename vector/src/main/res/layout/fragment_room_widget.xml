@@ -44,7 +44,7 @@
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
             android:layout_marginEnd="@dimen/layout_horizontal_margin"
-            android:textColor="?android:textColorPrimary"
+            android:textColor="?riotx_text_primary"
             android:textStyle="bold"
             tools:text="Fail to load widget " />
     </LinearLayout>

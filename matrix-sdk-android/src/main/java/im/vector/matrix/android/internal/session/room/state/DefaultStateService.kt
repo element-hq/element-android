@@ -65,6 +65,7 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
     ): Cancelable {
         val params = SendStateTask.Params(
                 roomId = roomId,
+                stateKey = stateKey,
                 eventType = eventType,
                 body = body
         )

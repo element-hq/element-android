@@ -16,19 +16,19 @@
 
 package im.vector.matrix.android.api.session.widgets.model
 
-sealed class WidgetType(open val preferred: String, open val legacy: String) {
+sealed class WidgetType(open val preferred: String, open val legacy: String = preferred) {
     object Jitsi : WidgetType("m.jitsi", "jitsi")
-    object TradingView : WidgetType("m.tradingview", "m.tradingview")
-    object Spotify : WidgetType("m.spotify", "m.spotify")
-    object Video : WidgetType("m.video", "m.video")
-    object GoogleDoc : WidgetType("m.googledoc", "m.googledoc")
-    object GoogleCalendar : WidgetType("m.googlecalendar", "m.googlecalendar")
-    object Etherpad : WidgetType("m.etherpad", "m.etherpad")
-    object StickerPicker : WidgetType("m.stickerpicker", "m.stickerpicker")
-    object Grafana : WidgetType("m.grafana", "m.grafana")
-    object Custom : WidgetType("m.custom", "m.custom")
-    object IntegrationManager : WidgetType("m.integration_manager", "m.integration_manager")
-    data class Fallback(override val preferred: String, override val legacy: String) : WidgetType(preferred, legacy)
+    object TradingView : WidgetType("m.tradingview")
+    object Spotify : WidgetType("m.spotify")
+    object Video : WidgetType("m.video")
+    object GoogleDoc : WidgetType("m.googledoc")
+    object GoogleCalendar : WidgetType("m.googlecalendar")
+    object Etherpad : WidgetType("m.etherpad")
+    object StickerPicker : WidgetType("m.stickerpicker")
+    object Grafana : WidgetType("m.grafana")
+    object Custom : WidgetType("m.custom")
+    object IntegrationManager : WidgetType("m.integration_manager")
+    data class Fallback(override val preferred: String) : WidgetType(preferred)
 
     fun matches(type: String?): Boolean {
         return type == preferred || type == legacy
@@ -58,7 +58,7 @@ sealed class WidgetType(open val preferred: String, open val legacy: String) {
             val matchingType = DEFINED_TYPES.firstOrNull {
                 it.matches(type)
             }
-            return matchingType ?: Fallback(type, type)
+            return matchingType ?: Fallback(type)
         }
     }
 }

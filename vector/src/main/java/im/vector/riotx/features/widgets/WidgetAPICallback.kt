@@ -27,12 +27,10 @@ class WidgetAPICallback(private val postAPIMediator: WidgetPostAPIMediator,
                         private val stringProvider: StringProvider) : MatrixCallback<Any> {
 
     override fun onFailure(failure: Throwable) {
-        super.onFailure(failure)
         postAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_failed_to_send_request), eventData)
     }
 
     override fun onSuccess(data: Any) {
-        super.onSuccess(data)
         postAPIMediator.sendSuccess(eventData)
     }
 }

@@ -202,7 +202,8 @@ class RoomDetailFragment @Inject constructor(
         VectorInviteView.Callback,
         JumpToReadMarkerView.Callback,
         AttachmentTypeSelectorView.Callback,
-        AttachmentsHelper.Callback, RoomWidgetsBannerView.Callback {
+        AttachmentsHelper.Callback,
+        RoomWidgetsBannerView.Callback {
 
     companion object {
 
@@ -327,8 +328,6 @@ class RoomDetailFragment @Inject constructor(
     private fun displayPromptForIntegrationManager() {
         // The Sticker picker widget is not installed yet. Propose the user to install it
         val builder = AlertDialog.Builder(requireContext())
-        // Use the builder context
-        // Use the builder context
         val v: View = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_no_sticker_pack, null)
         builder
                 .setView(v)

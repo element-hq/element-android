@@ -123,7 +123,7 @@ interface ScreenComponent {
     fun inject(activity: BigImageViewerActivity)
     fun inject(activity: InviteUsersToRoomActivity)
     fun inject(activity: ReviewTermsActivity)
-    fun inject(widgetActivity: WidgetActivity)
+    fun inject(activity: WidgetActivity)
 
     /* ==========================================================================================
      * BottomSheets

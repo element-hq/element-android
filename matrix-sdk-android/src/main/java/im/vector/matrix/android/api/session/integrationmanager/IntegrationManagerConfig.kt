@@ -15,6 +15,9 @@
  */
 package im.vector.matrix.android.api.session.integrationmanager
 
+/**
+ * This class holds configuration of integration manager.
+ */
 data class IntegrationManagerConfig(
         val uiUrl: String,
         val apiUrl: String,
@@ -22,9 +25,21 @@ data class IntegrationManagerConfig(
 ) {
 
     // Order matters, first is preferred
+    /**
+     * The kind of config, it will reflect where the data is coming from.
+     */
     enum class Kind {
+        /**
+         * Defined in UserAccountData
+         */
         ACCOUNT,
+        /**
+         * Defined in Wellknown
+         */
         HOMESERVER,
+        /**
+         * Fallback value, hardcoded by the SDK
+         */
         DEFAULT
     }
 }
