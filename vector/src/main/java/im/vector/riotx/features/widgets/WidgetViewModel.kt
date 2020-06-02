@@ -85,7 +85,6 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
         }
         setupName()
         refreshPermissionStatus()
-        subscribeToPermissionStatus()
         observePowerLevel()
         observeWidgetIfNeeded()
         subscribeToWidget()
@@ -133,22 +132,14 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
                 }
     }
 
-    private fun subscribeToPermissionStatus() {
-        selectSubscribe(WidgetViewState::status) {
-            Timber.v("Widget status: $it")
-            if (it == WidgetStatus.WIDGET_ALLOWED) {
-                loadFormattedUrl()
-            }
-        }
-    }
-
     fun getPostAPIMediator() = postAPIMediator
 
     override fun handle(action: WidgetAction) {
         when (action) {
-            is WidgetAction.OnWebViewLoadingError   -> handleWebViewLoadingError(action.isHttpError, action.errorCode, action.errorDescription)
-            is WidgetAction.OnWebViewLoadingSuccess -> handleWebViewLoadingSuccess(action.url)
+            is WidgetAction.OnWebViewLoadingError   -> handleWebViewLoadingError(action)
+            is WidgetAction.OnWebViewLoadingSuccess -> handleWebViewLoadingSuccess(action)
             is WidgetAction.OnWebViewStartedToLoad  -> handleWebViewStartLoading()
+            WidgetAction.LoadFormattedUrl           -> loadFormattedUrl()
             WidgetAction.DeleteWidget               -> handleDeleteWidget()
             WidgetAction.RevokeWidget               -> handleRevokeWidget()
             WidgetAction.OnTermsReviewed            -> refreshPermissionStatus()
@@ -232,6 +223,7 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
                         bypassWhitelist = initialState.widgetKind == WidgetKind.INTEGRATION_MANAGER
                 )
                 setState { copy(formattedURL = Success(formattedUrl)) }
+                Timber.v("Post load formatted url event: $formattedUrl")
                 _viewEvents.post(WidgetViewEvents.LoadFormattedURL(formattedUrl))
             } catch (failure: Throwable) {
                 if (failure is WidgetManagementFailure.TermsNotSignedException) {
@@ -246,23 +238,24 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
         setState { copy(webviewLoadedUrl = Loading()) }
     }
 
-    private fun handleWebViewLoadingSuccess(url: String) {
+    private fun handleWebViewLoadingSuccess(action: WidgetAction.OnWebViewLoadingSuccess) {
         if (initialState.widgetKind.isAdmin()) {
             postAPIMediator.injectAPI()
         }
-        setState { copy(webviewLoadedUrl = Success(url)) }
+        setState { copy(webviewLoadedUrl = Success(action.url)) }
     }
 
-    private fun handleWebViewLoadingError(isHttpError: Boolean, reason: Int, errorDescription: String) {
-        if (isHttpError) {
+    private fun handleWebViewLoadingError(action: WidgetAction.OnWebViewLoadingError) = withState {
+        if (!action.url.startsWith(it.baseUrl)) {
+            return@withState
+        }
+        if (action.isHttpError) {
             // In case of 403, try to refresh the scalar token
-            withState {
-                if (it.formattedURL is Success && reason == HttpsURLConnection.HTTP_FORBIDDEN) {
-                    loadFormattedUrl(true)
-                }
+            if (it.formattedURL is Success && action.errorCode == HttpsURLConnection.HTTP_FORBIDDEN) {
+                loadFormattedUrl(true)
             }
         } else {
-            setState { copy(webviewLoadedUrl = Fail(Throwable(errorDescription))) }
+            setState { copy(webviewLoadedUrl = Fail(Throwable(action.errorDescription))) }
         }
     }
 

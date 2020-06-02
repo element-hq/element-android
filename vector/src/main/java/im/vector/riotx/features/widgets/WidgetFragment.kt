@@ -18,6 +18,7 @@ package im.vector.riotx.features.widgets
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
@@ -27,6 +28,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
@@ -45,6 +47,7 @@ import im.vector.riotx.features.widgets.webview.setupForWidget
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_widget.*
 import timber.log.Timber
+import java.net.URISyntaxException
 import javax.inject.Inject
 
 @Parcelize
@@ -71,6 +74,7 @@ class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventL
             viewModel.getPostAPIMediator().setWebView(widgetWebView)
         }
         viewModel.observeViewEvents {
+            Timber.v("Observed view events: $it")
             when (it) {
                 is WidgetViewEvents.DisplayTerms              -> displayTerms(it)
                 is WidgetViewEvents.LoadFormattedURL          -> loadFormattedUrl(it)
@@ -78,6 +82,7 @@ class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventL
                 is WidgetViewEvents.Failure                   -> displayErrorDialog(it.throwable)
             }
         }
+        viewModel.handle(WidgetAction.LoadFormattedUrl)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -169,56 +174,66 @@ class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventL
 
     override fun invalidate() = withState(viewModel) { state ->
         Timber.v("Invalidate state: $state")
-        when (state.status) {
-            WidgetStatus.UNKNOWN            -> {
-                // Hide all?
-                widgetWebView.isVisible = false
+        when (state.formattedURL) {
+            is Incomplete -> {
+                setStateError(null)
+                widgetWebView.isInvisible = true
+                widgetProgressBar.isIndeterminate = true
+                widgetProgressBar.isVisible = true
             }
-            WidgetStatus.WIDGET_NOT_ALLOWED -> {
-                widgetWebView.isVisible = false
-            }
-            WidgetStatus.WIDGET_ALLOWED     -> {
-                widgetWebView.isVisible = true
-                when (state.formattedURL) {
+            is Success    -> {
+                setStateError(null)
+                when (state.webviewLoadedUrl) {
                     Uninitialized -> {
+                        widgetWebView.isInvisible = true
                     }
                     is Loading    -> {
                         setStateError(null)
+                        widgetWebView.isInvisible = false
                         widgetProgressBar.isIndeterminate = true
                         widgetProgressBar.isVisible = true
                     }
                     is Success    -> {
+                        widgetWebView.isInvisible = false
+                        widgetProgressBar.isVisible = false
                         setStateError(null)
-                        when (state.webviewLoadedUrl) {
-                            Uninitialized -> {
-                                widgetWebView.isInvisible = true
-                            }
-                            is Loading    -> {
-                                setStateError(null)
-                                widgetWebView.isInvisible = false
-                                widgetProgressBar.isIndeterminate = true
-                                widgetProgressBar.isVisible = true
-                            }
-                            is Success    -> {
-                                widgetWebView.isInvisible = false
-                                widgetProgressBar.isVisible = false
-                                setStateError(null)
-                            }
-                            is Fail       -> {
-                                widgetProgressBar.isInvisible = true
-                                setStateError(state.webviewLoadedUrl.error.message)
-                            }
-                        }
                     }
                     is Fail       -> {
-                        // we need to show Error
-                        widgetWebView.isInvisible = true
-                        widgetProgressBar.isVisible = false
-                        setStateError(state.formattedURL.error.message)
+                        widgetProgressBar.isInvisible = true
+                        setStateError(state.webviewLoadedUrl.error.message)
                     }
                 }
             }
+            is Fail       -> {
+                // we need to show Error
+                widgetWebView.isInvisible = true
+                widgetProgressBar.isVisible = false
+                setStateError(state.formattedURL.error.message)
+            }
         }
+    }
+
+    override fun shouldOverrideUrlLoading(url: String): Boolean {
+        if (url.startsWith("intent://")) {
+            try {
+                val context = requireContext()
+                val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
+                if (intent != null) {
+                    val packageManager: PackageManager = context.packageManager
+                    val info = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
+                    if (info != null) {
+                        context.startActivity(intent)
+                    } else {
+                        val fallbackUrl = intent.getStringExtra("browser_fallback_url")
+                        openUrlInExternalBrowser(context, fallbackUrl)
+                    }
+                    return true
+                }
+            } catch (e: URISyntaxException) {
+                Timber.d("Can't resolve intent://")
+            }
+        }
+        return false
     }
 
     override fun onPageStarted(url: String) {
