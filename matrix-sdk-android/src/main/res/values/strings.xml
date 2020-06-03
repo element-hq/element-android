@@ -83,11 +83,11 @@
     <string name="notice_room_third_party_registered_invite_by_you">You accepted the invitation for %1$s</string>
 
     <string name="notice_widget_added">%1$s added %2$s widget</string>
-    <string name="notice_widget_added_by_you">you added %1$s widget</string>
+    <string name="notice_widget_added_by_you">You added %1$s widget</string>
     <string name="notice_widget_removed">%1$s removed %2$s widget</string>
-    <string name="notice_widget_removed_by_you">you removed %1$s widget</string>
+    <string name="notice_widget_removed_by_you">You removed %1$s widget</string>
     <string name="notice_widget_modified">%1$s modified %2$s widget</string>
-    <string name="notice_widget_modified_by_you">you modified %1$s widget</string>
+    <string name="notice_widget_modified_by_you">You modified %1$s widget</string>
 
     <string name="notice_crypto_unable_to_decrypt">** Unable to decrypt: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">The sender\'s device has not sent us the keys for this message.</string>
