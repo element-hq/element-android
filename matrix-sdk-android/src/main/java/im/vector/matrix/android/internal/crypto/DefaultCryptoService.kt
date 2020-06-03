@@ -1334,6 +1334,9 @@ internal class DefaultCryptoService @Inject constructor(
         return cryptoStore.getSharedWithInfo(roomId, sessionId)
     }
 
+    override fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent? {
+        return cryptoStore.getWithHeldMegolmSession(roomId, sessionId)
+    }
     /* ==========================================================================================
      * For test only
      * ========================================================================================== */

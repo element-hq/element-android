@@ -94,7 +94,7 @@ internal class MXMegolmEncryption(
                 { it.second },
                 { it.first }
         ).forEach { (code, targets) ->
-            notifyKeyWithHeld(targets, outboundSession.sessionId, code)
+            notifyKeyWithHeld(targets, outboundSession.sessionId, olmDevice.deviceCurve25519Key, code)
         }
     }
 
@@ -229,6 +229,7 @@ internal class MXMegolmEncryption(
                     notifyKeyWithHeld(
                             listOf(UserDevice(userId, deviceID)),
                             session.sessionId,
+                            olmDevice.deviceCurve25519Key,
                             WithHeldCode.NO_OLM
                     )
 
@@ -267,10 +268,10 @@ internal class MXMegolmEncryption(
         }
     }
 
-    private fun notifyKeyWithHeld(targets: List<UserDevice>, sessionId: String, code: WithHeldCode) {
+    private fun notifyKeyWithHeld(targets: List<UserDevice>, sessionId: String, senderKey: String?, code: WithHeldCode) {
         val withHeldContent = RoomKeyWithHeldContent(
                 roomId = roomId,
-                senderKey = olmDevice.deviceCurve25519Key,
+                senderKey = senderKey,
                 algorithm = MXCRYPTO_ALGORITHM_MEGOLM,
                 sessionId = sessionId,
                 codeString = code.value
@@ -383,7 +384,11 @@ internal class MXMegolmEncryption(
 
         // Get the chain index of the key we previously sent this device
         val chainIndex = outboundSession?.sharedWithHelper?.wasSharedWith(userId,deviceId) ?: return false
-                .also { Timber.w("[MXMegolmEncryption] reshareKey : ERROR : Never share megolm with this device") }
+                .also {
+                    // Send a room key with held
+                    notifyKeyWithHeld(listOf(UserDevice(userId, deviceId)), sessionId, senderKey, WithHeldCode.UNAUTHORISED)
+                    Timber.w("[MXMegolmEncryption] reshareKey : ERROR : Never share megolm with this device")
+                }
 
         val devicesByUser = mapOf(userId to listOf(deviceInfo))
         val usersDeviceMap = ensureOlmSessionsForDevicesAction.handle(devicesByUser)
