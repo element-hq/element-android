@@ -1108,9 +1108,6 @@
     <!-- Widget-->
     <string name="widget_no_power_to_manage">You need permission to manage widgets in this room</string>
     <string name="widget_creation_failure">Widget creation has failed</string>
-    <string name="event_formatter_widget_added">%1$s widget added by %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s widget removed by %2$s</string>
-    <string name="event_formatter_widget_modified">%1$s widget modified by %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Create conference calls with jitsi</string>
     <string name="widget_delete_message_confirmation">Are you sure you want to delete the widget from this room?</string>
     <plurals name="active_widgets">

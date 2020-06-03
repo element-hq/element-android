@@ -20,6 +20,7 @@ import android.net.Uri
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig.Builder
 import im.vector.matrix.android.internal.network.ssl.Fingerprint
+import im.vector.matrix.android.internal.util.ensureTrailingSlash
 import okhttp3.CipherSuite
 import okhttp3.TlsVersion
 
@@ -71,15 +72,11 @@ data class HomeServerConnectionConfig(
                 throw RuntimeException("Invalid home server URI: " + hsUri)
             }
             // ensure trailing /
-            homeServerUri = if (!hsUri.toString().endsWith("/")) {
-                try {
-                    val url = hsUri.toString()
-                    Uri.parse("$url/")
-                } catch (e: Exception) {
-                    throw RuntimeException("Invalid home server URI: $hsUri")
-                }
-            } else {
-                hsUri
+            val hsString = hsUri.toString().ensureTrailingSlash()
+            homeServerUri = try {
+                Uri.parse(hsString)
+            } catch (e: Exception) {
+                throw RuntimeException("Invalid home server URI: $hsUri")
             }
             return this
         }
@@ -97,15 +94,11 @@ data class HomeServerConnectionConfig(
                 throw RuntimeException("Invalid identity server URI: $identityServerUri")
             }
             // ensure trailing /
-            if (!identityServerUri.toString().endsWith("/")) {
-                try {
-                    val url = identityServerUri.toString()
-                    this.identityServerUri = Uri.parse("$url/")
-                } catch (e: Exception) {
-                    throw RuntimeException("Invalid identity server URI: $identityServerUri")
-                }
-            } else {
-                this.identityServerUri = identityServerUri
+            val isString = identityServerUri.toString().ensureTrailingSlash()
+            this.identityServerUri = try {
+                Uri.parse(isString)
+            } catch (e: Exception) {
+                throw RuntimeException("Invalid identity server URI: $identityServerUri")
             }
             return this
         }

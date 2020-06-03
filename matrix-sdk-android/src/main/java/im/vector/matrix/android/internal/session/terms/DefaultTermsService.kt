@@ -36,6 +36,7 @@ import im.vector.matrix.android.internal.session.user.accountdata.UpdateUserAcco
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.android.internal.util.ensureTrailingSlash
 import okhttp3.OkHttpClient
 import javax.inject.Inject
 
@@ -55,17 +56,10 @@ internal class DefaultTermsService @Inject constructor(
                           baseUrl: String,
                           callback: MatrixCallback<GetTermsResponse>): Cancelable {
         return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
-            val sep = if (baseUrl.endsWith("/")) "" else "/"
-
-            val url = when (serviceType) {
-                TermsService.ServiceType.IntegrationManager -> "$baseUrl$sep${NetworkConstants.URI_INTEGRATION_MANAGER_PATH}"
-                TermsService.ServiceType.IdentityService    -> "$baseUrl$sep${NetworkConstants.URI_IDENTITY_PATH_V2}"
-            }
-
+            val url = buildUrl(baseUrl, serviceType)
             val termsResponse = executeRequest<TermsResponse>(null) {
                 apiCall = termsAPI.getTerms("${url}terms")
             }
-
             GetTermsResponse(termsResponse, getAlreadyAcceptedTermUrlsFromAccountData())
         }
     }
@@ -76,13 +70,7 @@ internal class DefaultTermsService @Inject constructor(
                               token: String?,
                               callback: MatrixCallback<Unit>): Cancelable {
         return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
-            val sep = if (baseUrl.endsWith("/")) "" else "/"
-
-            val url = when (serviceType) {
-                TermsService.ServiceType.IntegrationManager -> "$baseUrl$sep${NetworkConstants.URI_INTEGRATION_MANAGER_PATH}"
-                TermsService.ServiceType.IdentityService    -> "$baseUrl$sep${NetworkConstants.URI_IDENTITY_PATH_V2}"
-            }
-
+            val url = buildUrl(baseUrl, serviceType)
             val tokenToUse = token?.takeIf { it.isNotEmpty() } ?: getToken(baseUrl)
 
             executeRequest<Unit>(null) {
@@ -110,6 +98,14 @@ internal class DefaultTermsService @Inject constructor(
         val token = identityRegisterTask.execute(IdentityRegisterTask.Params(api, openIdToken))
 
         return token.token
+    }
+
+    private fun buildUrl(baseUrl: String, serviceType: TermsService.ServiceType): String {
+        val servicePath = when (serviceType) {
+            TermsService.ServiceType.IntegrationManager -> NetworkConstants.URI_INTEGRATION_MANAGER_PATH
+            TermsService.ServiceType.IdentityService    -> NetworkConstants.URI_IDENTITY_PATH_V2
+        }
+        return "${baseUrl.ensureTrailingSlash()}$servicePath"
     }
 
     private fun getAlreadyAcceptedTermUrlsFromAccountData(): Set<String> {

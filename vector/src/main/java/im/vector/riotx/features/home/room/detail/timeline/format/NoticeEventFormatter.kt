@@ -88,26 +88,26 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
         val widgetContent: WidgetContent = event.getClearContent().toModel() ?: return null
         val previousWidgetContent: WidgetContent? = event.prevContent.toModel()
         return if (widgetContent.isActive()) {
-            val name = widgetContent.getHumanName()
+            val widgetName = widgetContent.getHumanName()
             if (previousWidgetContent?.isActive().orFalse()) {
                 if (event.isSentByCurrentUser()) {
-                    sp.getString(R.string.notice_widget_modified_by_you, name, disambiguatedDisplayName)
+                    sp.getString(R.string.notice_widget_modified_by_you, widgetName)
                 } else {
-                    sp.getString(R.string.notice_widget_modified, name, disambiguatedDisplayName)
+                    sp.getString(R.string.notice_widget_modified, disambiguatedDisplayName, widgetName)
                 }
             } else {
                 if (event.isSentByCurrentUser()) {
-                    sp.getString(R.string.notice_widget_added_by_you, name, disambiguatedDisplayName)
+                    sp.getString(R.string.notice_widget_added_by_you, widgetName)
                 } else {
-                    sp.getString(R.string.notice_widget_added, name, disambiguatedDisplayName)
+                    sp.getString(R.string.notice_widget_added, disambiguatedDisplayName, widgetName)
                 }
             }
         } else {
-            val name = previousWidgetContent?.getHumanName()
+            val widgetName = previousWidgetContent?.getHumanName()
             if (event.isSentByCurrentUser()) {
-                sp.getString(R.string.notice_widget_removed_by_you, name, disambiguatedDisplayName)
+                sp.getString(R.string.notice_widget_removed_by_you, widgetName)
             } else {
-                sp.getString(R.string.notice_widget_removed, name, disambiguatedDisplayName)
+                sp.getString(R.string.notice_widget_removed, disambiguatedDisplayName, widgetName)
             }
         }
     }

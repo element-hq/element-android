@@ -708,8 +708,6 @@
 
     <string name="settings_notification_ringtone">Звук уведомлений</string>
     <string name="settings_12_24_timestamps">Показывать метки времени в 12-часовом формате</string>
-    <string name="event_formatter_widget_added">%1$s добавлен %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s удален %2$s</string>
 
     <string name="widget_no_power_to_manage">Вам нужно разрешение на управление виджетами в этой комнате</string>
     <string name="widget_creation_failure">Создание виджета не удалось</string>

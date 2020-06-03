@@ -1010,8 +1010,6 @@
 
     <string name="widget_no_power_to_manage">이 방에서 위젯을 다루려면 권한이 있어야 합니다</string>
     <string name="widget_creation_failure">위젯 생성 실패</string>
-    <string name="event_formatter_widget_added">%1$s을(를) %2$s님이 추가함</string>
-    <string name="event_formatter_widget_removed">%1$s을(를) %2$s님이 삭제함</string>
     <string name="settings_labs_create_conference_with_jitsi">Jitsi로 회의 전화 만들기</string>
     <string name="widget_delete_message_confirmation">이 방에서 위젯을 삭제하겠습니까\?</string>
     <plurals name="active_widgets">

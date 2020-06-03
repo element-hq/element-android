@@ -990,8 +990,6 @@
         <item quantity="many">%d رسالة إخطار غير مقروءة</item>
         <item quantity="other">%d رسالة إخطار غير مقروءة</item>
     </plurals>
-    <string name="event_formatter_widget_added">أضاف ⁨%2$s⁩ المستخدم ⁨%1$s⁩</string>
-    <string name="event_formatter_widget_removed">أزال ⁨%2$s⁩ المستخدم ⁨%1$s⁩</string>
     <string name="settings_labs_keyboard_options_to_send_message">استخدم مفتاح الإدخال في لوحة المفاتيح لإرسال الرسالة</string>
     <string name="command_description_ban_user">يمنع المستخدم حسب المعرّف المعطى</string>
     <string name="command_description_unban_user">يُلغي المنع عن المستخدم حسب المعرّف المعطى</string>

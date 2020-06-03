@@ -654,8 +654,6 @@ Til að halda áfram skaltu setja inn lykilorðið þitt.</string>
     </plurals>
     <string name="widget_no_power_to_manage">Þú þarft aðgangsheimildir til að sýsla með viðmótshluta á þessari spjallrás</string>
     <string name="widget_creation_failure">Gerð viðmótshluta mistókst</string>
-    <string name="event_formatter_widget_added">%1$s bætt við af %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s fjarlægt af %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Búa til símafundi með Jitsi</string>
     <string name="widget_delete_message_confirmation">Ertu viss um að þú viljir eyða viðmótshlutanum?</string>
     <string name="widget_integration_unable_to_create">Gat ekki búið til viðmótshluta.</string>

@@ -734,8 +734,6 @@
 
     <string name="widget_no_power_to_manage">Tarvitse oikeudet pienoissovellusten hallintaan tässä huoneessa</string>
     <string name="widget_creation_failure">Pienoissovelluksen luonti epäonnistui</string>
-    <string name="event_formatter_widget_added">%2$s lisäsi %1$s:n</string>
-    <string name="event_formatter_widget_removed">%2$s poisti %1$s:n</string>
     <string name="settings_labs_create_conference_with_jitsi">Luo konferenssipuheluita jitsin avulla</string>
     <string name="widget_delete_message_confirmation">Haluatko varmasti poistaa pienoissovelluksen tästä huoneesta\?</string>
 

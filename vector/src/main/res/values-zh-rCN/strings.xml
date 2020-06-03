@@ -662,8 +662,6 @@
 
     <string name="widget_no_power_to_manage">您需要权限来管理这个聊天室的小部件</string>
     <string name="widget_creation_failure">创建小部件失败</string>
-    <string name="event_formatter_widget_added">%1$s 被 %2$s 添加</string>
-    <string name="event_formatter_widget_removed">%1$s 被 %2$s 移除</string>
     <string name="settings_labs_create_conference_with_jitsi">用 jitsi 创建会议通话</string>
     <string name="widget_delete_message_confirmation">您确定要删除这个小部件吗？</string>
 

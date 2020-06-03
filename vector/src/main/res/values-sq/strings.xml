@@ -624,8 +624,6 @@
     <string name="huge">Të stërmëdha</string>
 
     <string name="widget_creation_failure">Krijimi i widget-it dështoi</string>
-    <string name="event_formatter_widget_added">%1$s u shtua nga %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s u hoq nga %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Krijoni thirrje konferencë me Jitsi-n</string>
     <string name="widget_delete_message_confirmation">Jeni i sigurt se doni të fshihet widget-i nga kjo dhomë?</string>
     <string name="widget_integration_unable_to_create">S’arrihet të krijohet widget-i.</string>

@@ -24,6 +24,13 @@ data class MatrixConfiguration(
         val cryptoConfig: MXCryptoConfig = MXCryptoConfig(),
         val integrationUIUrl: String = "https://scalar.vector.im/",
         val integrationRestUrl: String = "https://scalar.vector.im/api",
+        val integrationWidgetUrls: List<String> = listOf(
+                "https://scalar.vector.im/_matrix/integrations/v1",
+                "https://scalar.vector.im/api",
+                "https://scalar-staging.vector.im/_matrix/integrations/v1",
+                "https://scalar-staging.vector.im/api",
+                "https://scalar-staging.riot.im/scalar/api"
+        ),
         /**
          * Optional proxy to connect to the matrix servers
          * You can create one using for instance Proxy(proxyType, InetSocketAddress(hostname, port)

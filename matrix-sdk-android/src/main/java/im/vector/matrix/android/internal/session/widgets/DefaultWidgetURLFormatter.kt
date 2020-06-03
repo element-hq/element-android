@@ -16,21 +16,20 @@
 
 package im.vector.matrix.android.internal.session.widgets
 
-import im.vector.matrix.android.R
+import im.vector.matrix.android.api.MatrixConfiguration
 import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerConfig
 import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerService
 import im.vector.matrix.android.api.session.widgets.WidgetURLFormatter
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.integrationmanager.IntegrationManager
 import im.vector.matrix.android.internal.session.widgets.token.GetScalarTokenTask
-import im.vector.matrix.android.internal.util.StringProvider
 import java.net.URLEncoder
 import javax.inject.Inject
 
 @SessionScope
 internal class DefaultWidgetURLFormatter @Inject constructor(private val integrationManager: IntegrationManager,
                                                              private val getScalarTokenTask: GetScalarTokenTask,
-                                                             private val stringProvider: StringProvider
+                                                             private val matrixConfiguration: MatrixConfiguration
 ) : IntegrationManagerService.Listener, WidgetURLFormatter {
 
     private lateinit var currentConfig: IntegrationManagerConfig
@@ -53,11 +52,10 @@ internal class DefaultWidgetURLFormatter @Inject constructor(private val integra
         val preferredConfig = integrationManager.getPreferredConfig()
         if (!this::currentConfig.isInitialized || preferredConfig != currentConfig) {
             currentConfig = preferredConfig
-            val defaultWhiteList = stringProvider.getStringArray(R.array.integrations_widgets_urls).asList()
-            whiteListedUrls = when (preferredConfig.kind) {
-                IntegrationManagerConfig.Kind.DEFAULT    -> defaultWhiteList
-                IntegrationManagerConfig.Kind.ACCOUNT    -> defaultWhiteList + preferredConfig.restUrl
-                IntegrationManagerConfig.Kind.HOMESERVER -> listOf(preferredConfig.restUrl)
+            whiteListedUrls = if (matrixConfiguration.integrationWidgetUrls.isEmpty()) {
+                listOf(preferredConfig.restUrl)
+            } else {
+                matrixConfiguration.integrationWidgetUrls
             }
         }
     }
