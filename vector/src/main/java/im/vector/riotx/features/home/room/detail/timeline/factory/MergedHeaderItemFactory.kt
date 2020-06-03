@@ -177,8 +177,8 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                     if (!highlighted && mergedEvent.root.eventId == eventIdToHighlight) {
                         highlighted = true
                     }
-                    val senderAvatar = mergedEvent.senderAvatar
-                    val senderName = mergedEvent.getDisambiguatedDisplayName()
+                    val senderAvatar = mergedEvent.senderInfo.avatarUrl
+                    val senderName = mergedEvent.senderInfo.disambiguatedDisplayName
                     val data = BasedMergedItem.Data(
                             userId = mergedEvent.root.senderId ?: "",
                             avatarUrl = senderAvatar,

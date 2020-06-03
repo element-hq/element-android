@@ -59,7 +59,6 @@ import im.vector.matrix.android.internal.network.NetworkCallbackStrategy
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.network.PreferredNetworkCallbackStrategy
 import im.vector.matrix.android.internal.network.RetrofitFactory
-import im.vector.matrix.android.internal.network.httpclient.addAccessTokenInterceptor
 import im.vector.matrix.android.internal.network.interceptors.CurlLoggingInterceptor
 import im.vector.matrix.android.internal.network.token.AccessTokenProvider
 import im.vector.matrix.android.internal.network.token.HomeserverAccessTokenProvider
@@ -185,7 +184,7 @@ internal abstract class SessionModule {
         @SessionScope
         @Authenticated
         fun providesOkHttpClient(@Unauthenticated okHttpClient: OkHttpClient,
-                                 accessTokenInterceptor: AccessTokenInterceptor,
+                                 @Authenticated accessTokenProvider: AccessTokenProvider,
                                  @SessionId sessionId: String,
                                  @MockHttpInterceptor testInterceptor: TestInterceptor?): OkHttpClient {
             return okHttpClient.newBuilder()
@@ -194,7 +193,7 @@ internal abstract class SessionModule {
                         val existingCurlInterceptors = interceptors().filterIsInstance<CurlLoggingInterceptor>()
                         interceptors().removeAll(existingCurlInterceptors)
 
-                        addInterceptor(accessTokenInterceptor)
+                        addInterceptor(AccessTokenInterceptor(accessTokenProvider))
                         if (testInterceptor != null) {
                             testInterceptor.sessionId = sessionId
                             addInterceptor(testInterceptor)

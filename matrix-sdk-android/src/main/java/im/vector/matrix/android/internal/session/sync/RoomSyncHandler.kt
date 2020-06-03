@@ -265,7 +265,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                      isLimited: Boolean = true,
                                      syncLocalTimestampMillis: Long,
                                      isInitialSync: Boolean): ChunkEntity {
-        val lastChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomEntity.roomId)
+        val lastChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomEntity.roomId)
         val chunkEntity = if (!isLimited && lastChunk != null) {
             lastChunk
         } else {
