@@ -6,6 +6,7 @@ Features ✨:
 
 Improvements 🙌:
  - New wording for notice when current user is the sender
+ - Hide "X made no changes" event by default in timeline (#1430)
 
 Bugfix 🐛:
  - Switch theme is not fully taken into account without restarting the app
