@@ -275,6 +275,4 @@ internal abstract class SessionModule {
     @Binds
     abstract fun bindSharedSecretStorageService(service: DefaultSharedSecretStorageService): SharedSecretStorageService
 
-    @Binds
-    abstract fun bindCallService(service:DefaultCallService): CallService
 }

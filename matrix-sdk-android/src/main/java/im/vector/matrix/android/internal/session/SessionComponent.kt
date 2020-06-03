@@ -30,6 +30,7 @@ import im.vector.matrix.android.internal.di.SessionAssistedInjectModule
 import im.vector.matrix.android.internal.network.NetworkConnectivityChecker
 import im.vector.matrix.android.internal.session.account.AccountModule
 import im.vector.matrix.android.internal.session.cache.CacheModule
+import im.vector.matrix.android.internal.session.call.CallModule
 import im.vector.matrix.android.internal.session.content.ContentModule
 import im.vector.matrix.android.internal.session.content.UploadContentWorker
 import im.vector.matrix.android.internal.session.filter.FilterModule
@@ -83,7 +84,8 @@ import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
             AccountDataModule::class,
             ProfileModule::class,
             SessionAssistedInjectModule::class,
-            AccountModule::class
+            AccountModule::class,
+            CallModule::class
         ]
 )
 @SessionScope

@@ -28,11 +28,14 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.call.CallAnswerContent
 import im.vector.matrix.android.api.session.room.model.call.CallHangupContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
+import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.call.model.MxCallImpl
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.send.RoomEventSender
+import im.vector.matrix.android.internal.task.TaskExecutor
+import im.vector.matrix.android.internal.task.configureWith
 import java.util.UUID
 import javax.inject.Inject
 
@@ -41,13 +44,27 @@ internal class DefaultCallService @Inject constructor(
         @UserId
         private val userId: String,
         private val localEchoEventFactory: LocalEchoEventFactory,
-        private val roomEventSender: RoomEventSender
+        private val roomEventSender: RoomEventSender,
+        private val taskExecutor: TaskExecutor,
+        private val turnServerTask: GetTurnServerTask
 ) : CallService {
 
     private val callListeners = mutableSetOf<CallsListener>()
 
-    override fun getTurnServer(callback: MatrixCallback<TurnServer?>) {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+    override fun getTurnServer(callback: MatrixCallback<TurnServer>): Cancelable {
+        return turnServerTask
+                .configureWith(GetTurnServerTask.Params) {
+                    this.callback = object : MatrixCallback<TurnServer> {
+                        override fun onSuccess(data: TurnServer) {
+                            callback.onSuccess(data)
+                        }
+
+                        override fun onFailure(failure: Throwable) {
+                            callback.onFailure(failure)
+                        }
+                    }
+                }
+                .executeBy(taskExecutor)
     }
 
     override fun createOutgoingCall(roomId: String, otherUserId: String, isVideoCall: Boolean): MxCall {

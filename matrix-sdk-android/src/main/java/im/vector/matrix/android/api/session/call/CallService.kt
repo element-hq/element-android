@@ -17,10 +17,11 @@
 package im.vector.matrix.android.api.session.call
 
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.util.Cancelable
 
 interface CallService {
 
-    fun getTurnServer(callback: MatrixCallback<TurnServer?>)
+    fun getTurnServer(callback: MatrixCallback<TurnServer>): Cancelable
 
     /**
      * Create an outgoing call
