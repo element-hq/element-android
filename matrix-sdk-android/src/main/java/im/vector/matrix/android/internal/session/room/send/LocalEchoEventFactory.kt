@@ -58,14 +58,11 @@ import im.vector.matrix.android.api.session.room.model.relation.ReplyToContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
 import im.vector.matrix.android.internal.di.UserId
-import im.vector.matrix.android.internal.extensions.subStringBetween
 import im.vector.matrix.android.internal.session.content.ThumbnailExtractor
 import im.vector.matrix.android.internal.session.room.send.pills.TextPillsUtils
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.StringProvider
 import kotlinx.coroutines.launch
-import org.commonmark.parser.Parser
-import org.commonmark.renderer.html.HtmlRenderer
 import javax.inject.Inject
 
 /**
@@ -81,16 +78,11 @@ internal class LocalEchoEventFactory @Inject constructor(
         private val context: Context,
         @UserId private val userId: String,
         private val stringProvider: StringProvider,
+        private val markdownParser: MarkdownParser,
         private val textPillsUtils: TextPillsUtils,
         private val taskExecutor: TaskExecutor,
         private val localEchoRepository: LocalEchoRepository
 ) {
-    // TODO Inject
-    private val parser = Parser.builder().build()
-
-    // TODO Inject
-    private val renderer = HtmlRenderer.builder().build()
-
     fun createTextEvent(roomId: String, msgType: String, text: CharSequence, autoMarkdown: Boolean): Event {
         if (msgType == MessageType.MSGTYPE_TEXT || msgType == MessageType.MSGTYPE_EMOTE) {
             return createFormattedTextEvent(roomId, createTextContent(text, autoMarkdown), msgType)
@@ -101,21 +93,8 @@ internal class LocalEchoEventFactory @Inject constructor(
 
     private fun createTextContent(text: CharSequence, autoMarkdown: Boolean): TextContent {
         if (autoMarkdown) {
-            val source = textPillsUtils.processSpecialSpansToMarkdown(text)
-                    ?: text.toString()
-            val document = parser.parse(source)
-            val htmlText = renderer.render(document)
-
-            // Cleanup extra paragraph
-            val cleanHtmlText = if (htmlText.startsWith("<p>") && htmlText.endsWith("</p>\n")) {
-                htmlText.subStringBetween("<p>", "</p>\n")
-            } else {
-                htmlText
-            }
-
-            if (isFormattedTextPertinent(source, cleanHtmlText)) {
-                return TextContent(text.toString(), cleanHtmlText)
-            }
+            val source = textPillsUtils.processSpecialSpansToMarkdown(text) ?: text.toString()
+            return markdownParser.parse(source)
         } else {
             // Try to detect pills
             textPillsUtils.processSpecialSpansToHtml(text)?.let {
@@ -125,9 +104,6 @@ internal class LocalEchoEventFactory @Inject constructor(
 
         return TextContent(text.toString())
     }
-
-    private fun isFormattedTextPertinent(text: String, htmlText: String?) =
-            text != htmlText && htmlText != "<p>${text.trim()}</p>\n"
 
     fun createFormattedTextEvent(roomId: String, textContent: TextContent, msgType: String): Event {
         return createMessageEvent(roomId, textContent.toMessageTextContent(msgType))

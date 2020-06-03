@@ -66,6 +66,9 @@ import im.vector.matrix.android.internal.session.room.typing.DefaultSendTypingTa
 import im.vector.matrix.android.internal.session.room.typing.SendTypingTask
 import im.vector.matrix.android.internal.session.room.uploads.DefaultGetUploadsTask
 import im.vector.matrix.android.internal.session.room.uploads.GetUploadsTask
+import org.commonmark.parser.Parser
+import org.commonmark.renderer.html.HtmlRenderer
+import org.commonmark.renderer.text.TextContentRenderer
 import retrofit2.Retrofit
 
 @Module
@@ -78,6 +81,28 @@ internal abstract class RoomModule {
         @SessionScope
         fun providesRoomAPI(retrofit: Retrofit): RoomAPI {
             return retrofit.create(RoomAPI::class.java)
+        }
+
+        @Provides
+        @JvmStatic
+        fun providesParser(): Parser {
+            return Parser.builder().build()
+        }
+
+        @Provides
+        @JvmStatic
+        fun providesHtmlRenderer(): HtmlRenderer {
+            return HtmlRenderer
+                    .builder()
+                    .build()
+        }
+
+        @Provides
+        @JvmStatic
+        fun providesTextContentRenderer(): TextContentRenderer {
+            return TextContentRenderer
+                    .builder()
+                    .build()
         }
     }
 

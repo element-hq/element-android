@@ -23,7 +23,7 @@ Build 🧱:
  -
 
 Other changes:
- -
+ - Send plain text in the body of events containing formatted body, as per https://matrix.org/docs/spec/client_server/latest#m-room-message-msgtypes
 
 Changes in RiotX 0.21.0 (2020-05-28)
 ===================================================
