@@ -38,6 +38,8 @@ object EventType {
 
     // State Events
 
+    const val STATE_ROOM_WIDGET_LEGACY = "im.vector.modular.widgets"
+    const val STATE_ROOM_WIDGET = "m.widget"
     const val STATE_ROOM_NAME = "m.room.name"
     const val STATE_ROOM_TOPIC = "m.room.topic"
     const val STATE_ROOM_AVATAR = "m.room.avatar"
@@ -83,29 +85,6 @@ object EventType {
 
     // Unwedging
     internal const val DUMMY = "m.dummy"
-
-    private val STATE_EVENTS = listOf(
-            STATE_ROOM_NAME,
-            STATE_ROOM_TOPIC,
-            STATE_ROOM_AVATAR,
-            STATE_ROOM_MEMBER,
-            STATE_ROOM_THIRD_PARTY_INVITE,
-            STATE_ROOM_CREATE,
-            STATE_ROOM_JOIN_RULES,
-            STATE_ROOM_GUEST_ACCESS,
-            STATE_ROOM_POWER_LEVELS,
-            STATE_ROOM_ALIASES,
-            STATE_ROOM_TOMBSTONE,
-            STATE_ROOM_CANONICAL_ALIAS,
-            STATE_ROOM_HISTORY_VISIBILITY,
-            STATE_ROOM_RELATED_GROUPS,
-            STATE_ROOM_PINNED_EVENT,
-            STATE_ROOM_ENCRYPTION
-    )
-
-    fun isStateEvent(type: String): Boolean {
-        return STATE_EVENTS.contains(type)
-    }
 
     fun isCallEvent(type: String): Boolean {
         return type == CALL_INVITE

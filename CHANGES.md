@@ -2,7 +2,8 @@ Changes in RiotX 0.22.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Integration Manager and Widget support (#48)
+ - Send stickers (#51)
 
 Improvements 🙌:
  - New wording for notice when current user is the sender

@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.identity.todelete
+package im.vector.matrix.android.internal.session.user.accountdata
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
+import im.vector.matrix.android.internal.database.mapper.AccountDataMapper
 import im.vector.matrix.android.internal.database.model.UserAccountDataEntity
 import im.vector.matrix.android.internal.database.model.UserAccountDataEntityFields
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
@@ -28,7 +29,6 @@ import io.realm.Realm
 import io.realm.RealmQuery
 import javax.inject.Inject
 
-// There will be a duplicated class when Integration manager will be merged, so delete this one
 internal class AccountDataDataSource @Inject constructor(private val monarchy: Monarchy,
                                                          private val accountDataMapper: AccountDataMapper) {
 

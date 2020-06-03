@@ -735,8 +735,6 @@ Puedes hacerlo ahora o más tarde desde los ajustes de la aplicación.</string>
 
     <string name="widget_no_power_to_manage">Necesitas permiso para gestionar los componentes en esta sala</string>
     <string name="widget_creation_failure">La creación del componente falló</string>
-    <string name="event_formatter_widget_added">%1$s añadido por %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s eliminado por %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Crear llamadas de conferencia con jitsi</string>
     <string name="widget_delete_message_confirmation">¿Seguro que quieres eliminar el widget de esta sala\?</string>
 

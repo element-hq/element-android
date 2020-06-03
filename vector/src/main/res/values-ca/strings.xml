@@ -738,8 +738,6 @@ Atenció: es podria eliminar aquest fitxer si es desinstal·la l\'aplicació.</s
     <!-- Widget-->
     <string name="widget_no_power_to_manage">No teniu permisos per a gestionar ginys en aquesta sala</string>
     <string name="widget_creation_failure">Ha fallat la creació del giny</string>
-    <string name="event_formatter_widget_added">%1$s afegit per %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s retirat per %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Fes conferències amb jitsi</string>
     <string name="widget_delete_message_confirmation">Confirmeu que voleu esborrar el giny d\'aquesta sala?</string>
 

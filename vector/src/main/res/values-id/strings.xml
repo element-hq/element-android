@@ -578,8 +578,6 @@ Perhatikan bahwa tindakan ini akan memulai ulang aplikasi dan mungkin cukup mema
 
     <string name="widget_no_power_to_manage">Anda butuh permisi untuk mengurus widget di ruang ini</string>
     <string name="widget_creation_failure">Pembuatan widget gagal</string>
-    <string name="event_formatter_widget_added">%1$s ditambahkan oleh %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s disingkirkan oleh %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Buat panggilan konferensi dengan jitsi</string>
     <string name="widget_delete_message_confirmation">Apa Anda yakin ingin menghapus widget tersebut dari ruang ini?</string>
     <plurals name="active_widgets">

@@ -1145,8 +1145,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 
     <string name="widget_no_power_to_manage">Pro správu widgetů v této místnosti potřebujete oprávnění</string>
     <string name="widget_creation_failure">Založení widgetu se nezdařilo</string>
-    <string name="event_formatter_widget_added">%2$s přidal %1$s</string>
-    <string name="event_formatter_widget_removed">%2$s odstranil(a) %1$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Založit konferenční hovor s jitsi</string>
     <string name="widget_delete_message_confirmation">Jste si jisti, že chcete smazat widget z této místnosti\?</string>
     <plurals name="active_widgets">

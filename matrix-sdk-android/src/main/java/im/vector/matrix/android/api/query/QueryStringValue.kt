@@ -25,8 +25,8 @@ sealed class QueryStringValue {
     object IsNotNull : QueryStringValue()
     object IsEmpty : QueryStringValue()
     object IsNotEmpty : QueryStringValue()
-    data class Equals(val string: String, val case: Case) : QueryStringValue()
-    data class Contains(val string: String, val case: Case) : QueryStringValue()
+    data class Equals(val string: String, val case: Case = Case.SENSITIVE) : QueryStringValue()
+    data class Contains(val string: String, val case: Case = Case.SENSITIVE) : QueryStringValue()
 
     enum class Case {
         SENSITIVE,

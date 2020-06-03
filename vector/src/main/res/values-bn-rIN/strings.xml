@@ -1042,8 +1042,6 @@
 
     <string name="widget_no_power_to_manage">আপনি এই রুমে উইজেট পরিচালনা করার অনুমতি প্রয়োজন</string>
     <string name="widget_creation_failure">উইজেট এর নির্মাণ ব্যর্থ হয়েছে</string>
-    <string name="event_formatter_widget_added">%1$s %2$s দ্বারা যোগ করা হয়েছে</string>
-    <string name="event_formatter_widget_removed">%1$s %2$s দ্বারা সরানো হয়েছে</string>
     <string name="settings_labs_create_conference_with_jitsi">Jitsi সঙ্গে কনফারেন্স কল তৈরি করুন</string>
     <string name="widget_delete_message_confirmation">আপনি কি এই রুমে উইজেট মুছে ফেলতে চান\?</string>
     <plurals name="active_widgets">

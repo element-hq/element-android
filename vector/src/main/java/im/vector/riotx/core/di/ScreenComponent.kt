@@ -36,6 +36,7 @@ import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceipt
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.riotx.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
+import im.vector.riotx.features.home.room.detail.widget.RoomWidgetsBottomSheet
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.home.room.list.RoomListModule
 import im.vector.riotx.features.home.room.list.actions.RoomListQuickActionsBottomSheet
@@ -63,6 +64,8 @@ import im.vector.riotx.features.share.IncomingShareActivity
 import im.vector.riotx.features.signout.soft.SoftLogoutActivity
 import im.vector.riotx.features.terms.ReviewTermsActivity
 import im.vector.riotx.features.ui.UiStateRepository
+import im.vector.riotx.features.widgets.WidgetActivity
+import im.vector.riotx.features.widgets.permissions.RoomWidgetPermissionBottomSheet
 
 @Component(
         dependencies = [
@@ -120,6 +123,7 @@ interface ScreenComponent {
     fun inject(activity: BigImageViewerActivity)
     fun inject(activity: InviteUsersToRoomActivity)
     fun inject(activity: ReviewTermsActivity)
+    fun inject(activity: WidgetActivity)
 
     /* ==========================================================================================
      * BottomSheets
@@ -134,6 +138,8 @@ interface ScreenComponent {
     fun inject(bottomSheet: DeviceVerificationInfoBottomSheet)
     fun inject(bottomSheet: DeviceListBottomSheet)
     fun inject(bottomSheet: BootstrapBottomSheet)
+    fun inject(bottomSheet: RoomWidgetPermissionBottomSheet)
+    fun inject(bottomSheet: RoomWidgetsBottomSheet)
 
     /* ==========================================================================================
      * Others

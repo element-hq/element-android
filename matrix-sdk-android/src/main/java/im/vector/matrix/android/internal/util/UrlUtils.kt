@@ -37,3 +37,14 @@ internal fun String.ensureProtocol(): String {
         else                -> this
     }
 }
+
+/**
+ * Ensure string has trailing /
+ */
+internal fun String.ensureTrailingSlash(): String {
+    return when {
+        isEmpty()      -> this
+        !endsWith("/") -> "$this/"
+        else           -> this
+    }
+}

@@ -98,7 +98,7 @@ data class Event(
      * @return true if event is state event.
      */
     fun isStateEvent(): Boolean {
-        return EventType.isStateEvent(getClearType())
+        return stateKey != null
     }
 
     // ==============================================================================================================

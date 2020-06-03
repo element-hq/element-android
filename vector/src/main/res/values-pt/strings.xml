@@ -722,8 +722,6 @@ Dispositivos desconhecidos:</string>
 
     <string name="widget_no_power_to_manage">Precisa de permissão para gerir os widgets nesta sala</string>
     <string name="widget_creation_failure">Criação de widget falhou</string>
-    <string name="event_formatter_widget_added">%1$s adicionado por %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s removido por %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Criar chamadas de conferência com o jitsi</string>
     <string name="widget_delete_message_confirmation">Tem a certeza que quer remover o widget?</string>
 

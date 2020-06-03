@@ -648,8 +648,6 @@
 
     <string name="widget_no_power_to_manage">Трябва Ви разрешение, за да управлявате приспособленията в тази стая</string>
     <string name="widget_creation_failure">Създаване на приспособлението беше неуспешно</string>
-    <string name="event_formatter_widget_added">%1$s добавено от %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s премахнато от %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Създаване на групови разговори с jitsi</string>
     <string name="widget_delete_message_confirmation">Сигурни ли сте, че искате да изтриете приспособлението от тази стая?</string>
     <plurals name="active_widgets">

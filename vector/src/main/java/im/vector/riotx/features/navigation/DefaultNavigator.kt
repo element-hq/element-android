@@ -31,6 +31,7 @@ import im.vector.matrix.android.api.session.crypto.verification.IncomingSasVerif
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoom
 import im.vector.matrix.android.api.session.terms.TermsService
 import im.vector.matrix.android.api.util.MatrixItem
+import im.vector.matrix.android.api.session.widgets.model.Widget
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.error.fatalError
@@ -45,6 +46,7 @@ import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.debug.DebugMenuActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailArgs
+import im.vector.riotx.features.home.room.detail.sticker.StickerPickerConstants
 import im.vector.riotx.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.riotx.features.invite.InviteUsersToRoomActivity
 import im.vector.riotx.features.media.BigImageViewerActivity
@@ -62,6 +64,8 @@ import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.settings.VectorSettingsActivity
 import im.vector.riotx.features.share.SharedData
 import im.vector.riotx.features.terms.ReviewTermsActivity
+import im.vector.riotx.features.widgets.WidgetActivity
+import im.vector.riotx.features.widgets.WidgetArgsBuilder
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -69,6 +73,7 @@ import javax.inject.Singleton
 class DefaultNavigator @Inject constructor(
         private val sessionHolder: ActiveSessionHolder,
         private val vectorPreferences: VectorPreferences,
+        private val widgetArgsBuilder: WidgetArgsBuilder,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider
 ) : Navigator {
 
@@ -220,6 +225,22 @@ class DefaultNavigator @Inject constructor(
     override fun openTerms(fragment: Fragment, serviceType: TermsService.ServiceType, baseUrl: String, token: String?, requestCode: Int) {
         val intent = ReviewTermsActivity.intent(fragment.requireContext(), serviceType, baseUrl, token)
         fragment.startActivityForResult(intent, requestCode)
+    }
+
+    override fun openStickerPicker(fragment: Fragment, roomId: String, widget: Widget, requestCode: Int) {
+        val widgetArgs = widgetArgsBuilder.buildStickerPickerArgs(roomId, widget)
+        val intent = WidgetActivity.newIntent(fragment.requireContext(), widgetArgs)
+        fragment.startActivityForResult(intent, StickerPickerConstants.STICKER_PICKER_REQUEST_CODE)
+    }
+
+    override fun openIntegrationManager(context: Context, roomId: String, integId: String?, screen: String?) {
+        val widgetArgs = widgetArgsBuilder.buildIntegrationManagerArgs(roomId, integId, screen)
+        context.startActivity(WidgetActivity.newIntent(context, widgetArgs))
+    }
+
+    override fun openRoomWidget(context: Context, roomId: String, widget: Widget) {
+        val widgetArgs = widgetArgsBuilder.buildRoomWidgetArgs(roomId, widget)
+        context.startActivity(WidgetActivity.newIntent(context, widgetArgs))
     }
 
     override fun openImageViewer(activity: Activity, mediaData: ImageContentRenderer.Data, view: View, options: ((MutableList<Pair<View, String>>) -> Unit)?) {

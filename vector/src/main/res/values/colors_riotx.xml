@@ -175,6 +175,16 @@
     <color name="riotx_attachment_selector_border_dark">#FF22262E</color>
     <color name="riotx_attachment_selector_border_black">#FF090A0C</color>
 
+    <attr name="riotx_room_active_widgets_banner_bg" format="color" />
+    <color name="riotx_room_active_widgets_banner_bg_light">#EBEFF5</color>
+    <color name="riotx_room_active_widgets_banner_bg_dark">#27303A</color>
+    <color name="riotx_room_active_widgets_banner_bg_black">#27303A</color>
+
+    <attr name="riotx_room_active_widgets_banner_text" format="color" />
+    <color name="riotx_room_active_widgets_banner_text_light">#61708B</color>
+    <color name="riotx_room_active_widgets_banner_text_dark">#E3E8F0</color>
+    <color name="riotx_room_active_widgets_banner_text_black">#E3E8F0</color>
+
     <!-- (color from RiotWeb) -->
     <attr name="riotx_keys_backup_banner_accent_color" format="color" />
     <color name="riotx_keys_backup_banner_accent_color_light">#FFF8E3</color>

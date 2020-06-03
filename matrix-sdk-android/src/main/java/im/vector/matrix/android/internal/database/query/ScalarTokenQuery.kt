@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.identity.todelete
+package im.vector.matrix.android.internal.database.query
 
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
+import im.vector.matrix.android.internal.database.model.ScalarTokenEntity
+import im.vector.matrix.android.internal.database.model.ScalarTokenEntityFields
+import io.realm.Realm
+import io.realm.RealmQuery
+import io.realm.kotlin.where
 
-// There will be a duplicated class when Integration manager will be merged, so delete this one
-inline fun <T> LiveData<T>.observeK(owner: LifecycleOwner, crossinline observer: (T?) -> Unit) {
-    this.observe(owner, Observer { observer(it) })
-}
-
-inline fun <T> LiveData<T>.observeNotNull(owner: LifecycleOwner, crossinline observer: (T) -> Unit) {
-    this.observe(owner, Observer { it?.run(observer) })
+internal fun ScalarTokenEntity.Companion.where(realm: Realm, serverUrl: String): RealmQuery<ScalarTokenEntity> {
+    return realm
+            .where<ScalarTokenEntity>()
+            .equalTo(ScalarTokenEntityFields.SERVER_URL, serverUrl)
 }

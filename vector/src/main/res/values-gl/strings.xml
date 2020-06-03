@@ -456,8 +456,6 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="huge">Enorme</string>
 
     <string name="widget_creation_failure">Fallou a creación do trebello</string>
-    <string name="event_formatter_widget_added">%1$s engadido por %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s eliminado por %2$s</string>
     <plurals name="active_widgets">
         <item quantity="one">1 trebello activo</item>
         <item quantity="other">%d trebellos activos</item>

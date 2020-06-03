@@ -712,8 +712,6 @@
     <string name="settings_notification_ringtone">Suono delle notifiche</string>
     <string name="settings_12_24_timestamps">Mostra gli orari in formato 12 ore</string>
     <string name="widget_no_power_to_manage">Devi avere il permesso per poter gestire i widget in questa stanza</string>
-    <string name="event_formatter_widget_added">%1$s aggiunto da %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s rimosso da %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Avvia una conferenza usando Jitsi</string>
     <string name="widget_delete_message_confirmation">Vuoi davvero eliminare questo widget dalla stanza\?</string>
 

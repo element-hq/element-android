@@ -784,8 +784,6 @@
 
     <string name="widget_no_power_to_manage">您需要相關權限以管理此聊天室的小部件</string>
     <string name="widget_creation_failure">創建小部件失敗</string>
-    <string name="event_formatter_widget_added">%1$s 已由 %2$s 新增</string>
-    <string name="event_formatter_widget_removed">%1$s 被 %2$s 移除</string>
     <string name="settings_labs_create_conference_with_jitsi">使用 jitsi 建立會議通話</string>
     <string name="widget_delete_message_confirmation">您確定要從聊天室刪除小工具嗎？</string>
     <plurals name="active_widgets">

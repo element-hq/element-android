@@ -162,6 +162,7 @@
             android:theme="@style/AppTheme.AttachmentsPreview" />
 
         <activity android:name=".features.terms.ReviewTermsActivity" />
+        <activity android:name=".features.widgets.WidgetActivity" />
 
         <!-- Services -->
 

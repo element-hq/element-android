@@ -789,8 +789,6 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
 
     <string name="widget_no_power_to_manage">Du trenger tillating til å handsama widgetar i dette rommet</string>
     <string name="widget_creation_failure">Widget-laging mislukkast</string>
-    <string name="event_formatter_widget_added">%1$s lagt til av %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s fjerna av %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Lag konferansesamtalar med Jitsi</string>
     <string name="widget_delete_message_confirmation">Er du sikker på at du vil slette widgeten frå dette rommet\?</string>
     <plurals name="active_widgets">
