@@ -20,7 +20,6 @@ package im.vector.matrix.android.api.session.crypto
 
 import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
-import im.vector.matrix.android.internal.crypto.model.event.WithHeldCode
 import org.matrix.olm.OlmException
 
 /**

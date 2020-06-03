@@ -86,7 +86,7 @@ internal class MXMegolmEncryption(
     }
 
     private fun notifyWithheldForSession(devices: MXUsersDevicesMap<WithHeldCode>, outboundSession: MXOutboundSessionInfo) {
-        ArrayList<Pair<UserDevice, WithHeldCode>>().apply {
+        mutableListOf<Pair<UserDevice, WithHeldCode>>().apply {
             devices.forEach { userId, deviceId, withheldCode ->
                 this.add(UserDevice(userId, deviceId) to withheldCode)
             }
@@ -339,7 +339,6 @@ internal class MXMegolmEncryption(
         val devicesInRoom = DeviceInRoomInfo()
         val unknownDevices = MXUsersDevicesMap<CryptoDeviceInfo>()
 
-
         for (userId in keys.userIds) {
             val deviceIds = keys.getUserDeviceIds(userId) ?: continue
             for (deviceId in deviceIds) {
@@ -383,7 +382,7 @@ internal class MXMegolmEncryption(
                 .also { Timber.w("Device not found") }
 
         // Get the chain index of the key we previously sent this device
-        val chainIndex = outboundSession?.sharedWithHelper?.wasSharedWith(userId,deviceId) ?: return false
+        val chainIndex = outboundSession?.sharedWithHelper?.wasSharedWith(userId, deviceId) ?: return false
                 .also {
                     // Send a room key with held
                     notifyKeyWithHeld(listOf(UserDevice(userId, deviceId)), sessionId, senderKey, WithHeldCode.UNAUTHORISED)

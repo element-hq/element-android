@@ -31,7 +31,6 @@ import im.vector.matrix.android.internal.session.TestInterceptor
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.util.BackgroundDetectionObserver
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.matrix.olm.OlmManager
 import java.io.File

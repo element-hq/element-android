@@ -843,7 +843,7 @@ internal class DefaultCryptoService @Inject constructor(
         val withHeldContent = event.getClearContent().toModel<RoomKeyWithHeldContent>() ?: return Unit.also {
             Timber.e("## CRYPTO | Malformed onKeyWithHeldReceived() : missing fields")
         }
-        Timber.d("## CRYPTO | onKeyWithHeldReceived() received : content <${withHeldContent}>")
+        Timber.d("## CRYPTO | onKeyWithHeldReceived() received : content <$withHeldContent>")
         val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(withHeldContent.roomId, withHeldContent.algorithm)
         if (alg is IMXWithHeldExtension) {
             alg.onRoomKeyWithHeldEvent(withHeldContent)

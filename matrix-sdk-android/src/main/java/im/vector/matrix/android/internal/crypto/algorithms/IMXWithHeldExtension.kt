@@ -21,4 +21,3 @@ import im.vector.matrix.android.internal.crypto.model.event.RoomKeyWithHeldConte
 internal interface IMXWithHeldExtension {
     fun onRoomKeyWithHeldEvent(withHeldInfo: RoomKeyWithHeldContent)
 }
-

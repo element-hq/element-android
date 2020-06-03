@@ -46,10 +46,9 @@ class WithHeldTests : InstrumentedTest {
 
     @Test
     fun test_WithHeldUnverifiedReason() {
-
-        //=============================
+        // =============================
         // ARRANGE
-        //=============================
+        // =============================
 
         val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
         val bobSession = mTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
@@ -65,9 +64,9 @@ class WithHeldTests : InstrumentedTest {
 
         val bobUnverifiedSession = mTestHelper.logIntoAccount(bobSession.myUserId, SessionTestParams(true))
 
-        //=============================
+        // =============================
         // ACT
-        //=============================
+        // =============================
 
         // Alice decide to not send to unverified sessions
         aliceSession.cryptoService().setGlobalBlacklistUnverifiedDevices(true)
@@ -83,9 +82,9 @@ class WithHeldTests : InstrumentedTest {
 
         val eventBobPOV = bobUnverifiedSession.getRoom(roomId)?.getTimeLineEvent(timelineEvent.eventId)!!
 
-        //=============================
+        // =============================
         // ASSERT
-        //=============================
+        // =============================
 
         // Bob should not be able to decrypt because the keys is withheld
         try {
@@ -123,7 +122,6 @@ class WithHeldTests : InstrumentedTest {
             Assert.assertEquals("Error should be withheld", MXCryptoError.ErrorType.KEYS_WITHHELD, type)
             Assert.assertEquals("Cause should be unverified", WithHeldCode.UNVERIFIED.value, technicalMessage)
         }
-
 
         mTestHelper.signOutAndClose(aliceSession)
         mTestHelper.signOutAndClose(bobSession)
@@ -236,7 +234,7 @@ class WithHeldTests : InstrumentedTest {
             }
         }
 
-        //Check that bob second session requested the key
+        // Check that bob second session requested the key
         mTestHelper.waitWithLatch { latch ->
             mTestHelper.retryPeriodicallyWithLatch(latch) {
                 val wc = bobSecondSession.cryptoService().getWithHeldMegolmSession(roomAlicePov.roomId, sessionId!!)

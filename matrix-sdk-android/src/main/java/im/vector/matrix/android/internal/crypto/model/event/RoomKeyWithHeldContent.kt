@@ -17,7 +17,6 @@ package im.vector.matrix.android.internal.crypto.model.event
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.extensions.tryThis
 
 /**
  * Class representing an sharekey content
@@ -99,5 +98,3 @@ enum class WithHeldCode(val value: String) {
         }
     }
 }
-
-

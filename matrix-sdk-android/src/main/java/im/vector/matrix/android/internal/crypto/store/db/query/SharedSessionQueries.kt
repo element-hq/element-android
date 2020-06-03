@@ -55,4 +55,3 @@ internal fun SharedSessionEntity.Companion.create(realm: Realm, roomId: String?,
         this.chainIndex = chainIndex
     }
 }
-

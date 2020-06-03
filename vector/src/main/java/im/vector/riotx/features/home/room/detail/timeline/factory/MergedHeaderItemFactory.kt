@@ -148,14 +148,12 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
         return nextEvent == null || nextEvent.root.getClearType() != EventType.ENCRYPTED
     }
 
-
     private fun buildUTDMergedSummary(currentPosition: Int,
                                                items: List<TimelineEvent>,
                                                event: TimelineEvent,
                                                eventIdToHighlight: String?,
                                                requestModelBuild: () -> Unit,
                                                callback: TimelineEventController.Callback?): MergedUTDItem_? {
-
         var prevEvent = if (currentPosition > 0) items[currentPosition - 1] else null
         var tmpPos = currentPosition - 1
         val mergedEvents = ArrayList<TimelineEvent>().also { it.add(event) }

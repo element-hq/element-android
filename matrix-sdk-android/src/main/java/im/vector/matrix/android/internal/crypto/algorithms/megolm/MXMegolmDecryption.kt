@@ -115,7 +115,7 @@ internal class MXMegolmDecryption(private val userId: String,
                             if (throwable is MXCryptoError.OlmError) {
                                 // TODO Check the value of .message
                                 if (throwable.olmException.message == "UNKNOWN_MESSAGE_INDEX") {
-                                    //addEventToPendingList(event, timeline)
+                                    // addEventToPendingList(event, timeline)
                                     // The session might has been partially withheld (and only pass ratcheted)
                                     val withHeldInfo = cryptoStore.getWithHeldMegolmSession(event.roomId, encryptedEventContent.sessionId)
                                     if (withHeldInfo != null) {
@@ -157,7 +157,7 @@ internal class MXMegolmDecryption(private val userId: String,
                                                 withHeldInfo.reason)
                                     } else {
                                         // This is un-used in riotX SDK, not sure if needed
-                                        //addEventToPendingList(event, timeline)
+                                        // addEventToPendingList(event, timeline)
                                         if (requestKeysOnFail) {
                                             requestKeysForEvent(event, false)
                                         }

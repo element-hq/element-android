@@ -39,4 +39,3 @@ internal fun WithHeldSessionEntity.Companion.getOrCreate(realm: Realm, roomId: S
                 this.sessionId = sessionId
             }
 }
-

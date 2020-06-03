@@ -18,9 +18,6 @@ package im.vector.riotx.features.home.room.detail.timeline.action
 import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Success
-import im.vector.matrix.android.api.session.crypto.MXCryptoError
-import im.vector.matrix.android.api.session.events.model.EventType
-import im.vector.matrix.android.internal.crypto.model.event.WithHeldCode
 import im.vector.riotx.EmojiCompatFontProvider
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.bottomsheet.BottomSheetQuickReactionsItem

@@ -36,7 +36,6 @@ import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.TimelineSettings
 import im.vector.matrix.android.api.session.sync.SyncState
-import im.vector.matrix.android.internal.session.TestInterceptor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -152,7 +151,7 @@ class CommonTestHelper(context: Context) {
         timeline.dispose()
 
         // Check that all events has been created
-        assertEquals("Message number do not match ${sentEvents}", nbOfMessages.toLong(), sentEvents.size.toLong())
+        assertEquals("Message number do not match $sentEvents", nbOfMessages.toLong(), sentEvents.size.toLong())
 
         return sentEvents
     }

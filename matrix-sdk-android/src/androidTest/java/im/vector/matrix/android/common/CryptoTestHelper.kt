@@ -22,7 +22,6 @@ import androidx.lifecycle.Observer
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.verification.IncomingSasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.OutgoingSasVerificationTransaction
-import im.vector.matrix.android.api.session.crypto.verification.SasVerificationTransaction
 import im.vector.matrix.android.api.session.crypto.verification.VerificationMethod
 import im.vector.matrix.android.api.session.crypto.verification.VerificationTxState
 import im.vector.matrix.android.api.session.events.model.Event
@@ -41,7 +40,6 @@ import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupAuthData
 import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
-import im.vector.matrix.android.internal.crypto.verification.SASDefaultVerificationTransaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -295,7 +293,6 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
             )
         }
 
-
         mTestHelper.waitWithLatch { latch ->
             val bobRoomSummariesLive = runBlocking(Dispatchers.Main) {
                 bob.getRoomSummariesLive(roomSummaryQueryParams { })
@@ -314,9 +311,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
             GlobalScope.launch(Dispatchers.Main) {
                 bobRoomSummariesLive.observeForever(newRoomObserver)
             }
-
         }
-
 
         mTestHelper.waitWithLatch { latch ->
             val bobRoomSummariesLive = runBlocking(Dispatchers.Main) {
@@ -339,9 +334,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
             }
 
             mTestHelper.doSync<Unit> { bob.joinRoom(roomId, callback = it) }
-
         }
-
 
         return roomId
     }
@@ -357,7 +350,6 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
     }
 
     fun verifySASCrossSign(alice: Session, bob: Session, roomId: String) {
-
         assertTrue(alice.cryptoService().crossSigningService().canCrossSign())
         assertTrue(bob.cryptoService().crossSigningService().canCrossSign())
 
@@ -372,7 +364,6 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
                 bob.myUserId,
                 bob.sessionParams.credentials.deviceId!!,
                 null)
-
 
         // we should reach SHOW SAS on both
         var alicePovTx: OutgoingSasVerificationTransaction? = null
@@ -427,6 +418,5 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
                 alice.cryptoService().crossSigningService().isUserTrusted(bob.myUserId)
             }
         }
-
     }
 }

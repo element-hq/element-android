@@ -57,7 +57,6 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                 val cryptoError = event.root.mCryptoError
 
                 val spannableStr = if (vectorPreferences.hideE2ETechnicalErrors()) {
-
                     val colorFromAttribute = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
                     if (cryptoError == null) {
                         span(stringProvider.getString(R.string.encrypted_message)) {
@@ -110,7 +109,6 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                         textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
                     }
                 }
-
 
                 val informationData = messageInformationDataFactory.create(event, nextEvent)
                 val attributes = attributesFactory.create(event.root.content.toModel<EncryptedEventContent>(), informationData, callback)

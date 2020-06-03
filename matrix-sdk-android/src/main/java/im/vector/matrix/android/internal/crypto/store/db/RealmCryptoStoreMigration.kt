@@ -433,7 +433,6 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                 .addField(WithHeldSessionEntityFields.CODE_STRING, String::class.java)
                 .addField(WithHeldSessionEntityFields.REASON, String::class.java)
 
-
         realm.schema.create("SharedSessionEntity")
                 .addField(SharedSessionEntityFields.ROOM_ID, String::class.java)
                 .addField(SharedSessionEntityFields.ALGORITHM, String::class.java)
