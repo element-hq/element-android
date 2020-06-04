@@ -18,6 +18,7 @@ package im.vector.matrix.android.api.auth.data
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.internal.auth.version.HomeServerVersion
 
 /**
  * Model for https://matrix.org/docs/spec/client_server/latest#get-matrix-client-versions
@@ -47,13 +48,13 @@ data class Versions(
 )
 
 // MatrixClientServerAPIVersion
-private const val r0_0_1 = "r0.0.1"
-private const val r0_1_0 = "r0.1.0"
-private const val r0_2_0 = "r0.2.0"
-private const val r0_3_0 = "r0.3.0"
-private const val r0_4_0 = "r0.4.0"
-private const val r0_5_0 = "r0.5.0"
-private const val r0_6_0 = "r0.6.0"
+private val r0_0_1 = HomeServerVersion.parse("r0.0.1")!!
+private val r0_1_0 = HomeServerVersion.parse("r0.1.0")!!
+private val r0_2_0 = HomeServerVersion.parse("r0.2.0")!!
+private val r0_3_0 = HomeServerVersion.parse("r0.3.0")!!
+private val r0_4_0 = HomeServerVersion.parse("r0.4.0")!!
+private val r0_5_0 = HomeServerVersion.parse("r0.5.0")!!
+private val r0_6_0 = HomeServerVersion.parse("r0.6.0")!!
 
 // MatrixVersionsFeature
 private const val FEATURE_LAZY_LOAD_MEMBERS = "m.lazy_load_members"
@@ -83,7 +84,7 @@ fun Versions.isLoginAndRegistrationSupportedBySdk(): Boolean {
  * @return true if the server support the lazy loading of room members
  */
 private fun Versions.supportLazyLoadMembers(): Boolean {
-    return supportedVersions?.contains(r0_5_0) == true
+    return getMaxVersion() >= r0_5_0
             || unstableFeatures?.get(FEATURE_LAZY_LOAD_MEMBERS) == true
 }
 
@@ -92,7 +93,7 @@ private fun Versions.supportLazyLoadMembers(): Boolean {
  * adding a 3pid or resetting password.
  */
 private fun Versions.doesServerRequireIdentityServerParam(): Boolean {
-    if (supportedVersions?.contains(r0_6_0) == true) return false
+    if (getMaxVersion() >= r0_6_0) return false
     return unstableFeatures?.get(FEATURE_REQUIRE_IDENTITY_SERVER) ?: true
 }
 
@@ -101,11 +102,18 @@ private fun Versions.doesServerRequireIdentityServerParam(): Boolean {
  * Some homeservers may trigger errors if they are not prepared for the new parameter.
  */
 private fun Versions.doesServerAcceptIdentityAccessToken(): Boolean {
-    return supportedVersions?.contains(r0_6_0) == true
+    return getMaxVersion() >= r0_6_0
             || unstableFeatures?.get(FEATURE_ID_ACCESS_TOKEN) ?: false
 }
 
 private fun Versions.doesServerSeparatesAddAndBind(): Boolean {
-    return supportedVersions?.contains(r0_6_0) == true
+    return getMaxVersion() >= r0_6_0
             || unstableFeatures?.get(FEATURE_SEPARATE_ADD_AND_BIND) ?: false
+}
+
+private fun Versions.getMaxVersion(): HomeServerVersion {
+    return supportedVersions
+            ?.mapNotNull { HomeServerVersion.parse(it) }
+            ?.max()
+            ?: r0_0_1
 }
