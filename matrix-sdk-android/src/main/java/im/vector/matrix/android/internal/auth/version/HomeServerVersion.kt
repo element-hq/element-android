@@ -48,5 +48,13 @@ internal data class HomeServerVersion(
                     patch = result.groupValues[3].toInt()
             )
         }
+
+        val r0_0_1 = parse("r0.0.1")!!
+        val r0_1_0 = parse("r0.1.0")!!
+        val r0_2_0 = parse("r0.2.0")!!
+        val r0_3_0 = parse("r0.3.0")!!
+        val r0_4_0 = parse("r0.4.0")!!
+        val r0_5_0 = parse("r0.5.0")!!
+        val r0_6_0 = parse("r0.6.0")!!
     }
 }

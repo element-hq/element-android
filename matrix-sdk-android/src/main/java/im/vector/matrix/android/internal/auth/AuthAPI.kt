@@ -17,7 +17,6 @@
 package im.vector.matrix.android.internal.auth
 
 import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.matrix.android.api.auth.data.Versions
 import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.internal.auth.data.RiotConfig
@@ -27,6 +26,7 @@ import im.vector.matrix.android.internal.auth.registration.AddThreePidRegistrati
 import im.vector.matrix.android.internal.auth.registration.RegistrationParams
 import im.vector.matrix.android.internal.auth.registration.SuccessResult
 import im.vector.matrix.android.internal.auth.registration.ValidationCodeBody
+import im.vector.matrix.android.internal.auth.version.Versions
 import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
 import retrofit2.http.Body

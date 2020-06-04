@@ -16,6 +16,8 @@
 
 package im.vector.matrix.android.api.auth.data
 
+import im.vector.matrix.android.internal.auth.version.Versions
+import im.vector.matrix.android.internal.auth.version.isSupportedBySdk
 import org.amshove.kluent.shouldBe
 import org.junit.Test
 
