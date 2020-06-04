@@ -73,15 +73,17 @@ interface RoomService {
 
     /**
      * Get a snapshot list of Breadcrumbs
+     * @param queryParams parameters to query the room summaries. It can be use to keep only joined rooms, for instance.
      * @return the immutable list of [RoomSummary]
      */
-    fun getBreadcrumbs(): List<RoomSummary>
+    fun getBreadcrumbs(queryParams: RoomSummaryQueryParams): List<RoomSummary>
 
     /**
      * Get a live list of Breadcrumbs
+     * @param queryParams parameters to query the room summaries. It can be use to keep only joined rooms, for instance.
      * @return the [LiveData] of [RoomSummary]
      */
-    fun getBreadcrumbsLive(): LiveData<List<RoomSummary>>
+    fun getBreadcrumbsLive(queryParams: RoomSummaryQueryParams): LiveData<List<RoomSummary>>
 
     /**
      * Inform the Matrix SDK that a room is displayed.
