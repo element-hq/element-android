@@ -2,7 +2,8 @@
 <resources>
 
     <style name="AppTheme.Status.v21" parent="AppTheme.Base.Status">
-        <item name="android:statusBarColor">@color/riotx_header_panel_background_light</item>
+        <!-- Use dark color, to have enough contrast with icons color. windowLightStatusBar is only available in API 23+ -->
+        <item name="android:statusBarColor">@color/riotx_header_panel_background_dark</item>
         <!-- Use dark color, to have enough contrast with icons color. windowLightNavigationBar is only available in API 27+ -->
         <item name="android:navigationBarColor">@color/riotx_header_panel_background_dark</item>
 

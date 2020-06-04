@@ -14,6 +14,7 @@ Bugfix 🐛:
  - Temporary fix to show error when user is creating an account on matrix.org with userId containing only digits (#1410)
  - Reply composer overlay stays on screen too long after send (#1169)
  - Fix navigation bar icon contrast on API in [21,27[ (#1342)
+ - Fix status bar icon contrast on API in [21,23[
 
 Translations 🗣:
  -
