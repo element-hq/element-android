@@ -28,6 +28,7 @@ import android.os.Parcelable
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import androidx.core.view.isVisible
 import butterknife.BindView
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
@@ -130,10 +131,7 @@ class VectorCallActivity : VectorBaseActivity() {
             finish()
         }
 
-        iv_end_call.setOnClickListener {
-            callViewModel.handle(VectorCallViewActions.EndCall)
-            finish()
-        }
+        configureCallViews()
 
         callViewModel.viewEvents
                 .observe()
@@ -145,6 +143,23 @@ class VectorCallActivity : VectorBaseActivity() {
 
         if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL, this, CAPTURE_PERMISSION_REQUEST_CODE, R.string.permissions_rationale_msg_camera_and_audio)) {
             start()
+        }
+    }
+
+    private fun configureCallViews() {
+        if (callArgs.isVideoCall) {
+            iv_call_speaker.isVisible = false
+            iv_call_flip_camera.isVisible = true
+            iv_call_videocam_off.isVisible = true
+        } else {
+            iv_call_speaker.isVisible = true
+            iv_call_flip_camera.isVisible = false
+            iv_call_videocam_off.isVisible = false
+        }
+
+        iv_end_call.setOnClickListener {
+            callViewModel.handle(VectorCallViewActions.EndCall)
+            finish()
         }
     }
 
