@@ -12,6 +12,7 @@ Improvements 🙌:
 Bugfix 🐛:
  - Switch theme is not fully taken into account without restarting the app
  - Temporary fix to show error when user is creating an account on matrix.org with userId containing only digits (#1410)
+ - Make Credentials.homeServer optional because it is deprecated (#1443)
 
 Translations 🗣:
  -
