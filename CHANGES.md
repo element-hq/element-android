@@ -13,6 +13,7 @@ Bugfix 🐛:
  - Switch theme is not fully taken into account without restarting the app
  - Temporary fix to show error when user is creating an account on matrix.org with userId containing only digits (#1410)
  - Reply composer overlay stays on screen too long after send (#1169)
+ - Wrong /query request (#1444)
 
 Translations 🗣:
  -
