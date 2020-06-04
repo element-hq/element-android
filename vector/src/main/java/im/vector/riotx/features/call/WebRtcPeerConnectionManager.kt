@@ -142,12 +142,14 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 .setVideoEncoderFactory(defaultVideoEncoderFactory)
                 .setVideoDecoderFactory(defaultVideoDecoderFactory)
                 .createPeerConnectionFactory()
+
+        attachViewRenderersInternal()
     }
 
     private fun createPeerConnection(turnServer: TurnServer?) {
         val iceServers = mutableListOf<PeerConnection.IceServer>().apply {
             turnServer?.let { server ->
-                server.uris?.forEach {  uri ->
+                server.uris?.forEach { uri ->
                     add(
                             PeerConnection
                                     .IceServer
@@ -159,23 +161,11 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 }
             }
         }
-        /*
-        val iceServers = ArrayList<PeerConnection.IceServer>().apply {
-            listOf("turn:turn.matrix.org:3478?transport=udp", "turn:turn.matrix.org:3478?transport=tcp", "turns:turn.matrix.org:443?transport=tcp").forEach {
-                add(
-                        PeerConnection.IceServer.builder(it)
-                                .setUsername("xxxxx")
-                                .setPassword("xxxxx")
-                                .createIceServer()
-                )
-            }
-        }
-         */
         Timber.v("## VOIP creating peer connection... ")
         peerConnection = peerConnectionFactory?.createPeerConnection(iceServers, streamObserver)
     }
 
-    private fun startCall() {
+    private fun startCall(turnServer: TurnServer?) {
         iceCandidateDisposable = iceCandidateSource
                 .buffer(400, TimeUnit.MILLISECONDS)
                 .subscribe {
@@ -187,12 +177,8 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 }
 
         executor.execute {
-            sessionHolder.getActiveSession().callService().getTurnServer(object : MatrixCallback<TurnServer?> {
-                override fun onSuccess(data: TurnServer?) {
-                    createPeerConnectionFactory()
-                    createPeerConnection(data)
-                }
-            })
+            createPeerConnectionFactory()
+            createPeerConnection(turnServer)
         }
     }
 
@@ -208,52 +194,62 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     fun attachViewRenderers(localViewRenderer: SurfaceViewRenderer, remoteViewRenderer: SurfaceViewRenderer) {
-        this.localViewRenderer = localViewRenderer
-        this.remoteViewRenderer = remoteViewRenderer
-        this.localSurfaceRenderer = WeakReference(localViewRenderer)
-        this.remoteSurfaceRenderer = WeakReference(remoteViewRenderer)
+        executor.execute {
+            this.localViewRenderer = localViewRenderer
+            this.remoteViewRenderer = remoteViewRenderer
+            this.localSurfaceRenderer = WeakReference(localViewRenderer)
+            this.remoteSurfaceRenderer = WeakReference(remoteViewRenderer)
 
-        audioSource = peerConnectionFactory?.createAudioSource(DEFAULT_AUDIO_CONSTRAINTS)
-        localAudioTrack = peerConnectionFactory?.createAudioTrack(AUDIO_TRACK_ID, audioSource)
-        localAudioTrack?.setEnabled(true)
-
-        localViewRenderer.setMirror(true)
-        localVideoTrack?.addSink(localViewRenderer)
-
-        localMediaStream = peerConnectionFactory?.createLocalMediaStream("ARDAMS") // magic value?
-
-        if (currentCall?.isVideoCall == true) {
-            val cameraIterator = if (Camera2Enumerator.isSupported(context)) Camera2Enumerator(context) else Camera1Enumerator(false)
-            val frontCamera = cameraIterator.deviceNames
-                    ?.firstOrNull { cameraIterator.isFrontFacing(it) }
-                    ?: cameraIterator.deviceNames?.first()
-
-            val videoCapturer = cameraIterator.createCapturer(frontCamera, null)
-
-            videoSource = peerConnectionFactory?.createVideoSource(videoCapturer.isScreencast)
-            val surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", rootEglBase!!.eglBaseContext)
-            Timber.v("## VOIP Local video source created")
-            videoCapturer.initialize(surfaceTextureHelper, context.applicationContext, videoSource!!.capturerObserver)
-            videoCapturer.startCapture(1280, 720, 30)
-            localVideoTrack = peerConnectionFactory?.createVideoTrack("ARDAMSv0", videoSource)
-            Timber.v("## VOIP Local video track created")
-            localSurfaceRenderer?.get()?.let { surface ->
-                localVideoTrack?.addSink(surface)
-            }
-            localVideoTrack?.setEnabled(true)
-
-            localVideoTrack?.addSink(localViewRenderer)
-            localMediaStream?.addTrack(localVideoTrack)
-            remoteVideoTrack?.let {
-                it.setEnabled(true)
-                it.addSink(remoteViewRenderer)
+            if (peerConnection != null) {
+                attachViewRenderersInternal()
             }
         }
+    }
 
-        localMediaStream?.addTrack(localAudioTrack)
+    private fun attachViewRenderersInternal() {
+        executor.execute {
+            audioSource = peerConnectionFactory?.createAudioSource(DEFAULT_AUDIO_CONSTRAINTS)
+            localAudioTrack = peerConnectionFactory?.createAudioTrack(AUDIO_TRACK_ID, audioSource)
+            localAudioTrack?.setEnabled(true)
 
-        Timber.v("## VOIP add local stream to peer connection")
-        peerConnection?.addStream(localMediaStream)
+            localViewRenderer?.setMirror(true)
+            localVideoTrack?.addSink(localViewRenderer)
+
+            localMediaStream = peerConnectionFactory?.createLocalMediaStream("ARDAMS") // magic value?
+
+            if (currentCall?.isVideoCall == true) {
+                val cameraIterator = if (Camera2Enumerator.isSupported(context)) Camera2Enumerator(context) else Camera1Enumerator(false)
+                val frontCamera = cameraIterator.deviceNames
+                        ?.firstOrNull { cameraIterator.isFrontFacing(it) }
+                        ?: cameraIterator.deviceNames?.first()
+
+                val videoCapturer = cameraIterator.createCapturer(frontCamera, null)
+
+                videoSource = peerConnectionFactory?.createVideoSource(videoCapturer.isScreencast)
+                val surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", rootEglBase!!.eglBaseContext)
+                Timber.v("## VOIP Local video source created")
+                videoCapturer.initialize(surfaceTextureHelper, context.applicationContext, videoSource!!.capturerObserver)
+                videoCapturer.startCapture(1280, 720, 30)
+                localVideoTrack = peerConnectionFactory?.createVideoTrack("ARDAMSv0", videoSource)
+                Timber.v("## VOIP Local video track created")
+                localSurfaceRenderer?.get()?.let { surface ->
+                    localVideoTrack?.addSink(surface)
+                }
+                localVideoTrack?.setEnabled(true)
+
+                localVideoTrack?.addSink(localViewRenderer)
+                localMediaStream?.addTrack(localVideoTrack)
+                remoteVideoTrack?.let {
+                    it.setEnabled(true)
+                    it.addSink(remoteViewRenderer)
+                }
+            }
+
+            localMediaStream?.addTrack(localAudioTrack)
+
+            Timber.v("## VOIP add local stream to peer connection")
+            peerConnection?.addStream(localMediaStream)
+        }
     }
 
     fun detachRenderers() {
@@ -314,8 +310,12 @@ class WebRtcPeerConnectionManager @Inject constructor(
         startHeadsUpService(createdCall)
         context.startActivity(VectorCallActivity.newIntent(context, createdCall))
 
-        startCall()
-        sendSdpOffer()
+        sessionHolder.getActiveSession().callService().getTurnServer(object : MatrixCallback<TurnServer?> {
+            override fun onSuccess(data: TurnServer?) {
+                startCall(data)
+                sendSdpOffer()
+            }
+        })
     }
 
     override fun onCallInviteReceived(mxCall: MxCall, callInviteContent: CallInviteContent) {
@@ -328,10 +328,18 @@ class WebRtcPeerConnectionManager @Inject constructor(
         currentCall = mxCall
 
         startHeadsUpService(mxCall)
-        startCall()
 
+        sessionHolder.getActiveSession().callService().getTurnServer(object : MatrixCallback<TurnServer?> {
+            override fun onSuccess(data: TurnServer?) {
+                startCall(data)
+                setInviteRemoteDescription(callInviteContent.offer?.sdp)
+            }
+        })
+    }
+
+    private fun setInviteRemoteDescription(description: String?) {
         executor.execute {
-            val sdp = SessionDescription(SessionDescription.Type.OFFER, callInviteContent.offer?.sdp)
+            val sdp = SessionDescription(SessionDescription.Type.OFFER, description)
             peerConnection?.setRemoteDescription(sdpObserver, sdp)
         }
     }
