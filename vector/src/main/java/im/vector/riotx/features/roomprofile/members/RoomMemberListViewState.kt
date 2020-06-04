@@ -36,9 +36,9 @@ data class RoomMemberListViewState(
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 }
 
-typealias RoomMemberSummaries = List<Pair<PowerLevelCategory, List<RoomMemberSummary>>>
+typealias RoomMemberSummaries = List<Pair<RoomMemberListCategories, List<RoomMemberSummary>>>
 
-enum class PowerLevelCategory(@StringRes val titleRes: Int) {
+enum class RoomMemberListCategories(@StringRes val titleRes: Int) {
     ADMIN(R.string.room_member_power_level_admins),
     MODERATOR(R.string.room_member_power_level_moderators),
     CUSTOM(R.string.room_member_power_level_custom),

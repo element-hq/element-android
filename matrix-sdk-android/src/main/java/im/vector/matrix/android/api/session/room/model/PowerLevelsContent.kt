@@ -18,21 +18,21 @@ package im.vector.matrix.android.api.session.room.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsConstants
+import im.vector.matrix.android.api.session.room.powerlevels.Role
 
 /**
  * Class representing the EventType.EVENT_TYPE_STATE_ROOM_POWER_LEVELS state event content.
  */
 @JsonClass(generateAdapter = true)
 data class PowerLevelsContent(
-        @Json(name = "ban") val ban: Int = PowerLevelsConstants.DEFAULT_ROOM_MODERATOR_LEVEL,
-        @Json(name = "kick") val kick: Int = PowerLevelsConstants.DEFAULT_ROOM_MODERATOR_LEVEL,
-        @Json(name = "invite") val invite: Int = PowerLevelsConstants.DEFAULT_ROOM_MODERATOR_LEVEL,
-        @Json(name = "redact") val redact: Int = PowerLevelsConstants.DEFAULT_ROOM_MODERATOR_LEVEL,
-        @Json(name = "events_default") val eventsDefault: Int = PowerLevelsConstants.DEFAULT_ROOM_USER_LEVEL,
+        @Json(name = "ban") val ban: Int = Role.Moderator.value,
+        @Json(name = "kick") val kick: Int = Role.Moderator.value,
+        @Json(name = "invite") val invite: Int = Role.Moderator.value,
+        @Json(name = "redact") val redact: Int = Role.Moderator.value,
+        @Json(name = "events_default") val eventsDefault: Int = Role.Default.value,
         @Json(name = "events") val events: MutableMap<String, Int> = HashMap(),
-        @Json(name = "users_default") val usersDefault: Int = PowerLevelsConstants.DEFAULT_ROOM_USER_LEVEL,
+        @Json(name = "users_default") val usersDefault: Int = Role.Default.value,
         @Json(name = "users") val users: MutableMap<String, Int> = HashMap(),
-        @Json(name = "state_default") val stateDefault: Int = PowerLevelsConstants.DEFAULT_ROOM_MODERATOR_LEVEL,
+        @Json(name = "state_default") val stateDefault: Int = Role.Moderator.value,
         @Json(name = "notifications") val notifications: Map<String, Any> = HashMap()
 )

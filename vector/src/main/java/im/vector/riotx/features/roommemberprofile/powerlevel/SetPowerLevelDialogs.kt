@@ -22,21 +22,21 @@ import android.view.KeyEvent
 import android.widget.SeekBar
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
-import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsConstants
+import im.vector.matrix.android.api.session.room.powerlevels.Role
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.hideKeyboard
 import kotlinx.android.synthetic.main.dialog_set_power_level.view.*
 
 object SetPowerLevelDialogs {
 
-    fun showChoice(activity: Activity, currentValue: Int, listener: (Int) -> Unit) {
+    fun showChoice(activity: Activity, currentRole: Role, listener: (Int) -> Unit) {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_set_power_level, null)
         dialogLayout.powerLevelRadioGroup.setOnCheckedChangeListener { _, checkedId ->
             dialogLayout.powerLevelCustomLayout.isVisible = checkedId == R.id.powerLevelCustomRadio
         }
         dialogLayout.powerLevelCustomSlider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                dialogLayout.powerLevelCustomValue.text = progress.toString()
+                dialogLayout.powerLevelCustomTitle.text = activity.getString(R.string.power_level_custom, progress)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -47,12 +47,12 @@ object SetPowerLevelDialogs {
                 //NOOP
             }
         })
-        dialogLayout.powerLevelCustomSlider.progress = currentValue
-        when (currentValue) {
-            PowerLevelsConstants.DEFAULT_ROOM_ADMIN_LEVEL     -> dialogLayout.powerLevelAdminRadio.isChecked = true
-            PowerLevelsConstants.DEFAULT_ROOM_MODERATOR_LEVEL -> dialogLayout.powerLevelModeratorRadio.isChecked = true
-            PowerLevelsConstants.DEFAULT_ROOM_USER_LEVEL      -> dialogLayout.powerLevelDefaultRadio.isChecked = true
-            else                                              -> dialogLayout.powerLevelCustomRadio.isChecked = true
+        dialogLayout.powerLevelCustomSlider.progress = currentRole.value
+        when (currentRole) {
+            Role.Admin     -> dialogLayout.powerLevelAdminRadio.isChecked = true
+            Role.Moderator -> dialogLayout.powerLevelModeratorRadio.isChecked = true
+            Role.Default   -> dialogLayout.powerLevelDefaultRadio.isChecked = true
+            else           -> dialogLayout.powerLevelCustomRadio.isChecked = true
         }
 
         AlertDialog.Builder(activity)
@@ -61,9 +61,9 @@ object SetPowerLevelDialogs {
                 .setPositiveButton(R.string.action_change)
                 { _, _ ->
                     val newValue = when (dialogLayout.powerLevelRadioGroup.checkedRadioButtonId) {
-                        R.id.powerLevelAdminRadio     -> PowerLevelsConstants.DEFAULT_ROOM_ADMIN_LEVEL
-                        R.id.powerLevelModeratorRadio -> PowerLevelsConstants.DEFAULT_ROOM_MODERATOR_LEVEL
-                        R.id.powerLevelDefaultRadio   -> PowerLevelsConstants.DEFAULT_ROOM_USER_LEVEL
+                        R.id.powerLevelAdminRadio     -> Role.Admin.value
+                        R.id.powerLevelModeratorRadio -> Role.Moderator.value
+                        R.id.powerLevelDefaultRadio   -> Role.Default.value
                         else                          -> dialogLayout.powerLevelCustomSlider.progress
                     }
                     listener(newValue)

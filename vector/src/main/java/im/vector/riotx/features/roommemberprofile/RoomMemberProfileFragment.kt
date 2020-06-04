@@ -29,6 +29,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import im.vector.matrix.android.api.session.room.powerlevels.Role
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.animations.AppBarStateChangeListener
@@ -248,9 +249,9 @@ class RoomMemberProfileFragment @Inject constructor(
         navigator.openBigImageViewer(requireActivity(), view, userMatrixItem)
     }
 
-    override fun onSetPowerLevel(userPowerLevel: Int) {
-        SetPowerLevelDialogs.showChoice(requireActivity(), userPowerLevel) { newPowerLevel ->
-            viewModel.handle(RoomMemberProfileAction.SetPowerLevel(userPowerLevel, newPowerLevel, true))
+    override fun onSetPowerLevel(userRole: Role) {
+        SetPowerLevelDialogs.showChoice(requireActivity(), userRole) { newPowerLevel ->
+            viewModel.handle(RoomMemberProfileAction.SetPowerLevel(userRole.value, newPowerLevel, true))
         }
     }
 }

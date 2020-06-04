@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.GuestAccess
 import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.session.room.model.RoomAliasesContent
 import im.vector.matrix.android.api.session.room.model.RoomCanonicalAliasContent
 import im.vector.matrix.android.api.session.room.model.RoomGuestAccessContent
@@ -34,6 +35,7 @@ import im.vector.matrix.android.api.session.room.model.RoomNameContent
 import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.matrix.android.api.session.room.model.create.RoomCreateContent
+import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.widgets.model.WidgetContent
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
@@ -64,6 +66,7 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             EventType.STATE_ROOM_WIDGET,
             EventType.STATE_ROOM_WIDGET_LEGACY      -> formatWidgetEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_POWER_LEVELS       -> formatRoomPowerLevels(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER                   -> formatCallEvent(type, timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
@@ -81,6 +84,34 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
                 Timber.v("Type $type not handled by this formatter")
                 null
             }
+        }
+    }
+
+    private fun formatRoomPowerLevels(event: Event, disambiguatedDisplayName: String): CharSequence? {
+        val powerLevelsContent: PowerLevelsContent = event.getClearContent().toModel() ?: return null
+        val previousPowerLevelsContent: PowerLevelsContent = event.prevContent.toModel() ?: return null
+        val userIds = HashSet<String>()
+        userIds.addAll(powerLevelsContent.users.keys)
+        userIds.addAll(previousPowerLevelsContent.users.keys)
+        val diffs = ArrayList<String>()
+        userIds.forEach { userId ->
+            val from = PowerLevelsHelper(previousPowerLevelsContent).getUserRole(userId)
+            val to = PowerLevelsHelper(powerLevelsContent).getUserRole(userId)
+            if (from != to) {
+                val fromStr = sp.getString(from.res, from.value)
+                val toStr = sp.getString(to.res, to.value)
+                val diff = sp.getString(R.string.notice_power_level_diff, userId, fromStr, toStr)
+                diffs.add(diff)
+            }
+        }
+        if (diffs.isEmpty()) {
+            return null
+        }
+        val diffStr = diffs.joinToString(separator = ", ")
+        return if (event.isSentByCurrentUser()) {
+            sp.getString(R.string.notice_power_level_changed_by_you, diffStr)
+        } else {
+            sp.getString(R.string.notice_power_level_changed, disambiguatedDisplayName, diffStr)
         }
     }
 

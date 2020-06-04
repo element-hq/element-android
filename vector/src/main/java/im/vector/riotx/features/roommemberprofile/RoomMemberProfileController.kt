@@ -19,7 +19,7 @@ package im.vector.riotx.features.roommemberprofile
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsConstants
+import im.vector.matrix.android.api.session.room.powerlevels.Role
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.profiles.buildProfileAction
@@ -46,7 +46,7 @@ class RoomMemberProfileController @Inject constructor(
         fun onShowDeviceListNoCrossSigning()
         fun onJumpToReadReceiptClicked()
         fun onMentionClicked()
-        fun onSetPowerLevel(userPowerLevel: Int)
+        fun onSetPowerLevel(userRole: Role)
     }
 
     override fun buildModels(data: RoomMemberProfileViewState?) {
@@ -85,10 +85,10 @@ class RoomMemberProfileController @Inject constructor(
         val powerLevelsContent = state.powerLevelsContent() ?: return
         val powerLevelsStr = state.userPowerLevelString() ?: return
         val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
-        val userPowerLevel = powerLevelsHelper.getUserPowerLevel(state.userId)
-        val myPowerLevel = powerLevelsHelper.getUserPowerLevel(session.myUserId)
+        val userPowerLevel = powerLevelsHelper.getUserRole(state.userId)
+        val myPowerLevel = powerLevelsHelper.getUserRole(session.myUserId)
         if ((!state.isMine && myPowerLevel <= userPowerLevel)
-                || myPowerLevel != PowerLevelsConstants.DEFAULT_ROOM_ADMIN_LEVEL) {
+                || myPowerLevel != Role.Admin) {
             return
         }
         buildProfileSection("Admin Actions")

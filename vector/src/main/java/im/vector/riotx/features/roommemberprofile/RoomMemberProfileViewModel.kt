@@ -37,7 +37,6 @@ import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.members.roomMemberQueryParams
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.session.room.model.RoomSummary
-import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsConstants
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
@@ -151,7 +150,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
             return@withState
         }
         val currentPowerLevelsContent = state.powerLevelsContent() ?: return@withState
-        val myPowerLevel = PowerLevelsHelper(currentPowerLevelsContent).getUserPowerLevel(session.myUserId)
+        val myPowerLevel = PowerLevelsHelper(currentPowerLevelsContent).getUserPowerLevelValue(session.myUserId)
         if (action.askForValidation && action.newValue >= myPowerLevel) {
             _viewEvents.post(RoomMemberProfileViewEvents.ShowPowerLevelValidation(action.previousValue, action.newValue))
         } else {
@@ -229,16 +228,9 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                         BiFunction<RoomSummary, PowerLevelsContent, String> { roomSummary, powerLevelsContent ->
                             val roomName = roomSummary.toMatrixItem().getBestName()
                             val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
-                            val userPowerLevel = powerLevelsHelper.getUserPowerLevel(initialState.userId)
-                            if (userPowerLevel == PowerLevelsConstants.DEFAULT_ROOM_ADMIN_LEVEL) {
-                                stringProvider.getString(R.string.room_member_power_level_admin_in, roomName)
-                            } else if (userPowerLevel == PowerLevelsConstants.DEFAULT_ROOM_MODERATOR_LEVEL) {
-                                stringProvider.getString(R.string.room_member_power_level_moderator_in, roomName)
-                            } else if (userPowerLevel == PowerLevelsConstants.DEFAULT_ROOM_USER_LEVEL) {
-                                stringProvider.getString(R.string.room_member_power_level_user_in, roomName)
-                            } else {
-                                stringProvider.getString(R.string.room_member_power_level_custom_in, userPowerLevel, roomName)
-                            }
+                            val userPowerLevel = powerLevelsHelper.getUserRole(initialState.userId)
+                            val powerLevelStr = stringProvider.getString(userPowerLevel.res, userPowerLevel.value)
+                            stringProvider.getString(R.string.room_member_power_level_in, powerLevelStr, roomName)
                         }
                 ).execute {
                     copy(userPowerLevelString = it)

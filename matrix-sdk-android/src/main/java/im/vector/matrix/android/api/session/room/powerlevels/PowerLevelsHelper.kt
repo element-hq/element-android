@@ -30,9 +30,21 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
      * @param userId the user id
      * @return the power level
      */
-    fun getUserPowerLevel(userId: String): Int {
+    fun getUserPowerLevelValue(userId: String): Int {
         return powerLevelsContent.users.getOrElse(userId) {
             powerLevelsContent.usersDefault
+        }
+    }
+
+    /**
+     * Returns the user power level of a dedicated user Id
+     *
+     * @param userId the user id
+     * @return the power level
+     */
+    fun getUserRole(userId: String): Role {
+        return getUserPowerLevelValue(userId).let {
+            Role.fromValue(it, powerLevelsContent.eventsDefault)
         }
     }
 
@@ -45,7 +57,7 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
      */
     fun isAllowedToSend(isState: Boolean, eventType: String?, userId: String): Boolean {
         return if (userId.isNotEmpty()) {
-            val powerLevel = getUserPowerLevel(userId)
+            val powerLevel = getUserPowerLevelValue(userId)
             val minimumPowerLevel = powerLevelsContent.events[eventType]
                     ?: if (isState) {
                         powerLevelsContent.stateDefault
@@ -67,7 +79,7 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
             // the first implementation was a string value
             is String -> value.toInt()
             is Int    -> value
-            else      -> PowerLevelsConstants.DEFAULT_ROOM_MODERATOR_LEVEL
+            else      -> Role.Moderator.value
         }
     }
 }
