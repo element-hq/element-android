@@ -172,6 +172,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     // omit empty :/
                     if (it.isNotEmpty()) {
                         Timber.v("## Sending local ice candidates to call")
+                        it.forEach { peerConnection?.addIceCandidate(it) }
                         currentCall?.sendLocalIceCandidates(it)
                     }
                 }
