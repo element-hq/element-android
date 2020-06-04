@@ -58,7 +58,7 @@ class BreadcrumbsViewModel @AssistedInject constructor(@Assisted initialState: B
 
     private fun observeBreadcrumbs() {
         session.rx()
-                .liveBreadcrumbs()
+                .liveBreadcrumbs(true)
                 .observeOn(Schedulers.computation())
                 .execute { asyncBreadcrumbs ->
                     copy(asyncBreadcrumbs = asyncBreadcrumbs)

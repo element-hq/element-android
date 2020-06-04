@@ -73,15 +73,17 @@ interface RoomService {
 
     /**
      * Get a snapshot list of Breadcrumbs
+     * @param onlyJoinedRooms set to true to keep only joined rooms, and filter out left rooms
      * @return the immutable list of [RoomSummary]
      */
-    fun getBreadcrumbs(): List<RoomSummary>
+    fun getBreadcrumbs(onlyJoinedRooms: Boolean): List<RoomSummary>
 
     /**
      * Get a live list of Breadcrumbs
+     * @param onlyJoinedRooms set to true to keep only joined rooms, and filter out left rooms
      * @return the [LiveData] of [RoomSummary]
      */
-    fun getBreadcrumbsLive(): LiveData<List<RoomSummary>>
+    fun getBreadcrumbsLive(onlyJoinedRooms: Boolean): LiveData<List<RoomSummary>>
 
     /**
      * Inform the Matrix SDK that a room is displayed.

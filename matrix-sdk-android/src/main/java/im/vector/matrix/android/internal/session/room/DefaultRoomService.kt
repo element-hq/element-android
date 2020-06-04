@@ -22,6 +22,7 @@ import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.RoomService
 import im.vector.matrix.android.api.session.room.RoomSummaryQueryParams
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.VersioningState
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
@@ -111,24 +112,29 @@ internal class DefaultRoomService @Inject constructor(
         return query
     }
 
-    override fun getBreadcrumbs(): List<RoomSummary> {
+    override fun getBreadcrumbs(onlyJoinedRooms: Boolean): List<RoomSummary> {
         return monarchy.fetchAllMappedSync(
-                { breadcrumbsQuery(it) },
+                { breadcrumbsQuery(it, onlyJoinedRooms) },
                 { roomSummaryMapper.map(it) }
         )
     }
 
-    override fun getBreadcrumbsLive(): LiveData<List<RoomSummary>> {
+    override fun getBreadcrumbsLive(onlyJoinedRooms: Boolean): LiveData<List<RoomSummary>> {
         return monarchy.findAllMappedWithChanges(
-                { breadcrumbsQuery(it) },
+                { breadcrumbsQuery(it, onlyJoinedRooms) },
                 { roomSummaryMapper.map(it) }
         )
     }
 
-    private fun breadcrumbsQuery(realm: Realm): RealmQuery<RoomSummaryEntity> {
+    private fun breadcrumbsQuery(realm: Realm, onlyJoinedRooms: Boolean): RealmQuery<RoomSummaryEntity> {
         return RoomSummaryEntity.where(realm)
                 .isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME)
                 .notEqualTo(RoomSummaryEntityFields.VERSIONING_STATE_STR, VersioningState.UPGRADED_ROOM_JOINED.name)
+                .apply {
+                    if (onlyJoinedRooms) {
+                        equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
+                    }
+                }
                 .greaterThan(RoomSummaryEntityFields.BREADCRUMBS_INDEX, RoomSummary.NOT_IN_BREADCRUMBS)
                 .sort(RoomSummaryEntityFields.BREADCRUMBS_INDEX)
     }
