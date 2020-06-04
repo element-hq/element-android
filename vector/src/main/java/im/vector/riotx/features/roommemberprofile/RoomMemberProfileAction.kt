@@ -24,4 +24,5 @@ sealed class RoomMemberProfileAction : VectorViewModelAction {
     object IgnoreUser : RoomMemberProfileAction()
     object VerifyUser : RoomMemberProfileAction()
     object ShareRoomMemberProfile : RoomMemberProfileAction()
+    data class SetPowerLevel(val previousValue: Int, val newValue: Int, val askForValidation: Boolean) : RoomMemberProfileAction()
 }

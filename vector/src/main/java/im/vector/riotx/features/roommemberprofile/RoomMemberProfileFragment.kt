@@ -43,6 +43,7 @@ import im.vector.riotx.core.utils.startSharePlainTextIntent
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.roommemberprofile.devices.DeviceListBottomSheet
+import im.vector.riotx.features.roommemberprofile.powerlevel.SetPowerLevelDialogs
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_matrix_profile.*
 import kotlinx.android.synthetic.main.view_stub_room_member_profile_header.*
@@ -94,12 +95,20 @@ class RoomMemberProfileFragment @Inject constructor(
         matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         viewModel.observeViewEvents {
             when (it) {
-                is RoomMemberProfileViewEvents.Loading                -> showLoading(it.message)
+                is RoomMemberProfileViewEvents.Loading                 -> showLoading(it.message)
                 is RoomMemberProfileViewEvents.Failure                -> showFailure(it.throwable)
                 is RoomMemberProfileViewEvents.OnIgnoreActionSuccess  -> Unit
                 is RoomMemberProfileViewEvents.StartVerification      -> handleStartVerification(it)
                 is RoomMemberProfileViewEvents.ShareRoomMemberProfile -> handleShareRoomMemberProfile(it.permalink)
+                is RoomMemberProfileViewEvents.OnSetPowerLevelSuccess -> Unit
+                is RoomMemberProfileViewEvents.ShowPowerLevelValidation  -> handleShowPowerLevelAdminWarning(it)
             }.exhaustive
+        }
+    }
+
+    private fun handleShowPowerLevelAdminWarning(event: RoomMemberProfileViewEvents.ShowPowerLevelValidation) {
+        SetPowerLevelDialogs.showValidation(requireActivity()){
+            viewModel.handle(RoomMemberProfileAction.SetPowerLevel(event.currentValue, event.newValue, false))
         }
     }
 
@@ -237,5 +246,11 @@ class RoomMemberProfileFragment @Inject constructor(
 
     private fun onAvatarClicked(view: View, userMatrixItem: MatrixItem) {
         navigator.openBigImageViewer(requireActivity(), view, userMatrixItem)
+    }
+
+    override fun onSetPowerLevel(userPowerLevel: Int) {
+        SetPowerLevelDialogs.showChoice(requireActivity(), userPowerLevel) { newPowerLevel ->
+            viewModel.handle(RoomMemberProfileAction.SetPowerLevel(userPowerLevel, newPowerLevel, true))
+        }
     }
 }

@@ -30,6 +30,7 @@ import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.profile.ProfileService
 import im.vector.matrix.android.api.session.room.Room
@@ -41,6 +42,7 @@ import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.api.util.toOptional
+import im.vector.matrix.android.internal.util.awaitCallback
 import im.vector.matrix.rx.mapOptional
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
@@ -140,6 +142,31 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
             is RoomMemberProfileAction.IgnoreUser             -> handleIgnoreAction()
             is RoomMemberProfileAction.VerifyUser             -> prepareVerification()
             is RoomMemberProfileAction.ShareRoomMemberProfile -> handleShareRoomMemberProfile()
+            is RoomMemberProfileAction.SetPowerLevel          -> handleSetPowerLevel(action)
+        }
+    }
+
+    private fun handleSetPowerLevel(action: RoomMemberProfileAction.SetPowerLevel) = withState { state ->
+        if (room == null || action.previousValue == action.newValue) {
+            return@withState
+        }
+        val currentPowerLevelsContent = state.powerLevelsContent() ?: return@withState
+        val myPowerLevel = PowerLevelsHelper(currentPowerLevelsContent).getUserPowerLevel(session.myUserId)
+        if (action.askForValidation && action.newValue >= myPowerLevel) {
+            _viewEvents.post(RoomMemberProfileViewEvents.ShowPowerLevelValidation(action.previousValue, action.newValue))
+        } else {
+            currentPowerLevelsContent.users[state.userId] = action.newValue
+            viewModelScope.launch {
+                _viewEvents.post(RoomMemberProfileViewEvents.Loading())
+                try {
+                    awaitCallback<Unit> {
+                        room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, currentPowerLevelsContent.toContent(), it)
+                    }
+                    _viewEvents.post(RoomMemberProfileViewEvents.OnSetPowerLevelSuccess)
+                } catch (failure: Throwable) {
+                    _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
+                }
+            }
         }
     }
 
@@ -208,7 +235,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                             } else if (userPowerLevel == PowerLevelsConstants.DEFAULT_ROOM_MODERATOR_LEVEL) {
                                 stringProvider.getString(R.string.room_member_power_level_moderator_in, roomName)
                             } else if (userPowerLevel == PowerLevelsConstants.DEFAULT_ROOM_USER_LEVEL) {
-                                ""
+                                stringProvider.getString(R.string.room_member_power_level_user_in, roomName)
                             } else {
                                 stringProvider.getString(R.string.room_member_power_level_custom_in, userPowerLevel, roomName)
                             }

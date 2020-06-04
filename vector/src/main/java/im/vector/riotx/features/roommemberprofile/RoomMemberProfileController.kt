@@ -18,6 +18,9 @@
 package im.vector.riotx.features.roommemberprofile
 
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsConstants
+import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.profiles.buildProfileAction
 import im.vector.riotx.core.epoxy.profiles.buildProfileSection
@@ -28,7 +31,8 @@ import javax.inject.Inject
 
 class RoomMemberProfileController @Inject constructor(
         private val stringProvider: StringProvider,
-        colorProvider: ColorProvider
+        colorProvider: ColorProvider,
+        private val session: Session
 ) : TypedEpoxyController<RoomMemberProfileViewState>() {
 
     private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
@@ -42,6 +46,7 @@ class RoomMemberProfileController @Inject constructor(
         fun onShowDeviceListNoCrossSigning()
         fun onJumpToReadReceiptClicked()
         fun onMentionClicked()
+        fun onSetPowerLevel(userPowerLevel: Int)
     }
 
     override fun buildModels(data: RoomMemberProfileViewState?) {
@@ -71,6 +76,68 @@ class RoomMemberProfileController @Inject constructor(
     }
 
     private fun buildRoomMemberActions(state: RoomMemberProfileViewState) {
+        buildSecuritySection(state)
+        buildMoreSection(state)
+        buildAdminSection(state)
+    }
+
+    private fun buildAdminSection(state: RoomMemberProfileViewState) {
+        val powerLevelsContent = state.powerLevelsContent() ?: return
+        val powerLevelsStr = state.userPowerLevelString() ?: return
+        val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
+        val userPowerLevel = powerLevelsHelper.getUserPowerLevel(state.userId)
+        val myPowerLevel = powerLevelsHelper.getUserPowerLevel(session.myUserId)
+        if ((!state.isMine && myPowerLevel <= userPowerLevel)
+                || myPowerLevel != PowerLevelsConstants.DEFAULT_ROOM_ADMIN_LEVEL) {
+            return
+        }
+        buildProfileSection("Admin Actions")
+        buildProfileAction(
+                id = "set_power_level",
+                editable = false,
+                title = powerLevelsStr,
+                dividerColor = dividerColor,
+                action = { callback?.onSetPowerLevel(userPowerLevel) }
+        )
+    }
+
+    private fun buildMoreSection(state: RoomMemberProfileViewState) {
+        // More
+        if (!state.isMine) {
+            buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
+            buildProfileAction(
+                    id = "read_receipt",
+                    editable = false,
+                    title = stringProvider.getString(R.string.room_member_jump_to_read_receipt),
+                    dividerColor = dividerColor,
+                    action = { callback?.onJumpToReadReceiptClicked() }
+            )
+
+            val ignoreActionTitle = state.buildIgnoreActionTitle()
+
+            buildProfileAction(
+                    id = "mention",
+                    title = stringProvider.getString(R.string.room_participants_action_mention),
+                    dividerColor = dividerColor,
+                    editable = false,
+                    divider = ignoreActionTitle != null,
+                    action = { callback?.onMentionClicked() }
+            )
+            if (ignoreActionTitle != null) {
+                buildProfileAction(
+                        id = "ignore",
+                        title = ignoreActionTitle,
+                        dividerColor = dividerColor,
+                        destructive = true,
+                        editable = false,
+                        divider = false,
+                        action = { callback?.onIgnoreClicked() }
+                )
+            }
+        }
+    }
+
+    private fun buildSecuritySection(state: RoomMemberProfileViewState) {
         // Security
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
 
@@ -146,40 +213,6 @@ class RoomMemberProfileController @Inject constructor(
                 id("verify_footer_not_encrypted")
                 text(stringProvider.getString(R.string.room_profile_not_encrypted_subtitle))
                 centered(false)
-            }
-        }
-
-        // More
-        if (!state.isMine) {
-            buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
-            buildProfileAction(
-                    id = "read_receipt",
-                    editable = false,
-                    title = stringProvider.getString(R.string.room_member_jump_to_read_receipt),
-                    dividerColor = dividerColor,
-                    action = { callback?.onJumpToReadReceiptClicked() }
-            )
-
-            val ignoreActionTitle = state.buildIgnoreActionTitle()
-
-            buildProfileAction(
-                    id = "mention",
-                    title = stringProvider.getString(R.string.room_participants_action_mention),
-                    dividerColor = dividerColor,
-                    editable = false,
-                    divider = ignoreActionTitle != null,
-                    action = { callback?.onMentionClicked() }
-            )
-            if (ignoreActionTitle != null) {
-                buildProfileAction(
-                        id = "ignore",
-                        title = ignoreActionTitle,
-                        dividerColor = dividerColor,
-                        destructive = true,
-                        editable = false,
-                        divider = false,
-                        action = { callback?.onIgnoreClicked() }
-                )
             }
         }
     }
