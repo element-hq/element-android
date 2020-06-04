@@ -28,6 +28,7 @@ import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.network.NetworkConstants
 import im.vector.matrix.android.internal.session.room.alias.RoomAliasDescription
 import im.vector.matrix.android.internal.session.room.membership.RoomMembersResponse
+import im.vector.matrix.android.internal.session.room.membership.admin.UserIdAndReason
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteBody
 import im.vector.matrix.android.internal.session.room.relation.RelationsResponse
 import im.vector.matrix.android.internal.session.room.reporting.ReportContentBody
@@ -242,6 +243,33 @@ internal interface RoomAPI {
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/leave")
     fun leave(@Path("roomId") roomId: String,
               @Body params: Map<String, String?>): Call<Unit>
+
+    /**
+     * Ban a user from the given room.
+     *
+     * @param roomId          the room id
+     * @param userIdAndReason the banned user object (userId and reason for ban)
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/ban")
+    fun ban(@Path("roomId") roomId: String?, @Body userIdAndReason: UserIdAndReason): Call<Unit>
+
+    /**
+     * unban a user from the given room.
+     *
+     * @param roomId          the room id
+     * @param userIdAndReason the unbanned user object (userId and reason for unban)
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/unban")
+    fun unban(@Path("roomId") roomId: String?, @Body userIdAndReason: UserIdAndReason): Call<Unit>
+
+    /**
+     * Kick a user from the given room.
+     *
+     * @param roomId          the room id
+     * @param userIdAndReason the kicked user object (userId and reason for kicking)
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/kick")
+    fun kick(@Path("roomId") roomId: String?, @Body userIdAndReason: UserIdAndReason): Call<Unit>
 
     /**
      * Strips all information out of an event which isn't critical to the integrity of the server-side representation of the room.

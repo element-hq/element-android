@@ -408,16 +408,16 @@ class RoomDetailViewModel @AssistedInject constructor(
                             popDraft()
                         }
                         is ParsedCommand.UnbanUser                -> {
-                            // TODO
-                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
+                            handleUnbanSlashCommand(slashCommandResult)
+                            popDraft()
                         }
                         is ParsedCommand.BanUser                  -> {
-                            // TODO
-                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
+                            handleBanSlashCommand(slashCommandResult)
+                            popDraft()
                         }
                         is ParsedCommand.KickUser                 -> {
-                            // TODO
-                            _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
+                            handleKickSlashCommand(slashCommandResult)
+                            popDraft()
                         }
                         is ParsedCommand.JoinRoom                 -> {
                             handleJoinToAnotherRoomSlashCommand(slashCommandResult)
@@ -603,23 +603,38 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleChangeTopicSlashCommand(changeTopic: ParsedCommand.ChangeTopic) {
-        _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
-
-        room.updateTopic(changeTopic.topic, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                _viewEvents.post(RoomDetailViewEvents.SlashCommandResultOk)
-            }
-
-            override fun onFailure(failure: Throwable) {
-                _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
-            }
-        })
+        launchSlashCommandFlow {
+            room.updateTopic(changeTopic.topic, it)
+        }
     }
 
     private fun handleInviteSlashCommand(invite: ParsedCommand.Invite) {
-        _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+        launchSlashCommandFlow {
+            room.invite(invite.userId, invite.reason, it)
+        }
+    }
 
-        room.invite(invite.userId, invite.reason, object : MatrixCallback<Unit> {
+    private fun handleKickSlashCommand(kick: ParsedCommand.KickUser) {
+        launchSlashCommandFlow {
+            room.kick(kick.userId, kick.reason, it)
+        }
+    }
+
+    private fun handleBanSlashCommand(ban: ParsedCommand.BanUser) {
+        launchSlashCommandFlow {
+            room.ban(ban.userId, ban.reason, it)
+        }
+    }
+
+    private fun handleUnbanSlashCommand(unban: ParsedCommand.UnbanUser) {
+        launchSlashCommandFlow {
+            room.unban(unban.userId, unban.reason, it)
+        }
+    }
+
+    private fun launchSlashCommandFlow(lambda: (MatrixCallback<Unit>) -> Unit) {
+        _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+        val matrixCallback = object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 _viewEvents.post(RoomDetailViewEvents.SlashCommandResultOk)
             }
@@ -627,7 +642,8 @@ class RoomDetailViewModel @AssistedInject constructor(
             override fun onFailure(failure: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
             }
-        })
+        }
+        lambda.invoke(matrixCallback)
     }
 
     private fun handleSendReaction(action: RoomDetailAction.SendReaction) {
