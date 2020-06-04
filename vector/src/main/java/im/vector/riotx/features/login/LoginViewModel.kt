@@ -110,6 +110,7 @@ class LoginViewModel @AssistedInject constructor(
             is LoginAction.InitWith                   -> handleInitWith(action)
             is LoginAction.UpdateHomeServer           -> handleUpdateHomeserver(action)
             is LoginAction.LoginOrRegister            -> handleLoginOrRegister(action)
+            is LoginAction.LoginWithToken             -> handleLoginWithToken(action)
             is LoginAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
             is LoginAction.ResetPassword              -> handleResetPassword(action)
             is LoginAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
@@ -118,6 +119,41 @@ class LoginViewModel @AssistedInject constructor(
             is LoginAction.SetupSsoForSessionRecovery -> handleSetupSsoForSessionRecovery(action)
             is LoginAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
         }.exhaustive
+    }
+
+    private fun handleLoginWithToken(action: LoginAction.LoginWithToken) {
+        val safeLoginWizard = loginWizard
+
+        if (safeLoginWizard == null) {
+            setState {
+                copy(
+                        asyncLoginAction = Fail(Throwable("Bad configuration"))
+                )
+            }
+        } else {
+            setState {
+                copy(
+                        asyncLoginAction = Loading()
+                )
+            }
+
+            currentTask = safeLoginWizard.loginWithToken(
+                    action.loginToken,
+                    object : MatrixCallback<Session> {
+                        override fun onSuccess(data: Session) {
+                            onSessionCreated(data)
+                        }
+
+                        override fun onFailure(failure: Throwable) {
+                            _viewEvents.post(LoginViewEvents.Failure(failure))
+                            setState {
+                                copy(
+                                        asyncLoginAction = Fail(failure)
+                                )
+                            }
+                        }
+                    })
+        }
     }
 
     private fun handleSetupSsoForSessionRecovery(action: LoginAction.SetupSsoForSessionRecovery) {
