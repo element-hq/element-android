@@ -43,7 +43,6 @@ import im.vector.matrix.android.internal.crypto.verification.VerificationMessage
 import im.vector.matrix.android.internal.database.SessionRealmConfigurationFactory
 import im.vector.matrix.android.internal.di.Authenticated
 import im.vector.matrix.android.internal.di.DeviceId
-import im.vector.matrix.android.internal.di.MockHttpInterceptor
 import im.vector.matrix.android.internal.di.SessionCacheDirectory
 import im.vector.matrix.android.internal.di.SessionDatabase
 import im.vector.matrix.android.internal.di.SessionFilesDirectory
@@ -82,6 +81,11 @@ import org.greenrobot.eventbus.EventBus
 import retrofit2.Retrofit
 import java.io.File
 import javax.inject.Provider
+import javax.inject.Qualifier
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class MockHttpInterceptor
 
 @Module
 internal abstract class SessionModule {

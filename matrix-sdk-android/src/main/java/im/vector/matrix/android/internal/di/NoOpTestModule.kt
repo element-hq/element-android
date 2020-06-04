@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.di
 
 import dagger.Module
 import dagger.Provides
+import im.vector.matrix.android.internal.session.MockHttpInterceptor
 import im.vector.matrix.android.internal.session.TestInterceptor
 
 @Module
