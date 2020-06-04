@@ -24,6 +24,7 @@ import im.vector.matrix.android.api.session.room.model.create.JoinRoomResponse
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsParams
 import im.vector.matrix.android.api.session.room.model.roomdirectory.PublicRoomsResponse
 import im.vector.matrix.android.api.session.room.model.thirdparty.ThirdPartyProtocol
+import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.network.NetworkConstants
 import im.vector.matrix.android.internal.session.room.alias.RoomAliasDescription
 import im.vector.matrix.android.internal.session.room.membership.RoomMembersResponse
@@ -175,7 +176,7 @@ internal interface RoomAPI {
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/state/{state_event_type}")
     fun sendStateEvent(@Path("roomId") roomId: String,
                        @Path("state_event_type") stateEventType: String,
-                       @Body params: Map<String, String>): Call<Unit>
+                       @Body params: JsonDict): Call<Unit>
 
     /**
      * Send a generic state events
@@ -189,7 +190,7 @@ internal interface RoomAPI {
     fun sendStateEvent(@Path("roomId") roomId: String,
                        @Path("state_event_type") stateEventType: String,
                        @Path("state_key") stateKey: String,
-                       @Body params: Map<String, String>): Call<Unit>
+                       @Body params: JsonDict): Call<Unit>
 
     /**
      * Send a relation event to a room.

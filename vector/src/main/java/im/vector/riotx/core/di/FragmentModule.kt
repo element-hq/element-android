@@ -102,6 +102,7 @@ import im.vector.riotx.features.signout.soft.SoftLogoutFragment
 import im.vector.riotx.features.terms.ReviewTermsFragment
 import im.vector.riotx.features.userdirectory.KnownUsersFragment
 import im.vector.riotx.features.userdirectory.UserDirectoryFragment
+import im.vector.riotx.features.widgets.WidgetFragment
 
 @Module
 interface FragmentModule {
@@ -510,4 +511,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(ReviewTermsFragment::class)
     fun bindReviewTermsFragment(fragment: ReviewTermsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(WidgetFragment::class)
+    fun bindWidgetFragment(fragment: WidgetFragment): Fragment
 }

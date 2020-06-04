@@ -18,6 +18,7 @@ package im.vector.riotx.features.home.room.detail
 
 import android.net.Uri
 import androidx.annotation.IdRes
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
@@ -34,6 +35,7 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.isImageMessage
 import im.vector.matrix.android.api.session.events.model.isTextMessage
+import im.vector.matrix.android.api.session.events.model.toContent
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
@@ -67,6 +69,7 @@ import im.vector.riotx.features.command.CommandParser
 import im.vector.riotx.features.command.ParsedCommand
 import im.vector.riotx.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.riotx.features.home.room.detail.composer.rainbow.RainbowGenerator
+import im.vector.riotx.features.home.room.detail.sticker.StickerPickerActionHandler
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
 import im.vector.riotx.features.home.room.typing.TypingHelper
 import im.vector.riotx.features.settings.VectorPreferences
@@ -74,6 +77,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import timber.log.Timber
@@ -82,14 +86,15 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
 class RoomDetailViewModel @AssistedInject constructor(
-        @Assisted initialState: RoomDetailViewState,
+        @Assisted private val initialState: RoomDetailViewState,
         userPreferencesProvider: UserPreferencesProvider,
         private val vectorPreferences: VectorPreferences,
         private val stringProvider: StringProvider,
         private val typingHelper: TypingHelper,
         private val rainbowGenerator: RainbowGenerator,
         private val session: Session,
-        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider
+        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
+        private val stickerPickerActionHandler: StickerPickerActionHandler
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState), Timeline.Listener {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -100,12 +105,14 @@ class RoomDetailViewModel @AssistedInject constructor(
         TimelineSettings(30,
                 filterEdits = false,
                 filterRedacted = userPreferencesProvider.shouldShowRedactedMessages().not(),
+                filterUseless = false,
                 filterTypes = false,
                 buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts())
     } else {
         TimelineSettings(30,
                 filterEdits = true,
                 filterRedacted = userPreferencesProvider.shouldShowRedactedMessages().not(),
+                filterUseless = true,
                 filterTypes = true,
                 allowedTypes = TimelineDisplayableEvents.DISPLAYABLE_TYPES,
                 buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts())
@@ -155,11 +162,26 @@ class RoomDetailViewModel @AssistedInject constructor(
         observeDrafts()
         observeUnreadState()
         observeMyRoomMember()
+        observeActiveRoomWidgets()
         room.getRoomSummaryLive()
         room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, NoOpMatrixCallback())
         room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         // Inform the SDK that the room is displayed
         session.onRoomDisplayed(initialState.roomId)
+    }
+
+    private fun observeActiveRoomWidgets() {
+        session.rx()
+                .liveRoomWidgets(
+                        roomId = initialState.roomId,
+                        widgetId = QueryStringValue.NoCondition
+                )
+                .map { widgets ->
+                    widgets.filter { it.isActive }
+                }
+                .execute {
+                    copy(activeRoomWidgets = it)
+                }
     }
 
     private fun observeMyRoomMember() {
@@ -183,6 +205,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.SaveDraft                        -> handleSaveDraft(action)
             is RoomDetailAction.SendMessage                      -> handleSendMessage(action)
             is RoomDetailAction.SendMedia                        -> handleSendMedia(action)
+            is RoomDetailAction.SendSticker                      -> handleSendSticker(action)
             is RoomDetailAction.TimelineEventTurnsVisible        -> handleEventVisible(action)
             is RoomDetailAction.TimelineEventTurnsInvisible      -> handleEventInvisible(action)
             is RoomDetailAction.LoadMoreTimelineEvents           -> handleLoadMore(action)
@@ -214,6 +237,18 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.RequestVerification              -> handleRequestVerification(action)
             is RoomDetailAction.ResumeVerification               -> handleResumeRequestVerification(action)
             is RoomDetailAction.ReRequestKeys                    -> handleReRequestKeys(action)
+            is RoomDetailAction.SelectStickerAttachment          -> handleSelectStickerAttachment()
+        }
+    }
+
+    private fun handleSendSticker(action: RoomDetailAction.SendSticker) {
+        room.sendEvent(EventType.STICKER, action.stickerContent.toContent())
+    }
+
+    private fun handleSelectStickerAttachment() {
+        viewModelScope.launch {
+            val viewEvent = stickerPickerActionHandler.handle()
+            _viewEvents.post(viewEvent)
         }
     }
 
@@ -322,6 +357,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             timeline.pendingEventCount() > 0 && vectorPreferences.developerMode()
         R.id.resend_all          -> timeline.failedToDeliverEventCount() > 0
         R.id.clear_all           -> timeline.failedToDeliverEventCount() > 0
+        R.id.open_matrix_apps    -> session.integrationManagerService().isIntegrationEnabled()
         else                     -> false
     }
 
@@ -1006,7 +1042,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                     setState { copy(asyncInviter = Success(it)) }
                 }
             }
-            room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE, "")?.also {
+            room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE)?.also {
                 setState { copy(tombstoneEvent = it) }
             }
         }

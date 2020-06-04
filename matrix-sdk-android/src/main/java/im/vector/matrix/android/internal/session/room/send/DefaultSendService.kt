@@ -33,6 +33,7 @@ import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.util.Cancelable
 import im.vector.matrix.android.api.util.CancelableBag
+import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.di.SessionId
 import im.vector.matrix.android.internal.di.WorkManagerProvider
 import im.vector.matrix.android.internal.session.content.UploadContentWorker
@@ -66,6 +67,12 @@ internal class DefaultSendService @AssistedInject constructor(
     }
 
     private val workerFutureListenerExecutor = Executors.newSingleThreadExecutor()
+
+    override fun sendEvent(eventType: String, content: JsonDict?): Cancelable {
+        return localEchoEventFactory.createEvent(roomId, eventType, content)
+                .also { createLocalEcho(it) }
+                .let { sendEvent(it) }
+    }
 
     override fun sendTextMessage(text: CharSequence, msgType: String, autoMarkdown: Boolean): Cancelable {
         return localEchoEventFactory.createTextEvent(roomId, msgType, text, autoMarkdown)

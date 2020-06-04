@@ -659,8 +659,6 @@ Orain egin dezakezu edo gero aplikazioaren ezarpenetatik.</string>
 
     <string name="widget_no_power_to_manage">Baimena behar duzu gela honetako trepetak kudeatzeko</string>
     <string name="widget_creation_failure">Trepetaren sorrerak huts egin du</string>
-    <string name="event_formatter_widget_added">%1$s gehitu du %2$s erabiltzaileak</string>
-    <string name="event_formatter_widget_removed">%1$s kendu du %2$s erabiltzaileak</string>
     <string name="settings_labs_create_conference_with_jitsi">Sortu konferentzia deiak Jitsi bidez</string>
     <string name="widget_delete_message_confirmation">Ziur trepeta ezabatu nahi duzula gela honetatik?</string>
 

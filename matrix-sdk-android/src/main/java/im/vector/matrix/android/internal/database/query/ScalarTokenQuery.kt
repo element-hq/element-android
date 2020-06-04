@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.extensions
+package im.vector.matrix.android.internal.database.query
 
-/**
- * Ex: "abcdef".subStringBetween("a", "f") -> "bcde"
- * Ex: "abcdefff".subStringBetween("a", "f") -> "bcdeff"
- * Ex: "aaabcdef".subStringBetween("a", "f") -> "aabcde"
- */
-internal fun String.subStringBetween(prefix: String, suffix: String) = substringAfter(prefix).substringBeforeLast(suffix)
+import im.vector.matrix.android.internal.database.model.ScalarTokenEntity
+import im.vector.matrix.android.internal.database.model.ScalarTokenEntityFields
+import io.realm.Realm
+import io.realm.RealmQuery
+import io.realm.kotlin.where
+
+internal fun ScalarTokenEntity.Companion.where(realm: Realm, serverUrl: String): RealmQuery<ScalarTokenEntity> {
+    return realm
+            .where<ScalarTokenEntity>()
+            .equalTo(ScalarTokenEntityFields.SERVER_URL, serverUrl)
+}

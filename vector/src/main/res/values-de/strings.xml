@@ -704,8 +704,6 @@ Du kannst sie jetzt aktivieren oder später über das Einstellungsmenü.</string
 
     <string name="widget_no_power_to_manage">Um Widgets in diesem Raum zu verwalten, ist eine Berechtigung erforderlich</string>
     <string name="widget_creation_failure">Widget konnte nicht erstellt werden</string>
-    <string name="event_formatter_widget_added">%1$s hinzugefügt von %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s entfernt von %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Konferenzgespräche mit jitsi durchführen</string>
     <string name="widget_delete_message_confirmation">Soll das Widget wirklich aus diesem Raum gelöscht werden?</string>
 

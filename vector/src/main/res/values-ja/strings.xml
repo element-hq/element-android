@@ -543,10 +543,8 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="widget_integration_missing_room_id">リクエストに room_id がありません。</string>
     <string name="widget_integration_failed_to_send_request">リクエストの送信に失敗しました。</string>
     <string name="widget_integration_unable_to_create">ウィジェットを作成できません。</string>
-    <string name="event_formatter_widget_removed">%1$s は %2$s によって削除されました</string>
     <string name="widget_no_power_to_manage">この部屋のウィジェットを管理する権限が必要です</string>
     <string name="widget_creation_failure">ウィジェットの作成に失敗しました</string>
-    <string name="event_formatter_widget_added">%1$s は %2$s によって追加されました</string>
     <string name="widget_delete_message_confirmation">ウィジェットをこの部屋から削除してもよろしいですか？</string>
     <string name="directory_server_fail_to_retrieve_server">サーバーが利用できないか、オーバーロードしている可能性があります</string>
     <string name="unknown_devices_alert_message">この部屋は検証されていない不明なデバイスが含まれています。

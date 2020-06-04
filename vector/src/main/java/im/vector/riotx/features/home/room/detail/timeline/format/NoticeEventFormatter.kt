@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.home.room.detail.timeline.format
 
+import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -34,6 +35,7 @@ import im.vector.matrix.android.api.session.room.model.RoomTopicContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.matrix.android.api.session.room.model.create.RoomCreateContent
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
+import im.vector.matrix.android.api.session.widgets.model.WidgetContent
 import im.vector.matrix.android.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import im.vector.matrix.android.internal.crypto.model.event.EncryptionEventContent
 import im.vector.riotx.R
@@ -59,6 +61,8 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             EventType.STATE_ROOM_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_GUEST_ACCESS       -> formatRoomGuestAccessEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_ENCRYPTION         -> formatRoomEncryptionEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.STATE_ROOM_WIDGET,
+            EventType.STATE_ROOM_WIDGET_LEGACY      -> formatWidgetEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
@@ -76,6 +80,34 @@ class NoticeEventFormatter @Inject constructor(private val sessionHolder: Active
             else                                    -> {
                 Timber.v("Type $type not handled by this formatter")
                 null
+            }
+        }
+    }
+
+    private fun formatWidgetEvent(event: Event, disambiguatedDisplayName: String): CharSequence? {
+        val widgetContent: WidgetContent = event.getClearContent().toModel() ?: return null
+        val previousWidgetContent: WidgetContent? = event.prevContent.toModel()
+        return if (widgetContent.isActive()) {
+            val widgetName = widgetContent.getHumanName()
+            if (previousWidgetContent?.isActive().orFalse()) {
+                if (event.isSentByCurrentUser()) {
+                    sp.getString(R.string.notice_widget_modified_by_you, widgetName)
+                } else {
+                    sp.getString(R.string.notice_widget_modified, disambiguatedDisplayName, widgetName)
+                }
+            } else {
+                if (event.isSentByCurrentUser()) {
+                    sp.getString(R.string.notice_widget_added_by_you, widgetName)
+                } else {
+                    sp.getString(R.string.notice_widget_added, disambiguatedDisplayName, widgetName)
+                }
+            }
+        } else {
+            val widgetName = previousWidgetContent?.getHumanName()
+            if (event.isSentByCurrentUser()) {
+                sp.getString(R.string.notice_widget_removed_by_you, widgetName)
+            } else {
+                sp.getString(R.string.notice_widget_removed, disambiguatedDisplayName, widgetName)
             }
         }
     }

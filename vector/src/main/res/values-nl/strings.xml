@@ -725,8 +725,6 @@
 
     <string name="widget_no_power_to_manage">U heeft toestemming nodig om widgets in dit gesprek te beheren</string>
     <string name="widget_creation_failure">Aanmaken van widget is mislukt</string>
-    <string name="event_formatter_widget_added">%1$s is toegevoegd door %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s is verwijderd door %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Vergadergesprekken maken met jitsi</string>
     <string name="widget_delete_message_confirmation">Weet u zeker dat u deze widget uit dit gesprek wilt verwijderen\?</string>
 

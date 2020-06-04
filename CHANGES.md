@@ -2,13 +2,16 @@ Changes in RiotX 0.22.0 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Integration Manager and Widget support (#48)
+ - Send stickers (#51)
 
 Improvements 🙌:
  - New wording for notice when current user is the sender
+ - Hide "X made no changes" event by default in timeline (#1430)
 
 Bugfix 🐛:
  - Switch theme is not fully taken into account without restarting the app
+ - Temporary fix to show error when user is creating an account on matrix.org with userId containing only digits (#1410)
  - Reply composer overlay stays on screen too long after send (#1169)
 
 Translations 🗣:
@@ -21,7 +24,7 @@ Build 🧱:
  -
 
 Other changes:
- -
+ - Send plain text in the body of events containing formatted body, as per https://matrix.org/docs/spec/client_server/latest#m-room-message-msgtypes
 
 Changes in RiotX 0.21.0 (2020-05-28)
 ===================================================

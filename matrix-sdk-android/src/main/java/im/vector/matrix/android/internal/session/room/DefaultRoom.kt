@@ -116,9 +116,11 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
                 callback.onFailure(InvalidParameterException("Only MXCRYPTO_ALGORITHM_MEGOLM algorithm is supported"))
             }
             else                                   -> {
-                val params = SendStateTask.Params(roomId,
-                        EventType.STATE_ROOM_ENCRYPTION,
-                        mapOf(
+                val params = SendStateTask.Params(
+                        roomId = roomId,
+                        stateKey = null,
+                        eventType = EventType.STATE_ROOM_ENCRYPTION,
+                        body = mapOf(
                                 "algorithm" to algorithm
                         ))
 

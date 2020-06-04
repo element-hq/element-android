@@ -660,8 +660,6 @@ Ezt megteheted most vagy később az alkalmazás beállítások alatt.</string>
 
     <string name="widget_no_power_to_manage">Engedélyre van szükséged a kisalkalmazások ebben a szobában való kezeléséhez</string>
     <string name="widget_creation_failure">Kisalkalmazás létrehozása sikertelen</string>
-    <string name="event_formatter_widget_added">%1$s hozzá lett adva %2$s által</string>
-    <string name="event_formatter_widget_removed">%1$s eltávolításra került %2$s által</string>
     <string name="settings_labs_create_conference_with_jitsi">Hozz létre konferencia hívást a jitsi segítségével</string>
     <string name="widget_delete_message_confirmation">Biztos vagy benne hogy törölni akarod ezt a kisalkalmazást ebből a szobából?</string>
 

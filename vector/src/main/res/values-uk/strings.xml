@@ -708,8 +708,6 @@
     <!-- Widget-->
     <string name="widget_no_power_to_manage">Для керування віджетами у цій кімнаті потрібен дозвіл</string>
     <string name="widget_creation_failure">Помилка створення віджету</string>
-    <string name="event_formatter_widget_added">%1$s додано %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s видалено %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Здійснювати конференц дзвінки через Jitsi</string>
     <string name="widget_delete_message_confirmation">Справді бажаєте видалити віджет?</string>
 

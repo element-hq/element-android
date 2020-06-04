@@ -16,6 +16,7 @@
 
 package im.vector.matrix.rx
 
+import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.members.RoomMemberQueryParams
@@ -61,7 +62,7 @@ class RxRoom(private val room: Room) {
                 }
     }
 
-    fun liveStateEvent(eventType: String, stateKey: String): Observable<Optional<Event>> {
+    fun liveStateEvent(eventType: String, stateKey: QueryStringValue): Observable<Optional<Event>> {
         return room.getStateEventLive(eventType, stateKey).asObservable()
                 .startWithCallable {
                     room.getStateEvent(eventType, stateKey).toOptional()

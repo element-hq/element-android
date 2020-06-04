@@ -48,6 +48,9 @@ class DisplayableEventFormatter @Inject constructor(
         val senderName = timelineEvent.senderInfo.disambiguatedDisplayName
 
         when (timelineEvent.root.getClearType()) {
+            EventType.STICKER -> {
+                return simpleFormat(senderName, stringProvider.getString(R.string.send_a_sticker), appendAuthor)
+            }
             EventType.MESSAGE -> {
                 timelineEvent.getLastMessageContent()?.let { messageContent ->
                     when (messageContent.msgType) {

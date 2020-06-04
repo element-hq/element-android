@@ -760,8 +760,6 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
 
     <string name="widget_no_power_to_manage">Você necessita ter permissões para poder gerenciar os widgets desta sala</string>
     <string name="widget_creation_failure">A criação do widget falhou</string>
-    <string name="event_formatter_widget_added">%1$s adicionada/o por %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s removida/o por %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Criar chamadas de conferência com jitsi</string>
     <string name="widget_delete_message_confirmation">Você tem certeza que quer apagar este widget desta sala?</string>
 

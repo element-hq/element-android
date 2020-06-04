@@ -14,17 +14,22 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.session.identity.todelete
+package im.vector.matrix.android.api.session.widgets.model
 
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
+import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.room.sender.SenderInfo
 
-// There will be a duplicated class when Integration manager will be merged, so delete this one
-inline fun <T> LiveData<T>.observeK(owner: LifecycleOwner, crossinline observer: (T?) -> Unit) {
-    this.observe(owner, Observer { observer(it) })
-}
+data class Widget(
+        val widgetContent: WidgetContent,
+        val event: Event,
+        val widgetId: String,
+        val senderInfo: SenderInfo?,
+        val isAddedByMe: Boolean,
+        val computedUrl: String?,
+        val type: WidgetType
+) {
 
-inline fun <T> LiveData<T>.observeNotNull(owner: LifecycleOwner, crossinline observer: (T) -> Unit) {
-    this.observe(owner, Observer { it?.run(observer) })
+    val isActive = widgetContent.isActive()
+
+    val name = widgetContent.getHumanName()
 }

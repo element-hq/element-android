@@ -154,6 +154,11 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
             not().`in`("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.TYPE}", settings.allowedTypes.toTypedArray())
             needOr = true
         }
+        if (settings.filterUseless) {
+            if (needOr) or()
+            equalTo("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.IS_USELESS}", true)
+            needOr = true
+        }
         if (settings.filterEdits) {
             if (needOr) or()
             like("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.CONTENT}", TimelineEventFilter.Content.EDIT)

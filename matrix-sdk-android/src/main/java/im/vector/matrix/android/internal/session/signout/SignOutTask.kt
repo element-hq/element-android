@@ -49,7 +49,7 @@ internal class DefaultSignOutTask @Inject constructor(
                     apiCall = signOutAPI.signOut()
                 }
             } catch (throwable: Throwable) {
-                // Maybe due to https://github.com/matrix-org/synapse/issues/5755
+                // Maybe due to https://github.com/matrix-org/synapse/issues/5756
                 if (throwable is Failure.ServerError
                         && throwable.httpCode == HttpURLConnection.HTTP_UNAUTHORIZED /* 401 */
                         && throwable.error.code == MatrixError.M_UNKNOWN_TOKEN) {
