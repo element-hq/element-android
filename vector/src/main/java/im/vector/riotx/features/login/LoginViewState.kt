@@ -22,6 +22,9 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.PersistState
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
+import im.vector.matrix.android.api.auth.SSO_FALLBACK_PATH
+import im.vector.matrix.android.api.auth.SSO_REDIRECT_URL_PARAM
+import im.vector.riotx.core.extensions.appendParamToUrl
 
 data class LoginViewState(
         val asyncLoginAction: Async<Unit> = Uninitialized,
@@ -63,5 +66,23 @@ data class LoginViewState(
 
     fun isUserLogged(): Boolean {
         return asyncLoginAction is Success
+    }
+
+    fun getSsoUrl(): String {
+        return buildString {
+            append(homeServerUrl?.trim { it == '/' })
+            append(SSO_FALLBACK_PATH)
+            // Set a redirect url we will intercept later
+            appendParamToUrl(SSO_REDIRECT_URL_PARAM, RIOTX_REDIRECT_URL)
+            deviceId?.takeIf { it.isNotBlank() }?.let {
+                // But https://github.com/matrix-org/synapse/issues/5755
+                appendParamToUrl("device_id", it)
+            }
+        }
+    }
+
+    companion object {
+        // Note that the domain can be displayed to the user for confirmation that he trusts it. So use a human readable string
+        private const val RIOTX_REDIRECT_URL = "riotx://riotx"
     }
 }

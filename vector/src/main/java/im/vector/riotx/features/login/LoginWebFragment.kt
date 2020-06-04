@@ -21,7 +21,6 @@ package im.vector.riotx.features.login
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.graphics.Bitmap
-import android.net.Uri
 import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
@@ -34,10 +33,7 @@ import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.activityViewModel
 import im.vector.matrix.android.api.auth.LOGIN_FALLBACK_PATH
 import im.vector.matrix.android.api.auth.REGISTER_FALLBACK_PATH
-import im.vector.matrix.android.api.auth.SSO_FALLBACK_PATH
-import im.vector.matrix.android.api.auth.SSO_REDIRECT_URL_PARAM
 import im.vector.matrix.android.api.auth.data.Credentials
-import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.appendParamToUrl
@@ -50,17 +46,12 @@ import java.net.URLDecoder
 import javax.inject.Inject
 
 /**
- * This screen is displayed for SSO login and also when the application does not support login flow or registration flow
+ * This screen is displayed when the application does not support login flow or registration flow
  * of the homeserver, as a fallback to login or to create an account
  */
 class LoginWebFragment @Inject constructor(
         private val assetReader: AssetReader
 ) : AbstractLoginFragment() {
-
-    companion object {
-        // Note that the domain can be displayed to the user for confirmation that he trusts it. So use a human readable string
-        private const val REDIRECT_URL = "riotx://riotx"
-    }
 
     override fun getLayoutResId() = R.layout.fragment_login_web
 
@@ -135,13 +126,7 @@ class LoginWebFragment @Inject constructor(
         val url = buildString {
             append(state.homeServerUrl?.trim { it == '/' })
             if (state.signMode == SignMode.SignIn) {
-                if (state.loginMode == LoginMode.Sso) {
-                    append(SSO_FALLBACK_PATH)
-                    // Set a redirect url we will intercept later
-                    appendParamToUrl(SSO_REDIRECT_URL_PARAM, REDIRECT_URL)
-                } else {
-                    append(LOGIN_FALLBACK_PATH)
-                }
+                append(LOGIN_FALLBACK_PATH)
                 state.deviceId?.takeIf { it.isNotBlank() }?.let {
                     // But https://github.com/matrix-org/synapse/issues/5755
                     appendParamToUrl("device_id", it)
@@ -261,21 +246,11 @@ class LoginWebFragment @Inject constructor(
                         }
                     }
                     return true
-                } else if (url.startsWith(REDIRECT_URL)) {
-                    return handleSsoLoginSuccess(url)
                 }
 
                 return super.shouldOverrideUrlLoading(view, url)
             }
         }
-    }
-
-    private fun handleSsoLoginSuccess(url: String): Boolean {
-        val uri = Uri.parse(url)
-        val loginToken = tryThis { uri.getQueryParameter("loginToken") } ?: return false
-
-        loginViewModel.handle(LoginAction.LoginWithToken(loginToken))
-        return true
     }
 
     private fun notifyViewModel(credentials: Credentials) {
