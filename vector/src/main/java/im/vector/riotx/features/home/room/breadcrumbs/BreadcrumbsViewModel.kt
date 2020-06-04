@@ -21,7 +21,10 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
 import im.vector.matrix.rx.rx
 import im.vector.riotx.core.platform.EmptyAction
 import im.vector.riotx.core.platform.EmptyViewEvents
@@ -58,7 +61,10 @@ class BreadcrumbsViewModel @AssistedInject constructor(@Assisted initialState: B
 
     private fun observeBreadcrumbs() {
         session.rx()
-                .liveBreadcrumbs(true)
+                .liveBreadcrumbs(roomSummaryQueryParams {
+                    displayName = QueryStringValue.NoCondition
+                    memberships = listOf(Membership.JOIN)
+                })
                 .observeOn(Schedulers.computation())
                 .execute { asyncBreadcrumbs ->
                     copy(asyncBreadcrumbs = asyncBreadcrumbs)

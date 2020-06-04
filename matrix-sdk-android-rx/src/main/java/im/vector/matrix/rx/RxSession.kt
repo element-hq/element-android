@@ -56,10 +56,10 @@ class RxSession(private val session: Session) {
                 }
     }
 
-    fun liveBreadcrumbs(onlyJoinedRooms: Boolean): Observable<List<RoomSummary>> {
-        return session.getBreadcrumbsLive(onlyJoinedRooms).asObservable()
+    fun liveBreadcrumbs(queryParams: RoomSummaryQueryParams): Observable<List<RoomSummary>> {
+        return session.getBreadcrumbsLive(queryParams).asObservable()
                 .startWithCallable {
-                    session.getBreadcrumbs(onlyJoinedRooms)
+                    session.getBreadcrumbs(queryParams)
                 }
     }
 
