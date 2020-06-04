@@ -9,6 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Switch theme is not fully taken into account without restarting the app
+ - Reply composer overlay stays on screen too long after send (#1169)
 
 Translations 🗣:
  -
