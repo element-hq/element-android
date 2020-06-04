@@ -22,7 +22,7 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.PersistState
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import im.vector.matrix.android.api.auth.SSO_FALLBACK_PATH
+import im.vector.matrix.android.api.auth.SSO_REDIRECT_PATH
 import im.vector.matrix.android.api.auth.SSO_REDIRECT_URL_PARAM
 import im.vector.riotx.core.extensions.appendParamToUrl
 
@@ -71,7 +71,7 @@ data class LoginViewState(
     fun getSsoUrl(): String {
         return buildString {
             append(homeServerUrl?.trim { it == '/' })
-            append(SSO_FALLBACK_PATH)
+            append(SSO_REDIRECT_PATH)
             // Set a redirect url we will intercept later
             appendParamToUrl(SSO_REDIRECT_URL_PARAM, RIOTX_REDIRECT_URL)
             deviceId?.takeIf { it.isNotBlank() }?.let {
