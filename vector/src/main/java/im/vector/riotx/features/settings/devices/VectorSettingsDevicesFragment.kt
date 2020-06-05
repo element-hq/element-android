@@ -134,7 +134,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
         val inflater = requireActivity().layoutInflater
         val layout = inflater.inflate(R.layout.dialog_base_edit_text, null)
 
-        val input = layout.findViewById<EditText>(R.id.edit_text)
+        val input = layout.findViewById<EditText>(R.id.editText)
         input.setText(deviceInfo.displayName)
 
         AlertDialog.Builder(requireActivity())

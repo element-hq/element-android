@@ -21,8 +21,10 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.util.MatrixItem
+import java.lang.reflect.Member
 
 data class RoomMemberProfileViewState(
         val userId: String,
@@ -36,7 +38,8 @@ data class RoomMemberProfileViewState(
         val userMatrixItem: Async<MatrixItem> = Uninitialized,
         val userMXCrossSigningInfo: MXCrossSigningInfo? = null,
         val allDevicesAreTrusted: Boolean = false,
-        val allDevicesAreCrossSignedTrusted: Boolean = false
+        val allDevicesAreCrossSignedTrusted: Boolean = false,
+        val asyncMembership: Async<Membership> = Uninitialized
 ) : MvRxState {
 
     constructor(args: RoomMemberProfileArgs) : this(roomId = args.roomId, userId = args.userId)

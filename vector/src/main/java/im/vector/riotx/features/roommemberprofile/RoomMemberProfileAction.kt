@@ -22,6 +22,9 @@ import im.vector.riotx.core.platform.VectorViewModelAction
 sealed class RoomMemberProfileAction : VectorViewModelAction {
     object RetryFetchingInfo : RoomMemberProfileAction()
     object IgnoreUser : RoomMemberProfileAction()
+    data class BanUser(val reason: String?) : RoomMemberProfileAction()
+    data class KickUser(val reason: String?) : RoomMemberProfileAction()
+    object InviteUser : RoomMemberProfileAction()
     object VerifyUser : RoomMemberProfileAction()
     object ShareRoomMemberProfile : RoomMemberProfileAction()
     data class SetPowerLevel(val previousValue: Int, val newValue: Int, val askForValidation: Boolean) : RoomMemberProfileAction()

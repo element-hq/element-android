@@ -19,8 +19,9 @@ package im.vector.riotx.features.roommemberprofile
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.session.room.powerlevels.Role
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
+import im.vector.matrix.android.api.session.room.powerlevels.Role
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.profiles.buildProfileAction
 import im.vector.riotx.core.epoxy.profiles.buildProfileSection
@@ -47,6 +48,10 @@ class RoomMemberProfileController @Inject constructor(
         fun onJumpToReadReceiptClicked()
         fun onMentionClicked()
         fun onSetPowerLevel(userRole: Role)
+        fun onKickClicked()
+        fun onBanClicked(isUserBanned: Boolean)
+        fun onCancelInviteClicked()
+        fun onInviteClicked()
     }
 
     override fun buildModels(data: RoomMemberProfileViewState?) {
@@ -87,11 +92,11 @@ class RoomMemberProfileController @Inject constructor(
         val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
         val userPowerLevel = powerLevelsHelper.getUserRole(state.userId)
         val myPowerLevel = powerLevelsHelper.getUserRole(session.myUserId)
-        if ((!state.isMine && myPowerLevel <= userPowerLevel)
-                || myPowerLevel != Role.Admin) {
+        if (myPowerLevel < Role.Moderator || (!state.isMine && myPowerLevel <= userPowerLevel)) {
             return
         }
-        buildProfileSection("Admin Actions")
+        val membership = state.asyncMembership() ?: return
+        buildProfileSection(stringProvider.getString(R.string.room_profile_section_admin))
         buildProfileAction(
                 id = "set_power_level",
                 editable = false,
@@ -99,11 +104,46 @@ class RoomMemberProfileController @Inject constructor(
                 dividerColor = dividerColor,
                 action = { callback?.onSetPowerLevel(userPowerLevel) }
         )
+
+        if (membership == Membership.JOIN) {
+            buildProfileAction(
+                    id = "kick",
+                    editable = false,
+                    destructive = true,
+                    title = stringProvider.getString(R.string.room_participants_action_kick),
+                    dividerColor = dividerColor,
+                    action = { callback?.onKickClicked() }
+            )
+        } else if (membership == Membership.INVITE) {
+            buildProfileAction(
+                    id = "cancel_invite",
+                    title = stringProvider.getString(R.string.room_participants_action_cancel_invite),
+                    dividerColor = dividerColor,
+                    destructive = true,
+                    editable = false,
+                    action = { callback?.onCancelInviteClicked() }
+            )
+        }
+        val banActionTitle = if (membership == Membership.BAN) {
+            stringProvider.getString(R.string.room_participants_action_unban)
+        } else {
+            stringProvider.getString(R.string.room_participants_action_ban)
+        }
+        buildProfileAction(
+                id = "ban",
+                editable = false,
+                destructive = true,
+                title = banActionTitle,
+                dividerColor = dividerColor,
+                action = { callback?.onBanClicked(membership == Membership.BAN) }
+        )
     }
 
     private fun buildMoreSection(state: RoomMemberProfileViewState) {
         // More
         if (!state.isMine) {
+            val membership = state.asyncMembership() ?: return
+
             buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
             buildProfileAction(
                     id = "read_receipt",
@@ -123,6 +163,17 @@ class RoomMemberProfileController @Inject constructor(
                     divider = ignoreActionTitle != null,
                     action = { callback?.onMentionClicked() }
             )
+            if (membership == Membership.LEAVE || membership == Membership.KNOCK) {
+                buildProfileAction(
+                        id = "invite",
+                        title = stringProvider.getString(R.string.room_participants_action_invite),
+                        dividerColor = dividerColor,
+                        destructive = false,
+                        editable = false,
+                        divider = ignoreActionTitle != null,
+                        action = { callback?.onInviteClicked() }
+                )
+            }
             if (ignoreActionTitle != null) {
                 buildProfileAction(
                         id = "ignore",

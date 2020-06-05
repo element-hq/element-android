@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
@@ -96,19 +97,22 @@ class RoomMemberProfileFragment @Inject constructor(
         matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         viewModel.observeViewEvents {
             when (it) {
-                is RoomMemberProfileViewEvents.Loading                 -> showLoading(it.message)
-                is RoomMemberProfileViewEvents.Failure                -> showFailure(it.throwable)
-                is RoomMemberProfileViewEvents.OnIgnoreActionSuccess  -> Unit
-                is RoomMemberProfileViewEvents.StartVerification      -> handleStartVerification(it)
-                is RoomMemberProfileViewEvents.ShareRoomMemberProfile -> handleShareRoomMemberProfile(it.permalink)
-                is RoomMemberProfileViewEvents.OnSetPowerLevelSuccess -> Unit
-                is RoomMemberProfileViewEvents.ShowPowerLevelValidation  -> handleShowPowerLevelAdminWarning(it)
+                is RoomMemberProfileViewEvents.Loading                  -> showLoading(it.message)
+                is RoomMemberProfileViewEvents.Failure                  -> showFailure(it.throwable)
+                is RoomMemberProfileViewEvents.StartVerification        -> handleStartVerification(it)
+                is RoomMemberProfileViewEvents.ShareRoomMemberProfile   -> handleShareRoomMemberProfile(it.permalink)
+                is RoomMemberProfileViewEvents.ShowPowerLevelValidation -> handleShowPowerLevelAdminWarning(it)
+                is RoomMemberProfileViewEvents.OnKickActionSuccess      -> Unit
+                is RoomMemberProfileViewEvents.OnSetPowerLevelSuccess   -> Unit
+                is RoomMemberProfileViewEvents.OnBanActionSuccess       -> Unit
+                is RoomMemberProfileViewEvents.OnIgnoreActionSuccess    -> Unit
+                is RoomMemberProfileViewEvents.OnInviteActionSuccess    -> Unit
             }.exhaustive
         }
     }
 
     private fun handleShowPowerLevelAdminWarning(event: RoomMemberProfileViewEvents.ShowPowerLevelValidation) {
-        SetPowerLevelDialogs.showValidation(requireActivity()){
+        SetPowerLevelDialogs.showValidation(requireActivity()) {
             viewModel.handle(RoomMemberProfileAction.SetPowerLevel(event.currentValue, event.newValue, false))
         }
     }
@@ -253,5 +257,53 @@ class RoomMemberProfileFragment @Inject constructor(
         SetPowerLevelDialogs.showChoice(requireActivity(), userRole) { newPowerLevel ->
             viewModel.handle(RoomMemberProfileAction.SetPowerLevel(userRole.value, newPowerLevel, true))
         }
+    }
+
+    override fun onKickClicked() {
+        val layout = layoutInflater.inflate(R.layout.dialog_base_edit_text, null)
+        val input = layout.findViewById<TextView>(R.id.editText)
+        input.setHint(R.string.reason_hint)
+        AlertDialog.Builder(requireActivity())
+                .setTitle(resources.getQuantityString(R.plurals.room_participants_kick_prompt_msg, 1))
+                .setView(layout)
+                .setPositiveButton(R.string.room_participants_action_kick) { _, _ ->
+                    viewModel.handle(RoomMemberProfileAction.KickUser(input.text.toString()))
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
+    }
+
+    override fun onBanClicked(isUserBanned: Boolean) {
+        val layout = layoutInflater.inflate(R.layout.dialog_base_edit_text, null)
+        val input = layout.findViewById<TextView>(R.id.editText)
+        input.setHint(R.string.reason_hint)
+        val (titleRes, positiveButtonRes) = if (isUserBanned) {
+            input.isVisible = false
+            Pair(R.string.room_participants_unban_prompt_msg, R.string.room_participants_action_unban)
+        } else {
+            Pair(R.string.room_participants_ban_prompt_msg, R.string.room_participants_action_ban)
+        }
+        AlertDialog.Builder(requireActivity())
+                .setTitle(titleRes)
+                .setView(layout)
+                .setPositiveButton(positiveButtonRes) { _, _ ->
+                    viewModel.handle(RoomMemberProfileAction.BanUser(input.text.toString()))
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
+    }
+
+    override fun onCancelInviteClicked() {
+        AlertDialog.Builder(requireActivity())
+                .setTitle(resources.getString(R.string.room_participants_action_cancel_invite_prompt_msg))
+                .setPositiveButton(R.string.room_participants_action_cancel_invite) { _, _ ->
+                    viewModel.handle(RoomMemberProfileAction.KickUser(null))
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
+    }
+
+    override fun onInviteClicked() {
+        viewModel.handle(RoomMemberProfileAction.InviteUser)
     }
 }

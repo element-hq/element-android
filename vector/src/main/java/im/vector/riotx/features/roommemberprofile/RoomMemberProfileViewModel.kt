@@ -18,7 +18,9 @@
 package im.vector.riotx.features.roommemberprofile
 
 import androidx.lifecycle.viewModelScope
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
@@ -35,6 +37,7 @@ import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.profile.ProfileService
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.members.roomMemberQueryParams
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
@@ -142,6 +145,9 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
             is RoomMemberProfileAction.VerifyUser             -> prepareVerification()
             is RoomMemberProfileAction.ShareRoomMemberProfile -> handleShareRoomMemberProfile()
             is RoomMemberProfileAction.SetPowerLevel          -> handleSetPowerLevel(action)
+            is RoomMemberProfileAction.BanUser                -> handleBanAction(action)
+            is RoomMemberProfileAction.KickUser               -> handleKickAction(action)
+            RoomMemberProfileAction.InviteUser                -> handleInviteAction()
         }
     }
 
@@ -182,15 +188,79 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         }
     }
 
+    private fun handleInviteAction() {
+        if (room == null) {
+            return
+        }
+        viewModelScope.launch {
+            try {
+                _viewEvents.post(RoomMemberProfileViewEvents.Loading())
+                awaitCallback<Unit> {
+                    room.invite(initialState.userId, callback = it)
+                }
+                _viewEvents.post(RoomMemberProfileViewEvents.OnInviteActionSuccess)
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
+            }
+        }
+    }
+
+    private fun handleKickAction(action: RoomMemberProfileAction.KickUser) {
+        if (room == null) {
+            return
+        }
+        viewModelScope.launch {
+            try {
+                _viewEvents.post(RoomMemberProfileViewEvents.Loading())
+                awaitCallback<Unit> {
+                    room.kick(initialState.userId, action.reason, it)
+                }
+                _viewEvents.post(RoomMemberProfileViewEvents.OnKickActionSuccess)
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
+            }
+        }
+    }
+
+    private fun handleBanAction(action: RoomMemberProfileAction.BanUser) = withState { state ->
+        if (room == null) {
+            return@withState
+        }
+        val membership = state.asyncMembership() ?: return@withState
+        viewModelScope.launch {
+            try {
+                _viewEvents.post(RoomMemberProfileViewEvents.Loading())
+                awaitCallback<Unit> {
+                    if (membership == Membership.BAN) {
+                        room.unban(initialState.userId, action.reason, it)
+                    } else {
+                        room.ban(initialState.userId, action.reason, it)
+                    }
+                }
+                _viewEvents.post(RoomMemberProfileViewEvents.OnBanActionSuccess)
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
+            }
+        }
+    }
+
     private fun observeRoomMemberSummary(room: Room) {
         val queryParams = roomMemberQueryParams {
             this.userId = QueryStringValue.Equals(initialState.userId, QueryStringValue.Case.SENSITIVE)
         }
         room.rx().liveRoomMembers(queryParams)
-                .map { it.firstOrNull()?.toMatrixItem().toOptional() }
+                .map { it.firstOrNull().toOptional() }
                 .unwrap()
                 .execute {
-                    copy(userMatrixItem = it)
+                    when (it) {
+                        is Loading       -> copy(userMatrixItem = Loading(), asyncMembership = Loading())
+                        is Success       -> copy(
+                                userMatrixItem = Success(it().toMatrixItem()),
+                                asyncMembership = Success(it().membership)
+                        )
+                        is Fail          -> copy(userMatrixItem = Fail(it.error), asyncMembership = Fail(it.error))
+                        is Uninitialized -> this
+                    }
                 }
     }
 

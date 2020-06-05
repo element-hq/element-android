@@ -465,6 +465,7 @@
     <string name="room_participants_header_devices">SESSIONS</string>
 
     <string name="room_participants_action_invite">Invite</string>
+    <string name="room_participants_action_cancel_invite">Cancel invite</string>
     <string name="room_participants_action_leave">Leave this room</string>
     <string name="room_participants_action_remove">Remove from this room</string>
     <string name="room_participants_action_ban">Ban</string>
@@ -481,11 +482,15 @@
     <string name="room_participants_action_devices_list">Show Session List</string>
     <string name="room_participants_power_level_prompt">You will not be able to undo this change as you are promoting the user to have the same power level as yourself.\nAre you sure?</string>
 
+    <string name="room_participants_action_cancel_invite_prompt_msg">Are you sure you want to cancel the invite for this user?</string>
+
     <plurals name="room_participants_kick_prompt_msg">
         <item quantity="one">Are you sure that you want to kick this user from this chat?</item>
         <item quantity="other">Are you sure that you want to kick these users from this chat?</item>
     </plurals>
     <string name="room_participants_ban_prompt_msg">Are you sure that you want to ban this user from this chat?</string>
+    <string name="room_participants_unban_prompt_msg">Are you sure that you want to unban this user from this chat?</string>
+
     <string name="reason_hint">Reason</string>
 
     <!--
@@ -2068,6 +2073,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="room_profile_section_security">Security</string>
     <string name="room_profile_section_security_learn_more">Learn more</string>
     <string name="room_profile_section_more">More</string>
+    <string name="room_profile_section_admin">Admin Actions</string>
     <string name="room_profile_section_more_settings">Room settings</string>
     <string name="room_profile_section_more_notifications">Notifications</string>
     <plurals name="room_profile_section_more_member_list">
