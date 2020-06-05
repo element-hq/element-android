@@ -210,6 +210,17 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: realm.createObject(roomId)
         roomEntity.membership = Membership.LEAVE
         roomEntity.chunks.deleteAllFromRealm()
+        for (event in roomSync.state?.events.orEmpty()) {
+            if (event.eventId == null || event.stateKey == null) {
+                continue
+            }
+            val eventEntity = event.toEntity(roomId, SendState.SYNCED).copyToRealmOrIgnore(realm)
+            CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
+                eventId = event.eventId
+                root = eventEntity
+            }
+            roomMemberEventHandler.handle(realm, roomId, event)
+        }
         roomSummaryUpdater.update(realm, roomId, Membership.LEAVE, roomSync.summary, roomSync.unreadNotifications)
         return roomEntity
     }
