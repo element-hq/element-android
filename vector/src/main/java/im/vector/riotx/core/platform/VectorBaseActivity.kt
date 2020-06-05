@@ -188,7 +188,8 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
             if (!it.hasBeenHandled) {
                 // Recreate the Activity because configuration has changed
                 startActivity(intent)
-                finish()
+                //finish()
+                Runtime.getRuntime().exit(0)
             }
         })
 
