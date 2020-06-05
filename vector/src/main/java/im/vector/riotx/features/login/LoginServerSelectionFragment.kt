@@ -55,7 +55,7 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
     }
 
     @OnClick(R.id.loginServerChoiceModularLearnMore)
-    fun learMore() {
+    fun learnMore() {
         openUrlInExternalBrowser(requireActivity(), MODULAR_LINK)
     }
 
