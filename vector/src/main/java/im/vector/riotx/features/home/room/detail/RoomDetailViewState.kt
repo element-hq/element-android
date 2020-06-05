@@ -66,7 +66,7 @@ data class RoomDetailViewState(
         val highlightedEventId: String? = null,
         val unreadState: UnreadState = UnreadState.Unknown,
         val canShowJumpToReadMarker: Boolean = true,
-        val canSendMessage: Boolean = false
+        val canSendMessage: Boolean = true
 ) : MvRxState {
 
     constructor(args: RoomDetailArgs) : this(roomId = args.roomId, eventId = args.eventId)
