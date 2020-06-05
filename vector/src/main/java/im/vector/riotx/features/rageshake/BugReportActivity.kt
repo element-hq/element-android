@@ -70,6 +70,8 @@ class BugReportActivity : VectorBaseActivity() {
             bug_report_button_include_crash_logs.isVisible = false
 
             // Keep the screenshot
+        } else {
+            supportActionBar?.setTitle(R.string.title_activity_bug_report)
         }
     }
 

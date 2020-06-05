@@ -20,10 +20,12 @@ package im.vector.matrix.android.internal.session.profile
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.network.NetworkConstants
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
-interface ProfileAPI {
+internal interface ProfileAPI {
 
     /**
      * Get the combined profile information for this user.
@@ -33,4 +35,24 @@ interface ProfileAPI {
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "profile/{userId}")
     fun getProfile(@Path("userId") userId: String): Call<JsonDict>
+
+    /**
+     * List all 3PIDs linked to the Matrix user account.
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/3pid")
+    fun getThreePIDs(): Call<AccountThreePidsResponse>
+
+    /**
+     * Bind a threePid
+     * Ref: https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-account-3pid-bind
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "account/3pid/bind")
+    fun bindThreePid(@Body body: BindThreePidBody): Call<Unit>
+
+    /**
+     * Unbind a threePid
+     * Ref: https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-account-3pid-unbind
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "account/3pid/unbind")
+    fun unbindThreePid(@Body body: UnbindThreePidBody): Call<UnbindThreePidResponse>
 }

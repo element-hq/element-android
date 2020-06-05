@@ -97,7 +97,7 @@ class DevicesViewModel @AssistedInject constructor(
             copy(
                     hasAccountCrossSigning = session.cryptoService().crossSigningService().getMyCrossSigningKeys() != null,
                     accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified(),
-                    myDeviceId = session.sessionParams.credentials.deviceId ?: ""
+                    myDeviceId = session.sessionParams.deviceId ?: ""
             )
         }
 

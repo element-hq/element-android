@@ -73,7 +73,7 @@ class UserDirectoryFragment @Inject constructor(
     }
 
     private fun setupCloseView() {
-        userDirectoryClose.setOnClickListener {
+        userDirectoryClose.debouncedClicks {
             sharedActionViewModel.post(UserDirectorySharedAction.GoBack)
         }
     }

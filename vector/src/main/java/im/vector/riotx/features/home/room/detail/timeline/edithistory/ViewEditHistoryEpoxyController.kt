@@ -27,6 +27,7 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.util.ContentUtils.extractUsefulTextFromReply
+import im.vector.matrix.android.internal.session.room.send.TextContent
 import im.vector.riotx.R
 import im.vector.riotx.core.date.VectorDateFormatter
 import im.vector.riotx.core.extensions.localDateTime
@@ -90,17 +91,15 @@ class ViewEditHistoryEpoxyController(private val context: Context,
                 }
                 lastDate = evDate
                 val cContent = getCorrectContent(timelineEvent, isOriginalReply)
-                val body = cContent.second?.let { eventHtmlRenderer.render(it) }
-                        ?: cContent.first
+                val body = cContent.formattedText?.let { eventHtmlRenderer.render(it) } ?: cContent.text
 
                 val nextEvent = sourceEvents.getOrNull(index + 1)
 
                 var spannedDiff: Spannable? = null
-                if (nextEvent != null && cContent.second == null /*No diff for html*/) {
+                if (nextEvent != null && cContent.formattedText == null /*No diff for html*/) {
                     // compares the body
                     val nContent = getCorrectContent(nextEvent, isOriginalReply)
-                    val nextBody = nContent.second?.let { eventHtmlRenderer.render(it) }
-                            ?: nContent.first
+                    val nextBody = nContent.formattedText?.let { eventHtmlRenderer.render(it) } ?: nContent.text
                     val dmp = diff_match_patch()
                     val diff = dmp.diff_main(nextBody.toString(), body.toString())
                     dmp.diff_cleanupSemantic(diff)
@@ -138,15 +137,14 @@ class ViewEditHistoryEpoxyController(private val context: Context,
         }
     }
 
-    private fun getCorrectContent(event: Event, isOriginalReply: Boolean): Pair<String, String?> {
+    private fun getCorrectContent(event: Event, isOriginalReply: Boolean): TextContent {
         val clearContent = event.getClearContent().toModel<MessageTextContent>()
         val newContent = clearContent
                 ?.newContent
                 ?.toModel<MessageTextContent>()
         if (isOriginalReply) {
-            return extractUsefulTextFromReply(newContent?.body ?: clearContent?.body ?: "") to null
+            return TextContent(extractUsefulTextFromReply(newContent?.body ?: clearContent?.body ?: ""))
         }
-        return (newContent?.body ?: clearContent?.body ?: "") to (newContent?.formattedBody
-                ?: clearContent?.formattedBody)
+        return TextContent(newContent?.body ?: clearContent?.body ?: "", newContent?.formattedBody ?: clearContent?.formattedBody)
     }
 }

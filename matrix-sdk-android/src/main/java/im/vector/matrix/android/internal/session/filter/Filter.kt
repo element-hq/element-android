@@ -17,28 +17,42 @@ package im.vector.matrix.android.internal.session.filter
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.internal.di.MoshiProvider
 
 /**
- * Represents "Filter" as mentioned in the SPEC
+ * Class which can be parsed to a filter json string. Used for POST and GET
+ * Have a look here for further information:
  * https://matrix.org/docs/spec/client_server/r0.3.0.html#post-matrix-client-r0-user-userid-filter
  */
 @JsonClass(generateAdapter = true)
-data class Filter(
-        @Json(name = "limit") val limit: Int? = null,
-        @Json(name = "senders") val senders: List<String>? = null,
-        @Json(name = "not_senders") val notSenders: List<String>? = null,
-        @Json(name = "types") val types: List<String>? = null,
-        @Json(name = "not_types") val notTypes: List<String>? = null,
-        @Json(name = "rooms") val rooms: List<String>? = null,
-        @Json(name = "not_rooms") val notRooms: List<String>? = null
+internal data class Filter(
+        /**
+         * List of event fields to include. If this list is absent then all fields are included. The entries may
+         * include '.' characters to indicate sub-fields. So ['content.body'] will include the 'body' field of the
+         * 'content' object. A literal '.' character in a field name may be escaped using a '\'. A server may
+         * include more fields than were requested.
+         */
+        @Json(name = "event_fields") val eventFields: List<String>? = null,
+        /**
+         * The format to use for events. 'client' will return the events in a format suitable for clients.
+         * 'federation' will return the raw event as received over federation. The default is 'client'. One of: ["client", "federation"]
+         */
+        @Json(name = "event_format") val eventFormat: String? = null,
+        /**
+         * The presence updates to include.
+         */
+        @Json(name = "presence") val presence: EventFilter? = null,
+        /**
+         * The user account data that isn't associated with rooms to include.
+         */
+        @Json(name = "account_data") val accountData: EventFilter? = null,
+        /**
+         * Filters to be applied to room data.
+         */
+        @Json(name = "room") val room: RoomFilter? = null
 ) {
-    fun hasData(): Boolean {
-        return (limit != null
-                || senders != null
-                || notSenders != null
-                || types != null
-                || notTypes != null
-                || rooms != null
-                || notRooms != null)
+
+    fun toJSONString(): String {
+        return MoshiProvider.providesMoshi().adapter(Filter::class.java).toJson(this)
     }
 }

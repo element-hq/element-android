@@ -23,4 +23,6 @@ internal interface TokenChunkEvent {
     val end: String?
     val events: List<Event>
     val stateEvents: List<Event>
+
+    fun hasMore() = start != end
 }

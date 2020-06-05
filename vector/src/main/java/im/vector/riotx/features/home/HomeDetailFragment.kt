@@ -125,12 +125,12 @@ class HomeDetailFragment @Inject constructor(
                                 ?.navigator
                                 ?.requestSessionVerification(requireContext(), newest.deviceId ?: "")
                         unknownDeviceDetectorSharedViewModel.handle(
-                                UnknownDeviceDetectorSharedViewModel.Action.IgnoreDevice(newest.deviceId?.let { listOf(it) } ?: emptyList())
+                                UnknownDeviceDetectorSharedViewModel.Action.IgnoreDevice(newest.deviceId?.let { listOf(it) }.orEmpty())
                         )
                     }
                     dismissedAction = Runnable {
                         unknownDeviceDetectorSharedViewModel.handle(
-                                UnknownDeviceDetectorSharedViewModel.Action.IgnoreDevice(newest.deviceId?.let { listOf(it) } ?: emptyList())
+                                UnknownDeviceDetectorSharedViewModel.Action.IgnoreDevice(newest.deviceId?.let { listOf(it) }.orEmpty())
                         )
                     }
                 }
@@ -211,7 +211,7 @@ class HomeDetailFragment @Inject constructor(
             parentActivity.configure(groupToolbar)
         }
         groupToolbar.title = ""
-        groupToolbarAvatarImageView.setOnClickListener {
+        groupToolbarAvatarImageView.debouncedClicks {
             sharedActionViewModel.post(HomeActivitySharedAction.OpenDrawer)
         }
     }

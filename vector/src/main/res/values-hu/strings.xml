@@ -2388,4 +2388,19 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 \n
 \nFolytatod\?</string>
 
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
+
+    <string name="add_members_to_room">Tag hozzáadása</string>
+    <string name="invite_users_to_room_action_invite">MEGHÍV</string>
+    <string name="inviting_users_to_room">Felhasználók meghívása…</string>
+    <string name="invite_users_to_room_title">Felhasználók meghívása</string>
+    <string name="invitation_sent_to_one_user">Meghívó elküldve neki: %1$s</string>
+    <string name="invitations_sent_to_two_users">Meghívó elküldve nekik: %1$s, %2$s</string>
+    <plurals name="invitations_sent_to_one_and_more_users">
+        <item quantity="one">Meghívó elküldve neki: %1$s és még egy valakinek</item>
+        <item quantity="other">Meghívó elküldve neki: %1$s és még %2$d helyre</item>
+    </plurals>
+    <string name="invite_users_to_room_failure">Felhasználókat nem tudtuk meghívni. Ellenőrizd azokat a felhasználókat akiket meg szeretnél hívni és próbáld újra.</string>
+
 </resources>

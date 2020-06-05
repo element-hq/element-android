@@ -1,3 +1,30 @@
+Changes in RiotX 0.21.0 (2020-05-28)
+===================================================
+
+Features ✨:
+ - Identity server support (#607)
+ - Switch language support (#41)
+ - Display list of attachments of a room (#860)
+
+Improvements 🙌:
+ - Better connectivity lost indicator when airplane mode is on
+ - Add a setting to hide redacted events (#951)
+ - Render formatted_body for m.notice and m.emote (#1196)
+ - Change icon to magnifying-glass to filter room (#1384)
+
+Bugfix 🐛:
+ - After jump to unread, newer messages are never loaded (#1008)
+ - Fix issues with FontScale switch (#69, #645)
+ - "Seen by" uses 12h time (#1378)
+ - Enable markdown (if active) when sending emote (#734)
+ - Screenshots for Rageshake now includes Dialogs such as BottomSheet (#1349)
+
+SDK API changes ⚠️:
+ - initialize with proxy configuration
+
+Other changes:
+ - support new key agreement method for SAS (#1374)
+
 Changes in RiotX 0.20.0 (2020-05-15)
 ===================================================
 

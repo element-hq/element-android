@@ -2335,4 +2335,18 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="verify_other_sessions">驗證您所有的工作階段以確保您的帳號與訊息都安全</string>
     <string name="verify_this_session">驗證正在存取您帳號的新登入：%1$s</string>
 
+    <string name="notification_ticker_text_dm">%1$s：%2$s</string>
+    <string name="notification_ticker_text_group">%1$s：%2$s %3$s</string>
+
+    <string name="add_members_to_room">新增成員</string>
+    <string name="invite_users_to_room_action_invite">邀請</string>
+    <string name="inviting_users_to_room">正在邀請使用者……</string>
+    <string name="invite_users_to_room_title">邀請使用者</string>
+    <string name="invitation_sent_to_one_user">邀請已傳送給 %1$s</string>
+    <string name="invitations_sent_to_two_users">邀請已傳送給 %1$s 與 %2$s</string>
+    <plurals name="invitations_sent_to_one_and_more_users">
+        <item quantity="other">邀請已傳送給 %1$s 與其他 %2$d 個人</item>
+    </plurals>
+    <string name="invite_users_to_room_failure">我們無法邀請使用者。請檢查您想要邀請的使用者並再試一次。</string>
+
 </resources>

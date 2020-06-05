@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.androidsdk.rest.model.login
+package im.vector.matrix.android.internal.auth.registration
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

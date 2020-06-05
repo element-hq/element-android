@@ -75,8 +75,8 @@ abstract class VectorModule {
     abstract fun bindNavigator(navigator: DefaultNavigator): Navigator
 
     @Binds
-    abstract fun bindErrorFormatter(errorFormatter: DefaultErrorFormatter): ErrorFormatter
+    abstract fun bindErrorFormatter(formatter: DefaultErrorFormatter): ErrorFormatter
 
     @Binds
-    abstract fun bindUiStateRepository(uiStateRepository: SharedPreferencesUiStateRepository): UiStateRepository
+    abstract fun bindUiStateRepository(repository: SharedPreferencesUiStateRepository): UiStateRepository
 }

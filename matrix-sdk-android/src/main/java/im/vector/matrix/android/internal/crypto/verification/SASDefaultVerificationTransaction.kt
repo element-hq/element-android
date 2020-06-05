@@ -26,7 +26,6 @@ import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.internal.crypto.IncomingGossipingRequestManager
 import im.vector.matrix.android.internal.crypto.OutgoingGossipingRequestManager
 import im.vector.matrix.android.internal.crypto.actions.SetDeviceVerificationAction
-import im.vector.matrix.android.internal.crypto.model.MXKey
 import im.vector.matrix.android.internal.crypto.store.IMXCryptoStore
 import im.vector.matrix.android.internal.extensions.toUnsignedInt
 import im.vector.matrix.android.internal.util.withoutPrefix
@@ -66,8 +65,11 @@ internal abstract class SASDefaultVerificationTransaction(
         const val SAS_MAC_SHA256_LONGKDF = "hmac-sha256"
         const val SAS_MAC_SHA256 = "hkdf-hmac-sha256"
 
+        // Deprecated maybe removed later, use V2
+        const val KEY_AGREEMENT_V1 = "curve25519"
+        const val KEY_AGREEMENT_V2 = "curve25519-hkdf-sha256"
         // ordered by preferred order
-        val KNOWN_AGREEMENT_PROTOCOLS = listOf(MXKey.KEY_CURVE_25519_TYPE)
+        val KNOWN_AGREEMENT_PROTOCOLS = listOf(KEY_AGREEMENT_V2, KEY_AGREEMENT_V1)
         // ordered by preferred order
         val KNOWN_HASHES = listOf("sha256")
         // ordered by preferred order

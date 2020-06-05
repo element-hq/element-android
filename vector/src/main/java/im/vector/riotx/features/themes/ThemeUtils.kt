@@ -90,7 +90,8 @@ object ThemeUtils {
      * @return the selected application theme for light system design
      */
     fun getApplicationLightTheme(context: Context): String {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(APPLICATION_THEME_KEY, THEME_SC_DARK_COLORED_VALUE)!!
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(APPLICATION_THEME_KEY, THEME_SC_DARK_COLORED_VALUE) ?: THEME_SC_DARK_COLORED_VALUE
     }
 
 
@@ -101,7 +102,8 @@ object ThemeUtils {
      * @return the selected application theme for night system design
      */
     fun getApplicationDarkTheme(context: Context): String {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(APPLICATION_DARK_THEME_KEY, THEME_SC_DARK_COLORED_VALUE)!!
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(APPLICATION_DARK_THEME_KEY, THEME_SC_DARK_COLORED_VALUE) ?: THEME_SC_DARK_COLORED_VALUE
     }
 
     /**
@@ -140,6 +142,14 @@ object ThemeUtils {
 
         // Clear the cache
         mColorByAttr.clear()
+    }
+
+    fun setApplicationLightTheme(context: Context, theme: String) {
+        setApplicationTheme(context, theme, getApplicationDarkTheme(context))
+    }
+
+    fun setApplicationDarkTheme(context: Context, theme: String) {
+        setApplicationTheme(context, getApplicationLightTheme(context), theme)
     }
 
     /**

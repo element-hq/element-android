@@ -137,7 +137,7 @@ internal class OneTimeKeysUploader @Inject constructor(
     private suspend fun uploadOneTimeKeys(oneTimeKeys: Map<String, Map<String, String>>?): KeysUploadResponse {
         val oneTimeJson = mutableMapOf<String, Any>()
 
-        val curve25519Map = oneTimeKeys?.get(OlmAccount.JSON_KEY_ONE_TIME_KEY) ?: emptyMap()
+        val curve25519Map = oneTimeKeys?.get(OlmAccount.JSON_KEY_ONE_TIME_KEY).orEmpty()
 
         curve25519Map.forEach { (key_id, value) ->
             val k = mutableMapOf<String, Any>()

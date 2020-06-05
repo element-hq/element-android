@@ -24,5 +24,10 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class FilterResponse(
+        /**
+         * Required. The ID of the filter that was created. Cannot start with a { as this character
+         * is used to determine if the filter provided is inline JSON or a previously declared
+         * filter by homeservers on some APIs.
+         */
         @Json(name = "filter_id") val filterId: String
 )

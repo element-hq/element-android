@@ -36,7 +36,7 @@ internal fun isEventRead(monarchy: Monarchy,
     var isEventRead = false
 
     monarchy.doWithRealm { realm ->
-        val liveChunk = ChunkEntity.findLastLiveChunkFromRoom(realm, roomId) ?: return@doWithRealm
+        val liveChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId) ?: return@doWithRealm
         val eventToCheck = liveChunk.timelineEvents.find(eventId)
         isEventRead = if (eventToCheck == null || eventToCheck.root?.sender == userId) {
             true

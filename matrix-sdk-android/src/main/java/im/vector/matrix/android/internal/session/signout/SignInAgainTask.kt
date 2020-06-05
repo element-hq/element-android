@@ -43,13 +43,13 @@ internal class DefaultSignInAgainTask @Inject constructor(
             apiCall = signOutAPI.loginAgain(
                     PasswordLoginParams.userIdentifier(
                             // Reuse the same userId
-                            sessionParams.credentials.userId,
+                            sessionParams.userId,
                             params.password,
                             // The spec says the initial device name will be ignored
                             // https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-login
                             // but https://github.com/matrix-org/synapse/issues/6525
                             // Reuse the same deviceId
-                            deviceId = sessionParams.credentials.deviceId
+                            deviceId = sessionParams.deviceId
                     )
             )
         }

@@ -2438,4 +2438,19 @@
 \nSei sicuro di volere continuare\?</string>
 
     <string name="create_room_dm_failure">Impossibile creare il messaggio diretto. Controlla gli utenti che vuoi invitare e riprova.</string>
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
+
+    <string name="add_members_to_room">Aggiungi membri</string>
+    <string name="invite_users_to_room_action_invite">INVITA</string>
+    <string name="inviting_users_to_room">Invito utenti…</string>
+    <string name="invite_users_to_room_title">Invita utenti</string>
+    <string name="invitation_sent_to_one_user">Invito spedito a %1$s</string>
+    <string name="invitations_sent_to_two_users">Inviti spediti a %1$s e %2$s</string>
+    <plurals name="invitations_sent_to_one_and_more_users">
+        <item quantity="one">Inviti spediti a %1$s e ad un altro</item>
+        <item quantity="other">Inviti spediti a %1$s e ad altri %2$d</item>
+    </plurals>
+    <string name="invite_users_to_room_failure">Impossibile invitare gli utenti. Controlla gli utenti che vuoi invitare e riprova.</string>
+
 </resources>

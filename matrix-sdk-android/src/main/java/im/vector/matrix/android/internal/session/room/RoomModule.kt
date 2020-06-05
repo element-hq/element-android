@@ -56,12 +56,16 @@ import im.vector.matrix.android.internal.session.room.reporting.DefaultReportCon
 import im.vector.matrix.android.internal.session.room.reporting.ReportContentTask
 import im.vector.matrix.android.internal.session.room.state.DefaultSendStateTask
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
+import im.vector.matrix.android.internal.session.room.timeline.DefaultFetchNextTokenAndPaginateTask
 import im.vector.matrix.android.internal.session.room.timeline.DefaultGetContextOfEventTask
 import im.vector.matrix.android.internal.session.room.timeline.DefaultPaginationTask
+import im.vector.matrix.android.internal.session.room.timeline.FetchNextTokenAndPaginateTask
 import im.vector.matrix.android.internal.session.room.timeline.GetContextOfEventTask
 import im.vector.matrix.android.internal.session.room.timeline.PaginationTask
 import im.vector.matrix.android.internal.session.room.typing.DefaultSendTypingTask
 import im.vector.matrix.android.internal.session.room.typing.SendTypingTask
+import im.vector.matrix.android.internal.session.room.uploads.DefaultGetUploadsTask
+import im.vector.matrix.android.internal.session.room.uploads.GetUploadsTask
 import retrofit2.Retrofit
 
 @Module
@@ -144,6 +148,9 @@ internal abstract class RoomModule {
     abstract fun bindPaginationTask(task: DefaultPaginationTask): PaginationTask
 
     @Binds
+    abstract fun bindFetchNextTokenAndPaginateTask(task: DefaultFetchNextTokenAndPaginateTask): FetchNextTokenAndPaginateTask
+
+    @Binds
     abstract fun bindFetchEditHistoryTask(task: DefaultFetchEditHistoryTask): FetchEditHistoryTask
 
     @Binds
@@ -151,4 +158,7 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindSendTypingTask(task: DefaultSendTypingTask): SendTypingTask
+
+    @Binds
+    abstract fun bindGetUploadsTask(task: DefaultGetUploadsTask): GetUploadsTask
 }

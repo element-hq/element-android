@@ -25,7 +25,6 @@ import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
 import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.GlobalScope
 import javax.inject.Inject
 
 internal class DefaultSignOutService @Inject constructor(private val signOutTask: SignOutTask,
@@ -45,7 +44,7 @@ internal class DefaultSignOutService @Inject constructor(private val signOutTask
 
     override fun updateCredentials(credentials: Credentials,
                                    callback: MatrixCallback<Unit>): Cancelable {
-        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
             sessionParamsStore.updateCredentials(credentials)
         }
     }

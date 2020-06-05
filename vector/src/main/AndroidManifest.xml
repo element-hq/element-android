@@ -161,6 +161,8 @@
             android:name=".features.attachments.preview.AttachmentsPreviewActivity"
             android:theme="@style/AppTheme.AttachmentsPreview" />
 
+        <activity android:name=".features.terms.ReviewTermsActivity" />
+
         <!-- Services -->
 
         <service

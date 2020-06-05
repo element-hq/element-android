@@ -29,6 +29,10 @@ data class TimelineSettings(
          */
         val filterEdits: Boolean = false,
         /**
+         * A flag to filter redacted events
+         */
+        val filterRedacted: Boolean = false,
+        /**
          * A flag to filter by types. It should be used with [allowedTypes] field
          */
         val filterTypes: Boolean = false,

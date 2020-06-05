@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.database.helper
 
 import im.vector.matrix.android.internal.database.model.TimelineEventEntity
 import im.vector.matrix.android.internal.database.model.TimelineEventEntityFields
+import im.vector.matrix.android.internal.extensions.assertIsManaged
 import io.realm.Realm
 
 internal fun TimelineEventEntity.Companion.nextId(realm: Realm): Long {
@@ -27,4 +28,12 @@ internal fun TimelineEventEntity.Companion.nextId(realm: Realm): Long {
     } else {
         currentIdNum.toLong() + 1
     }
+}
+
+internal fun TimelineEventEntity.deleteOnCascade() {
+    assertIsManaged()
+    root?.deleteFromRealm()
+    annotations?.deleteFromRealm()
+    readReceipts?.deleteFromRealm()
+    deleteFromRealm()
 }

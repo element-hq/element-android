@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.session.events.model.RelationType
 import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
 import im.vector.matrix.android.api.session.room.model.message.MessageContent
+import im.vector.matrix.android.api.session.room.model.message.MessageContentWithFormattedBody
 import im.vector.matrix.android.api.session.room.model.message.MessageEmoteContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.model.message.MessageImageInfoContent
@@ -350,7 +351,7 @@ class MessageItemFactory @Inject constructor(
                                         highlight: Boolean,
                                         callback: TimelineEventController.Callback?,
                                         attributes: AbsMessageItem.Attributes): VectorEpoxyModel<*>? {
-        val isFormatted = messageContent.formattedBody.isNullOrBlank().not()
+        val isFormatted = messageContent.matrixFormattedBody.isNullOrBlank().not()
         return if (isFormatted) {
             // First detect if the message contains some code block(s) or inline code
             val localFormattedBody = htmlRenderer.get().parse(messageContent.body) as Document
@@ -462,14 +463,14 @@ class MessageItemFactory @Inject constructor(
                                        highlight: Boolean,
                                        callback: TimelineEventController.Callback?,
                                        attributes: AbsMessageItem.Attributes): MessageTextItem? {
-        val message = messageContent.body.let {
-            val formattedBody = span {
-                text = it
-                textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
-                textStyle = "italic"
-            }
-            formattedBody.linkify(callback)
+        val formattedBody = span {
+            text = messageContent.getHtmlBody()
+            textColor = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
+            textStyle = "italic"
         }
+
+        val message = formattedBody.linkify(callback)
+
         return MessageTextItem_()
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
@@ -483,10 +484,12 @@ class MessageItemFactory @Inject constructor(
                                       highlight: Boolean,
                                       callback: TimelineEventController.Callback?,
                                       attributes: AbsMessageItem.Attributes): MessageTextItem? {
-        val message = messageContent.body.let {
-            val formattedBody = "* ${informationData.memberName} $it"
-            formattedBody.linkify(callback)
-        }
+        val formattedBody = SpannableStringBuilder()
+        formattedBody.append("* ${informationData.memberName} ")
+        formattedBody.append(messageContent.getHtmlBody())
+
+        val message = formattedBody.linkify(callback)
+
         return MessageTextItem_()
                 .apply {
                     if (informationData.hasBeenEdited) {
@@ -500,6 +503,13 @@ class MessageItemFactory @Inject constructor(
                 .attributes(attributes)
                 .highlighted(highlight)
                 .movementMethod(createLinkMovementMethod(callback))
+    }
+
+    private fun MessageContentWithFormattedBody.getHtmlBody(): CharSequence {
+        return matrixFormattedBody
+                ?.let { htmlCompressor.compress(it) }
+                ?.let { htmlRenderer.get().render(it) }
+                ?: body
     }
 
     private fun buildRedactedItem(attributes: AbsMessageItem.Attributes,

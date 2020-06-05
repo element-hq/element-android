@@ -38,7 +38,7 @@ import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.task.launchToCallback
 import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 
@@ -47,7 +47,8 @@ internal class DefaultLoginWizard(
         retrofitFactory: RetrofitFactory,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val sessionCreator: SessionCreator,
-        private val pendingSessionStore: PendingSessionStore
+        private val pendingSessionStore: PendingSessionStore,
+        private val coroutineScope: CoroutineScope
 ) : LoginWizard {
 
     private var pendingSessionData: PendingSessionData = pendingSessionStore.getPendingSessionData() ?: error("Pending session data should exist here")
@@ -59,7 +60,7 @@ internal class DefaultLoginWizard(
                        password: String,
                        deviceName: String,
                        callback: MatrixCallback<Session>): Cancelable {
-        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+        return coroutineScope.launchToCallback(coroutineDispatchers.main, callback) {
             loginInternal(login, password, deviceName)
         }
     }
@@ -80,7 +81,7 @@ internal class DefaultLoginWizard(
     }
 
     override fun resetPassword(email: String, newPassword: String, callback: MatrixCallback<Unit>): Cancelable {
-        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+        return coroutineScope.launchToCallback(coroutineDispatchers.main, callback) {
             resetPasswordInternal(email, newPassword)
         }
     }
@@ -108,7 +109,7 @@ internal class DefaultLoginWizard(
             callback.onFailure(IllegalStateException("developer error, no reset password in progress"))
             return NoOpCancellable
         }
-        return GlobalScope.launchToCallback(coroutineDispatchers.main, callback) {
+        return coroutineScope.launchToCallback(coroutineDispatchers.main, callback) {
             resetPasswordMailConfirmedInternal(safeResetPasswordData)
         }
     }

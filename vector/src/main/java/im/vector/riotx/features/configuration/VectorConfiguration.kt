@@ -30,73 +30,19 @@ import javax.inject.Inject
 /**
  * Handle locale configuration change, such as theme, font size and locale chosen by the user
  */
-
 class VectorConfiguration @Inject constructor(private val context: Context) {
 
-    // TODO Import mLanguageReceiver From Riot?
     fun onConfigurationChanged() {
-        var needsSettingsUpdate = false
         if (Locale.getDefault().toString() != VectorLocale.applicationLocale.toString()) {
             Timber.v("## onConfigurationChanged(): the locale has been updated to ${Locale.getDefault()}")
             Timber.v("## onConfigurationChanged(): restore the expected value ${VectorLocale.applicationLocale}")
+            Locale.setDefault(VectorLocale.applicationLocale)
             ThemeUtils.invalidateNightMode()
-            needsSettingsUpdate = true
         }
         if (ThemeUtils.useDarkTheme(context) != ThemeUtils.shouldUseDarkTheme(context)) {
             Timber.v("## onConfigurationChanged(): night mode has changed")
             ThemeUtils.invalidateNightMode()
-            needsSettingsUpdate = true
         }
-        if (needsSettingsUpdate) {
-            updateApplicationSettings(VectorLocale.applicationLocale,
-                    FontScale.getFontScalePrefValue(context),
-                    ThemeUtils.getApplicationLightTheme(context),
-                    ThemeUtils.getApplicationDarkTheme(context))
-        }
-    }
-
-    private fun updateApplicationSettings(locale: Locale, textSize: String, lightTheme: String, darkTheme: String) {
-        VectorLocale.saveApplicationLocale(context, locale)
-        FontScale.saveFontScale(context, textSize)
-        Locale.setDefault(locale)
-
-        val config = Configuration(context.resources.configuration)
-        @Suppress("DEPRECATION")
-        config.locale = locale
-        config.fontScale = FontScale.getFontScale(context)
-        @Suppress("DEPRECATION")
-        context.resources.updateConfiguration(config, context.resources.displayMetrics)
-
-        ThemeUtils.setApplicationTheme(context, lightTheme, darkTheme)
-        // TODO PhoneNumberUtils.onLocaleUpdate()
-    }
-
-    /**
-     * Update the light application theme
-     *
-     * @param theme the new theme
-     */
-    fun updateApplicationLightTheme(lightTheme: String) {
-        val darkTheme = ThemeUtils.getApplicationDarkTheme(context)
-        ThemeUtils.setApplicationTheme(context, lightTheme, darkTheme)
-        updateApplicationSettings(VectorLocale.applicationLocale,
-                                  FontScale.getFontScalePrefValue(context),
-                                  lightTheme,
-                                  darkTheme)
-    }
-
-    /**
-     * Update the dark application theme
-     *
-     * @param theme the new theme
-     */
-    fun updateApplicationDarkTheme(darkTheme: String) {
-        val lightTheme = ThemeUtils.getApplicationLightTheme(context)
-        ThemeUtils.setApplicationTheme(context, lightTheme, darkTheme)
-        updateApplicationSettings(VectorLocale.applicationLocale,
-                                  FontScale.getFontScalePrefValue(context),
-                                  lightTheme,
-                                  darkTheme)
     }
 
     /**
@@ -105,7 +51,7 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
     fun initConfiguration() {
         VectorLocale.init(context)
         val locale = VectorLocale.applicationLocale
-        val fontScale = FontScale.getFontScale(context)
+        val fontScale = FontScale.getFontScaleValue(context)
         val lightTheme = ThemeUtils.getApplicationLightTheme(context)
         val darkTheme = ThemeUtils.getApplicationDarkTheme(context)
 
@@ -113,23 +59,12 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
         val config = Configuration(context.resources.configuration)
         @Suppress("DEPRECATION")
         config.locale = locale
-        config.fontScale = fontScale
+        config.fontScale = fontScale.scale
         @Suppress("DEPRECATION")
         context.resources.updateConfiguration(config, context.resources.displayMetrics)
 
         // init the theme
         ThemeUtils.setApplicationTheme(context, lightTheme, darkTheme)
-    }
-
-    /**
-     * Update the application locale
-     *
-     * @param locale
-     */
-    // TODO Call from LanguagePickerActivity
-    fun updateApplicationLocale(locale: Locale) {
-        updateApplicationSettings(locale, FontScale.getFontScalePrefValue(context), ThemeUtils.getApplicationLightTheme(context),
-                                  ThemeUtils.getApplicationDarkTheme(context))
     }
 
     /**
@@ -144,7 +79,7 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
             val resources = context.resources
             val locale = VectorLocale.applicationLocale
             val configuration = resources.configuration
-            configuration.fontScale = FontScale.getFontScale(context)
+            configuration.fontScale = FontScale.getFontScaleValue(context).scale
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 configuration.setLocale(locale)
@@ -171,10 +106,9 @@ class VectorConfiguration @Inject constructor(private val context: Context) {
      * Compute the locale status value
      * @return the local status value
      */
-    // TODO Create data class for this
     fun getHash(): String {
         return (VectorLocale.applicationLocale.toString()
-                + "_" + FontScale.getFontScalePrefValue(context)
+                + "_" + FontScale.getFontScaleValue(context).preferenceValue
                 + "_" + ThemeUtils.getApplicationLightTheme(context)
                 + "_" + ThemeUtils.getApplicationDarkTheme(context)
                 + "_" + ThemeUtils.useDarkTheme(context).toString())

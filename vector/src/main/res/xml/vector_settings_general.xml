@@ -43,6 +43,13 @@
             android:title="@string/settings_add_phone_number"
             app:iconTint="?attr/vctr_settings_icon_tint_color" />
 
+        <im.vector.riotx.core.preference.VectorPreference
+            android:order="1000"
+            android:persistent="false"
+            android:summary="@string/settings_discovery_manage"
+            android:title="@string/settings_discovery_category"
+            app:fragment="im.vector.riotx.features.discovery.DiscoverySettingsFragment" />
+
     </im.vector.riotx.core.preference.VectorPreferenceCategory>
 
     <im.vector.riotx.core.preference.VectorPreferenceCategory
@@ -76,7 +83,7 @@
         <im.vector.riotx.core.preference.VectorPreference
             android:key="SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
             android:title="@string/settings_identity_server"
-            app:isPreferenceVisible="@bool/false_not_implemented"
+            app:fragment="im.vector.riotx.features.discovery.DiscoverySettingsFragment"
             tools:summary="https://identity.server.url" />
 
         <im.vector.riotx.core.preference.VectorPreference

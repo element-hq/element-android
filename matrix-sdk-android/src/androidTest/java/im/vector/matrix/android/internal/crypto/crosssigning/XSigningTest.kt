@@ -122,7 +122,7 @@ class XSigningTest : InstrumentedTest {
         // We will want to test that in alice POV, this new device would be trusted by cross signing
 
         val bobSession2 = mTestHelper.logIntoAccount(bobUserId, SessionTestParams(true))
-        val bobSecondDeviceId = bobSession2.sessionParams.credentials.deviceId!!
+        val bobSecondDeviceId = bobSession2.sessionParams.deviceId!!
 
         // Check that bob first session sees the new login
         val data = mTestHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> {

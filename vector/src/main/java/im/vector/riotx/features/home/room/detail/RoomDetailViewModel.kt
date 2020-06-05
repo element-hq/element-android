@@ -99,11 +99,13 @@ class RoomDetailViewModel @AssistedInject constructor(
     private val timelineSettings = if (userPreferencesProvider.shouldShowHiddenEvents()) {
         TimelineSettings(30,
                 filterEdits = false,
+                filterRedacted = userPreferencesProvider.shouldShowRedactedMessages().not(),
                 filterTypes = false,
                 buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts())
     } else {
         TimelineSettings(30,
                 filterEdits = true,
+                filterRedacted = userPreferencesProvider.shouldShowRedactedMessages().not(),
                 filterTypes = true,
                 allowedTypes = TimelineDisplayableEvents.DISPLAYABLE_TYPES,
                 buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts())
@@ -115,8 +117,10 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     // Slot to keep a pending action during permission request
     var pendingAction: RoomDetailAction? = null
+
     // Slot to keep a pending uri during permission request
     var pendingUri: Uri? = null
+
     // Slot to store if we want to prevent preview of attachment
     var preventAttachmentPreview = false
 
@@ -388,7 +392,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandNotImplemented)
                         }
                         is ParsedCommand.SendEmote                -> {
-                            room.sendTextMessage(slashCommandResult.message, msgType = MessageType.MSGTYPE_EMOTE)
+                            room.sendTextMessage(slashCommandResult.message, msgType = MessageType.MSGTYPE_EMOTE, autoMarkdown = action.autoMarkdown)
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }

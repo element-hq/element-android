@@ -60,10 +60,9 @@ internal fun ChunkEntity.merge(roomId: String, chunkToMerge: ChunkEntity, direct
     chunkToMerge.stateEvents.forEach { stateEvent ->
         addStateEvent(roomId, stateEvent, direction)
     }
-    return eventsToMerge
-            .forEach {
-                addTimelineEventFromMerge(localRealm, it, direction)
-            }
+    eventsToMerge.forEach {
+        addTimelineEventFromMerge(localRealm, it, direction)
+    }
 }
 
 internal fun ChunkEntity.addStateEvent(roomId: String, stateEvent: EventEntity, direction: PaginationDirection) {

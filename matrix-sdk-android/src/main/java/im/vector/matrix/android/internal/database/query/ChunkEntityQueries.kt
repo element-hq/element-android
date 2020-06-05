@@ -41,7 +41,7 @@ internal fun ChunkEntity.Companion.find(realm: Realm, roomId: String, prevToken:
     return query.findFirst()
 }
 
-internal fun ChunkEntity.Companion.findLastLiveChunkFromRoom(realm: Realm, roomId: String): ChunkEntity? {
+internal fun ChunkEntity.Companion.findLastForwardChunkOfRoom(realm: Realm, roomId: String): ChunkEntity? {
     return where(realm, roomId)
             .equalTo(ChunkEntityFields.IS_LAST_FORWARD, true)
             .findFirst()

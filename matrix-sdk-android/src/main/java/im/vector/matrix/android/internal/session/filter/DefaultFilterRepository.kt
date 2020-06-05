@@ -28,25 +28,25 @@ import javax.inject.Inject
 
 internal class DefaultFilterRepository @Inject constructor(private val monarchy: Monarchy) : FilterRepository {
 
-    override suspend fun storeFilter(filterBody: FilterBody, roomEventFilter: RoomEventFilter): Boolean {
+    override suspend fun storeFilter(filter: Filter, roomEventFilter: RoomEventFilter): Boolean {
         return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
-            val filter = FilterEntity.get(realm)
+            val filterEntity = FilterEntity.get(realm)
             // Filter has changed, or no filter Id yet
-            filter == null
-                    || filter.filterBodyJson != filterBody.toJSONString()
-                    || filter.filterId.isBlank()
+            filterEntity == null
+                    || filterEntity.filterBodyJson != filter.toJSONString()
+                    || filterEntity.filterId.isBlank()
         }.also { hasChanged ->
             if (hasChanged) {
                 // Filter is new or has changed, store it and reset the filter Id.
                 // This has to be done outside of the Realm.use(), because awaitTransaction change the current thread
                 monarchy.awaitTransaction { realm ->
                     // We manage only one filter for now
-                    val filterBodyJson = filterBody.toJSONString()
+                    val filterJson = filter.toJSONString()
                     val roomEventFilterJson = roomEventFilter.toJSONString()
 
                     val filterEntity = FilterEntity.getOrCreate(realm)
 
-                    filterEntity.filterBodyJson = filterBodyJson
+                    filterEntity.filterBodyJson = filterJson
                     filterEntity.roomEventFilterJson = roomEventFilterJson
                     // Reset filterId
                     filterEntity.filterId = ""
@@ -55,14 +55,14 @@ internal class DefaultFilterRepository @Inject constructor(private val monarchy:
         }
     }
 
-    override suspend fun storeFilterId(filterBody: FilterBody, filterId: String) {
+    override suspend fun storeFilterId(filter: Filter, filterId: String) {
         monarchy.awaitTransaction {
             // We manage only one filter for now
-            val filterBodyJson = filterBody.toJSONString()
+            val filterJson = filter.toJSONString()
 
             // Update the filter id, only if the filter body matches
             it.where<FilterEntity>()
-                    .equalTo(FilterEntityFields.FILTER_BODY_JSON, filterBodyJson)
+                    .equalTo(FilterEntityFields.FILTER_BODY_JSON, filterJson)
                     ?.findFirst()
                     ?.filterId = filterId
         }

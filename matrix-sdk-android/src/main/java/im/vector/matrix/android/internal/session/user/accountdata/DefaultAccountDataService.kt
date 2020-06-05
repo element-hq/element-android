@@ -67,7 +67,7 @@ internal class DefaultAccountDataService @Inject constructor(
             entity.type?.let { type ->
                 UserAccountDataEvent(
                         type = type,
-                        content = entity.contentStr?.let { adapter.fromJson(it) } ?: emptyMap()
+                        content = entity.contentStr?.let { adapter.fromJson(it) }.orEmpty()
                 )
             }
         }
@@ -84,7 +84,7 @@ internal class DefaultAccountDataService @Inject constructor(
         }, { entity ->
             UserAccountDataEvent(
                     type = entity.type ?: "",
-                    content = entity.contentStr?.let { adapter.fromJson(it) } ?: emptyMap()
+                    content = entity.contentStr?.let { adapter.fromJson(it) }.orEmpty()
             )
         })
     }

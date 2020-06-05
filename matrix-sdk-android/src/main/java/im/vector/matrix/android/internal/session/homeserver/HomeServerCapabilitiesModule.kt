@@ -20,9 +20,10 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import im.vector.matrix.android.internal.session.SessionScope
+import im.vector.matrix.android.internal.wellknown.WellknownModule
 import retrofit2.Retrofit
 
-@Module
+@Module(includes = [WellknownModule::class])
 internal abstract class HomeServerCapabilitiesModule {
 
     @Module
