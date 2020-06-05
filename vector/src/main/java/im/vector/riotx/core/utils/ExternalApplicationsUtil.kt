@@ -70,6 +70,8 @@ fun openUrlInExternalBrowser(context: Context, uri: Uri?) {
 
 /**
  * Open url in custom tab or, if not available, in the default browser
+ * If several compatible browsers are installed, the user will be proposed to choose one.
+ * Ref: https://developer.chrome.com/multidevice/android/customtabs
  */
 fun openUrlInChromeCustomTab(context: Context, session: CustomTabsSession?, url: String) {
     try {

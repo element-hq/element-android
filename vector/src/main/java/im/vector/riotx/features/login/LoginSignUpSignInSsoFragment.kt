@@ -43,6 +43,7 @@ open class LoginSignUpSignInSsoFragment @Inject constructor() : LoginSignUpSignI
 
         val packageName = CustomTabsClient.getPackageName(requireContext(), null)
 
+        // packageName can be null if there are 0 or several CustomTabs compatible browsers installed on the device
         if (packageName != null) {
             customTabsServiceConnection = object : CustomTabsServiceConnection() {
                 override fun onCustomTabsServiceConnected(name: ComponentName, client: CustomTabsClient) {
