@@ -33,7 +33,6 @@ import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toContent
-import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.profile.ProfileService
 import im.vector.matrix.android.api.session.room.Room
 import im.vector.matrix.android.api.session.room.members.roomMemberQueryParams
@@ -45,12 +44,12 @@ import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.api.util.toOptional
 import im.vector.matrix.android.internal.util.awaitCallback
-import im.vector.matrix.rx.mapOptional
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.features.powerlevel.PowerLevelsObservableFactory
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import kotlinx.coroutines.Dispatchers
@@ -155,7 +154,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         if (room == null || action.previousValue == action.newValue) {
             return@withState
         }
-        val currentPowerLevelsContent = state.powerLevelsContent() ?: return@withState
+        val currentPowerLevelsContent = state.powerLevelsContent ?: return@withState
         val myPowerLevel = PowerLevelsHelper(currentPowerLevelsContent).getUserPowerLevelValue(session.myUserId)
         if (action.askForValidation && action.newValue >= myPowerLevel) {
             _viewEvents.post(RoomMemberProfileViewEvents.ShowPowerLevelValidation(action.previousValue, action.newValue))
@@ -280,17 +279,22 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
 
     private fun observeRoomSummaryAndPowerLevels(room: Room) {
         val roomSummaryLive = room.rx().liveRoomSummary().unwrap()
-        val powerLevelsContentLive = room.rx().liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
-                .mapOptional { it.content.toModel<PowerLevelsContent>() }
-                .unwrap()
+        val powerLevelsContentLive = PowerLevelsObservableFactory(room).createObservable()
+
+        powerLevelsContentLive.subscribe {
+            val powerLevelsHelper = PowerLevelsHelper(it)
+            val permissions = ActionPermissions(
+                    canKick = powerLevelsHelper.canKick(session.myUserId),
+                    canBan = powerLevelsHelper.canBan(session.myUserId),
+                    canInvite = powerLevelsHelper.canInvite(session.myUserId),
+                    canEditPowerLevel = powerLevelsHelper.isAllowedToSend(true, EventType.STATE_ROOM_POWER_LEVELS, session.myUserId)
+            )
+            setState { copy(powerLevelsContent = it, actionPermissions = permissions) }
+        }.disposeOnClear()
 
         roomSummaryLive.execute {
             copy(isRoomEncrypted = it.invoke()?.isEncrypted == true)
         }
-        powerLevelsContentLive.execute {
-            copy(powerLevelsContent = it)
-        }
-
         Observable
                 .combineLatest(
                         roomSummaryLive,

@@ -25,8 +25,8 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.model.User
-import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.session.widgets.model.Widget
+import im.vector.matrix.android.api.util.MatrixItem
 
 /**
  * Describes the current send mode:
@@ -65,7 +65,8 @@ data class RoomDetailViewState(
         val syncState: SyncState = SyncState.Idle,
         val highlightedEventId: String? = null,
         val unreadState: UnreadState = UnreadState.Unknown,
-        val canShowJumpToReadMarker: Boolean = true
+        val canShowJumpToReadMarker: Boolean = true,
+        val canSendMessage: Boolean = false
 ) : MvRxState {
 
     constructor(args: RoomDetailArgs) : this(roomId = args.roomId, eventId = args.eventId)

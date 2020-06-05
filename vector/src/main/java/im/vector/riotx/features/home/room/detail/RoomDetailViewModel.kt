@@ -48,6 +48,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageType
 import im.vector.matrix.android.api.session.room.model.message.OptionItem
 import im.vector.matrix.android.api.session.room.model.message.getFileUrl
 import im.vector.matrix.android.api.session.room.model.tombstone.RoomTombstoneContent
+import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
 import im.vector.matrix.android.api.session.room.read.ReadService
 import im.vector.matrix.android.api.session.room.send.UserDraft
 import im.vector.matrix.android.api.session.room.timeline.Timeline
@@ -71,6 +72,7 @@ import im.vector.riotx.features.crypto.verification.SupportedVerificationMethods
 import im.vector.riotx.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.riotx.features.home.room.detail.sticker.StickerPickerActionHandler
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
+import im.vector.riotx.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.riotx.features.home.room.typing.TypingHelper
 import im.vector.riotx.features.settings.VectorPreferences
 import io.reactivex.Observable
@@ -163,11 +165,22 @@ class RoomDetailViewModel @AssistedInject constructor(
         observeUnreadState()
         observeMyRoomMember()
         observeActiveRoomWidgets()
+        observePowerLevel()
         room.getRoomSummaryLive()
         room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, NoOpMatrixCallback())
         room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         // Inform the SDK that the room is displayed
         session.onRoomDisplayed(initialState.roomId)
+    }
+
+    private fun observePowerLevel() {
+        PowerLevelsObservableFactory(room).createObservable()
+                .subscribe {
+                    val canSendMessage = PowerLevelsHelper(it).isAllowedToSend(false, EventType.MESSAGE, session.myUserId)
+                    setState {
+                        copy(canSendMessage = canSendMessage)
+                    }
+                }.disposeOnClear()
     }
 
     private fun observeActiveRoomWidgets() {

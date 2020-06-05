@@ -39,6 +39,7 @@ import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
+import im.vector.riotx.features.powerlevel.PowerLevelsObservableFactory
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
@@ -68,6 +69,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
     init {
         observeRoomMemberSummaries()
         observeRoomSummary()
+        observePowerLevel()
     }
 
     private fun observeRoomMemberSummaries() {
@@ -116,6 +118,18 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                         copy(trustLevelMap = async)
                     }
         }
+    }
+
+    private fun observePowerLevel() {
+        PowerLevelsObservableFactory(room).createObservable()
+                .subscribe {
+                    val permissions = ActionPermissions(
+                            canInvite = PowerLevelsHelper(it).canInvite(session.myUserId)
+                    )
+                    setState {
+                        copy(actionsPermissions = permissions)
+                    }
+                }.disposeOnClear()
     }
 
     private fun observeRoomSummary() {

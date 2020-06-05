@@ -24,7 +24,6 @@ import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningIn
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.util.MatrixItem
-import java.lang.reflect.Member
 
 data class RoomMemberProfileViewState(
         val userId: String,
@@ -33,14 +32,22 @@ data class RoomMemberProfileViewState(
         val isMine: Boolean = false,
         val isIgnored: Async<Boolean> = Uninitialized,
         val isRoomEncrypted: Boolean = false,
-        val powerLevelsContent: Async<PowerLevelsContent> = Uninitialized,
+        val powerLevelsContent: PowerLevelsContent? = null,
         val userPowerLevelString: Async<String> = Uninitialized,
         val userMatrixItem: Async<MatrixItem> = Uninitialized,
         val userMXCrossSigningInfo: MXCrossSigningInfo? = null,
         val allDevicesAreTrusted: Boolean = false,
         val allDevicesAreCrossSignedTrusted: Boolean = false,
-        val asyncMembership: Async<Membership> = Uninitialized
+        val asyncMembership: Async<Membership> = Uninitialized,
+        val actionPermissions: ActionPermissions = ActionPermissions()
 ) : MvRxState {
 
     constructor(args: RoomMemberProfileArgs) : this(roomId = args.roomId, userId = args.userId)
 }
+
+data class ActionPermissions(
+        val canKick: Boolean = false,
+        val canBan: Boolean = false,
+        val canInvite: Boolean = false,
+        val canEditPowerLevel: Boolean = false
+)

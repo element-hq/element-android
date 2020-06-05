@@ -285,7 +285,10 @@ class RoomDetailFragment @Inject constructor(
             renderTombstoneEventHandling(it)
         }
 
-        roomDetailViewModel.selectSubscribe(RoomDetailViewState::sendMode) { mode ->
+        roomDetailViewModel.selectSubscribe(RoomDetailViewState::sendMode, RoomDetailViewState::canSendMessage) { mode, canSend ->
+            if (!canSend) {
+                return@selectSubscribe
+            }
             when (mode) {
                 is SendMode.REGULAR -> renderRegularMode(mode.text)
                 is SendMode.EDIT    -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_edit, R.string.edit, mode.text)
@@ -372,6 +375,7 @@ class RoomDetailFragment @Inject constructor(
         modelBuildListener = null
         debouncer.cancelAll()
         recyclerView.cleanup()
+
         super.onDestroyView()
     }
 
@@ -611,6 +615,12 @@ class RoomDetailFragment @Inject constructor(
                 }
 
                 override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
+                    val canSendMessage = withState(roomDetailViewModel) {
+                        it.canSendMessage
+                    }
+                    if (!canSendMessage) {
+                        return false
+                    }
                     return when (model) {
                         is MessageFileItem,
                         is MessageImageVideoItem,
@@ -733,23 +743,26 @@ class RoomDetailFragment @Inject constructor(
             val uid = session.myUserId
             val meMember = state.myRoomMember()
             avatarRenderer.render(MatrixItem.UserItem(uid, meMember?.displayName, meMember?.avatarUrl), composerLayout.composerAvatarImageView)
+            if (state.tombstoneEvent == null) {
+                if (state.canSendMessage) {
+                    composerLayout.visibility = View.VISIBLE
+                    composerLayout.setRoomEncrypted(summary.isEncrypted, summary.roomEncryptionTrustLevel)
+                    notificationAreaView.render(NotificationAreaView.State.Hidden)
+                } else {
+                    composerLayout.visibility = View.GONE
+                    notificationAreaView.render(NotificationAreaView.State.NoPermissionToPost)
+                }
+            } else {
+                composerLayout.visibility = View.GONE
+                notificationAreaView.render(NotificationAreaView.State.Tombstone(state.tombstoneEvent))
+            }
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
             inviteView.visibility = View.VISIBLE
             inviteView.render(inviter, VectorInviteView.Mode.LARGE)
-
             // Intercept click event
             inviteView.setOnClickListener { }
         } else if (state.asyncInviter.complete) {
             vectorBaseActivity.finish()
-        }
-        val isRoomEncrypted = summary?.isEncrypted ?: false
-        if (state.tombstoneEvent == null) {
-            composerLayout.visibility = View.VISIBLE
-            composerLayout.setRoomEncrypted(isRoomEncrypted, state.asyncRoomSummary.invoke()?.roomEncryptionTrustLevel)
-            notificationAreaView.render(NotificationAreaView.State.Hidden)
-        } else {
-            composerLayout.visibility = View.GONE
-            notificationAreaView.render(NotificationAreaView.State.Tombstone(state.tombstoneEvent))
         }
     }
 
@@ -1378,7 +1391,9 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun focusComposerAndShowKeyboard() {
-        composerLayout.composerEditText.showKeyboard(andRequestFocus = true)
+        if (composerLayout.isVisible) {
+            composerLayout.composerEditText.showKeyboard(andRequestFocus = true)
+        }
     }
 
     private fun showSnackWithMessage(message: String, duration: Int = Snackbar.LENGTH_SHORT) {

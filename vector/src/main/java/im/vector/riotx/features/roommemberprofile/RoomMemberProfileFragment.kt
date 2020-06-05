@@ -45,7 +45,7 @@ import im.vector.riotx.core.utils.startSharePlainTextIntent
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.roommemberprofile.devices.DeviceListBottomSheet
-import im.vector.riotx.features.roommemberprofile.powerlevel.SetPowerLevelDialogs
+import im.vector.riotx.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_matrix_profile.*
 import kotlinx.android.synthetic.main.view_stub_room_member_profile_header.*
@@ -85,7 +85,7 @@ class RoomMemberProfileFragment @Inject constructor(
             }
         }
         memberProfileStateView.contentView = memberProfileInfoContainer
-        matrixProfileRecyclerView.configureWith(roomMemberProfileController, hasFixedSize = true)
+        matrixProfileRecyclerView.configureWith(roomMemberProfileController, hasFixedSize = true, disableItemAnimation = true)
         roomMemberProfileController.callback = this
         appBarStateChangeListener = MatrixItemAppBarStateChangeListener(headerView,
                 listOf(
@@ -112,7 +112,7 @@ class RoomMemberProfileFragment @Inject constructor(
     }
 
     private fun handleShowPowerLevelAdminWarning(event: RoomMemberProfileViewEvents.ShowPowerLevelValidation) {
-        SetPowerLevelDialogs.showValidation(requireActivity()) {
+        EditPowerLevelDialogs.showValidation(requireActivity()) {
             viewModel.handle(RoomMemberProfileAction.SetPowerLevel(event.currentValue, event.newValue, false))
         }
     }
@@ -253,9 +253,9 @@ class RoomMemberProfileFragment @Inject constructor(
         navigator.openBigImageViewer(requireActivity(), view, userMatrixItem)
     }
 
-    override fun onSetPowerLevel(userRole: Role) {
-        SetPowerLevelDialogs.showChoice(requireActivity(), userRole) { newPowerLevel ->
-            viewModel.handle(RoomMemberProfileAction.SetPowerLevel(userRole.value, newPowerLevel, true))
+    override fun onEditPowerLevel(currentRole: Role) {
+        EditPowerLevelDialogs.showChoice(requireActivity(), currentRole) { newPowerLevel ->
+            viewModel.handle(RoomMemberProfileAction.SetPowerLevel(currentRole.value, newPowerLevel, true))
         }
     }
 

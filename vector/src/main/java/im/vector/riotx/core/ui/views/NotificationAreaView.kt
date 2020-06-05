@@ -34,7 +34,9 @@ import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.riotx.R
 import im.vector.riotx.core.error.ResourceLimitErrorFormatter
+import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.themes.ThemeUtils
+import kotlinx.android.synthetic.main.view_notification_area.view.*
 import me.gujun.android.span.span
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import timber.log.Timber
@@ -48,11 +50,6 @@ class NotificationAreaView @JvmOverloads constructor(
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
 ) : RelativeLayout(context, attrs, defStyleAttr) {
-
-    @BindView(R.id.room_notification_icon)
-    lateinit var imageView: ImageView
-    @BindView(R.id.room_notification_message)
-    lateinit var messageView: TextView
 
     var delegate: Delegate? = null
     private var state: State = State.Initial
@@ -77,6 +74,7 @@ class NotificationAreaView @JvmOverloads constructor(
         when (newState) {
             is State.Default                    -> renderDefault()
             is State.Hidden                     -> renderHidden()
+            is State.NoPermissionToPost         -> renderNoPermissionToPost()
             is State.Tombstone                  -> renderTombstone(newState)
             is State.ResourceLimitExceededError -> renderResourceLimitExceededError(newState)
             is State.ConnectionError            -> renderConnectionError()
@@ -91,20 +89,30 @@ class NotificationAreaView @JvmOverloads constructor(
 
     private fun setupView() {
         inflate(context, R.layout.view_notification_area, this)
-        ButterKnife.bind(this)
+        minimumHeight = DimensionConverter(resources).dpToPx(48)
     }
 
     private fun cleanUp() {
-        messageView.setOnClickListener(null)
-        imageView.setOnClickListener(null)
+        roomNotificationMessage.setOnClickListener(null)
+        roomNotificationIcon.setOnClickListener(null)
         setBackgroundColor(Color.TRANSPARENT)
-        messageView.text = null
-        imageView.setImageResource(0)
+        roomNotificationMessage.text = null
+        roomNotificationIcon.setImageResource(0)
+    }
+
+    private fun renderNoPermissionToPost() {
+        visibility = View.VISIBLE
+        roomNotificationIcon.setImageDrawable(null)
+        val message = span {
+            +resources.getString(R.string.room_do_not_have_permission_to_post)
+        }
+        roomNotificationMessage.text = message
+        roomNotificationMessage.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_secondary))
     }
 
     private fun renderTombstone(state: State.Tombstone) {
         visibility = View.VISIBLE
-        imageView.setImageResource(R.drawable.error)
+        roomNotificationIcon.setImageResource(R.drawable.error)
         val message = span {
             +resources.getString(R.string.room_tombstone_versioned_description)
             +"\n"
@@ -113,8 +121,8 @@ class NotificationAreaView @JvmOverloads constructor(
                 onClick = { delegate?.onTombstoneEventClicked(state.tombstoneEvent) }
             }
         }
-        messageView.movementMethod = BetterLinkMovementMethod.getInstance()
-        messageView.text = message
+        roomNotificationMessage.movementMethod = BetterLinkMovementMethod.getInstance()
+        roomNotificationMessage.text = message
     }
 
     private fun renderResourceLimitExceededError(state: State.ResourceLimitExceededError) {
@@ -130,54 +138,54 @@ class NotificationAreaView @JvmOverloads constructor(
             formatterMode = ResourceLimitErrorFormatter.Mode.Hard
         }
         val message = resourceLimitErrorFormatter.format(state.matrixError, formatterMode, clickable = true)
-        messageView.setTextColor(Color.WHITE)
-        messageView.text = message
-        messageView.movementMethod = LinkMovementMethod.getInstance()
-        messageView.setLinkTextColor(Color.WHITE)
+        roomNotificationMessage.setTextColor(Color.WHITE)
+        roomNotificationMessage.text = message
+        roomNotificationMessage.movementMethod = LinkMovementMethod.getInstance()
+        roomNotificationMessage.setLinkTextColor(Color.WHITE)
         setBackgroundColor(ContextCompat.getColor(context, backgroundColor))
     }
 
     private fun renderConnectionError() {
         visibility = View.VISIBLE
-        imageView.setImageResource(R.drawable.error)
-        messageView.setTextColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color))
-        messageView.text = SpannableString(resources.getString(R.string.room_offline_notification))
+        roomNotificationIcon.setImageResource(R.drawable.error)
+        roomNotificationMessage.setTextColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color))
+        roomNotificationMessage.text = SpannableString(resources.getString(R.string.room_offline_notification))
     }
 
     private fun renderTyping(state: State.Typing) {
         visibility = View.VISIBLE
-        imageView.setImageResource(R.drawable.vector_typing)
-        messageView.text = SpannableString(state.message)
-        messageView.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_room_notification_text_color))
+        roomNotificationIcon.setImageResource(R.drawable.vector_typing)
+        roomNotificationMessage.text = SpannableString(state.message)
+        roomNotificationMessage.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_room_notification_text_color))
     }
 
     private fun renderUnreadPreview() {
         visibility = View.VISIBLE
-        imageView.setImageResource(R.drawable.scrolldown)
-        messageView.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_room_notification_text_color))
-        imageView.setOnClickListener { delegate?.closeScreen() }
+        roomNotificationIcon.setImageResource(R.drawable.scrolldown)
+        roomNotificationMessage.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_room_notification_text_color))
+        roomNotificationIcon.setOnClickListener { delegate?.closeScreen() }
     }
 
     private fun renderScrollToBottom(state: State.ScrollToBottom) {
         visibility = View.VISIBLE
         if (state.unreadCount > 0) {
-            imageView.setImageResource(R.drawable.newmessages)
-            messageView.setTextColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color))
-            messageView.text = SpannableString(resources.getQuantityString(R.plurals.room_new_messages_notification, state.unreadCount, state.unreadCount))
+            roomNotificationIcon.setImageResource(R.drawable.newmessages)
+            roomNotificationMessage.setTextColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color))
+            roomNotificationMessage.text = SpannableString(resources.getQuantityString(R.plurals.room_new_messages_notification, state.unreadCount, state.unreadCount))
         } else {
-            imageView.setImageResource(R.drawable.scrolldown)
-            messageView.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_room_notification_text_color))
+            roomNotificationIcon.setImageResource(R.drawable.scrolldown)
+            roomNotificationMessage.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_room_notification_text_color))
             if (!state.message.isNullOrEmpty()) {
-                messageView.text = SpannableString(state.message)
+                roomNotificationMessage.text = SpannableString(state.message)
             }
         }
-        messageView.setOnClickListener { delegate?.jumpToBottom() }
-        imageView.setOnClickListener { delegate?.jumpToBottom() }
+        roomNotificationMessage.setOnClickListener { delegate?.jumpToBottom() }
+        roomNotificationIcon.setOnClickListener { delegate?.jumpToBottom() }
     }
 
     private fun renderUnsent(state: State.UnsentEvents) {
         visibility = View.VISIBLE
-        imageView.setImageResource(R.drawable.error)
+        roomNotificationIcon.setImageResource(R.drawable.error)
         val cancelAll = resources.getString(R.string.room_prompt_cancel)
         val resendAll = resources.getString(R.string.room_prompt_resend)
         val messageRes = if (state.hasUnknownDeviceEvents) R.string.room_unknown_devices_messages_notification else R.string.room_unsent_messages_notification
@@ -194,9 +202,9 @@ class NotificationAreaView @JvmOverloads constructor(
         if (resendAllPos >= 0) {
             spannableString.setSpan(ResendAllClickableSpan(), resendAllPos, resendAllPos + resendAll.length, 0)
         }
-        messageView.movementMethod = LinkMovementMethod.getInstance()
-        messageView.setTextColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color))
-        messageView.text = spannableString
+        roomNotificationMessage.movementMethod = LinkMovementMethod.getInstance()
+        roomNotificationMessage.setTextColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color))
+        roomNotificationMessage.text = spannableString
     }
 
     private fun renderDefault() {
@@ -254,6 +262,8 @@ class NotificationAreaView @JvmOverloads constructor(
         // View will be Invisible
         object Default : State()
 
+        object NoPermissionToPost: State()
+
         // View will be Gone
         object Hidden : State()
 
@@ -288,27 +298,5 @@ class NotificationAreaView @JvmOverloads constructor(
         fun deleteUnsentEvents()
         fun closeScreen()
         fun jumpToBottom()
-    }
-
-    companion object {
-        /**
-         * Preference key.
-         */
-        private const val SHOW_INFO_AREA_KEY = "SETTINGS_SHOW_INFO_AREA_KEY"
-
-        /**
-         * Always show the info area.
-         */
-        private const val SHOW_INFO_AREA_VALUE_ALWAYS = "always"
-
-        /**
-         * Show the info area when it has messages or errors.
-         */
-        private const val SHOW_INFO_AREA_VALUE_MESSAGES_AND_ERRORS = "messages_and_errors"
-
-        /**
-         * Show the info area only when it has errors.
-         */
-        private const val SHOW_INFO_AREA_VALUE_ONLY_ERRORS = "only_errors"
     }
 }

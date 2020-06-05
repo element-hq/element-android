@@ -51,6 +51,7 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
     /**
      * Tell if an user can send an event of a certain type
      *
+     * @param isState true if the event is a state event (ie. state key is not null)
      * @param eventType the event type to check for
      * @param userId          the user id
      * @return true if the user can send this type of event
@@ -66,6 +67,26 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
                     }
             powerLevel >= minimumPowerLevel
         } else false
+    }
+
+    fun canInvite(userId: String): Boolean {
+        val powerLevel = getUserPowerLevelValue(userId)
+        return powerLevel >= powerLevelsContent.invite
+    }
+
+    fun canBan(userId: String): Boolean {
+        val powerLevel = getUserPowerLevelValue(userId)
+        return powerLevel >= powerLevelsContent.ban
+    }
+
+    fun canKick(userId: String): Boolean {
+        val powerLevel = getUserPowerLevelValue(userId)
+        return powerLevel >= powerLevelsContent.kick
+    }
+
+    fun canRedact(userId: String): Boolean {
+        val powerLevel = getUserPowerLevelValue(userId)
+        return powerLevel >= powerLevelsContent.redact
     }
 
     /**
