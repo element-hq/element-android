@@ -19,7 +19,6 @@ package im.vector.riotx.features.roommemberprofile.powerlevel
 import android.app.Activity
 import android.content.DialogInterface
 import android.view.KeyEvent
-import android.widget.SeekBar
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import im.vector.matrix.android.api.session.room.powerlevels.Role
@@ -29,30 +28,13 @@ import kotlinx.android.synthetic.main.dialog_edit_power_level.view.*
 
 object EditPowerLevelDialogs {
 
-    private const val SLIDER_STEP = 1
-    private const val SLIDER_MAX_VALUE = 100
-    private const val SLIDER_MIN_VALUE = -100
-
     fun showChoice(activity: Activity, currentRole: Role, listener: (Int) -> Unit) {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_edit_power_level, null)
         dialogLayout.powerLevelRadioGroup.setOnCheckedChangeListener { _, checkedId ->
-            dialogLayout.powerLevelCustomLayout.isVisible = checkedId == R.id.powerLevelCustomRadio
+            dialogLayout.powerLevelCustomEditLayout.isVisible = checkedId == R.id.powerLevelCustomRadio
         }
-        dialogLayout.powerLevelCustomSlider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                dialogLayout.powerLevelCustomTitle.text = activity.getString(R.string.power_level_custom, seekBar.normalizedProgress())
-            }
+        dialogLayout.powerLevelCustomEdit.setText(currentRole.value.toString())
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                //NOOP
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                //NOOP
-            }
-        })
-        dialogLayout.powerLevelCustomSlider.max = (SLIDER_MAX_VALUE - SLIDER_MIN_VALUE) / SLIDER_STEP
-        dialogLayout.powerLevelCustomSlider.progress = SLIDER_MAX_VALUE + (currentRole.value * SLIDER_STEP)
         when (currentRole) {
             Role.Admin     -> dialogLayout.powerLevelAdminRadio.isChecked = true
             Role.Moderator -> dialogLayout.powerLevelModeratorRadio.isChecked = true
@@ -69,7 +51,9 @@ object EditPowerLevelDialogs {
                         R.id.powerLevelAdminRadio     -> Role.Admin.value
                         R.id.powerLevelModeratorRadio -> Role.Moderator.value
                         R.id.powerLevelDefaultRadio   -> Role.Default.value
-                        else                          -> dialogLayout.powerLevelCustomSlider.normalizedProgress()
+                        else                          -> {
+                            dialogLayout.powerLevelCustomEdit.text?.toString()?.toInt() ?: currentRole.value
+                        }
                     }
                     listener(newValue)
                 }
@@ -88,8 +72,6 @@ object EditPowerLevelDialogs {
                 .create()
                 .show()
     }
-
-    private fun SeekBar.normalizedProgress() = SLIDER_MIN_VALUE + (progress * SLIDER_STEP)
 
     fun showValidation(activity: Activity, onValidate: () -> Unit) {
         // ask to the user to confirmation thu upgrade.
