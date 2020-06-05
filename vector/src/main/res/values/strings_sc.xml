@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="redacted_stub_text">(Deleted message)</string>
-
     <string name="settings_dark_theme">Night Theme</string>
     <string name="sc_theme">SC Black</string>
     <string name="sc_dark_theme">SC Dark</string>
