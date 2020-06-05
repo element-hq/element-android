@@ -202,9 +202,11 @@ object VectorLocale {
                             .setScript(script)
                             .build()
                 } catch (exception: IllformedLocaleException) {
+                    /*
                     if (BuildConfig.DEBUG) {
                         throw exception
                     }
+                    */
                     // Ignore this locale in production
                     null
                 }
