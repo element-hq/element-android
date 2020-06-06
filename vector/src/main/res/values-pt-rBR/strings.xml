@@ -1266,4 +1266,7 @@ Para garantir que você não perca nada, mantenha suas atualizações ativadas."
     <string name="decline">Negar</string>
 
     <string name="action_mark_room_read">Marcar como lido</string>
-</resources>
+<string name="people_no_identity_server">Nenhum servidor de identidade configurado.</string>
+
+    <string name="call_failed_no_ice_title">Ligação falhou devido ao servidor mal configurado</string>
+    </resources>
