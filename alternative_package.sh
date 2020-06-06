@@ -27,6 +27,7 @@ logo_alternative() {
     logo_replace_color "$mydir/graphics/ic_launcher_round.svg" "$color1" "$color2"
     logo_replace_color "$mydir/graphics/ic_launcher.svg" "$color1" "$color2"
     logo_replace_color "$mydir/graphics/riot_splash_0_green.svg" "$color1" "$color2"
+    logo_replace_color "$mydir/vector/src/main/res/drawable-anydpi-v26/ic_launcher_foreground.xml" "$color1" "$color2"
     "$mydir/graphics/icon_gen.sh"
 }
 
