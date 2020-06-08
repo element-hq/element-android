@@ -97,17 +97,24 @@ class RoomMemberProfileFragment @Inject constructor(
         matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         viewModel.observeViewEvents {
             when (it) {
-                is RoomMemberProfileViewEvents.Loading                  -> showLoading(it.message)
-                is RoomMemberProfileViewEvents.Failure                  -> showFailure(it.throwable)
-                is RoomMemberProfileViewEvents.StartVerification        -> handleStartVerification(it)
-                is RoomMemberProfileViewEvents.ShareRoomMemberProfile   -> handleShareRoomMemberProfile(it.permalink)
-                is RoomMemberProfileViewEvents.ShowPowerLevelValidation -> handleShowPowerLevelAdminWarning(it)
-                is RoomMemberProfileViewEvents.OnKickActionSuccess      -> Unit
-                is RoomMemberProfileViewEvents.OnSetPowerLevelSuccess   -> Unit
-                is RoomMemberProfileViewEvents.OnBanActionSuccess       -> Unit
-                is RoomMemberProfileViewEvents.OnIgnoreActionSuccess    -> Unit
-                is RoomMemberProfileViewEvents.OnInviteActionSuccess    -> Unit
+                is RoomMemberProfileViewEvents.Loading                     -> showLoading(it.message)
+                is RoomMemberProfileViewEvents.Failure                     -> showFailure(it.throwable)
+                is RoomMemberProfileViewEvents.StartVerification           -> handleStartVerification(it)
+                is RoomMemberProfileViewEvents.ShareRoomMemberProfile      -> handleShareRoomMemberProfile(it.permalink)
+                is RoomMemberProfileViewEvents.ShowPowerLevelValidation    -> handleShowPowerLevelAdminWarning(it)
+                is RoomMemberProfileViewEvents.ShowPowerLevelDemoteWarning -> handleShowPowerLevelDemoteWarning(it)
+                is RoomMemberProfileViewEvents.OnKickActionSuccess         -> Unit
+                is RoomMemberProfileViewEvents.OnSetPowerLevelSuccess      -> Unit
+                is RoomMemberProfileViewEvents.OnBanActionSuccess          -> Unit
+                is RoomMemberProfileViewEvents.OnIgnoreActionSuccess       -> Unit
+                is RoomMemberProfileViewEvents.OnInviteActionSuccess       -> Unit
             }.exhaustive
+        }
+    }
+
+    private fun handleShowPowerLevelDemoteWarning(event: RoomMemberProfileViewEvents.ShowPowerLevelDemoteWarning) {
+        EditPowerLevelDialogs.showDemoteWarning(requireActivity()) {
+            viewModel.handle(RoomMemberProfileAction.SetPowerLevel(event.currentValue, event.newValue, false))
         }
     }
 

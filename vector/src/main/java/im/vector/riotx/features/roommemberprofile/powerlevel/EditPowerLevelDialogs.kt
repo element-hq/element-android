@@ -82,4 +82,15 @@ object EditPowerLevelDialogs {
                 .setNegativeButton(R.string.no, null)
                 .show()
     }
+
+    fun showDemoteWarning(activity: Activity, onValidate: () -> Unit) {
+        AlertDialog.Builder(activity)
+                .setTitle(R.string.room_participants_power_level_demote_warning_title)
+                .setMessage(R.string.room_participants_power_level_demote_warning_prompt)
+                .setPositiveButton(R.string.room_participants_power_level_demote) { _, _ ->
+                    onValidate()
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
+    }
 }

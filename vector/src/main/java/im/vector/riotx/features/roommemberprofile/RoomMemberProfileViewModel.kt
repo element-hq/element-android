@@ -158,6 +158,8 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         val myPowerLevel = PowerLevelsHelper(currentPowerLevelsContent).getUserPowerLevelValue(session.myUserId)
         if (action.askForValidation && action.newValue >= myPowerLevel) {
             _viewEvents.post(RoomMemberProfileViewEvents.ShowPowerLevelValidation(action.previousValue, action.newValue))
+        } else if (state.isMine) {
+            _viewEvents.post(RoomMemberProfileViewEvents.ShowPowerLevelDemoteWarning(action.previousValue, action.newValue))
         } else {
             currentPowerLevelsContent.users[state.userId] = action.newValue
             viewModelScope.launch {
