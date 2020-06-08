@@ -1,6 +1,5 @@
 /*
- * Copyright 2016 OpenMarket Ltd
- * Copyright 2020 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,29 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package im.vector.matrix.android.internal.crypto.model.rest
+
+package im.vector.matrix.android.internal.auth.data
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import im.vector.matrix.android.api.auth.data.LoginFlowTypes
 
-/**
- * This class provides the authentication data by using user and password
- */
 @JsonClass(generateAdapter = true)
-data class UserPasswordAuth(
-
-        // device device session id
-        @Json(name = "session")
-        val session: String? = null,
-
-        // registration information
-        @Json(name = "type")
-        val type: String? = LoginFlowTypes.PASSWORD,
-
-        @Json(name = "user")
-        val user: String? = null,
-
-        @Json(name = "password")
-        val password: String? = null
-)
+internal data class TokenLoginParams(
+        @Json(name = "type") override val type: String = LoginFlowTypes.TOKEN,
+        @Json(name = "token") val token: String
+) : LoginParams

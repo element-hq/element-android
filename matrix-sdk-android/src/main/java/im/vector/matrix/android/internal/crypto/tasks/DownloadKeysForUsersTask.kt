@@ -27,7 +27,7 @@ import javax.inject.Inject
 internal interface DownloadKeysForUsersTask : Task<DownloadKeysForUsersTask.Params, KeysQueryResponse> {
     data class Params(
             // the list of users to get keys for.
-            val userIds: List<String>?,
+            val userIds: List<String>,
             // the up-to token
             val token: String?
     )
@@ -39,7 +39,7 @@ internal class DefaultDownloadKeysForUsers @Inject constructor(
 ) : DownloadKeysForUsersTask {
 
     override suspend fun execute(params: DownloadKeysForUsersTask.Params): KeysQueryResponse {
-        val downloadQuery = params.userIds?.associateWith { emptyMap<String, Any>() }.orEmpty()
+        val downloadQuery = params.userIds.associateWith { emptyList<String>() }
 
         val body = KeysQueryBody(
                 deviceKeys = downloadQuery,

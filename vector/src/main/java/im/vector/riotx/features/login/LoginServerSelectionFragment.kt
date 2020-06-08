@@ -55,7 +55,7 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
     }
 
     @OnClick(R.id.loginServerChoiceModularLearnMore)
-    fun learMore() {
+    fun learnMore() {
         openUrlInExternalBrowser(requireActivity(), MODULAR_LINK)
     }
 
@@ -113,7 +113,7 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
 
         if (state.loginMode != LoginMode.Unknown) {
             // LoginFlow for matrix.org has been retrieved
-            loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnLoginFlowRetrieved))
+            loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnLoginFlowRetrieved(state.loginMode == LoginMode.Sso)))
         }
     }
 }

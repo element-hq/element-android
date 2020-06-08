@@ -672,6 +672,8 @@ class RoomDetailFragment @Inject constructor(
                     return
                 }
                 if (text.isNotBlank()) {
+                    // We collapse ASAP, if not there will be a slight anoying delay
+                    composerLayout.collapse(true)
                     lockSendButton = true
                     roomDetailViewModel.handle(RoomDetailAction.SendMessage(text, vectorPreferences.isMarkdownEnabled()))
                 }

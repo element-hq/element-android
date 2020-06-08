@@ -29,6 +29,7 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.session.widgets.model.Widget
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
@@ -36,7 +37,6 @@ import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.store.PrivateKeysInfo
 import im.vector.matrix.android.internal.session.sync.model.accountdata.UserAccountDataEvent
-import im.vector.matrix.android.api.session.widgets.model.Widget
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -56,10 +56,10 @@ class RxSession(private val session: Session) {
                 }
     }
 
-    fun liveBreadcrumbs(): Observable<List<RoomSummary>> {
-        return session.getBreadcrumbsLive().asObservable()
+    fun liveBreadcrumbs(queryParams: RoomSummaryQueryParams): Observable<List<RoomSummary>> {
+        return session.getBreadcrumbsLive(queryParams).asObservable()
                 .startWithCallable {
-                    session.getBreadcrumbs()
+                    session.getBreadcrumbs(queryParams)
                 }
     }
 

@@ -8,10 +8,17 @@ Features ✨:
 Improvements 🙌:
  - New wording for notice when current user is the sender
  - Hide "X made no changes" event by default in timeline (#1430)
+ - Hide left rooms in breadcrumbs (#766)
+ - Correctly handle SSO login redirection
+ - SSO login is now performed in the default browser, or in Chrome Custom tab if available (#1400)
 
 Bugfix 🐛:
  - Switch theme is not fully taken into account without restarting the app
  - Temporary fix to show error when user is creating an account on matrix.org with userId containing only digits (#1410)
+ - Reply composer overlay stays on screen too long after send (#1169)
+ - Fix navigation bar icon contrast on API in [21,27[ (#1342)
+ - Fix status bar icon contrast on API in [21,23[
+ - Wrong /query request (#1444)
  - Make Credentials.homeServer optional because it is deprecated (#1443)
 
 Translations 🗣:

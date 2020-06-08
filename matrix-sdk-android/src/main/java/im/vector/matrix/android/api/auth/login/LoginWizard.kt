@@ -35,6 +35,12 @@ interface LoginWizard {
               callback: MatrixCallback<Session>): Cancelable
 
     /**
+     * Exchange a login token to an access token
+     */
+    fun loginWithToken(loginToken: String,
+                       callback: MatrixCallback<Session>): Cancelable
+
+    /**
      * Reset user password
      */
     fun resetPassword(email: String,

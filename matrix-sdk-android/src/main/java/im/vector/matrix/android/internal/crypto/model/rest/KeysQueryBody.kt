@@ -36,7 +36,7 @@ internal data class KeysQueryBody(
          * A map from user ID, to a list of device IDs, or to an empty list to indicate all devices for the corresponding user.
          */
         @Json(name = "device_keys")
-        val deviceKeys: Map<String, Any>,
+        val deviceKeys: Map<String, List<String>>,
 
         /**
          * If the client is fetching keys as a result of a device update received in a sync request, this should be the 'since' token
