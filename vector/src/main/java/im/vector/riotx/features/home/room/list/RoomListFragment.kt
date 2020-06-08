@@ -72,6 +72,7 @@ class RoomListFragment @Inject constructor(
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
     private val roomListParams: RoomListParams by args()
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
+    private lateinit var stateRestorer: LayoutManagerStateRestorer
 
     override fun getLayoutResId() = R.layout.fragment_room_list
 
@@ -126,6 +127,7 @@ class RoomListFragment @Inject constructor(
         modelBuildListener = null
         roomListView.cleanup()
         roomController.listener = null
+        stateRestorer.layoutManager = null
         createChatFabMenu.listener = null
         super.onDestroyView()
     }
@@ -190,7 +192,7 @@ class RoomListFragment @Inject constructor(
 
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(context)
-        val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
+        stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         roomListView.layoutManager = layoutManager
         roomListView.itemAnimator = RoomListAnimator()
         roomListView.setRecycledViewPool(sharedViewPool)

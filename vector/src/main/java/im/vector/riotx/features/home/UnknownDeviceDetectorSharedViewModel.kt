@@ -16,12 +16,16 @@
 
 package im.vector.riotx.features.home
 
+import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.extensions.orFalse
 import im.vector.matrix.android.api.session.Session
@@ -37,6 +41,8 @@ import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.platform.VectorViewModelAction
 import im.vector.riotx.features.settings.VectorPreferences
+import im.vector.riotx.features.widgets.WidgetViewModel
+import im.vector.riotx.features.widgets.WidgetViewState
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import timber.log.Timber
@@ -53,14 +59,30 @@ data class DeviceDetectionInfo(
         val currentSessionTrust: Boolean
 )
 
-class UnknownDeviceDetectorSharedViewModel(
-        session: Session,
-        private val vectorPreferences: VectorPreferences,
-        initialState: UnknownDevicesState)
+class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted initialState: UnknownDevicesState,
+                                                                       session: Session,
+                                                                       private val vectorPreferences: VectorPreferences)
     : VectorViewModel<UnknownDevicesState, UnknownDeviceDetectorSharedViewModel.Action, EmptyViewEvents>(initialState) {
 
     sealed class Action : VectorViewModelAction {
         data class IgnoreDevice(val deviceIds: List<String>) : Action()
+    }
+
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(initialState: UnknownDevicesState): UnknownDeviceDetectorSharedViewModel
+    }
+
+    companion object : MvRxViewModelFactory<UnknownDeviceDetectorSharedViewModel, UnknownDevicesState> {
+
+        @JvmStatic
+        override fun create(viewModelContext: ViewModelContext, state: UnknownDevicesState): UnknownDeviceDetectorSharedViewModel? {
+            val factory = when (viewModelContext) {
+                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
+                is ActivityViewModelContext -> viewModelContext.activity as? Factory
+            }
+            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
+        }
     }
 
     private val ignoredDeviceList = ArrayList<String>()
@@ -84,7 +106,7 @@ class UnknownDeviceDetectorSharedViewModel(
                 session.rx().liveMyDeviceInfo(),
                 session.rx().liveCrossSigningPrivateKeys(),
                 Function3 { cryptoList, infoList, pInfo ->
-//                    Timber.v("## Detector trigger ${cryptoList.map { "${it.deviceId} ${it.trustLevel}" }}")
+                    //                    Timber.v("## Detector trigger ${cryptoList.map { "${it.deviceId} ${it.trustLevel}" }}")
 //                    Timber.v("## Detector trigger canCrossSign ${pInfo.get().selfSigned != null}")
                     infoList
                             .filter { info ->
@@ -106,7 +128,7 @@ class UnknownDeviceDetectorSharedViewModel(
         )
                 .distinctUntilChanged()
                 .execute { async ->
-//                    Timber.v("## Detector trigger passed distinct")
+                    //                    Timber.v("## Detector trigger passed distinct")
                     copy(
                             myMatrixItem = session.getUser(session.myUserId)?.toMatrixItem(),
                             unknownSessions = async
@@ -147,11 +169,4 @@ class UnknownDeviceDetectorSharedViewModel(
         super.onCleared()
     }
 
-    companion object : MvRxViewModelFactory<UnknownDeviceDetectorSharedViewModel, UnknownDevicesState> {
-
-        override fun create(viewModelContext: ViewModelContext, state: UnknownDevicesState): UnknownDeviceDetectorSharedViewModel? {
-            val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
-            return UnknownDeviceDetectorSharedViewModel(session, VectorPreferences(viewModelContext.activity()), state)
-        }
-    }
 }

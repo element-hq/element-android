@@ -63,7 +63,7 @@ class RoomMemberProfileFragment @Inject constructor(
     private val fragmentArgs: RoomMemberProfileArgs by args()
     private val viewModel: RoomMemberProfileViewModel by fragmentViewModel()
 
-    private lateinit var appBarStateChangeListener: AppBarStateChangeListener
+    private var appBarStateChangeListener: AppBarStateChangeListener? = null
 
     override fun getLayoutResId() = R.layout.fragment_matrix_profile
 
@@ -135,6 +135,7 @@ class RoomMemberProfileFragment @Inject constructor(
     override fun onDestroyView() {
         matrixProfileAppBarLayout.removeOnOffsetChangedListener(appBarStateChangeListener)
         roomMemberProfileController.callback = null
+        appBarStateChangeListener = null
         matrixProfileRecyclerView.cleanup()
         super.onDestroyView()
     }
