@@ -18,6 +18,7 @@ Bugfix 🐛:
  - Reply composer overlay stays on screen too long after send (#1169)
  - Fix navigation bar icon contrast on API in [21,27[ (#1342)
  - Fix status bar icon contrast on API in [21,23[
+ - Wrong /query request (#1444)
 
 Translations 🗣:
  -
