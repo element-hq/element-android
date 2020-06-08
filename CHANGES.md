@@ -9,6 +9,8 @@ Improvements 🙌:
  - New wording for notice when current user is the sender
  - Hide "X made no changes" event by default in timeline (#1430)
  - Hide left rooms in breadcrumbs (#766)
+ - Correctly handle SSO login redirection
+ - SSO login is now performed in the default browser, or in Chrome Custom tab if available (#1400)
 
 Bugfix 🐛:
  - Switch theme is not fully taken into account without restarting the app

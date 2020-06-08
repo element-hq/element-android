@@ -21,14 +21,11 @@ sealed class Stage(open val mandatory: Boolean) {
     // m.login.recaptcha
     data class ReCaptcha(override val mandatory: Boolean, val publicKey: String) : Stage(mandatory)
 
-    // m.login.oauth2
     // m.login.email.identity
     data class Email(override val mandatory: Boolean) : Stage(mandatory)
 
     // m.login.msisdn
     data class Msisdn(override val mandatory: Boolean) : Stage(mandatory)
-
-    // m.login.token
 
     // m.login.dummy, can be mandatory if there is no other stages. In this case the account cannot be created by just sending a username
     // and a password, the dummy stage has to be done
