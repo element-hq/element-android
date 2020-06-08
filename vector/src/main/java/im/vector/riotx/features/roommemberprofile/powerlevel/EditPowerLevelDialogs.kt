@@ -45,8 +45,7 @@ object EditPowerLevelDialogs {
         AlertDialog.Builder(activity)
                 .setTitle(R.string.power_level_edit_title)
                 .setView(dialogLayout)
-                .setPositiveButton(R.string.edit)
-                { _, _ ->
+                .setPositiveButton(R.string.edit) { _, _ ->
                     val newValue = when (dialogLayout.powerLevelRadioGroup.checkedRadioButtonId) {
                         R.id.powerLevelAdminRadio     -> Role.Admin.value
                         R.id.powerLevelModeratorRadio -> Role.Moderator.value

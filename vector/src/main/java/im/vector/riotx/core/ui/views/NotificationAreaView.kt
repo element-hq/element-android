@@ -24,12 +24,8 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.AttributeSet
 import android.view.View
-import android.widget.ImageView
 import android.widget.RelativeLayout
-import android.widget.TextView
 import androidx.core.content.ContextCompat
-import butterknife.BindView
-import butterknife.ButterKnife
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.riotx.R
@@ -76,12 +72,6 @@ class NotificationAreaView @JvmOverloads constructor(
             is State.Hidden                     -> renderHidden()
             is State.NoPermissionToPost         -> renderNoPermissionToPost()
             is State.Tombstone                  -> renderTombstone(newState)
-            is State.ResourceLimitExceededError -> renderResourceLimitExceededError(newState)
-            is State.ConnectionError            -> renderConnectionError()
-            is State.Typing                     -> renderTyping(newState)
-            is State.UnreadPreview              -> renderUnreadPreview()
-            is State.ScrollToBottom             -> renderScrollToBottom(newState)
-            is State.UnsentEvents               -> renderUnsent(newState)
         }
     }
 
@@ -125,88 +115,6 @@ class NotificationAreaView @JvmOverloads constructor(
         roomNotificationMessage.text = message
     }
 
-    private fun renderResourceLimitExceededError(state: State.ResourceLimitExceededError) {
-        visibility = View.VISIBLE
-        val resourceLimitErrorFormatter = ResourceLimitErrorFormatter(context)
-        val formatterMode: ResourceLimitErrorFormatter.Mode
-        val backgroundColor: Int
-        if (state.isSoft) {
-            backgroundColor = R.color.soft_resource_limit_exceeded
-            formatterMode = ResourceLimitErrorFormatter.Mode.Soft
-        } else {
-            backgroundColor = R.color.hard_resource_limit_exceeded
-            formatterMode = ResourceLimitErrorFormatter.Mode.Hard
-        }
-        val message = resourceLimitErrorFormatter.format(state.matrixError, formatterMode, clickable = true)
-        roomNotificationMessage.setTextColor(Color.WHITE)
-        roomNotificationMessage.text = message
-        roomNotificationMessage.movementMethod = LinkMovementMethod.getInstance()
-        roomNotificationMessage.setLinkTextColor(Color.WHITE)
-        setBackgroundColor(ContextCompat.getColor(context, backgroundColor))
-    }
-
-    private fun renderConnectionError() {
-        visibility = View.VISIBLE
-        roomNotificationIcon.setImageResource(R.drawable.error)
-        roomNotificationMessage.setTextColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color))
-        roomNotificationMessage.text = SpannableString(resources.getString(R.string.room_offline_notification))
-    }
-
-    private fun renderTyping(state: State.Typing) {
-        visibility = View.VISIBLE
-        roomNotificationIcon.setImageResource(R.drawable.vector_typing)
-        roomNotificationMessage.text = SpannableString(state.message)
-        roomNotificationMessage.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_room_notification_text_color))
-    }
-
-    private fun renderUnreadPreview() {
-        visibility = View.VISIBLE
-        roomNotificationIcon.setImageResource(R.drawable.scrolldown)
-        roomNotificationMessage.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_room_notification_text_color))
-        roomNotificationIcon.setOnClickListener { delegate?.closeScreen() }
-    }
-
-    private fun renderScrollToBottom(state: State.ScrollToBottom) {
-        visibility = View.VISIBLE
-        if (state.unreadCount > 0) {
-            roomNotificationIcon.setImageResource(R.drawable.newmessages)
-            roomNotificationMessage.setTextColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color))
-            roomNotificationMessage.text = SpannableString(resources.getQuantityString(R.plurals.room_new_messages_notification, state.unreadCount, state.unreadCount))
-        } else {
-            roomNotificationIcon.setImageResource(R.drawable.scrolldown)
-            roomNotificationMessage.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_room_notification_text_color))
-            if (!state.message.isNullOrEmpty()) {
-                roomNotificationMessage.text = SpannableString(state.message)
-            }
-        }
-        roomNotificationMessage.setOnClickListener { delegate?.jumpToBottom() }
-        roomNotificationIcon.setOnClickListener { delegate?.jumpToBottom() }
-    }
-
-    private fun renderUnsent(state: State.UnsentEvents) {
-        visibility = View.VISIBLE
-        roomNotificationIcon.setImageResource(R.drawable.error)
-        val cancelAll = resources.getString(R.string.room_prompt_cancel)
-        val resendAll = resources.getString(R.string.room_prompt_resend)
-        val messageRes = if (state.hasUnknownDeviceEvents) R.string.room_unknown_devices_messages_notification else R.string.room_unsent_messages_notification
-        val message = context.getString(messageRes, resendAll, cancelAll)
-        val cancelAllPos = message.indexOf(cancelAll)
-        val resendAllPos = message.indexOf(resendAll)
-        val spannableString = SpannableString(message)
-        // cancelAllPos should always be > 0 but a GA crash reported here
-        if (cancelAllPos >= 0) {
-            spannableString.setSpan(CancelAllClickableSpan(), cancelAllPos, cancelAllPos + cancelAll.length, 0)
-        }
-
-        // resendAllPos should always be > 0 but a GA crash reported here
-        if (resendAllPos >= 0) {
-            spannableString.setSpan(ResendAllClickableSpan(), resendAllPos, resendAllPos + resendAll.length, 0)
-        }
-        roomNotificationMessage.movementMethod = LinkMovementMethod.getInstance()
-        roomNotificationMessage.setTextColor(ContextCompat.getColor(context, R.color.vector_fuchsia_color))
-        roomNotificationMessage.text = spannableString
-    }
-
     private fun renderDefault() {
         visibility = View.GONE
     }
@@ -216,43 +124,8 @@ class NotificationAreaView @JvmOverloads constructor(
     }
 
     /**
-     * Track the cancel all click.
-     */
-    private inner class CancelAllClickableSpan : ClickableSpan() {
-        override fun onClick(widget: View) {
-            delegate?.deleteUnsentEvents()
-            render(state)
-        }
-
-        override fun updateDrawState(ds: TextPaint) {
-            super.updateDrawState(ds)
-            ds.color = ContextCompat.getColor(context, R.color.vector_fuchsia_color)
-            ds.bgColor = 0
-            ds.isUnderlineText = true
-        }
-    }
-
-    /**
-     * Track the resend all click.
-     */
-    private inner class ResendAllClickableSpan : ClickableSpan() {
-        override fun onClick(widget: View) {
-            delegate?.resendUnsentEvents()
-            render(state)
-        }
-
-        override fun updateDrawState(ds: TextPaint) {
-            super.updateDrawState(ds)
-            ds.color = ContextCompat.getColor(context, R.color.vector_fuchsia_color)
-            ds.bgColor = 0
-            ds.isUnderlineText = true
-        }
-    }
-
-    /**
      * The state representing the view
      * It can take one state at a time
-     * Priority of state is managed in {@link VectorRoomActivity.refreshNotificationsArea() }
      */
     sealed class State {
 
@@ -262,31 +135,14 @@ class NotificationAreaView @JvmOverloads constructor(
         // View will be Invisible
         object Default : State()
 
+        // User can't post messages to room because his power level doesn't allow it.
         object NoPermissionToPost: State()
 
         // View will be Gone
         object Hidden : State()
 
-        // Resource limit exceeded error will be displayed (only hard for the moment)
-        data class ResourceLimitExceededError(val isSoft: Boolean, val matrixError: MatrixError) : State()
-
-        // Server connection is lost
-        object ConnectionError : State()
-
         // The room is dead
         data class Tombstone(val tombstoneEvent: Event) : State()
-
-        // Somebody is typing
-        data class Typing(val message: String) : State()
-
-        // Some new messages are unread in preview
-        object UnreadPreview : State()
-
-        // Some new messages are unread (grey or red)
-        data class ScrollToBottom(val unreadCount: Int, val message: String? = null) : State()
-
-        // Some event has been unsent
-        data class UnsentEvents(val hasUndeliverableEvents: Boolean, val hasUnknownDeviceEvents: Boolean) : State()
     }
 
     /**
@@ -294,9 +150,5 @@ class NotificationAreaView @JvmOverloads constructor(
      */
     interface Delegate {
         fun onTombstoneEventClicked(tombstoneEvent: Event)
-        fun resendUnsentEvents()
-        fun deleteUnsentEvents()
-        fun closeScreen()
-        fun jumpToBottom()
     }
 }

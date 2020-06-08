@@ -446,22 +446,6 @@ class RoomDetailFragment @Inject constructor(
             override fun onTombstoneEventClicked(tombstoneEvent: Event) {
                 roomDetailViewModel.handle(RoomDetailAction.HandleTombstoneEvent(tombstoneEvent))
             }
-
-            override fun resendUnsentEvents() {
-                vectorBaseActivity.notImplemented()
-            }
-
-            override fun deleteUnsentEvents() {
-                vectorBaseActivity.notImplemented()
-            }
-
-            override fun closeScreen() {
-                vectorBaseActivity.notImplemented()
-            }
-
-            override fun jumpToBottom() {
-                vectorBaseActivity.notImplemented()
-            }
         }
     }
 

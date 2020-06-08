@@ -341,7 +341,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     private fun canQuote(event: TimelineEvent, messageContent: MessageContent?, actionPermissions: ActionPermissions): Boolean {
         // Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
         if (event.root.getClearType() != EventType.MESSAGE) return false
-        if(!actionPermissions.canSendMessage) return false
+        if (!actionPermissions.canSendMessage) return false
         return when (messageContent?.msgType) {
             MessageType.MSGTYPE_TEXT,
             MessageType.MSGTYPE_NOTICE,
@@ -373,7 +373,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     private fun canEdit(event: TimelineEvent, myUserId: String, actionPermissions: ActionPermissions): Boolean {
         // Only event of type Event.EVENT_TYPE_MESSAGE are supported for the moment
         if (event.root.getClearType() != EventType.MESSAGE) return false
-        if(!actionPermissions.canSendMessage) return false
+        if (!actionPermissions.canSendMessage) return false
         // TODO if user is admin or moderator
         val messageContent = event.root.getClearContent().toModel<MessageContent>()
         return event.root.senderId == myUserId && (
