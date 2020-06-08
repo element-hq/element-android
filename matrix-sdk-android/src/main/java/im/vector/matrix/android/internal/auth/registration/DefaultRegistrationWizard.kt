@@ -18,6 +18,7 @@ package im.vector.matrix.android.internal.auth.registration
 
 import dagger.Lazy
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.auth.data.LoginFlowTypes
 import im.vector.matrix.android.api.auth.registration.RegisterThreePid
 import im.vector.matrix.android.api.auth.registration.RegistrationResult
 import im.vector.matrix.android.api.auth.registration.RegistrationWizard
@@ -28,7 +29,6 @@ import im.vector.matrix.android.api.util.NoOpCancellable
 import im.vector.matrix.android.internal.auth.AuthAPI
 import im.vector.matrix.android.internal.auth.PendingSessionStore
 import im.vector.matrix.android.internal.auth.SessionCreator
-import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.auth.db.PendingSessionData
 import im.vector.matrix.android.internal.network.RetrofitFactory
 import im.vector.matrix.android.internal.task.launchToCallback

@@ -30,6 +30,7 @@ import im.vector.matrix.android.internal.auth.PendingSessionStore
 import im.vector.matrix.android.internal.auth.SessionCreator
 import im.vector.matrix.android.internal.auth.data.PasswordLoginParams
 import im.vector.matrix.android.internal.auth.data.ThreePidMedium
+import im.vector.matrix.android.internal.auth.data.TokenLoginParams
 import im.vector.matrix.android.internal.auth.db.PendingSessionData
 import im.vector.matrix.android.internal.auth.registration.AddThreePidRegistrationParams
 import im.vector.matrix.android.internal.auth.registration.AddThreePidRegistrationResponse
@@ -62,6 +63,22 @@ internal class DefaultLoginWizard(
                        callback: MatrixCallback<Session>): Cancelable {
         return coroutineScope.launchToCallback(coroutineDispatchers.main, callback) {
             loginInternal(login, password, deviceName)
+        }
+    }
+
+    /**
+     * Ref: https://matrix.org/docs/spec/client_server/latest#handling-the-authentication-endpoint
+     */
+    override fun loginWithToken(loginToken: String, callback: MatrixCallback<Session>): Cancelable {
+        return coroutineScope.launchToCallback(coroutineDispatchers.main, callback) {
+            val loginParams = TokenLoginParams(
+                    token = loginToken
+            )
+            val credentials = executeRequest<Credentials>(null) {
+                apiCall = authAPI.login(loginParams)
+            }
+
+            sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
         }
     }
 
