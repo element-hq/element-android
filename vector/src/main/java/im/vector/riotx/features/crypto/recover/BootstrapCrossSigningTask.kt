@@ -58,7 +58,7 @@ sealed class BootstrapResult {
     class FailedToStorePrivateKeyInSSSS(failure: Throwable) : Failure(failure.localizedMessage)
     object MissingPrivateKey : Failure(null)
 
-    data class PasswordAuthFlowMissing(val sessionId: String, val userId: String) : Failure(null)
+    data class PasswordAuthFlowMissing(val sessionId: String) : Failure(null)
 }
 
 interface BootstrapProgressListener {
@@ -232,9 +232,11 @@ class BootstrapCrossSigningTask @Inject constructor(
         } else {
             val registrationFlowResponse = failure.toRegistrationFlowResponse()
             if (registrationFlowResponse != null) {
-                if (registrationFlowResponse.flows?.any { it.stages?.contains(LoginFlowTypes.PASSWORD) == true } != true) {
+                return if (registrationFlowResponse.flows.orEmpty().any { it.stages?.contains(LoginFlowTypes.PASSWORD) == true }) {
+                    BootstrapResult.PasswordAuthFlowMissing(registrationFlowResponse.session ?: "")
+                } else {
                     // can't do this from here
-                    return BootstrapResult.UnsupportedAuthFlow()
+                    BootstrapResult.UnsupportedAuthFlow()
                 }
             }
         }

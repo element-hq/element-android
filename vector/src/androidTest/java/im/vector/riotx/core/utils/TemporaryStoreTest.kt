@@ -14,14 +14,24 @@
  * limitations under the License.
  */
 
-package im.vector.riotx.features.login
+package im.vector.riotx.core.utils
 
-import im.vector.riotx.core.utils.TemporaryStore
-import javax.inject.Inject
-import javax.inject.Singleton
+import org.amshove.kluent.shouldBe
+import org.junit.Test
+import java.lang.Thread.sleep
 
-/**
- * Will store the account password for 3 minutes
- */
-@Singleton
-class ReAuthHelper @Inject constructor() : TemporaryStore<String>()
+class TemporaryStoreTest {
+
+    @Test
+    fun testTemporaryStore() {
+        // Keep the data 30 millis
+        val store = TemporaryStore<String>(30)
+
+        store.data = "test"
+        store.data shouldBe "test"
+        sleep(15)
+        store.data shouldBe "test"
+        sleep(20)
+        store.data shouldBe null
+    }
+}

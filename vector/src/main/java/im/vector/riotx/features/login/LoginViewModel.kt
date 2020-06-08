@@ -41,7 +41,6 @@ import im.vector.matrix.android.api.auth.registration.Stage
 import im.vector.matrix.android.api.auth.wellknown.WellknownResult
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.configureAndStart
@@ -289,7 +288,7 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun handleRegisterWith(action: LoginAction.LoginOrRegister) {
         setState { copy(asyncRegistration = Loading()) }
-        reAuthHelper.rememberAuth(UserPasswordAuth(user = action.username, password = action.password))
+        reAuthHelper.data = action.password
         currentTask = registrationWizard?.createAccount(
                 action.username,
                 action.password,

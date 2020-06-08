@@ -90,7 +90,7 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 .apply {
                     if (genKeyOption) {
                         setNeutralButton(R.string.generate_message_key) { _, _ ->
-                            viewModel.handle(BootstrapActions.DoInitializeGeneratedKey())
+                            viewModel.handle(BootstrapActions.DoInitializeGeneratedKey)
                         }
                     }
                 }
