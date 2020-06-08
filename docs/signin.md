@@ -2,7 +2,7 @@
 
 This document describes the flow of signin to a homeserver, and also the flow when user want to reset his password. Examples come from the `matrix.org` homeserver.
 
-## Sign up flows
+## Sign in flows
 
 ### Get the flow
 

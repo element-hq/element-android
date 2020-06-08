@@ -55,7 +55,7 @@ internal interface AuthAPI {
     fun versions(): Call<Versions>
 
     /**
-     * Register to the homeserver
+     * Register to the homeserver, or get error 401 with a RegistrationFlowResponse object if registration is incomplete
      * Ref: https://matrix.org/docs/spec/client_server/latest#account-registration-and-management
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "register")

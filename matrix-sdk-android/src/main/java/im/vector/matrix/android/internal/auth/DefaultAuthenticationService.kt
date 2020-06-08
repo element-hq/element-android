@@ -236,7 +236,7 @@ internal class DefaultAuthenticationService @Inject constructor(
             val loginFlowResponse = executeRequest<LoginFlowResponse>(null) {
                 apiCall = authAPI.getLoginFlows()
             }
-            LoginFlowResult.Success(loginFlowResponse, versions.isLoginAndRegistrationSupportedBySdk(), homeServerUrl)
+            LoginFlowResult.Success(loginFlowResponse.flows.orEmpty().mapNotNull { it.type }, versions.isLoginAndRegistrationSupportedBySdk(), homeServerUrl)
         } else {
             // Not supported
             LoginFlowResult.OutdatedHomeserver
