@@ -105,5 +105,5 @@ private fun Versions.getMaxVersion(): HomeServerVersion {
     return supportedVersions
             ?.mapNotNull { HomeServerVersion.parse(it) }
             ?.max()
-            ?: HomeServerVersion.r0_0_1
+            ?: HomeServerVersion.r0_0_0
 }

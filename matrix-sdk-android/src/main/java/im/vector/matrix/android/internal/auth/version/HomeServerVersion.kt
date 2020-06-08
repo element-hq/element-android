@@ -49,12 +49,12 @@ internal data class HomeServerVersion(
             )
         }
 
-        val r0_0_1 = parse("r0.0.1")!!
-        val r0_1_0 = parse("r0.1.0")!!
-        val r0_2_0 = parse("r0.2.0")!!
-        val r0_3_0 = parse("r0.3.0")!!
-        val r0_4_0 = parse("r0.4.0")!!
-        val r0_5_0 = parse("r0.5.0")!!
-        val r0_6_0 = parse("r0.6.0")!!
+        val r0_0_0 = HomeServerVersion(major = 0, minor = 0, patch = 0)
+        val r0_1_0 = HomeServerVersion(major = 0, minor = 1, patch = 0)
+        val r0_2_0 = HomeServerVersion(major = 0, minor = 2, patch = 0)
+        val r0_3_0 = HomeServerVersion(major = 0, minor = 3, patch = 0)
+        val r0_4_0 = HomeServerVersion(major = 0, minor = 4, patch = 0)
+        val r0_5_0 = HomeServerVersion(major = 0, minor = 5, patch = 0)
+        val r0_6_0 = HomeServerVersion(major = 0, minor = 6, patch = 0)
     }
 }
