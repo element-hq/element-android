@@ -19,6 +19,7 @@ Bugfix 🐛:
  - Fix navigation bar icon contrast on API in [21,27[ (#1342)
  - Fix status bar icon contrast on API in [21,23[
  - Wrong /query request (#1444)
+ - Make Credentials.homeServer optional because it is deprecated (#1443)
 
 Translations 🗣:
  -

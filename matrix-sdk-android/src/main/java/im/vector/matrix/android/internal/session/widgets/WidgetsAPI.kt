@@ -27,7 +27,7 @@ internal interface WidgetsAPI {
     /**
      * register to the server
      *
-     * @param requestOpenIdTokenResponse the body content (Ref: https://github.com/matrix-org/matrix-doc/pull/1961)
+     * @param body the body content (Ref: https://github.com/matrix-org/matrix-doc/pull/1961)
      */
     @POST("register")
     fun register(@Body body: RequestOpenIdTokenResponse, @Query("v") version: String?): Call<RegisterWidgetResponse>
