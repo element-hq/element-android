@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,20 @@
 
 package im.vector.riotx.features.home
 
-import im.vector.riotx.core.platform.VectorSharedActionViewModel
-import javax.inject.Inject
+import com.airbnb.mvrx.MvRxState
+import im.vector.riotx.core.platform.EmptyAction
+import im.vector.riotx.core.platform.EmptyViewEvents
+import im.vector.riotx.core.platform.VectorViewModel
 
-class HomeSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<HomeActivitySharedAction>()
+data class EmptyState(
+        val dummy: Boolean = false
+) : MvRxState
+
+class HomeActivityViewModel : VectorViewModel<EmptyState, EmptyAction, EmptyViewEvents>(EmptyState()) {
+    var hasDisplayedCompleteSecurityPrompt: Boolean = false
+    var isAccountCreation: Boolean = false
+
+    override fun handle(action: EmptyAction) {
+        // NA
+    }
+}
