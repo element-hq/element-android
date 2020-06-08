@@ -161,7 +161,7 @@ The parameter `redirectUrl` is set to `riotx://riotx`.
 
 ChromeCustomTabs are an intermediate way to display a WebPage, between a WebView and using the external browser. More info can be found [here](https://developer.chrome.com/multidevice/android/customtabs)
 
-The browser will then take care of the SSO login, which may include creating a third party account, entering an email, or any other possibility.
+The browser will then take care of the SSO login, which may include creating a third party account, entering an email, settings a display name, or any other possibilities.
 
 During the process, user may be asked to validate an email by clicking on a link it contains. The link has to be opened in the browser which initiates the authentication. This is why we cannot use WebView anymore.
 
@@ -171,16 +171,12 @@ Once the process is finished, the web page will call the `redirectUrl` with an e
 
 This navigation is intercepted by RiotX by the `LoginActivity`, which will then ask the homeserver to convert this `loginToken` to an access token
 
-RiotX is generating a `txn_id` parameter, to avoid a replay of the request if the loginToken has been leaked.
-*Note*: for the moment RiotX does not send any `session` parameter in this request.
-
-> curl -X POST --data $'{"type":"m.login.token","token":"MDAxOWxvY2F0aW9uIG1vemlsbGEub3JnCjAwMTNpZGVudGlmaWVy","txn_id":"5114076e-40f0-477f-aa50-8ea2442d9dc1"}' 'https://homeserver.with.sso/_matrix/client/r0/login'
+> curl -X POST --data $'{"type":"m.login.token","token":"MDAxOWxvY2F0aW9uIG1vemlsbGEub3JnCjAwMTNpZGVudGlmaWVy"}' 'https://homeserver.with.sso/_matrix/client/r0/login'
 
 ```json
 {
   "type": "m.login.token",
-  "token": "MDAxOWxvY2F0aW9uIG1vemlsbGEub3JnCjAwMTNpZGVudGlmaWVy",
-  "txn_id": "5114076e-40f0-477f-aa50-8ea2442d9dc1"
+  "token": "MDAxOWxvY2F0aW9uIG1vemlsbGEub3JnCjAwMTNpZGVudGlmaWVy"
 }
 ```
 

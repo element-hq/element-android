@@ -18,13 +18,9 @@ package im.vector.matrix.android.internal.auth.data
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import java.util.UUID
 
 @JsonClass(generateAdapter = true)
 internal data class TokenLoginParams(
         @Json(name = "type") override val type: String = LoginFlowTypes.TOKEN,
-        @Json(name = "token") val token: String,
-        // client generated nonce
-        @Json(name = "txn_id") val txId: String = UUID.randomUUID().toString()
-        // Param session is not useful in this case?
+        @Json(name = "token") val token: String
 ) : LoginParams
