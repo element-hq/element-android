@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.internal.auth.data
+package im.vector.matrix.android.api.auth.data
 
 object LoginFlowTypes {
     const val PASSWORD = "m.login.password"
