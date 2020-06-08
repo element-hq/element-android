@@ -17,10 +17,10 @@
 package im.vector.matrix.android.internal.session.homeserver
 
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.auth.data.Versions
-import im.vector.matrix.android.api.auth.data.isLoginAndRegistrationSupportedBySdk
 import im.vector.matrix.android.api.auth.wellknown.WellknownResult
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
+import im.vector.matrix.android.internal.auth.version.Versions
+import im.vector.matrix.android.internal.auth.version.isLoginAndRegistrationSupportedBySdk
 import im.vector.matrix.android.internal.database.model.HomeServerCapabilitiesEntity
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.di.UserId

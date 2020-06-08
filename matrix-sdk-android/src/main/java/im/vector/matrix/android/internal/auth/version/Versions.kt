@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.auth.data
+package im.vector.matrix.android.internal.auth.version
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -38,22 +38,13 @@ import com.squareup.moshi.JsonClass
  * </pre>
  */
 @JsonClass(generateAdapter = true)
-data class Versions(
+internal data class Versions(
         @Json(name = "versions")
         val supportedVersions: List<String>? = null,
 
         @Json(name = "unstable_features")
         val unstableFeatures: Map<String, Boolean>? = null
 )
-
-// MatrixClientServerAPIVersion
-private const val r0_0_1 = "r0.0.1"
-private const val r0_1_0 = "r0.1.0"
-private const val r0_2_0 = "r0.2.0"
-private const val r0_3_0 = "r0.3.0"
-private const val r0_4_0 = "r0.4.0"
-private const val r0_5_0 = "r0.5.0"
-private const val r0_6_0 = "r0.6.0"
 
 // MatrixVersionsFeature
 private const val FEATURE_LAZY_LOAD_MEMBERS = "m.lazy_load_members"
@@ -64,14 +55,14 @@ private const val FEATURE_SEPARATE_ADD_AND_BIND = "m.separate_add_and_bind"
 /**
  * Return true if the SDK supports this homeserver version
  */
-fun Versions.isSupportedBySdk(): Boolean {
+internal fun Versions.isSupportedBySdk(): Boolean {
     return supportLazyLoadMembers()
 }
 
 /**
  * Return true if the SDK supports this homeserver version for login and registration
  */
-fun Versions.isLoginAndRegistrationSupportedBySdk(): Boolean {
+internal fun Versions.isLoginAndRegistrationSupportedBySdk(): Boolean {
     return !doesServerRequireIdentityServerParam()
             && doesServerAcceptIdentityAccessToken()
             && doesServerSeparatesAddAndBind()
@@ -83,7 +74,7 @@ fun Versions.isLoginAndRegistrationSupportedBySdk(): Boolean {
  * @return true if the server support the lazy loading of room members
  */
 private fun Versions.supportLazyLoadMembers(): Boolean {
-    return supportedVersions?.contains(r0_5_0) == true
+    return getMaxVersion() >= HomeServerVersion.r0_5_0
             || unstableFeatures?.get(FEATURE_LAZY_LOAD_MEMBERS) == true
 }
 
@@ -92,7 +83,7 @@ private fun Versions.supportLazyLoadMembers(): Boolean {
  * adding a 3pid or resetting password.
  */
 private fun Versions.doesServerRequireIdentityServerParam(): Boolean {
-    if (supportedVersions?.contains(r0_6_0) == true) return false
+    if (getMaxVersion() >= HomeServerVersion.r0_6_0) return false
     return unstableFeatures?.get(FEATURE_REQUIRE_IDENTITY_SERVER) ?: true
 }
 
@@ -101,11 +92,18 @@ private fun Versions.doesServerRequireIdentityServerParam(): Boolean {
  * Some homeservers may trigger errors if they are not prepared for the new parameter.
  */
 private fun Versions.doesServerAcceptIdentityAccessToken(): Boolean {
-    return supportedVersions?.contains(r0_6_0) == true
+    return getMaxVersion() >= HomeServerVersion.r0_6_0
             || unstableFeatures?.get(FEATURE_ID_ACCESS_TOKEN) ?: false
 }
 
 private fun Versions.doesServerSeparatesAddAndBind(): Boolean {
-    return supportedVersions?.contains(r0_6_0) == true
+    return getMaxVersion() >= HomeServerVersion.r0_6_0
             || unstableFeatures?.get(FEATURE_SEPARATE_ADD_AND_BIND) ?: false
+}
+
+private fun Versions.getMaxVersion(): HomeServerVersion {
+    return supportedVersions
+            ?.mapNotNull { HomeServerVersion.parse(it) }
+            ?.max()
+            ?: HomeServerVersion.r0_0_0
 }
