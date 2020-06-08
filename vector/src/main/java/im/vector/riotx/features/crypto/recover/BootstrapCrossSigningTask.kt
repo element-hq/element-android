@@ -16,6 +16,7 @@
 
 package im.vector.riotx.features.crypto.recover
 
+import im.vector.matrix.android.api.auth.data.LoginFlowTypes
 import im.vector.matrix.android.api.failure.Failure
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.failure.toRegistrationFlowResponse
@@ -28,7 +29,6 @@ import im.vector.matrix.android.api.session.securestorage.EmptyKeySigner
 import im.vector.matrix.android.api.session.securestorage.SharedSecretStorageService
 import im.vector.matrix.android.api.session.securestorage.SsssKeyCreationInfo
 import im.vector.matrix.android.api.session.securestorage.SsssKeySpec
-import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.crypto.crosssigning.toBase64NoPadding
 import im.vector.matrix.android.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
 import im.vector.matrix.android.internal.crypto.keysbackup.model.rest.KeysVersion

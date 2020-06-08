@@ -28,9 +28,9 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.auth.AuthenticationService
 import im.vector.matrix.android.api.auth.data.LoginFlowResult
+import im.vector.matrix.android.api.auth.data.LoginFlowTypes
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.util.Cancelable
-import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.extensions.hasUnsavedKeys
 import im.vector.riotx.core.platform.VectorViewModel
@@ -105,9 +105,9 @@ class SoftLogoutViewModel @AssistedInject constructor(
                     is LoginFlowResult.Success            -> {
                         val loginMode = when {
                             // SSO login is taken first
-                            data.loginFlowResponse.flows.any { it.type == LoginFlowTypes.SSO }      -> LoginMode.Sso
-                            data.loginFlowResponse.flows.any { it.type == LoginFlowTypes.PASSWORD } -> LoginMode.Password
-                            else                                                                    -> LoginMode.Unsupported
+                            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)      -> LoginMode.Sso
+                            data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.Password
+                            else                                                       -> LoginMode.Unsupported
                         }
 
                         if (loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported) {

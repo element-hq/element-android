@@ -332,6 +332,9 @@ dependencies {
     implementation 'com.google.android:flexbox:1.1.1'
     implementation "androidx.autofill:autofill:$autofill_version"
 
+    // Custom Tab
+    implementation 'androidx.browser:browser:1.2.0'
+
     // Passphrase strength helper
     implementation 'com.nulab-inc:zxcvbn:1.2.7'
 
