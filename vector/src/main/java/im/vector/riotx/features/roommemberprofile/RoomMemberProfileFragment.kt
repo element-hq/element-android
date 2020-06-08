@@ -21,7 +21,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
@@ -35,6 +34,7 @@ import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.animations.AppBarStateChangeListener
 import im.vector.riotx.core.animations.MatrixItemAppBarStateChangeListener
+import im.vector.riotx.core.dialogs.ConfirmationDialogBuilder
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
@@ -221,8 +221,31 @@ class RoomMemberProfileFragment @Inject constructor(
 
     // RoomMemberProfileController.Callback
 
-    override fun onIgnoreClicked() {
-        viewModel.handle(RoomMemberProfileAction.IgnoreUser)
+    override fun onIgnoreClicked() = withState(viewModel) { state ->
+        val isIgnored = state.isIgnored() ?: false
+        val titleRes: Int
+        val positiveButtonRes: Int
+        val confirmationRes: Int
+        if (isIgnored) {
+            confirmationRes = R.string.room_participants_action_unignore_prompt_msg
+            titleRes = R.string.room_participants_action_unignore_title
+            positiveButtonRes = R.string.room_participants_action_unignore
+        } else {
+            confirmationRes = R.string.room_participants_action_ignore_prompt_msg
+            titleRes = R.string.room_participants_action_ignore_title
+            positiveButtonRes = R.string.room_participants_action_ignore
+        }
+        ConfirmationDialogBuilder
+                .show(
+                        activity = requireActivity(),
+                        askForReason = false,
+                        confirmationRes = confirmationRes,
+                        positiveRes = positiveButtonRes,
+                        reasonHintRes = 0,
+                        titleRes = titleRes
+                ) {
+                    viewModel.handle(RoomMemberProfileAction.IgnoreUser)
+                }
     }
 
     override fun onTapVerify() {
@@ -260,47 +283,57 @@ class RoomMemberProfileFragment @Inject constructor(
     }
 
     override fun onKickClicked() {
-        val layout = layoutInflater.inflate(R.layout.dialog_base_edit_text, null)
-        val input = layout.findViewById<TextView>(R.id.editText)
-        input.setHint(R.string.reason_hint)
-        AlertDialog.Builder(requireActivity())
-                .setTitle(resources.getQuantityString(R.plurals.room_participants_kick_prompt_msg, 1))
-                .setView(layout)
-                .setPositiveButton(R.string.room_participants_action_kick) { _, _ ->
-                    viewModel.handle(RoomMemberProfileAction.KickUser(input.text.toString()))
+        ConfirmationDialogBuilder
+                .show(
+                        activity = requireActivity(),
+                        askForReason = true,
+                        confirmationRes = R.string.room_participants_kick_prompt_msg,
+                        positiveRes = R.string.room_participants_action_kick,
+                        reasonHintRes = R.string.room_participants_kick_reason,
+                        titleRes = R.string.room_participants_kick_title
+                ) { reason ->
+                    viewModel.handle(RoomMemberProfileAction.KickUser(reason))
                 }
-                .setNegativeButton(R.string.cancel, null)
-                .show()
     }
 
     override fun onBanClicked(isUserBanned: Boolean) {
-        val layout = layoutInflater.inflate(R.layout.dialog_base_edit_text, null)
-        val input = layout.findViewById<TextView>(R.id.editText)
-        input.setHint(R.string.reason_hint)
-        val (titleRes, positiveButtonRes) = if (isUserBanned) {
-            input.isVisible = false
-            Pair(R.string.room_participants_unban_prompt_msg, R.string.room_participants_action_unban)
+        val titleRes: Int
+        val positiveButtonRes: Int
+        val confirmationRes: Int
+        if (isUserBanned) {
+            confirmationRes = R.string.room_participants_unban_prompt_msg
+            titleRes = R.string.room_participants_unban_title
+            positiveButtonRes = R.string.room_participants_action_unban
         } else {
-            Pair(R.string.room_participants_ban_prompt_msg, R.string.room_participants_action_ban)
+            confirmationRes = R.string.room_participants_ban_prompt_msg
+            titleRes = R.string.room_participants_ban_title
+            positiveButtonRes = R.string.room_participants_action_ban
         }
-        AlertDialog.Builder(requireActivity())
-                .setTitle(titleRes)
-                .setView(layout)
-                .setPositiveButton(positiveButtonRes) { _, _ ->
-                    viewModel.handle(RoomMemberProfileAction.BanUser(input.text.toString()))
+        ConfirmationDialogBuilder
+                .show(
+                        activity = requireActivity(),
+                        askForReason = !isUserBanned,
+                        confirmationRes = confirmationRes,
+                        positiveRes = positiveButtonRes,
+                        reasonHintRes = R.string.room_participants_ban_reason,
+                        titleRes = titleRes
+                ) { reason ->
+                    viewModel.handle(RoomMemberProfileAction.BanUser(reason))
                 }
-                .setNegativeButton(R.string.cancel, null)
-                .show()
     }
 
     override fun onCancelInviteClicked() {
-        AlertDialog.Builder(requireActivity())
-                .setTitle(resources.getString(R.string.room_participants_action_cancel_invite_prompt_msg))
-                .setPositiveButton(R.string.room_participants_action_cancel_invite) { _, _ ->
+        ConfirmationDialogBuilder
+                .show(
+                        activity = requireActivity(),
+                        askForReason = false,
+                        confirmationRes = R.string.room_participants_action_cancel_invite_prompt_msg,
+                        positiveRes = R.string.room_participants_action_cancel_invite,
+                        reasonHintRes = 0,
+                        titleRes = R.string.room_participants_action_cancel_invite_title
+                ) {
                     viewModel.handle(RoomMemberProfileAction.KickUser(null))
                 }
-                .setNegativeButton(R.string.cancel, null)
-                .show()
     }
 
     override fun onInviteClicked() {

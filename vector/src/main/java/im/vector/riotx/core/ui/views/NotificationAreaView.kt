@@ -18,18 +18,11 @@ package im.vector.riotx.core.ui.views
 
 import android.content.Context
 import android.graphics.Color
-import android.text.SpannableString
-import android.text.TextPaint
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
 import android.util.AttributeSet
 import android.view.View
 import android.widget.RelativeLayout
-import androidx.core.content.ContextCompat
-import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.riotx.R
-import im.vector.riotx.core.error.ResourceLimitErrorFormatter
 import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.themes.ThemeUtils
 import kotlinx.android.synthetic.main.view_notification_area.view.*

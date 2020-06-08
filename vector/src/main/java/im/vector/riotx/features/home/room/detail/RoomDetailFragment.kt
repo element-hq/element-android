@@ -56,10 +56,8 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
@@ -88,6 +86,7 @@ import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.riotx.R
+import im.vector.riotx.core.dialogs.ConfirmationDialogBuilder
 import im.vector.riotx.core.dialogs.withColoredButton
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotx.core.extensions.cleanup
@@ -862,28 +861,17 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun promptConfirmationToRedactEvent(action: EventSharedAction.Redact) {
-        val layout = requireActivity().layoutInflater.inflate(R.layout.dialog_delete_event, null)
-        val reasonCheckBox = layout.findViewById<MaterialCheckBox>(R.id.deleteEventReasonCheck)
-        val reasonTextInputLayout = layout.findViewById<TextInputLayout>(R.id.deleteEventReasonTextInputLayout)
-        val reasonInput = layout.findViewById<TextInputEditText>(R.id.deleteEventReasonInput)
-
-        reasonCheckBox.isVisible = action.askForReason
-        reasonTextInputLayout.isVisible = action.askForReason
-
-        reasonCheckBox.setOnCheckedChangeListener { _, isChecked -> reasonTextInputLayout.isEnabled = isChecked }
-
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.delete_event_dialog_title)
-                .setView(layout)
-                .setPositiveButton(R.string.remove) { _, _ ->
-                    val reason = reasonInput.text.toString()
-                            .takeIf { action.askForReason }
-                            ?.takeIf { reasonCheckBox.isChecked }
-                            ?.takeIf { it.isNotBlank() }
+        ConfirmationDialogBuilder
+                .show(
+                        activity = requireActivity(),
+                        askForReason = action.askForReason,
+                        confirmationRes = R.string.delete_event_dialog_content,
+                        positiveRes = R.string.remove,
+                        reasonHintRes = R.string.delete_event_dialog_reason_hint,
+                        titleRes = R.string.delete_event_dialog_title
+                ) { reason ->
                     roomDetailViewModel.handle(RoomDetailAction.RedactAction(action.eventId, reason))
                 }
-                .setNegativeButton(R.string.cancel, null)
-                .show()
     }
 
     private fun displayRoomDetailActionFailure(result: RoomDetailViewEvents.ActionFailure) {
