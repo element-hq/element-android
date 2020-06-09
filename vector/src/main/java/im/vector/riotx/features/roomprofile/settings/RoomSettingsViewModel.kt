@@ -62,6 +62,8 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
     override fun handle(action: RoomSettingsAction) {
         when (action) {
             is RoomSettingsAction.EnableEncryption -> handleEnableEncryption()
+            is RoomSettingsAction.SetRoomName -> setState { copy(newName = action.newName) }
+            is RoomSettingsAction.SetRoomTopic -> setState { copy(newTopic = action.newTopic) }
         }
     }
 

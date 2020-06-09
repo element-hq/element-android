@@ -25,7 +25,9 @@ import im.vector.riotx.features.roomprofile.RoomProfileArgs
 data class RoomSettingsViewState(
         val roomId: String,
         val roomSummary: Async<RoomSummary> = Uninitialized,
-        val isLoading: Boolean = false
+        val isLoading: Boolean = false,
+        val newName: String? = null,
+        val newTopic: String? = null
 ) : MvRxState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)

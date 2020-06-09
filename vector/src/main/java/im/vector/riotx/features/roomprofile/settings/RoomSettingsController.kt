@@ -22,6 +22,7 @@ import im.vector.riotx.core.epoxy.profiles.buildProfileAction
 import im.vector.riotx.core.epoxy.profiles.buildProfileSection
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
+import im.vector.riotx.features.form.formEditTextItem
 import javax.inject.Inject
 
 // TODO Add other feature here (waiting for design)
@@ -32,6 +33,8 @@ class RoomSettingsController @Inject constructor(
 
     interface Callback {
         fun onEnableEncryptionClicked()
+        fun onNameChanged(name: String)
+        fun onTopicChanged(topic: String)
     }
 
     private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
@@ -67,6 +70,28 @@ class RoomSettingsController @Inject constructor(
                     editable = true,
                     action = { callback?.onEnableEncryptionClicked() }
             )
+        }
+
+        formEditTextItem {
+            id("name")
+            /*enabled(enableFormElement)*/
+            value(roomSummary.displayName)
+            hint(stringProvider.getString(R.string.room_settings_name_hint))
+
+            onTextChange { text ->
+                callback?.onNameChanged(text)
+            }
+        }
+
+        formEditTextItem {
+            id("topic")
+            /*enabled(enableFormElement)*/
+            value(roomSummary.topic)
+            hint(stringProvider.getString(R.string.room_settings_topic_hint))
+
+            onTextChange { text ->
+                callback?.onTopicChanged(text)
+            }
         }
     }
 }

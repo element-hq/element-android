@@ -2496,4 +2496,8 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="save_your_security_key_title">Save your Security Key</string>
     <string name="save_your_security_key_notice">Store your Security Key somewhere safe, like a password manager or a safe.</string>
 
+    <!-- Room Settings -->
+    <string name="room_settings_name_hint">Room Name</string>
+    <string name="room_settings_topic_hint">Topic</string>
+
 </resources>
