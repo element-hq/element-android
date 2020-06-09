@@ -12,6 +12,7 @@ Improvements 🙌:
  - Correctly handle SSO login redirection
  - SSO login is now performed in the default browser, or in Chrome Custom tab if available (#1400)
  - Improve checking of homeserver version support (#1442)
+ - Room Settings: Name, Topic, Photo, Aliases, History Visibility (#1455)
 
 Bugfix 🐛:
  - Switch theme is not fully taken into account without restarting the app

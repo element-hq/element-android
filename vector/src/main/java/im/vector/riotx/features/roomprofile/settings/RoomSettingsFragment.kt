@@ -82,6 +82,14 @@ class RoomSettingsFragment @Inject constructor(
                 .show()
     }
 
+    override fun onNameChanged(name: String) {
+        viewModel.handle(RoomSettingsAction.SetRoomName(name))
+    }
+
+    override fun onTopicChanged(topic: String) {
+        viewModel.handle(RoomSettingsAction.SetRoomTopic(topic))
+    }
+
     private fun renderRoomSummary(state: RoomSettingsViewState) {
         waiting_view.isVisible = state.isLoading
 

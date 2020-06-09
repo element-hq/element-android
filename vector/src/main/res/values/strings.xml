@@ -2431,4 +2431,8 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="identity_server_set_alternative_notice_no_default">Enter the URL of an identity server</string>
     <string name="identity_server_set_alternative_submit">Submit</string>
 
+    <!-- Room Settings -->
+    <string name="room_settings_name_hint">Room Name</string>
+    <string name="room_settings_topic_hint">Topic</string>
+
 </resources>
