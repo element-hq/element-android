@@ -22,14 +22,17 @@ import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetActionItem
 import im.vector.riotx.core.epoxy.bottomsheet.bottomSheetRoomPreviewItem
 import im.vector.riotx.core.epoxy.dividerItem
+import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
 /**
  * Epoxy controller for room list actions
  */
-class RoomListQuickActionsEpoxyController @Inject constructor(private val avatarRenderer: AvatarRenderer)
-    : TypedEpoxyController<RoomListQuickActionsState>() {
+class RoomListQuickActionsEpoxyController @Inject constructor(
+        private val avatarRenderer: AvatarRenderer,
+        private val stringProvider: StringProvider
+) : TypedEpoxyController<RoomListQuickActionsState>() {
 
     var listener: Listener? = null
 
@@ -38,12 +41,15 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val avatar
         val showAll = state.mode == RoomListActionsArgs.Mode.FULL
 
         if (showAll) {
-            // Preview
+            // Preview, favorite, settings
             bottomSheetRoomPreviewItem {
                 id("room_preview")
                 avatarRenderer(avatarRenderer)
                 matrixItem(roomSummary.toMatrixItem())
+                stringProvider(stringProvider)
+                izFavorite(roomSummary.isFavorite)
                 settingsClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Settings(roomSummary.roomId)) }
+                favoriteClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Favorite(roomSummary.roomId)) }
             }
 
             // Notifications
@@ -73,8 +79,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(private val avatar
             is RoomListQuickActionsSharedAction.NotificationsAll          -> roomNotificationState == RoomNotificationState.ALL_MESSAGES
             is RoomListQuickActionsSharedAction.NotificationsMentionsOnly -> roomNotificationState == RoomNotificationState.MENTIONS_ONLY
             is RoomListQuickActionsSharedAction.NotificationsMute         -> roomNotificationState == RoomNotificationState.MUTE
-            is RoomListQuickActionsSharedAction.Settings,
-            is RoomListQuickActionsSharedAction.Leave                     -> false
+            else                                                          -> false
         }
         return bottomSheetActionItem {
             id("action_$index")

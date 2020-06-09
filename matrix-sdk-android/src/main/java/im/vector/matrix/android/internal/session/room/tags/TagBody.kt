@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.room.model.tag
+package im.vector.matrix.android.internal.session.room.tags
 
-data class RoomTag(
-        val name: String,
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
+internal data class TagBody(
+        /**
+         * A number in a range [0,1] describing a relative position of the room under the given tag.
+         */
+        @Json(name = "order")
         val order: Double?
-) {
-
-    companion object {
-        const val ROOM_TAG_FAVOURITE = "m.favourite"
-        const val ROOM_TAG_LOW_PRIORITY = "m.lowpriority"
-        const val ROOM_TAG_SERVER_NOTICE = "m.server_notice"
-    }
-}
+)

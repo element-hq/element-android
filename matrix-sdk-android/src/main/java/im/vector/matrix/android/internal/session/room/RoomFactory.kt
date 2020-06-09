@@ -30,6 +30,7 @@ import im.vector.matrix.android.internal.session.room.reporting.DefaultReporting
 import im.vector.matrix.android.internal.session.room.send.DefaultSendService
 import im.vector.matrix.android.internal.session.room.state.DefaultStateService
 import im.vector.matrix.android.internal.session.room.state.SendStateTask
+import im.vector.matrix.android.internal.session.room.tags.DefaultTagsService
 import im.vector.matrix.android.internal.session.room.timeline.DefaultTimelineService
 import im.vector.matrix.android.internal.session.room.typing.DefaultTypingService
 import im.vector.matrix.android.internal.session.room.uploads.DefaultUploadsService
@@ -52,6 +53,7 @@ internal class DefaultRoomFactory @Inject constructor(private val monarchy: Mona
                                                       private val reportingServiceFactory: DefaultReportingService.Factory,
                                                       private val readServiceFactory: DefaultReadService.Factory,
                                                       private val typingServiceFactory: DefaultTypingService.Factory,
+                                                      private val tagsServiceFactory: DefaultTagsService.Factory,
                                                       private val relationServiceFactory: DefaultRelationService.Factory,
                                                       private val membershipServiceFactory: DefaultMembershipService.Factory,
                                                       private val roomPushRuleServiceFactory: DefaultRoomPushRuleService.Factory,
@@ -72,6 +74,7 @@ internal class DefaultRoomFactory @Inject constructor(private val monarchy: Mona
                 reportingService = reportingServiceFactory.create(roomId),
                 readService = readServiceFactory.create(roomId),
                 typingService = typingServiceFactory.create(roomId),
+                tagsService = tagsServiceFactory.create(roomId),
                 cryptoService = cryptoService,
                 relationService = relationServiceFactory.create(roomId),
                 roomMembersService = membershipServiceFactory.create(roomId),

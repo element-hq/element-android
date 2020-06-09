@@ -59,6 +59,9 @@ data class RoomSummary constructor(
     val hasNewMessages: Boolean
         get() = notificationCount != 0
 
+    val isFavorite: Boolean
+        get() = tags.any { it.name == RoomTag.ROOM_TAG_FAVOURITE }
+
     companion object {
         const val NOT_IN_BREADCRUMBS = -1
     }
