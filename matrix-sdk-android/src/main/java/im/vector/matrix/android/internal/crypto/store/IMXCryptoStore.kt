@@ -397,6 +397,7 @@ internal interface IMXCryptoStore {
     fun markMyMasterKeyAsLocallyTrusted(trusted: Boolean)
 
     fun storePrivateKeysInfo(msk: String?, usk: String?, ssk: String?)
+    fun storeMSKPrivateKey(msk: String?)
     fun storeSSKPrivateKey(ssk: String?)
     fun storeUSKPrivateKey(usk: String?)
 

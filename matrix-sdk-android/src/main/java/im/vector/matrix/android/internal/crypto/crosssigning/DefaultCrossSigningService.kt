@@ -168,6 +168,33 @@ internal class DefaultCrossSigningService @Inject constructor(
         }.executeBy(taskExecutor)
     }
 
+    override fun onSecretMSKGossip(mskPrivateKey: String) {
+        Timber.i("## CrossSigning - onSecretSSKGossip")
+        val mxCrossSigningInfo = getMyCrossSigningKeys() ?: return Unit.also {
+            Timber.e("## CrossSigning - onSecretMSKGossip() received secret but public key is not known")
+        }
+
+        mskPrivateKey.fromBase64()
+                .let { privateKeySeed ->
+                    val pkSigning = OlmPkSigning()
+                    try {
+                        if (pkSigning.initWithSeed(privateKeySeed) == mxCrossSigningInfo.masterKey()?.unpaddedBase64PublicKey) {
+                            masterPkSigning?.releaseSigning()
+                            masterPkSigning = pkSigning
+                            Timber.i("## CrossSigning - Loading MSK success")
+                            cryptoStore.storeMSKPrivateKey(mskPrivateKey)
+                            return
+                        } else {
+                            Timber.e("## CrossSigning - onSecretMSKGossip() private key do not match public key")
+                            pkSigning.releaseSigning()
+                        }
+                    } catch (failure: Throwable) {
+                        Timber.e("## CrossSigning - onSecretMSKGossip() ${failure.localizedMessage}")
+                        pkSigning.releaseSigning()
+                    }
+                }
+    }
+
     override fun onSecretSSKGossip(sskPrivateKey: String) {
         Timber.i("## CrossSigning - onSecretSSKGossip")
         val mxCrossSigningInfo = getMyCrossSigningKeys() ?: return Unit.also {

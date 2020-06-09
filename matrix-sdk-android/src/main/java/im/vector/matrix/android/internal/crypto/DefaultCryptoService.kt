@@ -34,6 +34,7 @@ import im.vector.matrix.android.api.listeners.ProgressListener
 import im.vector.matrix.android.api.session.crypto.CryptoService
 import im.vector.matrix.android.api.session.crypto.MXCryptoError
 import im.vector.matrix.android.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
+import im.vector.matrix.android.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import im.vector.matrix.android.api.session.crypto.keyshare.GossipingRequestListener
@@ -835,6 +836,10 @@ internal class DefaultCryptoService @Inject constructor(
      */
     private fun handleSDKLevelGossip(secretName: String?, secretValue: String): Boolean {
         return when (secretName) {
+            MASTER_KEY_SSSS_NAME -> {
+                crossSigningService.onSecretMSKGossip(secretValue)
+                true
+            }
             SELF_SIGNING_KEY_SSSS_NAME -> {
                 crossSigningService.onSecretSSKGossip(secretValue)
                 true
