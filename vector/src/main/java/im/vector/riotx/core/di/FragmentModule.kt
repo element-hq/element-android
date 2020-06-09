@@ -28,8 +28,6 @@ import im.vector.riotx.features.crypto.quads.SharedSecuredStorageKeyFragment
 import im.vector.riotx.features.crypto.quads.SharedSecuredStoragePassphraseFragment
 import im.vector.riotx.features.crypto.recover.BootstrapAccountPasswordFragment
 import im.vector.riotx.features.crypto.recover.BootstrapConclusionFragment
-import im.vector.riotx.features.crypto.recover.BootstrapConfirmPassphraseFragment
-import im.vector.riotx.features.crypto.recover.BootstrapEnterPassphraseFragment
 import im.vector.riotx.features.crypto.recover.BootstrapMigrateBackupFragment
 import im.vector.riotx.features.crypto.recover.BootstrapSaveRecoveryKeyFragment
 import im.vector.riotx.features.crypto.recover.BootstrapWaitingFragment
@@ -452,16 +450,6 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(GossipingEventsPaperTrailFragment::class)
     fun bindGossipingEventsPaperTrailFragment(fragment: GossipingEventsPaperTrailFragment): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(BootstrapEnterPassphraseFragment::class)
-    fun bindBootstrapEnterPassphraseFragment(fragment: BootstrapEnterPassphraseFragment): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(BootstrapConfirmPassphraseFragment::class)
-    fun bindBootstrapConfirmPassphraseFragment(fragment: BootstrapConfirmPassphraseFragment): Fragment
 
     @Binds
     @IntoMap

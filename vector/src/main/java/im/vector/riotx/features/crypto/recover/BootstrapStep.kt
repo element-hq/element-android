@@ -30,29 +30,25 @@ package im.vector.riotx.features.crypto.recover
  *                        └───────────────────────────────────┘            │
  *                                          │                              │
  *                                          │                              │
- *                           Existing       ├─────────No ───────┐          │
- *                     ┌────Keybackup───────┘     KeyBackup     │          │
- *                     │                                        │          │
- *                     │                                        ▼          ▼
- *                     ▼                                    ┌────────────────────────────────────┐
- *     ┌─────────────────────────────────────────┐          │   BootstrapStep.SetupPassphrase    │◀─┐
- *     │BootstrapStep.GetBackupSecretForMigration│          └────────────────────────────────────┘  │
- *     └─────────────────────────────────────────┘                             │                    │
- *                             │                                               │                 ┌Back
- *                             │                                               ▼                 │
- *                             │                            ┌────────────────────────────────────┤
- *                             │                            │  BootstrapStep.ConfirmPassphrase   │──┐
- *                             │                            └────────────────────────────────────┘  │
- *                             │                                               │                    │
- *                             │                                      is password needed?           │
- *                             │                                               │                    │
- *                             │                                               ▼                    │
+ *                           Existing       ├─────────No ──────────────────┐
+ *                     ┌────Keybackup───────┘     KeyBackup                │
+ *                     │                                                   │
+ *                     │                                                   │
+ *                     ▼                                                   │
+ *     ┌─────────────────────────────────────────┐                         │
+ *     │BootstrapStep.GetBackupSecretForMigration│                         │
+ *     └─────────────────────────────────────────┘                         │
+ *                             │                                           │
+ *                             │                                           │
+ *                             │                                  is password needed?  ─────────────┐
+ *                             │                                           │                        │
+ *                             │                                           ▼                        │
  *                             │                            ┌────────────────────────────────────┐  │
  *                             │                            │   BootstrapStep.AccountPassword    │  │
  *                             │                            └────────────────────────────────────┘  │
- *                             │                                               │                    │
- *                             │                                               │                    │
- *                             │                            ┌──────────────────┘         password not needed (in
+ *                             │                                           │                        │
+ *                             │                                           │                        │
+ *                             │                            ┌──────────────┘            password not needed (in
  *                             │                            │                                    memory)
  *                             │                            │                                       │
  *                             │                            ▼                                       │
@@ -77,8 +73,6 @@ package im.vector.riotx.features.crypto.recover
  */
 
 sealed class BootstrapStep {
-    data class SetupPassphrase(val isPasswordVisible: Boolean) : BootstrapStep()
-    data class ConfirmPassphrase(val isPasswordVisible: Boolean) : BootstrapStep()
     data class AccountPassword(val isPasswordVisible: Boolean, val failure: String? = null) : BootstrapStep()
     object CheckingMigration : BootstrapStep()
 
