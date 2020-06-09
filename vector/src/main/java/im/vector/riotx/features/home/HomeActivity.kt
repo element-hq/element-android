@@ -19,20 +19,16 @@ package im.vector.riotx.features.home
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
+import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.session.Session
-import im.vector.matrix.android.api.util.toMatrixItem
-import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
-import im.vector.matrix.android.internal.crypto.model.MXUsersDevicesMap
+import im.vector.matrix.android.api.session.InitialSyncProgressService
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ActiveSessionHolder
 import im.vector.riotx.core.di.ScreenComponent
@@ -46,21 +42,28 @@ import im.vector.riotx.features.crypto.recover.BootstrapBottomSheet
 import im.vector.riotx.features.disclaimer.showDisclaimerDialog
 import im.vector.riotx.features.notifications.NotificationDrawerManager
 import im.vector.riotx.features.popup.PopupAlertManager
-import im.vector.riotx.features.popup.VerificationVectorAlert
 import im.vector.riotx.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.workers.signout.SignOutViewModel
 import im.vector.riotx.push.fcm.FcmHelper
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import timber.log.Timber
 import javax.inject.Inject
+
+@Parcelize
+data class HomeActivityArgs(
+        val clearNotification: Boolean,
+        val accountCreation: Boolean
+) : Parcelable
 
 class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDetectorSharedViewModel.Factory {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
+    @Inject lateinit var viewModelFactory: HomeActivityViewModel.Factory
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
@@ -114,21 +117,33 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                 }
                 .disposeOnDestroy()
 
-        if (intent.getBooleanExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION, false)) {
+        val args = intent.getParcelableExtra<HomeActivityArgs>(MvRx.KEY_ARG)
+
+        if (args?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
-            intent.removeExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)
-        }
-        if (intent.getBooleanExtra(EXTRA_ACCOUNT_CREATION, false)) {
-            sharedActionViewModel.post(HomeActivitySharedAction.PromptForSecurityBootstrap)
-            homeActivityViewModel.isAccountCreation = true
-            intent.removeExtra(EXTRA_ACCOUNT_CREATION)
         }
 
-        activeSessionHolder.getSafeActiveSession()?.getInitialSyncProgressStatus()?.observe(this, Observer { status ->
-            if (status == null) {
+        homeActivityViewModel.subscribe(this) { renderState(it) }
+
+        /*
+        // TODO Remove
+        // Ask again if the app is relaunched
+        if (!homeActivityViewModel.hasDisplayedCompleteSecurityPrompt
+                && activeSessionHolder.getSafeActiveSession()?.hasAlreadySynced() == true) {
+            promptCompleteSecurityIfNeeded()
+        }
+        */
+
+        shortcutsHandler.observeRoomsAndBuildShortcuts()
+                .disposeOnDestroy()
+    }
+
+    private fun renderState(state: HomeActivityViewState) {
+        when (val status = state.initialSyncProgressServiceStatus) {
+            is InitialSyncProgressService.Status.Idle        -> {
                 waiting_view.isVisible = false
-                promptCompleteSecurityIfNeeded()
-            } else {
+            }
+            is InitialSyncProgressService.Status.Progressing -> {
                 homeActivityViewModel.hasDisplayedCompleteSecurityPrompt = false
                 Timber.v("${getString(status.statusText)} ${status.percentProgress}")
                 waiting_view.setOnClickListener {
@@ -146,18 +161,11 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                 }
                 waiting_view.isVisible = true
             }
-        })
-
-        // Ask again if the app is relaunched
-        if (!homeActivityViewModel.hasDisplayedCompleteSecurityPrompt
-                && activeSessionHolder.getSafeActiveSession()?.hasAlreadySynced() == true) {
-            promptCompleteSecurityIfNeeded()
-        }
-
-        shortcutsHandler.observeRoomsAndBuildShortcuts()
-                .disposeOnDestroy()
+        }.exhaustive
     }
 
+    /*
+    // TODO Remove
     private fun promptCompleteSecurityIfNeeded() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         if (!session.hasAlreadySynced()) return
@@ -172,7 +180,10 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
             }
         })
     }
+     */
 
+    // TODO Remove
+    /*
     private fun alertCompleteSecurity(session: Session) {
         val myCrossSigningKeys = session.cryptoService().crossSigningService()
                 .getMyCrossSigningKeys()
@@ -204,7 +215,10 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
             }
         }
     }
+     */
 
+    /*
+    // TODO Remove
     private fun promptSecurityEvent(session: Session, titleRes: Int, descRes: Int, action: ((VectorBaseActivity) -> Unit)) {
         homeActivityViewModel.hasDisplayedCompleteSecurityPrompt = true
         popupAlertManager.postVectorAlert(
@@ -225,12 +239,12 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                 }
         )
     }
+     */
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        if (intent?.hasExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION) == true) {
+        if (intent?.getParcelableExtra<HomeActivityArgs>(MvRx.KEY_ARG)?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
-            intent.removeExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION)
         }
     }
 
@@ -293,14 +307,15 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
     }
 
     companion object {
-        private const val EXTRA_CLEAR_EXISTING_NOTIFICATION = "EXTRA_CLEAR_EXISTING_NOTIFICATION"
-        private const val EXTRA_ACCOUNT_CREATION = "EXTRA_ACCOUNT_CREATION"
-
         fun newIntent(context: Context, clearNotification: Boolean = false, accountCreation: Boolean = false): Intent {
+            val args = HomeActivityArgs(
+                    clearNotification = clearNotification,
+                    accountCreation = accountCreation
+            )
+
             return Intent(context, HomeActivity::class.java)
                     .apply {
-                        putExtra(EXTRA_CLEAR_EXISTING_NOTIFICATION, clearNotification)
-                        putExtra(EXTRA_ACCOUNT_CREATION, accountCreation)
+                        putExtra(MvRx.KEY_ARG, args)
                     }
         }
     }
