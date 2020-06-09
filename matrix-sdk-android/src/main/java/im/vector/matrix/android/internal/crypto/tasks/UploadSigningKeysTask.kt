@@ -32,11 +32,11 @@ import javax.inject.Inject
 
 internal interface UploadSigningKeysTask : Task<UploadSigningKeysTask.Params, Unit> {
     data class Params(
-            // the device keys to send.
+            // the MSK
             val masterKey: CryptoCrossSigningKey,
-            // the one-time keys to send.
+            // the USK
             val userKey: CryptoCrossSigningKey,
-            // the explicit device_id to use for upload (default is to use the same as that used during auth).
+            // the SSK
             val selfSignedKey: CryptoCrossSigningKey,
             /**
              * - If null:
