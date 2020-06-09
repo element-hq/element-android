@@ -43,7 +43,7 @@
     <string name="loading">Učitavanje…</string>
 
     <string name="ok">U redu</string>
-    <string name="cancel">Otkaži</string>
+    <string name="cancel">Odustani</string>
     <string name="save">Spremi</string>
     <string name="leave">Napusti</string>
     <string name="stay">Ostani</string>
@@ -63,7 +63,7 @@
     <string name="view_decrypted_source">Vidi dešifrirani izvor</string>
     <string name="delete">Izbriši</string>
     <string name="rename">Preimenuj</string>
-    <string name="none">Ništa</string>
+    <string name="none">Nije podešeno</string>
     <string name="revoke">Opozovi</string>
     <string name="disconnect">Odspoji se</string>
     <string name="report_content">Prijavi sadržaj</string>
@@ -611,7 +611,7 @@
     <string name="settings_troubleshoot_diagnostic_run_button_title">Pokreni testove</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Izvršavanje… (%1$d od %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_success_status">Osnovna dijagnostika je uredna. Ako i dalje ne dobivate obavijesti, pošaljite izvješće o grešci kako bi se mogao utvrditi problem.</string>
-    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Jedan ili više testova nije uspjelo pa pokušajte s predloženim ispravkom/ama.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Jedan ili više testova nisu uspjeli pa pokušajte s predloženim ispravkom/ama.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Jedan ili više testova nije uspjelo, pošaljite izvješće o grešci kako bi se mogao utvrditi problem.</string>
 
     <string name="settings_troubleshoot_test_system_settings_title">Postavke sustava.</string>
@@ -840,7 +840,7 @@
     <string name="account_email_error">Došlo je do greške tijekom potvrde Vaše adrese e-pošte.</string>
 
     <string name="settings_password">Lozinka</string>
-    <string name="settings_change_password">Promijeni lozinku</string>
+    <string name="settings_change_password">Promijenite lozinku</string>
     <string name="settings_old_password">Sadašnja lozinka</string>
     <string name="settings_new_password">Nova lozinka</string>
     <string name="settings_confirm_password">Potvrdite novu lozinku</string>
@@ -1079,7 +1079,7 @@
     <string name="sas_error_m_user_error">Nepodudaranje u korisnicima</string>
     <string name="sas_error_unknown">Nepoznata greška</string>
 
-    <string name="identity_server_not_defined">Ne koristite poslužitelj identiteta</string>
+    <string name="identity_server_not_defined">Ne koristite poslužitelja identiteta</string>
     <string name="identity_server_not_defined_for_password_reset">Nije podešen poslužitelj identiteta. Potreban je za poništavanje Vaše lozinke.</string>
 
     <string name="security_warning_identity_server">Prijašnje inačice Riota imale su sigurnosni propust koji bi Vašem poslužitelju identiteta (%1$s) omogućio pristup Vašem računu. Ako vjerujete %2$s, možete ovo zanemariti. U suprotnom se odjavite i ponovno prijavite.
@@ -1608,4 +1608,58 @@
 
     <string name="room_message_placeholder">Poruka…</string>
 
+    <string name="keys_backup_setup_step3_success_title">Uspješno dovršeno!</string>
+    <string name="keys_backup_setup_step3_text_line1">Izrada sigurnosne kopije ključeva je u tijeku.</string>
+    <string name="keys_backup_setup_step3_button_title">Dovršeno</string>
+    <string name="keys_backup_setup_step3_button_title_no_passphrase">Napravljena je kopija</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">Dijeli</string>
+    <string name="keys_backup_setup_step3_save_button_title">Spremi u datoteku</string>
+    <string name="sas_verified_successful_description">Sigurne poruke s ovim korisnikom su šifrirane s kraja na kraj i treće strane ih ne mogu pročitati.</string>
+    <string name="sas_verification_request_notification_channel">Interaktivna potvrda sesije</string>
+    <string name="settings_show_redacted">Prikaži izbrisane poruke</string>
+    <string name="settings_show_redacted_summary">Prikaži prazninu umjesto izbrisanih poruka</string>
+    <string name="create_room_name_hint">Naziv sobe</string>
+    <string name="create_room_public_title">Javna</string>
+    <string name="create_room_public_description">Bilo tko moći će se pridružiti sobi</string>
+    <string name="create_room_directory_title">Popis soba</string>
+    <string name="create_room_directory_description">Objavi ovu sobu u popisu soba</string>
+
+    <string name="keys_backup_unable_to_get_keys_backup_data">Došlo je do greške pri dohvaćanju podataka iz sigurnosne kopije ključeva</string>
+
+    <string name="alpha_disclaimer_title">Dobrodošli u radnu inačicu!</string>
+    <string name="alpha_disclaimer_content_line_1">Obzirom da je RiotX u fazi ranog razvoja, neke značajke mogu nedostajati i moguće su greške u aplikaciji.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay">Najnoviji popis značajki se uvijek nalazi na %1%s. Ako nađete greške u aplikaciji, budite ljubazni pa pošaljite izvještaj pomoću izbornika u gornje-lijevom kutu Početne stranice. Razvijatelji će ispraviti greške čim prije.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Opis za trgovinu Play</string>
+    <string name="alpha_disclaimer_content_line_2_fdroid">Ako nađete greške u aplikaciji, budite ljubazni pa pošaljite izvještaj pomoću izbornika u gornje-lijevom kutu Početne stranice. Razvijatelji će ispraviti greške čim prije.</string>
+
+    <string name="import_e2e_keys_from_file">Uvezi ključeve za E2E iz datoteke \"%1$s\".</string>
+
+    <string name="settings_sdk_version">Inačica Matrix SDK-a</string>
+    <string name="settings_other_third_party_notices">Druge obavijesti trećih strana</string>
+    <string name="navigate_to_room_when_already_in_the_room">Već se nalazite u toj sobi!</string>
+
+    <string name="quick_reactions">Brze reakcije</string>
+
+    <string name="settings_general_title">Općenito</string>
+    <string name="settings_preferences">Postavke</string>
+    <string name="settings_security_and_privacy">Sigurnost i privatnost</string>
+    <string name="settings_expert">Stručnjak</string>
+    <string name="settings_push_rules">Obavijesna pravila</string>
+    <string name="settings_push_rules_no_rules">Nije definirano ni jedno obavijesno pravilo</string>
+    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_push_key">push_key:</string>
+    <string name="push_gateway_item_app_display_name">app_display_name:</string>
+    <string name="push_gateway_item_device_name">session_name:</string>
+    <string name="push_gateway_item_url">URL:</string>
+    <string name="push_gateway_item_format">Oblik:</string>
+
+    <string name="preference_voice_and_video">Glas i video</string>
+    <string name="preference_root_help_about">Pomoć i o aplikaciji</string>
+
+
+    <string name="bottom_action_people_x">Izravne poruke</string>
+
+    <string name="message_action_item_redact">Ukloni…</string>
+    <string name="delete_event_dialog_title">Potvrda uklanjanja</string>
+    <string name="delete_event_dialog_content">Jeste li sigurni da želite ukloniti (izbrisati) ovaj događaj\? Ukoliko izbrišete naziv sobe ili promjenu teme, to može poništiti promjenu.</string>
     </resources>
