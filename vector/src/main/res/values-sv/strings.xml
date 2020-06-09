@@ -938,4 +938,8 @@
     <string name="identity_server_set_default_notice">Din hemserver (%1$s) föreslår att du använder %2$s som din identitetsserver</string>
     <string name="identity_server_set_alternative_notice">Alternativt så kan du skriva in en annan identitetsserver-URL</string>
     <string name="identity_server_set_alternative_notice_no_default">Skriv in URL för en identitetsserver</string>
+    <string name="e2e_use_keybackup">Lås upp krypterad meddelandehistorik</string>
+
+    <string name="verify_new_session_notice">Använd den här sessionen för att verifiera din nya och ge den tillgång till krypterade meddelanden.</string>
+    <string name="verify_cancel_self_verification_from_untrusted">Om du avbryter så kommer du inte kunna läsa krypterade meddelanden på den här enheten, och andra användare kommer inte att lita på den</string>
     </resources>
