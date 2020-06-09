@@ -2403,4 +2403,5 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="identity_server_set_alternative_notice_no_default">Jepni URL-në e një shërbyesi identitetesh</string>
     <string name="identity_server_set_alternative_submit">Parashtroje</string>
 
-</resources>
+<string name="open_terms_of">Hap termat e %s</string>
+    </resources>
