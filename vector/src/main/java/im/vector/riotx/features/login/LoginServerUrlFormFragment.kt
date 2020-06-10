@@ -26,7 +26,7 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.utils.ensureProtocol
-import im.vector.riotx.core.utils.openUrlInExternalBrowser
+import im.vector.riotx.core.utils.openUrlInChromeCustomTab
 import kotlinx.android.synthetic.main.fragment_login_server_url_form.*
 import javax.inject.Inject
 
@@ -84,7 +84,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
 
     @OnClick(R.id.loginServerUrlFormLearnMore)
     fun learnMore() {
-        openUrlInExternalBrowser(requireActivity(), MODULAR_LINK)
+        openUrlInChromeCustomTab(requireActivity(), null, MODULAR_LINK)
     }
 
     override fun resetViewModel() {
