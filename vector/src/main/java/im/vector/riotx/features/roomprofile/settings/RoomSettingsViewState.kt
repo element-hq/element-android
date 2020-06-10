@@ -27,7 +27,8 @@ data class RoomSettingsViewState(
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val isLoading: Boolean = false,
         val newName: String? = null,
-        val newTopic: String? = null
+        val newTopic: String? = null,
+        val showSaveAction: Boolean = false
 ) : MvRxState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)

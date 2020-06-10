@@ -55,16 +55,41 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
         room.rx().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
-                    copy(roomSummary = async)
+                    val roomSummary = async.invoke()
+                    copy(
+                            roomSummary = async,
+                            newName = roomSummary?.displayName,
+                            newTopic = roomSummary?.topic
+                    )
                 }
     }
 
     override fun handle(action: RoomSettingsAction) {
         when (action) {
             is RoomSettingsAction.EnableEncryption -> handleEnableEncryption()
-            is RoomSettingsAction.SetRoomName -> setState { copy(newName = action.newName) }
-            is RoomSettingsAction.SetRoomTopic -> setState { copy(newTopic = action.newTopic) }
+            is RoomSettingsAction.SetRoomName      -> setState {
+                copy(
+                        newName = action.newName,
+                        showSaveAction = shouldShowSaveAction(this)
+                )
+            }
+            is RoomSettingsAction.SetRoomTopic     -> setState {
+                copy(
+                        newTopic = action.newTopic,
+                        showSaveAction = shouldShowSaveAction(this)
+                )
+            }
+            is RoomSettingsAction.Save             -> saveSettings()
         }
+    }
+
+    private fun shouldShowSaveAction(state: RoomSettingsViewState): Boolean {
+        val summary = state.roomSummary.invoke()
+        return summary?.displayName != state.newName ||
+                summary?.topic != state.newTopic
+    }
+
+    private fun saveSettings() {
     }
 
     private fun handleEnableEncryption() {
