@@ -17,6 +17,8 @@
 package im.vector.riotx.features.roomprofile.settings
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
@@ -46,6 +48,8 @@ class RoomSettingsFragment @Inject constructor(
 
     override fun getLayoutResId() = R.layout.fragment_room_setting_generic
 
+    override fun getMenuRes() = R.menu.vector_room_settings
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         controller.callback = this
@@ -64,6 +68,20 @@ class RoomSettingsFragment @Inject constructor(
     override fun onDestroyView() {
         recyclerView.cleanup()
         super.onDestroyView()
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        withState(viewModel) { state ->
+            menu.findItem(R.id.roomSettingsSaveAction).isVisible = state.showSaveAction
+        }
+        super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.roomSettingsSaveAction) {
+            viewModel.handle(RoomSettingsAction.Save)
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun invalidate() = withState(viewModel) { viewState ->
@@ -97,5 +115,7 @@ class RoomSettingsFragment @Inject constructor(
             roomSettingsToolbarTitleView.text = it.displayName
             avatarRenderer.render(it.toMatrixItem(), roomSettingsToolbarAvatarImageView)
         }
+
+        invalidateOptionsMenu()
     }
 }

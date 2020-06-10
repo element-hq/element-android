@@ -52,6 +52,28 @@ class RoomSettingsController @Inject constructor(
                 stringProvider.getString(R.string.settings)
         )
 
+        formEditTextItem {
+            id("name")
+            /*enabled(enableFormElement)*/
+            value(data.newName ?: roomSummary.displayName)
+            hint(stringProvider.getString(R.string.room_settings_name_hint))
+
+            onTextChange { text ->
+                callback?.onNameChanged(text)
+            }
+        }
+
+        formEditTextItem {
+            id("topic")
+            /*enabled(enableFormElement)*/
+            value(data.newTopic ?: roomSummary.topic)
+            hint(stringProvider.getString(R.string.room_settings_topic_hint))
+
+            onTextChange { text ->
+                callback?.onTopicChanged(text)
+            }
+        }
+
         if (roomSummary.isEncrypted) {
             buildProfileAction(
                     id = "encryption",
@@ -70,28 +92,6 @@ class RoomSettingsController @Inject constructor(
                     editable = true,
                     action = { callback?.onEnableEncryptionClicked() }
             )
-        }
-
-        formEditTextItem {
-            id("name")
-            /*enabled(enableFormElement)*/
-            value(roomSummary.displayName)
-            hint(stringProvider.getString(R.string.room_settings_name_hint))
-
-            onTextChange { text ->
-                callback?.onNameChanged(text)
-            }
-        }
-
-        formEditTextItem {
-            id("topic")
-            /*enabled(enableFormElement)*/
-            value(roomSummary.topic)
-            hint(stringProvider.getString(R.string.room_settings_topic_hint))
-
-            onTextChange { text ->
-                callback?.onTopicChanged(text)
-            }
         }
     }
 }

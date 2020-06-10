@@ -23,4 +23,5 @@ sealed class RoomSettingsAction : VectorViewModelAction {
     data class SetRoomTopic(val newTopic: String) : RoomSettingsAction()
     data class SetRoomAvatar(val newAvatarUrl: String) : RoomSettingsAction()
     object EnableEncryption : RoomSettingsAction()
+    object Save : RoomSettingsAction()
 }
