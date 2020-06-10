@@ -21,7 +21,7 @@ import android.view.View
 import butterknife.OnClick
 import com.airbnb.mvrx.withState
 import im.vector.riotx.R
-import im.vector.riotx.core.utils.openUrlInExternalBrowser
+import im.vector.riotx.core.utils.openUrlInChromeCustomTab
 import kotlinx.android.synthetic.main.fragment_login_server_selection.*
 import me.gujun.android.span.span
 import javax.inject.Inject
@@ -56,7 +56,7 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
 
     @OnClick(R.id.loginServerChoiceModularLearnMore)
     fun learnMore() {
-        openUrlInExternalBrowser(requireActivity(), MODULAR_LINK)
+        openUrlInChromeCustomTab(requireActivity(), null, MODULAR_LINK)
     }
 
     @OnClick(R.id.loginServerChoiceMatrixOrg)
