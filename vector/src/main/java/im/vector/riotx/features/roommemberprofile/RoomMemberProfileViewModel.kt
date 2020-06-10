@@ -144,7 +144,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
             is RoomMemberProfileAction.VerifyUser             -> prepareVerification()
             is RoomMemberProfileAction.ShareRoomMemberProfile -> handleShareRoomMemberProfile()
             is RoomMemberProfileAction.SetPowerLevel          -> handleSetPowerLevel(action)
-            is RoomMemberProfileAction.BanUser                -> handleBanAction(action)
+            is RoomMemberProfileAction.BanOrUnbanUser         -> handleBanOrUnbanAction(action)
             is RoomMemberProfileAction.KickUser               -> handleKickAction(action)
             RoomMemberProfileAction.InviteUser                -> handleInviteAction()
         }
@@ -223,7 +223,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         }
     }
 
-    private fun handleBanAction(action: RoomMemberProfileAction.BanUser) = withState { state ->
+    private fun handleBanOrUnbanAction(action: RoomMemberProfileAction.BanOrUnbanUser) = withState { state ->
         if (room == null) {
             return@withState
         }
@@ -286,10 +286,10 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         powerLevelsContentLive.subscribe {
             val powerLevelsHelper = PowerLevelsHelper(it)
             val permissions = ActionPermissions(
-                    canKick = powerLevelsHelper.canKick(session.myUserId),
-                    canBan = powerLevelsHelper.canBan(session.myUserId),
-                    canInvite = powerLevelsHelper.canInvite(session.myUserId),
-                    canEditPowerLevel = powerLevelsHelper.isAllowedToSend(true, EventType.STATE_ROOM_POWER_LEVELS, session.myUserId)
+                    canKick = powerLevelsHelper.isUserAbleToKick(session.myUserId),
+                    canBan = powerLevelsHelper.isUserAbleToBan(session.myUserId),
+                    canInvite = powerLevelsHelper.isUserAbleToInvite(session.myUserId),
+                    canEditPowerLevel = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_POWER_LEVELS)
             )
             setState { copy(powerLevelsContent = it, actionPermissions = permissions) }
         }.disposeOnClear()

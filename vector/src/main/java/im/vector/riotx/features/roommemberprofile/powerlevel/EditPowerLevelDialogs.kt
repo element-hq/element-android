@@ -73,7 +73,7 @@ object EditPowerLevelDialogs {
     }
 
     fun showValidation(activity: Activity, onValidate: () -> Unit) {
-        // ask to the user to confirmation thu upgrade.
+        // Ask to the user the confirmation to upgrade.
         AlertDialog.Builder(activity)
                 .setMessage(R.string.room_participants_power_level_prompt)
                 .setPositiveButton(R.string.yes) { _, _ ->
@@ -84,6 +84,7 @@ object EditPowerLevelDialogs {
     }
 
     fun showDemoteWarning(activity: Activity, onValidate: () -> Unit) {
+        // Ask to the user the confirmation to downgrade his own role.
         AlertDialog.Builder(activity)
                 .setTitle(R.string.room_participants_power_level_demote_warning_title)
                 .setMessage(R.string.room_participants_power_level_demote_warning_prompt)

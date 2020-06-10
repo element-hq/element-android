@@ -124,7 +124,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
         PowerLevelsObservableFactory(room).createObservable()
                 .subscribe {
                     val permissions = ActionPermissions(
-                            canInvite = PowerLevelsHelper(it).canInvite(session.myUserId)
+                            canInvite = PowerLevelsHelper(it).isUserAbleToInvite(session.myUserId)
                     )
                     setState {
                         copy(actionsPermissions = permissions)

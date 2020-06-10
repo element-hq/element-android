@@ -18,11 +18,15 @@ package im.vector.riotx.core.ui.views
 
 import android.content.Context
 import android.graphics.Color
+import android.text.method.LinkMovementMethod
 import android.util.AttributeSet
 import android.view.View
 import android.widget.RelativeLayout
+import androidx.core.content.ContextCompat
+import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.riotx.R
+import im.vector.riotx.core.error.ResourceLimitErrorFormatter
 import im.vector.riotx.core.utils.DimensionConverter
 import im.vector.riotx.features.themes.ThemeUtils
 import kotlinx.android.synthetic.main.view_notification_area.view.*
@@ -61,10 +65,11 @@ class NotificationAreaView @JvmOverloads constructor(
         cleanUp()
         state = newState
         when (newState) {
-            is State.Default                    -> renderDefault()
-            is State.Hidden                     -> renderHidden()
-            is State.NoPermissionToPost         -> renderNoPermissionToPost()
-            is State.Tombstone                  -> renderTombstone(newState)
+            is State.Default            -> renderDefault()
+            is State.Hidden             -> renderHidden()
+            is State.NoPermissionToPost -> renderNoPermissionToPost()
+            is State.Tombstone          -> renderTombstone(newState)
+            is State.ResourceLimitExceededError -> renderResourceLimitExceededError(newState)
         }
     }
 
@@ -91,6 +96,26 @@ class NotificationAreaView @JvmOverloads constructor(
         }
         roomNotificationMessage.text = message
         roomNotificationMessage.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_secondary))
+    }
+
+    private fun renderResourceLimitExceededError(state: State.ResourceLimitExceededError) {
+        visibility = View.VISIBLE
+        val resourceLimitErrorFormatter = ResourceLimitErrorFormatter(context)
+        val formatterMode: ResourceLimitErrorFormatter.Mode
+        val backgroundColor: Int
+        if (state.isSoft) {
+            backgroundColor = R.color.soft_resource_limit_exceeded
+            formatterMode = ResourceLimitErrorFormatter.Mode.Soft
+        } else {
+            backgroundColor = R.color.hard_resource_limit_exceeded
+            formatterMode = ResourceLimitErrorFormatter.Mode.Hard
+        }
+        val message = resourceLimitErrorFormatter.format(state.matrixError, formatterMode, clickable = true)
+        roomNotificationMessage.setTextColor(Color.WHITE)
+        roomNotificationMessage.text = message
+        roomNotificationMessage.movementMethod = LinkMovementMethod.getInstance()
+        roomNotificationMessage.setLinkTextColor(Color.WHITE)
+        setBackgroundColor(ContextCompat.getColor(context, backgroundColor))
     }
 
     private fun renderTombstone(state: State.Tombstone) {
@@ -129,13 +154,16 @@ class NotificationAreaView @JvmOverloads constructor(
         object Default : State()
 
         // User can't post messages to room because his power level doesn't allow it.
-        object NoPermissionToPost: State()
+        object NoPermissionToPost : State()
 
         // View will be Gone
         object Hidden : State()
 
         // The room is dead
         data class Tombstone(val tombstoneEvent: Event) : State()
+
+        // Resource limit exceeded error will be displayed (only hard for the moment)
+        data class ResourceLimitExceededError(val isSoft: Boolean, val matrixError: MatrixError) : State()
     }
 
     /**

@@ -34,10 +34,11 @@ sealed class Role(open val value: Int, @StringRes val res: Int) : Comparable<Rol
 
         fun fromValue(value: Int, default: Int): Role {
             return when (value) {
-                default, Default.value -> Default
-                Moderator.value        -> Moderator
-                Admin.value            -> Admin
-                else                   -> Custom(value)
+                default,
+                Default.value   -> Default
+                Moderator.value -> Moderator
+                Admin.value     -> Admin
+                else            -> Custom(value)
             }
         }
     }

@@ -325,7 +325,7 @@ class RoomMemberProfileFragment @Inject constructor(
                         reasonHintRes = R.string.room_participants_ban_reason,
                         titleRes = titleRes
                 ) { reason ->
-                    viewModel.handle(RoomMemberProfileAction.BanUser(reason))
+                    viewModel.handle(RoomMemberProfileAction.BanOrUnbanUser(reason))
                 }
     }
 

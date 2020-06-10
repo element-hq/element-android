@@ -109,9 +109,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         PowerLevelsObservableFactory(room).createObservable()
                 .subscribe {
                     val powerLevelsHelper = PowerLevelsHelper(it)
-                    val canReact = powerLevelsHelper.isAllowedToSend(false, EventType.REACTION, session.myUserId)
-                    val canRedact = powerLevelsHelper.canRedact(session.myUserId)
-                    val canSendMessage = powerLevelsHelper.isAllowedToSend(false, EventType.MESSAGE, session.myUserId)
+                    val canReact = powerLevelsHelper.isUserAllowedToSend(session.myUserId, false, EventType.REACTION)
+                    val canRedact = powerLevelsHelper.isUserAbleToRedact(session.myUserId)
+                    val canSendMessage = powerLevelsHelper.isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
                     val permissions = ActionPermissions(canSendMessage = canSendMessage, canRedact = canRedact, canReact = canReact)
                     setState {
                         copy(actionPermissions = permissions)

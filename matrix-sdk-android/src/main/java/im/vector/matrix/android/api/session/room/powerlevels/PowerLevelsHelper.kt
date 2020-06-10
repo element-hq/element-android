@@ -43,20 +43,19 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
      * @return the power level
      */
     fun getUserRole(userId: String): Role {
-        return getUserPowerLevelValue(userId).let {
-            Role.fromValue(it, powerLevelsContent.eventsDefault)
-        }
+        val value = getUserPowerLevelValue(userId)
+        return Role.fromValue(value, powerLevelsContent.eventsDefault)
     }
 
     /**
      * Tell if an user can send an event of a certain type
      *
+     * @param userId  the id of the user to check for.
      * @param isState true if the event is a state event (ie. state key is not null)
      * @param eventType the event type to check for
-     * @param userId          the user id
      * @return true if the user can send this type of event
      */
-    fun isAllowedToSend(isState: Boolean, eventType: String?, userId: String): Boolean {
+    fun isUserAllowedToSend(userId: String, isState: Boolean, eventType: String?): Boolean {
         return if (userId.isNotEmpty()) {
             val powerLevel = getUserPowerLevelValue(userId)
             val minimumPowerLevel = powerLevelsContent.events[eventType]
@@ -69,22 +68,42 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
         } else false
     }
 
-    fun canInvite(userId: String): Boolean {
+    /**
+     * Check if the user have the necessary power level to invite
+     * @param userId the id of the user to check for.
+     * @return true if able to invite
+     */
+    fun isUserAbleToInvite(userId: String): Boolean {
         val powerLevel = getUserPowerLevelValue(userId)
         return powerLevel >= powerLevelsContent.invite
     }
 
-    fun canBan(userId: String): Boolean {
+    /**
+     * Check if the user have the necessary power level to ban
+     * @param userId the id of the user to check for.
+     * @return true if able to ban
+     */
+    fun isUserAbleToBan(userId: String): Boolean {
         val powerLevel = getUserPowerLevelValue(userId)
         return powerLevel >= powerLevelsContent.ban
     }
 
-    fun canKick(userId: String): Boolean {
+    /**
+     * Check if the user have the necessary power level to kick
+     * @param userId the id of the user to check for.
+     * @return true if able to kick
+     */
+    fun isUserAbleToKick(userId: String): Boolean {
         val powerLevel = getUserPowerLevelValue(userId)
         return powerLevel >= powerLevelsContent.kick
     }
 
-    fun canRedact(userId: String): Boolean {
+    /**
+     * Check if the user have the necessary power level to redact
+     * @param userId the id of the user to check for.
+     * @return true if able to redact
+     */
+    fun isUserAbleToRedact(userId: String): Boolean {
         val powerLevel = getUserPowerLevelValue(userId)
         return powerLevel >= powerLevelsContent.redact
     }

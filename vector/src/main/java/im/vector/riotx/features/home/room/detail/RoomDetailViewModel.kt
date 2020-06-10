@@ -72,8 +72,8 @@ import im.vector.riotx.features.crypto.verification.SupportedVerificationMethods
 import im.vector.riotx.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.riotx.features.home.room.detail.sticker.StickerPickerActionHandler
 import im.vector.riotx.features.home.room.detail.timeline.helper.TimelineDisplayableEvents
-import im.vector.riotx.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.riotx.features.home.room.typing.TypingHelper
+import im.vector.riotx.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.riotx.features.settings.VectorPreferences
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -176,11 +176,12 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun observePowerLevel() {
         PowerLevelsObservableFactory(room).createObservable()
                 .subscribe {
-                    val canSendMessage = PowerLevelsHelper(it).isAllowedToSend(false, EventType.MESSAGE, session.myUserId)
+                    val canSendMessage = PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
                     setState {
                         copy(canSendMessage = canSendMessage)
                     }
-                }.disposeOnClear()
+                }
+                .disposeOnClear()
     }
 
     private fun observeActiveRoomWidgets() {
