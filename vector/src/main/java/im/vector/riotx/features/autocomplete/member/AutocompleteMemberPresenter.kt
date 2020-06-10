@@ -18,7 +18,6 @@ package im.vector.riotx.features.autocomplete.member
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import com.otaliastudios.autocomplete.RecyclerViewPresenter
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.query.QueryStringValue
@@ -27,6 +26,7 @@ import im.vector.matrix.android.api.session.room.members.roomMemberQueryParams
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.RoomMemberSummary
 import im.vector.riotx.features.autocomplete.AutocompleteClickListener
+import im.vector.riotx.features.autocomplete.RecyclerViewPresenter
 
 class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
                                                               @Assisted val roomId: String,
@@ -40,14 +40,16 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
         controller.listener = this
     }
 
+    fun clear(){
+        controller.listener = null
+    }
+
     @AssistedInject.Factory
     interface Factory {
         fun create(roomId: String): AutocompleteMemberPresenter
     }
 
     override fun instantiateAdapter(): RecyclerView.Adapter<*> {
-        // Also remove animation
-        recyclerView?.itemAnimator = null
         return controller.adapter
     }
 

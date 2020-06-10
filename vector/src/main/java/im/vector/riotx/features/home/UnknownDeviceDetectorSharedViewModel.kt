@@ -36,13 +36,10 @@ import im.vector.matrix.android.internal.crypto.model.CryptoDeviceInfo
 import im.vector.matrix.android.internal.crypto.model.rest.DeviceInfo
 import im.vector.matrix.android.internal.crypto.store.PrivateKeysInfo
 import im.vector.matrix.rx.rx
-import im.vector.riotx.core.di.HasScreenInjector
 import im.vector.riotx.core.platform.EmptyViewEvents
 import im.vector.riotx.core.platform.VectorViewModel
 import im.vector.riotx.core.platform.VectorViewModelAction
 import im.vector.riotx.features.settings.VectorPreferences
-import im.vector.riotx.features.widgets.WidgetViewModel
-import im.vector.riotx.features.widgets.WidgetViewState
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import timber.log.Timber
@@ -168,5 +165,4 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
         vectorPreferences.storeUnknownDeviceDismissedList(ignoredDeviceList)
         super.onCleared()
     }
-
 }
