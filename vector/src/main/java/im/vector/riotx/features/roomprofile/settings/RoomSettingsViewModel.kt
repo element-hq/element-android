@@ -26,6 +26,8 @@ import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.platform.VectorViewModel
+import io.reactivex.Completable
+import io.reactivex.Observable
 
 class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: RoomSettingsViewState,
                                                         private val session: Session)
@@ -89,28 +91,53 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                 summary?.topic != state.newTopic
     }
 
-    private fun saveSettings() {
+    private fun saveSettings() = withState { state ->
+        postLoading(true)
+
+        val operationList = mutableListOf<Completable>()
+
+        val summary = state.roomSummary.invoke()
+
+        if (summary?.displayName != state.newName) {
+            operationList.add(room.rx().updateName(state.newName ?: ""))
+        }
+        if (summary?.topic != state.newTopic) {
+            operationList.add(room.rx().updateTopic(state.newTopic ?: ""))
+        }
+
+        Observable
+                .fromIterable(operationList)
+                .flatMapCompletable { it }
+                .subscribe(
+                        {
+                            postLoading(false)
+                            _viewEvents.post(RoomSettingsViewEvents.Success)
+                        },
+                        {
+                            postLoading(false)
+                            _viewEvents.post(RoomSettingsViewEvents.Failure(it))
+                        }
+                )
     }
 
     private fun handleEnableEncryption() {
-        setState {
-            copy(isLoading = true)
-        }
+        postLoading(true)
 
         room.enableEncryption(callback = object : MatrixCallback<Unit> {
             override fun onFailure(failure: Throwable) {
-                setState {
-                    copy(isLoading = false)
-                }
-
+                postLoading(false)
                 _viewEvents.post(RoomSettingsViewEvents.Failure(failure))
             }
 
             override fun onSuccess(data: Unit) {
-                setState {
-                    copy(isLoading = false)
-                }
+                postLoading(false)
             }
         })
+    }
+
+    private fun postLoading(isLoading: Boolean) {
+        setState {
+            copy(isLoading = isLoading)
+        }
     }
 }

@@ -31,6 +31,7 @@ import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorBaseFragment
+import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
 import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
@@ -61,8 +62,13 @@ class RoomSettingsFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is RoomSettingsViewEvents.Failure -> showFailure(it.throwable)
+                is RoomSettingsViewEvents.Success    -> showSuccess()
             }.exhaustive
         }
+    }
+
+    private fun showSuccess() {
+        activity?.toast(R.string.room_settings_save_success)
     }
 
     override fun onDestroyView() {

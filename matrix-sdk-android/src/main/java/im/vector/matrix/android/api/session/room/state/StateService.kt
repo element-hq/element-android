@@ -31,6 +31,11 @@ interface StateService {
      */
     fun updateTopic(topic: String, callback: MatrixCallback<Unit>): Cancelable
 
+    /**
+     * Update the name of the room
+     */
+    fun updateName(name: String, callback: MatrixCallback<Unit>): Cancelable
+
     fun sendStateEvent(eventType: String, stateKey: String?, body: JsonDict, callback: MatrixCallback<Unit>): Cancelable
 
     fun getStateEvent(eventType: String, stateKey: QueryStringValue = QueryStringValue.NoCondition): Event?

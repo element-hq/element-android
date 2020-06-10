@@ -101,6 +101,14 @@ class RxRoom(private val room: Room) {
     fun invite(userId: String, reason: String? = null): Completable = completableBuilder<Unit> {
         room.invite(userId, reason, it)
     }
+
+    fun updateTopic(topic: String): Completable = completableBuilder<Unit> {
+        room.updateTopic(topic, it)
+    }
+
+    fun updateName(name: String): Completable = completableBuilder<Unit> {
+        room.updateName(name, it)
+    }
 }
 
 fun Room.rx(): RxRoom {
