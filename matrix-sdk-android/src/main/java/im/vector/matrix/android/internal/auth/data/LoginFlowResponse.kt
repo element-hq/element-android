@@ -20,7 +20,19 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class LoginFlowResponse(
+internal data class LoginFlowResponse(
+        /**
+         * The homeserver's supported login types
+         */
         @Json(name = "flows")
-        val flows: List<InteractiveAuthenticationFlow>
+        val flows: List<LoginFlow>?
+)
+
+@JsonClass(generateAdapter = true)
+internal data class LoginFlow(
+        /**
+         * The login type. This is supplied as the type when logging in.
+         */
+        @Json(name = "type")
+        val type: String?
 )

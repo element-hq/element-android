@@ -10,6 +10,9 @@ Improvements 🙌:
  - Hide "X made no changes" event by default in timeline (#1430)
  - Hide left rooms in breadcrumbs (#766)
  - Handle PowerLevel properly (#627)
+ - Correctly handle SSO login redirection
+ - SSO login is now performed in the default browser, or in Chrome Custom tab if available (#1400)
+ - Improve checking of homeserver version support (#1442)
 
 Bugfix 🐛:
  - Switch theme is not fully taken into account without restarting the app
@@ -17,6 +20,8 @@ Bugfix 🐛:
  - Reply composer overlay stays on screen too long after send (#1169)
  - Fix navigation bar icon contrast on API in [21,27[ (#1342)
  - Fix status bar icon contrast on API in [21,23[
+ - Wrong /query request (#1444)
+ - Make Credentials.homeServer optional because it is deprecated (#1443)
 
 Translations 🗣:
  -
@@ -29,6 +34,7 @@ Build 🧱:
 
 Other changes:
  - Send plain text in the body of events containing formatted body, as per https://matrix.org/docs/spec/client_server/latest#m-room-message-msgtypes
+ - Update link to Modular url from "https://modular.im/" to "https://modular.im/services/matrix-hosting-riot" and open it using ChromeCustomTab
 
 Changes in RiotX 0.21.0 (2020-05-28)
 ===================================================

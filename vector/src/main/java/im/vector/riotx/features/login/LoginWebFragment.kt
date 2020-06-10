@@ -33,8 +33,6 @@ import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.activityViewModel
 import im.vector.matrix.android.api.auth.LOGIN_FALLBACK_PATH
 import im.vector.matrix.android.api.auth.REGISTER_FALLBACK_PATH
-import im.vector.matrix.android.api.auth.SSO_FALLBACK_PATH
-import im.vector.matrix.android.api.auth.SSO_REDIRECT_URL_PARAM
 import im.vector.matrix.android.api.auth.data.Credentials
 import im.vector.matrix.android.internal.di.MoshiProvider
 import im.vector.riotx.R
@@ -48,7 +46,7 @@ import java.net.URLDecoder
 import javax.inject.Inject
 
 /**
- * This screen is displayed for SSO login and also when the application does not support login flow or registration flow
+ * This screen is displayed when the application does not support login flow or registration flow
  * of the homeserver, as a fallback to login or to create an account
  */
 class LoginWebFragment @Inject constructor(
@@ -128,17 +126,7 @@ class LoginWebFragment @Inject constructor(
         val url = buildString {
             append(state.homeServerUrl?.trim { it == '/' })
             if (state.signMode == SignMode.SignIn) {
-                if (state.loginMode == LoginMode.Sso) {
-                    append(SSO_FALLBACK_PATH)
-                    // We do not want to deal with the result, so let the fallback login page to handle it for us
-                    appendParamToUrl(SSO_REDIRECT_URL_PARAM,
-                            buildString {
-                                append(state.homeServerUrl?.trim { it == '/' })
-                                append(LOGIN_FALLBACK_PATH)
-                            })
-                } else {
-                    append(LOGIN_FALLBACK_PATH)
-                }
+                append(LOGIN_FALLBACK_PATH)
                 state.deviceId?.takeIf { it.isNotBlank() }?.let {
                     // But https://github.com/matrix-org/synapse/issues/5755
                     appendParamToUrl("device_id", it)
@@ -226,7 +214,9 @@ class LoginWebFragment @Inject constructor(
              * @return
              */
             override fun shouldOverrideUrlLoading(view: WebView, url: String?): Boolean {
-                if (null != url && url.startsWith("js:")) {
+                if (url == null) return super.shouldOverrideUrlLoading(view, url as String?)
+
+                if (url.startsWith("js:")) {
                     var json = url.substring(3)
                     var javascriptResponse: JavascriptResponse? = null
 

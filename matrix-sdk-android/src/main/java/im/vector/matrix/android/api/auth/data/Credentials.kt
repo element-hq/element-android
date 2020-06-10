@@ -45,7 +45,7 @@ data class Credentials(
          * @Deprecated. Clients should extract the server_name from user_id (by splitting at the first colon)
          * if they require it. Note also that homeserver is not spelt this way.
          */
-        @Json(name = "home_server") val homeServer: String,
+        @Json(name = "home_server") val homeServer: String?,
         /**
          * ID of the logged-in device. Will be the same as the corresponding parameter in the request, if one was specified.
          */

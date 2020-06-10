@@ -26,13 +26,11 @@ import javax.inject.Inject
 /**
  * In this screen, the user is asked to sign up or to sign in to the homeserver
  */
-class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFragment() {
+open class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_login_signup_signin_selection
 
-    private var isSsoSignIn: Boolean = false
-
-    private fun setupUi(state: LoginViewState) {
+    protected fun setupUi(state: LoginViewState) {
         when (state.serverType) {
             ServerType.MatrixOrg -> {
                 loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
@@ -54,25 +52,14 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFr
         }
     }
 
-    private fun setupButtons(state: LoginViewState) {
-        isSsoSignIn = state.loginMode == LoginMode.Sso
-
-        if (isSsoSignIn) {
-            loginSignupSigninSubmit.text = getString(R.string.login_signin_sso)
-            loginSignupSigninSignIn.isVisible = false
-        } else {
-            loginSignupSigninSubmit.text = getString(R.string.login_signup)
-            loginSignupSigninSignIn.isVisible = true
-        }
+    private fun setupButtons() {
+        loginSignupSigninSubmit.text = getString(R.string.login_signup)
+        loginSignupSigninSignIn.isVisible = true
     }
 
     @OnClick(R.id.loginSignupSigninSubmit)
-    fun signUp() {
-        if (isSsoSignIn) {
-            signIn()
-        } else {
-            loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignUp))
-        }
+    open fun submit() {
+        loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignUp))
     }
 
     @OnClick(R.id.loginSignupSigninSignIn)
@@ -86,6 +73,6 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFr
 
     override fun updateWithState(state: LoginViewState) {
         setupUi(state)
-        setupButtons(state)
+        setupButtons()
     }
 }
