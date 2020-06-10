@@ -84,4 +84,13 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
                 stateKey = null
         )
     }
+
+    override fun updateName(name: String, callback: MatrixCallback<Unit>): Cancelable {
+        return sendStateEvent(
+                eventType = EventType.STATE_ROOM_NAME,
+                body = mapOf("name" to name),
+                callback = callback,
+                stateKey = null
+        )
+    }
 }

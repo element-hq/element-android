@@ -2499,5 +2499,6 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <!-- Room Settings -->
     <string name="room_settings_name_hint">Room Name</string>
     <string name="room_settings_topic_hint">Topic</string>
+    <string name="room_settings_save_success">You changed room settings successfully</string>
 
 </resources>
