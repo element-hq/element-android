@@ -227,8 +227,8 @@ class RoomMemberProfileController @Inject constructor(
             return
         }
         val membership = state.asyncMembership() ?: return
-        val canKick = state.actionPermissions.canKick
-        val canBan = state.actionPermissions.canBan
+        val canKick = !state.isMine && state.actionPermissions.canKick
+        val canBan = !state.isMine && state.actionPermissions.canBan
         val canEditPowerLevel = state.actionPermissions.canEditPowerLevel
         if (canKick || canBan || canEditPowerLevel) {
             buildProfileSection(stringProvider.getString(R.string.room_profile_section_admin))
