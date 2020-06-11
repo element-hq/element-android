@@ -183,9 +183,7 @@ class DebugMenuActivity : VectorBaseActivity() {
     @OnClick(R.id.debug_scan_qr_code)
     fun scanQRCode() {
         if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
-            // doScanQRCode()
-            // TODO. Find a better way?
-            //startActivity(VectorCallActivity.newIntent(this, "!cyIJhOLwWgmmqreHLD:matrix.org"))
+            doScanQRCode()
         }
     }
 
