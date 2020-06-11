@@ -48,7 +48,7 @@ data class CallCandidatesContent(
             /**
              * Required. The index of the SDP 'm' line this candidate is intended for.
              */
-            @Json(name = "sdpMLineIndex") val sdpMLineIndex: String,
+            @Json(name = "sdpMLineIndex") val sdpMLineIndex: Int,
             /**
              * Required. The SDP 'a' line of the candidate.
              */

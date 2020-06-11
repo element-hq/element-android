@@ -35,11 +35,14 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.RemoteInput
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.IconCompat
 import androidx.fragment.app.Fragment
 import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.core.utils.startNotificationChannelSettingsIntent
+import im.vector.riotx.features.call.VectorCallActivity
+import im.vector.riotx.features.call.service.CallHeadsUpActionReceiver
 import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailActivity
 import im.vector.riotx.features.home.room.detail.RoomDetailArgs
@@ -263,13 +266,13 @@ class NotificationUtils @Inject constructor(private val context: Context,
      */
     @SuppressLint("NewApi")
     fun buildIncomingCallNotification(isVideo: Boolean,
-                                      roomName: String,
-                                      matrixId: String,
+                                      otherUserId: String,
+                                      roomId: String,
                                       callId: String): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
 
         val builder = NotificationCompat.Builder(context, CALL_NOTIFICATION_CHANNEL_ID)
-                .setContentTitle(ensureTitleNotEmpty(roomName))
+                .setContentTitle(ensureTitleNotEmpty(otherUserId))
                 .apply {
                     if (isVideo) {
                         setContentText(stringProvider.getString(R.string.incoming_video_call))
@@ -282,26 +285,61 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .setLights(accentColor, 500, 500)
 
         // Compat: Display the incoming call notification on the lock screen
-        builder.priority = NotificationCompat.PRIORITY_MAX
+        builder.priority = NotificationCompat.PRIORITY_HIGH
 
         // clear the activity stack to home activity
-        val intent = Intent(context, HomeActivity::class.java)
-                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        // val intent = Intent(context, HomeActivity::class.java)
+        // .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         // TODO .putExtra(VectorHomeActivity.EXTRA_CALL_SESSION_ID, matrixId)
         // TODO .putExtra(VectorHomeActivity.EXTRA_CALL_ID, callId)
 
         // Recreate the back stack
-        val stackBuilder = TaskStackBuilder.create(context)
-                .addParentStack(HomeActivity::class.java)
-                .addNextIntent(intent)
+//        val stackBuilder = TaskStackBuilder.create(context)
+//                .addParentStack(HomeActivity::class.java)
+//                .addNextIntent(intent)
 
         // android 4.3 issue
         // use a generator for the private requestCode.
         // When using 0, the intent is not created/launched when the user taps on the notification.
         //
-        val pendingIntent = stackBuilder.getPendingIntent(Random.nextInt(1000), PendingIntent.FLAG_UPDATE_CURRENT)
+        val requestId = Random.nextInt(1000)
+//        val pendingIntent = stackBuilder.getPendingIntent(requestId, PendingIntent.FLAG_UPDATE_CURRENT)
+        val contentPendingIntent = TaskStackBuilder.create(context)
+                .addNextIntentWithParentStack(Intent(context, HomeActivity::class.java))
+                .addNextIntent(VectorCallActivity.newIntent(context, callId, roomId, otherUserId, true, isVideo, false, VectorCallActivity.INCOMING_RINGING))
+                .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
 
-        builder.setContentIntent(pendingIntent)
+        val answerCallPendingIntent = TaskStackBuilder.create(context)
+                .addNextIntentWithParentStack(Intent(context, HomeActivity::class.java))
+                .addNextIntent(VectorCallActivity.newIntent(context, callId, roomId, otherUserId, true, isVideo, true, VectorCallActivity.INCOMING_ACCEPT))
+                .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
+
+//        val answerCallActionReceiver = Intent(context, CallHeadsUpActionReceiver::class.java).apply {
+//            putExtra(CallHeadsUpService.EXTRA_CALL_ACTION_KEY, CallHeadsUpService.CALL_ACTION_ANSWER)
+//        }
+        val rejectCallActionReceiver = Intent(context, CallHeadsUpActionReceiver::class.java).apply {
+            //            putExtra(CallHeadsUpService.EXTRA_CALL_ACTION_KEY, CallHeadsUpService.CALL_ACTION_REJECT)
+        }
+        //val answerCallPendingIntent = PendingIntent.getBroadcast(context, requestId, answerCallActionReceiver, PendingIntent.FLAG_UPDATE_CURRENT)
+        val rejectCallPendingIntent = PendingIntent.getBroadcast(context, requestId + 1, rejectCallActionReceiver, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        builder.addAction(
+                NotificationCompat.Action(
+                        R.drawable.ic_call,
+                        //IconCompat.createWithResource(applicationContext, R.drawable.ic_call).setTint(ContextCompat.getColor(applicationContext, R.color.riotx_positive_accent)),
+                        context.getString(R.string.call_notification_answer),
+                        answerCallPendingIntent
+                )
+        )
+
+        builder.addAction(
+                NotificationCompat.Action(
+                        IconCompat.createWithResource(context, R.drawable.ic_call_end).setTint(ContextCompat.getColor(context, R.color.riotx_notice)),
+                        context.getString(R.string.call_notification_reject),
+                        rejectCallPendingIntent)
+        )
+
+        builder.setContentIntent(contentPendingIntent)
 
         return builder.build()
     }
@@ -334,10 +372,18 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .setSmallIcon(R.drawable.incoming_call_notification_transparent)
                 .setCategory(NotificationCompat.CATEGORY_CALL)
 
-        // Display the pending call notification on the lock screen
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            builder.priority = NotificationCompat.PRIORITY_MAX
-        }
+        builder.priority = NotificationCompat.PRIORITY_DEFAULT
+
+        val contentPendingIntent = TaskStackBuilder.create(context)
+                .addNextIntentWithParentStack(Intent(context, HomeActivity::class.java))
+                //TODO other userId
+                .addNextIntent(VectorCallActivity.newIntent(context, callId, roomId, "otherUserId", true, isVideo, false, null))
+                .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
+
+        // android 4.3 issue
+        // use a generator for the private requestCode.
+        // When using 0, the intent is not created/launched when the user taps on the notification.
+        builder.setContentIntent(contentPendingIntent)
 
         /* TODO
         // Build the pending intent for when the notification is clicked

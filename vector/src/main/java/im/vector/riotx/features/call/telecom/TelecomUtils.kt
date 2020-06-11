@@ -14,21 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.session.call
+package im.vector.riotx.features.call.telecom
 
-import im.vector.matrix.android.api.MatrixCallback
-import im.vector.matrix.android.api.util.Cancelable
+import android.content.Context
+import android.telephony.TelephonyManager
 
-interface CallService {
+object TelecomUtils {
 
-    fun getTurnServer(callback: MatrixCallback<TurnServer>): Cancelable
-
-    /**
-     * Create an outgoing call
-     */
-    fun createOutgoingCall(roomId: String, otherUserId: String, isVideoCall: Boolean): MxCall
-
-    fun addCallListener(listener: CallsListener)
-
-    fun removeCallListener(listener: CallsListener)
+    fun isLineBusy(context: Context): Boolean {
+        val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as? TelephonyManager
+                ?: return false
+        return telephonyManager.callState != TelephonyManager.CALL_STATE_IDLE
+    }
 }

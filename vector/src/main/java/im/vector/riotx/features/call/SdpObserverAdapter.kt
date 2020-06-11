@@ -20,7 +20,7 @@ import org.webrtc.SdpObserver
 import org.webrtc.SessionDescription
 import timber.log.Timber
 
-abstract class SdpObserverAdapter : SdpObserver {
+open class SdpObserverAdapter : SdpObserver {
     override fun onSetFailure(p0: String?) {
        Timber.e("## SdpObserver: onSetFailure $p0")
     }

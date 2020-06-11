@@ -21,6 +21,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class CallHeadsUpServiceArgs(
+        val callId: String,
         val roomId: String,
         val otherUserId: String,
         val isIncomingCall: Boolean,

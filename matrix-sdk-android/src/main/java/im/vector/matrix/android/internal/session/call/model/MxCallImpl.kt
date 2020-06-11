@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.session.call.model
 
+import im.vector.matrix.android.api.session.call.CallState
 import im.vector.matrix.android.api.session.call.MxCall
 import im.vector.matrix.android.api.session.events.model.Content
 import im.vector.matrix.android.api.session.events.model.Event
@@ -27,14 +28,15 @@ import im.vector.matrix.android.api.session.room.model.call.CallAnswerContent
 import im.vector.matrix.android.api.session.room.model.call.CallCandidatesContent
 import im.vector.matrix.android.api.session.room.model.call.CallHangupContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
-import im.vector.matrix.android.internal.session.call.DefaultCallService
+import im.vector.matrix.android.internal.session.call.DefaultCallSignalingService
 import im.vector.matrix.android.internal.session.room.send.LocalEchoEventFactory
 import im.vector.matrix.android.internal.session.room.send.RoomEventSender
 import org.webrtc.IceCandidate
 import org.webrtc.SessionDescription
+import timber.log.Timber
 
 internal class MxCallImpl(
-        val callId: String,
+        override val callId: String,
         override val isOutgoing: Boolean,
         override val roomId: String,
         private val userId: String,
@@ -44,12 +46,47 @@ internal class MxCallImpl(
         private val roomEventSender: RoomEventSender
 ) : MxCall {
 
+    override var state: CallState = CallState.IDLE
+        set(value) {
+            field = value
+            dispatchStateChange()
+        }
+
+    private val listeners = mutableListOf<MxCall.StateListener>()
+
+    override fun addListener(listener: MxCall.StateListener) {
+        listeners.add(listener)
+    }
+
+    override fun removeListener(listener: MxCall.StateListener) {
+        listeners.remove(listener)
+    }
+
+    private fun dispatchStateChange() {
+        listeners.forEach {
+            try {
+                it.onStateUpdate(this)
+            } catch (failure: Throwable) {
+                Timber.d("dispatchStateChange failed for call $callId : ${failure.localizedMessage}")
+            }
+        }
+    }
+
+    init {
+        if (isOutgoing) {
+            state = CallState.DIALING
+        } else {
+            state = CallState.LOCAL_RINGING
+        }
+    }
+
+
     override fun offerSdp(sdp: SessionDescription) {
         if (!isOutgoing) return
-
+        state = CallState.REMOTE_RINGING
         CallInviteContent(
                 callId = callId,
-                lifetime = DefaultCallService.CALL_TIMEOUT_MS,
+                lifetime = DefaultCallSignalingService.CALL_TIMEOUT_MS,
                 offer = CallInviteContent.Offer(sdp = sdp.description)
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_INVITE, roomId = roomId, content = it.toContent()) }
@@ -62,7 +99,7 @@ internal class MxCallImpl(
                 candidates = candidates.map {
                     CallCandidatesContent.Candidate(
                             sdpMid = it.sdpMid,
-                            sdpMLineIndex = it.sdpMLineIndex.toString(),
+                            sdpMLineIndex = it.sdpMLineIndex,
                             candidate = it.sdp
                     )
                 }
@@ -80,11 +117,12 @@ internal class MxCallImpl(
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_HANGUP, roomId = roomId, content = it.toContent()) }
                 .also { roomEventSender.sendEvent(it) }
+        state = CallState.TERMINATED
     }
 
     override fun accept(sdp: SessionDescription) {
         if (isOutgoing) return
-
+        state = CallState.ANSWERING
         CallAnswerContent(
                 callId = callId,
                 answer = CallAnswerContent.Answer(sdp = sdp.description)

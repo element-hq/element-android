@@ -14,17 +14,23 @@
  * limitations under the License.
  */
 
-package im.vector.matrix.android.api.extensions
+package im.vector.matrix.android.api.session.call
 
-import timber.log.Timber
+import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.util.Cancelable
 
-inline fun <A> tryThis(message: String? = null, operation: () -> A): A? {
-    return try {
-        operation()
-    } catch (any: Throwable) {
-        if (message != null) {
-            Timber.e(any, message)
-        }
-        null
-    }
+interface CallSignalingService {
+
+    fun getTurnServer(callback: MatrixCallback<TurnServer>): Cancelable
+
+    /**
+     * Create an outgoing call
+     */
+    fun createOutgoingCall(roomId: String, otherUserId: String, isVideoCall: Boolean): MxCall
+
+    fun addCallListener(listener: CallsListener)
+
+    fun removeCallListener(listener: CallsListener)
+
+    fun getCallWithId(callId: String) : MxCall?
 }

@@ -15,15 +15,16 @@
  * limitations under the License.
  */
 
-@file:Suppress("UNUSED_PARAMETER")
 
 package im.vector.riotx.core.services
 
 import android.content.Context
 import android.content.Intent
 import android.os.Binder
+import android.text.TextUtils
 import androidx.core.content.ContextCompat
 import im.vector.riotx.core.extensions.vectorComponent
+import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.call.telecom.CallConnection
 import im.vector.riotx.features.notifications.NotificationUtils
 import timber.log.Timber
@@ -41,6 +42,7 @@ class CallService : VectorService() {
     private var mCallIdInProgress: String? = null
 
     private lateinit var notificationUtils: NotificationUtils
+    private lateinit var webRtcPeerConnectionManager: WebRtcPeerConnectionManager
 
     /**
      * incoming (foreground notification)
@@ -50,6 +52,7 @@ class CallService : VectorService() {
     override fun onCreate() {
         super.onCreate()
         notificationUtils = vectorComponent().notificationUtils()
+        webRtcPeerConnectionManager = vectorComponent().webRtcPeerConnectionManager()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -87,46 +90,46 @@ class CallService : VectorService() {
     private fun displayIncomingCallNotification(intent: Intent) {
         Timber.v("displayIncomingCallNotification")
 
-        // TODO
-        /*
+
 
         // the incoming call in progress is already displayed
         if (!TextUtils.isEmpty(mIncomingCallId)) {
             Timber.v("displayIncomingCallNotification : the incoming call in progress is already displayed")
         } else if (!TextUtils.isEmpty(mCallIdInProgress)) {
             Timber.v("displayIncomingCallNotification : a 'call in progress' notification is displayed")
-        } else if (null == CallsManager.getSharedInstance().activeCall) {
+        } else
+//            if (null == webRtcPeerConnectionManager.currentCall)
+            {
             val callId = intent.getStringExtra(EXTRA_CALL_ID)
 
             Timber.v("displayIncomingCallNotification : display the dedicated notification")
-            val notification = NotificationUtils.buildIncomingCallNotification(
-                    this,
+            val notification = notificationUtils.buildIncomingCallNotification(
                     intent.getBooleanExtra(EXTRA_IS_VIDEO, false),
-                    intent.getStringExtra(EXTRA_ROOM_NAME),
-                    intent.getStringExtra(EXTRA_MATRIX_ID),
-                    callId)
+                    intent.getStringExtra(EXTRA_ROOM_NAME) ?: "",
+                    intent.getStringExtra(EXTRA_MATRIX_ID) ?: "",
+                    callId ?: "")
             startForeground(NOTIFICATION_ID, notification)
 
             mIncomingCallId = callId
 
             // turn the screen on for 3 seconds
-            if (Matrix.getInstance(VectorApp.getInstance())!!.pushManager.isScreenTurnedOn) {
-                try {
-                    val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
-                    val wl = pm.newWakeLock(
-                            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or PowerManager.ACQUIRE_CAUSES_WAKEUP,
-                            CallService::class.java.simpleName)
-                    wl.acquire(3000)
-                    wl.release()
-                } catch (re: RuntimeException) {
-                    Timber.e(re, "displayIncomingCallNotification : failed to turn screen on ")
-                }
-
-            }
-        } else {
-            Timber.i("displayIncomingCallNotification : do not display the incoming call notification because there is a pending call")
-        }// test if there is no active call
-        */
+//            if (Matrix.getInstance(VectorApp.getInstance())!!.pushManager.isScreenTurnedOn) {
+//                try {
+//                    val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+//                    val wl = pm.newWakeLock(
+//                            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or PowerManager.ACQUIRE_CAUSES_WAKEUP,
+//                            CallService::class.java.simpleName)
+//                    wl.acquire(3000)
+//                    wl.release()
+//                } catch (re: RuntimeException) {
+//                    Timber.e(re, "displayIncomingCallNotification : failed to turn screen on ")
+//                }
+//
+//            }
+        }
+//        else {
+//            Timber.i("displayIncomingCallNotification : do not display the incoming call notification because there is a pending call")
+//        }
     }
 
     /**
@@ -169,6 +172,7 @@ class CallService : VectorService() {
         private const val ACTION_INCOMING_CALL = "im.vector.riotx.core.services.CallService.INCOMING_CALL"
         private const val ACTION_PENDING_CALL = "im.vector.riotx.core.services.CallService.PENDING_CALL"
         private const val ACTION_NO_ACTIVE_CALL = "im.vector.riotx.core.services.CallService.NO_ACTIVE_CALL"
+//        private const val ACTION_ON_ACTIVE_CALL = "im.vector.riotx.core.services.CallService.ACTIVE_CALL"
 
         private const val EXTRA_IS_VIDEO = "EXTRA_IS_VIDEO"
         private const val EXTRA_ROOM_NAME = "EXTRA_ROOM_NAME"
@@ -194,6 +198,25 @@ class CallService : VectorService() {
 
             ContextCompat.startForegroundService(context, intent)
         }
+
+//        fun onActiveCall(context: Context,
+//                           isVideo: Boolean,
+//                           roomName: String,
+//                           roomId: String,
+//                           matrixId: String,
+//                           callId: String) {
+//            val intent = Intent(context, CallService::class.java)
+//                    .apply {
+//                        action = ACTION_ON_ACTIVE_CALL
+//                        putExtra(EXTRA_IS_VIDEO, isVideo)
+//                        putExtra(EXTRA_ROOM_NAME, roomName)
+//                        putExtra(EXTRA_ROOM_ID, roomId)
+//                        putExtra(EXTRA_MATRIX_ID, matrixId)
+//                        putExtra(EXTRA_CALL_ID, callId)
+//                    }
+//
+//            ContextCompat.startForegroundService(context, intent)
+//        }
 
         fun onPendingCall(context: Context,
                           isVideo: Boolean,

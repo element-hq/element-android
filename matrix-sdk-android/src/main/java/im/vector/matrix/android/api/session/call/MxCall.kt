@@ -20,6 +20,7 @@ import org.webrtc.IceCandidate
 import org.webrtc.SessionDescription
 
 interface MxCallDetail {
+    val callId: String
     val isOutgoing: Boolean
     val roomId: String
     val otherUserId: String
@@ -30,6 +31,8 @@ interface MxCallDetail {
  * Define both an incoming call and on outgoing call
  */
 interface MxCall : MxCallDetail {
+
+    var state: CallState
     /**
      * Pick Up the incoming call
      * It has no effect on outgoing call
@@ -62,4 +65,11 @@ interface MxCall : MxCallDetail {
      * Send removed ICE candidates to the other participant.
      */
     fun sendLocalIceCandidateRemovals(candidates: List<IceCandidate>)
+
+    fun addListener(listener: StateListener)
+    fun removeListener(listener: StateListener)
+
+    interface StateListener {
+        fun onStateUpdate(call: MxCall)
+    }
 }

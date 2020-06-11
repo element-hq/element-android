@@ -19,6 +19,7 @@
 
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Needed for incoming calls  -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <!-- Adding CAMERA permission prevents Chromebooks to see the application on the PlayStore -->
@@ -206,9 +207,9 @@
             </intent-filter>
         </service>
 
-        <service
-            android:name=".features.call.service.CallHeadsUpService"
-            android:exported="false" />
+<!--        <service-->
+<!--            android:name=".features.call.service.CallHeadsUpService"-->
+<!--            android:exported="false" />-->
 
         <!-- Receivers -->
 

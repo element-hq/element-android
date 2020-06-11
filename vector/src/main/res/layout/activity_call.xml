@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- tools:ignore is needed because lint thinks this can be replaced with a merge. Replacing this
+<?xml version="1.0" encoding="utf-8"?><!-- tools:ignore is needed because lint thinks this can be replaced with a merge. Replacing this
      with a merge causes the fullscreen SurfaceView not to be centered. -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?riotx_background"
     tools:ignore="MergeRootFrame">
 
     <org.webrtc.SurfaceViewRenderer
@@ -19,75 +19,149 @@
         android:layout_width="wrap_content"
         android:layout_height="144dp"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp" />
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/participantNameText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="?riotx_text_primary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/callTypeText"
+        tools:text="Joe" />
+
+    <TextView
+        android:id="@+id/callTypeText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/otherMemberAvatar"
+        tools:text="Video Call" />
 
     <ImageView
-        android:id="@+id/iv_end_call"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:src="@drawable/ic_call_end"
+        android:id="@+id/otherMemberAvatar"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_centerVertical="true"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="32dp"
-        app:layout_constraintBottom_toTopOf="@+id/layout_call_actions"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3"
+        tools:src="@tools:sample/avatars" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_call_actions"
+    <TextView
+        android:id="@+id/callStatusText"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginBottom="48dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@drawable/bg_call_actions">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/otherMemberAvatar"
+        tools:text="Connecting..." />
 
-        <ImageView
-            android:id="@+id/iv_call_speaker"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/ic_call_speaker_default"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="32dp"/>
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/callInfoGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="participantNameText, callTypeText, otherMemberAvatar, callStatusText" />
 
-        <ImageView
-            android:id="@+id/iv_call_flip_camera"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/ic_call_flip_camera_default"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="32dp"/>
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/callVideoGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="pip_video_view, fullscreen_video_view"
+        tools:visibility="invisible" />
 
-        <ImageView
-            android:id="@+id/iv_call_videocam_off"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/ic_call_videocam_off_default"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageView
-            android:id="@+id/iv_call_mute"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/ic_call_mute_default"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="32dp"/>
+    <im.vector.riotx.features.call.CallControlsView
+        android:id="@+id/callControls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent" />
+    <!--    <ImageView-->
+    <!--        android:id="@+id/iv_end_call"-->
+    <!--        android:layout_width="64dp"-->
+    <!--        android:layout_height="64dp"-->
+    <!--        android:background="@drawable/oval_destructive"-->
+    <!--        android:src="@drawable/ic_call_end"-->
+    <!--        android:tint="@color/white"-->
+    <!--        android:padding="8dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        android:layout_marginBottom="32dp"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/layout_call_actions"/>-->
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--        android:id="@+id/layout_call_actions"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="80dp"-->
+    <!--        android:layout_marginBottom="48dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        android:background="@drawable/bg_call_actions">-->
+
+    <!--        <ImageView-->
+    <!--            android:id="@+id/iv_call_speaker"-->
+    <!--            android:layout_width="32dp"-->
+    <!--            android:layout_height="32dp"-->
+    <!--            android:src="@drawable/ic_call_speaker_default"-->
+    <!--            app:layout_constraintTop_toTopOf="parent"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            android:layout_marginStart="32dp"/>-->
+
+    <!--        <ImageView-->
+    <!--            android:id="@+id/iv_call_flip_camera"-->
+    <!--            android:layout_width="32dp"-->
+    <!--            android:layout_height="32dp"-->
+    <!--            android:src="@drawable/ic_call_flip_camera_default"-->
+    <!--            app:layout_constraintTop_toTopOf="parent"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            android:layout_marginStart="32dp"/>-->
+
+    <!--        <ImageView-->
+    <!--            android:id="@+id/iv_call_videocam_off"-->
+    <!--            android:layout_width="32dp"-->
+    <!--            android:layout_height="32dp"-->
+    <!--            android:src="@drawable/ic_call_videocam_off_default"-->
+    <!--            app:layout_constraintTop_toTopOf="parent"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent" />-->
+
+    <!--        <ImageView-->
+    <!--            android:id="@+id/iv_call_mute"-->
+    <!--            android:layout_width="32dp"-->
+    <!--            android:layout_height="32dp"-->
+    <!--            android:src="@drawable/ic_call_mute_default"-->
+    <!--            app:layout_constraintTop_toTopOf="parent"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            android:layout_marginEnd="32dp"/>-->
+
+    <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
     <FrameLayout
         android:id="@+id/hud_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <FrameLayout
             android:id="@+id/call_fragment_container"

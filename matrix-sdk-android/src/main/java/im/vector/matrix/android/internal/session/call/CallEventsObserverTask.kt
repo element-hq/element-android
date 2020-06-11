@@ -39,7 +39,7 @@ internal interface CallEventsObserverTask : Task<CallEventsObserverTask.Params, 
 internal class DefaultCallEventsObserverTask @Inject constructor(
         private val monarchy: Monarchy,
         private val cryptoService: CryptoService,
-        private val callService: DefaultCallService) : CallEventsObserverTask {
+        private val callService: DefaultCallSignalingService) : CallEventsObserverTask {
 
     override suspend fun execute(params: CallEventsObserverTask.Params) {
         val events = params.events

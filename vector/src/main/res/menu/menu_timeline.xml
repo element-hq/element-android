@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/video_call"
-        android:icon="@drawable/ic_videocam"
+        android:icon="@drawable/ic_video"
         android:title="@string/action_video_call"
         android:visible="false"
         app:iconTint="@color/riotx_accent"

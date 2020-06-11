@@ -21,34 +21,44 @@ import android.content.Context
 import android.content.Intent
 import im.vector.riotx.core.di.HasVectorInjector
 import im.vector.riotx.features.call.WebRtcPeerConnectionManager
+import im.vector.riotx.features.notifications.NotificationUtils
 import im.vector.riotx.features.settings.VectorLocale.context
 import timber.log.Timber
 
 class CallHeadsUpActionReceiver : BroadcastReceiver() {
 
     private lateinit var peerConnectionManager: WebRtcPeerConnectionManager
+    private lateinit var notificationUtils: NotificationUtils
 
     init {
         val appContext = context.applicationContext
         if (appContext is HasVectorInjector) {
             peerConnectionManager = appContext.injector().webRtcPeerConnectionManager()
+            notificationUtils = appContext.injector().notificationUtils()
         }
     }
 
     override fun onReceive(context: Context, intent: Intent?) {
-        when (intent?.getIntExtra(CallHeadsUpService.EXTRA_CALL_ACTION_KEY, 0)) {
-            CallHeadsUpService.CALL_ACTION_ANSWER -> onCallAnswerClicked()
-            CallHeadsUpService.CALL_ACTION_REJECT -> onCallRejectClicked()
-        }
+//        when (intent?.getIntExtra(CallHeadsUpService.EXTRA_CALL_ACTION_KEY, 0)) {
+//            CallHeadsUpService.CALL_ACTION_ANSWER -> onCallAnswerClicked(context)
+//            CallHeadsUpService.CALL_ACTION_REJECT -> onCallRejectClicked()
+//        }
+
+        // Not sure why this should be needed
+//        val it = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
+//        context.sendBroadcast(it)
+
+        // Close the notification after the click action is performed.
+//        context.stopService(Intent(context, CallHeadsUpService::class.java))
     }
 
-    private fun onCallRejectClicked() {
-        Timber.d("onCallRejectClicked")
-        peerConnectionManager.endCall()
-    }
+//    private fun onCallRejectClicked() {
+//        Timber.d("onCallRejectClicked")
+//        peerConnectionManager.endCall()
+//    }
 
-    private fun onCallAnswerClicked() {
-        Timber.d("onCallAnswerClicked")
-        peerConnectionManager.answerCall()
-    }
+//    private fun onCallAnswerClicked(context: Context) {
+//        Timber.d("onCallAnswerClicked")
+//        peerConnectionManager.answerCall(context)
+//    }
 }
