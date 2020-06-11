@@ -115,7 +115,6 @@ class AutoCompleter @AssistedInject constructor(
                     }
                 })
                 .build()
-
     }
 
     private fun setupMembers(backgroundDrawable: ColorDrawable, editText: EditText) {

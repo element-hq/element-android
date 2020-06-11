@@ -40,7 +40,7 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
         controller.listener = this
     }
 
-    fun clear(){
+    fun clear() {
         controller.listener = null
     }
 

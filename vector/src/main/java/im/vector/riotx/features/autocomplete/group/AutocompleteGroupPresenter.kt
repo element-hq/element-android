@@ -35,7 +35,7 @@ class AutocompleteGroupPresenter @Inject constructor(context: Context,
         controller.listener = this
     }
 
-    fun clear(){
+    fun clear() {
         controller.listener = null
     }
 
