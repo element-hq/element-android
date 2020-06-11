@@ -23,6 +23,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
+import androidx.core.text.italic
 import im.vector.matrix.android.api.failure.MatrixError
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.riotx.R
@@ -65,10 +66,10 @@ class NotificationAreaView @JvmOverloads constructor(
         cleanUp()
         state = newState
         when (newState) {
-            is State.Default            -> renderDefault()
-            is State.Hidden             -> renderHidden()
-            is State.NoPermissionToPost -> renderNoPermissionToPost()
-            is State.Tombstone          -> renderTombstone(newState)
+            is State.Default                    -> renderDefault()
+            is State.Hidden                     -> renderHidden()
+            is State.NoPermissionToPost         -> renderNoPermissionToPost()
+            is State.Tombstone                  -> renderTombstone(newState)
             is State.ResourceLimitExceededError -> renderResourceLimitExceededError(newState)
         }
     }
@@ -92,7 +93,9 @@ class NotificationAreaView @JvmOverloads constructor(
         visibility = View.VISIBLE
         roomNotificationIcon.setImageDrawable(null)
         val message = span {
-            +resources.getString(R.string.room_do_not_have_permission_to_post)
+            italic {
+                +resources.getString(R.string.room_do_not_have_permission_to_post)
+            }
         }
         roomNotificationMessage.text = message
         roomNotificationMessage.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_secondary))
