@@ -42,7 +42,7 @@ data class RoomMemberProfileViewState(
         val actionPermissions: ActionPermissions = ActionPermissions()
 ) : MvRxState {
 
-    constructor(args: RoomMemberProfileArgs) : this(roomId = args.roomId, userId = args.userId)
+    constructor(args: RoomMemberProfileArgs) : this(userId = args.userId, roomId = args.roomId)
 }
 
 data class ActionPermissions(

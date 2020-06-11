@@ -94,7 +94,7 @@ class RoomDetailActivity : VectorBaseActivity(), ToolbarConfigurable {
             hideKeyboard()
 
             if (!drawerLayout.isDrawerOpen(GravityCompat.START) && newState == DrawerLayout.STATE_DRAGGING) {
-                // User is starting to open the drawer, scroll the list to op
+                // User is starting to open the drawer, scroll the list to top
                 scrollBreadcrumbsToTop()
             }
         }
