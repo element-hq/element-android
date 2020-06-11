@@ -753,15 +753,10 @@ class RoomDetailFragment @Inject constructor(
 
     private fun renderRoomSummary(state: RoomDetailViewState) {
         state.asyncRoomSummary()?.let { roomSummary ->
-            if (roomSummary.membership.isLeft()) {
-                Timber.w("The room has been left")
-                activity?.finish()
-            } else {
-                roomToolbarTitleView.text = roomSummary.displayName
-                avatarRenderer.render(roomSummary.toMatrixItem(), roomToolbarAvatarImageView)
+            roomToolbarTitleView.text = roomSummary.displayName
+            avatarRenderer.render(roomSummary.toMatrixItem(), roomToolbarAvatarImageView)
 
-                renderSubTitle(state.typingMessage, roomSummary.topic)
-            }
+            renderSubTitle(state.typingMessage, roomSummary.topic)
             jumpToBottomView.count = roomSummary.notificationCount
             jumpToBottomView.drawBadge = roomSummary.hasUnreadMessages
 

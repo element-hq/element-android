@@ -22,20 +22,43 @@ import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.airbnb.mvrx.viewModel
 import im.vector.riotx.R
+import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.replaceFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.home.room.breadcrumbs.BreadcrumbsFragment
+import im.vector.riotx.features.room.RequireActiveMembershipAction
+import im.vector.riotx.features.room.RequireActiveMembershipViewModel
+import im.vector.riotx.features.room.RequireActiveMembershipViewState
 import kotlinx.android.synthetic.main.activity_room_detail.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+import javax.inject.Inject
 
-class RoomDetailActivity : VectorBaseActivity(), ToolbarConfigurable {
+class RoomDetailActivity :
+        VectorBaseActivity(),
+        ToolbarConfigurable,
+        RequireActiveMembershipViewModel.Factory {
 
     override fun getLayoutRes() = R.layout.activity_room_detail
 
     private lateinit var sharedActionViewModel: RoomDetailSharedActionViewModel
+    private val requireActiveMembershipViewModel: RequireActiveMembershipViewModel by viewModel()
+
+    @Inject
+    lateinit var requireActiveMembershipViewModelFactory: RequireActiveMembershipViewModel.Factory
+
+    override fun create(initialState: RequireActiveMembershipViewState): RequireActiveMembershipViewModel {
+        // Due to shortcut, we cannot use MvRx args. Pass the first roomId here
+        return requireActiveMembershipViewModelFactory.create(initialState.copy(roomId = currentRoomId ?: ""))
+    }
+
+    override fun injectWith(injector: ScreenComponent) {
+        super.injectWith(injector)
+        injector.inject(this)
+    }
 
     // Simple filter
     private var currentRoomId: String? = null
@@ -68,6 +91,8 @@ class RoomDetailActivity : VectorBaseActivity(), ToolbarConfigurable {
                 }
                 .disposeOnDestroy()
 
+        requireActiveMembershipViewModel.observeViewEvents { finish() }
+
         drawerLayout.addDrawerListener(drawerListener)
     }
 
@@ -76,6 +101,7 @@ class RoomDetailActivity : VectorBaseActivity(), ToolbarConfigurable {
         // Do not replace the Fragment if it's the same roomId
         if (currentRoomId != switchToRoom.roomId) {
             currentRoomId = switchToRoom.roomId
+            requireActiveMembershipViewModel.handle(RequireActiveMembershipAction.ChangeRoom(switchToRoom.roomId))
             replaceFragment(R.id.roomDetailContainer, RoomDetailFragment::class.java, RoomDetailArgs(switchToRoom.roomId))
         }
     }
@@ -125,6 +151,7 @@ class RoomDetailActivity : VectorBaseActivity(), ToolbarConfigurable {
             }
         }
 
+        // Shortcuts can't have intents with parcelables
         fun shortcutIntent(context: Context, roomId: String): Intent {
             return Intent(context, RoomDetailActivity::class.java).apply {
                 action = ACTION_ROOM_DETAILS_FROM_SHORTCUT
