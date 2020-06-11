@@ -2102,7 +2102,11 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="room_member_power_level_invites">Invites</string>
     <string name="room_member_power_level_users">Users</string>
 
-    <string name="room_member_power_level_in">%1$s in %2$s</string>
+    <string name="room_member_power_level_admin_in">Admin in %1$s</string>
+    <string name="room_member_power_level_moderator_in">Moderator in %1$s</string>
+    <string name="room_member_power_level_default_in">Default in %1$s</string>
+    <string name="room_member_power_level_custom_in">Custom (%1$d) in %2$s</string>
+
     <string name="room_member_jump_to_read_receipt">Jump to read receipt</string>
 
     <string name="rendering_event_error_type_of_event_not_handled">"RiotX does not handle events of type '%1$s'"</string>

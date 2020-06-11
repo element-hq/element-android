@@ -40,6 +40,7 @@ import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
+import im.vector.matrix.android.api.session.room.powerlevels.Role
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.api.util.toOptional
@@ -304,9 +305,12 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                         BiFunction<RoomSummary, PowerLevelsContent, String> { roomSummary, powerLevelsContent ->
                             val roomName = roomSummary.toMatrixItem().getBestName()
                             val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
-                            val userPowerLevel = powerLevelsHelper.getUserRole(initialState.userId)
-                            val powerLevelStr = stringProvider.getString(userPowerLevel.res, userPowerLevel.value)
-                            stringProvider.getString(R.string.room_member_power_level_in, powerLevelStr, roomName)
+                            when (val userPowerLevel = powerLevelsHelper.getUserRole(initialState.userId)) {
+                                Role.Admin     -> stringProvider.getString(R.string.room_member_power_level_admin_in, roomName)
+                                Role.Moderator -> stringProvider.getString(R.string.room_member_power_level_moderator_in, roomName)
+                                Role.Default   -> stringProvider.getString(R.string.room_member_power_level_default_in, roomName)
+                                is Role.Custom -> stringProvider.getString(R.string.room_member_power_level_custom_in, userPowerLevel.value, roomName)
+                            }
                         }
                 ).execute {
                     copy(userPowerLevelString = it)
