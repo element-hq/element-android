@@ -196,10 +196,10 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     private fun sendSdpOffer(callContext: CallContext) {
-//        executor.execute {
         val constraints = MediaConstraints()
-        constraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"))
-        constraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveVideo", if (currentCall?.mxCall?.isVideoCall == true) "true" else "false"))
+        // These are deprecated options
+//        constraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"))
+//        constraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveVideo", if (currentCall?.mxCall?.isVideoCall == true) "true" else "false"))
 
         Timber.v("## VOIP creating offer...")
         callContext.peerConnection?.createOffer(object : SdpObserverAdapter() {
@@ -211,7 +211,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 currentCall?.mxCall?.offerSdp(p0)
             }
         }, constraints)
-//        }
+
     }
 
     private fun getTurnServer(callback: ((TurnServer?) -> Unit)) {
@@ -355,7 +355,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
 //            localViewRenderer?.let { localVideoTrack?.addSink(it) }
             localMediaStream?.addTrack(localVideoTrack)
-            callContext.localMediaStream = localMediaStream
+//            callContext.localMediaStream = localMediaStream
 //            remoteVideoTrack?.setEnabled(true)
 //            remoteVideoTrack?.let {
 //                it.setEnabled(true)
@@ -418,20 +418,20 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
         private val DEFAULT_AUDIO_CONSTRAINTS = MediaConstraints().apply {
             // add all existing audio filters to avoid having echos
-            mandatory.add(MediaConstraints.KeyValuePair("googEchoCancellation", "true"))
-            mandatory.add(MediaConstraints.KeyValuePair("googEchoCancellation2", "true"))
-            mandatory.add(MediaConstraints.KeyValuePair("googDAEchoCancellation", "true"))
-
-            mandatory.add(MediaConstraints.KeyValuePair("googTypingNoiseDetection", "true"))
-
-            mandatory.add(MediaConstraints.KeyValuePair("googAutoGainControl", "true"))
-            mandatory.add(MediaConstraints.KeyValuePair("googAutoGainControl2", "true"))
-
-            mandatory.add(MediaConstraints.KeyValuePair("googNoiseSuppression", "true"))
-            mandatory.add(MediaConstraints.KeyValuePair("googNoiseSuppression2", "true"))
-
-            mandatory.add(MediaConstraints.KeyValuePair("googAudioMirroring", "false"))
-            mandatory.add(MediaConstraints.KeyValuePair("googHighpassFilter", "true"))
+//            mandatory.add(MediaConstraints.KeyValuePair("googEchoCancellation", "true"))
+//            mandatory.add(MediaConstraints.KeyValuePair("googEchoCancellation2", "true"))
+//            mandatory.add(MediaConstraints.KeyValuePair("googDAEchoCancellation", "true"))
+//
+//            mandatory.add(MediaConstraints.KeyValuePair("googTypingNoiseDetection", "true"))
+//
+//            mandatory.add(MediaConstraints.KeyValuePair("googAutoGainControl", "true"))
+//            mandatory.add(MediaConstraints.KeyValuePair("googAutoGainControl2", "true"))
+//
+//            mandatory.add(MediaConstraints.KeyValuePair("googNoiseSuppression", "true"))
+//            mandatory.add(MediaConstraints.KeyValuePair("googNoiseSuppression2", "true"))
+//
+//            mandatory.add(MediaConstraints.KeyValuePair("googAudioMirroring", "false"))
+//            mandatory.add(MediaConstraints.KeyValuePair("googHighpassFilter", "true"))
         }
     }
 
@@ -507,6 +507,14 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 }
             }, constraints)
         }
+    }
+
+    fun muteCall(muted: Boolean) {
+        currentCall?.localAudioTrack?.setEnabled(!muted)
+    }
+
+    fun enableVideo(enabled: Boolean) {
+        currentCall?.localVideoTrack?.setEnabled(enabled)
     }
 
     fun endCall() {

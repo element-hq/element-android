@@ -182,7 +182,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
 
     private fun renderState(state: VectorCallViewState) {
         Timber.v("## VOIP renderState call $state")
-        callControlsView.updateForState(state.callState.invoke())
+        callControlsView.updateForState(state)
         when (state.callState.invoke()) {
             CallState.IDLE           -> {
             }
@@ -338,5 +338,13 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
 
     override fun didEndCall() {
         callViewModel.handle(VectorCallViewActions.EndCall)
+    }
+
+    override fun didTapToggleMute() {
+        callViewModel.handle(VectorCallViewActions.ToggleMute)
+    }
+
+    override fun didTapToggleVideo() {
+        callViewModel.handle(VectorCallViewActions.ToggleVideo)
     }
 }

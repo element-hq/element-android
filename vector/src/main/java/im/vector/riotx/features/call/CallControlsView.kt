@@ -19,6 +19,7 @@ package im.vector.riotx.features.call
 import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
@@ -44,6 +45,13 @@ class CallControlsView @JvmOverloads constructor(
     @BindView(R.id.connectedControls)
     lateinit var connectedControls: ViewGroup
 
+
+    @BindView(R.id.iv_mute_toggle)
+    lateinit var muteIcon: ImageView
+
+    @BindView(R.id.iv_video_toggle)
+    lateinit var videoToggleIcon: ImageView
+
     init {
         ConstraintLayout.inflate(context, R.layout.fragment_call_controls, this)
         // layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -65,11 +73,21 @@ class CallControlsView @JvmOverloads constructor(
         interactionListener?.didEndCall()
     }
 
-    @OnClick(R.id.iv_end_call)
-    fun hangupCall() {
+    @OnClick(R.id.iv_mute_toggle)
+    fun toggleMute() {
+        interactionListener?.didTapToggleMute()
     }
 
-    fun updateForState(callState: CallState?) {
+    @OnClick(R.id.iv_video_toggle)
+    fun toggleVideo() {
+        interactionListener?.didTapToggleVideo()
+    }
+
+    fun updateForState(state: VectorCallViewState) {
+        val callState = state.callState.invoke()
+        muteIcon.setImageResource(if (state.isAudioMuted) R.drawable.ic_microphone_off else R.drawable.ic_microphone_on)
+        videoToggleIcon.setImageResource(if (state.isVideoEnabled) R.drawable.ic_video else R.drawable.ic_video_off)
+
         when (callState) {
             CallState.DIALING        -> {
             }
@@ -94,11 +112,15 @@ class CallControlsView @JvmOverloads constructor(
                 connectedControls.isVisible = false
             }
         }
+
+
     }
 
     interface InteractionListener {
         fun didAcceptIncomingCall()
         fun didDeclineIncomingCall()
         fun didEndCall()
+        fun didTapToggleMute()
+        fun didTapToggleVideo()
     }
 }

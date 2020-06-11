@@ -41,6 +41,8 @@ data class VectorCallViewState(
         val callId: String? = null,
         val roomId: String = "",
         val isVideoCall: Boolean,
+        val isAudioMuted: Boolean = false,
+        val isVideoEnabled: Boolean = true,
         val otherUserMatrixItem: Async<MatrixItem> = Uninitialized,
         val callState: Async<CallState> = Uninitialized
 ) : MvRxState
@@ -49,6 +51,8 @@ sealed class VectorCallViewActions : VectorViewModelAction {
     object EndCall : VectorCallViewActions()
     object AcceptCall : VectorCallViewActions()
     object DeclineCall : VectorCallViewActions()
+    object ToggleMute : VectorCallViewActions()
+    object ToggleVideo : VectorCallViewActions()
 }
 
 sealed class VectorCallViewEvents : VectorViewEvents {
@@ -65,26 +69,6 @@ class VectorCallViewModel @AssistedInject constructor(
         val webRtcPeerConnectionManager: WebRtcPeerConnectionManager
 ) : VectorViewModel<VectorCallViewState, VectorCallViewActions, VectorCallViewEvents>(initialState) {
 
-    //    private val callServiceListener: CallsListener = object : CallsListener {
-//        override fun onCallAnswerReceived(callAnswerContent: CallAnswerContent) {
-//            withState { state ->
-//                if (callAnswerContent.callId == state.callId) {
-//                    _viewEvents.post(VectorCallViewEvents.CallAnswered(callAnswerContent))
-//                }
-//            }
-//        }
-//
-//        override fun onCallInviteReceived(mxCall: MxCall, callInviteContent: CallInviteContent) {
-//        }
-//
-//        override fun onCallHangupReceived(callHangupContent: CallHangupContent) {
-//            withState { state ->
-//                if (callHangupContent.callId == state.callId) {
-//                    _viewEvents.post(VectorCallViewEvents.CallHangup(callHangupContent))
-//                }
-//            }
-//        }
-//    }
     var autoReplyIfNeeded: Boolean = false
 
     var call: MxCall? = null
@@ -120,7 +104,6 @@ class VectorCallViewModel @AssistedInject constructor(
             }
         }
 
-        // session.callService().addCallListener(callServiceListener)
     }
 
     override fun onCleared() {
@@ -143,6 +126,26 @@ class VectorCallViewModel @AssistedInject constructor(
                     copy(callState = Loading())
                 }
                 webRtcPeerConnectionManager.endCall()
+            }
+            VectorCallViewActions.ToggleMute  -> {
+                withState {
+                    val muted = it.isAudioMuted
+                    webRtcPeerConnectionManager.muteCall(!muted)
+                    setState {
+                        copy(isAudioMuted = !muted)
+                    }
+                }
+            }
+            VectorCallViewActions.ToggleVideo -> {
+                withState {
+                    if(it.isVideoCall) {
+                        val videoEnabled = it.isVideoEnabled
+                        webRtcPeerConnectionManager.enableVideo(!videoEnabled)
+                        setState {
+                            copy(isVideoEnabled = !videoEnabled)
+                        }
+                    }
+                }
             }
         }.exhaustive
     }
