@@ -898,9 +898,6 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
     <string name="error_empty_field_your_password">Sartu zure pasahitza.</string>
 
     <string name="send_bug_report_description_in_english">Ahal dela idatzi deskripzioa ingelesez.</string>
-    <string name="room_participants_action_unignore_prompt">Erakutsi erabiltzaile honen mezu guztiak?
-
-Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat beharko lukeela.</string>
     <string name="room_message_placeholder_reply_to_encrypted">Zifratutako erantzuna bidalita…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Bidali erantzuna (zifratu gabea)…</string>
     <string name="settings_preview_media_before_sending">Aurreikusi multimedia bidali aurretik</string>
@@ -1015,10 +1012,6 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="settings_call_ringtone_dialog_title">Hautatu deientzako doinua:</string>
 
     <string name="room_participants_action_kick">Kanporatu</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Ziur erabiltzaile hau txat honetatik kanporatu nahi duzula?</item>
-        <item quantity="other">Ziur erabiltzaile hauek txat honetatik kanporatu nahi dituzula?</item>
-    </plurals>
     <string name="reason_hint">Arrazoia</string>
 
     <string name="settings_inline_url_preview_summary">Erakutsi txateko esteken aurrebista hasiera-zerbitzariak onartzen badu.</string>

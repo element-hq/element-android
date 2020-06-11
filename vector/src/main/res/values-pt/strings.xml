@@ -835,9 +835,6 @@ Adicionar alguns agora?</string>
     <string name="room_participants_now">%1$s agora</string>
     <string name="room_participants_ago">há %1$s %2$s</string>
 
-    <string name="room_participants_action_unignore_prompt">Mostrar todas as mensagens deste utilizador?
-
-Note que esta acção reiniciará a aplicação e poderá demorar algum tempo.</string>
     <string name="room_participants_ban_prompt_msg">Tem a certeza que pretende banir este utilizador desta conversa?</string>
 
     <string name="room_participants_invite_join_names">"%1$s, "</string>

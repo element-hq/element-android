@@ -409,11 +409,6 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="room_participants_action_devices_list">Zobrazit seznam relací</string>
     <string name="room_preview_room_interactions_disabled">Toto je náhled místnosti. Interakce s místností byla vypnuta.</string>
 
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Opravdu chcete vyhodit tohoto uživatele z této konverzace\?</item>
-        <item quantity="few">Opravdu chcete vyhodit tyto uživatele z této konverzace\?</item>
-        <item quantity="other">Opravdu chcete vyhodit tyto uživatele z této konverzace\?</item>
-    </plurals>
     <string name="room_participants_ban_prompt_msg">Opravdu chcete zakázat vstup tohoto uživatele do této konverzace\?</string>
     <string name="reason_hint">Důvod</string>
 
@@ -502,10 +497,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="room_preview_unlinked_email_warning">Pozvánka byla odeslána na %s, což není spárováno s tímto účtem. 
 \nPřihlaste se s jiným účtem nebo přidejte tento e-mail ke svému současnému účtu.</string>
     <string name="room_preview_try_join_an_unknown_room">Snažíte se přistupovat k %s. Chcete vstoupit, abyste se mohli podílet na diskuzi\?</string>
-    <string name="room_participants_action_unignore_prompt">Zobrazit všechny zprávy od tohoto uživatele\?
-\n
-\nTato akce provede restart aplikace a může nějakou dobu trvat.</string>
-    <string name="room_participants_power_level_prompt">Tuto změnu nelze vrátit, protože povyšujete uživatele na stejnou úroveň, jakou máte vy. 
+    <string name="room_participants_power_level_prompt">Tuto změnu nelze vrátit, protože povyšujete uživatele na stejnou úroveň, jakou máte vy.
 \nOpravdu to chcete udělat\?</string>
 
     <string name="people_search_invite_by_id_dialog_description">Prosím zadejte jednu nebo více e-mailových adres nebo Matrix ID</string>

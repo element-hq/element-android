@@ -848,9 +848,6 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="room_participants_now">現在 %1$s</string>
     <string name="room_participants_ago">%2$s 前 %1$s</string>
 
-    <string name="room_participants_action_unignore_prompt">このユーザからのすべてのメッセージを表示しますか？
-
-この操作によってアプリを再起動するため、しばらく時間がかかることにご注意ください。</string>
     <string name="room_participants_invite_join_names">"%1$s、 "</string>
     <string name="room_participants_invite_join_names_and">%1$s と %2$s</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
@@ -999,9 +996,6 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="settings_call_ringtone_dialog_title">着信音を選んでください:</string>
 
     <string name="room_participants_action_kick">追い出す</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="other">このチャットから本当にこのユーザーを追い出しますか？</item>
-    </plurals>
     <string name="reason_hint">理由</string>
 
     <string name="notification_sync_init">サービスを初期化</string>
