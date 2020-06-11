@@ -32,12 +32,13 @@ sealed class Role(open val value: Int, @StringRes val res: Int) : Comparable<Rol
 
     companion object {
 
+        // Order matters, default value should be checked after defined roles
         fun fromValue(value: Int, default: Int): Role {
             return when (value) {
-                default,
-                Default.value   -> Default
-                Moderator.value -> Moderator
                 Admin.value     -> Admin
+                Moderator.value -> Moderator
+                Default.value,
+                default         -> Default
                 else            -> Custom(value)
             }
         }
