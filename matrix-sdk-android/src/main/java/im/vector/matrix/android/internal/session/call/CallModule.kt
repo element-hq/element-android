@@ -37,7 +37,6 @@ internal abstract class CallModule {
         }
     }
 
-
     @Binds
     abstract fun bindCallService(service:DefaultCallSignalingService): CallSignalingService
 

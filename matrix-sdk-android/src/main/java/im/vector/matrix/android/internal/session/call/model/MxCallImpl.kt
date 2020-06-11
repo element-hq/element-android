@@ -80,7 +80,6 @@ internal class MxCallImpl(
         }
     }
 
-
     override fun offerSdp(sdp: SessionDescription) {
         if (!isOutgoing) return
         state = CallState.REMOTE_RINGING

@@ -46,7 +46,7 @@ class CallControlsView @JvmOverloads constructor(
 
     init {
         ConstraintLayout.inflate(context, R.layout.fragment_call_controls, this)
-        //layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        // layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         ButterKnife.bind(this)
     }
 

@@ -320,13 +320,13 @@ class NotificationUtils @Inject constructor(private val context: Context,
         val rejectCallActionReceiver = Intent(context, CallHeadsUpActionReceiver::class.java).apply {
             //            putExtra(CallHeadsUpService.EXTRA_CALL_ACTION_KEY, CallHeadsUpService.CALL_ACTION_REJECT)
         }
-        //val answerCallPendingIntent = PendingIntent.getBroadcast(context, requestId, answerCallActionReceiver, PendingIntent.FLAG_UPDATE_CURRENT)
+        // val answerCallPendingIntent = PendingIntent.getBroadcast(context, requestId, answerCallActionReceiver, PendingIntent.FLAG_UPDATE_CURRENT)
         val rejectCallPendingIntent = PendingIntent.getBroadcast(context, requestId + 1, rejectCallActionReceiver, PendingIntent.FLAG_UPDATE_CURRENT)
 
         builder.addAction(
                 NotificationCompat.Action(
                         R.drawable.ic_call,
-                        //IconCompat.createWithResource(applicationContext, R.drawable.ic_call).setTint(ContextCompat.getColor(applicationContext, R.color.riotx_positive_accent)),
+                        // IconCompat.createWithResource(applicationContext, R.drawable.ic_call).setTint(ContextCompat.getColor(applicationContext, R.color.riotx_positive_accent)),
                         context.getString(R.string.call_notification_answer),
                         answerCallPendingIntent
                 )
@@ -376,7 +376,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
 
         val contentPendingIntent = TaskStackBuilder.create(context)
                 .addNextIntentWithParentStack(Intent(context, HomeActivity::class.java))
-                //TODO other userId
+                // TODO other userId
                 .addNextIntent(VectorCallActivity.newIntent(context, callId, roomId, "otherUserId", true, isVideo, false, null))
                 .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
 

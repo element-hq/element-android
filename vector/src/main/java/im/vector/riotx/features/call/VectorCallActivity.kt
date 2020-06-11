@@ -16,7 +16,7 @@
 
 package im.vector.riotx.features.call
 
-//import im.vector.riotx.features.call.service.CallHeadsUpService
+// import im.vector.riotx.features.call.service.CallHeadsUpService
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
@@ -161,7 +161,6 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
             renderState(it)
         }
 
-
         callViewModel.viewEvents
                 .observe()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -186,7 +185,6 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         callControlsView.updateForState(state.callState.invoke())
         when (state.callState.invoke()) {
             CallState.IDLE           -> {
-
             }
             CallState.DIALING        -> {
                 callVideoGroup.isInvisible = true
@@ -232,7 +230,6 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                 finish()
             }
             null                     -> {
-
             }
         }
     }
@@ -276,7 +273,6 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         pipRenderer.setZOrderMediaOverlay(true)
         pipRenderer.setEnableHardwareScaler(true /* enabled */)
         fullscreenRenderer.setEnableHardwareScaler(true /* enabled */)
-
 
         peerConnectionManager.attachViewRenderers(pipRenderer, fullscreenRenderer,
                 intent.getStringExtra(EXTRA_MODE)?.takeIf { isFirstCreation() })

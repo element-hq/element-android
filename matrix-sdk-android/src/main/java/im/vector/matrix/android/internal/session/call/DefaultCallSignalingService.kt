@@ -101,7 +101,7 @@ internal class DefaultCallSignalingService @Inject constructor(
         // TODO if handled by other of my sessions
         // this test is too simple, should notify upstream
         if (event.senderId == userId) {
-            //ignore local echos!
+            // ignore local echos!
             return
         }
         when (event.getClearType()) {
@@ -139,7 +139,6 @@ internal class DefaultCallSignalingService @Inject constructor(
                     }
                 }
             }
-
         }
     }
 

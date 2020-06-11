@@ -120,11 +120,11 @@ class VectorCallViewModel @AssistedInject constructor(
             }
         }
 
-        //session.callService().addCallListener(callServiceListener)
+        // session.callService().addCallListener(callServiceListener)
     }
 
     override fun onCleared() {
-        //session.callService().removeCallListener(callServiceListener)
+        // session.callService().removeCallListener(callServiceListener)
         this.call?.removeListener(callStateListener)
         super.onCleared()
     }

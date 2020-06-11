@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-
 package im.vector.riotx.core.services
 
 import android.content.Context
@@ -89,8 +88,6 @@ class CallService : VectorService() {
      */
     private fun displayIncomingCallNotification(intent: Intent) {
         Timber.v("displayIncomingCallNotification")
-
-
 
         // the incoming call in progress is already displayed
         if (!TextUtils.isEmpty(mIncomingCallId)) {

@@ -23,7 +23,6 @@ import im.vector.riotx.core.di.HasVectorInjector
 import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.notifications.NotificationUtils
 import im.vector.riotx.features.settings.VectorLocale.context
-import timber.log.Timber
 
 class CallHeadsUpActionReceiver : BroadcastReceiver() {
 

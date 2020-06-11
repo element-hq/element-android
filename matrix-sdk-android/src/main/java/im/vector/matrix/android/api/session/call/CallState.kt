@@ -38,5 +38,4 @@ enum class CallState {
 
     /** Terminated.  Incoming/Outgoing call, the call is terminated */
     TERMINATED,
-
 }

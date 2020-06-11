@@ -94,7 +94,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     // omit empty :/
                     if (it.isNotEmpty()) {
                         Timber.v("## Sending local ice candidates to call")
-                        //it.forEach { peerConnection?.addIceCandidate(it) }
+                        // it.forEach { peerConnection?.addIceCandidate(it) }
                         mxCall.sendLocalIceCandidates(it)
                     }
                 }
@@ -103,7 +103,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
         var remoteIceCandidateDisposable: Disposable? = null
 
         fun release() {
-
             remoteIceCandidateDisposable?.dispose()
             iceCandidateDisposable?.dispose()
 
@@ -174,7 +173,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 .setVideoDecoderFactory(defaultVideoDecoderFactory)
                 .createPeerConnectionFactory()
 
-        //attachViewRenderersInternal()
+        // attachViewRenderersInternal()
     }
 
     private fun createPeerConnection(callContext: CallContext, turnServer: TurnServer?) {
@@ -192,7 +191,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 }
             }
         }
-        Timber.v("## VOIP creating peer connection...with iceServers ${iceServers} ")
+        Timber.v("## VOIP creating peer connection...with iceServers $iceServers ")
         callContext.peerConnection = peerConnectionFactory?.createPeerConnection(iceServers, StreamObserver(callContext))
     }
 
@@ -270,7 +269,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     attachViewRenderersInternal()
                 }
             }
-
         }
     }
 
@@ -307,7 +305,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     private fun createLocalStream(callContext: CallContext) {
-
         if (callContext.localMediaStream != null) {
             Timber.e("## VOIP localMediaStream already created")
             return
@@ -325,12 +322,12 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
         val localMediaStream = peerConnectionFactory!!.createLocalMediaStream("ARDAMS") // magic value?
 
-        //Add audio track
+        // Add audio track
         localMediaStream?.addTrack(localAudioTrack)
 
         callContext.localMediaStream = localMediaStream
 
-        //add video track if needed
+        // add video track if needed
         if (callContext.mxCall.isVideoCall) {
             val cameraIterator = if (Camera2Enumerator.isSupported(context)) Camera2Enumerator(context) else Camera1Enumerator(false)
             val frontCamera = cameraIterator.deviceNames
@@ -368,7 +365,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     private fun attachViewRenderersInternal() {
-
         // render local video in pip view
         localSurfaceRenderer?.get()?.let { pipSurface ->
             pipSurface.setMirror(true)
@@ -395,7 +391,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     fun detachRenderers() {
         Timber.v("## VOIP detachRenderers")
-        //currentCall?.localMediaStream?.let { currentCall?.peerConnection?.removeStream(it) }
+        // currentCall?.localMediaStream?.let { currentCall?.peerConnection?.removeStream(it) }
         localSurfaceRenderer?.get()?.let {
             currentCall?.localVideoTrack?.removeSink(it)
         }
@@ -503,7 +499,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
         executor.execute {
             call.peerConnection?.createAnswer(object : SdpObserverAdapter() {
-
                 override fun onCreateSuccess(p0: SessionDescription?) {
                     if (p0 == null) return
                     call.peerConnection?.setLocalDescription(object : SdpObserverAdapter() {}, p0)
@@ -529,7 +524,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
             Timber.v("## VOIP onCallAnswerReceived ${callAnswerContent.callId}")
             val sdp = SessionDescription(SessionDescription.Type.ANSWER, callAnswerContent.answer.sdp)
             call.peerConnection?.setRemoteDescription(object : SdpObserverAdapter() {
-
             }, sdp)
         }
     }
@@ -560,7 +554,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 PeerConnection.PeerConnectionState.DISCONNECTED,
                 PeerConnection.PeerConnectionState.CLOSED,
                 null                                         -> {
-
                 }
             }
         }
@@ -593,7 +586,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
         override fun onAddStream(stream: MediaStream) {
             Timber.v("## VOIP StreamObserver onAddStream: $stream")
             executor.execute {
-
                 // reportError("Weird-looking stream: " + stream);
                 if (stream.audioTracks.size > 1 || stream.videoTracks.size > 1) return@execute
 
