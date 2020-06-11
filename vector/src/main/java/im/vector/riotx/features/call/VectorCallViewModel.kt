@@ -104,7 +104,7 @@ class VectorCallViewModel @AssistedInject constructor(
         autoReplyIfNeeded = args.autoAccept
 
         initialState.callId?.let {
-            session.callService().getCallWithId(it)?.let { mxCall ->
+            session.callSignalingService().getCallWithId(it)?.let { mxCall ->
                 this.call = mxCall
                 mxCall.otherUserId
                 val item: MatrixItem? = session.getUser(mxCall.otherUserId)?.toMatrixItem()

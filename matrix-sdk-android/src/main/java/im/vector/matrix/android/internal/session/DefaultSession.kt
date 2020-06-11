@@ -247,7 +247,7 @@ internal class DefaultSession @Inject constructor(
 
     override fun integrationManagerService() = integrationManagerService
 
-    override fun callService(): CallSignalingService = callSignalingService.get()
+    override fun callSignalingService(): CallSignalingService = callSignalingService.get()
 
     override fun addListener(listener: Session.Listener) {
         sessionListeners.addListener(listener)

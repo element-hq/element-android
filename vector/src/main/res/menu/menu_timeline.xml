@@ -18,7 +18,7 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/voip_call"
+        android:id="@+id/voice_call"
         android:icon="@drawable/ic_phone"
         android:title="@string/call"
         android:visible="false"

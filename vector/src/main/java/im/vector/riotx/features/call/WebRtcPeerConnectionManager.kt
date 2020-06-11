@@ -216,7 +216,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     private fun getTurnServer(callback: ((TurnServer?) -> Unit)) {
-        sessionHolder.getActiveSession().callService().getTurnServer(object : MatrixCallback<TurnServer?> {
+        sessionHolder.getActiveSession().callSignalingService().getTurnServer(object : MatrixCallback<TurnServer?> {
             override fun onSuccess(data: TurnServer?) {
                 callback(data)
             }
@@ -441,7 +441,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     fun startOutgoingCall(context: Context, signalingRoomId: String, otherUserId: String, isVideoCall: Boolean) {
         Timber.v("## VOIP startOutgoingCall in room $signalingRoomId to $otherUserId isVideo $isVideoCall")
-        val createdCall = sessionHolder.getSafeActiveSession()?.callService()?.createOutgoingCall(signalingRoomId, otherUserId, isVideoCall) ?: return
+        val createdCall = sessionHolder.getSafeActiveSession()?.callSignalingService()?.createOutgoingCall(signalingRoomId, otherUserId, isVideoCall) ?: return
         val callContext = CallContext(createdCall)
         currentCall = callContext
 

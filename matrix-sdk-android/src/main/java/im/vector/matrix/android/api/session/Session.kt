@@ -155,7 +155,6 @@ interface Session :
      * Returns the identity service associated with the session
      */
     fun identityService(): IdentityService
-    fun callService(): CallSignalingService
 
     /**
      * Returns the widget service associated with the session
@@ -168,9 +167,9 @@ interface Session :
     fun integrationManagerService(): IntegrationManagerService
 
     /**
-     * Returns the cryptoService associated with the session
+     * Returns the call signaling service associated with the session
      */
-    fun callService(): CallService
+    fun callSignalingService(): CallSignalingService
 
     /**
      * Add a listener to the session.

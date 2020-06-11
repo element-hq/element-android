@@ -125,7 +125,7 @@ class VectorApplication : Application(), HasVectorInjector, MatrixConfiguration.
             val lastAuthenticatedSession = authenticationService.getLastAuthenticatedSession()!!
             activeSessionHolder.setActiveSession(lastAuthenticatedSession)
             lastAuthenticatedSession.configureAndStart(applicationContext, pushRuleTriggerListener, sessionListener)
-            lastAuthenticatedSession.callService().addCallListener(webRtcPeerConnectionManager)
+            lastAuthenticatedSession.callSignalingService().addCallListener(webRtcPeerConnectionManager)
         }
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
