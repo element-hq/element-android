@@ -245,26 +245,30 @@ class RoomMemberProfileController @Inject constructor(
         }
 
         if (canKick) {
-            if (membership == Membership.JOIN) {
-                buildProfileAction(
-                        id = "kick",
-                        editable = false,
-                        divider = canBan,
-                        destructive = true,
-                        title = stringProvider.getString(R.string.room_participants_action_kick),
-                        dividerColor = dividerColor,
-                        action = { callback?.onKickClicked() }
-                )
-            } else if (membership == Membership.INVITE) {
-                buildProfileAction(
-                        id = "cancel_invite",
-                        title = stringProvider.getString(R.string.room_participants_action_cancel_invite),
-                        divider = canBan,
-                        dividerColor = dividerColor,
-                        destructive = true,
-                        editable = false,
-                        action = { callback?.onCancelInviteClicked() }
-                )
+            when (membership) {
+                Membership.JOIN   -> {
+                    buildProfileAction(
+                            id = "kick",
+                            editable = false,
+                            divider = canBan,
+                            destructive = true,
+                            title = stringProvider.getString(R.string.room_participants_action_kick),
+                            dividerColor = dividerColor,
+                            action = { callback?.onKickClicked() }
+                    )
+                }
+                Membership.INVITE -> {
+                    buildProfileAction(
+                            id = "cancel_invite",
+                            title = stringProvider.getString(R.string.room_participants_action_cancel_invite),
+                            divider = canBan,
+                            dividerColor = dividerColor,
+                            destructive = true,
+                            editable = false,
+                            action = { callback?.onCancelInviteClicked() }
+                    )
+                }
+                else              -> Unit
             }
         }
         if (canBan) {
