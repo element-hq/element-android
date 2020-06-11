@@ -942,4 +942,6 @@
 
     <string name="verify_new_session_notice">Använd den här sessionen för att verifiera din nya och ge den tillgång till krypterade meddelanden.</string>
     <string name="verify_cancel_self_verification_from_untrusted">Om du avbryter så kommer du inte kunna läsa krypterade meddelanden på den här enheten, och andra användare kommer inte att lita på den</string>
+    <string name="verify_cancel_self_verification_from_trusted">Om du avbryter så kommer du inte kunna läsa krypterade meddelanden på din nya enhet, och andra användare kommer inte att lita på den</string>
+    <string name="bootstrap_info_text">Säkra och lås upp krypterade meddelanden och pålitlighet med en %s.</string>
     </resources>
