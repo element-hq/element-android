@@ -1147,7 +1147,7 @@
     <string name="room_filtering_footer_create_new_direct_message">Pošalji novu izravnu poruku</string>
     <string name="room_filtering_footer_open_room_directory">Prikaži popis soba</string>
 
-    <string name="room_directory_search_hint">Ime ili identitet (#primjer:matrix.org)</string>
+    <string name="room_directory_search_hint">Naziv ili identitet (#primjer:matrix.org)</string>
 
     <string name="labs_swipe_to_reply_in_timeline">Omogući povlačenje za odgovaranje u vremenskoj crti</string>
 
