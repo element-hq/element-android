@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,36 +13,36 @@
     android:paddingBottom="12dp">
 
     <TextView
-        android:id="@+id/deleteEventConfirmationText"
+        android:id="@+id/dialogConfirmationText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/delete_event_dialog_content"
+        tools:text="@string/delete_event_dialog_content"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/deleteEventReasonCheck"
+        android:id="@+id/dialogReasonCheck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:checked="true"
         android:text="@string/delete_event_dialog_reason_checkbox"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/deleteEventConfirmationText" />
+        app:layout_constraintTop_toBottomOf="@+id/dialogConfirmationText" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/deleteEventReasonTextInputLayout"
+        android:id="@+id/dialogReasonTextInputLayout"
         style="@style/VectorTextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/delete_event_dialog_reason_hint"
+        tools:hint="@string/delete_event_dialog_reason_hint"
         app:counterEnabled="true"
         app:counterMaxLength="240"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/deleteEventReasonCheck">
+        app:layout_constraintTop_toBottomOf="@+id/dialogReasonCheck">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/deleteEventReasonInput"
+            android:id="@+id/dialogReasonInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

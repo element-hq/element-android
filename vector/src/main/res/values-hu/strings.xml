@@ -901,9 +901,6 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="error_empty_field_your_password">Kérlek add meg a jelszavad.</string>
 
     <string name="send_bug_report_description_in_english">Kérlek, ha lehetséges a leírást angolul írd.</string>
-    <string name="room_participants_action_unignore_prompt">Mutassuk ennek a felhasználónak minden üzenetét?
-
-Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</string>
     <string name="room_message_placeholder_reply_to_encrypted">Titkosított válasz küldése…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Válasz küldése (titkosítás nélkül)…</string>
     <string name="settings_preview_media_before_sending">Média előnézete küldés előtt</string>
@@ -1013,10 +1010,6 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
 
     <string name="call_anyway">Hívás mindenképpen</string>
     <string name="room_participants_action_kick">Elküld</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Biztos, hogy kirúgod ezt a felhasználót\?</item>
-        <item quantity="other">Biztos, hogy kirúgod ezeket a felhasználókat\?</item>
-    </plurals>
     <string name="reason_hint">Ok</string>
 
     <string name="settings_inline_url_preview_summary">URL előnézet a csevegő ablakban, ha a Matrix szervered támogatja ezt a lehetőséget.</string>

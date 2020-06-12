@@ -31,6 +31,7 @@ import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntity
 import im.vector.matrix.android.internal.database.model.RoomMemberSummaryEntityFields
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.query.process
+import im.vector.matrix.android.internal.session.room.membership.admin.MembershipAdminTask
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteTask
 import im.vector.matrix.android.internal.session.room.membership.joining.JoinRoomTask
 import im.vector.matrix.android.internal.session.room.membership.leaving.LeaveRoomTask
@@ -48,6 +49,7 @@ internal class DefaultMembershipService @AssistedInject constructor(
         private val inviteTask: InviteTask,
         private val joinTask: JoinRoomTask,
         private val leaveRoomTask: LeaveRoomTask,
+        private val membershipAdminTask: MembershipAdminTask,
         @UserId
         private val userId: String
 ) : MembershipService {
@@ -111,6 +113,33 @@ internal class DefaultMembershipService @AssistedInject constructor(
         return Realm.getInstance(monarchy.realmConfiguration).use {
             RoomMemberHelper(it, roomId).getNumberOfJoinedMembers()
         }
+    }
+
+    override fun ban(userId: String, reason: String?, callback: MatrixCallback<Unit>): Cancelable {
+        val params = MembershipAdminTask.Params(MembershipAdminTask.Type.BAN, roomId, userId, reason)
+        return membershipAdminTask
+                .configureWith(params) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun unban(userId: String, reason: String?, callback: MatrixCallback<Unit>): Cancelable {
+        val params = MembershipAdminTask.Params(MembershipAdminTask.Type.UNBAN, roomId, userId, reason)
+        return membershipAdminTask
+                .configureWith(params) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun kick(userId: String, reason: String?, callback: MatrixCallback<Unit>): Cancelable {
+        val params = MembershipAdminTask.Params(MembershipAdminTask.Type.KICK, roomId, userId, reason)
+        return membershipAdminTask
+                .configureWith(params) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
     }
 
     override fun invite(userId: String, reason: String?, callback: MatrixCallback<Unit>): Cancelable {

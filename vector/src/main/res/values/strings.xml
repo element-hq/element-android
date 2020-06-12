@@ -465,6 +465,7 @@
     <string name="room_participants_header_devices">SESSIONS</string>
 
     <string name="room_participants_action_invite">Invite</string>
+    <string name="room_participants_action_cancel_invite">Cancel invite</string>
     <string name="room_participants_action_leave">Leave this room</string>
     <string name="room_participants_action_remove">Remove from this room</string>
     <string name="room_participants_action_ban">Ban</string>
@@ -473,19 +474,35 @@
     <string name="room_participants_action_set_default_power_level">Reset to normal user</string>
     <string name="room_participants_action_set_moderator">Make moderator</string>
     <string name="room_participants_action_set_admin">Make admin</string>
-    <string name="room_participants_action_ignore">Hide all messages from this user</string>
-    <string name="room_participants_action_unignore">Show all messages from this user</string>
-    <string name="room_participants_action_unignore_prompt">Show all messages from this user?\n\nNote that this action will restart the app and it may take some time.</string>
     <string name="room_participants_invite_search_another_user">User ID, Name or email</string>
     <string name="room_participants_action_mention">Mention</string>
     <string name="room_participants_action_devices_list">Show Session List</string>
     <string name="room_participants_power_level_prompt">You will not be able to undo this change as you are promoting the user to have the same power level as yourself.\nAre you sure?</string>
 
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Are you sure that you want to kick this user from this chat?</item>
-        <item quantity="other">Are you sure that you want to kick these users from this chat?</item>
-    </plurals>
-    <string name="room_participants_ban_prompt_msg">Are you sure that you want to ban this user from this chat?</string>
+    <string name="room_participants_power_level_demote_warning_title">Demote yourself?</string>
+    <string name="room_participants_power_level_demote_warning_prompt">"You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges."</string>
+    <string name="room_participants_power_level_demote">Demote</string>
+
+
+    <string name="room_participants_action_ignore_title">Ignore user</string>
+    <string name="room_participants_action_ignore_prompt_msg">Ignoring this user will remove their messages from rooms you share.\n\nYou can reverse this action at any time in the general settings.</string>
+    <string name="room_participants_action_ignore">Ignore</string>
+
+    <string name="room_participants_action_unignore_title">Unignore user</string>
+    <string name="room_participants_action_unignore_prompt_msg">Unignoring this user will show all messages from them again.</string>
+    <string name="room_participants_action_unignore">Unignore</string>
+
+    <string name="room_participants_action_cancel_invite_title">Cancel invite</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">Are you sure you want to cancel the invite for this user?</string>
+    <string name="room_participants_kick_title">Kick user</string>
+    <string name="room_participants_kick_reason">Reason to kick</string>
+    <string name="room_participants_kick_prompt_msg">kicking user will remove them from this room.\n\nTo prevent them from joining again, you should ban them instead.</string>
+    <string name="room_participants_ban_title">Ban user</string>
+    <string name="room_participants_ban_reason">Reason to ban</string>
+    <string name="room_participants_unban_title">Unban user</string>
+    <string name="room_participants_ban_prompt_msg">Banning user will kick them from this room and prevent them from joining again.</string>
+    <string name="room_participants_unban_prompt_msg">Unbanning user will allow them to join the room again.</string>
+
     <string name="reason_hint">Reason</string>
 
     <!--
@@ -2068,6 +2085,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="room_profile_section_security">Security</string>
     <string name="room_profile_section_security_learn_more">Learn more</string>
     <string name="room_profile_section_more">More</string>
+    <string name="room_profile_section_admin">Admin Actions</string>
     <string name="room_profile_section_more_settings">Room settings</string>
     <string name="room_profile_section_more_notifications">Notifications</string>
     <plurals name="room_profile_section_more_member_list">
@@ -2086,6 +2104,7 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
 
     <string name="room_member_power_level_admin_in">Admin in %1$s</string>
     <string name="room_member_power_level_moderator_in">Moderator in %1$s</string>
+    <string name="room_member_power_level_default_in">Default in %1$s</string>
     <string name="room_member_power_level_custom_in">Custom (%1$d) in %2$s</string>
 
     <string name="room_member_jump_to_read_receipt">Jump to read receipt</string>
@@ -2430,5 +2449,6 @@ Not all features in Riot are implemented in RiotX yet. Main missing (and coming 
     <string name="identity_server_set_alternative_notice">Alternatively, you can enter any other identity server URL</string>
     <string name="identity_server_set_alternative_notice_no_default">Enter the URL of an identity server</string>
     <string name="identity_server_set_alternative_submit">Submit</string>
+    <string name="power_level_edit_title">Set role</string>
 
 </resources>

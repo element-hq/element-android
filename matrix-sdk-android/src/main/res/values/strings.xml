@@ -89,6 +89,19 @@
     <string name="notice_widget_modified">%1$s modified %2$s widget</string>
     <string name="notice_widget_modified_by_you">You modified %1$s widget</string>
 
+    <string name="power_level_admin">Admin</string>
+    <string name="power_level_moderator">Moderator</string>
+    <string name="power_level_default">Default</string>
+    <string name="power_level_custom">Custom (%1$d)</string>
+    <string name="power_level_custom_no_value">Custom</string>
+
+    <!-- parameter will be a comma separated list of values of notice_power_level_diff -->
+    <string name="notice_power_level_changed_by_you">You changed the power level of %1$s.</string>
+    <!-- First parameter will be a userId or display name, second one will be a comma separated list of values of notice_power_level_diff -->
+    <string name="notice_power_level_changed">%1$s changed the power level of %2$s.</string>
+    <!-- First parameter will be a userId or display name, the two last ones will be value of power_level_* -->
+    <string name="notice_power_level_diff">%1$s from %2$s to %3$s</string>
+
     <string name="notice_crypto_unable_to_decrypt">** Unable to decrypt: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">The sender\'s device has not sent us the keys for this message.</string>
 

@@ -21,6 +21,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
+import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 import im.vector.matrix.android.api.util.MatrixItem
 
@@ -31,13 +32,22 @@ data class RoomMemberProfileViewState(
         val isMine: Boolean = false,
         val isIgnored: Async<Boolean> = Uninitialized,
         val isRoomEncrypted: Boolean = false,
-        val powerLevelsContent: Async<PowerLevelsContent> = Uninitialized,
+        val powerLevelsContent: PowerLevelsContent? = null,
         val userPowerLevelString: Async<String> = Uninitialized,
         val userMatrixItem: Async<MatrixItem> = Uninitialized,
         val userMXCrossSigningInfo: MXCrossSigningInfo? = null,
         val allDevicesAreTrusted: Boolean = false,
-        val allDevicesAreCrossSignedTrusted: Boolean = false
+        val allDevicesAreCrossSignedTrusted: Boolean = false,
+        val asyncMembership: Async<Membership> = Uninitialized,
+        val actionPermissions: ActionPermissions = ActionPermissions()
 ) : MvRxState {
 
-    constructor(args: RoomMemberProfileArgs) : this(roomId = args.roomId, userId = args.userId)
+    constructor(args: RoomMemberProfileArgs) : this(userId = args.userId, roomId = args.roomId)
 }
+
+data class ActionPermissions(
+        val canKick: Boolean = false,
+        val canBan: Boolean = false,
+        val canInvite: Boolean = false,
+        val canEditPowerLevel: Boolean = false
+)

@@ -448,19 +448,12 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="room_participants_action_set_admin">Yönetici yap</string>
     <string name="room_participants_action_ignore">Bu kullanıcının tüm mesajlarını gizle</string>
     <string name="room_participants_action_unignore">Bu kullanıcının tüm mesajlarını göster</string>
-    <string name="room_participants_action_unignore_prompt">Bu kullanıcının tüm mesajlarını göster
-\n
-\nBu işlem uygulamayı yeniden başlatak ve biraz zaman alacak.</string>
     <string name="room_participants_invite_search_another_user">Kullanıcı ID, Ad ya da eposta</string>
     <string name="room_participants_action_mention">Bahset</string>
     <string name="room_participants_action_devices_list">Oturum Listesini Göster</string>
     <string name="room_participants_power_level_prompt">Bu işlemin geri dönüşü yok kullanıcıyı sen ile aynı erişim seviyesine getiriyorsun.
 \nEmin misin\?</string>
 
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Kullanıcıyı bu sohbetten atmak istediğine emin misin\?</item>
-        <item quantity="other">Kullanıcıları bu sohbetten atmak istediğine emin misin\?</item>
-    </plurals>
     <string name="room_participants_ban_prompt_msg">Kullanıcıyı bu sohbetten engellemek istediğine emin misin\?</string>
     <string name="reason_hint">Neden</string>
 

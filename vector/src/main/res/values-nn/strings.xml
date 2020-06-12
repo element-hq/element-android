@@ -361,9 +361,6 @@
     <string name="room_participants_action_set_admin">Gjer til administrator</string>
     <string name="room_participants_action_ignore">Gøym alle meldingar frå denne brukaren</string>
     <string name="room_participants_action_unignore">Syn alle meldingar frå denne brukaren</string>
-    <string name="room_participants_action_unignore_prompt">Syn alle meldingar frå denne brukaren\? 
-\n 
-\nMerk deg at denne handlinga startar programmet på nytt og kan ta litt tid.</string>
     <string name="room_participants_invite_search_another_user">Brukar-ID, namn, eller e-post</string>
     <string name="room_participants_action_mention">Nemn</string>
     <string name="room_participants_action_devices_list">Vis sesjonsliste</string>
@@ -972,10 +969,6 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="video_call_in_progress">Ein videosamtale pågår…</string>
 
     <string name="room_participants_action_kick">Spark</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Er du trygg på at du vil sparka denne brukaren frå samtala\?</item>
-        <item quantity="other">Er du trygg på at du vil sparka desse brukarane frå samtala\?</item>
-    </plurals>
     <string name="reason_hint">Grunn</string>
 
     <string name="settings_notification_advanced">Avanserte varslingsinnstillingar</string>

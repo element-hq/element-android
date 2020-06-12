@@ -867,9 +867,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="error_empty_field_your_password">請輸入您的密碼。</string>
 
     <string name="send_bug_report_description_in_english">如果可以，請使用英文撰寫描述。</string>
-    <string name="room_participants_action_unignore_prompt">顯示所有從此使用者而來的訊息？
-
-注意此動作將會重新啟動應用程式，而其可能需要一點時間。</string>
     <string name="room_message_placeholder_reply_to_encrypted">傳送加密回覆……</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">傳送回覆（未加密）……</string>
     <string name="settings_preview_media_before_sending">在傳送前預覽媒體</string>
@@ -962,9 +959,6 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
 
     <string name="call_anyway">無論如何都要通話</string>
     <string name="room_participants_action_kick">踢出</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="other">您確定您想要從這個聊天中踢出這些使用者嗎？</item>
-    </plurals>
     <string name="reason_hint">理由</string>
 
     <string name="settings_inline_url_preview_summary">當您的家伺服器支援此功能時在聊天中預覽連結。</string>

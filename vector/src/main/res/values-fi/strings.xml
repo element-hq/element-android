@@ -959,13 +959,6 @@ Haluatko lisätä paketteja?</string>
     <string name="room_participants_ago">Oli %1$s %2$s sitten</string>
 
     <string name="room_participants_action_kick">Poista huoneesta</string>
-    <string name="room_participants_action_unignore_prompt">Näytä tämän käyttäjän kaikki viestit\?
-\n
-\nHuomioi, että tämä toiminto käynnistää Riotin uudelleen ja siinä voi kestää jonkin aikaa.</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Oletko varma, että haluat poistaa tämän käyttäjän tästä keskustelusta\?</item>
-        <item quantity="other">Oletko varma, että haluat poistaa nämä käyttäjät tästä keskustelusta\?</item>
-    </plurals>
     <string name="reason_hint">Syy</string>
 
     <string name="room_participants_invite_join_names">"%1$s, "</string>

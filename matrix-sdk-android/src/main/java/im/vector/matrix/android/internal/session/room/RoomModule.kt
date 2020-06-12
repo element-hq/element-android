@@ -34,6 +34,8 @@ import im.vector.matrix.android.internal.session.room.directory.GetPublicRoomTas
 import im.vector.matrix.android.internal.session.room.directory.GetThirdPartyProtocolsTask
 import im.vector.matrix.android.internal.session.room.membership.DefaultLoadRoomMembersTask
 import im.vector.matrix.android.internal.session.room.membership.LoadRoomMembersTask
+import im.vector.matrix.android.internal.session.room.membership.admin.DefaultMembershipAdminTask
+import im.vector.matrix.android.internal.session.room.membership.admin.MembershipAdminTask
 import im.vector.matrix.android.internal.session.room.membership.joining.DefaultInviteTask
 import im.vector.matrix.android.internal.session.room.membership.joining.DefaultJoinRoomTask
 import im.vector.matrix.android.internal.session.room.membership.joining.InviteTask
@@ -141,6 +143,9 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindLeaveRoomTask(task: DefaultLeaveRoomTask): LeaveRoomTask
+
+    @Binds
+    abstract fun bindMembershipAdminTask(task: DefaultMembershipAdminTask): MembershipAdminTask
 
     @Binds
     abstract fun bindLoadRoomMembersTask(task: DefaultLoadRoomMembersTask): LoadRoomMembersTask

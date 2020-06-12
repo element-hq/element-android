@@ -59,6 +59,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.CALL_INVITE,
                 EventType.CALL_HANGUP,
                 EventType.CALL_ANSWER,
+                EventType.STATE_ROOM_POWER_LEVELS,
                 EventType.REACTION,
                 EventType.REDACTION                     -> noticeItemFactory.create(event, highlight, callback)
                 EventType.STATE_ROOM_ENCRYPTION         -> {

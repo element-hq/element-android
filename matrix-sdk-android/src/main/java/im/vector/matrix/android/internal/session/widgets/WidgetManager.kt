@@ -198,6 +198,6 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
                 stateKey = QueryStringValue.NoCondition
         )
         val powerLevelsContent = powerLevelsEvent?.content?.toModel<PowerLevelsContent>() ?: return false
-        return PowerLevelsHelper(powerLevelsContent).isAllowedToSend(true, null, userId)
+        return PowerLevelsHelper(powerLevelsContent).isUserAllowedToSend(userId, true, null)
     }
 }

@@ -140,7 +140,7 @@ class RoomProfileFragment @Inject constructor(
 
     private fun setupRecyclerView() {
         roomProfileController.callback = this
-        matrixProfileRecyclerView.configureWith(roomProfileController, hasFixedSize = true)
+        matrixProfileRecyclerView.configureWith(roomProfileController, hasFixedSize = true, disableItemAnimation = true)
     }
 
     override fun onDestroyView() {

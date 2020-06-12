@@ -29,10 +29,12 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import im.vector.matrix.android.api.session.room.powerlevels.Role
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.animations.AppBarStateChangeListener
 import im.vector.riotx.core.animations.MatrixItemAppBarStateChangeListener
+import im.vector.riotx.core.dialogs.ConfirmationDialogBuilder
 import im.vector.riotx.core.extensions.cleanup
 import im.vector.riotx.core.extensions.configureWith
 import im.vector.riotx.core.extensions.exhaustive
@@ -43,6 +45,7 @@ import im.vector.riotx.core.utils.startSharePlainTextIntent
 import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.roommemberprofile.devices.DeviceListBottomSheet
+import im.vector.riotx.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_matrix_profile.*
 import kotlinx.android.synthetic.main.view_stub_room_member_profile_header.*
@@ -82,7 +85,7 @@ class RoomMemberProfileFragment @Inject constructor(
             }
         }
         memberProfileStateView.contentView = memberProfileInfoContainer
-        matrixProfileRecyclerView.configureWith(roomMemberProfileController, hasFixedSize = true)
+        matrixProfileRecyclerView.configureWith(roomMemberProfileController, hasFixedSize = true, disableItemAnimation = true)
         roomMemberProfileController.callback = this
         appBarStateChangeListener = MatrixItemAppBarStateChangeListener(headerView,
                 listOf(
@@ -94,12 +97,30 @@ class RoomMemberProfileFragment @Inject constructor(
         matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         viewModel.observeViewEvents {
             when (it) {
-                is RoomMemberProfileViewEvents.Loading                -> showLoading(it.message)
-                is RoomMemberProfileViewEvents.Failure                -> showFailure(it.throwable)
-                is RoomMemberProfileViewEvents.OnIgnoreActionSuccess  -> Unit
-                is RoomMemberProfileViewEvents.StartVerification      -> handleStartVerification(it)
-                is RoomMemberProfileViewEvents.ShareRoomMemberProfile -> handleShareRoomMemberProfile(it.permalink)
+                is RoomMemberProfileViewEvents.Loading                     -> showLoading(it.message)
+                is RoomMemberProfileViewEvents.Failure                     -> showFailure(it.throwable)
+                is RoomMemberProfileViewEvents.StartVerification           -> handleStartVerification(it)
+                is RoomMemberProfileViewEvents.ShareRoomMemberProfile      -> handleShareRoomMemberProfile(it.permalink)
+                is RoomMemberProfileViewEvents.ShowPowerLevelValidation    -> handleShowPowerLevelAdminWarning(it)
+                is RoomMemberProfileViewEvents.ShowPowerLevelDemoteWarning -> handleShowPowerLevelDemoteWarning(it)
+                is RoomMemberProfileViewEvents.OnKickActionSuccess         -> Unit
+                is RoomMemberProfileViewEvents.OnSetPowerLevelSuccess      -> Unit
+                is RoomMemberProfileViewEvents.OnBanActionSuccess          -> Unit
+                is RoomMemberProfileViewEvents.OnIgnoreActionSuccess       -> Unit
+                is RoomMemberProfileViewEvents.OnInviteActionSuccess       -> Unit
             }.exhaustive
+        }
+    }
+
+    private fun handleShowPowerLevelDemoteWarning(event: RoomMemberProfileViewEvents.ShowPowerLevelDemoteWarning) {
+        EditPowerLevelDialogs.showDemoteWarning(requireActivity()) {
+            viewModel.handle(RoomMemberProfileAction.SetPowerLevel(event.currentValue, event.newValue, false))
+        }
+    }
+
+    private fun handleShowPowerLevelAdminWarning(event: RoomMemberProfileViewEvents.ShowPowerLevelValidation) {
+        EditPowerLevelDialogs.showValidation(requireActivity()) {
+            viewModel.handle(RoomMemberProfileAction.SetPowerLevel(event.currentValue, event.newValue, false))
         }
     }
 
@@ -207,8 +228,31 @@ class RoomMemberProfileFragment @Inject constructor(
 
     // RoomMemberProfileController.Callback
 
-    override fun onIgnoreClicked() {
-        viewModel.handle(RoomMemberProfileAction.IgnoreUser)
+    override fun onIgnoreClicked() = withState(viewModel) { state ->
+        val isIgnored = state.isIgnored() ?: false
+        val titleRes: Int
+        val positiveButtonRes: Int
+        val confirmationRes: Int
+        if (isIgnored) {
+            confirmationRes = R.string.room_participants_action_unignore_prompt_msg
+            titleRes = R.string.room_participants_action_unignore_title
+            positiveButtonRes = R.string.room_participants_action_unignore
+        } else {
+            confirmationRes = R.string.room_participants_action_ignore_prompt_msg
+            titleRes = R.string.room_participants_action_ignore_title
+            positiveButtonRes = R.string.room_participants_action_ignore
+        }
+        ConfirmationDialogBuilder
+                .show(
+                        activity = requireActivity(),
+                        askForReason = false,
+                        confirmationRes = confirmationRes,
+                        positiveRes = positiveButtonRes,
+                        reasonHintRes = 0,
+                        titleRes = titleRes
+                ) {
+                    viewModel.handle(RoomMemberProfileAction.IgnoreUser)
+                }
     }
 
     override fun onTapVerify() {
@@ -237,5 +281,69 @@ class RoomMemberProfileFragment @Inject constructor(
 
     private fun onAvatarClicked(view: View, userMatrixItem: MatrixItem) {
         navigator.openBigImageViewer(requireActivity(), view, userMatrixItem)
+    }
+
+    override fun onEditPowerLevel(currentRole: Role) {
+        EditPowerLevelDialogs.showChoice(requireActivity(), currentRole) { newPowerLevel ->
+            viewModel.handle(RoomMemberProfileAction.SetPowerLevel(currentRole.value, newPowerLevel, true))
+        }
+    }
+
+    override fun onKickClicked() {
+        ConfirmationDialogBuilder
+                .show(
+                        activity = requireActivity(),
+                        askForReason = true,
+                        confirmationRes = R.string.room_participants_kick_prompt_msg,
+                        positiveRes = R.string.room_participants_action_kick,
+                        reasonHintRes = R.string.room_participants_kick_reason,
+                        titleRes = R.string.room_participants_kick_title
+                ) { reason ->
+                    viewModel.handle(RoomMemberProfileAction.KickUser(reason))
+                }
+    }
+
+    override fun onBanClicked(isUserBanned: Boolean) {
+        val titleRes: Int
+        val positiveButtonRes: Int
+        val confirmationRes: Int
+        if (isUserBanned) {
+            confirmationRes = R.string.room_participants_unban_prompt_msg
+            titleRes = R.string.room_participants_unban_title
+            positiveButtonRes = R.string.room_participants_action_unban
+        } else {
+            confirmationRes = R.string.room_participants_ban_prompt_msg
+            titleRes = R.string.room_participants_ban_title
+            positiveButtonRes = R.string.room_participants_action_ban
+        }
+        ConfirmationDialogBuilder
+                .show(
+                        activity = requireActivity(),
+                        askForReason = !isUserBanned,
+                        confirmationRes = confirmationRes,
+                        positiveRes = positiveButtonRes,
+                        reasonHintRes = R.string.room_participants_ban_reason,
+                        titleRes = titleRes
+                ) { reason ->
+                    viewModel.handle(RoomMemberProfileAction.BanOrUnbanUser(reason))
+                }
+    }
+
+    override fun onCancelInviteClicked() {
+        ConfirmationDialogBuilder
+                .show(
+                        activity = requireActivity(),
+                        askForReason = false,
+                        confirmationRes = R.string.room_participants_action_cancel_invite_prompt_msg,
+                        positiveRes = R.string.room_participants_action_cancel_invite,
+                        reasonHintRes = 0,
+                        titleRes = R.string.room_participants_action_cancel_invite_title
+                ) {
+                    viewModel.handle(RoomMemberProfileAction.KickUser(null))
+                }
+    }
+
+    override fun onInviteClicked() {
+        viewModel.handle(RoomMemberProfileAction.InviteUser)
     }
 }

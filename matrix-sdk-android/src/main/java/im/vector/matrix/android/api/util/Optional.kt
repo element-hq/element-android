@@ -47,6 +47,10 @@ data class Optional<T : Any> constructor(private val value: T?) {
         fun <T : Any> from(value: T?): Optional<T> {
             return Optional(value)
         }
+
+        fun <T: Any> empty(): Optional<T> {
+            return Optional(null)
+        }
     }
 }
 

@@ -422,19 +422,12 @@
     <string name="room_participants_action_set_admin">অ্যাডমিন কর</string>
     <string name="room_participants_action_ignore">এই ব্যবহারকারীর কাছ থেকে সব বার্তা লুকান</string>
     <string name="room_participants_action_unignore">এই ব্যবহারকারীর সব বার্তা দেখান</string>
-    <string name="room_participants_action_unignore_prompt">এই ব্যবহারকারীর কাছ থেকে সব বার্তা দেখান\?
-\n
-\nমনে রাখবেন যে এই পদক্ষেপটি অ্যাপ্লিকেশনটি পুনরায় চালু করবে এবং এটি কিছু সময় নিতে পারে।</string>
     <string name="room_participants_invite_search_another_user">ব্যবহারকারী আইডি, নাম বা ইমেইল</string>
     <string name="room_participants_action_mention">উল্লেখ</string>
     <string name="room_participants_action_devices_list">সেশান তালিকা প্রদর্শন কর</string>
     <string name="room_participants_power_level_prompt">আপনি এই পরিবর্তনটি পূর্বাবস্থায় ফিরিয়ে আনতে সক্ষম হবেন না যেহেতু আপনি ব্যবহারকারীকে একই শক্তি স্তর হিসাবে প্রচার করার জন্য প্রচার করছেন।
 \nআপনি কি নিশ্চিত\?</string>
 
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">আপনি কি নিশ্চিত যে এই চ্যাট থেকে এই ব্যবহারকারী কে পদাঘাত করতে চান\?</item>
-        <item quantity="other">আপনি কি নিশ্চিত যে এই চ্যাট থেকে এই ব্যবহারকারীদের কে পদাঘাত করতে চান\?</item>
-    </plurals>
     <string name="room_participants_ban_prompt_msg">আপনি কি এই চ্যাট থেকে এই ব্যবহারকারীকে নিষিদ্ধ করতে চান\?</string>
     <string name="reason_hint">কারণ</string>
 
