@@ -82,6 +82,8 @@ class WebRtcPeerConnectionManager @Inject constructor(
         currentCallsListeners.remove(listener)
     }
 
+    val audioManager = CallAudioManager(context.applicationContext)
+
     data class CallContext(
             val mxCall: MxCall,
 
@@ -457,6 +459,8 @@ class WebRtcPeerConnectionManager @Inject constructor(
         Timber.v("## VOIP startOutgoingCall in room $signalingRoomId to $otherUserId isVideo $isVideoCall")
         val createdCall = sessionHolder.getSafeActiveSession()?.callSignalingService()?.createOutgoingCall(signalingRoomId, otherUserId, isVideoCall) ?: return
         val callContext = CallContext(createdCall)
+
+        audioManager.startForCall(createdCall)
         currentCall = callContext
 
         executor.execute {
@@ -489,11 +493,13 @@ class WebRtcPeerConnectionManager @Inject constructor(
         if (currentCall != null) {
             Timber.w("## VOIP TODO: Automatically reject incoming call?")
             mxCall.hangUp()
+            audioManager.stop()
             return
         }
 
         val callContext = CallContext(mxCall)
         currentCall = callContext
+        audioManager.startForCall(mxCall)
         executor.execute {
             callContext.remoteCandidateSource = ReplaySubject.create()
         }
@@ -538,6 +544,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
     fun endCall() {
         currentCall?.mxCall?.hangUp()
         currentCall = null
+        audioManager.stop()
         close()
     }
 
@@ -602,7 +609,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
                  * property until the May 13, 2016 draft of the specification.
                  */
                 PeerConnection.PeerConnectionState.CLOSED       -> {
-
                 }
                 /**
                  * At least one of the ICE transports for the connection is in the "disconnected" state and none of
