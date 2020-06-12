@@ -171,56 +171,56 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         callControlsView.updateForState(state)
         when (state.callState.invoke()) {
             CallState.IDLE,
-            CallState.DIALING        -> {
+            CallState.DIALING       -> {
                 callVideoGroup.isInvisible = true
                 callInfoGroup.isVisible = true
                 callStatusText.setText(R.string.call_ring)
-                state.otherUserMatrixItem.invoke()?.let {
-                    avatarRenderer.render(it, otherMemberAvatar)
-                    participantNameText.text = it.getBestName()
-                    callTypeText.setText(if (state.isVideoCall) R.string.action_video_call else R.string.action_voice_call)
-                }
+                configureCallInfo(state)
             }
 
-            CallState.LOCAL_RINGING  -> {
+            CallState.LOCAL_RINGING -> {
                 callVideoGroup.isInvisible = true
                 callInfoGroup.isVisible = true
                 callStatusText.text = null
-                state.otherUserMatrixItem.invoke()?.let {
-                    avatarRenderer.render(it, otherMemberAvatar)
-                    participantNameText.text = it.getBestName()
-                    callTypeText.setText(if (state.isVideoCall) R.string.action_video_call else R.string.action_voice_call)
-                }
+                configureCallInfo(state)
             }
 
-            CallState.ANSWERING      -> {
+            CallState.ANSWERING     -> {
                 callVideoGroup.isInvisible = true
                 callInfoGroup.isVisible = true
                 callStatusText.setText(R.string.call_connecting)
-                state.otherUserMatrixItem.invoke()?.let {
-                    avatarRenderer.render(it, otherMemberAvatar)
-                }
+                configureCallInfo(state)
             }
-            CallState.CONNECTING -> {
+            CallState.CONNECTING    -> {
                 callVideoGroup.isInvisible = true
                 callInfoGroup.isVisible = true
+                configureCallInfo(state)
                 callStatusText.setText(R.string.call_connecting)
             }
-            CallState.CONNECTED      -> {
+            CallState.CONNECTED     -> {
                 if (callArgs.isVideoCall) {
                     callVideoGroup.isVisible = true
                     callInfoGroup.isVisible = false
                 } else {
                     callVideoGroup.isInvisible = true
                     callInfoGroup.isVisible = true
+                    configureCallInfo(state)
                     callStatusText.text = null
                 }
             }
-            CallState.TERMINATED     -> {
+            CallState.TERMINATED    -> {
                 finish()
             }
-            null                     -> {
+            null                    -> {
             }
+        }
+    }
+
+    private fun configureCallInfo(state: VectorCallViewState) {
+        state.otherUserMatrixItem.invoke()?.let {
+            avatarRenderer.render(it, otherMemberAvatar)
+            participantNameText.text = it.getBestName()
+            callTypeText.setText(if (state.isVideoCall) R.string.action_video_call else R.string.action_voice_call)
         }
     }
 
@@ -336,5 +336,10 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
 
     override fun didTapToggleVideo() {
         callViewModel.handle(VectorCallViewActions.ToggleVideo)
+    }
+
+    override fun returnToChat() {
+        // TODO, what if the room is not in backstack??
+        finish()
     }
 }

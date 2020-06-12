@@ -18,6 +18,7 @@ package im.vector.riotx.features.call
 
 import android.content.Context
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.session.call.CallState
 import im.vector.matrix.android.api.session.call.CallsListener
 import im.vector.matrix.android.api.session.call.EglUtils
@@ -67,6 +68,19 @@ class WebRtcPeerConnectionManager @Inject constructor(
         private val context: Context,
         private val sessionHolder: ActiveSessionHolder
 ) : CallsListener {
+
+    interface CurrentCallListener {
+        fun onCurrentCallChange(call: MxCall?)
+    }
+
+    private val currentCallsListeners = emptyList<CurrentCallListener>().toMutableList()
+    fun addCurrentCallListener(listener: CurrentCallListener) {
+        currentCallsListeners.add(listener)
+    }
+
+    fun removeCurrentCallListener(listener: CurrentCallListener) {
+        currentCallsListeners.remove(listener)
+    }
 
     data class CallContext(
             val mxCall: MxCall,
@@ -137,6 +151,12 @@ class WebRtcPeerConnectionManager @Inject constructor(
     var remoteSurfaceRenderer: WeakReference<SurfaceViewRenderer>? = null
 
     var currentCall: CallContext? = null
+        set(value) {
+            field = value
+            currentCallsListeners.forEach {
+                tryThis { it.onCurrentCallChange(value?.mxCall) }
+            }
+        }
 
     init {
         // TODO do this lazyly
@@ -569,10 +589,10 @@ class WebRtcPeerConnectionManager @Inject constructor(
                  */
                 PeerConnection.PeerConnectionState.NEW,
 
-                /**
-                 * One or more of the ICE transports are currently in the process of establishing a connection;
-                 * that is, their RTCIceConnectionState is either "checking" or "connected", and no transports are in the "failed" state
-                 */
+                    /**
+                     * One or more of the ICE transports are currently in the process of establishing a connection;
+                     * that is, their RTCIceConnectionState is either "checking" or "connected", and no transports are in the "failed" state
+                     */
                 PeerConnection.PeerConnectionState.CONNECTING   -> {
                     callContext.mxCall.state = CallState.CONNECTING
                 }

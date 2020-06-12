@@ -22,12 +22,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import im.vector.matrix.android.api.session.call.CallState
 import im.vector.riotx.R
+import kotlinx.android.synthetic.main.fragment_call_controls.view.*
 
 class CallControlsView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -82,6 +84,12 @@ class CallControlsView @JvmOverloads constructor(
         interactionListener?.didTapToggleVideo()
     }
 
+    @OnClick(R.id.iv_leftMiniControl)
+    fun returnToChat() {
+        interactionListener?.returnToChat()
+    }
+
+
     fun updateForState(state: VectorCallViewState) {
         val callState = state.callState.invoke()
         muteIcon.setImageResource(if (state.isAudioMuted) R.drawable.ic_microphone_off else R.drawable.ic_microphone_on)
@@ -106,6 +114,7 @@ class CallControlsView @JvmOverloads constructor(
             CallState.CONNECTED     -> {
                 ringingControls.isVisible = false
                 connectedControls.isVisible = true
+                iv_video_toggle.isInvisible = !state.isVideoCall
             }
             CallState.TERMINATED,
             null                    -> {
@@ -121,5 +130,6 @@ class CallControlsView @JvmOverloads constructor(
         fun didEndCall()
         fun didTapToggleMute()
         fun didTapToggleVideo()
+        fun returnToChat()
     }
 }

@@ -11,8 +11,8 @@
         android:id="@+id/ringingControls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
         android:orientation="horizontal"
+        android:padding="16dp"
         tools:background="@color/password_strength_bar_ok"
         tools:visibility="visible">
 
@@ -55,8 +55,8 @@
         android:id="@+id/connectedControls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
         android:orientation="horizontal"
+        android:padding="16dp"
         android:visibility="gone"
         tools:background="@color/password_strength_bar_low"
         tools:visibility="visible">
@@ -66,11 +66,13 @@
             android:layout_width="44dp"
             android:layout_height="44dp"
             android:layout_marginBottom="32dp"
+            android:background="@drawable/oval_positive"
+            android:backgroundTint="?attr/riotx_background"
             android:clickable="true"
             android:focusable="true"
-            android:padding="8dp"
+            android:padding="10dp"
             android:src="@drawable/ic_home_bottom_chat"
-            android:tint="?attr/riotx_background"
+            android:tint="?attr/riotx_text_primary"
             tools:ignore="MissingConstraints" />
 
 
@@ -85,9 +87,9 @@
             android:focusable="true"
             android:padding="16dp"
             android:src="@drawable/ic_microphone_off"
-            tools:src="@drawable/ic_microphone_on"
             android:tint="?attr/riotx_text_primary"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"
+            tools:src="@drawable/ic_microphone_on" />
 
         <ImageView
             android:id="@+id/iv_end_call"

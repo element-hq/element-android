@@ -362,6 +362,8 @@
     <string name="incoming_voice_call">Incoming Voice Call</string>
     <string name="call_in_progress">Call In Progress…</string>
     <string name="video_call_in_progress">Video Call In Progress…</string>
+    <string name="active_call_with_duration">Active Call (%s)</string>
+    <string name="return_to_call">Return to call</string>
 
     <string name="call_error_user_not_responding">The remote side failed to pick up.</string>
     <string name="call_error_ice_failed">Media Connection Failed</string>

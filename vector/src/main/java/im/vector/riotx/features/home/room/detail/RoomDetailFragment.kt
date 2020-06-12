@@ -42,6 +42,7 @@ import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -100,6 +101,7 @@ import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.intent.getMimeTypeFromUri
 import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.resources.ColorProvider
+import im.vector.riotx.core.ui.views.ActiveCallView
 import im.vector.riotx.core.ui.views.JumpToReadMarkerView
 import im.vector.riotx.core.ui.views.NotificationAreaView
 import im.vector.riotx.core.utils.Debouncer
@@ -127,6 +129,8 @@ import im.vector.riotx.features.attachments.ContactAttachment
 import im.vector.riotx.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.riotx.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.riotx.features.attachments.toGroupedContentAttachmentData
+import im.vector.riotx.features.call.SharedActiveCallViewModel
+import im.vector.riotx.features.call.VectorCallActivity
 import im.vector.riotx.features.call.WebRtcPeerConnectionManager
 import im.vector.riotx.features.command.Command
 import im.vector.riotx.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
@@ -205,7 +209,8 @@ class RoomDetailFragment @Inject constructor(
         JumpToReadMarkerView.Callback,
         AttachmentTypeSelectorView.Callback,
         AttachmentsHelper.Callback,
-        RoomWidgetsBannerView.Callback {
+        RoomWidgetsBannerView.Callback,
+        ActiveCallView.Callback {
 
     companion object {
 
@@ -245,6 +250,8 @@ class RoomDetailFragment @Inject constructor(
     override fun getMenuRes() = R.menu.menu_timeline
 
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
+    private lateinit var sharedCallActionViewModel: SharedActiveCallViewModel
+
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var jumpToBottomViewVisibilityManager: JumpToBottomViewVisibilityManager
     private var modelBuildListener: OnModelBuildFinishedListener? = null
@@ -261,6 +268,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
+        sharedCallActionViewModel = activityViewModelProvider.get(SharedActiveCallViewModel::class.java)
         attachmentsHelper = AttachmentsHelper(requireContext(), this).register()
         keyboardStateUtils = KeyboardStateUtils(requireActivity())
         setupToolbar(roomToolbar)
@@ -269,6 +277,7 @@ class RoomDetailFragment @Inject constructor(
         setupInviteView()
         setupNotificationView()
         setupJumpToReadMarkerView()
+        setupActiveCallView()
         setupJumpToBottomView()
         setupWidgetsBannerView()
 
@@ -282,6 +291,13 @@ class RoomDetailFragment @Inject constructor(
                     handleActions(it)
                 }
                 .disposeOnDestroyView()
+
+        sharedCallActionViewModel
+                .activeCall
+                .observe(viewLifecycleOwner, Observer {
+                    //TODO delay a bit if it's a new call to let call activity launch before ..
+                    activeCallView.isVisible = it != null
+                })
 
         roomDetailViewModel.selectSubscribe(this, RoomDetailViewState::tombstoneEventHandling, uniqueOnly("tombstoneEventHandling")) {
             renderTombstoneEventHandling(it)
@@ -374,6 +390,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onDestroyView() {
         timelineEventController.callback = null
         timelineEventController.removeModelBuildListener(modelBuildListener)
+        activeCallView.callback = null
         modelBuildListener = null
         autoCompleter.clear()
         debouncer.cancelAll()
@@ -410,6 +427,10 @@ class RoomDetailFragment @Inject constructor(
 
     private fun setupJumpToReadMarkerView() {
         jumpToReadMarkerView.callback = this
+    }
+
+    private fun setupActiveCallView() {
+        activeCallView.callback = this
     }
 
     private fun navigateToEvent(action: RoomDetailViewEvents.NavigateToEvent) {
@@ -483,7 +504,19 @@ class RoomDetailFragment @Inject constructor(
             R.id.video_call          -> {
                 roomDetailViewModel.getOtherUserIds()?.firstOrNull()?.let {
                     // TODO CALL We should check/ask for permission here first
-                    webRtcPeerConnectionManager.startOutgoingCall(requireContext(), roomDetailArgs.roomId, it, item.itemId == R.id.video_call)
+                    val activeCall = sharedCallActionViewModel.activeCall.value
+                    if (activeCall != null) {
+                        // resume existing if same room, if not prompt to kill and then restart new call?
+                        if (activeCall.roomId == roomDetailArgs.roomId) {
+                            onTapToReturnToCall()
+                        } else {
+                            // TODO might not work well, and should prompt
+                            webRtcPeerConnectionManager.endCall()
+                            webRtcPeerConnectionManager.startOutgoingCall(requireContext(), roomDetailArgs.roomId, it, item.itemId == R.id.video_call)
+                        }
+                    } else {
+                        webRtcPeerConnectionManager.startOutgoingCall(requireContext(), roomDetailArgs.roomId, it, item.itemId == R.id.video_call)
+                    }
                 }
                 true
             }
@@ -1478,5 +1511,22 @@ class RoomDetailFragment @Inject constructor(
     override fun onViewWidgetsClicked() {
         RoomWidgetsBottomSheet.newInstance()
                 .show(childFragmentManager, "ROOM_WIDGETS_BOTTOM_SHEET")
+    }
+
+    override fun onTapToReturnToCall() {
+        sharedCallActionViewModel.activeCall.value?.let { call ->
+            VectorCallActivity.newIntent(
+                    requireContext(),
+                    call.callId,
+                    call.roomId,
+                    call.otherUserId,
+                    !call.isOutgoing,
+                    call.isVideoCall,
+                    false,
+                    null
+            ).let {
+                startActivity(it)
+            }
+        }
     }
 }

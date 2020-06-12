@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?colorPrimary"
+    tools:parentTag="android.widget.RelativeLayout">
+
+    <TextView
+        android:id="@+id/activeCallInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/returnToCallButton"
+        android:background="?attr/selectableItemBackground"
+        android:drawableStart="@drawable/ic_call"
+        android:drawableTint="@color/white"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="12dp"
+        android:text="@string/active_call"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/returnToCallButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/activeCallInfo"
+        android:layout_alignBottom="@+id/activeCallInfo"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:paddingEnd="16dp"
+        android:paddingStart="8dp"
+        android:textSize="15sp"
+        android:text="@string/return_to_call" />
+
+</merge>
