@@ -16,6 +16,7 @@
 
 package im.vector.matrix.rx
 
+import android.net.Uri
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.Room
@@ -108,6 +109,10 @@ class RxRoom(private val room: Room) {
 
     fun updateName(name: String): Completable = completableBuilder<Unit> {
         room.updateName(name, it)
+    }
+
+    fun updateAvatar(avatarUri: Uri, fileName: String): Completable = completableBuilder<Unit> {
+        room.updateAvatar(avatarUri, fileName, it)
     }
 }
 

@@ -16,7 +16,10 @@
 
 package im.vector.matrix.android.internal.session.room.state
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
+import androidx.work.BackoffPolicy
+import androidx.work.ExistingWorkPolicy
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
@@ -25,15 +28,29 @@ import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.state.StateService
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.util.CancelableBag
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.Optional
+import im.vector.matrix.android.internal.di.SessionId
+import im.vector.matrix.android.internal.di.WorkManagerProvider
+import im.vector.matrix.android.internal.session.content.UploadAvatarWorker
 import im.vector.matrix.android.internal.task.TaskExecutor
 import im.vector.matrix.android.internal.task.configureWith
+import im.vector.matrix.android.internal.util.CancelableWork
+import im.vector.matrix.android.internal.util.MatrixCoroutineDispatchers
+import im.vector.matrix.android.internal.worker.WorkerParamsFactory
+import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
+
+private const val UPLOAD_AVATAR_WORK = "UPLOAD_AVATAR_WORK"
 
 internal class DefaultStateService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                private val stateEventDataSource: StateEventDataSource,
                                                                private val taskExecutor: TaskExecutor,
-                                                               private val sendStateTask: SendStateTask
+                                                               private val sendStateTask: SendStateTask,
+                                                               @SessionId private val sessionId: String,
+                                                               private val workManagerProvider: WorkManagerProvider,
+                                                               private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) : StateService {
 
     @AssistedInject.Factory
@@ -92,5 +109,41 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
                 callback = callback,
                 stateKey = null
         )
+    }
+
+    override fun updateAvatar(avatarUri: Uri, fileName: String, callback: MatrixCallback<Unit>): Cancelable {
+        val cancelableBag = CancelableBag()
+        val workerParams = UploadAvatarWorker.Params(sessionId, avatarUri, fileName)
+        val workerData = WorkerParamsFactory.toData(workerParams)
+
+        val uploadAvatarWork = workManagerProvider.matrixOneTimeWorkRequestBuilder<UploadAvatarWorker>()
+                .setConstraints(WorkManagerProvider.workConstraints)
+                .setInputData(workerData)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY, TimeUnit.MILLISECONDS)
+                .build()
+
+        workManagerProvider.workManager
+                .beginUniqueWork("${roomId}_$UPLOAD_AVATAR_WORK", ExistingWorkPolicy.REPLACE, uploadAvatarWork)
+                .enqueue()
+
+        cancelableBag.add(CancelableWork(workManagerProvider.workManager, uploadAvatarWork.id))
+
+        taskExecutor.executorScope.launch(coroutineDispatchers.main) {
+            workManagerProvider.workManager.getWorkInfoByIdLiveData(uploadAvatarWork.id)
+                    .observeForever { info ->
+                        if (info != null && info.state.isFinished) {
+                            val result = WorkerParamsFactory.fromData<UploadAvatarWorker.OutputParams>(info.outputData)
+                            cancelableBag.add(
+                                    sendStateEvent(
+                                            eventType = EventType.STATE_ROOM_AVATAR,
+                                            body = mapOf("url" to result?.imageUrl!!),
+                                            callback = callback,
+                                            stateKey = null
+                                    )
+                            )
+                        }
+                    }
+        }
+        return cancelableBag
     }
 }

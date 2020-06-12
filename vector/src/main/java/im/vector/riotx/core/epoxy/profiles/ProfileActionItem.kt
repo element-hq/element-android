@@ -25,10 +25,12 @@ import androidx.core.view.isVisible
 import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.VectorEpoxyHolder
 import im.vector.riotx.core.epoxy.VectorEpoxyModel
 import im.vector.riotx.core.extensions.setTextOrHide
+import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.themes.ThemeUtils
 
 @EpoxyModelClass(layout = R.layout.item_profile_action)
@@ -50,6 +52,12 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() 
 
     @EpoxyAttribute
     var accessoryRes: Int = 0
+
+    @EpoxyAttribute
+    var accessoryMatrixItem: MatrixItem? = null
+
+    @EpoxyAttribute
+    var avatarRenderer: AvatarRenderer? = null
 
     @EpoxyAttribute
     var editable: Boolean = true
@@ -89,6 +97,13 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() 
 
         if (accessoryRes != 0) {
             holder.secondaryAccessory.setImageResource(accessoryRes)
+            holder.secondaryAccessory.isVisible = true
+        } else {
+            holder.secondaryAccessory.isVisible = false
+        }
+
+        if (accessoryMatrixItem != null) {
+            avatarRenderer?.render(accessoryMatrixItem!!, holder.secondaryAccessory)
             holder.secondaryAccessory.isVisible = true
         } else {
             holder.secondaryAccessory.isVisible = false

@@ -17,16 +17,19 @@
 package im.vector.riotx.features.roomprofile.settings
 
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.profiles.buildProfileAction
 import im.vector.riotx.core.epoxy.profiles.buildProfileSection
 import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.resources.StringProvider
 import im.vector.riotx.features.form.formEditTextItem
+import im.vector.riotx.features.home.AvatarRenderer
 import javax.inject.Inject
 
 // TODO Add other feature here (waiting for design)
 class RoomSettingsController @Inject constructor(
+        private val avatarRenderer: AvatarRenderer,
         private val stringProvider: StringProvider,
         colorProvider: ColorProvider
 ) : TypedEpoxyController<RoomSettingsViewState>() {
@@ -35,6 +38,7 @@ class RoomSettingsController @Inject constructor(
         fun onEnableEncryptionClicked()
         fun onNameChanged(name: String)
         fun onTopicChanged(topic: String)
+        fun onPhotoClicked()
     }
 
     private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
@@ -73,6 +77,18 @@ class RoomSettingsController @Inject constructor(
                 callback?.onTopicChanged(text)
             }
         }
+
+        buildProfileAction(
+                id = "photo",
+                title = stringProvider.getString(R.string.room_settings_room_photo),
+                subtitle = "",
+                dividerColor = dividerColor,
+                divider = true,
+                editable = true,
+                accessoryMatrixItem = roomSummary.toMatrixItem(),
+                avatarRenderer = avatarRenderer,
+                action = { callback?.onPhotoClicked() }
+        )
 
         if (roomSummary.isEncrypted) {
             buildProfileAction(
