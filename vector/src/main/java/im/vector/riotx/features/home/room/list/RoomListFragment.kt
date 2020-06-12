@@ -127,7 +127,7 @@ class RoomListFragment @Inject constructor(
         modelBuildListener = null
         roomListView.cleanup()
         roomController.listener = null
-        stateRestorer.layoutManager = null
+        stateRestorer.clear()
         createChatFabMenu.listener = null
         super.onDestroyView()
     }

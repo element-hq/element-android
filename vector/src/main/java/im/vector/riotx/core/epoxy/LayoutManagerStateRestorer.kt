@@ -27,11 +27,15 @@ private const val LAYOUT_MANAGER_STATE = "LAYOUT_MANAGER_STATE"
 
 class LayoutManagerStateRestorer(layoutManager: RecyclerView.LayoutManager) : Restorable, DefaultListUpdateCallback {
 
-    var layoutManager: RecyclerView.LayoutManager? = null
+    private var layoutManager: RecyclerView.LayoutManager? = null
     private var layoutManagerState = AtomicReference<Parcelable?>()
 
     init {
         this.layoutManager = layoutManager
+    }
+
+    fun clear() {
+        layoutManager = null
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
