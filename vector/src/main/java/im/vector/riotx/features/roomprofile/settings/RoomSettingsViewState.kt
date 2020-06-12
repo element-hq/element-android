@@ -21,6 +21,7 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
+import im.vector.riotx.multipicker.entity.MultiPickerImageType
 
 data class RoomSettingsViewState(
         val roomId: String,
@@ -28,6 +29,7 @@ data class RoomSettingsViewState(
         val isLoading: Boolean = false,
         val newName: String? = null,
         val newTopic: String? = null,
+        val newAvatar: MultiPickerImageType? = null,
         val showSaveAction: Boolean = false
 ) : MvRxState {
 

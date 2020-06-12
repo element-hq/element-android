@@ -16,6 +16,8 @@
 
 package im.vector.riotx.features.roomprofile.settings
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -34,6 +36,8 @@ import im.vector.riotx.core.platform.VectorBaseFragment
 import im.vector.riotx.core.utils.toast
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
+import im.vector.riotx.multipicker.MultiPicker
+import im.vector.riotx.multipicker.entity.MultiPickerImageType
 import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import javax.inject.Inject
@@ -62,7 +66,7 @@ class RoomSettingsFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is RoomSettingsViewEvents.Failure -> showFailure(it.throwable)
-                is RoomSettingsViewEvents.Success    -> showSuccess()
+                is RoomSettingsViewEvents.Success -> showSuccess()
             }.exhaustive
         }
     }
@@ -95,6 +99,17 @@ class RoomSettingsFragment @Inject constructor(
         renderRoomSummary(viewState)
     }
 
+    private fun renderRoomSummary(state: RoomSettingsViewState) {
+        waiting_view.isVisible = state.isLoading
+
+        state.roomSummary()?.let {
+            roomSettingsToolbarTitleView.text = it.displayName
+            avatarRenderer.render(it.toMatrixItem(), roomSettingsToolbarAvatarImageView)
+        }
+
+        invalidateOptionsMenu()
+    }
+
     override fun onEnableEncryptionClicked() {
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.room_settings_enable_encryption_dialog_title)
@@ -114,14 +129,27 @@ class RoomSettingsFragment @Inject constructor(
         viewModel.handle(RoomSettingsAction.SetRoomTopic(topic))
     }
 
-    private fun renderRoomSummary(state: RoomSettingsViewState) {
-        waiting_view.isVisible = state.isLoading
+    override fun onPhotoClicked() {
+        MultiPicker.get(MultiPicker.IMAGE).single().startWith(this)
+    }
 
-        state.roomSummary()?.let {
-            roomSettingsToolbarTitleView.text = it.displayName
-            avatarRenderer.render(it.toMatrixItem(), roomSettingsToolbarAvatarImageView)
+    private fun onRoomPhotoSelected(selectedImage: MultiPickerImageType) {
+        viewModel.handle(RoomSettingsAction.SetRoomAvatar(selectedImage))
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                MultiPicker.REQUEST_CODE_PICK_IMAGE -> {
+                    MultiPicker
+                            .get(MultiPicker.IMAGE)
+                            .getSelectedFiles(requireContext(), requestCode, resultCode, data)
+                            .firstOrNull()?.let {
+                                onRoomPhotoSelected(it)
+                            }
+                }
+            }
         }
-
-        invalidateOptionsMenu()
+        super.onActivityResult(requestCode, resultCode, data)
     }
 }

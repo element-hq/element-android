@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.api.session.room.state
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.query.QueryStringValue
@@ -35,6 +36,11 @@ interface StateService {
      * Update the name of the room
      */
     fun updateName(name: String, callback: MatrixCallback<Unit>): Cancelable
+
+    /**
+     * Update the avatar of the room
+     */
+    fun updateAvatar(avatarUri: Uri, fileName: String, callback: MatrixCallback<Unit>): Cancelable
 
     fun sendStateEvent(eventType: String, stateKey: String?, body: JsonDict, callback: MatrixCallback<Unit>): Cancelable
 

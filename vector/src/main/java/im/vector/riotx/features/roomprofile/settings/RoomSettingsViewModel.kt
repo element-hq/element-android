@@ -28,6 +28,7 @@ import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.platform.VectorViewModel
 import io.reactivex.Completable
 import io.reactivex.Observable
+import java.util.UUID
 
 class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: RoomSettingsViewState,
                                                         private val session: Session)
@@ -69,17 +70,17 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
     override fun handle(action: RoomSettingsAction) {
         when (action) {
             is RoomSettingsAction.EnableEncryption -> handleEnableEncryption()
-            is RoomSettingsAction.SetRoomName      -> setState {
-                copy(
-                        newName = action.newName,
-                        showSaveAction = shouldShowSaveAction(this)
-                )
+            is RoomSettingsAction.SetRoomName      -> {
+                setState { copy(newName = action.newName) }
+                setState { copy(showSaveAction = shouldShowSaveAction(this)) }
             }
-            is RoomSettingsAction.SetRoomTopic     -> setState {
-                copy(
-                        newTopic = action.newTopic,
-                        showSaveAction = shouldShowSaveAction(this)
-                )
+            is RoomSettingsAction.SetRoomTopic     -> {
+                setState { copy(newTopic = action.newTopic) }
+                setState { copy(showSaveAction = shouldShowSaveAction(this)) }
+            }
+            is RoomSettingsAction.SetRoomAvatar    -> {
+                setState { copy(newAvatar = action.image) }
+                setState { copy(showSaveAction = shouldShowSaveAction(this)) }
             }
             is RoomSettingsAction.Save             -> saveSettings()
         }
@@ -88,7 +89,8 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
     private fun shouldShowSaveAction(state: RoomSettingsViewState): Boolean {
         val summary = state.roomSummary.invoke()
         return summary?.displayName != state.newName ||
-                summary?.topic != state.newTopic
+                summary?.topic != state.newTopic ||
+                state.newAvatar != null
     }
 
     private fun saveSettings() = withState { state ->
@@ -105,12 +107,18 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
             operationList.add(room.rx().updateTopic(state.newTopic ?: ""))
         }
 
+        if (state.newAvatar != null) {
+            operationList.add(room.rx().updateAvatar(state.newAvatar.contentUri, state.newAvatar.displayName ?: UUID.randomUUID().toString()))
+        }
+
         Observable
                 .fromIterable(operationList)
                 .flatMapCompletable { it }
                 .subscribe(
                         {
                             postLoading(false)
+                            setState { copy(newAvatar = null) }
+                            setState { copy(showSaveAction = shouldShowSaveAction(this)) }
                             _viewEvents.post(RoomSettingsViewEvents.Success)
                         },
                         {
