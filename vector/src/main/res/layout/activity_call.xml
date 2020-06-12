@@ -11,8 +11,9 @@
     <org.webrtc.SurfaceViewRenderer
         android:id="@+id/fullscreen_video_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center" />
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <org.webrtc.SurfaceViewRenderer
         android:id="@+id/pip_video_view"
