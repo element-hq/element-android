@@ -49,7 +49,7 @@ class RoomMemberProfileActivity :
     @Inject
     lateinit var requireActiveMembershipViewModelFactory: RequireActiveMembershipViewModel.Factory
 
-    override fun create(initialState: RequireActiveMembershipViewState): RequireActiveMembershipViewModel { // Due to shortcut, we cannot use MvRx args. Pass the roomId here
+    override fun create(initialState: RequireActiveMembershipViewState): RequireActiveMembershipViewModel {
         return requireActiveMembershipViewModelFactory.create(initialState)
     }
 
