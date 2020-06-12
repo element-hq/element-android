@@ -944,4 +944,10 @@
     <string name="verify_cancel_self_verification_from_untrusted">Om du avbryter så kommer du inte kunna läsa krypterade meddelanden på den här enheten, och andra användare kommer inte att lita på den</string>
     <string name="verify_cancel_self_verification_from_trusted">Om du avbryter så kommer du inte kunna läsa krypterade meddelanden på din nya enhet, och andra användare kommer inte att lita på den</string>
     <string name="bootstrap_info_text">Säkra och lås upp krypterade meddelanden och pålitlighet med en %s.</string>
+    <string name="bootstrap_skip_text">Att sätta en återställningslösenfras låter dig säkra och låsa upp krypterade meddelanden och pålitlighet.
+\n
+\nOm du inte vill sätta ett meddelandelösenord, generera en meddelandenyckel istället.</string>
+    <string name="bootstrap_skip_text_no_gen_key">Att sätta en återställningslösenfras låter dig säkra och låsa upp krypterade meddelanden och pålitlighet.</string>
+
+
     </resources>
