@@ -21,17 +21,20 @@ enum class CallState {
     /** Idle, setting up objects */
     IDLE,
 
+
     /** Dialing.  Outgoing call is signaling the remote peer */
     DIALING,
+
+
+    /** Local ringing. Incoming call offer received */
+    LOCAL_RINGING,
 
     /** Answering.  Incoming call is responding to remote peer */
     ANSWERING,
 
-    /** Remote ringing. Outgoing call, ICE negotiation is complete */
-    REMOTE_RINGING,
+    /** Connecting. Incoming/Outgoing Offer and answer are known,  Currently checking and testing pairs of ice candidates */
+    CONNECTING,
 
-    /** Local ringing. Incoming call, ICE negotiation is complete */
-    LOCAL_RINGING,
 
     /** Connected. Incoming/Outgoing call, the call is connected */
     CONNECTED,

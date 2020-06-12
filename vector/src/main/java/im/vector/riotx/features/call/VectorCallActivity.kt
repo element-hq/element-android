@@ -91,17 +91,6 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
 
     private var rootEglBase: EglBase? = null
 
-//    var callHeadsUpService: CallHeadsUpService? = null
-//    private val serviceConnection = object : ServiceConnection {
-//        override fun onServiceDisconnected(name: ComponentName?) {
-//            finish()
-//        }
-//
-//        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-//            callHeadsUpService = (service as? CallHeadsUpService.CallHeadsUpServiceBinder)?.getService()
-//        }
-//    }
-
     override fun doBeforeSetContentView() {
         // Set window styles for fullscreen-window size. Needs to be done before adding content.
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -129,9 +118,6 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
 
 //        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 //        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-//        tryThis { unbindService(serviceConnection) }
-//        bindService(Intent(this, CallHeadsUpService::class.java), serviceConnection, 0)
 
         if (intent.hasExtra(MvRx.KEY_ARG)) {
             callArgs = intent.getParcelableExtra(MvRx.KEY_ARG)!!
@@ -184,8 +170,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         Timber.v("## VOIP renderState call $state")
         callControlsView.updateForState(state)
         when (state.callState.invoke()) {
-            CallState.IDLE           -> {
-            }
+            CallState.IDLE,
             CallState.DIALING        -> {
                 callVideoGroup.isInvisible = true
                 callInfoGroup.isVisible = true
@@ -196,35 +181,40 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                     callTypeText.setText(if (state.isVideoCall) R.string.action_video_call else R.string.action_voice_call)
                 }
             }
-            CallState.ANSWERING      -> {
-                callInfoGroup.isVisible = true
-                callStatusText.setText(R.string.call_connecting)
-                state.otherUserMatrixItem.invoke()?.let {
-                    avatarRenderer.render(it, otherMemberAvatar)
-                }
-//                fullscreenRenderer.isVisible = true
-//                pipRenderer.isVisible = true
-            }
-            CallState.REMOTE_RINGING -> {
-                callVideoGroup.isInvisible = true
-                callInfoGroup.isVisible = true
-                callStatusText.setText(
-                        if (state.isVideoCall) R.string.incoming_video_call else R.string.incoming_voice_call
-                )
-            }
+
             CallState.LOCAL_RINGING  -> {
                 callVideoGroup.isInvisible = true
                 callInfoGroup.isVisible = true
+                callStatusText.text = null
                 state.otherUserMatrixItem.invoke()?.let {
                     avatarRenderer.render(it, otherMemberAvatar)
                     participantNameText.text = it.getBestName()
                     callTypeText.setText(if (state.isVideoCall) R.string.action_video_call else R.string.action_voice_call)
                 }
             }
+
+            CallState.ANSWERING      -> {
+                callVideoGroup.isInvisible = true
+                callInfoGroup.isVisible = true
+                callStatusText.setText(R.string.call_connecting)
+                state.otherUserMatrixItem.invoke()?.let {
+                    avatarRenderer.render(it, otherMemberAvatar)
+                }
+            }
+            CallState.CONNECTING -> {
+                callVideoGroup.isInvisible = true
+                callInfoGroup.isVisible = true
+                callStatusText.setText(R.string.call_connecting)
+            }
             CallState.CONNECTED      -> {
-                // TODO only if is video call
-                callVideoGroup.isVisible = true
-                callInfoGroup.isVisible = false
+                if (callArgs.isVideoCall) {
+                    callVideoGroup.isVisible = true
+                    callInfoGroup.isVisible = false
+                } else {
+                    callVideoGroup.isInvisible = true
+                    callInfoGroup.isVisible = true
+                    callStatusText.text = null
+                }
             }
             CallState.TERMINATED     -> {
                 finish()
@@ -279,20 +269,20 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         return false
     }
 
-    override fun onDestroy() {
+    override fun onPause() {
         peerConnectionManager.detachRenderers()
-//        tryThis { unbindService(serviceConnection) }
-        super.onDestroy()
+        super.onPause()
     }
 
     private fun handleViewEvents(event: VectorCallViewEvents?) {
-        when (event) {
-            is VectorCallViewEvents.CallAnswered -> {
-            }
-            is VectorCallViewEvents.CallHangup   -> {
-                finish()
-            }
-        }
+        Timber.v("handleViewEvents $event")
+//        when (event) {
+//            is VectorCallViewEvents.CallAnswered -> {
+//            }
+//            is VectorCallViewEvents.CallHangup   -> {
+//                finish()
+//            }
+//        }
     }
 
     companion object {

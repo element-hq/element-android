@@ -74,15 +74,16 @@ internal class MxCallImpl(
 
     init {
         if (isOutgoing) {
-            state = CallState.DIALING
+            state = CallState.IDLE
         } else {
+            // because it's created on reception of an offer
             state = CallState.LOCAL_RINGING
         }
     }
 
     override fun offerSdp(sdp: SessionDescription) {
         if (!isOutgoing) return
-        state = CallState.REMOTE_RINGING
+        state = CallState.DIALING
         CallInviteContent(
                 callId = callId,
                 lifetime = DefaultCallSignalingService.CALL_TIMEOUT_MS,
@@ -108,6 +109,7 @@ internal class MxCallImpl(
     }
 
     override fun sendLocalIceCandidateRemovals(candidates: List<IceCandidate>) {
+        // For now we don't support this flow
     }
 
     override fun hangUp() {

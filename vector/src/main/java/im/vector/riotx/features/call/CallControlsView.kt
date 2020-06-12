@@ -35,16 +35,15 @@ class CallControlsView @JvmOverloads constructor(
 
     var interactionListener: InteractionListener? = null
 
-    @BindView(R.id.incomingRingingControls)
-    lateinit var incomingRingingControls: ViewGroup
-//    @BindView(R.id.iv_icr_accept_call)
-//    lateinit var incomingRingingControlAccept: ImageView
-//    @BindView(R.id.iv_icr_end_call)
-//    lateinit var incomingRingingControlDecline: ImageView
+    @BindView(R.id.ringingControls)
+    lateinit var ringingControls: ViewGroup
+    @BindView(R.id.iv_icr_accept_call)
+    lateinit var ringingControlAccept: ImageView
+    @BindView(R.id.iv_icr_end_call)
+    lateinit var ringingControlDecline: ImageView
 
     @BindView(R.id.connectedControls)
     lateinit var connectedControls: ViewGroup
-
 
     @BindView(R.id.iv_mute_toggle)
     lateinit var muteIcon: ImageView
@@ -89,31 +88,31 @@ class CallControlsView @JvmOverloads constructor(
         videoToggleIcon.setImageResource(if (state.isVideoEnabled) R.drawable.ic_video else R.drawable.ic_video_off)
 
         when (callState) {
-            CallState.DIALING        -> {
-            }
-            CallState.ANSWERING      -> {
-                incomingRingingControls.isVisible = false
+            CallState.IDLE,
+            CallState.DIALING,
+            CallState.CONNECTING,
+            CallState.ANSWERING     -> {
+                ringingControls.isVisible = true
+                ringingControlAccept.isVisible = false
+                ringingControlDecline.isVisible = true
                 connectedControls.isVisible = false
             }
-            CallState.REMOTE_RINGING -> {
-            }
-            CallState.LOCAL_RINGING  -> {
-                incomingRingingControls.isVisible = true
+            CallState.LOCAL_RINGING -> {
+                ringingControls.isVisible = true
+                ringingControlAccept.isVisible = true
+                ringingControlDecline.isVisible = true
                 connectedControls.isVisible = false
             }
-            CallState.CONNECTED      -> {
-                incomingRingingControls.isVisible = false
+            CallState.CONNECTED     -> {
+                ringingControls.isVisible = false
                 connectedControls.isVisible = true
             }
             CallState.TERMINATED,
-            CallState.IDLE,
-            null                     -> {
-                incomingRingingControls.isVisible = false
+            null                    -> {
+                ringingControls.isVisible = false
                 connectedControls.isVisible = false
             }
         }
-
-
     }
 
     interface InteractionListener {

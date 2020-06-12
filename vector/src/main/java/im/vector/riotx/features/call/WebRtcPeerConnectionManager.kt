@@ -211,7 +211,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 currentCall?.mxCall?.offerSdp(p0)
             }
         }, constraints)
-
     }
 
     private fun getTurnServer(callback: ((TurnServer?) -> Unit)) {
@@ -374,7 +373,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
         // If remote track exists, then sink it to surface
         remoteSurfaceRenderer?.get()?.let { participantSurface ->
             currentCall?.remoteVideoTrack?.let {
-                it.setEnabled(true)
                 it.addSink(participantSurface)
             }
         }
@@ -551,17 +549,47 @@ class WebRtcPeerConnectionManager @Inject constructor(
         override fun onConnectionChange(newState: PeerConnection.PeerConnectionState?) {
             Timber.v("## VOIP StreamObserver onConnectionChange: $newState")
             when (newState) {
-                PeerConnection.PeerConnectionState.CONNECTED -> {
+                /**
+                 * Every ICE transport used by the connection is either in use (state "connected" or "completed")
+                 * or is closed (state "closed"); in addition, at least one transport is either "connected" or "completed"
+                 */
+                PeerConnection.PeerConnectionState.CONNECTED    -> {
                     callContext.mxCall.state = CallState.CONNECTED
                 }
-                PeerConnection.PeerConnectionState.FAILED    -> {
+                /**
+                 * One or more of the ICE transports on the connection is in the "failed" state.
+                 */
+                PeerConnection.PeerConnectionState.FAILED       -> {
                     endCall()
                 }
+                /**
+                 * At least one of the connection's ICE transports (RTCIceTransports or RTCDtlsTransports) are in the "new" state,
+                 * and none of them are in one of the following states: "connecting", "checking", "failed", or "disconnected",
+                 * or all of the connection's transports are in the "closed" state.
+                 */
                 PeerConnection.PeerConnectionState.NEW,
-                PeerConnection.PeerConnectionState.CONNECTING,
-                PeerConnection.PeerConnectionState.DISCONNECTED,
+
+                /**
+                 * One or more of the ICE transports are currently in the process of establishing a connection;
+                 * that is, their RTCIceConnectionState is either "checking" or "connected", and no transports are in the "failed" state
+                 */
+                PeerConnection.PeerConnectionState.CONNECTING   -> {
+                    callContext.mxCall.state = CallState.CONNECTING
+                }
+                /**
+                 * The RTCPeerConnection is closed.
+                 * This value was in the RTCSignalingState enum (and therefore found by reading the value of the signalingState)
+                 * property until the May 13, 2016 draft of the specification.
+                 */
                 PeerConnection.PeerConnectionState.CLOSED,
-                null                                         -> {
+                    /**
+                     * 	At least one of the ICE transports for the connection is in the "disconnected" state and none of the other transports are in the state "failed",
+                     * 	"connecting", or "checking".
+                     */
+                PeerConnection.PeerConnectionState.DISCONNECTED -> {
+
+                }
+                null                                            -> {
                 }
             }
         }
@@ -580,14 +608,60 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
 
         override fun onIceConnectionChange(newState: PeerConnection.IceConnectionState) {
+            Timber.v("## VOIP StreamObserver onIceConnectionChange IceConnectionState:$newState")
             when (newState) {
-                PeerConnection.IceConnectionState.CONNECTED    -> Timber.v("## VOIP StreamObserver onIceConnectionChange.CONNECTED")
-                PeerConnection.IceConnectionState.DISCONNECTED -> {
-                    Timber.v("## VOIP StreamObserver onIceConnectionChange.DISCONNECTED")
-                    endCall()
+
+                /**
+                 * the ICE agent is gathering addresses or is waiting to be given remote candidates through
+                 * calls to RTCPeerConnection.addIceCandidate() (or both).
+                 */
+                PeerConnection.IceConnectionState.NEW          -> {
+
                 }
-                PeerConnection.IceConnectionState.FAILED       -> Timber.v("## VOIP StreamObserver onIceConnectionChange.FAILED")
-                else                                           -> Timber.v("## VOIP StreamObserver onIceConnectionChange.$newState")
+                /**
+                 * The ICE agent has been given one or more remote candidates and is checking pairs of local and remote candidates
+                 * against one another to try to find a compatible match, but has not yet found a pair which will allow
+                 * the peer connection to be made. It's possible that gathering of candidates is also still underway.
+                 */
+                PeerConnection.IceConnectionState.CHECKING     -> {
+
+                }
+
+                /**
+                 * A usable pairing of local and remote candidates has been found for all components of the connection,
+                 * and the connection has been established.
+                 * It's possible that gathering is still underway, and it's also possible that the ICE agent is still checking
+                 * candidates against one another looking for a better connection to use.
+                 */
+                PeerConnection.IceConnectionState.CONNECTED    -> {
+
+                }
+                /**
+                 * Checks to ensure that components are still connected failed for at least one component of the RTCPeerConnection.
+                 * This is a less stringent test than "failed" and may trigger intermittently and resolve just as spontaneously on less reliable networks,
+                 * or during temporary disconnections. When the problem resolves, the connection may return to the "connected" state.
+                 */
+                PeerConnection.IceConnectionState.DISCONNECTED -> {
+                }
+                /**
+                 * The ICE candidate has checked all candidates pairs against one another and has failed to find compatible matches for all components of the connection.
+                 * It is, however, possible that the ICE agent did find compatible connections for some components.
+                 */
+                PeerConnection.IceConnectionState.FAILED       -> {
+                    callContext.mxCall.hangUp()
+                }
+                /**
+                 *  The ICE agent has finished gathering candidates, has checked all pairs against one another, and has found a connection for all components.
+                 */
+                PeerConnection.IceConnectionState.COMPLETED    -> {
+
+                }
+                /**
+                 * The ICE agent for this RTCPeerConnection has shut down and is no longer handling requests.
+                 */
+                PeerConnection.IceConnectionState.CLOSED       -> {
+
+                }
             }
         }
 
@@ -595,7 +669,12 @@ class WebRtcPeerConnectionManager @Inject constructor(
             Timber.v("## VOIP StreamObserver onAddStream: $stream")
             executor.execute {
                 // reportError("Weird-looking stream: " + stream);
-                if (stream.audioTracks.size > 1 || stream.videoTracks.size > 1) return@execute
+                if (stream.audioTracks.size > 1 || stream.videoTracks.size > 1) {
+                    Timber.e("## VOIP StreamObserver weird looking stream: $stream")
+                    //TODO maybe do something more??
+                    callContext.mxCall.hangUp()
+                    return@execute
+                }
 
                 if (stream.videoTracks.size == 1) {
                     val remoteVideoTrack = stream.videoTracks.first()

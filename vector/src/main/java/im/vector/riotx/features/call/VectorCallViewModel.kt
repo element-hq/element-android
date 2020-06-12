@@ -57,9 +57,9 @@ sealed class VectorCallViewActions : VectorViewModelAction {
 
 sealed class VectorCallViewEvents : VectorViewEvents {
 
-    data class CallAnswered(val content: CallAnswerContent) : VectorCallViewEvents()
-    data class CallHangup(val content: CallHangupContent) : VectorCallViewEvents()
-    object CallAccepted : VectorCallViewEvents()
+//    data class CallAnswered(val content: CallAnswerContent) : VectorCallViewEvents()
+//    data class CallHangup(val content: CallHangupContent) : VectorCallViewEvents()
+//    object CallAccepted : VectorCallViewEvents()
 }
 
 class VectorCallViewModel @AssistedInject constructor(
