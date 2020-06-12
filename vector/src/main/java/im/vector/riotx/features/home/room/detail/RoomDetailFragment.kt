@@ -295,7 +295,7 @@ class RoomDetailFragment @Inject constructor(
         sharedCallActionViewModel
                 .activeCall
                 .observe(viewLifecycleOwner, Observer {
-                    //TODO delay a bit if it's a new call to let call activity launch before ..
+                    // TODO delay a bit if it's a new call to let call activity launch before ..
                     activeCallView.isVisible = it != null
                 })
 

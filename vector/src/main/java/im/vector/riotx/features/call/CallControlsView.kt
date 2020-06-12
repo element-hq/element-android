@@ -89,7 +89,6 @@ class CallControlsView @JvmOverloads constructor(
         interactionListener?.returnToChat()
     }
 
-
     fun updateForState(state: VectorCallViewState) {
         val callState = state.callState.invoke()
         muteIcon.setImageResource(if (state.isAudioMuted) R.drawable.ic_microphone_off else R.drawable.ic_microphone_on)

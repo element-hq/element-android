@@ -607,7 +607,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
                      * 	"connecting", or "checking".
                      */
                 PeerConnection.PeerConnectionState.DISCONNECTED -> {
-
                 }
                 null                                            -> {
                 }
@@ -630,13 +629,11 @@ class WebRtcPeerConnectionManager @Inject constructor(
         override fun onIceConnectionChange(newState: PeerConnection.IceConnectionState) {
             Timber.v("## VOIP StreamObserver onIceConnectionChange IceConnectionState:$newState")
             when (newState) {
-
                 /**
                  * the ICE agent is gathering addresses or is waiting to be given remote candidates through
                  * calls to RTCPeerConnection.addIceCandidate() (or both).
                  */
                 PeerConnection.IceConnectionState.NEW          -> {
-
                 }
                 /**
                  * The ICE agent has been given one or more remote candidates and is checking pairs of local and remote candidates
@@ -644,7 +641,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
                  * the peer connection to be made. It's possible that gathering of candidates is also still underway.
                  */
                 PeerConnection.IceConnectionState.CHECKING     -> {
-
                 }
 
                 /**
@@ -654,7 +650,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
                  * candidates against one another looking for a better connection to use.
                  */
                 PeerConnection.IceConnectionState.CONNECTED    -> {
-
                 }
                 /**
                  * Checks to ensure that components are still connected failed for at least one component of the RTCPeerConnection.
@@ -674,13 +669,11 @@ class WebRtcPeerConnectionManager @Inject constructor(
                  *  The ICE agent has finished gathering candidates, has checked all pairs against one another, and has found a connection for all components.
                  */
                 PeerConnection.IceConnectionState.COMPLETED    -> {
-
                 }
                 /**
                  * The ICE agent for this RTCPeerConnection has shut down and is no longer handling requests.
                  */
                 PeerConnection.IceConnectionState.CLOSED       -> {
-
                 }
             }
         }
@@ -691,7 +684,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 // reportError("Weird-looking stream: " + stream);
                 if (stream.audioTracks.size > 1 || stream.videoTracks.size > 1) {
                     Timber.e("## VOIP StreamObserver weird looking stream: $stream")
-                    //TODO maybe do something more??
+                    // TODO maybe do something more??
                     callContext.mxCall.hangUp()
                     return@execute
                 }

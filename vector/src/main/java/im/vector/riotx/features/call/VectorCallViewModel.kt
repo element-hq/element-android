@@ -28,8 +28,6 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.call.CallState
 import im.vector.matrix.android.api.session.call.MxCall
-import im.vector.matrix.android.api.session.room.model.call.CallAnswerContent
-import im.vector.matrix.android.api.session.room.model.call.CallHangupContent
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.core.extensions.exhaustive
@@ -103,7 +101,6 @@ class VectorCallViewModel @AssistedInject constructor(
                 }
             }
         }
-
     }
 
     override fun onCleared() {
@@ -138,7 +135,7 @@ class VectorCallViewModel @AssistedInject constructor(
             }
             VectorCallViewActions.ToggleVideo -> {
                 withState {
-                    if(it.isVideoCall) {
+                    if (it.isVideoCall) {
                         val videoEnabled = it.isVideoEnabled
                         webRtcPeerConnectionManager.enableVideo(!videoEnabled)
                         setState {
