@@ -19,6 +19,7 @@ package im.vector.riotx.features.home.room.detail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -31,6 +32,7 @@ import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
 import im.vector.riotx.features.home.room.breadcrumbs.BreadcrumbsFragment
 import im.vector.riotx.features.room.RequireActiveMembershipAction
+import im.vector.riotx.features.room.RequireActiveMembershipViewEvents
 import im.vector.riotx.features.room.RequireActiveMembershipViewModel
 import im.vector.riotx.features.room.RequireActiveMembershipViewState
 import kotlinx.android.synthetic.main.activity_room_detail.*
@@ -91,9 +93,19 @@ class RoomDetailActivity :
                 }
                 .disposeOnDestroy()
 
-        requireActiveMembershipViewModel.observeViewEvents { finish() }
-
+        requireActiveMembershipViewModel.observeViewEvents {
+            when (it) {
+                is RequireActiveMembershipViewEvents.RoomLeft -> handleRoomLeft(it)
+            }
+        }
         drawerLayout.addDrawerListener(drawerListener)
+    }
+
+    private fun handleRoomLeft(roomLeft: RequireActiveMembershipViewEvents.RoomLeft) {
+        if (roomLeft.leftMessage != null) {
+            Toast.makeText(this, roomLeft.leftMessage, Toast.LENGTH_LONG).show()
+        }
+        finish()
     }
 
     private fun switchToRoom(switchToRoom: RoomDetailSharedAction.SwitchToRoom) {

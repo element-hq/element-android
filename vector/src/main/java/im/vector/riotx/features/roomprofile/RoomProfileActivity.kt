@@ -19,6 +19,7 @@ package im.vector.riotx.features.roomprofile
 
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
@@ -28,6 +29,7 @@ import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.extensions.addFragmentToBackstack
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.features.room.RequireActiveMembershipViewEvents
 import im.vector.riotx.features.room.RequireActiveMembershipViewModel
 import im.vector.riotx.features.room.RequireActiveMembershipViewState
 import im.vector.riotx.features.roomprofile.members.RoomMemberListFragment
@@ -86,7 +88,18 @@ class RoomProfileActivity :
                 }
                 .disposeOnDestroy()
 
-        requireActiveMembershipViewModel.observeViewEvents { finish() }
+        requireActiveMembershipViewModel.observeViewEvents {
+            when (it) {
+                is RequireActiveMembershipViewEvents.RoomLeft -> handleRoomLeft(it)
+            }
+        }
+    }
+
+    private fun handleRoomLeft(roomLeft: RequireActiveMembershipViewEvents.RoomLeft) {
+        if (roomLeft.leftMessage != null) {
+            Toast.makeText(this, roomLeft.leftMessage, Toast.LENGTH_LONG).show()
+        }
+        finish()
     }
 
     private fun openRoomUploads() {

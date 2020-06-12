@@ -20,21 +20,31 @@ import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
+import com.jakewharton.rxrelay2.BehaviorRelay
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.events.model.EventType
+import im.vector.matrix.android.api.session.room.Room
+import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.model.RoomSummary
+import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
+import im.vector.riotx.R
 import im.vector.riotx.core.extensions.exhaustive
 import im.vector.riotx.core.platform.VectorViewModel
-import io.reactivex.disposables.Disposable
-import timber.log.Timber
+import im.vector.riotx.core.resources.StringProvider
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 
 /**
  * This ViewModel observe a room summary and notify when the room is left
  */
 class RequireActiveMembershipViewModel @AssistedInject constructor(
         @Assisted initialState: RequireActiveMembershipViewState,
+        private val stringProvider: StringProvider,
         private val session: Session)
     : VectorViewModel<RequireActiveMembershipViewState, RequireActiveMembershipAction, RequireActiveMembershipViewEvents>(initialState) {
 
@@ -55,32 +65,60 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
         }
     }
 
-    private var currentDisposable: Disposable? = null
+    private val roomIdObservable = BehaviorRelay.createDefault(Optional.from(initialState.roomId))
 
     init {
-        observeRoomSummary(initialState.roomId)
+        observeRoomSummary()
     }
 
-    private fun observeRoomSummary(roomId: String?) {
-        currentDisposable?.dispose()
-
-        currentDisposable = roomId
-                ?.let { session.getRoom(it) }
-                ?.let { room ->
-                    room.rx().liveRoomSummary()
+    private fun observeRoomSummary() {
+        roomIdObservable
+                .unwrap()
+                .switchMap { roomId ->
+                    val room = session.getRoom(roomId) ?: return@switchMap Observable.just(Optional.empty<RequireActiveMembershipViewEvents.RoomLeft>())
+                    room.rx()
+                            .liveRoomSummary()
                             .unwrap()
-                            .subscribe {
-                                if (it.membership.isLeft()) {
-                                    Timber.w("The room has been left")
-                                    _viewEvents.post(RequireActiveMembershipViewEvents.RoomLeft)
-                                }
-                            }
+                            .observeOn(Schedulers.computation())
+                            .map { mapToLeftViewEvent(room, it) }
                 }
+                .unwrap()
+                .subscribe { event ->
+                    _viewEvents.post(event)
+                }
+                .disposeOnClear()
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        currentDisposable?.dispose()
+    private fun mapToLeftViewEvent(room: Room, roomSummary: RoomSummary): Optional<RequireActiveMembershipViewEvents.RoomLeft> {
+        if (roomSummary.membership.isActive()) {
+            return Optional.empty()
+        }
+        val senderId = room.getStateEvent(EventType.STATE_ROOM_MEMBER, QueryStringValue.Equals(session.myUserId))?.senderId
+        val senderDisplayName = senderId?.takeIf { it != session.myUserId }?.let {
+            room.getRoomMember(it)?.displayName ?: it
+        }
+        val viewEvent = when (roomSummary.membership) {
+            Membership.LEAVE -> {
+                val message = senderDisplayName?.let {
+                    stringProvider.getString(R.string.has_been_kicked, roomSummary.displayName, it)
+                }
+                RequireActiveMembershipViewEvents.RoomLeft(message)
+            }
+            Membership.KNOCK -> {
+                val message = senderDisplayName?.let {
+                    stringProvider.getString(R.string.has_been_kicked, roomSummary.displayName, it)
+                }
+                RequireActiveMembershipViewEvents.RoomLeft(message)
+            }
+            Membership.BAN   -> {
+                val message = senderDisplayName?.let {
+                    stringProvider.getString(R.string.has_been_banned, roomSummary.displayName, it)
+                }
+                RequireActiveMembershipViewEvents.RoomLeft(message)
+            }
+            else             -> null
+        }
+        return Optional.from(viewEvent)
     }
 
     override fun handle(action: RequireActiveMembershipAction) {
@@ -89,7 +127,7 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
                 setState {
                     copy(roomId = action.roomId)
                 }
-                observeRoomSummary(action.roomId)
+                roomIdObservable.accept(Optional.from(action.roomId))
             }
         }.exhaustive
     }

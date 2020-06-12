@@ -19,5 +19,5 @@ package im.vector.riotx.features.room
 import im.vector.riotx.core.platform.VectorViewEvents
 
 sealed class RequireActiveMembershipViewEvents : VectorViewEvents {
-    object RoomLeft : RequireActiveMembershipViewEvents()
+    data class RoomLeft(val leftMessage: String?) : RequireActiveMembershipViewEvents()
 }
