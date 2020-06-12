@@ -326,7 +326,8 @@ class NotificationUtils @Inject constructor(private val context: Context,
         builder.addAction(
                 NotificationCompat.Action(
                         R.drawable.ic_call,
-                        // IconCompat.createWithResource(applicationContext, R.drawable.ic_call).setTint(ContextCompat.getColor(applicationContext, R.color.riotx_positive_accent)),
+                        // IconCompat.createWithResource(applicationContext, R.drawable.ic_call)
+                        // .setTint(ContextCompat.getColor(applicationContext, R.color.riotx_positive_accent)),
                         context.getString(R.string.call_notification_answer),
                         answerCallPendingIntent
                 )

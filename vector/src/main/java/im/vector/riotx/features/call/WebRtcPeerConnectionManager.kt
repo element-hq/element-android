@@ -601,11 +601,13 @@ class WebRtcPeerConnectionManager @Inject constructor(
                  * This value was in the RTCSignalingState enum (and therefore found by reading the value of the signalingState)
                  * property until the May 13, 2016 draft of the specification.
                  */
-                PeerConnection.PeerConnectionState.CLOSED,
-                    /**
-                     * 	At least one of the ICE transports for the connection is in the "disconnected" state and none of the other transports are in the state "failed",
-                     * 	"connecting", or "checking".
-                     */
+                PeerConnection.PeerConnectionState.CLOSED       -> {
+
+                }
+                /**
+                 * At least one of the ICE transports for the connection is in the "disconnected" state and none of
+                 * the other transports are in the state "failed", "connecting", or "checking".
+                 */
                 PeerConnection.PeerConnectionState.DISCONNECTED -> {
                 }
                 null                                            -> {
@@ -659,7 +661,8 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 PeerConnection.IceConnectionState.DISCONNECTED -> {
                 }
                 /**
-                 * The ICE candidate has checked all candidates pairs against one another and has failed to find compatible matches for all components of the connection.
+                 * The ICE candidate has checked all candidates pairs against one another and has failed to find
+                 * compatible matches for all components of the connection.
                  * It is, however, possible that the ICE agent did find compatible connections for some components.
                  */
                 PeerConnection.IceConnectionState.FAILED       -> {
