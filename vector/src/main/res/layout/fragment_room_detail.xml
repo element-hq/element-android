@@ -98,6 +98,8 @@
         app:layout_constraintTop_toBottomOf="@id/roomToolbar" />
 
     <im.vector.riotx.core.ui.views.ActiveCallView
+        android:visibility="gone"
+        tools:visibility="visible"
         android:id="@+id/activeCallView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -121,7 +123,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/syncStateView">
+        app:layout_constraintTop_toBottomOf="@id/activeCallView">
 
         <im.vector.riotx.features.home.room.detail.widget.RoomWidgetsBannerView
             android:id="@+id/roomWidgetsBannerView"
