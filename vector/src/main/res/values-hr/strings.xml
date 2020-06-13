@@ -1436,11 +1436,11 @@
     <string name="keys_backup_setup_step1_advanced">(Napredno)</string>
     <string name="keys_backup_setup_step1_manual_export">Ručno izvezi ključeve</string>
 
-    <string name="keys_backup_setup_step2_text_title">Zaštitite svoju sigurnosnu kopiju fraza-lozinkom.</string>
+    <string name="keys_backup_setup_step2_text_title">Zaštitite svoju sigurnosnu kopiju rečeničnom lozinkom.</string>
     <string name="keys_backup_setup_step2_text_description">Šifriran primjerak Vaših ključeva bit će spremljen na Vašem poslužitelju. Zaštitite Vašu sigurnosnu kopiju fraza-lozinkom.
 \n
 \nZa najveću sigurnost ona bi trebala biti drugačija od Vaše lozinke za račun.</string>
-    <string name="keys_backup_setup_step2_button_title">Postavi fraza-lozinku</string>
+    <string name="keys_backup_setup_step2_button_title">Postavi rečeničnu lozinku</string>
     <string name="keys_backup_setup_creating_backup">Izrada sigurnosne kopije</string>
     <string name="keys_backup_setup_step1_recovery_key_alternative">Alternativno, zaštitite Vašu sigurnosnu kopiju ključem za obnovu i pohranite ga na sigurno.</string>
     <string name="event_redacted">Poruka je izbrisana</string>
