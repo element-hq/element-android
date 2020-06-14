@@ -17,6 +17,10 @@
 package im.vector.riotx.features.roomprofile.settings
 
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.toModel
+import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibility
+import im.vector.matrix.android.api.session.room.model.RoomHistoryVisibilityContent
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.profiles.buildProfileAction
@@ -39,6 +43,7 @@ class RoomSettingsController @Inject constructor(
         fun onNameChanged(name: String)
         fun onTopicChanged(topic: String)
         fun onPhotoClicked()
+        fun onHistoryVisibilityClicked()
     }
 
     private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
@@ -51,6 +56,8 @@ class RoomSettingsController @Inject constructor(
 
     override fun buildModels(data: RoomSettingsViewState?) {
         val roomSummary = data?.roomSummary?.invoke() ?: return
+
+        val historyVisibility = data.historyVisibilityEvent?.let { formatRoomHistoryVisibilityEvent(it) } ?: ""
 
         buildProfileSection(
                 stringProvider.getString(R.string.settings)
@@ -77,6 +84,16 @@ class RoomSettingsController @Inject constructor(
                 callback?.onTopicChanged(text)
             }
         }
+
+        buildProfileAction(
+                id = "historyReadability",
+                title = stringProvider.getString(R.string.room_settings_room_read_history_rules_pref_title),
+                subtitle = historyVisibility.toString(),
+                dividerColor = dividerColor,
+                divider = false,
+                editable = true,
+                action = { callback?.onHistoryVisibilityClicked() }
+        )
 
         buildProfileAction(
                 id = "photo",
@@ -109,5 +126,17 @@ class RoomSettingsController @Inject constructor(
                     action = { callback?.onEnableEncryptionClicked() }
             )
         }
+    }
+
+    private fun formatRoomHistoryVisibilityEvent(event: Event): String? {
+        val historyVisibility = event.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility ?: return null
+
+        val formattedVisibility = when (historyVisibility) {
+            RoomHistoryVisibility.SHARED         -> stringProvider.getString(R.string.notice_room_visibility_shared)
+            RoomHistoryVisibility.INVITED        -> stringProvider.getString(R.string.notice_room_visibility_invited)
+            RoomHistoryVisibility.JOINED         -> stringProvider.getString(R.string.notice_room_visibility_joined)
+            RoomHistoryVisibility.WORLD_READABLE -> stringProvider.getString(R.string.notice_room_visibility_world_readable)
+        }
+        return formattedVisibility
     }
 }

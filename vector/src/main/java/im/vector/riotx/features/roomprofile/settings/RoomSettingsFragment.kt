@@ -152,4 +152,8 @@ class RoomSettingsFragment @Inject constructor(
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
+
+    override fun onHistoryVisibilityClicked() {
+        
+    }
 }

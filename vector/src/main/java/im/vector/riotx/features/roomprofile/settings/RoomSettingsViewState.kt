@@ -19,12 +19,14 @@ package im.vector.riotx.features.roomprofile.settings
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.riotx.features.roomprofile.RoomProfileArgs
 import im.vector.riotx.multipicker.entity.MultiPickerImageType
 
 data class RoomSettingsViewState(
         val roomId: String,
+        val historyVisibilityEvent: Event? = null,
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val isLoading: Boolean = false,
         val newName: String? = null,
