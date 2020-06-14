@@ -23,6 +23,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.rx.rx
 import im.vector.matrix.rx.unwrap
 import im.vector.riotx.core.platform.VectorViewModel
@@ -60,6 +61,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                 .execute { async ->
                     val roomSummary = async.invoke()
                     copy(
+                            historyVisibilityEvent = room.getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY),
                             roomSummary = async,
                             newName = roomSummary?.displayName,
                             newTopic = roomSummary?.topic
