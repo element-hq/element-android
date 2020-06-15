@@ -586,9 +586,6 @@
 
     <string name="encryption_enabled_tile_description">Meddelanden i det här rummet är totalsträckskrypterade. Lär dig mer och verifiera användare i deras profiler.</string>
     <string name="room_participants_action_unignore">Visa alla meddelanden från den här användaren</string>
-    <string name="room_participants_action_unignore_prompt">Visa alla meddelanden från den här användaren\?
-\n
-\nObservera att den har handlingen kommer att starta om appen, och det kan ta lite tid.</string>
     <string name="room_participants_invite_prompt_msg">Är du säker på att du vill bjuda in %s till den här chatten\?</string>
     <string name="people_search_invite_by_id"><u>Bjud in med ID</u></string>
     <string name="people_search_invite_by_id_dialog_title">Bjud in användare med ID</string>

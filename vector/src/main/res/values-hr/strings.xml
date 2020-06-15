@@ -1386,8 +1386,6 @@
 
     <string name="widget_no_power_to_manage">Potrebna Vam je dozvola za upravljanje grafičkim elementima u ovoj sobi</string>
     <string name="widget_creation_failure">Stvaranje grafičkog elementa nije uspjelo</string>
-    <string name="event_formatter_widget_added">%2$s je dodao/la %1$s</string>
-    <string name="event_formatter_widget_removed">%2$s je uklonio/la %1$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Uspostavljanje konferencijskih poziva kroz Jitsi</string>
     <string name="widget_delete_message_confirmation">Jeste li sigurni da želite ukloniti grafički element iz ove sobe\?</string>
     <plurals name="active_widgets">
@@ -1621,7 +1619,7 @@
 
     <string name="alpha_disclaimer_title">Dobrodošli u radnu inačicu!</string>
     <string name="alpha_disclaimer_content_line_1">Obzirom da je RiotX u fazi ranog razvoja, neke značajke mogu nedostajati i moguće su greške u aplikaciji.</string>
-    <string name="alpha_disclaimer_content_line_2_gplay">Najnoviji popis značajki se uvijek nalazi na %1%s. Ako nađete greške u aplikaciji, budite ljubazni pa pošaljite izvještaj pomoću izbornika u gornje-lijevom kutu Početne stranice. Razvijatelji će ispraviti greške čim prije.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay">Najnoviji popis značajki se uvijek nalazi na %1$s. Ako nađete greške u aplikaciji, budite ljubazni pa pošaljite izvještaj pomoću izbornika u gornje-lijevom kutu Početne stranice. Razvijatelji će ispraviti greške čim prije.</string>
     <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Opis za trgovinu Play</string>
     <string name="alpha_disclaimer_content_line_2_fdroid">Ako nađete greške u aplikaciji, budite ljubazni pa pošaljite izvještaj pomoću izbornika u gornje-lijevom kutu Početne stranice. Razvijatelji će ispraviti greške čim prije.</string>
 

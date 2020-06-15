@@ -719,10 +719,6 @@
     <string name="room_participants_action_unignore">نمایش همه پیام‌ها از این کاربر</string>
     <string name="room_participants_action_mention">اشاره</string>
     <string name="room_participants_action_devices_list">نمایش فهرست نشست</string>
-    <plurals name="room_participants_kick_prompt_msg">
-	<item quantity="one">آیا مطئنید می‌خواهید این کاربر را از این گفتگو اخراج کنید؟</item>
-	<item quantity="other">آیا مطئنید می‌خواهید این کاربران را از این گفتگو اخراج کنید؟</item>
-</plurals>
     <string name="room_participants_ban_prompt_msg">آیا مطئنید می‌خواهید این کاربر را از این گفتگو مسدود کنید؟</string>
     <string name="reason_hint">دلیل</string>
 
