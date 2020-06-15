@@ -24,6 +24,7 @@ import dagger.Component
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.preference.UserAvatarPreference
 import im.vector.riotx.features.MainActivity
+import im.vector.riotx.features.call.CallControlsBottomSheet
 import im.vector.riotx.features.call.VectorCallActivity
 import im.vector.riotx.features.createdirect.CreateDirectRoomActivity
 import im.vector.riotx.features.crypto.keysbackup.settings.KeysBackupManageActivity
@@ -148,6 +149,7 @@ interface ScreenComponent {
     fun inject(bottomSheet: BootstrapBottomSheet)
     fun inject(bottomSheet: RoomWidgetPermissionBottomSheet)
     fun inject(bottomSheet: RoomWidgetsBottomSheet)
+    fun inject(callControlsBottomSheet: CallControlsBottomSheet)
 
     /* ==========================================================================================
      * Others

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?colorPrimary"
+    android:foreground="?attr/selectableItemBackground"
     tools:parentTag="android.widget.RelativeLayout">
 
     <TextView
@@ -31,6 +32,8 @@
         android:layout_alignBottom="@+id/activeCallInfo"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:clickable="false"
+        android:focusable="false"
         android:textColor="@color/white"
         android:gravity="center"
         android:textAllCaps="true"

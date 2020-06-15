@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/callControlsWrapper"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <im.vector.riotx.core.ui.views.BottomSheetActionButton
+        android:id="@+id/callControlsSoundDevice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:actionTitle="Select sound device"
+        tools:actionDescription="Speaker"
+        app:leftIcon="@drawable/ic_call_speaker_default"
+        app:tint="?attr/riotx_text_primary" />
+
+</LinearLayout>

@@ -127,6 +127,8 @@
 
         <im.vector.riotx.features.home.room.detail.widget.RoomWidgetsBannerView
             android:id="@+id/roomWidgetsBannerView"
+            android:visibility="gone"
+            tools:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

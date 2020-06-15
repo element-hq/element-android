@@ -26,6 +26,11 @@ class CallAudioManager(
         val applicationContext: Context
 ) {
 
+    enum class SoundDevice {
+        PHONE,
+        SPEAKER
+    }
+
     private val audioManager: AudioManager = applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
     private var savedIsSpeakerPhoneOn = false
@@ -69,6 +74,8 @@ class CallAudioManager(
         // TODO check if there are headsets?
         if (mxCall.isVideoCall) {
             setSpeakerphoneOn(true)
+        } else {
+            setSpeakerphoneOn(false)
         }
     }
 
@@ -82,6 +89,21 @@ class CallAudioManager(
 
         @Suppress("DEPRECATION")
         audioManager.abandonAudioFocus(audioFocusChangeListener)
+    }
+
+    fun getCurrentSoundDevice() : SoundDevice {
+        if (audioManager.isSpeakerphoneOn) {
+            return SoundDevice.SPEAKER
+        } else {
+            return SoundDevice.PHONE
+        }
+    }
+
+    fun setCurrentSoundDevice(device: SoundDevice)  {
+        when (device) {
+            SoundDevice.PHONE   -> setSpeakerphoneOn(false)
+            SoundDevice.SPEAKER -> setSpeakerphoneOn(true)
+        }
     }
 
     /** Sets the speaker phone mode.  */

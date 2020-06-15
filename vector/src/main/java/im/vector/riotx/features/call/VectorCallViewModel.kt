@@ -41,6 +41,7 @@ data class VectorCallViewState(
         val isVideoCall: Boolean,
         val isAudioMuted: Boolean = false,
         val isVideoEnabled: Boolean = true,
+        val soundDevice: CallAudioManager.SoundDevice = CallAudioManager.SoundDevice.PHONE,
         val otherUserMatrixItem: Async<MatrixItem> = Uninitialized,
         val callState: Async<CallState> = Uninitialized
 ) : MvRxState
@@ -51,6 +52,7 @@ sealed class VectorCallViewActions : VectorViewModelAction {
     object DeclineCall : VectorCallViewActions()
     object ToggleMute : VectorCallViewActions()
     object ToggleVideo : VectorCallViewActions()
+    data class ChangeAudioDevice(val device: CallAudioManager.SoundDevice) : VectorCallViewActions()
 }
 
 sealed class VectorCallViewEvents : VectorViewEvents {
@@ -86,6 +88,7 @@ class VectorCallViewModel @AssistedInject constructor(
         autoReplyIfNeeded = args.autoAccept
 
         initialState.callId?.let {
+
             session.callSignalingService().getCallWithId(it)?.let { mxCall ->
                 this.call = mxCall
                 mxCall.otherUserId
@@ -96,7 +99,8 @@ class VectorCallViewModel @AssistedInject constructor(
                     copy(
                             isVideoCall = mxCall.isVideoCall,
                             callState = Success(mxCall.state),
-                            otherUserMatrixItem = item?.let { Success(it) } ?: Uninitialized
+                            otherUserMatrixItem = item?.let { Success(it) } ?: Uninitialized,
+                            soundDevice = webRtcPeerConnectionManager.audioManager.getCurrentSoundDevice()
                     )
                 }
             }
@@ -111,20 +115,20 @@ class VectorCallViewModel @AssistedInject constructor(
 
     override fun handle(action: VectorCallViewActions) = withState {
         when (action) {
-            VectorCallViewActions.EndCall     -> webRtcPeerConnectionManager.endCall()
-            VectorCallViewActions.AcceptCall  -> {
+            VectorCallViewActions.EndCall              -> webRtcPeerConnectionManager.endCall()
+            VectorCallViewActions.AcceptCall           -> {
                 setState {
                     copy(callState = Loading())
                 }
                 webRtcPeerConnectionManager.acceptIncomingCall()
             }
-            VectorCallViewActions.DeclineCall -> {
+            VectorCallViewActions.DeclineCall          -> {
                 setState {
                     copy(callState = Loading())
                 }
                 webRtcPeerConnectionManager.endCall()
             }
-            VectorCallViewActions.ToggleMute  -> {
+            VectorCallViewActions.ToggleMute           -> {
                 withState {
                     val muted = it.isAudioMuted
                     webRtcPeerConnectionManager.muteCall(!muted)
@@ -133,7 +137,7 @@ class VectorCallViewModel @AssistedInject constructor(
                     }
                 }
             }
-            VectorCallViewActions.ToggleVideo -> {
+            VectorCallViewActions.ToggleVideo          -> {
                 withState {
                     if (it.isVideoCall) {
                         val videoEnabled = it.isVideoEnabled
@@ -142,6 +146,14 @@ class VectorCallViewModel @AssistedInject constructor(
                             copy(isVideoEnabled = !videoEnabled)
                         }
                     }
+                }
+            }
+            is VectorCallViewActions.ChangeAudioDevice -> {
+                webRtcPeerConnectionManager.audioManager.setCurrentSoundDevice(action.device)
+                setState {
+                    copy(
+                            soundDevice = webRtcPeerConnectionManager.audioManager.getCurrentSoundDevice()
+                    )
                 }
             }
         }.exhaustive

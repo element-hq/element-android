@@ -26,11 +26,14 @@ import android.os.Parcelable
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import androidx.core.view.ViewCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import butterknife.BindView
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
+import com.jakewharton.rxbinding3.view.clicks
 import im.vector.matrix.android.api.session.call.CallState
 import im.vector.matrix.android.api.session.call.EglUtils
 import im.vector.matrix.android.api.session.call.MxCallDetail
@@ -46,10 +49,12 @@ import im.vector.riotx.features.home.AvatarRenderer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_call.*
+import kotlinx.android.synthetic.main.fragment_attachments_preview.*
 import org.webrtc.EglBase
 import org.webrtc.RendererCommon
 import org.webrtc.SurfaceViewRenderer
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @Parcelize
@@ -91,6 +96,8 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
 
     private var rootEglBase: EglBase? = null
 
+    var systemUiVisibility = false
+
     override fun doBeforeSetContentView() {
         // Set window styles for fullscreen-window size. Needs to be done before adding content.
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -108,14 +115,64 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
             )
         }
 
-        window.decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        hideSystemUI()
         setContentView(R.layout.activity_call)
+    }
+
+    private fun hideSystemUI() {
+        systemUiVisibility = false
+        // Enables regular immersive mode.
+        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
+        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
+                // Set the content to appear under the system bars so that the
+                // content doesn't resize when the system bars hide and show.
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                // Hide the nav bar and status bar
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN)
+    }
+
+    // Shows the system bars by removing all the flags
+// except for the ones that make the content appear under the system bars.
+    private fun showSystemUI() {
+        systemUiVisibility = true
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+    }
+
+    private fun toggleUiSystemVisibility() {
+        if (systemUiVisibility) {
+            hideSystemUI()
+        } else {
+            showSystemUI()
+        }
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        // Rehide when bottom sheet is dismissed
+        if (hasFocus) {
+            hideSystemUI()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // This will need to be refined
+        ViewCompat.setOnApplyWindowInsetsListener(constraintLayout) { v, insets ->
+            v.updatePadding(bottom = if (systemUiVisibility) insets.systemWindowInsetBottom else 0)
+            insets
+        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+// //            window.navigationBarColor = ContextCompat.getColor(this, R.color.riotx_background_light)
+// //        }
+
+        // for content intent when screen is locked
 //        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 //        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -124,6 +181,12 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         } else {
             finish()
         }
+
+        constraintLayout.clicks()
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { toggleUiSystemVisibility() }
+                .disposeOnDestroy()
 
         if (isFirstCreation()) {
             // Reduce priority of notification as the activity is on screen
@@ -341,5 +404,9 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     override fun returnToChat() {
         // TODO, what if the room is not in backstack??
         finish()
+    }
+
+    override fun didTapMore() {
+        CallControlsBottomSheet().show(supportFragmentManager, "Controls")
     }
 }

@@ -22,7 +22,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -89,6 +88,11 @@ class CallControlsView @JvmOverloads constructor(
         interactionListener?.returnToChat()
     }
 
+    @OnClick(R.id.iv_more)
+    fun moreControlOption() {
+        interactionListener?.didTapMore()
+    }
+
     fun updateForState(state: VectorCallViewState) {
         val callState = state.callState.invoke()
         muteIcon.setImageResource(if (state.isAudioMuted) R.drawable.ic_microphone_off else R.drawable.ic_microphone_on)
@@ -113,7 +117,7 @@ class CallControlsView @JvmOverloads constructor(
             CallState.CONNECTED     -> {
                 ringingControls.isVisible = false
                 connectedControls.isVisible = true
-                iv_video_toggle.isInvisible = !state.isVideoCall
+                iv_video_toggle.isVisible = state.isVideoCall
             }
             CallState.TERMINATED,
             null                    -> {
@@ -130,5 +134,6 @@ class CallControlsView @JvmOverloads constructor(
         fun didTapToggleMute()
         fun didTapToggleVideo()
         fun returnToChat()
+        fun didTapMore()
     }
 }
