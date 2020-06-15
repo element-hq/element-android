@@ -301,6 +301,11 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     }
                 }
                 else                                -> {
+                    // Fallback for old android, try to restart capture when attached
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && capturerIsInError && call.mxCall.isVideoCall) {
+                        // try to restart capture?
+                        videoCapturer?.startCapture(1280, 720, 30)
+                    }
                     // sink existing tracks (configuration change, e.g screen rotation)
                     attachViewRenderersInternal()
                 }
