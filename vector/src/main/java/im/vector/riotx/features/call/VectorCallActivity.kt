@@ -264,6 +264,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                 if (callArgs.isVideoCall) {
                     callVideoGroup.isVisible = true
                     callInfoGroup.isVisible = false
+                    pip_video_view.isVisible = !state.isVideoCaptureInError
                 } else {
                     callVideoGroup.isInvisible = true
                     callInfoGroup.isVisible = true

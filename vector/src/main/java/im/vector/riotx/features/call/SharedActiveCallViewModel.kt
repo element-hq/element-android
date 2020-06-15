@@ -37,6 +37,10 @@ class SharedActiveCallViewModel @Inject constructor(
         override fun onCurrentCallChange(call: MxCall?) {
             activeCall.postValue(call)
         }
+
+        override fun onCaptureStateChanged(captureInError: Boolean) {
+            // nop
+        }
     }
 
     init {

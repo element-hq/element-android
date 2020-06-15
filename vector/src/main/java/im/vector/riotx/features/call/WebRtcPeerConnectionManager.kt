@@ -17,6 +17,9 @@
 package im.vector.riotx.features.call
 
 import android.content.Context
+import android.hardware.camera2.CameraManager
+import android.os.Build
+import androidx.annotation.RequiresApi
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.session.call.CallState
@@ -71,6 +74,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     interface CurrentCallListener {
         fun onCurrentCallChange(call: MxCall?)
+        fun onCaptureStateChanged(captureInError: Boolean)
     }
 
     private val currentCallsListeners = emptyList<CurrentCallListener>().toMutableList()
@@ -118,6 +122,9 @@ class WebRtcPeerConnectionManager @Inject constructor(
         var remoteCandidateSource: ReplaySubject<IceCandidate>? = null
         var remoteIceCandidateDisposable: Disposable? = null
 
+        // We register an availability callback if we loose access to camera
+        var cameraAvailabilityCallback: CameraRestarter? = null
+
         fun release() {
             remoteIceCandidateDisposable?.dispose()
             iceCandidateDisposable?.dispose()
@@ -148,6 +155,14 @@ class WebRtcPeerConnectionManager @Inject constructor(
 //    private var localSdp: SessionDescription? = null
 
     private var videoCapturer: VideoCapturer? = null
+
+    var capturerIsInError = false
+        set(value) {
+            field = value
+            currentCallsListeners.forEach {
+                tryThis { it.onCaptureStateChanged(value) }
+            }
+        }
 
     var localSurfaceRenderer: WeakReference<SurfaceViewRenderer>? = null
     var remoteSurfaceRenderer: WeakReference<SurfaceViewRenderer>? = null
@@ -355,7 +370,27 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     ?.firstOrNull { cameraIterator.isFrontFacing(it) }
                     ?: cameraIterator.deviceNames?.first()
 
-            val videoCapturer = cameraIterator.createCapturer(frontCamera, null)
+            // TODO detect when no camera or no front camera
+
+            val videoCapturer = cameraIterator.createCapturer(frontCamera, object : CameraEventsHandlerAdapter() {
+                override fun onFirstFrameAvailable() {
+                    super.onFirstFrameAvailable()
+                    capturerIsInError = false
+                }
+
+                override fun onCameraClosed() {
+                    // This could happen if you open the camera app in chat
+                    // We then register in order to restart capture as soon as the camera is available again
+                    Timber.v("## VOIP onCameraClosed")
+                    this@WebRtcPeerConnectionManager.capturerIsInError = true
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        val restarter = CameraRestarter(frontCamera ?: "", callContext.mxCall.callId)
+                        callContext.cameraAvailabilityCallback = restarter
+                        val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+                        cameraManager.registerAvailabilityCallback(restarter, null)
+                    }
+                }
+            })
 
             val videoSource = peerConnectionFactory!!.createVideoSource(videoCapturer.isScreencast)
             val surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", rootEglBase!!.eglBaseContext)
@@ -374,14 +409,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
             callContext.localVideoSource = videoSource
             callContext.localVideoTrack = localVideoTrack
 
-//            localViewRenderer?.let { localVideoTrack?.addSink(it) }
             localMediaStream?.addTrack(localVideoTrack)
-//            callContext.localMediaStream = localMediaStream
-//            remoteVideoTrack?.setEnabled(true)
-//            remoteVideoTrack?.let {
-//                it.setEnabled(true)
-//                it.addSink(remoteViewRenderer)
-//            }
         }
     }
 
@@ -542,6 +570,12 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     fun endCall() {
+        currentCall?.cameraAvailabilityCallback?.let { cameraAvailabilityCallback ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+                cameraManager.unregisterAvailabilityCallback(cameraAvailabilityCallback)
+            }
+        }
         currentCall?.mxCall?.hangUp()
         currentCall = null
         audioManager.stop()
@@ -744,6 +778,20 @@ class WebRtcPeerConnectionManager @Inject constructor(
          */
         override fun onAddTrack(p0: RtpReceiver?, p1: Array<out MediaStream>?) {
             Timber.v("## VOIP StreamObserver onAddTrack")
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    inner class CameraRestarter(val cameraId: String, val callId: String) : CameraManager.AvailabilityCallback() {
+
+        override fun onCameraAvailable(cameraId: String) {
+            if (this.cameraId == cameraId && currentCall?.mxCall?.callId == callId) {
+                // re-start the capture
+                // TODO notify that video is enabled
+                videoCapturer?.startCapture(1280, 720, 30)
+                (context.getSystemService(Context.CAMERA_SERVICE) as? CameraManager)
+                        ?.unregisterAvailabilityCallback(this)
+            }
         }
     }
 }

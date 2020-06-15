@@ -41,6 +41,7 @@ data class VectorCallViewState(
         val isVideoCall: Boolean,
         val isAudioMuted: Boolean = false,
         val isVideoEnabled: Boolean = true,
+        val isVideoCaptureInError: Boolean = false,
         val soundDevice: CallAudioManager.SoundDevice = CallAudioManager.SoundDevice.PHONE,
         val otherUserMatrixItem: Async<MatrixItem> = Uninitialized,
         val callState: Async<CallState> = Uninitialized
@@ -83,11 +84,24 @@ class VectorCallViewModel @AssistedInject constructor(
         }
     }
 
+    private val currentCallListener = object : WebRtcPeerConnectionManager.CurrentCallListener {
+        override fun onCurrentCallChange(call: MxCall?) {
+        }
+
+        override fun onCaptureStateChanged(captureInError: Boolean) {
+            setState {
+                copy(isVideoCaptureInError = captureInError)
+            }
+        }
+    }
+
     init {
 
         autoReplyIfNeeded = args.autoAccept
 
         initialState.callId?.let {
+
+            webRtcPeerConnectionManager.addCurrentCallListener(currentCallListener)
 
             session.callSignalingService().getCallWithId(it)?.let { mxCall ->
                 this.call = mxCall
@@ -109,6 +123,7 @@ class VectorCallViewModel @AssistedInject constructor(
 
     override fun onCleared() {
         // session.callService().removeCallListener(callServiceListener)
+        webRtcPeerConnectionManager.removeCurrentCallListener(currentCallListener)
         this.call?.removeListener(callStateListener)
         super.onCleared()
     }
