@@ -284,10 +284,6 @@
     <string name="room_participants_invite_search_another_user">ID Përdoruesi, Emër ose email-i</string>
     <string name="room_participants_action_mention">Përmendje</string>
     <string name="room_participants_action_devices_list">Shfaq Listë Sesionesh</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Jeni i sigurt se doni të përzihet ky përdorues nga kjo fjalosje?</item>
-        <item quantity="other">Jeni i sigurt se doni të përzihen këta përdorues nga kjo fjalosje?</item>
-    </plurals>
     <string name="room_participants_ban_prompt_msg">Jeni i sigurt se doni të dëbohet ky përdorues nga kjo fjalosje?</string>
     <string name="reason_hint">Arsye</string>
 
@@ -624,8 +620,6 @@
     <string name="huge">Të stërmëdha</string>
 
     <string name="widget_creation_failure">Krijimi i widget-it dështoi</string>
-    <string name="event_formatter_widget_added">%1$s u shtua nga %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s u hoq nga %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Krijoni thirrje konferencë me Jitsi-n</string>
     <string name="widget_delete_message_confirmation">Jeni i sigurt se doni të fshihet widget-i nga kjo dhomë?</string>
     <string name="widget_integration_unable_to_create">S’arrihet të krijohet widget-i.</string>
@@ -872,9 +866,6 @@
         <item quantity="one">1 anëtar</item>
         <item quantity="other">%d anëtarë</item>
     </plurals>
-    <string name="room_participants_action_unignore_prompt">Të shfaqen krejt mesazhet nga ky përdorues\?
-\n
-\nKini parasysh që ky veprim do të sjellë rinisjen e aplikacionit dhe mund të hajë ca kohë.</string>
     <string name="room_participants_power_level_prompt">S’do të jeni në gjendje ta zhbëni këtë ndryshim, ngaqë po e promovoni përdoruesin të ketë të njëjtën shkallë pushteti si ju vetë.
 \nJeni i sigurt\?</string>
 

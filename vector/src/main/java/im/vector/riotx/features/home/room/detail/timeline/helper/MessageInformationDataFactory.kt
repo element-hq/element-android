@@ -158,7 +158,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                     }
                 }
             } else {
-                if (EventType.isStateEvent(event.root.type)) {
+                if (event.root.isStateEvent()) {
                     // Do not warn for state event, they are always in clear
                     E2EDecoration.NONE
                 } else {

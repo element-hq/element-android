@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="?dialogPreferredPadding"
+    android:paddingLeft="?dialogPreferredPadding"
+    android:paddingTop="12dp"
+    android:paddingEnd="?dialogPreferredPadding"
+    android:paddingRight="?dialogPreferredPadding">
+
+    <RadioGroup
+        android:id="@+id/powerLevelRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/powerLevelAdminRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/power_level_admin"
+            android:textColor="?riotx_text_primary" />
+
+        <RadioButton
+            android:id="@+id/powerLevelModeratorRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/power_level_moderator"
+            android:textColor="?riotx_text_primary" />
+
+        <RadioButton
+            android:id="@+id/powerLevelDefaultRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/power_level_default"
+            android:textColor="?riotx_text_primary" />
+
+        <RadioButton
+            android:id="@+id/powerLevelCustomRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/power_level_custom_no_value"
+            android:textColor="?riotx_text_primary" />
+
+    </RadioGroup>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/powerLevelCustomEditLayout"
+        style="@style/VectorTextInputLayout"
+        android:hint="@string/power_level_custom_no_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/powerLevelCustomEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number|numberSigned" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

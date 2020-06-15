@@ -16,6 +16,7 @@
 
 package im.vector.matrix.android.internal.session.room.state
 
+import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.network.executeRequest
 import im.vector.matrix.android.internal.session.room.RoomAPI
 import im.vector.matrix.android.internal.task.Task
@@ -25,8 +26,9 @@ import javax.inject.Inject
 internal interface SendStateTask : Task<SendStateTask.Params, Unit> {
     data class Params(
             val roomId: String,
+            val stateKey: String?,
             val eventType: String,
-            val body: Map<String, String>
+            val body: JsonDict
     )
 }
 
@@ -37,7 +39,20 @@ internal class DefaultSendStateTask @Inject constructor(
 
     override suspend fun execute(params: SendStateTask.Params) {
         return executeRequest(eventBus) {
-            apiCall = roomAPI.sendStateEvent(params.roomId, params.eventType, params.body)
+            apiCall = if (params.stateKey == null) {
+                roomAPI.sendStateEvent(
+                        roomId = params.roomId,
+                        stateEventType = params.eventType,
+                        params = params.body
+                )
+            } else {
+                roomAPI.sendStateEvent(
+                        roomId = params.roomId,
+                        stateEventType = params.eventType,
+                        stateKey = params.stateKey,
+                        params = params.body
+                )
+            }
         }
     }
 }

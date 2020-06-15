@@ -19,36 +19,70 @@ package im.vector.riotx.features.roommemberprofile
 
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.viewModel
 import im.vector.riotx.R
+import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.features.room.RequireActiveMembershipViewEvents
+import im.vector.riotx.features.room.RequireActiveMembershipViewModel
+import im.vector.riotx.features.room.RequireActiveMembershipViewState
+import javax.inject.Inject
 
-class RoomMemberProfileActivity : VectorBaseActivity(), ToolbarConfigurable {
+class RoomMemberProfileActivity :
+        VectorBaseActivity(),
+        ToolbarConfigurable,
+        RequireActiveMembershipViewModel.Factory {
 
     companion object {
-
-        private const val EXTRA_FRAGMENT_ARGS = "EXTRA_FRAGMENT_ARGS"
-
         fun newIntent(context: Context, args: RoomMemberProfileArgs): Intent {
             return Intent(context, RoomMemberProfileActivity::class.java).apply {
-                putExtra(EXTRA_FRAGMENT_ARGS, args)
+                putExtra(MvRx.KEY_ARG, args)
             }
         }
+    }
+
+    private val requireActiveMembershipViewModel: RequireActiveMembershipViewModel by viewModel()
+
+    @Inject
+    lateinit var requireActiveMembershipViewModelFactory: RequireActiveMembershipViewModel.Factory
+
+    override fun create(initialState: RequireActiveMembershipViewState): RequireActiveMembershipViewModel {
+        return requireActiveMembershipViewModelFactory.create(initialState)
+    }
+
+    override fun injectWith(injector: ScreenComponent) {
+        super.injectWith(injector)
+        injector.inject(this)
     }
 
     override fun getLayoutRes() = R.layout.activity_simple
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            val fragmentArgs: RoomMemberProfileArgs = intent?.extras?.getParcelable(EXTRA_FRAGMENT_ARGS)
-                                                      ?: return
+            val fragmentArgs: RoomMemberProfileArgs = intent?.extras?.getParcelable(MvRx.KEY_ARG) ?: return
             addFragment(R.id.simpleFragmentContainer, RoomMemberProfileFragment::class.java, fragmentArgs)
+        }
+
+        requireActiveMembershipViewModel.observeViewEvents {
+            when (it) {
+                is RequireActiveMembershipViewEvents.RoomLeft -> handleRoomLeft(it)
+            }
         }
     }
 
     override fun configure(toolbar: Toolbar) {
         configureToolbar(toolbar)
+    }
+
+    private fun handleRoomLeft(roomLeft: RequireActiveMembershipViewEvents.RoomLeft) {
+        if (roomLeft.leftMessage != null) {
+            Toast.makeText(this, roomLeft.leftMessage, Toast.LENGTH_LONG).show()
+        }
+        finish()
     }
 }

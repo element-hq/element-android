@@ -23,7 +23,7 @@ import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.createObject
 
-internal fun CurrentStateEventEntity.Companion.where(realm: Realm, roomId: String, type: String): RealmQuery<CurrentStateEventEntity> {
+internal fun CurrentStateEventEntity.Companion.whereType(realm: Realm, roomId: String, type: String): RealmQuery<CurrentStateEventEntity> {
     return realm.where(CurrentStateEventEntity::class.java)
             .equalTo(CurrentStateEventEntityFields.ROOM_ID, roomId)
             .equalTo(CurrentStateEventEntityFields.TYPE, type)
@@ -31,7 +31,7 @@ internal fun CurrentStateEventEntity.Companion.where(realm: Realm, roomId: Strin
 
 internal fun CurrentStateEventEntity.Companion.whereStateKey(realm: Realm, roomId: String, type: String, stateKey: String)
         : RealmQuery<CurrentStateEventEntity> {
-    return where(realm = realm, roomId = roomId, type = type)
+    return whereType(realm = realm, roomId = roomId, type = type)
             .equalTo(CurrentStateEventEntityFields.STATE_KEY, stateKey)
 }
 

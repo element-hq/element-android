@@ -17,18 +17,20 @@
 package im.vector.matrix.android.internal.session.homeserver
 
 import com.zhuinden.monarchy.Monarchy
-import im.vector.matrix.android.api.auth.data.Versions
-import im.vector.matrix.android.api.auth.data.isLoginAndRegistrationSupportedBySdk
 import im.vector.matrix.android.api.auth.wellknown.WellknownResult
 import im.vector.matrix.android.api.session.homeserver.HomeServerCapabilities
-import im.vector.matrix.android.internal.wellknown.GetWellknownTask
+import im.vector.matrix.android.internal.auth.version.Versions
+import im.vector.matrix.android.internal.auth.version.isLoginAndRegistrationSupportedBySdk
 import im.vector.matrix.android.internal.database.model.HomeServerCapabilitiesEntity
 import im.vector.matrix.android.internal.database.query.getOrCreate
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.network.executeRequest
+import im.vector.matrix.android.internal.session.integrationmanager.IntegrationManagerConfigExtractor
 import im.vector.matrix.android.internal.task.Task
 import im.vector.matrix.android.internal.util.awaitTransaction
+import im.vector.matrix.android.internal.wellknown.GetWellknownTask
 import org.greenrobot.eventbus.EventBus
+import timber.log.Timber
 import java.util.Date
 import javax.inject.Inject
 
@@ -39,6 +41,7 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
         private val monarchy: Monarchy,
         private val eventBus: EventBus,
         private val getWellknownTask: GetWellknownTask,
+        private val configExtractor: IntegrationManagerConfigExtractor,
         @UserId
         private val userId: String
 ) : GetHomeServerCapabilitiesTask {
@@ -102,8 +105,14 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
 
             if (getWellknownResult != null && getWellknownResult is WellknownResult.Prompt) {
                 homeServerCapabilitiesEntity.defaultIdentityServerUrl = getWellknownResult.identityServerUrl
-            }
 
+                // We are also checking for integration manager configurations
+                val config = configExtractor.extract(getWellknownResult.wellKnown)
+                if (config != null) {
+                    Timber.v("Extracted integration config : $config")
+                    realm.insertOrUpdate(config)
+                }
+            }
             homeServerCapabilitiesEntity.lastUpdatedTimestamp = Date().time
         }
     }

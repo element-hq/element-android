@@ -22,7 +22,6 @@ import android.os.Build
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
-import im.vector.matrix.android.api.session.room.model.tag.RoomTag
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.riotx.core.glide.GlideApp
 import im.vector.riotx.core.utils.DimensionConverter
@@ -58,7 +57,7 @@ class ShortcutsHandler @Inject constructor(
                 .observeOn(Schedulers.computation())
                 .subscribe { rooms ->
                     val shortcuts = rooms
-                            .filter { room -> room.tags.any { it.name == RoomTag.ROOM_TAG_FAVOURITE } }
+                            .filter { room -> room.isFavorite }
                             .take(n = 4) // Android only allows us to create 4 shortcuts
                             .map { room ->
                                 val intent = RoomDetailActivity.shortcutIntent(context, room.roomId)

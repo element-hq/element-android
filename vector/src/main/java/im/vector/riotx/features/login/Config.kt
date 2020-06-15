@@ -16,4 +16,7 @@
 
 package im.vector.riotx.features.login
 
-const val MODULAR_LINK = "https://modular.im/?utm_source=riot-x-android&utm_medium=native&utm_campaign=riot-x-android-authentication"
+const val MODULAR_LINK = "https://modular.im/services/matrix-hosting-riot" +
+        "?utm_source=riot-x-android" +
+        "&utm_medium=native" +
+        "&utm_campaign=riot-x-android-authentication"

@@ -738,8 +738,6 @@ Atenció: es podria eliminar aquest fitxer si es desinstal·la l\'aplicació.</s
     <!-- Widget-->
     <string name="widget_no_power_to_manage">No teniu permisos per a gestionar ginys en aquesta sala</string>
     <string name="widget_creation_failure">Ha fallat la creació del giny</string>
-    <string name="event_formatter_widget_added">%1$s afegit per %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s retirat per %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Fes conferències amb jitsi</string>
     <string name="widget_delete_message_confirmation">Confirmeu que voleu esborrar el giny d\'aquesta sala?</string>
 
@@ -920,9 +918,6 @@ En voleu afegir algun?</string>
     <string name="room_participants_now">Ara %1$s</string>
     <string name="room_participants_ago">%1$s fa %2$s</string>
 
-    <string name="room_participants_action_unignore_prompt">Mostrar tots els missatges d\'aquest usuari?
-
-Tingueu en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una estona.</string>
     <string name="room_participants_invite_join_names">"%1$s,· "</string>
     <string name="room_participants_invite_join_names_and">%1$s i %2$s</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
@@ -1045,10 +1040,6 @@ Tingueu en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una 
     <string name="settings_call_ringtone_dialog_title">Escolliu el to per les trucades:</string>
 
     <string name="room_participants_action_kick">Expulsar</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Esteu segur que voleu expulsar aquest usuari d\'aquest xat?</item>
-        <item quantity="other">Esteu segur que voleu expulsar aquests usuaris d\'aquest xat?</item>
-    </plurals>
     <string name="reason_hint">Motiu</string>
 
     <string name="settings_inline_url_preview_summary">Mostra la vista prèvia dels enllaços dins del xat en cas que el vostre servidor base suporti aquesta funcionalitat.</string>

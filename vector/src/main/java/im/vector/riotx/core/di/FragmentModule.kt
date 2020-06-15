@@ -59,6 +59,7 @@ import im.vector.riotx.features.login.LoginResetPasswordSuccessFragment
 import im.vector.riotx.features.login.LoginServerSelectionFragment
 import im.vector.riotx.features.login.LoginServerUrlFormFragment
 import im.vector.riotx.features.login.LoginSignUpSignInSelectionFragment
+import im.vector.riotx.features.login.LoginSignUpSignInSsoFragment
 import im.vector.riotx.features.login.LoginSplashFragment
 import im.vector.riotx.features.login.LoginWaitForEmailFragment
 import im.vector.riotx.features.login.LoginWebFragment
@@ -102,6 +103,7 @@ import im.vector.riotx.features.signout.soft.SoftLogoutFragment
 import im.vector.riotx.features.terms.ReviewTermsFragment
 import im.vector.riotx.features.userdirectory.KnownUsersFragment
 import im.vector.riotx.features.userdirectory.UserDirectoryFragment
+import im.vector.riotx.features.widgets.WidgetFragment
 
 @Module
 interface FragmentModule {
@@ -215,6 +217,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(LoginSignUpSignInSelectionFragment::class)
     fun bindLoginSignUpSignInSelectionFragment(fragment: LoginSignUpSignInSelectionFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LoginSignUpSignInSsoFragment::class)
+    fun bindLoginSignUpSignInSsoFragment(fragment: LoginSignUpSignInSsoFragment): Fragment
 
     @Binds
     @IntoMap
@@ -510,4 +517,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(ReviewTermsFragment::class)
     fun bindReviewTermsFragment(fragment: ReviewTermsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(WidgetFragment::class)
+    fun bindWidgetFragment(fragment: WidgetFragment): Fragment
 }

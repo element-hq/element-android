@@ -19,16 +19,16 @@ package im.vector.matrix.android.internal.session.content
 import im.vector.matrix.android.api.auth.data.HomeServerConnectionConfig
 import im.vector.matrix.android.api.session.content.ContentUrlResolver
 import im.vector.matrix.android.internal.network.NetworkConstants
+import im.vector.matrix.android.internal.util.ensureTrailingSlash
 import javax.inject.Inject
 
 private const val MATRIX_CONTENT_URI_SCHEME = "mxc://"
 
 internal class DefaultContentUrlResolver @Inject constructor(homeServerConnectionConfig: HomeServerConnectionConfig) : ContentUrlResolver {
 
-    private val baseUrl = homeServerConnectionConfig.homeServerUri.toString()
-    private val sep = if (baseUrl.endsWith("/")) "" else "/"
+    private val baseUrl = homeServerConnectionConfig.homeServerUri.toString().ensureTrailingSlash()
 
-    override val uploadUrl = baseUrl + sep + NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "upload"
+    override val uploadUrl = baseUrl + NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "upload"
 
     override fun resolveFullSize(contentUrl: String?): String? {
         return contentUrl
@@ -66,7 +66,7 @@ internal class DefaultContentUrlResolver @Inject constructor(homeServerConnectio
             serverAndMediaId = serverAndMediaId.substring(0, fragmentOffset)
         }
 
-        return baseUrl + sep + prefix + serverAndMediaId + params + fragment
+        return baseUrl + prefix + serverAndMediaId + params + fragment
     }
 
     private fun String.isValidMatrixContentUrl(): Boolean {

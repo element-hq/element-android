@@ -19,26 +19,35 @@ package im.vector.riotx.features.roomprofile
 
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.viewModel
 import im.vector.riotx.R
+import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.addFragment
 import im.vector.riotx.core.extensions.addFragmentToBackstack
 import im.vector.riotx.core.platform.ToolbarConfigurable
 import im.vector.riotx.core.platform.VectorBaseActivity
+import im.vector.riotx.features.room.RequireActiveMembershipViewEvents
+import im.vector.riotx.features.room.RequireActiveMembershipViewModel
+import im.vector.riotx.features.room.RequireActiveMembershipViewState
 import im.vector.riotx.features.roomprofile.members.RoomMemberListFragment
 import im.vector.riotx.features.roomprofile.settings.RoomSettingsFragment
 import im.vector.riotx.features.roomprofile.uploads.RoomUploadsFragment
+import javax.inject.Inject
 
-class RoomProfileActivity : VectorBaseActivity(), ToolbarConfigurable {
+class RoomProfileActivity :
+        VectorBaseActivity(),
+        ToolbarConfigurable,
+        RequireActiveMembershipViewModel.Factory {
 
     companion object {
-
-        private const val EXTRA_ROOM_PROFILE_ARGS = "EXTRA_ROOM_PROFILE_ARGS"
 
         fun newIntent(context: Context, roomId: String): Intent {
             val roomProfileArgs = RoomProfileArgs(roomId)
             return Intent(context, RoomProfileActivity::class.java).apply {
-                putExtra(EXTRA_ROOM_PROFILE_ARGS, roomProfileArgs)
+                putExtra(MvRx.KEY_ARG, roomProfileArgs)
             }
         }
     }
@@ -46,11 +55,25 @@ class RoomProfileActivity : VectorBaseActivity(), ToolbarConfigurable {
     private lateinit var sharedActionViewModel: RoomProfileSharedActionViewModel
     private lateinit var roomProfileArgs: RoomProfileArgs
 
+    private val requireActiveMembershipViewModel: RequireActiveMembershipViewModel by viewModel()
+
+    @Inject
+    lateinit var requireActiveMembershipViewModelFactory: RequireActiveMembershipViewModel.Factory
+
+    override fun create(initialState: RequireActiveMembershipViewState): RequireActiveMembershipViewModel {
+        return requireActiveMembershipViewModelFactory.create(initialState)
+    }
+
+    override fun injectWith(injector: ScreenComponent) {
+        super.injectWith(injector)
+        injector.inject(this)
+    }
+
     override fun getLayoutRes() = R.layout.activity_simple
 
     override fun initUiAndData() {
         sharedActionViewModel = viewModelProvider.get(RoomProfileSharedActionViewModel::class.java)
-        roomProfileArgs = intent?.extras?.getParcelable(EXTRA_ROOM_PROFILE_ARGS) ?: return
+        roomProfileArgs = intent?.extras?.getParcelable(MvRx.KEY_ARG) ?: return
         if (isFirstCreation()) {
             addFragment(R.id.simpleFragmentContainer, RoomProfileFragment::class.java, roomProfileArgs)
         }
@@ -64,6 +87,19 @@ class RoomProfileActivity : VectorBaseActivity(), ToolbarConfigurable {
                     }
                 }
                 .disposeOnDestroy()
+
+        requireActiveMembershipViewModel.observeViewEvents {
+            when (it) {
+                is RequireActiveMembershipViewEvents.RoomLeft -> handleRoomLeft(it)
+            }
+        }
+    }
+
+    private fun handleRoomLeft(roomLeft: RequireActiveMembershipViewEvents.RoomLeft) {
+        if (roomLeft.leftMessage != null) {
+            Toast.makeText(this, roomLeft.leftMessage, Toast.LENGTH_LONG).show()
+        }
+        finish()
     }
 
     private fun openRoomUploads() {

@@ -39,6 +39,6 @@ class SenderNotificationPermissionCondition(
 
     fun isSatisfied(event: Event, powerLevels: PowerLevelsContent): Boolean {
         val powerLevelsHelper = PowerLevelsHelper(powerLevels)
-        return event.senderId != null && powerLevelsHelper.getUserPowerLevel(event.senderId) >= powerLevelsHelper.notificationLevel(key)
+        return event.senderId != null && powerLevelsHelper.getUserPowerLevelValue(event.senderId) >= powerLevelsHelper.notificationLevel(key)
     }
 }

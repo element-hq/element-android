@@ -16,7 +16,7 @@
 
 package im.vector.matrix.android.internal.crypto.tasks
 
-import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
+import im.vector.matrix.android.api.auth.data.LoginFlowTypes
 import im.vector.matrix.android.internal.crypto.api.CryptoApi
 import im.vector.matrix.android.internal.crypto.model.rest.DeleteDeviceParams
 import im.vector.matrix.android.internal.crypto.model.rest.UserPasswordAuth

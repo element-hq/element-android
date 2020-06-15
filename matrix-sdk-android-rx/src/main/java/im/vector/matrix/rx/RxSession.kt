@@ -17,6 +17,7 @@
 package im.vector.matrix.rx
 
 import androidx.paging.PagedList
+import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.crypto.crosssigning.MXCrossSigningInfo
 import im.vector.matrix.android.api.session.group.GroupSummaryQueryParams
@@ -28,6 +29,7 @@ import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.model.create.CreateRoomParams
 import im.vector.matrix.android.api.session.sync.SyncState
 import im.vector.matrix.android.api.session.user.model.User
+import im.vector.matrix.android.api.session.widgets.model.Widget
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.api.util.Optional
 import im.vector.matrix.android.api.util.toOptional
@@ -54,10 +56,10 @@ class RxSession(private val session: Session) {
                 }
     }
 
-    fun liveBreadcrumbs(): Observable<List<RoomSummary>> {
-        return session.getBreadcrumbsLive().asObservable()
+    fun liveBreadcrumbs(queryParams: RoomSummaryQueryParams): Observable<List<RoomSummary>> {
+        return session.getBreadcrumbsLive(queryParams).asObservable()
                 .startWithCallable {
-                    session.getBreadcrumbs()
+                    session.getBreadcrumbs(queryParams)
                 }
     }
 
@@ -149,6 +151,18 @@ class RxSession(private val session: Session) {
         return session.getLiveAccountDataEvents(types).asObservable()
                 .startWithCallable {
                     session.getAccountDataEvents(types)
+                }
+    }
+
+    fun liveRoomWidgets(
+            roomId: String,
+            widgetId: QueryStringValue,
+            widgetTypes: Set<String>? = null,
+            excludedTypes: Set<String>? = null
+    ): Observable<List<Widget>> {
+        return session.widgetService().getRoomWidgetsLive(roomId, widgetId, widgetTypes, excludedTypes).asObservable()
+                .startWithCallable {
+                    session.widgetService().getRoomWidgets(roomId, widgetId, widgetTypes, excludedTypes)
                 }
     }
 }

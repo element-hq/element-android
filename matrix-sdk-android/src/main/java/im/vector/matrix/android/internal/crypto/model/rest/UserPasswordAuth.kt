@@ -18,7 +18,7 @@ package im.vector.matrix.android.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
+import im.vector.matrix.android.api.auth.data.LoginFlowTypes
 
 /**
  * This class provides the authentication data by using user and password

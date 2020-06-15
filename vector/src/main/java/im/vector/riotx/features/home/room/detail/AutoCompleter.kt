@@ -34,6 +34,7 @@ import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.api.util.toRoomAliasMatrixItem
 import im.vector.riotx.R
 import im.vector.riotx.core.glide.GlideApp
+import im.vector.riotx.core.glide.GlideRequests
 import im.vector.riotx.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.riotx.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.riotx.features.autocomplete.emoji.AutocompleteEmojiPresenter
@@ -56,12 +57,14 @@ class AutoCompleter @AssistedInject constructor(
         private val autocompleteEmojiPresenter: AutocompleteEmojiPresenter
 ) {
 
+    private lateinit var autocompleteMemberPresenter: AutocompleteMemberPresenter
+
     @AssistedInject.Factory
     interface Factory {
         fun create(roomId: String): AutoCompleter
     }
 
-    private lateinit var editText: EditText
+    private var editText: EditText? = null
 
     fun enterSpecialMode() {
         commandAutocompletePolicy.enabled = false
@@ -71,18 +74,26 @@ class AutoCompleter @AssistedInject constructor(
         commandAutocompletePolicy.enabled = true
     }
 
-    private val glideRequests by lazy {
-        GlideApp.with(editText)
-    }
+    private lateinit var glideRequests: GlideRequests
 
     fun setup(editText: EditText) {
         this.editText = editText
+        glideRequests = GlideApp.with(editText)
         val backgroundDrawable = ColorDrawable(ThemeUtils.getColor(editText.context, R.attr.riotx_background))
         setupCommands(backgroundDrawable, editText)
         setupMembers(backgroundDrawable, editText)
         setupGroups(backgroundDrawable, editText)
         setupEmojis(backgroundDrawable, editText)
         setupRooms(backgroundDrawable, editText)
+    }
+
+    fun clear() {
+        this.editText = null
+        autocompleteEmojiPresenter.clear()
+        autocompleteGroupPresenter.clear()
+        autocompleteRoomPresenter.clear()
+        autocompleteCommandPresenter.clear()
+        autocompleteMemberPresenter.clear()
     }
 
     private fun setupCommands(backgroundDrawable: Drawable, editText: EditText) {
@@ -107,7 +118,7 @@ class AutoCompleter @AssistedInject constructor(
     }
 
     private fun setupMembers(backgroundDrawable: ColorDrawable, editText: EditText) {
-        val autocompleteMemberPresenter = autocompleteMemberPresenterFactory.create(roomId)
+        autocompleteMemberPresenter = autocompleteMemberPresenterFactory.create(roomId)
         Autocomplete.on<RoomMemberSummary>(editText)
                 .with(CharPolicy('@', true))
                 .with(autocompleteMemberPresenter)

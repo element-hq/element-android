@@ -33,6 +33,7 @@ import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import im.vector.matrix.android.api.auth.registration.FlowResult
 import im.vector.matrix.android.api.auth.registration.Stage
+import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.riotx.R
 import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.extensions.POP_BACK_STACK_EXCLUSIVE
@@ -45,7 +46,6 @@ import im.vector.riotx.features.home.HomeActivity
 import im.vector.riotx.features.login.terms.LoginTermsFragment
 import im.vector.riotx.features.login.terms.LoginTermsFragmentArgument
 import im.vector.riotx.features.login.terms.toLocalizedLoginTerms
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
@@ -103,13 +103,7 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
                     updateWithState(it)
                 }
 
-        loginViewModel.viewEvents
-                .observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    handleLoginViewEvents(it)
-                }
-                .disposeOnDestroy()
+        loginViewModel.observeViewEvents { handleLoginViewEvents(it) }
     }
 
     protected open fun addFirstFragment() {
@@ -162,7 +156,11 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
             is LoginViewEvents.OnSignModeSelected                         -> onSignModeSelected()
             is LoginViewEvents.OnLoginFlowRetrieved                       ->
                 addFragmentToBackstack(R.id.loginFragmentContainer,
-                        LoginSignUpSignInSelectionFragment::class.java,
+                        if (loginViewEvents.isSso) {
+                            LoginSignUpSignInSsoFragment::class.java
+                        } else {
+                            LoginSignUpSignInSelectionFragment::class.java
+                        },
                         option = commonOption)
             is LoginViewEvents.OnWebLoginError                            -> onWebLoginError(loginViewEvents)
             is LoginViewEvents.OnForgetPasswordClicked                    ->
@@ -246,22 +244,31 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable {
             SignMode.SignIn             -> {
                 // It depends on the LoginMode
                 when (state.loginMode) {
-                    LoginMode.Unknown     -> error("Developer error")
+                    LoginMode.Unknown,
+                    LoginMode.Sso         -> error("Developer error")
                     LoginMode.Password    -> addFragmentToBackstack(R.id.loginFragmentContainer,
                             LoginFragment::class.java,
                             tag = FRAGMENT_LOGIN_TAG,
                             option = commonOption)
-                    LoginMode.Sso         -> addFragmentToBackstack(R.id.loginFragmentContainer,
-                            LoginWebFragment::class.java,
-                            option = commonOption)
                     LoginMode.Unsupported -> onLoginModeNotSupported(state.loginModeSupportedTypes)
-                }
+                }.exhaustive
             }
             SignMode.SignInWithMatrixId -> addFragmentToBackstack(R.id.loginFragmentContainer,
                     LoginFragment::class.java,
                     tag = FRAGMENT_LOGIN_TAG,
                     option = commonOption)
         }.exhaustive
+    }
+
+    /**
+     * Handle the SSO redirection here
+     */
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        intent?.data
+                ?.let { tryThis { it.getQueryParameter("loginToken") } }
+                ?.let { loginViewModel.handle(LoginAction.LoginWithToken(it)) }
     }
 
     private fun onRegistrationStageNotSupported() {

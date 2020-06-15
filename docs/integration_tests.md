@@ -59,6 +59,12 @@ It's recommended to run tests using an Android Emulator and not a real device. F
 
 You can run all the tests in the `androidTest` folders.
 
+It can be done using this command:
+
+```bash
+./gradlew vector:connectedAndroidTest matrix-sdk-android:connectedAndroidTest
+```
+
 ## Stop Synapse
 
 To stop Synapse, you can run the following commands:

@@ -708,8 +708,6 @@
     <!-- Widget-->
     <string name="widget_no_power_to_manage">Для керування віджетами у цій кімнаті потрібен дозвіл</string>
     <string name="widget_creation_failure">Помилка створення віджету</string>
-    <string name="event_formatter_widget_added">%1$s додано %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s видалено %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Здійснювати конференц дзвінки через Jitsi</string>
     <string name="widget_delete_message_confirmation">Справді бажаєте видалити віджет?</string>
 
@@ -895,9 +893,6 @@
     <string name="room_participants_now">Зараз %1$s</string>
     <string name="room_participants_ago">%1$s %2$s тому</string>
 
-    <string name="room_participants_action_unignore_prompt">Показати усі повідомлення від цього користувача?
-
-Зауважте, що це перезавантажить додаток та може зайняти деякий час.</string>
     <string name="room_participants_invite_join_names">"%1$s, "</string>
     <string name="room_participants_invite_join_names_and">%1$s та %2$s</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
@@ -1090,12 +1085,6 @@
 
     <string name="call_anyway">Все одно подзвонити</string>
     <string name="room_participants_action_kick">Копнути</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Ви певні, що хочете викинути цього (%d) користувача з чату?</item>
-        <item quantity="few">Ви певні, що хочете викинути цих користувачів з чату?</item>
-        <item quantity="many">Ви певні, що хочете викинути цих користувачів з чату?</item>
-        <item quantity="other" />
-    </plurals>
     <string name="reason_hint">Причина</string>
 
     <string name="settings_inline_url_preview_summary">Попередній перегляд посилань у чаті, у разі якщо Ваш сервер підтримує таку можливість.</string>

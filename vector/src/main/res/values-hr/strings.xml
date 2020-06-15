@@ -577,16 +577,9 @@
     <string name="settings_add_phone_number">Dodaj broj telefona</string>
     <string name="settings_app_info_link_title">Informacije o aplikaciji</string>
     <string name="settings_app_info_link_summary">Prikaži informacije o aplikaciji u postavkama sustava.</string>
-    <string name="room_participants_action_unignore_prompt">Želite li prikazati sve poruke ovog korisnika\?
-\nOva će radnja ponovno pokrenuti aplikaciju i to bi moglo potrajati.</string>
     <string name="room_participants_power_level_prompt">Nećete moći poništiti ovu izmjenu jer dotičnom korisniku dajete istu razinu upravljanja kao Vaša.
 \nJeste li sigurni\?</string>
 
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Jeste li sigurni da želite izbaciti ovog korisnika iz razgovora\?</item>
-        <item quantity="few">Jeste li sigurni da želite izbaciti ove korisnike iz razgovora\?</item>
-        <item quantity="other">Jeste li sigurni da želite izbaciti ove korisnike iz razgovora\?</item>
-    </plurals>
     <string name="room_participants_ban_prompt_msg">Jeste li sigurni da želite zabraniti korisniku pristup ovom razgovoru\?</string>
     <string name="room_participants_invite_prompt_msg">Jeste li sigurni da želite pozvati %s u ovoj razgovor\?</string>
     <string name="people_search_invite_by_id_dialog_description">Unesite jednu ili više adresa e-pošte ili identitet u Matrixu</string>

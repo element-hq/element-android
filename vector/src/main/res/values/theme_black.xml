@@ -33,6 +33,8 @@
         <item name="riotx_touch_guard_bg">@color/riotx_touch_guard_bg_black</item>
         <item name="riotx_attachment_selector_background">@color/riotx_attachment_selector_background_black</item>
         <item name="riotx_attachment_selector_border">@color/riotx_attachment_selector_border_black</item>
+        <item name="riotx_room_active_widgets_banner_bg">@color/riotx_room_active_widgets_banner_bg_black</item>
+        <item name="riotx_room_active_widgets_banner_text">@color/riotx_room_active_widgets_banner_text_black</item>
 
         <!-- Drawables -->
         <item name="riotx_highlighted_message_background">@drawable/highlighted_message_background_black</item>

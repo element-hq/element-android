@@ -17,7 +17,6 @@
 
 package im.vector.matrix.android.api.session.room.powerlevels
 
-import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.room.model.PowerLevelsContent
 
 /**
@@ -31,30 +30,82 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
      * @param userId the user id
      * @return the power level
      */
-    fun getUserPowerLevel(userId: String): Int {
+    fun getUserPowerLevelValue(userId: String): Int {
         return powerLevelsContent.users.getOrElse(userId) {
             powerLevelsContent.usersDefault
         }
     }
 
     /**
+     * Returns the user power level of a dedicated user Id
+     *
+     * @param userId the user id
+     * @return the power level
+     */
+    fun getUserRole(userId: String): Role {
+        val value = getUserPowerLevelValue(userId)
+        return Role.fromValue(value, powerLevelsContent.eventsDefault)
+    }
+
+    /**
      * Tell if an user can send an event of a certain type
      *
+     * @param userId  the id of the user to check for.
+     * @param isState true if the event is a state event (ie. state key is not null)
      * @param eventType the event type to check for
-     * @param userId          the user id
      * @return true if the user can send this type of event
      */
-    fun isAllowedToSend(eventType: String, userId: String): Boolean {
-        return if (eventType.isNotEmpty() && userId.isNotEmpty()) {
-            val powerLevel = getUserPowerLevel(userId)
+    fun isUserAllowedToSend(userId: String, isState: Boolean, eventType: String?): Boolean {
+        return if (userId.isNotEmpty()) {
+            val powerLevel = getUserPowerLevelValue(userId)
             val minimumPowerLevel = powerLevelsContent.events[eventType]
-                                    ?: if (EventType.isStateEvent(eventType)) {
-                                        powerLevelsContent.stateDefault
-                                    } else {
-                                        powerLevelsContent.eventsDefault
-                                    }
+                    ?: if (isState) {
+                        powerLevelsContent.stateDefault
+                    } else {
+                        powerLevelsContent.eventsDefault
+                    }
             powerLevel >= minimumPowerLevel
         } else false
+    }
+
+    /**
+     * Check if the user have the necessary power level to invite
+     * @param userId the id of the user to check for.
+     * @return true if able to invite
+     */
+    fun isUserAbleToInvite(userId: String): Boolean {
+        val powerLevel = getUserPowerLevelValue(userId)
+        return powerLevel >= powerLevelsContent.invite
+    }
+
+    /**
+     * Check if the user have the necessary power level to ban
+     * @param userId the id of the user to check for.
+     * @return true if able to ban
+     */
+    fun isUserAbleToBan(userId: String): Boolean {
+        val powerLevel = getUserPowerLevelValue(userId)
+        return powerLevel >= powerLevelsContent.ban
+    }
+
+    /**
+     * Check if the user have the necessary power level to kick
+     * @param userId the id of the user to check for.
+     * @return true if able to kick
+     */
+    fun isUserAbleToKick(userId: String): Boolean {
+        val powerLevel = getUserPowerLevelValue(userId)
+        return powerLevel >= powerLevelsContent.kick
+    }
+
+    /**
+     * Check if the user have the necessary power level to redact
+     * @param userId the id of the user to check for.
+     * @return true if able to redact
+     */
+    fun isUserAbleToRedact(userId: String): Boolean {
+        val powerLevel = getUserPowerLevelValue(userId)
+        return powerLevel >= powerLevelsContent.redact
     }
 
     /**
@@ -68,7 +119,7 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
             // the first implementation was a string value
             is String -> value.toInt()
             is Int    -> value
-            else      -> PowerLevelsConstants.DEFAULT_ROOM_MODERATOR_LEVEL
+            else      -> Role.Moderator.value
         }
     }
 }

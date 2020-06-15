@@ -18,12 +18,12 @@ package im.vector.riotx.features.autocomplete.room
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import com.otaliastudios.autocomplete.RecyclerViewPresenter
 import im.vector.matrix.android.api.query.QueryStringValue
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.room.model.RoomSummary
 import im.vector.matrix.android.api.session.room.roomSummaryQueryParams
 import im.vector.riotx.features.autocomplete.AutocompleteClickListener
+import im.vector.riotx.features.autocomplete.RecyclerViewPresenter
 import javax.inject.Inject
 
 class AutocompleteRoomPresenter @Inject constructor(context: Context,
@@ -36,8 +36,6 @@ class AutocompleteRoomPresenter @Inject constructor(context: Context,
     }
 
     override fun instantiateAdapter(): RecyclerView.Adapter<*> {
-        // Also remove animation
-        recyclerView?.itemAnimator = null
         return controller.adapter
     }
 
@@ -57,5 +55,9 @@ class AutocompleteRoomPresenter @Inject constructor(context: Context,
                 .asSequence()
                 .sortedBy { it.displayName }
         controller.setData(rooms.toList())
+    }
+
+    fun clear() {
+        controller.listener = null
     }
 }

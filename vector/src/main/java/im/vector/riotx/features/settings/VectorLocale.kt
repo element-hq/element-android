@@ -21,10 +21,12 @@ import android.content.res.Configuration
 import android.os.Build
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import im.vector.riotx.BuildConfig
 import im.vector.riotx.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.util.IllformedLocaleException
 import java.util.Locale
 
 /**
@@ -37,6 +39,8 @@ object VectorLocale {
     private const val APPLICATION_LOCALE_SCRIPT_KEY = "APPLICATION_LOCALE_SCRIPT_KEY"
 
     private val defaultLocale = Locale("en", "US")
+
+    private const val ISO_15924_LATN = "Latn"
 
     /**
      * The cache of supported application languages
@@ -189,13 +193,21 @@ object VectorLocale {
             )
         }
 
-        val list = knownLocalesSet.map { (language, country, script) ->
+        val list = knownLocalesSet.mapNotNull { (language, country, script) ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                Locale.Builder()
-                        .setLanguage(language)
-                        .setRegion(country)
-                        .setScript(script)
-                        .build()
+                try {
+                    Locale.Builder()
+                            .setLanguage(language)
+                            .setRegion(country)
+                            .setScript(script)
+                            .build()
+                } catch (exception: IllformedLocaleException) {
+                    if (BuildConfig.DEBUG) {
+                        throw exception
+                    }
+                    // Ignore this locale in production
+                    null
+                }
             } else {
                 Locale(language, country)
             }
@@ -218,7 +230,7 @@ object VectorLocale {
             append(locale.getDisplayLanguage(locale))
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                    && locale.script != "Latn"
+                    && locale.script != ISO_15924_LATN
                     && locale.getDisplayScript(locale).isNotEmpty()) {
                 append(" - ")
                 append(locale.getDisplayScript(locale))
@@ -242,7 +254,7 @@ object VectorLocale {
         return buildString {
             append("[")
             append(locale.displayLanguage)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && locale.script != "Latn") {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && locale.script != ISO_15924_LATN) {
                 append(" - ")
                 append(locale.displayScript)
             }

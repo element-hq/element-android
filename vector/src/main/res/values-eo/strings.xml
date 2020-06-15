@@ -565,9 +565,6 @@
     <string name="room_participants_action_set_admin">Igi administranto</string>
     <string name="room_participants_action_ignore">Kaŝi ĉiujn mesaĝojn de ĉi tiu uzanto</string>
     <string name="room_participants_action_unignore">Remontri ĉiujn mesaĝojn de ĉi tiu uzanto</string>
-    <string name="room_participants_action_unignore_prompt">Ĉu remontri ĉiujn mesaĝojn de ĉi tiu uzanto\?
-\n
-\nRimarku, ke tiu ĉi ago reekigos la aplikaĵon, kio povas daŭri ioman temon.</string>
     <string name="room_participants_invite_search_another_user">Identigilo de uzanto, nomo, aŭ retpoŝtadreso</string>
     <string name="room_participants_action_mention">Mencii</string>
     <string name="room_participants_action_devices_list">Montri liston de salutaĵoj</string>

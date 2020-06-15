@@ -26,6 +26,12 @@ sealed class RoomMemberProfileViewEvents : VectorViewEvents {
     data class Failure(val throwable: Throwable) : RoomMemberProfileViewEvents()
 
     object OnIgnoreActionSuccess : RoomMemberProfileViewEvents()
+    object OnSetPowerLevelSuccess : RoomMemberProfileViewEvents()
+    object OnInviteActionSuccess : RoomMemberProfileViewEvents()
+    object OnKickActionSuccess : RoomMemberProfileViewEvents()
+    object OnBanActionSuccess : RoomMemberProfileViewEvents()
+    data class ShowPowerLevelValidation(val currentValue: Int, val newValue: Int) : RoomMemberProfileViewEvents()
+    data class ShowPowerLevelDemoteWarning(val currentValue: Int, val newValue: Int) : RoomMemberProfileViewEvents()
 
     data class StartVerification(
             val userId: String,

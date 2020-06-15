@@ -26,6 +26,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.text.Spannable
 import android.view.HapticFeedbackConstants
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -55,16 +56,15 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
+import im.vector.matrix.android.api.session.events.model.toModel
 import im.vector.matrix.android.api.session.file.FileService
 import im.vector.matrix.android.api.session.room.model.Membership
 import im.vector.matrix.android.api.session.room.model.message.MessageAudioContent
@@ -72,6 +72,7 @@ import im.vector.matrix.android.api.session.room.model.message.MessageContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFileContent
 import im.vector.matrix.android.api.session.room.model.message.MessageFormat
 import im.vector.matrix.android.api.session.room.model.message.MessageImageInfoContent
+import im.vector.matrix.android.api.session.room.model.message.MessageStickerContent
 import im.vector.matrix.android.api.session.room.model.message.MessageTextContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVerificationRequestContent
 import im.vector.matrix.android.api.session.room.model.message.MessageVideoContent
@@ -80,10 +81,12 @@ import im.vector.matrix.android.api.session.room.send.SendState
 import im.vector.matrix.android.api.session.room.timeline.Timeline
 import im.vector.matrix.android.api.session.room.timeline.TimelineEvent
 import im.vector.matrix.android.api.session.room.timeline.getLastMessageContent
+import im.vector.matrix.android.api.session.widgets.model.WidgetType
 import im.vector.matrix.android.api.util.MatrixItem
 import im.vector.matrix.android.api.util.toMatrixItem
 import im.vector.matrix.android.internal.crypto.attachments.toElementToDecrypt
 import im.vector.riotx.R
+import im.vector.riotx.core.dialogs.ConfirmationDialogBuilder
 import im.vector.riotx.core.dialogs.withColoredButton
 import im.vector.riotx.core.epoxy.LayoutManagerStateRestorer
 import im.vector.riotx.core.extensions.cleanup
@@ -110,10 +113,10 @@ import im.vector.riotx.core.utils.allGranted
 import im.vector.riotx.core.utils.checkPermissions
 import im.vector.riotx.core.utils.colorizeMatchingText
 import im.vector.riotx.core.utils.copyToClipboard
+import im.vector.riotx.core.utils.createJSonViewerStyleProvider
 import im.vector.riotx.core.utils.createUIHandler
 import im.vector.riotx.core.utils.getColorFromUserId
 import im.vector.riotx.core.utils.isValidUrl
-import im.vector.riotx.core.utils.jsonViewerStyler
 import im.vector.riotx.core.utils.openUrlInExternalBrowser
 import im.vector.riotx.core.utils.saveMedia
 import im.vector.riotx.core.utils.shareMedia
@@ -131,6 +134,7 @@ import im.vector.riotx.features.crypto.verification.VerificationBottomSheet
 import im.vector.riotx.features.home.AvatarRenderer
 import im.vector.riotx.features.home.room.detail.composer.TextComposerView
 import im.vector.riotx.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
+import im.vector.riotx.features.home.room.detail.sticker.StickerPickerConstants
 import im.vector.riotx.features.home.room.detail.timeline.TimelineEventController
 import im.vector.riotx.features.home.room.detail.timeline.action.EventSharedAction
 import im.vector.riotx.features.home.room.detail.timeline.action.MessageActionsBottomSheet
@@ -143,6 +147,8 @@ import im.vector.riotx.features.home.room.detail.timeline.item.MessageInformatio
 import im.vector.riotx.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.riotx.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.riotx.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
+import im.vector.riotx.features.home.room.detail.widget.RoomWidgetsBannerView
+import im.vector.riotx.features.home.room.detail.widget.RoomWidgetsBottomSheet
 import im.vector.riotx.features.html.EventHtmlRenderer
 import im.vector.riotx.features.html.PillImageSpan
 import im.vector.riotx.features.invite.VectorInviteView
@@ -155,6 +161,7 @@ import im.vector.riotx.features.reactions.EmojiReactionPickerActivity
 import im.vector.riotx.features.settings.VectorPreferences
 import im.vector.riotx.features.share.SharedData
 import im.vector.riotx.features.themes.ThemeUtils
+import im.vector.riotx.features.widgets.WidgetActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.parcel.Parcelize
@@ -194,7 +201,8 @@ class RoomDetailFragment @Inject constructor(
         VectorInviteView.Callback,
         JumpToReadMarkerView.Callback,
         AttachmentTypeSelectorView.Callback,
-        AttachmentsHelper.Callback {
+        AttachmentsHelper.Callback,
+        RoomWidgetsBannerView.Callback {
 
     companion object {
 
@@ -259,10 +267,11 @@ class RoomDetailFragment @Inject constructor(
         setupNotificationView()
         setupJumpToReadMarkerView()
         setupJumpToBottomView()
+        setupWidgetsBannerView()
+
         roomToolbarContentView.debouncedClicks {
             navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
         }
-        roomDetailViewModel.subscribe { renderState(it) }
 
         sharedActionViewModel
                 .observe()
@@ -275,7 +284,10 @@ class RoomDetailFragment @Inject constructor(
             renderTombstoneEventHandling(it)
         }
 
-        roomDetailViewModel.selectSubscribe(RoomDetailViewState::sendMode) { mode ->
+        roomDetailViewModel.selectSubscribe(RoomDetailViewState::sendMode, RoomDetailViewState::canSendMessage) { mode, canSend ->
+            if (!canSend) {
+                return@selectSubscribe
+            }
             when (mode) {
                 is SendMode.REGULAR -> renderRegularMode(mode.text)
                 is SendMode.EDIT    -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_edit, R.string.edit, mode.text)
@@ -290,18 +302,47 @@ class RoomDetailFragment @Inject constructor(
 
         roomDetailViewModel.observeViewEvents {
             when (it) {
-                is RoomDetailViewEvents.Failure                -> showErrorInSnackbar(it.throwable)
-                is RoomDetailViewEvents.OnNewTimelineEvents    -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
-                is RoomDetailViewEvents.ActionSuccess          -> displayRoomDetailActionSuccess(it)
-                is RoomDetailViewEvents.ActionFailure          -> displayRoomDetailActionFailure(it)
-                is RoomDetailViewEvents.ShowMessage            -> showSnackWithMessage(it.message, Snackbar.LENGTH_LONG)
-                is RoomDetailViewEvents.NavigateToEvent        -> navigateToEvent(it)
-                is RoomDetailViewEvents.FileTooBigError        -> displayFileTooBigError(it)
-                is RoomDetailViewEvents.DownloadFileState      -> handleDownloadFileState(it)
-                is RoomDetailViewEvents.JoinRoomCommandSuccess -> handleJoinedToAnotherRoom(it)
-                is RoomDetailViewEvents.SendMessageResult      -> renderSendMessageResult(it)
+                is RoomDetailViewEvents.Failure                         -> showErrorInSnackbar(it.throwable)
+                is RoomDetailViewEvents.OnNewTimelineEvents             -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
+                is RoomDetailViewEvents.ActionSuccess                   -> displayRoomDetailActionSuccess(it)
+                is RoomDetailViewEvents.ActionFailure                   -> displayRoomDetailActionFailure(it)
+                is RoomDetailViewEvents.ShowMessage                     -> showSnackWithMessage(it.message, Snackbar.LENGTH_LONG)
+                is RoomDetailViewEvents.NavigateToEvent                 -> navigateToEvent(it)
+                is RoomDetailViewEvents.FileTooBigError                 -> displayFileTooBigError(it)
+                is RoomDetailViewEvents.DownloadFileState               -> handleDownloadFileState(it)
+                is RoomDetailViewEvents.JoinRoomCommandSuccess          -> handleJoinedToAnotherRoom(it)
+                is RoomDetailViewEvents.SendMessageResult               -> renderSendMessageResult(it)
+                RoomDetailViewEvents.DisplayPromptForIntegrationManager -> displayPromptForIntegrationManager()
+                is RoomDetailViewEvents.OpenStickerPicker               -> openStickerPicker(it)
             }.exhaustive
         }
+    }
+
+    private fun setupWidgetsBannerView() {
+        roomWidgetsBannerView.callback = this
+    }
+
+    private fun openStickerPicker(event: RoomDetailViewEvents.OpenStickerPicker) {
+        navigator.openStickerPicker(this, roomDetailArgs.roomId, event.widget)
+    }
+
+    private fun displayPromptForIntegrationManager() {
+        // The Sticker picker widget is not installed yet. Propose the user to install it
+        val builder = AlertDialog.Builder(requireContext())
+        val v: View = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_no_sticker_pack, null)
+        builder
+                .setView(v)
+                .setPositiveButton(R.string.yes) { _, _ ->
+                    // Open integration manager, to the sticker installation page
+                    navigator.openIntegrationManager(
+                            context = requireContext(),
+                            roomId = roomDetailArgs.roomId,
+                            integId = null,
+                            screen = WidgetType.StickerPicker.preferred
+                    )
+                }
+                .setNegativeButton(R.string.no, null)
+                .show()
     }
 
     private fun handleJoinedToAnotherRoom(action: RoomDetailViewEvents.JoinRoomCommandSuccess) {
@@ -331,8 +372,10 @@ class RoomDetailFragment @Inject constructor(
         timelineEventController.callback = null
         timelineEventController.removeModelBuildListener(modelBuildListener)
         modelBuildListener = null
+        autoCompleter.clear()
         debouncer.cancelAll()
         recyclerView.cleanup()
+
         super.onDestroyView()
     }
 
@@ -403,22 +446,6 @@ class RoomDetailFragment @Inject constructor(
             override fun onTombstoneEventClicked(tombstoneEvent: Event) {
                 roomDetailViewModel.handle(RoomDetailAction.HandleTombstoneEvent(tombstoneEvent))
             }
-
-            override fun resendUnsentEvents() {
-                vectorBaseActivity.notImplemented()
-            }
-
-            override fun deleteUnsentEvents() {
-                vectorBaseActivity.notImplemented()
-            }
-
-            override fun closeScreen() {
-                vectorBaseActivity.notImplemented()
-            }
-
-            override fun jumpToBottom() {
-                vectorBaseActivity.notImplemented()
-            }
         }
     }
 
@@ -429,18 +456,24 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.clear_message_queue) {
-            // This a temporary option during dev as it is not super stable
-            // Cancel all pending actions in room queue and post a dummy
-            // Then mark all sending events as undelivered
-            roomDetailViewModel.handle(RoomDetailAction.ClearSendQueue)
-            return true
+        return when (item.itemId) {
+            R.id.clear_message_queue -> {
+                // This a temporary option during dev as it is not super stable
+                // Cancel all pending actions in room queue and post a dummy
+                // Then mark all sending events as undelivered
+                roomDetailViewModel.handle(RoomDetailAction.ClearSendQueue)
+                true
+            }
+            R.id.resend_all          -> {
+                roomDetailViewModel.handle(RoomDetailAction.ResendAll)
+                true
+            }
+            R.id.open_matrix_apps    -> {
+                navigator.openIntegrationManager(requireContext(), roomDetailArgs.roomId, null, null)
+                true
+            }
+            else                     -> super.onOptionsItemSelected(item)
         }
-        if (item.itemId == R.id.resend_all) {
-            roomDetailViewModel.handle(RoomDetailAction.ResendAll)
-            return true
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun renderRegularMode(text: String) {
@@ -515,14 +548,18 @@ class RoomDetailFragment @Inject constructor(
         val hasBeenHandled = attachmentsHelper.onActivityResult(requestCode, resultCode, data)
         if (!hasBeenHandled && resultCode == RESULT_OK && data != null) {
             when (requestCode) {
-                AttachmentsPreviewActivity.REQUEST_CODE -> {
+                AttachmentsPreviewActivity.REQUEST_CODE            -> {
                     val sendData = AttachmentsPreviewActivity.getOutput(data)
                     val keepOriginalSize = AttachmentsPreviewActivity.getKeepOriginalSize(data)
                     roomDetailViewModel.handle(RoomDetailAction.SendMedia(sendData, !keepOriginalSize))
                 }
-                REACTION_SELECT_REQUEST_CODE            -> {
+                REACTION_SELECT_REQUEST_CODE                       -> {
                     val (eventId, reaction) = EmojiReactionPickerActivity.getOutput(data) ?: return
                     roomDetailViewModel.handle(RoomDetailAction.SendReaction(eventId, reaction))
+                }
+                StickerPickerConstants.STICKER_PICKER_REQUEST_CODE -> {
+                    val content = WidgetActivity.getOutput(data).toModel<MessageStickerContent>() ?: return
+                    roomDetailViewModel.handle(RoomDetailAction.SendSticker(content))
                 }
             }
         }
@@ -562,6 +599,12 @@ class RoomDetailFragment @Inject constructor(
                 }
 
                 override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
+                    val canSendMessage = withState(roomDetailViewModel) {
+                        it.canSendMessage
+                    }
+                    if (!canSendMessage) {
+                        return false
+                    }
                     return when (model) {
                         is MessageFileItem,
                         is MessageImageVideoItem,
@@ -623,6 +666,8 @@ class RoomDetailFragment @Inject constructor(
                     return
                 }
                 if (text.isNotBlank()) {
+                    // We collapse ASAP, if not there will be a slight anoying delay
+                    composerLayout.collapse(true)
                     lockSendButton = true
                     roomDetailViewModel.handle(RoomDetailAction.SendMessage(text, vectorPreferences.isMarkdownEnabled()))
                 }
@@ -672,48 +717,47 @@ class RoomDetailFragment @Inject constructor(
         inviteView.callback = this
     }
 
-    private fun renderState(state: RoomDetailViewState) {
+    override fun invalidate() = withState(roomDetailViewModel) { state ->
         renderRoomSummary(state)
         val summary = state.asyncRoomSummary()
         val inviter = state.asyncInviter()
         if (summary?.membership == Membership.JOIN) {
+            roomWidgetsBannerView.render(state.activeRoomWidgets())
             scrollOnHighlightedEventCallback.timeline = roomDetailViewModel.timeline
             timelineEventController.update(state)
             inviteView.visibility = View.GONE
             val uid = session.myUserId
             val meMember = state.myRoomMember()
             avatarRenderer.render(MatrixItem.UserItem(uid, meMember?.displayName, meMember?.avatarUrl), composerLayout.composerAvatarImageView)
+            if (state.tombstoneEvent == null) {
+                if (state.canSendMessage) {
+                    composerLayout.visibility = View.VISIBLE
+                    composerLayout.setRoomEncrypted(summary.isEncrypted, summary.roomEncryptionTrustLevel)
+                    notificationAreaView.render(NotificationAreaView.State.Hidden)
+                } else {
+                    composerLayout.visibility = View.GONE
+                    notificationAreaView.render(NotificationAreaView.State.NoPermissionToPost)
+                }
+            } else {
+                composerLayout.visibility = View.GONE
+                notificationAreaView.render(NotificationAreaView.State.Tombstone(state.tombstoneEvent))
+            }
         } else if (summary?.membership == Membership.INVITE && inviter != null) {
             inviteView.visibility = View.VISIBLE
             inviteView.render(inviter, VectorInviteView.Mode.LARGE)
-
             // Intercept click event
             inviteView.setOnClickListener { }
         } else if (state.asyncInviter.complete) {
             vectorBaseActivity.finish()
         }
-        val isRoomEncrypted = summary?.isEncrypted ?: false
-        if (state.tombstoneEvent == null) {
-            composerLayout.visibility = View.VISIBLE
-            composerLayout.setRoomEncrypted(isRoomEncrypted, state.asyncRoomSummary.invoke()?.roomEncryptionTrustLevel)
-            notificationAreaView.render(NotificationAreaView.State.Hidden)
-        } else {
-            composerLayout.visibility = View.GONE
-            notificationAreaView.render(NotificationAreaView.State.Tombstone(state.tombstoneEvent))
-        }
     }
 
     private fun renderRoomSummary(state: RoomDetailViewState) {
         state.asyncRoomSummary()?.let { roomSummary ->
-            if (roomSummary.membership.isLeft()) {
-                Timber.w("The room has been left")
-                activity?.finish()
-            } else {
-                roomToolbarTitleView.text = roomSummary.displayName
-                avatarRenderer.render(roomSummary.toMatrixItem(), roomToolbarAvatarImageView)
+            roomToolbarTitleView.text = roomSummary.displayName
+            avatarRenderer.render(roomSummary.toMatrixItem(), roomToolbarAvatarImageView)
 
-                renderSubTitle(state.typingMessage, roomSummary.topic)
-            }
+            renderSubTitle(state.typingMessage, roomSummary.topic)
             jumpToBottomView.count = roomSummary.notificationCount
             jumpToBottomView.drawBadge = roomSummary.hasUnreadMessages
 
@@ -813,28 +857,17 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun promptConfirmationToRedactEvent(action: EventSharedAction.Redact) {
-        val layout = requireActivity().layoutInflater.inflate(R.layout.dialog_delete_event, null)
-        val reasonCheckBox = layout.findViewById<MaterialCheckBox>(R.id.deleteEventReasonCheck)
-        val reasonTextInputLayout = layout.findViewById<TextInputLayout>(R.id.deleteEventReasonTextInputLayout)
-        val reasonInput = layout.findViewById<TextInputEditText>(R.id.deleteEventReasonInput)
-
-        reasonCheckBox.isVisible = action.askForReason
-        reasonTextInputLayout.isVisible = action.askForReason
-
-        reasonCheckBox.setOnCheckedChangeListener { _, isChecked -> reasonTextInputLayout.isEnabled = isChecked }
-
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.delete_event_dialog_title)
-                .setView(layout)
-                .setPositiveButton(R.string.remove) { _, _ ->
-                    val reason = reasonInput.text.toString()
-                            .takeIf { action.askForReason }
-                            ?.takeIf { reasonCheckBox.isChecked }
-                            ?.takeIf { it.isNotBlank() }
+        ConfirmationDialogBuilder
+                .show(
+                        activity = requireActivity(),
+                        askForReason = action.askForReason,
+                        confirmationRes = R.string.delete_event_dialog_content,
+                        positiveRes = R.string.remove,
+                        reasonHintRes = R.string.delete_event_dialog_reason_hint,
+                        titleRes = R.string.delete_event_dialog_title
+                ) { reason ->
                     roomDetailViewModel.handle(RoomDetailAction.RedactAction(action.eventId, reason))
                 }
-                .setNegativeButton(R.string.cancel, null)
-                .show()
     }
 
     private fun displayRoomDetailActionFailure(result: RoomDetailViewEvents.ActionFailure) {
@@ -1208,14 +1241,14 @@ class RoomDetailFragment @Inject constructor(
                 JSonViewerDialog.newInstance(
                         action.content,
                         -1,
-                        jsonViewerStyler(colorProvider)
+                        createJSonViewerStyleProvider(colorProvider)
                 ).show(childFragmentManager, "JSON_VIEWER")
             }
             is EventSharedAction.ViewDecryptedSource        -> {
                 JSonViewerDialog.newInstance(
                         action.content,
                         -1,
-                        jsonViewerStyler(colorProvider)
+                        createJSonViewerStyleProvider(colorProvider)
                 ).show(childFragmentManager, "JSON_VIEWER")
             }
             is EventSharedAction.QuickReact                 -> {
@@ -1328,7 +1361,9 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun focusComposerAndShowKeyboard() {
-        composerLayout.composerEditText.showKeyboard(andRequestFocus = true)
+        if (composerLayout.isVisible) {
+            composerLayout.composerEditText.showKeyboard(andRequestFocus = true)
+        }
     }
 
     private fun showSnackWithMessage(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
@@ -1380,7 +1415,7 @@ class RoomDetailFragment @Inject constructor(
             AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(this)
             AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio(this)
             AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(this)
-            AttachmentTypeSelectorView.Type.STICKER -> vectorBaseActivity.notImplemented("Adding stickers")
+            AttachmentTypeSelectorView.Type.STICKER -> roomDetailViewModel.handle(RoomDetailAction.SelectStickerAttachment)
         }.exhaustive
     }
 
@@ -1412,5 +1447,10 @@ class RoomDetailFragment @Inject constructor(
         super.onContactAttachmentReady(contactAttachment)
         val formattedContact = contactAttachment.toHumanReadable()
         roomDetailViewModel.handle(RoomDetailAction.SendMessage(formattedContact, false))
+    }
+
+    override fun onViewWidgetsClicked() {
+        RoomWidgetsBottomSheet.newInstance()
+                .show(childFragmentManager, "ROOM_WIDGETS_BOTTOM_SHEET")
     }
 }

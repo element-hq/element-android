@@ -98,7 +98,7 @@ data class Event(
      * @return true if event is state event.
      */
     fun isStateEvent(): Boolean {
-        return EventType.isStateEvent(getClearType())
+        return stateKey != null
     }
 
     // ==============================================================================================================
@@ -161,6 +161,8 @@ data class Event(
      * Tells if the event is redacted by the user himself.
      */
     fun isRedactedBySameUser() = senderId == unsignedData?.redactedEvent?.senderId
+
+    fun resolvedPrevContent(): Content? = prevContent ?: unsignedData?.prevContent
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

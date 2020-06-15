@@ -54,30 +54,4 @@ data class WellKnown(
 
         @Json(name = "m.integrations")
         val integrations: JsonDict? = null
-) {
-    /**
-     * Returns the list of integration managers proposed
-     */
-    fun getIntegrationManagers(): List<WellKnownManagerConfig> {
-        val managers = ArrayList<WellKnownManagerConfig>()
-        integrations?.get("managers")?.let {
-            (it as? ArrayList<*>)?.let { configs ->
-                configs.forEach { config ->
-                    (config as? Map<*, *>)?.let { map ->
-                        val apiUrl = map["api_url"] as? String
-                        val uiUrl = map["ui_url"] as? String ?: apiUrl
-                        if (apiUrl != null
-                                && apiUrl.startsWith("https://")
-                                && uiUrl!!.startsWith("https://")) {
-                            managers.add(WellKnownManagerConfig(
-                                    apiUrl = apiUrl,
-                                    uiUrl = uiUrl
-                            ))
-                        }
-                    }
-                }
-            }
-        }
-        return managers
-    }
-}
+)
