@@ -90,7 +90,7 @@
         <item quantity="one">%1$s и 1 другой</item>
         <item quantity="few">%1$s и %2$d другие</item>
         <item quantity="many">%1$s и %2$d других</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
 
@@ -226,7 +226,7 @@
 
     <string name="key_verification_request_fallback_message">%s запрашивает подтверждение вашего ключа, но ваш клиент не поддерживает подтверждение в чате. Используйте устаревшую проверку для сверки ключей.</string>
 
-<string name="summary_you_sent_image">Вы отправили изображение.</string>
+    <string name="summary_you_sent_image">Вы отправили изображение.</string>
     <string name="summary_you_sent_sticker">Вы отправили стикер.</string>
 
     <string name="notice_room_invite_no_invitee_by_you">Ваше приглашение</string>
@@ -292,16 +292,16 @@
     <string name="notice_room_withdraw_with_reason_by_you">Вы отозвали приглашение %1$s. Причина: %2$s</string>
 
     <plurals name="notice_room_aliases_added_by_you">
-	<item quantity="one">Вы добавили адрес %1$s для этой комнаты.</item>
-	<item quantity="few">Вы добавили %1$s в качестве адресов для этой комнаты.</item>
-	<item quantity="many">Вы добавили %1$s в качестве адресов для этой комнаты.</item>
-</plurals>
+        <item quantity="one">Вы добавили адрес %1$s для этой комнаты.</item>
+        <item quantity="few">Вы добавили %1$s в качестве адресов для этой комнаты.</item>
+        <item quantity="many">Вы добавили %1$s в качестве адресов для этой комнаты.</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_removed_by_you">
-	<item quantity="one">Вы удалили адрес этой комнаты: %1$s.</item>
-	<item quantity="few">Вы удалили адреса этой комнаты: %1$s.</item>
-	<item quantity="many">Вы удалили адреса этой комнаты: %1$s.</item>
-</plurals>
+        <item quantity="one">Вы удалили адрес этой комнаты: %1$s.</item>
+        <item quantity="few">Вы удалили адреса этой комнаты: %1$s.</item>
+        <item quantity="many">Вы удалили адреса этой комнаты: %1$s.</item>
+    </plurals>
 
     <string name="notice_room_aliases_added_and_removed_by_you">Вы добавили адреса %1$s и удалили %2$s для этой комнаты.</string>
 
@@ -314,4 +314,4 @@
     <string name="notice_end_to_end_ok_by_you">Вы включили сквозное шифрование.</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Вы включили сквозное шифрование (неизвестный алгоритм %1$s).</string>
 
-    </resources>
+</resources>
