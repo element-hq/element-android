@@ -1683,7 +1683,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     <string name="settings_discovery_confirm_mail">Nous vous avons envoyé un e-mail de confirmation à %s, vérifiez vos e-mails et cliquez sur le lien de confirmation</string>
     <string name="settings_discovery_mail_pending">En attente</string>
 
-    <string name="settings_discovery_enter_identity_server">Renseignez un nouveau serveur d’identité</string>
+    <string name="settings_discovery_enter_identity_server">Renseignez l’URL d’un serveur d’identité</string>
     <string name="settings_discovery_bad_identity_server">Impossible de se connecter au serveur d’identité</string>
     <string name="settings_discovery_please_enter_server">Veuillez renseigner l’URL du serveur d’identité</string>
     <string name="settings_discovery_no_terms_title">Le serveur d’identité n’a pas de conditions de service</string>
@@ -2398,5 +2398,47 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
         <item quantity="other">Invitations envoyées à %1$s et %2$d autres</item>
     </plurals>
     <string name="invite_users_to_room_failure">Nous n’avons pas pu inviter les utilisateurs. Vérifiez les utilisateurs que vous souhaitez inviter et réessayez.</string>
+
+<string name="event_redacted">Message supprimé</string>
+    <string name="settings_show_redacted">Afficher les messages supprimés</string>
+    <string name="settings_show_redacted_summary">Afficher un remplaçant pour les messages supprimés</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Nous vous avons envoyé un e-mail de confirmation à %s, vérifiez vos e-mails et cliquez sur le lien de confirmation</string>
+    <string name="settings_text_message_sent_wrong_code">Le code de vérification n’est pas correct.</string>
+
+    <string name="uploads_media_title">MÉDIA</string>
+    <string name="uploads_media_no_result">Il n’y a aucun média dans ce salon</string>
+    <string name="uploads_files_title">FICHIERS</string>
+    <string name="uploads_files_subtitle">%1$s à %2$s</string>
+    <string name="uploads_files_no_result">Il n’y a aucun fichier dans ce salon</string>
+
+    <string name="login_connect_using_matrix_id_notice">Sinon, si vous avez déjà un compte et que vous connaissez votre identifiant Matrix et votre mot de passe, vous pouvez utiliser cette méthode :</string>
+    <string name="login_connect_using_matrix_id_submit">Me connecter avec mon identifiant Matrix</string>
+    <string name="login_signin_matrix_id_title">Se connecter</string>
+    <string name="login_signin_matrix_id_notice">Saisissez votre identifiant et votre mot de passe</string>
+    <string name="login_signin_matrix_id_hint">Identifiant de l’utilisateur</string>
+    <string name="login_signin_matrix_id_error_invalid_matrix_id">Ce n’est pas un identifiant d’utilisateur valide. Format attendu : « @utilisateur:serveuraccueil.org »</string>
+    <string name="autodiscover_well_known_error">Impossible de trouver un serveur d’accueil valide. Veuillez vérifier votre identifiant</string>
+
+    <string name="no_connectivity_to_the_server_indicator_airplane">Le mode avion est activé</string>
+
+    <string name="choose_locale_current_locale_title">Langue actuelle</string>
+    <string name="choose_locale_other_locales_title">Autres langues disponibles</string>
+    <string name="choose_locale_loading_locales">Chargement des langues disponibles…</string>
+
+    <string name="open_terms_of">Ouvrir les termes de %s</string>
+    <string name="disconnect_identity_server_dialog_content">Se déconnecter du serveur d’identité %s \?</string>
+    <string name="identity_server_error_outdated_identity_server">Ce serveur d’identité est obsolète. RiotX ne supporte que l’API V2.</string>
+    <string name="identity_server_error_outdated_home_server">Cette opération n’est pas possible. Le serveur d’accueil est obsolète.</string>
+    <string name="identity_server_error_no_identity_server_configured">Veuillez d’abord configurer un serveur d’identité.</string>
+    <string name="identity_server_error_terms_not_signed">Veuillez d’abord accepter les termes du serveur d’identité dans les paramètres.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Pour votre vie privée, RiotX prend uniquement en charge l’envoi des adresses e-mail et des numéros de téléphone hachés.</string>
+    <string name="identity_server_error_binding_error">L’association a échoué.</string>
+    <string name="identity_server_error_no_current_binding_error">Il n’y a actuellement aucune association avec cet identifiant.</string>
+
+    <string name="identity_server_set_default_notice">Votre serveur d’accueil (%1$s) propose d’utiliser %2$s comme serveur d’identité</string>
+    <string name="identity_server_set_default_submit">Utiliser %1$s</string>
+    <string name="identity_server_set_alternative_notice">Sinon, vous pouvez renseigner n’importe quelle autre URL de serveur d’identité</string>
+    <string name="identity_server_set_alternative_notice_no_default">Renseignez l’URL d’un serveur d’identité</string>
+    <string name="identity_server_set_alternative_submit">Valider</string>
 
 </resources>

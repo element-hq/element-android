@@ -19,7 +19,7 @@
     <string name="title_activity_room">Soba</string>
     <string name="title_activity_settings">Postavke</string>
     <string name="title_activity_member_details">Detalji o članu</string>
-    <string name="title_activity_historical">Povijesno</string>
+    <string name="title_activity_historical">Prijašnje</string>
     <string name="title_activity_bug_report">Izvješće o grešci</string>
     <string name="title_activity_group_details">Detalji o zajednici</string>
     <string name="title_activity_choose_sticker">Pošalji naljepnicu</string>
@@ -43,7 +43,7 @@
     <string name="loading">Učitavanje…</string>
 
     <string name="ok">U redu</string>
-    <string name="cancel">Otkaži</string>
+    <string name="cancel">Odustani</string>
     <string name="save">Spremi</string>
     <string name="leave">Napusti</string>
     <string name="stay">Ostani</string>
@@ -63,7 +63,7 @@
     <string name="view_decrypted_source">Vidi dešifrirani izvor</string>
     <string name="delete">Izbriši</string>
     <string name="rename">Preimenuj</string>
-    <string name="none">Ništa</string>
+    <string name="none">Nije podešeno</string>
     <string name="revoke">Opozovi</string>
     <string name="disconnect">Odspoji se</string>
     <string name="report_content">Prijavi sadržaj</string>
@@ -161,7 +161,7 @@
     <string name="send_bug_report_logs_description">Kako bi se dijagnosticirali problemi, zapisi iz ove aplikacije bit će poslani zajedno s ovom prijavom greške. Prijava greške, zapisi i slika zaslona neće biti javno vidljivi. Ako biste željeli poslati samo tekst, uklonite kvačicu:</string>
     <string name="send_bug_report_alert_message">Čini se da usred razočaranja tresete telefonom. Želite li otvoriti zaslon za prijavu grešaka\?</string>
     <string name="send_bug_report_app_crashed">Zadnji se puta aplikacija srušila. Želite li otvoriti zaslon za prijavu rušenja\?</string>
-    <string name="send_bug_report_rage_shake">Jako tresite za prijavu greške</string>
+    <string name="send_bug_report_rage_shake">Jako drmanje za prijavu greške</string>
 
     <string name="send_bug_report_sent">Prijava greške je uspješno poslana</string>
     <string name="send_bug_report_failed">Prijava greške nije poslana (%s)</string>
@@ -251,7 +251,7 @@
     <string name="auth_reset_password_message">Kako biste poništili lozinku, unesite adresu e-pošte vezanu za Vaš račun:</string>
     <string name="auth_reset_password_missing_email">Nužan je unos adrese e-pošte vezane za Vaš račun.</string>
     <string name="auth_reset_password_missing_password">Nužan je unos nove lozinke.</string>
-    <string name="auth_reset_password_email_validation_message">Poslana je e-pošta na %s. Nakon što slijedite sadržanu poveznicu, kliknite ispod.</string>
+    <string name="auth_reset_password_email_validation_message">Poslana je e-pošta na %s. Nakon što ste slijedili sadržanu poveznicu, kliknite ispod.</string>
     <string name="auth_reset_password_error_unauthorized">Neuspješna provjera adrese e-pošte: pobrinite se kliknuti na poveznicu u e-pošti</string>
     <string name="auth_reset_password_success_message">Vaša je lozinka poništena.
 \n
@@ -604,7 +604,7 @@
     <string name="settings_troubleshoot_diagnostic_run_button_title">Pokreni testove</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Izvršavanje… (%1$d od %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_success_status">Osnovna dijagnostika je uredna. Ako i dalje ne dobivate obavijesti, pošaljite izvješće o grešci kako bi se mogao utvrditi problem.</string>
-    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Jedan ili više testova nije uspjelo pa pokušajte s predloženim ispravkom/ama.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Jedan ili više testova nisu uspjeli pa pokušajte s predloženim ispravkom/ama.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Jedan ili više testova nije uspjelo, pošaljite izvješće o grešci kako bi se mogao utvrditi problem.</string>
 
     <string name="settings_troubleshoot_test_system_settings_title">Postavke sustava.</string>
@@ -833,7 +833,7 @@
     <string name="account_email_error">Došlo je do greške tijekom potvrde Vaše adrese e-pošte.</string>
 
     <string name="settings_password">Lozinka</string>
-    <string name="settings_change_password">Promijeni lozinku</string>
+    <string name="settings_change_password">Promijenite lozinku</string>
     <string name="settings_old_password">Sadašnja lozinka</string>
     <string name="settings_new_password">Nova lozinka</string>
     <string name="settings_confirm_password">Potvrdite novu lozinku</string>
@@ -899,7 +899,7 @@
 
     <string name="widget_integration_unable_to_create">Neuspjela izrada grafičkog elementa.</string>
     <string name="widget_integration_failed_to_send_request">Neuspjelo slanje zahtjeva.</string>
-    <string name="widget_integration_positive_power_level">Razina baterije treba biti pozitivan cijeli broj.</string>
+    <string name="widget_integration_positive_power_level">Razina upravljanja treba biti pozitivan cijeli broj.</string>
     <string name="widget_integration_must_be_in_room">Niste u ovoj sobi.</string>
     <string name="widget_integration_no_permission_in_room">Nemate dozvolu to učiniti u ovoj sobi.</string>
     <string name="widget_integration_missing_room_id">U zahtjevu nedostaje identitet sobe.</string>
@@ -908,7 +908,7 @@
     <string name="widget_integration_missing_parameter">Nedostaje obavezan parametar.</string>
     <string name="widget_integration_invalid_parameter">Parametar je neispravan.</string>
     <string name="integration_manager_not_configured">Nije podešen upravitelj integracijama.</string>
-    <string name="room_add_matrix_apps">Dodaj Matrix-aplikacije</string>
+    <string name="room_add_matrix_apps">Dodaj aplikacije unutar Matrixa</string>
     <string name="settings_labs_native_camera">Koristi izvornu kameru</string>
     <string name="settings_labs_native_camera_summary">Pokreni sistemsku kameru umjesto prilagođenog zaslona za kameru.</string>
     <string name="settings_labs_keyboard_options_to_send_message">Koristi tipku enter za slanje poruka</string>
@@ -1056,7 +1056,7 @@
     <string name="passphrase_empty_error_message">Unesite fraza-lozinku</string>
     <string name="passphrase_passphrase_too_weak">Fraza-lozinka je preslaba</string>
 
-    <string name="keys_backup_passphrase_not_empty_error_message">Izbrišite fraza-lozinku ako želite da Riot generira ključ za obnavljanje.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Izbrišite fraza-lozinku ako želite da Riot generira ključ za obnovu.</string>
     <string name="sas_incoming_request_notif_title">Zahtjev za potvrdom</string>
     <string name="sas_incoming_request_notif_content">%s želi potvrditi Vašu sesiju</string>
 
@@ -1072,7 +1072,7 @@
     <string name="sas_error_m_user_error">Nepodudaranje u korisnicima</string>
     <string name="sas_error_unknown">Nepoznata greška</string>
 
-    <string name="identity_server_not_defined">Ne koristite poslužitelj identiteta</string>
+    <string name="identity_server_not_defined">Ne koristite poslužitelja identiteta</string>
     <string name="identity_server_not_defined_for_password_reset">Nije podešen poslužitelj identiteta. Potreban je za poništavanje Vaše lozinke.</string>
 
     <string name="security_warning_identity_server">Prijašnje inačice Riota imale su sigurnosni propust koji bi Vašem poslužitelju identiteta (%1$s) omogućio pristup Vašem računu. Ako vjerujete %2$s, možete ovo zanemariti. U suprotnom se odjavite i ponovno prijavite.
@@ -1140,7 +1140,7 @@
     <string name="room_filtering_footer_create_new_direct_message">Pošalji novu izravnu poruku</string>
     <string name="room_filtering_footer_open_room_directory">Prikaži popis soba</string>
 
-    <string name="room_directory_search_hint">Ime ili identitet (#primjer:matrix.org)</string>
+    <string name="room_directory_search_hint">Naziv ili identitet (#primjer:matrix.org)</string>
 
     <string name="labs_swipe_to_reply_in_timeline">Omogući povlačenje za odgovaranje u vremenskoj crti</string>
 
@@ -1202,4 +1202,457 @@
     <string name="a11y_create_direct_message">Započni novi izravni razgovor</string>
     <string name="a11y_create_room">Izradi novu sobu</string>
     <string name="settings_rageshake">Gnjevno drmanje</string>
-</resources>
+<string name="auth_threepid_warning_message">Registracija uz istovremeno navođenje e-pošte i telefonskog broja nije podržano jer ne postoji odgovarajući API. U obzir će biti uzet samo telefonski broj.
+\n
+\nMožete dodati Vašu e-poštu Vašem profilu u postavkama.</string>
+    <string name="settings_integrations_summary">Koristite upravitelja integracijama kako biste rukovali botovima, mostovima, grafičkim elementima i paketima naljepnica.
+\nUpravitelji integracijama primaju konfiguracijske podatke i mogu mijenjati grafičke elemente, slati pozivnice za pridruživanje u sobe i postavljati razine upravljanja u Vaše ime.</string>
+    <string name="settings_flair">Sklonost</string>
+    <string name="room_settings_tag_pref_entry_none">Ništa</string>
+
+    <string name="room_settings_category_access_visibility_title">Pristup i vidljivost</string>
+    <string name="room_settings_directory_visibility">Prikaži ovu sobu u popisu soba</string>
+    <string name="room_settings_room_notifications_title">Obavijesti</string>
+    <string name="room_settings_room_access_rules_pref_title">Pristup sobi</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Čitljivost sobne povijesti</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">Tko može čitati povijest\?</string>
+    <string name="room_settings_room_access_rules_pref_dialog_title">Tko može pristupiti ovoj sobi\?</string>
+
+    <string name="room_settings_read_history_entry_anyone">Bilo tko</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Samo članovi (od trenutka odabira ove opcije)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Samo članovi (od trenutka kad su pozvani)</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Samo članovi (od trenutka kad su se pridružili)</string>
+
+    <string name="room_settings_room_access_warning">Soba mora imati adresu kako bi se za nju mogla ponuditi poveznica.</string>
+    <string name="room_settings_room_access_entry_only_invited">Samo osobe koje su pozvane</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Bilo tko osim gostiju, a da zna sobnu poveznicu</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Bilo tko, uključujući goste, a da zna sobnu poveznicu</string>
+
+    <string name="room_settings_banned_users_title">Korisnici sa zabranom pristupa</string>
+
+    <string name="room_settings_category_advanced_title">Napredno</string>
+    <string name="room_settings_room_internal_id">Interni identitet sobe</string>
+    <string name="room_settings_addresses_pref_title">Adrese</string>
+    <string name="room_settings_labs_pref_title">Laboratorij</string>
+    <string name="room_settings_labs_warning_message">Ovo su probne značajke koje se mogu pokvariti na neočekivane načine. Koristite ih s oprezom.</string>
+    <string name="room_settings_labs_end_to_end">Šifriranje s kraja na kraj</string>
+    <string name="room_settings_labs_end_to_end_is_active">Šifriranje s kraja na kraj je aktivno</string>
+    <string name="room_settings_labs_end_to_end_warnings">Potrebno je odjaviti se da bi se moglo omogućiti šifriranje.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Šifriraj samo za potvrđene sesije</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Nikada iz ove sesije ne šaljite šifrirane poruke nepotvrđenim sesijama u ovoj sobi.</string>
+
+    <string name="room_settings_addresses_no_local_addresses">Ova soba nema lokalnih adresa</string>
+    <string name="room_settings_addresses_add_new_address">Nova adresa (npr. #foo:matrix.org)</string>
+
+    <string name="room_settings_no_flair">Ova soba ne pokazuje sklonost bilo kojoj zajednici</string>
+    <string name="room_settings_add_new_group">Novi identitet zajednice (npr. +foo:matrix.org)</string>
+    <string name="room_settings_invalid_group_format_dialog_title">Neispravan identitet zajednice</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' nije ispravan identitet zajednice</string>
+
+
+    <string name="room_settings_addresses_invalid_format_dialog_title">Neispravni oblik za alternativni naziv</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' nije ispravni oblik za alternativni naziv</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">Neće postojati glavna adresa za ovu sobu.</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_title">Upozorenja za glavnu adresu</string>
+
+    <string name="room_settings_set_main_address">Postavi za glavnu adresu</string>
+    <string name="room_settings_unset_main_address">Izbriši glavnu adresu</string>
+    <string name="room_settings_copy_room_id">Kopiraj identitet sobe</string>
+    <string name="room_settings_copy_room_address">Kopiraj adresu sobe</string>
+
+    <string name="room_settings_addresses_e2e_enabled">Šifriranje je omogućeno u ovoj sobi.</string>
+    <string name="room_settings_addresses_e2e_disabled">Šifriranje je onemogućeno u ovoj sobi.</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">Omogući šifriranje (upozorenje: ovo nije moguće naknadno onemogućiti!)</string>
+
+    <string name="directory_title">Popis</string>
+    <string name="settings_theme">Tema</string>
+
+    <string name="failed_to_load_timeline_position">%s je pokušavao učitati određenu točku s vremenske crte ove sobe, no nije ju mogao naći.</string>
+
+    <string name="encryption_information_title">Informacije o šifriranju s kraja na kraj</string>
+
+    <string name="encryption_information_device_info">Informacije o događaju</string>
+    <string name="encryption_information_user_id">Korisnički identitet</string>
+    <string name="encryption_information_curve25519_identity_key">Identitetski ključ za Curve25519</string>
+    <string name="encryption_information_algorithm">Algoritam</string>
+    <string name="encryption_information_session_id">Identitet sesije</string>
+    <string name="encryption_information_decryption_error">Greška u dešifriranju</string>
+
+    <string name="encryption_information_sender_device_information">Informacije o sesiji pošiljatelja</string>
+    <string name="encryption_information_device_name">Javni naziv</string>
+    <string name="encryption_information_device_name_with_warning">Javni naziv (vidljivo osobama s kojima komunicirate)</string>
+    <string name="device_name_warning">Javni naziv sesije vidljiv je osobama s kojima komunicirate</string>
+    <string name="encryption_information_name">Javni naziv</string>
+    <string name="encryption_information_device_id">Identitet</string>
+    <string name="encryption_information_device_key">Ključ sesije</string>
+    <string name="encryption_information_verification">Potvrda</string>
+    <string name="encryption_export_e2e_room_keys">Izvezi sobne ključeve za E2E</string>
+    <string name="encryption_export_room_keys">Izvezi sobne ključeve</string>
+    <string name="encryption_export_room_keys_summary">Izvezi ključeve u lokalnu datoteku</string>
+    <string name="encryption_export_export">Izvezi</string>
+    <string name="encryption_export_notice">Napravite fraza-lozinku za šifriranje izvedenih ključeva. Ista fraza-lozinka trebat će Vam za uvoz ključeva.</string>
+    <string name="encryption_export_saved_as">Sobni ključevi za E2E su spremljeni u \'%s\'.
+\n
+\nUpozorenje: moguće je da će ova datoteka biti izbrisana uklanjanjem aplikacije.</string>
+
+    <string name="encryption_message_recovery">Povrat šifriranih poruka</string>
+    <string name="encryption_import_e2e_room_keys">Uvezi sobne ključeve za E2E</string>
+    <string name="encryption_import_room_keys">Uvezi sobne ključeve</string>
+    <string name="encryption_import_room_keys_summary">Uvezi ključeve iz lokalne datoteke</string>
+    <string name="encryption_import_import">Uvezi</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Šifriraj samo ka potvrđenim sesijama</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Nikada iz ove sesije ne šalji šifrirane poruke nepotvrđenim sesijama.</string>
+    <string name="encryption_import_room_keys_success">%1$d od %2$d ključ(eva) je uspješno uvezeno.</string>
+
+    <string name="encryption_information_not_verified">Nije potvrđeno</string>
+    <string name="encryption_information_verified">Potvrđeno</string>
+    <string name="encryption_information_blocked">Na crnoj listi</string>
+
+    <string name="encryption_information_unknown_device">Nepoznata sesija</string>
+    <string name="encryption_information_unknown_ip">nepoznata IP adresa</string>
+    <string name="encryption_information_none">ništa</string>
+
+    <string name="encryption_information_verify">Potvrdi</string>
+    <string name="encryption_information_unverify">Ukloni potvrdu</string>
+    <string name="encryption_information_block">Stav na crnu listu</string>
+    <string name="encryption_information_unblock">Ukloni s crne liste</string>
+
+    <string name="encryption_information_verify_device">Potvrdi sesiju</string>
+    <string name="encryption_information_verify_device_warning">Potvrdite usporedbom sljedećeg s korisničkim postavkama u Vašoj drugoj sesiji:</string>
+    <string name="encryption_information_verify_device_warning2">Ako se ne podudaraju, sigurnost Vaše komunikacije može biti narušena.</string>
+    <string name="encryption_information_verify_key_match">Potvrđujem da ključevi odgovaraju</string>
+
+    <string name="e2e_enabling_on_app_update">Riot podržava šifriranje s kraja na kraj, no trebat ćete se ponovno prijaviti kako biste ga omogućili.
+\n
+\nTo možete sada učiniti ili kasnije iz postavki aplikacije.</string>
+
+    <string name="unknown_devices_alert_title">Soba sadrži nepoznate sesije</string>
+    <string name="select_room_directory">Odaberite popis soba</string>
+    <string name="directory_server_fail_to_retrieve_server">Moguće je da je poslužitelj nedostupan ili preopterećen</string>
+    <string name="directory_server_type_homeserver">Unesite poslužitelja za ispis javnih soba s</string>
+    <string name="directory_server_placeholder">URL poslužitelja</string>
+    <string name="directory_server_all_rooms_on_server">Sve sobe na poslužitelju %s</string>
+    <string name="directory_server_native_rooms">Sve izvorne sobe s %s</string>
+
+    <string name="lock_screen_hint">Ovdje tipkajte…</string>
+
+    <plurals name="notification_unread_notified_messages">
+	<item quantity="one">%d nepročitana obavijesna poruka</item>
+	<item quantity="few">%d nepročitane obavijesne poruke</item>
+	<item quantity="other">%d nepročitanih obavijesnih poruka</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+	<item quantity="one">%d nepročitana obavijesna poruka</item>
+	<item quantity="few">%d nepročitane obavijesne poruke</item>
+	<item quantity="other">%d nepročitanih obavijesnih poruka</item>
+</plurals>
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+	<item quantity="one">%d soba</item>
+	<item quantity="few">%d sobe</item>
+	<item quantity="other">%d soba</item>
+</plurals>
+
+    <plurals name="notification_compat_summary_line_for_room">
+	<item quantity="one">%1$s: %2$d poruka</item>
+	<item quantity="few">%1$s: %2$d poruke</item>
+	<item quantity="other">%1$s: %2$d poruka</item>
+</plurals>
+    <plurals name="notification_compat_summary_title">
+	<item quantity="one">%d obavijest</item>
+	<item quantity="few">%d obavijesti</item>
+	<item quantity="other">%d obavijesti</item>
+</plurals>
+
+    <string name="notification_unread_notified_messages_in_room">%1$s u %2$s</string>
+    <string name="notification_unknown_new_event">Novi događaj</string>
+    <string name="notification_unknown_room_name">Soba</string>
+    <string name="notification_new_messages">Nove poruke</string>
+    <string name="notification_new_invitation">Nova pozivnica</string>
+    <string name="notification_sender_me">Vi</string>
+    <string name="notification_inline_reply_failed">** Neuspjelo slanje - otvorite sobu</string>
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
+
+    <string name="historical_placeholder">Traži prijašnje</string>
+
+    <string name="font_size">Veličina pisma</string>
+    <string name="tiny">Sićušna</string>
+    <string name="small">Mala</string>
+    <string name="normal">Normalna</string>
+    <string name="large">Velika</string>
+    <string name="larger">Veća</string>
+    <string name="largest">Najveća</string>
+    <string name="huge">Ogromna</string>
+
+    <string name="widget_no_power_to_manage">Potrebna Vam je dozvola za upravljanje grafičkim elementima u ovoj sobi</string>
+    <string name="widget_creation_failure">Stvaranje grafičkog elementa nije uspjelo</string>
+    <string name="event_formatter_widget_added">%2$s je dodao/la %1$s</string>
+    <string name="event_formatter_widget_removed">%2$s je uklonio/la %1$s</string>
+    <string name="settings_labs_create_conference_with_jitsi">Uspostavljanje konferencijskih poziva kroz Jitsi</string>
+    <string name="widget_delete_message_confirmation">Jeste li sigurni da želite ukloniti grafički element iz ove sobe\?</string>
+    <plurals name="active_widgets">
+	<item quantity="one">%d aktivan grafički element</item>
+	<item quantity="few">%d aktivna grafička elementa</item>
+	<item quantity="other">%d aktivnih grafičkih elemenata</item>
+</plurals>
+
+
+    <string name="room_widget_activity_title">Grafički element</string>
+    <string name="room_widget_permission_title">Učitaj grafički element</string>
+    <string name="room_widget_permission_added_by">Ovaj je grafički element dodao/la:</string>
+    <string name="room_widget_permission_webview_shared_info_title">Njegovo korištenje može postaviti kolačiće i dijeliti podatke s %s:</string>
+    <string name="room_widget_permission_shared_info_title">Njegovo korištenje može dijeliti podatke s %s:</string>
+    <string name="room_widget_failed_to_load">Neuspješno učitavanje grafičkog elementa.
+\n%s</string>
+    <string name="room_widget_reload">Ponovno učitaj grafički element</string>
+    <string name="room_widget_open_in_browser">Otvori u web pregledniku</string>
+    <string name="room_widget_revoke_access">Opozovi moj pristup</string>
+
+    <string name="room_widget_permission_display_name">Vaše ime za prikaz</string>
+    <string name="room_widget_permission_avatar_url">URL Vašeg avatara</string>
+    <string name="room_widget_permission_user_id">Vaš korisnički identitet</string>
+    <string name="room_widget_permission_theme">Vaša tema</string>
+    <string name="room_widget_permission_widget_id">Identitet grafičkog elementa</string>
+    <string name="room_widget_permission_room_id">Identitet sobe</string>
+
+
+    <string name="error_jitsi_not_supported_on_old_device">Nažalost konferencijski pozivi kroz Jitsi nisu podržani na starim uređajima (uređaji s Androidom inačice manje od 5.0)</string>
+    <string name="command_description_clear_scalar_token">Za popravak upravljanja aplikacijama unutar Matrixa</string>
+
+    <string name="group_details_home">Početna</string>
+    <string name="keys_backup_no_session_error">Nije dostupna ni jedna sesija Matrixa</string>
+
+    <string name="keys_backup_setup_step1_title">Nikada ne izgubite šifrirane poruke</string>
+    <string name="keys_backup_setup_step1_description">Poruke u šifriranim sobama su osigurane šifriranjem s kraja na kraj. Samo Vi i primatelj(i) imate ključeve za čitanje ovih poruka.
+\n
+\nNapravite sigurnosnu kopiju Vaših ključeva kako ih ne biste izgubili.</string>
+    <string name="keys_backup_setup_step1_advanced">(Napredno)</string>
+    <string name="keys_backup_setup_step1_manual_export">Ručno izvezi ključeve</string>
+
+    <string name="keys_backup_setup_step2_text_title">Zaštitite svoju sigurnosnu kopiju rečeničnom lozinkom.</string>
+    <string name="keys_backup_setup_step2_text_description">Šifriran primjerak Vaših ključeva bit će spremljen na Vašem poslužitelju. Zaštitite Vašu sigurnosnu kopiju fraza-lozinkom.
+\n
+\nZa najveću sigurnost ona bi trebala biti drugačija od Vaše lozinke za račun.</string>
+    <string name="keys_backup_setup_step2_button_title">Postavi rečeničnu lozinku</string>
+    <string name="keys_backup_setup_creating_backup">Izrada sigurnosne kopije</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">Alternativno, zaštitite Vašu sigurnosnu kopiju ključem za obnovu i pohranite ga na sigurno.</string>
+    <string name="event_redacted">Poruka je izbrisana</string>
+    <string name="a11y_close_keys_backup_banner">Zatvori natpis o pričuvnim ključevima</string>
+    <string name="room_list_quick_actions_notifications_all_noisy">Sve poruke (bučno)</string>
+    <string name="room_list_quick_actions_notifications_all">Sve poruke</string>
+    <string name="room_list_quick_actions_notifications_mentions">Samo sa spomenom</string>
+    <string name="room_list_quick_actions_notifications_mute">Utišano</string>
+    <string name="room_list_quick_actions_leave">Napusti sobu</string>
+    <string name="help_long_click_on_room_for_more_options">Napravite dugi klik na sobu za više opcija</string>
+
+
+    <string name="room_join_rules_public">%1$s je učinio/la sobu javnom svakome tko zna poveznicu.</string>
+    <string name="room_join_rules_invite">%1$s je učinio/la sobu dostupnom samo putem pozivnice.</string>
+    <string name="timeline_unread_messages">Nepročitane poruke</string>
+
+    <string name="login_splash_title">Oslobodite svoju komunikaciju</string>
+    <string name="login_splash_text1">Ćaskajte s ljudima izravno ili u grupama</string>
+    <string name="login_splash_text2">Neka razgovori budu privatni uz šifriranje</string>
+    <string name="login_splash_text3">Proširite i podesite Vaše iskustvo</string>
+    <string name="login_splash_submit">Započni</string>
+
+    <string name="login_server_title">Odaberite poslužitelja</string>
+    <string name="login_server_text">Poput e-pošte, računi imaju jedan dom, no možete razgovarati s bilo kime</string>
+    <string name="login_server_matrix_org_text">Pridružite se milijunima koji su slobodni na najvećem javnom poslužitelju</string>
+    <string name="login_server_modular_text">Plaćeno gošćenje za organizacije</string>
+    <string name="login_server_modular_learn_more">Naučite više</string>
+    <string name="login_server_other_title">Drugo</string>
+    <string name="login_server_other_text">Prilagođene i napredne postavke</string>
+
+    <string name="login_continue">Nastavi</string>
+    <string name="login_connect_to">Spoji se na %1$s</string>
+    <string name="login_connect_to_modular">Spoji se na Modular</string>
+    <string name="login_connect_to_a_custom_server">Spoji se na prilagođenog poslužitelja</string>
+    <string name="login_signin_to">Prijavi se na %1$s</string>
+    <string name="login_signup">Otvori račun</string>
+    <string name="login_signin">Prijavi se</string>
+    <string name="login_signin_sso">Nastavi sa SSO-om</string>
+
+    <string name="login_server_url_form_modular_hint">Adresa u Modularu</string>
+    <string name="login_server_url_form_other_hint">Adresa</string>
+    <string name="login_server_url_form_modular_text">Plaćeno gošćenje za organizacije</string>
+    <string name="login_server_url_form_modular_notice">Unesite adresu Modular Riota ili poslužitelja koji želite koristiti</string>
+    <string name="login_server_url_form_other_notice">Unesite adresu poslužitelja ili Riota na koji se želite spojiti</string>
+
+    <string name="login_sso_error_message">Došlo je do greške pri učitavanju stranice: %1$s (%2$d)</string>
+    <string name="login_mode_not_supported">Aplikacija se ne može prijaviti na ovog poslužitelja. Poslužitelj podržava sljedeće vrste prijava: %1$s.
+\n
+\nŽelite li se prijaviti pomoću web-klijenta\?</string>
+    <string name="login_registration_disabled">Nažalost ovaj poslužitelj ne prihvaća nove račune.</string>
+    <string name="login_registration_not_supported">Aplikacija ne može otvoriti račun na ovom poslužitelju.
+\n
+\nŽelite li otvoriti račun pomoću web-klijenta\?</string>
+
+    <string name="login_login_with_email_error">Ova e-pošta nije vezana ni uz koji račun.</string>
+
+    <string name="login_reset_password_on">Poništi lozinku na %1$s</string>
+    <string name="login_reset_password_notice">Bit će Vam poslana kontrolna e-pošta u Vaš sandučić radi potvrde postavljanja nove lozinke.</string>
+    <string name="login_reset_password_submit">Dalje</string>
+    <string name="login_reset_password_email_hint">E-pošta</string>
+    <string name="login_reset_password_password_hint">Nova lozinka</string>
+
+    <string name="login_reset_password_warning_title">Upozorenje!</string>
+    <string name="login_reset_password_warning_content">Promjena lozinke će poništiti sve ključeve za šifriranje od kraja do kraja u svim Vašim sesijama, zbog čega će šifrirana povijest ćaskanja biti nečitljiva. Podesite pričuvu ključeva ili izvezite ključeve Vaših soba pomoću druge sesije prije nego poništite Vašu lozinku.</string>
+    <string name="login_reset_password_warning_submit">Nastavi</string>
+
+    <string name="login_reset_password_error_not_found">Ova e-pošta nije povezana ni sa kojim računom</string>
+
+    <string name="login_reset_password_mail_confirmation_title">Provjerite Vaš sandučić</string>
+    <string name="login_reset_password_mail_confirmation_notice">Kontrolna e-pošta poslana je na adresu %1$s.</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">Pritisnite poveznicu za potvrdu Vaše nove lozinke. Nakon što ste slijedili sadržanu poveznicu, kliknite ispod.</string>
+    <string name="login_reset_password_mail_confirmation_submit">Potvrdio/la sam svoju adresu e-pošte</string>
+
+    <string name="login_reset_password_success_title">Uspješno provedeno!</string>
+    <string name="login_reset_password_success_notice">Vaša je lozinka poništena.</string>
+    <string name="login_reset_password_success_notice_2">Odjavljeni ste iz svih sesija i više nećete primati obavijesti. Kako biste ponovno omogućili obavijesti, ponovno se prijavite na svakom uređaju.</string>
+    <string name="login_reset_password_success_submit">Povratak na prijavu</string>
+
+    <string name="login_reset_password_cancel_confirmation_title">Upozorenje</string>
+    <string name="login_reset_password_cancel_confirmation_content">Vaša lozinka nije promijenjena.
+\n
+\nŽelite li zaustaviti proces promjene lozinke\?</string>
+
+    <string name="bug_report_error_too_short">Opis je prekratak</string>
+
+    <string name="command_description_shrug">Ubacuje ¯\\_(ツ)_/¯ prije početka tekstualne poruke</string>
+
+    <string name="verification_verified_user">%s potvrđen/a</string>
+    <string name="verification_request_waiting_for">Čekanje na %s…</string>
+    <string name="verification_request_alert_description">Za dodatnu sigurnost, potvrdite korisnika/cu %s provjerom jednokratnog kôda na oba uređaja.
+\n
+\nUčinite to osobno za najveću sigurnost.</string>
+    <string name="room_profile_not_encrypted_subtitle">Poruke u ovoj sobi nisu šifrirane s kraja na kraj.</string>
+    <string name="room_profile_encrypted_subtitle">Poruke u ovoj sobi su šifrirane s kraja na kraj.
+\n
+\nVaše su poruke osigurane ključanicama te samo Vi i primatelj imate jedinstvene ključeve za otključavanje.</string>
+    <string name="room_profile_section_security">Sigurnost</string>
+    <string name="room_profile_section_security_learn_more">Saznajte više</string>
+    <string name="room_profile_section_more">Više</string>
+    <string name="room_profile_section_more_settings">Postavke sobe</string>
+    <string name="room_profile_section_more_notifications">Obavijesti</string>
+    <plurals name="room_profile_section_more_member_list">
+	<item quantity="one">%1$d osoba</item>
+	<item quantity="few">%1$d osobe</item>
+	<item quantity="other">%1$d osoba</item>
+</plurals>
+    <string name="room_profile_section_more_uploads">Slanja</string>
+    <string name="room_profile_section_more_leave">Napusti sobu</string>
+    <string name="room_profile_leaving_room">Napuštanje sobe…</string>
+
+    <string name="room_member_power_level_admins">Administratori</string>
+    <string name="room_member_power_level_moderators">Moderatori</string>
+    <string name="room_member_power_level_custom">Prilagođeno</string>
+    <string name="room_member_power_level_invites">Pozivnice</string>
+    <string name="room_member_power_level_users">Korisnici</string>
+
+    <string name="room_member_power_level_admin_in">Administrator u %1$s</string>
+    <string name="room_member_power_level_moderator_in">Moderator u %1$s</string>
+    <string name="room_member_power_level_custom_in">Prilagođeno (%1$d) u %2$s</string>
+
+    <string name="room_member_jump_to_read_receipt">Skoči na potvrdu o pročitanoj poruci</string>
+
+    <string name="rendering_event_error_type_of_event_not_handled">RiotX ne podržava događaje tipa \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">RiotX ne podržava poruke tipa \'%1$s\'</string>
+    <string name="rendering_event_error_exception">RiotX je naišao na problem pri prikazu sadržaja događaja s identitetom \'%1$s\'</string>
+
+    <string name="unignore">Ukloni zanemarivanje</string>
+
+    <string name="room_list_sharing_header_recent_rooms">Nedavne sobe</string>
+    <string name="room_list_sharing_header_other_rooms">Druge sobe</string>
+
+    <string name="command_description_rainbow">Šalje danu poruku obojanu duginim bojama</string>
+    <string name="settings_category_timeline">Vremenska crta</string>
+
+    <string name="settings_category_composer">Uređivač poruka</string>
+
+    <string name="room_settings_enable_encryption">Omogući šifriranje s kraja na kraj</string>
+    <string name="room_settings_enable_encryption_warning">Šifriranje nije moguće onemogućiti jednom kad se omogući.</string>
+
+    <string name="room_settings_enable_encryption_dialog_title">Omogućiti šifriranje\?</string>
+    <string name="room_settings_enable_encryption_dialog_content">Šifriranje nije moguće onemogućiti jednom kad se omogući. Poslužitelj ne može vidjeti poruke koje su poslane u šifriranu sobu, već ih mogu vidjeti samo sudionici u sobi. Omogućavanje šifriranja može uzrokovati poteškoće u radu mnogim botovima i mostovima.</string>
+    <string name="room_settings_enable_encryption_dialog_submit">Omogući šifriranje</string>
+
+    <string name="verification_request_notice">Kako biste bili sigurni, potvrdite %s provjerom jednokratnog kôda.</string>
+    <string name="verification_request_start_notice">Kako biste bili sigurni, ovo učinite osobno ili koristite drugi način komuniciranja.</string>
+
+    <string name="verification_emoji_notice">Usporedite jedinstvene emojije i potvrdite da se pojavljuju istim redoslijedom.</string>
+    <string name="verification_code_notice">Usporedite kôd s onim prikazanim na zaslonu drugog korisnika.</string>
+    <string name="verification_conclusion_ok_notice">Poruke s ovim korisnikom su šifrirane s kraja na kraj te ih ne mogu pročitati treće strane.</string>
+    <string name="verification_conclusion_ok_self_notice">Vaša je nova sesija sada potvrđena. Sesija ima pristup Vašim šifriranim porukama te će ju drugi korisnici vidjeti kao pouzdanu.</string>
+
+
+    <string name="settings_active_sessions_list">Aktivne sesije</string>
+    <string name="settings_active_sessions_show_all">Prikaži sve sesije</string>
+    <string name="settings_active_sessions_manage">Upravljanje sesijama</string>
+    <string name="settings_active_sessions_signout_device">Odjavi se iz ove sesije</string>
+
+    <string name="settings_failed_to_get_crypto_device_info">Nisu dostupne kriptografske informacije</string>
+
+    <string name="settings_active_sessions_verified_device_desc">Ova je sesija pouzdana za sigurno dopisivanje jer ste ju Vi potvrdili:</string>
+    <string name="message_key">Ključ za poruke</string>
+    <string name="generate_message_key">Generiraj ključ za poruke</string>
+
+    <string name="command_description_plain">Šalje poruku u jasnom tekstu bez interpretacije u Markdownu</string>
+
+    <string name="room_message_placeholder">Poruka…</string>
+
+    <string name="keys_backup_setup_step3_success_title">Uspješno dovršeno!</string>
+    <string name="keys_backup_setup_step3_text_line1">Izrada sigurnosne kopije ključeva je u tijeku.</string>
+    <string name="keys_backup_setup_step3_button_title">Dovršeno</string>
+    <string name="keys_backup_setup_step3_button_title_no_passphrase">Napravljena je kopija</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">Dijeli</string>
+    <string name="keys_backup_setup_step3_save_button_title">Spremi u datoteku</string>
+    <string name="sas_verified_successful_description">Sigurne poruke s ovim korisnikom su šifrirane s kraja na kraj i treće strane ih ne mogu pročitati.</string>
+    <string name="sas_verification_request_notification_channel">Interaktivna potvrda sesije</string>
+    <string name="settings_show_redacted">Prikaži izbrisane poruke</string>
+    <string name="settings_show_redacted_summary">Prikaži prazninu umjesto izbrisanih poruka</string>
+    <string name="create_room_name_hint">Naziv sobe</string>
+    <string name="create_room_public_title">Javna</string>
+    <string name="create_room_public_description">Bilo tko moći će se pridružiti sobi</string>
+    <string name="create_room_directory_title">Popis soba</string>
+    <string name="create_room_directory_description">Objavi ovu sobu u popisu soba</string>
+
+    <string name="keys_backup_unable_to_get_keys_backup_data">Došlo je do greške pri dohvaćanju podataka iz sigurnosne kopije ključeva</string>
+
+    <string name="alpha_disclaimer_title">Dobrodošli u radnu inačicu!</string>
+    <string name="alpha_disclaimer_content_line_1">Obzirom da je RiotX u fazi ranog razvoja, neke značajke mogu nedostajati i moguće su greške u aplikaciji.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay">Najnoviji popis značajki se uvijek nalazi na %1%s. Ako nađete greške u aplikaciji, budite ljubazni pa pošaljite izvještaj pomoću izbornika u gornje-lijevom kutu Početne stranice. Razvijatelji će ispraviti greške čim prije.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Opis za trgovinu Play</string>
+    <string name="alpha_disclaimer_content_line_2_fdroid">Ako nađete greške u aplikaciji, budite ljubazni pa pošaljite izvještaj pomoću izbornika u gornje-lijevom kutu Početne stranice. Razvijatelji će ispraviti greške čim prije.</string>
+
+    <string name="import_e2e_keys_from_file">Uvezi ključeve za E2E iz datoteke \"%1$s\".</string>
+
+    <string name="settings_sdk_version">Inačica Matrix SDK-a</string>
+    <string name="settings_other_third_party_notices">Druge obavijesti trećih strana</string>
+    <string name="navigate_to_room_when_already_in_the_room">Već se nalazite u toj sobi!</string>
+
+    <string name="quick_reactions">Brze reakcije</string>
+
+    <string name="settings_general_title">Općenito</string>
+    <string name="settings_preferences">Postavke</string>
+    <string name="settings_security_and_privacy">Sigurnost i privatnost</string>
+    <string name="settings_expert">Stručnjak</string>
+    <string name="settings_push_rules">Obavijesna pravila</string>
+    <string name="settings_push_rules_no_rules">Nije definirano ni jedno obavijesno pravilo</string>
+    <string name="push_gateway_item_app_id">app_id:</string>
+    <string name="push_gateway_item_push_key">push_key:</string>
+    <string name="push_gateway_item_app_display_name">app_display_name:</string>
+    <string name="push_gateway_item_device_name">session_name:</string>
+    <string name="push_gateway_item_url">URL:</string>
+    <string name="push_gateway_item_format">Oblik:</string>
+
+    <string name="preference_voice_and_video">Glas i video</string>
+    <string name="preference_root_help_about">Pomoć i o aplikaciji</string>
+
+
+    <string name="bottom_action_people_x">Izravne poruke</string>
+
+    <string name="message_action_item_redact">Ukloni…</string>
+    <string name="delete_event_dialog_title">Potvrda uklanjanja</string>
+    <string name="delete_event_dialog_content">Jeste li sigurni da želite ukloniti (izbrisati) ovaj događaj\? Ukoliko izbrišete naziv sobe ili promjenu teme, to može poništiti promjenu.</string>
+    </resources>

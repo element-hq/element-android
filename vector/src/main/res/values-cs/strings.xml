@@ -259,7 +259,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
         <item quantity="one">1 změna členství</item>
         <item quantity="few">%d změny členství</item>
         <item quantity="many">%d změn členství</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="compression_options">Odeslat jako</string>
@@ -309,11 +309,11 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="permissions_rationale_msg_camera">Riot potřebuje oprávnění pro přístup k Vašemu fotoaparátu pro pořizování fotografií a uskutečňování video hovorů.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
-\nProsím, povolte přístup na následující hlášce abyste mohli uskutečnit hovor."</string>
+\nProsím, povolte přístup na následující hlášce, abyste mohli uskutečnit hovor."</string>
     <string name="permissions_rationale_msg_record_audio">Riot potřebuje oprávnění pro přístup k Vašemu mikrofonu pro uskutečňování hlasových hovorů.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
-\nProsím, povolte přístup na následující hlášce abyste mohli uskutečnit hovor."</string>
+\nProsím, povolte přístup na následující hlášce, abyste mohli uskutečnit hovor."</string>
     <string name="media_slider_saved">Uloženo</string>
     <string name="media_slider_saved_message">Uložit do Stažených souborů?</string>
     <string name="yes">ANO</string>
@@ -347,13 +347,13 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
         <item quantity="one">1 aktivní člen</item>
         <item quantity="few">%d aktivní členové</item>
         <item quantity="many">%d aktivních členů</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">1 člen</item>
         <item quantity="few">%d členové</item>
         <item quantity="many">%d členů</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="room_title_one_member">1 člen</string>
     <plurals name="format_time_s">
@@ -445,7 +445,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
         <item quantity="one">1 nová zpráva</item>
         <item quantity="few">%d nové zprávy</item>
         <item quantity="many">%d nových zpráv</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
 
     <string name="ssl_trust">Důvěřovat</string>
@@ -462,7 +462,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
         <item quantity="one">1 vybrán</item>
         <item quantity="few">%d vybrány</item>
         <item quantity="many">%d vybráno</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="title_activity_keys_backup_setup">Záloha klíče</string>
     <string name="title_activity_keys_backup_restore">Použít zálohu klíče</string>
@@ -1017,7 +1017,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Nikdy neposílejte šifrované zprávy do neověřených relací z této relace.</string>
     <string name="encryption_import_room_keys_success">Klíče %1$d/%2$d importovány úspěšně.</string>
 
-    <string name="encryption_information_not_verified">NENÍ potvrzeno</string>
+    <string name="encryption_information_not_verified">Není ověřeno</string>
     <string name="encryption_information_verified">Potvrzeno</string>
     <string name="encryption_information_blocked">Na černé listině</string>
 
@@ -1025,12 +1025,12 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="encryption_information_unknown_ip">neznámá ip</string>
     <string name="encryption_information_none">není</string>
 
-    <string name="encryption_information_verify">Potvrdit</string>
-    <string name="encryption_information_unverify">Odebrat potvrzení</string>
+    <string name="encryption_information_verify">Ověřit</string>
+    <string name="encryption_information_unverify">Odebrat ověření</string>
     <string name="encryption_information_block">Černá listina</string>
     <string name="encryption_information_unblock">Odebrat z černé listiny</string>
 
-    <string name="encryption_information_verify_device">Potvrdit relaci</string>
+    <string name="encryption_information_verify_device">Ověřit relaci</string>
     <string name="font_size">Velikost písma</string>
     <string name="tiny">Velmi malé</string>
     <string name="small">Malé</string>
@@ -1076,8 +1076,8 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
 
     <string name="import_e2e_keys_from_file">Importovat e2e klíče ze souboru \"%1$s\".</string>
 
-    <string name="encryption_information_verify_device_warning">Abyste ověřili důvěryhodnost této relace, prosím, kontaktujte jejího majitele nějakým jiným způsobem (např. osobně nebo telefonátem) s otázkou, zda se klíč, jenž je zobrazen v jejich Nastavení uživatele, shoduje s klíčem níže:</string>
-    <string name="encryption_information_verify_device_warning2">Pokud se shoduje, klepněte na tlačítko ověřit. Pokud ne, pak někdo jiný zachycuje tuto relaci a měli byste je snad zadat na černou listinu. V budoucnu bude tento ověřovací proces sofistikovanější.</string>
+    <string name="encryption_information_verify_device_warning">Potvrďte porovnáním následujícího s nastavením uživatele ve svých dalších relacích:</string>
+    <string name="encryption_information_verify_device_warning2">Pokud se neshodují, zabezpečení Vaší komunikace může být ohroženo.</string>
     <string name="e2e_enabling_on_app_update">Riot nyní podporuje šifrování end-to-end, ale pro aktivaci se musíte se opět přihlásit.
 \n
 \nMůžete to provést nyní nebo později z aplikačních nastavení.</string>
@@ -1696,7 +1696,7 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="settings_discovery_confirm_mail">Poslali jsme Vám potvrzovací email na %s, podívejte se do emailu a klikněte na protvrzovací odkaz</string>
     <string name="settings_discovery_mail_pending">Nevyřízený</string>
 
-    <string name="settings_discovery_enter_identity_server">Zadejte nový server pro identity</string>
+    <string name="settings_discovery_enter_identity_server">Zadejte URL serveru pro identity</string>
     <string name="settings_discovery_bad_identity_server">Nemohl jsem se spojit se serverem pro identity</string>
     <string name="settings_discovery_please_enter_server">Prosím, zadejte url serveru pro identity</string>
     <string name="settings_discovery_no_terms_title">Server pro identity nemá žádné všeobecné podmínky</string>
@@ -2324,11 +2324,105 @@ Vaši e-mailovou adresu můžete přidat k profilu v nastavení.</string>
     <string name="bootstrap_migration_with_passphrase_helper_with_link">Neznáte-li své heslo zálohy klíčů, můžete %s.</string>
     <string name="bootstrap_migration_backup_recovery_key">Klíč pro obnovu zálohy klíčů</string>
 
-    <string name="settings_security_prevent_screenshots_title">Zamezte screenshotům aplikace</string>
+    <string name="settings_security_prevent_screenshots_title">Zamezit screenshotům aplikace</string>
     <string name="settings_security_prevent_screenshots_summary">Zapnutí toho nastavení doplní značku FLAG_SECURE ke všem aktivitám. Pro aktivaci změny restartujte aplikaci.</string>
 
     <string name="media_file_added_to_gallery">Mediální soubor byl připojen do galerie</string>
     <string name="error_adding_media_file_to_gallery">Mediální soubor nemohl být připojen do galerie</string>
     <string name="change_password_summary">Nastavit nové heslo účtu…</string>
+
+<string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
+
+    <string name="event_redacted">Zpráva smazána</string>
+    <string name="settings_show_redacted">Ukázat odstraněné zprávy</string>
+    <string name="settings_show_redacted_summary">Zobrazit zástupný symbol za odstraněné zprávy</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Poslali jsme Vám potvrzovací email na %s, podívejte se nejdříve do emailu a klikněte na protvrzovací odkaz</string>
+    <string name="settings_text_message_sent_wrong_code">Ověřovací kód není správný.</string>
+
+    <string name="uploads_media_title">MÉDIA</string>
+    <string name="uploads_media_no_result">V této místnosti nejsou žádná média</string>
+    <string name="uploads_files_title">SOUBORY</string>
+    <string name="uploads_files_subtitle">%1$s %2$s</string>
+    <string name="uploads_files_no_result">V této místnosti nejsou žádné soubory</string>
+
+    <string name="login_connect_using_matrix_id_notice">Jinak, máte-li již účet a znáte-li svůj identifikátor a heslo, můžete použít tuto metodu:</string>
+    <string name="login_connect_using_matrix_id_submit">Přihlásit se s mým identifikátorem Matrixu</string>
+    <string name="login_signin_matrix_id_title">Přihlásit se</string>
+    <string name="login_signin_matrix_id_notice">Zadejte svůj identifikátor a heslo</string>
+    <string name="login_signin_matrix_id_hint">Identifikátor uživatele</string>
+    <string name="login_signin_matrix_id_error_invalid_matrix_id">To není platný identifikátor uživatele. Platný formát: \'@uživatel:homeserver.org\'</string>
+    <string name="autodiscover_well_known_error">Nemohu najít platný domovský server. Prosím, zkontrolujte svůj identifikátor</string>
+
+    <string name="no_connectivity_to_the_server_indicator_airplane">Režim letadlo je zapnut</string>
+
+    <string name="use_other_session_content_description">Použijte na svých zařízeních nejnovější Riot, Riot Web, Riot Desktop, Riot iOS, RiotX pro Android nebo jiný Matrix klient schopný křížového přihlášení</string>
+    <string name="riot_desktop_web">Riot Web
+\nRiot Desktop</string>
+    <string name="riot_ios_android">Riot iOS
+\nRiot X pro Android</string>
+    <string name="or_other_mx_capabale_client">nebo jiný Matrix klient schopný křížového přihlášení</string>
+    <string name="use_latest_riot">Použijte na svých zařízeních nejnovější Riot:</string>
+    <string name="command_description_discard_session">Vynutí zahození probíhající skupinové relace v šifrované místnosti</string>
+    <string name="command_description_discard_session_not_handled">Podporováno jen v šifrovaných místnostech</string>
+    <string name="enter_secret_storage_passphrase_or_key">Použijte své %1$s nebo použijte svůj %2$s a pokračujte.</string>
+    <string name="use_recovery_key">Použít klíč obnovy</string>
+    <string name="enter_secret_storage_input_key">Vyberte klíč obnovy nebo jej zadejte manuálně zapsáním nebo vložením ze schránky</string>
+    <string name="keys_backup_recovery_key_error_decrypt">Zálohu nebylo možno tímto klíčem obnovy dešifrovat: prosím, ověřte správnost zadaného klíče obnovy.</string>
+    <string name="failed_to_access_secure_storage">Přístup k zabezpečenému úložišti selhal</string>
+
+    <string name="unencrypted">Nezašifrováno</string>
+    <string name="encrypted_unverified">Zašifrováno neověřeným zařízením</string>
+    <string name="review_logins">Přezkoumejte, kde jste se přihlásili</string>
+    <string name="verify_other_sessions">Ověřte všechny své relace za účelem bezpečí Vašeho účtu a zpráv</string>
+    <string name="verify_this_session">Ověřte nové přihlášení s přístupem na Váš účet: %1$s</string>
+
+    <string name="cross_signing_verify_by_text">Manuálně ověřit textem</string>
+    <string name="crosssigning_verify_session">Ověřit přihlášení</string>
+    <string name="cross_signing_verify_by_emoji">Interaktivně ověřit pomocí Emoji</string>
+    <string name="confirm_your_identity">Potvrďte svou identitu ověřením tohoto přihlášení v některé z Vašich dalších relacích a udělte přístup k zašifrovaným zprávám.</string>
+    <string name="mark_as_verified">Označit za důvěryhodné</string>
+
+    <string name="error_empty_field_choose_user_name">Prosím, zvolte uživatelské jméno.</string>
+    <string name="error_empty_field_choose_password">Prosím, zvolte heslo.</string>
+    <string name="external_link_confirmation_title">Překontrolovat tento odkaz</string>
+    <string name="external_link_confirmation_message">Odkaz %1$s Vás převede na jiný site: %2$s.
+\n
+\nOpravdu chcete pokračovat\?</string>
+
+    <string name="create_room_dm_failure">Nemohli jsme vytvořit Vaši DM. Prosím, zkontrolujte uživatele, které chcete pozvat, a zkuste znovu.</string>
+
+    <string name="add_members_to_room">Přidat členy</string>
+    <string name="invite_users_to_room_action_invite">POZVAT</string>
+    <string name="inviting_users_to_room">Zvu uživatele…</string>
+    <string name="invite_users_to_room_title">Pozvat uživatele</string>
+    <string name="invitation_sent_to_one_user">Pozvánka odeslána %1$s</string>
+    <string name="invitations_sent_to_two_users">Pozvánky odeslány %1$s a %2$s</string>
+    <plurals name="invitations_sent_to_one_and_more_users">
+	<item quantity="one">Pozvánky odeslány %1$s a jednomu dalšímu</item>
+	<item quantity="few">Pozvánky odeslány %1$s a %2$d dalším</item>
+	<item quantity="other">Pozvánky odeslány %1$s a %2$d dalším</item>
+</plurals>
+    <string name="invite_users_to_room_failure">Nemohli jsme pozvat uživatele. Prosím, zkontrolujte uživatele, které chete pozvat, a zkuste znovu.</string>
+
+    <string name="choose_locale_current_locale_title">Nastavený jazyk</string>
+    <string name="choose_locale_other_locales_title">Další dostupné jayzky</string>
+    <string name="choose_locale_loading_locales">Načítám dostupné jayzky…</string>
+
+    <string name="open_terms_of">Otevřít všeobecné podmínky %s</string>
+    <string name="disconnect_identity_server_dialog_content">Odpojit se od serveru identit %s\?</string>
+    <string name="identity_server_error_outdated_identity_server">Tento server identit je zastaralý. RiotX podporuje jen API V2.</string>
+    <string name="identity_server_error_outdated_home_server">Tato operace není možná. Domovský server je zastaralý.</string>
+    <string name="identity_server_error_no_identity_server_configured">Prosím, nejdříve nastavit server identit.</string>
+    <string name="identity_server_error_terms_not_signed">Prosím, přijměte nejdříve všeobecné podmínky serveru identit v nastavení.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Pro Vaše soukromí, RiotX podporuje jen odesílání hašovaných emailových adress a telefonních čísel.</string>
+    <string name="identity_server_error_binding_error">Propojení selhalo.</string>
+    <string name="identity_server_error_no_current_binding_error">S tímto identifikátorem neexistuje žádné propojení.</string>
+
+    <string name="identity_server_set_default_notice">Váš domovský server (%1$s) navrhuje použít %2$s za Váš domovský server</string>
+    <string name="identity_server_set_default_submit">Použít %1$s</string>
+    <string name="identity_server_set_alternative_notice">Jinak můžete zadat URL jakéhokoli jiného serveru identit</string>
+    <string name="identity_server_set_alternative_notice_no_default">Zadejte URL serveru identit</string>
+    <string name="identity_server_set_alternative_submit">Odeslat</string>
 
 </resources>

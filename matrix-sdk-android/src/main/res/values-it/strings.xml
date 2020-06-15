@@ -210,4 +210,5 @@
 
     <string name="key_verification_request_fallback_message">%s sta chiedendo di verificare la tua chiave, ma il tuo client non supporta la verifica in-chat. Dovrai usare il metodo di verifica obsoleto per verificare le chiavi.</string>
 
-</resources>
+<string name="notice_room_created">%1$s ha creato la stanza</string>
+    </resources>

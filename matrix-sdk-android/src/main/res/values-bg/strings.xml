@@ -7,8 +7,8 @@
     <string name="notice_room_invite_no_invitee">Поканата на %s</string>
     <string name="notice_room_invite">%1$s покани %2$s</string>
     <string name="notice_room_invite_you">%1$s Ви покани</string>
-    <string name="notice_room_join">%1$s се присъедини</string>
-    <string name="notice_room_leave">%1$s напусна</string>
+    <string name="notice_room_join">%1$s се присъедини в стаята</string>
+    <string name="notice_room_leave">%1$s напусна стаята</string>
     <string name="notice_room_reject">%1$s отхвърли поканата</string>
     <string name="notice_room_kick">%1$s изгони %2$s</string>
     <string name="notice_room_unban">%1$s отблокира %2$s</string>
@@ -176,8 +176,8 @@
     <string name="notice_room_invite_no_invitee_with_reason">поканата на %1$s. Причина: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s покани %2$s. Причина: %3$s</string>
     <string name="notice_room_invite_you_with_reason">%1$s ви покани. Причина: %2$s</string>
-    <string name="notice_room_join_with_reason">%1$s се присъедини. Причина: %2$s</string>
-    <string name="notice_room_leave_with_reason">%1$s напусна. Причина: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s се присъедини в стаята. Причина: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s напусна стаята. Причина: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s отхвърли поканата. Причина: %2$s</string>
     <string name="notice_room_kick_with_reason">%1$s изгони %2$s. Причина: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s блокира %2$s. Причина: %3$s</string>
@@ -210,4 +210,5 @@
 
     <string name="key_verification_request_fallback_message">%s изпрати запитване за потвърждение на ключа ви, но клиентът ви не поддържа верифициране посредством чат. Ще трябва да използвате стария метод за верифициране на ключове.</string>
 
-</resources>
+<string name="notice_room_created">%1$s създаде стаята</string>
+    </resources>

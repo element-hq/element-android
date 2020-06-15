@@ -205,4 +205,5 @@
 
     <string name="key_verification_request_fallback_message">%s soovib verifitseerida sinu võtmeid, kuid sinu kasutatav klient ei oska vestluse-sisest verifitseerimist teha. Sa pead kasutama traditsioonilist verifitseerimislahendust.</string>
 
-</resources>
+<string name="notice_room_created">Kasutaja %1$s lõi jututoa</string>
+    </resources>

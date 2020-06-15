@@ -206,4 +206,5 @@
 
     <string name="key_verification_request_fallback_message">%s 正在請求驗證您的金鑰，但您的客戶端不支援聊天中金鑰驗證。您將必須使用舊版的金鑰驗證來驗證金鑰。</string>
 
-</resources>
+<string name="notice_room_created">%1$s 建立了聊天室</string>
+    </resources>
