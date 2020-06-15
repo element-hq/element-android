@@ -950,4 +950,19 @@
     <string name="bootstrap_skip_text_no_gen_key">Att sätta en återställningslösenfras låter dig säkra och låsa upp krypterade meddelanden och pålitlighet.</string>
 
 
+    <string name="settings_invited_to_room">När jag bjuds in till ett rum</string>
+    <string name="settings_call_invitations">Samtalsinbjudningar</string>
+    <string name="settings_messages_sent_by_bot">Meddelanden skickade av en bott</string>
+
+    <string name="settings_user_interface">Användargränssnitt</string>
+    <string name="settings_interface_language">Språk</string>
+    <string name="settings_select_language">Välj språk</string>
+
+    <string name="settings_theme">Tema</string>
+
+    <string name="room_widget_permission_theme">Ditt tema</string>
+    <string name="choose_locale_current_locale_title">Nuvarande språk</string>
+    <string name="choose_locale_other_locales_title">Andra tillgängliga språk</string>
+    <string name="choose_locale_loading_locales">Laddar tillgängliga språk…</string>
+
     </resources>
