@@ -543,10 +543,8 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="widget_integration_missing_room_id">リクエストに room_id がありません。</string>
     <string name="widget_integration_failed_to_send_request">リクエストの送信に失敗しました。</string>
     <string name="widget_integration_unable_to_create">ウィジェットを作成できません。</string>
-    <string name="event_formatter_widget_removed">%1$s は %2$s によって削除されました</string>
     <string name="widget_no_power_to_manage">この部屋のウィジェットを管理する権限が必要です</string>
     <string name="widget_creation_failure">ウィジェットの作成に失敗しました</string>
-    <string name="event_formatter_widget_added">%1$s は %2$s によって追加されました</string>
     <string name="widget_delete_message_confirmation">ウィジェットをこの部屋から削除してもよろしいですか？</string>
     <string name="directory_server_fail_to_retrieve_server">サーバーが利用できないか、オーバーロードしている可能性があります</string>
     <string name="unknown_devices_alert_message">この部屋は検証されていない不明なデバイスが含まれています。
@@ -850,9 +848,6 @@ Riotアプリがあなたの電話帳へアクセスすることを許可しま�
     <string name="room_participants_now">現在 %1$s</string>
     <string name="room_participants_ago">%2$s 前 %1$s</string>
 
-    <string name="room_participants_action_unignore_prompt">このユーザからのすべてのメッセージを表示しますか？
-
-この操作によってアプリを再起動するため、しばらく時間がかかることにご注意ください。</string>
     <string name="room_participants_invite_join_names">"%1$s、 "</string>
     <string name="room_participants_invite_join_names_and">%1$s と %2$s</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
@@ -1001,9 +996,6 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="settings_call_ringtone_dialog_title">着信音を選んでください:</string>
 
     <string name="room_participants_action_kick">追い出す</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="other">このチャットから本当にこのユーザーを追い出しますか？</item>
-    </plurals>
     <string name="reason_hint">理由</string>
 
     <string name="notification_sync_init">サービスを初期化</string>

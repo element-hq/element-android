@@ -16,12 +16,10 @@
 
 package im.vector.matrix.android.api.auth.data
 
-import im.vector.matrix.android.internal.auth.data.LoginFlowResponse
-
-// Either a LoginFlowResponse, or an error if the homeserver is outdated
+// Either a list of supported login types, or an error if the homeserver is outdated
 sealed class LoginFlowResult {
     data class Success(
-            val loginFlowResponse: LoginFlowResponse,
+            val supportedLoginTypes: List<String>,
             val isLoginAndRegistrationSupported: Boolean,
             val homeServerUrl: String
     ) : LoginFlowResult()

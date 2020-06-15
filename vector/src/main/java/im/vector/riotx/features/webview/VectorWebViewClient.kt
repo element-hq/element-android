@@ -23,8 +23,10 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.annotation.RequiresApi
 
 /**
  * This class inherits from WebViewClient. It has to be used with a WebView.
@@ -54,6 +56,14 @@ class VectorWebViewClient(private val eventListener: WebViewEventListener) : Web
         if (!mInError) {
             eventListener.onPageFinished(url)
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    override fun onReceivedHttpError(view: WebView, request: WebResourceRequest, errorResponse: WebResourceResponse) {
+        super.onReceivedHttpError(view, request, errorResponse)
+        eventListener.onHttpError(request.url.toString(),
+                errorResponse.statusCode,
+                errorResponse.reasonPhrase)
     }
 
     override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {

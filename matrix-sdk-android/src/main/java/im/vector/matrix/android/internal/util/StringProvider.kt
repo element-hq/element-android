@@ -17,6 +17,7 @@
 package im.vector.matrix.android.internal.util
 
 import android.content.res.Resources
+import androidx.annotation.ArrayRes
 import androidx.annotation.NonNull
 import androidx.annotation.StringRes
 import dagger.Reusable
@@ -52,5 +53,10 @@ internal class StringProvider @Inject constructor(private val resources: Resourc
     @NonNull
     fun getString(@StringRes resId: Int, vararg formatArgs: Any?): String {
         return resources.getString(resId, *formatArgs)
+    }
+
+    @Throws(Resources.NotFoundException::class)
+    fun getStringArray(@ArrayRes id: Int): Array<String> {
+        return resources.getStringArray(id)
     }
 }

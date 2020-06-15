@@ -27,6 +27,7 @@ import im.vector.matrix.android.api.session.room.reporting.ReportingService
 import im.vector.matrix.android.api.session.room.send.DraftService
 import im.vector.matrix.android.api.session.room.send.SendService
 import im.vector.matrix.android.api.session.room.state.StateService
+import im.vector.matrix.android.api.session.room.tags.TagsService
 import im.vector.matrix.android.api.session.room.timeline.TimelineService
 import im.vector.matrix.android.api.session.room.typing.TypingService
 import im.vector.matrix.android.api.session.room.uploads.UploadsService
@@ -41,6 +42,7 @@ interface Room :
         DraftService,
         ReadService,
         TypingService,
+        TagsService,
         MembershipService,
         StateService,
         UploadsService,

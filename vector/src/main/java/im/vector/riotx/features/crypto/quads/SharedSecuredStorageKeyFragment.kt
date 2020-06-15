@@ -22,22 +22,18 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import com.airbnb.mvrx.activityViewModel
-import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.editorActionEvents
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.riotx.R
 import im.vector.riotx.core.platform.VectorBaseFragment
-import im.vector.riotx.core.resources.ColorProvider
 import im.vector.riotx.core.utils.startImportTextFromFileIntent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_ssss_access_from_key.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class SharedSecuredStorageKeyFragment @Inject constructor(
-        private val colorProvider: ColorProvider
-) : VectorBaseFragment() {
+class SharedSecuredStorageKeyFragment @Inject constructor() : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_ssss_access_from_key
 
@@ -48,7 +44,7 @@ class SharedSecuredStorageKeyFragment @Inject constructor(
         ssss_restore_with_key_text.text = getString(R.string.enter_secret_storage_input_key)
 
         ssss_key_enter_edittext.editorActionEvents()
-                .debounce(300, TimeUnit.MILLISECONDS)
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
@@ -100,9 +96,6 @@ class SharedSecuredStorageKeyFragment @Inject constructor(
             return
         }
         super.onActivityResult(requestCode, resultCode, data)
-    }
-
-    override fun invalidate() = withState(sharedViewModel) { _ ->
     }
 
     companion object {

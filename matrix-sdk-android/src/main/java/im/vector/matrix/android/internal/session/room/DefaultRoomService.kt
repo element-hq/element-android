@@ -111,24 +111,22 @@ internal class DefaultRoomService @Inject constructor(
         return query
     }
 
-    override fun getBreadcrumbs(): List<RoomSummary> {
+    override fun getBreadcrumbs(queryParams: RoomSummaryQueryParams): List<RoomSummary> {
         return monarchy.fetchAllMappedSync(
-                { breadcrumbsQuery(it) },
+                { breadcrumbsQuery(it, queryParams) },
                 { roomSummaryMapper.map(it) }
         )
     }
 
-    override fun getBreadcrumbsLive(): LiveData<List<RoomSummary>> {
+    override fun getBreadcrumbsLive(queryParams: RoomSummaryQueryParams): LiveData<List<RoomSummary>> {
         return monarchy.findAllMappedWithChanges(
-                { breadcrumbsQuery(it) },
+                { breadcrumbsQuery(it, queryParams) },
                 { roomSummaryMapper.map(it) }
         )
     }
 
-    private fun breadcrumbsQuery(realm: Realm): RealmQuery<RoomSummaryEntity> {
-        return RoomSummaryEntity.where(realm)
-                .isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME)
-                .notEqualTo(RoomSummaryEntityFields.VERSIONING_STATE_STR, VersioningState.UPGRADED_ROOM_JOINED.name)
+    private fun breadcrumbsQuery(realm: Realm, queryParams: RoomSummaryQueryParams): RealmQuery<RoomSummaryEntity> {
+        return roomSummariesQuery(realm, queryParams)
                 .greaterThan(RoomSummaryEntityFields.BREADCRUMBS_INDEX, RoomSummary.NOT_IN_BREADCRUMBS)
                 .sort(RoomSummaryEntityFields.BREADCRUMBS_INDEX)
     }

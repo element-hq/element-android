@@ -949,9 +949,6 @@
     <string name="room_participants_now">%1$s الآن</string>
     <string name="room_participants_ago">%1$s منذ %2$s</string>
 
-    <string name="room_participants_action_unignore_prompt">أأعرض كل الرسائل من هذا المستخدم؟
-
-سيُعيد هذا الإجراء تشغيل التطبيق وقد يأخذ بعض الوقت.</string>
     <string name="room_participants_invite_join_names">"⁨%1$s⁩ و "</string>
     <string name="room_participants_invite_join_names_and">⁨%1$s⁩ و ⁨%2$s⁩</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
@@ -990,8 +987,6 @@
         <item quantity="many">%d رسالة إخطار غير مقروءة</item>
         <item quantity="other">%d رسالة إخطار غير مقروءة</item>
     </plurals>
-    <string name="event_formatter_widget_added">أضاف ⁨%2$s⁩ المستخدم ⁨%1$s⁩</string>
-    <string name="event_formatter_widget_removed">أزال ⁨%2$s⁩ المستخدم ⁨%1$s⁩</string>
     <string name="settings_labs_keyboard_options_to_send_message">استخدم مفتاح الإدخال في لوحة المفاتيح لإرسال الرسالة</string>
     <string name="command_description_ban_user">يمنع المستخدم حسب المعرّف المعطى</string>
     <string name="command_description_unban_user">يُلغي المنع عن المستخدم حسب المعرّف المعطى</string>

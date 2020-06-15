@@ -31,7 +31,6 @@ import im.vector.riotx.core.di.ScreenComponent
 import im.vector.riotx.core.error.ErrorFormatter
 import im.vector.riotx.core.extensions.commitTransaction
 import im.vector.riotx.core.platform.SimpleFragmentActivity
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity.*
 import javax.inject.Inject
@@ -59,17 +58,9 @@ class SharedSecureStorageActivity : SimpleFragmentActivity() {
         super.onCreate(savedInstanceState)
         toolbar.visibility = View.GONE
 
-        viewModel.viewEvents
-                .observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    observeViewEvents(it)
-                }
-                .disposeOnDestroy()
+        viewModel.observeViewEvents { observeViewEvents(it) }
 
-        viewModel.subscribe(this) {
-            renderState(it)
-        }
+        viewModel.subscribe(this) { renderState(it) }
     }
 
     override fun onBackPressed() {

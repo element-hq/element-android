@@ -30,15 +30,20 @@ data class RoomMemberListViewState(
         val roomId: String,
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val roomMemberSummaries: Async<RoomMemberSummaries> = Uninitialized,
-        val trustLevelMap: Async<Map<String, RoomEncryptionTrustLevel?>> = Uninitialized
+        val trustLevelMap: Async<Map<String, RoomEncryptionTrustLevel?>> = Uninitialized,
+        val actionsPermissions: ActionPermissions = ActionPermissions()
 ) : MvRxState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 }
 
-typealias RoomMemberSummaries = List<Pair<PowerLevelCategory, List<RoomMemberSummary>>>
+data class ActionPermissions(
+        val canInvite: Boolean = false
+)
 
-enum class PowerLevelCategory(@StringRes val titleRes: Int) {
+typealias RoomMemberSummaries = List<Pair<RoomMemberListCategories, List<RoomMemberSummary>>>
+
+enum class RoomMemberListCategories(@StringRes val titleRes: Int) {
     ADMIN(R.string.room_member_power_level_admins),
     MODERATOR(R.string.room_member_power_level_moderators),
     CUSTOM(R.string.room_member_power_level_custom),

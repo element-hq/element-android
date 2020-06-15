@@ -420,18 +420,12 @@
     <string name="room_participants_action_set_admin">관리자로 하기</string>
     <string name="room_participants_action_ignore">이 사용자의 모든 메시지 숨기기</string>
     <string name="room_participants_action_unignore">이 사용자의 모든 메시지 보이기</string>
-    <string name="room_participants_action_unignore_prompt">이 사용자의 모든 메시지를 보이겠습니까\?
-\n
-\n이 동작은 앱을 재시작하며 일정 시간이 걸릴 수 있습니다.</string>
     <string name="room_participants_invite_search_another_user">사용자 ID, 이름 혹은 이메일</string>
     <string name="room_participants_action_mention">언급</string>
     <string name="room_participants_action_devices_list">기기 목록 보이기</string>
     <string name="room_participants_power_level_prompt">사용자를 자신과 동일한 권한 등급으로 승격시키는 것은 취소할 수 없습니다.
 \n확신합니까\?</string>
 
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="other">이 사용자들을 이 대화에서 추방하겠습니까\?</item>
-    </plurals>
     <string name="room_participants_ban_prompt_msg">이 사용자를 이 대화에서 출입 금지하겠습니까\?</string>
     <string name="reason_hint">이유</string>
 
@@ -1010,8 +1004,6 @@
 
     <string name="widget_no_power_to_manage">이 방에서 위젯을 다루려면 권한이 있어야 합니다</string>
     <string name="widget_creation_failure">위젯 생성 실패</string>
-    <string name="event_formatter_widget_added">%1$s을(를) %2$s님이 추가함</string>
-    <string name="event_formatter_widget_removed">%1$s을(를) %2$s님이 삭제함</string>
     <string name="settings_labs_create_conference_with_jitsi">Jitsi로 회의 전화 만들기</string>
     <string name="widget_delete_message_confirmation">이 방에서 위젯을 삭제하겠습니까\?</string>
     <plurals name="active_widgets">
@@ -1691,4 +1683,11 @@
 
     <string name="no_network_indicator">현재 네트워크 연결이 없습니다</string>
 
+    <string name="settings_add_3pid_confirm_password_title">비밀번호가 정확하지 않습니다</string>
+    <string name="settings_add_3pid_flow_not_supported">라이엇 모바일에서 불가능한 것입니다</string>
+    <string name="settings_add_3pid_authentication_needed">인증이 요구됩니다</string>
+
+
+    <string name="settings_integrations">통합</string>
+    <string name="settings_integration_allow">통합 수락</string>
 </resources>

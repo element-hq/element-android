@@ -722,8 +722,6 @@ Dispositivos desconhecidos:</string>
 
     <string name="widget_no_power_to_manage">Precisa de permissão para gerir os widgets nesta sala</string>
     <string name="widget_creation_failure">Criação de widget falhou</string>
-    <string name="event_formatter_widget_added">%1$s adicionado por %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s removido por %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Criar chamadas de conferência com o jitsi</string>
     <string name="widget_delete_message_confirmation">Tem a certeza que quer remover o widget?</string>
 
@@ -837,9 +835,6 @@ Adicionar alguns agora?</string>
     <string name="room_participants_now">%1$s agora</string>
     <string name="room_participants_ago">há %1$s %2$s</string>
 
-    <string name="room_participants_action_unignore_prompt">Mostrar todas as mensagens deste utilizador?
-
-Note que esta acção reiniciará a aplicação e poderá demorar algum tempo.</string>
     <string name="room_participants_ban_prompt_msg">Tem a certeza que pretende banir este utilizador desta conversa?</string>
 
     <string name="room_participants_invite_join_names">"%1$s, "</string>

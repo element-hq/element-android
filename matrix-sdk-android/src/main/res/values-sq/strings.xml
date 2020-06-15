@@ -206,4 +206,7 @@
 
     <string name="key_verification_request_fallback_message">%s po kërkon të verifikojë kyçin tuaj, por klienti juaj nuk mbulon verifikim kyçesh brenda fjalosjeje. Që të verifikoni kyça, do t’ju duhet të përdorni verifikim të dikurshëm kyçesh.</string>
 
+    <string name="notice_room_created">%1$s krijo dhomën</string>
+    <string name="verification_emoji_pin">Fiksoje</string>
+
 </resources>

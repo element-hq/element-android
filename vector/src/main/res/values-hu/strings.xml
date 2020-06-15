@@ -660,8 +660,6 @@ Ezt megteheted most vagy később az alkalmazás beállítások alatt.</string>
 
     <string name="widget_no_power_to_manage">Engedélyre van szükséged a kisalkalmazások ebben a szobában való kezeléséhez</string>
     <string name="widget_creation_failure">Kisalkalmazás létrehozása sikertelen</string>
-    <string name="event_formatter_widget_added">%1$s hozzá lett adva %2$s által</string>
-    <string name="event_formatter_widget_removed">%1$s eltávolításra került %2$s által</string>
     <string name="settings_labs_create_conference_with_jitsi">Hozz létre konferencia hívást a jitsi segítségével</string>
     <string name="widget_delete_message_confirmation">Biztos vagy benne hogy törölni akarod ezt a kisalkalmazást ebből a szobából?</string>
 
@@ -903,9 +901,6 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="error_empty_field_your_password">Kérlek add meg a jelszavad.</string>
 
     <string name="send_bug_report_description_in_english">Kérlek, ha lehetséges a leírást angolul írd.</string>
-    <string name="room_participants_action_unignore_prompt">Mutassuk ennek a felhasználónak minden üzenetét?
-
-Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</string>
     <string name="room_message_placeholder_reply_to_encrypted">Titkosított válasz küldése…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Válasz küldése (titkosítás nélkül)…</string>
     <string name="settings_preview_media_before_sending">Média előnézete küldés előtt</string>
@@ -1015,10 +1010,6 @@ Vedd figyelembe, hogy az alkalmazás újraindul ami sok időt vehet igénybe.</s
 
     <string name="call_anyway">Hívás mindenképpen</string>
     <string name="room_participants_action_kick">Elküld</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Biztos, hogy kirúgod ezt a felhasználót\?</item>
-        <item quantity="other">Biztos, hogy kirúgod ezeket a felhasználókat\?</item>
-    </plurals>
     <string name="reason_hint">Ok</string>
 
     <string name="settings_inline_url_preview_summary">URL előnézet a csevegő ablakban, ha a Matrix szervered támogatja ezt a lehetőséget.</string>
@@ -1686,7 +1677,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="settings_discovery_confirm_mail">Megerősítő levelet küldtünk ide: %s, ellenőrizd az e-mailedet és kattints a megerősítő hivatkozásra</string>
     <string name="settings_discovery_mail_pending">Várakozás</string>
 
-    <string name="settings_discovery_enter_identity_server">Add meg az új azonosítási szervert</string>
+    <string name="settings_discovery_enter_identity_server">Add meg az azonosítási szerver URL-jét</string>
     <string name="settings_discovery_bad_identity_server">Az azonosítási szerverhez nem lehet csatlakozni</string>
     <string name="settings_discovery_please_enter_server">Kérlek add meg az azonosítási szerver url-jét</string>
     <string name="settings_discovery_no_terms_title">Az azonosítási szervernek nincsen felhasználási feltétele</string>
@@ -2403,4 +2394,46 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     </plurals>
     <string name="invite_users_to_room_failure">Felhasználókat nem tudtuk meghívni. Ellenőrizd azokat a felhasználókat akiket meg szeretnél hívni és próbáld újra.</string>
 
+    <string name="event_redacted">Üzenet törölve</string>
+    <string name="settings_show_redacted_summary">Helykitöltő mutatása a törölt szövegek helyett</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Megerősítő levelet küldtünk ide: %s, először ellenőrizd az e-mailedet és kattints a megerősítő hivatkozásra</string>
+    <string name="uploads_media_title">MÉDIA</string>
+    <string name="uploads_files_title">FÁJLOK</string>
+    <string name="uploads_files_subtitle">%1$s itt: %2$s</string>
+    <string name="login_signin_matrix_id_title">Bejelentkezés</string>
+    <string name="disconnect_identity_server_dialog_content">Lecsatlakozol erről az azonosítási szerverről: %s\?</string>
+    <string name="identity_server_set_alternative_submit">Küldés</string>
+
+    <string name="settings_show_redacted">Törölt üzenetek megmutatása</string>
+    <string name="settings_text_message_sent_wrong_code">Az ellenőrző kód nem helyes.</string>
+
+    <string name="uploads_media_no_result">Ebben a szobában nincsenek média fájlok</string>
+    <string name="uploads_files_no_result">Ebben a szobában nincsenek fájlok</string>
+
+    <string name="login_connect_using_matrix_id_notice">Vagy, ha már rendelkezel egy fiókkal és tudod a Matrix azonosítódat és jelszavadat használhatod ezt is:</string>
+    <string name="login_connect_using_matrix_id_submit">Belépés a Matrix azonosítómmal</string>
+    <string name="login_signin_matrix_id_notice">Add meg az azonosítódat és jelszavadat</string>
+    <string name="login_signin_matrix_id_hint">Felhasználói azonosító</string>
+    <string name="login_signin_matrix_id_error_invalid_matrix_id">Ez nem egy valós felhasználó azonosító. A helyes formátum: „@felhasznalo:matrixszerver.org”</string>
+    <string name="autodiscover_well_known_error">Nem található a Matrix szerver. Ellenőrizd az azonosítódat</string>
+
+    <string name="no_connectivity_to_the_server_indicator_airplane">Repülőgép üzemmód be van kapcsolva</string>
+
+    <string name="choose_locale_current_locale_title">Jelenlegi nyelv</string>
+    <string name="choose_locale_other_locales_title">További elérhető nyelvek</string>
+    <string name="choose_locale_loading_locales">Elérhető nyelvek betöltése…</string>
+
+    <string name="open_terms_of">Megnyitás: %s feltételek</string>
+    <string name="identity_server_error_outdated_identity_server">Ez az azonosítási szerver régi. RiotX csak az API V2-t támogatja.</string>
+    <string name="identity_server_error_outdated_home_server">Ez a művelet nem támogatott. A Matrix szerver elavult.</string>
+    <string name="identity_server_error_no_identity_server_configured">Kérlek először állíts be egy azonosítási szervert.</string>
+    <string name="identity_server_error_terms_not_signed">Kérlek először fogadd el az azonosítási szerver felhasználási feltételeit a beállításokban.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">A biztonságod érdekében RiotX csak hash-selt e-mail cím és telefonszám küldését támogatja.</string>
+    <string name="identity_server_error_binding_error">A megfeleltetés sikertelen.</string>
+    <string name="identity_server_error_no_current_binding_error">Ezzel az azonosítóval jelenleg nincs megfeleltetve semmi.</string>
+
+    <string name="identity_server_set_default_notice">A Matrix szervered (%1$s) ezt az azonosítási szervert javasolja: %2$s</string>
+    <string name="identity_server_set_default_submit">%1$s használata</string>
+    <string name="identity_server_set_alternative_notice">Vagy beírhatsz más azonosítási szerver URL-t</string>
+    <string name="identity_server_set_alternative_notice_no_default">Add meg az azonosítási szerver URL-jét</string>
 </resources>

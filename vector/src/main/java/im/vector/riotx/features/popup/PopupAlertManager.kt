@@ -15,6 +15,7 @@
  */
 package im.vector.riotx.features.popup
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Build
 import android.os.Handler
@@ -26,6 +27,7 @@ import com.tapadoo.alerter.OnHideAlertListener
 import dagger.Lazy
 import im.vector.riotx.R
 import im.vector.riotx.features.home.AvatarRenderer
+import im.vector.riotx.features.themes.ThemeUtils
 import timber.log.Timber
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -139,24 +141,32 @@ class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<Ava
         }
     }
 
+    @SuppressLint("InlinedApi")
     private fun clearLightStatusBar() {
-        val view = weakCurrentActivity?.get()?.window?.decorView
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && view != null) {
-            var flags = view.systemUiVisibility
-            flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
-            view.systemUiVisibility = flags
-        }
+        weakCurrentActivity?.get()
+                ?.takeIf { Build.VERSION.SDK_INT >= Build.VERSION_CODES.M }
+                // Do not change anything on Dark themes
+                ?.takeIf { ThemeUtils.isLightTheme(it) }
+                ?.let { it.window?.decorView }
+                ?.let { view ->
+                    var flags = view.systemUiVisibility
+                    flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+                    view.systemUiVisibility = flags
+                }
     }
 
+    @SuppressLint("InlinedApi")
     private fun setLightStatusBar() {
-        val view = weakCurrentActivity?.get()?.window?.decorView
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && view != null) {
-            var flags = view.systemUiVisibility
-            flags = flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            view.systemUiVisibility = flags
-        }
+        weakCurrentActivity?.get()
+                ?.takeIf { Build.VERSION.SDK_INT >= Build.VERSION_CODES.M }
+                // Do not change anything on Dark themes
+                ?.takeIf { ThemeUtils.isLightTheme(it) }
+                ?.let { it.window?.decorView }
+                ?.let { view ->
+                    var flags = view.systemUiVisibility
+                    flags = flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                    view.systemUiVisibility = flags
+                }
     }
 
     private fun showAlert(alert: VectorAlert, activity: Activity, animate: Boolean = true) {

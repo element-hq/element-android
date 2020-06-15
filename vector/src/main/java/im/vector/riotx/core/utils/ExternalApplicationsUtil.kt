@@ -21,10 +21,14 @@ import android.content.ActivityNotFoundException
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.provider.Browser
 import android.provider.MediaStore
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.browser.customtabs.CustomTabsSession
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import im.vector.riotx.BuildConfig
@@ -61,6 +65,34 @@ fun openUrlInExternalBrowser(context: Context, uri: Uri?) {
         } catch (activityNotFoundException: ActivityNotFoundException) {
             context.toast(R.string.error_no_external_application_found)
         }
+    }
+}
+
+/**
+ * Open url in custom tab or, if not available, in the default browser
+ * If several compatible browsers are installed, the user will be proposed to choose one.
+ * Ref: https://developer.chrome.com/multidevice/android/customtabs
+ */
+fun openUrlInChromeCustomTab(context: Context, session: CustomTabsSession?, url: String) {
+    try {
+        CustomTabsIntent.Builder()
+                .setToolbarColor(ContextCompat.getColor(context, R.color.riotx_background_light))
+                .apply {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                        setNavigationBarColor(ContextCompat.getColor(context, R.color.riotx_header_panel_background_light))
+                    }
+                }
+                .setNavigationBarColor(ContextCompat.getColor(context, R.color.riotx_background_light))
+                .setColorScheme(CustomTabsIntent.COLOR_SCHEME_LIGHT)
+                // Note: setting close button icon does not work
+                .setCloseButtonIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_back_24dp))
+                .setStartAnimations(context, R.anim.enter_fade_in, R.anim.exit_fade_out)
+                .setExitAnimations(context, R.anim.enter_fade_in, R.anim.exit_fade_out)
+                .apply { session?.let { setSession(it) } }
+                .build()
+                .launchUrl(context, Uri.parse(url))
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        context.toast(R.string.error_no_external_application_found)
     }
 }
 

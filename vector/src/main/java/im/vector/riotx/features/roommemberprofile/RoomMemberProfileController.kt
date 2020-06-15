@@ -18,6 +18,10 @@
 package im.vector.riotx.features.roommemberprofile
 
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.room.model.Membership
+import im.vector.matrix.android.api.session.room.powerlevels.PowerLevelsHelper
+import im.vector.matrix.android.api.session.room.powerlevels.Role
 import im.vector.riotx.R
 import im.vector.riotx.core.epoxy.profiles.buildProfileAction
 import im.vector.riotx.core.epoxy.profiles.buildProfileSection
@@ -28,7 +32,8 @@ import javax.inject.Inject
 
 class RoomMemberProfileController @Inject constructor(
         private val stringProvider: StringProvider,
-        colorProvider: ColorProvider
+        colorProvider: ColorProvider,
+        private val session: Session
 ) : TypedEpoxyController<RoomMemberProfileViewState>() {
 
     private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
@@ -42,6 +47,11 @@ class RoomMemberProfileController @Inject constructor(
         fun onShowDeviceListNoCrossSigning()
         fun onJumpToReadReceiptClicked()
         fun onMentionClicked()
+        fun onEditPowerLevel(currentRole: Role)
+        fun onKickClicked()
+        fun onBanClicked(isUserBanned: Boolean)
+        fun onCancelInviteClicked()
+        fun onInviteClicked()
     }
 
     override fun buildModels(data: RoomMemberProfileViewState?) {
@@ -71,6 +81,12 @@ class RoomMemberProfileController @Inject constructor(
     }
 
     private fun buildRoomMemberActions(state: RoomMemberProfileViewState) {
+        buildSecuritySection(state)
+        buildMoreSection(state)
+        buildAdminSection(state)
+    }
+
+    private fun buildSecuritySection(state: RoomMemberProfileViewState) {
         // Security
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
 
@@ -148,9 +164,13 @@ class RoomMemberProfileController @Inject constructor(
                 centered(false)
             }
         }
+    }
 
+    private fun buildMoreSection(state: RoomMemberProfileViewState) {
         // More
         if (!state.isMine) {
+            val membership = state.asyncMembership() ?: return
+
             buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
             buildProfileAction(
                     id = "read_receipt",
@@ -170,6 +190,19 @@ class RoomMemberProfileController @Inject constructor(
                     divider = ignoreActionTitle != null,
                     action = { callback?.onMentionClicked() }
             )
+
+            val canInvite = state.actionPermissions.canInvite
+            if (canInvite && (membership == Membership.LEAVE || membership == Membership.KNOCK)) {
+                buildProfileAction(
+                        id = "invite",
+                        title = stringProvider.getString(R.string.room_participants_action_invite),
+                        dividerColor = dividerColor,
+                        destructive = false,
+                        editable = false,
+                        divider = ignoreActionTitle != null,
+                        action = { callback?.onInviteClicked() }
+                )
+            }
             if (ignoreActionTitle != null) {
                 buildProfileAction(
                         id = "ignore",
@@ -181,6 +214,77 @@ class RoomMemberProfileController @Inject constructor(
                         action = { callback?.onIgnoreClicked() }
                 )
             }
+        }
+    }
+
+    private fun buildAdminSection(state: RoomMemberProfileViewState) {
+        val powerLevelsContent = state.powerLevelsContent ?: return
+        val powerLevelsStr = state.userPowerLevelString() ?: return
+        val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
+        val userPowerLevel = powerLevelsHelper.getUserRole(state.userId)
+        val myPowerLevel = powerLevelsHelper.getUserRole(session.myUserId)
+        if ((!state.isMine && myPowerLevel <= userPowerLevel)) {
+            return
+        }
+        val membership = state.asyncMembership() ?: return
+        val canKick = !state.isMine && state.actionPermissions.canKick
+        val canBan = !state.isMine && state.actionPermissions.canBan
+        val canEditPowerLevel = state.actionPermissions.canEditPowerLevel
+        if (canKick || canBan || canEditPowerLevel) {
+            buildProfileSection(stringProvider.getString(R.string.room_profile_section_admin))
+        }
+        if (canEditPowerLevel) {
+            buildProfileAction(
+                    id = "edit_power_level",
+                    editable = false,
+                    title = powerLevelsStr,
+                    divider = canKick || canBan,
+                    dividerColor = dividerColor,
+                    action = { callback?.onEditPowerLevel(userPowerLevel) }
+            )
+        }
+
+        if (canKick) {
+            when (membership) {
+                Membership.JOIN   -> {
+                    buildProfileAction(
+                            id = "kick",
+                            editable = false,
+                            divider = canBan,
+                            destructive = true,
+                            title = stringProvider.getString(R.string.room_participants_action_kick),
+                            dividerColor = dividerColor,
+                            action = { callback?.onKickClicked() }
+                    )
+                }
+                Membership.INVITE -> {
+                    buildProfileAction(
+                            id = "cancel_invite",
+                            title = stringProvider.getString(R.string.room_participants_action_cancel_invite),
+                            divider = canBan,
+                            dividerColor = dividerColor,
+                            destructive = true,
+                            editable = false,
+                            action = { callback?.onCancelInviteClicked() }
+                    )
+                }
+                else              -> Unit
+            }
+        }
+        if (canBan) {
+            val banActionTitle = if (membership == Membership.BAN) {
+                stringProvider.getString(R.string.room_participants_action_unban)
+            } else {
+                stringProvider.getString(R.string.room_participants_action_ban)
+            }
+            buildProfileAction(
+                    id = "ban",
+                    editable = false,
+                    destructive = true,
+                    title = banActionTitle,
+                    dividerColor = dividerColor,
+                    action = { callback?.onBanClicked(membership == Membership.BAN) }
+            )
         }
     }
 

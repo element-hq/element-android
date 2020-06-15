@@ -18,12 +18,12 @@ package im.vector.matrix.android.internal.auth.registration
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import im.vector.matrix.android.api.auth.data.LoginFlowTypes
 import im.vector.matrix.android.api.auth.registration.FlowResult
 import im.vector.matrix.android.api.auth.registration.Stage
 import im.vector.matrix.android.api.auth.registration.TermPolicies
 import im.vector.matrix.android.api.util.JsonDict
 import im.vector.matrix.android.internal.auth.data.InteractiveAuthenticationFlow
-import im.vector.matrix.android.internal.auth.data.LoginFlowTypes
 
 @JsonClass(generateAdapter = true)
 data class RegistrationFlowResponse(

@@ -47,8 +47,8 @@
     <string name="rename">Gje nytt namn</string>
     <string name="report_content">Rapporter innhaldet</string>
     <string name="active_call">Pågåande samtale</string>
-    <string name="ongoing_conference_call">Pågåande konferanseanrop.
-\nBli med som %1$s eller %2$s.</string>
+    <string name="ongoing_conference_call">Pågåande konferansesamtale. 
+\nBli med som %1$s eller %2$s</string>
     <string name="ongoing_conference_call_voice">Tale</string>
     <string name="ongoing_conference_call_video">Video</string>
     <string name="cannot_start_call">Kan ikkje starte samtalen, prøv litt seinare</string>
@@ -56,7 +56,7 @@
     <string name="missing_permissions_to_start_conf_call">Du treng invitasjonsrett for å starte ein konferanse i dette rommet</string>
     <string name="missing_permissions_title_to_start_conf_call">Kunne ikkje starte samtalen</string>
     <string name="device_information">Sesjonsinformasjon</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">Konferanseanrop er ikkje støtta i krypterte rom</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Konferansesamtalar er ikkje støtta i krypterte rom</string>
     <string name="send_anyway">Send likevel</string>
     <string name="or">eller</string>
     <string name="invite">Inviter</string>
@@ -65,8 +65,8 @@
     <string name="action_exit">Gå ut</string>
     <string name="actions">Handlingar</string>
     <string name="action_sign_out">Logg av</string>
-    <string name="action_voice_call">Taleanrop</string>
-    <string name="action_video_call">Videoanrop</string>
+    <string name="action_voice_call">Talesamtale</string>
+    <string name="action_video_call">Videosamtale</string>
     <string name="action_global_search">Globalt søk</string>
     <string name="action_mark_all_as_read">Merk alle som lesne</string>
     <string name="action_historical">Historisk</string>
@@ -80,13 +80,13 @@
     <string name="dialog_title_warning">Åtvaring</string>
 
     <string name="bottom_action_home">Heim</string>
-    <string name="bottom_action_favourites">Favorittar</string>
+    <string name="bottom_action_favourites">Yndlingar</string>
     <string name="bottom_action_people">Folk</string>
     <string name="bottom_action_rooms">Rom</string>
     <string name="bottom_action_groups">Samfund</string>
 
     <string name="home_filter_placeholder_home">Filtrer romnamn</string>
-    <string name="home_filter_placeholder_favorites">Filtrer favorittar</string>
+    <string name="home_filter_placeholder_favorites">Filtrer yndlingar</string>
     <string name="home_filter_placeholder_people">Filtrer folk</string>
     <string name="home_filter_placeholder_rooms">Filtrer romnamn</string>
     <string name="home_filter_placeholder_groups">Filtrer felleskap</string>
@@ -144,13 +144,13 @@
     <string name="search">Søk</string>
 
     <string name="start_new_chat">Start ny samtale</string>
-    <string name="start_voice_call">Start taleanrop</string>
+    <string name="start_voice_call">Start talesamtale</string>
     <string name="start_video_call">Start videosamtale</string>
 
     <string name="option_send_voice">Send tale</string>
 
     <string name="start_new_chat_prompt_msg">Er du sikker på at du vil starta ein ny samtale med %s\?</string>
-    <string name="start_voice_call_prompt_msg">Er du sikker på at du vil starta eit nytt taleanrop\?</string>
+    <string name="start_voice_call_prompt_msg">Er du sikker på at du vil starta ein ny talesamtale\?</string>
     <string name="start_video_call_prompt_msg">Er du sikker på at du vil starta ein ny videosamtale\?</string>
 
     <string name="option_send_files">Send filer</string>
@@ -168,7 +168,7 @@
     <string name="auth_register">Lag konto</string>
     <string name="auth_submit">Send inn</string>
     <string name="auth_skip">Hopp over</string>
-    <string name="auth_send_reset_email">Send tilbakestillings-epost</string>
+    <string name="auth_send_reset_email">Send nullstillings-epost</string>
     <string name="auth_return_to_login">Gå tilbake til innloggingsvindauget</string>
     <string name="auth_user_id_placeholder">E-post eller brukarnamn</string>
     <string name="auth_password_placeholder">Passord</string>
@@ -261,18 +261,18 @@
     <string name="room_info_room_topic">Romemne</string>
 
     <string name="call">Ring</string>
-    <string name="call_connected">Anrop tilkopla</string>
-    <string name="call_connecting">Koplar saman anrop…</string>
-    <string name="call_ended">Anrop avslutta</string>
+    <string name="call_connected">Samtalen er kopla opp</string>
+    <string name="call_connecting">Koplar saman samtalar…</string>
+    <string name="call_ended">Samtalen er avslutta</string>
     <string name="call_ring">Ringjer…</string>
-    <string name="incoming_call">Innkommande anrop</string>
+    <string name="incoming_call">Innkommande samtale</string>
     <string name="incoming_video_call">Innkommande videosamtale</string>
-    <string name="incoming_voice_call">Innkommande taleanrop</string>
-    <string name="call_in_progress">Anrop pågår…</string>
+    <string name="incoming_voice_call">Innkomande talesamtale</string>
+    <string name="call_in_progress">Samtalen er i gang…</string>
 
     <string name="call_error_user_not_responding">Den andre parten tok ikkje samtalen.</string>
     <string name="call_error_camera_init_failed">Klarar ikkje å skru på kameraet</string>
-    <string name="call_error_answered_elsewhere">Anropet vart teke ein annan plass</string>
+    <string name="call_error_answered_elsewhere">Røyret vart teke ein annan stad</string>
 
     <string name="media_picker_both_capture_title">Ta bilete eller video</string>
     <string name="media_picker_cannot_record_video">Kan ikkje spela inn video</string>
@@ -284,8 +284,8 @@
     <string name="permissions_rationale_msg_camera">Riot treng tilgang til kameraet ditt for å ta bilete og videosamtalar.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
-\nVer venleg og gje tilgang på sprettvindauget som kjem for å starte anropet."</string>
-    <string name="permissions_rationale_msg_record_audio">Riot treng tilgang til mikrofonen din for å utføra taleanrop.</string>
+\nVer venleg og gje tilgang på sprettvindauget som kjem for å starta samtalen."</string>
+    <string name="permissions_rationale_msg_record_audio">Riot treng tilgang til mikrofonen din for å utføra talesamtalar.</string>
     <string name="call_error_ice_failed">Mediaforbindelsen feila</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
@@ -347,7 +347,7 @@
     <string name="room_participants_ago">%1$s %2$s sidan</string>
 
     <string name="room_participants_header_admin_tools">ADMINISTRATORVERKTY</string>
-    <string name="room_participants_header_call">ANROP</string>
+    <string name="room_participants_header_call">RØYSTSAMTALA</string>
     <string name="room_participants_header_direct_chats">DIREKTESAMTALE</string>
     <string name="room_participants_header_devices">SESJONAR</string>
 
@@ -361,9 +361,6 @@
     <string name="room_participants_action_set_admin">Gjer til administrator</string>
     <string name="room_participants_action_ignore">Gøym alle meldingar frå denne brukaren</string>
     <string name="room_participants_action_unignore">Syn alle meldingar frå denne brukaren</string>
-    <string name="room_participants_action_unignore_prompt">Syn alle meldingar frå denne brukaren\? 
-\n 
-\nMerk deg at denne handlinga startar programmet på nytt og kan ta litt tid.</string>
     <string name="room_participants_invite_search_another_user">Brukar-ID, namn, eller e-post</string>
     <string name="room_participants_action_mention">Nemn</string>
     <string name="room_participants_action_devices_list">Vis sesjonsliste</string>
@@ -409,9 +406,9 @@
     <string name="ssl_logout_account">Logg ut</string>
     <string name="ssl_remain_offline">Ignorer</string>
     <string name="ssl_fingerprint_hash">Fingeravtrykk (%s):</string>
-    <string name="ssl_could_not_verify">Fekk ikkje til å stadfesta identiteten på den eksterne serveren.</string>
+    <string name="ssl_could_not_verify">Fekk ikkje til å stadfesta identiteten på den eksterne tenaren.</string>
     <string name="ssl_cert_not_trust">Detta kan vere teikn på at tilkoplinga blir avlytta eller at telefonen ikkje stolar på sertifikatet den eksterne tenaren brukar.</string>
-    <string name="ssl_cert_new_account_expl">Om administratoren av serveren har informert at dette er forventa, pass på at fingeravtrykket under samsvarar med fingeravtrykket han gav deg.</string>
+    <string name="ssl_cert_new_account_expl">Om administratoren av tenaren har informert at dette er forventa, pass på at fingeravtrykket under samsvarar med fingeravtrykket han gav deg.</string>
     <string name="ssl_unexpected_existing_expl">Sertifikatet har forandra seg frå det som var stolt på av mobilen din. Dette er SÆRS UVANLEG. Det er tilrådd å IKKJE GODKJENNA dette nye sertifikatet.</string>
     <string name="ssl_expected_existing_expl">Sertifikatet har endra seg frå eit som tidlegare var stole på, til eit som ikkje er det. Det kan henda at tenaren har fornya sertifikatet. Snakk med administrator for å få det forventa fingeravtrykket.</string>
     <string name="ssl_only_accept">Godkjenn BERRE sertifikatet viss tenaradministratoren har publisert eit fingeravtrykk som samsvarar med det over.</string>
@@ -442,7 +439,7 @@
 
     <string name="room_recents_join">VERT MED</string>
     <string name="room_recents_directory">UTVAL</string>
-    <string name="room_recents_favourites">FAVORITTAR</string>
+    <string name="room_recents_favourites">YNDLINGAR</string>
     <string name="room_recents_conversations">ROM</string>
     <string name="room_recents_low_priority">LÅGRETT</string>
     <string name="room_recents_invites">INNBJODINGAR</string>
@@ -511,7 +508,7 @@
     <string name="settings_messages_in_one_to_one">Meldingar i ein-og-ein-samtalar</string>
     <string name="settings_messages_in_group_chat">Meldingar i gruppesamtalar</string>
     <string name="settings_invited_to_room">Når eg blir invitert til eit rom</string>
-    <string name="settings_call_invitations">Invitasjon til anrop</string>
+    <string name="settings_call_invitations">Invitasjon til samtale</string>
     <string name="settings_messages_sent_by_bot">Meldingar frå botar</string>
 
     <string name="settings_start_on_boot">Køyr ved oppstart</string>
@@ -789,8 +786,6 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
 
     <string name="widget_no_power_to_manage">Du trenger tillating til å handsama widgetar i dette rommet</string>
     <string name="widget_creation_failure">Widget-laging mislukkast</string>
-    <string name="event_formatter_widget_added">%1$s lagt til av %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s fjerna av %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Lag konferansesamtalar med Jitsi</string>
     <string name="widget_delete_message_confirmation">Er du sikker på at du vil slette widgeten frå dette rommet\?</string>
     <plurals name="active_widgets">
@@ -966,22 +961,18 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="auth_accept_policies">Venligast sjå over og godta retningslinjene til heimtenaren:</string>
 
     <string name="login_error_unknown_host">Det gjeng ikkje å nå URL-en, gjer vel og sjå til honom</string>
-    <string name="settings_call_category">Anrop</string>
-    <string name="settings_call_ringtone_use_riot_ringtone">Bruk standard Riot-ringetone for innkommande anrop</string>
-    <string name="settings_call_ringtone_title">Ringetone for innkommande anrop</string>
-    <string name="settings_call_ringtone_dialog_title">Vel ringetone for anrop:</string>
+    <string name="settings_call_category">Oppringingar</string>
+    <string name="settings_call_ringtone_use_riot_ringtone">Bruk standard Riot-ringetone for innkommande samtalar</string>
+    <string name="settings_call_ringtone_title">Ringetone for innkommande samtalar</string>
+    <string name="settings_call_ringtone_dialog_title">Vel ringetone for samtalar:</string>
 
     <string name="video_call_in_progress">Ein videosamtale pågår…</string>
 
     <string name="room_participants_action_kick">Spark</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Er du trygg på at du vil sparka denne brukaren frå samtala\?</item>
-        <item quantity="other">Er du trygg på at du vil sparka desse brukarane frå samtala\?</item>
-    </plurals>
     <string name="reason_hint">Grunn</string>
 
     <string name="settings_notification_advanced">Avanserte varslingsinnstillingar</string>
-    <string name="settings_notification_advanced_summary">Sett prioritet for varslingar etter hending, konfiguer lyd, LED, vibrasjon</string>
+    <string name="settings_notification_advanced_summary">Sett prioritet for varslingar etter hending, still inn lyd, LED, vibrasjon</string>
     <string name="settings_notification_by_event">Prioritet på varsel ut ifrå hendingar</string>
 
     <string name="settings_notification_troubleshoot">Løys problem med varslingar</string>
@@ -1033,12 +1024,12 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="review">Sjå gjennom</string>
     <string name="decline">Avvis</string>
 
-    <string name="people_no_identity_server">Ingen identitetsserver er konfiguert.</string>
+    <string name="people_no_identity_server">Ingen identitetstenar er satt opp.</string>
 
-    <string name="call_failed_no_ice_title">Anrop feila fordi serveren er feilkonfiguert</string>
-    <string name="call_failed_no_ice_description">Be administratoren for din heimeserver (%1$s) om, å konfiguere ein TURN-servern for å handtere anrop på rett måte.
-\n
-\nEventuelt, kan du prøve å bruke den offentlege serveren på %2$s, men dette vil kanskje ikkje vere like stabilt og IP-adressa di vil bli delt mot den serveren. Du kan også styre dette under Innstillingar.</string>
+    <string name="call_failed_no_ice_title">Samtale feila fordi tenaren er satt opp feil</string>
+    <string name="call_failed_no_ice_description">Be administratoren for din heimetenar (%1$s) om, å setta opp ein \"TURN-server\" for å handtera samtalar på rett måte. 
+\n 
+\nEventuelt, kan du prøve å nytta den offentlege tenaren på %2$s, men dette vil kanskje ikkje vere like stabilt og IP-adressa di vil bli delt mot den tenaren. Du kan også styre dette under Innstillingar.</string>
     <string name="call_failed_no_ice_use_alt">Prøv med %s</string>
     <string name="call_failed_dont_ask_again">Spør meg ikkje om att</string>
 
@@ -1047,11 +1038,11 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="auth_add_phone_message_2">Sett telefonnummer, så kan du og seinare bli synleg for folk som kjenner deg.</string>
     <string name="auth_add_email_phone_message_2">Sett e-postadresse for gjenoppretting av konto. Bestem valfritt seinare om å vere synleg for folk som kjenner deg via e-post eller telefonnummer.</string>
     <string name="auth_add_email_and_phone_message_2">Sett e-postadresse for gjenoppretting av konto. Bestem valfritt seinare om å vere synleg for folk som kjenner deg via e-post eller telefonnummer.</string>
-    <string name="login_error_no_homeserver_found">Dette er ikkje ei gyldig Matrix-serveradresse</string>
+    <string name="login_error_no_homeserver_found">Dette er ikkje ei gyldig Matrix-tenaradresse</string>
     <string name="login_error_homeserver_not_found">Klarar ikkje å nå ein heimetenar på denne URL\'en, sjekk at den er korrekt</string>
     <string name="login_error_ssl_handshake">Dingsen din brukar ein utdatert TLS-sikkerheitsprotokoll som er sårbar for angrep. For din sikkerheit vil du ikkje kunne koble til</string>
-    <string name="settings_call_ringtone_use_default_stun">Tillat assistanseserver for tilbake-ring</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">Vil nytte %s for assistanse når heimetenaren din ikkje tilbyr ein (IP-adressa di vil bli delt under samtalen)</string>
+    <string name="settings_call_ringtone_use_default_stun">Tillat å bruke assistansetenar for talesamtalar</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Vil nytte %s for assistanse når heimetenaren din ikkje tilbyr dette (IP-adressa di vil bli delt under samtalen)</string>
     <string name="invite_no_identity_server_error">Legg til ein identitetstenar i innstillingane for å utføre denne handlinga.</string>
     <string name="room_sliding_menu_version_x">Versjon %s</string>
     <string name="settings_add_3pid_confirm_password_title">Stadfest ditt passord</string>
@@ -1060,8 +1051,8 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
 
 
     <string name="settings_integrations">Integrasjonar</string>
-    <string name="settings_integrations_summary">Bruk ein integrasjonshandterar (Integration Manager) for å handtere botar, bruker, tillegg og klistermerkepakker.
-\nIntegrasjonshandterarar hentar konfigurasjonsdata, kan endre tillegg, sende rominvitasjonar og sette tilgangsnivå på vegne av deg.</string>
+    <string name="settings_integrations_summary">Bruk ein integrasjonshandterar (Integration Manager) for å handtere botar, bruer, tillegg og klistermerkepakker. 
+\nIntegrasjonshandterarar hentar konfigurasjonsdata, og kan endra tillegg, senda rominvitasjonar og sette tilgangsnivå på vegne av deg.</string>
     <string name="settings_cryptography_manage_keys">Handtering av kryptografiske nøkklar</string>
     <string name="settings_labs_enable_send_voice_summary">Dette valet krev eit tredjepartsprogram for å registrere meldingane.</string>
     <string name="settings_lazy_loading_title">Last rom-medlemmar etter behov (lazy-load)</string>
@@ -1070,30 +1061,30 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="sas_verified_successful_description">Sikre meldingar med denne brukaren er ende-til-ende kryptert, dei kan ikkje bli lesne av tredje partar.</string>
     <string name="settings_other_third_party_notices">Anna informasjon frå tredjepart</string>
     <string name="verification_conclusion_ok_notice">Meldingar med denne brukaren er ende-til-ende kryptert, dei kan ikkje bli lesne av tredje part.</string>
-    <string name="settings_noisy_notifications_preferences">Konfiguer bråkete-varsel</string>
-    <string name="settings_call_notifications_preferences">Konfiguer anrops-varsel</string>
-    <string name="settings_silent_notifications_preferences">Konfiguer stille-varsel</string>
-    <string name="settings_system_preferences_summary">Konfiguer LED-farge, vibrasjon eller lyd…</string>
+    <string name="settings_noisy_notifications_preferences">Set opp bråkete-varsel</string>
+    <string name="settings_call_notifications_preferences">Still inn samtale-varsel</string>
+    <string name="settings_silent_notifications_preferences">Set opp stille-varsel</string>
+    <string name="settings_system_preferences_summary">Set opp LED-farge, vibrasjon eller lyd…</string>
 
 
     <string name="settings_show_join_leave_messages">Vis bli-med/forlat hendelsar</string>
     <string name="settings_show_join_leave_messages_summary">Invitasjonar, utkastingar og utestengingar gjeld ikkje dette.</string>
     <string name="room_widget_open_in_browser">Opna i nettlesar</string>
-    <string name="store_full_description">Program for nettprat, under din kontroll og med full fleksibilitet. Riot lar deg kommunisere på den måten du vil. Implementert for [matrix] - protokollen for open, desentralisert kommunikasjon.
-\n
-\nOpprett ein gratis matrix.org-konto, sett opp eigen server på https://modular.im, eller ta i bruk ein annan Matrix-server.
-\n
-\nKvifor velje Riot.im\?
-\n
-\n• KOMPLETT KOMMUNIKASJON: Bygg rom rund teamet, venner, fellesskapet - du bestemmer! Send direktemeldingar, del filer, legg til tillegg, start taleanrop og videokonferansar! Alt saman er tilgjengeleg utan kostnad.
-\n
-\n• KRAFTIGE INTEGRASJONAR: Bruk Riot.im saman med verktøya du brukar frå før. Med Riot.Im kan du kommunisere med brukarar på andre plattformar.
-\n
-\n• PRIVAT OG SIKKER: Hald dine samtalar hemmelege. Industristandard ende-til-ende-kryptering sørgjer for at private samtalar forblir private.
-\n
-\n• OPEN, IKKJE LUKKA: Open kjeldekode, på toppen av Matrix-protokollen. Eig dine eigne data ved å drifte eigen server eller hjå nokon du stolar på.
-\n
-\n• OVERALT DER DU ER: Hald kontakten uansett kvar du er; fullstendig synkronisert meldingshistorikk på alle klientar, samt online på https://riot.im.</string>
+    <string name="store_full_description">Program for nettprat, under din kontroll og med full fleksibilitet. Riot let deg kommunisera på den måten du vil. Implementert for [matrix] - protokollen for open, desentralisert kommunikasjon. 
+\n 
+\nOpprett ein gratis matrix.org-konto, sett opp eigen tenar på https://modular.im, eller ta i bruk ein annan Matrix-tenar. 
+\n 
+\nKvifor velje Riot.im\? 
+\n 
+\n• KOMPLETT KOMMUNIKASJON: Bygg rom rund teamet, venner, fellesskapet - du bestemmer! Send direktemeldingar, del filer, legg til tillegg, start talesamtalar og videokonferansar! Alt saman er tilgjengeleg utan kostnad.
+\n 
+\n• KRAFTIGE INTEGRASJONAR: Bruk Riot.im saman med verktøya du nyttar frå før. Med Riot.Im kan du kommunisera med brukarar på andre plattformar. 
+\n 
+\n• PRIVAT OG SIKKER: Hald dine samtalar hemmelege. Industristandard ende-til-ende-kryptering sørgjer for at private samtalar forblir private. 
+\n 
+\n• OPEN, IKKJE LUKKA: Open kjeldekode, på toppen av Matrix-protokollen. Eig dine eigne data ved å drifta eigen tenar eller hjå nokon du stolar på. 
+\n 
+\n• OVERALT DER DU ER: Hald kontakten uansett kvar du er; fullstendig synkronisert meldingshistorikk på alle klientar, samt i nettlesar på https://riot.im.</string>
 
     <string name="keys_backup_restore_is_getting_backup_version">Hentar sikkerheitskopiversjon…</string>
     <string name="keys_backup_info_title_version">Versjon</string>

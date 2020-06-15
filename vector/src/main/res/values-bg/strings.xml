@@ -648,8 +648,6 @@
 
     <string name="widget_no_power_to_manage">Трябва Ви разрешение, за да управлявате приспособленията в тази стая</string>
     <string name="widget_creation_failure">Създаване на приспособлението беше неуспешно</string>
-    <string name="event_formatter_widget_added">%1$s добавено от %2$s</string>
-    <string name="event_formatter_widget_removed">%1$s премахнато от %2$s</string>
     <string name="settings_labs_create_conference_with_jitsi">Създаване на групови разговори с jitsi</string>
     <string name="widget_delete_message_confirmation">Сигурни ли сте, че искате да изтриете приспособлението от тази стая?</string>
     <plurals name="active_widgets">
@@ -921,9 +919,6 @@
     <string name="room_tombstone_continuation_description">Тази стая е продължение от предишна кореспонденция</string>
     <string name="room_tombstone_predecessor_link">Натиснете тук за да видите по-стари съобщения</string>
 
-    <string name="room_participants_action_unignore_prompt">Показване на всички съобщения от този потребител?
-
-Имайте предвид, че това действие ще рестартира приложението, което може да отнеме известно време.</string>
     <string name="missing_permissions_error">Поради липсващи разрешения, това действие не е възможно.</string>
     <plurals name="format_time_s">
         <item quantity="one">1 сек.</item>
@@ -1016,10 +1011,6 @@
     <string name="settings_call_ringtone_dialog_title">Избор на мелодия за обаждания:</string>
 
     <string name="room_participants_action_kick">Изгони</string>
-    <plurals name="room_participants_kick_prompt_msg">
-        <item quantity="one">Сигурни ли сте, че искате да изгоните този потребител от този чат?</item>
-        <item quantity="other">Сигурни ли сте, че искате да изгоните тези потребители от този чат?</item>
-    </plurals>
     <string name="reason_hint">Причина</string>
 
     <string name="settings_inline_url_preview_summary">Прегледи на връзки директно в самия чат, когато функцията се поддържа от сървъра.</string>
@@ -1682,7 +1673,7 @@
     <string name="settings_discovery_confirm_mail">Изпратихме имейл за потвърждение на %s. Проверете имейла и кликнете връзката за потвърждение</string>
     <string name="settings_discovery_mail_pending">Изчакване</string>
 
-    <string name="settings_discovery_enter_identity_server">Въведете нов сървър за самоличност</string>
+    <string name="settings_discovery_enter_identity_server">Въведете сървър за самоличност</string>
     <string name="settings_discovery_bad_identity_server">Неуспешна връзка със сървъра за самоличност</string>
     <string name="settings_discovery_please_enter_server">Въведете адреса на сървъра за самоличност</string>
     <string name="settings_discovery_no_terms_title">Сървъра за самоличност няма условия за ползване</string>
@@ -1987,4 +1978,10 @@
 
     <string name="settings_developer_mode_fail_fast_title">Бърз-провал</string>
     <string name="settings_developer_mode_fail_fast_summary">RiotX може да забива по-често когато възникне неочаквана грешка</string>
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
+
+    <string name="event_redacted">Съобщението беше изтрито</string>
+    <string name="settings_show_redacted">Показвай премахнатите съобщения</string>
+    <string name="settings_show_redacted_summary">Показвай индикатор на мястото на премахнатите съобщения</string>
 </resources>

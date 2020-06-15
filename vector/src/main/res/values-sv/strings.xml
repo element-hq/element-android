@@ -12,8 +12,8 @@
     <string name="notification_sync_init">Initialiserar tjänst</string>
     <string name="notification_sync_in_progress">Synkroniserar…</string>
     <string name="notification_listening_for_events">Lyssnar efter händelser</string>
-    <string name="notification_noisy_notifications">Högljudda notifikationer</string>
-    <string name="notification_silent_notifications">Tysta notifikationer</string>
+    <string name="notification_noisy_notifications">Högljudda aviseringar</string>
+    <string name="notification_silent_notifications">Tysta aviseringar</string>
 
     <string name="title_activity_home">Meddelanden</string>
     <string name="title_activity_room">Rum</string>
@@ -256,9 +256,9 @@
     <string name="auth_reset_password_missing_password">Du måste skriva in ett nytt lösenord.</string>
     <string name="auth_reset_password_email_validation_message">Ett e-brev har skickats till %s. När du har följt länken i det, klicka nedan.</string>
     <string name="auth_reset_password_error_unauthorized">Misslyckades att verifiera e-postadressen: se till att du klickade på länken i e-brevet</string>
-    <string name="auth_reset_password_success_message">Ditt lösenord har blivit återställt.
-\n
-\nDu har loggats ut ur alla sessioner och kommer inte längre motta pushnotifikationer. För att återaktivera notifikationer, logga in igen på varje enhet.</string>
+    <string name="auth_reset_password_success_message">Ditt lösenord har blivit återställt. 
+\n 
+\nDu har loggats ut ur alla sessioner och kommer inte längre motta pushnotiser. För att återaktivera pushnotiser, logga in igen på varje enhet.</string>
     <string name="auth_accept_policies">Vänligen granska och acceptera villkoren för denna hemserver:</string>
 
     <string name="login_error_must_start_http">URLen måste börja med http[s]://</string>
@@ -282,8 +282,8 @@
     <string name="login_error_user_in_use">Det här användarnamnet är upptaget</string>
     <string name="login_error_login_email_not_yet">E-postlänken har inte klickats på än</string>
 
-    <string name="e2e_need_log_in_again">Du behöver logga in igen för att generera nycklar för ände-till-ände-kryptering för den här sessionen och skicka den publika nyckeln till hemservern.
-\nDet här behövs bara en gång.
+    <string name="e2e_need_log_in_again">Du behöver logga in igen för att generera nycklar för totalsträckskryptering för den här sessionen och skicka den publika nyckeln till hemservern. 
+\nDet här behövs bara en gång. 
 \nUrsäkta för besväret.</string>
 
     <string name="e2e_re_request_encryption_key">Efterfråga krypteringsnycklarna igen från dina andra sessioner.</string>
@@ -322,7 +322,7 @@
     <string name="settings_call_category">Samtal</string>
     <string name="settings_call_ringtone_use_riot_ringtone">Använd förvald Riot-ringsignal för inkommande samtal</string>
     <string name="settings_call_ringtone_use_default_stun">Tillåt reservassistansserver för samtal</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">Kommer att använda %s som reserv när din hemserver inte erbjuder en (din IP-adress kommer att delas under samtalet).</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Kommer att använda %s som reserv när din hemserver inte erbjuder en (din IP-adress kommer att delas under samtalet)</string>
     <string name="settings_call_ringtone_title">Ringsignal för inkommande samtal</string>
     <string name="settings_call_ringtone_dialog_title">Välj ringsignal för samtal:</string>
 
@@ -434,5 +434,532 @@
     <string name="room_participants_header_call">RING</string>
     <string name="room_participants_header_direct_chats">DIREKTCHATT</string>
     <string name="room_participants_header_devices">SESSIONER</string>
+
+    <string name="room_participants_action_invite">Bjud in</string>
+    <string name="room_participants_action_leave">Lämna det här rummet</string>
+    <string name="room_participants_action_remove">Ta bort från det här rummet</string>
+    <string name="room_participants_action_ban">Banna</string>
+    <string name="room_participants_action_unban">Avbanna</string>
+    <string name="room_participants_action_kick">Kasta ut</string>
+    <string name="room_participants_action_set_default_power_level">Återställ till vanlig användare</string>
+    <string name="room_participants_action_set_moderator">Gör till moderator</string>
+    <string name="room_participants_action_set_admin">Gör till administratör</string>
+    <string name="room_participants_action_ignore">Dölj alla meddelanden från den här användaren</string>
+    <string name="search_members_hint">Filtrera rumsmedlemmar</string>
+    <string name="tab_title_search_rooms">RUM</string>
+    <string name="room_recents_conversations">RUM</string>
+    <plurals name="directory_search_rooms">
+        <item quantity="one">1 rum</item>
+        <item quantity="other">%d rum</item>
+    </plurals>
+    <plurals name="directory_search_rooms_for">
+        <item quantity="one">%1$s rum hittat för %2$s</item>
+        <item quantity="other">%1$s rum hittade för %2$s</item>
+    </plurals>
+    <string name="room_settings_direct_chat">Direktchatt</string>
+    <string name="settings_pin_missed_notifications">Fäst rum med missade aviseringar</string>
+    <string name="settings_pin_unread_messages">Fäst rum med olästa meddelanden</string>
+    <string name="settings_data_save_mode_summary">Datasparningsläge använder ett specifikt filter så att närvarouppdateringar och \"skriver\"-statusar filtreras ut.</string>
+
+    <string name="failed_to_load_timeline_position">%s försökte ladda en specifik punkt i det här rummets tidslinje, men kunde inte hitta den.</string>
+
+    <string name="directory_server_type_homeserver">Skriv en hemserver att visa listan över publika rum från</string>
+    <string name="directory_server_all_rooms_on_server">Alla rum på %s-servern</string>
+    <string name="directory_server_native_rooms">Alla %s-rum på Matrix</string>
+
+    <plurals name="notification_unread_notified_messages_in_room_rooms">
+        <item quantity="one">1 rum</item>
+        <item quantity="other">%d rum</item>
+    </plurals>
+
+    <string name="group_details_rooms">Rum</string>
+    <string name="rooms">Rum</string>
+    <string name="filter_group_members">Filtrera gruppmedlemmar</string>
+    <string name="filter_group_rooms">Filtrera grupprum</string>
+
+    <plurals name="group_rooms">
+        <item quantity="one">1 rum</item>
+        <item quantity="other">%d rum</item>
+    </plurals>
+    <string name="deactivate_account_content">Detta kommer att göra ditt konto permanent oanvändbart. Du kommer inte kunna logga in, och ingen kommer kunna registrera sig med samma användar-ID. Detta kommer att få ditt konto att lämna alla rum det är med i, och det kommer att ta bort din kontoinformation från din identitetsserver. <b>Den här handlingen går inte att ångra</b>.
+\n
+\nAtt inaktivera ditt konto <b>får oss normalt inte att glömma meddelanden du har skickat</b>. Om du skulle vilja att vi glömmer dina meddelanden, markera rutan nedan.
+\n
+\nMeddelandesynlighet I Matrix är likt e-post. Att vi glömmer dina meddelanden betyder att meddelanden du har skickat inte kommer delas med nya eller oregistrerade användare, men registrerade användare som redan har tillgång till dessa meddelanden kommer fortfarande ha tillgång till deras exemplar.</string>
+    <string name="settings_lazy_loading_title">Ladda rumsmedlemmar endast vid behov</string>
+    <string name="settings_lazy_loading_description">Öka prestandan genom att bara ladda rumsmedlemmar när du kollar på dem för första gången.</string>
+    <string name="room_list_catchup_empty_title">Du är ikapp!</string>
+    <string name="room_list_catchup_empty_body">Du har inga olästa meddelanden kvar</string>
+    <string name="room_list_rooms_empty_title">Rum</string>
+    <string name="room_list_rooms_empty_body">Dina rum kommer att visas här</string>
+
+    <string name="create_new_room">Skapa ett nytt rum</string>
+    <string name="fab_menu_create_room">Rum</string>
+    <string name="fab_menu_create_chat">Direktmeddelanden</string>
+
+    <string name="alpha_disclaimer_content_line_2_gplay">Den senaste funktionslistan finns alltid i %1$s, och om du skulle hitta buggar, vänligen skicka en rapport från menyn på toppen av Hem, så fixar vi dem så fort vi kan.</string>
+    <string name="alpha_disclaimer_content_line_2_gplay_colored_part">Play Store-beskrivningen</string>
+    <string name="alpha_disclaimer_content_line_2_fdroid">Om du skulle hitta buggar, vänligen skicka en rapport från menyn på toppen av Hem, så fixar vi dem så fort vi kan.</string>
+
+    <string name="send_suggestion">Ge ett förslag</string>
+    <string name="send_suggestion_content">Vänligen skriv ditt förslag nedan.</string>
+    <string name="send_suggestion_report_placeholder">Beskriv ditt förslag här</string>
+    <string name="send_suggestion_sent">Tack, ditt förslag har skickats framgångsrikt</string>
+    <string name="send_suggestion_failed">Förslaget misslyckades att skickas (%s)</string>
+
+    <string name="store_riotx_full_description">RiotX är en ny klient för Matrix-protokollet (Matrix.org): ett öppet nätverk för säker, decentraliserad kommunikation. RiotX är en komplett omskrivning av klienten Riot för Android, baserat på en komplett omskrivning av Matrix-SDK:t för Android.
+\n
+\nVarning: Detta är en betaversion. RiotX är för närvarande under aktiv utveckling och innehåller begränsningar och (vi hoppas inte alltför många) buggar. All feedback är välkommen!
+\n
+\nRiotX stöder: • Logga in med ett existerande konto • Skapa rum och gå med i publika rum • Acceptera och neka inbjudningar • Lista användares rum • Visa rumsdetaljer • Skicka textmeddelanden • Skicka bilagor • Läsa och skriva meddelanden i krypterade rum • Krypto: säkerhetskopiering av E2E-nycklar, avancerad enhetsverifiering, nyckeldelningsförfrågan och -svar • Pushnotiser • Ljust, mörkt eller svart tema
+\n
+\nInte alla funktioner i Riot är implementerade i RiotX än. Huvudsakligen saknade (vilka kommer snart!) funktioner: • Rumsinställningar (lista rumsmedlemmar, o.s.v.) • Röstsamtal • Widgets • …</string>
+
+    <string name="bottom_action_people_x">Direktmeddelanden</string>
+
+    <string name="room_filtering_filter_hint">Filtrera konversationer…</string>
+    <string name="room_filtering_footer_title">Kan du inte hitta det du letar efter\?</string>
+    <string name="room_filtering_footer_create_new_room">Skapa ett nytt rum</string>
+    <string name="room_filtering_footer_create_new_direct_message">Skicka ett nytt direktmeddelande</string>
+    <string name="room_filtering_footer_open_room_directory">Se rumskatalogen</string>
+
+    <string name="direct_room_filter_hint">Filtrera efter användarnamn eller ID…</string>
+
+    <string name="a11y_create_direct_message">Skapa en ny direktkonversation</string>
+    <string name="a11y_create_room">Skapa ett nytt rum</string>
+    <string name="reaction_search_type_hint">Skriv nyckelord för att hitta en reaktion.</string>
+
+    <string name="autodiscover_well_known_error">Kan inte hitta en giltig hemserver. Vänligen kontrollera din identifierare</string>
+
+    <string name="room_list_sharing_header_recent_rooms">Nyliga rum</string>
+    <string name="room_list_sharing_header_other_rooms">Andra rum</string>
+
+    <string name="enter_secret_storage_invalid">Kan inte hitta hemligheter i lagringen</string>
+    <string name="settings_when_rooms_are_upgraded">När rum uppgraderas</string>
+    <string name="command_description_discard_session_not_handled">Stöds endast I krypterade rum</string>
+    <string name="room_participants_invite_search_another_user">Användar-ID, namn eller e-postadress</string>
+    <string name="settings_profile_picture">Profilbild</string>
+    <string name="settings_display_name">Visningsnamn</string>
+    <string name="settings_add_3pid_confirm_password_title">Bekräfta ditt lösenord</string>
+    <string name="settings_containing_my_display_name">Meddelanden som innehåller mitt visningsnamn</string>
+    <string name="settings_user_settings">Användarinställningar</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">Innehåller ändringar av avatar eller visningsnamn.</string>
+    <string name="devices_delete_dialog_text">Den här handlingen kräver extra autentisering.
+\nFör att fortsätta, skriv in ditt lösenord.</string>
+    <string name="devices_delete_pswd">Lösenord:</string>
+    <string name="settings_password">Lösenord</string>
+    <string name="settings_change_password">Byt lösenord</string>
+    <string name="settings_old_password">Nuvarande lösenord</string>
+    <string name="settings_new_password">Nytt lösenord</string>
+    <string name="settings_confirm_password">Bekräfta nytt lösenord</string>
+    <string name="settings_change_password_submit">Uppdatera lösenordet</string>
+    <string name="settings_fail_to_update_password">Misslyckades att uppdatera lösenordet</string>
+    <string name="settings_fail_to_update_password_invalid_current_password">Lösenordet är ogiltigt</string>
+    <string name="settings_password_updated">Ditt lösenord har uppdaterats</string>
+    <string name="settings_without_flair">Du är för närvarande inte medlem in någon gemenskap.</string>
+
+    <string name="encryption_information_verify_device_warning">Bekräfta genom att jämföra följande nyckel med användarinställningarna i din andra session:</string>
+    <string name="room_widget_permission_display_name">Ditt visningsnamn</string>
+    <string name="deactivate_account_prompt_password">För att fortsätta, skriv in ditt lösenord:</string>
+    <string name="error_empty_field_your_password">Vänligen skriv in ditt lösenord.</string>
+    <string name="keys_backup_setup_step2_text_description">Vi kommer att lagra en krypterad kopia av dina nycklar på din hemserver. Skydda din säkerhetskopia med en lösenfras för att hålla den säker.
+\n
+\nFör maximal säkerhet så bör denna skilja sig från ditt kontolösenord.</string>
+    <string name="keys_backup_setup_step3_text_line2">Din återställningsnyckel är ett skyddsnät - du kan använda den för att återfå åtkomst till dina krypterade meddelanden om du skulle glömma din lösenfras.
+\nLagra din återställningsnyckel på något säkert ställe, t.ex. en lösenordshanterare (eller ett kassaskåp)</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Lagra din återställningsnyckel på något säkert ställe, t.ex. en lösenordshanterare (eller ett kassaskåp)</string>
+    <string name="new_recovery_method_popup_description">En ny säker säkerhetskopia för meddelandenycklar har hittats.
+\n
+\nOm det inte var du som satte upp den nya återställningsmetoden så kan det vara en angripare som försöker komma åt ditt konto. Ändra ditt kontolösenord och sätt en ny återställningsmetod omedelbart i inställningarna.</string>
+    <string name="identity_server_not_defined_for_password_reset">Ingen identitetsserver är konfigurerad, vilket krävs för att återställa ditt lösenord.</string>
+
+    <string name="change_room_directory_network">Byt nätverk</string>
+    <string name="group_all_communities">Alla gemenskaper</string>
+
+    <string name="settings_general_title">Allmänt</string>
+    <string name="settings_preferences">Alternativ</string>
+    <string name="store_riotx_title">RiotX - Nästa generations Matrix-klient</string>
+    <string name="store_riotx_short_description">En snabbare och lättviktigare klient för Matrix som använder de senaste Android-ramverken</string>
+    <string name="room_directory_search_hint">Namn eller ID (#example:matrix.org)</string>
+
+    <string name="verify_cancel_other">Du kommer inte att verifiera %1$s (%2$s) om du avbryter nu. Börja igen i hens användarprofil.</string>
+
+    <string name="encryption_enabled_tile_description">Meddelanden i det här rummet är totalsträckskrypterade. Lär dig mer och verifiera användare i deras profiler.</string>
+    <string name="room_participants_action_unignore">Visa alla meddelanden från den här användaren</string>
+    <string name="room_participants_invite_prompt_msg">Är du säker på att du vill bjuda in %s till den här chatten\?</string>
+    <string name="people_search_invite_by_id"><u>Bjud in med ID</u></string>
+    <string name="people_search_invite_by_id_dialog_title">Bjud in användare med ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Vänligen skriv in en eller flera e-postadresser eller Matrix-IDn</string>
+    <string name="people_search_invite_by_id_dialog_hint">E-postadress eller Matrix-ID</string>
+
+    <string name="ssl_could_not_verify">Kunde inte verifiera den externa serverns identitet.</string>
+    <string name="room_details_title">Rumsdetaljer</string>
+    <string name="room_details_people">Personer</string>
+    <string name="room_details_files">Filer</string>
+    <string name="malformed_id">Felformaterat ID. Ska vara en e-postadress eller ett Matrix-ID som \'@lokaldel:domän\'</string>
+    <string name="room_event_action_report_prompt_ignore_user">Vill du dölja alla meddelanden från den här användaren\?
+\n
+\nObservera att den har handlingen kommer att starta om appen, och det kan ta lite tid.</string>
+    <string name="tab_title_search_people">PERSONER</string>
+    <string name="tab_title_search_files">FILER</string>
+
+    <string name="room_settings_all_messages_noisy">Alla meddelanden (högljutt)</string>
+    <string name="room_settings_all_messages">Alla meddelanden</string>
+    <string name="room_settings_mention_only">Endast omnämnande</string>
+    <string name="room_settings_mute">Tysta</string>
+    <string name="room_settings_leave_conversation">Lämna konversationen</string>
+    <string name="room_sliding_menu_version">Version</string>
+    <string name="room_sliding_menu_version_x">Version %s</string>
+    <string name="settings_email_address">E-post</string>
+    <string name="settings_add_email_address">Lägg till e-postadress</string>
+    <string name="settings_add_phone_number">Lägg till telefonnummer</string>
+    <string name="settings_app_info_link_title">Appinfo</string>
+    <string name="settings_app_info_link_summary">Visa info om appen i systeminställningarna.</string>
+    <string name="settings_notification_advanced">Avancerade aviseringsinställningar</string>
+    <string name="settings_notification_advanced_summary">Sätt aviseringsprioritet efter händelser, konfigurera ljud, LED, vibration</string>
+    <string name="settings_notification_by_event">Aviseringsprioritet för händelser</string>
+
+    <string name="settings_notification_privacy">Aviseringssekretess</string>
+    <string name="settings_notification_troubleshoot">Felsök aviseringar</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Grundläggande felsökning lyckades. Om du fortfarande inte får aviseringar, vänligen skicka en buggrapport för att hjälpa oss att undersöka.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Ett eller flera tester har misslyckats, testa de föreslagna fixarna.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Ett eller flera tester har misslyckats, vänligen skicka en buggrapport för att hjälpa oss att undersöka.</string>
+
+    <string name="settings_troubleshoot_test_system_settings_success">Aviseringar är aktiverade i systeminställningarna.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Aviseringar är inaktiverade i systeminställningarna.
+\nVänligen kolla systeminställningarna.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Aviseringar är aktiverade för ditt konto.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Aviseringar är inaktiverade för ditt konto.
+\n
+\nVänligen kolla kontoinställningarna.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Aviseringar är aktiverade för den här sessionen.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Aviseringar är inaktiverade för den här sessionen.
+\nVänligen kolla Riotinställningarna.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Observera att vissa meddelandetyper är satta till tyst (kommer att producera aviseringar utan ljud).</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Vissa aviseringar är inaktiverade i dina anpassade inställningar.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_title">Aviseringstjänst</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Aviseringstjänsten körs.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">Aviseringstjänsten körs inte.
+\nFörsök att starta om appen.</string>
+    <string name="settings_troubleshoot_test_service_restart_title">Automatisk omstart av aviseringstjänsten</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Tjänsten kommer inte att starta när enheten startas om, så du kommer inte att få aviseringar förrens Riot har öppnats en gång.</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Bakgrundsbegränsningar är aktiverade för Riot.
+\nSaker som appen försöker göra kommer att kraftigt begränsas när appen är bakgrunden, och detta kan påverka aviseringar.
+\n
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_battery_failed">Om en användare lämnar sin enhet urkopplad och stilla en längre tid, med skärmen av, så går enheten in i Doze-läget. Detta hindrar appar från att komma åt nätverket och skjuter upp deras uppgifter, synkroniseringar och standardlarm.</string>
+    <string name="settings_notification_privacy_fcm">• Aviseringar skickas via Firebase Cloud Messaging</string>
+    <string name="settings_notification_privacy_metadata">• Aviseringar innehåller endast metadata</string>
+    <string name="settings_notification_privacy_secure_message_content">• Meddelandeinnehåll i aviseringen <b>hämtas på ett säkert sätt från Matrix-hemservern</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• Aviseringar innehåller <b>meta- och meddeladedata</b></string>
+    <string name="settings_notification_privacy_message_content_not_shown">• Aviseringar kommer <b>inte att visa meddelandeinnehåll</b></string>
+
+    <string name="settings_notification_ringtone">Aviseringsljud</string>
+    <string name="settings_enable_all_notif">Aktivera aviseringar för det här kontot</string>
+    <string name="settings_enable_this_device">Aktivera aviseringar för den här sessionen</string>
+    <string name="settings_noisy_notifications_preferences">Konfigurera högljudda aviseringar</string>
+    <string name="settings_call_notifications_preferences">Konfigurera samtalsaviseringar</string>
+    <string name="settings_silent_notifications_preferences">Konfigurera tysta aviseringar</string>
+    <string name="settings_system_preferences_summary">Välj LED-färg, vibration, ljud…</string>
+
+
+    <string name="settings_containing_my_user_name">Meddelanden innehållande mitt användarnamn</string>
+    <string name="settings_messages_in_one_to_one">Meddelanden i direktchattar</string>
+    <string name="settings_messages_in_group_chat">Meddelanden i gruppchattar</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Riot kommer att synka I bakgrunden periodiskt vid precisa tider (konfigurerbart).
+\nDetta kommer att påverka data- och batterianvändning, och det kommer att visas en permanent avisering som säger att Riot lyssnar efter händelser.</string>
+    <string name="settings_version">Version</string>
+    <string name="settings_olm_version">olm-version</string>
+    <string name="settings_keep_media">Behåll media</string>
+    <string name="settings_clear_cache">Rensa cache</string>
+    <string name="settings_clear_media_cache">Rensa mediacache</string>
+
+    <string name="settings_notifications">Aviseringar</string>
+    <string name="settings_ignored_users">Ignorerade användare</string>
+    <string name="settings_advanced">Avancerat</string>
+    <string name="settings_notifications_targets">Aviseringsmål</string>
+    <string name="settings_send_typing_notifs">Skicka \"skriver\"-statusar</string>
+    <string name="settings_send_markdown_summary">Formatera meddelanden med Markdown-syntax innan de skickas. Detta tillåter avancerad formatering som att använda asterisker för att visa kursiv text.</string>
+    <string name="settings_always_show_timestamps">Visa tidpunkt för alla meddelanden</string>
+    <string name="settings_show_join_leave_messages">Visa när folk går med och lämnar</string>
+    <string name="settings_preview_media_before_sending">Förhandsgranska media innan den skickas</string>
+    <string name="settings_deactivate_account_section">Inaktivera konto</string>
+    <string name="settings_deactivate_my_account">Inaktivera mitt konto</string>
+    <string name="settings_discovery_category">Upptäckbarhet</string>
+    <string name="settings_discovery_manage">Hantera dina upptäckbarhetsinställningar.</string>
+    <string name="startup_notification_privacy_title">Aviseringssekretess</string>
+    <string name="startup_notification_privacy_message">Riot kan köra i bakgrunden för att hantera dina aviseringar säkert och privat. Detta kan påverka batteritiden.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Riot behöver hålla en bakgrundsanslutning med låg påverkan för att ha pålitliga aviseringar.
+\nPå nästa skärm kommer du att frågas om du vill tillåta att Riot alltid körs i bakgrunden, vänligen acceptera.</string>
+    <string name="settings_logged_in">Inloggad som</string>
+    <string name="settings_home_server">Hemserver</string>
+    <string name="settings_identity_server">Identitetsserver</string>
+    <string name="account_email_validation_message">Vänligen kolla din e-post klicka på länken i den. När du är klar med detta, klicka på fortsätt.</string>
+    <string name="account_email_validation_error">Kunde inte verifiera din e-postadress. Vänligen kolla din e-post klicka på länken i den. När du är klar med detta, klicka på fortsätt.</string>
+    <string name="account_email_already_used_error">Den här e-postadressen är upptagen.</string>
+    <string name="account_email_not_found_error">Den här e-postadressen kunde inte hittas.</string>
+    <string name="account_email_error">Ett fel hände vid verifiering av din e-postadress.</string>
+
+    <string name="settings_unignore_user">Visa alla meddelanden från %s\?
+\n
+\nObservera att den har handlingen kommer att starta om appen, och det kan ta lite tid.</string>
+    <string name="settings_delete_notification_targets_confirmation">Är du säker på att du vill ta bort det här aviseringsmålet\?</string>
+
+    <string name="settings_media">Media</string>
+    <string name="settings_default_media_source">Förvald mediakälla</string>
+    <string name="settings_flair">Emblem</string>
+    <string name="room_settings_room_notifications_title">Aviseringar</string>
+    <string name="room_settings_room_access_entry_only_invited">Bara folk som har blivit inbjudna</string>
+    <string name="room_settings_category_advanced_title">Avancerat</string>
+    <string name="room_settings_labs_pref_title">Experiment</string>
+    <string name="room_settings_labs_end_to_end">Totalsträckskryptering</string>
+    <string name="room_settings_labs_end_to_end_is_active">Totalsträckskryptering är aktiv</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Skicka aldrig krypterade meddelanden till overifierade sessioner i det här rummet från den här sessionen.</string>
+
+    <string name="room_settings_no_flair">Det här rummet visar inte emblem för några gemenskaper</string>
+    <string name="room_settings_addresses_e2e_enabled">Kryptering är aktiverat i det här rummet.</string>
+    <string name="encryption_information_title">Totalsträckskrypteringsinformation</string>
+
+    <string name="encryption_information_device_name_with_warning">Publikt namn (synligt för folk som du pratar med)</string>
+    <string name="device_name_warning">En sessions publika namn är synligt för personer du pratar med</string>
+    <string name="encryption_message_recovery">Återställning av krypterade meddelanden</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Skicka aldrig krypterade meddelanden till overifierade sessioner från den här sessionen.</string>
+    <string name="e2e_enabling_on_app_update">Riot stöder nu totalsträckskryptering men du behöver logga in igen för att aktivera det.
+\n
+\nDu kan göra det nu eller senare från appinställningarna.</string>
+
+    <plurals name="notification_compat_summary_title">
+        <item quantity="one">%d avisering</item>
+        <item quantity="other">%d aviseringar</item>
+    </plurals>
+
+    <string name="room_widget_webview_read_protected_media">Läs DRM-skyddad media</string>
+
+    <string name="command_problem_with_parameters">Kommandot \"%s\" behöver fler parametrar, eller så är några av parametrarna felaktiga.</string>
+    <string name="command_description_part_room">Lämna rummet</string>
+    <string name="command_description_markdown">På/av Markdown</string>
+    <string name="notification_off">Av</string>
+    <string name="notification_silent">Tysta</string>
+    <string name="notification_noisy">Högljudda</string>
+
+    <string name="group_details_people">Personer</string>
+    <string name="deactivate_account_title">Inaktivera konto</string>
+    <string name="deactivate_account_delete_checkbox">Vänligen glöm alla meddelanden jag har skickat när mitt konto avaktiveras (varning: detta får framtida användare att se en inkomplett vy av konversationer)</string>
+    <string name="deactivate_account_submit">Inaktivera konto</string>
+
+    <string name="no_valid_google_play_services_apk">Ingen giltig \"Google Play-tjänster\"-APK hittades. Aviseringar kanske inte funkar ordentligt.</string>
+
+    <string name="keys_backup_setup_step1_title">Bli aldrig av med krypterade meddelanden</string>
+    <string name="keys_backup_setup_step1_description">Meddelanden i krypterade rum är säkrade med totalsträckskryptering. Bara du och mottagaren har nycklarna för att läsa dessa meddelanden.
+\n
+\nSäkerhetskopiera dina nycklar säkert för att undvika att bli av med dem.</string>
+    <string name="keys_backup_setup_step1_advanced">(Avancerat)</string>
+    <string name="keys_backup_setup_step2_skip_button_title">(Avancerat) Sätt upp med återställningsnyckel</string>
+    <string name="keys_backup_restore_is_getting_backup_version">Hämtar säkerhetskopieringsversion…</string>
+    <string name="keys_backup_restore_with_passphrase">Använd din återställningslösenfras för att låsa upp din krypterade meddelandehistorik</string>
+    <string name="keys_backup_restore_with_recovery_key">Använd din återställningsnyckel för att låsa upp din krypterade meddelandehistorik</string>
+    <string name="keys_backup_get_version_error">Misslyckades att få den senaste återställningsnyckelversionen (%s).</string>
+    <string name="keys_backup_banner_setup_line1">Bli aldrig av med krypterade meddelanden</string>
+    <string name="keys_backup_banner_recover_line1">Bli aldrig av med krypterade meddelanden</string>
+    <string name="keys_backup_info_title_version">Version</string>
+    <string name="autodiscover_invalid_response">Ogiltigt hemserversvar</string>
+    <string name="invalid_or_expired_credentials">Du har blivit utloggad på grund av ogiltiga eller utgångna uppgifter.</string>
+
+    <string name="sas_incoming_request_description">Verifiera den här sessionen för att markera den som pålitligt. Att lita på folks sessioner ger dig extra sinnesro när du skickar totalsträckskrypterade meddelanden.</string>
+    <string name="sas_verified_successful_description">Säkra meddelanden mellan dig och den här användaren är totalsträckskrypterade och kommer inte att vara läsbara för tredje parter.</string>
+    <string name="identity_server_not_defined">Du använder ingen identitetsserver</string>
+    <string name="security_warning_identity_server">Tidigare versioner av Riot hade en säkerhetsbugg som kunde ge din identitetsserver (%1$s) tillgång till ditt konto. Om du litar på %2$s så kan du ignorera detta; annars bör du logga ut och logga in igen.
+\n
+\nLäs mer detaljer här:
+\nhttps://medium.com/@RiotChat/36b4792ea0d6</string>
+
+    <string name="settings_sdk_version">Matrix-SDK-version</string>
+    <string name="settings_security_and_privacy">Säkerhet och sekretess</string>
+    <string name="preference_voice_and_video">Röst &amp; video</string>
+    <string name="preference_root_help_about">Hjälp &amp; om</string>
+
+
+    <string name="terms_description_for_identity_server">Bli upptäckbar av andra</string>
+    <string name="identity_server">Identitetsserver</string>
+    <string name="disconnect_identity_server">Koppla bort identitetsserver</string>
+    <string name="add_identity_server">Konfigurera identitetsserver</string>
+    <string name="change_identity_server">Byt identitetsserver</string>
+    <string name="settings_discovery_identity_server_info">Du använder för närvarande %1$s för att upptäcka och vara upptäckbar av existerande kontakter du känner.</string>
+    <string name="settings_discovery_identity_server_info_none">Du använder för närvarande ingen identitetsserver. För att upptäcka och vara upptäckbar av existerande kontakter du känner, konfigurera en nedan.</string>
+    <string name="settings_discovery_emails_title">Upptäckbara e-postadresser</string>
+    <string name="settings_discovery_no_mails">Upptäckbarhetsalternativ kommer att synas när du har lagt till en e-postadress.</string>
+    <string name="settings_discovery_no_msisdn">Upptäckbarhetsalternativ kommer att synas när du har lagt till ett telefonnummer.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">Om du kopplar bort från din identitetsserver så kommer du inte att vara upptäckbar av andra användare och du kommer inte kunna bjuda in folk med hjälp av deras e-postadresser eller telefonnummer.</string>
+    <string name="settings_discovery_msisdn_title">Upptäckbara telefonnummer</string>
+    <string name="settings_discovery_confirm_mail">Vi skickade ett bekräftelse-e-brev till %s, kolla din e-post och klicka på bekräftelselänken</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Vi skickade ett bekräftelse-e-brev till %s, vänligen kolla din e-post och klicka på bekräftelselänken</string>
+    <string name="settings_discovery_enter_identity_server">Skriv in en identitetsserver-URL</string>
+    <string name="settings_discovery_bad_identity_server">Kunde inte ansluta till identitetsserver</string>
+    <string name="settings_discovery_please_enter_server">Vänligen ange en identitetsserver-URL</string>
+    <string name="settings_discovery_no_terms_title">Identitetsservern har inga användarvillkor</string>
+    <string name="settings_discovery_no_terms">Identitetsservern du har valt har inga användarvillkor. Fortsätt endast om du litar på ägaren av servern</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">Du delar för närvarande e-postadresser och telefonnummer på hemservern %1$s. Du kommer behöva återansluta till %2$s för att sluta dela dem.</string>
+    <string name="settings_agree_to_terms">Acceptera identitetsserverns (%s) användarvillkor för att låta dig själv vara upptäckbar med e-postadress eller telefonnummer.</string>
+
+    <string name="labs_allow_extended_logging_summary">Mångord loggar kommer att hjälpa utvecklare genom att skicka mer loggar när du skickar en raseriskakning. Även när det är aktiverat, så loggar appen inga meddelandeinnehåll eller annan privat data.</string>
+
+
+    <string name="a11y_show_password">Visa lösenord</string>
+    <string name="a11y_hide_password">Dölj lösenord</string>
+    <string name="uploads_media_title">MEDIA</string>
+    <string name="uploads_media_no_result">Det finns ingen media i det här rummet</string>
+    <string name="uploads_files_title">FILER</string>
+    <string name="uploads_files_no_result">Det finns inga filer i det här rummet</string>
+
+    <string name="content_reported_content">Det här innehållet rapporterades.
+\n
+\nOm du inte vill se något mer innehåll från den här användaren så kan du blockera hen för att dölja hens meddelanden</string>
+    <string name="content_reported_as_spam_content">Det här innehållet rapporterades som spam.
+\n
+\nOm du inte vill se något mer innehåll från den här användaren så kan du blockera hen för att dölja hens meddelanden</string>
+    <string name="content_reported_as_inappropriate_content">Det här innehållet rapporterades som olämpligt.
+\n
+\nOm du inte vill se något mer innehåll från den här användaren så kan du blockera hen för att dölja hens meddelanden</string>
+
+    <string name="room_list_quick_actions_notifications_all_noisy">Alla meddelanden (högljutt)</string>
+    <string name="room_list_quick_actions_notifications_all">Alla meddelanden</string>
+    <string name="room_list_quick_actions_notifications_mentions">Endast omnämnande</string>
+    <string name="room_list_quick_actions_notifications_mute">Tysta</string>
+    <string name="room_list_quick_actions_leave">Lämna rummet</string>
+    <string name="help_long_click_on_room_for_more_options">Långklicka på ett rum för att se fler alternativ</string>
+
+
+    <string name="room_join_rules_invite">%1$s ändrade rummet till endast inbjudna.</string>
+    <string name="login_splash_text1">Chatta med folk direkt eller i grupp</string>
+    <string name="login_server_text">Precis som med e-post så har konton ett hem, fast du kan prata med vem som helst</string>
+    <string name="login_server_modular_learn_more">Lär dig mer</string>
+    <string name="login_server_other_text">Anpassade &amp; avancerade inställningar</string>
+
+    <string name="login_login_with_email_error">Den här e-postadressen är inte associerad med något konto.</string>
+
+    <string name="login_reset_password_on">Återställ lösenordet på %1$s</string>
+    <string name="login_reset_password_notice">Ett verifikations-e-brev kommer att skickas till din inkorg för att bekräfta bytet av ditt lösenord.</string>
+    <string name="login_reset_password_email_hint">E-post</string>
+    <string name="login_reset_password_password_hint">Nytt lösenord</string>
+
+    <string name="login_reset_password_warning_content">Att ändra ditt lösenord kommer att återställa alla nycklar för totalsträckskryptering på alla dina sessioner, och göra krypterad chatthistorik oläslig. Sätt upp nyckelsäkerhetskopiering eller exportera dina rumsnycklar från en annan session innan du återställer ditt lösenord.</string>
+    <string name="login_reset_password_error_not_found">Den här e-postadressen är inte länkad till något konto</string>
+
+    <string name="login_reset_password_mail_confirmation_notice">Ett verifikations-e-brev skickades till %1$s.</string>
+    <string name="login_reset_password_mail_confirmation_submit">Jag har verifierat min e-postadress</string>
+
+    <string name="login_reset_password_success_notice_2">Du har blivit utloggad ur alla sessioner och kommer inte längre motta pushnotiser. För att återaktivera pushnotiser, logga in igen på varje enhet.</string>
+    <string name="login_set_email_title">Sätt e-postadress</string>
+    <string name="login_set_email_notice">Sätt en e-postadress för att kunna återförva ditt konto. Senare kan du valfritt låta personer du känner upptäcka dig med din e-postadress.</string>
+    <string name="login_set_email_mandatory_hint">E-post</string>
+    <string name="login_set_email_optional_hint">E-post (valfritt)</string>
+    <string name="login_set_msisdn_notice">Sätt ett telefonnummer som valfritt kan användas för att vara upptäckbar av folk som känner dig.</string>
+    <string name="login_signin_username_hint">Användarnamn eller e-postadress</string>
+    <string name="login_wait_for_email_title">Vänligen kolla din e-post</string>
+    <string name="login_wait_for_email_notice">Vi skickade just ett e-brev till %1$s.
+\nKlicka på länken i det för att fortsätta med kontoskapningen.</string>
+    <string name="login_error_outdated_homeserver_content">Den här hemservern kör en för gammal version för att ansluta till. Be administratören för hemservern att uppdatera.</string>
+
+    <string name="soft_logout_signin_e2e_warning_notice">Logga in för att återfå krypteringsnycklar som endast lagras på den här enheten. Du behöver dem för att läsa alla dina säkra meddelanden på andra enheter.</string>
+    <string name="soft_logout_clear_data_dialog_content">Rensa all data lagrad på den här enheten\?
+\nLogga in igen för att komma åt din kontodata och dina meddelanden.</string>
+    <string name="settings_advanced_settings">Avancerade inställningar</string>
+    <string name="autocomplete_limited_results">Visar endast de första resultaten, skriv mer…</string>
+
+    <string name="settings_developer_mode_fail_fast_summary">RiotX kan krascha mer när ett oväntat fel inträffar</string>
+
+    <string name="create_room_encryption_description">Efter aktivering så kan kryptering inte avaktiveras.</string>
+
+    <string name="login_error_threepid_denied">Din e-postdomän är inte auktoriserad för att registrera på den här servern</string>
+
+    <string name="room_profile_not_encrypted_subtitle">Meddelanden i det här rummet är inte totalsträckskrypterade.</string>
+    <string name="room_profile_encrypted_subtitle">Meddelanden i det här rummet är totalsträckskrypterade.
+\n
+\nDina meddelanden är säkrade med lås och bara du och mottagaren har nycklarna för att låsa upp dem.</string>
+    <string name="room_profile_section_security_learn_more">Lär dig mer</string>
+    <string name="room_profile_section_more">Mer</string>
+    <string name="room_profile_section_more_settings">Rumsinställningar</string>
+    <string name="room_profile_section_more_notifications">Aviseringar</string>
+    <plurals name="room_profile_section_more_member_list">
+        <item quantity="one">En person</item>
+        <item quantity="other">%1$d personer</item>
+    </plurals>
+    <string name="room_profile_section_more_uploads">Uppladdningar</string>
+    <string name="room_profile_section_more_leave">Lämna rummet</string>
+    <string name="room_member_power_level_admins">Administratörer</string>
+    <string name="room_member_power_level_moderators">Moderatorer</string>
+    <string name="verify_cannot_cross_sign">Den här sessionen kan inte dela den här verifikationen med dina andra sessioner.
+\nVerifikationen kommer att sparas lokalt och delas i en framtida version av appen.</string>
+
+    <string name="room_settings_enable_encryption">Aktivera totalsträckskryptering</string>
+    <string name="room_settings_enable_encryption_warning">Efter aktivering så kan kryptering inte avaktiveras.</string>
+
+    <string name="room_settings_enable_encryption_dialog_content">Efter aktivering så kan kryptering inte avaktiveras. Meddelanden som skickas i ett krypterat rum kan inte läsas av servern, bara av deltagarna i rummet. Att aktivera kryptering kan kan göra att många bottar och bryggor inte funkar ordentligt.</string>
+    <string name="verification_conclusion_ok_notice">Meddelanden mellan dig och den här användaren är totalsträckskrypterade och kan inte läsas av tredje parter.</string>
+    <string name="verification_conclusion_ok_self_notice">Din nya session är nu verifierad. Den har tillgång till dina krypterade meddelanden, och andra användare kommer att se den som pålitlig.</string>
+
+
+    <string name="settings_active_sessions_unverified_device_desc">Verifiera den här sessionen gör att markera den som pålitlig och ge den tillgång till dina krypterade meddelanden. Om det inte var du som loggade in i den här sessionen så kan ditt konto vara kapat:</string>
+
+    <string name="verification_open_other_to_verify">Använd en existerande session för att verifiera den här och ge den tillgång till krypterade meddelanden.</string>
+
+
+    <string name="bootstrap_cross_signing_success">Din %2$s &amp; %1$s är nu satta.
+\n
+\nHåll dem säkra! Du kommer att behöva dem för att låsa upp krypterade meddelanden och säker information om du förlorar alla dina aktiva sessioner.</string>
+
+    <string name="encryption_enabled">Kryptering aktiverat</string>
+    <string name="encryption_not_enabled">Kryptering inte aktiverat</string>
+    <string name="settings_notification_configuration">Aviseringskonfiguration</string>
+    <string name="settings_messages_at_room">Meddelanden som innehåller @room</string>
+    <string name="settings_notification_advanced_summary_riotx">Sätt aviseringsprioritet för händelser</string>
+
+    <string name="media_file_added_to_gallery">Mediafiler tillagda till galleriet</string>
+    <string name="error_adding_media_file_to_gallery">Kunde inte lägga till mediafilen till galleriet</string>
+    <string name="review_logins">Granska var du är inloggad</string>
+    <string name="verify_other_sessions">Verifiera alla dina sessioner för att se till att ditt konto och dina meddelanden är säkra</string>
+    <string name="create_room_dm_failure">Vi kunde inte skapa ditt DM. Vänligen kolla användarna du vill bjuda in och försök igen.</string>
+
+    <string name="invite_users_to_room_action_invite">BJUD IN</string>
+    <string name="invite_users_to_room_title">Bjud in användare</string>
+    <plurals name="invitations_sent_to_one_and_more_users">
+        <item quantity="one">Inbjudan skickad till %1$s och en till</item>
+        <item quantity="other">Inbjudan skickad till %1$s och %2$d till</item>
+    </plurals>
+    <string name="invite_users_to_room_failure">Vi kunde inte bjuda in användarna. Vänligen kolla användarna du vill bjuda in och försök igen.</string>
+
+    <string name="disconnect_identity_server_dialog_content">Koppla bort från identitetsservern %s\?</string>
+    <string name="identity_server_error_outdated_identity_server">Den här identitetsservern är utdaterat. RiotX stöder endast API V2.</string>
+    <string name="identity_server_error_no_identity_server_configured">Vänligen konfigurera en identitetsserver.</string>
+    <string name="identity_server_error_terms_not_signed">Vänligen acceptera först identitetsserverns användarvillkor i inställningarna.</string>
+    <string name="identity_server_set_default_notice">Din hemserver (%1$s) föreslår att du använder %2$s som din identitetsserver</string>
+    <string name="identity_server_set_alternative_notice">Alternativt så kan du skriva in en annan identitetsserver-URL</string>
+    <string name="identity_server_set_alternative_notice_no_default">Skriv in URL för en identitetsserver</string>
+    <string name="e2e_use_keybackup">Lås upp krypterad meddelandehistorik</string>
+
+    <string name="verify_new_session_notice">Använd den här sessionen för att verifiera din nya och ge den tillgång till krypterade meddelanden.</string>
+    <string name="verify_cancel_self_verification_from_untrusted">Om du avbryter så kommer du inte kunna läsa krypterade meddelanden på den här enheten, och andra användare kommer inte att lita på den</string>
+    <string name="verify_cancel_self_verification_from_trusted">Om du avbryter så kommer du inte kunna läsa krypterade meddelanden på din nya enhet, och andra användare kommer inte att lita på den</string>
+    <string name="bootstrap_info_text">Säkra och lås upp krypterade meddelanden och pålitlighet med en %s.</string>
+    <string name="bootstrap_skip_text">Att sätta en återställningslösenfras låter dig säkra och låsa upp krypterade meddelanden och pålitlighet.
+\n
+\nOm du inte vill sätta ett meddelandelösenord, generera en meddelandenyckel istället.</string>
+    <string name="bootstrap_skip_text_no_gen_key">Att sätta en återställningslösenfras låter dig säkra och låsa upp krypterade meddelanden och pålitlighet.</string>
+
+
+    <string name="settings_invited_to_room">När jag bjuds in till ett rum</string>
+    <string name="settings_call_invitations">Samtalsinbjudningar</string>
+    <string name="settings_messages_sent_by_bot">Meddelanden skickade av en bott</string>
+
+    <string name="settings_user_interface">Användargränssnitt</string>
+    <string name="settings_interface_language">Språk</string>
+    <string name="settings_select_language">Välj språk</string>
+
+    <string name="settings_theme">Tema</string>
+
+    <string name="room_widget_permission_theme">Ditt tema</string>
+    <string name="choose_locale_current_locale_title">Nuvarande språk</string>
+    <string name="choose_locale_other_locales_title">Andra tillgängliga språk</string>
+    <string name="choose_locale_loading_locales">Laddar tillgängliga språk…</string>
 
 </resources>

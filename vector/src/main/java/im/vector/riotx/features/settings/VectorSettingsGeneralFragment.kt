@@ -31,18 +31,23 @@ import androidx.core.view.isVisible
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
+import androidx.preference.SwitchPreference
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.cache.DiskCache
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.matrix.android.api.MatrixCallback
+import im.vector.matrix.android.api.NoOpMatrixCallback
 import im.vector.matrix.android.api.failure.isInvalidPassword
+import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerConfig
+import im.vector.matrix.android.api.session.integrationmanager.IntegrationManagerService
 import im.vector.riotx.R
 import im.vector.riotx.core.extensions.hideKeyboard
 import im.vector.riotx.core.extensions.showPassword
 import im.vector.riotx.core.platform.SimpleTextWatcher
 import im.vector.riotx.core.preference.UserAvatarPreference
 import im.vector.riotx.core.preference.VectorPreference
+import im.vector.riotx.core.preference.VectorSwitchPreference
 import im.vector.riotx.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
 import im.vector.riotx.core.utils.TextUtils
 import im.vector.riotx.core.utils.allGranted
@@ -90,6 +95,16 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
     private val mContactPhonebookCountryPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY)!!
+    }
+
+    private val integrationServiceListener = object : IntegrationManagerService.Listener {
+        override fun onConfigurationChanged(configs: List<IntegrationManagerConfig>) {
+            refreshIntegrationManagerSettings()
+        }
+
+        override fun onIsEnabledChanged(enabled: Boolean) {
+            refreshIntegrationManagerSettings()
+        }
     }
 
     override fun bindPref() {
@@ -196,6 +211,15 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
             }
         }
 
+        (findPreference(VectorPreferences.SETTINGS_ALLOW_INTEGRATIONS_KEY) as? VectorSwitchPreference)?.let {
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                // Disable it while updating the state, will be re-enabled by the account data listener.
+                it.isEnabled = false
+                session.integrationManagerService().setIntegrationEnabled(newValue as Boolean, NoOpMatrixCallback())
+                true
+            }
+        }
+
         // clear medias cache
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY)!!.let {
             val size = getSizeOfFiles(File(requireContext().cacheDir, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR))
@@ -241,9 +265,15 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
 
     override fun onResume() {
         super.onResume()
-
         // Refresh identity server summary
         mIdentityServerPreference.summary = session.identityService().getCurrentIdentityServerUrl() ?: getString(R.string.identity_server_not_defined)
+        refreshIntegrationManagerSettings()
+        session.integrationManagerService().addListener(integrationServiceListener)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        session.integrationManagerService().removeListener(integrationServiceListener)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -311,6 +341,25 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                         }
                     }
                     */
+            }
+        }
+    }
+
+    private fun refreshIntegrationManagerSettings() {
+        val integrationAllowed = session.integrationManagerService().isIntegrationEnabled()
+        (findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ALLOW_INTEGRATIONS_KEY))!!.let {
+            val savedListener = it.onPreferenceChangeListener
+            it.onPreferenceChangeListener = null
+            it.isChecked = integrationAllowed
+            it.isEnabled = true
+            it.onPreferenceChangeListener = savedListener
+        }
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_INTEGRATION_MANAGER_UI_URL_KEY)!!.let {
+            if (integrationAllowed) {
+                it.summary = session.integrationManagerService().getPreferredConfig().uiUrl
+                it.isVisible = true
+            } else {
+                it.isVisible = false
             }
         }
     }

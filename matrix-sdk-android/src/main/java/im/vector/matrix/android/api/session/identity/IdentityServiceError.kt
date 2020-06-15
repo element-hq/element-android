@@ -16,7 +16,9 @@
 
 package im.vector.matrix.android.api.session.identity
 
-sealed class IdentityServiceError : Throwable() {
+import im.vector.matrix.android.api.failure.Failure
+
+sealed class IdentityServiceError : Failure.FeatureFailure() {
     object OutdatedIdentityServer : IdentityServiceError()
     object OutdatedHomeServer : IdentityServiceError()
     object NoIdentityServerConfigured : IdentityServiceError()
