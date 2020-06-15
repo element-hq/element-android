@@ -238,9 +238,9 @@
     <string name="call_error_answered_elsewhere">پاسخ تماس از کاربری نامعتبر دریافت شد</string>
 
     <plurals name="room_title_members">
-	<item quantity="one">۱ عضو</item>
-	<item quantity="other">%d عضو</item>
-</plurals>
+        <item quantity="one">۱ عضو</item>
+        <item quantity="other">%d عضو</item>
+    </plurals>
     <string name="room_title_one_member">۱ عضو</string>
 
     <plurals name="format_time_s">
@@ -654,7 +654,7 @@
     <string name="room_member_profile_failed_to_get_devices">شکست در گرفتن نشست‌ها</string>
     <string name="room_member_profile_sessions_section_title">نشست‌ها</string>
     <string name="settings_dev_tools">ابزارهای توسعه</string>
-<string name="title_activity_verify_device">نشست را تایید کن</string>
+    <string name="title_activity_verify_device">نشست را تایید کن</string>
 
     <string name="none">هیچ</string>
     <string name="revoke">ابطال</string>
@@ -706,9 +706,9 @@
     <string name="room_creation_title">گپ جدید</string>
     <string name="room_creation_add_member">افزودن عضو</string>
     <plurals name="room_header_active_members_count">
-	<item quantity="one">۱ عضو فعال</item>
-	<item quantity="other">%d عضو فعال</item>
-</plurals>
+        <item quantity="one">۱ عضو فعال</item>
+        <item quantity="other">%d عضو فعال</item>
+    </plurals>
     <string name="room_participants_action_ban">انسداد</string>
     <string name="room_participants_action_unban">رفع انسداد</string>
     <string name="room_participants_action_kick">اخراج</string>
@@ -749,4 +749,4 @@
     <string name="settings">تنظیمات</string>
     <string name="account_password">گذرواژه حساب</string>
 
-    </resources>
+</resources>

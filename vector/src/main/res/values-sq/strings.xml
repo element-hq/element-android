@@ -2269,7 +2269,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
 
     <string name="auth_invalid_login_param_space_in_password">Emër përdoruesi dhe/ose fjalëkalim i pasaktë. Fjalëkalimi i dhënë fillon ose mbaron me hapësirë, ju lutemi, kontrollojeni.</string>
 
-    <string name="settings_rageshake"/>
+    <string name="settings_rageshake" />
     <string name="bootstrap_crosssigning_progress_initializing">Po publikohen kyçe të krijuar identiteti</string>
     <string name="room_message_placeholder">Mesazh…</string>
 
@@ -2353,7 +2353,7 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     </plurals>
     <string name="invite_users_to_room_failure">S’ftuam dot përdorues. Ju lutemi, kontrolloni përdoruesit që doni të ftoni dhe riprovoni.</string>
 
-<string name="event_redacted">Mesazhi u fshi</string>
+    <string name="event_redacted">Mesazhi u fshi</string>
     <string name="settings_show_redacted">Shfaq mesazhe të hequr</string>
     <string name="settings_show_redacted_summary">Shfaq një vendmbajtëse për mesazhe të hequr</string>
     <string name="settings_discovery_confirm_mail_not_clicked">Ju dërguam një email ripohimi te %s, ju lutemi, së pari, shihni email-in tuaj dhe klikoni mbi lidhjen e ripohimit</string>
@@ -2394,5 +2394,5 @@ Që të garantoni se s’ju shpëton gjë, thjesht mbajeni të aktivizuar mekani
     <string name="identity_server_set_alternative_notice_no_default">Jepni URL-në e një shërbyesi identitetesh</string>
     <string name="identity_server_set_alternative_submit">Parashtroje</string>
 
-<string name="open_terms_of">Hap termat e %s</string>
-    </resources>
+    <string name="open_terms_of">Hap termat e %s</string>
+</resources>

@@ -210,5 +210,5 @@
 
     <string name="key_verification_request_fallback_message">%s изпрати запитване за потвърждение на ключа ви, но клиентът ви не поддържа верифициране посредством чат. Ще трябва да използвате стария метод за верифициране на ключове.</string>
 
-<string name="notice_room_created">%1$s създаде стаята</string>
-    </resources>
+    <string name="notice_room_created">%1$s създаде стаята</string>
+</resources>

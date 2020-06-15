@@ -2444,7 +2444,7 @@
     </plurals>
     <string name="invite_users_to_room_failure">Impossibile invitare gli utenti. Controlla gli utenti che vuoi invitare e riprova.</string>
 
-<string name="event_redacted">Messaggio eliminato</string>
+    <string name="event_redacted">Messaggio eliminato</string>
     <string name="settings_show_redacted">Mostra messaggi rimossi</string>
     <string name="settings_show_redacted_summary">Mostra un segnaposto per i messaggi rimossi</string>
     <string name="settings_discovery_confirm_mail_not_clicked">Ti abbiamo inviato un\'email di conferma a %s, prima controlla la tua posta e clicca sul link di conferma</string>

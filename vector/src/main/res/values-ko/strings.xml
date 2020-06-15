@@ -1683,11 +1683,11 @@
 
     <string name="no_network_indicator">현재 네트워크 연결이 없습니다</string>
 
-<string name="settings_add_3pid_confirm_password_title">비밀번호가 정확하지 않습니다</string>
+    <string name="settings_add_3pid_confirm_password_title">비밀번호가 정확하지 않습니다</string>
     <string name="settings_add_3pid_flow_not_supported">라이엇 모바일에서 불가능한 것입니다</string>
     <string name="settings_add_3pid_authentication_needed">인증이 요구됩니다</string>
 
 
     <string name="settings_integrations">통합</string>
     <string name="settings_integration_allow">통합 수락</string>
-    </resources>
+</resources>

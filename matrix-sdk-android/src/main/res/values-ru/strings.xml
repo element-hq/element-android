@@ -90,7 +90,7 @@
         <item quantity="one">%1$s и 1 другой</item>
         <item quantity="few">%1$s и %2$d другие</item>
         <item quantity="many">%1$s и %2$d других</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
 
@@ -200,18 +200,18 @@
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s принял приглашение для %2$s. Причина: %3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s отозвал приглашение %2$s. Причина: %3$s</string>
 
-<string name="notice_room_created">%1$s создал(а) комнату</string>
+    <string name="notice_room_created">%1$s создал(а) комнату</string>
     <plurals name="notice_room_aliases_added">
-	<item quantity="one">%1$s добавил(а) адрес %2$s для комнаты.</item>
-	<item quantity="few">%1$s добавил(а) адреса %2$s для комнаты.</item>
-	<item quantity="many">%1$s добавил(а) адреса %2$s для комнаты.</item>
-</plurals>
+        <item quantity="one">%1$s добавил(а) адрес %2$s для комнаты.</item>
+        <item quantity="few">%1$s добавил(а) адреса %2$s для комнаты.</item>
+        <item quantity="many">%1$s добавил(а) адреса %2$s для комнаты.</item>
+    </plurals>
 
     <plurals name="notice_room_aliases_removed">
-	<item quantity="one">%1$s удалил(а) адрес %2$s для комнаты.</item>
-	<item quantity="few">%1$s удалил(а) адреса %2$s для комнаты.</item>
-	<item quantity="many">%1$s удалил(а) адреса %2$s для комнаты.</item>
-</plurals>
+        <item quantity="one">%1$s удалил(а) адрес %2$s для комнаты.</item>
+        <item quantity="few">%1$s удалил(а) адреса %2$s для комнаты.</item>
+        <item quantity="many">%1$s удалил(а) адреса %2$s для комнаты.</item>
+    </plurals>
 
     <string name="notice_room_aliases_added_and_removed">%1$s добавил(а) адреса %2$s и удалил(а) %3$s для комнаты.</string>
 

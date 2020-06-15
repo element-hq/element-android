@@ -205,5 +205,5 @@
 
     <string name="key_verification_request_fallback_message">%s 正在请求验证您的密钥，但您的客户端不支援聊天中密钥验证。 您将必须使用旧版的密钥验证来验证金钥。</string>
 
-<string name="notice_room_created">%1$s 创建了这个房间</string>
-    </resources>
+    <string name="notice_room_created">%1$s 创建了这个房间</string>
+</resources>

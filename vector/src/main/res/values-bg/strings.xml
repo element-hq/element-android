@@ -1978,10 +1978,10 @@
 
     <string name="settings_developer_mode_fail_fast_title">Бърз-провал</string>
     <string name="settings_developer_mode_fail_fast_summary">RiotX може да забива по-често когато възникне неочаквана грешка</string>
-<string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
 
     <string name="event_redacted">Съобщението беше изтрито</string>
     <string name="settings_show_redacted">Показвай премахнатите съобщения</string>
     <string name="settings_show_redacted_summary">Показвай индикатор на мястото на премахнатите съобщения</string>
-    </resources>
+</resources>

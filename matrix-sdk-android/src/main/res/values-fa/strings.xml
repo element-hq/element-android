@@ -190,9 +190,9 @@
     </plurals>
 
     <plurals name="notice_room_aliases_removed">
-	<item quantity="one">%1$s، %2$s را به عنوان نشانی‌ای برای این اتاق پاک کرد.</item>
-	<item quantity="other">%1$s، %3$s را به عنوان نشانی‌هایی برای این اتاق پاک کرد.</item>
-</plurals>
+        <item quantity="one">%1$s، %2$s را به عنوان نشانی‌ای برای این اتاق پاک کرد.</item>
+        <item quantity="other">%1$s، %3$s را به عنوان نشانی‌هایی برای این اتاق پاک کرد.</item>
+    </plurals>
 
     <string name="notice_room_aliases_added_and_removed">%1$s برای نشانی این اتاق، %2$s را افزود و %3$s را پاک کرد.</string>
 
@@ -207,7 +207,7 @@
 
     <string name="key_verification_request_fallback_message">%s درخواست تأیید کلیدتان را دارد، ولی کارخواهتان تأیید کلید درون گپ را پشتیبانی نمی‌کند. برای تأیید کلیدها لازم است از تأییدیهٔ کلید قدیمی استفاده کنید.</string>
 
-<string name="notice_room_created">%1$s اتاق را ایجاد کرد</string>
+    <string name="notice_room_created">%1$s اتاق را ایجاد کرد</string>
     <string name="notice_profile_change_redacted">%1$s نمایه خود را به‌روز کرد %2$s</string>
     <string name="could_not_redact">نمی‌توان ویرایش کرد</string>
-    </resources>
+</resources>

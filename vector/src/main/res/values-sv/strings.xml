@@ -435,7 +435,7 @@
     <string name="room_participants_header_direct_chats">DIREKTCHATT</string>
     <string name="room_participants_header_devices">SESSIONER</string>
 
-<string name="room_participants_action_invite">Bjud in</string>
+    <string name="room_participants_action_invite">Bjud in</string>
     <string name="room_participants_action_leave">Lämna det här rummet</string>
     <string name="room_participants_action_remove">Ta bort från det här rummet</string>
     <string name="room_participants_action_ban">Banna</string>
@@ -449,13 +449,13 @@
     <string name="tab_title_search_rooms">RUM</string>
     <string name="room_recents_conversations">RUM</string>
     <plurals name="directory_search_rooms">
-	<item quantity="one">1 rum</item>
-	<item quantity="other">%d rum</item>
-</plurals>
+        <item quantity="one">1 rum</item>
+        <item quantity="other">%d rum</item>
+    </plurals>
     <plurals name="directory_search_rooms_for">
-	<item quantity="one">%1$s rum hittat för %2$s</item>
-	<item quantity="other">%1$s rum hittade för %2$s</item>
-</plurals>
+        <item quantity="one">%1$s rum hittat för %2$s</item>
+        <item quantity="other">%1$s rum hittade för %2$s</item>
+    </plurals>
     <string name="room_settings_direct_chat">Direktchatt</string>
     <string name="settings_pin_missed_notifications">Fäst rum med missade aviseringar</string>
     <string name="settings_pin_unread_messages">Fäst rum med olästa meddelanden</string>
@@ -468,9 +468,9 @@
     <string name="directory_server_native_rooms">Alla %s-rum på Matrix</string>
 
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">1 rum</item>
-	<item quantity="other">%d rum</item>
-</plurals>
+        <item quantity="one">1 rum</item>
+        <item quantity="other">%d rum</item>
+    </plurals>
 
     <string name="group_details_rooms">Rum</string>
     <string name="rooms">Rum</string>
@@ -478,9 +478,9 @@
     <string name="filter_group_rooms">Filtrera grupprum</string>
 
     <plurals name="group_rooms">
-	<item quantity="one">1 rum</item>
-	<item quantity="other">%d rum</item>
-</plurals>
+        <item quantity="one">1 rum</item>
+        <item quantity="other">%d rum</item>
+    </plurals>
     <string name="deactivate_account_content">Detta kommer att göra ditt konto permanent oanvändbart. Du kommer inte kunna logga in, och ingen kommer kunna registrera sig med samma användar-ID. Detta kommer att få ditt konto att lämna alla rum det är med i, och det kommer att ta bort din kontoinformation från din identitetsserver. <b>Den här handlingen går inte att ångra</b>.
 \n
 \nAtt inaktivera ditt konto <b>får oss normalt inte att glömma meddelanden du har skickat</b>. Om du skulle vilja att vi glömmer dina meddelanden, markera rutan nedan.
@@ -729,9 +729,9 @@
 \nDu kan göra det nu eller senare från appinställningarna.</string>
 
     <plurals name="notification_compat_summary_title">
-	<item quantity="one">%d avisering</item>
-	<item quantity="other">%d aviseringar</item>
-</plurals>
+        <item quantity="one">%d avisering</item>
+        <item quantity="other">%d aviseringar</item>
+    </plurals>
 
     <string name="room_widget_webview_read_protected_media">Läs DRM-skyddad media</string>
 
@@ -881,9 +881,9 @@
     <string name="room_profile_section_more_settings">Rumsinställningar</string>
     <string name="room_profile_section_more_notifications">Aviseringar</string>
     <plurals name="room_profile_section_more_member_list">
-	<item quantity="one">En person</item>
-	<item quantity="other">%1$d personer</item>
-</plurals>
+        <item quantity="one">En person</item>
+        <item quantity="other">%1$d personer</item>
+    </plurals>
     <string name="room_profile_section_more_uploads">Uppladdningar</string>
     <string name="room_profile_section_more_leave">Lämna rummet</string>
     <string name="room_member_power_level_admins">Administratörer</string>
@@ -923,9 +923,9 @@
     <string name="invite_users_to_room_action_invite">BJUD IN</string>
     <string name="invite_users_to_room_title">Bjud in användare</string>
     <plurals name="invitations_sent_to_one_and_more_users">
-	<item quantity="one">Inbjudan skickad till %1$s och en till</item>
-	<item quantity="other">Inbjudan skickad till %1$s och %2$d till</item>
-</plurals>
+        <item quantity="one">Inbjudan skickad till %1$s och en till</item>
+        <item quantity="other">Inbjudan skickad till %1$s och %2$d till</item>
+    </plurals>
     <string name="invite_users_to_room_failure">Vi kunde inte bjuda in användarna. Vänligen kolla användarna du vill bjuda in och försök igen.</string>
 
     <string name="disconnect_identity_server_dialog_content">Koppla bort från identitetsservern %s\?</string>
@@ -962,4 +962,4 @@
     <string name="choose_locale_other_locales_title">Andra tillgängliga språk</string>
     <string name="choose_locale_loading_locales">Laddar tillgängliga språk…</string>
 
-    </resources>
+</resources>

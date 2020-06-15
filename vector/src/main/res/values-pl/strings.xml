@@ -588,7 +588,7 @@ Możesz dodać adres e-mail do swojego profilu w ustawieniach.</string>
         <item quantity="one">%d zmiana członkostwa</item>
         <item quantity="few">%d zmiany członkostwa</item>
         <item quantity="many">%d zmian członkostwa</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="call_error_user_not_responding">Rozmówca nie połączył się.</string>
@@ -615,13 +615,13 @@ Przyznaj dostęp w następnym oknie.</string>
         <item quantity="one">Jeden aktywny członek</item>
         <item quantity="few">Kilku aktywnych członków</item>
         <item quantity="many">%d aktywnych członków</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">1 członek</item>
         <item quantity="few">kilku członków</item>
         <item quantity="many">%d członków</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="room_participants_power_level_prompt">Nie będziesz w stanie cofnąć tej zmiany, ponieważ przyznajesz użytkownikowi uprawnienia równe swoim. 
@@ -638,7 +638,7 @@ Jesteś pewien?</string>
         <item quantity="one">Nowa wiadomość</item>
         <item quantity="few">Kilka nowych wiadomości</item>
         <item quantity="many">%d nowych wiadomości</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="ssl_cert_not_trust">Może to oznaczać że ktoś zakłóca twoje połączenie, lub Twój telefon nie ufa certyfikatowi dostarczonemu przez zdalny serwer.</string>
@@ -652,13 +652,13 @@ Jesteś pewien?</string>
         <item quantity="one">1 pokój</item>
         <item quantity="few">%d pokoje</item>
         <item quantity="many">%d pokoi</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="directory_search_rooms_for">
         <item quantity="one">%1$s pokój znaleziony dla %2$s</item>
         <item quantity="few">Kilka pokoi znalezionych dla %2$s</item>
         <item quantity="many">%1$s pokoi znalezionych dla %2$s</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="room_settings_all_messages_noisy">Wszystkie wiadomości (hałaśliwy)</string>
     <string name="room_settings_all_messages">Wszystkie wiadomości</string>
@@ -804,13 +804,13 @@ Możesz to zrobić teraz lub później z poziomu ustawień aplikacji.</string>
         <item quantity="one">1 pokój</item>
         <item quantity="few">%d pokoje</item>
         <item quantity="many">%d pokoi</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="active_widgets">
         <item quantity="one">1 aktywny widżet</item>
         <item quantity="few">%d aktywne widżety</item>
         <item quantity="many">%d aktywnych widżetów</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
 
     <string name="widget_integration_room_not_visible">Pokój %s nie jest widoczny.</string>
@@ -832,13 +832,13 @@ Czy chcesz dodać teraz kilka?</string>
         <item quantity="one">1 nieprzeczytana wiadomość powiadomienia</item>
         <item quantity="few">%d nieprzeczytane wiadomości powiadomienia</item>
         <item quantity="many">%d nieprzeczytanych wiadomości powiadomienia</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
         <item quantity="one">1 nieprzeczytana wiadomość powiadomienia</item>
         <item quantity="few">%d nieprzeczytane wiadomości powiadomienia</item>
         <item quantity="many">%d nieprzeczytanych wiadomości powiadomienia</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s w %2$s</string>
 
@@ -921,14 +921,14 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
     <plurals name="group_members">
         <item quantity="one">1 członek</item>
         <item quantity="few">%d członków</item>
-        <item quantity="many"/>
+        <item quantity="many" />
     </plurals>
 
     <plurals name="group_rooms">
         <item quantity="one">1 pokój</item>
         <item quantity="few">%d pokoje</item>
         <item quantity="many">%d pokoi</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="room_tombstone_predecessor_link">Kliknij tutaj, aby zobaczyć starsze wiadomości</string>
 
@@ -943,29 +943,29 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
     <plurals name="format_time_s">
         <item quantity="one">1 sekunda</item>
         <item quantity="few">%d sek.</item>
-        <item quantity="many"/>
+        <item quantity="many" />
     </plurals>
     <plurals name="format_time_m">
         <item quantity="one">1 minuta</item>
         <item quantity="few">%d min.</item>
-        <item quantity="many"/>
+        <item quantity="many" />
     </plurals>
     <plurals name="format_time_h">
         <item quantity="one">1 godzina</item>
         <item quantity="few">%s godz.</item>
-        <item quantity="many"/>
+        <item quantity="many" />
     </plurals>
     <plurals name="format_time_d">
         <item quantity="one">1 dzień</item>
         <item quantity="few">%d dni</item>
-        <item quantity="many"/>
+        <item quantity="many" />
     </plurals>
 
     <plurals name="room_details_selected">
         <item quantity="one">1 zaznaczone</item>
         <item quantity="few">%d zaznaczone</item>
         <item quantity="many">%d zaznaczonych</item>
-        <item quantity="other"/>
+        <item quantity="other" />
     </plurals>
     <string name="room_sliding_menu_version_x">Wersja %s</string>
     <string name="settings_preview_media_before_sending">Podgląd mediów przed wysłaniem</string>
@@ -1158,7 +1158,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Przywrócono kopię zapasową z %d kluczem.</item>
         <item quantity="few">Przywrócono kopię zapasową z %d kluczami.</item>
-        <item quantity="many"/>
+        <item quantity="many" />
     </plurals>
     <string name="title_activity_keys_backup_restore">Użyj kopii zapasowej klucza</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Uruchamianie… (%1$d z %2$d)</string>
@@ -1477,12 +1477,12 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <plurals name="notification_compat_summary_line_for_room">
         <item quantity="one">%1$s: 1 wiadomość</item>
         <item quantity="few">%1$s: %2$d wiadomości</item>
-        <item quantity="many"/>
+        <item quantity="many" />
     </plurals>
     <plurals name="notification_compat_summary_title">
         <item quantity="one">%d powiadomienie</item>
         <item quantity="few">%d powiadomień</item>
-        <item quantity="many"/>
+        <item quantity="many" />
     </plurals>
 
     <string name="notification_unknown_new_event">Nowe wydarzenie</string>
@@ -1612,7 +1612,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <plurals name="keys_backup_info_keys_backing_up">
         <item quantity="one">Kopiowanie %d klucza…</item>
         <item quantity="few">Kopiowanie %d kluczy…</item>
-        <item quantity="many"/>
+        <item quantity="many" />
     </plurals>
 
     <string name="autodiscover_invalid_response">Nieprawidłowa odpowiedź funkcji autoodkrywania serwera domowego</string>
@@ -1770,7 +1770,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <plurals name="fallback_users_read">
         <item quantity="one">1 użytkownik odczytał</item>
         <item quantity="few">%d użytkowników odczytało</item>
-        <item quantity="many"/>
+        <item quantity="many" />
     </plurals>
 
     <string name="error_attachment">Wystąpił błąd poczas otrzymywania załącznika.</string>
@@ -1915,7 +1915,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <plurals name="login_error_limit_exceeded_retry_after">
         <item quantity="one">Zostało wysłane zbyt wiele żądań. Możesz spróbować ponownie za %1$d sekundę…</item>
         <item quantity="few">Zostało wysłane zbyt wiele żądań. Możesz spróbować ponownie za %1$d sekundy…</item>
-        <item quantity="many"/>
+        <item quantity="many" />
     </plurals>
 
     <string name="signed_out_title">Wylogowałeś(-łaś) się</string>
@@ -2033,7 +2033,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <plurals name="room_profile_section_more_member_list">
         <item quantity="one">Jedna osoba</item>
         <item quantity="few">%1$d osób</item>
-        <item quantity="many"/>
+        <item quantity="many" />
     </plurals>
     <string name="room_profile_leaving_room">Opuszczanie pokoju…</string>
 
@@ -2108,7 +2108,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <plurals name="settings_active_sessions_count">
         <item quantity="one">%d aktywna sesja</item>
         <item quantity="few">%d aktywnych sesji</item>
-        <item quantity="many"/>
+        <item quantity="many" />
     </plurals>
 
     <string name="crosssigning_verify_this_session">Zweryfikuj tą sesję</string>
@@ -2145,12 +2145,12 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <plurals name="poll_info">
         <item quantity="one">%d głos</item>
         <item quantity="few">%d głosów</item>
-        <item quantity="many"/>
+        <item quantity="many" />
     </plurals>
     <plurals name="poll_info_final">
         <item quantity="one">%d głos - wyniki końcowe</item>
         <item quantity="few">%d głosów - wyniki końcowe</item>
-        <item quantity="many"/>
+        <item quantity="many" />
     </plurals>
     <string name="poll_item_selected_aria">Wybrana Opcja</string>
     <string name="command_description_poll">Tworzy prostą ankietę</string>
@@ -2169,7 +2169,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <plurals name="send_images_with_original_size">
         <item quantity="one">Wyślij obraz w oryginalnym rozmiarze</item>
         <item quantity="few">Wyślij obrazy w oryginalnym rozmiarze</item>
-        <item quantity="many"/>
+        <item quantity="many" />
     </plurals>
 
     <string name="delete_event_dialog_title">Potwierdź Usunięcie</string>

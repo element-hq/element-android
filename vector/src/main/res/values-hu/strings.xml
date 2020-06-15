@@ -2394,7 +2394,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     </plurals>
     <string name="invite_users_to_room_failure">Felhasználókat nem tudtuk meghívni. Ellenőrizd azokat a felhasználókat akiket meg szeretnél hívni és próbáld újra.</string>
 
-<string name="event_redacted">Üzenet törölve</string>
+    <string name="event_redacted">Üzenet törölve</string>
     <string name="settings_show_redacted_summary">Helykitöltő mutatása a törölt szövegek helyett</string>
     <string name="settings_discovery_confirm_mail_not_clicked">Megerősítő levelet küldtünk ide: %s, először ellenőrizd az e-mailedet és kattints a megerősítő hivatkozásra</string>
     <string name="uploads_media_title">MÉDIA</string>
@@ -2404,7 +2404,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="disconnect_identity_server_dialog_content">Lecsatlakozol erről az azonosítási szerverről: %s\?</string>
     <string name="identity_server_set_alternative_submit">Küldés</string>
 
-<string name="settings_show_redacted">Törölt üzenetek megmutatása</string>
+    <string name="settings_show_redacted">Törölt üzenetek megmutatása</string>
     <string name="settings_text_message_sent_wrong_code">Az ellenőrző kód nem helyes.</string>
 
     <string name="uploads_media_no_result">Ebben a szobában nincsenek média fájlok</string>
@@ -2436,4 +2436,4 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="identity_server_set_default_submit">%1$s használata</string>
     <string name="identity_server_set_alternative_notice">Vagy beírhatsz más azonosítási szerver URL-t</string>
     <string name="identity_server_set_alternative_notice_no_default">Add meg az azonosítási szerver URL-jét</string>
-    </resources>
+</resources>

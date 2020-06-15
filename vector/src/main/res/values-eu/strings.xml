@@ -2392,7 +2392,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     </plurals>
     <string name="invite_users_to_room_failure">Ezin izan ditugu erabiltzaile horiek gonbidatu. Egiaztatu gonbidatu nahi dituzun erabiltzaileak eta saiatu berriro.</string>
 
-<string name="event_redacted">Mezu ezabatuta</string>
+    <string name="event_redacted">Mezu ezabatuta</string>
     <string name="settings_show_redacted">Erakutsi kendutako mezuak</string>
     <string name="settings_show_redacted_summary">Erakutsi kendutako mezuek utzitako hutsunea</string>
     <string name="settings_discovery_confirm_mail_not_clicked">Berrespen e-mail bat bidali dizugu %s helbidera, begiratu zure e-maila eta sakatu baieztapen esteka</string>

@@ -2341,7 +2341,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     </plurals>
     <string name="invite_users_to_room_failure">我們無法邀請使用者。請檢查您想要邀請的使用者並再試一次。</string>
 
-<string name="event_redacted">訊息已刪除</string>
+    <string name="event_redacted">訊息已刪除</string>
     <string name="settings_show_redacted">顯示已移除的訊息</string>
     <string name="settings_show_redacted_summary">為已移除的訊息顯示佔位符</string>
     <string name="settings_discovery_confirm_mail_not_clicked">我們已傳送確認電子郵件給 %s，請先檢查您的電子郵件並點擊確認連結</string>

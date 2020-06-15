@@ -1202,7 +1202,7 @@
     <string name="a11y_create_direct_message">Započni novi izravni razgovor</string>
     <string name="a11y_create_room">Izradi novu sobu</string>
     <string name="settings_rageshake">Gnjevno drmanje</string>
-<string name="auth_threepid_warning_message">Registracija uz istovremeno navođenje e-pošte i telefonskog broja nije podržano jer ne postoji odgovarajući API. U obzir će biti uzet samo telefonski broj.
+    <string name="auth_threepid_warning_message">Registracija uz istovremeno navođenje e-pošte i telefonskog broja nije podržano jer ne postoji odgovarajući API. U obzir će biti uzet samo telefonski broj.
 \n
 \nMožete dodati Vašu e-poštu Vašem profilu u postavkama.</string>
     <string name="settings_integrations_summary">Koristite upravitelja integracijama kako biste rukovali botovima, mostovima, grafičkim elementima i paketima naljepnica.
@@ -1337,31 +1337,31 @@
     <string name="lock_screen_hint">Ovdje tipkajte…</string>
 
     <plurals name="notification_unread_notified_messages">
-	<item quantity="one">%d nepročitana obavijesna poruka</item>
-	<item quantity="few">%d nepročitane obavijesne poruke</item>
-	<item quantity="other">%d nepročitanih obavijesnih poruka</item>
-</plurals>
+        <item quantity="one">%d nepročitana obavijesna poruka</item>
+        <item quantity="few">%d nepročitane obavijesne poruke</item>
+        <item quantity="other">%d nepročitanih obavijesnih poruka</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-	<item quantity="one">%d nepročitana obavijesna poruka</item>
-	<item quantity="few">%d nepročitane obavijesne poruke</item>
-	<item quantity="other">%d nepročitanih obavijesnih poruka</item>
-</plurals>
+        <item quantity="one">%d nepročitana obavijesna poruka</item>
+        <item quantity="few">%d nepročitane obavijesne poruke</item>
+        <item quantity="other">%d nepročitanih obavijesnih poruka</item>
+    </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-	<item quantity="one">%d soba</item>
-	<item quantity="few">%d sobe</item>
-	<item quantity="other">%d soba</item>
-</plurals>
+        <item quantity="one">%d soba</item>
+        <item quantity="few">%d sobe</item>
+        <item quantity="other">%d soba</item>
+    </plurals>
 
     <plurals name="notification_compat_summary_line_for_room">
-	<item quantity="one">%1$s: %2$d poruka</item>
-	<item quantity="few">%1$s: %2$d poruke</item>
-	<item quantity="other">%1$s: %2$d poruka</item>
-</plurals>
+        <item quantity="one">%1$s: %2$d poruka</item>
+        <item quantity="few">%1$s: %2$d poruke</item>
+        <item quantity="other">%1$s: %2$d poruka</item>
+    </plurals>
     <plurals name="notification_compat_summary_title">
-	<item quantity="one">%d obavijest</item>
-	<item quantity="few">%d obavijesti</item>
-	<item quantity="other">%d obavijesti</item>
-</plurals>
+        <item quantity="one">%d obavijest</item>
+        <item quantity="few">%d obavijesti</item>
+        <item quantity="other">%d obavijesti</item>
+    </plurals>
 
     <string name="notification_unread_notified_messages_in_room">%1$s u %2$s</string>
     <string name="notification_unknown_new_event">Novi događaj</string>
@@ -1389,10 +1389,10 @@
     <string name="settings_labs_create_conference_with_jitsi">Uspostavljanje konferencijskih poziva kroz Jitsi</string>
     <string name="widget_delete_message_confirmation">Jeste li sigurni da želite ukloniti grafički element iz ove sobe\?</string>
     <plurals name="active_widgets">
-	<item quantity="one">%d aktivan grafički element</item>
-	<item quantity="few">%d aktivna grafička elementa</item>
-	<item quantity="other">%d aktivnih grafičkih elemenata</item>
-</plurals>
+        <item quantity="one">%d aktivan grafički element</item>
+        <item quantity="few">%d aktivna grafička elementa</item>
+        <item quantity="other">%d aktivnih grafičkih elemenata</item>
+    </plurals>
 
 
     <string name="room_widget_activity_title">Grafički element</string>
@@ -1534,10 +1534,10 @@
     <string name="room_profile_section_more_settings">Postavke sobe</string>
     <string name="room_profile_section_more_notifications">Obavijesti</string>
     <plurals name="room_profile_section_more_member_list">
-	<item quantity="one">%1$d osoba</item>
-	<item quantity="few">%1$d osobe</item>
-	<item quantity="other">%1$d osoba</item>
-</plurals>
+        <item quantity="one">%1$d osoba</item>
+        <item quantity="few">%1$d osobe</item>
+        <item quantity="other">%1$d osoba</item>
+    </plurals>
     <string name="room_profile_section_more_uploads">Slanja</string>
     <string name="room_profile_section_more_leave">Napusti sobu</string>
     <string name="room_profile_leaving_room">Napuštanje sobe…</string>
@@ -1653,4 +1653,4 @@
     <string name="message_action_item_redact">Ukloni…</string>
     <string name="delete_event_dialog_title">Potvrda uklanjanja</string>
     <string name="delete_event_dialog_content">Jeste li sigurni da želite ukloniti (izbrisati) ovaj događaj\? Ukoliko izbrišete naziv sobe ili promjenu teme, to može poništiti promjenu.</string>
-    </resources>
+</resources>

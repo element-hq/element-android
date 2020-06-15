@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resources_language">fr</string>
@@ -2399,7 +2399,7 @@ Si vous n’avez pas configuré de nouvelle méthode de récupération, un attaq
     </plurals>
     <string name="invite_users_to_room_failure">Nous n’avons pas pu inviter les utilisateurs. Vérifiez les utilisateurs que vous souhaitez inviter et réessayez.</string>
 
-<string name="event_redacted">Message supprimé</string>
+    <string name="event_redacted">Message supprimé</string>
     <string name="settings_show_redacted">Afficher les messages supprimés</string>
     <string name="settings_show_redacted_summary">Afficher un remplaçant pour les messages supprimés</string>
     <string name="settings_discovery_confirm_mail_not_clicked">Nous vous avons envoyé un e-mail de confirmation à %s, vérifiez vos e-mails et cliquez sur le lien de confirmation</string>

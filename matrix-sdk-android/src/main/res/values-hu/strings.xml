@@ -209,5 +209,5 @@
 
     <string name="key_verification_request_fallback_message">%s kéri a kulcsok ellenőrzését de a kliens nem támogatja a szobán belüli kulcs ellenőrzést. A hagyományos módon kell ellenőrizned a kulcsokat.</string>
 
-<string name="notice_room_created">%1$s szobát készített</string>
-    </resources>
+    <string name="notice_room_created">%1$s szobát készített</string>
+</resources>
