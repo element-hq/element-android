@@ -26,7 +26,7 @@ import im.vector.matrix.android.api.session.call.CallState
 import im.vector.matrix.android.api.session.call.CallsListener
 import im.vector.matrix.android.api.session.call.EglUtils
 import im.vector.matrix.android.api.session.call.MxCall
-import im.vector.matrix.android.api.session.call.TurnServer
+import im.vector.matrix.android.api.session.call.TurnServerResponse
 import im.vector.matrix.android.api.session.room.model.call.CallAnswerContent
 import im.vector.matrix.android.api.session.room.model.call.CallCandidatesContent
 import im.vector.matrix.android.api.session.room.model.call.CallHangupContent
@@ -213,9 +213,9 @@ class WebRtcPeerConnectionManager @Inject constructor(
         // attachViewRenderersInternal()
     }
 
-    private fun createPeerConnection(callContext: CallContext, turnServer: TurnServer?) {
+    private fun createPeerConnection(callContext: CallContext, turnServerResponse: TurnServerResponse?) {
         val iceServers = mutableListOf<PeerConnection.IceServer>().apply {
-            turnServer?.let { server ->
+            turnServerResponse?.let { server ->
                 server.uris?.forEach { uri ->
                     add(
                             PeerConnection
@@ -250,9 +250,9 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }, constraints)
     }
 
-    private fun getTurnServer(callback: ((TurnServer?) -> Unit)) {
-        sessionHolder.getActiveSession().callSignalingService().getTurnServer(object : MatrixCallback<TurnServer?> {
-            override fun onSuccess(data: TurnServer?) {
+    private fun getTurnServer(callback: ((TurnServerResponse?) -> Unit)) {
+        sessionHolder.getActiveSession().callSignalingService().getTurnServer(object : MatrixCallback<TurnServerResponse?> {
+            override fun onSuccess(data: TurnServerResponse?) {
                 callback(data)
             }
 
@@ -313,10 +313,10 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
     }
 
-    private fun internalAcceptIncomingCall(callContext: CallContext, turnServer: TurnServer?) {
+    private fun internalAcceptIncomingCall(callContext: CallContext, turnServerResponse: TurnServerResponse?) {
         executor.execute {
             // 1) create peer connection
-            createPeerConnection(callContext, turnServer)
+            createPeerConnection(callContext, turnServerResponse)
 
             // create sdp using offer, and set remote description
             // the offer has beed stored when invite was received

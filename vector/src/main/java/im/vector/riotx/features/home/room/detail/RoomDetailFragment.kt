@@ -63,6 +63,7 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.matrix.android.api.MatrixCallback
 import im.vector.matrix.android.api.permalinks.PermalinkFactory
 import im.vector.matrix.android.api.session.Session
+import im.vector.matrix.android.api.session.call.CallState
 import im.vector.matrix.android.api.session.content.ContentAttachmentData
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -295,8 +296,8 @@ class RoomDetailFragment @Inject constructor(
         sharedCallActionViewModel
                 .activeCall
                 .observe(viewLifecycleOwner, Observer {
-                    // TODO delay a bit if it's a new call to let call activity launch before ..
-                    activeCallView.isVisible = it != null
+                    val hasActiveCall = it?.state == CallState.CONNECTED
+                    activeCallView.isVisible = hasActiveCall
                 })
 
         roomDetailViewModel.selectSubscribe(this, RoomDetailViewState::tombstoneEventHandling, uniqueOnly("tombstoneEventHandling")) {

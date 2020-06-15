@@ -21,7 +21,7 @@ import im.vector.matrix.android.api.util.Cancelable
 
 interface CallSignalingService {
 
-    fun getTurnServer(callback: MatrixCallback<TurnServer>): Cancelable
+    fun getTurnServer(callback: MatrixCallback<TurnServerResponse>): Cancelable
 
     /**
      * Create an outgoing call

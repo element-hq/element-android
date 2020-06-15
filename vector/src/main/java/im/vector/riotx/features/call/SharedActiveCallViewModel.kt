@@ -33,9 +33,20 @@ class SharedActiveCallViewModel @Inject constructor(
 
     val activeCall: MutableLiveData<MxCall?> = MutableLiveData()
 
+    val callStateListener = object: MxCall.StateListener {
+
+        override fun onStateUpdate(call: MxCall) {
+           if (activeCall.value?.callId == call.callId) {
+               activeCall.postValue(call)
+           }
+        }
+    }
+
     private val listener = object : WebRtcPeerConnectionManager.CurrentCallListener {
         override fun onCurrentCallChange(call: MxCall?) {
+            activeCall.value?.removeListener(callStateListener)
             activeCall.postValue(call)
+            call?.addListener(callStateListener)
         }
 
         override fun onCaptureStateChanged(captureInError: Boolean) {
@@ -49,6 +60,7 @@ class SharedActiveCallViewModel @Inject constructor(
     }
 
     override fun onCleared() {
+        activeCall.value?.removeListener(callStateListener)
         webRtcPeerConnectionManager.removeCurrentCallListener(listener)
         super.onCleared()
     }

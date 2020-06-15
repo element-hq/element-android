@@ -21,7 +21,7 @@ import im.vector.matrix.android.api.extensions.tryThis
 import im.vector.matrix.android.api.session.call.CallSignalingService
 import im.vector.matrix.android.api.session.call.CallsListener
 import im.vector.matrix.android.api.session.call.MxCall
-import im.vector.matrix.android.api.session.call.TurnServer
+import im.vector.matrix.android.api.session.call.TurnServerResponse
 import im.vector.matrix.android.api.session.events.model.Event
 import im.vector.matrix.android.api.session.events.model.EventType
 import im.vector.matrix.android.api.session.events.model.toModel
@@ -30,6 +30,7 @@ import im.vector.matrix.android.api.session.room.model.call.CallCandidatesConten
 import im.vector.matrix.android.api.session.room.model.call.CallHangupContent
 import im.vector.matrix.android.api.session.room.model.call.CallInviteContent
 import im.vector.matrix.android.api.util.Cancelable
+import im.vector.matrix.android.api.util.NoOpCancellable
 import im.vector.matrix.android.internal.di.UserId
 import im.vector.matrix.android.internal.session.SessionScope
 import im.vector.matrix.android.internal.session.call.model.MxCallImpl
@@ -54,11 +55,18 @@ internal class DefaultCallSignalingService @Inject constructor(
 
     private val activeCalls = mutableListOf<MxCall>()
 
-    override fun getTurnServer(callback: MatrixCallback<TurnServer>): Cancelable {
+    private var cachedTurnServerResponse: TurnServerResponse? = null
+
+    override fun getTurnServer(callback: MatrixCallback<TurnServerResponse>): Cancelable {
+        if (cachedTurnServerResponse != null) {
+            cachedTurnServerResponse?.let { callback.onSuccess(it) }
+            return NoOpCancellable
+        }
         return turnServerTask
                 .configureWith(GetTurnServerTask.Params) {
-                    this.callback = object : MatrixCallback<TurnServer> {
-                        override fun onSuccess(data: TurnServer) {
+                    this.callback = object : MatrixCallback<TurnServerResponse> {
+                        override fun onSuccess(data: TurnServerResponse) {
+                            cachedTurnServerResponse = data
                             callback.onSuccess(data)
                         }
 
